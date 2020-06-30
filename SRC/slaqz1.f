@@ -107,70 +107,71 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine slaqz1(A,ldA,B,ldB,sr1,sr2,si,beta1,beta2,v)
-      implicit none
+      SUBROUTINE SLAQZ1( A, LDA, B, LDB, SR1, SR2, SI, BETA1, BETA2,
+     $    V )
+      IMPLICIT NONE
 *
 *     Arguments
-      integer,intent(in) :: ldA,ldB
-      real,intent(in) :: A(ldA,*),B(ldB,*)
-      real,intent(out) :: sr1,sr2,si,beta1,beta2,v(*)
+      INTEGER, INTENT( IN ) :: LDA, LDB
+      REAL, INTENT( IN ) :: A( LDA, * ), B( LDB, * )
+      REAL, INTENT( OUT ) :: SR1, SR2, SI, BETA1, BETA2, V( * )
 *
 *     Parameters
-      real :: zero,one,half
-      parameter(zero=0.0,one=1.0,half=0.5)
+      REAL :: ZERO, ONE, HALF
+      PARAMETER( ZERO=0.0, ONE=1.0, HALF=0.5 )
 *
 *     Local scalars
-      real :: w(2),safmin,safmax,scale
+      REAL :: W( 2 ), SAFMIN, SAFMAX, SCALE
 *
 *     External Functions
-      real,external :: slamch
+      REAL, EXTERNAL :: SLAMCH
 *
-      safmin = slamch('SAFE MINIMUM')
-      safmax = one/safmin
+      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+      SAFMAX = ONE/SAFMIN
 *
 *     Calculate first shifted vector
 *
-      w(1) = beta1*A(1,1)-sr1*B(1,1)
-      w(2) = beta1*A(2,1)-sr1*B(2,1)
-      scale = sqrt( abs(w(1)) ) * sqrt( abs(w(2)) )
-      if(scale .ge. safmin .and. scale .le. safmax) then
-         w(1) = w(1)/scale
-         w(2) = w(2)/scale
-      end if
+      W( 1 ) = BETA1*A( 1, 1 ) - SR1*B( 1, 1 )
+      W( 2 ) = BETA1*A( 2, 1 ) - SR1*B( 2, 1 )
+      SCALE = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
+      IF( SCALE .GE. SAFMIN .AND. SCALE .LE. SAFMAX ) THEN
+         W( 1 ) = W( 1 )/SCALE
+         W( 2 ) = W( 2 )/SCALE
+      END IF
 *
 *     Solve linear system
 *
-      w(2) = w(2)/B(2,2)
-      w(1) = (w(1)-B(1,2)*w(2))/B(1,1)
-      scale = sqrt( abs(w(1)) ) * sqrt( abs(w(2)) )
-      if(scale .ge. safmin .and. scale .le. safmax) then
-         w(1) = w(1)/scale
-         w(2) = w(2)/scale
-      end if
+      W( 2 ) = W( 2 )/B( 2, 2 )
+      W( 1 ) = ( W( 1 ) - B( 1, 2 )*W( 2 ) )/B( 1, 1 )
+      SCALE = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
+      IF( SCALE .GE. SAFMIN .AND. SCALE .LE. SAFMAX ) THEN
+         W( 1 ) = W( 1 )/SCALE
+         W( 2 ) = W( 2 )/SCALE
+      END IF
 *
 *     Apply second shift
 *
-      v(1) = beta2*(A(1,1)*w(1)+A(1,2)*w(2))-sr2*(B(1,1)*w(1)+B(1,
-     $   2)*w(2))
-      v(2) = beta2*(A(2,1)*w(1)+A(2,2)*w(2))-sr2*(B(2,1)*w(1)+B(2,
-     $   2)*w(2))
-      v(3) = beta2*(A(3,1)*w(1)+A(3,2)*w(2))-sr2*(B(3,1)*w(1)+B(3,
-     $   2)*w(2))
+      V( 1 ) = BETA2*( A( 1, 1 )*W( 1 ) + A( 1, 2 )*W( 2 ) ) - SR2*
+     $   ( B( 1, 1 )*W( 1 ) + B( 1, 2 )*W( 2 ) )
+      V( 2 ) = BETA2*( A( 2, 1 )*W( 1 ) + A( 2, 2 )*W( 2 ) ) - SR2*
+     $   ( B( 2, 1 )*W( 1 ) + B( 2, 2 )*W( 2 ) )
+      V( 3 ) = BETA2*( A( 3, 1 )*W( 1 ) + A( 3, 2 )*W( 2 ) ) - SR2*
+     $   ( B( 3, 1 )*W( 1 ) + B( 3, 2 )*W( 2 ) )
 *
 *     Account for imaginary part
 *
-      v(1) = v(1)+si*si*B(1,1)
+      V( 1 ) = V( 1 ) + SI*SI*B( 1, 1 )
 *
 *     Check for overflow
 *
-      if( abs(v(1)).gt.safmax .or. abs(v(2)) .gt. safmax .or. abs(v(3)).
-     $   gt.safmax .or. v(1).ne.v(1) .or. v(2).ne.v(2) .or. v(3).ne.v(3)
-     $   ) then
-         v(1) = zero
-         v(2) = zero
-         v(3) = zero
-      end if
+      IF( ABS( V( 1 ) ).GT.SAFMAX .OR. ABS( V( 2 ) ) .GT. SAFMAX .OR.
+     $    ABS( V( 3 ) ).GT.SAFMAX .OR. V( 1 ).NE.V( 1 ) .OR.
+     $    V( 2 ).NE.V( 2 ) .OR. V( 3 ).NE.V( 3 ) ) THEN
+         V( 1 ) = ZERO
+         V( 2 ) = ZERO
+         V( 3 ) = ZERO
+      END IF
 *
 *     End of SLAQZ1
 *
-      end subroutine
+      END SUBROUTINE

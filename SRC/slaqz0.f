@@ -261,6 +261,12 @@
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
+*> \param[in] REC
+*> \verbatim
+*>          REC is INTEGER
+*>             REC indicates the current recursion level. Should be set
+*>             to 0 on first call.
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -281,397 +287,414 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine slaqz0(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
-     $   alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
-      implicit none
+      SUBROUTINE SLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $    LDB, ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, REC,
+     $    INFO )
+      IMPLICIT NONE
 
 *     Arguments
-      character,intent(in) :: wantS,wantQ,wantZ
-      integer,intent(in) :: n,ilo,ihi,ldA,ldB,ldQ,ldZ,lwork
+      CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
+      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+     $    REC
 
-      integer,intent(out) :: info
+      INTEGER, INTENT( OUT ) :: INFO
 
-      real,intent(inout) :: A(ldA,*),B(ldB,*),Q(ldQ,*),Z(ldZ,*),
-     $   alphar(*),alphai(*),beta(*),work(*)
+      REAL, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+     $    Z( LDZ, * ), ALPHAR( * ), ALPHAI( * ), BETA( * ), WORK( * )
 
 *     Parameters
-      real :: zero,one,half
-      parameter(zero=0.0,one=1.0,half=0.5)
+      REAL :: ZERO, ONE, HALF
+      PARAMETER( ZERO=0.0, ONE=1.0, HALF=0.5 )
 
 *     Local scalars
-      real :: smlnum,ulp,eshift,safmin,safmax,c1,s1,temp
-      integer :: istart,istop,iiter,maxit,istart2,k,ld,nshifts,nblock,
-     $   nw,nmin,nibble,n_undeflated,n_deflated,ns,sweep_info,shiftpos,
-     $   lworkreq,k2,istartm,istopm,iwants,iwantq,iwantz,norm_info,
-     $   aed_info,nwr,nbr,nsr,itemp1,itemp2,rcost
-      logical :: ilschur,ilq,ilz,lquery
-      character :: jbcmpz*3
+      REAL :: SMLNUM, ULP, ESHIFT, SAFMIN, SAFMAX, C1, S1, TEMP
+      INTEGER :: ISTART, ISTOP, IITER, MAXIT, ISTART2, K, LD, NSHIFTS,
+     $    NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED, NS,
+     $    SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM, ISTOPM, IWANTS,
+     $    IWANTQ, IWANTZ, NORM_INFO, AED_INFO, NWR, NBR, NSR, ITEMP1,
+     $    ITEMP2, RCOST
+      LOGICAL :: ILSCHUR, ILQ, ILZ, LQUERY
+      CHARACTER :: JBCMPZ*3
 
 *     External Functions
-      real,external :: slamch
-      logical,external :: lsame
-      integer,external :: ilaenv
+      REAL, EXTERNAL :: SLAMCH
+      LOGICAL, EXTERNAL :: LSAME
+      INTEGER, EXTERNAL :: ILAENV
 
 *
 *     Decode wantS,wantQ,wantZ
 *      
-      if(lsame(wantS,'E')) then
-         ilschur = .false.
-         iwants = 1
-      else if(lsame(wantS,'S')) then
-         ilschur = .true.
-         iwants = 2
-      else
-         iwants = 0
-      end if
+      IF( LSAME( WANTS, 'E' ) ) THEN
+         ILSCHUR = .FALSE.
+         IWANTS = 1
+      ELSE IF( LSAME( WANTS, 'S' ) ) THEN
+         ILSCHUR = .TRUE.
+         IWANTS = 2
+      ELSE
+         IWANTS = 0
+      END IF
 
-      if(lsame(wantQ,'N')) then
-         ilq = .false.
-         iwantq = 1
-      else if(lsame(wantQ,'V')) then
-         ilq = .true.
-         iwantq = 2
-      else if(lsame(wantQ,'I')) then
-         ilq = .true.
-         iwantq = 3
-      else
-         iwantq = 0
-      end if
+      IF( LSAME( WANTQ, 'N' ) ) THEN
+         ILQ = .FALSE.
+         IWANTQ = 1
+      ELSE IF( LSAME( WANTQ, 'V' ) ) THEN
+         ILQ = .TRUE.
+         IWANTQ = 2
+      ELSE IF( LSAME( WANTQ, 'I' ) ) THEN
+         ILQ = .TRUE.
+         IWANTQ = 3
+      ELSE
+         IWANTQ = 0
+      END IF
 
-      if(lsame(wantZ,'N')) then
-         ilz = .false.
-         iwantz = 1
-      else if(lsame(wantZ,'V')) then
-         ilz = .true.
-         iwantz = 2
-      else if(lsame(wantZ,'I')) then
-         ilz = .true.
-         iwantz = 3
-      else
-         iwantz = 0
-      end if
+      IF( LSAME( WANTZ, 'N' ) ) THEN
+         ILZ = .FALSE.
+         IWANTZ = 1
+      ELSE IF( LSAME( WANTZ, 'V' ) ) THEN
+         ILZ = .TRUE.
+         IWANTZ = 2
+      ELSE IF( LSAME( WANTZ, 'I' ) ) THEN
+         ILZ = .TRUE.
+         IWANTZ = 3
+      ELSE
+         IWANTZ = 0
+      END IF
 *
 *     Check Argument Values
 *
-      info = 0
-      if( iwants.EQ.0 ) then
-         info =-1
-      else if( iwantq.EQ.0 ) then
-         info =-2
-      else if( iwantz.EQ.0 ) then
-         info =-3
-      else if( n.lt.0 ) then
-         info =-4
-      else if( ilo.lt.1 ) then
-         info =-5
-      else if( ihi.GT.n .OR. ihi.lt.ilo-1 ) then
-         info =-6
-      else if( lda.lt.n ) then
-         info =-8
-      else if( ldb.lt.n ) then
-         info =-10
-      else if( ldq.lt.1 .OR. ( ilq .and. ldq.lt.n ) ) then
-         info =-15
-      else if( ldz.lt.1 .OR. ( ilz .and. ldz.lt.n ) ) then
-         info =-17
-      end if
-      if( info.NE.0 ) then
-         call xerbla( 'SLAQZ0',-info )
-         return
-      end if
+      INFO = 0
+      IF( IWANTS.EQ.0 ) THEN
+         INFO = - 1
+      ELSE IF( IWANTQ.EQ.0 ) THEN
+         INFO = - 2
+      ELSE IF( IWANTZ.EQ.0 ) THEN
+         INFO = - 3
+      ELSE IF( N.LT.0 ) THEN
+         INFO = - 4
+      ELSE IF( ILO.LT.1 ) THEN
+         INFO = - 5
+      ELSE IF( IHI.GT.N .OR. IHI.LT.ILO - 1 ) THEN
+         INFO = - 6
+      ELSE IF( LDA.LT.N ) THEN
+         INFO = - 8
+      ELSE IF( LDB.LT.N ) THEN
+         INFO = - 10
+      ELSE IF( LDQ.LT.1 .OR. ( ILQ .AND. LDQ.LT.N ) ) THEN
+         INFO = - 15
+      ELSE IF( LDZ.LT.1 .OR. ( ILZ .AND. LDZ.LT.N ) ) THEN
+         INFO = - 17
+      END IF
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'SLAQZ0', - INFO )
+         RETURN
+      END IF
    
 *
 *     Quick return if possible
 *
-      if( n.le.0 ) then
-         work( 1 ) = real( 1 )
-         return
-      end if
+      IF( N.LE.0 ) THEN
+         WORK( 1 ) = REAL( 1 )
+         RETURN
+      END IF
 
 *
 *     Get the parameters
 *
-      jbcmpz(1:1)=wantS
-      jbcmpz(2:2)=wantQ
-      jbcmpz(3:3)=wantZ
+      JBCMPZ( 1:1 )=WANTS
+      JBCMPZ( 2:2 )=WANTQ
+      JBCMPZ( 3:3 )=WANTZ
 
-      nmin = ilaenv( 12,'SLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      NMIN = ILAENV( 12, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
 
-      nwr = ilaenv( 13,'SLAQZ0',jbcmpz,n,ilo,ihi,lwork )
-      nwr = max( 2,nwr )
-      nwr = min( ihi-ilo+1,( n-1 ) / 3,nwr )
+      NWR = ILAENV( 13, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
+      NWR = MAX( 2, NWR )
+      NWR = MIN( IHI - ILO + 1, ( N - 1 ) / 3, NWR )
 
-      nibble = ilaenv( 14,'SLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      NIBBLE = ILAENV( 14, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
       
-      nsr = ilaenv( 15,'SLAQZ0',jbcmpz,n,ilo,ihi,lwork )
-      nsr = min( nsr,( n+6 ) / 9,ihi-ilo )
-      nsr = max( 2,nsr-mod( nsr,2 ) )
+      NSR = ILAENV( 15, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
+      NSR = MIN( NSR, ( N + 6 ) / 9, IHI - ILO )
+      NSR = MAX( 2, NSR - MOD( NSR, 2 ) )
 
-      rcost = ilaenv( 17,'SLAQZ0',jbcmpz,n,ilo,ihi,lwork )
-      itemp1 = int(nsr/sqrt( 1+2*nsr/(real(rcost)/100*n) ))
-      itemp1 = ((itemp1-1)/4)*4+4
-      nbr = nsr+itemp1
+      RCOST = ILAENV( 17, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
+      ITEMP1 = INT( NSR/SQRT( 1 + 2*NSR/( REAL( RCOST )/100*N ) ) )
+      ITEMP1 = ( ( ITEMP1 - 1 )/4 )*4 + 4
+      NBR = NSR + ITEMP1
 
-      if( n .lt. nmin ) then
-         call shgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
-     $      alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
-         return
-      end if
+      IF( N .LT. NMIN .OR. REC .GE. 1 ) THEN
+         CALL SHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+     $       ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, INFO )
+         RETURN
+      END IF
 
 *
 *     Find out required workspace
 *
 
 *     Workspace query to slaqz3
-      nw = max(nwr,nmin)
-      call slaqz3(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
-     $   n_undeflated,n_deflated,alphar,alphai,beta,work,nw,work,nw,
-     $   work,-1,aed_info)
-      itemp1 = int(work(1))
+      NW = MAX( NWR, NMIN )
+      CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
+     $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR, ALPHAI,
+     $    BETA, WORK, NW, WORK, NW, WORK, - 1, REC, AED_INFO )
+      ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to slaqz4
-      call slaqz4(ilschur,ilq,ilz,n,ilo,ihi,nsr,nbr,alphar,alphai,beta,
-     $   A,ldA,B,ldB,Q,ldQ,Z,ldZ,work,nbr,work,nbr,work,-1,sweep_info)
-      itemp2 = int(work(1))
+      CALL SLAQZ4( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHAR,
+     $    ALPHAI, BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR, WORK,
+     $    NBR, WORK, - 1, SWEEP_INFO )
+      ITEMP2 = INT( WORK( 1 ) )
 
-      lworkreq = max(itemp1+2*nw**2,itemp2+2*nbr**2)
-      if (lwork .eq.-1) then
-         work(1) = real(lworkreq)
-         return
-      else if (lwork .lt. lworkreq) then
-         info =-19
-      end if
-      if( info.NE.0 ) then
-         call xerbla( 'SLAQZ0',info )
-         return
-      end if
+      LWORKREQ = MAX( ITEMP1 + 2*NW**2, ITEMP2 + 2*NBR**2 )
+      IF ( LWORK .EQ. - 1 ) THEN
+         WORK( 1 ) = REAL( LWORKREQ )
+         RETURN
+      ELSE IF ( LWORK .LT. LWORKREQ ) THEN
+         INFO = - 19
+      END IF
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'SLAQZ0', INFO )
+         RETURN
+      END IF
 *
 *     Initialize Q and Z
 *
-      if( iwantq.eq.3 ) call slaset( 'Full',n,n,zero,one,Q,ldq )
-      if( iwantz.eq.3 ) call slaset( 'Full',n,n,zero,one,Z,ldz )
+      IF( IWANTQ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Q, LDQ )
+      IF( IWANTZ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Z, LDZ )
 
 *     Get machine constants
-      safmin = slamch('SAFE MINIMUM')
-      safmax = one/safmin
-      call slabad(safmin,safmax)
-      ulp = slamch('precision')
-      smlnum = safmin*(real(n)/ulp)
+      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+      SAFMAX = ONE/SAFMIN
+      CALL SLABAD( SAFMIN, SAFMAX )
+      ULP = SLAMCH( 'PRECISION' )
+      SMLNUM = SAFMIN*( REAL( N )/ULP )
 
-      istart = ilo
-      istop = ihi
-      maxit = 3*(ihi-ilo+1)
-      ld = 0
+      ISTART = ILO
+      ISTOP = IHI
+      MAXIT = 3*( IHI - ILO + 1 )
+      LD = 0
  
-      do iiter = 1,maxit
-         if(iiter .ge. maxit) then
-            info = istop+1
-            goto 80
-         end if
-         if (istart+1 .ge. istop) then
-            istop = istart
-            exit
-         end if
+      DO IITER = 1, MAXIT
+         IF( IITER .GE. MAXIT ) THEN
+            INFO = ISTOP + 1
+            GOTO 80
+         END IF
+         IF ( ISTART + 1 .GE. ISTOP ) THEN
+            ISTOP = ISTART
+            EXIT
+         END IF
 
 *        Check deflations at the end
-         if (abs(A(istop-1,istop-2)) .le. max(smlnum,ulp*(abs(A(istop-1,
-     $      istop-1))+abs(A(istop-2,istop-2))))) then
-            A(istop-1,istop-2) = zero
-            istop = istop-2
-            ld = 0
-            eshift = zero
-         else if (abs(A(istop,istop-1)) .le. max(smlnum,
-     $      ulp*(abs(A(istop,istop))+abs(A(istop-1,istop-1))))) then
-            A(istop,istop-1) = zero
-            istop = istop-1
-            ld = 0
-            eshift = zero
-         end if
+         IF ( ABS( A( ISTOP - 1, ISTOP - 2 ) ) .LE. MAX( SMLNUM,
+     $       ULP*( ABS( A( ISTOP - 1, ISTOP - 1 ) ) + ABS( A( ISTOP - 2,
+     $       ISTOP - 2 ) ) ) ) ) THEN
+            A( ISTOP - 1, ISTOP - 2 ) = ZERO
+            ISTOP = ISTOP - 2
+            LD = 0
+            ESHIFT = ZERO
+         ELSE IF ( ABS( A( ISTOP, ISTOP - 1 ) ) .LE. MAX( SMLNUM,
+     $       ULP*( ABS( A( ISTOP, ISTOP ) ) + ABS( A( ISTOP - 1,
+     $       ISTOP - 1 ) ) ) ) ) THEN
+            A( ISTOP, ISTOP - 1 ) = ZERO
+            ISTOP = ISTOP - 1
+            LD = 0
+            ESHIFT = ZERO
+         END IF
 *        Check deflations at the start
-         if (abs(A(istart+2,istart+1)) .le. max(smlnum,
-     $      ulp*(abs(A(istart+1,istart+1))+abs(A(istart+2,
-     $      istart+2))))) then
-            A(istart+2,istart+1) = zero
-            istart = istart+2
-            ld = 0
-            eshift = zero
-         else if (abs(A(istart+1,istart)) .le. max(smlnum,
-     $      ulp*(abs(A(istart,istart))+abs(A(istart+1,
-     $      istart+1))))) then
-            A(istart+1,istart) = zero
-            istart = istart+1
-            ld = 0
-            eshift = zero
-         end if
+         IF ( ABS( A( ISTART + 2, ISTART + 1 ) ) .LE. MAX( SMLNUM,
+     $       ULP*( ABS( A( ISTART + 1, ISTART + 1 ) ) + ABS( A( ISTART +
+     $       2, ISTART + 2 ) ) ) ) ) THEN
+            A( ISTART + 2, ISTART + 1 ) = ZERO
+            ISTART = ISTART + 2
+            LD = 0
+            ESHIFT = ZERO
+         ELSE IF ( ABS( A( ISTART + 1, ISTART ) ) .LE. MAX( SMLNUM,
+     $       ULP*( ABS( A( ISTART, ISTART ) ) + ABS( A( ISTART + 1,
+     $       ISTART + 1 ) ) ) ) ) THEN
+            A( ISTART + 1, ISTART ) = ZERO
+            ISTART = ISTART + 1
+            LD = 0
+            ESHIFT = ZERO
+         END IF
 
-         if (istart+1 .ge. istop) then
-            exit
-         end if
+         IF ( ISTART + 1 .GE. ISTOP ) THEN
+            EXIT
+         END IF
 
 *        Check interior deflations
-         istart2 = istart
-         do k = istop,istart+1,-1
-            if (abs(A(k,k-1)) .le. max(smlnum,ulp*(abs(A(k,k))+abs(A(k-
-     $         1,k-1))))) then
-               A(k,k-1) = zero
-               istart2 = k
-               exit
-            end if
-         end do
+         ISTART2 = ISTART
+         DO K = ISTOP, ISTART + 1, - 1
+            IF ( ABS( A( K, K - 1 ) ) .LE. MAX( SMLNUM, ULP*( ABS( A( K,
+     $          K ) ) + ABS( A( K - 1, K - 1 ) ) ) ) ) THEN
+               A( K, K - 1 ) = ZERO
+               ISTART2 = K
+               EXIT
+            END IF
+         END DO
 
 *        Get range to apply rotations to
-         if (ilschur) then
-            istartm = 1
-            istopm = n
-         else
-            istartm = istart2
-            istopm = istop
-         end if
+         IF ( ILSCHUR ) THEN
+            ISTARTM = 1
+            ISTOPM = N
+         ELSE
+            ISTARTM = ISTART2
+            ISTOPM = ISTOP
+         END IF
 
 *        Check infinite eigenvalues, this is done without blocking so might
 *        slow down the method when many infinite eigenvalues are present
-         k = istop
-         do while (k.ge.istart2)
-            temp = zero
-            if(k .lt. istop) then
-               temp = temp+abs(B(k,k+1))
-            end if
-            if(k .gt. istart2) then
-               temp = temp+abs(B(k-1,k))
-            end if
+         K = ISTOP
+         DO WHILE ( K.GE.ISTART2 )
+            TEMP = ZERO
+            IF( K .LT. ISTOP ) THEN
+               TEMP = TEMP + ABS( B( K, K + 1 ) )
+            END IF
+            IF( K .GT. ISTART2 ) THEN
+               TEMP = TEMP + ABS( B( K - 1, K ) )
+            END IF
 
-            if(abs(B(k,k)) .lt. max(smlnum,ulp*temp)) then
+            IF( ABS( B( K, K ) ) .LT. MAX( SMLNUM, ULP*TEMP ) ) THEN
 *              A diagonal element of B is negligable, move it
 *              to the top and deflate it
                
-               do k2 = k,istart2+1,-1
-                  call slartg(B(k2-1,k2),B(k2-1,k2-1),c1,s1,temp)
-                  B(k2-1,k2) = temp
-                  B(k2-1,k2-1) = zero
+               DO K2 = K, ISTART2 + 1, - 1
+                  CALL SLARTG( B( K2 - 1, K2 ), B( K2 - 1, K2 - 1 ), C1,
+     $                S1, TEMP )
+                  B( K2 - 1, K2 ) = TEMP
+                  B( K2 - 1, K2 - 1 ) = ZERO
 
-                  call srot(k2-2-istartm+1,B(istartm,k2),1,B(istartm,
-     $               k2-1),1,c1,s1)
-                  call srot(min(k2+1,istop)-istartm+1,A(istartm,k2),1,
-     $               A(istartm,k2-1),1,c1,s1)
-                  if (ilz) then
-                     call srot(n,Z(1,k2),1,Z(1,k2-1),1,c1,s1)
-                  end if
+                  CALL SROT( K2 - 2 - ISTARTM + 1, B( ISTARTM, K2 ), 1,
+     $                B( ISTARTM, K2 - 1 ), 1, C1, S1 )
+                  CALL SROT( MIN( K2 + 1, ISTOP ) - ISTARTM + 1,
+     $                A( ISTARTM, K2 ), 1, A( ISTARTM, K2 - 1 ), 1, C1,
+     $                S1 )
+                  IF ( ILZ ) THEN
+                     CALL SROT( N, Z( 1, K2 ), 1, Z( 1, K2 - 1 ), 1, C1,
+     $                   S1 )
+                  END IF
 
-                  if(k2.lt.istop) then
-                     call slartg(A(k2,k2-1),A(k2+1,k2-1),c1,s1,temp)
-                     A(k2,k2-1) = temp
-                     A(k2+1,k2-1) = zero
+                  IF( K2.LT.ISTOP ) THEN
+                     CALL SLARTG( A( K2, K2 - 1 ), A( K2 + 1, K2 - 1 ),
+     $                   C1, S1, TEMP )
+                     A( K2, K2 - 1 ) = TEMP
+                     A( K2 + 1, K2 - 1 ) = ZERO
 
-                     call srot(istopm-k2+1,A(k2,k2),ldA,A(k2+1,k2),ldA,
-     $                  c1,s1)
-                     call srot(istopm-k2+1,B(k2,k2),ldB,B(k2+1,k2),ldB,
-     $                  c1,s1)
-                     if(ilq) then
-                        call srot(n,Q(1,k2),1,Q(1,k2+1),1,c1,s1)
-                     end if
-                  end if
+                     CALL SROT( ISTOPM - K2 + 1, A( K2, K2 ), LDA,
+     $                   A( K2 + 1, K2 ), LDA, C1, S1 )
+                     CALL SROT( ISTOPM - K2 + 1, B( K2, K2 ), LDB,
+     $                   B( K2 + 1, K2 ), LDB, C1, S1 )
+                     IF( ILQ ) THEN
+                        CALL SROT( N, Q( 1, K2 ), 1, Q( 1, K2 + 1 ), 1,
+     $                      C1, S1 )
+                     END IF
+                  END IF
 
-               end do
+               END DO
 
-               if(istart2.lt.istop)then
-                  call slartg(A(istart2,istart2),A(istart2+1,istart2),
-     $               c1,s1,temp)
-                  A(istart2,istart2) = temp
-                  A(istart2+1,istart2) = zero
+               IF( ISTART2.LT.ISTOP )THEN
+                  CALL SLARTG( A( ISTART2, ISTART2 ), A( ISTART2 + 1,
+     $                ISTART2 ), C1, S1, TEMP )
+                  A( ISTART2, ISTART2 ) = TEMP
+                  A( ISTART2 + 1, ISTART2 ) = ZERO
 
-                  call srot(istopm-(istart2+1)+1,A(istart2,istart2+1),
-     $               ldA,A(istart2+1,istart2+1),ldA,c1,s1)
-                  call srot(istopm-(istart2+1)+1,B(istart2,istart2+1),
-     $               ldB,B(istart2+1,istart2+1),ldB,c1,s1)
-                  if(ilq) then
-                     call srot(n,Q(1,istart2),1,Q(1,istart2+1),1,c1,s1)
-                  end if
-               end if
+                  CALL SROT( ISTOPM - ( ISTART2 + 1 ) + 1, A( ISTART2,
+     $                ISTART2 + 1 ), LDA, A( ISTART2 + 1, ISTART2 + 1 ),
+     $                LDA, C1, S1 )
+                  CALL SROT( ISTOPM - ( ISTART2 + 1 ) + 1, B( ISTART2,
+     $                ISTART2 + 1 ), LDB, B( ISTART2 + 1, ISTART2 + 1 ),
+     $                LDB, C1, S1 )
+                  IF( ILQ ) THEN
+                     CALL SROT( N, Q( 1, ISTART2 ), 1, Q( 1,
+     $                   ISTART2 + 1 ), 1, C1, S1 )
+                  END IF
+               END IF
 
-               istart2 = istart2+1
+               ISTART2 = ISTART2 + 1
    
-            end if
-            k = k-1
-         end do
+            END IF
+            K = K - 1
+         END DO
 
 *        istart2 now points to the top of the bottom right
 *        unreduced Hessenberg block
-         if (istart2 .ge. istop) then
-            istop = istart2-1
-            ld = 0
-            eshift = zero
-            cycle
-         end if
+         IF ( ISTART2 .GE. ISTOP ) THEN
+            ISTOP = ISTART2 - 1
+            LD = 0
+            ESHIFT = ZERO
+            CYCLE
+         END IF
 
-         nw = nwr
-         nshifts = nsr
-         nblock = nbr
+         NW = NWR
+         NSHIFTS = NSR
+         NBLOCK = NBR
 
-         if (istop-istart2+1 .lt. nmin) then
+         IF ( ISTOP - ISTART2 + 1 .LT. NMIN ) THEN
 *           Setting nw to the size of the subblock will make AED deflate
 *           all the eigenvalues. This is slightly more efficient than just
 *           using qz_small because the off diagonal part gets updated via BLAS.
-            if (istop-istart+1 .lt. nmin) then
-               nw = istop-istart+1
-               istart2 = istart
-            else
-               nw = istop-istart2+1
-            end if
-         end if
+            IF ( ISTOP - ISTART + 1 .LT. NMIN ) THEN
+               NW = ISTOP - ISTART + 1
+               ISTART2 = ISTART
+            ELSE
+               NW = ISTOP - ISTART2 + 1
+            END IF
+         END IF
 
 *
 *        Time for AED
 *
-         call slaqz3(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
-     $      ldQ,Z,ldZ,n_undeflated,n_deflated,alphar,alphai,beta,work,
-     $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2,aed_info)
+         CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
+     $       B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR,
+     $       ALPHAI, BETA, WORK, NW, WORK( NW**2 + 1 ), NW, WORK( 2*NW**
+     $      2 + 1 ), LWORK - 2*NW**2, REC, AED_INFO )
 
-         if (n_deflated > 0) then
-            istop = istop-n_deflated
-            ld = 0
-            eshift = zero
-         end if
+         IF ( N_DEFLATED > 0 ) THEN
+            ISTOP = ISTOP - N_DEFLATED
+            LD = 0
+            ESHIFT = ZERO
+         END IF
 
-         if (100*n_deflated > nibble*(n_deflated+
-     $      n_undeflated) .or.istop-istart2+1 .lt. nmin) then
+         IF ( 100*N_DEFLATED > NIBBLE*( N_DEFLATED + N_UNDEFLATED ) .OR.
+     $      ISTOP - ISTART2 + 1 .LT. NMIN ) THEN
 *           AED has uncovered many eigenvalues. Skip a QZ sweep and run
 *           AED again.
-            cycle
-         end if
+            CYCLE
+         END IF
 
-         ld = ld+1
+         LD = LD + 1
 
-         ns = min(nshifts,istop-istart2)
-         ns = min(ns,n_undeflated)
-         shiftpos = istop-n_deflated-n_undeflated+1
+         NS = MIN( NSHIFTS, ISTOP - ISTART2 )
+         NS = MIN( NS, N_UNDEFLATED )
+         SHIFTPOS = ISTOP - N_DEFLATED - N_UNDEFLATED + 1
 
-         if (mod(ld,6) .eq. 0) then
+         IF ( MOD( LD, 6 ) .EQ. 0 ) THEN
 * 
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
-            if((real(maxit)*safmin)*abs(A(istop,
-     $         istop-1)).lt.abs(A(istop-1,istop-1))) then
-               eshift = A(istop,istop-1)/B(istop-1,istop-1)
-            else
-               eshift = eshift+one/(safmin*real(maxit))
-            end if
-            alphar(shiftpos) = one
-            alphar(shiftpos+1) = zero
-            alphai(shiftpos) = zero
-            alphai(shiftpos+1) = zero
-            beta(shiftpos) = eshift
-            beta(shiftpos+1) = eshift
-            ns = 2
-         end if
+            IF( ( REAL( MAXIT )*SAFMIN )*ABS( A( ISTOP,
+     $          ISTOP - 1 ) ).LT.ABS( A( ISTOP - 1,
+     $          ISTOP - 1 ) ) ) THEN
+               ESHIFT = A( ISTOP, ISTOP - 1 )/B( ISTOP - 1, ISTOP - 1 )
+            ELSE
+               ESHIFT = ESHIFT + ONE/( SAFMIN*REAL( MAXIT ) )
+            END IF
+            ALPHAR( SHIFTPOS ) = ONE
+            ALPHAR( SHIFTPOS + 1 ) = ZERO
+            ALPHAI( SHIFTPOS ) = ZERO
+            ALPHAI( SHIFTPOS + 1 ) = ZERO
+            BETA( SHIFTPOS ) = ESHIFT
+            BETA( SHIFTPOS + 1 ) = ESHIFT
+            NS = 2
+         END IF
 
 *
 *        Time for a QZ sweep
 *
-         call slaqz4(ilschur,ilq,ilz,n,istart2,istop,ns,nblock,
-     $      alphar(shiftpos),alphai(shiftpos),beta(shiftpos),A,ldA,B,
-     $      ldB,Q,ldQ,Z,ldZ,work,nblock,work(nblock**2+1),nblock,
-     $      work(2*nblock**2+1),lwork-2*nblock**2,sweep_info)
+         CALL SLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
+     $       ALPHAR( SHIFTPOS ), ALPHAI( SHIFTPOS ), BETA( SHIFTPOS ),
+     $       A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBLOCK, WORK( NBLOCK*
+     $      *2 + 1 ), NBLOCK, WORK( 2*NBLOCK**2 + 1 ), LWORK - 2*NBLOCK*
+     $      *2, SWEEP_INFO )
 
-      end do
+      END DO
 
 *
 *     Call SHGEQZ to normalize the eigenvalue blocks and set the eigenvalues
@@ -679,9 +702,9 @@
 *     and only normalize the blocks. In case of a rare convergence failure,
 *     the single shift might perform better.
 *
-   80 call shgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,alphai,
-     $beta,Q,ldQ,Z,ldZ,work,lwork,norm_info)
+   80 CALL SHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+     $ ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, NORM_INFO )
       
-      info = norm_info
+      INFO = NORM_INFO
 
-      end subroutine
+      END SUBROUTINE

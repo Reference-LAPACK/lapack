@@ -185,309 +185,320 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine slaqz4(ilschur,ilq,ilz,n,ilo,ihi,nshifts,
-     $   nblock_desired,sr,si,ss,A,ldA,B,ldB,Q,ldQ,Z,ldZ,Qc,ldQc,Zc,
-     $   ldZc,work,lwork,info)
-      implicit none
+      SUBROUTINE SLAQZ4( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,
+     $    NBLOCK_DESIRED, SR, SI, SS, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
+     $    QC, LDQC, ZC, LDZC, WORK, LWORK, INFO )
+      IMPLICIT NONE
 
 *     Function arguments
-      logical,intent(in) :: ilschur,ilq,ilz
-      integer,intent(in) :: n,ilo,ihi,ldA,ldB,ldQ,ldZ,lwork,nshifts,
-     $   nblock_desired,ldQc,ldZc
+      LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
+      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+     $    NSHIFTS, NBLOCK_DESIRED, LDQC, LDZC
 
-      real,intent(inout) :: A(ldA,*),B(ldB,*),Q(ldQ,*),
-     $   Z(ldZ,*),Qc(ldQc,*),Zc(ldZc,*),work(*),sr(*),si(*),ss(*)
+      REAL, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+     $    Z( LDZ, * ), QC( LDQC, * ), ZC( LDZC, * ), WORK( * ), SR( * ),
+     $    SI( * ), SS( * )
 
-      integer,intent(out) :: info
+      INTEGER, INTENT( OUT ) :: INFO
 
 *     Parameters
-      real :: zero,one,half
-      parameter(zero=0.0,one=1.0,half=0.5)
+      REAL :: ZERO, ONE, HALF
+      PARAMETER( ZERO=0.0, ONE=1.0, HALF=0.5 )
 
 *     Local scalars
-      integer :: i,j,ns,istartm,istopm,sheight,swidth,k,np,istartb,
-     $   istopb,ishift,nblock,npos
-      real :: temp,v(3),c1,s1,c2,s2,H(2,3),swap
+      INTEGER :: I, J, NS, ISTARTM, ISTOPM, SHEIGHT, SWIDTH, K, NP,
+     $    ISTARTB, ISTOPB, ISHIFT, NBLOCK, NPOS
+      REAL :: TEMP, V( 3 ), C1, S1, C2, S2, H( 2, 3 ), SWAP
 
-      info = 0
-      if (nblock_desired .lt. nshifts+1) then
-         info =-8
-      end if
-      if (lwork .eq.-1) then
+      INFO = 0
+      IF ( NBLOCK_DESIRED .LT. NSHIFTS + 1 ) THEN
+         INFO = - 8
+      END IF
+      IF ( LWORK .EQ. - 1 ) THEN
 *        workspace query, quick return
-         work(1) = n*nblock_desired
-         return
-      else if (lwork .lt. n*nblock_desired) then
-         info =-25
-      end if
+         WORK( 1 ) = N*NBLOCK_DESIRED
+         RETURN
+      ELSE IF ( LWORK .LT. N*NBLOCK_DESIRED ) THEN
+         INFO = - 25
+      END IF
 
-      if( info.NE.0 ) then
-         call xerbla( 'SLAQZ4',-info )
-         return
-      end if
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'SLAQZ4', - INFO )
+         RETURN
+      END IF
 
 *     Executable statements
 
-      if (nshifts .lt. 2) then
-         return
-      end if
+      IF ( NSHIFTS .LT. 2 ) THEN
+         RETURN
+      END IF
 
-      if (ilo .ge. ihi) then
-         return
-      end if
+      IF ( ILO .GE. IHI ) THEN
+         RETURN
+      END IF
 
-      if (ilschur) then
-         istartm = 1
-         istopm = n
-      else
-         istartm = ilo
-         istopm = ihi
-      end if
+      IF ( ILSCHUR ) THEN
+         ISTARTM = 1
+         ISTOPM = N
+      ELSE
+         ISTARTM = ILO
+         ISTOPM = IHI
+      END IF
 
 *     Shuffle shifts into pairs of real shifts and pairs
 *     of complex conjugate shifts assuming complex
 *     conjugate shifts are already adjacent to one
 *     another
 
-      do i = 1,nshifts-2,2
-         if( si( i ).NE.-si( i+1 ) ) then
+      DO I = 1, NSHIFTS - 2, 2
+         IF( SI( I ).NE. - SI( I + 1 ) ) THEN
 *
-            swap = sr( i )
-            sr( i ) = sr( i+1 )
-            sr( i+1 ) = sr( i+2 )
-            sr( i+2 ) = swap
+            SWAP = SR( I )
+            SR( I ) = SR( I + 1 )
+            SR( I + 1 ) = SR( I + 2 )
+            SR( I + 2 ) = SWAP
 
-            swap = si( i )
-            si( i ) = si( i+1 )
-            si( i+1 ) = si( i+2 )
-            si( i+2 ) = swap
+            SWAP = SI( I )
+            SI( I ) = SI( I + 1 )
+            SI( I + 1 ) = SI( I + 2 )
+            SI( I + 2 ) = SWAP
             
-            swap = ss( i )
-            ss( i ) = ss( i+1 )
-            ss( i+1 ) = ss( i+2 )
-            ss( i+2 ) = swap
-         end if
-      end do
+            SWAP = SS( I )
+            SS( I ) = SS( I + 1 )
+            SS( I + 1 ) = SS( I + 2 )
+            SS( I + 2 ) = SWAP
+         END IF
+      END DO
 
 *     NSHFTS is supposed to be even, but if it is odd,
 *     then simply reduce it by one.  The shuffle above
 *     ensures that the dropped shift is real and that
 *     the remaining shifts are paired.
 
-      ns = nshifts-mod(nshifts,2)
-      npos = max(nblock_desired-ns,1)
+      NS = NSHIFTS - MOD( NSHIFTS, 2 )
+      NPOS = MAX( NBLOCK_DESIRED - NS, 1 )
 
 *     The following block introduces the shifts and chases
 *     them down one by one just enough to make space for
 *     the other shifts. The near-the-diagonal block is
 *     of size (ns+1) x ns.
 
-      call slaset('Full',ns+1,ns+1,zero,one,Qc,ldQc)
-      call slaset('Full',ns,ns,zero,one,Zc,ldZc)
+      CALL SLASET( 'FULL', NS + 1, NS + 1, ZERO, ONE, QC, LDQC )
+      CALL SLASET( 'FULL', NS, NS, ZERO, ONE, ZC, LDZC )
 
-      do i = 1,ns,2
+      DO I = 1, NS, 2
 *        Introduce the shift
-         call slaqz1(A(ilo,ilo),ldA,B(ilo,ilo),ldB,sr(i),sr(i+1),si(i),
-     $      ss(i),ss(i+1),v)
+         CALL SLAQZ1( A( ILO, ILO ), LDA, B( ILO, ILO ), LDB, SR( I ),
+     $       SR( I + 1 ), SI( I ), SS( I ), SS( I + 1 ), V )
 
-         temp = v(2)
-         call slartg(temp,v(3),c1,s1,v(2))
-         call slartg(v(1),v(2),c2,s2,temp)
+         TEMP = V( 2 )
+         CALL SLARTG( TEMP, V( 3 ), C1, S1, V( 2 ) )
+         CALL SLARTG( V( 1 ), V( 2 ), C2, S2, TEMP )
 
-         call srot(ns,A(ilo+1,ilo),ldA,A(ilo+2,ilo),ldA,c1,s1)
-         call srot(ns,A(ilo,ilo),ldA,A(ilo+1,ilo),ldA,c2,s2)
-         call srot(ns,B(ilo+1,ilo),ldB,B(ilo+2,ilo),ldB,c1,s1)
-         call srot(ns,B(ilo,ilo),ldB,B(ilo+1,ilo),ldB,c2,s2)
-         call srot(ns+1,Qc(1,2),1,Qc(1,3),1,c1,s1)
-         call srot(ns+1,Qc(1,1),1,Qc(1,2),1,c2,s2)
+         CALL SROT( NS, A( ILO + 1, ILO ), LDA, A( ILO + 2, ILO ), LDA,
+     $       C1, S1 )
+         CALL SROT( NS, A( ILO, ILO ), LDA, A( ILO + 1, ILO ), LDA, C2,
+     $       S2 )
+         CALL SROT( NS, B( ILO + 1, ILO ), LDB, B( ILO + 2, ILO ), LDB,
+     $       C1, S1 )
+         CALL SROT( NS, B( ILO, ILO ), LDB, B( ILO + 1, ILO ), LDB, C2,
+     $       S2 )
+         CALL SROT( NS + 1, QC( 1, 2 ), 1, QC( 1, 3 ), 1, C1, S1 )
+         CALL SROT( NS + 1, QC( 1, 1 ), 1, QC( 1, 2 ), 1, C2, S2 )
 
 *        Chase the shift down
-         do j = 1,ns-1-i
+         DO J = 1, NS - 1 - I
 
-            call slaqz2(.true.,.true.,j,1,ns,ihi-ilo+1,A(ilo,ilo),ldA,
-     $         B(ilo,ilo),ldB,ns+1,1,Qc,ldQc,ns,1,Zc,ldZc)
+            CALL SLAQZ2( .TRUE., .TRUE., J, 1, NS, IHI - ILO + 1,
+     $          A( ILO, ILO ), LDA, B( ILO, ILO ), LDB, NS + 1, 1, QC,
+     $          LDQC, NS, 1, ZC, LDZC )
 
-         end do
+         END DO
 
-      end do
+      END DO
 
 *     Update the rest of the pencil
 
 *     Update A(ilo:ilo+ns,ilo+ns:istopm) and B(ilo:ilo+ns,ilo+ns:istopm)
 *     from the left with Qc(1:ns+1,1:ns+1)'
-      sheight = ns+1
-      swidth = istopm-(ilo+ns)+1
-      if (swidth > 0) then
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,A(ilo,
-     $      ilo+ns),ldA,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,A(ilo,ilo+ns),
-     $      ldA)
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,B(ilo,
-     $      ilo+ns),ldB,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,B(ilo,ilo+ns),
-     $      ldB)
-      end if
-      if (ilq) then
-        call sgemm('N','N',n,sheight,sheight,one,Q(1,ilo),ldQ,Qc,ldQc,
-     $     zero,work,n)
-         call slacpy('ALL',n,sheight,work,n,Q(1,ilo),ldQ)
-      end if
+      SHEIGHT = NS + 1
+      SWIDTH = ISTOPM - ( ILO + NS ) + 1
+      IF ( SWIDTH > 0 ) THEN
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       A( ILO, ILO + NS ), LDA, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ILO,
+     $       ILO + NS ), LDA )
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       B( ILO, ILO + NS ), LDB, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ILO,
+     $       ILO + NS ), LDB )
+      END IF
+      IF ( ILQ ) THEN
+        CALL SGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
+     $      LDQ, QC, LDQC, ZERO, WORK, N )
+         CALL SLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
+      END IF
 
 *     Update A(istartm:ilo-1,ilo:ilo+ns-1) and B(istartm:ilo-1,ilo:ilo+ns-1)
 *     from the right with Zc(1:ns,1:ns)
-      sheight = ilo-1-istartm+1
-      swidth = ns
-      if (sheight > 0) then
-         call sgemm('N','N',sheight,swidth,swidth,one,A(istartm,ilo),
-     $      ldA,Zc,ldZc,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,A(istartm,ilo),
-     $      ldA)
-         call sgemm('N','N',sheight,swidth,swidth,one,B(istartm,ilo),
-     $      ldB,Zc,ldZc,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,B(istartm,ilo),
-     $      ldB)
-      end if
-      if (ilz) then
-         call sgemm('N','N',n,swidth,swidth,one,Z(1,ilo),ldZ,Zc,ldZc,
-     $      zero,work,n)
-         call slacpy('ALL',n,swidth,work,n,Z(1,ilo),ldZ)
-      end if
+      SHEIGHT = ILO - 1 - ISTARTM + 1
+      SWIDTH = NS
+      IF ( SHEIGHT > 0 ) THEN
+         CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
+     $       ILO ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+     $       ILO ), LDA )
+         CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
+     $       ILO ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+     $       ILO ), LDB )
+      END IF
+      IF ( ILZ ) THEN
+         CALL SGEMM( 'N', 'N', N, SWIDTH, SWIDTH, ONE, Z( 1, ILO ), LDZ,
+     $       ZC, LDZC, ZERO, WORK, N )
+         CALL SLACPY( 'ALL', N, SWIDTH, WORK, N, Z( 1, ILO ), LDZ )
+      END IF
 
 *     The following block chases the shifts down to the bottom
 *     right block. If possible, a shift is moved down npos
 *     positions at a time
 
-      k = ilo
-      do while (k < ihi-ns)
-         np = min(ihi-ns-k,npos)
+      K = ILO
+      DO WHILE ( K < IHI - NS )
+         NP = MIN( IHI - NS - K, NPOS )
 *        Size of the near-the-diagonal block
-         nblock = ns+np
+         NBLOCK = NS + NP
 *        istartb points to the first row we will be updating
-         istartb = k+1
+         ISTARTB = K + 1
 *        istopb points to the last column we will be updating
-         istopb = k+nblock-1
+         ISTOPB = K + NBLOCK - 1
 
-         call slaset('Full',ns+np,ns+np,zero,one,Qc,ldQc)
-         call slaset('Full',ns+np,ns+np,zero,one,Zc,ldZc)
+         CALL SLASET( 'FULL', NS + NP, NS + NP, ZERO, ONE, QC, LDQC )
+         CALL SLASET( 'FULL', NS + NP, NS + NP, ZERO, ONE, ZC, LDZC )
 
 *        Near the diagonal shift chase
-         do i = ns-1,1,-2
-            do j = 0,np-1
+         DO I = NS - 1, 1, - 2
+            DO J = 0, NP - 1
 *              Move down the block with index k+i+j-1, updating
 *              the (ns+np x ns+np) block:
 *              (k:k+ns+np,k:k+ns+np-1)
-               call slaqz2(.true.,.true.,k+i+j-1,istartb,istopb,ihi,A,
-     $            ldA,B,ldB,nblock,k+1,Qc,ldQc,nblock,k,Zc,ldZc)
-            end do
-         end do
+               CALL SLAQZ2( .TRUE., .TRUE., K + I + J - 1, ISTARTB,
+     $             ISTOPB, IHI, A, LDA, B, LDB, NBLOCK, K + 1, QC, LDQC,
+     $             NBLOCK, K, ZC, LDZC )
+            END DO
+         END DO
 
 *        Update rest of the pencil
 
 *        Update A(k+1:k+ns+np, k+ns+np:istopm) and
 *        B(k+1:k+ns+np, k+ns+np:istopm)
 *        from the left with Qc(1:ns+np,1:ns+np)'
-         sheight = ns+np
-         swidth = istopm-(k+ns+np)+1
-         if (swidth > 0) then
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,A(k+1,
-     $      k+ns+np),ldA,zero,work,sheight)
-            call slacpy('ALL',sheight,swidth,work,sheight,A(k+1,
-     $         k+ns+np),ldA)
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,B(k+1,
-     $      k+ns+np),ldB,zero,work,sheight)
-            call slacpy('ALL',sheight,swidth,work,sheight,B(k+1,
-     $         k+ns+np),ldB)
-         end if
-         if (ilq) then
-        call sgemm('N','N',n,nblock,nblock,one,Q(1,k+1),ldQ,Qc,ldQc,
-     $     zero,work,n)
-            call slacpy('ALL',n,nblock,work,n,Q(1,k+1),ldQ)
-         end if
+         SHEIGHT = NS + NP
+         SWIDTH = ISTOPM - ( K + NS + NP ) + 1
+         IF ( SWIDTH > 0 ) THEN
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       A( K + 1, K + NS + NP ), LDA, ZERO, WORK, SHEIGHT )
+            CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $          A( K + 1, K + NS + NP ), LDA )
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       B( K + 1, K + NS + NP ), LDB, ZERO, WORK, SHEIGHT )
+            CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $          B( K + 1, K + NS + NP ), LDB )
+         END IF
+         IF ( ILQ ) THEN
+        CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1, K + 1 ),
+     $      LDQ, QC, LDQC, ZERO, WORK, N )
+            CALL SLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K + 1 ),
+     $          LDQ )
+         END IF
 
 *        Update A(istartm:k,k:k+ns+npos-1) and B(istartm:k,k:k+ns+npos-1)
 *        from the right with Zc(1:ns+np,1:ns+np)
-         sheight = k-istartm+1
-         swidth = nblock
-         if (sheight > 0) then
-            call sgemm('N','N',sheight,swidth,swidth,one,A(istartm,k),
-     $         ldA,Zc,ldZc,zero,work,sheight)
-            call slacpy('ALL',sheight,swidth,work,sheight,A(istartm,k),
-     $         ldA)
-            call sgemm('N','N',sheight,swidth,swidth,one,B(istartm,k),
-     $         ldB,Zc,ldZc,zero,work,sheight)
-            call slacpy('ALL',sheight,swidth,work,sheight,B(istartm,k),
-     $         ldB)
-         end if
-         if (ilz) then
-            call sgemm('N','N',n,nblock,nblock,one,Z(1,k),ldZ,Zc,ldZc,
-     $         zero,work,n)
-            call slacpy('ALL',n,nblock,work,n,Z(1,k),ldZ)
-         end if
+         SHEIGHT = K - ISTARTM + 1
+         SWIDTH = NBLOCK
+         IF ( SHEIGHT > 0 ) THEN
+            CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $          A( ISTARTM, K ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+            CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $          A( ISTARTM, K ), LDA )
+            CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $          B( ISTARTM, K ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+            CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $          B( ISTARTM, K ), LDB )
+         END IF
+         IF ( ILZ ) THEN
+            CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Z( 1, K ),
+     $          LDZ, ZC, LDZC, ZERO, WORK, N )
+            CALL SLACPY( 'ALL', N, NBLOCK, WORK, N, Z( 1, K ), LDZ )
+         END IF
 
-         k = k+np
+         K = K + NP
 
-      end do
+      END DO
 
 *     The following block removes the shifts from the bottom right corner
 *     one by one. Updates are initially applied to A(ihi-ns+1:ihi,ihi-ns:ihi).
 
-      call slaset('Full',ns,ns,zero,one,Qc,ldQc)
-      call slaset('Full',ns+1,ns+1,zero,one,Zc,ldZc)
+      CALL SLASET( 'FULL', NS, NS, ZERO, ONE, QC, LDQC )
+      CALL SLASET( 'FULL', NS + 1, NS + 1, ZERO, ONE, ZC, LDZC )
 
 *     istartb points to the first row we will be updating
-      istartb = ihi-ns+1
+      ISTARTB = IHI - NS + 1
 *     istopb points to the last column we will be updating
-      istopb = ihi
+      ISTOPB = IHI
 
-      do i = 1,ns,2
+      DO I = 1, NS, 2
 *        Chase the shift down to the bottom right corner
-         do ishift = ihi-i-1,ihi-2
-            call slaqz2(.true.,.true.,ishift,istartb,istopb,ihi,A,ldA,B,
-     $         ldB,ns,ihi-ns+1,Qc,ldQc,ns+1,ihi-ns,Zc,ldZc)
-         end do
+         DO ISHIFT = IHI - I - 1, IHI - 2
+            CALL SLAQZ2( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB, IHI,
+     $          A, LDA, B, LDB, NS, IHI - NS + 1, QC, LDQC, NS + 1,
+     $          IHI - NS, ZC, LDZC )
+         END DO
          
-      end do
+      END DO
 
 *     Update rest of the pencil
 
 *     Update A(ihi-ns+1:ihi, ihi+1:istopm)
 *     from the left with Qc(1:ns,1:ns)'
-      sheight = ns
-      swidth = istopm-(ihi+1)+1
-      if (swidth > 0) then
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,
-     $      A(ihi-ns+1,ihi+1),ldA,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,A(ihi-ns+1,
-     $      ihi+1),ldA)
-         call sgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,
-     $      B(ihi-ns+1,ihi+1),ldB,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,B(ihi-ns+1,
-     $      ihi+1),ldB)
-      end if
-      if (ilq) then
-         call sgemm('N','N',n,ns,ns,one,Q(1,ihi-ns+1),ldQ,Qc,ldQc,zero,
-     $      work,n)
-         call slacpy('ALL',n,ns,work,n,Q(1,ihi-ns+1),ldQ)
-      end if
+      SHEIGHT = NS
+      SWIDTH = ISTOPM - ( IHI + 1 ) + 1
+      IF ( SWIDTH > 0 ) THEN
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       A( IHI - NS + 1, IHI + 1 ), LDA, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $       A( IHI - NS + 1, IHI + 1 ), LDA )
+         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+     $       B( IHI - NS + 1, IHI + 1 ), LDB, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $       B( IHI - NS + 1, IHI + 1 ), LDB )
+      END IF
+      IF ( ILQ ) THEN
+         CALL SGEMM( 'N', 'N', N, NS, NS, ONE, Q( 1, IHI - NS + 1 ),
+     $       LDQ, QC, LDQC, ZERO, WORK, N )
+         CALL SLACPY( 'ALL', N, NS, WORK, N, Q( 1, IHI - NS + 1 ),
+     $       LDQ )
+      END IF
 
 *     Update A(istartm:ihi-ns,ihi-ns:ihi)
 *     from the right with Zc(1:ns+1,1:ns+1)
-      sheight = ihi-ns-istartm+1
-      swidth = ns+1
-      if (sheight > 0) then
-         call sgemm('N','N',sheight,swidth,swidth,one,A(istartm,ihi-ns),
-     $      ldA,Zc,ldZc,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,A(istartm,
-     $      ihi-ns),ldA)
-         call sgemm('N','N',sheight,swidth,swidth,one,B(istartm,ihi-ns),
-     $      ldB,Zc,ldZc,zero,work,sheight)
-         call slacpy('ALL',sheight,swidth,work,sheight,B(istartm,
-     $      ihi-ns),ldB)
-      end if
-      if (ilz) then
-      call sgemm('N','N',n,ns+1,ns+1,one,Z(1,ihi-ns),ldZ,Zc,ldZc,zero,
-     $   work,n)
-         call slacpy('ALL',n,ns+1,work,n,Z(1,ihi-ns),ldZ)
-      end if
+      SHEIGHT = IHI - NS - ISTARTM + 1
+      SWIDTH = NS + 1
+      IF ( SHEIGHT > 0 ) THEN
+         CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
+     $       IHI - NS ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+     $       IHI - NS ), LDA )
+         CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
+     $       IHI - NS ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+         CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+     $       IHI - NS ), LDB )
+      END IF
+      IF ( ILZ ) THEN
+      CALL SGEMM( 'N', 'N', N, NS + 1, NS + 1, ONE, Z( 1, IHI - NS ),
+     $    LDZ, ZC, LDZC, ZERO, WORK, N )
+         CALL SLACPY( 'ALL', N, NS + 1, WORK, N, Z( 1, IHI - NS ),
+     $       LDZ )
+      END IF
 
-      end subroutine
+      END SUBROUTINE

@@ -151,134 +151,145 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine slaqz2(ilq,ilz,k,istartm,istopm,ihi,A,ldA,B,ldB,nQ,
-     $   qStart,Q,ldQ,nZ,zStart,Z,ldZ)
-      implicit none
+      SUBROUTINE SLAQZ2( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
+     $    LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
+      IMPLICIT NONE
 *
 *     Arguments
-      logical,intent(in) :: ilq,ilz
-      integer,intent(in) :: k,ldA,ldB,ldQ,ldZ,istartm,istopm,nQ,nZ,
-     $   qStart,zStart,ihi
-      real :: A(ldA,*),B(ldB,*),Q(ldQ,*),Z(ldZ,*)
+      LOGICAL, INTENT( IN ) :: ILQ, ILZ
+      INTEGER, INTENT( IN ) :: K, LDA, LDB, LDQ, LDZ, ISTARTM, ISTOPM,
+     $    NQ, NZ, QSTART, ZSTART, IHI
+      REAL :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ), Z( LDZ, * )
 *
 *     Parameters
-      real :: zero,one,half
-      parameter(zero=0.0,one=1.0,half=0.5)
+      REAL :: ZERO, ONE, HALF
+      PARAMETER( ZERO=0.0, ONE=1.0, HALF=0.5 )
 *
 *     Local variables
-      real :: H(2,3),c1,s1,c2,s2,temp
+      REAL :: H( 2, 3 ), C1, S1, C2, S2, TEMP
 *
-      if(k+2 .eq. ihi) then
+      IF( K + 2 .EQ. IHI ) THEN
 *        Shift is located on the edge of the matrix, remove it
-         H = B(ihi-1:ihi,ihi-2:ihi)
+         H = B( IHI - 1:IHI, IHI - 2:IHI )
 *        Make H upper triangular
-         call slartg(H(1,1),H(2,1),c1,s1,temp)
-         H(2,1) = zero
-         H(1,1) = temp
-         call srot(2,H(1,2),2,H(2,2),2,c1,s1)
+         CALL SLARTG( H( 1, 1 ), H( 2, 1 ), C1, S1, TEMP )
+         H( 2, 1 ) = ZERO
+         H( 1, 1 ) = TEMP
+         CALL SROT( 2, H( 1, 2 ), 2, H( 2, 2 ), 2, C1, S1 )
 *
-         call slartg(H(2,3),H(2,2),c1,s1,temp)
-         call srot(1,H(1,3),1,H(1,2),1,c1,s1)
-         call slartg(H(1,2),H(1,1),c2,s2,temp)
+         CALL SLARTG( H( 2, 3 ), H( 2, 2 ), C1, S1, TEMP )
+         CALL SROT( 1, H( 1, 3 ), 1, H( 1, 2 ), 1, C1, S1 )
+         CALL SLARTG( H( 1, 2 ), H( 1, 1 ), C2, S2, TEMP )
 *
-         call srot(ihi-istartm+1,B(istartm,ihi),1,B(istartm,ihi-1),1,c1,
-     $      s1)
-         call srot(ihi-istartm+1,B(istartm,ihi-1),1,B(istartm,ihi-2),1,
-     $      c2,s2)
-         B(ihi-1,ihi-2) = zero
-         B(ihi,ihi-2) = zero
-         call srot(ihi-istartm+1,A(istartm,ihi),1,A(istartm,ihi-1),1,c1,
-     $      s1)
-         call srot(ihi-istartm+1,A(istartm,ihi-1),1,A(istartm,ihi-2),1,
-     $      c2,s2)
-         if (ilz) then
-            call srot(nz,Z(1,ihi-zStart+1),1,Z(1,ihi-1-zStart+1),1,c1,
-     $         s1)
-            call srot(nz,Z(1,ihi-1-zStart+1),1,Z(1,ihi-2-zStart+1),1,c2,
-     $         s2)
-         end if
+         CALL SROT( IHI - ISTARTM + 1, B( ISTARTM, IHI ), 1, B( ISTARTM,
+     $       IHI - 1 ), 1, C1, S1 )
+         CALL SROT( IHI - ISTARTM + 1, B( ISTARTM, IHI - 1 ), 1,
+     $       B( ISTARTM, IHI - 2 ), 1, C2, S2 )
+         B( IHI - 1, IHI - 2 ) = ZERO
+         B( IHI, IHI - 2 ) = ZERO
+         CALL SROT( IHI - ISTARTM + 1, A( ISTARTM, IHI ), 1, A( ISTARTM,
+     $       IHI - 1 ), 1, C1, S1 )
+         CALL SROT( IHI - ISTARTM + 1, A( ISTARTM, IHI - 1 ), 1,
+     $       A( ISTARTM, IHI - 2 ), 1, C2, S2 )
+         IF ( ILZ ) THEN
+            CALL SROT( NZ, Z( 1, IHI - ZSTART + 1 ), 1, Z( 1,
+     $          IHI - 1 - ZSTART + 1 ), 1, C1, S1 )
+            CALL SROT( NZ, Z( 1, IHI - 1 - ZSTART + 1 ), 1, Z( 1,
+     $          IHI - 2 - ZSTART + 1 ), 1, C2, S2 )
+         END IF
 *
-         call slartg(A(ihi-1,ihi-2),A(ihi,ihi-2),c1,s1,temp)
-         A(ihi-1,ihi-2) = temp
-         A(ihi,ihi-2) = zero
-         call srot(istopm-ihi+2,A(ihi-1,ihi-1),ldA,A(ihi,ihi-1),ldA,c1,
-     $      s1)
-         call srot(istopm-ihi+2,B(ihi-1,ihi-1),ldB,B(ihi,ihi-1),ldB,c1,
-     $      s1)
-         if (ilq) then
-            call srot(nq,Q(1,ihi-1-qStart+1),1,Q(1,ihi-qStart+1),1,c1,
-     $         s1)
-         end if
+         CALL SLARTG( A( IHI - 1, IHI - 2 ), A( IHI, IHI - 2 ), C1, S1,
+     $       TEMP )
+         A( IHI - 1, IHI - 2 ) = TEMP
+         A( IHI, IHI - 2 ) = ZERO
+         CALL SROT( ISTOPM - IHI + 2, A( IHI - 1, IHI - 1 ), LDA,
+     $       A( IHI, IHI - 1 ), LDA, C1, S1 )
+         CALL SROT( ISTOPM - IHI + 2, B( IHI - 1, IHI - 1 ), LDB,
+     $       B( IHI, IHI - 1 ), LDB, C1, S1 )
+         IF ( ILQ ) THEN
+            CALL SROT( NQ, Q( 1, IHI - 1 - QSTART + 1 ), 1, Q( 1,
+     $          IHI - QSTART + 1 ), 1, C1, S1 )
+         END IF
 *
-         call slartg(B(ihi,ihi),B(ihi,ihi-1),c1,s1,temp)
-         B(ihi,ihi) = temp
-         B(ihi,ihi-1) = zero
-         call srot(ihi-istartm,B(istartm,ihi),1,B(istartm,ihi-1),1,c1,
-     $      s1)
-         call srot(ihi-istartm+1,A(istartm,ihi),1,A(istartm,ihi-1),1,c1,
-     $      s1)
-         if (ilz) then
-            call srot(nz,Z(1,ihi-zStart+1),1,Z(1,ihi-1-zStart+1),1,c1,
-     $         s1)
-         end if
+         CALL SLARTG( B( IHI, IHI ), B( IHI, IHI - 1 ), C1, S1, TEMP )
+         B( IHI, IHI ) = TEMP
+         B( IHI, IHI - 1 ) = ZERO
+         CALL SROT( IHI - ISTARTM, B( ISTARTM, IHI ), 1, B( ISTARTM,
+     $       IHI - 1 ), 1, C1, S1 )
+         CALL SROT( IHI - ISTARTM + 1, A( ISTARTM, IHI ), 1, A( ISTARTM,
+     $       IHI - 1 ), 1, C1, S1 )
+         IF ( ILZ ) THEN
+            CALL SROT( NZ, Z( 1, IHI - ZSTART + 1 ), 1, Z( 1,
+     $          IHI - 1 - ZSTART + 1 ), 1, C1, S1 )
+         END IF
 *
-      else
+      ELSE
 *
 *        Normal operation, move bulge down
 *
-         H = B(k+1:k+2,k:k+2)
+         H = B( K + 1:K + 2, K:K + 2 )
 *
 *        Make H upper triangular
 *
-         call slartg(H(1,1),H(2,1),c1,s1,temp)
-         H(2,1) = zero
-         H(1,1) = temp
-         call srot(2,H(1,2),2,H(2,2),2,c1,s1)
+         CALL SLARTG( H( 1, 1 ), H( 2, 1 ), C1, S1, TEMP )
+         H( 2, 1 ) = ZERO
+         H( 1, 1 ) = TEMP
+         CALL SROT( 2, H( 1, 2 ), 2, H( 2, 2 ), 2, C1, S1 )
 *
 *        Calculate Z1 and Z2
 *
-         call slartg(H(2,3),H(2,2),c1,s1,temp)
-         call srot(1,H(1,3),1,H(1,2),1,c1,s1)
-         call slartg(H(1,2),H(1,1),c2,s2,temp)
+         CALL SLARTG( H( 2, 3 ), H( 2, 2 ), C1, S1, TEMP )
+         CALL SROT( 1, H( 1, 3 ), 1, H( 1, 2 ), 1, C1, S1 )
+         CALL SLARTG( H( 1, 2 ), H( 1, 1 ), C2, S2, TEMP )
 *
 *        Apply transformations from the right
 *
-         call srot(k+3-istartm+1,A(istartm,k+2),1,A(istartm,k+1),1,c1,
-     $      s1)
-         call srot(k+3-istartm+1,A(istartm,k+1),1,A(istartm,k),1,c2,s2)
-         call srot(k+2-istartm+1,B(istartm,k+2),1,B(istartm,k+1),1,c1,
-     $      s1)
-         call srot(k+2-istartm+1,B(istartm,k+1),1,B(istartm,k),1,c2,s2)
-         if (ilz) then
-            call srot(nZ,Z(1,k+2-zStart+1),1,Z(1,k+1-zStart+1),1,c1,s1)
-            call srot(nZ,Z(1,k+1-zStart+1),1,Z(1,k-zStart+1),1,c2,s2)
-         end if
-         B(k+1,k) = zero
-         B(k+2,k) = zero
+         CALL SROT( K + 3 - ISTARTM + 1, A( ISTARTM, K + 2 ), 1,
+     $       A( ISTARTM, K + 1 ), 1, C1, S1 )
+         CALL SROT( K + 3 - ISTARTM + 1, A( ISTARTM, K + 1 ), 1,
+     $       A( ISTARTM, K ), 1, C2, S2 )
+         CALL SROT( K + 2 - ISTARTM + 1, B( ISTARTM, K + 2 ), 1,
+     $       B( ISTARTM, K + 1 ), 1, C1, S1 )
+         CALL SROT( K + 2 - ISTARTM + 1, B( ISTARTM, K + 1 ), 1,
+     $       B( ISTARTM, K ), 1, C2, S2 )
+         IF ( ILZ ) THEN
+            CALL SROT( NZ, Z( 1, K + 2 - ZSTART + 1 ), 1, Z( 1,
+     $          K + 1 - ZSTART + 1 ), 1, C1, S1 )
+            CALL SROT( NZ, Z( 1, K + 1 - ZSTART + 1 ), 1, Z( 1,
+     $          K - ZSTART + 1 ), 1, C2, S2 )
+         END IF
+         B( K + 1, K ) = ZERO
+         B( K + 2, K ) = ZERO
 *
 *        Calculate Q1 and Q2
 *
-         call slartg(A(k+2,k),A(k+3,k),c1,s1,temp)
-         A(k+2,k) = temp
-         A(k+3,k) = zero
-         call slartg(A(k+1,k),A(k+2,k),c2,s2,temp)
-         A(k+1,k) = temp
-         A(k+2,k) = zero
+         CALL SLARTG( A( K + 2, K ), A( K + 3, K ), C1, S1, TEMP )
+         A( K + 2, K ) = TEMP
+         A( K + 3, K ) = ZERO
+         CALL SLARTG( A( K + 1, K ), A( K + 2, K ), C2, S2, TEMP )
+         A( K + 1, K ) = TEMP
+         A( K + 2, K ) = ZERO
 *
 *     Apply transformations from the left
 *
-         call srot(istopm-k,A(k+2,k+1),ldA,A(k+3,k+1),ldA,c1,s1)
-         call srot(istopm-k,A(k+1,k+1),ldA,A(k+2,k+1),ldA,c2,s2)
+         CALL SROT( ISTOPM - K, A( K + 2, K + 1 ), LDA, A( K + 3,
+     $       K + 1 ), LDA, C1, S1 )
+         CALL SROT( ISTOPM - K, A( K + 1, K + 1 ), LDA, A( K + 2,
+     $       K + 1 ), LDA, C2, S2 )
 *
-         call srot(istopm-k,B(k+2,k+1),ldB,B(k+3,k+1),ldB,c1,s1)
-         call srot(istopm-k,B(k+1,k+1),ldB,B(k+2,k+1),ldB,c2,s2)
-         if (ilq) then
-            call srot(nQ,Q(1,k+2-qStart+1),1,Q(1,k+3-qStart+1),1,c1,s1)
-            call srot(nQ,Q(1,k+1-qStart+1),1,Q(1,k+2-qStart+1),1,c2,s2)
-         end if
+         CALL SROT( ISTOPM - K, B( K + 2, K + 1 ), LDB, B( K + 3,
+     $       K + 1 ), LDB, C1, S1 )
+         CALL SROT( ISTOPM - K, B( K + 1, K + 1 ), LDB, B( K + 2,
+     $       K + 1 ), LDB, C2, S2 )
+         IF ( ILQ ) THEN
+            CALL SROT( NQ, Q( 1, K + 2 - QSTART + 1 ), 1, Q( 1,
+     $          K + 3 - QSTART + 1 ), 1, C1, S1 )
+            CALL SROT( NQ, Q( 1, K + 1 - QSTART + 1 ), 1, Q( 1,
+     $          K + 2 - QSTART + 1 ), 1, C2, S2 )
+         END IF
 *
-      end if
+      END IF
 *
 *     End of SLAQZ2
 *
-      end subroutine
+      END SUBROUTINE

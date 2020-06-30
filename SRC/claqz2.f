@@ -182,6 +182,12 @@
 *>          RWORK is DOUBEL PRECISION array, dimension (N)
 *> \endverbatim
 *>
+*> \param[in] REC
+*> \verbatim
+*>          REC is INTEGER
+*>             REC indicates the current recursion level. Should be set
+*>             to 0 on first call.
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -201,13 +207,13 @@
 *  =====================================================================
       SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
      $    LDB, Q, LDQ, Z, LDZ, NS, ND, ALPHA, BETA, QC, LDQC, ZC, LDZC,
-     $    WORK, LWORK, RWORK, INFO )
+     $    WORK, LWORK, RWORK, REC, INFO )
       IMPLICIT NONE
 
 *     Arguments
       LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
       INTEGER, INTENT( IN ) :: N, ILO, IHI, NW, LDA, LDB, LDQ, LDZ,
-     $    LDQC, LDZC, LWORK
+     $    LDQC, LDZC, LWORK, REC
 
       COMPLEX, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
      $    Z( LDZ, * ), ALPHA( * ), BETA( * )
@@ -244,9 +250,9 @@
 *     Determine required workspace
       IFST = 1
       ILST = JW
-      CALL CHGEQZ( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
+      CALL CLAQZ2( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHA, BETA, QC, LDQC, ZC, LDZC, WORK,
-     $    - 1, RWORK, QZ_SMALL_INFO )
+     $    - 1, RWORK, REC, QZ_SMALL_INFO )
       LWORKREQ = INT( WORK( 1 ) ) + 2*JW**2
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2 + N )
       IF ( LWORK .EQ. - 1 ) THEN
@@ -294,9 +300,10 @@
 *     Transform window to real schur form
       CALL CLASET( 'FULL', JW, JW, CZERO, CONE, QC, LDQC )
       CALL CLASET( 'FULL', JW, JW, CZERO, CONE, ZC, LDZC )
-      CALL CHGEQZ( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
+      CALL CLAQZ2( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHA, BETA, QC, LDQC, ZC, LDZC,
-     $    WORK( 2*JW**2 + 1 ), LWORK - 2*JW**2, RWORK, QZ_SMALL_INFO )
+     $    WORK( 2*JW**2 + 1 ), LWORK - 2*JW**2, RWORK, REC + 1,
+     $    QZ_SMALL_INFO )
 
       IF( QZ_SMALL_INFO .NE. 0 ) THEN
 *        Convergence failure, restore the window and exit
