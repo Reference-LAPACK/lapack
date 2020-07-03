@@ -418,7 +418,7 @@
       ITEMP1 = ( ( ITEMP1-1 )/4 )*4+4
       NBR = NSR+ITEMP1
 
-      IF( N .LT. NMIN .OR. REC .GE. 1 ) THEN
+      IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
          CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
      $       ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, INFO )
          RETURN
