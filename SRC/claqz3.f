@@ -223,7 +223,7 @@
       END IF
 
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAQZ3',-INFO )
+         CALL XERBLA( 'CLAQZ3', -INFO )
          RETURN
       END IF
 
@@ -355,7 +355,7 @@
          CALL CLASET( 'FULL', NS+NP, NS+NP, CZERO, CONE, ZC, LDZC )
 
 *        Near the diagonal shift chase
-         DO I = NS-1, 1,-1
+         DO I = NS-1, 0, -1
             DO J = 0, NP-1
 *              Move down the block with index k+i+j, updating
 *              the (ns+np x ns+np) block:

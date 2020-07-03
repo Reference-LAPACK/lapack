@@ -377,7 +377,7 @@
          CALL SLASET( 'FULL', NS+NP, NS+NP, ZERO, ONE, ZC, LDZC )
 
 *        Near the diagonal shift chase
-         DO I = NS-1, 1,-2
+         DO I = NS-1, 0,-2
             DO J = 0, NP-1
 *              Move down the block with index k+i+j-1, updating
 *              the (ns+np x ns+np) block:
