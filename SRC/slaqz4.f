@@ -15,6 +15,27 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE SLAQZ4( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,
+*     $    NBLOCK_DESIRED, SR, SI, SS, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
+*     $    QC, LDQC, ZC, LDZC, WORK, LWORK, INFO )
+*      IMPLICIT NONE
+*
+*      Function arguments
+*      LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
+*      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+*     $    NSHIFTS, NBLOCK_DESIRED, LDQC, LDZC
+*
+*      REAL, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*     $    Z( LDZ, * ), QC( LDQC, * ), ZC( LDZC, * ), WORK( * ), SR( * ),
+*     $    SI( * ), SS( * )
+*
+*      INTEGER, INTENT( OUT ) :: INFO
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -178,7 +199,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *
@@ -223,7 +244,7 @@
       END IF
 
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAQZ4',-INFO )
+         CALL XERBLA( 'SLAQZ4', -INFO )
          RETURN
       END IF
 
@@ -377,7 +398,7 @@
          CALL SLASET( 'FULL', NS+NP, NS+NP, ZERO, ONE, ZC, LDZC )
 
 *        Near the diagonal shift chase
-         DO I = NS-1, 0,-2
+         DO I = NS-1, 0, -2
             DO J = 0, NP-1
 *              Move down the block with index k+i+j-1, updating
 *              the (ns+np x ns+np) block:

@@ -15,6 +15,26 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
+*     $    LDB, Q, LDQ, Z, LDZ, NS, ND, ALPHAR, ALPHAI, BETA, QC, LDQC,
+*     $    ZC, LDZC, WORK, LWORK, REC, INFO )
+*      IMPLICIT NONE
+*
+*      Arguments
+*      LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
+*      INTEGER, INTENT( IN ) :: N, ILO, IHI, NW, LDA, LDB, LDQ, LDZ,
+*     $    LDQC, LDZC, LWORK, REC
+*
+*      DOUBLE PRECISION, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ),
+*     $    Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ), ALPHAI( * ), BETA( * )
+*      INTEGER, INTENT( OUT ) :: NS, ND, INFO
+*      DOUBLE PRECISION :: QC( LDQC, * ), ZC( LDZC, * ), WORK( * )
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -203,7 +223,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *
@@ -253,11 +273,11 @@
       IFST = 1
       ILST = JW
       CALL DTGEXC( .TRUE., .TRUE., JW, A, LDA, B, LDB, QC, LDQC, ZC,
-     $    LDZC, IFST, ILST, WORK,-1, DTGEXC_INFO )
+     $    LDZC, IFST, ILST, WORK, -1, DTGEXC_INFO )
       LWORKREQ = INT( WORK( 1 ) )
       CALL DLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC, LDQC, ZC,
-     $    LDZC, WORK,-1, REC+1, QZ_SMALL_INFO )
+     $    LDZC, WORK, -1, REC+1, QZ_SMALL_INFO )
       LWORKREQ = MAX( LWORKREQ, INT( WORK( 1 ) )+2*JW**2 )
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2+N )
       IF ( LWORK .EQ.-1 ) THEN
@@ -269,7 +289,7 @@
       END IF
 
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAQZ3',-INFO )
+         CALL XERBLA( 'DLAQZ3', -INFO )
          RETURN
       END IF
 
@@ -413,7 +433,7 @@
 *        Reflect spike back, this will create optimally packed bulges
          A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 )*QC( 1,
      $       1:JW-ND )
-         DO K = KWBOT-1, KWTOP,-1
+         DO K = KWBOT-1, KWTOP, -1
             CALL DLARTG( A( K, KWTOP-1 ), A( K+1, KWTOP-1 ), C1, S1,
      $          TEMP )
             A( K, KWTOP-1 ) = TEMP

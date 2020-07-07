@@ -15,6 +15,27 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
+*     $    LDB, Q, LDQ, Z, LDZ, NS, ND, ALPHA, BETA, QC, LDQC, ZC, LDZC,
+*     $    WORK, LWORK, RWORK, REC, INFO )
+*      IMPLICIT NONE
+*
+*      Arguments
+*      LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
+*      INTEGER, INTENT( IN ) :: N, ILO, IHI, NW, LDA, LDB, LDQ, LDZ,
+*     $    LDQC, LDZC, LWORK, REC
+*
+*      COMPLEX, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*     $    Z( LDZ, * ), ALPHA( * ), BETA( * )
+*      INTEGER, INTENT( OUT ) :: NS, ND, INFO
+*      COMPLEX :: QC( LDQC, * ), ZC( LDZC, * ), WORK( * )
+*      REAL :: RWORK( * )
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -198,7 +219,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven, KU Leuven
 *
 *> \date May 2020
 *
@@ -252,7 +273,7 @@
       ILST = JW
       CALL CLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHA, BETA, QC, LDQC, ZC, LDZC, WORK,
-     $   -1, RWORK, REC+1, QZ_SMALL_INFO )
+     $    -1, RWORK, REC+1, QZ_SMALL_INFO )
       LWORKREQ = INT( WORK( 1 ) )+2*JW**2
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2+N )
       IF ( LWORK .EQ.-1 ) THEN
@@ -264,7 +285,7 @@
       END IF
 
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAQZ2',-INFO )
+         CALL XERBLA( 'CLAQZ2', -INFO )
          RETURN
       END IF
 
@@ -360,7 +381,7 @@
 *        Reflect spike back, this will create optimally packed bulges
          A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 ) *CONJG( QC( 1,
      $       1:JW-ND ) )
-         DO K = KWBOT-1, KWTOP,-1
+         DO K = KWBOT-1, KWTOP, -1
             CALL CLARTG( A( K, KWTOP-1 ), A( K+1, KWTOP-1 ), C1, S1,
      $          TEMP )
             A( K, KWTOP-1 ) = TEMP

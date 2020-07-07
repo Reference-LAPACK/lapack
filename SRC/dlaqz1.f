@@ -15,6 +15,21 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE DLAQZ1( A, LDA, B, LDB, SR1, SR2, SI, BETA1, BETA2,
+*     $    V )
+*      IMPLICIT NONE
+*
+*      Arguments
+*      INTEGER, INTENT( IN ) :: LDA, LDB
+*      DOUBLE PRECISION, INTENT( IN ) :: A( LDA, * ), B( LDB, * )
+*      DOUBLE PRECISION, INTENT( OUT ) :: SR1, SR2, SI, BETA1, BETA2,
+*     $    V( * )
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -100,7 +115,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *

@@ -18,18 +18,19 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-*                          ALPHA, BETA, Q, LDQ, Z, LDZ, WORK,
-*                          LWORK, INFO )
+*      SUBROUTINE ZLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+*     $    LDB, ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, REC,
+*     $    INFO )
+*      IMPLICIT NONE
 *
-*       .. Scalar Arguments ..
-*       CHARACTER          WANTS, WANTQ, WANTZ
-*       INTEGER            IHI, ILO, INFO, LDA, LDQ, LDB, LDZ, LWORK, N
-*       ..
-*       .. Array Arguments ..
-*       COMPLEX*16   ALPHA( * ), BETA( * ),
-*      $                   A( LDA, * ), Q( LDQ, * ), B( LDB, * ),
-*      $                   WORK( * ), Z( LDZ, * )
+*      Arguments
+*      CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
+*      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+*     $    REC
+*      INTEGER, INTENT( OUT ) :: INFO
+*      COMPLEX*16, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ,
+*     $    * ), Z( LDZ, * ), ALPHA( * ), BETA( * ), WORK( * )
+*      DOUBLE PRECISION, INTENT( OUT ) :: RWORK( * )
 *       ..
 *
 *
@@ -92,6 +93,13 @@
 *> Ref: C.B. Moler & G.W. Stewart, "An Algorithm for Generalized Matrix
 *>      Eigenvalue Problems", SIAM J. Numer. Anal., 10(1973),
 *>      pp. 241--256.
+*>
+*> Ref: B. Kagstrom, D. Kressner, "Multishift Variants of the QZ
+*>      Algorithm with Aggressive Early Deflation", SIAM J. Numer.
+*>      Anal., 29(2006), pp. 199--227.
+*>
+*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebrilm "A multishift,
+*>      multipole rational QZ method with agressive early deflation"
 *> \endverbatim
 *
 *  Arguments:
@@ -275,7 +283,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *
@@ -383,7 +391,7 @@
          INFO = -17
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLAQZ0',-INFO )
+         CALL XERBLA( 'ZLAQZ0', -INFO )
          RETURN
       END IF
    
@@ -433,12 +441,12 @@
       NW = MAX( NWR, NMIN )
       CALL ZLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
      $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA, BETA, WORK,
-     $    NW, WORK, NW, WORK,-1, RWORK, REC, AED_INFO )
+     $    NW, WORK, NW, WORK, -1, RWORK, REC, AED_INFO )
       ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to ZLAQZ3
       CALL ZLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHA,
      $    BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR, WORK, NBR,
-     $    WORK,-1, SWEEP_INFO )
+     $    WORK, -1, SWEEP_INFO )
       ITEMP2 = INT( WORK( 1 ) )
 
       LWORKREQ = MAX( ITEMP1+2*NW**2, ITEMP2+2*NBR**2 )
@@ -507,7 +515,7 @@
 
 *        Check interior deflations
          ISTART2 = ISTART
-         DO K = ISTOP, ISTART+1,-1
+         DO K = ISTOP, ISTART+1, -1
             IF ( ABS( A( K, K-1 ) ) .LE. MAX( SMLNUM, ULP*( ABS( A( K,
      $          K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
                A( K, K-1 ) = CZERO
@@ -541,7 +549,7 @@
 *              A diagonal element of B is negligable, move it
 *              to the top and deflate it
                
-               DO K2 = K, ISTART2+1,-1
+               DO K2 = K, ISTART2+1, -1
                   CALL ZLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
      $                TEMP )
                   B( K2-1, K2 ) = TEMP

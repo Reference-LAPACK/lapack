@@ -15,6 +15,20 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE SLAQZ1( A, LDA, B, LDB, SR1, SR2, SI, BETA1, BETA2,
+*     $    V )
+*      IMPLICIT NONE
+*
+*      Arguments
+*      INTEGER, INTENT( IN ) :: LDA, LDB
+*      REAL, INTENT( IN ) :: A( LDA, * ), B( LDB, * )
+*      REAL, INTENT( OUT ) :: SR1, SR2, SI, BETA1, BETA2, V( * )
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -100,7 +114,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *

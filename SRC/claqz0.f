@@ -18,18 +18,19 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-*                          ALPHA, BETA, Q, LDQ, Z, LDZ, WORK,
-*                          LWORK, INFO )
+*      SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+*     $    LDB, ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, REC,
+*     $    INFO )
+*      IMPLICIT NONE
 *
-*       .. Scalar Arguments ..
-*       CHARACTER          WANTS, WANTQ, WANTZ
-*       INTEGER            IHI, ILO, INFO, LDA, LDQ, LDB, LDZ, LWORK, N
-*       ..
-*       .. Array Arguments ..
-*       COMPLEX   ALPHA( * ), BETA( * ),
-*      $                   A( LDA, * ), Q( LDQ, * ), B( LDB, * ),
-*      $                   WORK( * ), Z( LDZ, * )
+*      Arguments
+*      CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
+*      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+*     $    REC
+*      INTEGER, INTENT( OUT ) :: INFO
+*      COMPLEX, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*     $    Z( LDZ, * ), ALPHA( * ), BETA( * ), WORK( * )
+*      REAL, INTENT( OUT ) :: RWORK( * )
 *       ..
 *
 *
@@ -92,6 +93,13 @@
 *> Ref: C.B. Moler & G.W. Stewart, "An Algorithm for Generalized Matrix
 *>      Eigenvalue Problems", SIAM J. Numer. Anal., 10(1973),
 *>      pp. 241--256.
+*>
+*> Ref: B. Kagstrom, D. Kressner, "Multishift Variants of the QZ
+*>      Algorithm with Aggressive Early Deflation", SIAM J. Numer.
+*>      Anal., 29(2006), pp. 199--227.
+*>
+*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebrilm "A multishift,
+*>      multipole rational QZ method with agressive early deflation"
 *> \endverbatim
 *
 *  Arguments:
@@ -148,9 +156,9 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA, N)
 *>          On entry, the N-by-N upper Hessenberg matrix A.
-*>          On exit, if JOB = 'S', A contains the upper quasi-triangular
+*>          On exit, if JOB = 'S', A contains the upper triangular
 *>          matrix S from the generalized Schur factorization.
-*>          If JOB = 'E', the diagonal blocks of A match those of S, but
+*>          If JOB = 'E', the diagonal of A matches that of S, but
 *>          the rest of A is unspecified.
 *> \endverbatim
 *>
@@ -165,12 +173,8 @@
 *>          B is COMPLEX array, dimension (LDB, N)
 *>          On entry, the N-by-N upper triangular matrix B.
 *>          On exit, if JOB = 'S', B contains the upper triangular
-*>          matrix P from the generalized Schur factorization;
-*>          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks of S
-*>          are reduced to positive diagonal form, i.e., if A(j+1,j) is
-*>          non-zero, then B(j+1,j) = B(j,j+1) = 0, B(j,j) > 0, and
-*>          B(j+1,j+1) > 0.
-*>          If JOB = 'E', the diagonal blocks of B match those of P, but
+*>          matrix P from the generalized Schur factorization.
+*>          If JOB = 'E', the diagonal of B matches that of P, but
 *>          the rest of B is unspecified.
 *> \endverbatim
 *>
@@ -275,7 +279,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *
@@ -382,7 +386,7 @@
          INFO = -17
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAQZ0',-INFO )
+         CALL XERBLA( 'CLAQZ0', -INFO )
          RETURN
       END IF
    
@@ -432,12 +436,12 @@
       NW = MAX( NWR, NMIN )
       CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
      $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA, BETA, WORK,
-     $    NW, WORK, NW, WORK,-1, RWORK, REC, AED_INFO )
+     $    NW, WORK, NW, WORK, -1, RWORK, REC, AED_INFO )
       ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to CLAQZ3
       CALL CLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHA,
      $    BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR, WORK, NBR,
-     $    WORK,-1, SWEEP_INFO )
+     $    WORK, -1, SWEEP_INFO )
       ITEMP2 = INT( WORK( 1 ) )
 
       LWORKREQ = MAX( ITEMP1+2*NW**2, ITEMP2+2*NBR**2 )
@@ -506,7 +510,7 @@
 
 *        Check interior deflations
          ISTART2 = ISTART
-         DO K = ISTOP, ISTART+1,-1
+         DO K = ISTOP, ISTART+1, -1
             IF ( ABS( A( K, K-1 ) ) .LE. MAX( SMLNUM, ULP*( ABS( A( K,
      $          K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
                A( K, K-1 ) = CZERO
@@ -540,7 +544,7 @@
 *              A diagonal element of B is negligable, move it
 *              to the top and deflate it
                
-               DO K2 = K, ISTART2+1,-1
+               DO K2 = K, ISTART2+1, -1
                   CALL CLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
      $                TEMP )
                   B( K2-1, K2 ) = TEMP
@@ -613,7 +617,7 @@
          IF ( ISTOP-ISTART2+1 .LT. NMIN ) THEN
 *           Setting nw to the size of the subblock will make AED deflate
 *           all the eigenvalues. This is slightly more efficient than just
-*           using qz_small because the off diagonal part gets updated via BLAS.
+*           using CHGEQZ because the off diagonal part gets updated via BLAS.
             IF ( ISTOP-ISTART+1 .LT. NMIN ) THEN
                NW = ISTOP-ISTART+1
                ISTART2 = ISTART

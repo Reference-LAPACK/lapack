@@ -15,6 +15,21 @@
 *> [TXT]</a>
 *> \endhtmlonly
 *
+*  Definition:
+*  ===========
+*
+*      SUBROUTINE ZLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
+*     $    LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
+*      IMPLICIT NONE
+*
+*      Arguments
+*      LOGICAL, INTENT( IN ) :: ILQ, ILZ
+*      INTEGER, INTENT( IN ) :: K, LDA, LDB, LDQ, LDZ, ISTARTM, ISTOPM,
+*     $    NQ, NZ, QSTART, ZSTART, IHI
+*      COMPLEX*16 :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ), Z( LDZ, * )
+*       ..
+*
+*
 *> \par Purpose:
 *  =============
 *>
@@ -144,7 +159,7 @@
 *  Authors:
 *  ========
 *
-*> \author Thijs Steel
+*> \author Thijs Steel, KU Leuven
 *
 *> \date May 2020
 *
