@@ -248,11 +248,12 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               PIOVER2, REALONE, REALZERO
-      PARAMETER          ( PIOVER2 = 1.57079632679489662E0,
-     $                     REALONE = 1.0E0, REALZERO = 0.0E0 )
+      REAL               REALONE, REALZERO
+      PARAMETER          ( REALONE = 1.0E0, REALZERO = 0.0E0 )
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = (0.0E0,0.0E0), ONE = (1.0E0,0.0E0) )
+      REAL               PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210E0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, INFO, R
