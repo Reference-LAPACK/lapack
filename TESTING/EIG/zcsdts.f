@@ -248,11 +248,12 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   PIOVER2, REALONE, REALZERO
-      PARAMETER          ( PIOVER2 = 1.57079632679489662D0,
-     $                     REALONE = 1.0D0, REALZERO = 0.0D0 )
+      DOUBLE PRECISION   REALONE, REALZERO
+      PARAMETER          ( REALONE = 1.0D0, REALZERO = 0.0D0 )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = (0.0D0,0.0D0), ONE = (1.0D0,0.0D0) )
+      DOUBLE PRECISION   PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210D0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, INFO, R

@@ -208,11 +208,11 @@
       PARAMETER          ( NTESTS = 15 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 4 )
-      REAL               GAPDIGIT, ONE, ORTH, PIOVER2, TEN, ZERO
+      REAL               GAPDIGIT, ONE, ORTH, TEN, ZERO
       PARAMETER          ( GAPDIGIT = 10.0E0, ONE = 1.0E0,
-     $                     ORTH = 1.0E-4,
-     $                     PIOVER2 = 1.57079632679489662E0,
-     $                     TEN = 10.0E0, ZERO = 0.0E0 )
+     $                     ORTH = 1.0E-4, TEN = 10.0E0, ZERO = 0.0E0 )
+      REAL               PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FIRSTT

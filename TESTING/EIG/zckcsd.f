@@ -208,13 +208,14 @@
       PARAMETER          ( NTESTS = 15 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 4 )
-      DOUBLE PRECISION   GAPDIGIT, ORTH, PIOVER2, REALONE, REALZERO, TEN
+      DOUBLE PRECISION   GAPDIGIT, ORTH, REALONE, REALZERO, TEN
       PARAMETER          ( GAPDIGIT = 18.0D0, ORTH = 1.0D-12,
-     $                     PIOVER2 = 1.57079632679489662D0,
      $                     REALONE = 1.0D0, REALZERO = 0.0D0,
      $                     TEN = 10.0D0 )
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D0,0.0D0), ZERO = (0.0D0,0.0D0) )
+      DOUBLE PRECISION   PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210D0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FIRSTT
