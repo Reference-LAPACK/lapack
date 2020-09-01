@@ -354,12 +354,13 @@
 *     .. Parameters ..
       INTEGER            MAXITR
       PARAMETER          ( MAXITR = 6 )
-      REAL               HUNDRED, MEIGHTH, ONE, PIOVER2, TEN, ZERO
+      REAL               HUNDRED, MEIGHTH, ONE, TEN, ZERO
       PARAMETER          ( HUNDRED = 100.0E0, MEIGHTH = -0.125E0,
-     $                     ONE = 1.0E0, PIOVER2 = 1.57079632679489662E0,
-     $                     TEN = 10.0E0, ZERO = 0.0E0 )
+     $                     ONE = 1.0E0, TEN = 10.0E0, ZERO = 0.0E0 )
       REAL               NEGONE
       PARAMETER          ( NEGONE = -1.0E0 )
+      REAL               PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY, RESTART11, RESTART12,

@@ -358,7 +358,7 @@
       COMPLEX            CZERO
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       REAL               TWOPI
-      PARAMETER          ( TWOPI = 6.2831853071795864769252867663E+0 )
+      PARAMETER  ( TWOPI = 6.28318530717958647692528676655900576839E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            CSYM, GIVENS, ILEXTR, ILTEMP, TOPDWN

@@ -354,12 +354,13 @@
 *     .. Parameters ..
       INTEGER            MAXITR
       PARAMETER          ( MAXITR = 6 )
-      DOUBLE PRECISION   HUNDRED, MEIGHTH, ONE, PIOVER2, TEN, ZERO
+      DOUBLE PRECISION   HUNDRED, MEIGHTH, ONE, TEN, ZERO
       PARAMETER          ( HUNDRED = 100.0D0, MEIGHTH = -0.125D0,
-     $                     ONE = 1.0D0, PIOVER2 = 1.57079632679489662D0,
-     $                     TEN = 10.0D0, ZERO = 0.0D0 )
+     $                     ONE = 1.0D0, TEN = 10.0D0, ZERO = 0.0D0 )
       DOUBLE PRECISION   NEGONE
       PARAMETER          ( NEGONE = -1.0D0 )
+      DOUBLE PRECISION   PIOVER2
+      PARAMETER ( PIOVER2 = 1.57079632679489661923132169163975144210D0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY, RESTART11, RESTART12,

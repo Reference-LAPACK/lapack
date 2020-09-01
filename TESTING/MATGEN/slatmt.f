@@ -354,7 +354,7 @@
       REAL               ONE
       PARAMETER          ( ONE = 1.0E0 )
       REAL               TWOPI
-      PARAMETER          ( TWOPI = 6.2831853071795864769252867663E+0 )
+      PARAMETER  ( TWOPI = 6.28318530717958647692528676655900576839E+0 )
 *     ..
 *     .. Local Scalars ..
       REAL               ALPHA, ANGLE, C, DUMMY, EXTRA, S, TEMP

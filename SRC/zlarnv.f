@@ -120,7 +120,7 @@
       INTEGER            LV
       PARAMETER          ( LV = 128 )
       DOUBLE PRECISION   TWOPI
-      PARAMETER          ( TWOPI = 6.2831853071795864769252867663D+0 )
+      PARAMETER  ( TWOPI = 6.28318530717958647692528676655900576839D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IL, IV
