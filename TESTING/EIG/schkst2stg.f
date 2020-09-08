@@ -999,8 +999,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage.
 *
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL SLACPY( "U", N, N, A, LDA, V, LDU )
             LH = MAX(1, 4*N)
             LW = LWORK - LH
@@ -1032,8 +1032,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage. 
 *
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL SLACPY( "L", N, N, A, LDA, V, LDU )
             CALL SSYTRD_2STAGE( 'N', "L", N, V, LDU, SD, SE, TAU, 
      $                   WORK, LH, WORK( LH+1 ), LW, IINFO )
