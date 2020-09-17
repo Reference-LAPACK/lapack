@@ -21,7 +21,7 @@ matrix:
     env: CMAKE_BUILD_TYPE=Release
     before_install:
     - brew update > /dev/null
-    - brew install gcc > /dev/null
+    - brew upgrade gcc > /dev/null
   - os: osx
     env: CMAKE_BUILD_TYPE=Coverage
     before_install:
