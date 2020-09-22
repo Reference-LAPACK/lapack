@@ -83,8 +83,8 @@ TMGLIB       = $(TOPSRCDIR)/libtmglib.a
 LAPACKELIB   = $(TOPSRCDIR)/liblapacke.a
 
 # Where to install the library
-PREFIX=/opt/reflapack/lapack-3.9.0/hpcsdk-20.7
+#PREFIX=/opt/reflapack/lapack-3.9.0/hpcsdk-20.7
 
 # Build shared library
 LINKER = nvfortran
-LAPACKSOLIB = liblapack.so.3.9.0
+#LAPACKSOLIB = liblapack.so.3.9.0
