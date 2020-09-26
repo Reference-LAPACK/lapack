@@ -215,7 +215,7 @@
 *     ..
 *     .. Local Scalars ..
       COMPLEX TEMP
-      INTEGER I,INFO,J,L,NCOLA,NROWA,NROWB
+      INTEGER I,INFO,J,L,NROWA,NROWB
       LOGICAL CONJA,CONJB,NOTA,NOTB
 *     ..
 *     .. Parameters ..
@@ -228,8 +228,7 @@
 *     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
 *     conjugated or transposed, set  CONJA and CONJB  as true if  A  and
 *     B  respectively are to be  transposed but  not conjugated  and set
-*     NROWA, NCOLA and  NROWB  as the number of rows and  columns  of  A
-*     and the number of rows of  B  respectively.
+*     NROWA and  NROWB  as the number of rows of  A  and  B  respectively.
 *
       NOTA = LSAME(TRANSA,'N')
       NOTB = LSAME(TRANSB,'N')
@@ -237,10 +236,8 @@
       CONJB = LSAME(TRANSB,'C')
       IF (NOTA) THEN
           NROWA = M
-          NCOLA = K
       ELSE
           NROWA = K
-          NCOLA = M
       END IF
       IF (NOTB) THEN
           NROWB = K
