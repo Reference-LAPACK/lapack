@@ -26,12 +26,12 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] SA
+*> \param[in,out] SA
 *> \verbatim
 *>          SA is REAL
 *> \endverbatim
 *>
-*> \param[in] SB
+*> \param[in,out] SB
 *> \verbatim
 *>          SB is REAL
 *> \endverbatim
