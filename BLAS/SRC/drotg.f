@@ -26,12 +26,12 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] DA
+*> \param[in,out] DA
 *> \verbatim
 *>          DA is DOUBLE PRECISION
 *> \endverbatim
 *>
-*> \param[in] DB
+*> \param[in,out] DB
 *> \verbatim
 *>          DB is DOUBLE PRECISION
 *> \endverbatim

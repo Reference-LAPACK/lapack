@@ -27,7 +27,7 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] CA
+*> \param[in,out] CA
 *> \verbatim
 *>          CA is COMPLEX*16
 *> \endverbatim
