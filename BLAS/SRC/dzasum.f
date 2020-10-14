@@ -24,7 +24,7 @@
 *> \verbatim
 *>
 *>    DZASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
-*>    returns a single precision result.
+*>    returns a double precision result.
 *> \endverbatim
 *
 *  Arguments:
