@@ -152,6 +152,16 @@
              SD1 = SD1/SU
              SD2 = SD2/SU
              SX1 = SX1*SU
+           ELSE
+             SFLAG = -ONE
+             SH11 = ZERO
+             SH12 = ZERO
+             SH21 = ZERO
+             SH22 = ZERO
+*
+             SD1 = ZERO
+             SD2 = ZERO
+             SX1 = ZERO
            END IF
          ELSE
 

@@ -152,6 +152,16 @@
              DD1 = DD1/DU
              DD2 = DD2/DU
              DX1 = DX1*DU
+           ELSE
+             DFLAG = -ONE
+             DH11 = ZERO
+             DH12 = ZERO
+             DH21 = ZERO
+             DH22 = ZERO
+*
+             DD1 = ZERO
+             DD2 = ZERO
+             DX1 = ZERO
            END IF
          ELSE
 
