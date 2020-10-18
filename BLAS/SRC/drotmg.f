@@ -152,6 +152,19 @@
              DD1 = DD1/DU
              DD2 = DD2/DU
              DX1 = DX1*DU
+           ELSE
+*            This code path if here for safety. We do not expect this
+*            condition to ever hold except in edge cases with rounding
+*            errors. See DOI: 10.1145/355841.355847
+             DFLAG = -ONE
+             DH11 = ZERO
+             DH12 = ZERO
+             DH21 = ZERO
+             DH22 = ZERO
+*
+             DD1 = ZERO
+             DD2 = ZERO
+             DX1 = ZERO
            END IF
          ELSE
 
