@@ -153,6 +153,9 @@
              SD2 = SD2/SU
              SX1 = SX1*SU
            ELSE
+*            This code path if here for safety. We do not expect this
+*            condition to ever hold except in edge cases with rounding
+*            errors. See DOI: 10.1145/355841.355847
              SFLAG = -ONE
              SH11 = ZERO
              SH12 = ZERO
