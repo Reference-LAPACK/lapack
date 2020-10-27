@@ -11,10 +11,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_dspmv(const CBLAS_LAYOUT layout,
-                 const CBLAS_UPLO Uplo, const int N,
+                 const CBLAS_UPLO Uplo, const CBLAS_INDEX N,
                  const double alpha, const double  *AP,
-                 const double  *X, const int incX, const double beta,
-                 double  *Y, const int incY)
+                 const double  *X, const CBLAS_INDEX incX, const double beta,
+                 double  *Y, const CBLAS_INDEX incY)
 {
    char UL;
 #ifdef F77_CHAR

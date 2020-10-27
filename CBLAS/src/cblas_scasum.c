@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-float cblas_scasum( const int N, const void *X, const int incX)
+float cblas_scasum( const CBLAS_INDEX N, const void *X, const CBLAS_INDEX incX)
 {
    float asum;
 #ifdef F77_INT

@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-CBLAS_INDEX cblas_icamax( const int N, const void *X, const int incX)
+CBLAS_INDEX cblas_icamax( const CBLAS_INDEX N, const void *X, const CBLAS_INDEX incX)
 {
    CBLAS_INDEX iamax;
 #ifdef F77_INT
