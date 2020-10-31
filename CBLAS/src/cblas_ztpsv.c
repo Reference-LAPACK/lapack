@@ -9,7 +9,7 @@
 #include "cblas_f77.h"
 void cblas_ztpsv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_DIAG Diag,
-                 const int N, const void  *Ap, void  *X, const int incX)
+                 const CBLAS_INDEX N, const void  *Ap, void  *X, const CBLAS_INDEX incX)
 {
    char TA;
    char UL;
@@ -27,7 +27,7 @@ void cblas_ztpsv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    #define F77_N N
    #define F77_incX incX
 #endif
-   int n, i=0, tincX;
+   CBLAS_INDEX n, i=0, tincX;
    double *st=0, *x=(double*)X;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;

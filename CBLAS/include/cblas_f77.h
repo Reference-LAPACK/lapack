@@ -19,6 +19,8 @@
 
 #ifdef WeirdNEC
    #define F77_INT long
+#else
+   #define F77_INT int
 #endif
 
 #ifdef  F77_CHAR
@@ -27,13 +29,8 @@
    #define FCHAR char *
 #endif
 
-#ifdef F77_INT
-   #define FINT const F77_INT *
-   #define FINT2 F77_INT *
-#else
-   #define FINT const int *
-   #define FINT2 int *
-#endif
+#define FINT const F77_INT *
+#define FINT2 F77_INT *
 
 /*
  * Level 1 BLAS
