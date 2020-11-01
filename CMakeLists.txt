@@ -47,6 +47,24 @@ endif()
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
+# By default build index32 library
+option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
+if(BUILD_INDEX64)
+  set(BLASLIB "blas64")
+  set(CBLASLIB "cblas64")
+  set(LAPACKLIB "lapack64")
+  set(LAPACKELIB "lapacke64")
+  set(TMGLIB "tmglib64")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWeirdNEC -DLAPACK_ILP64 -DHAVE_LAPACK_CONFIG_H")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-integer-8")
+else()
+  set(BLASLIB "blas")
+  set(CBLASLIB "cblas")
+  set(LAPACKLIB "lapack")
+  set(LAPACKELIB "lapacke")
+  set(TMGLIB "tmglib")
+endif()
+
 include(GNUInstallDirs)
 
 # Updated OSX RPATH settings
@@ -76,10 +94,10 @@ include(PreventInBuildInstalls)
 
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    string(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    string(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
@@ -115,7 +133,7 @@ endif()
 
 
 # --------------------------------------------------
-set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
+set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
@@ -223,7 +241,7 @@ endif()
 if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
-  set(BLAS_LIBRARIES blas)
+  set(BLAS_LIBRARIES ${BLASLIB})
 else()
   set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
@@ -282,7 +300,7 @@ endif()
 # Neither user specified or optimized LAPACK libraries can be used
 if(NOT LATESTLAPACK_FOUND)
   message(STATUS "Using supplied NETLIB LAPACK implementation")
-  set(LAPACK_LIBRARIES lapack)
+  set(LAPACK_LIBRARIES ${LAPACKLIB})
   add_subdirectory(SRC)
 else()
   set(CMAKE_EXE_LINKER_FLAGS
@@ -374,23 +392,23 @@ include(CPack)
 # --------------------------------------------------
 
 if(NOT BLAS_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} blas)
+  set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
 if(NOT LATESTLAPACK_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} lapack)
+  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
 endif()
 
 if(BUILD_TESTING OR LAPACKE_WITH_TMG)
-  set(ALL_TARGETS ${ALL_TARGETS} tmglib)
+  set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
 
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
-  install(EXPORT lapack-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+  install(EXPORT ${LAPACKLIB}-targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
     COMPONENT Development
     )
 
@@ -401,18 +419,18 @@ endif()
 
 # Include cblas in targets exported from the build tree.
 if(CBLAS)
-  set(ALL_TARGETS ${ALL_TARGETS} cblas)
+  set(ALL_TARGETS ${ALL_TARGETS} ${CBLASLIB})
 endif()
 
 # Include lapacke in targets exported from the build tree.
 if(LAPACKE)
-  set(ALL_TARGETS ${ALL_TARGETS} lapacke)
+  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKELIB})
 endif()
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
 if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
+  export(TARGETS ${ALL_TARGETS} FILE ${LAPACKLIB}-targets.cmake)
 
   # Choose one of the lapack or lapacke targets to use as a guard
   # for lapack-config.cmake to load targets from the build tree.
@@ -420,30 +438,30 @@ if(ALL_TARGETS)
 endif()
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config.cmake @ONLY)
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc @ONLY)
   install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
+  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc
   DESTINATION ${PKG_CONFIG_DIR}
   COMPONENT Development
   )
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake @ONLY)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
   VERSION ${LAPACK_VERSION}
   COMPATIBILITY SameMajorVersion
   )
 
 install(FILES
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
-  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
   
