@@ -10,10 +10,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_dsymv(const CBLAS_LAYOUT layout,
-                 const CBLAS_UPLO Uplo, const int N,
-                 const double alpha, const double  *A, const int lda,
-                 const double  *X, const int incX, const double beta,
-                 double  *Y, const int incY)
+                 const CBLAS_UPLO Uplo, const CBLAS_INDEX N,
+                 const double alpha, const double  *A, const CBLAS_INDEX lda,
+                 const double  *X, const CBLAS_INDEX incX, const double beta,
+                 double  *Y, const CBLAS_INDEX incY)
 {
    char UL;
 #ifdef F77_CHAR

@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-double cblas_dznrm2( const int N, const void *X, const int incX)
+double cblas_dznrm2( const CBLAS_INDEX N, const void *X, const CBLAS_INDEX incX)
 {
    double nrm2;
 #ifdef F77_INT

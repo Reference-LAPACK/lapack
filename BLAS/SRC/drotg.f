@@ -26,12 +26,12 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] DA
+*> \param[in,out] DA
 *> \verbatim
 *>          DA is DOUBLE PRECISION
 *> \endverbatim
 *>
-*> \param[in] DB
+*> \param[in,out] DB
 *> \verbatim
 *>          DB is DOUBLE PRECISION
 *> \endverbatim
@@ -86,8 +86,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC DABS,DSIGN,DSQRT
 *     ..
-      ROE = DB
-      IF (DABS(DA).GT.DABS(DB)) ROE = DA
       SCALE = DABS(DA) + DABS(DB)
       IF (SCALE.EQ.0.0d0) THEN
          C = 1.0d0
@@ -95,6 +93,8 @@
          R = 0.0d0
          Z = 0.0d0
       ELSE
+         ROE = DB
+         IF (DABS(DA).GT.DABS(DB)) ROE = DA
          R = SCALE*DSQRT((DA/SCALE)**2+ (DB/SCALE)**2)
          R = DSIGN(1.0d0,ROE)*R
          C = DA/R

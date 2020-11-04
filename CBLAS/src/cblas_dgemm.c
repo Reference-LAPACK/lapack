@@ -10,10 +10,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_dgemm(const CBLAS_LAYOUT layout, const CBLAS_TRANSPOSE TransA,
-                 const CBLAS_TRANSPOSE TransB, const int M, const int N,
-                 const int K, const double alpha, const double  *A,
-                 const int lda, const double  *B, const int ldb,
-                 const double beta, double  *C, const int ldc)
+                 const CBLAS_TRANSPOSE TransB, const CBLAS_INDEX M, const CBLAS_INDEX N,
+                 const CBLAS_INDEX K, const double alpha, const double  *A,
+                 const CBLAS_INDEX lda, const double  *B, const CBLAS_INDEX ldb,
+                 const double beta, double  *C, const CBLAS_INDEX ldc)
 {
    char TA, TB;
 #ifdef F77_CHAR

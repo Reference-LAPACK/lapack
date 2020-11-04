@@ -26,12 +26,12 @@
 *  Arguments:
 *  ==========
 *
-*> \param[in] SA
+*> \param[in,out] SA
 *> \verbatim
 *>          SA is REAL
 *> \endverbatim
 *>
-*> \param[in] SB
+*> \param[in,out] SB
 *> \verbatim
 *>          SB is REAL
 *> \endverbatim
@@ -86,8 +86,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,SIGN,SQRT
 *     ..
-      ROE = SB
-      IF (ABS(SA).GT.ABS(SB)) ROE = SA
       SCALE = ABS(SA) + ABS(SB)
       IF (SCALE.EQ.0.0) THEN
          C = 1.0
@@ -95,6 +93,8 @@
          R = 0.0
          Z = 0.0
       ELSE
+         ROE = SB
+         IF (ABS(SA).GT.ABS(SB)) ROE = SA
          R = SCALE*SQRT((SA/SCALE)**2+ (SB/SCALE)**2)
          R = SIGN(1.0,ROE)*R
          C = SA/R
