@@ -278,6 +278,7 @@
          DO I = 1, P
             Y(I) = CZERO
          END DO
+         RETURN
       END IF
 *
 *     Compute the GQR factorization of matrices A and B:
