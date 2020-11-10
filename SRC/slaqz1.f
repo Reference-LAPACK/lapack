@@ -139,6 +139,7 @@
 *
 *     External Functions
       REAL, EXTERNAL :: SLAMCH
+      LOGICAL, EXTERNAL :: SISNAN
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
@@ -179,8 +180,8 @@
 *     Check for overflow
 *
       IF( ABS( V( 1 ) ).GT.SAFMAX .OR. ABS( V( 2 ) ) .GT. SAFMAX .OR.
-     $   ABS( V( 3 ) ).GT.SAFMAX .OR. V( 1 ).NE.V( 1 ) .OR.
-     $   V( 2 ).NE.V( 2 ) .OR. V( 3 ).NE.V( 3 ) ) THEN
+     $   ABS( V( 3 ) ).GT.SAFMAX .OR. SISNAN( V( 1 ) ) .OR.
+     $   SISNAN( V( 2 ) ) .OR. SISNAN( V( 3 ) ) ) THEN
          V( 1 ) = ZERO
          V( 2 ) = ZERO
          V( 3 ) = ZERO
