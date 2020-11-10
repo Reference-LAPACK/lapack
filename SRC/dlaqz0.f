@@ -18,22 +18,23 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
-*     $    LDB, ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, REC,
-*     $    INFO )
-*      IMPLICIT NONE
+*     RECURSIVE SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+*    $                             LDA, B, LDB, ALPHAR, ALPHAI, BETA,
+*    $                             Q, LDQ, Z, LDZ, WORK, LWORK, REC,
+*    $                             INFO )
+*     IMPLICIT NONE
 *
-*      Arguments
-*      CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
-*      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
-*     $    REC
+*     Arguments
+*     CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
+*     INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+*    $         REC
 *
-*      INTEGER, INTENT( OUT ) :: INFO
+*     INTEGER, INTENT( OUT ) :: INFO
 *
-*      DOUBLE PRECISION, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ),
-*     $    Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ), ALPHAI( * ), BETA( * ),
-*     $    WORK( * )
-*       ..
+*     DOUBLE PRECISION, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ),
+*    $                  Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ),
+*    $                  ALPHAI( * ), BETA( * ), WORK( * )
+*      ..
 *
 *
 *> \par Purpose:
@@ -297,21 +298,22 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
-     $    LDB, ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, REC,
-     $    INFO )
+      RECURSIVE SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+     $                             LDA, B, LDB, ALPHAR, ALPHAI, BETA,
+     $                             Q, LDQ, Z, LDZ, WORK, LWORK, REC,
+     $                             INFO )
       IMPLICIT NONE
 
 *     Arguments
       CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
       INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
-     $    REC
+     $         REC
 
       INTEGER, INTENT( OUT ) :: INFO
 
       DOUBLE PRECISION, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ),
-     $    Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ), ALPHAI( * ), BETA( * ),
-     $    WORK( * )
+     $                  Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ),
+     $                  ALPHAI( * ), BETA( * ), WORK( * )
 
 *     Parameters
       DOUBLE PRECISION :: ZERO, ONE, HALF
@@ -319,12 +321,12 @@
 
 *     Local scalars
       DOUBLE PRECISION :: SMLNUM, ULP, ESHIFT, SAFMIN, SAFMAX, C1, S1,
-     $    TEMP
+     $                    TEMP
       INTEGER :: ISTART, ISTOP, IITER, MAXIT, ISTART2, K, LD, NSHIFTS,
-     $    NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED, NS,
-     $    SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM, ISTOPM, IWANTS,
-     $    IWANTQ, IWANTZ, NORM_INFO, AED_INFO, NWR, NBR, NSR, ITEMP1,
-     $    ITEMP2, RCOST
+     $           NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED,
+     $           NS, SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM,
+     $           ISTOPM, IWANTS, IWANTQ, IWANTZ, NORM_INFO, AED_INFO,
+     $           NWR, NBR, NSR, ITEMP1, ITEMP2, RCOST
       LOGICAL :: ILSCHUR, ILQ, ILZ, LQUERY
       CHARACTER :: JBCMPZ*3
 
@@ -435,7 +437,8 @@
 
       IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
          CALL DHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-     $       ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, INFO )
+     $                ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
+     $                LWORK, INFO )
          RETURN
       END IF
 
@@ -446,13 +449,14 @@
 *     Workspace query to dlaqz3
       NW = MAX( NWR, NMIN )
       CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
-     $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR, ALPHAI,
-     $    BETA, WORK, NW, WORK, NW, WORK, -1, REC, AED_INFO )
+     $             Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR,
+     $             ALPHAI, BETA, WORK, NW, WORK, NW, WORK, -1, REC,
+     $             AED_INFO )
       ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to dlaqz4
       CALL DLAQZ4( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHAR,
-     $    ALPHAI, BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR, WORK,
-     $    NBR, WORK, -1, SWEEP_INFO )
+     $             ALPHAI, BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK,
+     $             NBR, WORK, NBR, WORK, -1, SWEEP_INFO )
       ITEMP2 = INT( WORK( 1 ) )
 
       LWORKREQ = MAX( ITEMP1+2*NW**2, ITEMP2+2*NBR**2 )
@@ -496,15 +500,15 @@
 
 *        Check deflations at the end
          IF ( ABS( A( ISTOP-1, ISTOP-2 ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTOP-1, ISTOP-1 ) )+ABS( A( ISTOP-2,
-     $       ISTOP-2 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTOP-1, ISTOP-1 ) )+ABS( A( ISTOP-2,
+     $      ISTOP-2 ) ) ) ) ) THEN
             A( ISTOP-1, ISTOP-2 ) = ZERO
             ISTOP = ISTOP-2
             LD = 0
             ESHIFT = ZERO
          ELSE IF ( ABS( A( ISTOP, ISTOP-1 ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTOP, ISTOP ) )+ABS( A( ISTOP-1,
-     $       ISTOP-1 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTOP, ISTOP ) )+ABS( A( ISTOP-1,
+     $      ISTOP-1 ) ) ) ) ) THEN
             A( ISTOP, ISTOP-1 ) = ZERO
             ISTOP = ISTOP-1
             LD = 0
@@ -512,15 +516,15 @@
          END IF
 *        Check deflations at the start
          IF ( ABS( A( ISTART+2, ISTART+1 ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTART+1, ISTART+1 ) )+ABS( A( ISTART+2,
-     $       ISTART+2 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTART+1, ISTART+1 ) )+ABS( A( ISTART+2,
+     $      ISTART+2 ) ) ) ) ) THEN
             A( ISTART+2, ISTART+1 ) = ZERO
             ISTART = ISTART+2
             LD = 0
             ESHIFT = ZERO
          ELSE IF ( ABS( A( ISTART+1, ISTART ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTART, ISTART ) )+ABS( A( ISTART+1,
-     $       ISTART+1 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTART, ISTART ) )+ABS( A( ISTART+1,
+     $      ISTART+1 ) ) ) ) ) THEN
             A( ISTART+1, ISTART ) = ZERO
             ISTART = ISTART+1
             LD = 0
@@ -535,7 +539,7 @@
          ISTART2 = ISTART
          DO K = ISTOP, ISTART+1, -1
             IF ( ABS( A( K, K-1 ) ) .LE. MAX( SMLNUM, ULP*( ABS( A( K,
-     $          K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
+     $         K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
                A( K, K-1 ) = ZERO
                ISTART2 = K
                EXIT
@@ -569,32 +573,32 @@
                
                DO K2 = K, ISTART2+1, -1
                   CALL DLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
-     $                TEMP )
+     $                         TEMP )
                   B( K2-1, K2 ) = TEMP
                   B( K2-1, K2-1 ) = ZERO
 
                   CALL DROT( K2-2-ISTARTM+1, B( ISTARTM, K2 ), 1,
-     $                B( ISTARTM, K2-1 ), 1, C1, S1 )
+     $                       B( ISTARTM, K2-1 ), 1, C1, S1 )
                   CALL DROT( MIN( K2+1, ISTOP )-ISTARTM+1, A( ISTARTM,
-     $                K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
+     $                       K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
                   IF ( ILZ ) THEN
                      CALL DROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1, C1,
-     $                   S1 )
+     $                          S1 )
                   END IF
 
                   IF( K2.LT.ISTOP ) THEN
                      CALL DLARTG( A( K2, K2-1 ), A( K2+1, K2-1 ), C1,
-     $                   S1, TEMP )
+     $                            S1, TEMP )
                      A( K2, K2-1 ) = TEMP
                      A( K2+1, K2-1 ) = ZERO
 
                      CALL DROT( ISTOPM-K2+1, A( K2, K2 ), LDA, A( K2+1,
-     $                   K2 ), LDA, C1, S1 )
+     $                          K2 ), LDA, C1, S1 )
                      CALL DROT( ISTOPM-K2+1, B( K2, K2 ), LDB, B( K2+1,
-     $                   K2 ), LDB, C1, S1 )
+     $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL DROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
-     $                      C1, S1 )
+     $                             C1, S1 )
                      END IF
                   END IF
 
@@ -602,19 +606,19 @@
 
                IF( ISTART2.LT.ISTOP )THEN
                   CALL DLARTG( A( ISTART2, ISTART2 ), A( ISTART2+1,
-     $                ISTART2 ), C1, S1, TEMP )
+     $                         ISTART2 ), C1, S1, TEMP )
                   A( ISTART2, ISTART2 ) = TEMP
                   A( ISTART2+1, ISTART2 ) = ZERO
 
                   CALL DROT( ISTOPM-( ISTART2+1 )+1, A( ISTART2,
-     $                ISTART2+1 ), LDA, A( ISTART2+1, ISTART2+1 ), LDA,
-     $                C1, S1 )
+     $                       ISTART2+1 ), LDA, A( ISTART2+1,
+     $                       ISTART2+1 ), LDA, C1, S1 )
                   CALL DROT( ISTOPM-( ISTART2+1 )+1, B( ISTART2,
-     $                ISTART2+1 ), LDB, B( ISTART2+1, ISTART2+1 ), LDB,
-     $                C1, S1 )
+     $                       ISTART2+1 ), LDB, B( ISTART2+1,
+     $                       ISTART2+1 ), LDB, C1, S1 )
                   IF( ILQ ) THEN
                      CALL DROT( N, Q( 1, ISTART2 ), 1, Q( 1,
-     $                   ISTART2+1 ), 1, C1, S1 )
+     $                          ISTART2+1 ), 1, C1, S1 )
                   END IF
                END IF
 
@@ -653,9 +657,10 @@
 *        Time for AED
 *
          CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
-     $       B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR,
-     $       ALPHAI, BETA, WORK, NW, WORK( NW**2+1 ), NW, WORK( 2*NW**2+
-     $      1 ), LWORK-2*NW**2, REC, AED_INFO )
+     $                B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED,
+     $                ALPHAR, ALPHAI, BETA, WORK, NW, WORK( NW**2+1 ),
+     $                NW, WORK( 2*NW**2+1 ), LWORK-2*NW**2, REC,
+     $                AED_INFO )
 
          IF ( N_DEFLATED > 0 ) THEN
             ISTOP = ISTOP-N_DEFLATED
@@ -681,7 +686,7 @@
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
             IF( ( DBLE( MAXIT )*SAFMIN )*ABS( A( ISTOP,
-     $          ISTOP-1 ) ).LT.ABS( A( ISTOP-1, ISTOP-1 ) ) ) THEN
+     $         ISTOP-1 ) ).LT.ABS( A( ISTOP-1, ISTOP-1 ) ) ) THEN
                ESHIFT = A( ISTOP, ISTOP-1 )/B( ISTOP-1, ISTOP-1 )
             ELSE
                ESHIFT = ESHIFT+ONE/( SAFMIN*DBLE( MAXIT ) )
@@ -699,10 +704,11 @@
 *        Time for a QZ sweep
 *
          CALL DLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
-     $       ALPHAR( SHIFTPOS ), ALPHAI( SHIFTPOS ), BETA( SHIFTPOS ),
-     $       A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBLOCK, WORK( NBLOCK*
-     $      *2+1 ), NBLOCK, WORK( 2*NBLOCK**2+1 ), LWORK-2*NBLOCK**2,
-     $       SWEEP_INFO )
+     $                ALPHAR( SHIFTPOS ), ALPHAI( SHIFTPOS ),
+     $                BETA( SHIFTPOS ), A, LDA, B, LDB, Q, LDQ, Z, LDZ,
+     $                WORK, NBLOCK, WORK( NBLOCK**2+1 ), NBLOCK,
+     $                WORK( 2*NBLOCK**2+1 ), LWORK-2*NBLOCK**2,
+     $                SWEEP_INFO )
 
       END DO
 
@@ -713,7 +719,8 @@
 *     the single shift might perform better.
 *
    80 CALL DHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-     $ ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, NORM_INFO )
+     $             ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
+     $             NORM_INFO )
       
       INFO = NORM_INFO
 

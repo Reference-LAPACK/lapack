@@ -286,18 +286,19 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
-     $    LDB, ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, REC,
-     $    INFO )
+      RECURSIVE SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+     $                             LDA, B, LDB, ALPHA, BETA, Q, LDQ, Z,
+     $                             LDZ, WORK, LWORK, RWORK, REC,
+     $                             INFO )
       IMPLICIT NONE
 
 *     Arguments
       CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
       INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
-     $    REC
+     $         REC
       INTEGER, INTENT( OUT ) :: INFO
       COMPLEX, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
-     $    Z( LDZ, * ), ALPHA( * ), BETA( * ), WORK( * )
+     $   Z( LDZ, * ), ALPHA( * ), BETA( * ), WORK( * )
       REAL, INTENT( OUT ) :: RWORK( * )
 
 *     Parameters
@@ -310,10 +311,10 @@
       REAL :: SMLNUM, ULP, SAFMIN, SAFMAX, C1, TEMPR
       COMPLEX :: ESHIFT, S1, TEMP
       INTEGER :: ISTART, ISTOP, IITER, MAXIT, ISTART2, K, LD, NSHIFTS,
-     $    NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED, NS,
-     $    SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM, ISTOPM, IWANTS,
-     $    IWANTQ, IWANTZ, NORM_INFO, AED_INFO, NWR, NBR, NSR, ITEMP1,
-     $    ITEMP2, RCOST
+     $           NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED,
+     $           NS, SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM,
+     $           ISTOPM, IWANTS, IWANTQ, IWANTZ, NORM_INFO, AED_INFO,
+     $           NWR, NBR, NSR, ITEMP1, ITEMP2, RCOST
       LOGICAL :: ILSCHUR, ILQ, ILZ, LQUERY
       CHARACTER :: JBCMPZ*3
 
@@ -424,7 +425,8 @@
 
       IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
          CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-     $       ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, INFO )
+     $                ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK,
+     $                INFO )
          RETURN
       END IF
 
@@ -435,13 +437,14 @@
 *     Workspace query to CLAQZ2
       NW = MAX( NWR, NMIN )
       CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
-     $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA, BETA, WORK,
-     $    NW, WORK, NW, WORK, -1, RWORK, REC, AED_INFO )
+     $             Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA,
+     $             BETA, WORK, NW, WORK, NW, WORK, -1, RWORK, REC,
+     $             AED_INFO )
       ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to CLAQZ3
       CALL CLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHA,
-     $    BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR, WORK, NBR,
-     $    WORK, -1, SWEEP_INFO )
+     $             BETA, A, LDA, B, LDB, Q, LDQ, Z, LDZ, WORK, NBR,
+     $             WORK, NBR, WORK, -1, SWEEP_INFO )
       ITEMP2 = INT( WORK( 1 ) )
 
       LWORKREQ = MAX( ITEMP1+2*NW**2, ITEMP2+2*NBR**2 )
@@ -487,8 +490,8 @@
 
 *        Check deflations at the end
          IF ( ABS( A( ISTOP, ISTOP-1 ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTOP, ISTOP ) )+ABS( A( ISTOP-1,
-     $       ISTOP-1 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTOP, ISTOP ) )+ABS( A( ISTOP-1,
+     $      ISTOP-1 ) ) ) ) ) THEN
             A( ISTOP, ISTOP-1 ) = CZERO
             ISTOP = ISTOP-1
             LD = 0
@@ -496,8 +499,8 @@
          END IF
 *        Check deflations at the start
          IF ( ABS( A( ISTART+1, ISTART ) ) .LE. MAX( SMLNUM,
-     $       ULP*( ABS( A( ISTART, ISTART ) )+ABS( A( ISTART+1,
-     $       ISTART+1 ) ) ) ) ) THEN
+     $      ULP*( ABS( A( ISTART, ISTART ) )+ABS( A( ISTART+1,
+     $      ISTART+1 ) ) ) ) ) THEN
             A( ISTART+1, ISTART ) = CZERO
             ISTART = ISTART+1
             LD = 0
@@ -512,7 +515,7 @@
          ISTART2 = ISTART
          DO K = ISTOP, ISTART+1, -1
             IF ( ABS( A( K, K-1 ) ) .LE. MAX( SMLNUM, ULP*( ABS( A( K,
-     $          K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
+     $         K ) )+ABS( A( K-1, K-1 ) ) ) ) ) THEN
                A( K, K-1 ) = CZERO
                ISTART2 = K
                EXIT
@@ -546,32 +549,32 @@
                
                DO K2 = K, ISTART2+1, -1
                   CALL CLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
-     $                TEMP )
+     $                         TEMP )
                   B( K2-1, K2 ) = TEMP
                   B( K2-1, K2-1 ) = CZERO
 
                   CALL CROT( K2-2-ISTARTM+1, B( ISTARTM, K2 ), 1,
-     $                B( ISTARTM, K2-1 ), 1, C1, S1 )
+     $                       B( ISTARTM, K2-1 ), 1, C1, S1 )
                   CALL CROT( MIN( K2+1, ISTOP )-ISTARTM+1, A( ISTARTM,
-     $                K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
+     $                       K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
                   IF ( ILZ ) THEN
                      CALL CROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1, C1,
-     $                   S1 )
+     $                          S1 )
                   END IF
 
                   IF( K2.LT.ISTOP ) THEN
                      CALL CLARTG( A( K2, K2-1 ), A( K2+1, K2-1 ), C1,
-     $                   S1, TEMP )
+     $                            S1, TEMP )
                      A( K2, K2-1 ) = TEMP
                      A( K2+1, K2-1 ) = CZERO
 
                      CALL CROT( ISTOPM-K2+1, A( K2, K2 ), LDA, A( K2+1,
-     $                   K2 ), LDA, C1, S1 )
+     $                          K2 ), LDA, C1, S1 )
                      CALL CROT( ISTOPM-K2+1, B( K2, K2 ), LDB, B( K2+1,
-     $                   K2 ), LDB, C1, S1 )
+     $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL CROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
-     $                      C1, CONJG( S1 ) )
+     $                             C1, CONJG( S1 ) )
                      END IF
                   END IF
 
@@ -579,19 +582,19 @@
 
                IF( ISTART2.LT.ISTOP )THEN
                   CALL CLARTG( A( ISTART2, ISTART2 ), A( ISTART2+1,
-     $                ISTART2 ), C1, S1, TEMP )
+     $                         ISTART2 ), C1, S1, TEMP )
                   A( ISTART2, ISTART2 ) = TEMP
                   A( ISTART2+1, ISTART2 ) = CZERO
 
                   CALL CROT( ISTOPM-( ISTART2+1 )+1, A( ISTART2,
-     $                ISTART2+1 ), LDA, A( ISTART2+1, ISTART2+1 ), LDA,
-     $                C1, S1 )
+     $                       ISTART2+1 ), LDA, A( ISTART2+1,
+     $                       ISTART2+1 ), LDA, C1, S1 )
                   CALL CROT( ISTOPM-( ISTART2+1 )+1, B( ISTART2,
-     $                ISTART2+1 ), LDB, B( ISTART2+1, ISTART2+1 ), LDB,
-     $                C1, S1 )
+     $                       ISTART2+1 ), LDB, B( ISTART2+1,
+     $                       ISTART2+1 ), LDB, C1, S1 )
                   IF( ILQ ) THEN
                      CALL CROT( N, Q( 1, ISTART2 ), 1, Q( 1,
-     $                   ISTART2+1 ), 1, C1, CONJG( S1 ) )
+     $                          ISTART2+1 ), 1, C1, CONJG( S1 ) )
                   END IF
                END IF
 
@@ -630,9 +633,10 @@
 *        Time for AED
 *
          CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
-     $       B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA,
-     $       BETA, WORK, NW, WORK( NW**2+1 ), NW, WORK( 2*NW**2+1 ),
-     $       LWORK-2*NW**2, RWORK, REC, AED_INFO )
+     $                B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED,
+     $                ALPHA, BETA, WORK, NW, WORK( NW**2+1 ), NW,
+     $                WORK( 2*NW**2+1 ), LWORK-2*NW**2, RWORK, REC,
+     $                AED_INFO )
 
          IF ( N_DEFLATED > 0 ) THEN
             ISTOP = ISTOP-N_DEFLATED
@@ -658,7 +662,7 @@
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
             IF( ( REAL( MAXIT )*SAFMIN )*ABS( A( ISTOP,
-     $          ISTOP-1 ) ).LT.ABS( A( ISTOP-1, ISTOP-1 ) ) ) THEN
+     $         ISTOP-1 ) ).LT.ABS( A( ISTOP-1, ISTOP-1 ) ) ) THEN
                ESHIFT = A( ISTOP, ISTOP-1 )/B( ISTOP-1, ISTOP-1 )
             ELSE
                ESHIFT = ESHIFT+CONE/( SAFMIN*REAL( MAXIT ) )
@@ -672,9 +676,10 @@
 *        Time for a QZ sweep
 *
          CALL CLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
-     $       ALPHA( SHIFTPOS ), BETA( SHIFTPOS ), A, LDA, B, LDB, Q,
-     $       LDQ, Z, LDZ, WORK, NBLOCK, WORK( NBLOCK**2+1 ), NBLOCK,
-     $       WORK( 2*NBLOCK**2+1 ), LWORK-2*NBLOCK**2, SWEEP_INFO )
+     $                ALPHA( SHIFTPOS ), BETA( SHIFTPOS ), A, LDA, B,
+     $                LDB, Q, LDQ, Z, LDZ, WORK, NBLOCK, WORK( NBLOCK**
+     $                2+1 ), NBLOCK, WORK( 2*NBLOCK**2+1 ),
+     $                LWORK-2*NBLOCK**2, SWEEP_INFO )
 
       END DO
 
@@ -685,7 +690,8 @@
 *     the single shift might perform better.
 *
    80 CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
-     $ ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, NORM_INFO )
+     $             ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK,
+     $             NORM_INFO )
       
       INFO = NORM_INFO
 

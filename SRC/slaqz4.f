@@ -207,18 +207,19 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAQZ4( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,
-     $    NBLOCK_DESIRED, SR, SI, SS, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
-     $    QC, LDQC, ZC, LDZC, WORK, LWORK, INFO )
+     $                   NBLOCK_DESIRED, SR, SI, SS, A, LDA, B, LDB, Q,
+     $                   LDQ, Z, LDZ, QC, LDQC, ZC, LDZC, WORK, LWORK,
+     $                   INFO )
       IMPLICIT NONE
 
 *     Function arguments
       LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
       INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
-     $    NSHIFTS, NBLOCK_DESIRED, LDQC, LDZC
+     $         NSHIFTS, NBLOCK_DESIRED, LDQC, LDZC
 
       REAL, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
-     $    Z( LDZ, * ), QC( LDQC, * ), ZC( LDZC, * ), WORK( * ), SR( * ),
-     $    SI( * ), SS( * )
+     $   Z( LDZ, * ), QC( LDQC, * ), ZC( LDZC, * ), WORK( * ), SR( * ),
+     $   SI( * ), SS( * )
 
       INTEGER, INTENT( OUT ) :: INFO
 
@@ -228,7 +229,7 @@
 
 *     Local scalars
       INTEGER :: I, J, NS, ISTARTM, ISTOPM, SHEIGHT, SWIDTH, K, NP,
-     $    ISTARTB, ISTOPB, ISHIFT, NBLOCK, NPOS
+     $           ISTARTB, ISTOPB, ISHIFT, NBLOCK, NPOS
       REAL :: TEMP, V( 3 ), C1, S1, C2, S2, H( 2, 3 ), SWAP
 
       INFO = 0
@@ -310,20 +311,20 @@
       DO I = 1, NS, 2
 *        Introduce the shift
          CALL SLAQZ1( A( ILO, ILO ), LDA, B( ILO, ILO ), LDB, SR( I ),
-     $       SR( I+1 ), SI( I ), SS( I ), SS( I+1 ), V )
+     $                SR( I+1 ), SI( I ), SS( I ), SS( I+1 ), V )
 
          TEMP = V( 2 )
          CALL SLARTG( TEMP, V( 3 ), C1, S1, V( 2 ) )
          CALL SLARTG( V( 1 ), V( 2 ), C2, S2, TEMP )
 
          CALL SROT( NS, A( ILO+1, ILO ), LDA, A( ILO+2, ILO ), LDA, C1,
-     $       S1 )
+     $              S1 )
          CALL SROT( NS, A( ILO, ILO ), LDA, A( ILO+1, ILO ), LDA, C2,
-     $       S2 )
+     $              S2 )
          CALL SROT( NS, B( ILO+1, ILO ), LDB, B( ILO+2, ILO ), LDB, C1,
-     $       S1 )
+     $              S1 )
          CALL SROT( NS, B( ILO, ILO ), LDB, B( ILO+1, ILO ), LDB, C2,
-     $       S2 )
+     $              S2 )
          CALL SROT( NS+1, QC( 1, 2 ), 1, QC( 1, 3 ), 1, C1, S1 )
          CALL SROT( NS+1, QC( 1, 1 ), 1, QC( 1, 2 ), 1, C2, S2 )
 
@@ -331,8 +332,8 @@
          DO J = 1, NS-1-I
 
             CALL SLAQZ2( .TRUE., .TRUE., J, 1, NS, IHI-ILO+1, A( ILO,
-     $          ILO ), LDA, B( ILO, ILO ), LDB, NS+1, 1, QC, LDQC, NS,
-     $          1, ZC, LDZC )
+     $                   ILO ), LDA, B( ILO, ILO ), LDB, NS+1, 1, QC,
+     $                   LDQC, NS, 1, ZC, LDZC )
 
          END DO
 
@@ -346,17 +347,17 @@
       SWIDTH = ISTOPM-( ILO+NS )+1
       IF ( SWIDTH > 0 ) THEN
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       A( ILO, ILO+NS ), LDA, ZERO, WORK, SHEIGHT )
+     $               A( ILO, ILO+NS ), LDA, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ILO,
-     $       ILO+NS ), LDA )
+     $                ILO+NS ), LDA )
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       B( ILO, ILO+NS ), LDB, ZERO, WORK, SHEIGHT )
+     $               B( ILO, ILO+NS ), LDB, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ILO,
-     $       ILO+NS ), LDB )
+     $                ILO+NS ), LDB )
       END IF
       IF ( ILQ ) THEN
         CALL SGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
-     $      LDQ, QC, LDQC, ZERO, WORK, N )
+     $              LDQ, QC, LDQC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
       END IF
 
@@ -366,17 +367,17 @@
       SWIDTH = NS
       IF ( SHEIGHT > 0 ) THEN
          CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
-     $       ILO ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $               ILO ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
-     $       ILO ), LDA )
+     $                ILO ), LDA )
          CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
-     $       ILO ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $               ILO ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
-     $       ILO ), LDB )
+     $                ILO ), LDB )
       END IF
       IF ( ILZ ) THEN
          CALL SGEMM( 'N', 'N', N, SWIDTH, SWIDTH, ONE, Z( 1, ILO ), LDZ,
-     $       ZC, LDZC, ZERO, WORK, N )
+     $               ZC, LDZC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, SWIDTH, WORK, N, Z( 1, ILO ), LDZ )
       END IF
 
@@ -404,8 +405,8 @@
 *              the (ns+np x ns+np) block:
 *              (k:k+ns+np,k:k+ns+np-1)
                CALL SLAQZ2( .TRUE., .TRUE., K+I+J-1, ISTARTB, ISTOPB,
-     $             IHI, A, LDA, B, LDB, NBLOCK, K+1, QC, LDQC, NBLOCK,
-     $             K, ZC, LDZC )
+     $                      IHI, A, LDA, B, LDB, NBLOCK, K+1, QC, LDQC,
+     $                      NBLOCK, K, ZC, LDZC )
             END DO
          END DO
 
@@ -418,17 +419,17 @@
          SWIDTH = ISTOPM-( K+NS+NP )+1
          IF ( SWIDTH > 0 ) THEN
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       A( K+1, K+NS+NP ), LDA, ZERO, WORK, SHEIGHT )
+     $               A( K+1, K+NS+NP ), LDA, ZERO, WORK, SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
-     $          K+NS+NP ), LDA )
+     $                   K+NS+NP ), LDA )
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       B( K+1, K+NS+NP ), LDB, ZERO, WORK, SHEIGHT )
+     $               B( K+1, K+NS+NP ), LDB, ZERO, WORK, SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
-     $          K+NS+NP ), LDB )
+     $                   K+NS+NP ), LDB )
          END IF
          IF ( ILQ ) THEN
         CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1, K+1 ), LDQ,
-     $      QC, LDQC, ZERO, WORK, N )
+     $              QC, LDQC, ZERO, WORK, N )
             CALL SLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ), LDQ )
          END IF
 
@@ -438,17 +439,19 @@
          SWIDTH = NBLOCK
          IF ( SHEIGHT > 0 ) THEN
             CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
-     $          A( ISTARTM, K ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $                  A( ISTARTM, K ), LDA, ZC, LDZC, ZERO, WORK,
+     $                  SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
-     $          A( ISTARTM, K ), LDA )
+     $                   A( ISTARTM, K ), LDA )
             CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
-     $          B( ISTARTM, K ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $                  B( ISTARTM, K ), LDB, ZC, LDZC, ZERO, WORK,
+     $                  SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
-     $          B( ISTARTM, K ), LDB )
+     $                   B( ISTARTM, K ), LDB )
          END IF
          IF ( ILZ ) THEN
             CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Z( 1, K ),
-     $          LDZ, ZC, LDZC, ZERO, WORK, N )
+     $                  LDZ, ZC, LDZC, ZERO, WORK, N )
             CALL SLACPY( 'ALL', N, NBLOCK, WORK, N, Z( 1, K ), LDZ )
          END IF
 
@@ -471,8 +474,8 @@
 *        Chase the shift down to the bottom right corner
          DO ISHIFT = IHI-I-1, IHI-2
             CALL SLAQZ2( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB, IHI,
-     $          A, LDA, B, LDB, NS, IHI-NS+1, QC, LDQC, NS+1, IHI-NS,
-     $          ZC, LDZC )
+     $                   A, LDA, B, LDB, NS, IHI-NS+1, QC, LDQC, NS+1,
+     $                   IHI-NS, ZC, LDZC )
          END DO
          
       END DO
@@ -485,17 +488,17 @@
       SWIDTH = ISTOPM-( IHI+1 )+1
       IF ( SWIDTH > 0 ) THEN
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       A( IHI-NS+1, IHI+1 ), LDA, ZERO, WORK, SHEIGHT )
+     $               A( IHI-NS+1, IHI+1 ), LDA, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
-     $       A( IHI-NS+1, IHI+1 ), LDA )
+     $                A( IHI-NS+1, IHI+1 ), LDA )
          CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $       B( IHI-NS+1, IHI+1 ), LDB, ZERO, WORK, SHEIGHT )
+     $               B( IHI-NS+1, IHI+1 ), LDB, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
-     $       B( IHI-NS+1, IHI+1 ), LDB )
+     $                B( IHI-NS+1, IHI+1 ), LDB )
       END IF
       IF ( ILQ ) THEN
          CALL SGEMM( 'N', 'N', N, NS, NS, ONE, Q( 1, IHI-NS+1 ), LDQ,
-     $       QC, LDQC, ZERO, WORK, N )
+     $               QC, LDQC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, NS, WORK, N, Q( 1, IHI-NS+1 ), LDQ )
       END IF
 
@@ -505,17 +508,17 @@
       SWIDTH = NS+1
       IF ( SHEIGHT > 0 ) THEN
          CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
-     $       IHI-NS ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $               IHI-NS ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
-     $       IHI-NS ), LDA )
+     $                IHI-NS ), LDA )
          CALL SGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
-     $       IHI-NS ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
+     $               IHI-NS ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
          CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
-     $       IHI-NS ), LDB )
+     $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
       CALL SGEMM( 'N', 'N', N, NS+1, NS+1, ONE, Z( 1, IHI-NS ), LDZ, ZC,
-     $    LDZC, ZERO, WORK, N )
+     $            LDZC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF
 

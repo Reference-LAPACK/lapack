@@ -167,13 +167,13 @@
 *>
 *  =====================================================================
       SUBROUTINE CLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
-     $    LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
+     $                   LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
       IMPLICIT NONE
 *
 *     Arguments
       LOGICAL, INTENT( IN ) :: ILQ, ILZ
       INTEGER, INTENT( IN ) :: K, LDA, LDB, LDQ, LDZ, ISTARTM, ISTOPM,
-     $    NQ, NZ, QSTART, ZSTART, IHI
+     $         NQ, NZ, QSTART, ZSTART, IHI
       COMPLEX :: A( LDA, * ), B( LDB, * ), Q( LDQ, * ), Z( LDZ, * )
 *
 *     Parameters
@@ -194,12 +194,12 @@
          B( IHI, IHI ) = TEMP
          B( IHI, IHI-1 ) = CZERO
          CALL CROT( IHI-ISTARTM, B( ISTARTM, IHI ), 1, B( ISTARTM,
-     $       IHI-1 ), 1, C, S )
+     $              IHI-1 ), 1, C, S )
          CALL CROT( IHI-ISTARTM+1, A( ISTARTM, IHI ), 1, A( ISTARTM,
-     $       IHI-1 ), 1, C, S )
+     $              IHI-1 ), 1, C, S )
          IF ( ILZ ) THEN
             CALL CROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1, IHI-1-ZSTART+
-     $         1 ), 1, C, S )
+     $                 1 ), 1, C, S )
          END IF
 *
       ELSE
@@ -213,12 +213,12 @@
          B( K+1, K+1 ) = TEMP
          B( K+1, K ) = CZERO
          CALL CROT( K+2-ISTARTM+1, A( ISTARTM, K+1 ), 1, A( ISTARTM,
-     $       K ), 1, C, S )
+     $              K ), 1, C, S )
          CALL CROT( K-ISTARTM+1, B( ISTARTM, K+1 ), 1, B( ISTARTM, K ),
-     $       1, C, S )
+     $              1, C, S )
          IF ( ILZ ) THEN
             CALL CROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1, K-ZSTART+1 ),
-     $          1, C, S )
+     $                 1, C, S )
          END IF
 *
 *        Apply transformation from the left
@@ -227,12 +227,12 @@
          A( K+1, K ) = TEMP
          A( K+2, K ) = CZERO
          CALL CROT( ISTOPM-K, A( K+1, K+1 ), LDA, A( K+2, K+1 ), LDA, C,
-     $       S )
+     $              S )
          CALL CROT( ISTOPM-K, B( K+1, K+1 ), LDB, B( K+2, K+1 ), LDB, C,
-     $       S )
+     $              S )
          IF ( ILQ ) THEN
             CALL CROT( NQ, Q( 1, K+1-QSTART+1 ), 1, Q( 1, K+2-QSTART+
-     $         1 ), 1, C, CONJG( S ) )
+     $                 1 ), 1, C, CONJG( S ) )
          END IF
 *
       END IF

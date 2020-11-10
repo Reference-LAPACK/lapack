@@ -230,18 +230,20 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      SUBROUTINE DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
-     $    LDB, Q, LDQ, Z, LDZ, NS, ND, ALPHAR, ALPHAI, BETA, QC, LDQC,
-     $    ZC, LDZC, WORK, LWORK, REC, INFO )
+      RECURSIVE SUBROUTINE DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,
+     $                             A, LDA, B, LDB, Q, LDQ, Z, LDZ, NS,
+     $                             ND, ALPHAR, ALPHAI, BETA, QC, LDQC,
+     $                             ZC, LDZC, WORK, LWORK, REC, INFO )
       IMPLICIT NONE
 
 *     Arguments
       LOGICAL, INTENT( IN ) :: ILSCHUR, ILQ, ILZ
       INTEGER, INTENT( IN ) :: N, ILO, IHI, NW, LDA, LDB, LDQ, LDZ,
-     $    LDQC, LDZC, LWORK, REC
+     $         LDQC, LDZC, LWORK, REC
 
       DOUBLE PRECISION, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ),
-     $    Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ), ALPHAI( * ), BETA( * )
+     $                  Q( LDQ, * ), Z( LDZ, * ), ALPHAR( * ),
+     $                  ALPHAI( * ), BETA( * )
       INTEGER, INTENT( OUT ) :: NS, ND, INFO
       DOUBLE PRECISION :: QC( LDQC, * ), ZC( LDZC, * ), WORK( * )
 
@@ -252,7 +254,7 @@
 *     Local Scalars
       LOGICAL :: BULGE
       INTEGER :: JW, KWTOP, KWBOT, ISTOPM, ISTARTM, K, K2, DTGEXC_INFO,
-     $    IFST, ILST, LWORKREQ, N_SHIFTS, QZ_SMALL_INFO
+     $           IFST, ILST, LWORKREQ, N_SHIFTS, QZ_SMALL_INFO
       DOUBLE PRECISION :: S, SMLNUM, ULP, SAFMIN, SAFMAX, C1, S1, TEMP
 
 *     External Functions
@@ -273,11 +275,11 @@
       IFST = 1
       ILST = JW
       CALL DTGEXC( .TRUE., .TRUE., JW, A, LDA, B, LDB, QC, LDQC, ZC,
-     $    LDZC, IFST, ILST, WORK, -1, DTGEXC_INFO )
+     $             LDZC, IFST, ILST, WORK, -1, DTGEXC_INFO )
       LWORKREQ = INT( WORK( 1 ) )
       CALL DLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
-     $    B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC, LDQC, ZC,
-     $    LDZC, WORK, -1, REC+1, QZ_SMALL_INFO )
+     $             B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC,
+     $             LDQC, ZC, LDZC, WORK, -1, REC+1, QZ_SMALL_INFO )
       LWORKREQ = MAX( LWORKREQ, INT( WORK( 1 ) )+2*JW**2 )
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2+N )
       IF ( LWORK .EQ.-1 ) THEN
@@ -308,7 +310,7 @@
          NS = 1
          ND = 0
          IF ( ABS( S ) .LE. MAX( SMLNUM, ULP*ABS( A( KWTOP,
-     $       KWTOP ) ) ) ) THEN
+     $      KWTOP ) ) ) ) THEN
             NS = 0
             ND = 1
             IF ( KWTOP .GT. ILO ) THEN
@@ -321,14 +323,15 @@
 *     Store window in case of convergence failure
       CALL DLACPY( 'ALL', JW, JW, A( KWTOP, KWTOP ), LDA, WORK, JW )
       CALL DLACPY( 'ALL', JW, JW, B( KWTOP, KWTOP ), LDB, WORK( JW**2+
-     $   1 ), JW )
+     $             1 ), JW )
 
 *     Transform window to real schur form
       CALL DLASET( 'FULL', JW, JW, ZERO, ONE, QC, LDQC )
       CALL DLASET( 'FULL', JW, JW, ZERO, ONE, ZC, LDZC )
       CALL DLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
-     $    B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC, LDQC, ZC,
-     $    LDZC, WORK( 2*JW**2+1 ), LWORK-2*JW**2, REC, QZ_SMALL_INFO )
+     $             B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC,
+     $             LDQC, ZC, LDZC, WORK( 2*JW**2+1 ), LWORK-2*JW**2,
+     $             REC, QZ_SMALL_INFO )
 
       IF( QZ_SMALL_INFO .NE. 0 ) THEN
 *        Convergence failure, restore the window and exit
@@ -336,7 +339,7 @@
          NS = JW-QZ_SMALL_INFO
          CALL DLACPY( 'ALL', JW, JW, WORK, JW, A( KWTOP, KWTOP ), LDA )
          CALL DLACPY( 'ALL', JW, JW, WORK( JW**2+1 ), JW, B( KWTOP,
-     $       KWTOP ), LDB )
+     $                KWTOP ), LDB )
          RETURN
       END IF
 
@@ -356,13 +359,13 @@
 
 *              Try to deflate complex conjugate eigenvalue pair
                TEMP = ABS( A( KWBOT, KWBOT ) )+SQRT( ABS( A( KWBOT,
-     $             KWBOT-1 ) ) )*SQRT( ABS( A( KWBOT-1, KWBOT ) ) )
+     $            KWBOT-1 ) ) )*SQRT( ABS( A( KWBOT-1, KWBOT ) ) )
                IF( TEMP .EQ. ZERO )THEN
                   TEMP = ABS( S )
                END IF
                IF ( MAX( ABS( S*QC( 1, KWBOT-KWTOP ) ), ABS( S*QC( 1,
-     $             KWBOT-KWTOP+1 ) ) ) .LE. MAX( SMLNUM,
-     $             ULP*TEMP ) ) THEN
+     $            KWBOT-KWTOP+1 ) ) ) .LE. MAX( SMLNUM,
+     $            ULP*TEMP ) ) THEN
 *                 Deflatable
                   KWBOT = KWBOT-2
                ELSE
@@ -370,8 +373,9 @@
                   IFST = KWBOT-KWTOP+1
                   ILST = K2
                   CALL DTGEXC( .TRUE., .TRUE., JW, A( KWTOP, KWTOP ),
-     $                LDA, B( KWTOP, KWTOP ), LDB, QC, LDQC, ZC, LDZC,
-     $                IFST, ILST, WORK, LWORK, DTGEXC_INFO )
+     $                         LDA, B( KWTOP, KWTOP ), LDB, QC, LDQC,
+     $                         ZC, LDZC, IFST, ILST, WORK, LWORK,
+     $                         DTGEXC_INFO )
                   K2 = K2+2
                END IF
                K = K+2
@@ -391,8 +395,9 @@
                   IFST = KWBOT-KWTOP+1
                   ILST = K2
                   CALL DTGEXC( .TRUE., .TRUE., JW, A( KWTOP, KWTOP ),
-     $                LDA, B( KWTOP, KWTOP ), LDB, QC, LDQC, ZC, LDZC,
-     $                IFST, ILST, WORK, LWORK, DTGEXC_INFO )
+     $                         LDA, B( KWTOP, KWTOP ), LDB, QC, LDQC,
+     $                         ZC, LDZC, IFST, ILST, WORK, LWORK,
+     $                         DTGEXC_INFO )
                   K2 = K2+1
                END IF
 
@@ -416,8 +421,8 @@
          IF ( BULGE ) THEN
 *           2x2 eigenvalue block
             CALL DLAG2( A( K, K ), LDA, B( K, K ), LDB, SAFMIN,
-     $          BETA( K ), BETA( K+1 ), ALPHAR( K ), ALPHAR( K+1 ),
-     $          ALPHAI( K ) )
+     $                  BETA( K ), BETA( K+1 ), ALPHAR( K ),
+     $                  ALPHAR( K+1 ), ALPHAI( K ) )
             ALPHAI( K+1 ) = -ALPHAI( K )
             K = K+2
          ELSE
@@ -432,19 +437,19 @@
       IF ( KWTOP .NE. ILO .AND. S .NE. ZERO ) THEN
 *        Reflect spike back, this will create optimally packed bulges
          A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 )*QC( 1,
-     $       1:JW-ND )
+     $      1:JW-ND )
          DO K = KWBOT-1, KWTOP, -1
             CALL DLARTG( A( K, KWTOP-1 ), A( K+1, KWTOP-1 ), C1, S1,
-     $          TEMP )
+     $                   TEMP )
             A( K, KWTOP-1 ) = TEMP
             A( K+1, KWTOP-1 ) = ZERO
             K2 = MAX( KWTOP, K-1 )
             CALL DROT( IHI-K2+1, A( K, K2 ), LDA, A( K+1, K2 ), LDA, C1,
-     $          S1 )
+     $                 S1 )
             CALL DROT( IHI-( K-1 )+1, B( K, K-1 ), LDB, B( K+1, K-1 ),
-     $          LDB, C1, S1 )
+     $                 LDB, C1, S1 )
             CALL DROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1, K+1-KWTOP+1 ),
-     $          1, C1, S1 )
+     $                 1, C1, S1 )
          END DO
 
 *        Chase bulges down
@@ -452,14 +457,13 @@
          ISTOPM = IHI
          K = KWBOT-1
          DO WHILE ( K .GE. KWTOP )
-            IF ( ( K .GE. KWTOP+1 ) .AND. A( K+1,
-     $          K-1 ) .NE. ZERO ) THEN
+            IF ( ( K .GE. KWTOP+1 ) .AND. A( K+1, K-1 ) .NE. ZERO ) THEN
 
 *              Move double pole block down and remove it
                DO K2 = K-1, KWBOT-2
                   CALL DLAQZ2( .TRUE., .TRUE., K2, KWTOP, KWTOP+JW-1,
-     $                KWBOT, A, LDA, B, LDB, JW, KWTOP, QC, LDQC, JW,
-     $                KWTOP, ZC, LDZC )
+     $                         KWBOT, A, LDA, B, LDB, JW, KWTOP, QC,
+     $                         LDQC, JW, KWTOP, ZC, LDZC )
                END DO
 
                K = K-2
@@ -470,40 +474,40 @@
 
 *                 Move shift down
                   CALL DLARTG( B( K2+1, K2+1 ), B( K2+1, K2 ), C1, S1,
-     $                TEMP )
+     $                         TEMP )
                   B( K2+1, K2+1 ) = TEMP
                   B( K2+1, K2 ) = ZERO
                   CALL DROT( K2+2-ISTARTM+1, A( ISTARTM, K2+1 ), 1,
-     $                A( ISTARTM, K2 ), 1, C1, S1 )
+     $                       A( ISTARTM, K2 ), 1, C1, S1 )
                   CALL DROT( K2-ISTARTM+1, B( ISTARTM, K2+1 ), 1,
-     $                B( ISTARTM, K2 ), 1, C1, S1 )
+     $                       B( ISTARTM, K2 ), 1, C1, S1 )
                   CALL DROT( JW, ZC( 1, K2+1-KWTOP+1 ), 1, ZC( 1,
-     $                K2-KWTOP+1 ), 1, C1, S1 )
+     $                       K2-KWTOP+1 ), 1, C1, S1 )
             
                   CALL DLARTG( A( K2+1, K2 ), A( K2+2, K2 ), C1, S1,
-     $                TEMP )
+     $                         TEMP )
                   A( K2+1, K2 ) = TEMP
                   A( K2+2, K2 ) = ZERO
                   CALL DROT( ISTOPM-K2, A( K2+1, K2+1 ), LDA, A( K2+2,
-     $                K2+1 ), LDA, C1, S1 )
+     $                       K2+1 ), LDA, C1, S1 )
                   CALL DROT( ISTOPM-K2, B( K2+1, K2+1 ), LDB, B( K2+2,
-     $                K2+1 ), LDB, C1, S1 )
+     $                       K2+1 ), LDB, C1, S1 )
                   CALL DROT( JW, QC( 1, K2+1-KWTOP+1 ), 1, QC( 1,
-     $                K2+2-KWTOP+1 ), 1, C1, S1 )
+     $                       K2+2-KWTOP+1 ), 1, C1, S1 )
 
                END DO
 
 *              Remove the shift
                CALL DLARTG( B( KWBOT, KWBOT ), B( KWBOT, KWBOT-1 ), C1,
-     $             S1, TEMP )
+     $                      S1, TEMP )
                B( KWBOT, KWBOT ) = TEMP
                B( KWBOT, KWBOT-1 ) = ZERO
                CALL DROT( KWBOT-ISTARTM, B( ISTARTM, KWBOT ), 1,
-     $             B( ISTARTM, KWBOT-1 ), 1, C1, S1 )
+     $                    B( ISTARTM, KWBOT-1 ), 1, C1, S1 )
                CALL DROT( KWBOT-ISTARTM+1, A( ISTARTM, KWBOT ), 1,
-     $             A( ISTARTM, KWBOT-1 ), 1, C1, S1 )
+     $                    A( ISTARTM, KWBOT-1 ), 1, C1, S1 )
                CALL DROT( JW, ZC( 1, KWBOT-KWTOP+1 ), 1, ZC( 1,
-     $             KWBOT-1-KWTOP+1 ), 1, C1, S1 )
+     $                    KWBOT-1-KWTOP+1 ), 1, C1, S1 )
 
                K = K-1
             END IF
@@ -522,33 +526,35 @@
 
       IF ( ISTOPM-IHI > 0 ) THEN
          CALL DGEMM( 'T', 'N', JW, ISTOPM-IHI, JW, ONE, QC, LDQC,
-     $       A( KWTOP, IHI+1 ), LDA, ZERO, WORK, JW )
+     $               A( KWTOP, IHI+1 ), LDA, ZERO, WORK, JW )
          CALL DLACPY( 'ALL', JW, ISTOPM-IHI, WORK, JW, A( KWTOP,
-     $       IHI+1 ), LDA )
+     $                IHI+1 ), LDA )
          CALL DGEMM( 'T', 'N', JW, ISTOPM-IHI, JW, ONE, QC, LDQC,
-     $       B( KWTOP, IHI+1 ), LDB, ZERO, WORK, JW )
+     $               B( KWTOP, IHI+1 ), LDB, ZERO, WORK, JW )
          CALL DLACPY( 'ALL', JW, ISTOPM-IHI, WORK, JW, B( KWTOP,
-     $       IHI+1 ), LDB )
+     $                IHI+1 ), LDB )
       END IF
       IF ( ILQ ) THEN
          CALL DGEMM( 'N', 'N', N, JW, JW, ONE, Q( 1, KWTOP ), LDQ, QC,
-     $       LDQC, ZERO, WORK, N )
+     $               LDQC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, JW, WORK, N, Q( 1, KWTOP ), LDQ )
       END IF
 
       IF ( KWTOP-1-ISTARTM+1 > 0 ) THEN
          CALL DGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, A( ISTARTM,
-     $       KWTOP ), LDA, ZC, LDZC, ZERO, WORK, KWTOP-ISTARTM )
+     $               KWTOP ), LDA, ZC, LDZC, ZERO, WORK,
+     $               KWTOP-ISTARTM )
         CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
-     $      A( ISTARTM, KWTOP ), LDA )
+     $               A( ISTARTM, KWTOP ), LDA )
          CALL DGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, B( ISTARTM,
-     $       KWTOP ), LDB, ZC, LDZC, ZERO, WORK, KWTOP-ISTARTM )
+     $               KWTOP ), LDB, ZC, LDZC, ZERO, WORK,
+     $               KWTOP-ISTARTM )
         CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
-     $      B( ISTARTM, KWTOP ), LDB )
+     $               B( ISTARTM, KWTOP ), LDB )
       END IF
       IF ( ILZ ) THEN
          CALL DGEMM( 'N', 'N', N, JW, JW, ONE, Z( 1, KWTOP ), LDZ, ZC,
-     $       LDZC, ZERO, WORK, N )
+     $               LDZC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, JW, WORK, N, Z( 1, KWTOP ), LDZ )
       END IF
 
