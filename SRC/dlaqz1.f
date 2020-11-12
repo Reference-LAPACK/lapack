@@ -137,7 +137,7 @@
       PARAMETER( ZERO = 0.0D0, ONE = 1.0D0, HALF = 0.5D0 )
 *
 *     Local scalars
-      DOUBLE PRECISION :: W( 2 ), SAFMIN, SAFMAX, SCALE
+      DOUBLE PRECISION :: W( 2 ), SAFMIN, SAFMAX, SCALE1, SCALE2
 *
 *     External Functions
       DOUBLE PRECISION, EXTERNAL :: DLAMCH
@@ -150,20 +150,20 @@
 *
       W( 1 ) = BETA1*A( 1, 1 )-SR1*B( 1, 1 )
       W( 2 ) = BETA1*A( 2, 1 )-SR1*B( 2, 1 )
-      SCALE = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
-      IF( SCALE .GE. SAFMIN .AND. SCALE .LE. SAFMAX ) THEN
-         W( 1 ) = W( 1 )/SCALE
-         W( 2 ) = W( 2 )/SCALE
+      SCALE1 = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
+      IF( SCALE1 .GE. SAFMIN .AND. SCALE1 .LE. SAFMAX ) THEN
+         W( 1 ) = W( 1 )/SCALE1
+         W( 2 ) = W( 2 )/SCALE1
       END IF
 *
 *     Solve linear system
 *
       W( 2 ) = W( 2 )/B( 2, 2 )
       W( 1 ) = ( W( 1 )-B( 1, 2 )*W( 2 ) )/B( 1, 1 )
-      SCALE = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
-      IF( SCALE .GE. SAFMIN .AND. SCALE .LE. SAFMAX ) THEN
-         W( 1 ) = W( 1 )/SCALE
-         W( 2 ) = W( 2 )/SCALE
+      SCALE2 = SQRT( ABS( W( 1 ) ) ) * SQRT( ABS( W( 2 ) ) )
+      IF( SCALE2 .GE. SAFMIN .AND. SCALE2 .LE. SAFMAX ) THEN
+         W( 1 ) = W( 1 )/SCALE2
+         W( 2 ) = W( 2 )/SCALE2
       END IF
 *
 *     Apply second shift
@@ -177,7 +177,7 @@
 *
 *     Account for imaginary part
 *
-      V( 1 ) = V( 1 )+SI*SI*B( 1, 1 )
+      V( 1 ) = V( 1 )+SI*SI*B( 1, 1 )/SCALE1/SCALE2
 *
 *     Check for overflow
 *

@@ -331,7 +331,7 @@
       CALL DLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $             B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC,
      $             LDQC, ZC, LDZC, WORK( 2*JW**2+1 ), LWORK-2*JW**2,
-     $             REC, QZ_SMALL_INFO )
+     $             REC+1, QZ_SMALL_INFO )
 
       IF( QZ_SMALL_INFO .NE. 0 ) THEN
 *        Convergence failure, restore the window and exit

@@ -418,18 +418,20 @@
          SHEIGHT = NS+NP
          SWIDTH = ISTOPM-( K+NS+NP )+1
          IF ( SWIDTH > 0 ) THEN
-         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $               A( K+1, K+NS+NP ), LDA, ZERO, WORK, SHEIGHT )
+            CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $                  LDQC, A( K+1, K+NS+NP ), LDA, ZERO, WORK,
+     $                  SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
      $                   K+NS+NP ), LDA )
-         CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
-     $               B( K+1, K+NS+NP ), LDB, ZERO, WORK, SHEIGHT )
+            CALL SGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $                  LDQC, B( K+1, K+NS+NP ), LDB, ZERO, WORK,
+     $                  SHEIGHT )
             CALL SLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
      $                   K+NS+NP ), LDB )
          END IF
          IF ( ILQ ) THEN
-        CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1, K+1 ), LDQ,
-     $              QC, LDQC, ZERO, WORK, N )
+            CALL SGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1, K+1 ),
+     $                  LDQ, QC, LDQC, ZERO, WORK, N )
             CALL SLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ), LDQ )
          END IF
 
