@@ -99,14 +99,14 @@ set(SLASRC
    slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
-   slarf.f  slarfb.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f slargv.f
+   slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f slargv.f
    slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slaswp.f slasy2.f 
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrz.f
    slauu2.f slauum.f sopgtr.f sopmtr.f sorg2l.f sorg2r.f
    sorgbr.f sorghr.f sorgl2.f sorglq.f sorgql.f sorgqr.f sorgr2.f
-   sorgrq.f sorgtr.f sorgtsqr.f sorm2l.f sorm2r.f sorm22.f
+   sorgrq.f sorgtr.f sorgtsqr.f sorgtsqr_row.f sorm2l.f sorm2r.f sorm22.f
    sormbr.f sormhr.f sorml2.f sormlq.f sormql.f sormqr.f sormr2.f
    sormr3.f sormrq.f sormrz.f sormtr.f spbcon.f spbequ.f spbrfs.f
    spbstf.f spbsv.f  spbsvx.f
@@ -145,7 +145,7 @@ set(SLASRC
    sgeqrt.f sgeqrt2.f sgeqrt3.f sgemqrt.f
    stpqrt.f stpqrt2.f stpmqrt.f stprfb.f
    sgelqt.f sgelqt3.f sgemlqt.f
-   sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
+   sgetsls.f sgetsqrhrt.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
    stplqt.f stplqt2.f stpmlqt.f
    sorhr_col.f slaorhr_col_getrfnp.f slaorhr_col_getrfnp2.f
@@ -292,14 +292,14 @@ set(DLASRC
    dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
-   dlarf.f  dlarfb.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
+   dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
    dlargv.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f 
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrz.f dlauu2.f
    dlauum.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f
    dorgbr.f dorghr.f dorgl2.f dorglq.f dorgql.f dorgqr.f dorgr2.f
-   dorgrq.f dorgtr.f dorgtsqr.f dorm2l.f dorm2r.f dorm22.f
+   dorgrq.f dorgtr.f dorgtsqr.f dorgtsqr_row.f dorm2l.f dorm2r.f dorm22.f
    dormbr.f dormhr.f dorml2.f dormlq.f dormql.f dormqr.f dormr2.f
    dormr3.f dormrq.f dormrz.f dormtr.f dpbcon.f dpbequ.f dpbrfs.f
    dpbstf.f dpbsv.f  dpbsvx.f
@@ -340,7 +340,7 @@ set(DLASRC
    dgeqrt.f dgeqrt2.f dgeqrt3.f dgemqrt.f
    dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f
    dgelqt.f dgelqt3.f dgemlqt.f
-   dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
+   dgetsls.f dgetsqrhrt.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
    dtplqt.f dtplqt2.f dtpmlqt.f
    dorhr_col.f dlaorhr_col_getrfnp.f dlaorhr_col_getrfnp2.f

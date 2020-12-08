@@ -1,4 +1,4 @@
-*> \brief \b SORHR_COL01
+*> \brief \b SORHR_COL02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
+*       SUBROUTINE SORHR_COL02( M, N, MB1, NB1, NB2, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
@@ -21,7 +21,8 @@
 *>
 *> \verbatim
 *>
-*> SORHR_COL01 tests SORGTSQR and SORHR_COL using SLATSQR, SGEMQRT.
+*> SORHR_COL02 tests SORGTSQR_ROW and SORHR_COL inside SGETSQRHRT
+*> (which calls SLATSQR, SORGTSQR_ROW and SORHR_COL) using SGEMQRT.
 *> Therefore, SLATSQR (part of SGEQR), SGEMQRT (part of SGEMQR)
 *> have to be tested before this test.
 *>
@@ -85,7 +86,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
+      SUBROUTINE SORHR_COL02( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.10.0) --
@@ -112,7 +113,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
-      INTEGER            INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
+      INTEGER            INFO, J, K, L, LWORK, NB2_UB, NRB
       REAL               ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -124,8 +125,8 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLARNV, SLASET, SLATSQR, SORHR_COL,
-     $                   SORGTSQR, SSCAL, SGEMM, SGEMQRT, SSYRK
+      EXTERNAL           SLACPY, SLARNV, SLASET, SGETSQRHRT,
+     $                   SSCAL, SGEMM, SGEMQRT, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, REAL, MAX, MIN
@@ -177,21 +178,14 @@
 *
 *     Begin determine LWORK for the array WORK and allocate memory.
 *
-*     SLATSQR requires NB1 to be bounded by N.
-*
-      NB1_UB = MIN( NB1, N)
-*
 *     SGEMQRT requires NB2 to be bounded by N.
 *
       NB2_UB = MIN( NB2, N)
 *
-      CALL SLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1,
-     $              WORKQUERY, -1, INFO )
+      CALL SGETSQRHRT( M, N, MB1, NB1, NB2, AF, M, T2, NB2,
+     $                 WORKQUERY, -1, INFO )
+*
       LWORK = INT( WORKQUERY( 1 ) )
-      CALL SORGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORKQUERY, -1,
-     $               INFO )
-
-      LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
 *
 *     In SGEMQRT, WORK is N*NB2_UB if SIDE = 'L',
 *                or  M*NB2_UB if SIDE = 'R'.
@@ -207,42 +201,9 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      SRNAMT = 'SLATSQR'
-      CALL SLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
-     $              INFO )
-*
-*     Copy the factor R into the array R.
-*
-      SRNAMT = 'SLACPY'
-      CALL SLACPY( 'U', N, N, AF, M, R, M )
-*
-*     Reconstruct the orthogonal matrix Q.
-*
-      SRNAMT = 'SORGTSQR'
-      CALL SORGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORK, LWORK,
-     $               INFO )
-*
-*     Perform the Householder reconstruction, the result is stored
-*     the arrays AF and T2.
-*
-      SRNAMT = 'SORHR_COL'
-      CALL SORHR_COL( M, N, NB2, AF, M, T2, NB2, DIAG, INFO )
-*
-*     Compute the factor R_hr corresponding to the Householder
-*     reconstructed Q_hr and place it in the upper triangle of AF to
-*     match the Q storage format in SGEQRT. R_hr = R_tsqr * S,
-*     this means changing the sign of I-th row of the matrix R_tsqr
-*     according to sign of of I-th diagonal element DIAG(I) of the
-*     matrix S.
-*
-      SRNAMT = 'SLACPY'
-      CALL SLACPY( 'U', N, N, R, M, AF, M )
-*
-      DO I = 1, N
-         IF( DIAG( I ).EQ.-ONE ) THEN
-            CALL SSCAL( N+1-I, -ONE, AF( I, I ), M )
-         END IF
-      END DO
+      SRNAMT = 'SGETSQRHRT'
+      CALL SGETSQRHRT( M, N, MB1, NB1, NB2, AF, M, T2, NB2,
+     $                 WORK, LWORK, INFO )
 *
 *     End Householder reconstruction routines.
 *
@@ -381,6 +342,6 @@
 *
       RETURN
 *
-*     End of SORHR_COL01
+*     End of SORHR_COL02
 *
       END

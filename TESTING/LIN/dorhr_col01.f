@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> DORHR_COL01 tests DORHR_COL using DLATSQR, DGEMQRT and DORGTSQR.
-*> Therefore, DLATSQR (part of DGEQR), DGEMQRT (part DGEMQR), DORGTSQR
+*> DORHR_COL01 tests DORGTSQR and DORHR_COL using DLATSQR, DGEMQRT.
+*> Therefore, DLATSQR (part of DGEQR), DGEMQRT (part of DGEMQR)
 *> have to be tested before this test.
 *>
 *> \endverbatim
@@ -80,18 +80,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2019
+*> \date November 2020
 *
-*> \ingroup single_lin
+*> \ingroup double_lin
 *
 *  =====================================================================
       SUBROUTINE DORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.9.0) --
+*  -- LAPACK test routine (version 3.10.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2019
+*     November 2020
 *
 *     .. Scalar Arguments ..
       INTEGER           M, N, MB1, NB1, NB2

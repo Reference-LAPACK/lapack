@@ -74,7 +74,7 @@ SLINTST = schkaa.o \
    sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o \
    schklqt.o schklqtp.o schktsqr.o \
    serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o \
-   schkorhr_col.o serrorhr_col.o sorhr_col01.o
+   schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o
 
 ifdef USEXBLAS
 SLINTST += sdrvgbx.o sdrvgex.o sdrvsyx.o sdrvpox.o \
@@ -167,7 +167,7 @@ DLINTST = dchkaa.o \
    dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o \
    dchklq.o dchklqt.o dchklqtp.o dchktsqr.o \
    derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o \
-   dchkorhr_col.o derrorhr_col.o dorhr_col01.o
+   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o
 
 ifdef USEXBLAS
 DLINTST += ddrvgbx.o ddrvgex.o ddrvsyx.o ddrvpox.o \
