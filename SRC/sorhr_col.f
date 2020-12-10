@@ -112,7 +112,7 @@
 *>          blocks (same format as the output T in SGEQRT).
 *>          The matrix T and the matrix V stored on output in A
 *>          implicitly define Q_out. NOTE: The lower triangles
-*>          below the upper-triangular blcoks will be filled with
+*>          below the upper-triangular blocks will be filled with
 *>          zeros. See Further Details.
 *> \endverbatim
 *>
@@ -217,11 +217,11 @@
 *> If Q_in is the result of doing a QR factorization
 *> B = Q_in * R_in, then:
 *>
-*> B = (Q_out*S) * R_in = Q_out * (S * R_in) = O_out * R_out.
+*> B = (Q_out*S) * R_in = Q_out * (S * R_in) = Q_out * R_out.
 *>
 *> So if one wants to interpret Q_out as the result
-*> of the QR factorization of B, then corresponding R_out
-*> should be obtained by R_out = S * R_in, i.e. some rows of R_in
+*> of the QR factorization of B, then the corresponding R_out
+*> should be equal to R_out = S * R_in, i.e. some rows of R_in
 *> should be multiplied by -1.
 *>
 *> For the details of the algorithm, see [1].
