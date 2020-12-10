@@ -18,7 +18,7 @@
 *  ===========
 *
 *       SUBROUTINE DORGTSQR_ROW( M, N, MB, NB, A, LDA, T, LDT, WORK,
-*      $           LWORK, INFO )
+*      $                         LWORK, INFO )
 *       IMPLICIT NONE
 *
 *       .. Scalar Arguments ..
@@ -33,10 +33,11 @@
 *>
 *> \verbatim
 *>
-*> DORGTSQR_ROW generates an M-by-N real matrix Q_out with orthonormal
-*> columns from the output of DLATSQR. These N orthonormal columns are
-*> the first N columns of a product of real orthogonal matrices Q(k)_in
-*> of order M, which are returned by DLATSQR in a special format.
+*> DORGTSQR_ROW generates an M-by-N real matrix Q_out with
+*> orthonormal columns from the output of DLATSQR. These N orthonormal
+*> columns are the first N columns of a product of complex unitary
+*> matrices Q(k)_in of order M, which are returned by DLATSQR in
+*> a special format.
 *>
 *>      Q_out = first_N_columns_of( Q(1)_in * Q(2)_in * ... * Q(k)_in ).
 *>
@@ -47,7 +48,7 @@
 *> where the computation is performed on each individual block. The
 *> algorithm first sweeps NB-sized column blocks from the right to left
 *> starting in the bottom row block and continues to the top row block
-*> (Hence _ROW in the routine name). This sweep is in reverse order of
+*> (hence _ROW in the routine name). This sweep is in reverse order of
 *> the order in which DLATSQR generates the output blocks.
 *> \endverbatim
 *
@@ -90,11 +91,11 @@
 *>
 *>          On entry:
 *>
-*>             The elements on and above the diagonal are not accessed.
-*>             The elements below the diagonal represent the unit
+*>             The elements on and above the diagonal are not used as
+*>             input. The elements below the diagonal represent the unit
 *>             lower-trapezoidal blocked matrix V computed by DLATSQR
 *>             that defines the input matrices Q_in(k) (ones on the
-*>             diagonal are not stored) See DLATSQR for more details.
+*>             diagonal are not stored). See DLATSQR for more details.
 *>
 *>          On exit:
 *>
@@ -184,7 +185,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DORGTSQR_ROW( M, N, MB, NB, A, LDA, T, LDT, WORK,
-     $           LWORK, INFO )
+     $                         LWORK, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.10.0) --

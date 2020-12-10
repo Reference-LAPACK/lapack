@@ -36,7 +36,7 @@
 *> \verbatim
 *>
 *> SLARFB_GETT applies a real Householder block reflector H from the
-*> left to a real (K+M)-by-N  "triangular-pentagonal" matrix, which is
+*> left to a real (K+M)-by-N  "triangular-pentagonal" matrix
 *> composed of two block matrices: an upper trapezoidal K-by-N matrix A
 *> stored in the array A, and a rectangular M-by-(N-K) matrix B, stored
 *> in the array B. The block reflector H is stored in a compact
@@ -50,9 +50,11 @@
 *> \param[in] IDENT
 *> \verbatim
 *>          IDENT is CHARACTER*1
-*>          = 'I': V1 is an identity matrix and not stored.
-*>          = 'N': V1 is unit lower-triangular and
-*>          stored in the left K-by-K block of A.
+*>          If IDENT = not 'I', or not 'i', then V1 is unit
+*>             lower-triangular and stored in the left K-by-K block of
+*>             the input matrix A,
+*>          If IDENT = 'I' or 'i', then  V1 is an identity matrix and
+*>             not stored.
 *>          See Further Details section.
 *> \endverbatim
 *>
@@ -98,8 +100,8 @@
 *>
 *>          On entry:
 *>           a) In the K-by-N upper-trapezoidal part A: input matrix A.
-*>           b) In the columns below the diagonal: columns of V1,
-*>               (Ones are not stored on the diagonal).
+*>           b) In the columns below the diagonal: columns of V1
+*>              (ones are not stored on the diagonal).
 *>
 *>          On exit:
 *>            A is overwritten by rectangular K-by-N product H*A.
@@ -174,7 +176,7 @@
 *>
 *> \verbatim
 *>
-*>    (1) Description of an Algebraic Operation.
+*>    (1) Description of the Algebraic Operation.
 *>
 *>    The matrix A is a K-by-N matrix composed of two column block
 *>    matrices, A1, which is K-by-K, and A2, which is K-by-(N-K):
@@ -194,32 +196,32 @@
 *>    a) ( A_in )  consists of two block columns:
 *>       ( B_in )
 *>
-*>       ( A_in ) = (( A1_in ) ( A2_in ))
-*>       ( B_in )   ((     0 ) ( B2_in )),
+*>       ( A_in ) = (( A1_in ) ( A2_in )) = (( A1_in ) ( A2_in ))
+*>       ( B_in )   (( B1_in ) ( B2_in ))   ((     0 ) ( B2_in )),
 *>
 *>       where the column blocks are:
 *>
 *>       (  A1_in )  is a K-by-K upper-triangular matrix stored in the
-*>                   upper triangular part of the array A(1:K,1:K),
-*>       (  B1_in )  is an M-by-K rectangular ZERO matrix and not stored;
+*>                   upper triangular part of the array A(1:K,1:K).
+*>       (  B1_in )  is an M-by-K rectangular ZERO matrix and not stored.
 *>
 *>       ( A2_in )  is a K-by-(N-K) rectangular matrix stored
-*>                  in the array A(1:K,K+1:N),
+*>                  in the array A(1:K,K+1:N).
 *>       ( B2_in )  is an M-by-(N-K) rectangular matrix stored
-*>                  in the array B(1:M,K+1:N),
+*>                  in the array B(1:M,K+1:N).
 *>
 *>    b) V = ( V1 )
 *>           ( V2 )
 *>
-*>         where V1:
-*>         1) if IDENT == 'I', is a K-by-K identity matrix, not stored;
-*>         2) if IDENT != 'I', is a K-by-K unit lower-triangular matrix,
-*>            stored in the lower-triangular part of the array
-*>            A(1:K,1:K) (ones are not stored),
-*>         and V2 is an M-by-K rectangular stored the array B(1:M,1:K),
-*>                   (because on input B1_in is a rectangular zero
-*>                    matrix that is not stored and the space is
-*>                    used to store V2),
+*>       where:
+*>       1) if IDENT == 'I',V1 is a K-by-K identity matrix, not stored;
+*>       2) if IDENT != 'I',V1 is a K-by-K unit lower-triangular matrix,
+*>          stored in the lower-triangular part of the array
+*>          A(1:K,1:K) (ones are not stored),
+*>       and V2 is an M-by-K rectangular stored the array B(1:M,1:K),
+*>                 (because on input B1_in is a rectangular zero
+*>                  matrix that is not stored and the space is
+*>                  used to store V2).
 *>
 *>    c) T is a K-by-K upper-triangular matrix stored
 *>       in the array T(1:K,1:K).
@@ -234,13 +236,15 @@
 *>
 *>       where the column blocks are:
 *>
-*>       ( A1_out )  is a K-by-K square matrix stored in the array
-*>                   A(1:K,1:K) (upper-triangular if V1 is ZERO matrix)
+*>       ( A1_out )  is a K-by-K square matrix, or a K-by-K
+*>                   upper-triangular matrix, if V1 is an
+*>                   identity matrix. AiOut is stored in
+*>                   the array A(1:K,1:K).
 *>       ( B1_out )  is an M-by-K rectangular matrix stored
 *>                   in the array B(1:M,K:N).
 *>
 *>       ( A2_out )  is a K-by-(N-K) rectangular matrix stored
-*>                   in the array A(1:K,K+1:N),
+*>                   in the array A(1:K,K+1:N).
 *>       ( B2_out )  is an M-by-(N-K) rectangular matrix stored
 *>                   in the array B(1:M,K+1:N).
 *>
@@ -258,31 +262,31 @@
 *>
 *>       The computation for column block 1:
 *>
-*>       A1: = A1 - V1*T*(V1**T)*A1
+*>       A1_out: = A1_in - V1*T*(V1**T)*A1_in
 *>
-*>       B1: = - V2*T*(V1**T)*A1
+*>       B1_out: = - V2*T*(V1**T)*A1_in
 *>
 *>       The computation for column block 2, which exists if N > K:
 *>
-*>       A2: = A2 - V1*T*( (V1**T)*A2 + (V2**T)*B2 )
+*>       A2_out: = A2_in - V1*T*( (V1**T)*A2_in + (V2**T)*B2_in )
 *>
-*>       B2: = B2 - V2*T*( (V1**T)*A2 + (V2**T)*B2 )
+*>       B2_out: = B2_in - V2*T*( (V1**T)*A2_in + (V2**T)*B2_in )
 *>
 *>    If IDENT == 'I':
 *>
 *>       The operation for column block 1:
 *>
-*>       A1: = A1 - V1*T**A1
+*>       A1_out: = A1_in - V1*T**A1_in
 *>
-*>       B1: = - V2*T**A1
+*>       B1_out: = - V2*T**A1_in
 *>
 *>       The computation for column block 2, which exists if N > K:
 *>
-*>       A2: = A2 - T*( A2 + (V2**T)*B2 )
+*>       A2_out: = A2_in - T*( A2_in + (V2**T)*B2_in )
 *>
-*>       B2: = B2 - V2*T*( A2 + (V2**T)*B2 )
+*>       B2_out: = B2_in - V2*T*( A2_in + (V2**T)*B2_in )
 *>
-*>    (2) Description of an Algorithmic Computation.
+*>    (2) Description of the Algorithmic Computation.
 *>
 *>    In the first step, we compute column block 2, i.e. A2 and B2.
 *>    Here, we need to use the K-by-(N-K) rectangular workspace
@@ -409,7 +413,7 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            LIDENT
+      LOGICAL            LNOTIDENT
       INTEGER            I, J
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
@@ -426,7 +430,7 @@
       IF( M.LT.0 .OR. N.LE.0 .OR. K.EQ.0 .OR. K.GT.N )
      $   RETURN
 *
-      LIDENT = LSAME( IDENT, 'I' )
+      LNOTIDENT = .NOT.LSAME( IDENT, 'I' )
 *
 *     ------------------------------------------------------------------
 *
@@ -446,7 +450,7 @@
             CALL SCOPY( K, A( 1, K+J ), 1, WORK( 1, J ), 1 )
          END DO
 
-         IF( .NOT.LIDENT ) THEN
+         IF( LNOTIDENT ) THEN
 *
 *           col2_(2) Compute W2: = (V1**T) * W2 = (A1**T) * W2,
 *           V1 is not an identy matrix, but unit lower-triangular
@@ -479,7 +483,7 @@
      $                   WORK, LDWORK, ONE, B( 1, K+1 ), LDB )
          END IF
 *
-         IF( .NOT.LIDENT ) THEN
+         IF( LNOTIDENT ) THEN
 *
 *           col2_(6) Compute W2: = V1 * W2 = A1 * W2,
 *           V1 is not an identity matrix, but unit lower-triangular,
@@ -526,7 +530,7 @@
          END DO
       END DO
 *
-      IF( .NOT.LIDENT ) THEN
+      IF( LNOTIDENT ) THEN
 *
 *        col1_(2) Compute W1: = (V1**T) * W1 = (A1**T) * W1,
 *        V1 is not an identity matrix, but unit lower-triangular
@@ -552,7 +556,7 @@
      $               B, LDB )
       END IF
 *
-      IF( .NOT.LIDENT ) THEN
+      IF( LNOTIDENT ) THEN
 *
 *        col1_(5) Compute W1: = V1 * W1 = A1 * W1,
 *        V1 is not an identity matrix, but unit lower-triangular

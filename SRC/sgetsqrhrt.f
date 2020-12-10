@@ -35,13 +35,13 @@
 *>
 *> \verbatim
 *>
-*> SGETSQRHRT computes an NB-size column blocked QR-factorization
-*> of a real M-by-N matrix A with M >= N,
+*> SGETSQRHRT computes a NB2-sized column blocked QR-factorization
+*> of a complex M-by-N matrix A with M >= N,
 *>
 *>    A = Q * R.
 *>
 *> The routine uses internally a NB1-sized column blocked and MB1-sized
-*> row blocked TSQR-factorization and performing the reconstruction
+*> row blocked TSQR-factorization and perfors the reconstruction
 *> of the Householder vectors from the TSQR output. The routine also
 *> converts the R_tsqr factor from the TSQR-factorization output into
 *> the R factor that corresponds to the Householder QR-factorization,
@@ -49,8 +49,8 @@
 *>    A = Q_tsqr * R_tsqr = Q * R.
 *>
 *> The output Q and R factors are stored in the same format as in SGEQRT
-*> (Q is in compact WY-representation). See the documentation of SGEQRT
-*> for more details on the format.
+*> (Q is in blocked compact WY-representation). See the documentation
+*> of SGEQRT for more details on the format.
 *> \endverbatim
 *
 *  Arguments:
@@ -300,8 +300,8 @@
      $              WORK(LWT+1), LW1, IINFO )
 *
 *     (2) Copy the factor R_tsqr stored in the upper-triangular part
-*         of A into the square matrix in the work array WORK(LWT+1:LWT+N*N)
-*         column-by-column.
+*         of A into the square matrix in the work array
+*         WORK(LWT+1:LWT+N*N) column-by-column.
 *
       DO J = 1, N
          CALL SCOPY( J, A( 1, J ), 1, WORK( LWT + N*(J-1)+1 ), 1 )
@@ -325,7 +325,7 @@
 *     part of A.
 *
 *     (6) Compute from R_tsqr the factor R_hr corresponding to
-*     the reconstructed Householder vectors, i.e. R_hr = R_tsqr * S.
+*     the reconstructed Householder vectors, i.e. R_hr = S * R_tsqr.
 *     This multiplication by the sign matrix S on the left means
 *     changing the sign of I-th row of the matrix R_tsqr according
 *     to sign of the I-th diagonal element DIAG(I) of the matrix S.
