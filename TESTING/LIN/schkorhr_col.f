@@ -27,7 +27,7 @@
 *> SCHKORHR_COL tests:
 *>   1) SORGTSQR and SORHR_COL using SLATSQR, SGEMQRT,
 *>   2) SORGTSQR_ROW and SORHR_COL inside DGETSQRHRT
-*>      (which calls SLATSQR, SORGTSQR_ROW and SORHR_COL) using SGEMQR.
+*>      (which calls SLATSQR, SORGTSQR_ROW and SORHR_COL) using SGEMQRT.
 *> Therefore, SLATSQR (part of SGEQR), SGEMQRT (part of SGEMQR)
 *> have to be tested before this test.
 *>
@@ -157,7 +157,7 @@
 *
 *     Initialize constants
 *
-      PATH( 1: 1 ) = 'D'
+      PATH( 1: 1 ) = 'S'
       PATH( 2: 3 ) = 'HH'
       NRUN = 0
       NFAIL = 0

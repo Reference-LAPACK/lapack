@@ -27,7 +27,7 @@
 *> DCHKORHR_COL tests:
 *>   1) DORGTSQR and DORHR_COL using DLATSQR, DGEMQRT,
 *>   2) DORGTSQR_ROW and DORHR_COL inside DGETSQRHRT
-*>      (which calls DLATSQR, DORGTSQR_ROW and DORHR_COL) using DGEMQR.
+*>      (which calls DLATSQR, DORGTSQR_ROW and DORHR_COL) using DGEMQRT.
 *> Therefore, DLATSQR (part of DGEQR), DGEMQRT (part of DGEMQR)
 *> have to be tested before this test.
 *>
