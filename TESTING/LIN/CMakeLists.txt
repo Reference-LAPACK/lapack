@@ -96,7 +96,7 @@ set(CLINTST cchkaa.f
    cqrt04.f cqrt05.f cchkqrt.f cerrqrt.f cchkqrtp.f cerrqrtp.f
    cchklqt.f cchklqtp.f cchktsqr.f
    cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f
-   cchkunhr_col.f cerrunhr_col.f cunhr_col01.f)
+   cchkunhr_col.f cerrunhr_col.f cunhr_col01.f cunhr_col02.f)
 
 if(USE_XBLAS)
   list(APPEND CLINTST cdrvgbx.f cdrvgex.f cdrvhex.f cdrvsyx.f cdrvpox.f
@@ -198,7 +198,7 @@ set(ZLINTST zchkaa.f
    zqrt04.f zqrt05.f zchkqrt.f zerrqrt.f zchkqrtp.f zerrqrtp.f
    zchklqt.f zchklqtp.f zchktsqr.f
    zerrlqt.f zerrlqtp.f zerrtsqr.f ztsqr01.f zlqt04.f zlqt05.f
-   zchkunhr_col.f zerrunhr_col.f zunhr_col01.f)
+   zchkunhr_col.f zerrunhr_col.f zunhr_col01.f zunhr_col02.f)
 
 if(USE_XBLAS)
   list(APPEND ZLINTST zdrvgbx.f zdrvgex.f zdrvhex.f zdrvsyx.f zdrvpox.f

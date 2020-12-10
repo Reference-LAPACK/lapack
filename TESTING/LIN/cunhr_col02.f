@@ -1,4 +1,4 @@
-*> \brief \b CUNHR_COL01
+*> \brief \b CUNHR_COL02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +8,12 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CUNHR_COL01( M, N, MB1, NB1, NB2, RESULT )
+*       SUBROUTINE CUNHR_COL02( M, N, MB1, NB1, NB2, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
 *       .. Return values ..
-*       DOUBLE PRECISION  RESULT(6)
+*       REAL              RESULT(6)
 *
 *
 *> \par Purpose:
@@ -21,7 +21,8 @@
 *>
 *> \verbatim
 *>
-*> CUNHR_COL01 tests CUNGTSQR and CUNHR_COL using CLATSQR, CGEMQRT.
+*> CUNHR_COL02 tests CUNGTSQR_ROW and CUNHR_COL inside CGETSQRHRT
+*> (which calls CLATSQR, CUNGTSQR_ROW and CUNHR_COL) using CGEMQRT.
 *> Therefore, CLATSQR (part of CGEQR), CGEMQRT (part of CGEMQR)
 *> have to be tested before this test.
 *>
@@ -117,7 +118,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CUNHR_COL01( M, N, MB1, NB1, NB2, RESULT )
+      SUBROUTINE CUNHR_COL02( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.10.0) --
@@ -148,7 +149,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
-      INTEGER            INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
+      INTEGER            INFO, J, K, L, LWORK, NB2_UB, NRB
       REAL               ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -160,8 +161,8 @@
       EXTERNAL           SLAMCH, CLANGE, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLARNV, CLASET, CLATSQR, CUNHR_COL,
-     $                   CUNGTSQR, CSCAL, CGEMM, CGEMQRT, CHERK
+      EXTERNAL           CLACPY, CLARNV, CLASET, CGETSQRHRT,
+     $                   CSCAL, CGEMM, CGEMQRT, CHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, REAL, MAX, MIN
@@ -213,21 +214,15 @@
 *
 *     Begin determine LWORK for the array WORK and allocate memory.
 *
-*     CLATSQR requires NB1 to be bounded by N.
-*
-      NB1_UB = MIN( NB1, N)
-*
 *     CGEMQRT requires NB2 to be bounded by N.
 *
       NB2_UB = MIN( NB2, N)
 *
-      CALL CLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1,
-     $              WORKQUERY, -1, INFO )
+*
+      CALL CGETSQRHRT( M, N, MB1, NB1, NB2, AF, M, T2, NB2,
+     $                 WORKQUERY, -1, INFO )
+*
       LWORK = INT( WORKQUERY( 1 ) )
-      CALL CUNGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORKQUERY, -1,
-     $               INFO )
-
-      LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
 *
 *     In CGEMQRT, WORK is N*NB2_UB if SIDE = 'L',
 *                or  M*NB2_UB if SIDE = 'R'.
@@ -243,42 +238,9 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      SRNAMT = 'CLATSQR'
-      CALL CLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
-     $              INFO )
-*
-*     Copy the factor R into the array R.
-*
-      SRNAMT = 'CLACPY'
-      CALL CLACPY( 'U', N, N, AF, M, R, M )
-*
-*     Reconstruct the orthogonal matrix Q.
-*
-      SRNAMT = 'CUNGTSQR'
-      CALL CUNGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORK, LWORK,
-     $               INFO )
-*
-*     Perform the Householder reconstruction, the result is stored
-*     the arrays AF and T2.
-*
-      SRNAMT = 'CUNHR_COL'
-      CALL CUNHR_COL( M, N, NB2, AF, M, T2, NB2, DIAG, INFO )
-*
-*     Compute the factor R_hr corresponding to the Householder
-*     reconstructed Q_hr and place it in the upper triangle of AF to
-*     match the Q storage format in CGEQRT. R_hr = R_tsqr * S,
-*     this means changing the sign of I-th row of the matrix R_tsqr
-*     according to sign of of I-th diagonal element DIAG(I) of the
-*     matrix S.
-*
-      SRNAMT = 'CLACPY'
-      CALL CLACPY( 'U', N, N, R, M, AF, M )
-*
-      DO I = 1, N
-         IF( DIAG( I ).EQ.-CONE ) THEN
-            CALL CSCAL( N+1-I, -CONE, AF( I, I ), M )
-         END IF
-      END DO
+      SRNAMT = 'CGETSQRHRT'
+      CALL CGETSQRHRT( M, N, MB1, NB1, NB2, AF, M, T2, NB2,
+     $                 WORK, LWORK, INFO )
 *
 *     End Householder reconstruction routines.
 *
@@ -298,7 +260,7 @@
       CALL CLACPY( 'Upper', M, N, AF, M, R, M )
 *
 *     TEST 1
-*     Compute |R - (Q**H)*A| / ( eps * m * |A| ) and store in RESULT(1)
+*     Compute |R - (Q**T)*A| / ( eps * m * |A| ) and store in RESULT(1)
 *
       CALL CGEMM( 'C', 'N', M, N, M, -CONE, Q, M, A, M, CONE, R, M )
 *
@@ -311,9 +273,9 @@
       END IF
 *
 *     TEST 2
-*     Compute |I - (Q**H)*Q| / ( eps * m ) and store in RESULT(2)
+*     Compute |I - (Q**T)*Q| / ( eps * m ) and store in RESULT(2)
 *
-      CALL CLASET( 'Full', M, M, ZERO, CONE, R, M )
+      CALL CLASET( 'Full', M, M, CZERO, CONE, R, M )
       CALL CHERK( 'U', 'C', M, M, -CONE, Q, M, CONE, R, M )
       RESID = CLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
@@ -347,14 +309,14 @@
 *
       CALL CLACPY( 'Full', M, N, C, M, CF, M )
 *
-*     Apply Q to C as (Q**H)*C = CF
+*     Apply Q to C as (Q**T)*C = CF
 *
       SRNAMT = 'CGEMQRT'
       CALL CGEMQRT( 'L', 'C', M, N, K, NB2_UB, AF, M, T2, NB2, CF, M,
      $               WORK, INFO )
 *
 *     TEST 4
-*     Compute |CF - (Q**H)*C| / ( eps * m * |C|)
+*     Compute |CF - (Q**T)*C| / ( eps * m * |C|)
 *
       CALL CGEMM( 'C', 'N', M, N, M, -CONE, Q, M, C, M, CONE, CF, M )
       RESID = CLANGE( '1', M, N, CF, M, RWORK )
@@ -400,7 +362,7 @@
      $               WORK, INFO )
 *
 *     TEST 6
-*     Compute |DF - D*(Q**H)| / ( eps * m * |D| )
+*     Compute |DF - D*(Q**T)| / ( eps * m * |D| )
 *
       CALL CGEMM( 'N', 'C', N, M, M, -CONE, D, N, Q, M, CONE, DF, N )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
@@ -417,6 +379,6 @@
 *
       RETURN
 *
-*     End of CUNHR_COL01
+*     End of CUNHR_COL02
 *
       END
