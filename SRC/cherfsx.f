@@ -122,8 +122,8 @@
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The factored form of the matrix A.  AF contains the block
 *>     diagonal matrix D and the multipliers used to obtain the
-*>     factor U or L from the factorization A = U*D*U**T or A =
-*>     L*D*L**T as computed by CHETRF.
+*>     factor U or L from the factorization A = U*D*U**H or A =
+*>     L*D*L**H as computed by CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
