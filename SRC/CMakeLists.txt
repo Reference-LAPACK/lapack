@@ -35,7 +35,7 @@
 #
 #######################################################################
 
-set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
+set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.f
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
@@ -149,7 +149,7 @@ set(SLASRC
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
    stplqt.f stplqt2.f stpmlqt.f
    sorhr_col.f slaorhr_col_getrfnp.f slaorhr_col_getrfnp2.f
-   ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.F ssb2st_kernels.f
+   ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.f ssb2st_kernels.f
    ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
    ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f
    sgesvdq.f scombssq.f)
@@ -250,7 +250,7 @@ set(CLASRC
    cgelq.f claswlq.f clamswlq.f cgemlq.f
    ctplqt.f ctplqt2.f ctpmlqt.f
    cunhr_col.f claunhr_col_getrfnp.f claunhr_col_getrfnp2.f
-   chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.F chb2st_kernels.f
+   chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.f chb2st_kernels.f
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f
    cgesvdq.f)
@@ -344,7 +344,7 @@ set(DLASRC
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
    dtplqt.f dtplqt2.f dtpmlqt.f
    dorhr_col.f dlaorhr_col_getrfnp.f dlaorhr_col_getrfnp2.f
-   dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.F dsb2st_kernels.f
+   dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.f dsb2st_kernels.f
    dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
    dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f
    dgesvdq.f dcombssq.f)
@@ -447,7 +447,7 @@ set(ZLASRC
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
    zunhr_col.f zlaunhr_col_getrfnp.f zlaunhr_col_getrfnp2.f
-   zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
+   zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.f zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f
    zgesvdq.f)
