@@ -6,12 +6,12 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtplqt.f">
+*> Download ZTPLQT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztplqt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtplqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztplqt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtplqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztplqt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DTPLQT computes a blocked LQ factorization of a complex
+*> ZTPLQT computes a blocked LQ factorization of a complex
 *> "triangular-pentagonal" matrix C, which is composed of a
 *> triangular block A and pentagonal block B, using the compact
 *> WY representation for Q.

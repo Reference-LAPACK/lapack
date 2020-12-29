@@ -359,7 +359,7 @@
 *>          RWORK(3) = SCONDA is an estimate for the condition number of
 *>                    column equilibrated A. (If JOBA = 'E' or 'G')
 *>                    SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1).
-*>                    It is computed using SPOCON. It holds
+*>                    It is computed using CPOCON. It holds
 *>                    N^(-1/4) * SCONDA <= ||R^(-1)||_2 <= N^(1/4) * SCONDA
 *>                    where R is the triangular factor from the QRF of A.
 *>                    However, if R is truncated and the numerical rank is

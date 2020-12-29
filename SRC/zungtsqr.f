@@ -60,7 +60,7 @@
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The row block size used by DLATSQR to return
+*>          The row block size used by ZLATSQR to return
 *>          arrays A and T. MB > N.
 *>          (Note that if MB > M, then M is used instead of MB
 *>          as the row block size).

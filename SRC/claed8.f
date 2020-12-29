@@ -1,4 +1,4 @@
-*> \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
+*> \brief \b CLAED8 used by CSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *

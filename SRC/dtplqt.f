@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPQRT + dependencies
+*> Download DTPLQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtplqt.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtplqt.f">

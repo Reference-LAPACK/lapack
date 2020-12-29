@@ -1,4 +1,4 @@
-*> \brief \b DTPMLQT
+*> \brief \b STPMLQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPMQRT + dependencies
+*> Download STPMLQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt.f">
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DTPMQRT applies a real orthogonal matrix Q obtained from a
+*> STPMLQT applies a real orthogonal matrix Q obtained from a
 *> "triangular-pentagonal" real block reflector H to a general
 *> real matrix C, which consists of two blocks A and B.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DTPLQT.
+*>          in STPLQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -97,7 +97,7 @@
 *>          V is REAL array, dimension (LDV,K)
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DTPLQT in B.  See Further Details.
+*>          STPLQT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -112,7 +112,7 @@
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DTPLQT, stored as a MB-by-K matrix.
+*>          as returned by STPLQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT

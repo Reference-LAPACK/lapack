@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> DGELQT3 recursively computes a LQ factorization of a real M-by-N
+*> SGELQT3 recursively computes a LQ factorization of a real M-by-N
 *> matrix A, using the compact WY representation of Q.
 *>
 *> Based on the algorithm of Elmroth and Gustavson,

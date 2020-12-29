@@ -230,7 +230,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains the pivot indices from the factorization A = P*L*U
-*>     as computed by SGETRF; row i of the matrix was interchanged
+*>     as computed by CGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
@@ -349,8 +349,8 @@
 *>     This also means that the solution X, estimated condition numbers,
 *>     and error bounds could be unreliable. If factorization fails with
 *>     0<INFO<=N, then this contains the reciprocal pivot growth factor
-*>     for the leading INFO columns of A.  In SGESVX, this quantity is
-*>     returned in WORK(1).
+*>     for the leading INFO columns of A.  In CGESVX, this quantity is
+*>     returned in RWORK(1).
 *> \endverbatim
 *>
 *> \param[out] BERR
@@ -635,7 +635,7 @@
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until SGERFSX.
+*     Test the input parameters.  PARAMS is not tested until CGERFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
      $     LSAME( FACT, 'F' ) ) THEN

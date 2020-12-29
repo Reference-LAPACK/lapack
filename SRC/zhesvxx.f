@@ -185,7 +185,7 @@
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T as computed by DSYTRF.
+*>     U*D*U**T or A = L*D*L**T as computed by ZHETRF.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers

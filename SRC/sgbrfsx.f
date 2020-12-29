@@ -138,7 +138,7 @@
 *> \verbatim
 *>          AFB is REAL array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by DGBTRF.  U is stored as an upper triangular band
+*>     computed by SGBTRF.  U is stored as an upper triangular band
 *>     matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>     the multipliers used during the factorization are stored in
 *>     rows KL+KU+2 to 2*KL+KU+1.
