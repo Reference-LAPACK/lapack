@@ -75,7 +75,7 @@
 *> The desired accuracy of the output can be specified by the input
 *> parameter ABSTOL.
 *>
-*> For more details, see DSTEMR's documentation and:
+*> For more details, see CSTEMR's documentation and:
 *> - Inderjit S. Dhillon and Beresford N. Parlett: "Multiple representations
 *>   to compute orthogonal eigenvectors of symmetric tridiagonal matrices,"
 *>   Linear Algebra and its Applications, 387(1), pp. 1-28, August 2004.

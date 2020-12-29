@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQRT3 + dependencies
+*> Download ZGELQT3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelqt3.f">
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DGELQT3 recursively computes a LQ factorization of a complex M-by-N
+*> ZGELQT3 recursively computes a LQ factorization of a complex M-by-N
 *> matrix A, using the compact WY representation of Q.
 *>
 *> Based on the algorithm of Elmroth and Gustavson,

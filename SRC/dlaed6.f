@@ -1,4 +1,4 @@
-*> \brief \b DLAED6 used by sstedc. Computes one Newton step in solution of the secular equation.
+*> \brief \b DLAED6 used by DSTEDC. Computes one Newton step in solution of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *

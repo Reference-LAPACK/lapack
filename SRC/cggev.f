@@ -197,8 +197,8 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHA(j) and BETA(j) should be
 *>                correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other then QZ iteration failed in SHGEQZ,
-*>                =N+2: error return from STGEVC.
+*>          > N:  =N+1: other then QZ iteration failed in CHGEQZ,
+*>                =N+2: error return from CTGEVC.
 *> \endverbatim
 *
 *  Authors:

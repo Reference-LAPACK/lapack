@@ -31,7 +31,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**T
 *>
-*> generated using the compact WY representation as returned by DGELQT.
+*> generated using the compact WY representation as returned by SGELQT.
 *>
 *> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
 *> \endverbatim
@@ -79,7 +79,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DGELQT.
+*>          in SGELQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -89,7 +89,7 @@
 *>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DGELQT in the first K rows of its array argument A.
+*>          SGELQT in the first K rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -102,7 +102,7 @@
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-K matrix.
+*>          as returned by SGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT

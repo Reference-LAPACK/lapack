@@ -1,4 +1,4 @@
-*> \brief \b DLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal.
+*> \brief \b DLAED2 used by DSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *

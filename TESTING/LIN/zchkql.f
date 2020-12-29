@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKQL tests ZGEQLF, ZUNGQL and CUNMQL.
+*> ZCHKQL tests ZGEQLF, ZUNGQL and ZUNMQL.
 *> \endverbatim
 *
 *  Arguments:
