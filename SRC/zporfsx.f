@@ -122,7 +122,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by ZPOTRF.
+*>     A = U**H*U or A = L*L**H, as computed by ZPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
