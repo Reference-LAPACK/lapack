@@ -371,7 +371,7 @@
                          IF( .NOT. CGENND( M, N, AF, LDA ) )
      $                       RESULT( 9 ) = 2*THRESH
                         NT = NT + 1
-                    ELSE IF( M.GE.N ) THEN
+                     ELSE IF( M.GE.N ) THEN
 *
 *                       Test CUNGQR, using factorization
 *                       returned by CQRT01
