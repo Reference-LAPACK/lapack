@@ -24,9 +24,9 @@
 *
 *      Arguments
 *      INTEGER, INTENT( IN ) :: LDA, LDB
-*      DOUBLE PRECISION, INTENT( IN ) :: A( LDA, * ), B( LDB, * )
-*      DOUBLE PRECISION, INTENT( OUT ) :: SR1, SR2, SI, BETA1, BETA2,
-*     $    V( * )
+*      DOUBLE PRECISION, INTENT( IN ) :: A( LDA, * ), B( LDB, * ), SR1,
+*     $                  SR2, SI, BETA1, BETA2
+*      DOUBLE PRECISION, INTENT( OUT ) :: V( * )
 *       ..
 *
 *
@@ -128,9 +128,9 @@
 *
 *     Arguments
       INTEGER, INTENT( IN ) :: LDA, LDB
-      DOUBLE PRECISION, INTENT( IN ) :: A( LDA, * ), B( LDB, * )
-      DOUBLE PRECISION, INTENT( OUT ) :: SR1, SR2, SI, BETA1, BETA2,
-     $                  V( * )
+      DOUBLE PRECISION, INTENT( IN ) :: A( LDA, * ), B( LDB, * ), SR1,
+     $                  SR2, SI, BETA1, BETA2
+      DOUBLE PRECISION, INTENT( OUT ) :: V( * )
 *
 *     Parameters
       DOUBLE PRECISION :: ZERO, ONE, HALF
