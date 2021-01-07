@@ -6,15 +6,9 @@ labels: 'Type: Bug'
 assignees: ''
 
 ---
+**Description**
 
-# 1. Bug description
+**Checklist**
 
-A description of the bug: what is the expected behaviour? What is the actual behaviour?
-
-# 2. Reproduction
-
-Try to provide as much information to reproduce the bug as possible. If possible, also include a minimal example that we can use reproduce the bug.
-
-# 3. Fix
-
-(Optional) Do you have any suggestions of how to fix the issue? Are you willing to make a PR to fix this issue?
+- [ ] I've included a minimal example to reproduce the issue
+- [ ] I'd be willing to make a PR to solve this issue
