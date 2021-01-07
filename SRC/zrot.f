@@ -58,7 +58,7 @@
 *> \param[in] INCX
 *> \verbatim
 *>          INCX is INTEGER
-*>          The increment between successive values of CY.  INCX <> 0.
+*>          The increment between successive values of CX.  INCX <> 0.
 *> \endverbatim
 *>
 *> \param[in,out] CY
