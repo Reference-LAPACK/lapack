@@ -246,7 +246,7 @@
      $                   ISHFTS = 15, IACC22 = 16, ICOST = 17 )
       INTEGER            NMIN, K22MIN, KACMIN, NIBBLE, KNWSWP, RCOST
       PARAMETER          ( NMIN = 75, K22MIN = 14, KACMIN = 14,
-     $                   NIBBLE = 8, KNWSWP = 500, RCOST = 10 )
+     $                   NIBBLE = 14, KNWSWP = 500, RCOST = 10 )
       REAL               TWO
       PARAMETER          ( TWO = 2.0 )
 *     ..
@@ -261,6 +261,68 @@
 *     .. Executable Statements ..
       IF( ( ISPEC.EQ.ISHFTS ) .OR. ( ISPEC.EQ.INWIN ) .OR.
      $    ( ISPEC.EQ.IACC22 ) ) THEN
+*
+*        ==== Set the number simultaneous shifts ====
+*
+         NH = IHI - ILO + 1
+         NS = 2
+         IF( NH.GE.30 )
+     $      NS = 4
+         IF( NH.GE.60 )
+     $      NS = 10
+         IF( NH.GE.150 )
+     $      NS = MAX( 10, NH / NINT( LOG( REAL( NH ) ) / LOG( TWO ) ) )
+         IF( NH.GE.590 )
+     $      NS = 64
+         IF( NH.GE.3000 )
+     $      NS = 128
+         IF( NH.GE.6000 )
+     $      NS = 256
+         NS = MAX( 2, NS-MOD( NS, 2 ) )
+      END IF
+*
+      IF( ISPEC.EQ.INMIN ) THEN
+*
+*
+*        ===== Matrices of order smaller than NMIN get sent
+*        .     to xLAHQR, the classic double shift algorithm.
+*        .     This must be at least 11. ====
+*
+         IPARMQ = NMIN
+*
+      ELSE IF( ISPEC.EQ.INIBL ) THEN
+*
+*        ==== INIBL: skip a multi-shift qr iteration and
+*        .    whenever aggressive early deflation finds
+*        .    at least (NIBBLE*(window size)/100) deflations. ====
+*
+         IPARMQ = NIBBLE
+*
+      ELSE IF( ISPEC.EQ.ISHFTS ) THEN
+*
+*        ==== NSHFTS: The number of simultaneous shifts =====
+*
+         IPARMQ = NS
+*
+      ELSE IF( ISPEC.EQ.INWIN ) THEN
+*
+*        ==== NW: deflation window size.  ====
+*
+         IF( NH.LE.KNWSWP ) THEN
+            IPARMQ = NS
+         ELSE
+            IPARMQ = 3*NS / 2
+         END IF
+*
+      ELSE IF( ISPEC.EQ.IACC22 ) THEN
+*
+*        ==== IACC22: Whether to accumulate reflections
+*        .     before updating the far-from-diagonal elements
+*        .     and whether to use 2-by-2 block structure while
+*        .     doing it.  A small amount of work could be saved
+*        .     by making this choice dependent also upon the
+*        .     NH=IHI-ILO+1.
+*
 *
 *        Convert NAME to upper case if the first character is lower case.
 *
@@ -311,90 +373,6 @@
                END DO
             END IF
          END IF
-*
-*        ==== Set the number simultaneous shifts ====
-*
-         NH = IHI - ILO + 1
-         IF ( SUBNAM( 2:6 ).EQ.'LAQZ0' ) THEN
-            NS = 2
-            IF( NH.GE.30 )
-     $         NS = 4
-            IF( NH.GE.150 )
-     $         NS = 32
-            IF( NH.GE.590 )
-     $         NS = 40
-            IF( NH.GE.3000 )
-     $         NS = 64
-         ELSE
-            NS = 2
-            IF( NH.GE.30 )
-     $         NS = 4
-            IF( NH.GE.60 )
-     $         NS = 10
-            IF( NH.GE.150 )
-     $         NS = MAX( 10, NH /
-     $         NINT( LOG( REAL( NH ) ) / LOG( TWO ) ) )
-            IF( NH.GE.590 )
-     $         NS = 64
-            IF( NH.GE.3000 )
-     $         NS = 128
-            IF( NH.GE.6000 )
-     $         NS = 256
-         END IF
-         NS = MAX( 2, NS-MOD( NS, 2 ) )
-      END IF
-*
-      IF( ISPEC.EQ.INMIN ) THEN
-*
-*
-*        ===== Matrices of order smaller than NMIN get sent
-*        .     to xLAHQR, the classic double shift algorithm.
-*        .     This must be at least 11. ====
-*
-         IPARMQ = NMIN
-*
-      ELSE IF( ISPEC.EQ.INIBL ) THEN
-*
-*        ==== INIBL: skip a multi-shift qr iteration and
-*        .    whenever aggressive early deflation finds
-*        .    at least (NIBBLE*(window size)/100) deflations. ====
-*
-         IPARMQ = NIBBLE
-*
-      ELSE IF( ISPEC.EQ.ISHFTS ) THEN
-*
-*        ==== NSHFTS: The number of simultaneous shifts =====
-*
-         IPARMQ = NS
-*
-      ELSE IF( ISPEC.EQ.INWIN ) THEN
-*
-*        ==== NW: deflation window size.  ====
-*
-         IF ( SUBNAM( 2:6 ).EQ.'LAQZ0' ) THEN
-            IPARMQ = 4
-            IF( NH.GE.30 )
-     $         IPARMQ = 8
-            IF( NH.GE.150 )
-     $         IPARMQ = 48
-            IF( NH.GE.590 )
-     $         IPARMQ = 96
-         ELSE
-            IF( NH.LE.KNWSWP ) THEN
-               IPARMQ = NS
-            ELSE
-               IPARMQ = 3*NS / 2
-            END IF
-         END IF
-*
-      ELSE IF( ISPEC.EQ.IACC22 ) THEN
-*
-*        ==== IACC22: Whether to accumulate reflections
-*        .     before updating the far-from-diagonal elements
-*        .     and whether to use 2-by-2 block structure while
-*        .     doing it.  A small amount of work could be saved
-*        .     by making this choice dependent also upon the
-*        .     NH=IHI-ILO+1.
 *
          IF( SUBNAM( 2:6 ).EQ.'GGHRD' .OR.
      $       SUBNAM( 2:6 ).EQ.'GGHD3' ) THEN
