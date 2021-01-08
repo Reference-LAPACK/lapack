@@ -18,15 +18,11 @@ matrix:
   - os: linux
     env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
+    osx_image: xcode10.3
     env: CMAKE_BUILD_TYPE=Release
-    before_install:
-    - brew update > /dev/null
-    - brew upgrade gcc > /dev/null
   - os: osx
+    osx_image: xcode10.3
     env: CMAKE_BUILD_TYPE=Coverage
-    before_install:
-    - brew update > /dev/null
-    - brew upgrade gcc > /dev/null
 
 script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
