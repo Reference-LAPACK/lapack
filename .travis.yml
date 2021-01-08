@@ -20,9 +20,6 @@ matrix:
   - os: osx
     osx_image: xcode10.3
     env: CMAKE_BUILD_TYPE=Release
-  - os: osx
-    osx_image: xcode10.3
-    env: CMAKE_BUILD_TYPE=Coverage
 
 script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
