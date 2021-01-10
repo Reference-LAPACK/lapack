@@ -251,7 +251,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            STRONG, WEAK
-      INTEGER            I, IDUM, LINFO, M, COUNT
+      INTEGER            I, IDUM, LINFO, M
       DOUBLE PRECISION   BQRA21, BRQA21, DDUM, DNORMA, DNORMB, DSCALE,
      $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM, SS,
      $                   THRESHA, THRESHB, THRESH, WS
@@ -262,8 +262,7 @@
      $                   IRCOP( LDST, LDST ), LI( LDST, LDST ),
      $                   LICOP( LDST, LDST ), S( LDST, LDST ),
      $                   SCPY( LDST, LDST ), T( LDST, LDST ),
-     $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST ),
-     $                   IRREF( LDST, LDST ), LIREF( LDST, LDST )
+     $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -330,8 +329,6 @@
       THRESHA = MAX( TWENTY*EPS*DNORMA, SMLNUM )
       THRESHB = MAX( TWENTY*EPS*DNORMB, SMLNUM )
 *
-      COUNT = 0
-*
       IF( M.EQ.2 ) THEN
 *
 *        CASE 1: Swap 1-by-1 and 1-by-1 blocks.
@@ -370,7 +367,7 @@
          WEAK = ABS( S( 2, 1 ) ) .LE. THRESHA .AND.
      $      ABS( T( 2, 1 ) ) .LE. THRESHB
          IF( .NOT.WEAK )
-     $      GO TO 80
+     $      GO TO 70
 *
          IF( WANDS ) THEN
 *
@@ -402,7 +399,7 @@
             SB = DSCALE*SQRT( DSUM )
             STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
-     $         GO TO 80
+     $         GO TO 70
          END IF
 *
 *        Update (A(J1:J1+M-1, M+J1:N), B(J1:J1+M-1, M+J1:N)) and
@@ -453,7 +450,7 @@
      $                LDST, LI, LDST, SCALE, DSUM, DSCALE, IWORK, IDUM,
      $                LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
 *
 *        Compute orthogonal matrix QL:
 *
@@ -469,10 +466,10 @@
    10    CONTINUE
          CALL DGEQR2( M, N2, LI, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
          CALL DORG2R( M, M, N2, LI, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
 *
 *        Compute orthogonal matrix RQ:
 *
@@ -485,10 +482,10 @@
    20    CONTINUE
          CALL DGERQ2( N1, M, IR( N2+1, 1 ), LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
          CALL DORGR2( M, M, N1, IR, LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
 *
 *        Perform the swapping tentatively:
 *
@@ -510,15 +507,15 @@
 *
          CALL DGERQ2( M, M, T, LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
          CALL DORMR2( 'R', 'T', M, M, M, T, LDST, TAUR, S, LDST, WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
          CALL DORMR2( 'L', 'N', M, M, M, T, LDST, TAUR, IR, LDST, WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
 *
 *        Compute F-norm(S21) in BRQA21. (T21 is 0.)
 *
@@ -534,13 +531,13 @@
 *
          CALL DGEQR2( M, M, TCPY, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
          CALL DORM2R( 'L', 'T', M, M, M, TCPY, LDST, TAUL, SCPY, LDST,
      $                WORK, INFO )
          CALL DORM2R( 'R', 'N', M, M, M, TCPY, LDST, TAUL, LICOP, LDST,
      $                WORK, INFO )
          IF( LINFO.NE.0 )
-     $      GO TO 80
+     $      GO TO 70
 *
 *        Compute F-norm(S21) in BQRA21. (T21 is 0.)
 *
@@ -561,7 +558,7 @@
             CALL DLACPY( 'F', M, M, IRCOP, LDST, IR, LDST )
             CALL DLACPY( 'F', M, M, LICOP, LDST, LI, LDST )
          ELSE IF( BRQA21.GE.THRESHA ) THEN
-            GO TO 80
+            GO TO 70
          END IF
 *
 *        Set lower triangle of B-part to zero
@@ -598,7 +595,7 @@
             SB = DSCALE*SQRT( DSUM )
             STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
-     $         GO TO 80
+     $         GO TO 70
 *
          END IF
 *
@@ -707,7 +704,7 @@
 *
 *     Exit with INFO = 1 if swap was rejected.
 *
-   80 CONTINUE
+   70 CONTINUE
 *
       INFO = 1
       RETURN
