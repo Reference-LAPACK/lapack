@@ -66,10 +66,9 @@
 *>
 *> \param[in,out] INDICES
 *> \verbatim
-*>          X is INTEGER array, dimension (N)
+*>          INDICES is INTEGER array, dimension (N)
 *>          On entry, the indices of values in X to be sorted.
-*>          On exit, X has been sorted into
-*>          increasing order such that
+*>          On exit, the indices have been sorted such that
 *>          X( INDICES(1) ) <= ... <= X( INDICES(N) )
 *>          or decreasing order such that
 *>          X( INDICES(1) ) >= ... >= X( INDICES(N) )
