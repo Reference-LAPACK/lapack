@@ -745,12 +745,16 @@
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
             IF( ( IITER / 20 )*20.EQ.IITER .AND. 
-     $         ABS1(T( ILAST, ILAST )).GE.SAFMIN ) THEN
+     $         BSCALE*ABS1(T( ILAST, ILAST )).GT.SAFMIN ) THEN
                ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
      $            ILAST ) )/( BSCALE*T( ILAST, ILAST ) )
             ELSE
-               ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
-     $            ILAST-1 ) )/( BSCALE*T( ILAST-1, ILAST-1 ) )
+               IF( BSCALE*ABS1(T( ILAST, ILAST )).GT.SAFMIN ) THEN
+                  ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
+     $               ILAST-1 ) )/( BSCALE*T( ILAST-1, ILAST-1 ) )
+               ELSE
+                  ESHIFT = ESHIFT + ASCALE*H( ILAST, ILAST-1 )
+               END IF
             END IF
             SHIFT = ESHIFT
          END IF
