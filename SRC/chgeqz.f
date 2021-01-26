@@ -748,12 +748,8 @@
                ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
      $            ILAST ) )/( BSCALE*T( ILAST, ILAST ) )
             ELSE
-               IF( BSCALE*ABS1(T( ILAST, ILAST )).GT.SAFMIN ) THEN
-                  ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
-     $               ILAST-1 ) )/( BSCALE*T( ILAST-1, ILAST-1 ) )
-               ELSE
-                  ESHIFT = ESHIFT + ASCALE*H( ILAST, ILAST-1 )
-               END IF
+               ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
+     $            ILAST-1 ) )/( BSCALE*T( ILAST-1, ILAST-1 ) )
             END IF
             SHIFT = ESHIFT
          END IF
