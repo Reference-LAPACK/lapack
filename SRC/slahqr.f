@@ -227,13 +227,16 @@
       PARAMETER          ( ZERO = 0.0e0, ONE = 1.0e0, TWO = 2.0e0 )
       REAL               DAT1, DAT2
       PARAMETER          ( DAT1 = 3.0e0 / 4.0e0, DAT2 = -0.4375e0 )
+      INTEGER            KEXSH
+      PARAMETER          ( KEXSH = 6 )
 *     ..
 *     .. Local Scalars ..
       REAL               AA, AB, BA, BB, CS, DET, H11, H12, H21, H21S,
      $                   H22, RT1I, RT1R, RT2I, RT2R, RTDISC, S, SAFMAX,
      $                   SAFMIN, SMLNUM, SN, SUM, T1, T2, T3, TR, TST,
      $                   ULP, V2, V3
-      INTEGER            I, I1, I2, ITS, ITMAX, J, K, L, M, NH, NR, NZ
+      INTEGER            I, I1, I2, ITS, ITMAX, J, K, L, M, NH, NR, NZ,
+     $                   KDEFL
 *     ..
 *     .. Local Arrays ..
       REAL               V( 3 )
@@ -294,6 +297,10 @@
 *
       ITMAX = 30 * MAX( 10, NH )
 *
+*     KDFL counts the number of iterations since a deflation
+*
+      KDFL = -2
+*
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1 or 2. Each iteration of the loop works
 *     with the active submatrix in rows and columns L to I.
@@ -353,6 +360,7 @@
 *
          IF( L.GE.I-1 )
      $      GO TO 150
+         KDEFL = KDEFL + 1
 *
 *        Now the active submatrix is in rows and columns L to I. If
 *        eigenvalues only are being computed, only the active submatrix
@@ -363,16 +371,7 @@
             I2 = I
          END IF
 *
-         IF( ITS.EQ.10 ) THEN
-*
-*           Exceptional shift.
-*
-            S = ABS( H( L+1, L ) ) + ABS( H( L+2, L+1 ) )
-            H11 = DAT1*S + H( L, L )
-            H12 = DAT2*S
-            H21 = S
-            H22 = H11
-         ELSE IF( ITS.EQ.20 ) THEN
+         IF( MOD(KDEFL,2*KEXSH).EQ.0 ) THEN
 *
 *           Exceptional shift.
 *
@@ -381,7 +380,15 @@
             H12 = DAT2*S
             H21 = S
             H22 = H11
-         ELSE
+         ELSE IF( MOD(KDEFL,KEXSH).EQ.0 ) THEN
+*
+*           Exceptional shift.
+*
+            S = ABS( H( L+1, L ) ) + ABS( H( L+2, L+1 ) )
+            H11 = DAT1*S + H( L, L )
+            H12 = DAT2*S
+            H21 = S
+            H22 = H11
 *
 *           Prepare to use Francis' double shift
 *           (i.e. 2nd degree generalized Rayleigh quotient)
@@ -599,6 +606,8 @@
             CALL SROT( NZ, Z( ILOZ, I-1 ), 1, Z( ILOZ, I ), 1, CS, SN )
          END IF
       END IF
+*     reset deflation counter
+      KDFL = 0
 *
 *     return to start of the main loop with new value of I.
 *
