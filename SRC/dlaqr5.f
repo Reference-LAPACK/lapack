@@ -419,6 +419,16 @@
                   ALPHA = V( 1, M )
                   CALL DLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
                ELSE
+*
+*                 Apply the delayed update from the last bulge move
+*
+                  REFSUM = V( 1, M )*V( 3, M )*H( K+3, K+2 )
+                  H( K+3, K ) = -REFSUM
+                  H( K+3, K+1 ) = -REFSUM*V( 2, M )
+                  H( K+3, K+2 ) = H( K+3, K+2 ) - REFSUM*V( 3, M )
+*
+*                 Calculate reflection to move bulge
+*
                   BETA = H( K+1, K )
                   V( 2, M ) = H( K+2, K )
                   V( 3, M ) = H( K+3, K )
@@ -671,17 +681,6 @@
                   END IF
                END IF
   130       CONTINUE
-*
-*           ==== Fill in the last row of each bulge. ====
-*
-            MEND = MIN( NBMPS, ( KBOT-KRCOL-1 ) / 3 )
-            DO 140 M = MTOP, MEND
-               K = KRCOL + 3*( M-1 )
-               REFSUM = V( 1, M )*V( 3, M )*H( K+4, K+3 )
-               H( K+4, K+1 ) = -REFSUM
-               H( K+4, K+2 ) = -REFSUM*V( 2, M )
-               H( K+4, K+3 ) = H( K+4, K+3 ) - REFSUM*V( 3, M )
-  140       CONTINUE
 *
 *           ==== End of near-the-diagonal bulge chase. ====
 *
