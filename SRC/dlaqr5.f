@@ -256,6 +256,7 @@
       SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
      $                   SR, SI, H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U,
      $                   LDU, NV, WV, LDWV, NH, WH, LDWH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -285,7 +286,7 @@
       INTEGER            I, I2, I4, INCOL, J, J2, J4, JBOT, JCOL, JLEN,
      $                   JROW, JTOP, K, K1, KDU, KMS, KNZ, KRCOL, KZS,
      $                   M, M22, MBOT, MEND, MSTART, MTOP, NBMPS, NDCOL,
-     $                   NS, NU
+     $                   NS, NU, IWRITE, JWRITE
       LOGICAL            ACCUM, BLK22, BMP22
 *     ..
 *     .. External Functions ..
@@ -371,11 +372,11 @@
 *
 *     ==== KDU = width of slab ====
 *
-      KDU = 6*NBMPS - 3
+      KDU = 4*NBMPS - 1
 *
 *     ==== Create and chase chains of NBMPS bulges ====
 *
-      DO 220 INCOL = 3*( 1-NBMPS ) + KTOP - 1, KBOT - 2, 3*NBMPS - 2
+      DO 220 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS-1
          NDCOL = INCOL + KDU
          IF( ACCUM )
      $      CALL DLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
@@ -392,7 +393,7 @@
 *        .    bulges before they are actually introduced or to which
 *        .    to chase bulges beyond column KBOT.)  ====
 *
-         DO 150 KRCOL = INCOL, MIN( INCOL+3*NBMPS-3, KBOT-2 )
+         DO 150 KRCOL = INCOL, MIN( INCOL+2*NBMPS-2, KBOT-2 )
 *
 *           ==== Bulges number MTOP to MBOT are active double implicit
 *           .    shift bulges.  There may or may not also be small
@@ -401,17 +402,41 @@
 *           .    down the diagonal to make room.  The phantom matrix
 *           .    paradigm described above helps keep track.  ====
 *
-            MTOP = MAX( 1, ( ( KTOP-1 )-KRCOL+2 ) / 3+1 )
-            MBOT = MIN( NBMPS, ( KBOT-KRCOL ) / 3 )
+            MTOP = MAX( 1, ( KTOP-KRCOL ) / 2+1 )
+            MBOT = MIN( NBMPS, ( KBOT-KRCOL-1 ) / 2 )
             M22 = MBOT + 1
-            BMP22 = ( MBOT.LT.NBMPS ) .AND. ( KRCOL+3*( M22-1 ) ).EQ.
+            BMP22 = ( MBOT.LT.NBMPS ) .AND. ( KRCOL+2*( M22-1 ) ).EQ.
      $              ( KBOT-2 )
+*
+*           ==== Generate a 2-by-2 reflection, if needed. ====
+*
+            K = KRCOL + 2*( M22-1 )
+            IF( BMP22 ) THEN
+               IF( K.EQ.KTOP-1 ) THEN
+                  CALL DLAQR1( 2, H( K+1, K+1 ), LDH, SR( 2*M22-1 ),
+     $                         SI( 2*M22-1 ), SR( 2*M22 ), SI( 2*M22 ),
+     $                         V( 1, M22 ) )
+                  BETA = V( 1, M22 )
+                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+               ELSE
+                  BETA = H( K+1, K )
+                  V( 2, M22 ) = H( K+2, K )
+                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+                  H( K+1, K ) = BETA
+                  H( K+2, K ) = ZERO
+               END IF
+            END IF
 *
 *           ==== Generate reflections to chase the chain right
 *           .    one column.  (The minimum value of K is KTOP-1.) ====
 *
-            DO 20 M = MTOP, MBOT
-               K = KRCOL + 3*( M-1 )
+            DO 20 M = MBOT, MTOP, -1
+               K = KRCOL + 2*( M-1 )
+   !             WRITE( *, * ) "H", INCOL, KRCOL, M, K
+   !             DO IWRITE = 1, N
+   !                WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
+   !   $         JWRITE = 1, N )
+   !             END DO
                IF( K.EQ.KTOP-1 ) THEN
                   CALL DLAQR1( 3, H( KTOP, KTOP ), LDH, SR( 2*M-1 ),
      $                         SI( 2*M-1 ), SR( 2*M ), SI( 2*M ),
@@ -492,27 +517,14 @@
                   END IF
                END IF
    20       CONTINUE
+ 1302       CONTINUE
+   !          write(*,*) "Before left update"
+   !          DO IWRITE = 1, N
+   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
+   !   $         JWRITE = 1, N )
+   !          END DO
 *
-*           ==== Generate a 2-by-2 reflection, if needed. ====
-*
-            K = KRCOL + 3*( M22-1 )
-            IF( BMP22 ) THEN
-               IF( K.EQ.KTOP-1 ) THEN
-                  CALL DLAQR1( 2, H( K+1, K+1 ), LDH, SR( 2*M22-1 ),
-     $                         SI( 2*M22-1 ), SR( 2*M22 ), SI( 2*M22 ),
-     $                         V( 1, M22 ) )
-                  BETA = V( 1, M22 )
-                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
-               ELSE
-                  BETA = H( K+1, K )
-                  V( 2, M22 ) = H( K+2, K )
-                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
-                  H( K+1, K ) = BETA
-                  H( K+2, K ) = ZERO
-               END IF
-            END IF
-*
-*           ==== Multiply H by reflections from the left ====
+*           ==== Special case: 2-by-2 reflection (if needed) ====
 *
             IF( ACCUM ) THEN
                JBOT = MIN( NDCOL, KBOT )
@@ -521,19 +533,8 @@
             ELSE
                JBOT = KBOT
             END IF
-            DO 40 J = MAX( KTOP, KRCOL ), JBOT
-               MEND = MIN( MBOT, ( J-KRCOL+2 ) / 3 )
-               DO 30 M = MTOP, MEND
-                  K = KRCOL + 3*( M-1 )
-                  REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
-     $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
-                  H( K+1, J ) = H( K+1, J ) - REFSUM
-                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M )
-                  H( K+3, J ) = H( K+3, J ) - REFSUM*V( 3, M )
-   30          CONTINUE
-   40       CONTINUE
             IF( BMP22 ) THEN
-               K = KRCOL + 3*( M22-1 )
+               K = KRCOL + 2*( M22-1 )
                DO 50 J = MAX( K+1, KTOP ), JBOT
                   REFSUM = V( 1, M22 )*( H( K+1, J )+V( 2, M22 )*
      $                     H( K+2, J ) )
@@ -541,6 +542,54 @@
                   H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M22 )
    50          CONTINUE
             END IF
+            K = KRCOL + 2*( M22-1 )
+            IF( BMP22 ) THEN
+               IF ( V( 1, M22 ).NE.ZERO ) THEN
+                  DO 100 J = JTOP, MIN( KBOT, K+3 )
+                     REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
+     $                        H( J, K+2 ) )
+                     H( J, K+1 ) = H( J, K+1 ) - REFSUM
+                     H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M22 )
+  100             CONTINUE
+*
+                  IF( ACCUM ) THEN
+                     KMS = K - INCOL
+                     DO 110 J = MAX( 1, KTOP-INCOL ), KDU
+                        REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
+     $                           V( 2, M22 )*U( J, KMS+2 ) )
+                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
+                        U( J, KMS+2 ) = U( J, KMS+2 ) -
+     $                                  REFSUM*V( 2, M22 )
+  110             CONTINUE
+                  ELSE IF( WANTZ ) THEN
+                     DO 120 J = ILOZ, IHIZ
+                        REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
+     $                           Z( J, K+2 ) )
+                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
+                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M22 )
+  120                CONTINUE
+                  END IF
+               END IF
+            END IF
+*
+*           ==== Multiply H by reflections from the left ====
+*
+            DO 40 J = MAX( KTOP, KRCOL ), JBOT
+               MEND = MIN( MBOT, ( J-KRCOL+1 ) / 2 )
+               DO 30 M = MEND, MTOP, -1
+                  K = KRCOL + 2*( M-1 )
+                  REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
+     $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
+                  H( K+1, J ) = H( K+1, J ) - REFSUM
+                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M )
+                  H( K+3, J ) = H( K+3, J ) - REFSUM*V( 3, M )
+   30          CONTINUE
+   40       CONTINUE
+   !          write(*,*) "After left update"
+   !          DO IWRITE = 1, N
+   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
+   !   $         JWRITE = 1, N )
+   !          END DO
 *
 *           ==== Multiply H by reflections from the right.
 *           .    Delay filling in the last row until the
@@ -553,9 +602,9 @@
             ELSE
                JTOP = KTOP
             END IF
-            DO 90 M = MTOP, MBOT
+            DO 90 M = MBOT, MTOP, -1 
                IF( V( 1, M ).NE.ZERO ) THEN
-                  K = KRCOL + 3*( M-1 )
+                  K = KRCOL + 2*( M-1 )
                   DO 60 J = JTOP, MIN( KBOT, K+3 )
                      REFSUM = V( 1, M )*( H( J, K+1 )+V( 2, M )*
      $                        H( J, K+2 )+V( 3, M )*H( J, K+3 ) )
@@ -594,38 +643,11 @@
                   END IF
                END IF
    90       CONTINUE
-*
-*           ==== Special case: 2-by-2 reflection (if needed) ====
-*
-            K = KRCOL + 3*( M22-1 )
-            IF( BMP22 ) THEN
-               IF ( V( 1, M22 ).NE.ZERO ) THEN
-                  DO 100 J = JTOP, MIN( KBOT, K+3 )
-                     REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
-     $                        H( J, K+2 ) )
-                     H( J, K+1 ) = H( J, K+1 ) - REFSUM
-                     H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M22 )
-  100             CONTINUE
-*
-                  IF( ACCUM ) THEN
-                     KMS = K - INCOL
-                     DO 110 J = MAX( 1, KTOP-INCOL ), KDU
-                        REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
-     $                           V( 2, M22 )*U( J, KMS+2 ) )
-                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
-                        U( J, KMS+2 ) = U( J, KMS+2 ) -
-     $                                  REFSUM*V( 2, M22 )
-  110             CONTINUE
-                  ELSE IF( WANTZ ) THEN
-                     DO 120 J = ILOZ, IHIZ
-                        REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
-     $                           Z( J, K+2 ) )
-                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
-                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M22 )
-  120                CONTINUE
-                  END IF
-               END IF
-            END IF
+   !          write(*,*) "After right update"
+   !          DO IWRITE = 1, N
+   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
+   !   $         JWRITE = 1, N )
+   !          END DO
 *
 *           ==== Vigilant deflation check ====
 *
