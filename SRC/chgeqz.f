@@ -326,7 +326,7 @@
       COMPLEX            CLADIV
       LOGICAL            LSAME
       REAL               CLANHS, SLAMCH
-      EXTERNAL           CLADIV, LLSAME, CLANHS, SLAMCH
+      EXTERNAL           CLADIV, LSAME, CLANHS, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLARTG, CLASET, CROT, CSCAL, XERBLA
