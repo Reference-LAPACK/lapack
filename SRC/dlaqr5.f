@@ -243,6 +243,8 @@
 *>       Karen Braman and Ralph Byers, Department of Mathematics,
 *>       University of Kansas, USA
 *>
+*>       Lars Karlsson, Daniel Kressner, and Bruno Lang
+*>
 *>       Thijs Steel, Department of Computer science,
 *>       KU Leuven, Belgium
 *
@@ -374,11 +376,11 @@
 *
 *     ==== KDU = width of slab ====
 *
-      KDU = 4*NBMPS - 1
+      KDU = 4*NBMPS
 *
 *     ==== Create and chase chains of NBMPS bulges ====
 *
-      DO 180 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS-1
+      DO 180 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS
 *
 *        JTOP = Index from which updates from the right start.
 *
@@ -406,7 +408,7 @@
 *        .    bulges before they are actually introduced or to which
 *        .    to chase bulges beyond column KBOT.)  ====
 *
-         DO 140 KRCOL = INCOL, MIN( INCOL+2*NBMPS-2, KBOT-2 )
+         DO 140 KRCOL = INCOL, MIN( INCOL+2*NBMPS-1, KBOT-2 )
 *
 *           ==== Bulges number MTOP to MBOT are active double implicit
 *           .    shift bulges.  There may or may not also be small
@@ -725,7 +727,10 @@
 *                    .    multiply.) ====
 *
                      KMS = K - INCOL
-                     DO 110 J = MAX( 1, KTOP-INCOL ), KDU
+                     I2 = MAX( 1, KTOP-INCOL )
+                     I2 = MAX( I2, KMS-(KRCOL-INCOL)+1 )
+                     I4 = MIN( KDU, KRCOL + 2*( MBOT-1 ) - INCOL + 5 )
+                     DO 110 J = I2, I4
                         REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
      $                           U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
                         U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
