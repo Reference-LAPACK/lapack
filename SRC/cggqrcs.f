@@ -469,7 +469,7 @@
       IG11 = 1
       IG21 = M + 1
       IG22 = LDG * M + M + 1
-      IVT = LDG * N + 1
+      IVT = LDG * N + 2
       IVT12 = IVT + LDVT * M
       THETA = NAN
       IOTA = NAN
