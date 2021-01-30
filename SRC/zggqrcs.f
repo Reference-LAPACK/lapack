@@ -382,7 +382,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      COMPLEX*16         DLAMCH, ZLANGE
+      DOUBLE PRECISION   DLAMCH, ZLANGE
       EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..

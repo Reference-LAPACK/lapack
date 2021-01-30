@@ -382,7 +382,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      COMPLEX            SLAMCH, CLANGE
+      REAL               SLAMCH, CLANGE
       EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
