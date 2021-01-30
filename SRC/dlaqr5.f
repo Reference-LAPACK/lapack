@@ -294,7 +294,7 @@
       INTEGER            I, I2, I4, INCOL, J, J2, J4, JBOT, JCOL, JLEN,
      $                   JROW, JTOP, K, K1, KDU, KMS, KNZ, KRCOL, KZS,
      $                   M, M22, MBOT, MEND, MSTART, MTOP, NBMPS, NDCOL,
-     $                   NS, NU, IWRITE, JWRITE
+     $                   NS, NU
       LOGICAL            ACCUM, BMP22
 *     ..
 *     .. External Functions ..
