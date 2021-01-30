@@ -396,7 +396,7 @@
 *
 *        ==== Optimal workspace = MAX(DLAQR5, DLAQR2) ====
 *
-         LWKOPT = MAX( NSR, INT( WORK( 1 ) ) )
+         LWKOPT = MAX( 3*NSR / 2, INT( WORK( 1 ) ) )
 *
 *        ==== Quick return in case of workspace query. ====
 *
