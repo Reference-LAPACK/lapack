@@ -70,10 +70,9 @@
 *>             matrix entries.
 *>        = 1: SLAQR5 accumulates reflections and uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries.
-*>        = 2: SLAQR5 accumulates reflections, uses matrix-matrix
-*>             multiply to update the far-from-diagonal matrix entries,
-*>             and takes advantage of 2-by-2 block structure during
-*>             matrix multiplies.
+*>        = 2: Same as KACC22 = 1. This option used to enable exploiting
+*>             the 2-by-2 structure during matrix multiplications, but
+*>             this is no longer supported.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -178,14 +177,14 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is REAL array, dimension (LDU,3*NSHFTS-3)
+*>          U is REAL array, dimension (LDU,2*NSHFTS)
 *> \endverbatim
 *>
 *> \param[in] LDU
 *> \verbatim
 *>          LDU is INTEGER
 *>             LDU is the leading dimension of U just as declared in the
-*>             in the calling subroutine.  LDU >= 3*NSHFTS-3.
+*>             in the calling subroutine.  LDU >= 2*NSHFTS.
 *> \endverbatim
 *>
 *> \param[in] NV
@@ -197,7 +196,7 @@
 *>
 *> \param[out] WV
 *> \verbatim
-*>          WV is REAL array, dimension (LDWV,3*NSHFTS-3)
+*>          WV is REAL array, dimension (LDWV,2*NSHFTS)
 *> \endverbatim
 *>
 *> \param[in] LDWV
@@ -223,7 +222,7 @@
 *> \verbatim
 *>          LDWH is INTEGER
 *>             Leading dimension of WH just as declared in the
-*>             calling procedure.  LDWH >= 3*NSHFTS-3.
+*>             calling procedure.  LDWH >= 2*NSHFTS.
 *> \endverbatim
 *>
 *  Authors:
@@ -234,7 +233,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
+*> \date Januari 2021
 *
 *> \ingroup realOTHERauxiliary
 *
@@ -243,6 +242,11 @@
 *>
 *>       Karen Braman and Ralph Byers, Department of Mathematics,
 *>       University of Kansas, USA
+*>
+*>       Lars Karlsson, Daniel Kressner, and Bruno Lang
+*>
+*>       Thijs Steel, Department of Computer science,
+*>       KU Leuven, Belgium
 *
 *> \par References:
 *  ================
@@ -252,10 +256,15 @@
 *>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
 *>       929--947, 2002.
 *>
+*>       Lars Karlsson, Daniel Kressner, and Bruno Lang, Optimally packed
+*>       chains of bulges in multishift QR algorithms.
+*>       ACM Trans. Math. Softw. 40, 2, Article 12 (February 2014).
+*>
 *  =====================================================================
       SUBROUTINE SLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
      $                   SR, SI, H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U,
      $                   LDU, NV, WV, LDWV, NH, WH, LDWH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -177,14 +177,14 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is DOUBLE PRECISION array, dimension (LDU,2*NSHFTS-1)
+*>          U is DOUBLE PRECISION array, dimension (LDU,2*NSHFTS)
 *> \endverbatim
 *>
 *> \param[in] LDU
 *> \verbatim
 *>          LDU is INTEGER
 *>             LDU is the leading dimension of U just as declared in the
-*>             in the calling subroutine.  LDU >= 2*NSHFTS-1.
+*>             in the calling subroutine.  LDU >= 2*NSHFTS.
 *> \endverbatim
 *>
 *> \param[in] NV
@@ -196,7 +196,7 @@
 *>
 *> \param[out] WV
 *> \verbatim
-*>          WV is DOUBLE PRECISION array, dimension (LDWV,2*NSHFTS-1)
+*>          WV is DOUBLE PRECISION array, dimension (LDWV,2*NSHFTS)
 *> \endverbatim
 *>
 *> \param[in] LDWV
@@ -222,7 +222,7 @@
 *> \verbatim
 *>          LDWH is INTEGER
 *>             Leading dimension of WH just as declared in the
-*>             calling procedure.  LDWH >= 2*NSHFTS-1.
+*>             calling procedure.  LDWH >= 2*NSHFTS.
 *> \endverbatim
 *>
 *  Authors:
@@ -402,7 +402,7 @@
 *        .    chunk extends from column INCOL to column NDCOL
 *        .    (including both column INCOL and column NDCOL). The
 *        .    following loop chases a 2*NBMPS+1 column long chain of
-*        .    NBMPS bulges 2*NBMPS-1 columns to the right.  (INCOL
+*        .    NBMPS bulges 2*NBMPS columns to the right.  (INCOL
 *        .    may be less than KTOP and and NDCOL may be greater than
 *        .    KBOT indicating phantom columns from which to chase
 *        .    bulges before they are actually introduced or to which
