@@ -379,17 +379,28 @@
 *     ==== Create and chase chains of NBMPS bulges ====
 *
       DO 180 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS-1
+*
+*        JTOP = Index from which updates from the right start.
+*
+         IF( ACCUM ) THEN
+            JTOP = MAX( KTOP, INCOL )
+         ELSE IF( WANTT ) THEN
+            JTOP = 1
+         ELSE
+            JTOP = KTOP
+         END IF
+*
          NDCOL = INCOL + KDU
          IF( ACCUM )
      $      CALL DLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
 *
 *        ==== Near-the-diagonal bulge chase.  The following loop
 *        .    performs the near-the-diagonal part of a small bulge
-*        .    multi-shift QR sweep.  Each 6*NBMPS-2 column diagonal
+*        .    multi-shift QR sweep.  Each 4*NBMPS column diagonal
 *        .    chunk extends from column INCOL to column NDCOL
 *        .    (including both column INCOL and column NDCOL). The
-*        .    following loop chases a 3*NBMPS column long chain of
-*        .    NBMPS bulges 3*NBMPS-2 columns to the right.  (INCOL
+*        .    following loop chases a 2*NBMPS+1 column long chain of
+*        .    NBMPS bulges 2*NBMPS-1 columns to the right.  (INCOL
 *        .    may be less than KTOP and and NDCOL may be greater than
 *        .    KBOT indicating phantom columns from which to chase
 *        .    bulges before they are actually introduced or to which
@@ -410,10 +421,15 @@
             BMP22 = ( MBOT.LT.NBMPS ) .AND. ( KRCOL+2*( M22-1 ) ).EQ.
      $              ( KBOT-2 )
 *
-*           ==== Generate a 2-by-2 reflection, if needed. ====
+*           ==== Generate reflections to chase the chain right
+*           .    one column.  (The minimum value of K is KTOP-1.) ====
 *
-            K = KRCOL + 2*( M22-1 )
-            IF( BMP22 ) THEN
+            IF ( BMP22 ) THEN
+*
+*              ==== Special case: 2-by-2 reflection at bottom treated
+*              .    separately ====
+*
+               K = KRCOL + 2*( M22-1 )
                IF( K.EQ.KTOP-1 ) THEN
                   CALL DLAQR1( 2, H( K+1, K+1 ), LDH, SR( 2*M22-1 ),
      $                         SI( 2*M22-1 ), SR( 2*M22 ), SI( 2*M22 ),
@@ -427,12 +443,101 @@
                   H( K+1, K ) = BETA
                   H( K+2, K ) = ZERO
                END IF
+
+*
+*              ==== Perform update from right within 
+*              .    computational window. ====
+*
+               DO 30 J = JTOP, MIN( KBOT, K+3 )
+                  REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
+     $                     H( J, K+2 ) )
+                  H( J, K+1 ) = H( J, K+1 ) - REFSUM
+                  H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M22 )
+   30          CONTINUE
+*
+*              ==== Perform update from left within 
+*              .    computational window. ====
+*
+               IF( ACCUM ) THEN
+                  JBOT = MIN( NDCOL, KBOT )
+               ELSE IF( WANTT ) THEN
+                  JBOT = N
+               ELSE
+                  JBOT = KBOT
+               END IF
+               DO 40 J = K+1, JBOT
+                  REFSUM = V( 1, M22 )*( H( K+1, J )+V( 2, M22 )*
+     $                     H( K+2, J ) )
+                  H( K+1, J ) = H( K+1, J ) - REFSUM
+                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M22 )
+   40          CONTINUE
+*
+*              ==== The following convergence test requires that
+*              .    the tradition small-compared-to-nearby-diagonals
+*              .    criterion and the Ahues & Tisseur (LAWN 122, 1997)
+*              .    criteria both be satisfied.  The latter improves
+*              .    accuracy in some examples. Falling back on an
+*              .    alternate convergence criterion when TST1 or TST2
+*              .    is zero (as done here) is traditional but probably
+*              .    unnecessary. ====
+*
+               IF( K.GE.KTOP .AND. H( K+1, K ).NE.ZERO ) THEN
+                  TST1 = ABS( H( K, K ) ) + ABS( H( K+1, K+1 ) )
+                  IF( TST1.EQ.ZERO ) THEN
+                     IF( K.GE.KTOP+1 )
+     $                  TST1 = TST1 + ABS( H( K, K-1 ) )
+                     IF( K.GE.KTOP+2 )
+     $                  TST1 = TST1 + ABS( H( K, K-2 ) )
+                     IF( K.GE.KTOP+3 )
+     $                  TST1 = TST1 + ABS( H( K, K-3 ) )
+                     IF( K.LE.KBOT-2 )
+     $                  TST1 = TST1 + ABS( H( K+2, K+1 ) )
+                     IF( K.LE.KBOT-3 )
+     $                  TST1 = TST1 + ABS( H( K+3, K+1 ) )
+                     IF( K.LE.KBOT-4 )
+     $                  TST1 = TST1 + ABS( H( K+4, K+1 ) )
+                  END IF
+                  IF( ABS( H( K+1, K ) ).LE.MAX( SMLNUM, ULP*TST1 ) )
+     $                 THEN
+                     H12 = MAX( ABS( H( K+1, K ) ), ABS( H( K, K+1 ) ) )
+                     H21 = MIN( ABS( H( K+1, K ) ), ABS( H( K, K+1 ) ) )
+                     H11 = MAX( ABS( H( K+1, K+1 ) ),
+     $                     ABS( H( K, K )-H( K+1, K+1 ) ) )
+                     H22 = MIN( ABS( H( K+1, K+1 ) ),
+     $                     ABS( H( K, K )-H( K+1, K+1 ) ) )
+                     SCL = H11 + H12
+                     TST2 = H22*( H11 / SCL )
+*
+                     IF( TST2.EQ.ZERO .OR. H21*( H12 / SCL ).LE.
+     $                   MAX( SMLNUM, ULP*TST2 ) ) THEN
+                        H( K+1, K ) = ZERO
+                     END IF
+                  END IF
+               END IF
+*
+*              ==== Accumulate orthogonal transformations. ====
+*
+               IF( ACCUM ) THEN
+                  KMS = K - INCOL
+                  DO 50 J = MAX( 1, KTOP-INCOL ), KDU
+                     REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
+     $                        V( 2, M22 )*U( J, KMS+2 ) )
+                     U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
+                     U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M22 )
+  50                 CONTINUE
+               ELSE IF( WANTZ ) THEN
+                  DO 60 J = ILOZ, IHIZ
+                     REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
+     $                        Z( J, K+2 ) )
+                     Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
+                     Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M22 )
+  60              CONTINUE
+               END IF
             END IF
 *
-*           ==== Generate reflections to chase the chain right
-*           .    one column.  (The minimum value of K is KTOP-1.) ====
+*           ==== Normal case: Chain of 3-by-3 reflections ====
 *
-            DO 20 M = MBOT, MTOP, -1
+            DO 80 M = MBOT, MTOP, -1
                K = KRCOL + 2*( M-1 )
                IF( K.EQ.KTOP-1 ) THEN
                   CALL DLAQR1( 3, H( KTOP, KTOP ), LDH, SR( 2*M-1 ),
@@ -442,16 +547,19 @@
                   CALL DLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
                ELSE
 *
-*                 Apply the delayed update from the last bulge move
+*                 ==== Perform delayed transformation of row below
+*                 .    Mth bulge. Exploit fact that first two elements
+*                 .    of row are actually zero. ====
 *
                   REFSUM = V( 1, M )*V( 3, M )*H( K+3, K+2 )
-                  H( K+3, K ) = -REFSUM
+                  H( K+3, K   ) = -REFSUM
                   H( K+3, K+1 ) = -REFSUM*V( 2, M )
                   H( K+3, K+2 ) = H( K+3, K+2 ) - REFSUM*V( 3, M )
 *
-*                 Calculate reflection to move bulge
+*                 ==== Calculate reflection to move
+*                 .    Mth bulge one step. ====
 *
-                  BETA = H( K+1, K )
+                  BETA      = H( K+1, K )
                   V( 2, M ) = H( K+2, K )
                   V( 3, M ) = H( K+3, K )
                   CALL DLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
@@ -499,7 +607,7 @@
                         H( K+3, K ) = ZERO
                      ELSE
 *
-*                       ==== Stating a new bulge here would
+*                       ==== Starting a new bulge here would
 *                       .    create only negligible fill.
 *                       .    Replace the old reflector with
 *                       .    the new one. ====
@@ -513,132 +621,29 @@
                      END IF
                   END IF
                END IF
-   20       CONTINUE
 *
-*           ==== Special case: 2-by-2 reflection (if needed) ====
+*              ====  Apply reflection from the right and
+*              .     the first column of update from the left.
+*              .     These updates are required for the vigilant
+*              .     deflation check. We still delay most of the
+*              .     updates from the left for efficiency. ====      
 *
-            IF( ACCUM ) THEN
-               JBOT = MIN( NDCOL, KBOT )
-            ELSE IF( WANTT ) THEN
-               JBOT = N
-            ELSE
-               JBOT = KBOT
-            END IF
-            IF( BMP22 ) THEN
-               K = KRCOL + 2*( M22-1 )
-               DO 30 J = MAX( K+1, KTOP ), JBOT
-                  REFSUM = V( 1, M22 )*( H( K+1, J )+V( 2, M22 )*
-     $                     H( K+2, J ) )
-                  H( K+1, J ) = H( K+1, J ) - REFSUM
-                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M22 )
-   30          CONTINUE
-               IF ( V( 1, M22 ).NE.ZERO ) THEN
-                  DO 40 J = JTOP, MIN( KBOT, K+3 )
-                     REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
-     $                        H( J, K+2 ) )
-                     H( J, K+1 ) = H( J, K+1 ) - REFSUM
-                     H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M22 )
-  40              CONTINUE
-*
-                  IF( ACCUM ) THEN
-                     KMS = K - INCOL
-                     DO 50 J = MAX( 1, KTOP-INCOL ), KDU
-                        REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
-     $                           V( 2, M22 )*U( J, KMS+2 ) )
-                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
-                        U( J, KMS+2 ) = U( J, KMS+2 ) -
-     $                                  REFSUM*V( 2, M22 )
-  50                 CONTINUE
-                  ELSE IF( WANTZ ) THEN
-                     DO 60 J = ILOZ, IHIZ
-                        REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
-     $                           Z( J, K+2 ) )
-                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
-                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M22 )
-  60                 CONTINUE
-                  END IF
-               END IF
-            END IF
-*
-*           ==== Multiply H by reflections from the left ====
-*
-            DO 80 J = MAX( KTOP, KRCOL ), JBOT
-               MEND = MIN( MBOT, ( J-KRCOL+1 ) / 2 )
-               DO 70 M = MEND, MTOP, -1
-                  K = KRCOL + 2*( M-1 )
-                  REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
-     $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
-                  H( K+1, J ) = H( K+1, J ) - REFSUM
-                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M )
-                  H( K+3, J ) = H( K+3, J ) - REFSUM*V( 3, M )
-   70          CONTINUE
-   80       CONTINUE
-*
-*           ==== Multiply H by reflections from the right.
-*           .    Delay filling in the last row until the
-*           .    vigilant deflation check is complete. ====
-*
-            IF( ACCUM ) THEN
-               JTOP = MAX( KTOP, INCOL )
-            ELSE IF( WANTT ) THEN
-               JTOP = 1
-            ELSE
-               JTOP = KTOP
-            END IF
-            DO 120 M = MBOT, MTOP, -1 
-               IF( V( 1, M ).NE.ZERO ) THEN
-                  K = KRCOL + 2*( M-1 )
-                  DO 90 J = JTOP, MIN( KBOT, K+3 )
-                     REFSUM = V( 1, M )*( H( J, K+1 )+V( 2, M )*
+               DO 70 J = JTOP, MIN( KBOT, K+3 )
+                  REFSUM = V( 1, M )*( H( J, K+1 )+V( 2, M )*
      $                        H( J, K+2 )+V( 3, M )*H( J, K+3 ) )
-                     H( J, K+1 ) = H( J, K+1 ) - REFSUM
-                     H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M )
-                     H( J, K+3 ) = H( J, K+3 ) - REFSUM*V( 3, M )
-   90             CONTINUE
+                  H( J, K+1 ) = H( J, K+1 ) - REFSUM
+                  H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M )
+                  H( J, K+3 ) = H( J, K+3 ) - REFSUM*V( 3, M )
+   70          CONTINUE
 *
-                  IF( ACCUM ) THEN
+*              ==== Perform update from left for subsequent
+*              .    column. ====
 *
-*                    ==== Accumulate U. (If necessary, update Z later
-*                    .    with with an efficient matrix-matrix
-*                    .    multiply.) ====
-*
-                     KMS = K - INCOL
-                     DO 100 J = MAX( 1, KTOP-INCOL ), KDU
-                        REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
-     $                           U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
-                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
-                        U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M )
-                        U( J, KMS+3 ) = U( J, KMS+3 ) - REFSUM*V( 3, M )
-  100                CONTINUE
-                  ELSE IF( WANTZ ) THEN
-*
-*                    ==== U is not accumulated, so update Z
-*                    .    now by multiplying by reflections
-*                    .    from the right. ====
-*
-                     DO 110 J = ILOZ, IHIZ
-                        REFSUM = V( 1, M )*( Z( J, K+1 )+V( 2, M )*
-     $                           Z( J, K+2 )+V( 3, M )*Z( J, K+3 ) )
-                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
-                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M )
-                        Z( J, K+3 ) = Z( J, K+3 ) - REFSUM*V( 3, M )
-  110                CONTINUE
-                  END IF
-               END IF
-  120       CONTINUE
-*
-*           ==== Vigilant deflation check ====
-*
-            MSTART = MTOP
-            IF( KRCOL+2*( MSTART-1 ).LT.KTOP )
-     $         MSTART = MSTART + 1
-            MEND = MBOT
-            IF( BMP22 )
-     $         MEND = MEND + 1
-            IF( KRCOL.EQ.KBOT-2 )
-     $         MEND = MEND + 1
-            DO 130 M = MSTART, MEND
-               K = MIN( KBOT-1, KRCOL+2*( M-1 ) )
+               REFSUM = V( 1, M )*( H( K+1, K+1 )+V( 2, M )*
+     $                  H( K+2, K+1 )+V( 3, M )*H( K+3, K+1 ) )
+               H( K+1, K+1 ) = H( K+1, K+1 ) - REFSUM
+               H( K+2, K+1 ) = H( K+2, K+1 ) - REFSUM*V( 2, M )
+               H( K+3, K+1 ) = H( K+3, K+1 ) - REFSUM*V( 3, M )
 *
 *              ==== The following convergence test requires that
 *              .    the tradition small-compared-to-nearby-diagonals
@@ -649,6 +654,8 @@
 *              .    is zero (as done here) is traditional but probably
 *              .    unnecessary. ====
 *
+               IF( K.LT.KTOP)
+     $              CYCLE
                IF( H( K+1, K ).NE.ZERO ) THEN
                   TST1 = ABS( H( K, K ) ) + ABS( H( K+1, K+1 ) )
                   IF( TST1.EQ.ZERO ) THEN
@@ -677,7 +684,67 @@
                      TST2 = H22*( H11 / SCL )
 *
                      IF( TST2.EQ.ZERO .OR. H21*( H12 / SCL ).LE.
-     $                   MAX( SMLNUM, ULP*TST2 ) )H( K+1, K ) = ZERO
+     $                   MAX( SMLNUM, ULP*TST2 ) ) THEN
+                        H( K+1, K ) = ZERO
+                     END IF
+                  END IF
+               END IF
+   80       CONTINUE
+*
+*           ==== Multiply H by reflections from the left ====
+*
+            IF( ACCUM ) THEN
+               JBOT = MIN( NDCOL, KBOT )
+            ELSE IF( WANTT ) THEN
+               JBOT = N
+            ELSE
+               JBOT = KBOT
+            END IF
+            DO 100 J = MAX( KTOP, KRCOL ), JBOT
+               MEND = MIN( MBOT, ( J-KRCOL ) / 2 )
+               DO 90 M = MEND, MTOP, -1
+                  K = KRCOL + 2*( M-1 )
+                  REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
+     $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
+                  H( K+1, J ) = H( K+1, J ) - REFSUM
+                  H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M )
+                  H( K+3, J ) = H( K+3, J ) - REFSUM*V( 3, M )
+   90          CONTINUE
+  100       CONTINUE
+*
+*              ==== Accumulate orthogonal transformations. ====
+*
+            DO 130 M = MBOT, MTOP, -1 
+               IF( V( 1, M ).NE.ZERO ) THEN
+                  K = KRCOL + 2*( M-1 )
+*
+                  IF( ACCUM ) THEN
+*
+*                    ==== Accumulate U. (If necessary, update Z later
+*                    .    with with an efficient matrix-matrix
+*                    .    multiply.) ====
+*
+                     KMS = K - INCOL
+                     DO 110 J = MAX( 1, KTOP-INCOL ), KDU
+                        REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
+     $                           U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
+                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
+                        U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M )
+                        U( J, KMS+3 ) = U( J, KMS+3 ) - REFSUM*V( 3, M )
+  110                CONTINUE
+                  ELSE IF( WANTZ ) THEN
+*
+*                    ==== U is not accumulated, so update Z
+*                    .    now by multiplying by reflections
+*                    .    from the right. ====
+*
+                     DO 120 J = ILOZ, IHIZ
+                        REFSUM = V( 1, M )*( Z( J, K+1 )+V( 2, M )*
+     $                           Z( J, K+2 )+V( 3, M )*Z( J, K+3 ) )
+                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
+                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M )
+                        Z( J, K+3 ) = Z( J, K+3 ) - REFSUM*V( 3, M )
+  120                CONTINUE
                   END IF
                END IF
   130       CONTINUE
