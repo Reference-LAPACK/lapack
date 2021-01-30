@@ -632,7 +632,7 @@
 *
                DO 70 J = JTOP, MIN( KBOT, K+3 )
                   REFSUM = V( 1, M )*( H( J, K+1 )+V( 2, M )*
-     $                        H( J, K+2 )+V( 3, M )*H( J, K+3 ) )
+     $                     H( J, K+2 )+V( 3, M )*H( J, K+3 ) )
                   H( J, K+1 ) = H( J, K+1 ) - REFSUM
                   H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M )
                   H( J, K+3 ) = H( J, K+3 ) - REFSUM*V( 3, M )
@@ -714,7 +714,7 @@
    90          CONTINUE
   100       CONTINUE
 *
-*              ==== Accumulate orthogonal transformations. ====
+*           ==== Accumulate orthogonal transformations. ====
 *
             DO 130 M = MBOT, MTOP, -1 
                IF( V( 1, M ).NE.ZERO ) THEN
