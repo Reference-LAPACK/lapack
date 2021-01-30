@@ -373,12 +373,11 @@
      $                   CZERO = ( 0.0E0, 0.0E0 ) )
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
-      INTEGER            I, J, K, K1, LMAX, Z, LDG, LDX, LDVT, LWKOPT
+      INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
+     $                   IVT, IVT12, LDG, LDX, LDVT, LWKOPT
       REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
      $                   THETA, IOTA, W
       COMPLEX            CNAN
-*     .. Local Arrays ..
-      COMPLEX            G( M + P, N ), VT( N, N )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -463,12 +462,15 @@
 *
       SWAPPED = .FALSE.
       L = 0
-      LMAX = MIN( M + P, N )
-      Z = ( M + P ) * N
-      G = WORK( 1 )
       LDG = M + P
-      VT = 0
       LDVT = N
+      LMAX = MIN( M + P, N )
+      IG = 1
+      IG11 = 1
+      IG21 = M + 1
+      IG22 = LDG * M + M + 1
+      IVT = LDG * N + 1
+      IVT12 = IVT + LDVT * M
       THETA = NAN
       IOTA = NAN
       W = NAN
@@ -478,22 +480,23 @@
       IF( INFO.EQ.0 ) THEN
          LWKOPT = 0
 *
-         CALL CGEQP3( M + P, N, G, LDG, IWORK, WORK, WORK, -1, RWORK,
-     $                INFO )
+         CALL CGEQP3( M + P, N, WORK( IG ), LDG, IWORK, WORK, WORK, -1,
+     $                RWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = INT( WORK( 1 ) )
 *
-         CALL CUNGQR( M + P, LMAX, LMAX, G, LDG, WORK, WORK, -1, INFO )
+         CALL CUNGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, WORK, WORK,
+     $                -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL CUNCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, LMAX,
-     $                    G, LDG, G, LDG,
+     $                    WORK( IG ), LDG, WORK( IG ), LDG,
      $                    ALPHA,
-     $                    U1, LDU1, U2, LDU2, VT, LDVT,
+     $                    U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
      $                    WORK, -1, RWORK, LRWORK, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for CUNGQR
-         LWKOPT = LWKOPT + Z
+         LWKOPT = LWKOPT + IVT
 *        2-by-1 CSD matrix V1 must be stored
          IF( WANTX ) THEN
             LWKOPT = LWKOPT + LDVT*N
@@ -521,9 +524,7 @@
          RETURN
       ENDIF
 *     Finish initialization
-      IF( WANTX ) THEN
-         VT = WORK( Z + 1 )
-      ELSE
+      IF( .NOT.WANTX ) THEN
          LDVT = 0
       END IF
 *
@@ -543,8 +544,8 @@
 *
 *     Copy matrices A, B into the (M+P) x N matrix G
 *
-      CALL CLACPY( 'A', M, N, A, LDA, G( 1, 1 ), LDG )
-      CALL CLACPY( 'A', P, N, B, LDB, G( M + 1, 1 ), LDG )
+      CALL CLACPY( 'A', M, N, A, LDA, WORK( IG11 ), LDG )
+      CALL CLACPY( 'A', P, N, B, LDB, WORK( IG21 ), LDG )
 *
 *     DEBUG
 *
@@ -570,8 +571,9 @@
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
-      CALL CGEQP3( M + P, N, G, LDG, IWORK, WORK( Z + 1 ),
-     $             WORK( Z + LMAX + 1 ), LWORK - Z - LMAX, RWORK, INFO )
+      CALL CGEQP3( M + P, N, WORK( IG ), LDG, IWORK, WORK( IVT ),
+     $             WORK( IVT + LMAX ), LWORK - IVT - LMAX + 1, RWORK,
+     $             INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -579,7 +581,7 @@
 *     Determine the rank of G
 *
       DO I = 1, MIN( M + P, N )
-         IF( ABS( G( I, I ) ).LE.TOL ) THEN
+         IF( ABS( WORK( (I-1) * LDG + I ) ).LE.TOL ) THEN
             EXIT
          END IF
          L = L + 1
@@ -604,11 +606,11 @@
 *
       IF( WANTX ) THEN
          IF( L.LE.M ) THEN
-             CALL CLACPY( 'U', L, N, G, LDG, A, LDA )
+             CALL CLACPY( 'U', L, N, WORK( IG ), LDG, A, LDA )
              CALL CLASET( 'L', L - 1, N, CZERO, CZERO, A( 2, 1 ), LDA )
          ELSE
-             CALL CLACPY( 'U', M, N, G, LDG, A, LDA )
-             CALL CLACPY( 'U', L - M, N - M, G( M+1,M+1 ), LDG, B, LDB )
+             CALL CLACPY( 'U', M, N, WORK( IG ), LDG, A, LDA )
+             CALL CLACPY( 'U', L - M, N - M, WORK( IG22 ), LDG, B, LDB )
 *
              CALL CLASET( 'L', M - 1, N, CZERO, CZERO, A( 2, 1 ), LDA )
              CALL CLASET( 'L', L-M-1, N, CZERO, CZERO, B( 2, 1 ), LDB )
@@ -617,8 +619,8 @@
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL CUNGQR( M + P, L, L, G, LDG, WORK( Z + 1 ),
-     $             WORK( Z + L + 1 ), LWORK - Z - L, INFO )
+      CALL CUNGQR( M + P, L, L, WORK( IG ), LDG, WORK( IVT ),
+     $             WORK( IVT + L ), LWORK - IVT - L + 1, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -633,10 +635,10 @@
       K = MIN( M, P, L, M + P - L )
       K1 = MAX( L - P, 0 )
       CALL CUNCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, L,
-     $                 G( 1, 1 ), LDG, G( M + 1, 1 ), LDG,
+     $                 WORK( IG11 ), LDG, WORK( IG21 ), LDG,
      $                 ALPHA,
-     $                 U1, LDU1, U2, LDU2, VT, LDVT,
-     $                 WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
+     $                 U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
+     $                 WORK( IVT + LDVT*N ), LWORK - IVT - LDVT*N + 1,
      $                 RWORK, LRWORK,
      $                 IWORK( N + 1 ), INFO )
       IF( INFO.NE.0 ) THEN
@@ -654,14 +656,14 @@
          LDX = L
          IF ( L.LE.M ) THEN
             CALL CGEMM( 'N', 'N', L, N, L,
-     $                  CONE, VT, LDVT, A, LDA,
+     $                  CONE, WORK( IVT ), LDVT, A, LDA,
      $                  CZERO, WORK( 2 ), LDX )
          ELSE
             CALL CGEMM( 'N', 'N', L, N, M,
-     $                  CONE, VT( 1, 1 ), LDVT, A, LDA,
+     $                  CONE, WORK( IVT ), LDVT, A, LDA,
      $                  CZERO, WORK( 2 ), LDX )
             CALL CGEMM( 'N', 'N', L, N - M, L - M,
-     $                  CONE, VT( 1, M + 1 ), LDVT, B, LDB,
+     $                  CONE, WORK( IVT12 ), LDVT, B, LDB,
      $                  CONE, WORK( L*M + 2 ), LDX )
          END IF
 *        Revert column permutation Π by permuting the columns of X
