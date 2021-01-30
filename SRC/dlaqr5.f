@@ -70,10 +70,9 @@
 *>             matrix entries.
 *>        = 1: DLAQR5 accumulates reflections and uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries.
-*>        = 2: DLAQR5 accumulates reflections, uses matrix-matrix
-*>             multiply to update the far-from-diagonal matrix entries,
-*>             and takes advantage of 2-by-2 block structure during
-*>             matrix multiplies.
+*>        = 2: Same as KACC22 = 1. This option used to enable exploiting
+*>             the 2-by-2 structure during matrix multiplications, but
+*>             this is no longer supported.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -178,14 +177,14 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is DOUBLE PRECISION array, dimension (LDU,3*NSHFTS-3)
+*>          U is DOUBLE PRECISION array, dimension (LDU,2*NSHFTS-1)
 *> \endverbatim
 *>
 *> \param[in] LDU
 *> \verbatim
 *>          LDU is INTEGER
 *>             LDU is the leading dimension of U just as declared in the
-*>             in the calling subroutine.  LDU >= 3*NSHFTS-3.
+*>             in the calling subroutine.  LDU >= 2*NSHFTS-1.
 *> \endverbatim
 *>
 *> \param[in] NV
@@ -197,7 +196,7 @@
 *>
 *> \param[out] WV
 *> \verbatim
-*>          WV is DOUBLE PRECISION array, dimension (LDWV,3*NSHFTS-3)
+*>          WV is DOUBLE PRECISION array, dimension (LDWV,2*NSHFTS-1)
 *> \endverbatim
 *>
 *> \param[in] LDWV
@@ -223,7 +222,7 @@
 *> \verbatim
 *>          LDWH is INTEGER
 *>             Leading dimension of WH just as declared in the
-*>             calling procedure.  LDWH >= 3*NSHFTS-3.
+*>             calling procedure.  LDWH >= 2*NSHFTS-1.
 *> \endverbatim
 *>
 *  Authors:
@@ -234,7 +233,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
+*> \date Januari 2021
 *
 *> \ingroup doubleOTHERauxiliary
 *
@@ -243,6 +242,9 @@
 *>
 *>       Karen Braman and Ralph Byers, Department of Mathematics,
 *>       University of Kansas, USA
+*>
+*>       Thijs Steel, Department of Computer science,
+*>       KU Leuven, Belgium
 *
 *> \par References:
 *  ================
@@ -251,6 +253,10 @@
 *>       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
 *>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
 *>       929--947, 2002.
+*>
+*>       Lars Karlsson, Daniel Kressner, and Bruno Lang, Optimally packed
+*>       chains of bulges in multishift QR algorithms.
+*>       ACM Trans. Math. Softw. 40, 2, Article 12 (February 2014).
 *>
 *  =====================================================================
       SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
@@ -287,7 +293,7 @@
      $                   JROW, JTOP, K, K1, KDU, KMS, KNZ, KRCOL, KZS,
      $                   M, M22, MBOT, MEND, MSTART, MTOP, NBMPS, NDCOL,
      $                   NS, NU, IWRITE, JWRITE
-      LOGICAL            ACCUM, BLK22, BMP22
+      LOGICAL            ACCUM, BMP22
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -357,10 +363,6 @@
 *
       ACCUM = ( KACC22.EQ.1 ) .OR. ( KACC22.EQ.2 )
 *
-*     ==== If so, exploit the 2-by-2 block structure? ====
-*
-      BLK22 = ( NS.GT.2 ) .AND. ( KACC22.EQ.2 )
-*
 *     ==== clear trash ====
 *
       IF( KTOP+2.LE.KBOT )
@@ -376,7 +378,7 @@
 *
 *     ==== Create and chase chains of NBMPS bulges ====
 *
-      DO 220 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS-1
+      DO 180 INCOL = KTOP - 2*NBMPS + 1, KBOT - 2, 2*NBMPS-1
          NDCOL = INCOL + KDU
          IF( ACCUM )
      $      CALL DLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
@@ -393,7 +395,7 @@
 *        .    bulges before they are actually introduced or to which
 *        .    to chase bulges beyond column KBOT.)  ====
 *
-         DO 150 KRCOL = INCOL, MIN( INCOL+2*NBMPS-2, KBOT-2 )
+         DO 140 KRCOL = INCOL, MIN( INCOL+2*NBMPS-2, KBOT-2 )
 *
 *           ==== Bulges number MTOP to MBOT are active double implicit
 *           .    shift bulges.  There may or may not also be small
@@ -432,11 +434,6 @@
 *
             DO 20 M = MBOT, MTOP, -1
                K = KRCOL + 2*( M-1 )
-   !             WRITE( *, * ) "H", INCOL, KRCOL, M, K
-   !             DO IWRITE = 1, N
-   !                WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
-   !   $         JWRITE = 1, N )
-   !             END DO
                IF( K.EQ.KTOP-1 ) THEN
                   CALL DLAQR1( 3, H( KTOP, KTOP ), LDH, SR( 2*M-1 ),
      $                         SI( 2*M-1 ), SR( 2*M ), SI( 2*M ),
@@ -517,12 +514,6 @@
                   END IF
                END IF
    20       CONTINUE
- 1302       CONTINUE
-   !          write(*,*) "Before left update"
-   !          DO IWRITE = 1, N
-   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
-   !   $         JWRITE = 1, N )
-   !          END DO
 *
 *           ==== Special case: 2-by-2 reflection (if needed) ====
 *
@@ -535,61 +526,53 @@
             END IF
             IF( BMP22 ) THEN
                K = KRCOL + 2*( M22-1 )
-               DO 50 J = MAX( K+1, KTOP ), JBOT
+               DO 30 J = MAX( K+1, KTOP ), JBOT
                   REFSUM = V( 1, M22 )*( H( K+1, J )+V( 2, M22 )*
      $                     H( K+2, J ) )
                   H( K+1, J ) = H( K+1, J ) - REFSUM
                   H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M22 )
-   50          CONTINUE
-            END IF
-            K = KRCOL + 2*( M22-1 )
-            IF( BMP22 ) THEN
+   30          CONTINUE
                IF ( V( 1, M22 ).NE.ZERO ) THEN
-                  DO 100 J = JTOP, MIN( KBOT, K+3 )
+                  DO 40 J = JTOP, MIN( KBOT, K+3 )
                      REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
      $                        H( J, K+2 ) )
                      H( J, K+1 ) = H( J, K+1 ) - REFSUM
                      H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M22 )
-  100             CONTINUE
+  40              CONTINUE
 *
                   IF( ACCUM ) THEN
                      KMS = K - INCOL
-                     DO 110 J = MAX( 1, KTOP-INCOL ), KDU
+                     DO 50 J = MAX( 1, KTOP-INCOL ), KDU
                         REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
      $                           V( 2, M22 )*U( J, KMS+2 ) )
                         U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
                         U( J, KMS+2 ) = U( J, KMS+2 ) -
      $                                  REFSUM*V( 2, M22 )
-  110             CONTINUE
+  50                 CONTINUE
                   ELSE IF( WANTZ ) THEN
-                     DO 120 J = ILOZ, IHIZ
+                     DO 60 J = ILOZ, IHIZ
                         REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
      $                           Z( J, K+2 ) )
                         Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
                         Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M22 )
-  120                CONTINUE
+  60                 CONTINUE
                   END IF
                END IF
             END IF
 *
 *           ==== Multiply H by reflections from the left ====
 *
-            DO 40 J = MAX( KTOP, KRCOL ), JBOT
+            DO 80 J = MAX( KTOP, KRCOL ), JBOT
                MEND = MIN( MBOT, ( J-KRCOL+1 ) / 2 )
-               DO 30 M = MEND, MTOP, -1
+               DO 70 M = MEND, MTOP, -1
                   K = KRCOL + 2*( M-1 )
                   REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
      $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
                   H( K+1, J ) = H( K+1, J ) - REFSUM
                   H( K+2, J ) = H( K+2, J ) - REFSUM*V( 2, M )
                   H( K+3, J ) = H( K+3, J ) - REFSUM*V( 3, M )
-   30          CONTINUE
-   40       CONTINUE
-   !          write(*,*) "After left update"
-   !          DO IWRITE = 1, N
-   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
-   !   $         JWRITE = 1, N )
-   !          END DO
+   70          CONTINUE
+   80       CONTINUE
 *
 *           ==== Multiply H by reflections from the right.
 *           .    Delay filling in the last row until the
@@ -602,16 +585,16 @@
             ELSE
                JTOP = KTOP
             END IF
-            DO 90 M = MBOT, MTOP, -1 
+            DO 120 M = MBOT, MTOP, -1 
                IF( V( 1, M ).NE.ZERO ) THEN
                   K = KRCOL + 2*( M-1 )
-                  DO 60 J = JTOP, MIN( KBOT, K+3 )
+                  DO 90 J = JTOP, MIN( KBOT, K+3 )
                      REFSUM = V( 1, M )*( H( J, K+1 )+V( 2, M )*
      $                        H( J, K+2 )+V( 3, M )*H( J, K+3 ) )
                      H( J, K+1 ) = H( J, K+1 ) - REFSUM
                      H( J, K+2 ) = H( J, K+2 ) - REFSUM*V( 2, M )
                      H( J, K+3 ) = H( J, K+3 ) - REFSUM*V( 3, M )
-   60             CONTINUE
+   90             CONTINUE
 *
                   IF( ACCUM ) THEN
 *
@@ -620,39 +603,34 @@
 *                    .    multiply.) ====
 *
                      KMS = K - INCOL
-                     DO 70 J = MAX( 1, KTOP-INCOL ), KDU
+                     DO 100 J = MAX( 1, KTOP-INCOL ), KDU
                         REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
      $                           U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
                         U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
                         U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M )
                         U( J, KMS+3 ) = U( J, KMS+3 ) - REFSUM*V( 3, M )
-   70                CONTINUE
+  100                CONTINUE
                   ELSE IF( WANTZ ) THEN
 *
 *                    ==== U is not accumulated, so update Z
 *                    .    now by multiplying by reflections
 *                    .    from the right. ====
 *
-                     DO 80 J = ILOZ, IHIZ
+                     DO 110 J = ILOZ, IHIZ
                         REFSUM = V( 1, M )*( Z( J, K+1 )+V( 2, M )*
      $                           Z( J, K+2 )+V( 3, M )*Z( J, K+3 ) )
                         Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
                         Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M )
                         Z( J, K+3 ) = Z( J, K+3 ) - REFSUM*V( 3, M )
-   80                CONTINUE
+  110                CONTINUE
                   END IF
                END IF
-   90       CONTINUE
-   !          write(*,*) "After right update"
-   !          DO IWRITE = 1, N
-   !             WRITE( *, '( 60ES10.2 )' ) ( H( IWRITE, JWRITE ),
-   !   $         JWRITE = 1, N )
-   !          END DO
+  120       CONTINUE
 *
 *           ==== Vigilant deflation check ====
 *
             MSTART = MTOP
-            IF( KRCOL+3*( MSTART-1 ).LT.KTOP )
+            IF( KRCOL+2*( MSTART-1 ).LT.KTOP )
      $         MSTART = MSTART + 1
             MEND = MBOT
             IF( BMP22 )
@@ -660,7 +638,7 @@
             IF( KRCOL.EQ.KBOT-2 )
      $         MEND = MEND + 1
             DO 130 M = MSTART, MEND
-               K = MIN( KBOT-1, KRCOL+3*( M-1 ) )
+               K = MIN( KBOT-1, KRCOL+2*( M-1 ) )
 *
 *              ==== The following convergence test requires that
 *              .    the tradition small-compared-to-nearby-diagonals
@@ -706,7 +684,7 @@
 *
 *           ==== End of near-the-diagonal bulge chase. ====
 *
-  150    CONTINUE
+  140    CONTINUE
 *
 *        ==== Use U (if accumulated) to update far-from-diagonal
 *        .    entries in H.  If required, use U to update Z as
@@ -720,220 +698,45 @@
                JTOP = KTOP
                JBOT = KBOT
             END IF
-            IF( ( .NOT.BLK22 ) .OR. ( INCOL.LT.KTOP ) .OR.
-     $          ( NDCOL.GT.KBOT ) .OR. ( NS.LE.2 ) ) THEN
+            K1 = MAX( 1, KTOP-INCOL )
+            NU = ( KDU-MAX( 0, NDCOL-KBOT ) ) - K1 + 1
 *
-*              ==== Updates not exploiting the 2-by-2 block
-*              .    structure of U.  K1 and NU keep track of
-*              .    the location and size of U in the special
-*              .    cases of introducing bulges and chasing
-*              .    bulges off the bottom.  In these special
-*              .    cases and in case the number of shifts
-*              .    is NS = 2, there is no 2-by-2 block
-*              .    structure to exploit.  ====
+*           ==== Horizontal Multiply ====
 *
-               K1 = MAX( 1, KTOP-INCOL )
-               NU = ( KDU-MAX( 0, NDCOL-KBOT ) ) - K1 + 1
-*
-*              ==== Horizontal Multiply ====
-*
-               DO 160 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
-                  JLEN = MIN( NH, JBOT-JCOL+1 )
-                  CALL DGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 ),
+            DO 150 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
+               JLEN = MIN( NH, JBOT-JCOL+1 )
+               CALL DGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 ),
      $                        LDU, H( INCOL+K1, JCOL ), LDH, ZERO, WH,
      $                        LDWH )
-                  CALL DLACPY( 'ALL', NU, JLEN, WH, LDWH,
+               CALL DLACPY( 'ALL', NU, JLEN, WH, LDWH,
      $                         H( INCOL+K1, JCOL ), LDH )
-  160          CONTINUE
+  150       CONTINUE
 *
-*              ==== Vertical multiply ====
+*           ==== Vertical multiply ====
 *
-               DO 170 JROW = JTOP, MAX( KTOP, INCOL ) - 1, NV
-                  JLEN = MIN( NV, MAX( KTOP, INCOL )-JROW )
+            DO 160 JROW = JTOP, MAX( KTOP, INCOL ) - 1, NV
+               JLEN = MIN( NV, MAX( KTOP, INCOL )-JROW )
+               CALL DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+     $                     H( JROW, INCOL+K1 ), LDH, U( K1, K1 ),
+     $                     LDU, ZERO, WV, LDWV )
+               CALL DLACPY( 'ALL', JLEN, NU, WV, LDWV,
+     $                      H( JROW, INCOL+K1 ), LDH )
+  160       CONTINUE
+*
+*           ==== Z multiply (also vertical) ====
+*
+            IF( WANTZ ) THEN
+               DO 170 JROW = ILOZ, IHIZ, NV
+                  JLEN = MIN( NV, IHIZ-JROW+1 )
                   CALL DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
-     $                        H( JROW, INCOL+K1 ), LDH, U( K1, K1 ),
+     $                        Z( JROW, INCOL+K1 ), LDZ, U( K1, K1 ),
      $                        LDU, ZERO, WV, LDWV )
                   CALL DLACPY( 'ALL', JLEN, NU, WV, LDWV,
-     $                         H( JROW, INCOL+K1 ), LDH )
+     $                         Z( JROW, INCOL+K1 ), LDZ )
   170          CONTINUE
-*
-*              ==== Z multiply (also vertical) ====
-*
-               IF( WANTZ ) THEN
-                  DO 180 JROW = ILOZ, IHIZ, NV
-                     JLEN = MIN( NV, IHIZ-JROW+1 )
-                     CALL DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
-     $                           Z( JROW, INCOL+K1 ), LDZ, U( K1, K1 ),
-     $                           LDU, ZERO, WV, LDWV )
-                     CALL DLACPY( 'ALL', JLEN, NU, WV, LDWV,
-     $                            Z( JROW, INCOL+K1 ), LDZ )
-  180             CONTINUE
-               END IF
-            ELSE
-*
-*              ==== Updates exploiting U's 2-by-2 block structure.
-*              .    (I2, I4, J2, J4 are the last rows and columns
-*              .    of the blocks.) ====
-*
-               I2 = ( KDU+1 ) / 2
-               I4 = KDU
-               J2 = I4 - I2
-               J4 = KDU
-*
-*              ==== KZS and KNZ deal with the band of zeros
-*              .    along the diagonal of one of the triangular
-*              .    blocks. ====
-*
-               KZS = ( J4-J2 ) - ( NS+1 )
-               KNZ = NS + 1
-*
-*              ==== Horizontal multiply ====
-*
-               DO 190 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
-                  JLEN = MIN( NH, JBOT-JCOL+1 )
-*
-*                 ==== Copy bottom of H to top+KZS of scratch ====
-*                  (The first KZS rows get multiplied by zero.) ====
-*
-                  CALL DLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
-     $                         LDH, WH( KZS+1, 1 ), LDWH )
-*
-*                 ==== Multiply by U21**T ====
-*
-                  CALL DLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
-                  CALL DTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
-     $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
-     $                        LDWH )
-*
-*                 ==== Multiply top of H by U11**T ====
-*
-                  CALL DGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
-     $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
-*
-*                 ==== Copy top of H to bottom of WH ====
-*
-                  CALL DLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
-     $                         WH( I2+1, 1 ), LDWH )
-*
-*                 ==== Multiply by U21**T ====
-*
-                  CALL DTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
-     $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )
-*
-*                 ==== Multiply by U22 ====
-*
-                  CALL DGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
-     $                        U( J2+1, I2+1 ), LDU,
-     $                        H( INCOL+1+J2, JCOL ), LDH, ONE,
-     $                        WH( I2+1, 1 ), LDWH )
-*
-*                 ==== Copy it back ====
-*
-                  CALL DLACPY( 'ALL', KDU, JLEN, WH, LDWH,
-     $                         H( INCOL+1, JCOL ), LDH )
-  190          CONTINUE
-*
-*              ==== Vertical multiply ====
-*
-               DO 200 JROW = JTOP, MAX( INCOL, KTOP ) - 1, NV
-                  JLEN = MIN( NV, MAX( INCOL, KTOP )-JROW )
-*
-*                 ==== Copy right of H to scratch (the first KZS
-*                 .    columns get multiplied by zero) ====
-*
-                  CALL DLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 ),
-     $                         LDH, WV( 1, 1+KZS ), LDWV )
-*
-*                 ==== Multiply by U21 ====
-*
-                  CALL DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV )
-                  CALL DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
-     $                        U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
-     $                        LDWV )
-*
-*                 ==== Multiply by U11 ====
-*
-                  CALL DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
-     $                        H( JROW, INCOL+1 ), LDH, U, LDU, ONE, WV,
-     $                        LDWV )
-*
-*                 ==== Copy left of H to right of scratch ====
-*
-                  CALL DLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), LDH,
-     $                         WV( 1, 1+I2 ), LDWV )
-*
-*                 ==== Multiply by U21 ====
-*
-                  CALL DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
-     $                        U( 1, I2+1 ), LDU, WV( 1, 1+I2 ), LDWV )
-*
-*                 ==== Multiply by U22 ====
-*
-                  CALL DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
-     $                        H( JROW, INCOL+1+J2 ), LDH,
-     $                        U( J2+1, I2+1 ), LDU, ONE, WV( 1, 1+I2 ),
-     $                        LDWV )
-*
-*                 ==== Copy it back ====
-*
-                  CALL DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
-     $                         H( JROW, INCOL+1 ), LDH )
-  200          CONTINUE
-*
-*              ==== Multiply Z (also vertical) ====
-*
-               IF( WANTZ ) THEN
-                  DO 210 JROW = ILOZ, IHIZ, NV
-                     JLEN = MIN( NV, IHIZ-JROW+1 )
-*
-*                    ==== Copy right of Z to left of scratch (first
-*                    .     KZS columns get multiplied by zero) ====
-*
-                     CALL DLACPY( 'ALL', JLEN, KNZ,
-     $                            Z( JROW, INCOL+1+J2 ), LDZ,
-     $                            WV( 1, 1+KZS ), LDWV )
-*
-*                    ==== Multiply by U12 ====
-*
-                     CALL DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
-     $                            LDWV )
-                     CALL DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
-     $                           U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
-     $                           LDWV )
-*
-*                    ==== Multiply by U11 ====
-*
-                     CALL DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
-     $                           Z( JROW, INCOL+1 ), LDZ, U, LDU, ONE,
-     $                           WV, LDWV )
-*
-*                    ==== Copy left of Z to right of scratch ====
-*
-                     CALL DLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 ),
-     $                            LDZ, WV( 1, 1+I2 ), LDWV )
-*
-*                    ==== Multiply by U21 ====
-*
-                     CALL DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
-     $                           U( 1, I2+1 ), LDU, WV( 1, 1+I2 ),
-     $                           LDWV )
-*
-*                    ==== Multiply by U22 ====
-*
-                     CALL DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
-     $                           Z( JROW, INCOL+1+J2 ), LDZ,
-     $                           U( J2+1, I2+1 ), LDU, ONE,
-     $                           WV( 1, 1+I2 ), LDWV )
-*
-*                    ==== Copy the result back to Z ====
-*
-                     CALL DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
-     $                            Z( JROW, INCOL+1 ), LDZ )
-  210             CONTINUE
-               END IF
             END IF
          END IF
-  220 CONTINUE
+  180 CONTINUE
 *
 *     ==== End of DLAQR5 ====
 *
