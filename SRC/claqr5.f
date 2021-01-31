@@ -285,9 +285,9 @@
       COMPLEX            ALPHA, BETA, CDUM, REFSUM
       REAL               H11, H12, H21, H22, SAFMAX, SAFMIN, SCL,
      $                   SMLNUM, TST1, TST2, ULP
-      INTEGER            I2, I4, INCOL, J, J2, J4, JBOT, JCOL, JLEN,
-     $                   JROW, JTOP, K, K1, KDU, KMS, KNZ, KRCOL, KZS,
-     $                   M, M22, MBOT, MEND, MSTART, MTOP, NBMPS, NDCOL,
+      INTEGER            I2, I4, INCOL, J, JBOT, JCOL, JLEN,
+     $                   JROW, JTOP, K, K1, KDU, KMS, KRCOL,
+     $                   M, M22, MBOT, MTOP, NBMPS, NDCOL,
      $                   NS, NU
       LOGICAL            ACCUM, BMP22
 *     ..
