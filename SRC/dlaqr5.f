@@ -408,7 +408,7 @@
 *        .    bulges before they are actually introduced or to which
 *        .    to chase bulges beyond column KBOT.)  ====
 *
-         DO 140 KRCOL = INCOL, MIN( INCOL+2*NBMPS-1, KBOT-2 )
+         DO 145 KRCOL = INCOL, MIN( INCOL+2*NBMPS-1, KBOT-2 )
 *
 *           ==== Bulges number MTOP to MBOT are active double implicit
 *           .    shift bulges.  There may or may not also be small
@@ -702,10 +702,10 @@
             ELSE
                JBOT = KBOT
             END IF
-            DO 100 J = MAX( KTOP, KRCOL ), JBOT
-               MEND = MIN( MBOT, ( J-KRCOL ) / 2 )
-               DO 90 M = MEND, MTOP, -1
-                  K = KRCOL + 2*( M-1 )
+*
+            DO 100 M = MBOT, MTOP, -1
+               K = KRCOL + 2*( M-1 )
+               DO 90 J = MAX( KTOP, KRCOL + 2*M ), JBOT
                   REFSUM = V( 1, M )*( H( K+1, J )+V( 2, M )*
      $                     H( K+2, J )+V( 3, M )*H( K+3, J ) )
                   H( K+1, J ) = H( K+1, J ) - REFSUM
@@ -716,47 +716,47 @@
 *
 *           ==== Accumulate orthogonal transformations. ====
 *
-            DO 130 M = MBOT, MTOP, -1 
-               IF( V( 1, M ).NE.ZERO ) THEN
+            IF( ACCUM ) THEN
+*
+*              ==== Accumulate U. (If needed, update Z later
+*              .    with an efficient matrix-matrix
+*              .    multiply.) ====
+*
+               DO 120 M = MBOT, MTOP, -1
                   K = KRCOL + 2*( M-1 )
+                  KMS = K - INCOL
+                  I2 = MAX( 1, KTOP-INCOL )
+                  I2 = MAX( I2, KMS-(KRCOL-INCOL)+1 )
+                  I4 = MIN( KDU, KRCOL + 2*( MBOT-1 ) - INCOL + 5 )
+                  DO 110 J = I2, I4
+                     REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
+     $                        U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
+                     U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
+                     U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M )
+                     U( J, KMS+3 ) = U( J, KMS+3 ) - REFSUM*V( 3, M )
+  110             CONTINUE
+  120          CONTINUE
+            ELSE IF( WANTZ ) THEN
 *
-                  IF( ACCUM ) THEN
+*              ==== U is not accumulated, so update Z
+*              .    now by multiplying by reflections
+*              .    from the right. ====
 *
-*                    ==== Accumulate U. (If necessary, update Z later
-*                    .    with with an efficient matrix-matrix
-*                    .    multiply.) ====
-*
-                     KMS = K - INCOL
-                     I2 = MAX( 1, KTOP-INCOL )
-                     I2 = MAX( I2, KMS-(KRCOL-INCOL)+1 )
-                     I4 = MIN( KDU, KRCOL + 2*( MBOT-1 ) - INCOL + 5 )
-                     DO 110 J = I2, I4
-                        REFSUM = V( 1, M )*( U( J, KMS+1 )+V( 2, M )*
-     $                           U( J, KMS+2 )+V( 3, M )*U( J, KMS+3 ) )
-                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
-                        U( J, KMS+2 ) = U( J, KMS+2 ) - REFSUM*V( 2, M )
-                        U( J, KMS+3 ) = U( J, KMS+3 ) - REFSUM*V( 3, M )
-  110                CONTINUE
-                  ELSE IF( WANTZ ) THEN
-*
-*                    ==== U is not accumulated, so update Z
-*                    .    now by multiplying by reflections
-*                    .    from the right. ====
-*
-                     DO 120 J = ILOZ, IHIZ
-                        REFSUM = V( 1, M )*( Z( J, K+1 )+V( 2, M )*
-     $                           Z( J, K+2 )+V( 3, M )*Z( J, K+3 ) )
-                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
-                        Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M )
-                        Z( J, K+3 ) = Z( J, K+3 ) - REFSUM*V( 3, M )
-  120                CONTINUE
-                  END IF
-               END IF
-  130       CONTINUE
+               DO 140 M = MBOT, MTOP, -1
+                  K = KRCOL + 2*( M-1 )
+                  DO 130 J = ILOZ, IHIZ
+                     REFSUM = V( 1, M )*( Z( J, K+1 )+V( 2, M )*
+     $                        Z( J, K+2 )+V( 3, M )*Z( J, K+3 ) )
+                     Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
+                     Z( J, K+2 ) = Z( J, K+2 ) - REFSUM*V( 2, M )
+                     Z( J, K+3 ) = Z( J, K+3 ) - REFSUM*V( 3, M )
+  130             CONTINUE
+  140          CONTINUE
+            END IF
 *
 *           ==== End of near-the-diagonal bulge chase. ====
 *
-  140    CONTINUE
+  145    CONTINUE
 *
 *        ==== Use U (if accumulated) to update far-from-diagonal
 *        .    entries in H.  If required, use U to update Z as
