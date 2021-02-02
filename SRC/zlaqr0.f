@@ -262,7 +262,7 @@
 *     .    ZLAHQR because of insufficient subdiagonal scratch space.
 *     .    (This is a hard limit.) ====
       INTEGER            NTINY
-      PARAMETER          ( NTINY = 11 )
+      PARAMETER          ( NTINY = 13 )
 *
 *     ==== Exceptional deflation windows:  try to cure rare
 *     .    slow convergence by varying the size of the
@@ -357,7 +357,7 @@
          END IF
 *
 *        ==== NWR = recommended deflation window size.  At this
-*        .    point,  N .GT. NTINY = 11, so there is enough
+*        .    point,  N .GT. NTINY = 13, so there is enough
 *        .    subdiagonal workspace for NWR.GE.2 as required.
 *        .    (In fact, there is enough subdiagonal space for
 *        .    NWR.GE.3.) ====
@@ -367,7 +367,7 @@
          NWR = MIN( IHI-ILO+1, ( N-1 ) / 3, NWR )
 *
 *        ==== NSR = recommended number of simultaneous shifts.
-*        .    At this point N .GT. NTINY = 11, so there is at
+*        .    At this point N .GT. NTINY = 13, so there is at
 *        .    enough subdiagonal workspace for NSR to be even
 *        .    and greater than or equal to two as required. ====
 *
@@ -661,7 +661,7 @@
 *              .      (NVE-by-KDU) vertical work WV arrow along
 *              .      the left-hand-edge. ====
 *
-               KDU = 3*NS - 3
+               KDU = 2*NS
                KU = N - KDU + 1
                KWH = KDU + 1
                NHO = ( N-KDU+1-4 ) - ( KDU+1 ) + 1
