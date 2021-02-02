@@ -233,7 +233,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date Januari 2021
+*> \date January 2021
 *
 *> \ingroup realOTHERauxiliary
 *
