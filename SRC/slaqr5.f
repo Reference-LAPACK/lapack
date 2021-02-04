@@ -483,36 +483,40 @@
 *              .    is zero (as done here) is traditional but probably
 *              .    unnecessary. ====
 *
-               IF( K.GE.KTOP .AND. H( K+1, K ).NE.ZERO ) THEN
-                  TST1 = ABS( H( K, K ) ) + ABS( H( K+1, K+1 ) )
-                  IF( TST1.EQ.ZERO ) THEN
-                     IF( K.GE.KTOP+1 )
-     $                  TST1 = TST1 + ABS( H( K, K-1 ) )
-                     IF( K.GE.KTOP+2 )
-     $                  TST1 = TST1 + ABS( H( K, K-2 ) )
-                     IF( K.GE.KTOP+3 )
-     $                  TST1 = TST1 + ABS( H( K, K-3 ) )
-                     IF( K.LE.KBOT-2 )
-     $                  TST1 = TST1 + ABS( H( K+2, K+1 ) )
-                     IF( K.LE.KBOT-3 )
-     $                  TST1 = TST1 + ABS( H( K+3, K+1 ) )
-                     IF( K.LE.KBOT-4 )
-     $                  TST1 = TST1 + ABS( H( K+4, K+1 ) )
-                  END IF
-                  IF( ABS( H( K+1, K ) ).LE.MAX( SMLNUM, ULP*TST1 ) )
-     $                 THEN
-                     H12 = MAX( ABS( H( K+1, K ) ), ABS( H( K, K+1 ) ) )
-                     H21 = MIN( ABS( H( K+1, K ) ), ABS( H( K, K+1 ) ) )
-                     H11 = MAX( ABS( H( K+1, K+1 ) ),
-     $                     ABS( H( K, K )-H( K+1, K+1 ) ) )
-                     H22 = MIN( ABS( H( K+1, K+1 ) ),
-     $                     ABS( H( K, K )-H( K+1, K+1 ) ) )
-                     SCL = H11 + H12
-                     TST2 = H22*( H11 / SCL )
+               IF( K.GE.KTOP ) THEN
+                  IF( H( K+1, K ).NE.ZERO ) THEN
+                     TST1 = ABS( H( K, K ) ) + ABS( H( K+1, K+1 ) )
+                     IF( TST1.EQ.ZERO ) THEN
+                        IF( K.GE.KTOP+1 )
+     $                     TST1 = TST1 + ABS( H( K, K-1 ) )
+                        IF( K.GE.KTOP+2 )
+     $                     TST1 = TST1 + ABS( H( K, K-2 ) )
+                        IF( K.GE.KTOP+3 )
+     $                     TST1 = TST1 + ABS( H( K, K-3 ) )
+                        IF( K.LE.KBOT-2 )
+     $                     TST1 = TST1 + ABS( H( K+2, K+1 ) )
+                        IF( K.LE.KBOT-3 )
+     $                     TST1 = TST1 + ABS( H( K+3, K+1 ) )
+                        IF( K.LE.KBOT-4 )
+     $                     TST1 = TST1 + ABS( H( K+4, K+1 ) )
+                     END IF
+                     IF( ABS( H( K+1, K ) ).LE.MAX( SMLNUM, ULP*TST1 ) )
+     $                    THEN
+                        H12 = MAX( ABS( H( K+1, K ) ),
+     $                             ABS( H( K, K+1 ) ) )
+                        H21 = MIN( ABS( H( K+1, K ) ),
+     $                             ABS( H( K, K+1 ) ) )
+                        H11 = MAX( ABS( H( K+1, K+1 ) ),
+     $                        ABS( H( K, K )-H( K+1, K+1 ) ) )
+                        H22 = MIN( ABS( H( K+1, K+1 ) ),
+     $                        ABS( H( K, K )-H( K+1, K+1 ) ) )
+                        SCL = H11 + H12
+                        TST2 = H22*( H11 / SCL )
 *
-                     IF( TST2.EQ.ZERO .OR. H21*( H12 / SCL ).LE.
-     $                   MAX( SMLNUM, ULP*TST2 ) ) THEN
-                        H( K+1, K ) = ZERO
+                        IF( TST2.EQ.ZERO .OR. H21*( H12 / SCL ).LE.
+     $                      MAX( SMLNUM, ULP*TST2 ) ) THEN
+                           H( K+1, K ) = ZERO
+                        END IF
                      END IF
                   END IF
                END IF

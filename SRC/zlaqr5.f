@@ -462,37 +462,39 @@
 *              .    is zero (as done here) is traditional but probably
 *              .    unnecessary. ====
 *
-               IF( H( K+1, K ).NE.ZERO ) THEN
-                  TST1 = CABS1( H( K, K ) ) + CABS1( H( K+1, K+1 ) )
-                  IF( TST1.EQ.RZERO ) THEN
-                     IF( K.GE.KTOP+1 )
-     $                  TST1 = TST1 + CABS1( H( K, K-1 ) )
-                     IF( K.GE.KTOP+2 )
-     $                  TST1 = TST1 + CABS1( H( K, K-2 ) )
-                     IF( K.GE.KTOP+3 )
-     $                  TST1 = TST1 + CABS1( H( K, K-3 ) )
-                     IF( K.LE.KBOT-2 )
-     $                  TST1 = TST1 + CABS1( H( K+2, K+1 ) )
-                     IF( K.LE.KBOT-3 )
-     $                  TST1 = TST1 + CABS1( H( K+3, K+1 ) )
-                     IF( K.LE.KBOT-4 )
-     $                  TST1 = TST1 + CABS1( H( K+4, K+1 ) )
-                  END IF
-                  IF( CABS1( H( K+1, K ) ).LE.MAX( SMLNUM, ULP*TST1 ) )
-     $                 THEN
-                     H12 = MAX( CABS1( H( K+1, K ) ),
+               IF( K.GE.KTOP ) THEN
+                  IF( H( K+1, K ).NE.ZERO ) THEN
+                     TST1 = CABS1( H( K, K ) ) + CABS1( H( K+1, K+1 ) )
+                     IF( TST1.EQ.RZERO ) THEN
+                        IF( K.GE.KTOP+1 )
+     $                     TST1 = TST1 + CABS1( H( K, K-1 ) )
+                        IF( K.GE.KTOP+2 )
+     $                     TST1 = TST1 + CABS1( H( K, K-2 ) )
+                        IF( K.GE.KTOP+3 )
+     $                     TST1 = TST1 + CABS1( H( K, K-3 ) )
+                        IF( K.LE.KBOT-2 )
+     $                     TST1 = TST1 + CABS1( H( K+2, K+1 ) )
+                        IF( K.LE.KBOT-3 )
+     $                     TST1 = TST1 + CABS1( H( K+3, K+1 ) )
+                        IF( K.LE.KBOT-4 )
+     $                     TST1 = TST1 + CABS1( H( K+4, K+1 ) )
+                     END IF
+                     IF( CABS1( H( K+1, K ) )
+     $                   .LE.MAX( SMLNUM, ULP*TST1 ) ) THEN
+                        H12 = MAX( CABS1( H( K+1, K ) ),
      $                     CABS1( H( K, K+1 ) ) )
-                     H21 = MIN( CABS1( H( K+1, K ) ),
+                        H21 = MIN( CABS1( H( K+1, K ) ),
      $                     CABS1( H( K, K+1 ) ) )
-                     H11 = MAX( CABS1( H( K+1, K+1 ) ),
+                        H11 = MAX( CABS1( H( K+1, K+1 ) ),
      $                     CABS1( H( K, K )-H( K+1, K+1 ) ) )
-                     H22 = MIN( CABS1( H( K+1, K+1 ) ),
+                        H22 = MIN( CABS1( H( K+1, K+1 ) ),
      $                     CABS1( H( K, K )-H( K+1, K+1 ) ) )
-                     SCL = H11 + H12
-                     TST2 = H22*( H11 / SCL )
+                        SCL = H11 + H12
+                        TST2 = H22*( H11 / SCL )
 *
-                     IF( TST2.EQ.RZERO .OR. H21*( H12 / SCL ).LE.
-     $                   MAX( SMLNUM, ULP*TST2 ) )H( K+1, K ) = ZERO
+                        IF( TST2.EQ.RZERO .OR. H21*( H12 / SCL ).LE.
+     $                      MAX( SMLNUM, ULP*TST2 ) )H( K+1, K ) = ZERO
+                     END IF
                   END IF
                END IF
 *
