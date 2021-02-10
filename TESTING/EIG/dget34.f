@@ -36,7 +36,7 @@
 *> offdiagonal with differing signs) and A1 and C1 are returned with the
 *> same properties.
 *>
-*> The test code verifies these last last assertions, as well as that
+*> The test code verifies these last assertions, as well as that
 *> the residual in the above equation is small.
 *> \endverbatim
 *
