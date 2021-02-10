@@ -323,7 +323,7 @@
      $           NS, SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM,
      $           ISTOPM, IWANTS, IWANTQ, IWANTZ, NORM_INFO, AED_INFO,
      $           NWR, NBR, NSR, ITEMP1, ITEMP2, RCOST
-      LOGICAL :: ILSCHUR, ILQ, ILZ, LQUERY
+      LOGICAL :: ILSCHUR, ILQ, ILZ
       CHARACTER :: JBCMPZ*3
 
 *     External Functions

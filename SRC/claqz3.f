@@ -226,7 +226,7 @@
 *     Local scalars
       INTEGER :: I, J, NS, ISTARTM, ISTOPM, SHEIGHT, SWIDTH, K, NP,
      $           ISTARTB, ISTOPB, ISHIFT, NBLOCK, NPOS
-      REAL :: SAFMIN, SAFMAX, C, TEMPR, SCALE
+      REAL :: SAFMIN, SAFMAX, C, SCALE
       COMPLEX :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions

@@ -253,7 +253,7 @@
 *     Local Scalars
       LOGICAL :: BULGE
       INTEGER :: JW, KWTOP, KWBOT, ISTOPM, ISTARTM, K, K2, STGEXC_INFO,
-     $           IFST, ILST, LWORKREQ, N_SHIFTS, QZ_SMALL_INFO
+     $           IFST, ILST, LWORKREQ, QZ_SMALL_INFO
       REAL :: S, SMLNUM, ULP, SAFMIN, SAFMAX, C1, S1, TEMP
 
 *     External Functions
