@@ -206,6 +206,7 @@
 *  =====================================================================
       SUBROUTINE DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -297,9 +298,9 @@
 *
       ITMAX = 30 * MAX( 10, NH )
 *
-*     KDFL counts the number of iterations since a deflation
+*     KDEFL counts the number of iterations since a deflation
 *
-      KDFL = -2
+      KDEFL = -2
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1 or 2. Each iteration of the loop works
@@ -608,7 +609,7 @@
          END IF
       END IF
 *     reset deflation counter
-      KDFL = 0
+      KDEFL = 0
 *
 *     return to start of the main loop with new value of I.
 *
