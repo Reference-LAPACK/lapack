@@ -220,8 +220,8 @@
 *     .. Local Scalars ..
       LOGICAL            STRONG, WEAK
       INTEGER            I, M
-      REAL               CQ, CZ, EPS, SA, SB, SCALE, SMLNUM, SS, SUM,
-     $                   THRESHA, THRESHB, WS
+      REAL               CQ, CZ, EPS, SA, SB, SCALE, SMLNUM, SUM,
+     $                   THRESHA, THRESHB
       COMPLEX            CDUM, F, G, SQ, SZ
 *     ..
 *     .. Local Arrays ..

@@ -252,9 +252,10 @@
 *     .. Local Scalars ..
       LOGICAL            STRONG, WEAK
       INTEGER            I, IDUM, LINFO, M
-      REAL               BQRA21, BRQA21, DDUM, DNORM, DSCALEA, DSCALEB,
-     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM, SS,
-     $                   THRESHA, THRESHB, WS
+      REAL               BQRA21, BRQA21, DDUM, DNORMA, DNORMB,
+     $                   DSCALE,
+     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM,
+     $                   THRESHA, THRESHB
 *     ..
 *     .. Local Arrays ..
       INTEGER            IWORK( LDST )

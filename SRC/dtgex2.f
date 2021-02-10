@@ -253,8 +253,8 @@
       LOGICAL            STRONG, WEAK
       INTEGER            I, IDUM, LINFO, M
       DOUBLE PRECISION   BQRA21, BRQA21, DDUM, DNORMA, DNORMB, DSCALE,
-     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM, SS,
-     $                   THRESHA, THRESHB, THRESH, WS
+     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM,
+     $                   THRESHA, THRESHB
 *     ..
 *     .. Local Arrays ..
       INTEGER            IWORK( LDST )
