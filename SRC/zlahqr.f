@@ -220,7 +220,7 @@
       DOUBLE PRECISION   DAT1
       PARAMETER          ( DAT1 = 3.0d0 / 4.0d0 )
       INTEGER            KEXSH
-      PARAMETER          ( KEXSH = 6 )
+      PARAMETER          ( KEXSH = 10 )
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16         CDUM, H11, H11S, H22, SC, SUM, T, T1, TEMP, U,
@@ -320,7 +320,7 @@
 *
 *     KDEFL counts the number of iterations since a deflation
 *
-      KDEFL = -2
+      KDEFL = 0
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1. Each iteration of the loop works
