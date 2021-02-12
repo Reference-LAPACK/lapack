@@ -285,8 +285,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  CBBCSD did not converge. For further details, see
-*>                subroutine CUNCSDBY1.
+*>          > 0:  ZBBCSD did not converge. For further details, see
+*>                subroutine ZUNCSDBY1.
 *> \endverbatim
 *
 *> \par Internal Parameters:
