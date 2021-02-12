@@ -374,7 +374,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
       INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
-     $                   IVT, IVT12, LDG, LDX, LDVT, LWKOPT
+     $                   IVT, IVT12, LDG, LDX, LDVT, LWKMIN, LWKOPT
       REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
      $                   THETA, IOTA, W
       COMPLEX            CNAN
@@ -477,14 +477,17 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
+         LWKMIN = 0
          LWKOPT = 0
 *
          CALL CGEQP3( M + P, N, WORK( IG ), LDG, IWORK, WORK, WORK, -1,
      $                RWORK, INFO )
+         LWKMIN = MAX( LWKMIN, N + 1 )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL CUNGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, WORK, WORK,
      $                -1, INFO )
+         LWKMIN = MAX( LWKMIN, LMAX )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL CUNCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, LMAX,
@@ -492,11 +495,14 @@
      $                    ALPHA,
      $                    U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
      $                    WORK, -1, RWORK, LRWORK, IWORK, INFO )
+         LWKMIN = MAX( LWKMIN, INT( WORK( 1 ) ) )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for CUNGQR
+         LWKMIN = LWKMIN + IVT
          LWKOPT = LWKOPT + IVT
 *        2-by-1 CSD matrix V1 must be stored
          IF( WANTX ) THEN
+            LWKMIN = LWKMIN + LDVT*N
             LWKOPT = LWKOPT + LDVT*N
          END IF
 *        Adjust CUNCSD2BY1 LRWORK for case with maximum memory
@@ -509,6 +515,13 @@
      $                - 8 * MAX( 0, MIN( M, P, N, M+P-N ) )
      $                + 8 * MIN( M, P, N )
          LRWKOPT = MAX( 2*N, LRWORK2BY1 )
+*        Check workspace size
+         IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
+            INFO = -20
+         END IF
+         IF( LRWORK.LT.LRWKOPT .AND. .NOT.LQUERY ) THEN
+            INFO = -22
+         END IF
 *
          WORK( 1 ) = CMPLX( REAL( LWKOPT ), 0.0E0 )
          RWORK( 1 ) = REAL( LRWKOPT )

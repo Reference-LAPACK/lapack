@@ -351,7 +351,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
       INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
-     $                   IVT, IVT12, LDG, LDX, LDVT, LWKOPT
+     $                   IVT, IVT12, LDG, LDX, LDVT, LWKMIN, LWKOPT
       REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
      $                   THETA, IOTA, W
 *     ..
@@ -452,14 +452,17 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
+         LWKMIN = 0
          LWKOPT = 0
 *
          CALL SGEQP3( M + P, N, WORK( IG ), LDG, IWORK, ALPHA, WORK, -1,
      $                INFO )
+         LWKMIN = MAX( LWKMIN, 3 * N + 1 )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL SORGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, ALPHA, WORK,
      $                -1, INFO )
+         LWKMIN = MAX( LWKMIN, LMAX )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL SORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, LMAX,
@@ -467,12 +470,19 @@
      $                    ALPHA,
      $                    U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
      $                    WORK, -1, IWORK, INFO )
+         LWKMIN = MAX( LWKMIN, INT( WORK( 1 ) ) )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for SORGQR
+         LWKMIN = LWKMIN + IVT
          LWKOPT = LWKOPT + IVT
 *        2-by-1 CSD matrix V1 must be stored
          IF( WANTX ) THEN
+            LWKMIN = LWKMIN + LDVT*N
             LWKOPT = LWKOPT + LDVT*N
+         END IF
+*        Check workspace size
+         IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
+            INFO = -20
          END IF
 *
          WORK( 1 ) = REAL( LWKOPT )
