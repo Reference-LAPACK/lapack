@@ -27,9 +27,9 @@ CFLAGS = -O3
 #  type.
 #
 FC = gfortran
-FFLAGS = -O2 -frecursive -freal-4-real-16 -freal-8-real-16 -fimplicit-none
+FFLAGS = -O2 -frecursive -freal-4-real-16 -freal-8-real-16
 FFLAGS_DRV = $(FFLAGS)
-FFLAGS_NOOPT = -O0 -frecursive -freal-4-real-16 -freal-8-real-16 -fimplicit-none
+FFLAGS_NOOPT = -O0 -frecursive -freal-4-real-16 -freal-8-real-16
 
 #  Define LDFLAGS to the desired linker options for your machine.
 #
