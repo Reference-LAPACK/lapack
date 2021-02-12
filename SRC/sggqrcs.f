@@ -375,7 +375,6 @@
       WANTU2 = LSAME( JOBU2, 'Y' )
       WANTX = LSAME( JOBX, 'Y' )
       LQUERY = ( LWORK.EQ.-1 )
-      LWKOPT = 1
 *
 *     Test the input arguments
 *
@@ -458,7 +457,6 @@
          CALL SGEQP3( M + P, N, WORK( IG ), LDG, IWORK, ALPHA, WORK, -1,
      $                INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-         LWKOPT = INT( WORK( 1 ) )
 *
          CALL SORGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, ALPHA, WORK,
      $                -1, INFO )

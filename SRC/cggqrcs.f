@@ -399,7 +399,6 @@
       WANTU2 = LSAME( JOBU2, 'Y' )
       WANTX = LSAME( JOBX, 'Y' )
       LQUERY = LWORK.EQ.-1 .OR. LRWORK.EQ.-1
-      LWKOPT = 1
 *
 *     Test the input arguments
 *
@@ -483,7 +482,6 @@
          CALL CGEQP3( M + P, N, WORK( IG ), LDG, IWORK, WORK, WORK, -1,
      $                RWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-         LWKOPT = INT( WORK( 1 ) )
 *
          CALL CUNGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, WORK, WORK,
      $                -1, INFO )
