@@ -268,8 +268,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  DBBCSD did not converge. For further details, see
-*>                subroutine DORCSDBY1.
+*>          > 0:  SBBCSD did not converge. For further details, see
+*>                subroutine SORCSDBY1.
 *> \endverbatim
 *
 *> \par Internal Parameters:
