@@ -229,7 +229,7 @@
       REAL               DAT1, DAT2
       PARAMETER          ( DAT1 = 3.0e0 / 4.0e0, DAT2 = -0.4375e0 )
       INTEGER            KEXSH
-      PARAMETER          ( KEXSH = 6 )
+      PARAMETER          ( KEXSH = 10 )
 *     ..
 *     .. Local Scalars ..
       REAL               AA, AB, BA, BB, CS, DET, H11, H12, H21, H21S,
@@ -300,7 +300,7 @@
 *
 *     KDEFL counts the number of iterations since a deflation
 *
-      KDEFL = -2
+      KDEFL = 0
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1 or 2. Each iteration of the loop works
@@ -390,6 +390,7 @@
             H12 = DAT2*S
             H21 = S
             H22 = H11
+         ELSE
 *
 *           Prepare to use Francis' double shift
 *           (i.e. 2nd degree generalized Rayleigh quotient)
