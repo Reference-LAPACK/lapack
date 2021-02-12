@@ -416,15 +416,15 @@
       ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -9
+         INFO = -10
       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN
-         INFO = -11
+         INFO = -12
       ELSE IF( LDU1.LT.1 .OR. ( WANTU1 .AND. LDU1.LT.M ) ) THEN
-         INFO = -15
+         INFO = -16
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
-         INFO = -17
+         INFO = -18
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -19
+         INFO = -20
       END IF
 *
 *     Make sure A is the matrix smaller in norm
