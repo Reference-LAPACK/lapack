@@ -350,11 +350,10 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
-      INTEGER            I, J, K, K1, LMAX, Z, LDG, LDX, LDVT, LWKOPT
+      INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
+     $                   IVT, IVT12, LDG, LDX, LDVT, LWKOPT
       DOUBLE PRECISION   BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
      $                   THETA, IOTA, W
-*     .. Local Arrays ..
-      DOUBLE PRECISION   G( M + P, N ), VT( N, N )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -438,12 +437,15 @@
 *
       SWAPPED = .FALSE.
       L = 0
-      LMAX = MIN( M + P, N )
-      Z = ( M + P ) * N
-      G = WORK( 1 )
       LDG = M + P
-      VT = 0
       LDVT = N
+      LMAX = MIN( M + P, N )
+      IG = 1
+      IG11 = 1
+      IG21 = M + 1
+      IG22 = LDG * M + M + 1
+      IVT = LDG * N + 2
+      IVT12 = IVT + LDVT * M
       THETA = NAN
       IOTA = NAN
       W = NAN
@@ -453,21 +455,23 @@
       IF( INFO.EQ.0 ) THEN
          LWKOPT = 0
 *
-         CALL DGEQP3( M+P, N, G, LDG, IWORK, ALPHA, WORK, -1, INFO )
+         CALL DGEQP3( M + P, N, WORK( IG ), LDG, IWORK, ALPHA, WORK, -1,
+     $                INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = INT( WORK( 1 ) )
 *
-         CALL DORGQR( M + P, LMAX, LMAX, G, LDG, ALPHA, WORK, -1, INFO )
+         CALL DORGQR( M + P, LMAX, LMAX, WORK( IG ), LDG, ALPHA, WORK,
+     $                -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
          CALL DORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, LMAX,
-     $                    G, LDG, G, LDG,
+     $                    WORK( IG ), LDG, WORK( IG ), LDG,
      $                    ALPHA,
-     $                    U1, LDU1, U2, LDU2, VT, LDVT,
+     $                    U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for DORGQR
-         LWKOPT = LWKOPT + Z
+         LWKOPT = LWKOPT + IVT
 *        2-by-1 CSD matrix V1 must be stored
          IF( WANTX ) THEN
             LWKOPT = LWKOPT + LDVT*N
@@ -484,9 +488,7 @@
          RETURN
       ENDIF
 *     Finish initialization
-      IF( WANTX ) THEN
-         VT = WORK( Z + 1 )
-      ELSE
+      IF( .NOT.WANTX ) THEN
          LDVT = 0
       END IF
 *
@@ -506,8 +508,8 @@
 *
 *     Copy matrices A, B into the (M+P) x N matrix G
 *
-      CALL DLACPY( 'A', M, N, A, LDA, G( 1, 1 ), LDG )
-      CALL DLACPY( 'A', P, N, B, LDB, G( M + 1, 1 ), LDG )
+      CALL DLACPY( 'A', M, N, A, LDA, WORK( IG11 ), LDG )
+      CALL DLACPY( 'A', P, N, B, LDB, WORK( IG21 ), LDG )
 *
 *     DEBUG
 *
@@ -533,8 +535,8 @@
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
-      CALL DGEQP3( M + P, N, G, LDG, IWORK, ALPHA,
-     $             WORK( Z + 1 ), LWORK - Z, INFO )
+      CALL DGEQP3( M + P, N, WORK( IG ), LDG, IWORK, ALPHA,
+     $             WORK( IVT ), LWORK - IVT + 1, INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -542,7 +544,7 @@
 *     Determine the rank of G
 *
       DO I = 1, MIN( M + P, N )
-         IF( ABS( G( I, I ) ).LE.TOL ) THEN
+         IF( ABS( WORK( (I-1) * LDG + I ) ).LE.TOL ) THEN
             EXIT
          END IF
          L = L + 1
@@ -566,11 +568,11 @@
 *
       IF( WANTX ) THEN
          IF( L.LE.M ) THEN
-             CALL DLACPY( 'U', L, N, G, LDG, A, LDA )
+             CALL DLACPY( 'U', L, N, WORK( IG ), LDG, A, LDA )
              CALL DLASET( 'L', L - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
          ELSE
-             CALL DLACPY( 'U', M, N, G, LDG, A, LDA )
-             CALL DLACPY( 'U', L - M, N - M, G( M+1,M+1 ), LDG, B, LDB )
+             CALL DLACPY( 'U', M, N, WORK( IG ), LDG, A, LDA )
+             CALL DLACPY( 'U', L - M, N - M, WORK( IG22 ), LDG, B, LDB )
 *
              CALL DLASET( 'L', M - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
              CALL DLASET( 'L', L-M-1, N, 0.0D0, 0.0D0, B( 2, 1 ), LDB )
@@ -579,8 +581,8 @@
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL DORGQR( M + P, L, L, G, LDG, ALPHA,
-     $             WORK( Z + 1 ), LWORK - Z, INFO )
+      CALL DORGQR( M + P, L, L, WORK( IG ), LDG, ALPHA,
+     $             WORK( IVT ), LWORK - IVT + 1, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -595,10 +597,10 @@
       K = MIN( M, P, L, M + P - L )
       K1 = MAX( L - P, 0 )
       CALL DORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, L,
-     $                 G( 1, 1 ), LDG, G( M + 1, 1 ), LDG,
+     $                 WORK( IG11 ), LDG, WORK( IG21 ), LDG,
      $                 ALPHA,
-     $                 U1, LDU1, U2, LDU2, VT, LDVT,
-     $                 WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
+     $                 U1, LDU1, U2, LDU2, WORK( IVT ), LDVT,
+     $                 WORK( IVT + LDVT*N ), LWORK - IVT - LDVT*N + 1,
      $                 IWORK( N + 1 ), INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
@@ -614,14 +616,14 @@
          LDX = L
          IF ( L.LE.M ) THEN
             CALL DGEMM( 'N', 'N', L, N, L,
-     $                  1.0D0, VT, LDVT, A, LDA,
+     $                  1.0D0, WORK( IVT ), LDVT, A, LDA,
      $                  0.0D0, WORK( 2 ), LDX )
          ELSE
             CALL DGEMM( 'N', 'N', L, N, M,
-     $                  1.0D0, VT( 1, 1 ), LDVT, A, LDA,
+     $                  1.0D0, WORK( IVT ), LDVT, A, LDA,
      $                  0.0D0, WORK( 2 ), LDX )
             CALL DGEMM( 'N', 'N', L, N - M, L - M,
-     $                  1.0D0, VT( 1, M + 1 ), LDVT, B, LDB,
+     $                  1.0D0, WORK( IVT12 ), LDVT, B, LDB,
      $                  1.0D0, WORK( L*M + 2 ), LDX )
          END IF
 *        Revert column permutation Π by permuting the columns of X
@@ -640,7 +642,7 @@
             ALPHA( I ) = 0.0D0
             BETA( I ) = 1.0D0
             IF( WANTX ) THEN
-               WORK( Z + I + 1 ) = 1.0D0
+               WORK( IVT + I ) = 1.0D0
             END IF
          ELSE
 *           iota comes in the greek alphabet after theta
@@ -651,13 +653,13 @@
                ALPHA( I ) =  ( SIN( IOTA ) / TAN( THETA ) ) / W
                BETA( I ) = SIN( IOTA )
                IF( WANTX ) THEN
-                  WORK( Z + I + 1 ) = SIN( THETA ) / SIN( IOTA )
+                  WORK( IVT + I ) = SIN( THETA ) / SIN( IOTA )
                END IF
             ELSE
                ALPHA( I ) = COS( IOTA )
                BETA( I ) = SIN( IOTA )
                IF( WANTX ) THEN
-                  WORK( Z + I + 1 ) = COS( THETA ) / COS( IOTA ) / W
+                  WORK( IVT + I ) = COS( THETA ) / COS( IOTA ) / W
                END IF
             END IF
          END IF
@@ -670,7 +672,7 @@
             END DO
             DO I = 1, K
                WORK( LDX*J + I + K1 + 1 ) =
-     $         WORK( LDX*J + I + K1 + 1 ) * WORK( Z + I + 1 )
+     $         WORK( LDX*J + I + K1 + 1 ) * WORK( IVT + I )
             END DO
          END DO
       END IF
