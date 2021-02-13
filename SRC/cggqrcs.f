@@ -315,7 +315,7 @@
 *
 *> \author Christoph Conrads (https://christoph-conrads.name)
 *
-*> \date October 2019, May 2020
+*> \date October 2019, May 2020, February 2021
 *
 *> \ingroup realGEsing
 *
@@ -345,10 +345,10 @@
      $                              WORK, LWORK, RWORK, LRWORK, IWORK,
      $                              INFO )
 *
-*  -- LAPACK driver routine (version 3.7.0) --
+*  -- LAPACK driver routine (version 3.10.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*     September 2016
+*     February 2021
 *
       IMPLICIT NONE
 *     .. Scalar Arguments ..
