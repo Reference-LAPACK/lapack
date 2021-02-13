@@ -349,7 +349,7 @@
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
       INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
      $                   IVT, IVT12, LDG, LDX, LDVT, LWKMIN, LWKOPT
-      REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
+      REAL               BASE, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
      $                   THETA, IOTA, W
 *     ..
 *     .. External Functions ..
@@ -427,10 +427,6 @@
 *
 *     Initialize variables
 *
-*     Computing 0.0 / 0.0 directly causes compiler errors
-      NAN = 1.0E0
-      NAN = 0.0 / (NAN - 1.0E0)
-*
       SWAPPED = .FALSE.
       L = 0
       LDG = M + P
@@ -442,9 +438,9 @@
       IG22 = LDG * M + M + 1
       IVT = LDG * N + 2
       IVT12 = IVT + LDVT * M
-      THETA = NAN
-      IOTA = NAN
-      W = NAN
+      THETA = -1
+      IOTA = -1
+      W = -1
 *
 *     Compute workspace
 *
@@ -515,11 +511,6 @@
 *
       CALL SLACPY( 'A', M, N, A, LDA, WORK( IG11 ), LDG )
       CALL SLACPY( 'A', P, N, B, LDB, WORK( IG21 ), LDG )
-*
-*     DEBUG
-*
-      CALL SLASET( 'A', M, N, NAN, NAN, A, LDA )
-      CALL SLASET( 'A', P, N, NAN, NAN, B, LDB )
 *
 *     Compute the Frobenius norm of matrix G
 *
@@ -592,11 +583,6 @@
          RETURN
       END IF
 *
-*     DEBUG
-*
-      ALPHA( 1:N ) = NAN
-      BETA( 1:N ) = NAN
-*
 *     Compute the CS decomposition of Q1( :, 1:L )
 *
       K = MIN( M, P, L, M + P - L )
@@ -610,10 +596,6 @@
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
-*
-*     DEBUG
-*
-      WORK( 1:LDG*N ) = NAN
 *
 *     Compute X = V^T R1( 1:L, : ) and adjust for matrix scaling
 *
