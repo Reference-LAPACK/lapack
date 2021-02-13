@@ -106,10 +106,10 @@
 *  =====================================================================
       SUBROUTINE SLASRTR( ID, M, N, A, LDA, IPVT, WORK, INFO )
 *
-*  -- LAPACK computational routine (version TODO) --
+*  -- LAPACK computational routine (version 3.10.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     TODO
+*     February 2021
 *
 *     .. Scalar Arguments ..
       CHARACTER          ID
