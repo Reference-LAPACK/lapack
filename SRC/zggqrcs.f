@@ -292,15 +292,12 @@
 *> \par Internal Parameters:
 *  =========================
 *>
-*> \param[out] W
 *> \verbatim
-*>          W is DOUBLE PRECISION
+*>  W       DOUBLE PRECISION
 *>          W is a radix power chosen such that the Frobenius norm of A
 *>          and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of each
 *>          other.
-*> \endverbatim
 *>
-*> \verbatim
 *>  TOL     DOUBLE PRECISION
 *>          Let G = (A**H,B**H)**H. TOL is the threshold to determine
 *>          the effective rank of G. Generally, it is set to
@@ -328,7 +325,7 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  ZGGQRCS should be significantly faster than DGGSVD3 for large
+*>  ZGGQRCS should be significantly faster than ZGGSVD3 for large
 *>  matrices because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, ZGGQRCS requires a much larger

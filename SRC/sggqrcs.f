@@ -275,15 +275,12 @@
 *> \par Internal Parameters:
 *  =========================
 *>
-*> \param[out] W
 *> \verbatim
-*>          W is REAL
+*>  W       REAL
 *>          W is a radix power chosen such that the Frobenius norm of A
 *>          and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of each
 *>          other.
-*> \endverbatim
 *>
-*> \verbatim
 *>  TOL     REAL
 *>          Let G = (A**T,B**T)**T. TOL is the threshold to determine
 *>          the effective rank of G. Generally, it is set to
@@ -311,7 +308,7 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  SGGQRCS should be significantly faster than DGGSVD3 for large
+*>  SGGQRCS should be significantly faster than SGGSVD3 for large
 *>  matrices because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, SGGQRCS requires a much larger

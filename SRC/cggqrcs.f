@@ -292,15 +292,12 @@
 *> \par Internal Parameters:
 *  =========================
 *>
-*> \param[out] W
 *> \verbatim
-*>          W is REAL
+*>  W       REAL
 *>          W is a radix power chosen such that the Frobenius norm of A
 *>          and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of each
 *>          other.
-*> \endverbatim
 *>
-*> \verbatim
 *>  TOL     REAL
 *>          Let G = (A**H,B**H)**H. TOL is the threshold to determine
 *>          the effective rank of G. Generally, it is set to
@@ -328,7 +325,7 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  CGGQRCS should be significantly faster than DGGSVD3 for large
+*>  CGGQRCS should be significantly faster than CGGSVD3 for large
 *>  matrices because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, CGGQRCS requires a much larger

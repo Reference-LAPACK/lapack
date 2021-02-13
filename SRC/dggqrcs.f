@@ -275,15 +275,12 @@
 *> \par Internal Parameters:
 *  =========================
 *>
-*> \param[out] W
 *> \verbatim
-*>          W is DOUBLE PRECISION
+*>  W       DOUBLE PRECISION
 *>          W is a radix power chosen such that the Frobenius norm of A
 *>          and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of each
 *>          other.
-*> \endverbatim
 *>
-*> \verbatim
 *>  TOL     DOUBLE PRECISION
 *>          Let G = (A**T,B**T)**T. TOL is the threshold to determine
 *>          the effective rank of G. Generally, it is set to
