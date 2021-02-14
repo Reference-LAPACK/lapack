@@ -60,9 +60,9 @@
 *>          K is INTEGER
 *>              Index indicating the position of the bulge.
 *>              On entry, the bulge is located in
-*>              (A(k+1:k+2,k:k+1),B(k+1:k+2,k:k+1)).
+*>              (A(k+1,k),B(k+1,k)).
 *>              On exit, the bulge is located in
-*>              (A(k+2:k+3,k+1:k+2),B(k+2:k+3,k+1:k+2)).
+*>              (A(k+2,k+1),B(k+2,k+1)).
 *> \endverbatim
 *>
 *> \param[in] ISTARTM
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          ISTOPM is INTEGER
 *>              Updates to (A,B) are restricted to
-*>              (istartm:k+3,k:istopm). It is assumed
+*>              (istartm:k+2,k:istopm). It is assumed
 *>              without checking that istartm <= k+1 and
 *>              k+2 <= istopm
 *> \endverbatim
@@ -112,12 +112,13 @@
 *> \verbatim
 *>          NQ is INTEGER
 *>              The order of the matrix Q
+*> \endverbatim
 *>
 *> \param[in] QSTART
 *> \verbatim
 *>          QSTART is INTEGER
 *>              Start index of the matrix Q. Rotations are applied
-*>              To columns k+2-qStart:k+4-qStart of Q.
+*>              To columns k+2-qStart:k+3-qStart of Q.
 *> \endverbatim
 *
 *> \param[inout] Q
@@ -136,12 +137,13 @@
 *> \verbatim
 *>          NZ is INTEGER
 *>              The order of the matrix Z
+*> \endverbatim
 *>
 *> \param[in] ZSTART
 *> \verbatim
 *>          ZSTART is INTEGER
 *>              Start index of the matrix Z. Rotations are applied
-*>              To columns k+1-qStart:k+3-qStart of Z.
+*>              To columns k+1-qStart:k+2-qStart of Z.
 *> \endverbatim
 *
 *> \param[inout] Z
@@ -163,7 +165,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complexGEcomputational
 *>
 *  =====================================================================
       SUBROUTINE CLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,

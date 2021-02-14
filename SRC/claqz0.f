@@ -39,43 +39,33 @@
 *>
 *> \verbatim
 *>
-*> CLAQZ0 computes the eigenvalues of a real matrix pair (H,T),
+*> CLAQZ0 computes the eigenvalues of a matrix pair (H,T),
 *> where H is an upper Hessenberg matrix and T is upper triangular,
 *> using the double-shift QZ method.
 *> Matrix pairs of this type are produced by the reduction to
-*> generalized upper Hessenberg form of a real matrix pair (A,B):
+*> generalized upper Hessenberg form of a matrix pair (A,B):
 *>
-*>    A = Q1*H*Z1**T,  B = Q1*T*Z1**T,
+*>    A = Q1*H*Z1**H,  B = Q1*T*Z1**H,
 *>
-*> as computed by DGGHRD.
+*> as computed by CGGHRD.
 *>
 *> If JOB='S', then the Hessenberg-triangular pair (H,T) is
 *> also reduced to generalized Schur form,
 *>
-*>    H = Q*S*Z**T,  T = Q*P*Z**T,
+*>    H = Q*S*Z**H,  T = Q*P*Z**H,
 *>
-*> where Q and Z are orthogonal matrices, P is an upper triangular
-*> matrix, and S is a quasi-triangular matrix with 1-by-1 and 2-by-2
-*> diagonal blocks.
+*> where Q and Z are unitary matrices, P and S are an upper triangular
+*> matrices.
 *>
-*> The 1-by-1 blocks correspond to real eigenvalues of the matrix pair
-*> (H,T) and the 2-by-2 blocks correspond to complex conjugate pairs of
-*> eigenvalues.
-*>
-*> Additionally, the 2-by-2 upper triangular diagonal blocks of P
-*> corresponding to 2-by-2 blocks of S are reduced to positive diagonal
-*> form, i.e., if S(j+1,j) is non-zero, then P(j+1,j) = P(j,j+1) = 0,
-*> P(j,j) > 0, and P(j+1,j+1) > 0.
-*>
-*> Optionally, the orthogonal matrix Q from the generalized Schur
+*> Optionally, the unitary matrix Q from the generalized Schur
 *> factorization may be postmultiplied into an input matrix Q1, and the
-*> orthogonal matrix Z may be postmultiplied into an input matrix Z1.
-*> If Q1 and Z1 are the orthogonal matrices from DGGHRD that reduced
+*> unitary matrix Z may be postmultiplied into an input matrix Z1.
+*> If Q1 and Z1 are the unitary matrices from CGGHRD that reduced
 *> the matrix pair (A,B) to generalized upper Hessenberg form, then the
-*> output matrices Q1*Q and Z1*Z are the orthogonal factors from the
+*> output matrices Q1*Q and Z1*Z are the unitary factors from the
 *> generalized Schur factorization of (A,B):
 *>
-*>    A = (Q1*Q)*S*(Z1*Z)**T,  B = (Q1*Q)*P*(Z1*Z)**T.
+*>    A = (Q1*Q)*S*(Z1*Z)**H,  B = (Q1*Q)*P*(Z1*Z)**H.
 *>
 *> To avoid overflow, eigenvalues of the matrix pair (H,T) (equivalently,
 *> of (A,B)) are computed as a pair of values (alpha,beta), where alpha is
@@ -86,7 +76,7 @@
 *> and if alpha is nonzero, mu = beta / alpha is an eigenvalue of the
 *> alternate form of the GNEP
 *>    mu*A*y = B*y.
-*> Real eigenvalues can be read directly from the generalized Schur
+*> Eigenvalues can be read directly from the generalized Schur
 *> form:
 *>   alpha = S(i,i), beta = P(i,i).
 *>
@@ -98,7 +88,7 @@
 *>      Algorithm with Aggressive Early Deflation", SIAM J. Numer.
 *>      Anal., 29(2006), pp. 199--227.
 *>
-*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebrilm "A multishift,
+*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebril "A multishift,
 *>      multipole rational QZ method with agressive early deflation"
 *> \endverbatim
 *
@@ -118,7 +108,7 @@
 *>          = 'N': Left Schur vectors (Q) are not computed;
 *>          = 'I': Q is initialized to the unit matrix and the matrix Q
 *>                 of left Schur vectors of (A,B) is returned;
-*>          = 'V': Q must contain an orthogonal matrix Q1 on entry and
+*>          = 'V': Q must contain an unitary matrix Q1 on entry and
 *>                 the product Q1*Q is returned.
 *> \endverbatim
 *>
@@ -128,7 +118,7 @@
 *>          = 'N': Right Schur vectors (Z) are not computed;
 *>          = 'I': Z is initialized to the unit matrix and the matrix Z
 *>                 of right Schur vectors of (A,B) is returned;
-*>          = 'V': Z must contain an orthogonal matrix Z1 on entry and
+*>          = 'V': Z must contain an unitary matrix Z1 on entry and
 *>                 the product Z1*Z is returned.
 *> \endverbatim
 *>
@@ -205,10 +195,10 @@
 *> \param[in,out] Q
 *> \verbatim
 *>          Q is COMPLEX array, dimension (LDQ, N)
-*>          On entry, if COMPQ = 'V', the orthogonal matrix Q1 used in
+*>          On entry, if COMPQ = 'V', the unitary matrix Q1 used in
 *>          the reduction of (A,B) to generalized Hessenberg form.
-*>          On exit, if COMPQ = 'I', the orthogonal matrix of left Schur
-*>          vectors of (A,B), and if COMPQ = 'V', the orthogonal matrix
+*>          On exit, if COMPQ = 'I', the unitary matrix of left Schur
+*>          vectors of (A,B), and if COMPQ = 'V', the unitary matrix
 *>          of left Schur vectors of (A,B).
 *>          Not referenced if COMPQ = 'N'.
 *> \endverbatim
@@ -223,11 +213,11 @@
 *> \param[in,out] Z
 *> \verbatim
 *>          Z is COMPLEX array, dimension (LDZ, N)
-*>          On entry, if COMPZ = 'V', the orthogonal matrix Z1 used in
+*>          On entry, if COMPZ = 'V', the unitary matrix Z1 used in
 *>          the reduction of (A,B) to generalized Hessenberg form.
-*>          On exit, if COMPZ = 'I', the orthogonal matrix of
+*>          On exit, if COMPZ = 'I', the unitary matrix of
 *>          right Schur vectors of (H,T), and if COMPZ = 'V', the
-*>          orthogonal matrix of right Schur vectors of (A,B).
+*>          unitary matrix of right Schur vectors of (A,B).
 *>          Not referenced if COMPZ = 'N'.
 *> \endverbatim
 *>
@@ -265,6 +255,7 @@
 *>          REC is INTEGER
 *>             REC indicates the current recursion level. Should be set
 *>             to 0 on first call.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -283,7 +274,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complexGEcomputational
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,

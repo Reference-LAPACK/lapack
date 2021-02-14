@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*>      DLAQZ3 chases a 2x2 shift bulge in a matrix pencil down a single position
+*>      DLAQZ2 chases a 2x2 shift bulge in a matrix pencil down a single position
 *> \endverbatim
 *
 *
@@ -113,6 +113,7 @@
 *> \verbatim
 *>          NQ is INTEGER
 *>              The order of the matrix Q
+*> \endverbatim
 *>
 *> \param[in] QSTART
 *> \verbatim
@@ -137,6 +138,7 @@
 *> \verbatim
 *>          NZ is INTEGER
 *>              The order of the matrix Z
+*> \endverbatim
 *>
 *> \param[in] ZSTART
 *> \verbatim
@@ -287,7 +289,7 @@
          A( K+1, K ) = TEMP
          A( K+2, K ) = ZERO
 *
-*     Apply transformations from the left
+*        Apply transformations from the left
 *
          CALL DROT( ISTOPM-K, A( K+2, K+1 ), LDA, A( K+3, K+1 ), LDA,
      $              C1, S1 )

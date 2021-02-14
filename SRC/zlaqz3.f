@@ -52,6 +52,7 @@
 *>          ILSCHUR is LOGICAL
 *>              Determines whether or not to update the full Schur form
 *> \endverbatim
+*>
 *> \param[in] ILQ
 *> \verbatim
 *>          ILQ is LOGICAL
@@ -197,7 +198,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complex16GEcomputational
 *>
 *  =====================================================================
       SUBROUTINE ZLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,
@@ -336,8 +337,8 @@
      $                ILO+NS ), LDB )
       END IF
       IF ( ILQ ) THEN
-        CALL ZGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, CONE, Q( 1, ILO ),
-     $              LDQ, QC, LDQC, CZERO, WORK, N )
+         CALL ZGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, CONE, Q( 1, ILO ),
+     $               LDQ, QC, LDQC, CZERO, WORK, N )
          CALL ZLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
       END IF
 
@@ -400,12 +401,14 @@
          SHEIGHT = NS+NP
          SWIDTH = ISTOPM-( K+NS+NP )+1
          IF ( SWIDTH > 0 ) THEN
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
-     $               A( K+1, K+NS+NP ), LDA, CZERO, WORK, SHEIGHT )
+            CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $                  LDQC, A( K+1, K+NS+NP ), LDA, CZERO, WORK,
+     $                  SHEIGHT )
             CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
      $                   K+NS+NP ), LDA )
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
-     $               B( K+1, K+NS+NP ), LDB, CZERO, WORK, SHEIGHT )
+            CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $                  LDQC, B( K+1, K+NS+NP ), LDB, CZERO, WORK,
+     $                  SHEIGHT )
             CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
      $                   K+NS+NP ), LDB )
          END IF
@@ -501,8 +504,8 @@
      $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
-      CALL ZGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ), LDZ,
-     $            ZC, LDZC, CZERO, WORK, N )
+         CALL ZGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ), LDZ,
+     $               ZC, LDZC, CZERO, WORK, N )
          CALL ZLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF
 

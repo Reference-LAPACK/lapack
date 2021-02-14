@@ -101,7 +101,7 @@
 *>      Algorithm with Aggressive Early Deflation", SIAM J. Numer.
 *>      Anal., 29(2006), pp. 199--227.
 *>
-*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebrilm "A multishift,
+*> Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebril "A multishift,
 *>      multipole rational QZ method with agressive early deflation"
 *> \endverbatim
 *
@@ -277,6 +277,7 @@
 *>          REC is INTEGER
 *>             REC indicates the current recursion level. Should be set
 *>             to 0 on first call.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim

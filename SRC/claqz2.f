@@ -52,6 +52,7 @@
 *>          ILSCHUR is LOGICAL
 *>              Determines whether or not to update the full Schur form
 *> \endverbatim
+*>
 *> \param[in] ILQ
 *> \verbatim
 *>          ILQ is LOGICAL
@@ -200,7 +201,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBEL PRECISION array, dimension (N)
+*>          RWORK is REAL array, dimension (N)
 *> \endverbatim
 *>
 *> \param[in] REC
@@ -223,7 +224,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complexGEcomputational
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,
@@ -252,7 +253,7 @@
 *     Local Scalars
       INTEGER :: JW, KWTOP, KWBOT, ISTOPM, ISTARTM, K, K2, CTGEXC_INFO,
      $           IFST, ILST, LWORKREQ, QZ_SMALL_INFO
-      REAL ::SMLNUM, ULP, SAFMIN, SAFMAX, C1, TEMPR
+      REAL :: SMLNUM, ULP, SAFMIN, SAFMAX, C1, TEMPR
       COMPLEX :: S, S1, TEMP
 
 *     External Functions

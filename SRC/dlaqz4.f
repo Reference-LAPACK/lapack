@@ -357,8 +357,8 @@
      $                ILO+NS ), LDB )
       END IF
       IF ( ILQ ) THEN
-        CALL DGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
-     $              LDQ, QC, LDQC, ZERO, WORK, N )
+         CALL DGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
+     $               LDQ, QC, LDQC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
       END IF
 
@@ -520,8 +520,8 @@
      $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
-      CALL DGEMM( 'N', 'N', N, NS+1, NS+1, ONE, Z( 1, IHI-NS ), LDZ, ZC,
-     $            LDZC, ZERO, WORK, N )
+         CALL DGEMM( 'N', 'N', N, NS+1, NS+1, ONE, Z( 1, IHI-NS ), LDZ,
+     $               ZC, LDZC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF
 

@@ -200,7 +200,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBEL PRECISION array, dimension (N)
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
 *> \endverbatim
 *>
 *> \param[in] REC
@@ -208,7 +208,7 @@
 *>          REC is INTEGER
 *>             REC indicates the current recursion level. Should be set
 *>             to 0 on first call.
-*>
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -224,7 +224,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complex16GEcomputational
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE ZLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,

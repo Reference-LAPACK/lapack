@@ -51,6 +51,7 @@
 *>          ILSCHUR is LOGICAL
 *>              Determines whether or not to update the full Schur form
 *> \endverbatim
+*>
 *> \param[in] ILQ
 *> \verbatim
 *>          ILQ is LOGICAL
@@ -212,6 +213,7 @@
 *>          REC is INTEGER
 *>             REC indicates the current recursion level. Should be set
 *>             to 0 on first call.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim

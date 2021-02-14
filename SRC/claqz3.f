@@ -197,7 +197,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup complexGEcomputational
 *>
 *  =====================================================================
       SUBROUTINE CLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,
@@ -398,12 +398,14 @@
          SHEIGHT = NS+NP
          SWIDTH = ISTOPM-( K+NS+NP )+1
          IF ( SWIDTH > 0 ) THEN
-         CALL CGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
-     $               A( K+1, K+NS+NP ), LDA, CZERO, WORK, SHEIGHT )
+            CALL CGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $                  LDQC, A( K+1, K+NS+NP ), LDA, CZERO, WORK,
+     $                  SHEIGHT )
             CALL CLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
      $                   K+NS+NP ), LDA )
-         CALL CGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
-     $               B( K+1, K+NS+NP ), LDB, CZERO, WORK, SHEIGHT )
+            CALL CGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $                  LDQC, B( K+1, K+NS+NP ), LDB, CZERO, WORK,
+     $                  SHEIGHT )
             CALL CLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
      $                   K+NS+NP ), LDB )
          END IF
@@ -499,8 +501,8 @@
      $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
-      CALL CGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ), LDZ,
-     $            ZC, LDZC, CZERO, WORK, N )
+         CALL CGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ), LDZ,
+     $               ZC, LDZC, CZERO, WORK, N )
          CALL CLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF
 

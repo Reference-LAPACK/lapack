@@ -112,6 +112,7 @@
 *> \verbatim
 *>          NQ is INTEGER
 *>              The order of the matrix Q
+*> \endverbatim
 *>
 *> \param[in] QSTART
 *> \verbatim
@@ -136,6 +137,7 @@
 *> \verbatim
 *>          NZ is INTEGER
 *>              The order of the matrix Z
+*> \endverbatim
 *>
 *> \param[in] ZSTART
 *> \verbatim

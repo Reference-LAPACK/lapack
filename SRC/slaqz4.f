@@ -52,6 +52,7 @@
 *>          ILSCHUR is LOGICAL
 *>              Determines whether or not to update the full Schur form
 *> \endverbatim
+*>
 *> \param[in] ILQ
 *> \verbatim
 *>          ILQ is LOGICAL
@@ -356,8 +357,8 @@
      $                ILO+NS ), LDB )
       END IF
       IF ( ILQ ) THEN
-        CALL SGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
-     $              LDQ, QC, LDQC, ZERO, WORK, N )
+         CALL SGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, ONE, Q( 1, ILO ),
+     $               LDQ, QC, LDQC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
       END IF
 
