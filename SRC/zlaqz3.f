@@ -232,6 +232,8 @@
       COMPLEX*16 :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
+      EXTERNAL :: XERBLA, DLABAD, ZLASET, ZLARTG, ZROT, ZLAQZ1, ZGEMM,
+     $            ZLACPY
       DOUBLE PRECISION, EXTERNAL :: DLAMCH
 
       INFO = 0

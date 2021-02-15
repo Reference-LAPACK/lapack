@@ -188,6 +188,9 @@
       REAL :: C
       COMPLEX :: S, TEMP
 *
+*     External Functions
+      EXTERNAL :: CLARTG, CROT
+*
       IF( K+1 .EQ. IHI ) THEN
 *
 *        Shift is located on the edge of the matrix, remove it

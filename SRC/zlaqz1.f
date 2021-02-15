@@ -189,6 +189,9 @@
       DOUBLE PRECISION :: C
       COMPLEX*16 :: S, TEMP
 *
+*     External Functions
+      EXTERNAL :: ZLARTG, ZROT
+*
       IF( K+1 .EQ. IHI ) THEN
 *
 *        Shift is located on the edge of the matrix, remove it

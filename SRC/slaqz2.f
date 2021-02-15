@@ -185,6 +185,9 @@
 *     Local variables
       REAL :: H( 2, 3 ), C1, S1, C2, S2, TEMP
 *
+*     External functions
+      EXTERNAL :: SLARTG, SROT
+*
       IF( K+2 .EQ. IHI ) THEN
 *        Shift is located on the edge of the matrix, remove it
          H = B( IHI-1:IHI, IHI-2:IHI )

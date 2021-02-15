@@ -258,6 +258,8 @@
       REAL :: S, SMLNUM, ULP, SAFMIN, SAFMAX, C1, S1, TEMP
 
 *     External Functions
+      EXTERNAL :: XERBLA, STGEXC, SLABAD, SLAQZ0, SLACPY, SLASET,
+     $            SLAQZ2, SROT, SLARTG, SLAG2, SGEMM
       REAL, EXTERNAL :: SLAMCH
 
       INFO = 0

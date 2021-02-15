@@ -232,6 +232,10 @@
       INTEGER :: I, J, NS, ISTARTM, ISTOPM, SHEIGHT, SWIDTH, K, NP,
      $           ISTARTB, ISTOPB, ISHIFT, NBLOCK, NPOS
       REAL :: TEMP, V( 3 ), C1, S1, C2, S2, SWAP
+*
+*     External functions
+      EXTERNAL :: XERBLA, SGEMM, SLAQZ1, SLAQZ2, SLASET, SLARTG, SROT,
+     $            SLACPY
 
       INFO = 0
       IF ( NBLOCK_DESIRED .LT. NSHIFTS+1 ) THEN

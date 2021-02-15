@@ -230,6 +230,8 @@
       COMPLEX :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
+      EXTERNAL :: XERBLA, SLABAD, CLASET, CLARTG, CROT, CLAQZ1, CGEMM,
+     $            CLACPY
       REAL, EXTERNAL :: SLAMCH
 
       INFO = 0
