@@ -546,13 +546,13 @@
          CALL DGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, A( ISTARTM,
      $               KWTOP ), LDA, ZC, LDZC, ZERO, WORK,
      $               KWTOP-ISTARTM )
-        CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
-     $               A( ISTARTM, KWTOP ), LDA )
+         CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
+     $                A( ISTARTM, KWTOP ), LDA )
          CALL DGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, B( ISTARTM,
      $               KWTOP ), LDB, ZC, LDZC, ZERO, WORK,
      $               KWTOP-ISTARTM )
-        CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
-     $               B( ISTARTM, KWTOP ), LDB )
+         CALL DLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
+     $                B( ISTARTM, KWTOP ), LDB )
       END IF
       IF ( ILZ ) THEN
          CALL DGEMM( 'N', 'N', N, JW, JW, ONE, Z( 1, KWTOP ), LDZ, ZC,
