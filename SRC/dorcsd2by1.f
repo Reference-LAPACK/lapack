@@ -674,6 +674,9 @@
 *
 *        Accumulate Householder reflectors
 *
+         IF( WANTU2 .AND. M-P .GT. 0 ) THEN
+            CALL DCOPY( M-P, WORK(IORBDB+P), 1, U2, 1 )
+         END IF
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL DCOPY( P, WORK(IORBDB), 1, U1, 1 )
             DO J = 2, P
@@ -685,7 +688,6 @@
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL DCOPY( M-P, WORK(IORBDB+P), 1, U2, 1 )
             DO J = 2, M-P
                U2(1,J) = ZERO
             END DO
