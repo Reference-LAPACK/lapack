@@ -313,7 +313,7 @@
 *     TEST 2
 *     Compute |I - (Q**H)*Q| / ( eps * m ) and store in RESULT(2)
 *
-      CALL CLASET( 'Full', M, M, ZERO, CONE, R, M )
+      CALL CLASET( 'Full', M, M, CZERO, CONE, R, M )
       CALL CHERK( 'U', 'C', M, M, -CONE, Q, M, CONE, R, M )
       RESID = CLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
