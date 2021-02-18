@@ -1089,10 +1089,13 @@
      $                   PVAL( MAXIN )
       INTEGER            INMIN( MAXIN ), INWIN( MAXIN ), INIBL( MAXIN ),
      $                   ISHFTS( MAXIN ), IACC22( MAXIN )
-      REAL               A( NMAX*NMAX, NEED ), B( NMAX*NMAX, 5 ),
-     $                   C( NCMAX*NCMAX, NCMAX*NCMAX ), D( NMAX, 12 ),
-     $                   RESULT( 500 ), TAUA( NMAX ), TAUB( NMAX ),
-     $                   WORK( LWORK ), X( 5*NMAX )
+      REAL               D( NMAX, 12 ), RESULT( 500 ), TAUA( NMAX ),
+     $                   TAUB( NMAX ), X( 5*NMAX )
+*     ..
+*     .. Allocatable Arrays ..
+      INTEGER AllocateStatus
+      REAL, DIMENSION(:), ALLOCATABLE :: WORK
+      REAL, DIMENSION(:,:), ALLOCATABLE :: A, B, C
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -1132,7 +1135,18 @@
 *     ..
 *     .. Data statements ..
       DATA               INTSTR / '0123456789' /
-      DATA               IOLDSD / 0, 0, 0, 1 /
+      DATA               IOLDSD / 0, 0, 0, 1 / 
+*     ..
+*     .. Allocate memory dynamically ..
+*
+      ALLOCATE ( A(NMAX*NMAX,NEED), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( B(NMAX*NMAX,5), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( C(NCMAX*NCMAX,NCMAX*NCMAX), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( WORK(LWORK), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
 *     ..
 *     .. Executable Statements ..
 *
@@ -2440,6 +2454,11 @@
       WRITE( NOUT, FMT = 9994 )
       S2 = SECOND( )
       WRITE( NOUT, FMT = 9993 )S2 - S1
+*
+      DEALLOCATE (A, STAT = AllocateStatus)
+      DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (C, STAT = AllocateStatus)
+      DEALLOCATE (WORK,  STAT = AllocateStatus)
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9997 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4 )

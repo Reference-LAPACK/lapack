@@ -1084,11 +1084,15 @@
       INTEGER            INMIN( MAXIN ), INWIN( MAXIN ), INIBL( MAXIN ),
      $                   ISHFTS( MAXIN ), IACC22( MAXIN )
       REAL               ALPHA( NMAX ), BETA( NMAX ), DR( NMAX, 12 ),
-     $                   RESULT( 500 ), RWORK( LWORK ), S( NMAX*NMAX )
-      COMPLEX            A( NMAX*NMAX, NEED ), B( NMAX*NMAX, 5 ),
-     $                   C( NCMAX*NCMAX, NCMAX*NCMAX ), DC( NMAX, 6 ),
-     $                   TAUA( NMAX ), TAUB( NMAX ), WORK( LWORK ),
+     $                   RESULT( 500 )
+      COMPLEX            DC( NMAX, 6 ), TAUA( NMAX ), TAUB( NMAX ),
      $                   X( 5*NMAX )
+*     ..
+*     .. Allocatable Arrays ..
+      INTEGER AllocateStatus
+      REAL, DIMENSION(:), ALLOCATABLE :: RWORK, S
+      COMPLEX, DIMENSION(:), ALLOCATABLE :: WORK
+      COMPLEX, DIMENSION(:,:), ALLOCATABLE :: A, B, C
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -1129,6 +1133,21 @@
 *     .. Data statements ..
       DATA               INTSTR / '0123456789' /
       DATA               IOLDSD / 0, 0, 0, 1 /
+*     ..
+*     .. Allocate memory dynamically ..
+*
+      ALLOCATE ( S(NMAX*NMAX), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( A(NMAX*NMAX,NEED), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( B(NMAX*NMAX,5), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( C(NCMAX*NCMAX,NCMAX*NCMAX), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( RWORK(LWORK), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( WORK(LWORK), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
 *     ..
 *     .. Executable Statements ..
 *
@@ -2436,7 +2455,14 @@
   380 CONTINUE
       WRITE( NOUT, FMT = 9994 )
       S2 = SECOND( )
-      WRITE( NOUT, FMT = 9993 )S2 - S1
+      WRITE( NOUT, FMT = 9993 )S2 - S1    
+*
+      DEALLOCATE (S, STAT = AllocateStatus)
+      DEALLOCATE (A, STAT = AllocateStatus)
+      DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (C, STAT = AllocateStatus)
+      DEALLOCATE (RWORK, STAT = AllocateStatus)
+      DEALLOCATE (WORK,  STAT = AllocateStatus)
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9997 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4 )
