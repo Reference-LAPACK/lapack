@@ -92,22 +92,6 @@ configure_file(
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
-# # Following nomenclature from here:
-# # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
-# if    (CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-#   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive")
-# # elseif(CMAKE_Fortran_COMPILER_ID MATCHES "G95")
-# #   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive")
-# elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-#   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive")
-# elseif(CMAKE_Fortran_COMPILER_ID MATCHES "IntelLLVM")
-#   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive")
-# elseif(CMAKE_Fortran_COMPILER_ID MATCHES "NVIDIA")
-#   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive")
-# elseif(CMAKE_Fortran_COMPILER_ID MATCHES "PGI")
-#   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive")
-# endif()
-
 # Check if recursive flag exists
 include(CheckFortranCompilerFlag)
 check_fortran_compiler_flag("-recursive" _recursiveFlag)
