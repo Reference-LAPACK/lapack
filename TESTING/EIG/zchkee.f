@@ -1090,8 +1090,7 @@
 *     ..
 *     .. Allocatable Arrays ..
       INTEGER AllocateStatus
-      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: RWORK
-      DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE :: S
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: RWORK, S
       COMPLEX*16, DIMENSION(:), ALLOCATABLE :: WORK
       COMPLEX*16, DIMENSION(:,:), ALLOCATABLE :: A, B, C
 *     ..
@@ -1137,11 +1136,11 @@
 *     ..
 *     .. Allocate memory dynamically ..
 *
-      ALLOCATE ( S(NMAX,NMAX), STAT = AllocateStatus )
+      ALLOCATE ( S(NMAX*NMAX), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE ( A(NMAX,NMAX), STAT = AllocateStatus )
+      ALLOCATE ( A(NMAX*NMAX,NEED), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE ( B(NMAX,NMAX), STAT = AllocateStatus )
+      ALLOCATE ( B(NMAX*NMAX,5), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
       ALLOCATE ( C(NCMAX*NCMAX,NCMAX*NCMAX), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
