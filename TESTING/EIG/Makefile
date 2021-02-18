@@ -157,7 +157,7 @@ cleanobj:
 cleanexe:
 	rm -f xeigtst*
 
-FFLAGS_DRV_NORECURSIVE := $(filter-out -frecursive -Mrecursive,$(FFLAGS_DRV))
+FFLAGS_DRV_NORECURSIVE := $(filter-out -frecursive -Mrecursive -recursive,$(FFLAGS_DRV))
 
 schkee.o: schkee.f
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
