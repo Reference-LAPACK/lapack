@@ -92,6 +92,33 @@ configure_file(
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
+# Check if recursive flag exists
+include(CheckFortranCompilerFlag)
+check_fortran_compiler_flag("-recursive" _recursiveFlag)
+check_fortran_compiler_flag("-frecursive" _frecursiveFlag)
+check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
+
+# Add recursive flag
+if(_recursiveFlag)
+  string(REGEX MATCH "-recursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive"
+      CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+elseif(_frecursiveFlag)
+  string(REGEX MATCH "-frecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test) 
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive"
+    CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+elseif(_MrecursiveFlag)
+  string(REGEX MATCH "-Mrecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive"
+    CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+endif()
+
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
