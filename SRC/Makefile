@@ -57,8 +57,10 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
-.SUFFIXES: .F .o
+.SUFFIXES: .F .f90 .o
 .F.o:
+	$(FC) $(FFLAGS) -c -o $@ $<
+.f90.o:
 	$(FC) $(FFLAGS) -c -o $@ $<
 
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
@@ -67,6 +69,7 @@ ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
 SCLAUX = \
+   la_constants32.o \
    sbdsdc.o \
    sbdsqr.o sdisna.o slabad.o slacpy.o sladiv.o slae2.o  slaebz.o \
    slaed0.o slaed1.o slaed2.o slaed3.o slaed4.o slaed5.o slaed6.o \
@@ -85,6 +88,7 @@ SCLAUX = \
    ../INSTALL/second_$(TIMER).o
 
 DZLAUX = \
+   la_constants.o \
    dbdsdc.o \
    dbdsqr.o ddisna.o dlabad.o dlacpy.o dladiv.o dlae2.o  dlaebz.o \
    dlaed0.o dlaed1.o dlaed2.o dlaed3.o dlaed4.o dlaed5.o dlaed6.o \
