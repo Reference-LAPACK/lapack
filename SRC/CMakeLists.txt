@@ -41,6 +41,7 @@ set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ../INSTALL/slamch.f)
 
 set(SCLAUX
+   la_constants32.f90
    sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -49,7 +50,7 @@ set(SCLAUX
    slapy2.f slapy3.f slarnv.f
    slarra.f slarrb.f slarrc.f slarrd.f slarre.f slarrf.f slarrj.f
    slarrk.f slarrr.f slaneg.f
-   slartg.f slaruv.f slas2.f  slascl.f
+   slartg.f90 slaruv.f slas2.f  slascl.f
    slasd0.f slasd1.f slasd2.f slasd3.f slasd4.f slasd5.f slasd6.f
    slasd7.f slasd8.f slasda.f slasdq.f slasdt.f
    slaset.f slasq1.f slasq2.f slasq3.f slasq4.f slasq5.f slasq6.f
@@ -59,6 +60,7 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
+   la_constants.f90
    dbdsdc.f
    dbdsqr.f ddisna.f dlabad.f dlacpy.f dladiv.f dlae2.f  dlaebz.f
    dlaed0.f dlaed1.f dlaed2.f dlaed3.f dlaed4.f dlaed5.f dlaed6.f
@@ -67,7 +69,7 @@ set(DZLAUX
    dlapy2.f dlapy3.f dlarnv.f
    dlarra.f dlarrb.f dlarrc.f dlarrd.f dlarre.f dlarrf.f dlarrj.f
    dlarrk.f dlarrr.f dlaneg.f
-   dlartg.f dlaruv.f dlas2.f  dlascl.f
+   dlartg.f90 dlaruv.f dlas2.f  dlascl.f
    dlasd0.f dlasd1.f dlasd2.f dlasd3.f dlasd4.f dlasd5.f dlasd6.f
    dlasd7.f dlasd8.f dlasda.f dlasdq.f dlasdt.f
    dlaset.f dlasq1.f dlasq2.f dlasq3.f dlasq4.f dlasq5.f dlasq6.f
@@ -208,7 +210,7 @@ set(CLASRC
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f
-   clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f clartv.f
+   clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
    clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
@@ -403,7 +405,7 @@ set(ZLASRC
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
    zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f
    zlarfg.f zlarfgp.f zlarft.f
-   zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f zlartv.f
+   zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
    zlatbs.f zlatdf.f zlatps.f zlatrd.f zlatrs.f zlatrz.f zlauu2.f
