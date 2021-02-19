@@ -57,14 +57,22 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
-.SUFFIXES: .F .f90 .o
-.F.o:
-	$(FC) $(FFLAGS) -c -o $@ $<
-.f90.o:
-	$(FC) $(FFLAGS) -c -o $@ $<
+ALLMOD = la_xisnan.mod la_constants.mod la_constants32.mod
 
+.SUFFIXES: .f .F .f90 .o .mod
+%.o: %.f $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+%.o: %.F $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+%.o: %.f90 $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+%.o: %.F90 $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+.o.mod:
+	@true
+   
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
-   iparmq.o iparam2stage.o \
+   iparmq.o iparam2stage.o la_xisnan.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
@@ -612,7 +620,7 @@ endif
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
-	rm -f *.o DEPRECATED/*.o
+	rm -f *.o *.mod DEPRECATED/*.o DEPRECATED/*.mod
 cleanlib:
 	rm -f $(LAPACKLIB)
 
@@ -622,3 +630,11 @@ sla_wwaddw.o: sla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 dla_wwaddw.o: dla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 cla_wwaddw.o: cla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+
+# Modules
+la_xisnan.o: la_xisnan.f90 la_constants32.mod la_constants.mod
+	$(FC) $(FFLAGS) -c -o $@ $<
+la_constants32.o: la_constants32.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+la_constants.o: la_constants.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
