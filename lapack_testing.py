@@ -35,7 +35,6 @@ for o, a in opts:
         print("     - d [dir] is to indicate where is the LAPACK testing directory (.out files). By default, the script will use .")
         print("     - b [bin] is to indicate where is the LAPACK binary files are located. By default, the script will use .")
         print(" LEVEL OF OUTPUT")
-        print("     - x is to print a detailed summary")
         print("     - e is to print only the error summary")
         print("     - s is to print a short summary")
         print("     - n is to print the numbers of failing tests (turn on summary mode)")
