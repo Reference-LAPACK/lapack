@@ -18,12 +18,12 @@ except getopt.error as msg:
     print("for help use --help")
     sys.exit(2)
 
-short_summary=0
-with_file=1
-just_errors = 0
+short_summary = False
+with_file = True
+just_errors = False
 prec='x'
 test='all'
-only_numbers=0
+only_numbers = False
 test_dir='TESTING'
 bin_dir='bin/Release'
 
@@ -64,11 +64,11 @@ for o, a in opts:
         sys.exit(0)
     else:
         if o in ("-s", "--short"):
-            short_summary = 1
+            short_summary = True
         if o in ("-r", "--run"):
-            with_file = 0
+            with_file = False
         if o in ("-e", "--error"):
-            just_errors = 1
+            just_errors = True
         if o in ( '-p', '--prec' ):
             prec = a
         if o in ( '-b', '--bin' ):
@@ -78,8 +78,8 @@ for o, a in opts:
         if o in ( '-t', '--test' ):
             test = a
         if o in ( '-n', '--number' ):
-            only_numbers = 1
-            short_summary = 1
+            only_numbers = True
+            short_summary = True
 
 # process options
 
@@ -105,7 +105,7 @@ def run_summary_test( f, cmdline, short_summary):
     nb_test_illegal=0
     nb_test_info=0
 
-    if (with_file):
+    if with_file:
         if not os.path.exists(cmdline):
             error_message=cmdline+" file not found"
             r=1
@@ -142,16 +142,16 @@ def run_summary_test( f, cmdline, short_summary):
                 whereisrun=words_in_line.index("run)")
                 nb_test_run+=int(words_in_line[whereisrun-2])
             if (line.find("out of")!=-1):
-                if (short_summary==0): print(line, end=' ')
+                if not short_summary: print(line, end=' ')
                 whereisout= words_in_line.index("out")
                 nb_test_fail+=int(words_in_line[whereisout-1])
             if ((line.find("illegal")!=-1) or (line.find("Illegal")!=-1)):
-                if (short_summary==0):print(line, end=' ')
+                if not short_summary: print(line, end=' ')
                 nb_test_illegal+=1
             if (line.find(" INFO")!=-1):
-                if (short_summary==0):print(line, end=' ')
+                if not short_summary: print(line, end=' ')
                 nb_test_info+=1
-            if (with_file==1):
+            if with_file:
                 pipe.close()
 
     f.flush();
@@ -166,7 +166,7 @@ try:
 except IOError:
     f = sys.stdout
 
-if (short_summary==0):
+if not short_summary:
     print(" ")
     print("---------------- Testing LAPACK Routines ----------------")
     print(" ")
@@ -216,7 +216,7 @@ for dtype in range_prec:
     letter = dtypes[0][dtype]
     name = dtypes[1][dtype]
 
-    if (short_summary==0):
+    if not short_summary:
         print(" ")
         print("------------------------- %s ------------------------" % name)
         print(" ")
@@ -249,7 +249,7 @@ for dtype in range_prec:
         # NEED TO SKIP SOME PRECISION (namely s and c) FOR PROTO MIXED PRECISION TESTING
         if dtest==17 and (letter=="s" or letter=="c"):
             continue
-        if (with_file==1):
+        if with_file:
             cmdbase=dtests[2][dtest]+".out"
         else:
             if dtest==16:
@@ -264,7 +264,7 @@ for dtype in range_prec:
             else:
                 # EIG TESTS
                 cmdbase="xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-        if (not just_errors and not short_summary):
+        if not just_errors and not short_summary:
             print("Testing "+name+" "+dtests[1][dtest]+"-"+cmdbase, end=' ')
         # Run the process: either to read the file or run the LAPACK testing
         nb_test = run_summary_test(f, cmdbase, short_summary)
@@ -274,19 +274,19 @@ for dtype in range_prec:
         list_results[3][dtype]+=nb_test[3]
         got_error=nb_test[1]+nb_test[2]+nb_test[3]
 
-        if (not short_summary):
-            if (nb_test[0]>0 and just_errors==0):
+        if not short_summary:
+            if nb_test[0] > 0 and not just_errors:
                 print("passed: "+str(nb_test[0]))
-            if (nb_test[1]>0):
+            if nb_test[1] > 0:
                 print("failing to pass the threshold: "+str(nb_test[1]))
-            if (nb_test[2]>0):
+            if nb_test[2] > 0:
                 print("Illegal Error: "+str(nb_test[2]))
-            if (nb_test[3]>0):
+            if nb_test[3] > 0:
                 print("Info Error: "+str(nb_test[3]))
-            if (got_error>0 and just_errors==1):
+            if got_error > 0 and just_errors:
                 print("ERROR IS LOCATED IN "+name+" "+dtests[1][dtest]+" [ "+cmdbase+" ]")
                 print("")
-            if (just_errors==0):
+            if not just_errors:
                 print("")
 #     elif (got_error>0):
 #        print dtests[2][dtest]+".out \t"+str(nb_test[1])+"\t"+str(nb_test[2])+"\t"+str(nb_test[3])
@@ -304,7 +304,7 @@ for dtype in range_prec:
     list_results[2][4]+=list_results[2][dtype]
     list_results[3][4]+=list_results[3][dtype]
 
-if only_numbers==1:
+if only_numbers:
     print(str(list_results[1][4])+"\n"+str(list_results[2][4]+list_results[3][4]))
 else:
     print(summary)
