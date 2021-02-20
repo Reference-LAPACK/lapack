@@ -11,7 +11,7 @@ import getopt
 # Arguments
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hd:b:srep:t:n",
-                               ["help", "dir", "bin", "short", "run", "error","prec=","test=","number"])
+                               ["help", "dir=", "bin=", "short", "run", "error","prec=","test=","number"])
 
 except getopt.error as msg:
     print(msg)
