@@ -6,7 +6,20 @@ if(MSVC_VERSION)
 endif()
 add_subdirectory(LIN)
 add_subdirectory(EIG)
-macro(add_lapack_test output input target)
+
+
+# Only run this test if python 3 is found
+if(PYTHON_EXECUTABLE)
+  message(STATUS "Running Summary")
+  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
+  add_test(
+    NAME LAPACK_Test_Summary
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
+    COMMAND ${PYTHON_EXECUTABLE} "lapack_testing.py"
+    )
+endif()
+
+function(add_lapack_test output input target)
   set(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
   string(REPLACE "." "_" input_name ${input})
@@ -18,8 +31,15 @@ macro(add_lapack_test output input target)
       -DOUTPUT=${TEST_OUTPUT}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+
+    if(PYTHONINTERP_FOUND)
+      set_property(
+        TEST LAPACK_Test_Summary
+        APPEND PROPERTY DEPENDS LAPACK-${testName}
+      )
+    endif()
   endif()
-endmacro()
+endfunction()
 
 if(BUILD_SINGLE)
 add_lapack_test(stest.out stest.in xlintsts)
@@ -155,16 +175,4 @@ if(BUILD_COMPLEX AND BUILD_COMPLEX16)
 #
 # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
   add_lapack_test(zctest.out zctest.in xlintstzc)
-endif()
-
-# ==============================================================================
-# Only run this test if python 2.7 or greater is found
-if(PYTHONINTERP_FOUND)
-  message(STATUS "Running Summary")
-  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
-  add_test(
-    NAME LAPACK_Test_Summary
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-    COMMAND ${PYTHON_EXECUTABLE} "lapack_testing.py"
-    )
 endif()
