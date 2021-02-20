@@ -179,13 +179,14 @@ option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
-# lapack_testing.py uses features from python 2.7 and greater
 if(BUILD_TESTING)
-  set(_msg "Looking for Python >= 2.7 needed for summary tests")
+  set(_msg "Looking for Python3 needed for summary tests")
   message(STATUS "${_msg}")
-  find_package(PythonInterp 2.7 QUIET)
-  if(PYTHONINTERP_FOUND)
-    message(STATUS "${_msg} - found (${PYTHON_VERSION_STRING})")
+  # find_package(PythonInterp 3) cannot be used because /usr/bin/python may be
+  # a Python2 interpreter.
+  find_program(PYTHON_EXECUTABLE python3)
+  if(PYTHON_EXECUTABLE)
+    message(STATUS "${_msg} - found")
   else()
     message(STATUS "${_msg} - not found (skipping summary tests)")
   endif()
