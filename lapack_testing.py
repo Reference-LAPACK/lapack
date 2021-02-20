@@ -83,7 +83,7 @@ for o, a in opts:
 
 # process options
 
-abs_bin_dir=os.path.normpath(os.path.join(os.getcwd(),bin_dir))
+abs_bin_dir=os.path.abspath(bin_dir)
 
 os.chdir(test_dir)
 
