@@ -1,12 +1,10 @@
-#! /usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 
 ###############################################################################
 # lapack_testing.py
 ###############################################################################
 
-from __future__ import print_function
 from subprocess import Popen, STDOUT, PIPE
 import os, sys, math
 import getopt
