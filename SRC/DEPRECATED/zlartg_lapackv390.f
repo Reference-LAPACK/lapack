@@ -85,6 +85,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
+*> This implementation of ZLARTG has been deprecated with LAPACKv3.10.
+*> A better version of ZLARTG was contributed by Ed Anderson and released in 3.10.
+*
 *> \ingroup complex16OTHERauxiliary
 *
 *> \par Further Details:

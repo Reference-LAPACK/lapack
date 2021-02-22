@@ -1,4 +1,4 @@
-*> \brief \b SLARTG generates a plane rotation with real cosine and real sine.
+*> \brief \b DLARTG generates a plane rotation with real cosine and real sine.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,22 +6,22 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARTG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartg.f">
+*> Download DLARTG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARTG( F, G, CS, SN, R )
+*       SUBROUTINE DLARTG( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
-*       REAL               CS, F, G, R, SN
+*       DOUBLE PRECISION   CS, F, G, R, SN
 *       ..
 *
 *
@@ -30,17 +30,17 @@
 *>
 *> \verbatim
 *>
-*> SLARTG generate a plane rotation so that
+*> DLARTG generate a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the BLAS1 routine SROTG,
+*> This is a slower, more accurate version of the BLAS1 routine DROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
 *>    If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-*>       floating point operations (saves work in SBDSQR when
+*>       floating point operations (saves work in DBDSQR when
 *>       there are zeros on the diagonal).
 *>
 *> If F exceeds G in magnitude, CS will be positive.
@@ -51,31 +51,31 @@
 *
 *> \param[in] F
 *> \verbatim
-*>          F is REAL
+*>          F is DOUBLE PRECISION
 *>          The first component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[in] G
 *> \verbatim
-*>          G is REAL
+*>          G is DOUBLE PRECISION
 *>          The second component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[out] CS
 *> \verbatim
-*>          CS is REAL
+*>          CS is DOUBLE PRECISION
 *>          The cosine of the rotation.
 *> \endverbatim
 *>
 *> \param[out] SN
 *> \verbatim
-*>          SN is REAL
+*>          SN is DOUBLE PRECISION
 *>          The sine of the rotation.
 *> \endverbatim
 *>
 *> \param[out] R
 *> \verbatim
-*>          R is REAL
+*>          R is DOUBLE PRECISION
 *>          The nonzero component of the rotated vector.
 *>
 *>  This version has a few statements commented out for thread safety
@@ -90,37 +90,40 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
+*> This implementation of DLARTG has been deprecated with LAPACKv3.10.
+*> A better version of DLARTG was contributed by Ed Anderson and released in 3.10.
+*
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLARTG( F, G, CS, SN, R )
+      SUBROUTINE DLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      REAL               CS, F, G, R, SN
+      DOUBLE PRECISION   CS, F, G, R, SN
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E0 )
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E0 )
-      REAL               TWO
-      PARAMETER          ( TWO = 2.0E0 )
+      DOUBLE PRECISION   ZERO
+      PARAMETER          ( ZERO = 0.0D0 )
+      DOUBLE PRECISION   ONE
+      PARAMETER          ( ONE = 1.0D0 )
+      DOUBLE PRECISION   TWO
+      PARAMETER          ( TWO = 2.0D0 )
 *     ..
 *     .. Local Scalars ..
 *     LOGICAL            FIRST
       INTEGER            COUNT, I
-      REAL               EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
+      DOUBLE PRECISION   EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, SQRT
@@ -134,10 +137,10 @@
 *     .. Executable Statements ..
 *
 *     IF( FIRST ) THEN
-         SAFMIN = SLAMCH( 'S' )
-         EPS = SLAMCH( 'E' )
-         SAFMN2 = SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( SLAMCH( 'B' ) ) / TWO )
+         SAFMIN = DLAMCH( 'S' )
+         EPS = DLAMCH( 'E' )
+         SAFMN2 = DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( DLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *        FIRST = .FALSE.
 *     END IF
@@ -196,6 +199,6 @@
       END IF
       RETURN
 *
-*     End of SLARTG
+*     End of DLARTG
 *
       END

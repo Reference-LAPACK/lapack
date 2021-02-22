@@ -85,6 +85,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
+*> This implementation of CLARTG has been deprecated with LAPACKv3.10.
+*> A better version of CLARTG was contributed by Ed Anderson and released in 3.10.
+*
 *> \ingroup complexOTHERauxiliary
 *
 *> \par Further Details:
