@@ -1,4 +1,4 @@
-*> \brief \b ZROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors.
+*> \brief \b CROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,27 +6,27 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZROT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zrot.f">
+*> Download CROT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/crot.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zrot.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/crot.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zrot.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/crot.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )
+*       SUBROUTINE CROT( N, CX, INCX, CY, INCY, C, S )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
-*       DOUBLE PRECISION   C
-*       COMPLEX*16         S
+*       REAL               C
+*       COMPLEX            S
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         CX( * ), CY( * )
+*       COMPLEX            CX( * ), CY( * )
 *       ..
 *
 *
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZROT   applies a plane rotation, where the cos (C) is real and the
+*> CROT   applies a plane rotation, where the cos (C) is real and the
 *> sin (S) is complex, and the vectors CX and CY are complex.
 *> \endverbatim
 *
@@ -50,7 +50,7 @@
 *>
 *> \param[in,out] CX
 *> \verbatim
-*>          CX is COMPLEX*16 array, dimension (N)
+*>          CX is COMPLEX array, dimension (N)
 *>          On input, the vector X.
 *>          On output, CX is overwritten with C*X + S*Y.
 *> \endverbatim
@@ -63,7 +63,7 @@
 *>
 *> \param[in,out] CY
 *> \verbatim
-*>          CY is COMPLEX*16 array, dimension (N)
+*>          CY is COMPLEX array, dimension (N)
 *>          On input, the vector Y.
 *>          On output, CY is overwritten with -CONJG(S)*X + C*Y.
 *> \endverbatim
@@ -76,12 +76,12 @@
 *>
 *> \param[in] C
 *> \verbatim
-*>          C is DOUBLE PRECISION
+*>          C is REAL
 *> \endverbatim
 *>
 *> \param[in] S
 *> \verbatim
-*>          S is COMPLEX*16
+*>          S is COMPLEX
 *>          C and S define a rotation
 *>             [  C          S  ]
 *>             [ -conjg(S)   C  ]
@@ -96,10 +96,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> This implementation of CROT has been deprecated with LAPACKv3.10.
+*> A better version of CROT was contributed by Ed Anderson and released in 3.10.
+*
+*> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )
+      SUBROUTINE CROT( N, CX, INCX, CY, INCY, C, S )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -107,21 +110,21 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, INCY, N
-      DOUBLE PRECISION   C
-      COMPLEX*16         S
+      REAL               C
+      COMPLEX            S
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16         CX( * ), CY( * )
+      COMPLEX            CX( * ), CY( * )
 *     ..
 *
 * =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER            I, IX, IY
-      COMPLEX*16         STEMP
+      COMPLEX            STEMP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -140,7 +143,7 @@
      $   IY = ( -N+1 )*INCY + 1
       DO 10 I = 1, N
          STEMP = C*CX( IX ) + S*CY( IY )
-         CY( IY ) = C*CY( IY ) - DCONJG( S )*CX( IX )
+         CY( IY ) = C*CY( IY ) - CONJG( S )*CX( IX )
          CX( IX ) = STEMP
          IX = IX + INCX
          IY = IY + INCY
@@ -152,7 +155,7 @@
    20 CONTINUE
       DO 30 I = 1, N
          STEMP = C*CX( I ) + S*CY( I )
-         CY( I ) = C*CY( I ) - DCONJG( S )*CX( I )
+         CY( I ) = C*CY( I ) - CONJG( S )*CX( I )
          CX( I ) = STEMP
    30 CONTINUE
       RETURN

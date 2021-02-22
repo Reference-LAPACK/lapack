@@ -41,6 +41,7 @@ set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ../INSTALL/slamch.f)
 
 set(SCLAUX
+   la_constants32.f90
    sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -59,6 +60,7 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
+   la_constants.f90
    dbdsdc.f
    dbdsqr.f ddisna.f dlabad.f dlacpy.f dladiv.f dlae2.f  dlaebz.f
    dlaed0.f dlaed1.f dlaed2.f dlaed3.f dlaed4.f dlaed5.f dlaed6.f
@@ -217,7 +219,7 @@ set(CLASRC
    cposv.f  cposvx.f cpotf2.f cpotrf2.f cpotri.f cpstrf.f cpstf2.f
    cppcon.f cppequ.f cpprfs.f cppsv.f  cppsvx.f cpptrf.f cpptri.f cpptrs.f
    cptcon.f cpteqr.f cptrfs.f cptsv.f  cptsvx.f cpttrf.f cpttrs.f cptts2.f
-   crot.f   cspcon.f cspmv.f  cspr.f   csprfs.f cspsv.f
+   crot.f90 cspcon.f cspmv.f  cspr.f   csprfs.f cspsv.f
    cspsvx.f csptrf.f csptri.f csptrs.f csrscl.f cstedc.f
    cstegr.f cstein.f csteqr.f csycon.f csymv.f
    csyr.f   csyrfs.f csysv.f  csysvx.f csytf2.f csytrf.f csytri.f
@@ -412,7 +414,7 @@ set(ZLASRC
    zposv.f  zposvx.f zpotf2.f zpotrf.f zpotrf2.f zpotri.f zpotrs.f zpstrf.f zpstf2.f
    zppcon.f zppequ.f zpprfs.f zppsv.f  zppsvx.f zpptrf.f zpptri.f zpptrs.f
    zptcon.f zpteqr.f zptrfs.f zptsv.f  zptsvx.f zpttrf.f zpttrs.f zptts2.f
-   zrot.f   zspcon.f zspmv.f  zspr.f   zsprfs.f zspsv.f
+   zrot.f90 zspcon.f zspmv.f  zspr.f   zsprfs.f zspsv.f
    zspsvx.f zsptrf.f zsptri.f zsptrs.f zdrscl.f zstedc.f
    zstegr.f zstein.f zsteqr.f zsycon.f zsymv.f
    zsyr.f   zsyrfs.f zsysv.f  zsysvx.f zsytf2.f zsytrf.f zsytri.f
