@@ -99,6 +99,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
+*> This implementation of CLASSQ has been deprecated with LAPACKv3.10.
+*> A better version of CLASSQ was contributed by Ed Anderson and released in 3.10.
+*
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
