@@ -5,36 +5,35 @@ module LA_CONSTANTS32
 !
 !  Standard constants
 !
-   integer, parameter :: wp =    4
-   real(wp), parameter :: zero = 0.0_wp
-   real(wp), parameter :: half = 0.5_wp
-   real(wp), parameter :: one = 1.0_wp
-   real(wp), parameter :: two = 2.0_wp
-   real(wp), parameter :: three = 3.0_wp
-   real(wp), parameter :: four = 4.0_wp
-   real(wp), parameter :: eight = 8.0_wp
-   real(wp), parameter :: ten = 10.0_wp
-   complex(wp), parameter :: czero = ( 0.0_wp, 0.0_wp )
-   complex(wp), parameter :: chalf = ( 0.5_wp, 0.0_wp )
-   complex(wp), parameter :: cone = ( 1.0_wp, 0.0_wp )
+   real, parameter :: zero = 0.0
+   real, parameter :: half = 0.5
+   real, parameter :: one = 1.0
+   real, parameter :: two = 2.0
+   real, parameter :: three = 3.0
+   real, parameter :: four = 4.0
+   real, parameter :: eight = 8.0
+   real, parameter :: ten = 10.0
+   complex, parameter :: czero = ( 0.0, 0.0 )
+   complex, parameter :: chalf = ( 0.5, 0.0 )
+   complex, parameter :: cone = ( 1.0, 0.0 )
    character*1, parameter :: sprefix = 'S'
    character*1, parameter :: cprefix = 'C'
 !
 !  Model parameters
 !
-   real(wp), parameter :: eps =  0.5960464478E-07_wp
-   real(wp), parameter :: ulp =  0.1192092896E-06_wp
-   real(wp), parameter :: safmin =  0.1175494351E-37_wp
-   real(wp), parameter :: safmax =  0.8507059173E+38_wp
-   real(wp), parameter :: smlnum =  0.9860761315E-31_wp
-   real(wp), parameter :: bignum =  0.1014120480E+32_wp
-   real(wp), parameter :: rtmin =  0.3140184864E-15_wp
-   real(wp), parameter :: rtmax =  0.3184525782E+16_wp
+   real, parameter :: eps =  0.5960464478E-07
+   real, parameter :: ulp =  0.1192092896E-06
+   real, parameter :: safmin =  0.1175494351E-37
+   real, parameter :: safmax =  0.8507059173E+38
+   real, parameter :: smlnum =  0.9860761315E-31
+   real, parameter :: bignum =  0.1014120480E+32
+   real, parameter :: rtmin =  0.3140184864E-15
+   real, parameter :: rtmax =  0.3184525782E+16
 !
 !  Blue's scaling constants
 !
-   real(wp), parameter :: tsml =  0.1084202172E-18_wp
-   real(wp), parameter :: tbig =  0.4503599627E+16_wp
-   real(wp), parameter :: ssml =  0.3777893186E+23_wp
-   real(wp), parameter :: sbig =  0.1323488980E-22_wp
+   real, parameter :: tsml =  0.1084202172E-18
+   real, parameter :: tbig =  0.4503599627E+16
+   real, parameter :: ssml =  0.3777893186E+23
+   real, parameter :: sbig =  0.1323488980E-22
 end module LA_CONSTANTS32

@@ -1,12 +1,12 @@
 subroutine DLARTG( f, g, c, s, r )
-   use LA_CONSTANTS, only: wp, zero, half, one, rtmin, rtmax, safmin, safmax
+   use LA_CONSTANTS, only: zero, half, one, rtmin, rtmax, safmin, safmax
 !
 !  LAPACK auxiliary routine
 !  E. Anderson
 !  July 30, 2016
 !
 !  .. Scalar Arguments ..
-   real(wp) :: c, f, g, r, s
+   double precision :: c, f, g, r, s
 !  ..
 !
 !  Purpose
@@ -51,7 +51,7 @@ subroutine DLARTG( f, g, c, s, r )
 !  =====================================================================
 !
 !  .. Local Scalars ..
-   real(wp) :: d, f1, fs, g1, gs, p, u, uu
+   double precision :: d, f1, fs, g1, gs, p, u, uu
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt

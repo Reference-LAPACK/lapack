@@ -1,5 +1,5 @@
 subroutine CLARTG( f, g, c, s, r )
-   use LA_CONSTANTS32, only: wp, zero, one, two, czero, rtmin, rtmax, &
+   use LA_CONSTANTS32, only: zero, one, two, czero, rtmin, rtmax, &
                              safmin, safmax
 !
 !  LAPACK auxiliary routine
@@ -7,8 +7,8 @@ subroutine CLARTG( f, g, c, s, r )
 !  August 4, 2016
 !
 !  .. Scalar Arguments ..
-   real(wp)           c
-   complex(wp)        f, g, r, s
+   real           c
+   complex        f, g, r, s
 !  ..
 !
 !  Purpose
@@ -61,14 +61,14 @@ subroutine CLARTG( f, g, c, s, r )
 !  =====================================================================
 !
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
-   complex(wp) :: fs, gs, t
+   real :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
+   complex :: fs, gs, t
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, aimag, conjg, max, min, real, sqrt
 !  ..
 !  .. Statement Functions ..
-   real(wp) :: ABSSQ
+   real :: ABSSQ
 !  ..
 !  .. Statement Function definitions ..
    ABSSQ( t ) = real( t )**2 + aimag( t )**2

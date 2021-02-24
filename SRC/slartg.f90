@@ -1,12 +1,12 @@
 subroutine SLARTG( f, g, c, s, r )
-   use LA_CONSTANTS32, only: wp, zero, half, one, rtmin, rtmax, safmin, safmax
+   use LA_CONSTANTS32, only: zero, half, one, rtmin, rtmax, safmin, safmax
 !
 !  LAPACK auxiliary routine
 !  E. Anderson
 !  July 30, 2016
 !
 !  .. Scalar Arguments ..
-   real(wp) :: c, f, g, r, s
+   real :: c, f, g, r, s
 !  ..
 !
 !  Purpose
@@ -51,7 +51,7 @@ subroutine SLARTG( f, g, c, s, r )
 !  =====================================================================
 !
 !  .. Local Scalars ..
-   real(wp) :: d, f1, fs, g1, gs, p, u, uu
+   real :: d, f1, fs, g1, gs, p, u, uu
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt
