@@ -1,55 +1,133 @@
+!> \brief \b SLARTG generates a plane rotation with real cosine and real sine.
+!
+!  =========== DOCUMENTATION ===========
+!
+! Online html documentation available at
+!            http://www.netlib.org/lapack/explore-html/
+!
+!> \htmlonly
+!> Download SLARTG + dependencies
+!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartg.f">
+!> [TGZ]</a>
+!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartg.f">
+!> [ZIP]</a>
+!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartg.f">
+!> [TXT]</a>
+!> \endhtmlonly
+!
+!  Definition:
+!  ===========
+!
+!       SUBROUTINE SLARTG( F, G, CS, SN, R )
+!
+!       .. Scalar Arguments ..
+!       REAL               CS, F, G, R, SN
+!       ..
+!
+!
+!> \par Purpose:
+!  =============
+!>
+!> \verbatim
+!>
+!> SLARTG generates a plane rotation so that
+!>
+!>    [  C  S  ]  .  [ F ]  =  [ R ]
+!>    [ -S  C  ]     [ G ]     [ 0 ]
+!>
+!> where C**2 + S**2 = 1.
+!>
+!> The mathematical formulas used for C and S are
+!>    R = sign(F) * sqrt(F**2 + G**2)
+!>    C = F / R
+!>    S = G / R
+!> Hence C >= 0. The algorithm used to compute these quantities
+!> incorporates scaling to avoid overflow or underflow in computing the
+!> square root of the sum of squares.
+!>
+!> This version is discontinuous in R at F = 0 but it returns the same
+!> C and S as CLARTG for complex inputs (F,0) and (G,0).
+!>
+!> This is a more accurate version of the BLAS1 routine SROTG,
+!> with the following other differences:
+!>    F and G are unchanged on return.
+!>    If G=0, then C=1 and S=0.
+!>    If F=0 and (G .ne. 0), then C=0 and S=sign(1,G) without doing any
+!>       floating point operations (saves work in SBDSQR when
+!>       there are zeros on the diagonal).
+!>
+!> If F exceeds G in magnitude, CS will be positive.
+!> \endverbatim
+!
+!  Arguments:
+!  ==========
+!
+!> \param[in] F
+!> \verbatim
+!>          F is REAL
+!>          The first component of vector to be rotated.
+!> \endverbatim
+!>
+!> \param[in] G
+!> \verbatim
+!>          G is REAL
+!>          The second component of vector to be rotated.
+!> \endverbatim
+!>
+!> \param[out] CS
+!> \verbatim
+!>          CS is REAL
+!>          The cosine of the rotation.
+!> \endverbatim
+!>
+!> \param[out] SN
+!> \verbatim
+!>          SN is REAL
+!>          The sine of the rotation.
+!> \endverbatim
+!>
+!> \param[out] R
+!> \verbatim
+!>          R is REAL
+!>          The nonzero component of the rotated vector.
+!
+!  Authors:
+!  ========
+!
+!> \author Edward Anderson, Lockheed Martin
+!
+!> \date July 2016
+!
+!> \ingroup OTHERauxiliary
+!
+!> \par Contributors:
+!  ==================
+!>
+!> Weslley Pereira, University of Colorado Denver, USA
+!
+!> \par Further Details:
+!  =====================
+!>
+!> \verbatim
+!>
+!>  Anderson E. (2017)
+!>  Algorithm 978: Safe Scaling in the Level 1 BLAS
+!>  ACM Trans Math Softw 44:1--28
+!>  https://doi.org/10.1145/3061665
+!>
+!> \endverbatim
+!
 subroutine SLARTG( f, g, c, s, r )
    use LA_CONSTANTS32, only: zero, half, one, rtmin, rtmax, safmin, safmax
 !
-!  LAPACK auxiliary routine
-!  E. Anderson
-!  July 30, 2016
+!  -- LAPACK auxiliary routine (version 3.9.0) --
+!  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+!  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+!     February 2021
 !
 !  .. Scalar Arguments ..
    real :: c, f, g, r, s
 !  ..
-!
-!  Purpose
-!  =======
-!
-!  SLARTG generates a plane rotation so that
-!
-!     [  C  S  ]  .  [ F ]  =  [ R ]
-!     [ -S  C  ]     [ G ]     [ 0 ]
-!
-!  where C**2 + S**2 = 1.
-!
-!  The mathematical formulas used for C and S are
-!     R = sign(F) * sqrt(F**2 + G**2)
-!     C = F / R
-!     S = G / R
-!  Hence C >= 0.  The algorithm used to compute these quantities
-!  incorporates scaling to avoid overflow or underflow in computing the
-!  square root of the sum of squares.
-!
-!  This version is discontinuous in R at F = 0 but it returns the same
-!  C and S as CLARTG for complex inputs (F,0) and (G,0).
-!
-!  Arguments
-!  =========
-!
-!  F       (input) REAL
-!          The first component of vector to be rotated.
-!
-!  G       (input) REAL
-!          The second component of vector to be rotated.
-!
-!  C       (output) REAL
-!          The cosine of the rotation.
-!
-!  S       (output) REAL
-!          The sine of the rotation.
-!
-!  R       (output) REAL
-!          The nonzero component of the rotated vector.
-!
-!  =====================================================================
-!
 !  .. Local Scalars ..
    real :: d, f1, fs, g1, gs, p, u, uu
 !  ..
