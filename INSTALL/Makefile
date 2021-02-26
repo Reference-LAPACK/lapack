@@ -21,7 +21,7 @@ testdsecnd: dsecnd_$(TIMER).o dsecndtst.o
 	@echo "[INFO] : TIMER value: $(TIMER) (given by make.inc)"
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-testieee: tstiee.o
+testieee: tstiee.o ../SRC/ieeeck.f ../SRC/ilaenv.f ../SRC/iparmq.f
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 testversion: ilaver.o LAPACK_version.o

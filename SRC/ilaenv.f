@@ -79,7 +79,7 @@
 *>          = 9: maximum size of the subproblems at the bottom of the
 *>               computation tree in the divide-and-conquer algorithm
 *>               (used by xGELSD and xGESDD)
-*>          =10: ieee NaN arithmetic can be trusted not to trap
+*>          =10: ieee infinity and NaN arithmetic can be trusted not to trap
 *>          =11: infinity arithmetic can be trusted not to trap
 *>          12 <= ISPEC <= 16:
 *>               xHSEQR or related subroutines,
@@ -686,7 +686,7 @@
 *
   140 CONTINUE
 *
-*     ISPEC = 10: ieee NaN arithmetic can be trusted not to trap
+*     ISPEC = 10: ieee and infinity NaN arithmetic can be trusted not to trap
 *
 *     ILAENV = 0
       ILAENV = 1
@@ -697,7 +697,7 @@
 *
   150 CONTINUE
 *
-*     ISPEC = 11: infinity arithmetic can be trusted not to trap
+*     ISPEC = 11: ieee infinity arithmetic can be trusted not to trap
 *
 *     ILAENV = 0
       ILAENV = 1
