@@ -18,6 +18,7 @@
 !  ==================
 !>
 !> Weslley Pereira, University of Colorado Denver, USA
+!> Nick Papior, Technical University of Denmark, DNK
 !
 !> \par Further Details:
 !  =====================
