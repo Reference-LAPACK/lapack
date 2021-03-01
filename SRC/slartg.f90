@@ -90,6 +90,7 @@
 !> \verbatim
 !>          R is REAL
 !>          The nonzero component of the rotated vector.
+!> \endverbatim
 !
 !  Authors:
 !  ========
