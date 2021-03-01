@@ -26,7 +26,7 @@ matrix:
     env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
     osx_image: xcode10.3
-    name: "Makefile Test on Linux"
+    name: "Makefile Test on Mac OS X"
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
