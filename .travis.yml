@@ -13,25 +13,32 @@ addons:
 
 matrix:
   include:
-  # - os: linux
-  #   env: CMAKE_BUILD_TYPE=Release
   - os: linux
+    env: CMAKE_BUILD_TYPE=Release
+  - os: linux
+    name: "Makefile Test on Linux"
     script:
-    - echo "Testing Makefile"
-    - rm make.inc
+    - rm -f make.inc
     - cp make.inc.example make.inc
-    - make clean
-    - make all -j2
-  # - os: linux
-  #   env: CMAKE_BUILD_TYPE=Coverage
-  # - os: osx
-  #   osx_image: xcode10.3
-  #   env: CMAKE_BUILD_TYPE=Release
+    - make -s -j2 all
+    - make -j2 install
+  - os: linux
+    env: CMAKE_BUILD_TYPE=Coverage
+  - os: osx
+    osx_image: xcode10.3
+    name: "Makefile Test on Linux"
+    script:
+    - rm -f make.inc
+    - cp make.inc.example make.inc
+    - make -s -j2 all
+    - make -j2 install
 
-script:
+before_script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
+
+script:
   - export SRC_DIR=$(pwd)
   - export BLD_DIR=${SRC_DIR}/lapack-travis-bld
   - export INST_DIR=${SRC_DIR}/../lapack-travis-install
