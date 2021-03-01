@@ -1,39 +1,143 @@
+!> \brief \b LA_CONSTANTS is a module for the scaling constants for the compiled Fortran single and double precisions
+!
+!  =========== DOCUMENTATION ===========
+!
+! Online html documentation available at
+!            http://www.netlib.org/lapack/explore-html/
+!
+!  Authors:
+!  ========
+!
+!> \author Edward Anderson, Lockheed Martin
+!
+!> \date May 2016
+!
+!> \ingroup OTHERauxiliary
+!
+!> \par Contributors:
+!  ==================
+!>
+!> Weslley Pereira, University of Colorado Denver, USA
+!
+!> \par Further Details:
+!  =====================
+!>
+!> \verbatim
+!>
+!>  Anderson E. (2017)
+!>  Algorithm 978: Safe Scaling in the Level 1 BLAS
+!>  ACM Trans Math Softw 44:1--28
+!>  https://doi.org/10.1145/3061665
+!>
+!>  Blue, James L. (1978)
+!>  A Portable Fortran Program to Find the Euclidean Norm of a Vector
+!>  ACM Trans Math Softw 4:15--23
+!>  https://doi.org/10.1145/355769.355771
+!>
+!> \endverbatim
+!
 module LA_CONSTANTS
 !
-!  -- BLAS/LAPACK module --
-!     May 06, 2016
+!  -- LAPACK auxiliary module (version 3.9.0) --
+!  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+!  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+!     February 2021
 !
-!  Standard constants
+!  Standard constants for 
+   integer, parameter :: sp = kind(1.e0)
 !
-   double precision, parameter :: zero = 0.0
-   double precision, parameter :: half = 0.5
-   double precision, parameter :: one = 1.0
-   double precision, parameter :: two = 2.0
-   double precision, parameter :: three = 3.0
-   double precision, parameter :: four = 4.0
-   double precision, parameter :: eight = 8.0
-   double precision, parameter :: ten = 10.0
-   complex*16, parameter :: czero = ( 0.0, 0.0 )
-   complex*16, parameter :: chalf = ( 0.5, 0.0 )
-   complex*16, parameter :: cone = ( 1.0, 0.0 )
-   character*1, parameter :: sprefix = 'D'
-   character*1, parameter :: cprefix = 'Z'
+   real(sp), parameter :: szero = 0.0_sp
+   real(sp), parameter :: shalf = 0.5_sp
+   real(sp), parameter :: sone = 1.0_sp
+   real(sp), parameter :: stwo = 2.0_sp
+   real(sp), parameter :: sthree = 3.0_sp
+   real(sp), parameter :: sfour = 4.0_sp
+   real(sp), parameter :: seight = 8.0_sp
+   real(sp), parameter :: sten = 10.0_sp
+   complex(sp), parameter :: czero = ( 0.0_sp, 0.0_sp )
+   complex(sp), parameter :: chalf = ( 0.5_sp, 0.0_sp )
+   complex(sp), parameter :: cone = ( 1.0_sp, 0.0_sp )
+   character*1, parameter :: sprefix = 'S'
+   character*1, parameter :: cprefix = 'C'
 !
-!  Model parameters
+!  Scaling constants
 !
-   double precision, parameter :: eps =  0.11102230246251565404D-015
-   double precision, parameter :: ulp =  0.22204460492503130808D-015
-   double precision, parameter :: safmin =  0.22250738585072013831D-307
-   double precision, parameter :: safmax =  0.44942328371557897693D+308
-   double precision, parameter :: smlnum =  0.10020841800044863890D-291
-   double precision, parameter :: bignum =  0.99792015476735990583D+292
-   double precision, parameter :: rtmin =  0.10010415475915504622D-145
-   double precision, parameter :: rtmax =  0.99895953610111751404D+146
+   real(sp), parameter :: sulp = epsilon(0._sp)
+   real(sp), parameter :: seps = sulp * 0.5_sp
+   real(sp), parameter :: ssafmin = real(radix(0._sp),sp)**max( &
+      minexponent(0._sp)-1, &
+      1-maxexponent(0._sp) &
+   )
+   real(sp), parameter :: ssafmax = sone / ssafmin
+   real(sp), parameter :: ssmlnum = ssafmin / sulp
+   real(sp), parameter :: sbignum = ssafmax * sulp
+   real(sp), parameter :: srtmin = sqrt(ssmlnum)
+   real(sp), parameter :: srtmax = sqrt(sbignum)
 !
 !  Blue's scaling constants
 !
-   double precision, parameter :: tsml =  0.14916681462400413487D-153
-   double precision, parameter :: tbig =  0.19979190722022350281D+147
-   double precision, parameter :: ssml =  0.44989137945431963828D+162
-   double precision, parameter :: sbig =  0.11113793747425387417D-161
+   real(sp), parameter :: stsml = real(radix(0._sp), sp)**ceiling( &
+      real(( minexponent(0._sp) - 1_sp ) / 2, sp) &
+   )
+   real(sp), parameter :: stbig = real(radix(0._sp), sp)**floor( &
+      real(( maxexponent(0._sp) - digits(0._sp) + 1_sp) / 2, sp) &
+   )
+!  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+   real(sp), parameter :: sssml = real(radix(0._sp), sp)**( - floor( &
+      real(( minexponent(0._sp) - 1_sp ) / 2 ), sp) &
+   )
+!  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
+   real(sp), parameter :: ssbig = real(radix(0._sp), sp)**( - ceiling( &
+      real(( maxexponent(0._sp) - digits(0._sp) + 1_sp) / 2 ), sp) &
+   )
+!
+!  
+!  Standard constants for 
+   integer, parameter :: dp = kind(1.d0)
+!
+   real(dp), parameter :: dzero = 0.0_dp
+   real(dp), parameter :: dhalf = 0.5_dp
+   real(dp), parameter :: done = 1.0_dp
+   real(dp), parameter :: dtwo = 2.0_dp
+   real(dp), parameter :: dthree = 3.0_dp
+   real(dp), parameter :: dfour = 4.0_dp
+   real(dp), parameter :: deight = 8.0_dp
+   real(dp), parameter :: dten = 10.0_dp
+   complex(dp), parameter :: zzero = ( 0.0_dp, 0.0_dp )
+   complex(dp), parameter :: zhalf = ( 0.5_dp, 0.0_dp )
+   complex(dp), parameter :: zone = ( 1.0_dp, 0.0_dp )
+   character*1, parameter :: dprefix = 'D'
+   character*1, parameter :: zprefix = 'Z'
+!
+!  Scaling constants
+!
+   real(dp), parameter :: dulp = epsilon(0._dp)
+   real(dp), parameter :: deps = dulp * 0.5_dp
+   real(dp), parameter :: dsafmin = real(radix(0._dp),dp)**max( &
+      minexponent(0._dp)-1, &
+      1-maxexponent(0._dp) &
+   )
+   real(dp), parameter :: dsafmax = done / dsafmin
+   real(dp), parameter :: dsmlnum = dsafmin / dulp
+   real(dp), parameter :: dbignum = dsafmax * dulp
+   real(dp), parameter :: drtmin = sqrt(dsmlnum)
+   real(dp), parameter :: drtmax = sqrt(dbignum)
+!
+!  Blue's scaling constants
+!
+   real(dp), parameter :: dtsml = real(radix(0._dp), dp)**ceiling( &
+      real(( minexponent(0._dp) - 1_sp ) / 2, dp) &
+   )
+   real(dp), parameter :: dtbig = real(radix(0._dp), dp)**floor( &
+      real(( maxexponent(0._dp) - digits(0._dp) + 1_sp) / 2, dp) &
+   )
+!  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+   real(dp), parameter :: dssml = real(radix(0._dp) ,dp)**( - floor( &
+      real(( minexponent(0._dp) - 1_sp ) / 2 ), dp) &
+   )
+!  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
+   real(dp), parameter :: dsbig = real(radix(0._dp), dp)**( - ceiling( &
+      real(( maxexponent(0._dp) - digits(0._dp) + 1_sp) / 2 ), dp) &
+   )
+!
 end module LA_CONSTANTS
