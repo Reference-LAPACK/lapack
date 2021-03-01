@@ -13,13 +13,21 @@ addons:
 
 matrix:
   include:
+  # - os: linux
+  #   env: CMAKE_BUILD_TYPE=Release
   - os: linux
-    env: CMAKE_BUILD_TYPE=Release
-  - os: linux
-    env: CMAKE_BUILD_TYPE=Coverage
-  - os: osx
-    osx_image: xcode10.3
-    env: CMAKE_BUILD_TYPE=Release
+    script:
+    - echo "Testing Makefile"
+    - rm make.inc
+    - cp make.inc.example make.inc
+    - make clean
+    - make lib -j2
+    - make test -j2
+  # - os: linux
+  #   env: CMAKE_BUILD_TYPE=Coverage
+  # - os: osx
+  #   osx_image: xcode10.3
+  #   env: CMAKE_BUILD_TYPE=Release
 
 script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
@@ -52,12 +60,4 @@ script:
     echo "Coverage";
     make coverage;
     bash <(curl -s https://codecov.io/bash) -X gcov;
-    fi
-  - |
-    if [[ "$CMAKE_BUILD_TYPE" == "Release" ]]; then
-      echo "Testing Makefile"
-      rm make.inc
-      cp make.inc.example make.inc
-      make lib -j2
-      make test -j2
     fi
