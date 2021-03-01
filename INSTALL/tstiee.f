@@ -56,7 +56,7 @@
       END IF
 *
       WRITE( 6, FMT = * )
-*     ILAENV( 11, ...) checks both infinity and NaN arithmetic
+*     ILAENV( 10, ...) checks both infinity and NaN arithmetic
 *     infinity has already been checked so checking NaN now
       WRITE( 6, FMT = * )
      $   'We are about to check whether NaN arithmetic'
