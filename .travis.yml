@@ -53,3 +53,11 @@ script:
     make coverage;
     bash <(curl -s https://codecov.io/bash) -X gcov;
     fi
+  - |
+    if [[ "$CMAKE_BUILD_TYPE" == "Release" ]]; then
+      echo "Testing Makefile"
+      rm make.inc
+      cp make.inc.example make.inc
+      make lib -j2
+      make test -j2
+    fi
