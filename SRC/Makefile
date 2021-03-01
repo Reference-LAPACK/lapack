@@ -57,7 +57,7 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
-ALLMOD = la_constants.mod la_constants32.mod
+ALLMOD = la_constants.mod
 
 .SUFFIXES: .f .F .f90 .F90 .o .mod
 %.o: %.f $(ALLMOD)
@@ -70,14 +70,14 @@ ALLMOD = la_constants.mod la_constants32.mod
 	$(FC) $(FFLAGS) -c -o $@ $<
 .o.mod:
 	@true
-   
+
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
    iparmq.o iparam2stage.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
 SCLAUX = \
-   la_constants32.o \
+   la_constants.o \
    sbdsdc.o \
    sbdsqr.o sdisna.o slabad.o slacpy.o sladiv.o slae2.o  slaebz.o \
    slaed0.o slaed1.o slaed2.o slaed3.o slaed4.o slaed5.o slaed6.o \
@@ -632,8 +632,6 @@ cla_wwaddw.o: cla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 
 # Modules
-la_constants32.o: la_constants32.f90
-	$(FC) $(FFLAGS) -c -o $@ $<
 la_constants.o: la_constants.f90
 	$(FC) $(FFLAGS) -c -o $@ $<
 
