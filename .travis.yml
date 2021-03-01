@@ -21,8 +21,7 @@ matrix:
     - rm make.inc
     - cp make.inc.example make.inc
     - make clean
-    - make lib -j2
-    - make test -j2
+    - make all -j2
   # - os: linux
   #   env: CMAKE_BUILD_TYPE=Coverage
   # - os: osx
