@@ -405,15 +405,16 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       REAL               A1, A2, A3, B1, B2, B3, CSQ, CSU, CSV, ERROR,
-     $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN
+     $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN, SFMIN, HUGE
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
+      REAL               SLAMCH
       EXTERNAL           SCOPY, SLAGS2, SLAPLL, SLARTG, SLASET, SROT,
-     $                   SSCAL, XERBLA
+     $                   SSCAL, XERBLA, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -459,6 +460,11 @@
          CALL XERBLA( 'STGSJA', -INFO )
          RETURN
       END IF
+*
+*     Safe minimum
+*
+      SFMIN = SLAMCH( 'Safe minimum' )
+      HUGE = SLAMCH( 'O' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -594,26 +600,35 @@
          A1 = A( K+I, N-L+I )
          B1 = B( I, N-L+I )
 *
-         IF( A1.NE.ZERO ) THEN
+         IF( ABS(A1).GE.SFMIN ) THEN
             GAMMA = B1 / A1
 *
-*           change sign if necessary
+            IF( GAMMA.LE.HUGE ) THEN
 *
-            IF( GAMMA.LT.ZERO ) THEN
-               CALL SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
-               IF( WANTV )
-     $            CALL SSCAL( P, -ONE, V( 1, I ), 1 )
-            END IF
+*              change sign if necessary
 *
-            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
-     $                   RWK )
+               IF( GAMMA.LT.ZERO ) THEN
+                  CALL SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+                  IF( WANTV )
+     $               CALL SSCAL( P, -ONE, V( 1, I ), 1 )
+               END IF
 *
-            IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
-     $                     LDA )
-            ELSE
-               CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+               CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
+     $                      ALPHA( K+I ),RWK )
+*
+               IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
+                  CALL SSCAL( L-I+1, ONE / ALPHA( K+I ),
+     $                        A( K+I, N-L+I ),LDA )
+               ELSE
+                  CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
      $                     LDB )
+                  CALL SCOPY( L-I+1, B( I, N-L+I ), LDB,
+     $                        A( K+I, N-L+I ),LDA )
+               END IF
+*
+            ELSE
+               ALPHA( K+I ) = ZERO
+               BETA( K+I ) = ONE
                CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF

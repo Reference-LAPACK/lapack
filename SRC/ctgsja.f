@@ -409,7 +409,7 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       REAL               A1, A3, B1, B3, CSQ, CSU, CSV, ERROR, GAMMA,
-     $                   RWK, SSMIN, SFMIN
+     $                   RWK, SSMIN, SFMIN, HUGE
       COMPLEX            A2, B2, SNQ, SNU, SNV
 *     ..
 *     .. External Functions ..
@@ -469,6 +469,7 @@
 *     Safe minimum
 *
       SFMIN = SLAMCH( 'Safe minimum' )
+      HUGE = SLAMCH( 'O' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -616,21 +617,30 @@
          IF( ABS(A1).GE.SFMIN ) THEN
             GAMMA = B1 / A1
 *
-            IF( GAMMA.LT.ZERO ) THEN
-               CALL CSSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
-               IF( WANTV )
-     $            CALL CSSCAL( P, -ONE, V( 1, I ), 1 )
-            END IF
+            IF( GAMMA.LE.HUGE ) THEN
 *
-            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
-     $                   RWK )
+               IF( GAMMA.LT.ZERO ) THEN
+                  CALL CSSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+                  IF( WANTV )
+     $               CALL CSSCAL( P, -ONE, V( 1, I ), 1 )
+               END IF
 *
-            IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL CSSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
-     $                      LDA )
+               CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
+     $                      ALPHA( K+I ), RWK ) 
+*
+               IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
+                  CALL CSSCAL( L-I+1, ONE / ALPHA( K+I ),
+     $                         A( K+I, N-L+I ), LDA )
+               ELSE
+                  CALL CSSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+     $                         LDB )
+                  CALL CCOPY( L-I+1, B( I, N-L+I ), LDB,
+     $                        A( K+I, N-L+I ), LDA )
+               END IF
+*
             ELSE
-               CALL CSSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
-     $                      LDB )
+               ALPHA( K+I ) = ZERO
+               BETA( K+I ) = ONE
                CALL CCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF
