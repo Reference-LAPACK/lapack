@@ -39,7 +39,7 @@
 !
 module LA_CONSTANTS
 !
-!  -- LAPACK auxiliary module (version 3.9.0) --
+!  -- LAPACK auxiliary module (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     February 2021
