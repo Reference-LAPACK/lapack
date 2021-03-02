@@ -38,11 +38,11 @@
 !> \endverbatim
 !
 module LA_CONSTANTS
-!  -- LAPACK auxiliary module (version 3.9.0) --
+!
+!  -- LAPACK auxiliary module --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-!     February 2021
-
+!
 !  Standard constants for 
    integer, parameter :: sp = kind(1.e0)
 
