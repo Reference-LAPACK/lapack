@@ -409,12 +409,13 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       REAL               A1, A3, B1, B3, CSQ, CSU, CSV, ERROR, GAMMA,
-     $                   RWK, SSMIN
+     $                   RWK, SSMIN, SFMIN
       COMPLEX            A2, B2, SNQ, SNU, SNV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLAGS2, CLAPLL, CLASET, CROT, CSSCAL,
@@ -464,6 +465,10 @@
          CALL XERBLA( 'CTGSJA', -INFO )
          RETURN
       END IF
+*
+*     Safe minimum
+*
+      SFMIN = SLAMCH( 'Safe minimum' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -608,7 +613,7 @@
          A1 = REAL( A( K+I, N-L+I ) )
          B1 = REAL( B( I, N-L+I ) )
 *
-         IF( A1.NE.ZERO ) THEN
+         IF( ABS(A1).GE.SFMIN ) THEN
             GAMMA = B1 / A1
 *
             IF( GAMMA.LT.ZERO ) THEN
