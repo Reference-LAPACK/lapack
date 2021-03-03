@@ -5,25 +5,14 @@
 ! Online html documentation available at
 !            http://www.netlib.org/lapack/explore-html/
 !
-!> \htmlonly
-!> Download SLARTG + dependencies
-!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartg.f">
-!> [TGZ]</a>
-!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartg.f">
-!> [ZIP]</a>
-!> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartg.f">
-!> [TXT]</a>
-!> \endhtmlonly
-!
 !  Definition:
 !  ===========
 !
-!       SUBROUTINE SLARTG( F, G, CS, SN, R )
+!       SUBROUTINE SLARTG( F, G, C, S, R )
 !
 !       .. Scalar Arguments ..
-!       REAL               CS, F, G, R, SN
+!       REAL(wp)          C, F, G, R, S
 !       ..
-!
 !
 !> \par Purpose:
 !  =============
@@ -46,7 +35,7 @@
 !> square root of the sum of squares.
 !>
 !> This version is discontinuous in R at F = 0 but it returns the same
-!> C and S as CLARTG for complex inputs (F,0) and (G,0).
+!> C and S as SLARTG for complex inputs (F,0) and (G,0).
 !>
 !> This is a more accurate version of the BLAS1 routine SROTG,
 !> with the following other differences:
@@ -56,7 +45,9 @@
 !>       floating point operations (saves work in SBDSQR when
 !>       there are zeros on the diagonal).
 !>
-!> If F exceeds G in magnitude, CS will be positive.
+!> If F exceeds G in magnitude, C will be positive.
+!>
+!> Below, wp=>sp stands for single precision from LA_CONSTANTS module.
 !> \endverbatim
 !
 !  Arguments:
@@ -64,31 +55,31 @@
 !
 !> \param[in] F
 !> \verbatim
-!>          F is REAL
+!>          F is REAL(wp)
 !>          The first component of vector to be rotated.
 !> \endverbatim
 !>
 !> \param[in] G
 !> \verbatim
-!>          G is REAL
+!>          G is REAL(wp)
 !>          The second component of vector to be rotated.
 !> \endverbatim
 !>
-!> \param[out] CS
+!> \param[out] C
 !> \verbatim
-!>          CS is REAL
+!>          C is REAL(wp)
 !>          The cosine of the rotation.
 !> \endverbatim
 !>
-!> \param[out] SN
+!> \param[out] S
 !> \verbatim
-!>          SN is REAL
+!>          S is REAL(wp)
 !>          The sine of the rotation.
 !> \endverbatim
 !>
 !> \param[out] R
 !> \verbatim
-!>          R is REAL
+!>          R is REAL(wp)
 !>          The nonzero component of the rotated vector.
 !> \endverbatim
 !
@@ -119,18 +110,20 @@
 !> \endverbatim
 !
 subroutine SLARTG( f, g, c, s, r )
-   use LA_CONSTANTS32, only: zero, half, one, rtmin, rtmax, safmin, safmax
+   use LA_CONSTANTS, &
+   only: wp=>sp, zero=>szero, half=>shalf, one=>sone, &
+         rtmin=>srtmin, rtmax=>srtmax, safmin=>ssafmin, safmax=>ssafmax
 !
-!  -- LAPACK auxiliary routine (version 3.9.0) --
+!  -- LAPACK auxiliary routine (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     February 2021
 !
 !  .. Scalar Arguments ..
-   real :: c, f, g, r, s
+   real(wp) :: c, f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real :: d, f1, fs, g1, gs, p, u, uu
+   real(wp) :: d, f1, fs, g1, gs, p, u, uu
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt

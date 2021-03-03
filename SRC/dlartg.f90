@@ -1,57 +1,129 @@
-subroutine DLARTG( f, g, c, s, r )
-   use LA_CONSTANTS, only: zero, half, one, rtmin, rtmax, safmin, safmax
+!> \brief \b DLARTG generates a plane rotation with real cosine and real sine.
 !
-!  LAPACK auxiliary routine
-!  E. Anderson
-!  July 30, 2016
+!  =========== DOCUMENTATION ===========
+!
+! Online html documentation available at
+!            http://www.netlib.org/lapack/explore-html/
+!
+!  Definition:
+!  ===========
+!
+!       SUBROUTINE DLARTG( F, G, C, S, R )
+!
+!       .. Scalar Arguments ..
+!       REAL(wp)      C, F, G, R, S
+!       ..
+!
+!> \par Purpose:
+!  =============
+!>
+!> \verbatim
+!>
+!> DLARTG generates a plane rotation so that
+!>
+!>    [  C  S  ]  .  [ F ]  =  [ R ]
+!>    [ -S  C  ]     [ G ]     [ 0 ]
+!>
+!> where C**2 + S**2 = 1.
+!>
+!> The mathematical formulas used for C and S are
+!>    R = sign(F) * sqrt(F**2 + G**2)
+!>    C = F / R
+!>    S = G / R
+!> Hence C >= 0. The algorithm used to compute these quantities
+!> incorporates scaling to avoid overflow or underflow in computing the
+!> square root of the sum of squares.
+!>
+!> This version is discontinuous in R at F = 0 but it returns the same
+!> C and S as ZLARTG for complex inputs (F,0) and (G,0).
+!>
+!> This is a more accurate version of the BLAS1 routine DROTG,
+!> with the following other differences:
+!>    F and G are unchanged on return.
+!>    If G=0, then C=1 and S=0.
+!>    If F=0 and (G .ne. 0), then C=0 and S=sign(1,G) without doing any
+!>       floating point operations (saves work in DBDSQR when
+!>       there are zeros on the diagonal).
+!>
+!> If F exceeds G in magnitude, C will be positive.
+!>
+!> Below, wp=>dp stands for double precision from LA_CONSTANTS module.
+!> \endverbatim
+!
+!  Arguments:
+!  ==========
+!
+!> \param[in] F
+!> \verbatim
+!>          F is REAL(wp)
+!>          The first component of vector to be rotated.
+!> \endverbatim
+!>
+!> \param[in] G
+!> \verbatim
+!>          G is REAL(wp)
+!>          The second component of vector to be rotated.
+!> \endverbatim
+!>
+!> \param[out] C
+!> \verbatim
+!>          C is REAL(wp)
+!>          The cosine of the rotation.
+!> \endverbatim
+!>
+!> \param[out] S
+!> \verbatim
+!>          S is REAL(wp)
+!>          The sine of the rotation.
+!> \endverbatim
+!>
+!> \param[out] R
+!> \verbatim
+!>          R is REAL(wp)
+!>          The nonzero component of the rotated vector.
+!> \endverbatim
+!
+!  Authors:
+!  ========
+!
+!> \author Edward Anderson, Lockheed Martin
+!
+!> \date July 2016
+!
+!> \ingroup OTHERauxiliary
+!
+!> \par Contributors:
+!  ==================
+!>
+!> Weslley Pereira, University of Colorado Denver, USA
+!
+!> \par Further Details:
+!  =====================
+!>
+!> \verbatim
+!>
+!>  Anderson E. (2017)
+!>  Algorithm 978: Safe Scaling in the Level 1 BLAS
+!>  ACM Trans Math Softw 44:1--28
+!>  https://doi.org/10.1145/3061665
+!>
+!> \endverbatim
+!
+subroutine DLARTG( f, g, c, s, r )
+   use LA_CONSTANTS, &
+   only: wp=>dp, zero=>dzero, half=>dhalf, one=>done, &
+         rtmin=>drtmin, rtmax=>drtmax, safmin=>dsafmin, safmax=>dsafmax
+!
+!  -- LAPACK auxiliary routine (version 3.10.0) --
+!  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+!  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+!     February 2021
 !
 !  .. Scalar Arguments ..
-   double precision :: c, f, g, r, s
+   real(wp) :: c, f, g, r, s
 !  ..
-!
-!  Purpose
-!  =======
-!
-!  DLARTG generates a plane rotation so that
-!
-!     [  C  S  ]  .  [ F ]  =  [ R ]
-!     [ -S  C  ]     [ G ]     [ 0 ]
-!
-!  where C**2 + S**2 = 1.
-!
-!  The mathematical formulas used for C and S are
-!     R = sign(F) * sqrt(F**2 + G**2)
-!     C = F / R
-!     S = G / R
-!  Hence C >= 0.  The algorithm used to compute these quantities
-!  incorporates scaling to avoid overflow or underflow in computing the
-!  square root of the sum of squares.
-!
-!  This version is discontinuous in R at F = 0 but it returns the same
-!  C and S as CLARTG for complex inputs (F,0) and (G,0).
-!
-!  Arguments
-!  =========
-!
-!  F       (input) REAL
-!          The first component of vector to be rotated.
-!
-!  G       (input) REAL
-!          The second component of vector to be rotated.
-!
-!  C       (output) REAL
-!          The cosine of the rotation.
-!
-!  S       (output) REAL
-!          The sine of the rotation.
-!
-!  R       (output) REAL
-!          The nonzero component of the rotated vector.
-!
-!  =====================================================================
-!
 !  .. Local Scalars ..
-   double precision :: d, f1, fs, g1, gs, p, u, uu
+   real(wp) :: d, f1, fs, g1, gs, p, u, uu
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt
