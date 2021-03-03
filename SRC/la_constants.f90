@@ -18,7 +18,7 @@
 !  ==================
 !>
 !> Weslley Pereira, University of Colorado Denver, USA
-!> Nick Papior, Technical University of Denmark, DNK
+!> Nick Papior, Technical University of Denmark, DK
 !
 !> \par Further Details:
 !  =====================
@@ -38,15 +38,14 @@
 !> \endverbatim
 !
 module LA_CONSTANTS
-!
 !  -- LAPACK auxiliary module (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     February 2021
-!
+
 !  Standard constants for 
    integer, parameter :: sp = kind(1.e0)
-!
+
    real(sp), parameter :: szero = 0.0_sp
    real(sp), parameter :: shalf = 0.5_sp
    real(sp), parameter :: sone = 1.0_sp
@@ -60,9 +59,8 @@ module LA_CONSTANTS
    complex(sp), parameter :: cone = ( 1.0_sp, 0.0_sp )
    character*1, parameter :: sprefix = 'S'
    character*1, parameter :: cprefix = 'C'
-!
+
 !  Scaling constants
-!
    real(sp), parameter :: sulp = epsilon(0._sp)
    real(sp), parameter :: seps = sulp * 0.5_sp
    real(sp), parameter :: ssafmin = real(radix(0._sp),sp)**max( &
@@ -74,28 +72,22 @@ module LA_CONSTANTS
    real(sp), parameter :: sbignum = ssafmax * sulp
    real(sp), parameter :: srtmin = sqrt(ssmlnum)
    real(sp), parameter :: srtmax = sqrt(sbignum)
-!
+
 !  Blue's scaling constants
-!
    real(sp), parameter :: stsml = real(radix(0._sp), sp)**ceiling( &
-      real(( minexponent(0._sp) - 1_sp ) / 2, sp) &
-   )
+       (minexponent(0._sp) - 1) * 0.5_sp)
    real(sp), parameter :: stbig = real(radix(0._sp), sp)**floor( &
-      real(( maxexponent(0._sp) - digits(0._sp) + 1_sp) / 2, sp) &
-   )
+       (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp)
 !  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
    real(sp), parameter :: sssml = real(radix(0._sp), sp)**( - floor( &
-      real(( minexponent(0._sp) - 1_sp ) / 2 ), sp) &
-   )
+       (minexponent(0._sp) - 1) * 0.5_sp))
 !  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(sp), parameter :: ssbig = real(radix(0._sp), sp)**( - ceiling( &
-      real(( maxexponent(0._sp) - digits(0._sp) + 1_sp) / 2 ), sp) &
-   )
-!
-!  
+       (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp))
+
 !  Standard constants for 
    integer, parameter :: dp = kind(1.d0)
-!
+
    real(dp), parameter :: dzero = 0.0_dp
    real(dp), parameter :: dhalf = 0.5_dp
    real(dp), parameter :: done = 1.0_dp
@@ -109,9 +101,8 @@ module LA_CONSTANTS
    complex(dp), parameter :: zone = ( 1.0_dp, 0.0_dp )
    character*1, parameter :: dprefix = 'D'
    character*1, parameter :: zprefix = 'Z'
-!
+
 !  Scaling constants
-!
    real(dp), parameter :: dulp = epsilon(0._dp)
    real(dp), parameter :: deps = dulp * 0.5_dp
    real(dp), parameter :: dsafmin = real(radix(0._dp),dp)**max( &
@@ -123,22 +114,17 @@ module LA_CONSTANTS
    real(dp), parameter :: dbignum = dsafmax * dulp
    real(dp), parameter :: drtmin = sqrt(dsmlnum)
    real(dp), parameter :: drtmax = sqrt(dbignum)
-!
+
 !  Blue's scaling constants
-!
    real(dp), parameter :: dtsml = real(radix(0._dp), dp)**ceiling( &
-      real(( minexponent(0._dp) - 1_sp ) / 2, dp) &
-   )
+       (minexponent(0._dp) - 1) * 0.5_dp)
    real(dp), parameter :: dtbig = real(radix(0._dp), dp)**floor( &
-      real(( maxexponent(0._dp) - digits(0._dp) + 1_sp) / 2, dp) &
-   )
+       (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp)
 !  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
-   real(dp), parameter :: dssml = real(radix(0._dp) ,dp)**( - floor( &
-      real(( minexponent(0._dp) - 1_sp ) / 2 ), dp) &
-   )
+   real(dp), parameter :: dssml = real(radix(0._dp), dp)**( - floor( &
+       (minexponent(0._dp) - 1) * 0.5_dp))
 !  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(dp), parameter :: dsbig = real(radix(0._dp), dp)**( - ceiling( &
-      real(( maxexponent(0._dp) - digits(0._dp) + 1_sp) / 2 ), dp) &
-   )
-!
+       (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp))
+
 end module LA_CONSTANTS
