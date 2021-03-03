@@ -12,11 +12,11 @@
 !
 !       .. Scalar Arguments ..
 !       INTEGER            INCX, INCY, N
-!       REAL(dp)           C
-!       COMPLEX(dp)        S
+!       REAL(wp)           C
+!       COMPLEX(wp)        S
 !       ..
 !       .. Array Arguments ..
-!       COMPLEX(dp)        X( * ), Y( * )
+!       COMPLEX(wp)        X( * ), Y( * )
 !       ..
 !
 !
@@ -31,8 +31,8 @@
 !>    [ -conjg(s)  c ] [ y(1)  y(2)  ...  y(n) ]
 !>
 !> where c is real, s is complex, and c**2 + conjg(s)*s = 1.
-!> Below, dp = kind(1.d0) stands for double precision
 !>
+!> Below, wp=>dp stands for double precision from LA_CONSTANTS module.
 !> \endverbatim
 !
 !  Arguments:
@@ -46,7 +46,7 @@
 !>
 !> \param[in,out] X
 !> \verbatim
-!>          X is COMPLEX(dp) array, dimension (N)
+!>          X is COMPLEX(wp) array, dimension (N)
 !>          On input, the vector X.
 !>          On output, X is overwritten with C*X + S*Y.
 !> \endverbatim
@@ -59,7 +59,7 @@
 !>
 !> \param[in,out] Y
 !> \verbatim
-!>          Y is COMPLEX(dp) array, dimension (N)
+!>          Y is COMPLEX(wp) array, dimension (N)
 !>          On input, the vector Y.
 !>          On output, Y is overwritten with -CONJG(S)*X + C*Y.
 !> \endverbatim
@@ -72,12 +72,12 @@
 !>
 !> \param[in] C
 !> \verbatim
-!>          C is REAL(dp)
+!>          C is REAL(wp)
 !> \endverbatim
 !>
 !> \param[in] S
 !> \verbatim
-!>          S is COMPLEX(dp)
+!>          S is COMPLEX(wp)
 !> \endverbatim
 !
 !  Authors:
@@ -108,7 +108,7 @@
 !
 !  =====================================================================
 subroutine ZROT( n, x, incx, y, incy, c, s )
-   use LA_CONSTANTS, only: wp
+   use LA_CONSTANTS, only: wp=>dp
 !
 !  Updated Level 1 BLAS
 !  E. Anderson

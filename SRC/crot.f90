@@ -12,11 +12,11 @@
 !
 !       .. Scalar Arguments ..
 !       INTEGER            INCX, INCY, N
-!       REAL               C
-!       COMPLEX            S
+!       REAL(wp)           C
+!       COMPLEX(wp)        S
 !       ..
 !       .. Array Arguments ..
-!       COMPLEX            X( * ), Y( * )
+!       COMPLEX(wp)        X( * ), Y( * )
 !       ..
 !
 !
@@ -32,6 +32,8 @@
 !>
 !> where c is real, s is complex, and c**2 + conjg(s)*s = 1.
 !>
+!> Below, wp=>sp stands for single precision from LA_CONSTANTS module.
+!>
 !> \endverbatim
 !
 !  Arguments:
@@ -45,7 +47,7 @@
 !>
 !> \param[in,out] X
 !> \verbatim
-!>          X is COMPLEX array, dimension (N)
+!>          X is COMPLEX(wp) array, dimension (N)
 !>          On input, the vector X.
 !>          On output, X is overwritten with C*X + S*Y.
 !> \endverbatim
@@ -58,7 +60,7 @@
 !>
 !> \param[in,out] Y
 !> \verbatim
-!>          Y is COMPLEX array, dimension (N)
+!>          Y is COMPLEX(wp) array, dimension (N)
 !>          On input, the vector Y.
 !>          On output, Y is overwritten with -CONJG(S)*X + C*Y.
 !> \endverbatim
@@ -71,12 +73,12 @@
 !>
 !> \param[in] C
 !> \verbatim
-!>          C is REAL
+!>          C is REAL(wp)
 !> \endverbatim
 !>
 !> \param[in] S
 !> \verbatim
-!>          S is COMPLEX
+!>          S is COMPLEX(wp)
 !> \endverbatim
 !
 !  Authors:
@@ -107,7 +109,7 @@
 !
 !  =====================================================================
 subroutine CROT( n, x, incx, y, incy, c, s )
-   use LA_CONSTANTS32, only: wp
+   use LA_CONSTANTS, only: wp=>sp
 !
 !  -- LAPACK auxiliary routine (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
