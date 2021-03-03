@@ -1,3 +1,111 @@
+!> \brief \b ZROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors.
+!
+!  =========== DOCUMENTATION ===========
+!
+! Online html documentation available at
+!            http://www.netlib.org/lapack/explore-html/
+!
+!  Definition:
+!  ===========
+!
+!       SUBROUTINE ZROT( N, X, INCX, Y, INCY, C, S )
+!
+!       .. Scalar Arguments ..
+!       INTEGER            INCX, INCY, N
+!       REAL               C
+!       COMPLEX            S
+!       ..
+!       .. Array Arguments ..
+!       COMPLEX            X( * ), Y( * )
+!       ..
+!
+!
+!> \par Purpose:
+!  =============
+!>
+!> \verbatim
+!>
+!> ZROT applies a plane rotation to vectors x and y:
+!>
+!>    [  c         s ] [ x(1)  x(2)  ...  x(n) ]
+!>    [ -conjg(s)  c ] [ y(1)  y(2)  ...  y(n) ]
+!>
+!> where c is real, s is complex, and c**2 + conjg(s)*s = 1.
+!>
+!> \endverbatim
+!
+!  Arguments:
+!  ==========
+!
+!> \param[in] N
+!> \verbatim
+!>          N is INTEGER
+!>          The number of elements in the vectors X and Y.
+!> \endverbatim
+!>
+!> \param[in,out] X
+!> \verbatim
+!>          X is COMPLEX(dp) array, dimension (N)
+!>          On input, the vector X.
+!>          On output, X is overwritten with C*X + S*Y.
+!> \endverbatim
+!>
+!> \param[in] INCX
+!> \verbatim
+!>          INCX is INTEGER
+!>          The increment between successive values of X.  INCX <> 0.
+!> \endverbatim
+!>
+!> \param[in,out] Y
+!> \verbatim
+!>          Y is COMPLEX(dp) array, dimension (N)
+!>          On input, the vector Y.
+!>          On output, Y is overwritten with -CONJG(S)*X + C*Y.
+!> \endverbatim
+!>
+!> \param[in] INCY
+!> \verbatim
+!>          INCY is INTEGER
+!>          The increment between successive values of Y.  INCX <> 0.
+!> \endverbatim
+!>
+!> \param[in] C
+!> \verbatim
+!>          C is REAL(dp)
+!> \endverbatim
+!>
+!> \param[in] S
+!> \verbatim
+!>          S is COMPLEX(dp)
+!> \endverbatim
+!
+!  Authors:
+!  ========
+!
+!> \author Edward Anderson, Lockheed Martin
+!
+!> \date August 2016
+!
+!> \ingroup complexOTHERauxiliary
+!
+!> \par Contributors:
+!  ==================
+!>
+!> Weslley Pereira, University of Colorado Denver, USA
+!
+!> \par Further Details:
+!  =====================
+!>
+!> \verbatim
+!>
+!>  Anderson E. (2017)
+!>  Algorithm 978: Safe Scaling in the Level 1 BLAS
+!>  ACM Trans Math Softw 44:1--28
+!>  https://doi.org/10.1145/3061665
+!>
+!> \endverbatim
+!
+!  =====================================================================
 subroutine ZROT( n, x, incx, y, incy, c, s )
    use LA_CONSTANTS, only: wp
 !
@@ -13,49 +121,6 @@ subroutine ZROT( n, x, incx, y, incy, c, s )
 !  .. Array Arguments ..
    complex(wp) :: x(*), y(*)
 !  ..
-!
-!  Purpose
-!  =======
-!
-!  ZROT applies a plane rotation to vectors x and y:
-!
-!     [  c         s ] [ x(1)  x(2)  ...  x(n) ]
-!     [ -conjg(s)  c ] [ y(1)  y(2)  ...  y(n) ]
-!
-!  where c is real, s is complex, and c**2 + conjg(s)*s = 1.
-!
-!  Arguments
-!  =========
-!
-!  N       (input) INTEGER
-!          The number of elements of the vectors x and y.
-!
-!  X       (input/output) COMPLEX array, dimension (1+(N-1)*abs(INCX))
-!          On entry, the n-element vector x.
-!          On exit, the vector sum c*x + s*y.
-!
-!  INCX    (input) INTEGER
-!          The increment between successive values of the vector x.
-!          If INCX >= 0, X(1+(i-1)*INCX) = x(i) for 1 <= i <= n
-!          If INCX < 0, X(1-(n-i)*INCX) = x(i) for 1 <= i <= n
-!
-!  Y       (input/output) COMPLEX array, dimension (1+(N-1)*abs(INCY))
-!          On entry, the n-element vector y.
-!          On exit, the vector sum -conjg(s)*x + c*y.
-!
-!  INCY    (input) INTEGER
-!          The increment between successive values of the vector y.
-!          If INCY >= 0, Y(1+(i-1)*INCY) = y(i) for 1 <= i <= n
-!          If INCY < 0, Y(1-(n-i)*INCY) = y(i) for 1 <= i <= n
-!
-!  C       (input) REAL
-!          The scalar c.
-!
-!  S       (input) COMPLEX
-!          The scalar s.
-!
-! =====================================================================
-!
 !  .. Local Scalars ..
    integer :: i, ix, iy
    complex(wp) :: stmp
