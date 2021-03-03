@@ -12,11 +12,11 @@
 !
 !       .. Scalar Arguments ..
 !       INTEGER            INCX, INCY, N
-!       REAL               C
-!       COMPLEX            S
+!       REAL(dp)           C
+!       COMPLEX(dp)        S
 !       ..
 !       .. Array Arguments ..
-!       COMPLEX            X( * ), Y( * )
+!       COMPLEX(dp)        X( * ), Y( * )
 !       ..
 !
 !
@@ -31,6 +31,7 @@
 !>    [ -conjg(s)  c ] [ y(1)  y(2)  ...  y(n) ]
 !>
 !> where c is real, s is complex, and c**2 + conjg(s)*s = 1.
+!> Below, dp = kind(1.d0) stands for double precision
 !>
 !> \endverbatim
 !
