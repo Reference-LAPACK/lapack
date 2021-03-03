@@ -322,12 +322,12 @@
 
 *     Local scalars
       DOUBLE PRECISION :: SMLNUM, ULP, ESHIFT, SAFMIN, SAFMAX, C1, S1,
-     $                    TEMP
+     $                    TEMP, SWAP
       INTEGER :: ISTART, ISTOP, IITER, MAXIT, ISTART2, K, LD, NSHIFTS,
      $           NBLOCK, NW, NMIN, NIBBLE, N_UNDEFLATED, N_DEFLATED,
      $           NS, SWEEP_INFO, SHIFTPOS, LWORKREQ, K2, ISTARTM,
      $           ISTOPM, IWANTS, IWANTQ, IWANTZ, NORM_INFO, AED_INFO,
-     $           NWR, NBR, NSR, ITEMP1, ITEMP2, RCOST
+     $           NWR, NBR, NSR, ITEMP1, ITEMP2, RCOST, I
       LOGICAL :: ILSCHUR, ILQ, ILZ
       CHARACTER :: JBCMPZ*3
 
@@ -683,6 +683,29 @@
          NS = MIN( NSHIFTS, ISTOP-ISTART2 )
          NS = MIN( NS, N_UNDEFLATED )
          SHIFTPOS = ISTOP-N_DEFLATED-N_UNDEFLATED+1
+*
+*        Shuffle shifts to put double shifts in front
+*        This ensures that we don't split up a double shift
+*
+         DO I = SHIFTPOS, SHIFTPOS+N_UNDEFLATED-1, 2
+            IF( ALPHAI( I ).NE.-ALPHAI( I+1 ) ) THEN
+*
+               SWAP = ALPHAR( I )
+               ALPHAR( I ) = ALPHAR( I+1 )
+               ALPHAR( I+1 ) = ALPHAR( I+2 )
+               ALPHAR( I+2 ) = SWAP
+
+               SWAP = ALPHAI( I )
+               ALPHAI( I ) = ALPHAI( I+1 )
+               ALPHAI( I+1 ) = ALPHAI( I+2 )
+               ALPHAI( I+2 ) = SWAP
+               
+               SWAP = BETA( I )
+               BETA( I ) = BETA( I+1 )
+               BETA( I+1 ) = BETA( I+2 )
+               BETA( I+2 ) = SWAP
+            END IF
+         END DO
 
          IF ( MOD( LD, 6 ) .EQ. 0 ) THEN
 * 
