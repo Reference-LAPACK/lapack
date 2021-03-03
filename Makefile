@@ -120,7 +120,7 @@ lapacke_example: lapackelib lapacklib blaslib
 .PHONY: html
 html:
 	@echo "LAPACK HTML PAGES GENERATION with Doxygen"
-	doxygen DOCS/Doxyfile
+	( cat DOCS/Doxyfile ; echo "OUTPUT_DIRECTORY=$(DOCSDIR)" ) | doxygen -
 	@echo "=================="
 	@echo "LAPACK HTML PAGES GENERATED in DOCS/explore-html"
 	@echo "Usage: open DOCS/explore-html/index.html"
@@ -130,9 +130,10 @@ html:
 .PHONY: man
 man:
 	@echo "LAPACK MAN PAGES GENERATION with Doxygen"
-	doxygen DOCS/Doxyfile_man
+	@echo "OUTPUT_DIRECTORY=$(DOCSDIR)"
+	( cat DOCS/Doxyfile_man ; echo "OUTPUT_DIRECTORY=$(DOCSDIR)" ) | doxygen -
 	@echo "=================="
-	@echo "LAPACK MAN PAGES GENERATED in DOCS/MAN"
+	@echo "LAPACK MAN PAGES GENERATED in DOCS/man"
 	@echo "Set your MANPATH env variable accordingly"
 	@echo "Usage: man dgetrf.f"
 	@echo "=================="
