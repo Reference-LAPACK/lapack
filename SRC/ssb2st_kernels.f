@@ -128,8 +128,6 @@
 *> \verbatim
 *>          WORK is REAL array. Workspace of size nb.
 *> \endverbatim
-*> @param[in] n
-*>          The order of the matrix A.
 *>
 *>
 *> \par Further Details:

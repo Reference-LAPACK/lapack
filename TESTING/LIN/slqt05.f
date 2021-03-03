@@ -1,3 +1,10 @@
+*> \brief \b SLQT05
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
+*
 *  Definition:
 *  ===========
 *
@@ -13,7 +20,6 @@
 *  =============
 *>
 *> \verbatim
-*>
 *> SQRT05 tests STPLQT and STPMLQT.
 *> \endverbatim
 *
