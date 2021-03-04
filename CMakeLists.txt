@@ -107,7 +107,7 @@ if(_recursiveFlag)
   endif()
 elseif(_frecursiveFlag)
   string(REGEX MATCH "-frecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
-  if(NOT output_test) 
+  if(NOT output_test)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive"
     CACHE STRING "Recursive flag must be set" FORCE)
   endif()
@@ -368,8 +368,8 @@ endif()
 # BLAS++ / LAPACK++
 option(BLAS++ "Build BLAS++" OFF)
 option(LAPACK++ "Build LAPACK++" OFF)
- 
- 
+
+
 function(_display_cpp_implementation_msg name)
   string(TOLOWER ${name} name_lc)
   message(STATUS "${name}++ enable")
@@ -563,4 +563,70 @@ if (BLAS++)
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
+endif()
+
+# --------------------------------------------------
+# Generate MAN and/or HTML Documentation
+option(BUILD_HTML_DOCUMENTATION "Create and install the HTML based API
+documentation (requires Doxygen) - command: make html" OFF)
+option(BUILD_MAN_DOCUMENTATION "Create and install the MAN based documentation (requires Doxygen) - command: make man" OFF)
+message(STATUS "Build html documentation: ${BUILD_HTML_DOCUMENTATION}")
+message(STATUS "Build man documentation: ${BUILD_MAN_DOCUMENTATION}")
+
+if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
+    find_package(Doxygen)
+    if(NOT DOXYGEN_FOUND)
+         message(WARNING "Doxygen is needed to build the documentation.")
+
+    else()
+
+    set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
+    set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
+    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
+    set(PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
+    set(DOXYGEN_SOURCE_BROWSER YES)
+    set(DISTRIBUTE_GROUP_DOC YES)
+    set(DOXYGEN_CREATE_SUBDIRS YES)
+    set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
+    set(DOXYGEN_EXTRACT_ALL YES)
+    set(DOXYGEN_FILE_PATTERNS "*.f;*.c;*.h")
+    set(DOXYGEN_RECURSIVE YES)
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_INTERACTIVE_SVG YES)
+    set(DOXYGEN_QUIET YES)
+    set(DOXYGEN_WARNINGS NO)
+    set(DOXYGEN_GENERATE_HTML NO)
+    set(DOXYGEN_GENERATE_MAN NO)
+
+
+    if (BUILD_HTML_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML YES)
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_INLINE_SOURCES YES)
+        set(DOXYGEN_CALL_GRAPH YES)
+        set(DOXYGEN_CALLER_GRAPH YES)
+
+        doxygen_add_docs(
+            html
+            ${PROJECT_SOURCE_DIR}
+            COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
+        )
+    endif()
+    if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_MAN YES)
+        set(DOXYGEN_EXCLUDE SRC/VARIANTS)
+        set(DOXYGEN_MAN_LINKS YES)
+        set(DOXYGEN_INLINE_SOURCES NO)
+        set(DOXYGEN_CALL_GRAPH NO)
+        set(DOXYGEN_CALLER_GRAPH NO)
+
+        doxygen_add_docs(
+            man
+            ${PROJECT_SOURCE_DIR}
+            COMMENT "Generating man LAPACK documentation"
+        )
+    endif()
+
+    endif()
 endif()

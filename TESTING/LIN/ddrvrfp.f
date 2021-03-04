@@ -203,11 +203,6 @@
 *>          D_TEMP_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DLATMS
-*> \verbatim
-*>          D_WORK_DLATMS is DOUBLE PRECISION array, dimension ( NMAX )
-*> \endverbatim
-*>
 *> \param[out] D_WORK_DLANSY
 *> \verbatim
 *>          D_WORK_DLANSY is DOUBLE PRECISION array, dimension ( NMAX )

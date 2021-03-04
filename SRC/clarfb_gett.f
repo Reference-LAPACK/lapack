@@ -13,6 +13,7 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb_gett.f">
 *> [TXT]</a>
+*> \endhtmlonly
 *>
 *  Definition:
 *  ===========
@@ -69,7 +70,7 @@
 *> \verbatim
 *>          N is INTEGER
 *>          The number of columns of the matrices A and B.
-*.          N >= 0.
+*>          N >= 0.
 *> \endverbatim
 *>
 *> \param[in] K

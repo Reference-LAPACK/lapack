@@ -8,12 +8,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET40( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE DGET40( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
-*       INTEGER            KNT, LMAX, NINFO
-*       DOUBLE PRECISION   RMAX
-*       ..
+*      INTEGER            KNT, LMAX, NIN
+*      DOUBLE PRECISION   RMAX
+*      ..
+*       .. Array Arguments ..
+*      INTEGER            NINFO( 3 )
 *
 *
 *> \par Purpose:
@@ -26,7 +28,7 @@
 *> Thus, DTGEXC computes an orthogonal matrices Q and Z such that
 *>
 *>     Q' * ( [ A B ], [ D E ] ) * Z  = ( [ C1 B1 ], [ F1 E1 ] )
-*>          ( [ 0 C ]  [   F ] )        ( [ 0  A1 ]  [    D1]  ) 
+*>          ( [ 0 C ]  [   F ] )        ( [ 0  A1 ]  [    D1]  )
 *>
 *> where (C1,F1) is similar to (C,F) and (A1,D1) is similar to (A,D).
 *> Both (A,D) and (C,F) are assumed to be in standard form
@@ -51,7 +53,7 @@
 *>
 *> \param[out] NINFO
 *> \verbatim
-*>          NINFO is INTEGER
+*>          NINFO is INTEGER(3)
 *>          Number of examples where INFO is nonzero.
 *> \endverbatim
 *>
@@ -59,6 +61,11 @@
 *> \verbatim
 *>          KNT is INTEGER
 *>          Total number of examples tested.
+*> \endverbatim
+*>
+*> \param[out] NIN
+*> \verbatim
+*>          NINFO is INTEGER
 *> \endverbatim
 *
 *  Authors:

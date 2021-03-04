@@ -231,7 +231,7 @@
 *>          LIWORK >= N              if JOBP = 'N' and JOBA .NE. 'E';
 *>          LIWORK >= N + M - 1 + N, if JOBP = 'P' and JOBA = 'E';
 *>          LIWORK >= N + N          if JOBP = 'N' and JOBA = 'E'.
-*
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates and returns the optimal and minimal sizes
 *>          for the WORK, IWORK, and RWORK arrays, and no error
@@ -331,7 +331,7 @@
 *>          The dimension of the array RWORK.
 *>          If JOBP ='P', then LRWORK >= MAX(2, M).
 *>          Otherwise, LRWORK >= 2
-*
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates and returns the optimal and minimal sizes
 *>          for the WORK, IWORK, and RWORK arrays, and no error

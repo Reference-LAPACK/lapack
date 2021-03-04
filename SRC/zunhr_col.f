@@ -12,8 +12,9 @@
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunhr_col.f">
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunhr_col.f">
-*> [TXT]</a>
-*>
+*> [TXT]</a
+*> \endhtmlonly
+*
 *  Definition:
 *  ===========
 *

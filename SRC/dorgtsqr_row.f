@@ -13,7 +13,8 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgtsqr_row.f">
 *> [TXT]</a>
-*>
+*> \endhtmlonly
+*
 *  Definition:
 *  ===========
 *
