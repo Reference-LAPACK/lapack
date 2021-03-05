@@ -518,13 +518,17 @@
          IF( ILAST.EQ.ILO ) THEN
             GO TO 60
          ELSE
-            IF( ABS1( H( ILAST, ILAST-1 ) ).LE.ATOL ) THEN
+            IF( ABS1( H( ILAST, ILAST-1 ) ).LE.MAX( SAFMIN, ULP*( 
+     $         ABS1( H( ILAST, ILAST ) ) + ABS1( H( ILAST-1, ILAST-1 ) 
+     $         ) ) ) ) THEN
                H( ILAST, ILAST-1 ) = CZERO
                GO TO 60
             END IF
          END IF
 *
-         IF( ABS( T( ILAST, ILAST ) ).LE.BTOL ) THEN
+         IF( ABS( T( ILAST, ILAST ) ).LE.MAX( SAFMIN, ULP*( 
+     $         ABS( T( ILAST - 1, ILAST ) ) + ABS( T( ILAST-1, ILAST-1 )
+     $          ) ) ) ) THEN
             T( ILAST, ILAST ) = CZERO
             GO TO 50
          END IF
@@ -538,7 +542,9 @@
             IF( J.EQ.ILO ) THEN
                ILAZRO = .TRUE.
             ELSE
-               IF( ABS1( H( J, J-1 ) ).LE.ATOL ) THEN
+               IF( ABS1( H( J, J-1 ) ).LE.MAX( SAFMIN, ULP*( 
+     $            ABS1( H( J, J ) ) + ABS1( H( J-1, J-1 ) ) 
+     $            ) ) ) THEN
                   H( J, J-1 ) = CZERO
                   ILAZRO = .TRUE.
                ELSE
@@ -548,7 +554,10 @@
 *
 *           Test 2: for T(j,j)=0
 *
-            IF( ABS( T( J, J ) ).LT.BTOL ) THEN
+            TEMP = ABS ( T( J, J + 1 ) )
+            IF ( J .GT. ILO )
+     $           TEMP = TEMP + ABS ( T( J - 1, J ) )
+            IF( ABS( T( J, J ) ).LT.MAX( SAFMIN,ULP*TEMP ) ) THEN
                T( J, J ) = CZERO
 *
 *              Test 1a: Check for 2 consecutive small subdiagonals in A
