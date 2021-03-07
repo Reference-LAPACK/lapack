@@ -203,11 +203,6 @@
 *>          S_TEMP_SPOT03 is REAL array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SLATMS
-*> \verbatim
-*>          S_WORK_SLATMS is REAL array, dimension ( NMAX )
-*> \endverbatim
-*>
 *> \param[out] S_WORK_SLANSY
 *> \verbatim
 *>          S_WORK_SLANSY is REAL array, dimension ( NMAX )

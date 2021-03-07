@@ -183,10 +183,18 @@
 *
 *        2-by-2 case.
 *
-         IF( Z( 2 ).LT.ZERO .OR. Z( 3 ).LT.ZERO ) THEN
-            INFO = -2
+         IF( Z( 1 ).LT.ZERO ) THEN
+            INFO = -201
+            CALL XERBLA( 'DLASQ2', 2 )
+            RETURN
+         ELSE IF( Z( 2 ).LT.ZERO ) THEN
+            INFO = -202
             CALL XERBLA( 'SLASQ2', 2 )
             RETURN
+         ELSE IF( Z( 3 ).LT.ZERO ) THEN
+           INFO = -203
+           CALL XERBLA( 'SLASQ2', 2 )
+           RETURN
          ELSE IF( Z( 3 ).GT.Z( 1 ) ) THEN
             D = Z( 3 )
             Z( 3 ) = Z( 1 )
@@ -266,8 +274,7 @@
 *
 *     Check whether the machine is IEEE conformable.
 *
-*     IEEE = ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
-*    $       ILAENV( 11, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1
+*     IEEE = ( ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 )
 *
 *     [11/15/2008] The case IEEE=.TRUE. has a problem in single precision with
 *     some the test matrices of type 16. The double precision code is fine.

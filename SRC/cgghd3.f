@@ -221,7 +221,7 @@
 *>
 *> \verbatim
 *>
-*>  This routine reduces A to Hessenberg form and maintains B in
+*>  This routine reduces A to Hessenberg form and maintains B in triangular form
 *>  using a blocked variant of Moler and Stewart's original algorithm,
 *>  as described by Kagstrom, Kressner, Quintana-Orti, and Quintana-Orti
 *>  (BIT 2008).

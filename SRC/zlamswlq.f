@@ -81,14 +81,6 @@
 *>          NB > M.
 *> \endverbatim
 *>
-*> \param[in] NB
-*> \verbatim
-*>          NB is INTEGER
-*>          The block size to be used in the blocked QR.
-*>                MB > M.
-*>
-*> \endverbatim
-*>
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension

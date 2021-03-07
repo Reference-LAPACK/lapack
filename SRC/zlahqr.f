@@ -194,6 +194,7 @@
 *  =====================================================================
       SUBROUTINE ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -218,6 +219,8 @@
       PARAMETER          ( RZERO = 0.0d0, RONE = 1.0d0, HALF = 0.5d0 )
       DOUBLE PRECISION   DAT1
       PARAMETER          ( DAT1 = 3.0d0 / 4.0d0 )
+      INTEGER            KEXSH
+      PARAMETER          ( KEXSH = 10 )
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16         CDUM, H11, H11S, H22, SC, SUM, T, T1, TEMP, U,
@@ -225,7 +228,7 @@
       DOUBLE PRECISION   AA, AB, BA, BB, H10, H21, RTEMP, S, SAFMAX,
      $                   SAFMIN, SMLNUM, SX, T2, TST, ULP
       INTEGER            I, I1, I2, ITS, ITMAX, J, JHI, JLO, K, L, M,
-     $                   NH, NZ
+     $                   NH, NZ, KDEFL
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         V( 2 )
@@ -315,6 +318,10 @@
 *
       ITMAX = 30 * MAX( 10, NH )
 *
+*     KDEFL counts the number of iterations since a deflation
+*
+      KDEFL = 0
+*
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1. Each iteration of the loop works
 *     with the active submatrix in rows and columns L to I.
@@ -374,6 +381,7 @@
 *
          IF( L.GE.I )
      $      GO TO 140
+         KDEFL = KDEFL + 1
 *
 *        Now the active submatrix is in rows and columns L to I. If
 *        eigenvalues only are being computed, only the active submatrix
@@ -384,18 +392,18 @@
             I2 = I
          END IF
 *
-         IF( ITS.EQ.10 ) THEN
-*
-*           Exceptional shift.
-*
-            S = DAT1*ABS( DBLE( H( L+1, L ) ) )
-            T = S + H( L, L )
-         ELSE IF( ITS.EQ.20 ) THEN
+         IF( MOD(KDEFL,2*KEXSH).EQ.0 ) THEN
 *
 *           Exceptional shift.
 *
             S = DAT1*ABS( DBLE( H( I, I-1 ) ) )
             T = S + H( I, I )
+         ELSE IF( MOD(KDEFL,KEXSH).EQ.0 ) THEN
+*
+*           Exceptional shift.
+*
+            S = DAT1*ABS( DBLE( H( L+1, L ) ) )
+            T = S + H( L, L )
          ELSE
 *
 *           Wilkinson's shift.
@@ -557,6 +565,8 @@
 *     H(I,I-1) is negligible: one eigenvalue has converged.
 *
       W( I ) = H( I, I )
+*     reset deflation counter
+      KDEFL = 0
 *
 *     return to start of the main loop with new value of I.
 *
