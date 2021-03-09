@@ -31,8 +31,12 @@ matrix:
     osx_image: xcode10.3
     env: CMAKE_BUILD_TYPE=Release
   - os: osx
-    name: "CMake Release Test on OSX Catalina"
+    name: "CMake Release Test on macOS Catalina"
     osx_image: xcode12.2
+    env: CMAKE_BUILD_TYPE=Release
+  - os: osx
+    name: "CMake Release Test on macOS Big Sur"
+    osx_image: xcode12.3
     env: CMAKE_BUILD_TYPE=Release
   - os: osx
     osx_image: xcode10.3
