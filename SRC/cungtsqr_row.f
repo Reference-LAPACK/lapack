@@ -214,6 +214,9 @@
      $                   LWORKOPT, NUM_ALL_ROW_BLOCKS, JB_T, IB, IMB,
      $                   KB, KB_LAST, KNB, MB1
 *     ..
+*     .. Local Arrays ..
+      COMPLEX            DUMMY( 1, 1 )
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           CLARFB_GETT, CLASET, XERBLA
 *     ..
@@ -354,9 +357,21 @@
 *
          KNB = MIN( NBLOCAL, N - KB + 1 )
 *
-         CALL CLARFB_GETT( 'N', MB1-KB-KNB+1, N-KB+1, KNB,
-     $               T( 1, KB ), LDT, A( KB, KB ), LDA,
-     $               A( KB+KNB, KB), LDA, WORK, KNB )
+         IF( MB1-KB-KNB+1.EQ.0 ) THEN
+*
+*           In SLARFB_GETT parameters, when M=0, then the matrix B
+*           does not exist, hence we need to pass a dummy array
+*           reference DUMMY(1,1) to B with LDDUMMY=1.
+*
+            CALL CLARFB_GETT( 'N', 0, N-KB+1, KNB,
+     $                        T( 1, KB ), LDT, A( KB, KB ), LDA,
+     $                        DUMMY( 1, 1 ), 1, WORK, KNB )
+         ELSE
+            CALL CLARFB_GETT( 'N', MB1-KB-KNB+1, N-KB+1, KNB,
+     $                        T( 1, KB ), LDT, A( KB, KB ), LDA,
+     $                        A( KB+KNB, KB), LDA, WORK, KNB )
+
+         END IF
 *
       END DO
 *
