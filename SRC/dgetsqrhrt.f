@@ -86,7 +86,7 @@
 *> \verbatim
 *>          NB2 is INTEGER
 *>          The block size to be used in the blocked QR that is
-*>          output. NB >= 1.
+*>          output. NB2 >= 1.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -119,7 +119,7 @@
 *> \param[in] LDT
 *> \verbatim
 *>          LDT is INTEGER
-*>          The leading dimension of the array T.  LDT >= NB.
+*>          The leading dimension of the array T.  LDT >= NB2.
 *> \endverbatim
 *>
 *> \param[out] WORK
