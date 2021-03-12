@@ -20,9 +20,9 @@ CFLAGS = -O3
 #  should not compile LAPACK with flags such as -ffpe-trap=overflow.
 #
 FC = gfortran
-FFLAGS = -O2 -frecursive
+FFLAGS = -O2 -frecursive -fcheck=all
 FFLAGS_DRV = $(FFLAGS)
-FFLAGS_NOOPT = -O0 -frecursive
+FFLAGS_NOOPT = -O0 -frecursive -fcheck=all
 
 #  Define LDFLAGS to the desired linker options for your machine.
 #

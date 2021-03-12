@@ -15,7 +15,7 @@ matrix:
   include:
   - os: linux
     name: "CMake Release Test on Linux"
-    env: CMAKE_BUILD_TYPE=Release
+    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
   - os: linux
     name: "Makefile Test on Linux"
     script:
@@ -25,11 +25,11 @@ matrix:
     - make -j2 lapack_install
   - os: linux
     name: "CMake Coverage Test on Linux"
-    env: CMAKE_BUILD_TYPE=Coverage
+    env: CMAKE_BUILD_TYPE=Coverage CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
   - os: osx
     name: "CMake Release Test on Mac OS X"
     osx_image: xcode10.3
-    env: CMAKE_BUILD_TYPE=Release
+    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
   - os: osx
     name: "CMake Release Test on OSX Catalina"
     osx_image: xcode12.2
@@ -63,7 +63,8 @@ script:
     -DLAPACKE:BOOL=ON
     -DBUILD_TESTING=ON
     -DLAPACKE_WITH_TMG:BOOL=ON
-    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive"
+    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive -fcheck=all"
+    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure

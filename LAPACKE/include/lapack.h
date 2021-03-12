@@ -11,6 +11,7 @@
 #include "lapacke_mangling.h"
 
 #include <stdlib.h>
+#include <stdarg.h>
 
 /* Complex types are structures equivalent to the
 * Fortran complex types COMPLEX(4) and COMPLEX(8).
@@ -1515,14 +1516,23 @@ void LAPACK_cgels(
     lapack_complex_float* work, lapack_int const* lwork,
     lapack_int* info );
 
-#define LAPACK_dgels LAPACK_GLOBAL(dgels,DGELS)
-void LAPACK_dgels(
+#define LAPACK_dgels_base LAPACK_GLOBAL(dgels,DGELS)
+void LAPACK_dgels_base(
     char const* trans,
     lapack_int const* m, lapack_int const* n, lapack_int const* nrhs,
     double* A, lapack_int const* lda,
     double* B, lapack_int const* ldb,
     double* work, lapack_int const* lwork,
-    lapack_int* info );
+    lapack_int* info 
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , unsigned
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dgels(...) LAPACK_dgels_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_dgels(...) LAPACK_dgels_base(__VA_ARGS__)
+#endif
 
 #define LAPACK_sgels LAPACK_GLOBAL(sgels,SGELS)
 void LAPACK_sgels(
