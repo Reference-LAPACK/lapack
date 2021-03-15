@@ -330,15 +330,21 @@
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = MAX( 1, 8*N )
-         MAXWRK = MAX( 1, N*( 7 +
+*
+         MAXWRK = MAX( MINWRK, N*( 3 +
      $                 ILAENV( 1, 'DGEQRF', ' ', N, 1, N, 0 ) ) )
-         MAXWRK = MAX( MAXWRK, N*( 7 +
+         MAXWRK = MAX( MAXWRK, N*( 3 +
      $                 ILAENV( 1, 'DORMQR', ' ', N, 1, N, 0 ) ) )
          IF( ILVL ) THEN
-            MAXWRK = MAX( MAXWRK, N*( 7 +
+            MAXWRK = MAX( MAXWRK, N*( 3 +
      $                 ILAENV( 1, 'DORGQR', ' ', N, 1, N, -1 ) ) )
-         MAXWRK = MAX( MAXWRK, N*( 7 +
-     $                 ILAENV( 1, 'DGGHD3', ' ', N, 1, N, 0 ) ) )
+         END IF
+         IF( ILV ) THEN
+            MAXWRK = MAX( MAXWRK, N*( 2 + 6 *
+     $                 ILAENV( 1, 'DGGHD3', ' ', N, 1, N,  0 ) ) )
+         ELSE
+            MAXWRK = MAX( MAXWRK, 6*N *
+     $                 ILAENV( 1, 'DGGHD3', ' ', N, 1, N, 0 ) )
          END IF
          WORK( 1 ) = MAXWRK
 *
@@ -450,19 +456,20 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
+         IWRK = ITAU
          CALL DGGHD3( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
-     $                LDVL, VR, LDVR, WORK, LWORK+1-IWRK, IERR )
+     $                LDVL, VR, LDVR, WORK( IWRK ), LWORK+1-IWRK, IERR )
       ELSE
+         IWRK = 1
          CALL DGGHD3( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
      $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR,
-     $                WORK, LWORK+1-IWRK, IERR )
+     $                WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Perform QZ algorithm (Compute eigenvalues, and optionally, the
 *     Schur forms and Schur vectors)
 *     (Workspace: need N)
 *
-      IWRK = ITAU
       IF( ILV ) THEN
          CHTEMP = 'S'
       ELSE
