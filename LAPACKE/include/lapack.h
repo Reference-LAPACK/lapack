@@ -1525,7 +1525,7 @@ void LAPACK_dgels_base(
     double* work, lapack_int const* lwork,
     lapack_int* info 
 #ifdef LAPACK_FORTRAN_STRLEN_END
-    , unsigned
+    , size_t
 #endif
 );
 #ifdef LAPACK_FORTRAN_STRLEN_END

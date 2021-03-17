@@ -524,7 +524,7 @@ extern "C" {
 
 void F77_xerbla_base(FCHAR, void *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
 /*
@@ -600,78 +600,78 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_sgemv_base(FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_sgbmv_base(FCHAR, FINT, FINT, FINT, FINT, const float *,  const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_ssymv_base(FCHAR, FINT, const float *, const float *, FINT, const float *,  FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_ssbmv_base(FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_sspmv_base(FCHAR, FINT, const float *, const float *, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_strmv_base(FCHAR, FCHAR, FCHAR, FINT, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_stbmv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_strsv_base(FCHAR, FCHAR, FCHAR, FINT, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_stbsv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_stpmv_base(FCHAR, FCHAR, FCHAR, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_stpsv_base(FCHAR, FCHAR, FCHAR, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_sger_base( FINT, FINT, const float *, const float *, FINT, const float *, FINT, float *, FINT);
    void F77_ssyr_base(FCHAR, FINT, const float *, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_sspr_base(FCHAR, FINT, const float *, const float *, FINT, float *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_sspr2_base(FCHAR, FINT, const float *, const float *, FINT, const float *, FINT,  float *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_ssyr2_base(FCHAR, FINT, const float *, const float *, FINT, const float *, FINT,  float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
 
@@ -679,78 +679,78 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_dgemv_base(FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dgbmv_base(FCHAR, FINT, FINT, FINT, FINT, const double *,  const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dsymv_base(FCHAR, FINT, const double *, const double *, FINT, const double *,  FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dsbmv_base(FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dspmv_base(FCHAR, FINT, const double *, const double *, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dtrmv_base(FCHAR, FCHAR, FCHAR, FINT, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dtbmv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dtrsv_base(FCHAR, FCHAR, FCHAR, FINT, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dtbsv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dtpmv_base(FCHAR, FCHAR, FCHAR, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dtpsv_base(FCHAR, FCHAR, FCHAR, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_dger_base( FINT, FINT, const double *, const double *, FINT, const double *, FINT, double *, FINT);
    void F77_dsyr_base(FCHAR, FINT, const double *, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dspr_base(FCHAR, FINT, const double *, const double *, FINT, double *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dspr2_base(FCHAR, FINT, const double *, const double *, FINT, const double *, FINT,  double *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_dsyr2_base(FCHAR, FINT, const double *, const double *, FINT, const double *, FINT,  double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
 
@@ -758,79 +758,79 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_cgemv_base(FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_cgbmv_base(FCHAR, FINT, FINT, FINT, FINT, const void *,  const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_chemv_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_chbmv_base(FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_chpmv_base(FCHAR, FINT, const void *, const void *, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_ctrmv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ctbmv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ctpmv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ctrsv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ctbsv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ctpsv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, void *,FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_cgerc_base( FINT, FINT, const void *, const void *, FINT, const void *, FINT, void *, FINT);
    void F77_cgeru_base( FINT, FINT, const void *, const void *, FINT, const void *, FINT, void *,  FINT);
    void F77_cher_base(FCHAR, FINT, const float *, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_cher2_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_chpr_base(FCHAR, FINT, const float *, const void *, FINT, void *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_chpr2_base(FCHAR, FINT, const float *, const void *, FINT, const void *, FINT, void *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
 
@@ -838,79 +838,79 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_zgemv_base(FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zgbmv_base(FCHAR, FINT, FINT, FINT, FINT, const void *,  const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zhemv_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zhbmv_base(FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zhpmv_base(FCHAR, FINT, const void *, const void *, const void *, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_ztrmv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ztbmv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ztpmv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ztrsv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ztbsv_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_ztpsv_base(FCHAR, FCHAR, FCHAR, FINT, const void *, void *,FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned
+      , size_t, size_t, size_t
    #endif
    );
    void F77_zgerc_base( FINT, FINT, const void *, const void *, FINT, const void *, FINT, void *, FINT);
    void F77_zgeru_base( FINT, FINT, const void *, const void *, FINT, const void *, FINT, void *,  FINT);
    void F77_zher_base(FCHAR, FINT, const double *, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zher2_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, void *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zhpr_base(FCHAR, FINT, const double *, const void *, FINT, void *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
    void F77_zhpr2_base(FCHAR, FINT, const double *, const void *, FINT, const void *, FINT, void *
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned
+      , size_t
    #endif
    );
 
@@ -922,32 +922,32 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_sgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_ssymm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_ssyrk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_ssyr2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_strmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
    void F77_strsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
 
@@ -955,32 +955,32 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_dgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_dsymm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_dsyrk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_dsyr2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_dtrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
    void F77_dtrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
 
@@ -988,47 +988,47 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_cgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_csymm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_chemm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_csyrk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_cherk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_csyr2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_cher2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_ctrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
    void F77_ctrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
 
@@ -1036,47 +1036,47 @@ void F77_xerbla_base(FCHAR, void *
 
    void F77_zgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zsymm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zhemm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zsyrk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zherk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zsyr2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_zher2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned
+      , size_t, size_t
    #endif
    );
    void F77_ztrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
    void F77_ztrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
    #ifdef LAPACK_FORTRAN_STRLEN_END
-      , unsigned, unsigned, unsigned, unsigned
+      , size_t, size_t, size_t, size_t
    #endif
    );
 

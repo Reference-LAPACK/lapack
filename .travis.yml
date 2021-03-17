@@ -33,7 +33,7 @@ matrix:
   - os: osx
     name: "CMake Release Test on OSX Catalina"
     osx_image: xcode12.2
-    env: CMAKE_BUILD_TYPE=Release
+    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
   - os: osx
     osx_image: xcode10.3
     name: "Makefile Test on Mac OS X"
