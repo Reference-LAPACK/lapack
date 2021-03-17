@@ -197,8 +197,8 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHA(j) and BETA(j) should be
 *>                correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other then QZ iteration failed in DHGEQZ,
-*>                =N+2: error return from DTGEVC.
+*>          > N:  =N+1: other then QZ iteration failed in ZLAQZ0.
+*>                =N+2: error return from ZTGEVC.
 *> \endverbatim
 *
 *  Authors:
@@ -256,8 +256,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD,
-     $                   ZHGEQZ, ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZUNGQR,
+      EXTERNAL           DLABAD, XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHD3,
+     $                   ZLAQZ0, ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZUNGQR,
      $                   ZUNMQR
 *     ..
 *     .. External Functions ..
@@ -332,6 +332,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
+*
          LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) )
          LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N, 0 ) )
@@ -339,6 +340,8 @@
             LWKOPT = MAX( LWKOPT, N +
      $                    N*ILAENV( 1, 'ZUNGQR', ' ', N, 1, N, -1 ) )
          END IF
+         LWKOPT = MAX( LWKOPT, 6*N *
+     $                 ILAENV( 1, 'ZGGHD3', ' ', N, 1, N, 0 ) )
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY )
@@ -444,15 +447,17 @@
 *
 *     Reduce to generalized Hessenberg form
 *
+      IWRK = 1
       IF( ILV ) THEN
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL ZGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
-     $                LDVL, VR, LDVR, IERR )
+         CALL ZGGHD3( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+     $                LDVL, VR, LDVR, WORK( IWRK ), LWORK+1-IWRK, IERR )
       ELSE
-         CALL ZGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
-     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IERR )
+         CALL ZGGHD3( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR,
+     $                WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Perform QZ algorithm (Compute eigenvalues, and optionally, the
@@ -460,15 +465,14 @@
 *     (Complex Workspace: need N)
 *     (Real Workspace: need N)
 *
-      IWRK = ITAU
       IF( ILV ) THEN
          CHTEMP = 'S'
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL ZHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL ZLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VL, LDVL, VR, LDVR, WORK( IWRK ),
-     $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
+     $             LWORK+1-IWRK, RWORK( IRWRK ), 0, IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR
