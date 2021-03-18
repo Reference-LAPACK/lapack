@@ -640,7 +640,7 @@
                  IF ( WNTVA ) THEN
 *                   .. minimal workspace length for N x N/2 CGEQRF
                     LWQRF  = MAX( N/2, 1 )
-*                   .. minimal workspace lengthfor N/2 x N/2 CGESVD
+*                   .. minimal workspace length for N/2 x N/2 CGESVD
                     LWSVD2 = MAX( 3 * (N/2), 1 )
                     LWUNQ2 = MAX( N, 1 )
                     MINWRK2 = MAX( LWQP3, N/2+LWQRF, N/2+LWSVD2,
