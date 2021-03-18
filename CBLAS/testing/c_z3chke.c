@@ -39,11 +39,13 @@ void  F77_z3chke(char *  rout) {
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;
 
+#ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
    if (link_xerbla) /* call these first to link */
    {
       cblas_xerbla(cblas_info,cblas_rout,"");
       F77_xerbla(cblas_rout,&cblas_info);
    }
+#endif
 
    if (strncmp( sf,"cblas_zgemm"   ,11)==0) {
       cblas_rout = "cblas_zgemm"   ;
