@@ -281,7 +281,7 @@
 *>  spectral condition number. The best performance of this Jacobi SVD
 *>  procedure is achieved if used in an  accelerated version of Drmac and
 *>  Veselic [5,6], and it is the kernel routine in the SIGMA library [7].
-*>  Some tunning parameters (marked with [TP]) are available for the
+*>  Some tuning parameters (marked with [TP]) are available for the
 *>  implementer.
 *>  The computational range for the nonzero singular values is the  machine
 *>  number interval ( UNDERFLOW , OVERFLOW ). In extreme cases, even

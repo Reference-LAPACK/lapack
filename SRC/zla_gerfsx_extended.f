@@ -355,7 +355,7 @@
 *>          DZ_UB is DOUBLE PRECISION
 *>     Determines when to start considering componentwise convergence.
 *>     Componentwise convergence is only considered after each component
-*>     of the solution Y is stable, which we definte as the relative
+*>     of the solution Y is stable, which we define as the relative
 *>     change in each component being less than DZ_UB. The default value
 *>     is 0.25, requiring the first bit to be stable. See LAWN 165 for
 *>     more details.

@@ -158,7 +158,7 @@
 *
 *> \date November 2019
 *
-*> \ingroup comlex16OTHERcomputational
+*> \ingroup complex16OTHERcomputational
 *
 *> \par Contributors:
 *  ==================

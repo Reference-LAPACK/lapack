@@ -392,7 +392,7 @@
 *        Some BLAS implementations compute DNRM2(M,A(1,p),1)
 *        as DSQRT(DDOT(M,A(1,p),1,A(1,p),1)), which may result in
 *        overflow for ||A(:,p)||_2 > DSQRT(overflow_threshold), and
-*        undeflow for ||A(:,p)||_2 < DSQRT(underflow_threshold).
+*        underflow for ||A(:,p)||_2 < DSQRT(underflow_threshold).
 *        Hence, DNRM2 cannot be trusted, not even in the case when
 *        the true norm is far from the under(over)flow boundaries.
 *        If properly implemented DNRM2 is available, the IF-THEN-ELSE

@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> DERRORHR_COL tests the error exits for DORHR_COL that does
-*> Householder reconstruction from the ouput of tall-skinny
+*> Householder reconstruction from the output of tall-skinny
 *> factorization DLATSQR.
 *> \endverbatim
 *

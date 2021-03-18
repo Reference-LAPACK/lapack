@@ -423,7 +423,7 @@
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
 *
-*                    We need to copute the invesrse to compute
+*                    We need to compute the invesrse to compute
 *                    RCONDC that is used later in TEST3.
 *
                      CALL CSYTRI_3( UPLO, N, AINV, LDA, E, IWORK,
