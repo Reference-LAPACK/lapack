@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> CERRUNHR_COL tests the error exits for CUNHR_COL that does
-*> Householder reconstruction from the ouput of tall-skinny
+*> Householder reconstruction from the output of tall-skinny
 *> factorization CLATSQR.
 *> \endverbatim
 *

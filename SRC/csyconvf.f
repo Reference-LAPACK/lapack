@@ -38,7 +38,7 @@
 *> CSYCONVF converts the factorization output format used in
 *> CSYTRF provided on entry in parameter A into the factorization
 *> output format used in CSYTRF_RK (or CSYTRF_BK) that is stored
-*> on exit in parameters A and E. It also coverts in place details of
+*> on exit in parameters A and E. It also converts in place details of
 *> the intechanges stored in IPIV from the format used in CSYTRF into
 *> the format used in CSYTRF_RK (or CSYTRF_BK).
 *>
@@ -47,7 +47,7 @@
 *> converts the factorization output format used in CSYTRF_RK
 *> (or CSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in CSYTRF that is stored
-*> on exit in parameter A. It also coverts in place details of
+*> on exit in parameter A. It also converts in place details of
 *> the intechanges stored in IPIV from the format used in CSYTRF_RK
 *> (or CSYTRF_BK) into the format used in CSYTRF.
 *>

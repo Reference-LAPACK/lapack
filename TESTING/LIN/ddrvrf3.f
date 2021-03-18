@@ -255,8 +255,8 @@
 *                             Generate A our NA--by--NA triangular
 *                             matrix.
 *                             Our test is based on forward error so we
-*                             do want A to be well conditionned! To get
-*                             a well-conditionned triangular matrix, we
+*                             do want A to be well conditioned! To get
+*                             a well-conditioned triangular matrix, we
 *                             take the R factor of the QR/LQ factorization
 *                             of a random matrix.
 *

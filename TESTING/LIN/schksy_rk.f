@@ -486,7 +486,7 @@
                      CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      SRNAMT = 'SSYTRI_3'
 *
-*                    Another reason that we need to compute the invesrse
+*                    Another reason that we need to compute the inverse
 *                    is that SPOT03 produces RCONDC which is used later
 *                    in TEST6 and TEST7.
 *

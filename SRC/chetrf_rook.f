@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CHETRF_ROOK computes the factorization of a comlex Hermitian matrix A
+*> CHETRF_ROOK computes the factorization of a complex Hermitian matrix A
 *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *> The form of the factorization is
 *>

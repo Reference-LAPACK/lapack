@@ -505,7 +505,7 @@
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      SRNAMT = 'CSYTRI_3'
 *
-*                    Another reason that we need to compute the invesrse
+*                    Another reason that we need to compute the inverse
 *                    is that CSYT03 produces RCONDC which is used later
 *                    in TEST6 and TEST7.
 *
