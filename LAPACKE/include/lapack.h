@@ -13,6 +13,11 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+/* It seems all current Fortran compilers put strlen at end.
+*  Some historical compilers put strlen after the str argument
+*  or make the str argument into a struct. */
+#define LAPACK_FORTRAN_STRLEN_END
+
 /* Complex types are structures equivalent to the
 * Fortran complex types COMPLEX(4) and COMPLEX(8).
 *

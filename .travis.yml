@@ -15,32 +15,32 @@ matrix:
   include:
   - os: linux
     name: "CMake Release Test on Linux"
-    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
+    env: CMAKE_BUILD_TYPE=Release
   - os: linux
     name: "Makefile Test on Linux"
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
   - os: linux
     name: "CMake Coverage Test on Linux"
-    env: CMAKE_BUILD_TYPE=Coverage CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
+    env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
     name: "CMake Release Test on Mac OS X"
     osx_image: xcode10.3
-    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
+    env: CMAKE_BUILD_TYPE=Release
   - os: osx
     name: "CMake Release Test on OSX Catalina"
     osx_image: xcode12.2
-    env: CMAKE_BUILD_TYPE=Release CMAKE_C_FLAGS=-DLAPACK_FORTRAN_STRLEN_END
+    env: CMAKE_BUILD_TYPE=Release
   - os: osx
     osx_image: xcode10.3
     name: "Makefile Test on Mac OS X"
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
 
 before_script:
