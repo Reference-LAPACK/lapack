@@ -6,10 +6,15 @@
 #define XerblaStrLen 6
 #define XerblaStrLen1 7
 
+void
+#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
+__attribute__((weak))
+#endif
+F77_xerbla
 #ifdef F77_CHAR
-void F77_xerbla(F77_CHAR F77_srname, void *vinfo)
+(F77_CHAR F77_srname, void *vinfo)
 #else
-void F77_xerbla(char *srname, void *vinfo)
+(char *srname, void *vinfo)
 #endif
 
 {

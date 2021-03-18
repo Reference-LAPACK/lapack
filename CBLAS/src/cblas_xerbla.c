@@ -5,7 +5,11 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 
-void cblas_xerbla(CBLAS_INDEX info, const char *rout, const char *form, ...)
+void
+#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
+__attribute__((weak))
+#endif
+cblas_xerbla(CBLAS_INDEX info, const char *rout, const char *form, ...)
 {
    extern int RowMajorStrg;
    char empty[1] = "";
