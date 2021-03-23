@@ -40,7 +40,7 @@
 *> SGSVJ1 is called from SGESVJ as a pre-processor and that is its main
 *> purpose. It applies Jacobi rotations in the same way as SGESVJ does, but
 *> it targets only particular pivots and it does not check convergence
-*> (stopping criterion). Few tunning parameters (marked by [TP]) are
+*> (stopping criterion). Few tuning parameters (marked by [TP]) are
 *> available for the implementer.
 *>
 *> Further Details
@@ -61,7 +61,7 @@
 *> In terms of the columns of A, the first N1 columns are rotated 'against'
 *> the remaining N-N1 columns, trying to increase the angle between the
 *> corresponding subspaces. The off-diagonal block is N1-by(N-N1) and it is
-*> tiled using quadratic tiles of side KBL. Here, KBL is a tunning parameter.
+*> tiled using quadratic tiles of side KBL. Here, KBL is a tuning parameter.
 *> The number of sweeps is given in NSWEEP and the orthogonality threshold
 *> is given in TOL.
 *> \endverbatim

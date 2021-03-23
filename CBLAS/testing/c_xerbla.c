@@ -12,7 +12,7 @@ void cblas_xerbla(CBLAS_INDEX info, const char *rout, const char *form, ...)
    extern int RowMajorStrg;
    extern char *cblas_rout;
 
-   /* Initially, c__3chke will call this routine with
+   /* Initially, c__3chke may call this routine with
     * global variable link_xerbla=1, and F77_xerbla will set link_xerbla=0.
     * This is done to fool the linker into loading these subroutines first
     * instead of ones in the CBLAS or the legacy BLAS library.

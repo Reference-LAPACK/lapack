@@ -10,7 +10,7 @@ set(
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
-# Add the CMake directory for custon CMake modules
+# Add the CMake directory for custom CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
 # Export all symbols on Windows when building shared libraries

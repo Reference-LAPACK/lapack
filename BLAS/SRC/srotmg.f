@@ -191,7 +191,7 @@
             END IF
          END IF
 
-*     PROCESURE..SCALE-CHECK
+*     PROCEDURE..SCALE-CHECK
          IF (SD1.NE.ZERO) THEN
             DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
                IF (SFLAG.EQ.ZERO) THEN

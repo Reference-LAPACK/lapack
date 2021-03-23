@@ -18,6 +18,10 @@ if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
                  ${LAPACK_BINARY_DIR}/include/cblas_mangling.h)
 endif()
 
+include(CheckCSourceCompiles)
+check_c_source_compiles("void __attribute__((weak)) main() {};"
+                        HAS_ATTRIBUTE_WEAK_SUPPORT)
+
 include_directories(include ${LAPACK_BINARY_DIR}/include)
 add_subdirectory(include)
 add_subdirectory(src)

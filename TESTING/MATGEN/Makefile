@@ -80,15 +80,17 @@ complex16: $(ZMATGEN) $(DZATGEN)
 	$(AR) $(ARFLAGS) $(TMGLIB) $^
 	$(RANLIB) $(TMGLIB)
 
-$(SCATGEN): $(FRC)
-$(SMATGEN): $(FRC)
-$(CMATGEN): $(FRC)
-$(DZATGEN): $(FRC)
-$(DMATGEN): $(FRC)
-$(ZMATGEN): $(FRC)
+ifdef FRC
+  $(SCATGEN): $(FRC)
+  $(SMATGEN): $(FRC)
+  $(CMATGEN): $(FRC)
+  $(DZATGEN): $(FRC)
+  $(DMATGEN): $(FRC)
+  $(ZMATGEN): $(FRC)
 
-FRC:
+  FRC:
 	@FRC=$(FRC)
+endif
 
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
