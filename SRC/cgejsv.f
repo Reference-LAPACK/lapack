@@ -484,8 +484,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
-*
 *> \ingroup complexGEsing
 *
 *> \par Further Details:
@@ -568,10 +566,9 @@
      $                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      $                   CWORK, LWORK, RWORK, LRWORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       IMPLICIT    NONE

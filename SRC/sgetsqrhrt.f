@@ -160,8 +160,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2020
-*
 *> \ingroup singleOTHERcomputational
 *
 *> \par Contributors:
@@ -180,10 +178,9 @@
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.10.0) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2020
 *
 *     .. Scalar Arguments ..
       INTEGER           INFO, LDA, LDT, LWORK, M, N, NB1, NB2, MB1

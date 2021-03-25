@@ -13,16 +13,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       PROGRAM TSTIEE
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
 *
 *     .. External Functions ..
       INTEGER            ILAENV

@@ -157,8 +157,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2020
-*
 *> \ingroup complexOTHERauxiliary
 *
 *> \par Contributors:
@@ -393,10 +391,9 @@
      $                        WORK, LDWORK )
       IMPLICIT NONE
 *
-*  -- LAPACK auxiliary routine (version 3.10.0) --
+*  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2020
 *
 *     .. Scalar Arguments ..
       CHARACTER          IDENT

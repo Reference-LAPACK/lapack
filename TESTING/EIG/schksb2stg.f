@@ -323,8 +323,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup single_eig
 *
 *  =====================================================================
@@ -332,10 +330,9 @@
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,

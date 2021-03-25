@@ -58,8 +58,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
-*
 *> \ingroup single_blas_level1
 *
 *> \par Further Details:
@@ -75,10 +73,9 @@
 *  =====================================================================
       REAL FUNCTION SCNRM2(N,X,INCX)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
 *
 *     .. Scalar Arguments ..
       INTEGER INCX,N
