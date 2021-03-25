@@ -21,7 +21,7 @@ matrix:
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
   - os: linux
     name: "CMake Coverage Test on Linux"
@@ -40,7 +40,7 @@ matrix:
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
 
 before_script:
@@ -63,7 +63,8 @@ script:
     -DLAPACKE:BOOL=ON
     -DBUILD_TESTING=ON
     -DLAPACKE_WITH_TMG:BOOL=ON
-    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive"
+    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive -fcheck=all"
+    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
