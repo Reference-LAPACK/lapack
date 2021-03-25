@@ -1,7 +1,7 @@
 #
 #  Top Level Makefile for LAPACK
-#  Version 3.4.1
-#  April 2012
+#  Version 3.9.1
+#  April 2021
 #
 
 TOPSRCDIR = .
