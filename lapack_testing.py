@@ -60,7 +60,6 @@ for o, a in opts:
         print("            Will return the numbers of failed tests in REAL precision by running the LAPACK Tests then analyzing the output")
         print("     ./lapack_testing.py -n -p s -t eig ")
         print("            Will return the numbers of failed tests in REAL precision by analyzing only the LAPACK output of EIGEN testings")
-        print("Written by Julie Langou (June 2011) ")
         sys.exit(0)
     else:
         if o in ("-s", "--short"):

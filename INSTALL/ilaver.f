@@ -44,8 +44,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date April 2021
-*
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================

@@ -397,8 +397,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup complexGBcomputational
 *
 *  =====================================================================
@@ -410,10 +408,9 @@
      $                                Y_TAIL, RCOND, ITHRESH, RTHRESH,
      $                                DZ_UB, IGNORE_CWISE, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDAB, LDAFB, LDB, LDY, N, KL, KU, NRHS,

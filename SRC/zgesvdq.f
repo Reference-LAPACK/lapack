@@ -404,8 +404,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2018
-*
 *> \ingroup complex16GEsing
 *
 *  =====================================================================

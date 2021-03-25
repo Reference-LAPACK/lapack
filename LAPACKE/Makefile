@@ -28,7 +28,6 @@
 ##############################################################################
 # Contents: Native C interface to LAPACK
 # Author: Intel Corporation
-# September, 2010
 ##############################################################################
 # Top-level makefile for LAPACKE.
 #

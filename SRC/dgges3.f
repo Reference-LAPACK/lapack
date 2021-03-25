@@ -273,8 +273,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date January 2015
-*
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
@@ -282,10 +280,9 @@
      $                   LDB, SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL,
      $                   VSR, LDVSR, WORK, LWORK, BWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.6.0) --
+*  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     January 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVSL, JOBVSR, SORT
