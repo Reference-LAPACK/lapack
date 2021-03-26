@@ -1,0 +1,139 @@
+name: CMake
+
+on:
+  push:
+    branches:
+    - master
+    - try-github-actions
+    paths:
+    - .github/workflows/cmake.yml
+    - '**CMakeLists.txt'
+    - 'BLAS'
+    - 'CBLAS'
+    - 'CMAKE'
+    - 'INSTALL'
+    - 'LAPACKE'
+    - 'SRC'
+    - 'TESTING'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/cmake.yml
+    - '**CMakeLists.txt'
+    - 'BLAS'
+    - 'CBLAS'
+    - 'CMAKE'
+    - 'INSTALL'
+    - 'LAPACKE'
+    - 'SRC'
+    - 'TESTING'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+
+env:
+  CFLAGS: "-Wall -pedantic"
+  FFLAGS: "-fimplicit-none -frecursive -fcheck=all"
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  test-install-release:
+    # Use GNU compilers
+  
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ${{ matrix.os }}
+
+    env:
+      BUILD_TYPE: Release
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ macos-latest, ubuntu-latest ]
+    
+    steps:
+    
+    - name: Checkout LAPACK
+      uses: actions/checkout@v2
+
+    - name: Use GCC-11 on MacOS
+      if: ${{ matrix.os == 'macos-latest' }}
+      run: >
+        cmake -B build
+        -D CMAKE_C_COMPILER="gcc-11"
+        -D CMAKE_Fortran_COMPILER="gfortran-11"
+
+    # - name: Use Unix Makefiles on Windows
+    #   if: ${{ matrix.os == 'windows-latest' }}
+    #   run: >
+    #     cmake -B build
+    #     -G "Unix Makefiles"
+    #     -D CMAKE_C_FLAGS="${{env.CFLAGS}} -Wl,--stack=1000000000"
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        cmake -B build
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: CTest
+      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: |
+        ctest -D ExperimentalStart
+        ctest -D ExperimentalConfigure
+        ctest -D ExperimentalBuild -j2
+        ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure --timeout 100
+        ctest -D ExperimentalSubmit
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  coverage:
+    runs-on: ubuntu-latest 
+    env:
+      BUILD_TYPE: Coverage
+    steps:     
+    
+    - name: Checkout LAPACK
+      uses: actions/checkout@v2
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        cmake -B build
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+    - name: Coverage
+      run: |
+        echo "Coverage"
+        cmake --build build --target coverage
+        bash <(curl -s https://codecov.io/bash) -X gcov

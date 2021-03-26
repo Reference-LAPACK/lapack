@@ -1,0 +1,68 @@
+name: Makefile
+
+on:
+  push:
+    branches:
+    - master
+    - try-github-actions
+    paths:
+    - .github/workflows/cmake.yml
+    - '**Makefile'
+    - 'BLAS'
+    - 'CBLAS'
+    - 'INSTALL'
+    - 'LAPACKE'
+    - 'SRC'
+    - 'TESTING'
+    - '!**README'
+    - '!**CMakeLists.txt'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/cmake.yml
+    - '**Makefile'
+    - 'BLAS'
+    - 'CBLAS'
+    - 'INSTALL'
+    - 'LAPACKE'
+    - 'SRC'
+    - 'TESTING'
+    - '!**README'
+    - '!**CMakeLists.txt'
+    - '!**md'
+
+env:
+  CFLAGS: "-Wall -pedantic"
+  FFLAGS: "-fimplicit-none -frecursive -fcheck=all"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  install-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@v2
+    - name: Install
+      run: |
+        cp make.inc.example make.inc
+        make -s -j2 all
+        make -j2 lapack_install
+
+  install-macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@v2
+    - name: Alias for GCC compilers
+      run: |
+        sudo ln -s $(which gcc-11) /usr/local/bin/gcc
+        sudo ln -s $(which gfortran-11) /usr/local/bin/gfortran
+    - name: Install
+      run: |
+        cp make.inc.example make.inc
+        make -s -j2 all
+        make -j2 lapack_install
