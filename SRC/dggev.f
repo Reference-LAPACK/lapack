@@ -206,7 +206,7 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
 *>                should be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in DLAQZ0.
+*>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
 *>                =N+2: error return from DTGEVC.
 *> \endverbatim
 *
@@ -260,7 +260,7 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLABAD,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ, DLABAD,
      $                   DLACPY,DLASCL, DLASET, DORGQR, DORMQR, DTGEVC,
      $                   XERBLA
 *     ..
@@ -330,21 +330,13 @@
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = MAX( 1, 8*N )
-*
-         MAXWRK = MAX( MINWRK, N*( 3 +
+         MAXWRK = MAX( 1, N*( 7 +
      $                 ILAENV( 1, 'DGEQRF', ' ', N, 1, N, 0 ) ) )
-         MAXWRK = MAX( MAXWRK, N*( 3 +
+         MAXWRK = MAX( MAXWRK, N*( 7 +
      $                 ILAENV( 1, 'DORMQR', ' ', N, 1, N, 0 ) ) )
          IF( ILVL ) THEN
-            MAXWRK = MAX( MAXWRK, N*( 3 +
+            MAXWRK = MAX( MAXWRK, N*( 7 +
      $                 ILAENV( 1, 'DORGQR', ' ', N, 1, N, -1 ) ) )
-         END IF
-         IF( ILV ) THEN
-            MAXWRK = MAX( MAXWRK, N*( 2 + 6 *
-     $                 ILAENV( 1, 'DGGHD3', ' ', N, 1, N,  0 ) ) )
-         ELSE
-            MAXWRK = MAX( MAXWRK, 6*N *
-     $                 ILAENV( 1, 'DGGHD3', ' ', N, 1, N, 0 ) )
          END IF
          WORK( 1 ) = MAXWRK
 *
@@ -456,28 +448,26 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         IWRK = ITAU
-         CALL DGGHD3( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
-     $                LDVL, VR, LDVR, WORK( IWRK ), LWORK+1-IWRK, IERR )
+         CALL DGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+     $                LDVL, VR, LDVR, IERR )
       ELSE
-         IWRK = 1
-         CALL DGGHD3( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
-     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR,
-     $                WORK( IWRK ), LWORK+1-IWRK, IERR )
+         CALL DGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IERR )
       END IF
 *
 *     Perform QZ algorithm (Compute eigenvalues, and optionally, the
 *     Schur forms and Schur vectors)
 *     (Workspace: need N)
 *
+      IWRK = ITAU
       IF( ILV ) THEN
          CHTEMP = 'S'
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL DLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL DHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
-     $             WORK( IWRK ), LWORK+1-IWRK, 0, IERR )
+     $             WORK( IWRK ), LWORK+1-IWRK, IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR

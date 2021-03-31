@@ -197,8 +197,8 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHA(j) and BETA(j) should be
 *>                correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other then QZ iteration failed in CLAQZ0.
-*>                =N+2: error return from CTGEVC.
+*>          > N:  =N+1: other then QZ iteration failed in SHGEQZ,
+*>                =N+2: error return from STGEVC.
 *> \endverbatim
 *
 *  Authors:
@@ -256,7 +256,7 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CUNGQR, CUNMQR, SLABAD,
      $                   XERBLA
 *     ..
@@ -332,7 +332,6 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
-*
          LWKOPT = MAX( 1, N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N, 0 ) )
          LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N, 0 ) )
@@ -340,8 +339,6 @@
             LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'CUNGQR', ' ', N, 1, N, -1 ) )
          END IF
-         LWKOPT = MAX( LWKOPT, 6*N *
-     $                 ILAENV( 1, 'CGGHD3', ' ', N, 1, N,  0 ) )
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY )
@@ -447,17 +444,15 @@
 *
 *     Reduce to generalized Hessenberg form
 *
-      IWRK = 1
       IF( ILV ) THEN
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL CGGHD3( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
-     $                LDVL, VR, LDVR, WORK( IWRK ), LWORK+1-IWRK, IERR )
+         CALL CGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+     $                LDVL, VR, LDVR, IERR )
       ELSE
-         CALL CGGHD3( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
-     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR,
-     $                WORK( IWRK ), LWORK+1-IWRK, IERR )
+         CALL CGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IERR )
       END IF
 *
 *     Perform QZ algorithm (Compute eigenvalues, and optionally, the
@@ -465,14 +460,15 @@
 *     (Complex Workspace: need N)
 *     (Real Workspace: need N)
 *
+      IWRK = ITAU
       IF( ILV ) THEN
          CHTEMP = 'S'
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL CLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL CHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VL, LDVL, VR, LDVR, WORK( IWRK ),
-     $             LWORK+1-IWRK, RWORK( IRWRK ), 0, IERR )
+     $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR
