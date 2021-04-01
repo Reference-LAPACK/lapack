@@ -9,7 +9,7 @@ module LA_XISNAN
 contains
    
    logical function SISNAN( x )
-   use LA_CONSTANTS32, only: wp
+   use LA_CONSTANTS, only: wp=>sp
 #ifdef USE_IEEE_INTRINSIC
    use, intrinsic :: ieee_arithmetic
 #elif USE_ISNAN
@@ -25,7 +25,7 @@ contains
 
    contains
    logical function SLAISNAN( x, y )
-   use LA_CONSTANTS32, only: wp
+   use LA_CONSTANTS, only: wp=>sp
    real(wp) :: x, y
    SLAISNAN = ( x.ne.y )
    end function SLAISNAN
@@ -33,7 +33,7 @@ contains
    end function SISNAN
 
    logical function DISNAN( x )
-   use LA_CONSTANTS, only: wp
+   use LA_CONSTANTS, only: wp=>dp
 #ifdef USE_IEEE_INTRINSIC
    use, intrinsic :: ieee_arithmetic
 #elif USE_ISNAN
@@ -49,7 +49,7 @@ contains
 
    contains
    logical function DLAISNAN( x, y )
-   use LA_CONSTANTS, only: wp
+   use LA_CONSTANTS, only: wp=>dp
    real(wp) :: x, y
    DLAISNAN = ( x.ne.y )
    end function DLAISNAN

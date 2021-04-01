@@ -59,9 +59,7 @@ include $(TOPSRCDIR)/make.inc
 
 ALLMOD = la_xisnan.mod la_constants.mod
 
-.SUFFIXES: .f .F .f90 .F90 .o .mod
-%.o: %.f $(ALLMOD)
-	$(FC) $(FFLAGS) -c -o $@ $<
+.SUFFIXES: .F .f90 .F90 .o .mod
 %.o: %.F $(ALLMOD)
 	$(FC) $(FFLAGS) -c -o $@ $<
 %.o: %.f90 $(ALLMOD)
