@@ -398,7 +398,7 @@
 *     .. Parameters ..
       INTEGER            MAXIT
       PARAMETER          ( MAXIT = 40 )
-      REAL               ZERO, ONE
+      REAL               ZERO, ONE, HUGENUM
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
@@ -409,20 +409,20 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       REAL               A1, A3, B1, B3, CSQ, CSU, CSV, ERROR, GAMMA,
-     $                   RWK, SSMIN, SFMIN, HUGE
+     $                   RWK, SSMIN
       COMPLEX            A2, B2, SNQ, SNU, SNV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLAGS2, CLAPLL, CLASET, CROT, CSSCAL,
      $                   SLARTG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, CONJG, MAX, MIN, REAL
+      INTRINSIC          ABS, CONJG, MAX, MIN, REAL, HUGE
+      PARAMETER          ( HUGENUM = HUGE(ZERO) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -465,11 +465,6 @@
          CALL XERBLA( 'CTGSJA', -INFO )
          RETURN
       END IF
-*
-*     Safe minimum
-*
-      SFMIN = SLAMCH( 'Safe minimum' )
-      HUGE = SLAMCH( 'O' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -613,34 +608,25 @@
 *
          A1 = REAL( A( K+I, N-L+I ) )
          B1 = REAL( B( I, N-L+I ) )
+         GAMMA = B1 / A1
 *
-         IF( ABS(A1).GE.SFMIN ) THEN
-            GAMMA = B1 / A1
+         IF( (GAMMA.LE.HUGENUM).AND.(GAMMA.GE.-HUGENUM) ) THEN
 *
-            IF( GAMMA.LE.HUGE ) THEN
+            IF( GAMMA.LT.ZERO ) THEN
+               CALL CSSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+               IF( WANTV )
+     $            CALL CSSCAL( P, -ONE, V( 1, I ), 1 )
+            END IF
 *
-               IF( GAMMA.LT.ZERO ) THEN
-                  CALL CSSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
-                  IF( WANTV )
-     $               CALL CSSCAL( P, -ONE, V( 1, I ), 1 )
-               END IF
+            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+     $                   RWK )
 *
-               CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
-     $                      ALPHA( K+I ), RWK ) 
-*
-               IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-                  CALL CSSCAL( L-I+1, ONE / ALPHA( K+I ),
-     $                         A( K+I, N-L+I ), LDA )
-               ELSE
-                  CALL CSSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
-     $                         LDB )
-                  CALL CCOPY( L-I+1, B( I, N-L+I ), LDB,
-     $                        A( K+I, N-L+I ), LDA )
-               END IF
-*
+            IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
+               CALL CSSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+     $                      LDA )
             ELSE
-               ALPHA( K+I ) = ZERO
-               BETA( K+I ) = ONE
+               CALL CSSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+     $                      LDB )
                CALL CCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF

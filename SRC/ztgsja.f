@@ -398,7 +398,7 @@
 *     .. Parameters ..
       INTEGER            MAXIT
       PARAMETER          ( MAXIT = 40 )
-      DOUBLE PRECISION   ZERO, ONE
+      DOUBLE PRECISION   ZERO, ONE, HUGENUM
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
@@ -409,7 +409,7 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       DOUBLE PRECISION   A1, A3, B1, B3, CSQ, CSU, CSV, ERROR, GAMMA,
-     $                   RWK, SSMIN, SFMIN, HUGE
+     $                   RWK, SSMIN
       COMPLEX*16         A2, B2, SNQ, SNU, SNV
 *     ..
 *     .. External Functions ..
@@ -417,12 +417,12 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      DOUBLE PRECISION   DLAMCH
       EXTERNAL           DLARTG, XERBLA, ZCOPY, ZDSCAL, ZLAGS2, ZLAPLL,
-     $                   ZLASET, ZROT, DLAMCH
+     $                   ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
+      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, HUGE
+      PARAMETER          ( HUGENUM = HUGE(ZERO) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -465,11 +465,6 @@
          CALL XERBLA( 'ZTGSJA', -INFO )
          RETURN
       END IF
-*
-*     Safe minimum
-*
-      SFMIN = DLAMCH( 'Safe minimum' )
-      HUGE = DLAMCH( 'O' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -613,34 +608,25 @@
 *
          A1 = DBLE( A( K+I, N-L+I ) )
          B1 = DBLE( B( I, N-L+I ) )
+         GAMMA = B1 / A1
 *
-         IF( ABS(A1).GE.SFMIN ) THEN
-            GAMMA = B1 / A1
+         IF( (GAMMA.LE.HUGENUM).AND.(GAMMA.GE.-HUGENUM) ) THEN
 *
-            IF( GAMMA.LE.HUGE ) THEN
+            IF( GAMMA.LT.ZERO ) THEN
+               CALL ZDSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+               IF( WANTV )
+     $            CALL ZDSCAL( P, -ONE, V( 1, I ), 1 )
+            END IF
 *
-               IF( GAMMA.LT.ZERO ) THEN
-                  CALL ZDSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
-                  IF( WANTV )
-     $               CALL ZDSCAL( P, -ONE, V( 1, I ), 1 )
-               END IF
+            CALL DLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+     $                   RWK )
 *
-               CALL ZLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
-     $                      ALPHA( K+I ), RWK ) 
-*
-               IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-                  CALL ZDSCAL( L-I+1, ONE / ALPHA( K+I ),
-     $                         A( K+I, N-L+I ), LDA )
-               ELSE
-                  CALL ZDSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
-     $                         LDB )
-                  CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB,
-     $                        A( K+I, N-L+I ), LDA )
-               END IF
-*
+            IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
+               CALL ZDSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+     $                      LDA )
             ELSE
-               ALPHA( K+I ) = ZERO
-               BETA( K+I ) = ONE
+               CALL ZDSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+     $                      LDB )
                CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF

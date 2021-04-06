@@ -397,7 +397,7 @@
 *     .. Parameters ..
       INTEGER            MAXIT
       PARAMETER          ( MAXIT = 40 )
-      REAL               ZERO, ONE
+      REAL               ZERO, ONE, HUGENUM
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
@@ -405,19 +405,19 @@
       LOGICAL            INITQ, INITU, INITV, UPPER, WANTQ, WANTU, WANTV
       INTEGER            I, J, KCYCLE
       REAL               A1, A2, A3, B1, B2, B3, CSQ, CSU, CSV, ERROR,
-     $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN, SFMIN, HUGE
+     $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      REAL               SLAMCH
       EXTERNAL           SCOPY, SLAGS2, SLAPLL, SLARTG, SLASET, SROT,
-     $                   SSCAL, XERBLA, SLAMCH
+     $                   SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN
+      INTRINSIC          ABS, MAX, MIN, HUGE
+      PARAMETER          ( HUGENUM = HUGE(ZERO) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -460,11 +460,6 @@
          CALL XERBLA( 'STGSJA', -INFO )
          RETURN
       END IF
-*
-*     Safe minimum
-*
-      SFMIN = SLAMCH( 'Safe minimum' )
-      HUGE = SLAMCH( 'O' )
 *
 *     Initialize U, V and Q, if necessary
 *
@@ -599,36 +594,27 @@
 *
          A1 = A( K+I, N-L+I )
          B1 = B( I, N-L+I )
+         GAMMA = B1 / A1
 *
-         IF( ABS(A1).GE.SFMIN ) THEN
-            GAMMA = B1 / A1
+         IF( (GAMMA.LE.HUGENUM).AND.(GAMMA.GE.-HUGENUM) ) THEN
 *
-            IF( GAMMA.LE.HUGE ) THEN
+*           change sign if necessary
 *
-*              change sign if necessary
+            IF( GAMMA.LT.ZERO ) THEN
+               CALL SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+               IF( WANTV )
+     $            CALL SSCAL( P, -ONE, V( 1, I ), 1 )
+            END IF
 *
-               IF( GAMMA.LT.ZERO ) THEN
-                  CALL SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
-                  IF( WANTV )
-     $               CALL SSCAL( P, -ONE, V( 1, I ), 1 )
-               END IF
+            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+     $                   RWK )
 *
-               CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
-     $                      ALPHA( K+I ),RWK )
-*
-               IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-                  CALL SSCAL( L-I+1, ONE / ALPHA( K+I ),
-     $                        A( K+I, N-L+I ),LDA )
-               ELSE
-                  CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
-     $                     LDB )
-                  CALL SCOPY( L-I+1, B( I, N-L+I ), LDB,
-     $                        A( K+I, N-L+I ),LDA )
-               END IF
-*
+            IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
+               CALL SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+     $                     LDA )
             ELSE
-               ALPHA( K+I ) = ZERO
-               BETA( K+I ) = ONE
+               CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+     $                     LDB )
                CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF
