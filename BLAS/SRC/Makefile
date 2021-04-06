@@ -56,6 +56,10 @@
 TOPSRCDIR = ../..
 include $(TOPSRCDIR)/make.inc
 
+.SUFFIXES: .f90 .o
+.f90.o:
+	$(FC) $(FFLAGS) -c -o $@ $<
+
 .PHONY: all
 all: $(BLASLIB)
 

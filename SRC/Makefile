@@ -634,4 +634,3 @@ zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 # Modules
 la_constants.o: la_constants.f90
 	$(FC) $(FFLAGS) -c -o $@ $<
-
