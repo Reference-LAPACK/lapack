@@ -634,4 +634,3 @@ la_xisnan.o: la_xisnan.F90 la_constants.mod
 	$(FC) $(FFLAGS) -c -o $@ $<
 la_constants.o: la_constants.f90
 	$(FC) $(FFLAGS) -c -o $@ $<
-
