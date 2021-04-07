@@ -900,6 +900,6 @@
 
       RETURN
 *
-*     end of SLARRE
+*     End of SLARRE
 *
       END

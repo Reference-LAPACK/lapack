@@ -125,4 +125,7 @@
       END IF
       DASUM = DTEMP
       RETURN
+*
+*     End of DASUM
+*
       END

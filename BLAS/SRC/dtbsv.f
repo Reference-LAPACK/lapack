@@ -393,6 +393,6 @@
 *
       RETURN
 *
-*     End of DTBSV .
+*     End of DTBSV
 *
       END

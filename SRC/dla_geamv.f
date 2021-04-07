@@ -18,8 +18,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
-*                              Y, INCY )
+*       SUBROUTINE DLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+*                             Y, INCY )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   ALPHA, BETA

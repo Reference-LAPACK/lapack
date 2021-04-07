@@ -490,5 +490,7 @@ c$$$         WRITE(*,*)
 
  8000 FORMAT( ' S', A2, 'SVXX: N =', I2, ', INFO = ', I3,
      $     ', ORCOND = ', G12.5, ', real RCOND = ', G12.5 )
-
+*
+*     End of SEBCHVXX
+*
       END

@@ -1,4 +1,4 @@
-*> \brief \b SLAED5 used by sstedc. Solves the 2-by-2 secular equation.
+*> \brief \b SLAED5 used by SSTEDC. Solves the 2-by-2 secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -181,6 +181,6 @@
       END IF
       RETURN
 *
-*     End OF SLAED5
+*     End of SLAED5
 *
       END

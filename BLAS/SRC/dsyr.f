@@ -255,6 +255,6 @@
 *
       RETURN
 *
-*     End of DSYR  .
+*     End of DSYR
 *
       END

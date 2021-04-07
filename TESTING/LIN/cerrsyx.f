@@ -604,6 +604,6 @@
 *
       RETURN
 *
-*     End of CERRSY
+*     End of CERRSYX
 *
       END

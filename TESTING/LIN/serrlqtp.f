@@ -217,6 +217,6 @@
 *
       RETURN
 *
-*     End of SERRLQT
+*     End of SERRLQTP
 *
       END

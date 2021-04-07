@@ -575,6 +575,6 @@ c                  NT = 1
      $      I6 )
       RETURN
 *
-*     End of CCHKSY_AA_2STAGE
+*     End of CCHKHE_AA_2STAGE
 *
       END

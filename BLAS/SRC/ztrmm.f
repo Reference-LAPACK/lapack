@@ -444,6 +444,6 @@
 *
       RETURN
 *
-*     End of ZTRMM .
+*     End of ZTRMM
 *
       END

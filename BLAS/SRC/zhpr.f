@@ -271,6 +271,6 @@
 *
       RETURN
 *
-*     End of ZHPR  .
+*     End of ZHPR
 *
       END

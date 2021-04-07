@@ -701,4 +701,7 @@
       END DO
 *
       RETURN
+*
+*     End of DLA_GBRFSX_EXTENDED
+*
       END

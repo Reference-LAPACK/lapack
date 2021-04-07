@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQRT3 + dependencies
+*> Download ZGELQT3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelqt3.f">
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DGELQT3 recursively computes a LQ factorization of a complex M-by-N
+*> ZGELQT3 recursively computes a LQ factorization of a complex M-by-N
 *> matrix A, using the compact WY representation of Q.
 *>
 *> Based on the algorithm of Elmroth and Gustavson,
@@ -58,7 +58,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>          On entry, the real M-by-N matrix A.  On exit, the elements on and
+*>          On entry, the complex M-by-N matrix A.  On exit, the elements on and
 *>          below the diagonal contain the N-by-N lower triangular matrix L; the
 *>          elements above the diagonal are the rows of V.  See below for
 *>          further details.

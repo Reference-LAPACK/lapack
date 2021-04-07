@@ -126,4 +126,7 @@
       END IF
       SASUM = STEMP
       RETURN
+*
+*     End of SASUM
+*
       END

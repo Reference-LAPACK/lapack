@@ -157,9 +157,9 @@
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
 *>
-*>  This file is a slight modification of LAPACK-3.0's DGEHRD
+*>  This file is a slight modification of LAPACK-3.0's SGEHRD
 *>  subroutine incorporating improvements proposed by Quintana-Orti and
-*>  Van de Geijn (2006). (See DLAHR2.)
+*>  Van de Geijn (2006). (See SLAHR2.)
 *> \endverbatim
 *>
 *  =====================================================================

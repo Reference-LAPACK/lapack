@@ -382,6 +382,6 @@
 *
       RETURN
 *
-*     End of ZTPSV .
+*     End of ZTPSV
 *
       END

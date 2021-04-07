@@ -692,4 +692,7 @@
       END DO
 *
       RETURN
+*
+*     End of CLA_GERFSX_EXTENDED
+*
       END

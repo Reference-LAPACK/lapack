@@ -219,6 +219,6 @@
 *
       RETURN
 *
-*     End of DGER  .
+*     End of DGER
 *
       END

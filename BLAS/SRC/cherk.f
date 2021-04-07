@@ -388,6 +388,6 @@
 *
       RETURN
 *
-*     End of CHERK .
+*     End of CHERK
 *
       END

@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKLQ tests ZGELQF, ZUNGLQ and CUNMLQ.
+*> ZCHKLQ tests ZGELQF, ZUNGLQ and ZUNMLQ.
 *> \endverbatim
 *
 *  Arguments:

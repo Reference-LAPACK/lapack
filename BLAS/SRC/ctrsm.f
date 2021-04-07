@@ -469,6 +469,6 @@
 *
       RETURN
 *
-*     End of CTRSM .
+*     End of CTRSM
 *
       END

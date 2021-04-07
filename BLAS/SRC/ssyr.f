@@ -255,6 +255,6 @@
 *
       RETURN
 *
-*     End of SSYR  .
+*     End of SSYR
 *
       END

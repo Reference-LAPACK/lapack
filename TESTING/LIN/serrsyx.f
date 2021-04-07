@@ -610,6 +610,6 @@
 *
       RETURN
 *
-*     End of SERRSY
+*     End of SERRSYX
 *
       END

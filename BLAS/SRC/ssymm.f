@@ -359,6 +359,6 @@
 *
       RETURN
 *
-*     End of SSYMM .
+*     End of SSYMM
 *
       END

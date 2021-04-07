@@ -1,4 +1,4 @@
-*> \brief \b SCHKSBSTG
+*> \brief \b SCHKSB2STG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -31,18 +31,18 @@
 *>
 *> \verbatim
 *>
-*> SCHKSBSTG tests the reduction of a symmetric band matrix to tridiagonal
+*> SCHKSB2STG tests the reduction of a symmetric band matrix to tridiagonal
 *> form, used with the symmetric eigenvalue problem.
 *>
 *> SSBTRD factors a symmetric band matrix A as  U S U' , where ' means
 *> transpose, S is symmetric tridiagonal, and U is orthogonal.
 *> SSBTRD can use either just the lower or just the upper triangle
-*> of A; SCHKSBSTG checks both cases.
+*> of A; SCHKSB2STG checks both cases.
 *>
 *> SSYTRD_SB2ST factors a symmetric band matrix A as  U S U' ,
 *> where ' means transpose, S is symmetric tridiagonal, and U is
 *> orthogonal. SSYTRD_SB2ST can use either just the lower or just
-*> the upper triangle of A; SCHKSBSTG checks both cases.
+*> the upper triangle of A; SCHKSB2STG checks both cases.
 *>
 *> SSTEQR factors S as  Z D1 Z'.
 *> D1 is the matrix of eigenvalues computed when Z is not computed
@@ -52,7 +52,7 @@
 *> D3 is the matrix of eigenvalues computed when Z is not computed
 *> and from the S resulting of SSYTRD_SB2ST "L".
 *>
-*> When SCHKSBSTG is called, a number of matrix "sizes" ("n's"), a number
+*> When SCHKSB2STG is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
 *> specified.  For each size ("n"), each bandwidth ("k") less than or
 *> equal to "n", and each type of matrix, one matrix will be generated
@@ -126,7 +126,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          SCHKSBSTG does nothing.  It must be at least zero.
+*>          SCHKSB2STG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -141,7 +141,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          SCHKSBSTG does nothing.  It must be at least zero.
+*>          SCHKSB2STG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -154,7 +154,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, SCHKSBSTG
+*>          The number of elements in DOTYPE.   If it is zero, SCHKSB2STG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -184,7 +184,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to SCHKSBSTG to continue the same random number
+*>          next call to SCHKSB2STG to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -435,7 +435,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKSBSTG', -INFO )
+         CALL XERBLA( 'SCHKSB2STG', -INFO )
          RETURN
       END IF
 *
@@ -840,12 +840,12 @@
       CALL SLASUM( 'SSB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' SCHKSBSTG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' SCHKSB2STG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
  9998 FORMAT( / 1X, A3,
      $      ' -- Real Symmetric Banded Tridiagonal Reduction Routines' )
- 9997 FORMAT( ' Matrix types (see SCHKSBSTG for details): ' )
+ 9997 FORMAT( ' Matrix types (see SCHKSB2STG for details): ' )
 *
  9996 FORMAT( / ' Special Matrices:',
      $      / '  1=Zero matrix.                        ',
@@ -876,6 +876,6 @@
  9993 FORMAT( ' N=', I5, ', K=', I4, ', seed=', 4( I4, ',' ), ' type ',
      $      I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of SCHKSBSTG
+*     End of SCHKSB2STG
 *
       END

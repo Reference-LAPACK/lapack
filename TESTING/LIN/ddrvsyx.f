@@ -704,6 +704,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of DDRVSY
+*     End of DDRVSYX
 *
       END

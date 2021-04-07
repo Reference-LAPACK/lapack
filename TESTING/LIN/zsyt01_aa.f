@@ -255,6 +255,6 @@
 *
       RETURN
 *
-*     End of ZSYT01
+*     End of ZSYT01_AA
 *
       END

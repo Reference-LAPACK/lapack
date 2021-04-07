@@ -217,6 +217,6 @@
 *
       RETURN
 *
-*     End of DERRLQT
+*     End of DERRLQTP
 *
       END

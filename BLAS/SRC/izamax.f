@@ -121,4 +121,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of IZAMAX
+*
       END

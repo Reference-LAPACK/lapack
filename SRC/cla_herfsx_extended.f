@@ -710,4 +710,7 @@
       END DO
 *
       RETURN
+*
+*     End of CLA_HERFSX_EXTENDED
+*
       END

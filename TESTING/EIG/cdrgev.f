@@ -69,7 +69,7 @@
 *>
 *>      VL(i) denotes the i-th column of VL.
 *>
-*> (3)  max over all left eigenvalue/-vector pairs (alpha/beta,r) of
+*> (3)  max over all right eigenvalue/-vector pairs (alpha/beta,r) of
 *>
 *>      | (beta A - alpha B) * VR | / ( ulp max(|beta A|, |alpha B|) )
 *>

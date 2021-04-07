@@ -731,6 +731,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of CDRVPO
+*     End of CDRVPOX
 *
       END

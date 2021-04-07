@@ -294,6 +294,9 @@ C        ILAENV = 0
       END IF
 *
       RETURN
+*
+*     End of ILAENV2STAGE
+*
       END
       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
 *

@@ -329,6 +329,6 @@
 *
       RETURN
 *
-*     End of ZHEMV .
+*     End of ZHEMV
 *
       END

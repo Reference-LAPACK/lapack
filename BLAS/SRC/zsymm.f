@@ -361,6 +361,6 @@
 *
       RETURN
 *
-*     End of ZSYMM .
+*     End of ZSYMM
 *
       END

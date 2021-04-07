@@ -161,4 +161,7 @@
          END IF
       END DO
       CLA_GBRPVGRW = RPVGRW
+*
+*     End of CLA_GBRPVGRW
+*
       END

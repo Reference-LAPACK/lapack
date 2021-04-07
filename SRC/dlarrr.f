@@ -203,6 +203,6 @@
 *
       RETURN
 *
-*     END OF DLARRR
+*     End of DLARRR
 *
       END

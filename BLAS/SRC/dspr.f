@@ -253,6 +253,6 @@
 *
       RETURN
 *
-*     End of DSPR  .
+*     End of DSPR
 *
       END

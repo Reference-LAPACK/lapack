@@ -40,7 +40,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Transpose, apply Q**H.
+*>          = 'C':  Conjugate transpose, apply Q**H.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -74,7 +74,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DTPLQT.
+*>          in CTPLQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -82,7 +82,7 @@
 *>          V is COMPLEX array, dimension (LDV,K)
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DTPLQT in B.  See Further Details.
+*>          CTPLQT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -97,7 +97,7 @@
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DTPLQT, stored as a MB-by-K matrix.
+*>          as returned by CTPLQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT

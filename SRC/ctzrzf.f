@@ -141,7 +141,7 @@
 *>     V = ( I   A(:,M+1:N) )
 *>
 *>  I is the M-by-M identity matrix, A(:,M+1:N)
-*>  is the output stored in A on exit from DTZRZF,
+*>  is the output stored in A on exit from CTZRZF,
 *>  and tau(k) is the kth element of the array TAU.
 *>
 *> \endverbatim

@@ -125,4 +125,7 @@
       END IF
       CDOTU = CTEMP
       RETURN
+*
+*     End of CDOTU
+*
       END

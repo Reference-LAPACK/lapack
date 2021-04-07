@@ -611,6 +611,6 @@
 *
       RETURN
 *
-*     End of DERRSY
+*     End of DERRSYX
 *
       END

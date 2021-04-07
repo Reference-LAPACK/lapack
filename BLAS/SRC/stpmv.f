@@ -344,6 +344,6 @@
 *
       RETURN
 *
-*     End of STPMV .
+*     End of STPMV
 *
       END

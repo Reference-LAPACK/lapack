@@ -531,6 +531,6 @@
 *
       RETURN
 *
-*     End of ZERRPO
+*     End of ZERRPOX
 *
       END

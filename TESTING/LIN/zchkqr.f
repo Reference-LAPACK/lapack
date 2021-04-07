@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKQR tests ZGEQRF, ZUNGQR and CUNMQR.
+*> ZCHKQR tests ZGEQRF, ZUNGQR and ZUNMQR.
 *> \endverbatim
 *
 *  Arguments:

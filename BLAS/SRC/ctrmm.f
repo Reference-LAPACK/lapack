@@ -444,6 +444,6 @@
 *
       RETURN
 *
-*     End of CTRMM .
+*     End of CTRMM
 *
       END

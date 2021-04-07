@@ -18,8 +18,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
-*                              Y, INCY )
+*       SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+*                             Y, INCY )
 *
 *       .. Scalar Arguments ..
 *       REAL               ALPHA, BETA
@@ -169,8 +169,8 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
-     $                       Y, INCY )
+      SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+     $                      Y, INCY )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

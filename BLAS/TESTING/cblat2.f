@@ -428,7 +428,7 @@
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
 *
-*     End of CBLAT2.
+*     End of CBLAT2
 *
       END
       SUBROUTINE CCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -773,7 +773,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK1.
+*     End of CCHK1
 *
       END
       SUBROUTINE CCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1121,7 +1121,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK2.
+*     End of CCHK2
 *
       END
       SUBROUTINE CCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1482,7 +1482,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK3.
+*     End of CCHK3
 *
       END
       SUBROUTINE CCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1759,7 +1759,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK4.
+*     End of CCHK4
 *
       END
       SUBROUTINE CCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2043,7 +2043,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK5.
+*     End of CCHK5
 *
       END
       SUBROUTINE CCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2365,7 +2365,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK6.
+*     End of CCHK6
 *
       END
       SUBROUTINE CCHKE( ISNUM, SRNAMT, NOUT )
@@ -2708,7 +2708,7 @@
  9998 FORMAT( ' ******* ', A6, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
-*     End of CCHKE.
+*     End of CCHKE
 *
       END
       SUBROUTINE CMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
@@ -2900,7 +2900,7 @@
       END IF
       RETURN
 *
-*     End of CMAKE.
+*     End of CMAKE
 *
       END
       SUBROUTINE CMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
@@ -3032,7 +3032,7 @@
      $      'SULT                    COMPUTED RESULT' )
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
 *
-*     End of CMVCH.
+*     End of CMVCH
 *
       END
       LOGICAL FUNCTION LCE( RI, RJ, LR )
@@ -3062,7 +3062,7 @@
       LCE = .FALSE.
    30 RETURN
 *
-*     End of LCE.
+*     End of LCE
 *
       END
       LOGICAL FUNCTION LCERES( TYPE, UPLO, M, N, AA, AS, LDA )
@@ -3121,7 +3121,7 @@
       LCERES = .FALSE.
    80 RETURN
 *
-*     End of LCERES.
+*     End of LCERES
 *
       END
       COMPLEX FUNCTION CBEG( RESET )
@@ -3173,7 +3173,7 @@
       CBEG = CMPLX( ( I - 500 )/1001.0, ( J - 500 )/1001.0 )
       RETURN
 *
-*     End of CBEG.
+*     End of CBEG
 *
       END
       REAL FUNCTION SDIFF( X, Y )
@@ -3189,7 +3189,7 @@
       SDIFF = X - Y
       RETURN
 *
-*     End of SDIFF.
+*     End of SDIFF
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -3217,7 +3217,7 @@
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
      $      'ETECTED BY ', A6, ' *****' )
 *
-*     End of CHKXER.
+*     End of CHKXER
 *
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
@@ -3273,4 +3273,3 @@
 *     End of XERBLA
 *
       END
-

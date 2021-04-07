@@ -372,7 +372,7 @@
                          IF( .NOT. DGENND( M, N, AF, LDA ) )
      $                       RESULT( 9 ) = 2*THRESH
                         NT = NT + 1
-                    ELSE IF( M.GE.N ) THEN
+                     ELSE IF( M.GE.N ) THEN
 *
 *                       Test DORGQR, using factorization
 *                       returned by DQRT01

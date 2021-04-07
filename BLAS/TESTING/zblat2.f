@@ -429,7 +429,7 @@
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
 *
-*     End of ZBLAT2.
+*     End of ZBLAT2
 *
       END
       SUBROUTINE ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -775,7 +775,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK1.
+*     End of ZCHK1
 *
       END
       SUBROUTINE ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1124,7 +1124,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK2.
+*     End of ZCHK2
 *
       END
       SUBROUTINE ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1486,7 +1486,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK3.
+*     End of ZCHK3
 *
       END
       SUBROUTINE ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1764,7 +1764,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK4.
+*     End of ZCHK4
 *
       END
       SUBROUTINE ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2049,7 +2049,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK5.
+*     End of ZCHK5
 *
       END
       SUBROUTINE ZCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2372,7 +2372,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK6.
+*     End of ZCHK6
 *
       END
       SUBROUTINE ZCHKE( ISNUM, SRNAMT, NOUT )
@@ -2715,7 +2715,7 @@
  9998 FORMAT( ' ******* ', A6, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
-*     End of ZCHKE.
+*     End of ZCHKE
 *
       END
       SUBROUTINE ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
@@ -2908,7 +2908,7 @@
       END IF
       RETURN
 *
-*     End of ZMAKE.
+*     End of ZMAKE
 *
       END
       SUBROUTINE ZMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
@@ -3040,7 +3040,7 @@
      $      'SULT                    COMPUTED RESULT' )
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
 *
-*     End of ZMVCH.
+*     End of ZMVCH
 *
       END
       LOGICAL FUNCTION LZE( RI, RJ, LR )
@@ -3070,7 +3070,7 @@
       LZE = .FALSE.
    30 RETURN
 *
-*     End of LZE.
+*     End of LZE
 *
       END
       LOGICAL FUNCTION LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
@@ -3129,7 +3129,7 @@
       LZERES = .FALSE.
    80 RETURN
 *
-*     End of LZERES.
+*     End of LZERES
 *
       END
       COMPLEX*16 FUNCTION ZBEG( RESET )
@@ -3181,7 +3181,7 @@
       ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
       RETURN
 *
-*     End of ZBEG.
+*     End of ZBEG
 *
       END
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
@@ -3197,7 +3197,7 @@
       DDIFF = X - Y
       RETURN
 *
-*     End of DDIFF.
+*     End of DDIFF
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -3225,7 +3225,7 @@
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
      $      'ETECTED BY ', A6, ' *****' )
 *
-*     End of CHKXER.
+*     End of CHKXER
 *
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
@@ -3281,4 +3281,3 @@
 *     End of XERBLA
 *
       END
-

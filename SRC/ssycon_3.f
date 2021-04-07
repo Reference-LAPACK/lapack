@@ -277,6 +277,6 @@
 *
       RETURN
 *
-*     End of DSYCON_3
+*     End of SSYCON_3
 *
       END

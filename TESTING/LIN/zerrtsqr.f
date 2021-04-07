@@ -235,6 +235,6 @@
 *
       RETURN
 *
-*     End of DERRTSQR
+*     End of ZERRTSQR
 *
       END

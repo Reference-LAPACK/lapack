@@ -390,6 +390,6 @@
 *
       RETURN
 *
-*     End of DTBMV .
+*     End of DTBMV
 *
       END

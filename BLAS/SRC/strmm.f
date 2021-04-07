@@ -407,6 +407,6 @@
 *
       RETURN
 *
-*     End of STRMM .
+*     End of STRMM
 *
       END

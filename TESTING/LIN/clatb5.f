@@ -226,6 +226,6 @@
 *
       RETURN
 *
-*     End of SLATB5
+*     End of CLATB5
 *
       END

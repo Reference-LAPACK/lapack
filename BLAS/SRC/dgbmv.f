@@ -362,6 +362,6 @@
 *
       RETURN
 *
-*     End of DGBMV .
+*     End of DGBMV
 *
       END

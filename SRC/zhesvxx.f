@@ -185,12 +185,12 @@
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T as computed by DSYTRF.
+*>     U*D*U**H or A = L*D*L**H as computed by ZHETRF.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T.
+*>     U*D*U**H or A = L*D*L**H.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -643,7 +643,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the LDL^T or UDU^T factorization of A.
+*        Compute the LDL^H or UDU^H factorization of A.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )

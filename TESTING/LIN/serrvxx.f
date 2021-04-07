@@ -1033,6 +1033,6 @@
 *
       RETURN
 *
-*     End of SERRVX
+*     End of SERRVXX
 *
       END

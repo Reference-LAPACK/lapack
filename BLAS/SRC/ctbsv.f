@@ -424,6 +424,6 @@
 *
       RETURN
 *
-*     End of CTBSV .
+*     End of CTBSV
 *
       END

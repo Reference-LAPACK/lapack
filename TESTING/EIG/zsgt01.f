@@ -247,6 +247,6 @@
 *
       RETURN
 *
-*     End of CDGT01
+*     End of ZDGT01
 *
       END

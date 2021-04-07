@@ -711,4 +711,7 @@
       END DO
 *
       RETURN
+*
+*     End of ZLA_HERFSX_EXTENDED
+*
       END

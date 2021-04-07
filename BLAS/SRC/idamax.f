@@ -120,4 +120,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of IDAMAX
+*
       END

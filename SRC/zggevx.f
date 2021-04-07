@@ -707,8 +707,8 @@
 *
          IF( .NOT.WANTSN ) THEN
 *
-*           compute eigenvectors (DTGEVC) and estimate condition
-*           numbers (DTGSNA). Note that the definition of the condition
+*           compute eigenvectors (ZTGEVC) and estimate condition
+*           numbers (ZTGSNA). Note that the definition of the condition
 *           number is not invariant under transformation (u,v) to
 *           (Q*u, Z*v), where (u,v) are eigenvectors of the generalized
 *           Schur form (S,T), Q and Z are orthogonal matrices. In order

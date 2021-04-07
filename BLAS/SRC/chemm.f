@@ -363,6 +363,6 @@
 *
       RETURN
 *
-*     End of CHEMM .
+*     End of CHEMM
 *
       END

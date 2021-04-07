@@ -235,7 +235,7 @@
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
 *     Compute error matrix.
-*     Column i = ( b(i) A - a(i) B ) E(i) / max( |a(i) B| |b(i) A| )
+*     Column i = ( b(i) A - a(i) B ) E(i) / max( |a(i) B|, |b(i) A| )
 *
       DO 10 JVEC = 1, N
          ALPHAI = ALPHA( JVEC )
@@ -275,7 +275,7 @@
          DO 20 J = 1, N
             TEMP1 = MAX( TEMP1, ABS1( E( J, JVEC ) ) )
    20    CONTINUE
-         ENRMER = MAX( ENRMER, TEMP1-ONE )
+         ENRMER = MAX( ENRMER, ABS( TEMP1-ONE ) )
    30 CONTINUE
 *
 *     Compute RESULT(2) : the normalization error in E.

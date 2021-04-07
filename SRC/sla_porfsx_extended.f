@@ -672,4 +672,7 @@
       END DO
 *
       RETURN
+*
+*     End of SLA_PORFSX_EXTENDED
+*
       END

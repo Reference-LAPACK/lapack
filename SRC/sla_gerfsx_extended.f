@@ -683,4 +683,7 @@
       END DO
 *
       RETURN
+*
+*     End of SLA_GERFSX_EXTENDED
+*
       END

@@ -309,6 +309,6 @@
 *
       RETURN
 *
-*     End of CHER2 .
+*     End of CHER2
 *
       END

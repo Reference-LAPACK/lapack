@@ -88,6 +88,9 @@
 *
 99999 FORMAT (' Real BLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
+*
+*     End of DBLAT1
+*
       END
       SUBROUTINE HEADER
 *     .. Parameters ..
@@ -119,6 +122,9 @@
       RETURN
 *
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
+*
+*     End of HEADER
+*
       END
       SUBROUTINE CHECK0(SFAC)
 *     .. Parameters ..
@@ -235,6 +241,9 @@
          END IF
    20 CONTINUE
    40 RETURN
+*
+*     End of CHECK0
+*
       END
       SUBROUTINE CHECK1(SFAC)
 *     .. Parameters ..
@@ -346,6 +355,9 @@
          END IF
    80 CONTINUE
       RETURN
+*
+*     End of CHECK1
+*
       END
       SUBROUTINE CHECK2(SFAC)
 *     .. Parameters ..
@@ -709,6 +721,9 @@
   100    CONTINUE
   120 CONTINUE
       RETURN
+*
+*     End of CHECK2
+*
       END
       SUBROUTINE CHECK3(SFAC)
 *     .. Parameters ..
@@ -915,6 +930,9 @@
          CALL STEST(5,COPYY,MWPSTY,MWPSTY,SFAC)
   200 CONTINUE
       RETURN
+*
+*     End of CHECK3
+*
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
 *     ********************************* STEST **************************
@@ -971,6 +989,9 @@
      +       ' COMP(I)                             TRUE(I)  DIFFERENCE',
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,2I5,I3,2D36.8,2D12.4)
+*
+*     End of STEST
+*
       END
       SUBROUTINE TESTDSDOT(SCOMP,STRUE,SSIZE,SFAC)
 *     ********************************* STEST **************************
@@ -1019,6 +1040,9 @@
      +       ' COMP(I)                             TRUE(I)  DIFFERENCE',
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,1I5,I3,2E36.8,2E12.4)
+*
+*     End of TESTDSDOT
+*
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
 *     ************************* STEST1 *****************************
@@ -1044,6 +1068,9 @@
       CALL STEST(1,SCOMP,STRUE,SSIZE,SFAC)
 *
       RETURN
+*
+*     End of STEST1
+*
       END
       DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
 *     ********************************* SDIFF **************************
@@ -1054,6 +1081,9 @@
 *     .. Executable Statements ..
       SDIFF = SA - SB
       RETURN
+*
+*     End of SDIFF
+*
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
 *     ********************************* ITEST1 *************************
@@ -1095,4 +1125,7 @@
      +       ' COMP                                TRUE     DIFFERENCE',
      +       /1X)
 99997 FORMAT (1X,I4,I3,2I5,2I36,I12)
+*
+*     End of ITEST1
+*
       END

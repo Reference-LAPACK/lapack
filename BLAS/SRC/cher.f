@@ -270,6 +270,6 @@
 *
       RETURN
 *
-*     End of CHER  .
+*     End of CHER
 *
       END

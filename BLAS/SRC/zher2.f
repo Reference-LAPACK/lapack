@@ -309,6 +309,6 @@
 *
       RETURN
 *
-*     End of ZHER2 .
+*     End of ZHER2
 *
       END

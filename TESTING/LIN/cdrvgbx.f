@@ -1027,6 +1027,6 @@ c                     write(*,*) 'begin cgbsvxx testing'
 *
       RETURN
 *
-*     End of CDRVGB
+*     End of CDRVGBX
 *
       END

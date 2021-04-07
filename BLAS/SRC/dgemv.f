@@ -322,6 +322,6 @@
 *
       RETURN
 *
-*     End of DGEMV .
+*     End of DGEMV
 *
       END

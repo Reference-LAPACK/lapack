@@ -482,6 +482,6 @@ c                     NT = 2
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of SDRVSY_AA_2STAGE
+*     End of CSDRVSY_AA_2STAGE
 *
       END

@@ -49,7 +49,7 @@
 *> eigenvalues.
 *>
 *> ZSTEGR is a compatibility wrapper around the improved ZSTEMR routine.
-*> See DSTEMR for further details.
+*> See ZSTEMR for further details.
 *>
 *> One important change is that the ABSTOL parameter no longer provides any
 *> benefit and hence is no longer used.

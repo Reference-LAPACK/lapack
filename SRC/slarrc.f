@@ -243,6 +243,6 @@
 
       RETURN
 *
-*     end of SLARRC
+*     End of SLARRC
 *
       END
