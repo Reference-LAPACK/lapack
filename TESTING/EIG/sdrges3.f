@@ -393,8 +393,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date February 2015
-*
 *> \ingroup single_eig
 *
 *  =====================================================================
@@ -403,10 +401,9 @@
      $                    ALPHAI, BETA, WORK, LWORK, RESULT, BWORK,
      $                    INFO )
 *
-*  -- LAPACK test routine (version 3.6.1) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     February 2015
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDQ, LWORK, NOUNIT, NSIZES, NTYPES

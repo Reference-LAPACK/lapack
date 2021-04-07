@@ -47,6 +47,13 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(tmglib ${SOURCES})
-target_link_libraries(tmglib ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-lapack_install_library(tmglib)
+add_library(${TMGLIB} ${SOURCES})
+
+set_target_properties(
+  ${TMGLIB} PROPERTIES
+  VERSION ${LAPACK_VERSION}
+  SOVERSION ${LAPACK_MAJOR_VERSION}
+)
+
+target_link_libraries(${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+lapack_install_library(${TMGLIB})

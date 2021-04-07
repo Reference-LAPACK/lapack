@@ -183,8 +183,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup complex16_lin
 *
 *  =====================================================================
@@ -192,10 +190,9 @@
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, NOUT )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -372,12 +369,12 @@
                         END IF
 *                       Compute workspace needed for ZGELSY
                         CALL ZGELSY( M, N, NRHS, A, LDA, B, LDB, IWQ,
-     $                               RCOND, CRANK, WQ, -1, RWORK, INFO )
+     $                               RCOND, CRANK, WQ, -1, RWQ, INFO )
                         LWORK_ZGELSY = INT( WQ( 1 ) )
                         LRWORK_ZGELSY = 2*N
 *                       Compute workspace needed for ZGELSS
                         CALL ZGELSS( M, N, NRHS, A, LDA, B, LDB, S,
-     $                               RCOND, CRANK, WQ, -1 , RWORK,
+     $                               RCOND, CRANK, WQ, -1 , RWQ,
      $                               INFO )
                         LWORK_ZGELSS = INT( WQ( 1 ) )
                         LRWORK_ZGELSS = 5*MNMIN
@@ -564,7 +561,7 @@
                                  CALL ZLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
                                  CALL ZSCAL( NCOLS*NRHS,
-     $                                       ONE / DBLE( NCOLS ), WORK,
+     $                                       CONE / DBLE( NCOLS ), WORK,
      $                                       1 )
                               END IF
                               CALL ZGEMM( TRANS, 'No transpose', NROWS,

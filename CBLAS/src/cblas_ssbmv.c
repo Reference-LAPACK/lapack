@@ -9,9 +9,9 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_ssbmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-           const int N, const int K, const float alpha, const float *A,
-           const int lda, const float *X, const int incX,
-           const float beta, float *Y, const int incY)
+           const CBLAS_INDEX N, const CBLAS_INDEX K, const float alpha, const float *A,
+           const CBLAS_INDEX lda, const float *X, const CBLAS_INDEX incX,
+           const float beta, float *Y, const CBLAS_INDEX incY)
 {
    char UL;
 #ifdef F77_CHAR

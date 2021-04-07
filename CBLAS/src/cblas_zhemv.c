@@ -10,10 +10,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_zhemv(const CBLAS_LAYOUT layout,
-                 const CBLAS_UPLO Uplo, const int N,
-                 const void *alpha, const void *A, const int lda,
-                 const void *X, const int incX, const void *beta,
-                 void  *Y, const int incY)
+                 const CBLAS_UPLO Uplo, const CBLAS_INDEX N,
+                 const void *alpha, const void *A, const CBLAS_INDEX lda,
+                 const void *X, const CBLAS_INDEX incX, const void *beta,
+                 void  *Y, const CBLAS_INDEX incY)
 {
    char UL;
 #ifdef F77_CHAR
@@ -29,10 +29,10 @@ void cblas_zhemv(const CBLAS_LAYOUT layout,
    #define F77_incX incx
    #define F77_incY incY
 #endif
-   int n, i=0, incx=incX;
+   CBLAS_INDEX n, i=0, incx=incX;
    const double *xx= (double *)X, *alp= (double *)alpha, *bet = (double *)beta;
    double ALPHA[2],BETA[2];
-   int tincY, tincx;
+   CBLAS_INDEX tincY, tincx;
    double *x=(double *)X, *y=(double *)Y, *st=0, *tx;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;

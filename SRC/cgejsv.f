@@ -368,7 +368,7 @@
 *>                    singular values might be lost.
 *>
 *>          If full SVD is needed, the following two condition numbers are
-*>          useful for the analysis of the algorithm. They are provied for
+*>          useful for the analysis of the algorithm. They are provided for
 *>          a developer/implementer who is familiar with the details of
 *>          the method.
 *>
@@ -484,8 +484,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
-*
 *> \ingroup complexGEsing
 *
 *> \par Further Details:
@@ -568,10 +566,9 @@
      $                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      $                   CWORK, LWORK, RWORK, LRWORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       IMPLICIT    NONE
@@ -1314,7 +1311,7 @@
 *     (eg speed by replacing global with restricted window pivoting, such
 *     as in xGEQPX from TOMS # 782). Good results will be obtained using
 *     xGEQPX with properly (!) chosen numerical parameters.
-*     Any improvement of CGEQP3 improves overal performance of CGEJSV.
+*     Any improvement of CGEQP3 improves overall performance of CGEJSV.
 *
 *     A * P1 = Q1 * [ R1^* 0]^*:
       DO 1963 p = 1, N

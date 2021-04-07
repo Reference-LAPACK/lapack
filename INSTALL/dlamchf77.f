@@ -60,17 +60,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date April 2012
-*
+
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
 *
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
@@ -190,7 +188,6 @@
 *>          'round to nearest' style.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \date April 2012
 *> \ingroup auxOTHERauxiliary
 *>
 *> \details \b Further \b Details
@@ -209,9 +206,8 @@
 *>
       SUBROUTINE DLAMC1( BETA, T, RND, IEEE1 )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
 *
 *     .. Scalar Arguments ..
       LOGICAL            IEEE1, RND
@@ -362,7 +358,6 @@
 *> list.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \date April 2012
 *> \ingroup auxOTHERauxiliary
 *>
 *> \param[out] BETA
@@ -422,9 +417,8 @@
 *> \endverbatim
       SUBROUTINE DLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
 *
 *     .. Scalar Arguments ..
       LOGICAL            RND
@@ -645,9 +639,8 @@
 
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   A, B
@@ -692,9 +685,8 @@
 *>
       SUBROUTINE DLAMC4( EMIN, START, BASE )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
 *
 *     .. Scalar Arguments ..
       INTEGER            BASE, EMIN
@@ -799,9 +791,8 @@
 *>
       SUBROUTINE DLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
 *
 *     .. Scalar Arguments ..
       LOGICAL            IEEE

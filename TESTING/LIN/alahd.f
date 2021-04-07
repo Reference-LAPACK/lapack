@@ -100,17 +100,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
-*
 *> \ingroup aux_lin
 *
 *  =====================================================================
       SUBROUTINE ALAHD( IOUNIT, PATH )
 *
-*  -- LAPACK test routine (version 3.9.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH

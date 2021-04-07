@@ -14,24 +14,37 @@ addons:
 matrix:
   include:
   - os: linux
+    name: "CMake Release Test on Linux"
     env: CMAKE_BUILD_TYPE=Release
   - os: linux
+    name: "Makefile Test on Linux"
+    script:
+    - rm -f make.inc
+    - cp make.inc.example make.inc
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
+    - make -j2 lapack_install
+  - os: linux
+    name: "CMake Coverage Test on Linux"
     env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
+    name: "CMake Release Test on macOS Big Sur"
+    osx_image: xcode12.3
     env: CMAKE_BUILD_TYPE=Release
-    before_install:
-    - brew update > /dev/null
-    - brew install gcc > /dev/null
   - os: osx
-    env: CMAKE_BUILD_TYPE=Coverage
-    before_install:
-    - brew update > /dev/null
-    - brew install gcc > /dev/null
+    osx_image: xcode12.3
+    name: "Makefile Test on on macOS Big Sur"
+    script:
+    - rm -f make.inc
+    - cp make.inc.example make.inc
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
+    - make -j2 lapack_install
 
-script:
+before_script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
+
+script:
   - export SRC_DIR=$(pwd)
   - export BLD_DIR=${SRC_DIR}/lapack-travis-bld
   - export INST_DIR=${SRC_DIR}/../lapack-travis-install
@@ -46,6 +59,9 @@ script:
     -DLAPACKE:BOOL=ON
     -DBUILD_TESTING=ON
     -DLAPACKE_WITH_TMG:BOOL=ON
+    -DBUILD_SHARED_LIBS:BOOL=ON
+    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive -fcheck=all"
+    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure

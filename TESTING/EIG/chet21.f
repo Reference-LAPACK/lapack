@@ -206,18 +206,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup complex_eig
 *
 *  =====================================================================
       SUBROUTINE CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
      $                   LDV, TAU, WORK, RWORK, RESULT )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -307,7 +304,7 @@
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
-            DO 20 J = 1, N - 1
+            DO 20 J = 2, N - 1
                CALL CHER2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 1,
      $                     U( 1, J-1 ), 1, WORK, N )
    20       CONTINUE

@@ -212,8 +212,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
-*
 *> \ingroup complex16GEsing
 *
 *> \par Contributors:
@@ -227,10 +225,9 @@
      $                   WORK, LWORK, RWORK, IWORK, INFO )
       implicit none
 *
-*  -- LAPACK driver routine (version 3.7.0) --
+*  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ
@@ -281,9 +278,9 @@
      $                   ZLASET, ZUNGBR, ZUNGLQ, ZUNGQR, ZUNMBR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, DISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -647,6 +644,10 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = ZLANGE( 'M', M, N, A, LDA, DUM )
+      IF( DISNAN( ANRM ) ) THEN
+          INFO = -4
+          RETURN
+      END IF
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1

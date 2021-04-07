@@ -154,18 +154,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup realGEsolve
 *
 *  =====================================================================
       SUBROUTINE SGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
      $                    WORK, LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.7.1) --
+*  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -258,7 +255,7 @@
          TSZM = INT( TQ( 1 ) )
          LWM  = INT( WORKQ( 1 ) )
          CALL SGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
-     $                TSZO, B, LDB, WORKQ, -1, INFO2 )
+     $                TSZM, B, LDB, WORKQ, -1, INFO2 )
          LWM  = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
          WSIZEM = TSZM + LWM

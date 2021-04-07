@@ -10,8 +10,8 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_zher(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                const int N, const double alpha, const void *X, const int incX
-                ,void *A, const int lda)
+                const CBLAS_INDEX N, const double alpha, const void *X, const CBLAS_INDEX incX
+                ,void *A, const CBLAS_INDEX lda)
 {
    char UL;
 #ifdef F77_CHAR
@@ -27,7 +27,7 @@ void cblas_zher(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    #define F77_lda lda
    #define F77_incX incx
 #endif
-   int n, i, tincx, incx=incX;
+   CBLAS_INDEX n, i, tincx, incx=incX;
    double *x=(double *)X, *xx=(double *)X, *tx, *st;
 
    extern int CBLAS_CallFromC;

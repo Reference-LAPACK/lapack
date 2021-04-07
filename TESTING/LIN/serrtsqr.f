@@ -48,18 +48,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup double_lin
 *
 *  =====================================================================
       SUBROUTINE SERRTSQR( PATH, NUNIT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -77,7 +74,7 @@
 *     ..
 *     .. Local Arrays ..
       REAL               A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX)
+     $                   C( NMAX, NMAX ), TAU(NMAX*2)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SGEQR,
@@ -137,6 +134,8 @@
 *
       TAU(1)=1
       TAU(2)=1
+      TAU(3)=1
+      TAU(4)=1
       SRNAMT = 'SGEMQR'
       NB=1
       INFOT = 1

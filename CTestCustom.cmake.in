@@ -46,10 +46,9 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "Warning: File .* has modification time .* in the future"
 )
 
-# Only rung post test if suitable python interpreter was found
-set(PYTHONINTERP_FOUND @PYTHONINTERP_FOUND@)
+# Only run post test if suitable python interpreter was found
 set(PYTHON_EXECUTABLE  @PYTHON_EXECUTABLE@)
-if(PYTHONINTERP_FOUND)
+if(PYTHON_EXECUTABLE)
   set(CTEST_CUSTOM_POST_TEST "${PYTHON_EXECUTABLE} ./lapack_testing.py -s -d TESTING")
 endif()
 

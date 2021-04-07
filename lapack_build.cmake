@@ -4,7 +4,7 @@
 ## HINTS: ctest -Ddashboard_model=Nightly      -S $(pwd)/lapack/lapack_build.cmake
 ##
 
-cmake_minimum_required(VERSION 2.8.10)
+cmake_minimum_required(VERSION 3.2)
 ###################################################################
 # The values in this section must always be provided
 ###################################################################
@@ -57,7 +57,7 @@ if(WIN32)
     math(EXPR vstype "${vstype} +1")
   endforeach()
   if(NOT DEFINED genIndex)
-    message(FATAL_ERROR "Could not find installed visual stuido")
+    message(FATAL_ERROR "Could not find installed visual studio")
   endif()
   list(GET GENERATORS ${genIndex} GENERATOR)
   set(CTEST_CMAKE_GENERATOR      "${GENERATOR}")

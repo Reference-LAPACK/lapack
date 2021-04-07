@@ -10,9 +10,9 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_dsyr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                const int N, const double  alpha, const double  *X,
-                const int incX, const double  *Y, const int incY, double  *A,
-                const int lda)
+                const CBLAS_INDEX N, const double  alpha, const double  *X,
+                const CBLAS_INDEX incX, const double  *Y, const CBLAS_INDEX incY, double  *A,
+                const CBLAS_INDEX lda)
 {
    char UL;
 #ifdef F77_CHAR
