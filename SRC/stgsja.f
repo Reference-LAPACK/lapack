@@ -397,7 +397,7 @@
 *     .. Parameters ..
       INTEGER            MAXIT
       PARAMETER          ( MAXIT = 40 )
-      REAL               ZERO, ONE
+      REAL               ZERO, ONE, HUGENUM
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
@@ -416,7 +416,8 @@
      $                   SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN
+      INTRINSIC          ABS, MAX, MIN, HUGE
+      PARAMETER          ( HUGENUM = HUGE(ZERO) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -593,9 +594,9 @@
 *
          A1 = A( K+I, N-L+I )
          B1 = B( I, N-L+I )
+         GAMMA = B1 / A1
 *
-         IF( A1.NE.ZERO ) THEN
-            GAMMA = B1 / A1
+         IF( (GAMMA.LE.HUGENUM).AND.(GAMMA.GE.-HUGENUM) ) THEN
 *
 *           change sign if necessary
 *
