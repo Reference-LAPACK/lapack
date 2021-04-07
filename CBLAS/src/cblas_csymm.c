@@ -10,10 +10,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_csymm(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
-                 const CBLAS_UPLO Uplo, const int M, const int N,
-                 const void *alpha, const void  *A, const int lda,
-                 const void  *B, const int ldb, const void *beta,
-                 void  *C, const int ldc)
+                 const CBLAS_UPLO Uplo, const CBLAS_INDEX M, const CBLAS_INDEX N,
+                 const void *alpha, const void  *A, const CBLAS_INDEX lda,
+                 const void  *B, const CBLAS_INDEX ldb, const void *beta,
+                 void  *C, const CBLAS_INDEX ldc)
 {
    char SD, UL;
 #ifdef F77_CHAR

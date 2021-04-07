@@ -353,7 +353,7 @@
 *>          DZ_UB is REAL
 *>     Determines when to start considering componentwise convergence.
 *>     Componentwise convergence is only considered after each component
-*>     of the solution Y is stable, which we definte as the relative
+*>     of the solution Y is stable, which we define as the relative
 *>     change in each component being less than DZ_UB. The default value
 *>     is 0.25, requiring the first bit to be stable. See LAWN 165 for
 *>     more details.
@@ -382,8 +382,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
@@ -395,10 +393,9 @@
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDAF, LDB, LDY, N, NRHS, PREC_TYPE,

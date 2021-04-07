@@ -10,10 +10,10 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_zher2k(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                  const CBLAS_TRANSPOSE Trans, const int N, const int K,
-                  const void *alpha, const void *A, const int lda,
-                  const void *B, const int ldb, const double beta,
-                  void *C, const int ldc)
+                  const CBLAS_TRANSPOSE Trans, const CBLAS_INDEX N, const CBLAS_INDEX K,
+                  const void *alpha, const void *A, const CBLAS_INDEX lda,
+                  const void *B, const CBLAS_INDEX ldb, const double beta,
+                  void *C, const CBLAS_INDEX ldc)
 {
    char UL, TR;
 #ifdef F77_CHAR

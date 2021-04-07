@@ -8,14 +8,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDROT( N, CX, INCX, CY, INCY, C, S )
+*       SUBROUTINE ZDROT( N, ZX, INCX, ZY, INCY, C, S )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
 *       DOUBLE PRECISION   C, S
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         CX( * ), CY( * )
+*       COMPLEX*16         ZX( * ), ZY( * )
 *       ..
 *
 *
@@ -39,12 +39,12 @@
 *>           N must be at least zero.
 *> \endverbatim
 *>
-*> \param[in,out] CX
+*> \param[in,out] ZX
 *> \verbatim
-*>          CX is COMPLEX*16 array, dimension at least
+*>          ZX is COMPLEX*16 array, dimension at least
 *>           ( 1 + ( N - 1 )*abs( INCX ) ).
-*>           Before entry, the incremented array CX must contain the n
-*>           element vector cx. On exit, CX is overwritten by the updated
+*>           Before entry, the incremented array ZX must contain the n
+*>           element vector cx. On exit, ZX is overwritten by the updated
 *>           vector cx.
 *> \endverbatim
 *>
@@ -52,15 +52,15 @@
 *> \verbatim
 *>          INCX is INTEGER
 *>           On entry, INCX specifies the increment for the elements of
-*>           CX. INCX must not be zero.
+*>           ZX. INCX must not be zero.
 *> \endverbatim
 *>
-*> \param[in,out] CY
+*> \param[in,out] ZY
 *> \verbatim
-*>          CY is COMPLEX*16 array, dimension at least
+*>          ZY is COMPLEX*16 array, dimension at least
 *>           ( 1 + ( N - 1 )*abs( INCY ) ).
-*>           Before entry, the incremented array CY must contain the n
-*>           element vector cy. On exit, CY is overwritten by the updated
+*>           Before entry, the incremented array ZY must contain the n
+*>           element vector cy. On exit, ZY is overwritten by the updated
 *>           vector cy.
 *> \endverbatim
 *>
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          INCY is INTEGER
 *>           On entry, INCY specifies the increment for the elements of
-*>           CY. INCY must not be zero.
+*>           ZY. INCY must not be zero.
 *> \endverbatim
 *>
 *> \param[in] C
@@ -91,24 +91,21 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup complex16_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE ZDROT( N, CX, INCX, CY, INCY, C, S )
+      SUBROUTINE ZDROT( N, ZX, INCX, ZY, INCY, C, S )
 *
-*  -- Reference BLAS level1 routine (version 3.7.0) --
+*  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, INCY, N
       DOUBLE PRECISION   C, S
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16         CX( * ), CY( * )
+      COMPLEX*16         ZX( * ), ZY( * )
 *     ..
 *
 * =====================================================================
@@ -126,9 +123,9 @@
 *        code for both increments equal to 1
 *
          DO I = 1, N
-            CTEMP = C*CX( I ) + S*CY( I )
-            CY( I ) = C*CY( I ) - S*CX( I )
-            CX( I ) = CTEMP
+            CTEMP = C*ZX( I ) + S*ZY( I )
+            ZY( I ) = C*ZY( I ) - S*ZX( I )
+            ZX( I ) = CTEMP
          END DO
       ELSE
 *
@@ -142,9 +139,9 @@
          IF( INCY.LT.0 )
      $      IY = ( -N+1 )*INCY + 1
          DO I = 1, N
-            CTEMP = C*CX( IX ) + S*CY( IY )
-            CY( IY ) = C*CY( IY ) - S*CX( IX )
-            CX( IX ) = CTEMP
+            CTEMP = C*ZX( IX ) + S*ZY( IY )
+            ZY( IY ) = C*ZY( IY ) - S*ZX( IX )
+            ZX( IX ) = CTEMP
             IX = IX + INCX
             IY = IY + INCY
          END DO

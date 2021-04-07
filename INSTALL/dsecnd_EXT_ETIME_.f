@@ -28,16 +28,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DSECND( )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
 * =====================================================================
 *
 *     .. Local Scalars ..

@@ -602,8 +602,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup single_eig
 *
 *  =====================================================================
@@ -612,10 +610,9 @@
      $                   WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
      $                   LWORK, IWORK, LIWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LWORK, NOUNIT, NSIZES,
@@ -999,8 +996,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage.
 *
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL SLACPY( "U", N, N, A, LDA, V, LDU )
             LH = MAX(1, 4*N)
             LW = LWORK - LH
@@ -1032,8 +1029,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage. 
 *
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL SLACPY( "L", N, N, A, LDA, V, LDU )
             CALL SSYTRD_2STAGE( 'N', "L", N, V, LDU, SD, SE, TAU, 
      $                   WORK, LH, WORK( LH+1 ), LW, IINFO )

@@ -74,7 +74,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DTPLQT.
+*>          in CTPLQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -82,7 +82,7 @@
 *>          V is COMPLEX array, dimension (LDV,K)
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DTPLQT in B.  See Further Details.
+*>          CTPLQT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -97,7 +97,7 @@
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DTPLQT, stored as a MB-by-K matrix.
+*>          as returned by CTPLQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -160,8 +160,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
 *> \ingroup doubleOTHERcomputational
 *
 *> \par Further Details:
@@ -201,10 +199,9 @@
       SUBROUTINE CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER SIDE, TRANS

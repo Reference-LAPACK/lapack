@@ -614,8 +614,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup complex16_eig
 *
 *  =====================================================================
@@ -625,10 +623,9 @@
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
      $                   INFO )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
@@ -1014,8 +1011,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage.
 *
-            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL ZLACPY( 'U', N, N, A, LDA, V, LDU )
             LH = MAX(1, 4*N)
             LW = LWORK - LH
@@ -1048,8 +1045,8 @@
 *           the one from above. Compare it with D1 computed 
 *           using the 1-stage. 
 *
-            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SD, N )
+            CALL DLASET( 'Full', N, 1, ZERO, ZERO, SE, N )
             CALL ZLACPY( 'L', N, N, A, LDA, V, LDU )
             CALL ZHETRD_2STAGE( 'N', "L", N, V, LDU, SD, SE, TAU, 
      $                   WORK, LH, WORK( LH+1 ), LW, IINFO )

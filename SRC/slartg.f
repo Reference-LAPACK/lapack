@@ -90,17 +90,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLARTG( F, G, CS, SN, R )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       REAL               CS, F, G, R, SN
@@ -163,7 +160,7 @@
             F1 = F1*SAFMN2
             G1 = G1*SAFMN2
             SCALE = MAX( ABS( F1 ), ABS( G1 ) )
-            IF( SCALE.GE.SAFMX2 )
+            IF( SCALE.GE.SAFMX2 .AND. COUNT .LT. 20)
      $         GO TO 10
             R = SQRT( F1**2+G1**2 )
             CS = F1 / R

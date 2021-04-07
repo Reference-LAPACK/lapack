@@ -117,8 +117,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date April 2012
-*
 *> \ingroup complex16HEcomputational
 *
 *> \par References:
@@ -132,10 +130,9 @@
 *  =====================================================================
       SUBROUTINE ZHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.8.0) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, N
@@ -271,7 +268,7 @@
          AVG = AVG / N
 
          STD = 0.0D0
-         DO I = N+1, N
+         DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
          CALL ZLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )

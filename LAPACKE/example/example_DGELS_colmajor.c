@@ -49,11 +49,9 @@
 
    LAPACKE_dgels (col-major, high-level) Example Program Results
 
-  -- LAPACKE Example routine (version 3.7.0) --
+  -- LAPACKE Example routine --
   -- LAPACK is a software package provided by Univ. of Tennessee,    --
   -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-     December 2016
-
 */
 /* Calling DGELS using col-major layout */
 

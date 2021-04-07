@@ -83,17 +83,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
-*
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION DD1,DD2,DX1,DY1
@@ -152,6 +149,19 @@
              DD1 = DD1/DU
              DD2 = DD2/DU
              DX1 = DX1*DU
+           ELSE
+*            This code path if here for safety. We do not expect this
+*            condition to ever hold except in edge cases with rounding
+*            errors. See DOI: 10.1145/355841.355847
+             DFLAG = -ONE
+             DH11 = ZERO
+             DH12 = ZERO
+             DH21 = ZERO
+             DH22 = ZERO
+*
+             DD1 = ZERO
+             DD2 = ZERO
+             DX1 = ZERO
            END IF
          ELSE
 

@@ -1,23 +1,20 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.2)
 
 project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 9)
-set(LAPACK_PATCH_VERSION 0)
+set(LAPACK_PATCH_VERSION 1)
 set(
   LAPACK_VERSION
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
-# Add the CMake directory for custon CMake modules
+# Add the CMake directory for custom CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
 # Export all symbols on Windows when building shared libraries
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-
-# Tell CMake that our Fortran sources are written in fixed format.
-set(CMAKE_Fortran_FORMAT FIXED)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -47,6 +44,24 @@ endif()
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
+# By default build index32 library
+option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
+if(BUILD_INDEX64)
+  set(BLASLIB "blas64")
+  set(CBLASLIB "cblas64")
+  set(LAPACKLIB "lapack64")
+  set(LAPACKELIB "lapacke64")
+  set(TMGLIB "tmglib64")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWeirdNEC -DLAPACK_ILP64 -DHAVE_LAPACK_CONFIG_H")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-integer-8")
+else()
+  set(BLASLIB "blas")
+  set(CBLASLIB "cblas")
+  set(LAPACKLIB "lapack")
+  set(LAPACKELIB "lapacke")
+  set(TMGLIB "tmglib")
+endif()
+
 include(GNUInstallDirs)
 
 # Updated OSX RPATH settings
@@ -74,12 +89,39 @@ configure_file(
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
+# Check if recursive flag exists
+include(CheckFortranCompilerFlag)
+check_fortran_compiler_flag("-recursive" _recursiveFlag)
+check_fortran_compiler_flag("-frecursive" _frecursiveFlag)
+check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
+
+# Add recursive flag
+if(_recursiveFlag)
+  string(REGEX MATCH "-recursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive"
+      CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+elseif(_frecursiveFlag)
+  string(REGEX MATCH "-frecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive"
+    CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+elseif(_MrecursiveFlag)
+  string(REGEX MATCH "-Mrecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive"
+    CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+endif()
+
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    string(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    string(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
@@ -115,7 +157,7 @@ endif()
 
 
 # --------------------------------------------------
-set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
+set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
@@ -134,13 +176,14 @@ option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
-# lapack_testing.py uses features from python 2.7 and greater
 if(BUILD_TESTING)
-  set(_msg "Looking for Python >= 2.7 needed for summary tests")
+  set(_msg "Looking for Python3 needed for summary tests")
   message(STATUS "${_msg}")
-  find_package(PythonInterp 2.7 QUIET)
-  if(PYTHONINTERP_FOUND)
-    message(STATUS "${_msg} - found (${PYTHON_VERSION_STRING})")
+  # find_package(PythonInterp 3) cannot be used because /usr/bin/python may be
+  # a Python2 interpreter.
+  find_program(PYTHON_EXECUTABLE python3)
+  if(PYTHON_EXECUTABLE)
+    message(STATUS "${_msg} - found")
   else()
     message(STATUS "${_msg} - not found (skipping summary tests)")
   endif()
@@ -162,7 +205,7 @@ CheckLAPACKCompilerFlags()
 # Check second function
 
 include(CheckTimeFunction)
-set(TIME_FUNC NONE ${TIME_FUNC})
+set(NONE ${TIME_FUNC})
 CHECK_TIME_FUNCTION(NONE TIME_FUNC)
 CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
 CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
@@ -223,7 +266,7 @@ endif()
 if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
-  set(BLAS_LIBRARIES blas)
+  set(BLAS_LIBRARIES ${BLASLIB})
 else()
   set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
@@ -282,7 +325,7 @@ endif()
 # Neither user specified or optimized LAPACK libraries can be used
 if(NOT LATESTLAPACK_FOUND)
   message(STATUS "Using supplied NETLIB LAPACK implementation")
-  set(LAPACK_LIBRARIES lapack)
+  set(LAPACK_LIBRARIES ${LAPACKLIB})
   add_subdirectory(SRC)
 else()
   set(CMAKE_EXE_LINKER_FLAGS
@@ -322,23 +365,50 @@ endif()
 # BLAS++ / LAPACK++
 option(BLAS++ "Build BLAS++" OFF)
 option(LAPACK++ "Build LAPACK++" OFF)
- 
- 
+
+
 function(_display_cpp_implementation_msg name)
   string(TOLOWER ${name} name_lc)
   message(STATUS "${name}++ enable")
   message(STATUS "----------------")
   message(STATUS "Thank you for your interest in ${name}++, a newly developed C++ API for ${name} library")
   message(STATUS "The objective of ${name}++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc.")
-  message(STATUS "We are still working on integrating ${name}++ in our library. For the moment, you can download directly ${name_lc}++ from https://bitbucket.org/icl/${name_lc}pp")
   message(STATUS "For support ${name}++ related question, please email: slate-user@icl.utk.edu")
   message(STATUS "----------------")
 endfunction()
-if(BLAS++)
+if (BLAS++)
   _display_cpp_implementation_msg("BLAS")
+  include(ExternalProject)
+  ExternalProject_Add(blaspp
+	  URL https://bitbucket.org/icl/blaspp/downloads/blaspp-2020.10.02.tar.gz
+	  #	  CMAKE_ARGS "-DUSE_CMAKE_FIND_BLAS=ON -DLIBRARY_PATH=${CMAKE_BINARY_DIR}"
+	  CONFIGURE_COMMAND env LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} ${PROJECT_BINARY_DIR}/blaspp-prefix/src/blaspp
+	  BUILD_COMMAND env LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" make
+	  INSTALL_COMMAND make PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" install
+	  )
+  ExternalProject_Add_StepDependencies(blaspp build ${BLAS_LIBRARIES})
 endif()
-if(LAPACK++)
+if (LAPACK++)
+	message (STATUS "linking lapack++ against ${LAPACK_LIBRARIES}")
   _display_cpp_implementation_msg("LAPACK")
+  include(ExternalProject)
+  if (BUILD_SHARED_LIBS)
+  ExternalProject_Add(lapackpp
+	  URL https://bitbucket.org/icl/lapackpp/downloads/lapackpp-2020.10.02.tar.gz
+	  CONFIGURE_COMMAND env LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DLAPACK_LIBRARIES=${LAPACK_LIBRARIES} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}  ${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp
+	  BUILD_COMMAND env LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" make
+	  INSTALL_COMMAND make PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" install
+	  )
+  else ()
+# FIXME this does not really work as the libraries list gets converted to a semicolon-separated list somewhere in the lapack++ build files
+  ExternalProject_Add(lapackpp
+	  URL https://bitbucket.org/icl/lapackpp/downloads/lapackpp-2020.10.02.tar.gz
+	  CONFIGURE_COMMAND env LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DLAPACK_LIBRARIES="${PROJECT_BINARY_DIR}/lib/liblapack.a -lgfortran"  -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}  ${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp
+	  BUILD_COMMAND env LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" make
+	  INSTALL_COMMAND make PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" install
+  )
+  endif()
+  ExternalProject_Add_StepDependencies(lapackpp build blaspp ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
 endif()
 
 # --------------------------------------------------
@@ -374,23 +444,23 @@ include(CPack)
 # --------------------------------------------------
 
 if(NOT BLAS_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} blas)
+  set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
 if(NOT LATESTLAPACK_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} lapack)
+  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
 endif()
 
 if(BUILD_TESTING OR LAPACKE_WITH_TMG)
-  set(ALL_TARGETS ${ALL_TARGETS} tmglib)
+  set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
 
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
-  install(EXPORT lapack-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+  install(EXPORT ${LAPACKLIB}-targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
     COMPONENT Development
     )
 
@@ -401,18 +471,18 @@ endif()
 
 # Include cblas in targets exported from the build tree.
 if(CBLAS)
-  set(ALL_TARGETS ${ALL_TARGETS} cblas)
+  set(ALL_TARGETS ${ALL_TARGETS} ${CBLASLIB})
 endif()
 
 # Include lapacke in targets exported from the build tree.
 if(LAPACKE)
-  set(ALL_TARGETS ${ALL_TARGETS} lapacke)
+  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKELIB})
 endif()
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
 if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
+  export(TARGETS ${ALL_TARGETS} FILE ${LAPACKLIB}-targets.cmake)
 
   # Choose one of the lapack or lapacke targets to use as a guard
   # for lapack-config.cmake to load targets from the build tree.
@@ -420,30 +490,140 @@ if(ALL_TARGETS)
 endif()
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config.cmake @ONLY)
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc @ONLY)
   install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
+  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc
   DESTINATION ${PKG_CONFIG_DIR}
   COMPONENT Development
   )
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake @ONLY)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
   VERSION ${LAPACK_VERSION}
   COMPATIBILITY SameMajorVersion
   )
 
 install(FILES
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
-  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake
+  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
-  
+if (LAPACK++)
+  install(
+  DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  FILES_MATCHING REGEX "liblapackpp.(a|so)$"
+  )
+  install(
+    DIRECTORY "${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp/include/"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILES_MATCHING REGEX "\\.(h|hh)$"
+  )
+  write_basic_package_version_file(
+    "lapackppConfigVersion.cmake"
+    VERSION 2020.10.02
+    COMPATIBILITY AnyNewerVersion
+  )
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/lapackpp/lapackppConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/lib/lapackpp/lapackppConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
+  )
+
+endif()
+if (BLAS++)
+  write_basic_package_version_file(
+    "blasppConfigVersion.cmake"
+    VERSION 2020.10.02
+    COMPATIBILITY AnyNewerVersion
+  )
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/blaspp/blasppConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/lib/blaspp/blasppConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
+  )
+  install(
+  DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  FILES_MATCHING REGEX "libblaspp.(a|so)$"
+  )
+  install(
+    DIRECTORY "${PROJECT_BINARY_DIR}/blaspp-prefix/src/blaspp/include/"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILES_MATCHING REGEX "\\.(h|hh)$"
+  )
+endif()
+
+# --------------------------------------------------
+# Generate MAN and/or HTML Documentation
+option(BUILD_HTML_DOCUMENTATION "Create and install the HTML based API
+documentation (requires Doxygen) - command: make html" OFF)
+option(BUILD_MAN_DOCUMENTATION "Create and install the MAN based documentation (requires Doxygen) - command: make man" OFF)
+message(STATUS "Build html documentation: ${BUILD_HTML_DOCUMENTATION}")
+message(STATUS "Build man documentation: ${BUILD_MAN_DOCUMENTATION}")
+
+if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
+    find_package(Doxygen)
+    if(NOT DOXYGEN_FOUND)
+         message(WARNING "Doxygen is needed to build the documentation.")
+
+    else()
+
+    set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
+    set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
+    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
+    set(PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
+    set(DOXYGEN_SOURCE_BROWSER YES)
+    set(DISTRIBUTE_GROUP_DOC YES)
+    set(DOXYGEN_CREATE_SUBDIRS YES)
+    set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
+    set(DOXYGEN_EXTRACT_ALL YES)
+    set(DOXYGEN_FILE_PATTERNS "*.f;*.c;*.h")
+    set(DOXYGEN_RECURSIVE YES)
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_INTERACTIVE_SVG YES)
+    set(DOXYGEN_QUIET YES)
+    set(DOXYGEN_WARNINGS NO)
+    set(DOXYGEN_GENERATE_HTML NO)
+    set(DOXYGEN_GENERATE_MAN NO)
+
+
+    if (BUILD_HTML_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML YES)
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_INLINE_SOURCES YES)
+        set(DOXYGEN_CALL_GRAPH YES)
+        set(DOXYGEN_CALLER_GRAPH YES)
+
+        doxygen_add_docs(
+            html
+            ${PROJECT_SOURCE_DIR}
+            COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
+        )
+    endif()
+    if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_MAN YES)
+        set(DOXYGEN_EXCLUDE SRC/VARIANTS)
+        set(DOXYGEN_MAN_LINKS YES)
+        set(DOXYGEN_INLINE_SOURCES NO)
+        set(DOXYGEN_CALL_GRAPH NO)
+        set(DOXYGEN_CALLER_GRAPH NO)
+
+        doxygen_add_docs(
+            man
+            ${PROJECT_SOURCE_DIR}
+            COMMENT "Generating man LAPACK documentation"
+        )
+    endif()
+
+    endif()
+endif()
