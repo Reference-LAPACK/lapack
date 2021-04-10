@@ -156,8 +156,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2019
-*
 *> \ingroup singleOTHERcomputational
 *
 *> \par Contributors:
@@ -176,10 +174,9 @@
      $                     INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.9.0) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER           INFO, LDA, LDT, LWORK, M, N, MB, NB
@@ -226,7 +223,7 @@
 *
 *        Test the input LWORK for the dimension of the array WORK.
 *        This workspace is used to store array C(LDC, N) and WORK(LWORK)
-*        in the call to DLAMTSQR. See the documentation for DLAMTSQR.
+*        in the call to SLAMTSQR. See the documentation for SLAMTSQR.
 *
          IF( LWORK.LT.2 .AND. (.NOT.LQUERY) ) THEN
             INFO = -10
@@ -237,8 +234,8 @@
             NBLOCAL = MIN( NB, N )
 *
 *           LWORK = -1, then set the size for the array C(LDC,N)
-*           in DLAMTSQR call and set the optimal size of the work array
-*           WORK(LWORK) in DLAMTSQR call.
+*           in SLAMTSQR call and set the optimal size of the work array
+*           WORK(LWORK) in SLAMTSQR call.
 *
             LDC = M
             LC = LDC*N
@@ -273,7 +270,7 @@
 *     (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in
 *     of M-by-M orthogonal matrix Q_in, which is implicitly stored in
 *     the subdiagonal part of input array A and in the input array T.
-*     Perform by the following operation using the routine DLAMTSQR.
+*     Perform by the following operation using the routine SLAMTSQR.
 *
 *         Q1_in = Q_in * ( I ), where I is a N-by-N identity matrix,
 *                        ( 0 )        0 is a (M-N)-by-N zero matrix.

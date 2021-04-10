@@ -192,8 +192,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup double_lin
 *
 *  =====================================================================
@@ -201,10 +199,9 @@
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -375,7 +372,7 @@
                          IF( .NOT. DGENND( M, N, AF, LDA ) )
      $                       RESULT( 9 ) = 2*THRESH
                         NT = NT + 1
-                    ELSE IF( M.GE.N ) THEN
+                     ELSE IF( M.GE.N ) THEN
 *
 *                       Test DORGQR, using factorization
 *                       returned by DQRT01

@@ -614,8 +614,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup complex_eig
 *
 *  =====================================================================
@@ -625,10 +623,9 @@
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
      $                   INFO )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
@@ -2088,6 +2085,7 @@
      $      4( I4, ',' ), ' result ', I3, ' is', 1P, E10.3 )
 *
  9987 FORMAT( / 'Test performed:  see CCHKST2STG for details.', / )
+*
 *     End of CCHKST2STG
 *
       END

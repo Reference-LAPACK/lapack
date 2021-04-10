@@ -317,7 +317,7 @@
 *>          N^(-1/4) * RWORK(1) <= ||pinv(C)||_2 <= N^(1/4) * RWORK(1).
 *>          Otherwise, RWORK(1) = -1.
 *>          2. RWORK(2) contains the number of singular values computed as
-*>          exact zeros in SGESVD applied to the upper triangular or trapeziodal
+*>          exact zeros in SGESVD applied to the upper triangular or trapezoidal
 *>          R (from the initial QR factorization). In case of early exit (no call to
 *>          SGESVD, such as in the case of zero matrix) RWORK(2) = -1.
 *>
@@ -405,8 +405,6 @@
 *> \author Univ. of California Berkeley
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
-*
-*> \date November 2018
 *
 *> \ingroup realGEsing
 *
@@ -644,7 +642,7 @@
                  IF ( WNTVA ) THEN
 *                   .. minimal workspace length for N x N/2 SGEQRF
                     LWQRF  = MAX( N/2, 1 )
-*                   .. minimal workspace lengt for N/2 x N/2 SGESVD
+*                   .. minimal workspace length for N/2 x N/2 SGESVD
                     LWSVD2 = MAX( 5 * (N/2), 1 )
                     LWORQ2 = MAX( N, 1 )
                     MINWRK2 = MAX( LWQP3, N/2+LWQRF, N/2+LWSVD2,

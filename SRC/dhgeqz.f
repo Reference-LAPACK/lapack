@@ -282,8 +282,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
-*
 *> \ingroup doubleGEcomputational
 *
 *> \par Further Details:
@@ -304,10 +302,9 @@
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                   LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          COMPQ, COMPZ, JOB

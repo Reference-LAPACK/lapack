@@ -1,7 +1,5 @@
 #
 #  Top Level Makefile for LAPACK
-#  Version 3.4.1
-#  April 2012
 #
 
 TOPSRCDIR = .

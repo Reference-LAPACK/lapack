@@ -4,20 +4,17 @@ project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 9)
-set(LAPACK_PATCH_VERSION 0)
+set(LAPACK_PATCH_VERSION 1)
 set(
   LAPACK_VERSION
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
-# Add the CMake directory for custon CMake modules
+# Add the CMake directory for custom CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
 # Export all symbols on Windows when building shared libraries
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-
-# Tell CMake that our Fortran sources are written in fixed format.
-set(CMAKE_Fortran_FORMAT FIXED)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)

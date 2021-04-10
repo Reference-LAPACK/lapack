@@ -83,17 +83,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
-*
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
       SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
 *
-*  -- Reference BLAS level1 routine (version 3.8.0) --
+*  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
 *
 *     .. Scalar Arguments ..
       REAL SD1,SD2,SX1,SY1
@@ -191,7 +188,7 @@
             END IF
          END IF
 
-*     PROCESURE..SCALE-CHECK
+*     PROCEDURE..SCALE-CHECK
          IF (SD1.NE.ZERO) THEN
             DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
                IF (SFLAG.EQ.ZERO) THEN
@@ -257,8 +254,7 @@
 
       SPARAM(1) = SFLAG
       RETURN
+*
+*     End of SROTMG
+*
       END
-
-
-
-

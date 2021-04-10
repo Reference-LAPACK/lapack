@@ -21,26 +21,22 @@ matrix:
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
   - os: linux
     name: "CMake Coverage Test on Linux"
     env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
-    name: "CMake Release Test on Mac OS X"
-    osx_image: xcode10.3
+    name: "CMake Release Test on macOS Big Sur"
+    osx_image: xcode12.3
     env: CMAKE_BUILD_TYPE=Release
   - os: osx
-    name: "CMake Release Test on OSX Catalina"
-    osx_image: xcode12.2
-    env: CMAKE_BUILD_TYPE=Release
-  - os: osx
-    osx_image: xcode10.3
-    name: "Makefile Test on Mac OS X"
+    osx_image: xcode12.3
+    name: "Makefile Test on on macOS Big Sur"
     script:
     - rm -f make.inc
     - cp make.inc.example make.inc
-    - make -s -j2 all
+    - make FFLAGS="-fimplicit-none -frecursive -fcheck=all" -s -j2 all
     - make -j2 lapack_install
 
 before_script:
@@ -63,7 +59,9 @@ script:
     -DLAPACKE:BOOL=ON
     -DBUILD_TESTING=ON
     -DLAPACKE_WITH_TMG:BOOL=ON
-    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive"
+    -DBUILD_SHARED_LIBS:BOOL=ON
+    -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive -fcheck=all"
+    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
     ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure

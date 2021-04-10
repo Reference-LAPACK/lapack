@@ -28,7 +28,6 @@
 ##############################################################################
 # Contents: Native C interface to LAPACK
 # Author: Intel Corporation
-# September, 2010
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
@@ -2490,7 +2489,21 @@ endif
 .PHONY: all
 all: $(LAPACKELIB)
 
-$(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTENDED) $(MATGEN)
+LAPACKELIB_DEPS := $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z)
+
+ifdef BUILD_DEPRECATED
+  LAPACKELIB_DEPS += $(DEPRECATED)
+endif
+
+ifdef USEXBLAS
+  LAPACKELIB_DEPS += $(EXTENDED)
+endif
+
+ifdef LAPACKE_WITH_TMG
+  LAPACKELIB_DEPS += $(MATGEN)
+endif
+
+$(LAPACKELIB): $(LAPACKELIB_DEPS)
 	$(AR) $(ARFLAGS) $@ $(OBJ)
 	$(AR) $(ARFLAGS) $@ $(OBJ_S)
 	$(AR) $(ARFLAGS) $@ $(OBJ_C)
@@ -2499,7 +2512,7 @@ $(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTEND
 ifdef BUILD_DEPRECATED
 	$(AR) $(ARFLAGS) $@ $(DEPRECATED)
 endif
-ifdef (USEXBLAS)
+ifdef USEXBLAS
 	$(AR) $(ARFLAGS) $@ $(EXTENDED)
 endif
 ifdef LAPACKE_WITH_TMG

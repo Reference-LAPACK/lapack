@@ -57,16 +57,25 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
-.SUFFIXES: .F .o
-.F.o:
+ALLMOD = la_xisnan.mod la_constants.mod
+
+.SUFFIXES: .F .f90 .F90 .o .mod
+%.o: %.F $(ALLMOD)
 	$(FC) $(FFLAGS) -c -o $@ $<
+%.o: %.f90 $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+%.o: %.F90 $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+.o.mod:
+	@true
 
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
-   iparmq.o iparam2stage.o \
+   iparmq.o iparam2stage.o la_xisnan.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
 SCLAUX = \
+   la_constants.o \
    sbdsdc.o \
    sbdsqr.o sdisna.o slabad.o slacpy.o sladiv.o slae2.o  slaebz.o \
    slaed0.o slaed1.o slaed2.o slaed3.o slaed4.o slaed5.o slaed6.o \
@@ -85,6 +94,7 @@ SCLAUX = \
    ../INSTALL/second_$(TIMER).o
 
 DZLAUX = \
+   la_constants.o \
    dbdsdc.o \
    dbdsqr.o ddisna.o dlabad.o dlacpy.o dladiv.o dlae2.o  dlaebz.o \
    dlaed0.o dlaed1.o dlaed2.o dlaed3.o dlaed4.o dlaed5.o dlaed6.o \
@@ -528,50 +538,87 @@ endif
 .PHONY: all
 all: $(LAPACKLIB)
 
-$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+LAPACKLIB_DEPS := $(ALLOBJ)
+
+ifdef USEXBLAS
+  LAPACKLIB_DEPS += $(ALLXOBJ)
+endif
+
+ifdef BUILD_DEPRECATED
+  LAPACKLIB_DEPS += $(DEPRECATED)
+endif
+
+$(LAPACKLIB): $(LAPACKLIB_DEPS)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 .PHONY: single complex double complex16
-single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
 
-complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-$(ALLAUX): $(FRC)
-$(SCLAUX): $(FRC)
-$(DZLAUX): $(FRC)
-$(SLASRC): $(FRC)
-$(CLASRC): $(FRC)
-$(DLASRC): $(FRC)
-$(ZLASRC): $(FRC)
-$(ZCLASRC): $(FRC)
-$(DSLASRC): $(FRC)
+SINGLE_DEPS := $(SLASRC) $(DSLASRC)
 ifdef USEXBLAS
-$(SXLASRC): $(FRC)
-$(CXLASRC): $(FRC)
-$(DXLASRC): $(FRC)
-$(ZXLASRC): $(FRC)
+  SINGLE_DEPS += $(SXLASRC)
 endif
+SINGLE_DEPS += $(SCLAUX) $(ALLAUX)
 
-FRC:
+single: $(SINGLE_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+COMPLEX_DEPS := $(CLASRC) $(ZCLASRC)
+ifdef USEXBLAS
+  COMPLEX_DEPS += $(CXLASRC)
+endif
+COMPLEX_DEPS += $(SCLAUX) $(ALLAUX)
+
+complex: $(COMPLEX_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+DOUBLE_DEPS := $(DLASRC) $(DSLASRC)
+ifdef USEXBLAS
+  DOUBLE_DEPS += $(DXLASRC)
+endif
+DOUBLE_DEPS += $(DZLAUX) $(ALLAUX)
+
+double: $(DOUBLE_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+COMPLEX16_DEPS := $(ZLASRC) $(ZCLASRC)
+ifdef USEXBLAS
+  COMPLEX16_DEPS += $(ZXLASRC)
+endif
+COMPLEX16_DEPS += $(DZLAUX) $(ALLAUX)
+
+complex16: $(COMPLEX16_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+ifdef FRC
+  $(ALLAUX): $(FRC)
+  $(SCLAUX): $(FRC)
+  $(DZLAUX): $(FRC)
+  $(SLASRC): $(FRC)
+  $(CLASRC): $(FRC)
+  $(DLASRC): $(FRC)
+  $(ZLASRC): $(FRC)
+  $(ZCLASRC): $(FRC)
+  $(DSLASRC): $(FRC)
+  ifdef USEXBLAS
+  $(SXLASRC): $(FRC)
+  $(CXLASRC): $(FRC)
+  $(DXLASRC): $(FRC)
+  $(ZXLASRC): $(FRC)
+  endif
+
+  FRC:
 	@FRC=$(FRC)
+endif
 
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
-	rm -f *.o DEPRECATED/*.o
+	rm -f *.o *.mod DEPRECATED/*.o DEPRECATED/*.mod
 cleanlib:
 	rm -f $(LAPACKLIB)
 
@@ -581,3 +628,9 @@ sla_wwaddw.o: sla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 dla_wwaddw.o: dla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 cla_wwaddw.o: cla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+
+# Modules
+la_xisnan.o: la_xisnan.F90 la_constants.mod
+	$(FC) $(FFLAGS) -c -o $@ $<
+la_constants.o: la_constants.f90
+	$(FC) $(FFLAGS) -c -o $@ $<

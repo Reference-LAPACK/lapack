@@ -166,8 +166,6 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
-*
 *> \ingroup complex16_blas_level3
 *
 *> \par Further Details:
@@ -187,10 +185,9 @@
 *  =====================================================================
       SUBROUTINE ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
-*  -- Reference BLAS level3 routine (version 3.7.0) --
+*  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
 *
 *     .. Scalar Arguments ..
       COMPLEX*16 ALPHA,BETA
@@ -475,6 +472,6 @@
 *
       RETURN
 *
-*     End of ZGEMM .
+*     End of ZGEMM
 *
       END
