@@ -28,13 +28,14 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function chegst
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_chegst_work( int matrix_layout, lapack_int itype, char uplo,
                                 lapack_int n, lapack_complex_float* a,
-                                lapack_int lda, lapack_complex_float* b,
+                                lapack_int lda, const lapack_complex_float* b,
                                 lapack_int ldb )
 {
     lapack_int info = 0;

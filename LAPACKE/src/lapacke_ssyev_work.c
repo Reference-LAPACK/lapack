@@ -28,6 +28,7 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function ssyev
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -71,7 +72,7 @@ lapack_int LAPACKE_ssyev_work( int matrix_layout, char jobz, char uplo,
             info = info - 1;
         }
         /* Transpose output matrices */
-        if ( jobz == 'V') {
+        if ( jobz == 'V' || jobz == 'v' ) {
             LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         } else {
             LAPACKE_ssy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );

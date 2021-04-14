@@ -28,12 +28,13 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function dsytrs2
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_dsytrs2_work( int matrix_layout, char uplo, lapack_int n,
-                                 lapack_int nrhs, double* a,
+                                 lapack_int nrhs, const double* a,
                                  lapack_int lda, const lapack_int* ipiv,
                                  double* b, lapack_int ldb, double* work )
 {

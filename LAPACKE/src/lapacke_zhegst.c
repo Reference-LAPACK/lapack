@@ -28,6 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zhegst
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
@@ -47,7 +48,7 @@ lapack_int LAPACKE_zhegst( int matrix_layout, lapack_int itype, char uplo,
         if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, b, ldb ) ) {
             return -7;
         }
     }
