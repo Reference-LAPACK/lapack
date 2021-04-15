@@ -582,7 +582,7 @@
 *
 *                 ==== Got NS/2 or fewer shifts? Use SLAHQR
 *                 .    on a trailing principal submatrix to
-*                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
+*                 .    get more. (Since NS.LE.NSMAX.LE.(N-3)/6,
 *                 .    there is enough space below the subdiagonal
 *                 .    to fit an NS-by-NS scratch array.) ====
 *
@@ -697,7 +697,7 @@
 *              .      (NVE-by-KDU) vertical work WV arrow along
 *              .      the left-hand-edge. ====
 *
-               KDU = 3*NS - 3
+               KDU = 2*NS
                KU = N - KDU + 1
                KWH = KDU + 1
                NHO = ( N-KDU+1-4 ) - ( KDU+1 ) + 1

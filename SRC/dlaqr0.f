@@ -359,7 +359,7 @@
          END IF
 *
 *        ==== NWR = recommended deflation window size.  At this
-*        .    point,  N .GT. NTINY = 14, so there is enough
+*        .    point,  N .GT. NTINY = 15, so there is enough
 *        .    subdiagonal workspace for NWR.GE.2 as required.
 *        .    (In fact, there is enough subdiagonal space for
 *        .    NWR.GE.4.) ====
@@ -573,7 +573,7 @@
 *
 *                 ==== Got NS/2 or fewer shifts? Use DLAQR4 or
 *                 .    DLAHQR on a trailing principal submatrix to
-*                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
+*                 .    get more. (Since NS.LE.NSMAX.LE.(N-3)/6,
 *                 .    there is enough space below the subdiagonal
 *                 .    to fit an NS-by-NS scratch array.) ====
 *
