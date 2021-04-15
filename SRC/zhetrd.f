@@ -325,7 +325,7 @@
 *
             DO 10 J = I, I + NB - 1
                A( J-1, J ) = E( J-1 )
-               D( J ) = A( J, J )
+               D( J ) = DBLE( A( J, J ) )
    10       CONTINUE
    20    CONTINUE
 *
@@ -357,7 +357,7 @@
 *
             DO 30 J = I, I + NB - 1
                A( J+1, J ) = E( J )
-               D( J ) = A( J, J )
+               D( J ) = DBLE( A( J, J ) )
    30       CONTINUE
    40    CONTINUE
 *

@@ -239,8 +239,8 @@
          ELSE
 *           2 x 2 diagonal NNB
              T = ABS ( WORK(K+1,1) )
-             AK = REAL ( A( K, K ) ) / T
-             AKP1 = REAL ( A( K+1, K+1 ) ) / T
+             AK = DBLE ( A( K, K ) ) / T
+             AKP1 = DBLE ( A( K+1, K+1 ) ) / T
              AKKP1 = WORK(K+1,1)  / T
              D = T*( AK*AKP1-ONE )
              WORK(K,INVD) = AKP1 / D
@@ -416,8 +416,8 @@
          ELSE
 *           2 x 2 diagonal NNB
              T = ABS ( WORK(K-1,1) )
-             AK = REAL ( A( K-1, K-1 ) ) / T
-             AKP1 = REAL ( A( K, K ) ) / T
+             AK = DBLE ( A( K-1, K-1 ) ) / T
+             AKP1 = DBLE ( A( K, K ) ) / T
              AKKP1 = WORK(K-1,1) / T
              D = T*( AK*AKP1-ONE )
              WORK(K-1,INVD) = AKP1 / D

@@ -203,7 +203,7 @@
      $   RETURN
 *
       IF( N.EQ.1 ) THEN
-         W( 1 ) = AP( 1 )
+         W( 1 ) = DBLE( AP( 1 ) )
          RWORK( 1 ) = 1
          IF( WANTZ )
      $      Z( 1, 1 ) = ONE

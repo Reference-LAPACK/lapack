@@ -161,7 +161,7 @@
             JJ = JJ + J
             IF( J.GT.1 )
      $         CALL CHPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
-            AJJ = AP( JJ )
+            AJJ = REAL( AP( JJ ) )
             CALL CSSCAL( J, AJJ, AP( JC ), 1 )
    10    CONTINUE
 *

@@ -182,7 +182,7 @@
 *              Compute the j-th column of the upper triangle of A
 *
                AP( JJ ) = REAL( AP( JJ ) )
-               BJJ = BP( JJ )
+               BJJ = REAL( BP( JJ ) )
                CALL CTPSV( UPLO, 'Conjugate transpose', 'Non-unit', J,
      $                     BP, AP( J1 ), 1 )
                CALL CHPMV( UPLO, J-1, -CONE, AP, BP( J1 ), 1, CONE,
@@ -203,8 +203,8 @@
 *
 *              Update the lower triangle of A(k:n,k:n)
 *
-               AKK = AP( KK )
-               BKK = BP( KK )
+               AKK = REAL( AP( KK ) )
+               BKK = REAL( BP( KK ) )
                AKK = AKK / BKK**2
                AP( KK ) = AKK
                IF( K.LT.N ) THEN
@@ -234,8 +234,8 @@
 *
 *              Update the upper triangle of A(1:k,1:k)
 *
-               AKK = AP( KK )
-               BKK = BP( KK )
+               AKK = REAL( AP( KK ) )
+               BKK = REAL( BP( KK ) )
                CALL CTPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
      $                     AP( K1 ), 1 )
                CT = HALF*AKK
@@ -258,8 +258,8 @@
 *
 *              Compute the j-th column of the lower triangle of A
 *
-               AJJ = AP( JJ )
-               BJJ = BP( JJ )
+               AJJ = REAL( AP( JJ ) )
+               BJJ = REAL( BP( JJ ) )
                AP( JJ ) = AJJ*BJJ + CDOTC( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
                CALL CSSCAL( N-J, BJJ, AP( JJ+1 ), 1 )

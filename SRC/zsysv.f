@@ -223,7 +223,7 @@
             LWKOPT = 1
          ELSE
             CALL ZSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-            LWKOPT = WORK(1)
+            LWKOPT = DBLE( WORK(1) )
          END IF
          WORK( 1 ) = LWKOPT
       END IF

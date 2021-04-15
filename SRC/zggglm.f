@@ -289,7 +289,7 @@
 *
       CALL ZGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
      $             WORK( M+NP+1 ), LWORK-M-NP, INFO )
-      LOPT = WORK( M+NP+1 )
+      LOPT = DBLE( WORK( M+NP+1 ) )
 *
 *     Update left-hand-side vector d = Q**H*d = ( d1 ) M
 *                                               ( d2 ) N-M

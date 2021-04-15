@@ -332,11 +332,11 @@
       IF( N.EQ.1 ) THEN
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
-            W( 1 ) = AP( 1 )
+            W( 1 ) = REAL( AP( 1 ) )
          ELSE
             IF( VL.LT.REAL( AP( 1 ) ) .AND. VU.GE.REAL( AP( 1 ) ) ) THEN
                M = 1
-               W( 1 ) = AP( 1 )
+               W( 1 ) = REAL( AP( 1 ) )
             END IF
          END IF
          IF( WANTZ )

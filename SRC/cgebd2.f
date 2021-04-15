@@ -245,7 +245,7 @@
             ALPHA = A( I, I )
             CALL CLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
-            D( I ) = ALPHA
+            D( I ) = REAL( ALPHA )
             A( I, I ) = ONE
 *
 *           Apply H(i)**H to A(i:m,i+1:n) from the left
@@ -264,7 +264,7 @@
                ALPHA = A( I, I+1 )
                CALL CLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ),
      $                      LDA, TAUP( I ) )
-               E( I ) = ALPHA
+               E( I ) = REAL( ALPHA )
                A( I, I+1 ) = ONE
 *
 *              Apply G(i) to A(i+1:m,i+1:n) from the right
@@ -289,7 +289,7 @@
             ALPHA = A( I, I )
             CALL CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                   TAUP( I ) )
-            D( I ) = ALPHA
+            D( I ) = REAL( ALPHA )
             A( I, I ) = ONE
 *
 *           Apply G(i) to A(i+1:m,i:n) from the right
@@ -308,7 +308,7 @@
                ALPHA = A( I+1, I )
                CALL CLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
      $                      TAUQ( I ) )
-               E( I ) = ALPHA
+               E( I ) = REAL( ALPHA )
                A( I+1, I ) = ONE
 *
 *              Apply H(i)**H to A(i+1:m,i+1:n) from the left

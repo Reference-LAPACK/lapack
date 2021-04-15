@@ -231,7 +231,7 @@
         DO WHILE ( K .LE. N )
          IF( IPIV( K ).GT.0 ) THEN
 *           1 x 1 diagonal NNB
-             WORK(K,INVD) = 1/  A( K, K )
+             WORK(K,INVD) = ONE / A( K, K )
              WORK(K,INVD+1) = 0
             K=K+1
          ELSE
@@ -408,7 +408,7 @@
         DO WHILE ( K .GE. 1 )
          IF( IPIV( K ).GT.0 ) THEN
 *           1 x 1 diagonal NNB
-             WORK(K,INVD) = 1/  A( K, K )
+             WORK(K,INVD) = ONE / A( K, K )
              WORK(K,INVD+1) = 0
             K=K-1
          ELSE
