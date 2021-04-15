@@ -81,7 +81,7 @@
 *>               (used by xGELSD and xGESDD)
 *>          =10: ieee infinity and NaN arithmetic can be trusted not to trap
 *>          =11: infinity arithmetic can be trusted not to trap
-*>          12 <= ISPEC <= 16:
+*>          12 <= ISPEC <= 17:
 *>               xHSEQR or related subroutines,
 *>               see IPARMQ for detailed explanation
 *> \endverbatim
@@ -186,7 +186,7 @@
 *     .. Executable Statements ..
 *
       GO TO ( 10, 10, 10, 80, 90, 100, 110, 120,
-     $        130, 140, 150, 160, 160, 160, 160, 160)ISPEC
+     $        130, 140, 150, 160, 160, 160, 160, 160, 160)ISPEC
 *
 *     Invalid value for ISPEC
 *
@@ -705,7 +705,7 @@
 *
   160 CONTINUE
 *
-*     12 <= ISPEC <= 16: xHSEQR or related subroutines.
+*     12 <= ISPEC <= 17: xHSEQR or related subroutines.
 *
       ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
       RETURN

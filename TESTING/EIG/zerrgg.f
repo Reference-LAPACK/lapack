@@ -97,7 +97,7 @@
      $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
      $                   ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA, ZTGSNA,
      $                   ZTGSYL, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
-     $                   ZGGSVD3, ZGGSVP3
+     $                   ZGGSVD3, ZGGSVP3, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -134,6 +134,14 @@
       ILST = 1
       NT = 0
       LWORK = 1
+*
+*     Call XLAENV to set the parameters used in CLAQZ0
+*
+      CALL XLAENV( 12, 10 )
+      CALL XLAENV( 13, 12 )
+      CALL XLAENV( 14, 13 )
+      CALL XLAENV( 15, 2 )
+      CALL XLAENV( 17, 10 )
 *
 *     Test error exits for the GG path.
 *

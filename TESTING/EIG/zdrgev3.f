@@ -733,6 +733,14 @@
                RESULT( I ) = -ONE
   110       CONTINUE
 *
+*           Call XLAENV to set the parameters used in ZLAQZ0
+*
+            CALL XLAENV( 12, 10 )
+            CALL XLAENV( 13, 12 )
+            CALL XLAENV( 14, 13 )
+            CALL XLAENV( 15, 2 )
+            CALL XLAENV( 17, 10 )
+*
 *           Call ZGGEV3 to compute eigenvalues and eigenvectors.
 *
             CALL ZLACPY( ' ', N, N, A, LDA, S, LDA )

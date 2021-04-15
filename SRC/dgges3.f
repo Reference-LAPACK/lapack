@@ -256,7 +256,7 @@
 *>                The QZ iteration failed.  (A,B) are not in Schur
 *>                form, but ALPHAR(j), ALPHAI(j), and BETA(j) should
 *>                be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
+*>          > N:  =N+1: other than QZ iteration failed in DLAQZ0.
 *>                =N+2: after reordering, roundoff changed values of
 *>                      some complex eigenvalues so that leading
 *>                      eigenvalues in the Generalized Schur form no
@@ -318,7 +318,7 @@
       DOUBLE PRECISION   DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DHGEQZ, DLABAD,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLABAD,
      $                   DLACPY, DLASCL, DLASET, DORGQR, DORMQR, DTGSEN,
      $                   XERBLA
 *     ..
@@ -397,9 +397,9 @@
          CALL DGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
-         CALL DHGEQZ( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
+         CALL DLAQZ0( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
      $                ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
-     $                WORK, -1, IERR )
+     $                WORK, -1, 0, IERR )
          LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
          IF( WANTST ) THEN
             CALL DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
@@ -511,9 +511,9 @@
 *     Perform QZ algorithm, computing Schur vectors if desired
 *
       IWRK = ITAU
-      CALL DHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL DLAQZ0( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
-     $             WORK( IWRK ), LWORK+1-IWRK, IERR )
+     $             WORK( IWRK ), LWORK+1-IWRK, 0, IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR

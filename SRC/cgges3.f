@@ -243,7 +243,7 @@
 *>                The QZ iteration failed.  (A,B) are not in Schur
 *>                form, but ALPHA(j) and BETA(j) should be correct for
 *>                j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in CHGEQZ
+*>          > N:  =N+1: other than QZ iteration failed in CLAQZ0
 *>                =N+2: after reordering, roundoff changed values of
 *>                      some complex eigenvalues so that leading
 *>                      eigenvalues in the Generalized Schur form no
@@ -309,7 +309,7 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0, CLACPY,
      $                   CLASCL, CLASET, CTGSEN, CUNGQR, CUNMQR, SLABAD,
      $                   XERBLA
 *     ..
@@ -389,9 +389,9 @@
          CALL CGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
-         CALL CHGEQZ( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
+         CALL CLAQZ0( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
      $                ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK, -1,
-     $                RWORK, IERR )
+     $                RWORK, 0, IERR )
          LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
          IF( WANTST ) THEN
             CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
@@ -506,9 +506,9 @@
 *     Perform QZ algorithm, computing Schur vectors if desired
 *
       IWRK = ITAU
-      CALL CHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL CLAQZ0( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK( IWRK ),
-     $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
+     $             LWORK+1-IWRK, RWORK( IRWRK ), 0, IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR
