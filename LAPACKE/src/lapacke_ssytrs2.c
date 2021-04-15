@@ -28,12 +28,13 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function ssytrs2
 * Author: Intel Corporation
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_ssytrs2( int matrix_layout, char uplo, lapack_int n,
-                            lapack_int nrhs, float* a, lapack_int lda,
+                            lapack_int nrhs, const float* a, lapack_int lda,
                             const lapack_int* ipiv, float* b, lapack_int ldb )
 {
     lapack_int info = 0;
