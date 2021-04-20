@@ -99,17 +99,14 @@
 *
 *> \author Christoph Conrads (https://christoph-conrads.name)
 *
-*> \date April 2020
-*
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
       SUBROUTINE DLASRTR( ID, M, N, A, LDA, IPVT, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.10.0) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     February 2021
 *
 *     .. Scalar Arguments ..
       CHARACTER          ID
