@@ -295,8 +295,6 @@
 *
 *> \author Christoph Conrads (https://christoph-conrads.name)
 *
-*> \date September 2016, May 2020, February 2021
-*
 *> \ingroup doubleGEsing
 *
 *> \par Contributors:
@@ -324,10 +322,9 @@
      $                              U1, LDU1, U2, LDU2,
      $                              WORK, LWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.10.0) --
+*  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*     Feburary 2021
 *
       IMPLICIT NONE
 *     .. Scalar Arguments ..
