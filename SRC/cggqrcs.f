@@ -402,11 +402,11 @@
          INFO = -2
       ELSE IF( .NOT.( WANTX .OR. LSAME( JOBX, 'N' ) ) ) THEN
          INFO = -3
-      ELSE IF( M.LT.1 ) THEN
+      ELSE IF( M.LT.0 ) THEN
          INFO = -4
-      ELSE IF( N.LT.1 ) THEN
+      ELSE IF( N.LT.0 ) THEN
          INFO = -5
-      ELSE IF( P.LT.1 ) THEN
+      ELSE IF( P.LT.0 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -10
