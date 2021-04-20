@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> ZERRGG tests the error exits for ZGGES, ZGGESX, ZGGEV, ZGGEVX,
-*> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
+*> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRCS, ZGGQRF, ZGGRQF,
 *> ZGGSVD3, ZGGSVP3, ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA,
 *> ZTGSNA, ZTGSYL, and ZUNCSD.
 *> \endverbatim
@@ -94,7 +94,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGGES,  ZGGESX, ZGGEV,  ZGGEVX, ZGGGLM,
-     $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
+     $                   ZGGHRD, ZGGLSE, ZGGQRCS, ZGGQRF, ZGGRQF,
      $                   ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA, ZTGSNA,
      $                   ZTGSYL, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
      $                   ZGGSVD3, ZGGSVP3, XLAENV
@@ -636,6 +636,71 @@
 *     Test error exits for the GQR path.
 *
       ELSE IF( LSAMEN( 3, PATH, 'GQR' ) ) THEN
+*
+*        ZGGQRCS
+*
+         SRNAMT = 'ZGGQRCS'
+         INFOT = 1
+         CALL ZGGQRCS( '/', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZGGQRCS( 'N', '/', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZGGQRCS( 'N', 'N', '/', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZGGQRCS( 'N', 'N', 'N', -1, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, -1, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, -1, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 0, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 0, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 0, V, 1,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 18
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 0,
+     $                W, LW, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, 0, RW, LW, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 22
+         CALL ZGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1,
+     $                W, LW, RW, 0, IW, INFO )
+         CALL CHKXER( 'ZGGQRCS', INFOT, NOUT, LERR, OK )
+         NT = NT + 12
 *
 *        ZGGQRF
 *
