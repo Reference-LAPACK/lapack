@@ -418,6 +418,8 @@
          INFO = -18
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
          INFO = -20
+      ELSE IF( LRWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+         INFO = -22
       END IF
 *
 *     Make sure A is the matrix smaller in norm
