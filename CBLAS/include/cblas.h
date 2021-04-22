@@ -16,13 +16,13 @@ extern "C" {            /* Assume C declarations for C++ */
    #define CBLAS_INDEX int
 #endif
 
-typedef enum {CblasRowMajor=101, CblasColMajor=102} CBLAS_LAYOUT;
-typedef enum {CblasNoTrans=111, CblasTrans=112, CblasConjTrans=113} CBLAS_TRANSPOSE;
-typedef enum {CblasUpper=121, CblasLower=122} CBLAS_UPLO;
-typedef enum {CblasNonUnit=131, CblasUnit=132} CBLAS_DIAG;
-typedef enum {CblasLeft=141, CblasRight=142} CBLAS_SIDE;
+typedef enum CBLAS_LAYOUT {CblasRowMajor=101, CblasColMajor=102} CBLAS_LAYOUT;
+typedef enum CBLAS_TRANSPOSE {CblasNoTrans=111, CblasTrans=112, CblasConjTrans=113} CBLAS_TRANSPOSE;
+typedef enum CBLAS_UPLO {CblasUpper=121, CblasLower=122} CBLAS_UPLO;
+typedef enum CBLAS_DIAG {CblasNonUnit=131, CblasUnit=132} CBLAS_DIAG;
+typedef enum CBLAS_SIDE {CblasLeft=141, CblasRight=142} CBLAS_SIDE;
 
-typedef CBLAS_LAYOUT CBLAS_ORDER; /* this for backward compatibility with CBLAS_ORDER */
+#define CBLAS_ORDER CBLAS_LAYOUT /* this for backward compatibility with CBLAS_ORDER */
 
 #include "cblas_mangling.h"
 
