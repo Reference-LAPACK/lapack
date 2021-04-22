@@ -377,7 +377,7 @@
 *        .    and greater than or equal to two as required. ====
 *
          NSR = ILAENV( 15, 'CLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
-         NSR = MIN( NSR, ( N+6 ) / 9, IHI-ILO )
+         NSR = MIN( NSR, ( N-3 ) / 6, IHI-ILO )
          NSR = MAX( 2, NSR-MOD( NSR, 2 ) )
 *
 *        ==== Estimate optimal workspace ====
@@ -425,7 +425,7 @@
 *        ==== NSMAX = the Largest number of simultaneous shifts
 *        .    for which there is sufficient workspace. ====
 *
-         NSMAX = MIN( ( N+6 ) / 9, 2*LWORK / 3 )
+         NSMAX = MIN( ( N-3 ) / 6, 2*LWORK / 3 )
          NSMAX = NSMAX - MOD( NSMAX, 2 )
 *
 *        ==== NDFL: an iteration count restarted at deflation. ====
@@ -565,7 +565,7 @@
 *
 *                 ==== Got NS/2 or fewer shifts? Use CLAHQR
 *                 .    on a trailing principal submatrix to
-*                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
+*                 .    get more. (Since NS.LE.NSMAX.LE.(N-3)/6,
 *                 .    there is enough space below the subdiagonal
 *                 .    to fit an NS-by-NS scratch array.) ====
 *

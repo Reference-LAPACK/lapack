@@ -557,7 +557,7 @@
 *
 *                 ==== Got NS/2 or fewer shifts? Use ZLAQR4 or
 *                 .    ZLAHQR on a trailing principal submatrix to
-*                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
+*                 .    get more. (Since NS.LE.NSMAX.LE.(N-3)/6,
 *                 .    there is enough space below the subdiagonal
 *                 .    to fit an NS-by-NS scratch array.) ====
 *
