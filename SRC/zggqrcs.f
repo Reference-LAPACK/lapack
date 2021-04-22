@@ -451,7 +451,8 @@
 *
       SWAPPED = .FALSE.
       L = 0
-      LDG = M + P
+*     The leading dimension must never be zero
+      LDG = MAX( M + P, 1 )
       LDVT = N
       LMAX = MIN( M + P, N )
       IG = 1
