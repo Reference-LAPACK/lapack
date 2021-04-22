@@ -469,10 +469,6 @@ if(NOT LATESTLAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
 endif()
 
-if(BUILD_TESTING)
-  set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
-endif()
-
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
