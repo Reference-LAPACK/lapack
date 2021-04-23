@@ -347,7 +347,7 @@
       INTEGER            I, J, K, K1, LMAX, IG, IG11, IG21, IG22,
      $                   IVT, IVT12, LDG, LDX, LDVT, LWKMIN, LWKOPT
       REAL               BASE, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
-     $                   THETA, IOTA, W
+     $                   THETA, IOTA, W, HUGENUM
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -491,13 +491,16 @@
          LDVT = 0
       END IF
 *
-*     Scale matrix A such that norm(A) \approx norm(B)
+*     Scale matrix A such that norm(A) \approx norm(B) 
 *
-      IF( NORMA.EQ.0.0E0 ) THEN
-         W = 1.0E0
+      W = NORMB / NORMA
+      HUGENUM = SLAMCH( 'Overflow threshold' )
+      IF( W.GT.HUGENUM ) THEN
+*        normA << normB
+         W = HUGENUM
       ELSE
          BASE = SLAMCH( 'B' )
-         W = BASE ** INT( LOG( NORMB / NORMA ) / LOG( BASE ) )
+         W = BASE ** INT( LOG( W ) / LOG( BASE ) )
 *
          CALL SLASCL( 'G', -1, -1, 1.0E0, W, M, N, A, LDA, INFO )
          IF ( INFO.NE.0 ) THEN
@@ -512,7 +515,7 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      NORMG = NORMB * SQRT( 1.0E0 + ( ( W * NORMA ) / NORMB )**2 )
+      NORMG = NORMB * SQRT( 1.0E0 + ( W * (NORMA/NORMB) )**2 )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
