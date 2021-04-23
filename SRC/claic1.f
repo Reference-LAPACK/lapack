@@ -252,7 +252,8 @@
 *
             SINE = -( ALPHA / ABSEST ) / T
             COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
-            TMP = REAL( SQRT( SINE*CONJG( SINE )+COSINE*CONJG( COSINE ) ) )
+            TMP = REAL( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
             S = SINE / TMP
             C = COSINE / TMP
             SESTPR = SQRT( T+ONE )*ABSEST
@@ -354,7 +355,8 @@
                COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
                SESTPR = SQRT( ONE+T+FOUR*EPS*EPS*NORMA )*ABSEST
             END IF
-            TMP = REAL( SQRT( SINE*CONJG( SINE )+COSINE*CONJG( COSINE ) ) )
+            TMP = REAL( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
             S = SINE / TMP
             C = COSINE / TMP
             RETURN
