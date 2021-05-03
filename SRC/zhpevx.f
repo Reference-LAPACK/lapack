@@ -332,11 +332,11 @@
       IF( N.EQ.1 ) THEN
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
-            W( 1 ) = AP( 1 )
+            W( 1 ) = DBLE( AP( 1 ) )
          ELSE
             IF( VL.LT.DBLE( AP( 1 ) ) .AND. VU.GE.DBLE( AP( 1 ) ) ) THEN
                M = 1
-               W( 1 ) = AP( 1 )
+               W( 1 ) = DBLE( AP( 1 ) )
             END IF
          END IF
          IF( WANTZ )

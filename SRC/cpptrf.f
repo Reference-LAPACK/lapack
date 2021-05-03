@@ -189,8 +189,8 @@
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( AP( JJ ) ) - CDOTC( J-1, AP( JC ), 1, AP( JC ),
-     $            1 )
+            AJJ = REAL( REAL( AP( JJ ) ) - CDOTC( J-1,
+     $            AP( JC ), 1, AP( JC ), 1 ) )
             IF( AJJ.LE.ZERO ) THEN
                AP( JJ ) = AJJ
                GO TO 30

@@ -320,7 +320,7 @@
      $   RETURN
 *
       IF( N.EQ.1 ) THEN
-         W( 1 ) = AB( 1, 1 )
+         W( 1 ) = REAL( AB( 1, 1 ) )
          IF( WANTZ )
      $      Z( 1, 1 ) = CONE
          RETURN

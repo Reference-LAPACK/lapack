@@ -608,8 +608,8 @@
 *                 D = |A12|
                   D = DLAPY2( DBLE( A( K-1, K ) ),
      $                DIMAG( A( K-1, K ) ) )
-                  D11 = A( K, K ) / D
-                  D22 = A( K-1, K-1 ) / D
+                  D11 = DBLE( A( K, K ) / D )
+                  D22 = DBLE( A( K-1, K-1 ) / D )
                   D12 = A( K-1, K ) / D
                   TT = ONE / ( D11*D22-ONE )
 *

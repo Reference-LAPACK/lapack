@@ -235,7 +235,7 @@
                   DO J = 1, N-1
                      X( 1 + (J-1)*INCX ) = ZERO
                   END DO
-                  BETA = -SAVEALPHA
+                  BETA = REAL( -SAVEALPHA )
                END IF
             ELSE
                XNORM = SLAPY2( ALPHR, ALPHI )

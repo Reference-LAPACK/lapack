@@ -180,11 +180,11 @@
 *
 *     Find the minimum and maximum diagonal elements.
 *
-      S( 1 ) = A( 1, 1 )
+      S( 1 ) = REAL( A( 1, 1 ) )
       SMIN = S( 1 )
       AMAX = S( 1 )
       DO 10 I = 2, N
-         S( I ) = A( I, I )
+         S( I ) = REAL( A( I, I ) )
          SMIN = MIN( SMIN, S( I ) )
          AMAX = MAX( AMAX, S( I ) )
    10 CONTINUE

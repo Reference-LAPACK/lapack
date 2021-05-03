@@ -379,7 +379,7 @@
      $         M = 0
          END IF
          IF( M.EQ.1 ) THEN
-            W( 1 ) = CTMP1
+            W( 1 ) = REAL( CTMP1 )
             IF( WANTZ )
      $         Z( 1, 1 ) = CONE
          END IF

@@ -314,7 +314,7 @@
      $   RETURN
 *
       IF( N.EQ.1 ) THEN
-         W( 1 ) = A( 1, 1 )
+         W( 1 ) = DBLE( A( 1, 1 ) )
          IF( WANTZ )
      $      A( 1, 1 ) = CONE
          RETURN

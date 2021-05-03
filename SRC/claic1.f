@@ -191,7 +191,7 @@
             ELSE
                S = ALPHA / S1
                C = GAMMA / S1
-               TMP = SQRT( S*CONJG( S )+C*CONJG( C ) )
+               TMP = REAL( SQRT( S*CONJG( S )+C*CONJG( C ) ) )
                S = S / TMP
                C = C / TMP
                SESTPR = S1*TMP
@@ -245,14 +245,15 @@
             B = ( ONE-ZETA1*ZETA1-ZETA2*ZETA2 )*HALF
             C = ZETA1*ZETA1
             IF( B.GT.ZERO ) THEN
-               T = C / ( B+SQRT( B*B+C ) )
+               T = REAL( C / ( B+SQRT( B*B+C ) ) )
             ELSE
-               T = SQRT( B*B+C ) - B
+               T = REAL( SQRT( B*B+C ) - B )
             END IF
 *
             SINE = -( ALPHA / ABSEST ) / T
             COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
-            TMP = SQRT( SINE*CONJG( SINE )+COSINE*CONJG( COSINE ) )
+            TMP = REAL( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
             S = SINE / TMP
             C = COSINE / TMP
             SESTPR = SQRT( T+ONE )*ABSEST
@@ -277,7 +278,7 @@
             S1 = MAX( ABS( SINE ), ABS( COSINE ) )
             S = SINE / S1
             C = COSINE / S1
-            TMP = SQRT( S*CONJG( S )+C*CONJG( C ) )
+            TMP = REAL( SQRT( S*CONJG( S )+C*CONJG( C ) ) )
             S = S / TMP
             C = C / TMP
             RETURN
@@ -335,7 +336,7 @@
 *
                B = ( ZETA1*ZETA1+ZETA2*ZETA2+ONE )*HALF
                C = ZETA2*ZETA2
-               T = C / ( B+SQRT( ABS( B*B-C ) ) )
+               T = REAL( C / ( B+SQRT( ABS( B*B-C ) ) ) )
                SINE = ( ALPHA / ABSEST ) / ( ONE-T )
                COSINE = -( GAMMA / ABSEST ) / T
                SESTPR = SQRT( T+FOUR*EPS*EPS*NORMA )*ABSEST
@@ -346,15 +347,16 @@
                B = ( ZETA2*ZETA2+ZETA1*ZETA1-ONE )*HALF
                C = ZETA1*ZETA1
                IF( B.GE.ZERO ) THEN
-                  T = -C / ( B+SQRT( B*B+C ) )
+                  T = REAL( -C / ( B+SQRT( B*B+C ) ) )
                ELSE
-                  T = B - SQRT( B*B+C )
+                  T = REAL( B - SQRT( B*B+C ) )
                END IF
                SINE = -( ALPHA / ABSEST ) / T
                COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
                SESTPR = SQRT( ONE+T+FOUR*EPS*EPS*NORMA )*ABSEST
             END IF
-            TMP = SQRT( SINE*CONJG( SINE )+COSINE*CONJG( COSINE ) )
+            TMP = REAL( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
             S = SINE / TMP
             C = COSINE / TMP
             RETURN

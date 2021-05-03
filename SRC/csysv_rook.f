@@ -256,7 +256,7 @@
             LWKOPT = 1
          ELSE
             CALL CSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-            LWKOPT = WORK(1)
+            LWKOPT = REAL( WORK(1) )
          END IF
          WORK( 1 ) = LWKOPT
       END IF

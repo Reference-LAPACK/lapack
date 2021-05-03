@@ -194,8 +194,8 @@
 *
 *              Update the upper triangle of A(k:n,k:n)
 *
-               AKK = A( K, K )
-               BKK = B( K, K )
+               AKK = DBLE( A( K, K ) )
+               BKK = DBLE( B( K, K ) )
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
@@ -224,8 +224,8 @@
 *
 *              Update the lower triangle of A(k:n,k:n)
 *
-               AKK = A( K, K )
-               BKK = B( K, K )
+               AKK = DBLE( A( K, K ) )
+               BKK = DBLE( B( K, K ) )
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
@@ -249,8 +249,8 @@
 *
 *              Update the upper triangle of A(1:k,1:k)
 *
-               AKK = A( K, K )
-               BKK = B( K, K )
+               AKK = DBLE( A( K, K ) )
+               BKK = DBLE( B( K, K ) )
                CALL ZTRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
@@ -269,8 +269,8 @@
 *
 *              Update the lower triangle of A(1:k,1:k)
 *
-               AKK = A( K, K )
-               BKK = B( K, K )
+               AKK = DBLE( A( K, K ) )
+               BKK = DBLE( B( K, K ) )
                CALL ZLACGV( K-1, A( K, 1 ), LDA )
                CALL ZTRMV( UPLO, 'Conjugate transpose', 'Non-unit', K-1,
      $                     B, LDB, A( K, 1 ), LDA )

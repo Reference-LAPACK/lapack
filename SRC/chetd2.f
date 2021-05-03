@@ -245,7 +245,7 @@
 *
             ALPHA = A( I, I+1 )
             CALL CLARFG( I, ALPHA, A( 1, I+1 ), 1, TAUI )
-            E( I ) = ALPHA
+            E( I ) = REAL( ALPHA )
 *
             IF( TAUI.NE.ZERO ) THEN
 *
@@ -273,10 +273,10 @@
                A( I, I ) = REAL( A( I, I ) )
             END IF
             A( I, I+1 ) = E( I )
-            D( I+1 ) = A( I+1, I+1 )
+            D( I+1 ) = REAL( A( I+1, I+1 ) )
             TAU( I ) = TAUI
    10    CONTINUE
-         D( 1 ) = A( 1, 1 )
+         D( 1 ) = REAL( A( 1, 1 ) )
       ELSE
 *
 *        Reduce the lower triangle of A
@@ -289,7 +289,7 @@
 *
             ALPHA = A( I+1, I )
             CALL CLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAUI )
-            E( I ) = ALPHA
+            E( I ) = REAL( ALPHA )
 *
             IF( TAUI.NE.ZERO ) THEN
 *
@@ -318,10 +318,10 @@
                A( I+1, I+1 ) = REAL( A( I+1, I+1 ) )
             END IF
             A( I+1, I ) = E( I )
-            D( I ) = A( I, I )
+            D( I ) = REAL( A( I, I ) )
             TAU( I ) = TAUI
    20    CONTINUE
-         D( N ) = A( N, N )
+         D( N ) = REAL( A( N, N ) )
       END IF
 *
       RETURN

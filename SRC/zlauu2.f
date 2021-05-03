@@ -162,7 +162,7 @@
 *        Compute the product U * U**H.
 *
          DO 10 I = 1, N
-            AII = A( I, I )
+            AII = DBLE( A( I, I ) )
             IF( I.LT.N ) THEN
                A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I, I+1 ), LDA,
      $                     A( I, I+1 ), LDA ) )
@@ -181,7 +181,7 @@
 *        Compute the product L**H * L.
 *
          DO 20 I = 1, N
-            AII = A( I, I )
+            AII = DBLE( A( I, I ) )
             IF( I.LT.N ) THEN
                A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I+1, I ), 1,
      $                     A( I+1, I ), 1 ) )

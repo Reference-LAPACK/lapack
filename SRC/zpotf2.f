@@ -174,8 +174,8 @@
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( 1, J ), 1,
-     $            A( 1, J ), 1 )
+            AJJ = DBLE( A( J, J ) ) - DBLE( ZDOTC( J-1, A( 1, J ), 1,
+     $            A( 1, J ), 1 ) )
             IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
@@ -201,8 +201,8 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( J, 1 ), LDA,
-     $            A( J, 1 ), LDA )
+            AJJ = DBLE( A( J, J ) ) - DBLE( ZDOTC( J-1, A( J, 1 ), LDA,
+     $            A( J, 1 ), LDA ) )
             IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30

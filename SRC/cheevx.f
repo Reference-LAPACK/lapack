@@ -378,12 +378,12 @@
       IF( N.EQ.1 ) THEN
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
-            W( 1 ) = A( 1, 1 )
+            W( 1 ) = REAL( A( 1, 1 ) )
          ELSE IF( VALEIG ) THEN
             IF( VL.LT.REAL( A( 1, 1 ) ) .AND. VU.GE.REAL( A( 1, 1 ) ) )
      $           THEN
                M = 1
-               W( 1 ) = A( 1, 1 )
+               W( 1 ) = REAL( A( 1, 1 ) )
             END IF
          END IF
          IF( WANTZ )

@@ -220,9 +220,9 @@
 *
       IF( N.EQ.1 ) THEN
          IF( LOWER ) THEN
-            W( 1 ) = AB( 1, 1 )
+            W( 1 ) = DBLE( AB( 1, 1 ) )
          ELSE
-            W( 1 ) = AB( KD+1, 1 )
+            W( 1 ) = DBLE( AB( KD+1, 1 ) )
          END IF
          IF( WANTZ )
      $      Z( 1, 1 ) = ONE
