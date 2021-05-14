@@ -197,7 +197,6 @@
          IF( XNRM.NE.ZERO )
      $      CALL SLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
      $                   WORK( N*LDWORK+1 ), LDWORK, INFO )
-         ANRM = SLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
 *
 *        Compute QR factorization of X
 *
