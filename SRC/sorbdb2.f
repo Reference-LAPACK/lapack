@@ -221,7 +221,7 @@
 *     .. Local Scalars ..
       REAL               C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
-     $                   LWORKMIN, LWORKOPT
+     $                   LWORKMIN, LWORKOPT, I1, I2
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
@@ -277,48 +277,53 @@
 *     Reduce rows 1, ..., P of X11 and X21
 *
       DO I = 1, P
+         I1 = MIN(I+1,P)
+         I2 = MIN(I+1,Q)
 *
          IF( I .GT. 1 ) THEN
             CALL SROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21, C, S )
          END IF
-         CALL SLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
+         CALL SLARFGP( Q-I+1, X11(I,I), X11(I,I2), LDX11, TAUQ1(I) )
          C = X11(I,I)
          X11(I,I) = ONE
          CALL SLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
+     $               X11(I1,I), LDX11, WORK(ILARF) )
          CALL SLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(I,I), LDX21, WORK(ILARF) )
-         S = SQRT( SNRM2( P-I, X11(I+1,I), 1 )**2
+         S = SQRT( SNRM2( P-I, X11(I1,I), 1 )**2
      $           + SNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
-         CALL SORBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I), 1,
-     $                 X11(I+1,I+1), LDX11, X21(I,I+1), LDX21,
+         CALL SORBDB5( P-I, M-P-I+1, Q-I, X11(I1,I), 1, X21(I,I), 1,
+     $                 X11(I1,I2), LDX11, X21(I,I2), LDX21,
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
-         CALL SSCAL( P-I, NEGONE, X11(I+1,I), 1 )
-         CALL SLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
+         CALL SSCAL( P-I, NEGONE, X11(I1,I), 1 )
+         CALL SLARFGP( M-P-I+1, X21(I,I), X21( MIN(I+1,M-P) ,I), 1,
+     $                 TAUP2(I) )
          IF( I .LT. P ) THEN
-            CALL SLARFGP( P-I, X11(I+1,I), X11(I+2,I), 1, TAUP1(I) )
-            PHI(I) = ATAN2( X11(I+1,I), X21(I,I) )
+            CALL SLARFGP( P-I, X11(I1,I), X11( MIN(I+2,P) ,I), 1,
+     $                    TAUP1(I) )
+            PHI(I) = ATAN2( X11(I1,I), X21(I,I) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X11(I+1,I) = ONE
-            CALL SLARF( 'L', P-I, Q-I, X11(I+1,I), 1, TAUP1(I),
-     $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
+            X11(I1,I) = ONE
+            CALL SLARF( 'L', P-I, Q-I, X11(I1,I), 1, TAUP1(I),
+     $                  X11(I1,I2), LDX11, WORK(ILARF) )
          END IF
          X21(I,I) = ONE
          CALL SLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+     $               X21(I,I2), LDX21, WORK(ILARF) )
 *
       END DO
 *
 *     Reduce the bottom-right portion of X21 to the identity matrix
 *
       DO I = P + 1, Q
-         CALL SLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
+         CALL SLARFGP( M-P-I+1, X21(I,I), X21( MIN(I+1,M-P) ,I), 1,
+     $                 TAUP2(I) )
          X21(I,I) = ONE
          CALL SLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+     $               X21(I, MIN(I+1,Q) ), LDX21, WORK(ILARF) )
       END DO
 *
       RETURN
