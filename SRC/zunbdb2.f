@@ -222,7 +222,7 @@
 *     .. Local Scalars ..
       DOUBLE PRECISION   C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
-     $                   LWORKMIN, LWORKOPT
+     $                   LWORKMIN, LWORKOPT, I1, I2
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
@@ -279,51 +279,56 @@
 *     Reduce rows 1, ..., P of X11 and X21
 *
       DO I = 1, P
+         I1 = MIN(I+1,P)
+         I2 = MIN(I+1,Q)
 *
          IF( I .GT. 1 ) THEN
             CALL ZDROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21, C,
      $                  S )
          END IF
          CALL ZLACGV( Q-I+1, X11(I,I), LDX11 )
-         CALL ZLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
+         CALL ZLARFGP( Q-I+1, X11(I,I), X11(I,I2), LDX11, TAUQ1(I) )
          C = DBLE( X11(I,I) )
          X11(I,I) = ONE
          CALL ZLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
+     $               X11(I1,I), LDX11, WORK(ILARF) )
          CALL ZLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(I,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X11(I,I), LDX11 )
-         S = SQRT( DZNRM2( P-I, X11(I+1,I), 1 )**2
+         S = SQRT( DZNRM2( P-I, X11(I1,I), 1 )**2
      $           + DZNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
-         CALL ZUNBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I), 1,
-     $                 X11(I+1,I+1), LDX11, X21(I,I+1), LDX21,
+         CALL ZUNBDB5( P-I, M-P-I+1, Q-I, X11(I1,I), 1, X21(I,I), 1,
+     $                 X11(I1,I2), LDX11, X21(I,I2), LDX21,
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
-         CALL ZSCAL( P-I, NEGONE, X11(I+1,I), 1 )
-         CALL ZLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
+         CALL ZSCAL( P-I, NEGONE, X11(I1,I), 1 )
+         CALL ZLARFGP( M-P-I+1, X21(I,I), X21( MIN(I+1,M-P) ,I), 1,
+     $                 TAUP2(I) )
          IF( I .LT. P ) THEN
-            CALL ZLARFGP( P-I, X11(I+1,I), X11(I+2,I), 1, TAUP1(I) )
-            PHI(I) = ATAN2( DBLE( X11(I+1,I) ), DBLE( X21(I,I) ) )
+            CALL ZLARFGP( P-I, X11(I1,I), X11( MIN(I+2,P) ,I), 1,
+     $                    TAUP1(I) )
+            PHI(I) = ATAN2( DBLE( X11(I1,I) ), DBLE( X21(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X11(I+1,I) = ONE
-            CALL ZLARF( 'L', P-I, Q-I, X11(I+1,I), 1, DCONJG(TAUP1(I)),
-     $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
+            X11(I1,I) = ONE
+            CALL ZLARF( 'L', P-I, Q-I, X11(I1,I), 1, DCONJG(TAUP1(I)),
+     $                  X11(I1,I2), LDX11, WORK(ILARF) )
          END IF
          X21(I,I) = ONE
          CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, DCONJG(TAUP2(I)),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+     $               X21(I,I2), LDX21, WORK(ILARF) )
 *
       END DO
 *
 *     Reduce the bottom-right portion of X21 to the identity matrix
 *
       DO I = P + 1, Q
-         CALL ZLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
+         CALL ZLARFGP( M-P-I+1, X21(I,I), X21( MIN(I+1,M-P) ,I), 1,
+     $                 TAUP2(I) )
          X21(I,I) = ONE
          CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, DCONJG(TAUP2(I)),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+     $               X21(I, MIN(I+1,Q) ), LDX21, WORK(ILARF) )
       END DO
 *
       RETURN

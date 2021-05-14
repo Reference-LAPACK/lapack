@@ -222,7 +222,7 @@
 *     .. Local Scalars ..
       DOUBLE PRECISION   C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
-     $                   LWORKMIN, LWORKOPT
+     $                   LWORKMIN, LWORKOPT, I1, I2
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
