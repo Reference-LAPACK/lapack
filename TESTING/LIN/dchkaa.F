@@ -114,7 +114,6 @@
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     Novemebr 2019
 *
 *  =====================================================================
 *
@@ -150,9 +149,12 @@
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
-      DOUBLE PRECISION   A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   E( NMAX ), RWORK( 5*NMAX+2*MAXRHS ),
-     $                   S( 2*NMAX ), WORK( NMAX, 3*NMAX+MAXRHS+30 )
+      DOUBLE PRECISION   E( NMAX ), S( 2*NMAX )
+*     ..
+*     .. Allocatable Arrays ..
+      INTEGER AllocateStatus
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: RWORK
+      DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE :: A, B, WORK      
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -186,6 +188,18 @@
 *     .. Data statements ..
       DATA               THREQ / 2.0D0 / , INTSTR / '0123456789' /
 *     ..
+*     ..
+*     .. Allocate memory dynamically ..
+*
+      ALLOCATE ( A( ( KDMAX+1 )*NMAX, 7 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( B( NMAX*MAXRHS, 4 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( WORK( NMAX, 3*NMAX+MAXRHS+30 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( RWORK( 5*NMAX+2*MAXRHS ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+*
 *     .. Executable Statements ..
 *
       S1 = DSECND( )
@@ -1037,6 +1051,11 @@
       S2 = DSECND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
+*
+      DEALLOCATE (A, STAT = AllocateStatus)
+      DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (WORK, STAT = AllocateStatus)
+      DEALLOCATE (RWORK,  STAT = AllocateStatus)
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )

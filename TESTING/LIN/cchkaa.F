@@ -153,9 +153,13 @@
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
-      REAL               RWORK( 150*NMAX+2*MAXRHS ), S( 2*NMAX )
-      COMPLEX            A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   E( NMAX ), WORK( NMAX, NMAX+MAXRHS+10 )
+      REAL               S( 2*NMAX )
+      COMPLEX            E( NMAX )
+*     ..
+*     .. Allocatable Arrays ..
+      INTEGER AllocateStatus
+      REAL, DIMENSION(:), ALLOCATABLE :: RWORK
+      COMPLEX, DIMENSION(:,:), ALLOCATABLE :: A, B, WORK
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -190,6 +194,17 @@
 *     ..
 *     .. Data statements ..
       DATA               THREQ / 2.0 / , INTSTR / '0123456789' /
+*     ..
+*     .. Allocate memory dynamically ..
+*
+      ALLOCATE ( A( ( KDMAX+1 )*NMAX, 7 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( B( NMAX*MAXRHS, 4 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( WORK( NMAX, NMAX+MAXRHS+10 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( RWORK( 150*NMAX+2*MAXRHS ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
 *     ..
 *     .. Executable Statements ..
 *
@@ -1193,6 +1208,11 @@
       S2 = SECOND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
+*
+      DEALLOCATE (A, STAT = AllocateStatus)
+      DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (WORK, STAT = AllocateStatus)
+      DEALLOCATE (RWORK,  STAT = AllocateStatus)
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
