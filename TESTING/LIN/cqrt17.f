@@ -169,7 +169,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, ISCL, NCOLS, NROWS
-      REAL               BIGNUM, ERR, NORMA, NORMB, NORMRS, SMLNUM
+      REAL               ERR, NORMA, NORMB, NORMRS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       REAL               RWORK( 1 )
@@ -210,7 +210,6 @@
 *
       NORMA = CLANGE( 'One-norm', M, N, A, LDA, RWORK )
       SMLNUM = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
-      BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it

@@ -169,7 +169,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, ISCL, NCOLS, NROWS
-      DOUBLE PRECISION   BIGNUM, ERR, NORMA, NORMB, NORMRS, SMLNUM
+      DOUBLE PRECISION   ERR, NORMA, NORMB, NORMRS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   RWORK( 1 )
@@ -210,7 +210,6 @@
 *
       NORMA = ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
       SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
-      BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it
