@@ -1,4 +1,4 @@
-*> \brief \b CCHKAA
+*> \brief \b SCHKAA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       PROGRAM CCHKAA
+*       PROGRAM SCHKAA
 *
 *
 *> \par Purpose:
@@ -16,16 +16,16 @@
 *>
 *> \verbatim
 *>
-*> CCHKAA is the main test program for the COMPLEX linear equation
-*> routines.
+*> SCHKAA is the main test program for the REAL LAPACK
+*> linear equation routines
 *>
 *> The program must be driven by a short data file. The first 15 records
 *> (not including the first comment  line) specify problem dimensions
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 42 lines:
-*> Data file for testing COMPLEX LAPACK linear equation routines
+*> deleting the first 3 characters from the following 40 lines:
+*> Data file for testing REAL LAPACK linear eqn. routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
 *> 7                      Number of values of N
@@ -37,45 +37,39 @@
 *> 1 0 5 9 1              Values of NX (crossover point)
 *> 3                      Number of values of RANK
 *> 30 50 90               Values of rank (as a % of N)
-*> 30.0                   Threshold value of test ratio
+*> 20.0                   Threshold value of test ratio
 *> T                      Put T to test the LAPACK routines
 *> T                      Put T to test the driver routines
 *> T                      Put T to test the error exits
-*> CGE   11               List types on next line if 0 < NTYPES < 11
-*> CGB    8               List types on next line if 0 < NTYPES <  8
-*> CGT   12               List types on next line if 0 < NTYPES < 12
-*> CPO    9               List types on next line if 0 < NTYPES <  9
-*> CPO    9               List types on next line if 0 < NTYPES <  9
-*> CPP    9               List types on next line if 0 < NTYPES <  9
-*> CPB    8               List types on next line if 0 < NTYPES <  8
-*> CPT   12               List types on next line if 0 < NTYPES < 12
-*> CHE   10               List types on next line if 0 < NTYPES < 10
-*> CHR   10               List types on next line if 0 < NTYPES < 10
-*> CHK   10               List types on next line if 0 < NTYPES < 10
-*> CHA   10               List types on next line if 0 < NTYPES < 10
-*> CH2   10               List types on next line if 0 < NTYPES < 10
-*> CSA   11               List types on next line if 0 < NTYPES < 10
-*> CS2   11               List types on next line if 0 < NTYPES < 10
-*> CHP   10               List types on next line if 0 < NTYPES < 10
-*> CSY   11               List types on next line if 0 < NTYPES < 11
-*> CSK   11               List types on next line if 0 < NTYPES < 11
-*> CSR   11               List types on next line if 0 < NTYPES < 11
-*> CSP   11               List types on next line if 0 < NTYPES < 11
-*> CTR   18               List types on next line if 0 < NTYPES < 18
-*> CTP   18               List types on next line if 0 < NTYPES < 18
-*> CTB   17               List types on next line if 0 < NTYPES < 17
-*> CQR    8               List types on next line if 0 < NTYPES <  8
-*> CRQ    8               List types on next line if 0 < NTYPES <  8
-*> CLQ    8               List types on next line if 0 < NTYPES <  8
-*> CQL    8               List types on next line if 0 < NTYPES <  8
-*> CQP    6               List types on next line if 0 < NTYPES <  6
-*> CTZ    3               List types on next line if 0 < NTYPES <  3
-*> CLS    6               List types on next line if 0 < NTYPES <  6
-*> CEQ
-*> CQT
-*> CQX
-*> CTS
-*> CHH
+*> SGE   11               List types on next line if 0 < NTYPES < 11
+*> SGB    8               List types on next line if 0 < NTYPES <  8
+*> SGT   12               List types on next line if 0 < NTYPES < 12
+*> SPO    9               List types on next line if 0 < NTYPES <  9
+*> SPS    9               List types on next line if 0 < NTYPES <  9
+*> SPP    9               List types on next line if 0 < NTYPES <  9
+*> SPB    8               List types on next line if 0 < NTYPES <  8
+*> SPT   12               List types on next line if 0 < NTYPES < 12
+*> SSY   10               List types on next line if 0 < NTYPES < 10
+*> SSR   10               List types on next line if 0 < NTYPES < 10
+*> SSK   10               List types on next line if 0 < NTYPES < 10
+*> SSA   10               List types on next line if 0 < NTYPES < 10
+*> SS2   10               List types on next line if 0 < NTYPES < 10
+*> SSP   10               List types on next line if 0 < NTYPES < 10
+*> STR   18               List types on next line if 0 < NTYPES < 18
+*> STP   18               List types on next line if 0 < NTYPES < 18
+*> STB   17               List types on next line if 0 < NTYPES < 17
+*> SQR    8               List types on next line if 0 < NTYPES <  8
+*> SRQ    8               List types on next line if 0 < NTYPES <  8
+*> SLQ    8               List types on next line if 0 < NTYPES <  8
+*> SQL    8               List types on next line if 0 < NTYPES <  8
+*> SQP    6               List types on next line if 0 < NTYPES <  6
+*> STZ    3               List types on next line if 0 < NTYPES <  3
+*> SLS    6               List types on next line if 0 < NTYPES <  6
+*> SEQ
+*> SQT
+*> SQX
+*> STS
+*> SHH
 *> \endverbatim
 *
 *  Parameters:
@@ -110,10 +104,10 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_lin
+*> \ingroup single_lin
 *
 *  =====================================================================
-      PROGRAM CCHKAA
+      PROGRAM SCHKAA
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -153,9 +147,12 @@
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
-      REAL               RWORK( 150*NMAX+2*MAXRHS ), S( 2*NMAX )
-      COMPLEX            A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   E( NMAX ), WORK( NMAX, NMAX+MAXRHS+10 )
+      REAL               E( NMAX ), S( 2*NMAX )
+*     ..
+*     .. Allocatable Arrays ..
+      INTEGER AllocateStatus
+      REAL, DIMENSION(:), ALLOCATABLE :: RWORK
+      REAL, DIMENSION(:,:), ALLOCATABLE :: A, B, WORK
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -163,17 +160,15 @@
       EXTERNAL           LSAME, LSAMEN, SECOND, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
-     $                   CCHKHE_ROOK, CCHKHE_RK, CCHKHE_AA, CCHKHP,
-     $                   CCHKLQ, CCHKUNHR_COL, CCHKPB, CCHKPO, CCHKPS,
-     $                   CCHKPP, CCHKPT, CCHKQ3, CCHKQL, CCHKQR, CCHKRQ,
-     $                   CCHKSP, CCHKSY, CCHKSY_ROOK, CCHKSY_RK,
-     $                   CCHKSY_AA, CCHKTB,  CCHKTP, CCHKTR, CCHKTZ,
-     $                   CDRVGB, CDRVGE, CDRVGT, CDRVHE, CDRVHE_ROOK,
-     $                   CDRVHE_RK, CDRVHE_AA, CDRVHP, CDRVLS, CDRVPB,
-     $                   CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY,
-     $                   CDRVSY_ROOK, CDRVSY_RK, CDRVSY_AA, ILAVER,
-     $                   CCHKQRT, CCHKQRTP
+      EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
+     $                   SCHKORHR_COL, SCHKPB, SCHKPO, SCHKPS, SCHKPP,
+     $                   SCHKPT, SCHKQ3, SCHKQL, SCHKQR, SCHKRQ, SCHKSP,
+     $                   SCHKSY, SCHKSY_ROOK, SCHKSY_RK, SCHKSY_AA,
+     $                   SCHKTB, SCHKTP, SCHKTR, SCHKTZ, SDRVGB, SDRVGE,
+     $                   SDRVGT, SDRVLS, SDRVPB, SDRVPO, SDRVPP, SDRVPT,
+     $                   SDRVSP, SDRVSY, SDRVSY_ROOK, SDRVSY_RK,
+     $                   SDRVSY_AA, ILAVER, SCHKLQTP, SCHKQRT, SCHKQRTP,
+     $                   SCHKLQT, SCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -189,7 +184,18 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
-      DATA               THREQ / 2.0 / , INTSTR / '0123456789' /
+      DATA               THREQ / 2.0E0 / , INTSTR / '0123456789' /
+*     ..
+*     .. Allocate memory dynamically ..
+*
+      ALLOCATE (A( ( KDMAX+1 )*NMAX, 7 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE (B( NMAX*MAXRHS, 4 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE (WORK( NMAX, NMAX+MAXRHS+30 ) , STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE (RWORK( 5*NMAX+2*MAXRHS ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***" 
 *     ..
 *     .. Executable Statements ..
 *
@@ -385,7 +391,6 @@
       EPS = SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
-      NRHS = NSVAL( 1 )
 *
    80 CONTINUE
 *
@@ -397,8 +402,10 @@
       I = 3
    90 CONTINUE
       I = I + 1
-      IF( I.GT.72 )
-     $   GO TO 130
+      IF( I.GT.72 ) THEN
+         NMATS = MATMAX
+         GO TO 130
+      END IF
       IF( ALINE( I: I ).EQ.' ' )
      $   GO TO 90
       NMATS = 0
@@ -420,10 +427,11 @@
   130 CONTINUE
       C1 = PATH( 1: 1 )
       C2 = PATH( 2: 3 )
+      NRHS = NSVAL( 1 )
 *
 *     Check first character for correct precision.
 *
-      IF( .NOT.LSAME( C1, 'Complex precision' ) ) THEN
+      IF( .NOT.LSAME( C1, 'Single precision' ) ) THEN
          WRITE( NOUT, FMT = 9990 )PATH
 *
       ELSE IF( NMATS.LE.0 ) THEN
@@ -440,7 +448,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB2, NBVAL2, NNS,
+            CALL SCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB2, NBVAL2, NNS,
      $                   NSVAL, THRESH, TSTERR, LDA, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
      $                   B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
@@ -449,7 +457,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), B( 1, 4 ), S, WORK,
      $                   RWORK, IWORK, NOUT )
@@ -467,7 +475,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB2, NBVAL2, NNS,
+            CALL SCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB2, NBVAL2, NNS,
      $                   NSVAL, THRESH, TSTERR, A( 1, 1 ), LA,
      $                   A( 1, 3 ), LAFAC, B( 1, 1 ), B( 1, 2 ),
      $                   B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
@@ -476,7 +484,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+            CALL SDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                   A( 1, 1 ), LA, A( 1, 3 ), LAFAC, A( 1, 6 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ), S,
      $                   WORK, RWORK, IWORK, NOUT )
@@ -492,7 +500,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+            CALL SCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
      $                   B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
          ELSE
@@ -500,7 +508,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVGT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+            CALL SDRVGT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                   A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
      $                   B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
          ELSE
@@ -515,19 +523,19 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKPO( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKPO( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                   THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                   A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                   WORK, RWORK, NOUT )
+     $                   WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), B( 1, 4 ), S, WORK,
-     $                   RWORK, NOUT )
+     $                   RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -541,7 +549,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKPS( DOTYPE, NN, NVAL, NNB2, NBVAL2, NRANK,
+            CALL SCHKPS( DOTYPE, NN, NVAL, NNB2, NBVAL2, NRANK,
      $                   RANKVAL, THRESH, TSTERR, LDA, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), PIV, WORK, RWORK,
      $                   NOUT )
@@ -557,19 +565,19 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKPP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+            CALL SCHKPP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK, RWORK,
-     $                   NOUT )
+     $                   IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), B( 1, 4 ), S, WORK,
-     $                   RWORK, NOUT )
+     $                   RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -582,19 +590,19 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKPB( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKPB( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                   THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                   A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                   WORK, RWORK, NOUT )
+     $                   WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVPB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVPB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), B( 1, 4 ), S, WORK,
-     $                   RWORK, NOUT )
+     $                   RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -607,177 +615,17 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
-     $                   A( 1, 1 ), S, A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
-     $                   B( 1, 3 ), WORK, RWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                   A( 1, 1 ), S, A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
-     $                   B( 1, 3 ), WORK, RWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HE' ) ) THEN
-*
-*        HE:  Hermitian indefinite matrices,
-*             with partial (Bunch-Kaufman) pivoting algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
-     $                   THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
-     $                   A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                   WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
-     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
-     $                   NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
-*
-*        HR:  Hermitian indefinite matrices,
-*             with bounded Bunch-Kaufman (rook) pivoting algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
-     $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
-     $                       A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                       WORK, RWORK, IWORK, NOUT )
+     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                        RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HK' ) ) THEN
-*
-*        HK:  Hermitian indefinite matrices,
-*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
-*             different matrix storage format than HR path version.
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
-     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
-     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
-     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                      RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
-*
-*        HA:  Hermitian matrices,
-*             Aasen Algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                      NSVAL, THRESH, TSTERR, LDA,
-     $                      A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                      WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                           B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                      WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
-*
-*        H2:  Hermitian matrices,
-*             with partial (Aasen's) pivoting algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_AA_2STAGE( DOTYPE, NN, NVAL, NNB2, NBVAL2,
-     $                         NNS, NSVAL, THRESH, TSTERR, LDA,
-     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE_AA_2STAGE(
-     $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
-*
-*        HP:  Hermitian indefinite packed matrices,
-*             with partial (Bunch-Kaufman) pivoting algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
-     $                   LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK, RWORK,
-     $                   IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
-     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
-     $                   NOUT )
+     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -787,11 +635,11 @@
 *        SY:  symmetric indefinite matrices,
 *             with partial (Bunch-Kaufman) pivoting algorithm
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSY( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKSY( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                   THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                   A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                   WORK, RWORK, IWORK, NOUT )
@@ -800,7 +648,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
      $                   NOUT )
@@ -813,11 +661,11 @@
 *        SR:  symmetric indefinite matrices,
 *             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSY_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKSY_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                       A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                       WORK, RWORK, IWORK, NOUT )
@@ -826,10 +674,10 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+            CALL SDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                        RWORK, IWORK, NOUT )
+     $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                        WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -840,11 +688,11 @@
 *             with bounded Bunch-Kaufman (rook) pivoting algorithm,
 *             different matrix storage format than SR path version.
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
      $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
@@ -853,77 +701,79 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+            CALL SDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                      RWORK, IWORK, NOUT )
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                      WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
 *
-*        SA:  symmetric indefinite matrices with Aasen's algorithm,
+*        SA:  symmetric indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
-     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
-     $                      A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
-     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+            CALL SCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+     $                         NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                      RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
+            CALL SDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+        ELSE
+           WRITE( NOUT, FMT = 9988 )PATH
+        END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
 *
-*        S2:  symmetric indefinite matrices with Aasen's algorithm
-*             2 stage
+*        SA:  symmetric indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                      NSVAL, THRESH, TSTERR, LDA,
-     $                      A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                      WORK, RWORK, IWORK, NOUT )
+            CALL SCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB2, NBVAL2,
+     $                         NNS, NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSY_AA_2STAGE(
-     $                      DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
-     $                      RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
+            CALL SDRVSY_AA_2STAGE(
+     $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+        ELSE
+           WRITE( NOUT, FMT = 9988 )PATH
+        END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        SP:  symmetric indefinite packed matrices,
 *             with partial (Bunch-Kaufman) pivoting algorithm
 *
-         NTYPES = 11
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+            CALL SCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK, RWORK,
      $                   IWORK, NOUT )
@@ -932,7 +782,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
+            CALL SDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, LDA,
      $                   A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B( 1, 1 ),
      $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
      $                   NOUT )
@@ -948,10 +798,10 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKTR( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+            CALL SCHKTR( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                   THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK, RWORK,
-     $                   NOUT )
+     $                   IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -964,9 +814,10 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+            CALL SCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   LDA, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
-     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, NOUT )
+     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
+     $                   NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -979,9 +830,10 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+            CALL SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   LDA, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
-     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, NOUT )
+     $                   B( 1, 2 ), B( 1, 3 ), WORK, RWORK, IWORK,
+     $                   NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -994,7 +846,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+            CALL SCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
@@ -1011,7 +863,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKLQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+            CALL SCHKLQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
@@ -1028,7 +880,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+            CALL SCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
@@ -1045,37 +897,11 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+            CALL SCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
      $                   WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'EQ' ) ) THEN
-*
-*        EQ:  Equilibration routines for general and positive definite
-*             matrices (THREQ should be between 2 and 10)
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKEQ( THREQ, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
-*
-*        TZ:  Trapezoidal matrix
-*
-         NTYPES = 3
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR,
-     $                   A( 1, 1 ), A( 1, 2 ), S( 1 ),
-     $                   B( 1, 1 ), WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -1088,9 +914,24 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
-     $                   THRESH, A( 1, 1 ), A( 1, 2 ), S( 1 ),
-     $                   B( 1, 1 ), WORK, RWORK, IWORK, NOUT )
+            CALL SCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+     $                   THRESH, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
+     $                   B( 1, 3 ), WORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
+*
+*        TZ:  Trapezoidal matrix
+*
+         NTYPES = 3
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR,
+     $                   A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
+     $                   B( 1, 3 ), WORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -1103,10 +944,21 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTDRV ) THEN
-            CALL CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+            CALL SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A( 1, 1 ),
-     $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
-     $                   S( 1 ), S( NMAX+1 ), NOUT )
+     $                   A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                   RWORK, RWORK( NMAX+1 ), NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'EQ' ) ) THEN
+*
+*        EQ:  Equilibration routines for general and positive definite
+*             matrices (THREQ should be between 2 and 10)
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKEQ( THREQ, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -1116,7 +968,7 @@
 *        QT:  QRT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1127,7 +979,7 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1138,7 +990,7 @@
 *        TQ:  LQT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1149,7 +1001,7 @@
 *        XQ:  LQT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1160,7 +1012,7 @@
 *        TS:  QR routines for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1171,7 +1023,7 @@
 *        HH:  Householder reconstruction for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKUNHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL SCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                         NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 ) PATH
@@ -1194,6 +1046,11 @@
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
+      DEALLOCATE (A, STAT = AllocateStatus)
+      DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (WORK, STAT = AllocateStatus)
+      DEALLOCATE (RWORK,  STAT = AllocateStatus)
+*
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
  9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
@@ -1201,7 +1058,7 @@
      $      I6 )
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
- 9994 FORMAT( ' Tests of the COMPLEX LAPACK routines ',
+ 9994 FORMAT( ' Tests of the REAL LAPACK routines ',
      $      / ' LAPACK VERSION ', I1, '.', I1, '.', I1,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
@@ -1212,6 +1069,6 @@
  9989 FORMAT( / 1X, A3, ' routines were not tested' )
  9988 FORMAT( / 1X, A3, ' driver routines were not tested' )
 *
-*     End of CCHKAA
+*     End of SCHKAA
 *
       END
