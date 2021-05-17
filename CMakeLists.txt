@@ -276,6 +276,10 @@ if(USE_OPTIMIZED_BLAS)
   else()
     find_package(BLAS)
   endif()
+else()
+  if(BLAS_LIBRARIES)
+    message(FATAL_ERROR "USE_OPTIMIZED_BLAS unset but BLAS provided. Accident?")
+  endif()
 endif()
 
 # Neither user specified or optimized BLAS libraries can be used
@@ -343,6 +347,10 @@ if(USE_OPTIMIZED_LAPACK)
   else()
     # Let's hope for any working LAPACK.
     find_package(LAPACK)
+  endif()
+else()
+  if(LAPACK_LIBRARIES)
+    message(FATAL_ERROR "USE_OPTIMIZED_LAPACK unset but LAPACK provided. Accident?")
   endif()
 endif()
 
