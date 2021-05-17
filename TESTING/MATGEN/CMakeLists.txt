@@ -57,3 +57,12 @@ set_target_properties(
 
 target_link_libraries(${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 lapack_install_library(${TMGLIB})
+if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+  add_library(${TMGLIB}_static STATIC ${SOURCES})
+  set_target_properties(
+    ${TMGLIB}_static PROPERTIES
+    OUTPUT_NAME ${TMGLIB}
+  )
+  target_link_libraries(${TMGLIB}_static ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+  lapack_install_library(${TMGLIB}_static)
+endif()

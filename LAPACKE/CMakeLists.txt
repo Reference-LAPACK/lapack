@@ -99,6 +99,25 @@ install(
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   COMPONENT Development
   )
+if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+  add_library(${LAPACKELIB}_static STATIC ${SOURCES})
+  set_target_properties(
+    ${LAPACKELIB}_static PROPERTIES
+    LINKER_LANGUAGE C
+    OUTPUT_NAME ${LAPACKELIB}
+    )
+   target_include_directories(${LAPACKELIB}_static PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:include>
+  )
+
+  if(LAPACKE_WITH_TMG)
+    target_link_libraries(${LAPACKELIB}_static PRIVATE ${TMGLIB})
+  endif()
+  target_link_libraries(${LAPACKELIB}_static PRIVATE ${LAPACK_LIBRARIES})
+
+  lapack_install_library(${LAPACKELIB}_static)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(example)

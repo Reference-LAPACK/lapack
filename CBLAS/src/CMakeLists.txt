@@ -116,7 +116,6 @@ list(REMOVE_DUPLICATES SOURCES)
 add_library(${CBLASLIB} ${SOURCES})
 set_target_properties(
   ${CBLASLIB} PROPERTIES
-  LINKER_LANGUAGE C
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
@@ -129,3 +128,17 @@ target_include_directories(${CBLASLIB} PUBLIC
 )
 target_link_libraries(${CBLASLIB} PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(${CBLASLIB})
+
+if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+  add_library(${CBLASLIB}_static STATIC ${SOURCES})
+  set_target_properties(
+    ${CBLASLIB}_static PROPERTIES
+    OUTPUT_NAME ${CBLASLIB}
+    )
+  target_include_directories(${CBLASLIB}_static PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:include>
+  )
+  target_link_libraries(${CBLASLIB}_static PRIVATE ${BLAS_LIBRARIES})
+  lapack_install_library(${CBLASLIB}_static)
+endif()

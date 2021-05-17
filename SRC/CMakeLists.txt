@@ -524,3 +524,22 @@ if(_is_coverage_build)
 endif()
 
 lapack_install_library(${LAPACKLIB})
+if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+  add_library(${LAPACKLIB}_static STATIC ${SOURCES})
+  set_target_properties(
+    ${LAPACKLIB}_static PROPERTIES
+    OUTPUT_NAME ${LAPACKLIB}
+    )
+
+  if(USE_XBLAS)
+    target_link_libraries(${LAPACKLIB}_static PRIVATE ${XBLAS_LIBRARY})
+  endif()
+  target_link_libraries(${LAPACKLIB}_static PRIVATE ${BLAS_LIBRARIES})
+
+  if (_is_coverage_build)
+    target_link_libraries(${LAPACKLIB}_static PRIVATE gcov)
+    add_coverage(${LAPACKLIB}_static)
+  endif()
+
+  lapack_install_library(${LAPACKLIB}_static)
+endif()

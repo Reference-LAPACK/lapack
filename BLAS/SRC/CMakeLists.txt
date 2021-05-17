@@ -105,3 +105,11 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 lapack_install_library(${BLASLIB})
+if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+  add_library(${BLASLIB}_static STATIC ${SOURCES})
+  set_target_properties(
+     ${BLASLIB}_static PROPERTIES
+     OUTPUT_NAME ${BLASLIB}
+    )
+  lapack_install_library(${BLASLIB}_static)
+endif()
