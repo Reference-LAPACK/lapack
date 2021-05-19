@@ -118,15 +118,15 @@ subroutine SROTG( a, b, c, s )
 !  ..
    anorm = abs(a)
    bnorm = abs(b)
-   if( anorm == zero ) then
+   if( bnorm == zero ) then
+      c = one
+      s = zero
+      b = zero
+   else if( anorm == zero ) then
       c = zero
       s = one
       a = b
       b = one
-   else if( bnorm == zero ) then
-      c = one
-      s = zero
-      b = zero
    else
       scl = min( safmax, max( safmin, anorm, bnorm ) )
       if( anorm > bnorm ) then
