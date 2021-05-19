@@ -83,7 +83,7 @@ module LA_CONSTANTS
        (minexponent(0._sp) - digits(0._sp)) * 0.5_sp))
 !  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(sp), parameter :: ssbig = real(radix(0._sp), sp)**( - ceiling( &
-       (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp))
+       (maxexponent(0._sp) + digits(0._sp) - 1) * 0.5_sp))
 
 !  Standard constants for 
    integer, parameter :: dp = kind(1.d0)
@@ -126,6 +126,6 @@ module LA_CONSTANTS
        (minexponent(0._dp) - digits(0._dp)) * 0.5_dp))
 !  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(dp), parameter :: dsbig = real(radix(0._dp), dp)**( - ceiling( &
-       (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp))
+       (maxexponent(0._dp) + digits(0._dp) - 1) * 0.5_dp))
 
 end module LA_CONSTANTS
