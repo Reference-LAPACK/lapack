@@ -225,7 +225,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*A
+*     compute R'*op(A)
 *
       CALL DGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB,
      $            A, LDA, ZERO, WORK, NRHS )

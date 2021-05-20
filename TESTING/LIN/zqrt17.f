@@ -225,7 +225,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*A
+*     compute R'*op(A)
 *
       CALL ZGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            DCMPLX( ONE ), C, LDB, A, LDA, DCMPLX( ZERO ), WORK,
