@@ -77,12 +77,13 @@ module LA_CONSTANTS
        (minexponent(0._sp) - 1) * 0.5_sp)
    real(sp), parameter :: stbig = real(radix(0._sp), sp)**floor( &
        (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp)
-!  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+!  ssml >= 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly 
    real(sp), parameter :: sssml = real(radix(0._sp), sp)**( - floor( &
-       (minexponent(0._sp) - 1) * 0.5_sp))
-!  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
+       (minexponent(0._sp) - digits(0._sp)) * 0.5_sp))
+!  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(sp), parameter :: ssbig = real(radix(0._sp), sp)**( - ceiling( &
-       (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp))
+       (maxexponent(0._sp) + digits(0._sp) - 1) * 0.5_sp))
 
 !  Standard constants for 
    integer, parameter :: dp = kind(1.d0)
@@ -119,11 +120,12 @@ module LA_CONSTANTS
        (minexponent(0._dp) - 1) * 0.5_dp)
    real(dp), parameter :: dtbig = real(radix(0._dp), dp)**floor( &
        (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp)
-!  ssml = 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+!  ssml >= 1/s, where s was defined in https://doi.org/10.1145/355769.355771
+!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly 
    real(dp), parameter :: dssml = real(radix(0._dp), dp)**( - floor( &
-       (minexponent(0._dp) - 1) * 0.5_dp))
-!  ssml = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
+       (minexponent(0._dp) - digits(0._dp)) * 0.5_dp))
+!  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(dp), parameter :: dsbig = real(radix(0._dp), dp)**( - ceiling( &
-       (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp))
+       (maxexponent(0._dp) + digits(0._dp) - 1) * 0.5_dp))
 
 end module LA_CONSTANTS
