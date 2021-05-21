@@ -224,7 +224,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*A
+*     compute R'*op(A)
 *
       CALL CGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            CMPLX( ONE ), C, LDB, A, LDA, CMPLX( ZERO ), WORK,
