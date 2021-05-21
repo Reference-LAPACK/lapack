@@ -278,6 +278,14 @@
 *     Reduce rows 1, ..., P of X11 and X21
 *
       DO I = 1, P
+*
+*        The two lines of code below are meant to avoid an out-of-bound run-time error
+*        when we call subroutines like
+*           DLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I), X11(I+1,I), LDX11, WORK(ILARF) )
+*        with I = P, or
+*           DLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
+*        with I = Q. The invalid arrays have size 0, so they are never referenced in the subroutines.
+*
          I1 = MIN(I+1,P)
          I2 = MIN(I+1,Q)
 *

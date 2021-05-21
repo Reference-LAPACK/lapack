@@ -223,7 +223,7 @@
 *     .. Local Scalars ..
       REAL               C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
-     $                   LWORKMIN, LWORKOPT, I1, I2, I3, I4
+     $                   LWORKMIN, LWORKOPT, I1, I2
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
@@ -279,38 +279,45 @@
 *     Reduce columns 1, ..., Q of X11 and X21
 *
       DO I = 1, Q
-         I1 = MIN(I+1,P)
-         I2 = MIN(I+1,M-P)
-         I3 = MIN(I+1,Q)
-         I4 = MIN(I+2,Q)
 *
-         CALL SLARFGP( P-I+1, X11(I,I), X11(I1,I), 1, TAUP1(I) )
-         CALL SLARFGP( M-P-I+1, X21(I,I), X21(I2,I), 1, TAUP2(I) )
+*        The two lines of code below are meant to avoid an out-of-bound run-time error
+*        when we call subroutines like
+*           SLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1), LDX11, WORK(ILARF) )
+*        with I = Q, or
+*           SLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, TAUQ1(I) )
+*        with I = Q-1. The invalid arrays have size 0, so they are never referenced in the subroutines.
+*
+         I1 = MIN(I+1,Q)
+         I2 = MIN(I+2,Q)
+*
+         CALL SLARFGP( P-I+1, X11(I,I), X11(MIN(I+1,P),I), 1, TAUP1(I) )
+         CALL SLARFGP( M-P-I+1, X21(I,I), X21(MIN(I+1,M-P),I), 1,
+     $                 TAUP2(I) )
          THETA(I) = ATAN2( X21(I,I), X11(I,I) )
          C = COS( THETA(I) )
          S = SIN( THETA(I) )
          X11(I,I) = ONE
          X21(I,I) = ONE
-         CALL SLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I3),
+         CALL SLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I1),
      $               LDX11, WORK(ILARF) )
          CALL SLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $               X21(I,I3), LDX21, WORK(ILARF) )
+     $               X21(I,I1), LDX21, WORK(ILARF) )
 *
          IF( I .LT. Q ) THEN
-            CALL SROT( Q-I, X11(I,I3), LDX11, X21(I,I3), LDX21, C, S )
-            CALL SLARFGP( Q-I, X21(I,I3), X21(I,I4), LDX21, TAUQ1(I) )
-            S = X21(I,I3)
-            X21(I,I3) = ONE
-            CALL SLARF( 'R', P-I, Q-I, X21(I,I3), LDX21, TAUQ1(I),
-     $                  X11(I1,I3), LDX11, WORK(ILARF) )
-            CALL SLARF( 'R', M-P-I, Q-I, X21(I,I3), LDX21, TAUQ1(I),
-     $                  X21(I2,I3), LDX21, WORK(ILARF) )
-            C = SQRT( SNRM2( P-I, X11(I1,I3), 1 )**2
-     $              + SNRM2( M-P-I, X21(I2,I3), 1 )**2 )
+            CALL SROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C, S )
+            CALL SLARFGP( Q-I, X21(I,I+1), X21(I,I2), LDX21, TAUQ1(I) )
+            S = X21(I,I+1)
+            X21(I,I+1) = ONE
+            CALL SLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
+     $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
+            CALL SLARF( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
+     $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
+            C = SQRT( SNRM2( P-I, X11(I+1,I+1), 1 )**2
+     $              + SNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )
-            CALL SORBDB5( P-I, M-P-I, Q-I-1, X11(I1,I3), 1,
-     $                    X21(I2,I3), 1, X11(I1,I4), LDX11,
-     $                    X21(I2,I4), LDX21, WORK(IORBDB5), LORBDB5,
+            CALL SORBDB5( P-I, M-P-I, Q-I-1, X11(I+1,I+1), 1,
+     $                    X21(I+1,I+1), 1, X11(I+1,I2), LDX11,
+     $                    X21(I+1,I2), LDX21, WORK(IORBDB5), LORBDB5,
      $                    CHILDINFO )
          END IF
 *

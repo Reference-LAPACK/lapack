@@ -277,6 +277,14 @@
 *     Reduce rows 1, ..., M-P of X11 and X21
 *
       DO I = 1, M-P
+*
+*        The two lines of code below are meant to avoid an out-of-bound run-time error
+*        when we call subroutines like
+*           ZLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I), X21(I+1,I), LDX21, WORK(ILARF) )
+*        with I = M-P, or
+*           ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
+*        with I = Q. The invalid arrays have size 0, so they are never referenced in the subroutines.
+*
          I1 = MIN(I+1,M-P)
          I2 = MIN(I+1,Q)
 *
