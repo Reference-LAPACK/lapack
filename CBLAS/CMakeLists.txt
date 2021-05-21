@@ -39,50 +39,23 @@ install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
   COMPONENT Development
   )
 
-# --------------------------------------------------
 if(BUILD_TESTING)
   add_subdirectory(testing)
   add_subdirectory(examples)
 endif()
 
-if(NOT BLAS_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
-endif()
-
-# Export cblas targets from the
-# install tree, if any.
-set(_cblas_config_install_guard_target "")
-if(ALL_TARGETS)
-  install(EXPORT ${CBLASLIB}-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
-    COMPONENT Development
-    )
-  # Choose one of the cblas targets to use as a guard for
-  # cblas-config.cmake to load targets from the install tree.
-  list(GET ALL_TARGETS 0 _cblas_config_install_guard_target)
-endif()
-
-# Export cblas targets from the build tree, if any.
-set(_cblas_config_build_guard_target "")
-if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE ${CBLASLIB}-targets.cmake)
-
-  # Choose one of the cblas targets to use as a guard
-  # for cblas-config.cmake to load targets from the build tree.
-  list(GET ALL_TARGETS 0 _cblas_config_build_guard_target)
-endif()
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc @ONLY)
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc
+  DESTINATION ${PKG_CONFIG_DIR}
+  COMPONENT Development
+  )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/${CBLASLIB}-config-version.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/${CBLASLIB}-config.cmake @ONLY)
-
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc @ONLY)
-  install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc
-  DESTINATION ${PKG_CONFIG_DIR}
-  )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-install.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CBLASLIB}-config.cmake @ONLY)
@@ -90,9 +63,10 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CBLASLIB}-config.cmake
   ${LAPACK_BINARY_DIR}/${CBLASLIB}-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
   )
 
-#install(EXPORT ${CBLASLIB}-targets
-#  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
-#  COMPONENT Development
-#  )
+install(EXPORT ${CBLASLIB}-targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
+  )
