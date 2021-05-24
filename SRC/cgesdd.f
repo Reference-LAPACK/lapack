@@ -199,9 +199,10 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0:  successful exit.
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  The updating process of SBDSDC did not converge.
+*>          <  0:  if INFO = -i, the i-th argument had an illegal value.
+*>          = -4:  if A had a NAN entry.
+*>          >  0:  The updating process of SBDSDC did not converge.
+*>          =  0:  successful exit.
 *> \endverbatim
 *
 *  Authors:
