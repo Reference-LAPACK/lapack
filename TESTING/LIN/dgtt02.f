@@ -29,7 +29,7 @@
 *>
 *> DGTT02 computes the residual for the solution to a tridiagonal
 *> system of equations:
-*>    RESID = norm(B - op(A)*X) / (norm(A) * norm(X) * EPS),
+*>    RESID = norm(B - op(A)*X) / (norm(op(A)) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
 *> \endverbatim
 *
@@ -105,7 +105,7 @@
 *> \param[out] RESID
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
-*>          norm(B - op(A)*X) / (norm(A) * norm(X) * EPS)
+*>          norm(B - op(A)*X) / (norm(op(A)) * norm(X) * EPS)
 *> \endverbatim
 *
 *  Authors:
@@ -166,7 +166,7 @@
      $   RETURN
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(B - op(A)*X) / ( norm(A) * norm(X) * EPS ).
+*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = DLANGT( '1', N, DL, D, DU )
