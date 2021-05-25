@@ -232,7 +232,7 @@ subroutine DLASSQ( n, x, incx, scl, sumsq )
       end if
    else
 !
-!     Otherwise all values are mid-range
+!     Otherwise all values are mid-range or zero
 !
       scl = one
       sumsq = amed

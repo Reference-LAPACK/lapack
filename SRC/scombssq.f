@@ -75,6 +75,9 @@
 *     ..
 *     .. Executable Statements ..
 *
+*     A zero sum V2 shall not modify the scaling factor of V1
+      IF( V2( 2 ).EQ.ZERO ) RETURN
+*
       IF( V1( 1 ).GE.V2( 1 ) ) THEN
          IF( V1( 1 ).NE.ZERO ) THEN
             V1( 2 ) = V1( 2 ) + ( V2( 1 ) / V1( 1 ) )**2 * V2( 2 )
