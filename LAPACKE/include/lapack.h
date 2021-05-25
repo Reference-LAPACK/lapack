@@ -5973,7 +5973,7 @@ void LAPACK_sgtsvx_base(
 #endif
 
 #define LAPACK_zgtsvx_base LAPACK_GLOBAL(zgtsvx,ZGTSVX)
-void LAPACK_zgtsv_basex(
+void LAPACK_zgtsvx_base(
     char const* fact, char const* trans,
     lapack_int const* n, lapack_int const* nrhs,
     lapack_complex_double const* DL,
@@ -6834,7 +6834,7 @@ void LAPACK_zheevd_base(
 #endif
 
 #define LAPACK_cheevd_2stage_base LAPACK_GLOBAL(cheevd_2stage,CHEEVD_2STAGE)
-void LAPACK_cheevd_2stag_basee(
+void LAPACK_cheevd_2stage_base(
     char const* jobz, char const* uplo,
     lapack_int const* n,
     lapack_complex_float* A, lapack_int const* lda,
