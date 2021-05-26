@@ -124,7 +124,6 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
-      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
       INTEGER            LDA, N
@@ -141,17 +140,14 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   ABSA, SUM, VALUE
+      DOUBLE PRECISION   ABSA, SCALE, SUM, VALUE
 *     ..
-*     .. Local Arrays ..
-      DOUBLE PRECISION   SSQ( 2 ), COLSSQ( 2 )
+*     .. External Subroutines ..
+      EXTERNAL           DLASSQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
       EXTERNAL           LSAME, DISNAN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DLASSQ, DCOMBSSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -217,39 +213,21 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
-*        SSQ(1) is scale
-*        SSQ(2) is sum-of-squares
-*        For better accuracy, sum each column separately.
 *
-         SSQ( 1 ) = ZERO
-         SSQ( 2 ) = ONE
-*
-*        Sum off-diagonals
-*
+         SCALE = ZERO
+         SUM = ONE
          IF( LSAME( UPLO, 'U' ) ) THEN
             DO 110 J = 2, N
-               COLSSQ( 1 ) = ZERO
-               COLSSQ( 2 ) = ONE
-               CALL DLASSQ( J-1, A( 1, J ), 1, COLSSQ(1), COLSSQ(2) )
-               CALL DCOMBSSQ( SSQ, COLSSQ )
+               CALL DLASSQ( J-1, A( 1, J ), 1, SCALE, SUM )
   110       CONTINUE
          ELSE
             DO 120 J = 1, N - 1
-               COLSSQ( 1 ) = ZERO
-               COLSSQ( 2 ) = ONE
-               CALL DLASSQ( N-J, A( J+1, J ), 1, COLSSQ(1), COLSSQ(2) )
-               CALL DCOMBSSQ( SSQ, COLSSQ )
+               CALL DLASSQ( N-J, A( J+1, J ), 1, SCALE, SUM )
   120       CONTINUE
          END IF
-         SSQ( 2 ) = 2*SSQ( 2 )
-*
-*        Sum diagonal
-*
-         COLSSQ( 1 ) = ZERO
-         COLSSQ( 2 ) = ONE
-         CALL DLASSQ( N, A, LDA+1, COLSSQ( 1 ), COLSSQ( 2 ) )
-         CALL DCOMBSSQ( SSQ, COLSSQ )
-         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
+         SUM = 2*SUM
+         CALL DLASSQ( N, A, LDA+1, SCALE, SUM )
+         VALUE = SCALE*SQRT( SUM )
       END IF
 *
       DLANSY = VALUE
