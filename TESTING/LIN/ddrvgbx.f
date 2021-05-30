@@ -144,7 +144,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is DOUBLE PRECISION array, dimension
-*>                      (max(NMAX,2*NRHS))
+*>                      (max(2*NMAX,NMAX+2*NRHS))
 *> \endverbatim
 *>
 *> \param[out] IWORK

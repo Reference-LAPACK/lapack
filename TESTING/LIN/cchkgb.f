@@ -160,7 +160,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is REAL array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>                      (NMAX+2*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] IWORK
