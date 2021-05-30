@@ -168,12 +168,12 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I1, I2, J, KD, N1
-      DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
+      DOUBLE PRECISION   ANORM, BNORM, EPS, TEMP, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            DISNAN, LSAME
       DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           LSAME, DASUM, DLAMCH
+      EXTERNAL           DASUM, DISNAN, DLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGBMV
@@ -202,8 +202,10 @@
          DO 10 J = 1, N
             I1 = MAX( KD+1-J, 1 )
             I2 = MIN( KD+M-J, KL+KD )
-            IF( I2.GE.I1 )
-     $         ANORM = MAX( ANORM, DASUM( I2-I1+1, A( I1, J ), 1 ) )
+            IF( I2.GE.I1 ) THEN
+               TEMP = DASUM( I2-I1+1, A( I1, J ), 1 )
+               IF( ANORM.LT.TEMP .OR. DISNAN( TEMP ) ) ANORM = TEMP
+            END IF
    10    CONTINUE
       ELSE
 *
@@ -219,7 +221,8 @@
    14       CONTINUE
    16    CONTINUE
          DO 18 I1 = 1, M
-            ANORM = MAX( ANORM, RWORK( I1 ) )
+            TEMP = RWORK( I1 )
+            IF( ANORM.LT.TEMP .OR. DISNAN( TEMP ) ) ANORM = TEMP
    18    CONTINUE
       END IF
       IF( ANORM.LE.ZERO ) THEN

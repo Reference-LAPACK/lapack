@@ -170,13 +170,13 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I1, I2, J, KD, N1
-      REAL               ANORM, BNORM, EPS, XNORM
+      REAL               ANORM, BNORM, EPS, TEMP, XNORM
       COMPLEX            CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       REAL               SCASUM, SLAMCH
-      EXTERNAL           LSAME, SCASUM, SLAMCH
+      EXTERNAL           LSAME, SCASUM, SISNAN, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGBMV
@@ -211,8 +211,10 @@
          DO 10 J = 1, N
             I1 = MAX( KD+1-J, 1 )
             I2 = MIN( KD+M-J, KL+KD )
-            IF( I2.GE.I1 )
-     $         ANORM = MAX( ANORM, SCASUM( I2-I1+1, A( I1, J ), 1 ) )
+            IF( I2.GE.I1 ) THEN
+               TEMP = SCASUM( I2-I1+1, A( I1, J ), 1 )
+               IF( ANORM.LT.TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
+            END IF
    10    CONTINUE
       ELSE
 *
@@ -228,7 +230,8 @@
    14       CONTINUE
    16    CONTINUE
          DO 18 I1 = 1, M
-            ANORM = MAX( ANORM, RWORK( I1 ) )
+            TEMP = RWORK( I1 )
+            IF( ANORM.LT.TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
    18    CONTINUE
       END IF
       IF( ANORM.LE.ZERO ) THEN
