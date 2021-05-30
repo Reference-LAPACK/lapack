@@ -190,7 +190,8 @@
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
-         ANORM = MAX( ANORM, SCASUM( I2-I1+1, A( I1, J ), 1 ) )
+         IF( I2.GE.I1 )
+     $      ANORM = MAX( ANORM, SCASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
