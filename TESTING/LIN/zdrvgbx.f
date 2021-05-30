@@ -590,7 +590,8 @@
      $                                        WORK, LDB )
                                  CALL ZGBT02( 'No transpose', N, N, KL,
      $                                        KU, NRHS, A, LDA, X, LDB,
-     $                                        WORK, LDB, RESULT( 2 ) )
+     $                                        WORK, LDB, RWORK,
+     $                                        RESULT( 2 ) )
 *
 *                                Check solution from generated exact
 *                                solution.
@@ -708,6 +709,7 @@
      $                                     WORK, LDB )
                               CALL ZGBT02( TRANS, N, N, KL, KU, NRHS,
      $                                     ASAV, LDA, X, LDB, WORK, LDB,
+     $                                     RWORK( 2*NRHS+1 ),
      $                                     RESULT( 2 ) )
 *
 *                             Check solution from generated exact
@@ -897,7 +899,8 @@ c                     write(*,*) 'begin zgbsvxx testing'
                         CALL ZLACPY( 'Full', N, NRHS, BSAV, LDB, WORK,
      $                               LDB )
                         CALL ZGBT02( TRANS, N, N, KL, KU, NRHS, ASAV,
-     $                       LDA, X, LDB, WORK, LDB, RESULT( 2 ) )
+     $                               LDA, X, LDB, WORK, LDB, RWORK,
+     $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
