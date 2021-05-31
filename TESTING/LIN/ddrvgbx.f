@@ -144,7 +144,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is DOUBLE PRECISION array, dimension
-*>                      (max(NMAX,2*NRHS))
+*>                      (max(2*NMAX,NMAX+2*NRHS))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -590,7 +590,8 @@
      $                                        WORK, LDB )
                                  CALL DGBT02( 'No transpose', N, N, KL,
      $                                        KU, NRHS, A, LDA, X, LDB,
-     $                                        WORK, LDB, RESULT( 2 ) )
+     $                                        WORK, LDB, RWORK,
+     $                                        RESULT( 2 ) )
 *
 *                                Check solution from generated exact
 *                                solution.
@@ -707,6 +708,7 @@
      $                                     WORK, LDB )
                               CALL DGBT02( TRANS, N, N, KL, KU, NRHS,
      $                                     ASAV, LDA, X, LDB, WORK, LDB,
+     $                                     RWORK( 2*NRHS+1 ),
      $                                     RESULT( 2 ) )
 *
 *                             Check solution from generated exact
@@ -892,7 +894,7 @@
                         CALL DLACPY( 'Full', N, NRHS, BSAV, LDB, WORK,
      $                               LDB )
                         CALL DGBT02( TRANS, N, N, KL, KU, NRHS, ASAV,
-     $                               LDA, X, LDB, WORK, LDB,
+     $                               LDA, X, LDB, WORK, LDB, RWORK,
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.

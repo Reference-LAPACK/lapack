@@ -160,7 +160,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is REAL array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>                      (NMAX+2*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -563,7 +563,7 @@
                               END IF
 *
 *+    TEST 2:
-*                             Solve and compute residual for A * X = B.
+*                             Solve and compute residual for op(A) * X = B.
 *
                               SRNAMT = 'SLARHS'
                               CALL SLARHS( PATH, XTYPE, ' ', TRANS, N,
@@ -589,7 +589,7 @@
      $                                     WORK, LDB )
                               CALL SGBT02( TRANS, M, N, KL, KU, NRHS, A,
      $                                     LDA, X, LDB, WORK, LDB,
-     $                                     RESULT( 2 ) )
+     $                                     RWORK, RESULT( 2 ) )
 *
 *+    TEST 3:
 *                             Check solution from generated exact
