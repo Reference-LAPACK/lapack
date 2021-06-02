@@ -29,8 +29,8 @@
 *>
 *> CLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
-*>    op( A ) * X = B,
-*> where op( A ) may be A, A**T (transpose of A), or A**H (conjugate
+*>    op(A) * X = B,
+*> where op(A) = A, A**T (transpose of A) or A**H (conjugate
 *> transpose of A).
 *> \endverbatim
 *
@@ -313,7 +313,7 @@
    10    CONTINUE
       END IF
 *
-*     Multiply X by op( A ) using an appropriate
+*     Multiply X by op(A) using an appropriate
 *     matrix multiply routine.
 *
       IF( LSAMEN( 2, C2, 'GE' ) .OR. LSAMEN( 2, C2, 'QR' ) .OR.
