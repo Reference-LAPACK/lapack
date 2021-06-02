@@ -28,12 +28,12 @@
 *>
 *> SQRT17 computes the ratio
 *>
-*>    || R**T * op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>    norm(R**T * op(A))/(norm(A)*alpha*max(M,N,NRHS)*eps),
 *>
 *> where R = op(A)*X - B, op(A) is A or A**T, and
 *>
-*>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
-*>    alpha = ||R|| if IRESID = 2 (otherwise).
+*>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
+*>    alpha = norm(R) if IRESID = 2 (otherwise).
 *> \endverbatim
 *
 *  Arguments:

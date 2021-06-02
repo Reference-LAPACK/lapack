@@ -28,12 +28,12 @@
 *>
 *> CQRT17 computes the ratio
 *>
-*>    || R**H * op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>    norm(R**H * op(A))/(norm(A)*alpha*max(M,N,NRHS)*eps),
 *>
 *> where R = op(A)*X - B, op(A) is A or A**H, and
 *>
-*>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
-*>    alpha = ||R|| if IRESID = 2 (otherwise).
+*>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
+*>    alpha = norm(R) if IRESID = 2 (otherwise).
 *> \endverbatim
 *
 *  Arguments:
