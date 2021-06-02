@@ -79,8 +79,9 @@
 *> \param[in] TRANS
 *> \verbatim
 *>          TRANS is CHARACTER*1
-*>          Specifies the operation applied to the matrix A.
-*>          = 'N':  System is  A * x = b
+*>          Used only if A is nonsymmetric; specifies the operation
+*>          applied to the matrix A.
+*>          = 'N':  B := A    * X  (No transpose)
 *>          = 'T':  B := A**T * X  (Transpose)
 *>          = 'C':  B := A**H * X  (Conjugate transpose = Transpose)
 *> \endverbatim

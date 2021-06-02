@@ -53,9 +53,9 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
-*>          = 'N':  A *x = b     (No transpose)
-*>          = 'T':  A**T *x = b  (Transpose)
-*>          = 'C':  A**H *x = b  (Conjugate transpose)
+*>          = 'N':  A    * X = B  (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose)
 *> \endverbatim
 *>
 *> \param[in] DIAG

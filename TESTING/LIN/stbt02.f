@@ -50,7 +50,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
-*>          = 'N':  A *x = b  (No transpose)
+*>          = 'N':  A    * X = B  (No transpose)
 *>          = 'T':  A**T * X = B  (Transpose)
 *>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim

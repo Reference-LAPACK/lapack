@@ -85,9 +85,9 @@
 *>          TRANS is CHARACTER*1
 *>          Used only if A is nonsymmetric; specifies the operation
 *>          applied to the matrix A.
-*>          = 'N':  B := A    * X
-*>          = 'T':  B := A**T * X
-*>          = 'C':  B := A**H * X
+*>          = 'N':  B := A    * X  (No transpose)
+*>          = 'T':  B := A**T * X  (Transpose)
+*>          = 'C':  B := A**H * X  (Conjugate transpose)
 *> \endverbatim
 *>
 *> \param[in] M

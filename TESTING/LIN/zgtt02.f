@@ -40,7 +40,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER
 *>          Specifies the form of the residual.
-*>          = 'N':  B - A * X     (No transpose)
+*>          = 'N':  B - A    * X  (No transpose)
 *>          = 'T':  B - A**T * X  (Transpose)
 *>          = 'C':  B - A**H * X  (Conjugate transpose)
 *> \endverbatim
