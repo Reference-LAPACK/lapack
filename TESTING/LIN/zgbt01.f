@@ -226,7 +226,7 @@
          END IF
    40 CONTINUE
 *
-*     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
+*     Compute norm(L*U - A) / ( N * norm(A) * EPS )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

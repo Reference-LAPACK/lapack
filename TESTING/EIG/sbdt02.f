@@ -28,7 +28,7 @@
 *> SBDT02 tests the change of basis C = U**H * B by computing the
 *> residual
 *>
-*>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
+*>    RESID = norm(B - U * C) / ( max(m,n) * norm(B) * EPS ),
 *>
 *> where B and C are M by N matrices, U is an M by M orthogonal matrix,
 *> and EPS is the machine precision.
@@ -94,7 +94,7 @@
 *> \param[out] RESID
 *> \verbatim
 *>          RESID is REAL
-*>          RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
+*>          RESID = norm(B - U * C) / ( max(m,n) * norm(B) * EPS ),
 *> \endverbatim
 *
 *  Authors:
@@ -153,7 +153,7 @@
       REALMN = REAL( MAX( M, N ) )
       EPS = SLAMCH( 'Precision' )
 *
-*     Compute norm( B - U * C )
+*     Compute norm(B - U * C)
 *
       DO 10 J = 1, N
          CALL SCOPY( M, B( 1, J ), 1, WORK, 1 )

@@ -224,7 +224,7 @@
    70    CONTINUE
       END IF
 *
-*     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
+*     Compute norm(L*U - A) / ( N * norm(A) * EPS )
 *
       RESID = CLANHE( '1', UPLO, N, AFAC, LDAFAC, RWORK )
 *

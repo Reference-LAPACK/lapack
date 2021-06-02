@@ -207,7 +207,7 @@
    60    CONTINUE
       END IF
 *
-*     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
+*     Compute norm(L*U - A) / ( N * norm(A) * EPS )
 *
       RESID = DLANSY( '1', UPLO, N, AFAC, LDAFAC, RWORK )
 *

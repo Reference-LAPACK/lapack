@@ -33,7 +33,7 @@
 *> matrices and B is bidiagonal.
 *>
 *> The test ratio to test the reduction is
-*>    RESID = norm( A - Q * B * P**H ) / ( n * norm(A) * EPS )
+*>    RESID = norm(A - Q * B * P**H) / ( n * norm(A) * EPS )
 *> where EPS is the machine precision.
 *> \endverbatim
 *
