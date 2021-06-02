@@ -41,8 +41,8 @@
 *>          TRANS is CHARACTER
 *>          Specifies the form of the residual.
 *>          = 'N':  B - A * X  (No transpose)
-*>          = 'T':  B - A'* X  (Transpose)
-*>          = 'C':  B - A'* X  (Conjugate transpose = Transpose)
+*>          = 'T':  B - A**T * X  (Transpose)
+*>          = 'C':  B - A**H * X  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] N

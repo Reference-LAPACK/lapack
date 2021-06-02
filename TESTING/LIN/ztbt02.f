@@ -204,7 +204,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A'.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = ZLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, RWORK )

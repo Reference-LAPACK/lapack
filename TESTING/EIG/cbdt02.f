@@ -27,7 +27,8 @@
 *>
 *> \verbatim
 *>
-*> CBDT02 tests the change of basis C = U' * B by computing the residual
+*> CBDT02 tests the change of basis C = U**H * B by computing the
+*> residual
 *>
 *>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *>
@@ -66,7 +67,7 @@
 *> \param[in] C
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
-*>          The m by n matrix C, assumed to contain U' * B.
+*>          The m by n matrix C, assumed to contain U**H * B.
 *> \endverbatim
 *>
 *> \param[in] LDC

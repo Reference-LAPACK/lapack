@@ -28,9 +28,9 @@
 *>
 *> CQRT17 computes the ratio
 *>
-*>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>    || R**H * op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
 *>
-*> where R = op(A)*X - B, op(A) is A or A', and
+*> where R = op(A)*X - B, op(A) is A or A**H, and
 *>
 *>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
 *>    alpha = ||R|| if IRESID = 2 (otherwise).
@@ -44,7 +44,7 @@
 *>          TRANS is CHARACTER*1
 *>          Specifies whether or not the transpose of A is used.
 *>          = 'N':  No transpose, op(A) = A.
-*>          = 'C':  Conjugate transpose, op(A) = A'.
+*>          = 'C':  Conjugate transpose, op(A) = A**H.
 *> \endverbatim
 *>
 *> \param[in] IRESID
@@ -224,7 +224,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*op(A)
+*     compute R**H * op(A)
 *
       CALL CGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            CMPLX( ONE ), C, LDB, A, LDA, CMPLX( ZERO ), WORK,

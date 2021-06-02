@@ -30,7 +30,7 @@
 *> DLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op( A ) * X = B,
-*> where op( A ) may be A or A' (transpose of A).
+*> where op( A ) = A or A**T, depending on TRANS.
 *> \endverbatim
 *
 *  Arguments:
@@ -81,8 +81,8 @@
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to the matrix A.
 *>          = 'N':  System is  A * x = b
-*>          = 'T':  System is  A'* x = b
-*>          = 'C':  System is  A'* x = b
+*>          = 'T':  B := A**T * X  (Transpose)
+*>          = 'C':  B := A**H * X  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] M

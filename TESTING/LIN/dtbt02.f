@@ -52,8 +52,8 @@
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
 *>          = 'N':  A *x = b  (No transpose)
-*>          = 'T':  A'*x = b  (Transpose)
-*>          = 'C':  A'*x = b  (Conjugate transpose = Transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -196,7 +196,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A'.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = DLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, WORK )
