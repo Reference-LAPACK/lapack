@@ -31,7 +31,7 @@
 *> \verbatim
 *>
 *> DLAPY3 returns sqrt(x**2+y**2+z**2), taking care not to cause
-*> unnecessary overflow.
+*> unnecessary overflow and unnecessary underflow.
 *> \endverbatim
 *
 *  Arguments:
