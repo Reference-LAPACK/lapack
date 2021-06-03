@@ -69,8 +69,8 @@
 *>          AFAC is COMPLEX array, dimension (LDAFAC,N)
 *>          On entry, the factor L or U from the L * L**H or U**H * U
 *>          factorization of A.
-*>          Overwritten with the reconstructed matrix, and then with the
-*>          difference L * L**H - A (or U**H * U - A).
+*>          Overwritten with the reconstructed matrix, and then with
+*>          the difference L * L**H - A (or U**H * U - A).
 *> \endverbatim
 *>
 *> \param[in] LDAFAC

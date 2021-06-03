@@ -127,7 +127,8 @@
 *> \param[out] RESID
 *> \verbatim
 *>          RESID is REAL
-*>          The test ratio:  norm(A - Q * B * P**H) / ( n * norm(A) * EPS )
+*>          The test ratio:
+*>          norm(A - Q * B * P**H) / ( n * norm(A) * EPS )
 *> \endverbatim
 *
 *  Authors:

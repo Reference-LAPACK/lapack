@@ -67,8 +67,8 @@
 *>          AFAC is DOUBLE PRECISION array, dimension (LDAFAC,N)
 *>          On entry, the factor L or U from the L * L**T or U**T * U
 *>          factorization of A.
-*>          Overwritten with the reconstructed matrix, and then with the
-*>          difference L * L**T - A (or U**T * U - A).
+*>          Overwritten with the reconstructed matrix, and then with
+*>          the difference L * L**T - A (or U**T * U - A).
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
