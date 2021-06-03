@@ -142,7 +142,7 @@
 *> \verbatim
 *>          RESID is REAL
 *>          The maximum over the number of right hand sides of
-*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -221,7 +221,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
