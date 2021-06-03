@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CGBT01 reconstructs a band matrix  A  from its L*U factorization and
+*> CGBT01 reconstructs a band matrix A from its L*U factorization and
 *> computes the residual:
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.

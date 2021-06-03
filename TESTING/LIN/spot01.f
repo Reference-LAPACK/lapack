@@ -191,7 +191,7 @@
    20    CONTINUE
       END IF
 *
-*     Compute the difference  L * L**T - A (or U**T * U - A).
+*     Compute the difference L * L**T - A (or U**T * U - A).
 *
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 40 J = 1, N

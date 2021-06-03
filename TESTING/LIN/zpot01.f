@@ -206,7 +206,7 @@
    30    CONTINUE
       END IF
 *
-*     Compute the difference  L * L**H - A (or U**H * U - A).
+*     Compute the difference L * L**H - A (or U**H * U - A).
 *
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 50 J = 1, N
