@@ -28,12 +28,13 @@
 *>
 *> SQRT17 computes the ratio
 *>
-*>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>    norm(R**T * op(A)) / ( norm(A) * alpha * max(M,N,NRHS) * EPS ),
 *>
-*> where R = op(A)*X - B, op(A) is A or A', and
+*> where R = B - op(A)*X, op(A) is A or A**T, depending on TRANS, EPS
+*> is the machine epsilon, and
 *>
-*>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
-*>    alpha = ||R|| if IRESID = 2 (otherwise).
+*>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
+*>    alpha = norm(R) if IRESID = 2 (otherwise).
 *> \endverbatim
 *
 *  Arguments:
@@ -44,7 +45,7 @@
 *>          TRANS is CHARACTER*1
 *>          Specifies whether or not the transpose of A is used.
 *>          = 'N':  No transpose, op(A) = A.
-*>          = 'T':  Transpose, op(A) = A'.
+*>          = 'T':  Transpose, op(A) = A**T.
 *> \endverbatim
 *>
 *> \param[in] IRESID
@@ -225,7 +226,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*op(A)
+*     compute R**T * op(A)
 *
       CALL SGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB,
      $            A, LDA, ZERO, WORK, NRHS )

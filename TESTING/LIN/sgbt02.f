@@ -31,7 +31,7 @@
 *> equations op(A)*X = B:
 *>    RESID = norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ),
 *> where op(A) = A or A**T, depending on TRANS, and EPS is the
-*> machine precision.
+*> machine epsilon.
 *> \endverbatim
 *
 *  Arguments:

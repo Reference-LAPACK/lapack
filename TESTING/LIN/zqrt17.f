@@ -28,12 +28,13 @@
 *>
 *> ZQRT17 computes the ratio
 *>
-*>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>    norm(R**H * op(A)) / ( norm(A) * alpha * max(M,N,NRHS) * EPS ),
 *>
-*> where R = op(A)*X - B, op(A) is A or A', and
+*> where R = B - op(A)*X, op(A) is A or A**H, depending on TRANS, EPS
+*> is the machine epsilon, and
 *>
-*>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
-*>    alpha = ||R|| if IRESID = 2 (otherwise).
+*>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
+*>    alpha = norm(R) if IRESID = 2 (otherwise).
 *> \endverbatim
 *
 *  Arguments:
@@ -44,7 +45,7 @@
 *>          TRANS is CHARACTER*1
 *>          Specifies whether or not the transpose of A is used.
 *>          = 'N':  No transpose, op(A) = A.
-*>          = 'C':  Conjugate transpose, op(A) = A'.
+*>          = 'C':  Conjugate transpose, op(A) = A**H.
 *> \endverbatim
 *>
 *> \param[in] IRESID
@@ -225,7 +226,7 @@
      $                INFO )
       END IF
 *
-*     compute R'*op(A)
+*     compute R**H * op(A)
 *
       CALL ZGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            DCMPLX( ONE ), C, LDB, A, LDA, DCMPLX( ZERO ), WORK,

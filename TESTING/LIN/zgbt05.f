@@ -30,7 +30,7 @@
 *> ZGBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
 *> general band matrix of order n with kl subdiagonals and ku
-*> superdiagonals and op(A) = A or A**T, depending on TRANS.
+*> superdiagonals and op(A) = A, A**T, or A**H, depending on TRANS.
 *>
 *> RESLTS(1) = test of the error bound
 *>           = norm(X - XACT) / ( norm(X) * FERR )
@@ -50,7 +50,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the form of the system of equations.
-*>          = 'N':  A * X = B     (No transpose)
+*>          = 'N':  A    * X = B  (No transpose)
 *>          = 'T':  A**T * X = B  (Transpose)
 *>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim

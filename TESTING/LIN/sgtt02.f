@@ -40,9 +40,9 @@
 *> \verbatim
 *>          TRANS is CHARACTER
 *>          Specifies the form of the residual.
-*>          = 'N':  B - A * X  (No transpose)
-*>          = 'T':  B - A'* X  (Transpose)
-*>          = 'C':  B - A'* X  (Conjugate transpose = Transpose)
+*>          = 'N':  B - A    * X  (No transpose)
+*>          = 'T':  B - A**T * X  (Transpose)
+*>          = 'C':  B - A**H * X  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] N
@@ -182,7 +182,7 @@
          RETURN
       END IF
 *
-*     Compute B - op(A)*X.
+*     Compute B - op(A)*X and store in B.
 *
       CALL SLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
      $             LDB )

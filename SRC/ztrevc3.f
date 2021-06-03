@@ -286,13 +286,13 @@
      $                   ZGEMM, DLABAD, ZLASET, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, CONJG, AIMAG, MAX
+      INTRINSIC          ABS, DBLE, DCMPLX, CONJG, DIMAG, MAX
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

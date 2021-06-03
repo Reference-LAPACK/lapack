@@ -51,9 +51,9 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
-*>          = 'N':  A *x = b  (No transpose)
-*>          = 'T':  A'*x = b  (Transpose)
-*>          = 'C':  A'*x = b  (Conjugate transpose = Transpose)
+*>          = 'N':  A    * X = B  (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -135,7 +135,7 @@
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
 *>          The maximum over the number of right hand sides of
-*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -196,7 +196,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A'.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = DLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, WORK )
@@ -213,7 +213,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
