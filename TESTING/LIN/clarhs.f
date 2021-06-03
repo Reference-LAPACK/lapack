@@ -30,8 +30,7 @@
 *> CLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op(A) * X = B,
-*> where op(A) = A, A**T (transpose of A), or A**H (conjugate
-*> transpose of A).
+*> where op(A) = A, A**T, or A**H, depending on TRANS.
 *> \endverbatim
 *
 *  Arguments:

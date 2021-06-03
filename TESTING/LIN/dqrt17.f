@@ -30,7 +30,7 @@
 *>
 *>    norm(R**T * op(A))/(norm(A)*alpha*max(M,N,NRHS)*eps),
 *>
-*> where R = op(A)*X - B, op(A) is A or A**T, and
+*> where R = B - op(A)*X, op(A) is A or A**T, depending on TRANS, and
 *>
 *>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
 *>    alpha = norm(R) if IRESID = 2 (otherwise).

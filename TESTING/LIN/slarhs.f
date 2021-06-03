@@ -30,7 +30,7 @@
 *> SLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op(A) * X = B,
-*> where op(A) = A or A**T.
+*> where op(A) = A or A**T, depending on TRANS.
 *> \endverbatim
 *
 *  Arguments:
