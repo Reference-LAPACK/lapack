@@ -171,7 +171,7 @@
 *
       IF( M.EQ.1 ) THEN
 *
-*        Compute Householder transform when N=1
+*        Compute Householder transform when M=1
 *
          CALL DLARFG( N, A, A( 1, MIN( 2, N ) ), LDA, T )
 *
