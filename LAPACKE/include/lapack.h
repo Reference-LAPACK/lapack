@@ -216,9 +216,9 @@ void LAPACK_sbbcsd_base(
 #endif
 );
 #ifdef LAPACK_FORTRAN_STRLEN_END
-    #define LAPACK_sbbcsd(...) LAPACK_dbbcsd_base(__VA_ARGS__, 1, 1, 1, 1, 1)
+    #define LAPACK_sbbcsd(...) LAPACK_sbbcsd_base(__VA_ARGS__, 1, 1, 1, 1, 1)
 #else
-    #define LAPACK_sbbcsd(...) LAPACK_dbbcsd_base(__VA_ARGS__)
+    #define LAPACK_sbbcsd(...) LAPACK_sbbcsd_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_zbbcsd_base LAPACK_GLOBAL(zbbcsd,ZBBCSD)
