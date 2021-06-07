@@ -50,7 +50,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the form of the system of equations.
-*>          = 'N':  A * X = B     (No transpose)
+*>          = 'N':  A    * X = B  (No transpose)
 *>          = 'T':  A**T * X = B  (Transpose)
 *>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim

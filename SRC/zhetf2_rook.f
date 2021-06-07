@@ -357,7 +357,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( DBLE( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( A( IMAX, IMAX ) ) )
@@ -669,7 +669,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( DBLE( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( A( IMAX, IMAX ) ) )

@@ -28,10 +28,9 @@
 *> \verbatim
 *>
 *> STBT02 computes the residual for the computed solution to a
-*> triangular system of linear equations  A*x = b  or  A' *x = b when
-*> A is a triangular band matrix.  Here A' is the transpose of A and
-*> x and b are N by NRHS matrices.  The test ratio is the maximum over
-*> the number of right hand sides of
+*> triangular system of linear equations op(A)*X = B when A is a
+*> triangular band matrix.  The test ratio is the maximum over the
+*> number of right hand sides of
 *>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
 *> where op(A) denotes A or A' and EPS is the machine epsilon.
 *> \endverbatim
@@ -51,9 +50,9 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
-*>          = 'N':  A *x = b  (No transpose)
-*>          = 'T':  A'*x = b  (Transpose)
-*>          = 'C':  A'*x = b  (Conjugate transpose = Transpose)
+*>          = 'N':  A    * X = B  (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -135,7 +134,7 @@
 *> \verbatim
 *>          RESID is REAL
 *>          The maximum over the number of right hand sides of
-*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -196,7 +195,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A'.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = SLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, WORK )
@@ -213,7 +212,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS

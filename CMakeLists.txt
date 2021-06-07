@@ -43,6 +43,11 @@ endif()
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+# Packaging systems often want to install static and shared libs for the users. It helps
+# having both in a consistent manner built from one build configuration. This is how
+# it works with autotools and ./configure --enable-shared --enable-static
+# (at least sometimes;-).
+option(BUILD_STATIC_LIBS "Enable this and BUILD_SHARED_LIBS to build both static and shared libs in one go (default is just static)." OFF)
 
 # By default build index32 library
 option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)

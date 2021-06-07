@@ -172,7 +172,7 @@
 *
       IF( M.EQ.1 ) THEN
 *
-*        Compute Householder transform when N=1
+*        Compute Householder transform when M=1
 *
          CALL ZLARFG( N, A, A( 1, MIN( 2, N ) ), LDA, T )
          T(1,1)=CONJG(T(1,1))
