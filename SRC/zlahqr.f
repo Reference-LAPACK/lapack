@@ -540,7 +540,15 @@
          TEMP = H( I, I-1 )
          IF( DIMAG( TEMP ).NE.RZERO ) THEN
             RTEMP = ABS( TEMP )
-            H( I, I-1 ) = RTEMP
+            IF (RTEMP .EQ. RZERO) THEN
+                RTEMP = CABS1(TEMP)
+                H( I, I-1 ) = RTEMP
+                TEMP = TEMP / RTEMP
+                RTEMP = ABS( TEMP)
+                H( I, I-1 ) = H( I, I-1 )*RTEMP
+            ELSE
+                H( I, I-1 ) = RTEMP
+            END IF
             TEMP = TEMP / RTEMP
             IF( I2.GT.I )
      $         CALL ZSCAL( I2-I, DCONJG( TEMP ), H( I, I+1 ), LDH )
