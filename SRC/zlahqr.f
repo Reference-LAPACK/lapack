@@ -232,8 +232,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZLADIV
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           ZLADIV, DLAMCH
+      DOUBLE PRECISION   DLAMCH, DLAPY2
+      EXTERNAL           ZLADIV, DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, ZCOPY, ZLARFG, ZSCAL
@@ -539,16 +539,8 @@
 *
          TEMP = H( I, I-1 )
          IF( DIMAG( TEMP ).NE.RZERO ) THEN
-            RTEMP = ABS( TEMP )
-            IF (RTEMP .EQ. RZERO) THEN
-                RTEMP = CABS1(TEMP)
-                H( I, I-1 ) = RTEMP
-                TEMP = TEMP / RTEMP
-                RTEMP = ABS( TEMP)
-                H( I, I-1 ) = H( I, I-1 )*RTEMP
-            ELSE
-                H( I, I-1 ) = RTEMP
-            END IF
+            RTEMP = DLAPY2( DBLE(TEMP), DIMAG(TEMP) )
+            H( I, I-1 ) = RTEMP
             TEMP = TEMP / RTEMP
             IF( I2.GT.I )
      $         CALL ZSCAL( I2-I, DCONJG( TEMP ), H( I, I+1 ), LDH )
