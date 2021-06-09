@@ -32,6 +32,7 @@
 *>    RESID = norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ),
 *> where op(A) = A or A**T, depending on TRANS, and EPS is the
 *> machine epsilon.
+*> The norm used is the 1-norm.
 *> \endverbatim
 *
 *  Arguments:

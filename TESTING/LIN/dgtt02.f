@@ -31,6 +31,7 @@
 *> system of equations:
 *>    RESID = norm(B - op(A)*X) / (norm(op(A)) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
+*> The norm used is the 1-norm.
 *> \endverbatim
 *
 *  Arguments:
