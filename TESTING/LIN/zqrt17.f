@@ -35,6 +35,8 @@
 *>
 *>    alpha = norm(B) if IRESID = 1 (zero-residual problem)
 *>    alpha = norm(R) if IRESID = 2 (otherwise).
+*>
+*> The norm used is the 1-norm.
 *> \endverbatim
 *
 *  Arguments:

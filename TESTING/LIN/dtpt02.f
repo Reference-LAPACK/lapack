@@ -33,6 +33,7 @@
 *> the maximum over the number of right hand sides of
 *>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
 *> where op(A) denotes A or A' and EPS is the machine epsilon.
+*> The norm used is the 1-norm.
 *> \endverbatim
 *
 *  Arguments:
