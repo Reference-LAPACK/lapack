@@ -30,7 +30,7 @@
 *> triangular system of linear equations op(A)*X = B, when the
 *> triangular matrix A is stored in packed format. The test ratio is
 *> the maximum over the number of right hand sides of
-*>    norm(op(A)*x - b) / ( norm(op(A)) * norm(X) * EPS ),
+*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
 *> where op(A) = A or A**T, and EPS is the machine epsilon.
 *> The norm used is the 1-norm.
 *> \endverbatim
@@ -122,7 +122,7 @@
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
 *>          The maximum over the number of right hand sides of
-*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*>          norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -199,7 +199,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*        norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS

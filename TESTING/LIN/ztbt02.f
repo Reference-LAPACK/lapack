@@ -32,7 +32,7 @@
 *> triangular system of linear equations op(A)*X = B, when A is a
 *> triangular band matrix. The test ratio is the maximum over the
 *> number of right hand sides of
-*>    norm(op(A)*x - b) / ( norm(op(A)) * norm(X) * EPS ),
+*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
 *> where op(A) = A, A**T, or A**H, and EPS is the machine epsilon.
 *> \endverbatim
 *
