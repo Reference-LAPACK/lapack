@@ -31,7 +31,7 @@
 *> triangular system of linear equations op(A)*X = B, when the
 *> triangular matrix A is stored in packed format. The test ratio is
 *> the maximum over the number of right hand sides of
-*>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
+*>    norm(op(A)*x - b) / ( norm(op(A)) * norm(X) * EPS ),
 *> where op(A) = A, A**T, or A**H, and EPS is the machine epsilon.
 *> \endverbatim
 *
