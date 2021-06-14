@@ -29,13 +29,11 @@
 *> \verbatim
 *>
 *> ZTRT02 computes the residual for the computed solution to a
-*> triangular system of linear equations  A*x = b,  A**T *x = b,
-*> or A**H *x = b.  Here A is a triangular matrix, A**T is the transpose
-*> of A, A**H is the conjugate transpose of A, and x and b are N by NRHS
-*> matrices.  The test ratio is the maximum over the number of right
-*> hand sides of
+*> triangular system of linear equations op(A)*X = B, where A is a
+*> triangular matrix. The test ratio is the maximum over the number of
+*> right hand sides of
 *>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
-*> where op(A) denotes A, A**T, or A**H, and EPS is the machine epsilon.
+*> where op(A) = A, A**T, or A**H, and EPS is the machine epsilon.
 *> \endverbatim
 *
 *  Arguments:
@@ -200,7 +198,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A**H.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = ZLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )

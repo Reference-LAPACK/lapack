@@ -29,13 +29,11 @@
 *> \verbatim
 *>
 *> CTBT02 computes the residual for the computed solution to a
-*> triangular system of linear equations  A*x = b,  A**T *x = b,  or
-*> A**H *x = b  when A is a triangular band matrix.  Here A**T denotes
-*> the transpose of A, A**H denotes the conjugate transpose of A, and
-*> x and b are N by NRHS matrices.  The test ratio is the maximum over
-*> the number of right hand sides of
+*> triangular system of linear equations op(A)*X = B, when A is a
+*> triangular band matrix. The test ratio is the maximum over the
+*> number of right hand sides of
 *>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
-*> where op(A) denotes A, A**T, or A**H, and EPS is the machine epsilon.
+*> where op(A) = A, A**T, or A**H, and EPS is the machine epsilon.
 *> \endverbatim
 *
 *  Arguments:
