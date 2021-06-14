@@ -140,7 +140,7 @@
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
 *>          The maximum over the number of right hand sides of
-*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -219,7 +219,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
