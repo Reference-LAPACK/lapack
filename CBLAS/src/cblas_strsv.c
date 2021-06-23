@@ -9,8 +9,8 @@
 #include "cblas_f77.h"
 void cblas_strsv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_DIAG Diag,
-                 const CBLAS_INDEX N, const float  *A, const CBLAS_INDEX lda, float  *X,
-                 const CBLAS_INDEX incX)
+                 const CBLAS_INT N, const float  *A, const CBLAS_INT lda, float  *X,
+                 const CBLAS_INT incX)
 
 {
    char TA;

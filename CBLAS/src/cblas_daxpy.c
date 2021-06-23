@@ -8,8 +8,8 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_daxpy( const CBLAS_INDEX N, const double alpha, const double *X,
-                       const CBLAS_INDEX incX, double *Y, const CBLAS_INDEX incY)
+void cblas_daxpy( const CBLAS_INT N, const double alpha, const double *X,
+                       const CBLAS_INT incX, double *Y, const CBLAS_INT incY)
 {
 #ifdef F77_INT
    F77_INT F77_N=N, F77_incX=incX, F77_incY=incY;

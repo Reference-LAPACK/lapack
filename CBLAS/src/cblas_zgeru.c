@@ -7,9 +7,9 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zgeru(const CBLAS_LAYOUT layout, const CBLAS_INDEX M, const CBLAS_INDEX N,
-                 const void *alpha, const void *X, const CBLAS_INDEX incX,
-                 const void *Y, const CBLAS_INDEX incY, void *A, const CBLAS_INDEX lda)
+void cblas_zgeru(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
+                 const void *alpha, const void *X, const CBLAS_INT incX,
+                 const void *Y, const CBLAS_INT incY, void *A, const CBLAS_INT lda)
 {
 #ifdef F77_INT
    F77_INT F77_M=M, F77_N=N, F77_lda=lda, F77_incX=incX, F77_incY=incY;

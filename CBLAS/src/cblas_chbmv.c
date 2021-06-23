@@ -10,10 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 void cblas_chbmv(const CBLAS_LAYOUT layout,
-                 const CBLAS_UPLO Uplo,const CBLAS_INDEX N,const CBLAS_INDEX K,
-                 const void *alpha, const void  *A, const CBLAS_INDEX lda,
-                 const void  *X, const CBLAS_INDEX incX, const void *beta,
-                 void  *Y, const CBLAS_INDEX incY)
+                 const CBLAS_UPLO Uplo,const CBLAS_INT N,const CBLAS_INT K,
+                 const void *alpha, const void  *A, const CBLAS_INT lda,
+                 const void  *X, const CBLAS_INT incX, const void *beta,
+                 void  *Y, const CBLAS_INT incY)
 {
    char UL;
 #ifdef F77_CHAR
@@ -30,10 +30,10 @@ void cblas_chbmv(const CBLAS_LAYOUT layout,
    #define F77_incX incx
    #define F77_incY incY
 #endif
-   CBLAS_INDEX n, i=0, incx=incX;
+   CBLAS_INT n, i=0, incx=incX;
    const float *xx= (float *)X, *alp= (float *)alpha, *bet = (float *)beta;
    float ALPHA[2],BETA[2];
-   CBLAS_INDEX tincY, tincx;
+   CBLAS_INT tincY, tincx;
    float *x=(float *)X, *y=(float *)Y, *st=0, *tx;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;

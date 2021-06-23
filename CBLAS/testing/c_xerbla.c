@@ -5,7 +5,7 @@
 #include "cblas.h"
 #include "cblas_test.h"
 
-void cblas_xerbla(CBLAS_INDEX info, const char *rout, const char *form, ...)
+void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 {
    extern int cblas_lerr, cblas_info, cblas_ok;
    extern int link_xerbla;

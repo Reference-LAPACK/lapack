@@ -11,9 +11,9 @@
 #include "cblas_f77.h"
 void cblas_strmm(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
                  const CBLAS_UPLO Uplo, const  CBLAS_TRANSPOSE TransA,
-                 const CBLAS_DIAG Diag, const CBLAS_INDEX M, const CBLAS_INDEX N,
-                 const float alpha, const float *A, const CBLAS_INDEX lda,
-                 float *B, const CBLAS_INDEX ldb)
+                 const CBLAS_DIAG Diag, const CBLAS_INT M, const CBLAS_INT N,
+                 const float alpha, const float *A, const CBLAS_INT lda,
+                 float *B, const CBLAS_INT ldb)
 {
    char UL, TA, SD, DI;
 #ifdef F77_CHAR

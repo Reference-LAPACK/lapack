@@ -10,11 +10,11 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_sgbmv(const CBLAS_LAYOUT layout,
-                 const CBLAS_TRANSPOSE TransA, const CBLAS_INDEX M, const CBLAS_INDEX N,
-                 const CBLAS_INDEX KL, const CBLAS_INDEX KU,
-                 const float alpha, const float *A, const CBLAS_INDEX lda,
-                 const float  *X, const CBLAS_INDEX incX, const float beta,
-                 float  *Y, const CBLAS_INDEX incY)
+                 const CBLAS_TRANSPOSE TransA, const CBLAS_INT M, const CBLAS_INT N,
+                 const CBLAS_INT KL, const CBLAS_INT KU,
+                 const float alpha, const float *A, const CBLAS_INT lda,
+                 const float  *X, const CBLAS_INT incX, const float beta,
+                 float  *Y, const CBLAS_INT incY)
 {
    char TA;
 #ifdef F77_CHAR

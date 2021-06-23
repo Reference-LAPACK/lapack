@@ -9,8 +9,8 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-float cblas_sdsdot( const CBLAS_INDEX N, const float alpha, const float *X,
-                      const CBLAS_INDEX incX, const float *Y, const CBLAS_INDEX incY)
+float cblas_sdsdot( const CBLAS_INT N, const float alpha, const float *X,
+                      const CBLAS_INT incX, const float *Y, const CBLAS_INT incY)
 {
    float dot;
 #ifdef F77_INT

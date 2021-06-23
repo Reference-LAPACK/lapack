@@ -8,8 +8,8 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_drot(const CBLAS_INDEX N, double *X, const CBLAS_INDEX incX,
-   double *Y, const CBLAS_INDEX incY, const double c, const double s)
+void cblas_drot(const CBLAS_INT N, double *X, const CBLAS_INT incX,
+   double *Y, const CBLAS_INT incY, const double c, const double s)
 {
 #ifdef F77_INT
    F77_INT F77_N=N, F77_incX=incX, F77_incY=incY;

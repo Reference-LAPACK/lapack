@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-float cblas_scnrm2( const CBLAS_INDEX N, const void *X, const CBLAS_INDEX incX)
+float cblas_scnrm2( const CBLAS_INT N, const void *X, const CBLAS_INT incX)
 {
    float nrm2;
 #ifdef F77_INT

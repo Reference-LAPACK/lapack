@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-float cblas_sasum( const CBLAS_INDEX N, const float *X, const CBLAS_INDEX incX)
+float cblas_sasum( const CBLAS_INT N, const float *X, const CBLAS_INT incX)
 {
    float asum;
 #ifdef F77_INT
