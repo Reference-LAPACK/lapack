@@ -34,8 +34,8 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic"
-  FFLAGS: "-fimplicit-none -frecursive -fcheck=all"
+  CFLAGS: "-Wall -pedantic -mfpmath=sse -msse2"
+  FFLAGS: "-fimplicit-none -frecursive -fcheck=all -mfpmath=sse -msse2"
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
 
 defaults:
