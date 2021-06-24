@@ -6,7 +6,7 @@ on:
     - master
     - try-github-actions
     paths:
-    - .github/workflows/cmake.yml
+    - .github/workflows/makefile.yml
     - '**Makefile'
     - 'BLAS'
     - 'CBLAS'
@@ -19,7 +19,7 @@ on:
     - '!**md'
   pull_request:
     paths:
-    - .github/workflows/cmake.yml
+    - .github/workflows/makefile.yml
     - '**Makefile'
     - 'BLAS'
     - 'CBLAS'
