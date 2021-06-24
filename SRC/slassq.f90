@@ -202,7 +202,6 @@ subroutine SLASSQ( n, x, incx, scl, sumsq )
       if (ax > tbig) then
 !        We assume scl >= sqrt( TINY*EPS ) / sbig
          abig = abig + (scl*sbig)**2 * sumsq
-         notbig = .false.
       else if (ax < tsml) then
 !        We assume scl <= sqrt( HUGE ) / ssml
          if (notbig) asml = asml + (scl*ssml)**2 * sumsq
