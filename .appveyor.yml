@@ -16,7 +16,7 @@ cache:
 
 environment:
   global:
-    CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
+    CONDA_INSTALL_LOCN: C:\\Miniconda38-x64
 
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
