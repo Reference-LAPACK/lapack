@@ -1,5 +1,5 @@
 image:
-- Visual Studio 2017
+- Visual Studio 2019
 
 configuration: Release
 clone_depth: 3
@@ -16,13 +16,13 @@ cache:
 
 environment:
   global:
-    CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
+    CONDA_INSTALL_LOCN: C:\\Miniconda38-x64
 
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
   - conda config --add channels conda-forge --force
   - conda install --yes --quiet flang jom
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
   - set "CPATH=%CONDA_INSTALL_LOCN%\Library\include;%CPATH%"
 
