@@ -2793,7 +2793,7 @@ c           LIWEDC = 12
                      RESULT( NTEST ) = ULPINV
                      RESULT( NTEST+1 ) = ULPINV
                      RESULT( NTEST+2 ) = ULPINV
-                     GO TO 700
+                     GO TO 1720
                   END IF
                END IF
 *
@@ -2820,13 +2820,13 @@ c           LIWEDC = 12
                      RETURN
                   ELSE
                      RESULT( NTEST ) = ULPINV
-                     GO TO 700
+                     GO TO 1720
                   END IF
                END IF
 *
                IF( M3.EQ.0 .AND. N.GT.0 ) THEN
                   RESULT( NTEST ) = ULPINV
-                  GO TO 700
+                  GO TO 1720
                END IF
 *
 *              Do test 78 (or +54)
