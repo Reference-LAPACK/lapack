@@ -48,3 +48,6 @@ cleantest:
 
 slamch.o: slamch.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 dlamch.o: dlamch.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+
+sroundup_lwork.o: sroundup_lwork.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+droundup_lwork.o: droundup_lwork.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
