@@ -63,12 +63,8 @@
 *
 * =====================================================================
 *     ..
-*     .. External Functions ..
-      DOUBLE PRECISION  DLAMCH
-      EXTERNAL          DLAMCH
-*     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC         DIGITS, RADIX
+      INTRINSIC         DIGITS, RADIX, EPSILON
 *     ..
 *     .. Executable Statements ..
 *     ..
@@ -76,7 +72,7 @@
 *
       IF( DROUNDUP_LWORK .GE. DBLE(RADIX(0.0D+0))**DIGITS(0.0D+0) ) THEN
 *         If LWORK can't be represented exactly in double precision
-          DROUNDUP_LWORK = LWORK * ( 1.0D+0 + DLAMCH('EPS') )
+          DROUNDUP_LWORK = DROUNDUP_LWORK * ( 1.0D+0 + EPSILON(0.0D+0) )
       ENDIF
 *
       RETURN

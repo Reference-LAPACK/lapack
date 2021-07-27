@@ -66,12 +66,8 @@
 *
 * =====================================================================
 *     ..
-*     .. External Functions ..
-      REAL              SLAMCH
-      EXTERNAL          SLAMCH
-*     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC         DIGITS, RADIX
+      INTRINSIC         DIGITS, RADIX, EPSILON
 *     ..
 *     .. Executable Statements ..
 *     ..
@@ -79,7 +75,7 @@
 *
       IF( SROUNDUP_LWORK .GE. REAL(RADIX(0.0E+0))**DIGITS(0.0E+0) ) THEN
 *         If LWORK can't be represented exactly in single precision
-          SROUNDUP_LWORK = LWORK * ( 1.0E+0 + SLAMCH('EPS') )
+          SROUNDUP_LWORK = SROUNDUP_LWORK * ( 1.0E+0 + EPSILON(0.0E+0) )
       ENDIF
 *
       RETURN
