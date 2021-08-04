@@ -21,16 +21,17 @@
 *> \verbatim
 *>
 *> SROUNDUP_LWORK deals with a subtle bug with returning LWORK as a Float.
-*> If LWORK > 2**24, then it will get rounded as a Float.
 *> This routine guarantees it is rounded up instead of down by
-*> multiplying LWORK by 1+eps, where eps is the relative machine precision.
+*> multiplying LWORK by 1+eps when it is necessary, where eps is the relative machine precision.
+*> E.g.,
 *>
 *>        float( 16777217            ) == 16777216
-*>        float( 16777217 * (1.+eps) ) == 16777218
+*>        float( 16777217 ) * (1.+eps) == 16777218
 *>
 *> \return SROUNDUP_LWORK
 *> \verbatim
 *>         SROUNDUP_LWORK >= LWORK.
+*>         SROUNDUP_LWORK is guaranteed to have zero decimal part.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,14 +68,14 @@
 * =====================================================================
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC         DIGITS, RADIX, EPSILON
+      INTRINSIC         EPSILON, REAL, INT
 *     ..
 *     .. Executable Statements ..
 *     ..
-      SROUNDUP_LWORK = LWORK
+      SROUNDUP_LWORK = REAL( LWORK )
 *
-      IF( SROUNDUP_LWORK .GE. REAL(RADIX(0.0E+0))**DIGITS(0.0E+0) ) THEN
-*         If LWORK can't be represented exactly in single precision
+      IF( INT( SROUNDUP_LWORK ) .LT. LWORK ) THEN
+*         Force round up of LWORK
           SROUNDUP_LWORK = SROUNDUP_LWORK * ( 1.0E+0 + EPSILON(0.0E+0) )
       ENDIF
 *
