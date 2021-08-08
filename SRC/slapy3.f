@@ -81,18 +81,22 @@
       PARAMETER          ( ZERO = 0.0E0 )
 *     ..
 *     .. Local Scalars ..
-      REAL               W, XABS, YABS, ZABS
+      REAL               W, XABS, YABS, ZABS, HUGEVAL
+*     ..
+*     .. External Subroutines ..
+      REAL               SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
+      HUGEVAL = SLAMCH( 'Overflow' )
       XABS = ABS( X )
       YABS = ABS( Y )
       ZABS = ABS( Z )
       W = MAX( XABS, YABS, ZABS )
-      IF( W.EQ.ZERO ) THEN
+      IF( W.EQ.ZERO .OR. W.GT.HUGEVAL ) THEN
 *     W can be zero for max(0,nan,0)
 *     adding all three entries together will make sure
 *     NaN will not disappear.
