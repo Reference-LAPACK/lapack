@@ -34,8 +34,7 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic -fopenmp"
-  FFLAGS: "-fimplicit-none -frecursive -fopenmp -fcheck=all"
+  CFLAGS: "-Wall -pedantic"
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
 
 defaults:
@@ -55,11 +54,15 @@ jobs:
 
     env:
       BUILD_TYPE: Release
+      FFLAGS: ${{ matrix.fflags }}
 
     strategy:
       fail-fast: true
       matrix:
         os: [ macos-latest, ubuntu-latest ]
+        fflags: [
+          "-fimplicit-none -frecursive -fcheck=all",
+          "-fimplicit-none -frecursive -fcheck=all -fopenmp" ]
     
     steps:
     
@@ -111,6 +114,7 @@ jobs:
     runs-on: ubuntu-latest 
     env:
       BUILD_TYPE: Coverage
+      FFLAGS: "-fopenmp"
     steps:     
     
     - name: Checkout LAPACK

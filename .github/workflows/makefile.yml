@@ -32,7 +32,7 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic -fopenmp"
+  CFLAGS: "-Wall -pedantic"
   FFLAGS: "-fimplicit-none -frecursive -fopenmp -fcheck=all"
 
 defaults:
