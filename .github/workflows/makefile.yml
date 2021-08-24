@@ -32,8 +32,8 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic"
-  FFLAGS: "-fimplicit-none -frecursive -fcheck=all"
+  CFLAGS: "-Wall -pedantic -fopenmp"
+  FFLAGS: "-fimplicit-none -frecursive -fopenmp -fcheck=all"
 
 defaults:
   run:
