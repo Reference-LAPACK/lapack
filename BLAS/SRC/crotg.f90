@@ -58,7 +58,7 @@
 !>
 !> \param[out] S
 !> \verbatim
-!>          S is REAL
+!>          S is COMPLEX
 !>          The scalar s.
 !> \endverbatim
 !
