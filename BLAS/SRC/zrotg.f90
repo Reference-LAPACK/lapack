@@ -58,7 +58,7 @@
 !>
 !> \param[out] S
 !> \verbatim
-!>          S is DOUBLE PRECISION
+!>          S is DOUBLE COMPLEX
 !>          The scalar s.
 !> \endverbatim
 !
