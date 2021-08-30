@@ -39,12 +39,23 @@
 !>    ( scl**2 )*smsq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq,
 !>
 !> where  x( i ) = X( 1 + ( i - 1 )*INCX ). The value of  sumsq  is
-!> assumed to be non-negative and  scl  returns the value
-!>
-!>    scl = max( scale, abs( x( i ) ) ).
+!> assumed to be non-negative.
 !>
 !> scale and sumsq must be supplied in SCALE and SUMSQ and
 !> scl and smsq are overwritten on SCALE and SUMSQ respectively.
+!>
+!> If scale * sqrt( sumsq ) > tbig then
+!>    we require:   scale >= sqrt( TINY*EPS ) / sbig   on entry,
+!> and if 0 < scale * sqrt( sumsq ) < tsml then
+!>    we require:   scale <= sqrt( HUGE ) / ssml       on entry,
+!> where
+!>    tbig -- upper threshold for values whose square is representable;
+!>    sbig -- scaling constant for big numbers; \see la_constants.f90
+!>    tsml -- lower threshold for values whose square is representable;
+!>    ssml -- scaling constant for small numbers; \see la_constants.f90
+!> and
+!>    TINY*EPS -- tiniest representable number;
+!>    HUGE     -- biggest representable number.
 !>
 !> \endverbatim
 !
@@ -189,12 +200,13 @@ subroutine SLASSQ( n, x, incx, scl, sumsq )
    if( sumsq > zero ) then
       ax = scl*sqrt( sumsq )
       if (ax > tbig) then
-         abig = abig + (ax*sbig)**2
-         notbig = .false.
+!        We assume scl >= sqrt( TINY*EPS ) / sbig
+         abig = abig + (scl*sbig)**2 * sumsq
       else if (ax < tsml) then
-         if (notbig) asml = asml + (ax*ssml)**2
+!        We assume scl <= sqrt( HUGE ) / ssml
+         if (notbig) asml = asml + (scl*ssml)**2 * sumsq
       else
-         amed = amed + ax**2
+         amed = amed + scl**2 * sumsq
       end if
    end if
 !

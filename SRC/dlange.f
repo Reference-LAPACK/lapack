@@ -116,7 +116,6 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
-      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          NORM
       INTEGER            LDA, M, N
@@ -133,13 +132,10 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   SUM, VALUE, TEMP
-*     ..
-*     .. Local Arrays ..
-      DOUBLE PRECISION   SSQ( 2 ), COLSSQ( 2 )
+      DOUBLE PRECISION   SCALE, SUM, VALUE, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASSQ, DCOMBSSQ
+      EXTERNAL           DLASSQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
@@ -195,19 +191,13 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
-*        SSQ(1) is scale
-*        SSQ(2) is sum-of-squares
-*        For better accuracy, sum each column separately.
 *
-         SSQ( 1 ) = ZERO
-         SSQ( 2 ) = ONE
+         SCALE = ZERO
+         SUM = ONE
          DO 90 J = 1, N
-            COLSSQ( 1 ) = ZERO
-            COLSSQ( 2 ) = ONE
-            CALL DLASSQ( M, A( 1, J ), 1, COLSSQ( 1 ), COLSSQ( 2 ) )
-            CALL DCOMBSSQ( SSQ, COLSSQ )
+            CALL DLASSQ( M, A( 1, J ), 1, SCALE, SUM )
    90    CONTINUE
-         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
+         VALUE = SCALE*SQRT( SUM )
       END IF
 *
       DLANGE = VALUE
