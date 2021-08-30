@@ -687,7 +687,7 @@
      $                   XERBLA, ZCOPY, ZHET21, ZHETRD, ZHPT21, ZHPTRD,
      $                   ZLACPY, ZLASET, ZLATMR, ZLATMS, ZPTEQR, ZSTEDC,
      $                   ZSTEMR, ZSTEIN, ZSTEQR, ZSTT21, ZSTT22, ZUNGTR,
-     $                   ZUPGTR, ZHETRD_2STAGE
+     $                   ZUPGTR, ZHETRD_2STAGE, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, INT, LOG, MAX, MIN, SQRT
