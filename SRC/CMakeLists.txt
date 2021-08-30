@@ -56,7 +56,7 @@ set(SCLAUX
    slaset.f slasq1.f slasq2.f slasq3.f slasq4.f slasq5.f slasq6.f
    slasr.f  slasrt.f slassq.f90 slasv2.f spttrf.f sstebz.f sstedc.f
    ssteqr.f ssterf.f slaisnan.f sisnan.f
-   slartgp.f slartgs.f
+   slartgp.f slartgs.f ../INSTALL/sroundup_lwork.f
    ${SECOND_SRC})
 
 set(DZLAUX
@@ -75,7 +75,7 @@ set(DZLAUX
    dlaset.f dlasq1.f dlasq2.f dlasq3.f dlasq4.f dlasq5.f dlasq6.f
    dlasr.f  dlasrt.f dlassq.f90 dlasv2.f dpttrf.f dstebz.f dstedc.f
    dsteqr.f dsterf.f dlaisnan.f disnan.f
-   dlartgp.f dlartgs.f
+   dlartgp.f dlartgs.f ../INSTALL/droundup_lwork.f
    ../INSTALL/dlamch.f ${DSECOND_SRC})
 
 set(SLASRC

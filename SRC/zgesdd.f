@@ -280,8 +280,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, DISNAN
+      DOUBLE PRECISION   DLAMCH, ZLANGE, DROUNDUP_LWORK
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, DISNAN, 
+     $                   DROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -617,7 +618,7 @@
          MAXWRK = MAX( MAXWRK, MINWRK )
       END IF
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = DROUNDUP_LWORK( MAXWRK )
          IF( LWORK.LT.MINWRK .AND. .NOT. LQUERY ) THEN
             INFO = -12
          END IF
@@ -2213,7 +2214,7 @@
 *
 *     Return optimal workspace in WORK(1)
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = DROUNDUP_LWORK( MAXWRK )
 *
       RETURN
 *

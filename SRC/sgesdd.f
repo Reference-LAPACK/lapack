@@ -266,8 +266,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, SISNAN
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE, LSAME, SISNAN
+      REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           SLAMCH, SLANGE, LSAME, SISNAN, 
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -568,7 +569,7 @@
          END IF
 
          MAXWRK = MAX( MAXWRK, MINWRK )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = SROUNDUP_LWORK( MAXWRK )
 *
          IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN
             INFO = -12
@@ -1541,7 +1542,7 @@
 *
 *     Return optimal workspace in WORK(1)
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = SROUNDUP_LWORK( MAXWRK )
 *
       RETURN
 *
