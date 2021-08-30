@@ -33,7 +33,7 @@ on:
 
 env:
   CFLAGS: "-Wall -pedantic"
-  FFLAGS: "-fimplicit-none -frecursive -fcheck=all"
+  FFLAGS: "-fimplicit-none -frecursive -fopenmp -fcheck=all"
 
 defaults:
   run:
