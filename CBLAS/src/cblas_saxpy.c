@@ -9,8 +9,8 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_saxpy( const CBLAS_INDEX N, const float alpha, const float *X,
-                       const CBLAS_INDEX incX, float *Y, const CBLAS_INDEX incY)
+void cblas_saxpy( const CBLAS_INT N, const float alpha, const float *X,
+                       const CBLAS_INT incX, float *Y, const CBLAS_INT incY)
 {
 #ifdef F77_INT
    F77_INT F77_N=N, F77_incX=incX, F77_incY=incY;

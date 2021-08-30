@@ -10,8 +10,8 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_sspr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                const CBLAS_INDEX N, const float  alpha, const float  *X,
-                const CBLAS_INDEX incX, const float  *Y, const CBLAS_INDEX incY, float  *A)
+                const CBLAS_INT N, const float  alpha, const float  *X,
+                const CBLAS_INT incX, const float  *Y, const CBLAS_INT incY, float  *A)
 {
    char UL;
 #ifdef F77_CHAR

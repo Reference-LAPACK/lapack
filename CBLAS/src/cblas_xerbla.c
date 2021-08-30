@@ -9,7 +9,7 @@ void
 #ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
 __attribute__((weak))
 #endif
-cblas_xerbla(CBLAS_INDEX info, const char *rout, const char *form, ...)
+cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 {
    extern int RowMajorStrg;
    char empty[1] = "";

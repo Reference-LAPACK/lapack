@@ -10,11 +10,11 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_zgbmv(const CBLAS_LAYOUT layout,
-                 const CBLAS_TRANSPOSE TransA, const CBLAS_INDEX M, const CBLAS_INDEX N,
-                 const CBLAS_INDEX KL, const CBLAS_INDEX KU,
-                 const void *alpha, const void  *A, const CBLAS_INDEX lda,
-                 const void  *X, const CBLAS_INDEX incX, const void *beta,
-                 void  *Y, const CBLAS_INDEX incY)
+                 const CBLAS_TRANSPOSE TransA, const CBLAS_INT M, const CBLAS_INT N,
+                 const CBLAS_INT KL, const CBLAS_INT KU,
+                 const void *alpha, const void  *A, const CBLAS_INT lda,
+                 const void  *X, const CBLAS_INT incX, const void *beta,
+                 void  *Y, const CBLAS_INT incY)
 {
    char TA;
 #ifdef F77_CHAR
@@ -34,10 +34,10 @@ void cblas_zgbmv(const CBLAS_LAYOUT layout,
    #define F77_incX incx
    #define F77_incY incY
 #endif
-   CBLAS_INDEX n, i=0, incx=incX;
+   CBLAS_INT n, i=0, incx=incX;
    const double *xx= (double *)X, *alp= (double *)alpha, *bet = (double *)beta;
    double ALPHA[2],BETA[2];
-   CBLAS_INDEX tincY, tincx;
+   CBLAS_INT tincY, tincx;
    double *x=(double *)X, *y=(double *)Y, *st=0, *tx;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;

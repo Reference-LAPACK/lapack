@@ -10,9 +10,9 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_csyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                 const CBLAS_TRANSPOSE Trans, const CBLAS_INDEX N, const CBLAS_INDEX K,
-                 const void *alpha, const void  *A, const CBLAS_INDEX lda,
-                 const void *beta, void  *C, const CBLAS_INDEX ldc)
+                 const CBLAS_TRANSPOSE Trans, const CBLAS_INT N, const CBLAS_INT K,
+                 const void *alpha, const void  *A, const CBLAS_INT lda,
+                 const void *beta, void  *C, const CBLAS_INT ldc)
 {
    char UL, TR;
 #ifdef F77_CHAR

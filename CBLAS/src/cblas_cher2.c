@@ -10,8 +10,8 @@
 #include "cblas.h"
 #include "cblas_f77.h"
 void cblas_cher2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
-                 const CBLAS_INDEX N, const void *alpha, const void *X, const CBLAS_INDEX incX,
-                 const void *Y, const CBLAS_INDEX incY, void *A, const CBLAS_INDEX lda)
+                 const CBLAS_INT N, const void *alpha, const void *X, const CBLAS_INT incX,
+                 const void *Y, const CBLAS_INT incY, void *A, const CBLAS_INT lda)
 {
    char UL;
 #ifdef F77_CHAR
@@ -28,7 +28,7 @@ void cblas_cher2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    #define F77_incX incx
    #define F77_incY incy
 #endif
-   CBLAS_INDEX n, i, j, tincx, tincy, incx=incX, incy=incY;
+   CBLAS_INT n, i, j, tincx, tincy, incx=incX, incy=incY;
    float *x=(float *)X, *xx=(float *)X, *y=(float *)Y,
          *yy=(float *)Y, *tx, *ty, *stx, *sty;
 

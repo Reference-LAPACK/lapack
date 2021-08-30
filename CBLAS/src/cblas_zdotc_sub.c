@@ -9,8 +9,8 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zdotc_sub( const CBLAS_INDEX N, const void *X, const CBLAS_INDEX incX,
-                      const void *Y, const CBLAS_INDEX incY, void *dotc)
+void cblas_zdotc_sub( const CBLAS_INT N, const void *X, const CBLAS_INT incX,
+                      const void *Y, const CBLAS_INT incY, void *dotc)
 {
 #ifdef F77_INT
    F77_INT F77_N=N, F77_incX=incX, F77_incY=incY;
