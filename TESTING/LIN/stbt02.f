@@ -28,11 +28,11 @@
 *> \verbatim
 *>
 *> STBT02 computes the residual for the computed solution to a
-*> triangular system of linear equations op(A)*X = B when A is a
-*> triangular band matrix.  The test ratio is the maximum over the
+*> triangular system of linear equations op(A)*X = B, when A is a
+*> triangular band matrix. The test ratio is the maximum over the
 *> number of right hand sides of
-*>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
-*> where op(A) denotes A or A' and EPS is the machine epsilon.
+*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
+*> where op(A) = A or A**T, and EPS is the machine epsilon.
 *> The norm used is the 1-norm.
 *> \endverbatim
 *
@@ -135,7 +135,7 @@
 *> \verbatim
 *>          RESID is REAL
 *>          The maximum over the number of right hand sides of
-*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -213,7 +213,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS

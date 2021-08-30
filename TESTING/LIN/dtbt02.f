@@ -28,12 +28,11 @@
 *> \verbatim
 *>
 *> DTBT02 computes the residual for the computed solution to a
-*> triangular system of linear equations  A*x = b  or  A' *x = b when
-*> A is a triangular band matrix.  Here A' is the transpose of A and
-*> x and b are N by NRHS matrices.  The test ratio is the maximum over
-*> the number of right hand sides of
-*>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
-*> where op(A) denotes A or A' and EPS is the machine epsilon.
+*> triangular system of linear equations op(A)*X = B, when A is a
+*> triangular band matrix. The test ratio is the maximum over the
+*> number of right hand sides of
+*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
+*> where op(A) = A, A**T, or A**H and EPS is the machine epsilon.
 *> The norm used is the 1-norm.
 *> \endverbatim
 *
@@ -136,7 +135,7 @@
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
 *>          The maximum over the number of right hand sides of
-*>          norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -214,7 +213,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(B - op(A)*X) / ( norm(op(A)) * norm(X) * EPS ).
+*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS

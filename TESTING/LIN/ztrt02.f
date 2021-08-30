@@ -29,13 +29,11 @@
 *> \verbatim
 *>
 *> ZTRT02 computes the residual for the computed solution to a
-*> triangular system of linear equations  A*x = b,  A**T *x = b,
-*> or A**H *x = b.  Here A is a triangular matrix, A**T is the transpose
-*> of A, A**H is the conjugate transpose of A, and x and b are N by NRHS
-*> matrices.  The test ratio is the maximum over the number of right
-*> hand sides of
-*>    norm(b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
-*> where op(A) denotes A, A**T, or A**H, and EPS is the machine epsilon.
+*> triangular system of linear equations op(A)*X = B, where A is a
+*> triangular matrix. The test ratio is the maximum over the number of
+*> right hand sides of
+*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
+*> where op(A) = A, A**T, or A**H, and EPS is the machine epsilon.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,9 +51,9 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          Specifies the operation applied to A.
-*>          = 'N':  A *x = b     (No transpose)
-*>          = 'T':  A**T *x = b  (Transpose)
-*>          = 'C':  A**H *x = b  (Conjugate transpose)
+*>          = 'N':  A    * X = B  (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose)
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -138,7 +136,7 @@
 *> \verbatim
 *>          RESID is DOUBLE PRECISION
 *>          The maximum over the number of right hand sides of
-*>          norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS ).
+*>          norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ).
 *> \endverbatim
 *
 *  Authors:
@@ -200,7 +198,7 @@
          RETURN
       END IF
 *
-*     Compute the 1-norm of A or A**H.
+*     Compute the 1-norm of op(A).
 *
       IF( LSAME( TRANS, 'N' ) ) THEN
          ANORM = ZLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
@@ -217,7 +215,7 @@
       END IF
 *
 *     Compute the maximum over the number of right hand sides of
-*        norm(op(A)*x - b) / ( norm(op(A)) * norm(x) * EPS )
+*        norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS )
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
