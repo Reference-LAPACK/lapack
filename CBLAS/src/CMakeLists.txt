@@ -124,7 +124,7 @@ if(HAS_ATTRIBUTE_WEAK_SUPPORT)
   target_compile_definitions(${CBLASLIB} PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
 endif()
 target_include_directories(${CBLASLIB} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+  $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/../include>
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(${CBLASLIB} PRIVATE ${BLAS_LIBRARIES})
