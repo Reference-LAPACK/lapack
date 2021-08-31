@@ -80,7 +80,7 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 target_include_directories(${LAPACKELIB} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
 if(WIN32 AND NOT UNIX)
