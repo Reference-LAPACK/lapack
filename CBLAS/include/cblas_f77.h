@@ -527,7 +527,11 @@
 extern "C" {
 #endif
 
-void F77_xerbla(FCHAR, void *);
+#ifdef BLAS_FORTRAN_STRLEN_END
+  #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__, 1)
+#else
+  #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__)
+#endif
 void F77_xerbla_base(FCHAR, void *
    #ifdef BLAS_FORTRAN_STRLEN_END
       , size_t
