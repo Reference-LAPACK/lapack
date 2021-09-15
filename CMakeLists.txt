@@ -91,28 +91,40 @@ include(PreventInBuildInstalls)
 
 # Check if recursive flag exists
 include(CheckFortranCompilerFlag)
-check_fortran_compiler_flag("-recursive" _recursiveFlag)
-check_fortran_compiler_flag("-frecursive" _frecursiveFlag)
-check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL Flang)
+  check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
+  check_fortran_compiler_flag("-frecursive" _frecursiveFlag)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+  check_fortran_compiler_flag("-recursive" _recursiveFlag)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
+  check_fortran_compiler_flag("-qrecur" _qrecurFlag)
+endif()
 
 # Add recursive flag
-if(_recursiveFlag)
-  string(REGEX MATCH "-recursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+if(_MrecursiveFlag)
+  string(REGEX MATCH "-Mrecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
   if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive"
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive"
       CACHE STRING "Recursive flag must be set" FORCE)
   endif()
 elseif(_frecursiveFlag)
   string(REGEX MATCH "-frecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
   if(NOT output_test)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive"
-    CACHE STRING "Recursive flag must be set" FORCE)
+      CACHE STRING "Recursive flag must be set" FORCE)
   endif()
-elseif(_MrecursiveFlag)
-  string(REGEX MATCH "-Mrecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
+elseif(_recursiveFlag)
+  string(REGEX MATCH "-recursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
   if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive"
-    CACHE STRING "Recursive flag must be set" FORCE)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive"
+      CACHE STRING "Recursive flag must be set" FORCE)
+  endif()
+elseif(_qrecurFlag)
+  string(REGEX MATCH "-qrecur" output_test <string> "${CMAKE_Fortran_FLAGS}")
+  if(NOT output_test)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qrecur"
+      CACHE STRING "Recursive flag must be set" FORCE)
   endif()
 endif()
 
@@ -121,7 +133,7 @@ if(UNIX)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
