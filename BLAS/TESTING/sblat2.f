@@ -469,7 +469,7 @@
       LOGICAL            LSE, LSERES
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           SGBMV, SGEMV, SMAKE, SMVCH
+      EXTERNAL           SGBMV, SGEMV, SMAKE, SMVCH, SREGR1
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -723,6 +723,34 @@
   110    CONTINUE
 *
   120 CONTINUE
+*
+*     Regression test to verify preservation of y when m zero, n nonzero.
+*
+      CALL SREGR1( TRANS, M, N, LY, KL, KU, ALPHA, AA, LDA, XX, INCX,
+     $   BETA, YY, INCY, YS )
+      IF( FULL )THEN
+         IF( TRACE )
+     $      WRITE( NTRA, FMT = 9994 )NC, SNAME, TRANS, M, N, ALPHA, LDA,
+     $      INCX, BETA, INCY
+         IF( REWI )
+     $      REWIND NTRA
+         CALL SGEMV( TRANS, M, N, ALPHA, AA, LDA, XX, INCX, BETA, YY,
+     $      INCY )
+      ELSE IF( BANDED )THEN
+         IF( TRACE )
+     $      WRITE( NTRA, FMT = 9995 )NC, SNAME, TRANS, M, N, KL, KU,
+     $      ALPHA, LDA, INCX, BETA, INCY
+         IF( REWI )
+     $      REWIND NTRA
+         CALL SGBMV( TRANS, M, N, KL, KU, ALPHA, AA, LDA, XX, INCX,
+     $      BETA, YY, INCY )
+      END IF
+      NC = NC + 1
+      IF( .NOT.LSE( YS, YY, LY ) )THEN
+         WRITE( NOUT, FMT = 9998 )NARGS - 1
+         FATAL = .TRUE.
+         GO TO 130
+      END IF
 *
 *     Report result.
 *
@@ -3116,6 +3144,39 @@
 *
 *     End of CHKXER
 *
+      END
+      SUBROUTINE SREGR1( TRANS, M, N, LY, KL, KU, ALPHA, A, LDA, X,
+     $   INCX, BETA, Y, INCY, YS )
+*
+*  Input initialization for regression test.
+*
+*     .. Scalar Arguments ..
+      CHARACTER*1        TRANS
+      INTEGER            LY, M, N, KL, KU, LDA, INCX, INCY
+      REAL               ALPHA, BETA
+*     .. Array Arguments ..
+      REAL               A(LDA,*), X(*), Y(*), YS(*)
+*     .. Local Scalars ..
+      INTEGER            I
+*     .. Intrinsic Functions ..
+      INTRINSIC          REAL
+*     .. Executable Statements ..
+      TRANS = 'T'
+      M = 0
+      N = 5
+      KL = 0
+      KU = 0
+      ALPHA = 1.0
+      LDA = MAX( 1, M )
+      INCX = 1
+      BETA = -0.7
+      INCY = 1
+      LY = ABS( INCY )*N
+      DO 10 I = 1, LY
+         Y( I ) = 42.0 + REAL( I )
+         YS( I ) = Y( I )
+  10  CONTINUE
+      RETURN
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
 *
