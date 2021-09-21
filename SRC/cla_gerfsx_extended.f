@@ -54,7 +54,7 @@
 *> In addition to normwise error bound, the code provides maximum
 *> componentwise error bound if possible. See comments for ERRS_N
 *> and ERRS_C for details of the error bounds. Note that this
-*> subroutine is only resonsible for setting the second fields of
+*> subroutine is only responsible for setting the second fields of
 *> ERRS_N and ERRS_C.
 *> \endverbatim
 *
