@@ -14,10 +14,10 @@ CFLAGS = -O3 -qnosave
 #  the compiler options desired when NO OPTIMIZATION is selected.
 #
 FC = xlf
-FFLAGS = -O3 -qfixed -qnosave
+FFLAGS = -O3 -qfixed -qnosave -qrecur
 # For -O2, add -qstrict=none
 FFLAGS_DRV = $(FFLAGS)
-FFLAGS_NOOPT = -O0 -qfixed -qnosave
+FFLAGS_NOOPT = -O0 -qfixed -qnosave -qrecur
 
 #  Define LDFLAGS to the desired linker options for your machine.
 #
