@@ -99,6 +99,10 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
   check_fortran_compiler_flag("-recursive" _recursiveFlag)
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
   check_fortran_compiler_flag("-qrecur" _qrecurFlag)
+else()
+  message(WARNING "Fortran local arrays should be allocated on the stack."
+    " Please use a compiler which guarantees that feature."
+    " See https://github.com/Reference-LAPACK/lapack/pull/188 and references therein.")
 endif()
 
 # Add recursive flag
