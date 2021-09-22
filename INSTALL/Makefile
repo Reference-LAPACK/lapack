@@ -1,8 +1,8 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
-.PHONY: all testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
-all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
+.PHONY: all testlsame testslamch testdlamch testsecond testdsecnd testieee testversion test_zcomplexabs test_zcomplexdiv
+all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion test_zcomplexabs test_zcomplexdiv
 
 testlsame: lsame.o lsametst.o
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
@@ -27,6 +27,12 @@ testieee: tstiee.o $(TOPSRCDIR)/SRC/ieeeck.o $(TOPSRCDIR)/SRC/ilaenv.o $(TOPSRCD
 testversion: ilaver.o LAPACK_version.o
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+test_zcomplexabs: test_zcomplexabs.o
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+test_zcomplexdiv: test_zcomplexdiv.o
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
 .PHONY: run
 run: all
 	./testlsame
@@ -36,13 +42,15 @@ run: all
 	./testdsecnd
 	./testieee
 	./testversion
+	./test_zcomplexabs 2> test_zcomplexabs.err
+	./test_zcomplexdiv 2> test_zcomplexdiv.err
 
 .PHONY: clean cleanobj cleanexe cleantest
 clean: cleanobj cleanexe cleantest
 cleanobj:
 	rm -f *.o
 cleanexe:
-	rm -f test*
+	rm -f testlsame testslamch testdlamch testsecond testdsecnd testieee testversion test_zcomplexabs test_zcomplexdiv
 cleantest:
 	rm -f core
 

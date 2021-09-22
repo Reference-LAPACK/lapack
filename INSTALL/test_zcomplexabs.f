@@ -1,4 +1,10 @@
-*> \brief zabs tests the robustness and precision of the intrinsic ABS for double complex 
+*> \brief zabs tests the robustness and precision of the intrinsic ABS for double complex
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
+*
 *> \author Weslley S. Pereira, University of Colorado Denver, U.S.
 *
 *> \verbatim
@@ -32,35 +38,47 @@
 *>
 *> \endverbatim
 *
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       program zabs
+*
+*  -- LAPACK test routine --
+*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 
+*     ..
+*     .. Local parameters ..
       logical           debug
       parameter       ( debug = .false. )
-
-      integer           N, i, nNaN, nInf, min, Max, m
+      integer           N, nNaN, nInf
       parameter       ( N = 4, nNaN = 3, nInf = 5 )
-
-      double precision  X( N ), R, threeFourth, fiveFourth, answerC,
-     $                  answerD, oneHalf, aInf, aNaN, relDiff, b,
-     $                  eps, blueMin, blueMax, Xj, stepX(N), limX(N)
+      double precision  threeFourth, fiveFourth, oneHalf
       parameter       ( threeFourth = 3.0d0 / 4,
      $                  fiveFourth = 5.0d0 / 4,
      $                  oneHalf = 1.0d0 / 2 )
-
+*     ..
+*     .. Local Variables ..
+      integer           i, min, Max, m, subnormalTreatedAs0,
+     $                  caseAFails, caseBFails, caseCFails, caseDFails
+      double precision  X( N ), R, answerC,
+     $                  answerD, aInf, aNaN, relDiff, b,
+     $                  eps, blueMin, blueMax, Xj, stepX(N), limX(N)
       double complex    Y, cInf( nInf ), cNaN( nNaN )
+*
+*     .. Intrinsic Functions ..
       intrinsic         ABS, DBLE, RADIX, CEILING, TINY, DIGITS, SQRT,
      $                  MAXEXPONENT, MINEXPONENT, FLOOR, HUGE, DCMPLX,
      $                  EPSILON
 
-      integer           subnormalTreatedAs0, caseAFails, caseBFails,
-     $                  caseCFails, caseDFails
 *
+*     .. Initialize error counts ..
       subnormalTreatedAs0 = 0
       caseAFails = 0
       caseBFails = 0
       caseCFails = 0
       caseDFails = 0
 *
+*     .. Initialize machine constants ..
       min = MINEXPONENT(0.0d0)
       Max = MAXEXPONENT(0.0d0)
       m = DIGITS(0.0d0)
@@ -69,20 +87,40 @@
       blueMin = b**CEILING( (min - 1) * 0.5d0 )
       blueMax = b**FLOOR( (Max - m + 1) * 0.5d0 )
 *
+*     .. Vector X ..
       X(1) = TINY(0.0d0) * b**( DBLE(1-m) )
       X(2) = TINY(0.0d0)
       X(3) = HUGE(0.0d0)
       X(4) = b**( DBLE(Max-1) )
 *
+*     .. Then modify X using the step ..
       stepX(1) = 2.0
       stepX(2) = 2.0
       stepX(3) = 0.0
       stepX(4) = 0.5
 *
+*     .. Up to the value ..
       limX(1) = X(2)
       limX(2) = 1.0
       limX(3) = 0.0
       limX(4) = 2.0
+*
+*     .. Inf entries ..
+      aInf = X(3) * 2
+      cInf(1) = DCMPLX( aInf, 0.0d0 )
+      cInf(2) = DCMPLX(-aInf, 0.0d0 )
+      cInf(3) = DCMPLX( 0.0d0, aInf )
+      cInf(4) = DCMPLX( 0.0d0,-aInf )
+      cInf(5) = DCMPLX( aInf,  aInf )
+*
+*     .. NaN entries ..
+      aNaN = aInf / aInf
+      cNaN(1) = DCMPLX( aNaN, 0.0d0 )
+      cNaN(2) = DCMPLX( 0.0d0, aNaN )
+      cNaN(3) = DCMPLX( aNaN,  aNaN )
+
+*
+*     .. Tests ..
 *
       if( debug ) then
         print *, '# X :=', X
@@ -107,18 +145,6 @@
             endif
  100    continue
       endif
-*
-      aInf = X(3) * 2
-      cInf(1) = DCMPLX( aInf, 0.0d0 )
-      cInf(2) = DCMPLX(-aInf, 0.0d0 )
-      cInf(3) = DCMPLX( 0.0d0, aInf )
-      cInf(4) = DCMPLX( 0.0d0,-aInf )
-      cInf(5) = DCMPLX( aInf,  aInf )
-*
-      aNaN = aInf / aInf
-      cNaN(1) = DCMPLX( aNaN, 0.0d0 )
-      cNaN(2) = DCMPLX( 0.0d0, aNaN )
-      cNaN(3) = DCMPLX( aNaN,  aNaN )
 *
 *     Test (a) y = x + 0 * I, |y| = x
       do 10 i = 1, N
@@ -257,10 +283,12 @@
         endif
   60  continue
 *
+*     If anything was written to stderr, print the message
       if( (caseAFails .gt. 0) .or. (caseBFails .gt. 0) .or.
      $    (caseCFails .gt. 0) .or. (caseDFails .gt. 0) )
      $      print *, "# Please check the failed ABS(a+b*I) in [stderr]"
 *
+*     .. Formats ..
  9997 FORMAT( '[',A1,I1, '] ABS(', (ES8.1,SP,ES8.1,"*I"), ' ) = ',
      $        ES8.1, ' differs from Inf' )
 *
