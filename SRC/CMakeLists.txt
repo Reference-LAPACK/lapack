@@ -513,6 +513,10 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 
+if( TEST_FORTRAN_COMPILER )
+  add_dependencies( ${LAPACKLIB} run_test_zcomplexabs run_test_zcomplexdiv )
+endif()
+
 if(USE_XBLAS)
   target_link_libraries(${LAPACKLIB} PRIVATE ${XBLAS_LIBRARY})
 endif()

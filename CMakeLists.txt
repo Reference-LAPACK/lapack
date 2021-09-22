@@ -41,6 +41,26 @@ if(_is_coverage_build)
   find_package(codecov)
 endif()
 
+# By default test Fortran compiler complex abs and complex division
+option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex division" ON)
+if( TEST_FORTRAN_COMPILER )
+
+  add_executable( test_zcomplexabs ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
+  add_custom_target( run_test_zcomplexabs
+    COMMAND test_zcomplexabs 2> test_zcomplexabs.err
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
+    COMMENT "Running test_zcomplexabs in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexabs.err"
+    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
+
+  add_executable( test_zcomplexdiv ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
+  add_custom_target( run_test_zcomplexdiv
+    COMMAND test_zcomplexdiv 2> test_zcomplexdiv.err
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
+    COMMENT "Running test_zcomplexdiv in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexdiv.err"
+    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
+    
+endif()
+
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
