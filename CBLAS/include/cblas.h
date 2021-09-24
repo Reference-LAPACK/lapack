@@ -1,6 +1,7 @@
 #ifndef CBLAS_H
 #define CBLAS_H
 #include <stddef.h>
+#include <stdint.h>
 
 
 #ifdef __cplusplus
@@ -15,10 +16,12 @@ extern "C" {            /* Assume C declarations for C++ */
 /*
  * Integer type
  */
+#ifndef CBLAS_INT
 #ifdef WeirdNEC
-   #define CBLAS_INT long
+   #define CBLAS_INT int64_t
 #else
-   #define CBLAS_INT int
+   #define CBLAS_INT int32_t
+#endif
 #endif
 
 typedef enum CBLAS_LAYOUT {CblasRowMajor=101, CblasColMajor=102} CBLAS_LAYOUT;
