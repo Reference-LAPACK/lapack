@@ -11,7 +11,7 @@
 !  CROTG constructs a plane rotation
 !     [  c         s ] [ a ] = [ r ]
 !     [ -conjg(s)  c ] [ b ]   [ 0 ]
-!  where c is real, s ic complex, and c**2 + conjg(s)*s = 1.
+!  where c is real, s is complex, and c**2 + conjg(s)*s = 1.
 !
 !> \par Purpose:
 !  =============
