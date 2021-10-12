@@ -129,7 +129,7 @@ subroutine CLARTG( f, g, c, s, r )
    complex(wp)        f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
+   real(wp) :: d, f1, f2, g1, g2, h2, w2, u, uu, v, vv, w
    complex(wp) :: fs, gs, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -199,19 +199,21 @@ subroutine CLARTG( f, g, c, s, r )
             v = min( safmax, max( safmin, f1 ) )
             vv = one / v
             w = v * uu
+            w2 = w**2
             fs = f*vv
             f2 = ABSSQ( fs )
-            h2 = f2*w**2 + g2
+            h2 = f2*w2 + g2
          else
 !
 !           Otherwise use the same scaling for f and g.
 !
             w = one
+            w2 = one
             fs = f*uu
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         d = sqrt( w**2 + ( g2/f2 ) )
+         d = sqrt( w2 + ( g2/f2 ) )
          c = w / d
          r = fs*d
          s = conjg( gs )*( r / h2 )
