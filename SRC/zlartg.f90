@@ -129,7 +129,7 @@ subroutine ZLARTG( f, g, c, s, r )
    complex(wp)        f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
+   real(wp) :: d, f1, f2, g1, g2, h2, w2, u, uu, v, vv, w
    complex(wp) :: fs, gs, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -154,8 +154,7 @@ subroutine ZLARTG( f, g, c, s, r )
 !
 !        Use unscaled algorithm
 !
-         g2 = ABSSQ( g )
-         d = sqrt( g2 )
+         d = abs( g )
          s = conjg( g ) / d
          r = d
       else
@@ -165,8 +164,7 @@ subroutine ZLARTG( f, g, c, s, r )
          u = min( safmax, max( safmin, g1 ) )
          uu = one / u
          gs = g*uu
-         g2 = ABSSQ( gs )
-         d = sqrt( g2 )
+         d = abs( g2 )
          s = conjg( gs ) / d
          r = d*u
       end if
@@ -181,15 +179,10 @@ subroutine ZLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
-         else
-            d = sqrt( f2 )*sqrt( h2 )
-         end if
-         p = 1 / d
-         c = f2*p
-         s = conjg( g )*( f*p )
-         r = f*( h2*p )
+         d = sqrt( one + ( g2/f2 ) )
+         r = f*d
+         c = one / d
+         s = conjg( g )*( r / h2 )
       else
 !
 !        Use scaled algorithm
@@ -206,27 +199,25 @@ subroutine ZLARTG( f, g, c, s, r )
             v = min( safmax, max( safmin, f1 ) )
             vv = one / v
             w = v * uu
+            w2 = w**2
             fs = f*vv
             f2 = ABSSQ( fs )
-            h2 = f2*w**2 + g2
+            h2 = f2*w2 + g2
          else
 !
 !           Otherwise use the same scaling for f and g.
 !
             w = one
+            w2 = one
             fs = f*uu
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
-         else
-            d = sqrt( f2 )*sqrt( h2 )
-         end if
-         p = 1 / d
-         c = ( f2*p )*w
-         s = conjg( gs )*( fs*p )
-         r = ( fs*( h2*p ) )*u
+         d = sqrt( w2 + ( g2/f2 ) )
+         c = w / d
+         r = fs*d
+         s = conjg( gs )*( r / h2 )
+         r = r*u
       end if
    end if
    return
