@@ -187,7 +187,11 @@ subroutine CLARTG( f, g, c, s, r )
             d = sqrt( f2 )*sqrt( h2 )
          end if
          p = 1 / d
-         c = f2*p
+         if( f2 > safmin * g2 ) then
+            c = 1 / sqrt( one + g2/f2 )
+         else
+            c = f2*p
+         end if
          s = conjg( g )*( f*p )
          r = f*( h2*p )
       else
@@ -224,6 +228,11 @@ subroutine CLARTG( f, g, c, s, r )
             d = sqrt( f2 )*sqrt( h2 )
          end if
          p = 1 / d
+         if( f2 > safmin * g2 ) then
+            c = (1 / sqrt( one + g2/f2 )) * w
+         else
+            c = ( f2*p )*w
+         end if
          c = ( f2*p )*w
          s = conjg( gs )*( fs*p )
          r = ( fs*( h2*p ) )*u
