@@ -233,7 +233,6 @@ subroutine CLARTG( f, g, c, s, r )
          else
             c = ( f2*p )*w
          end if
-         c = ( f2*p )*w
          s = conjg( gs )*( fs*p )
          r = ( fs*( h2*p ) )*u
       end if
