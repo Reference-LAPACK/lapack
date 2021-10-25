@@ -672,7 +672,7 @@
 *        Accumulate Householder reflectors
 *
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL SCOPY( M-P, WORK(IORBDB+P), 1, U2, 1 )
+            CALL SCOPY( M-Q, WORK(IORBDB+P), 1, U2, 1 )
          END IF
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL SCOPY( P, WORK(IORBDB), 1, U1, 1 )
