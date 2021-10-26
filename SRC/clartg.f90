@@ -129,7 +129,7 @@ subroutine CLARTG( f, g, c, s, r )
    complex(wp)        f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
+   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w
    complex(wp) :: fs, gs, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -154,8 +154,7 @@ subroutine CLARTG( f, g, c, s, r )
 !
 !        Use unscaled algorithm
 !
-         g2 = ABSSQ( g )
-         d = sqrt( g2 )
+         d = abs( g )
          s = conjg( g ) / d
          r = d
       else
@@ -163,10 +162,8 @@ subroutine CLARTG( f, g, c, s, r )
 !        Use scaled algorithm
 !
          u = min( safmax, max( safmin, g1 ) )
-         uu = one / u
-         gs = g*uu
-         g2 = ABSSQ( gs )
-         d = sqrt( g2 )
+         gs = g / u
+         d = abs( gs )
          s = conjg( gs ) / d
          r = d*u
       end if
@@ -181,36 +178,40 @@ subroutine CLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
-         else
-            d = sqrt( f2 )*sqrt( h2 )
-         end if
-         p = 1 / d
          if( f2 > safmin * g2 ) then
-            c = 1 / sqrt( one + g2/f2 )
+            d = sqrt( one + g2/f2 )
+            c = one / d
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               s = conjg( g )*( f / sqrt( f2*h2 ) )
+            else
+               s = conjg( g )*( f /( f2*d ) )
+            end if
+            r = f * d
          else
-            c = f2*p
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               d = sqrt( f2*h2 )
+            else
+               d = sqrt( f2 )*sqrt( h2 )
+            end if
+            c = f2 / d
+            s = conjg( g )*( f / d )
+            r = f*( h2 / d )
          end if
-         s = conjg( g )*( f*p )
-         r = f*( h2*p )
       else
 !
 !        Use scaled algorithm
 !
          u = min( safmax, max( safmin, f1, g1 ) )
-         uu = one / u
-         gs = g*uu
+         gs = g / u
          g2 = ABSSQ( gs )
-         if( f1*uu < rtmin ) then
+         if( f1 < rtmin * u ) then
 !
 !           f is not well-scaled when scaled by g1.
 !           Use a different scaling for f.
 !
             v = min( safmax, max( safmin, f1 ) )
-            vv = one / v
-            w = v * uu
-            fs = f*vv
+            w = v / u
+            fs = f / v
             f2 = ABSSQ( fs )
             h2 = f2*w**2 + g2
          else
@@ -218,23 +219,30 @@ subroutine CLARTG( f, g, c, s, r )
 !           Otherwise use the same scaling for f and g.
 !
             w = one
-            fs = f*uu
+            fs = f / u
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
-         else
-            d = sqrt( f2 )*sqrt( h2 )
-         end if
-         p = 1 / d
          if( f2 > safmin * g2 ) then
-            c = (1 / sqrt( one + g2/f2 )) * w
+            ! Use a precise algorithm
+            d = sqrt( w**2 + g2/f2 )
+            c = w / d
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               s = conjg( gs )*( fs / sqrt( f2*h2 ) )
+            else
+               s = conjg( gs )*( fs / ( f2*d ) )
+            end if
+            r = ( fs * d ) * u
          else
-            c = ( f2*p )*w
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               d = sqrt( f2*h2 )
+            else
+               d = sqrt( f2 )*sqrt( h2 )
+            end if
+            c = ( f2 / d )*w
+            s = conjg( gs )*( fs / d )
+            r = ( fs*( h2 / d ) )*u
          end if
-         s = conjg( gs )*( fs*p )
-         r = ( fs*( h2*p ) )*u
       end if
    end if
    return
