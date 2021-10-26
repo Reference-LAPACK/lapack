@@ -167,14 +167,13 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ALPHASQ, REALONE, REALZERO
-      PARAMETER          ( ALPHASQ = 0.01E0, REALONE = 1.0E0,
-     $                     REALZERO = 0.0E0 )
+      REAL               ALPHASQ, REALZERO
+      PARAMETER          ( ALPHASQ = 0.01E0, REALZERO = 0.0E0 )
       REAL               NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0, ZERO = 0.0E0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I
+      INTEGER            I, IX
       REAL               NORMSQ1, NORMSQ2, SCL1, SCL2, SSQ1, SSQ2
 *     ..
 *     .. External Subroutines ..
@@ -215,12 +214,21 @@
 *     space
 *
       SCL1 = REALZERO
-      SSQ1 = REALONE
+      SSQ1 = REALZERO
       CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
-      SSQ2 = REALONE
+      SSQ2 = REALZERO
       CALL SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ1 = SCL1**2*SSQ1 + SCL2**2*SSQ2
+      IF ( NORMSQ1 .EQ. 0 ) THEN
+         DO IX = 1, 1 + (M1-1)*INCX1, INCX1
+           X1( IX ) = ZERO
+         END DO
+         DO IX = 1, 1 + (M2-1)*INCX2, INCX2
+           X2( IX ) = ZERO
+         END DO
+        RETURN
+      END IF
 *
       IF( M1 .EQ. 0 ) THEN
          DO I = 1, N
@@ -239,10 +247,10 @@
      $            INCX2 )
 *
       SCL1 = REALZERO
-      SSQ1 = REALONE
+      SSQ1 = REALZERO
       CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
-      SSQ2 = REALONE
+      SSQ2 = REALZERO
       CALL SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
@@ -255,6 +263,12 @@
       END IF
 *
       IF( NORMSQ2 .EQ. ZERO ) THEN
+         DO IX = 1, 1 + (M1-1)*INCX1, INCX1
+           X1( IX ) = ZERO
+         END DO
+         DO IX = 1, 1 + (M2-1)*INCX2, INCX2
+           X2( IX ) = ZERO
+         END DO
          RETURN
       END IF
 *
@@ -281,10 +295,10 @@
      $            INCX2 )
 *
       SCL1 = REALZERO
-      SSQ1 = REALONE
+      SSQ1 = REALZERO
       CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
-      SSQ2 = REALONE
+      SSQ2 = REALZERO
       CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
@@ -293,11 +307,11 @@
 *     truncate it to zero.
 *
       IF( NORMSQ2 .LT. ALPHASQ*NORMSQ1 ) THEN
-         DO I = 1, M1
-            X1(I) = ZERO
+         DO IX = 1, 1 + (M1-1)*INCX1, INCX1
+            X1(IX) = ZERO
          END DO
-         DO I = 1, M2
-            X2(I) = ZERO
+         DO IX = 1, 1 + (M2-1)*INCX2, INCX2
+            X2(IX) = ZERO
          END DO
       END IF
 *
