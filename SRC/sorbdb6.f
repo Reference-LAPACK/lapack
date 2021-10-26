@@ -41,10 +41,15 @@
 *> with respect to the columns of
 *>      Q = [ Q1 ] .
 *>          [ Q2 ]
-*> The columns of Q must be orthonormal.
+*> The columns of Q must be orthonormal. The orthogonalized vector will
+*> be zero if and only if it lies entirely in the range of Q.
 *>
-*> If the projection is zero according to Kahan's "twice is enough"
-*> criterion, then the zero vector is returned.
+*> The projection is computed with at most two iterations of the
+*> classical Gram-Schmidt algorithm, see
+*> * L. Giraud, J. Langou, M. Rozložník. "On the round-off error
+*>   analysis of the Gram-Schmidt algorithm with reorthogonalization."
+*>   2002. CERFACS Technical Report No. TR/PA/02/33. URL:
+*>   https://www.cerfacs.fr/algor/reports/2002/TR_PA_02_33.pdf
 *>
 *>\endverbatim
 *
@@ -320,4 +325,3 @@
 *     End of SORBDB6
 *
       END
-
