@@ -224,7 +224,6 @@ subroutine CLARTG( f, g, c, s, r )
             h2 = f2 + g2
          end if
          if( f2 > safmin * g2 ) then
-            ! Use a precise algorithm
             d = sqrt( w**2 + g2/f2 )
             c = w / d
             if( f2 > rtmin .and. h2 < rtmax ) then
