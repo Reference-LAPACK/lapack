@@ -122,7 +122,7 @@ subroutine ZROTG( a, b, c, s )
    complex(wp) :: a, b, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, p, u, uu, v, vv, w
+   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w
    complex(wp) :: f, fs, g, gs, r, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -149,8 +149,7 @@ subroutine ZROTG( a, b, c, s )
 !
 !        Use unscaled algorithm
 !
-         g2 = ABSSQ( g )
-         d = sqrt( g2 )
+         d = abs( g )
          s = conjg( g ) / d
          r = d
       else
@@ -158,10 +157,8 @@ subroutine ZROTG( a, b, c, s )
 !        Use scaled algorithm
 !
          u = min( safmax, max( safmin, g1 ) )
-         uu = one / u
-         gs = g*uu
-         g2 = ABSSQ( gs )
-         d = sqrt( g2 )
+         gs = g / u
+         d = abs( gs )
          s = conjg( gs ) / d
          r = d*u
       end if
@@ -181,27 +178,24 @@ subroutine ZROTG( a, b, c, s )
          else
             d = sqrt( f2 )*sqrt( h2 )
          end if
-         p = 1 / d
-         c = f2*p
-         s = conjg( g )*( f*p )
-         r = f*( h2*p )
+         c = f2 / d
+         s = conjg( g )*( f / d )
+         r = f*( h2 / d )
       else
 !
 !        Use scaled algorithm
 !
          u = min( safmax, max( safmin, f1, g1 ) )
-         uu = one / u
-         gs = g*uu
+         gs = g / u
          g2 = ABSSQ( gs )
-         if( f1*uu < rtmin ) then
+         if( f1 / u < rtmin ) then
 !
 !           f is not well-scaled when scaled by g1.
 !           Use a different scaling for f.
 !
             v = min( safmax, max( safmin, f1 ) )
-            vv = one / v
-            w = v * uu
-            fs = f*vv
+            w = v / u
+            fs = f / v
             f2 = ABSSQ( fs )
             h2 = f2*w**2 + g2
          else
@@ -209,7 +203,7 @@ subroutine ZROTG( a, b, c, s )
 !           Otherwise use the same scaling for f and g.
 !
             w = one
-            fs = f*uu
+            fs = f / u
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
@@ -218,10 +212,9 @@ subroutine ZROTG( a, b, c, s )
          else
             d = sqrt( f2 )*sqrt( h2 )
          end if
-         p = 1 / d
-         c = ( f2*p )*w
-         s = conjg( gs )*( fs*p )
-         r = ( fs*( h2*p ) )*u
+         c = ( f2 / d )*w
+         s = conjg( gs )*( fs / d )
+         r = ( fs*( h2 / d ) )*u
       end if
    end if
    a = r

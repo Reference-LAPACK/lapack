@@ -193,7 +193,7 @@ subroutine ZLARTG( f, g, c, s, r )
          u = min( safmax, max( safmin, f1, g1 ) )
          gs = g / u
          g2 = ABSSQ( gs )
-         if( f1 < rtmin*u ) then
+         if( f1 / u < rtmin ) then
 !
 !           f is not well-scaled when scaled by g1.
 !           Use a different scaling for f.

@@ -178,25 +178,14 @@ subroutine CLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         if( f2 > safmin * g2 ) then
-            d = sqrt( one + g2/f2 )
-            c = one / d
-            if( f2 > rtmin .and. h2 < rtmax ) then
-               s = conjg( g )*( f / sqrt( f2*h2 ) )
-            else
-               s = conjg( g )*( f /( f2*d ) )
-            end if
-            r = f * d
+         if( f2 > rtmin .and. h2 < rtmax ) then
+            d = sqrt( f2*h2 )
          else
-            if( f2 > rtmin .and. h2 < rtmax ) then
-               d = sqrt( f2*h2 )
-            else
-               d = sqrt( f2 )*sqrt( h2 )
-            end if
-            c = f2 / d
-            s = conjg( g )*( f / d )
-            r = f*( h2 / d )
+            d = sqrt( f2 )*sqrt( h2 )
          end if
+         c = f2 / d
+         s = conjg( g )*( f / d )
+         r = f*( h2 / d )
       else
 !
 !        Use scaled algorithm
@@ -204,7 +193,7 @@ subroutine CLARTG( f, g, c, s, r )
          u = min( safmax, max( safmin, f1, g1 ) )
          gs = g / u
          g2 = ABSSQ( gs )
-         if( f1 < rtmin * u ) then
+         if( f1 / u < rtmin ) then
 !
 !           f is not well-scaled when scaled by g1.
 !           Use a different scaling for f.
@@ -223,25 +212,14 @@ subroutine CLARTG( f, g, c, s, r )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         if( f2 > safmin * g2 ) then
-            d = sqrt( w**2 + g2/f2 )
-            c = w / d
-            if( f2 > rtmin .and. h2 < rtmax ) then
-               s = conjg( gs )*( fs / sqrt( f2*h2 ) )
-            else
-               s = conjg( gs )*( fs / ( f2*d ) )
-            end if
-            r = ( fs * d ) * u
+         if( f2 > rtmin .and. h2 < rtmax ) then
+            d = sqrt( f2*h2 )
          else
-            if( f2 > rtmin .and. h2 < rtmax ) then
-               d = sqrt( f2*h2 )
-            else
-               d = sqrt( f2 )*sqrt( h2 )
-            end if
-            c = ( f2 / d )*w
-            s = conjg( gs )*( fs / d )
-            r = ( fs*( h2 / d ) )*u
+            d = sqrt( f2 )*sqrt( h2 )
          end if
+         c = ( f2 / d )*w
+         s = conjg( gs )*( fs / d )
+         r = ( fs*( h2 / d ) )*u
       end if
    end if
    return

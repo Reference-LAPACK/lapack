@@ -123,7 +123,7 @@ subroutine SLARTG( f, g, c, s, r )
    real(wp) :: c, f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, fs, g1, gs, p, u, uu
+   real(wp) :: d, f1, fs, g1, gs, u
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt
@@ -143,20 +143,18 @@ subroutine SLARTG( f, g, c, s, r )
    else if( f1 > rtmin .and. f1 < rtmax .and. &
             g1 > rtmin .and. g1 < rtmax ) then
       d = sqrt( f*f + g*g )
-      p = one / d
-      c = f1*p
-      s = g*sign( p, f )
+      c = f1 / d
       r = sign( d, f )
+      s = g / r
    else
       u = min( safmax, max( safmin, f1, g1 ) )
-      uu = one / u
-      fs = f*uu
-      gs = g*uu
+      fs = f / u
+      gs = g / u
       d = sqrt( fs*fs + gs*gs )
-      p = one / d
-      c = abs( fs )*p
-      s = gs*sign( p, f )
-      r = sign( d, f )*u
+      c = abs( fs ) / d
+      r = sign( d, f )
+      s = gs / r
+      r = r*u
    end if
    return
 end subroutine
