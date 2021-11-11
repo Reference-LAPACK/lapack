@@ -38,12 +38,22 @@ set(CBLAS1 scabs1.f scasum.f scnrm2.f90 icamax.f caxpy.f ccopy.f
 set(DBLAS1 idamax.f dasum.f daxpy.f dcopy.f ddot.f dnrm2.f90
 	drot.f drotg.f90 dscal.f dsdot.f dswap.f drotmg.f drotm.f)
 
+set(DB1AUX sscal.f isamax.f)
+
 set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f90 izamax.f zaxpy.f zcopy.f
 	zdotc.f zdotu.f zdscal.f zrotg.f90 zscal.f zswap.f zdrot.f)
 
-set(CB1AUX isamax.f sasum.f saxpy.f scopy.f snrm2.f90 sscal.f)
+set(CB1AUX
+    isamax.f idamax.f
+    sasum.f saxpy.f scopy.f sdot.f sgemm.f sgemv.f snrm2.f90 srot.f sscal.f
+    sswap.f)
 
-set(ZB1AUX idamax.f dasum.f daxpy.f dcopy.f dnrm2.f90 dscal.f)
+set(ZB1AUX
+    icamax.f idamax.f
+    cgemm.f cherk.f cscal.f ctrsm.f
+    dasum.f daxpy.f dcopy.f ddot.f dgemm.f dgemv.f dnrm2.f90 drot.f dscal.f
+    dswap.f
+    scabs1.f)
 
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
@@ -88,7 +98,8 @@ if(BUILD_SINGLE)
   list(APPEND SOURCES ${SBLAS1} ${ALLBLAS} ${SBLAS2} ${SBLAS3})
 endif()
 if(BUILD_DOUBLE)
-  list(APPEND SOURCES ${DBLAS1} ${ALLBLAS} ${DBLAS2} ${DBLAS3})
+  list(APPEND SOURCES
+       ${DBLAS1} ${DB1AUX} ${ALLBLAS} ${DBLAS2} ${DBLAS3} ${SBLAS3})
 endif()
 if(BUILD_COMPLEX)
   list(APPEND SOURCES ${CBLAS1} ${CB1AUX} ${ALLBLAS} ${CBLAS2} ${CBLAS3})
