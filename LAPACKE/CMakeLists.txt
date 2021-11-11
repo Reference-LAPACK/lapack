@@ -26,6 +26,15 @@ option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
 option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
 option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
 
+foreach(precision SINGLE DOUBLE COMPLEX COMPLEX16)
+  if(LAPACKE_BUILD_${precision} AND NOT BUILD_${precision})
+    message(
+      SEND_ERROR
+      "LAPACKE_BUILD_${precision} requires BUILD_${precision} to be ON"
+    )
+  endif()
+endforeach()
+
 macro(append_subdir_files variable dirname)
   get_directory_property(holder DIRECTORY ${dirname} DEFINITION ${variable})
   foreach(depfile ${holder})
