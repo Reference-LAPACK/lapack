@@ -1,4 +1,4 @@
-!> \brief \b CROTG
+!> \brief \b CROTG  generates a Givens rotation with real cosine and complex sine.
 !
 !  =========== DOCUMENTATION ===========
 !
@@ -24,12 +24,12 @@
 !>           = 1        if x  = 0
 !>    c = |a| / sqrt(|a|**2 + |b|**2)
 !>    s = sgn(a) * conjg(b) / sqrt(|a|**2 + |b|**2)
-!> When a and b are real and r /= 0, the formulas simplify to
 !>    r = sgn(a)*sqrt(|a|**2 + |b|**2)
+!> When a and b are real and r /= 0, the formulas simplify to
 !>    c = a / r
 !>    s = b / r
-!> the same as in CROTG when |a| > |b|.  When |b| >= |a|, the
-!> sign of c and s will be different from those computed by CROTG
+!> the same as in SROTG when |a| > |b|.  When |b| >= |a|, the
+!> sign of c and s will be different from those computed by SROTG
 !> if the signs of a and b are not the same.
 !>
 !> \endverbatim
@@ -65,19 +65,18 @@
 !  Authors:
 !  ========
 !
-!> \author Edward Anderson, Lockheed Martin
+!> \author Weslley Pereira, University of Colorado Denver, USA
 !
-!> \par Contributors:
-!  ==================
-!>
-!> Weslley Pereira, University of Colorado Denver, USA
+!> \date December 2021
 !
-!> \ingroup single_blas_level1
+!> \ingroup OTHERauxiliary
 !
 !> \par Further Details:
 !  =====================
 !>
 !> \verbatim
+!>
+!> Based on the algorithm from
 !>
 !>  Anderson E. (2017)
 !>  Algorithm 978: Safe Scaling in the Level 1 BLAS
@@ -108,21 +107,14 @@ subroutine CROTG( a, b, c, s )
       1-minexponent(0._wp), &
       maxexponent(0._wp)-1 &
    )
-   real(wp), parameter :: rtmin = sqrt( real(radix(0._wp),wp)**max( &
-      minexponent(0._wp)-1, &
-      1-maxexponent(0._wp) &
-   ) / epsilon(0._wp) )
-   real(wp), parameter :: rtmax = sqrt( real(radix(0._wp),wp)**max( &
-      1-minexponent(0._wp), &
-      maxexponent(0._wp)-1 &
-   ) * epsilon(0._wp) )
+   real(wp), parameter :: rtmin = sqrt( safmin )
 !  ..
 !  .. Scalar Arguments ..
    real(wp) :: c
    complex(wp) :: a, b, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w
+   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w, rtmax
    complex(wp) :: f, fs, g, gs, r, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -145,6 +137,7 @@ subroutine CROTG( a, b, c, s )
    else if( f == czero ) then
       c = zero
       g1 = max( abs(real(g)), abs(aimag(g)) )
+      rtmax = sqrt( safmax/2 )
       if( g1 > rtmin .and. g1 < rtmax ) then
 !
 !        Use unscaled algorithm
@@ -165,6 +158,7 @@ subroutine CROTG( a, b, c, s )
    else
       f1 = max( abs(real(f)), abs(aimag(f)) )
       g1 = max( abs(real(g)), abs(aimag(g)) )
+      rtmax = sqrt( safmax/4 )
       if( f1 > rtmin .and. f1 < rtmax .and. &
           g1 > rtmin .and. g1 < rtmax ) then
 !
@@ -173,14 +167,36 @@ subroutine CROTG( a, b, c, s )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
+         ! safmin <= f2 <= h2 <= safmax 
+         if( f2 >= h2 * safmin ) then
+            ! safmin <= f2/h2 <= 1, and h2/f2 is finite
+            c = sqrt( f2 / h2 )
+            r = f / c
+            rtmax = rtmax * 2
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               ! safmin <= sqrt( f2*h2 ) <= safmax
+               s = conjg( g ) * ( f / sqrt( f2*h2 ) )
+            else
+               s = conjg( g ) * ( r / h2 )
+            end if
          else
-            d = sqrt( f2 )*sqrt( h2 )
+            ! f2/h2 <= safmin may be subnormal, and h2/f2 may overflow.
+            ! Moreover,
+            !  safmin <= f2*f2 * safmax < f2 * h2 < h2*h2 * safmin <= safmax,
+            !  sqrt(safmin) <= sqrt(f2 * h2) <= sqrt(safmax).
+            ! Also,
+            !  g2 >> f2, which means that h2 = g2.
+            d = sqrt( f2 * h2 )
+            c = f2 / d
+            if( c >= safmin ) then
+               r = f / c
+            else
+               ! f2 / sqrt(f2 * h2) < safmin, then
+               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               r = f * ( h2 / d )
+            end if
+            s = conjg( g ) * ( f / d )
          end if
-         c = f2 / d
-         s = conjg( g )*( f / d )
-         r = f*( h2 / d )
       else
 !
 !        Use scaled algorithm
@@ -207,14 +223,39 @@ subroutine CROTG( a, b, c, s )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
+         ! safmin <= f2 <= h2 <= safmax 
+         if( f2 >= h2 * safmin ) then
+            ! safmin <= f2/h2 <= 1, and h2/f2 is finite
+            c = sqrt( f2 / h2 )
+            r = fs / c
+            rtmax = rtmax * 2
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               ! safmin <= sqrt( f2*h2 ) <= safmax
+               s = conjg( gs ) * ( fs / sqrt( f2*h2 ) )
+            else
+               s = conjg( gs ) * ( r / h2 )
+            end if
          else
-            d = sqrt( f2 )*sqrt( h2 )
+            ! f2/h2 <= safmin may be subnormal, and h2/f2 may overflow.
+            ! Moreover,
+            !  safmin <= f2*f2 * safmax < f2 * h2 < h2*h2 * safmin <= safmax,
+            !  sqrt(safmin) <= sqrt(f2 * h2) <= sqrt(safmax).
+            ! Also,
+            !  g2 >> f2, which means that h2 = g2.
+            d = sqrt( f2 * h2 )
+            c = f2 / d
+            if( c >= safmin ) then
+               r = fs / c
+            else
+               ! f2 / sqrt(f2 * h2) < safmin, then
+               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               r = fs * ( h2 / d )
+            end if
+            s = conjg( gs ) * ( fs / d )
          end if
-         c = ( f2 / d )*w
-         s = conjg( gs )*( fs / d )
-         r = ( fs*( h2 / d ) )*u
+         ! Rescale c and r
+         c = c * w
+         r = r * u
       end if
    end if
    a = r

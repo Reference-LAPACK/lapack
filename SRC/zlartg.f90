@@ -11,8 +11,8 @@
 !       SUBROUTINE ZLARTG( F, G, C, S, R )
 !
 !       .. Scalar Arguments ..
-!       REAL(wp)           C
-!       COMPLEX(wp)        F, G, R, S
+!       REAL(wp)              C
+!       COMPLEX(wp)           F, G, R, S
 !       ..
 !
 !> \par Purpose:
@@ -30,13 +30,17 @@
 !> The mathematical formulas used for C and S are
 !>
 !>    sgn(x) = {  x / |x|,   x != 0
-!>             {  1,         x = 0
+!>             {  1,         x  = 0
 !>
 !>    R = sgn(F) * sqrt(|F|**2 + |G|**2)
 !>
 !>    C = |F| / sqrt(|F|**2 + |G|**2)
 !>
 !>    S = sgn(F) * conjg(G) / sqrt(|F|**2 + |G|**2)
+!>
+!> Special conditions:
+!>    If G=0, then C=1 and S=0.
+!>    If F=0, then C=0 and S is chosen so that R is real.
 !>
 !> When F and G are real, the formulas simplify to C = F/R and
 !> S = G/R, and the returned values of C, S, and R should be
@@ -46,11 +50,8 @@
 !> to avoid overflow or underflow in computing the square root of the
 !> sum of squares.
 !>
-!> This is a faster version of the BLAS1 routine ZROTG, except for
-!> the following differences:
-!>    F and G are unchanged on return.
-!>    If G=0, then C=1 and S=0.
-!>    If F=0, then C=0 and S is chosen so that R is real.
+!> This is the same routine CROTG fom BLAS1, except that
+!> F and G are unchanged on return.
 !>
 !> Below, wp=>dp stands for double precision from LA_CONSTANTS module.
 !> \endverbatim
@@ -91,21 +92,18 @@
 !  Authors:
 !  ========
 !
-!> \author Edward Anderson, Lockheed Martin
+!> \author Weslley Pereira, University of Colorado Denver, USA
 !
-!> \date August 2016
+!> \date December 2021
 !
 !> \ingroup OTHERauxiliary
-!
-!> \par Contributors:
-!  ==================
-!>
-!> Weslley Pereira, University of Colorado Denver, USA
 !
 !> \par Further Details:
 !  =====================
 !>
 !> \verbatim
+!>
+!> Based on the algorithm from
 !>
 !>  Anderson E. (2017)
 !>  Algorithm 978: Safe Scaling in the Level 1 BLAS
@@ -117,7 +115,7 @@
 subroutine ZLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>dp, zero=>dzero, one=>done, two=>dtwo, czero=>zzero, &
-         rtmin=>drtmin, rtmax=>drtmax, safmin=>dsafmin, safmax=>dsafmax
+         safmin=>dsafmin, safmax=>dsafmax
 !
 !  -- LAPACK auxiliary routine (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +127,7 @@ subroutine ZLARTG( f, g, c, s, r )
    complex(wp)        f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w
+   real(wp) :: d, f1, f2, g1, g2, h2, u, v, w, rtmin, rtmax
    complex(wp) :: fs, gs, t
 !  ..
 !  .. Intrinsic Functions ..
@@ -141,6 +139,9 @@ subroutine ZLARTG( f, g, c, s, r )
 !  .. Statement Function definitions ..
    ABSSQ( t ) = real( t )**2 + aimag( t )**2
 !  ..
+!  .. Constants ..
+   rtmin = sqrt( safmin )
+!  ..
 !  .. Executable Statements ..
 !
    if( g == czero ) then
@@ -150,6 +151,7 @@ subroutine ZLARTG( f, g, c, s, r )
    else if( f == czero ) then
       c = zero
       g1 = max( abs(real(g)), abs(aimag(g)) )
+      rtmax = sqrt( safmax/2 )
       if( g1 > rtmin .and. g1 < rtmax ) then
 !
 !        Use unscaled algorithm
@@ -170,6 +172,7 @@ subroutine ZLARTG( f, g, c, s, r )
    else
       f1 = max( abs(real(f)), abs(aimag(f)) )
       g1 = max( abs(real(g)), abs(aimag(g)) )
+      rtmax = sqrt( safmax/4 )
       if( f1 > rtmin .and. f1 < rtmax .and. &
           g1 > rtmin .and. g1 < rtmax ) then
 !
@@ -178,14 +181,36 @@ subroutine ZLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
+         ! safmin <= f2 <= h2 <= safmax 
+         if( f2 >= h2 * safmin ) then
+            ! safmin <= f2/h2 <= 1, and h2/f2 is finite
+            c = sqrt( f2 / h2 )
+            r = f / c
+            rtmax = rtmax * 2
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               ! safmin <= sqrt( f2*h2 ) <= safmax
+               s = conjg( g ) * ( f / sqrt( f2*h2 ) )
+            else
+               s = conjg( g ) * ( r / h2 )
+            end if
          else
-            d = sqrt( f2 )*sqrt( h2 )
+            ! f2/h2 <= safmin may be subnormal, and h2/f2 may overflow.
+            ! Moreover,
+            !  safmin <= f2*f2 * safmax < f2 * h2 < h2*h2 * safmin <= safmax,
+            !  sqrt(safmin) <= sqrt(f2 * h2) <= sqrt(safmax).
+            ! Also,
+            !  g2 >> f2, which means that h2 = g2.
+            d = sqrt( f2 * h2 )
+            c = f2 / d
+            if( c >= safmin ) then
+               r = f / c
+            else
+               ! f2 / sqrt(f2 * h2) < safmin, then
+               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               r = f * ( h2 / d )
+            end if
+            s = conjg( g ) * ( f / d )
          end if
-         c = f2 / d
-         s = conjg( g )*( f / d )
-         r = f*( h2 / d )
       else
 !
 !        Use scaled algorithm
@@ -212,14 +237,39 @@ subroutine ZLARTG( f, g, c, s, r )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         if( f2 > rtmin .and. h2 < rtmax ) then
-            d = sqrt( f2*h2 )
+         ! safmin <= f2 <= h2 <= safmax 
+         if( f2 >= h2 * safmin ) then
+            ! safmin <= f2/h2 <= 1, and h2/f2 is finite
+            c = sqrt( f2 / h2 )
+            r = fs / c
+            rtmax = rtmax * 2
+            if( f2 > rtmin .and. h2 < rtmax ) then
+               ! safmin <= sqrt( f2*h2 ) <= safmax
+               s = conjg( gs ) * ( fs / sqrt( f2*h2 ) )
+            else
+               s = conjg( gs ) * ( r / h2 )
+            end if
          else
-            d = sqrt( f2 )*sqrt( h2 )
+            ! f2/h2 <= safmin may be subnormal, and h2/f2 may overflow.
+            ! Moreover,
+            !  safmin <= f2*f2 * safmax < f2 * h2 < h2*h2 * safmin <= safmax,
+            !  sqrt(safmin) <= sqrt(f2 * h2) <= sqrt(safmax).
+            ! Also,
+            !  g2 >> f2, which means that h2 = g2.
+            d = sqrt( f2 * h2 )
+            c = f2 / d
+            if( c >= safmin ) then
+               r = fs / c
+            else
+               ! f2 / sqrt(f2 * h2) < safmin, then
+               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               r = fs * ( h2 / d )
+            end if
+            s = conjg( gs ) * ( fs / d )
          end if
-         c = ( f2 / d )*w
-         s = conjg( gs )*( fs / d )
-         r = ( fs*( h2 / d ) )*u
+         ! Rescale c and r
+         c = c * w
+         r = r * u
       end if
    end if
    return

@@ -11,7 +11,7 @@
 !       SUBROUTINE DLARTG( F, G, C, S, R )
 !
 !       .. Scalar Arguments ..
-!       REAL(wp)      C, F, G, R, S
+!       REAL(wp)          C, F, G, R, S
 !       ..
 !
 !> \par Purpose:
@@ -37,15 +37,13 @@
 !> This version is discontinuous in R at F = 0 but it returns the same
 !> C and S as ZLARTG for complex inputs (F,0) and (G,0).
 !>
-!> This is a more accurate version of the BLAS1 routine DROTG,
+!> This is a more accurate version of the BLAS1 routine SROTG,
 !> with the following other differences:
 !>    F and G are unchanged on return.
 !>    If G=0, then C=1 and S=0.
 !>    If F=0 and (G .ne. 0), then C=0 and S=sign(1,G) without doing any
 !>       floating point operations (saves work in DBDSQR when
 !>       there are zeros on the diagonal).
-!>
-!> If F exceeds G in magnitude, C will be positive.
 !>
 !> Below, wp=>dp stands for double precision from LA_CONSTANTS module.
 !> \endverbatim
@@ -112,7 +110,7 @@
 subroutine DLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>dp, zero=>dzero, half=>dhalf, one=>done, &
-         rtmin=>drtmin, rtmax=>drtmax, safmin=>dsafmin, safmax=>dsafmax
+         safmin=>dsafmin, safmax=>dsafmax
 !
 !  -- LAPACK auxiliary routine (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,10 +121,14 @@ subroutine DLARTG( f, g, c, s, r )
    real(wp) :: c, f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, fs, g1, gs, u
+   real(wp) :: d, f1, fs, g1, gs, u, rtmin, rtmax
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt
+!  ..
+!  .. Constants ..
+   rtmin = sqrt( safmin )
+   rtmax = sqrt( safmax/2 )
 !  ..
 !  .. Executable Statements ..
 !
@@ -154,7 +156,7 @@ subroutine DLARTG( f, g, c, s, r )
       c = abs( fs ) / d
       r = sign( d, f )
       s = gs / r
-      r = r * u
+      r = r*u
    end if
    return
 end subroutine

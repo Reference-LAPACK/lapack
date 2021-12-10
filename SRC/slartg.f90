@@ -35,7 +35,7 @@
 !> square root of the sum of squares.
 !>
 !> This version is discontinuous in R at F = 0 but it returns the same
-!> C and S as SLARTG for complex inputs (F,0) and (G,0).
+!> C and S as CLARTG for complex inputs (F,0) and (G,0).
 !>
 !> This is a more accurate version of the BLAS1 routine SROTG,
 !> with the following other differences:
@@ -44,8 +44,6 @@
 !>    If F=0 and (G .ne. 0), then C=0 and S=sign(1,G) without doing any
 !>       floating point operations (saves work in SBDSQR when
 !>       there are zeros on the diagonal).
-!>
-!> If F exceeds G in magnitude, C will be positive.
 !>
 !> Below, wp=>sp stands for single precision from LA_CONSTANTS module.
 !> \endverbatim
@@ -112,7 +110,7 @@
 subroutine SLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>sp, zero=>szero, half=>shalf, one=>sone, &
-         rtmin=>srtmin, rtmax=>srtmax, safmin=>ssafmin, safmax=>ssafmax
+         safmin=>ssafmin, safmax=>ssafmax
 !
 !  -- LAPACK auxiliary routine (version 3.10.0) --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,10 +121,14 @@ subroutine SLARTG( f, g, c, s, r )
    real(wp) :: c, f, g, r, s
 !  ..
 !  .. Local Scalars ..
-   real(wp) :: d, f1, fs, g1, gs, u
+   real(wp) :: d, f1, fs, g1, gs, u, rtmin, rtmax
 !  ..
 !  .. Intrinsic Functions ..
    intrinsic :: abs, sign, sqrt
+!  ..
+!  .. Constants ..
+   rtmin = sqrt( safmin )
+   rtmax = sqrt( safmax/2 )
 !  ..
 !  .. Executable Statements ..
 !

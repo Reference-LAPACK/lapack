@@ -30,7 +30,7 @@
 !> The mathematical formulas used for C and S are
 !>
 !>    sgn(x) = {  x / |x|,   x != 0
-!>             {  1,         x = 0
+!>             {  1,         x  = 0
 !>
 !>    R = sgn(F) * sqrt(|F|**2 + |G|**2)
 !>
@@ -38,19 +38,20 @@
 !>
 !>    S = sgn(F) * conjg(G) / sqrt(|F|**2 + |G|**2)
 !>
+!> Special conditions:
+!>    If G=0, then C=1 and S=0.
+!>    If F=0, then C=0 and S is chosen so that R is real.
+!>
 !> When F and G are real, the formulas simplify to C = F/R and
 !> S = G/R, and the returned values of C, S, and R should be
-!> identical to those returned by CLARTG.
+!> identical to those returned by SLARTG.
 !>
 !> The algorithm used to compute these quantities incorporates scaling
 !> to avoid overflow or underflow in computing the square root of the
 !> sum of squares.
 !>
-!> This is a faster version of the BLAS1 routine CROTG, except for
-!> the following differences:
-!>    F and G are unchanged on return.
-!>    If G=0, then C=1 and S=0.
-!>    If F=0, then C=0 and S is chosen so that R is real.
+!> This is the same routine CROTG fom BLAS1, except that
+!> F and G are unchanged on return.
 !>
 !> Below, wp=>sp stands for single precision from LA_CONSTANTS module.
 !> \endverbatim
@@ -91,21 +92,18 @@
 !  Authors:
 !  ========
 !
-!> \author Edward Anderson, Lockheed Martin
+!> \author Weslley Pereira, University of Colorado Denver, USA
 !
-!> \date August 2016
+!> \date December 2021
 !
 !> \ingroup OTHERauxiliary
-!
-!> \par Contributors:
-!  ==================
-!>
-!> Weslley Pereira, University of Colorado Denver, USA
 !
 !> \par Further Details:
 !  =====================
 !>
 !> \verbatim
+!>
+!> Based on the algorithm from
 !>
 !>  Anderson E. (2017)
 !>  Algorithm 978: Safe Scaling in the Level 1 BLAS
