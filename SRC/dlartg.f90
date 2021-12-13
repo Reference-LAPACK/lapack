@@ -37,7 +37,7 @@
 !> This version is discontinuous in R at F = 0 but it returns the same
 !> C and S as ZLARTG for complex inputs (F,0) and (G,0).
 !>
-!> This is a more accurate version of the BLAS1 routine SROTG,
+!> This is a more accurate version of the BLAS1 routine DROTG,
 !> with the following other differences:
 !>    F and G are unchanged on return.
 !>    If G=0, then C=1 and S=0.

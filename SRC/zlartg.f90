@@ -50,7 +50,7 @@
 !> to avoid overflow or underflow in computing the square root of the
 !> sum of squares.
 !>
-!> This is the same routine CROTG fom BLAS1, except that
+!> This is the same routine ZROTG fom BLAS1, except that
 !> F and G are unchanged on return.
 !>
 !> Below, wp=>dp stands for double precision from LA_CONSTANTS module.
