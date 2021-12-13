@@ -69,7 +69,7 @@
 !
 !> \date December 2021
 !
-!> \ingroup OTHERauxiliary
+!> \ingroup single_blas_level1
 !
 !> \par Further Details:
 !  =====================
@@ -136,24 +136,38 @@ subroutine ZROTG( a, b, c, s )
       r = f
    else if( f == czero ) then
       c = zero
-      g1 = max( abs(real(g)), abs(aimag(g)) )
-      rtmax = sqrt( safmax/2 )
-      if( g1 > rtmin .and. g1 < rtmax ) then
+      if( real(g) == zero ) then
+         r = abs(aimag(g))
+         s = conjg( g ) / r
+      elseif( aimag(g) == zero ) then
+         r = abs(real(g))
+         s = conjg( g ) / r
+      else
+         g1 = max( abs(real(g)), abs(aimag(g)) )
+         rtmax = sqrt( safmax/2 )
+         if( g1 > rtmin .and. g1 < rtmax ) then
 !
 !        Use unscaled algorithm
 !
-         d = abs( g )
-         s = conjg( g ) / d
-         r = d
-      else
+!           The following two lines can be replaced by `d = abs( g )`.
+!           This algorithm do not use the intrinsic complex abs.
+            g2 = ABSSQ( g )
+            d = sqrt( g2 )
+            s = conjg( g ) / d
+            r = d
+         else
 !
 !        Use scaled algorithm
 !
-         u = min( safmax, max( safmin, g1 ) )
-         gs = g / u
-         d = abs( gs )
-         s = conjg( gs ) / d
-         r = d*u
+            u = min( safmax, max( safmin, g1 ) )
+            gs = g / u
+!           The following two lines can be replaced by `d = abs( gs )`.
+!           This algorithm do not use the intrinsic complex abs.
+            g2 = ABSSQ( gs )
+            d = sqrt( g2 )
+            s = conjg( gs ) / d
+            r = d*u
+         end if
       end if
    else
       f1 = max( abs(real(f)), abs(aimag(f)) )
@@ -192,7 +206,7 @@ subroutine ZROTG( a, b, c, s )
                r = f / c
             else
                ! f2 / sqrt(f2 * h2) < safmin, then
-               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               !  sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
                r = f * ( h2 / d )
             end if
             s = conjg( g ) * ( f / d )
@@ -248,7 +262,7 @@ subroutine ZROTG( a, b, c, s )
                r = fs / c
             else
                ! f2 / sqrt(f2 * h2) < safmin, then
-               !  h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
+               !  sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2) <= h2 * (safmin / f2) <= h2 <= safmax
                r = fs * ( h2 / d )
             end if
             s = conjg( gs ) * ( fs / d )
