@@ -21,8 +21,8 @@ environment:
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
 #  - conda config --set auto_update_conda false
-  - conda clean --yes --packages
   - conda config --add channels conda-forge --force
+  - conda install --yes charset-normalizer --force  
   - conda update --yes -n base conda
   - conda install --yes --quiet flang jom
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
