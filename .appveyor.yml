@@ -21,7 +21,7 @@ environment:
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
 #  - conda config --set auto_update_conda false
-  - conda clean --packages
+  - conda clean --yes --packages
   - conda update --yes -n base conda
   - conda config --add channels conda-forge --force
   - conda install --yes --quiet flang jom
