@@ -29,9 +29,10 @@
 *> DTPT02 computes the residual for the computed solution to a
 *> triangular system of linear equations op(A)*X = B, when the
 *> triangular matrix A is stored in packed format. The test ratio is
-*> the maximum over the number of right hand sides of
-*>    norm(op(A)*X - B) / ( norm(op(A)) * norm(X) * EPS ),
-*> where op(A) = A or A**T, and EPS is the machine epsilon.
+*> the maximum over
+*>    norm(b - op(A)*x) / ( ||op(A)||_1 * norm(x) * EPS ),
+*> where op(A) = A or A**T, b is the column of B, x is the solution
+*> vector, and EPS is the machine epsilon.
 *> The norm used is the 1-norm.
 *> \endverbatim
 *

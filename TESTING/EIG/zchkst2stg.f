@@ -1072,7 +1072,6 @@
                END IF
             END IF
 *
-*
 *           Do Tests 3 and 4 which are similar to 11 and 12 but with the
 *           D1 computed using the standard 1-stage reduction as reference
 *
@@ -1735,7 +1734,6 @@
                         END IF
                      END IF
 *
-*
 *                 Do test 28
 *
                      TEMP2 = TWO*( TWO*N-ONE )*ULP*
@@ -1792,7 +1790,6 @@
 *
 *           Do Tests 29 and 30
 *
-*
 *           Call ZSTEMR to compute D2, do tests.
 *
 *           Compute D2
@@ -1831,7 +1828,6 @@
 *
                   RESULT( 31 ) = TEMP2 / MAX( UNFL,
      $                           ULP*MAX( TEMP1, TEMP2 ) )
-*
 *
 *           Call ZSTEMR(V,V) to compute D1 and Z, do tests.
 *
@@ -1934,7 +1930,6 @@
                   RESULT( 34 ) = ZERO
                END IF
 *
-*
 *           Call ZSTEMR(V,A) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
@@ -1991,7 +1986,7 @@
                   END IF
                END IF
 *
-*           Do Test 34
+*           Do Test 37
 *
                TEMP1 = ZERO
                TEMP2 = ZERO
@@ -2009,7 +2004,6 @@
             NTESTT = NTESTT + NTEST
 *
 *           End of Loop -- Check for RESULT(j) > THRESH
-*
 *
 *           Print out tests which fail.
 *

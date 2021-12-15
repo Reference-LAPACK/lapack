@@ -10,13 +10,16 @@ void
 #ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
 __attribute__((weak))
 #endif
-F77_xerbla
+F77_xerbla_base
 #ifdef F77_CHAR
-(F77_CHAR F77_srname, void *vinfo)
+(F77_CHAR F77_srname, void *vinfo
 #else
-(char *srname, void *vinfo)
+(char *srname, void *vinfo
 #endif
-
+#ifdef BLAS_FORTRAN_STRLEN_END
+, size_t len
+#endif
+)
 {
 #ifdef F77_CHAR
    char *srname;

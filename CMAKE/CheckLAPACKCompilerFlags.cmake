@@ -14,6 +14,26 @@ macro( CheckLAPACKCompilerFlags )
 
 set( FPE_EXIT FALSE )
 
+# FORTRAN ILP default
+if ( FORTRAN_ILP )
+    if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+        if ( WIN32 )
+            set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /integer-size:64")
+        else ()
+            set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -integer-size 64")
+        endif()
+    else()
+        set(CPE_ENV $ENV{PE_ENV})
+        if(CPE_ENV STREQUAL "CRAY")
+          set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -sinteger64")
+        elseif(CPE_ENV STREQUAL "NVIDIA")
+          set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -i8")
+        else()
+          set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-integer-8")  
+        endif()        
+    endif()
+endif()
+
 # GNU Fortran
 if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
   if( "${CMAKE_Fortran_FLAGS}" MATCHES "-ffpe-trap=[izoupd]")

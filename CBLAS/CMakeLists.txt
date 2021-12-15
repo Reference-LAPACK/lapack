@@ -11,9 +11,7 @@ FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/cblas_mangling.h
                          MACRO_NAMESPACE "F77_"
                          SYMBOL_NAMESPACE "F77_")
 if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
-  message(WARNING "Reverting to pre-defined include/lapacke_mangling.h")
-    configure_file(include/lapacke_mangling_with_flags.h.in
-                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
+  message(WARNING "Reverting to pre-defined include/cblas_mangling.h")
     configure_file(include/cblas_mangling_with_flags.h.in
                  ${LAPACK_BINARY_DIR}/include/cblas_mangling.h)
 endif()

@@ -11,7 +11,7 @@
 !  CROTG constructs a plane rotation
 !     [  c         s ] [ a ] = [ r ]
 !     [ -conjg(s)  c ] [ b ]   [ 0 ]
-!  where c is real, s ic complex, and c**2 + conjg(s)*s = 1.
+!  where c is real, s is complex, and c**2 + conjg(s)*s = 1.
 !
 !> \par Purpose:
 !  =============
@@ -28,8 +28,8 @@
 !>    r = sgn(a)*sqrt(|a|**2 + |b|**2)
 !>    c = a / r
 !>    s = b / r
-!> the same as in CROTG when |a| > |b|.  When |b| >= |a|, the
-!> sign of c and s will be different from those computed by CROTG
+!> the same as in SROTG when |a| > |b|.  When |b| >= |a|, the
+!> sign of c and s will be different from those computed by SROTG
 !> if the signs of a and b are not the same.
 !>
 !> \endverbatim

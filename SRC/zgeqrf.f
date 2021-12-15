@@ -95,7 +95,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise.
 *>          For optimum performance LWORK >= N*NB, where NB is
 *>          the optimal blocksize.
 *>
@@ -175,10 +176,9 @@
 *
 *     Test the input arguments
 *
+      K = MIN( M, N )
       INFO = 0
       NB = ILAENV( 1, 'ZGEQRF', ' ', M, N, -1, -1 )
-      LWKOPT = N*NB
-      WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -186,19 +186,25 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -4
-      ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN
-         INFO = -7
+      ELSE IF( .NOT.LQUERY ) THEN
+         IF( LWORK.LE.0 .OR. ( M.GT.0 .AND. LWORK.LT.MAX( 1, N ) ) )
+     $      INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZGEQRF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
+         IF( K.EQ.0 ) THEN
+            LWKOPT = 1
+         ELSE
+            LWKOPT = N*NB
+         END IF
+         WORK( 1 ) = LWKOPT
          RETURN
       END IF
 *
 *     Quick return if possible
 *
-      K = MIN( M, N )
       IF( K.EQ.0 ) THEN
          WORK( 1 ) = 1
          RETURN

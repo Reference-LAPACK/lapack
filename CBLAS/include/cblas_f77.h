@@ -10,6 +10,7 @@
 #define CBLAS_F77_H
 
 #include <stdarg.h>
+#include <stdint.h>
 
 /* It seems all current Fortran compilers put strlen at end.
 *  Some historical compilers put strlen after the str argument
@@ -24,10 +25,12 @@
    #define F77_STRLEN(a) (_fcdlen)
 #endif
 
+#ifndef F77_INT
 #ifdef WeirdNEC
-   #define F77_INT long
+   #define F77_INT int64_t
 #else
-   #define F77_INT int
+   #define F77_INT int32_t
+#endif
 #endif
 
 #ifdef  F77_CHAR
@@ -527,7 +530,11 @@
 extern "C" {
 #endif
 
-void F77_xerbla(FCHAR, void *);
+#ifdef BLAS_FORTRAN_STRLEN_END
+  #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__, 1)
+#else
+  #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__)
+#endif
 void F77_xerbla_base(FCHAR, void *
    #ifdef BLAS_FORTRAN_STRLEN_END
       , size_t
