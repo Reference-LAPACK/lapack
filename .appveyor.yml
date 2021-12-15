@@ -22,7 +22,7 @@ install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
   - conda config --set auto_update_conda false
   - conda config --add channels conda-forge --force
-  - conda install --yes conda=4.10.3 --force
+  - conda install --yes conda=4.3.8 --force
   - conda install --yes charset-normalizer --force  
   - conda update --yes -n base conda
   - conda install --yes --quiet flang jom
