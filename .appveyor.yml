@@ -24,7 +24,7 @@ install:
   - conda config --add channels conda-forge --force
   - conda clean --all --yes
 #  - conda install --yes conda=4.3.8 --force
-#  - conda install --yes charset-normalizer --force  
+  - conda install --yes -c conda-forge charset-normalizer=2.0.5 --force  
 #  - conda update --yes -n base conda
   - conda install --yes --quiet flang jom
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
