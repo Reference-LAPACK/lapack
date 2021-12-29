@@ -215,7 +215,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER.
+*>          LWORK is INTEGER
 *>          Length of CWORK, LWORK >= M+N.
 *> \endverbatim
 *>

@@ -148,7 +148,7 @@
 *>
 *> \param[in] LDA
 *> \verbatim
-*>          LDA is INTEGER.
+*>          LDA is INTEGER
 *>          The leading dimension of the array A.  LDA >= max(1,M).
 *> \endverbatim
 *>
@@ -173,7 +173,7 @@
 *>
 *> \param[in] LDU
 *> \verbatim
-*>          LDU is INTEGER.
+*>          LDU is INTEGER
 *>          The leading dimension of the array U.
 *>          If JOBU = 'A', 'S', 'U', 'R',  LDU >= max(1,M).
 *>          If JOBU = 'F',                 LDU >= max(1,N).
@@ -327,7 +327,7 @@
 *>
 *> \param[in] LRWORK
 *> \verbatim
-*>          LRWORK is INTEGER.
+*>          LRWORK is INTEGER
 *>          The dimension of the array RWORK.
 *>          If JOBP ='P', then LRWORK >= MAX(2, M).
 *>          Otherwise, LRWORK >= 2
