@@ -51,8 +51,8 @@
 *> left and the right singular vectors of A, respectively.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBA
 *> \verbatim
