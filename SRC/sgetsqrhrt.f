@@ -131,6 +131,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
+*>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          LWORK >= MAX( LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
 *>          where
