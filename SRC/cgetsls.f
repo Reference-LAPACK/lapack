@@ -118,7 +118,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          workspace
 *>          On exit, if INFO = 0, WORK(1) contains optimal (or either minimal
 *>          or optimal, if query was assumed) LWORK.
 *>          See LWORK for details.
@@ -131,7 +132,7 @@
 *>          If LWORK = -1 or -2, then a workspace query is assumed.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
-*>          If LWORK = -2, the routine calculates minimal size of WORK and 
+*>          If LWORK = -2, the routine calculates minimal size of WORK and
 *>          returns this value in WORK(1).
 *> \endverbatim
 *>

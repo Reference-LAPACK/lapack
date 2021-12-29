@@ -111,7 +111,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          workspace
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -120,7 +121,7 @@
 *>          The dimension of the array WORK.
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
-*>          value as WORK(1), and no error message related to WORK 
+*>          value as WORK(1), and no error message related to WORK
 *>          is issued by XERBLA.
 *> \endverbatim
 *>
@@ -144,7 +145,7 @@
 *>
 *> \verbatim
 *>
-*> These details are particular for this LAPACK implementation. Users should not 
+*> These details are particular for this LAPACK implementation. Users should not
 *> take them for granted. These details may change in the future, and are not likely
 *> true for another LAPACK implementation. These details are relevant if one wants
 *> to try to understand the code. They are not part of the interface.

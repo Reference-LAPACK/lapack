@@ -54,7 +54,7 @@
 *>          On exit, the elements on and above the diagonal of the array
 *>          contain the min(M,N)-by-N upper trapezoidal matrix R
 *>          (R is upper triangular if M >= N);
-*>          the elements below the diagonal are used to store part of the 
+*>          the elements below the diagonal are used to store part of the
 *>          data structure to represent Q.
 *> \endverbatim
 *>
@@ -67,10 +67,10 @@
 *> \param[out] T
 *> \verbatim
 *>          T is REAL array, dimension (MAX(5,TSIZE))
-*>          On exit, if INFO = 0, T(1) returns optimal (or either minimal 
+*>          On exit, if INFO = 0, T(1) returns optimal (or either minimal
 *>          or optimal, if query is assumed) TSIZE. See TSIZE for details.
 *>          Remaining T contains part of the data structure used to represent Q.
-*>          If one wants to apply or construct Q, then one needs to keep T 
+*>          If one wants to apply or construct Q, then one needs to keep T
 *>          (in addition to A) and pass it to further subroutines.
 *> \endverbatim
 *>
@@ -82,15 +82,16 @@
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
 *>          message related to T or WORK is issued by XERBLA.
-*>          If TSIZE = -1, the routine calculates optimal size of T for the 
+*>          If TSIZE = -1, the routine calculates optimal size of T for the
 *>          optimum performance and returns this value in T(1).
-*>          If TSIZE = -2, the routine calculates minimal size of T and 
+*>          If TSIZE = -2, the routine calculates minimal size of T and
 *>          returns this value in T(1).
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) REAL array, dimension (MAX(1,LWORK))
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          workspace
 *>          On exit, if INFO = 0, WORK(1) contains optimal (or either minimal
 *>          or optimal, if query was assumed) LWORK.
 *>          See LWORK for details.
@@ -106,7 +107,7 @@
 *>          message related to T or WORK is issued by XERBLA.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
-*>          If LWORK = -2, the routine calculates minimal size of WORK and 
+*>          If LWORK = -2, the routine calculates minimal size of WORK and
 *>          returns this value in WORK(1).
 *> \endverbatim
 *>
@@ -131,15 +132,15 @@
 *> \verbatim
 *>
 *> The goal of the interface is to give maximum freedom to the developers for
-*> creating any QR factorization algorithm they wish. The triangular 
+*> creating any QR factorization algorithm they wish. The triangular
 *> (trapezoidal) R has to be stored in the upper part of A. The lower part of A
 *> and the array T can be used to store any relevant information for applying or
 *> constructing the Q factor. The WORK array can safely be discarded after exit.
 *>
-*> Caution: One should not expect the sizes of T and WORK to be the same from one 
+*> Caution: One should not expect the sizes of T and WORK to be the same from one
 *> LAPACK implementation to the other, or even from one execution to the other.
-*> A workspace query (for T and WORK) is needed at each execution. However, 
-*> for a given execution, the size of T and WORK are fixed and will not change 
+*> A workspace query (for T and WORK) is needed at each execution. However,
+*> for a given execution, the size of T and WORK are fixed and will not change
 *> from one query to the next.
 *>
 *> \endverbatim
@@ -149,7 +150,7 @@
 *>
 *> \verbatim
 *>
-*> These details are particular for this LAPACK implementation. Users should not 
+*> These details are particular for this LAPACK implementation. Users should not
 *> take them for granted. These details may change in the future, and are not likely
 *> true for another LAPACK implementation. These details are relevant if one wants
 *> to try to understand the code. They are not part of the interface.

@@ -101,9 +101,9 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK))
-*> \endverbatim
-*>
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          workspace
+*> \endverbatim*>
 *> \param[in] LWORK
 *> \verbatim
 *>          The dimension of the array WORK.  LWORK >= NB*N.

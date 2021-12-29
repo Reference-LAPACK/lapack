@@ -124,7 +124,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) REAL array, dimension (MAX(1,LWORK))
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          workspace
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>

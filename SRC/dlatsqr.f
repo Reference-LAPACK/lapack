@@ -101,7 +101,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>         WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>         workspace
 *> \endverbatim
 *>
 *> \param[in] LWORK
