@@ -123,7 +123,8 @@
 *>
 *> \param[in] LDU
 *> \verbatim
-*>          LDU is INTEGER, LDU = > N.
+*>         LDU is INTEGER
+*>         LDU = > N.
 *>         The leading dimension of arrays U, VT, DIFL, DIFR,
 *>         POLES, GIVNUM, and Z.
 *> \endverbatim
@@ -190,7 +191,8 @@
 *>
 *> \param[in] LDGCOL
 *> \verbatim
-*>          LDGCOL is INTEGER, LDGCOL = > N.
+*>         LDGCOL is INTEGER
+*>         LDGCOL = > N.
 *>         The leading dimension of arrays GIVCOL and PERM.
 *> \endverbatim
 *>
