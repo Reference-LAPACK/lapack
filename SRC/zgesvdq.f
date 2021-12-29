@@ -238,7 +238,7 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*>          CWORK is COMPLEX*12 array, dimension (max(2, LCWORK)), used as a workspace.
+*>          CWORK is COMPLEX*16 array, dimension (max(2, LCWORK)), used as a workspace.
 *>          On exit, if, on entry, LCWORK.NE.-1, CWORK(1:N) contains parameters
 *>          needed to recover the Q factor from the QR factorization computed by
 *>          ZGEQP3.
