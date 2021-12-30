@@ -68,7 +68,7 @@
 *>
 *> \param[in,out] RHS
 *> \verbatim
-*>          RHS is COMPLEX*16 array, dimension N.
+*>          RHS is COMPLEX*16 array, dimension (N)
 *>          On entry, the right hand side vector b.
 *>          On exit, the solution vector X.
 *> \endverbatim

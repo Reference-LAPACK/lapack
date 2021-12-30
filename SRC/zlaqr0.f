@@ -151,7 +151,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension LWORK
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
 *>           On exit, if LWORK = -1, WORK(1) returns an estimate of
 *>           the optimal value for LWORK.
 *> \endverbatim

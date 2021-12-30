@@ -154,7 +154,7 @@
 *>
 *> \param[out] S
 *> \verbatim
-*>          S is DOUBLE PRECISION array of dimension N.
+*>          S is DOUBLE PRECISION array of dimension (N)
 *>          The singular values of A, ordered so that S(i) >= S(i+1).
 *> \endverbatim
 *>
