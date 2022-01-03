@@ -58,6 +58,20 @@ if( TEST_FORTRAN_COMPILER )
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
     COMMENT "Running test_zcomplexdiv in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexdiv.err"
     SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
+
+  add_executable( test_zcomplexmult ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
+  add_custom_target( run_test_zcomplexmult
+    COMMAND test_zcomplexmult 2> test_zcomplexmult.err
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
+    COMMENT "Running test_zcomplexmult in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexmult.err"
+    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
+
+  add_executable( test_zminMax ${LAPACK_SOURCE_DIR}/INSTALL/test_zminMax.f )
+  add_custom_target( run_test_zminMax
+    COMMAND test_zminMax 2> test_zminMax.err
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
+    COMMENT "Running test_zminMax in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zminMax.err"
+    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zminMax.f )
     
 endif()
 

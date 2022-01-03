@@ -514,7 +514,7 @@ set_target_properties(
   )
 
 if( TEST_FORTRAN_COMPILER )
-  add_dependencies( ${LAPACKLIB} run_test_zcomplexabs run_test_zcomplexdiv )
+  add_dependencies( ${LAPACKLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
 endif()
 
 if(USE_XBLAS)

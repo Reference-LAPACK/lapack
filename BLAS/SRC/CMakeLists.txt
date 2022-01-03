@@ -107,5 +107,5 @@ set_target_properties(
 lapack_install_library(${BLASLIB})
 
 if( TEST_FORTRAN_COMPILER )
-  add_dependencies( ${BLASLIB} run_test_zcomplexabs run_test_zcomplexdiv )
+  add_dependencies( ${BLASLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
 endif()

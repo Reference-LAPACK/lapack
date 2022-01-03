@@ -13,11 +13,11 @@
 *> \verbatim
 *>
 *> Real values for test:
-*> (1) x = 2**m, where m = MINEXPONENT-DIGITS, ..., MINEXPONENT-1. Stop on the first success.
+*> (1) x = 2**m, where m = MINEXPONENT-DIGITS, ..., MINEXPONENT-1.
 *>     Mind that not all platforms might implement subnormal numbers.
-*> (2) x = 2**m, where m = MINEXPONENT, ..., 0. Stop on the first success.
+*> (2) x = 2**m, where m = MINEXPONENT, ..., 0.
 *> (3) x = OV, where OV is the overflow threshold. OV^2 overflows but the norm is OV.
-*> (4) x = 2**m, where m = MAXEXPONENT-1, ..., 1. Stop on the first success.
+*> (4) x = 2**m, where m = MAXEXPONENT-1, ..., 1.
 *>
 *> Tests:
 *> (a) y = x + 0 * I, y/y = 1
@@ -357,7 +357,8 @@
      $      print *, "# Please check the failed divisions in [stderr]"
 *
 *     .. Formats ..
- 9998 FORMAT( '[',A2,I1, '] X = ', ES24.16E3, ' : ', A15, ' = ',
+ 9998 FORMAT( '[',A2,I1, '] ', (ES24.16E3,SP,ES24.16E3,"*I"), ' * ',
+     $         (ES24.16E3,SP,ES24.16E3,"*I"), ' = ',
      $         (ES24.16E3,SP,ES24.16E3,"*I"), ' differs from ', A10 )
 *
  9999 FORMAT( '[',A2,I1, '] X = ', ES24.16E3, ' : ', A15, ' = ',
