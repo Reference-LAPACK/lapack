@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV,  DGGEVX,
-*> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD3,
+*> DGGGLM, DGGHRD, DGGLSE, DGGQRCS, DGGQRF, DGGRQF, DGGSVD3,
 *> DGGSVP3, DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
 *> DGGES3, DGGEV3, and DTGSYL.
 *> \endverbatim
@@ -93,7 +93,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
-     $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF,
+     $                   DGGHRD, DGGLSE, DGGQRCS, DGGQRF, DGGRQF,
      $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
      $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
      $                   DGGSVD3, DGGSVP3, XLAENV
@@ -608,6 +608,55 @@
 *     Test error exits for the GQR path.
 *
       ELSE IF( LSAMEN( 3, PATH, 'GQR' ) ) THEN
+*
+*        DGGQRCS
+*
+         SRNAMT = 'DGGQRCS'
+         INFOT = 1
+         CALL DGGQRCS( '/', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGGQRCS( 'N', '/', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGGQRCS( 'N', 'N', '/', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DGGQRCS( 'N', 'N', 'N', -1, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DGGQRCS( 'N', 'N', 'N', 0, -1, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, -1, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 0, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 0, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 0, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 18
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 0, W, LW, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL DGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, 0, IW, INFO )
+         CALL CHKXER( 'DGGQRCS', INFOT, NOUT, LERR, OK )
+         NT = NT + 11
 *
 *        DGGQRF
 *

@@ -517,10 +517,12 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL SLACPY( 'U', Q-1, Q-1, X21(1,2), LDX21, V1T(2,2),
+            IF( Q.GT.1 ) THEN
+               CALL SLACPY( 'U', Q-1, Q-1, X21(1,2), LDX21, V1T(2,2),
      $                   LDV1T )
-            CALL SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+               CALL SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
+            ENDIF
          END IF
 *
 *        Simultaneously diagonalize X11 and X21.

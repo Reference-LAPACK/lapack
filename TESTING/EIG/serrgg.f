@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> SERRGG tests the error exits for SGGES, SGGESX, SGGEV, SGGEVX,
-*> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF,
+*> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRCS, SGGQRF, SGGRQF,
 *> SGGSVD3, SGGSVP3, SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN,
 *> STGSJA, STGSNA, and STGSYL.
 *> \endverbatim
@@ -73,6 +73,7 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
+      LOGICAL            SWAPPED
       CHARACTER*2        C2
       INTEGER            DUMMYK, DUMMYL, I, IFST, ILO, IHI, ILST, INFO,
      $                   J, M, NCYCLE, NT, SDIM, LWORK
@@ -93,7 +94,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, SGGES, SGGESX, SGGEV, SGGEVX, SGGGLM,
-     $                   SGGHRD, SGGLSE, SGGQRF, SGGRQF,
+     $                   SGGHRD, SGGLSE, SGGQRCS, SGGQRF, SGGRQF,
      $                   SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN, STGSJA,
      $                   STGSNA, STGSYL, SGGES3, SGGEV3, SGGHD3,
      $                   SGGSVD3, SGGSVP3, XLAENV
@@ -654,6 +655,55 @@
          CALL SGGRQF( 1, 1, 2, A, 1, R1, B, 1, R2, W, 1, INFO )
          CALL CHKXER( 'SGGRQF', INFOT, NOUT, LERR, OK )
          NT = NT + 6
+*
+*        SGGQRCS
+*
+         SRNAMT = 'SGGQRCS'
+         INFOT = 1
+         CALL SGGQRCS( '/', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGGQRCS( 'N', '/', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGGQRCS( 'N', 'N', '/', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SGGQRCS( 'N', 'N', 'N', -1, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGGQRCS( 'N', 'N', 'N', 0, -1, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, -1, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 0, B, 1, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 0, R1, R2, U, 1, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 0, V, 1, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 18
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 0, W, LW, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL SGGQRCS( 'N', 'N', 'N', 0, 0, 0, I, SWAPPED,
+     $                A, 1, B, 1, R1, R2, U, 1, V, 1, W, 0, IW, INFO )
+         CALL CHKXER( 'SGGQRCS', INFOT, NOUT, LERR, OK )
+         NT = NT + 11
 *
 *     Test error exits for the SGS, SGV, SGX, and SXV paths.
 *
