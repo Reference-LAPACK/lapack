@@ -19,11 +19,13 @@
 *  ===========
 *
 *       SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
-*                          LDQ, Z, LDZ, WORK, LWORK, INFO )
+*                          LDQ, Z, LDZ, WORK, LWORK, INFO, IMAX )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPQ, COMPZ
-*       INTEGER            IHI, ILO, INFO, LDA, LDB, LDQ, LDZ, N, LWORK
+*       INTEGER            IHI, ILO, INFO, LDA, LDB, LDQ, LDZ, N, LWORK,
+*                          IMAX
+*       OPTIONAL           IMAX
 *       ..
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
@@ -202,6 +204,17 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
+*>
+*> \param[in]  IMAX
+*> \verbatim
+*>          IMAX is INTEGER
+*>          The index of the last column that must reduced.
+*>          The routine will stop once at least IMAX-ILO columns have reduced,
+*>          resulting in a partial Hessenberg-upper triangular form. This is
+*>          potentially useful to develop hybrid reduction algorithms.
+*>          This argument is optional, if present it must satisfy
+*>          1 <= IMAX <= IHI. If not present, it will default to IHI.
+*> \endverbatim
 *
 *  Authors:
 *  ========
@@ -226,7 +239,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
-     $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
+     $                   LDQ, Z, LDZ, WORK, LWORK, INFO, IMAX )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -236,7 +249,9 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          COMPQ, COMPZ
-      INTEGER            IHI, ILO, INFO, LDA, LDB, LDQ, LDZ, N, LWORK
+      INTEGER            IHI, ILO, INFO, LDA, LDB, LDQ, LDZ, N, LWORK,
+     $                   IMAX
+      OPTIONAL           IMAX
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
@@ -251,10 +266,10 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            BLK22, INITQ, INITZ, LQUERY, WANTQ, WANTZ
-      CHARACTER*1        COMPQ2, COMPZ2
       INTEGER            COLA, I, IERR, J, J0, JCOL, JJ, JROW, K,
      $                   KACC22, LEN, LWKOPT, N2NB, NB, NBLST, NBMIN,
-     $                   NH, NNB, NX, PPW, PPWO, PW, TOP, TOPQ
+     $                   NH, NNB, NX, PPW, PPWO, PW, TOP, TOPQ, IHI2,
+     $                   JCOL2
       DOUBLE PRECISION   C, C1, C2, S, S1, S2, TEMP, TEMP1, TEMP2, TEMP3
 *     ..
 *     .. External Functions ..
@@ -282,6 +297,11 @@
       INITZ = LSAME( COMPZ, 'I' )
       WANTZ = INITZ .OR. LSAME( COMPZ, 'V' )
       LQUERY = ( LWORK.EQ.-1 )
+      IF( PRESENT( IMAX ) ) THEN
+         IHI2 = IMAX
+      ELSE
+         IHI2 = IHI
+      ENDIF
 *
       IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -1
@@ -303,6 +323,8 @@
          INFO = -13
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
          INFO = -15
+      ELSE IF( IHI2.LT.1 .OR. IHI2.GT.IHI ) THEN
+         INFO = -17
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DGGHD3', -INFO )
@@ -372,7 +394,7 @@
 *
          KACC22 = ILAENV( 16, 'DGGHD3', ' ', N, ILO, IHI, -1 )
          BLK22 = KACC22.EQ.2
-         DO JCOL = ILO, IHI-2, NB
+         DO JCOL = ILO, MIN( IHI2, IHI-2 ), NB
             NNB = MIN( NB, IHI-JCOL-1 )
 *
 *           Initialize small orthogonal factors that will hold the
@@ -870,21 +892,35 @@
          END DO
       END IF
 *
-*     Use unblocked code to reduce the rest of the matrix
-*     Avoid re-initialization of modified Q and Z.
+*     Use unblocked code to reduce the rest of the matrix.
 *
-      COMPQ2 = COMPQ
-      COMPZ2 = COMPZ
-      IF ( JCOL.NE.ILO ) THEN
-         IF ( WANTQ )
-     $      COMPQ2 = 'V'
-         IF ( WANTZ )
-     $      COMPZ2 = 'V'
+      IF ( JCOL.LE. MIN( IHI2, IHI-2 ) ) THEN
+         DO JCOL2 = JCOL, IHI2
+            DO JROW = IHI, JCOL2+2, -1
+               TEMP = A( JROW-1, JCOL2 )
+               CALL DLARTG( TEMP, A( JROW, JCOL2 ), C, S, A( JROW-1,
+     $             JCOL2 ) )
+               A( JROW, JCOL2 ) = ZERO
+               CALL DROT( N-JCOL2, A( JROW-1, JCOL2+1 ), LDA, A( JROW,
+     $             JCOL2+1 ), LDA, C, S )
+               CALL DROT( N+2-JROW, B( JROW-1, JROW-1 ), LDB, B( JROW,
+     $             JROW-1 ), LDB, C, S )
+               IF( WANTQ )CALL DROT( N, Q( 1, JROW-1 ), 1, Q( 1, JROW ),
+     $             1, C, S )
+   
+               TEMP = B( JROW, JROW )
+               CALL DLARTG( TEMP, B( JROW, JROW-1 ), C, S, B( JROW,
+     $             JROW ) )
+               B( JROW, JROW-1 ) = ZERO
+               CALL DROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C,
+     $             S )
+               CALL DROT( JROW-1, B( 1, JROW ), 1, B( 1, JROW-1 ), 1, C,
+     $             S )
+               IF( WANTZ )CALL DROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ),
+     $             1, C, S )
+            END DO
+         END DO
       END IF
-*
-      IF ( JCOL.LT.IHI )
-     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
-     $                LDQ, Z, LDZ, IERR )
       WORK( 1 ) = DBLE( LWKOPT )
 *
       RETURN
