@@ -206,10 +206,8 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Thijs Steel
+*> \author Raf Vandebril
 *
 *> \ingroup doubleOTHERcomputational
 *
