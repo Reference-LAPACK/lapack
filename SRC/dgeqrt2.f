@@ -154,10 +154,10 @@
 *     Test the input arguments
 *
       INFO = 0
-      IF( N.LT.0 ) THEN
-         INFO = -2
-      ELSE IF( M.LT.N ) THEN
+      IF( M.LT.0 ) THEN
          INFO = -1
+      ELSE IF( N.LT.0 ) THEN
+         INFO = -2
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -4
       ELSE IF( LDT.LT.MAX( 1, N ) ) THEN
