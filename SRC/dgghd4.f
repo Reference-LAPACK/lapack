@@ -7,11 +7,11 @@
 *
 *> \htmlonly
 *> Download DGGHD4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghd4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -62,7 +62,7 @@
 *>      Q1 * B * Z1**T = (Q1*Q) * T * (Z1*Z)**T
 *>
 *> If Q1 is the orthogonal matrix from the QR factorization of B in the
-*> original equation A*x = lambda*B*x, then DGGHD3 reduces the original
+*> original equation A*x = lambda*B*x, then DGGHD4 reduces the original
 *> problem to generalized Hessenberg form.
 *>
 *> This is a blocked variant of DGGHRD, using matrix-matrix
@@ -199,6 +199,7 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
+*>          > 0:  the refinement scheme failed to converge.
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
@@ -243,7 +244,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ILQ, ILZ, XOVERFLOW
-      CHARACTER*1        COMPQ2, COMPZ2
+      CHARACTER          COMPQ2, COMPZ2
       INTEGER            ICOMPQ, ICOMPZ, JCOL, JROW, ITAU, IWRK, IERR,
      $                   COUNT, LWORKREQ, ILO2, COUNT2, IMAX
       DOUBLE PRECISION   ERR, ANRM, BNRM, ULP, TOL
@@ -254,7 +255,7 @@
       EXTERNAL           LSAME, DLANGE, DLAMCH, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARTG, DLASET, DROT, XERBLA
+      EXTERNAL           DLARTG, DLASET, DROT, XERBLA, DLAHT0
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -330,7 +331,7 @@
       LWORKREQ = MAX ( INT( WORK( 1 ) )+N+N**2, LWORKREQ )
       CALL DGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
       LWORKREQ = MAX ( INT( WORK( 1 ) )+N, LWORKREQ )
-      CALL DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      CALL DLAHT0( COMPQ, COMPZ, N, ILO, IHI, IHI, A, LDA, B, LDB, Q,
      $             LDQ, Z, LDZ, WORK, -1, IERR )
       LWORKREQ = MAX ( INT( WORK( 1 ) ), LWORKREQ )
 *
@@ -370,7 +371,7 @@
    40 CONTINUE
 *
 *     If too many iterations have failed, return with error.
-*     Because we default to reducing some columns using DGGHD3,
+*     Because we default to reducing some columns using DLAHT0,
 *     this should be impossible.
 *
       IF ( COUNT .GE. 50 ) THEN
@@ -380,7 +381,7 @@
       COUNT = COUNT+1
 *
 *     Reduce an increasing amount of columns using the fallback algorithm
-*     DGGHD3. This guarantees convergence.
+*     DLAHT0. This guarantees convergence.
 *     Avoid re-initialization of modified Q and Z.
 *
       IF( COUNT .GT. 1) THEN
@@ -391,8 +392,8 @@
      $      COMPQ2 = 'V'
          IF ( ILZ )
      $      COMPZ2 = 'V'
-         CALL DGGHD3( COMPQ2, COMPZ2, N, ILO2, IHI, A, LDA, B, LDB, Q,
-     $                LDQ, Z, LDZ, WORK, LWORK, IERR, IMAX )
+         CALL DLAHT0( COMPQ2, COMPZ2, N, ILO2, IHI, IMAX, A, LDA,
+     $                B, LDB, Q, LDQ, Z, LDZ, WORK, LWORK, IERR )
          ILO2 = IMAX
          IF( ILO2 .GE. IHI ) THEN
             GOTO 60
