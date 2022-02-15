@@ -254,6 +254,7 @@ if(NOT (BUILD_SINGLE OR BUILD_DOUBLE OR BUILD_COMPLEX OR BUILD_COMPLEX16))
   BUILD_SINGLE, BUILD_DOUBLE, BUILD_COMPLEX, BUILD_COMPLEX16.")
 endif()
 
+
 # --------------------------------------------------
 # Subdirectories that need to be processed
 option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
@@ -391,9 +392,8 @@ endif()
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
 unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 
-if(LAPACKE)
-  add_subdirectory(LAPACKE)
-endif()
+add_subdirectory(LAPACKE)
+
 
 #-------------------------------------
 # BLAS++ / LAPACK++

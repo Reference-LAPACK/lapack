@@ -1,8 +1,3 @@
-message(STATUS "LAPACKE enable")
-enable_language(C)
-
-set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
-
 # Create a header file lapacke_mangling.h for the routines called in my C programs
 include(FortranCInterface)
 ## Ensure that the fortran compiler and c compiler specified are compatible
@@ -16,8 +11,20 @@ if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
 endif()
 
-include_directories(include ${LAPACK_BINARY_DIR}/include)
 add_subdirectory(include)
+
+
+if(NOT LAPACKE)
+    return()
+endif()
+
+
+message(STATUS "LAPACKE enabled")
+enable_language(C)
+
+set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
+
+include_directories(include ${LAPACK_BINARY_DIR}/include)
 add_subdirectory(src)
 add_subdirectory(utils)
 
@@ -25,6 +32,15 @@ option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON)
 option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
 option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
 option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
+
+foreach(precision SINGLE DOUBLE COMPLEX COMPLEX16)
+  if(LAPACKE_BUILD_${precision} AND NOT BUILD_${precision})
+    message(
+      SEND_ERROR
+      "LAPACKE_BUILD_${precision} requires BUILD_${precision} to be ON"
+    )
+  endif()
+endforeach()
 
 macro(append_subdir_files variable dirname)
   get_directory_property(holder DIRECTORY ${dirname} DEFINITION ${variable})
