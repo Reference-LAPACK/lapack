@@ -99,15 +99,15 @@ function DNRM2( n, x, incx )
    real(wp), parameter :: one  = 1.0_wp
    real(wp), parameter :: maxN = huge(0.0_wp)
 !  ..
-!  .. Blue's ccaling constants ..
+!  .. Blue's scaling constants ..
    real(wp), parameter :: tsml = real(radix(0._wp), wp)**ceiling( &
        (minexponent(0._wp) - 1) * 0.5_wp)
    real(wp), parameter :: tbig = real(radix(0._wp), wp)**floor( &
        (maxexponent(0._wp) - digits(0._wp) + 1) * 0.5_wp)
    real(wp), parameter :: ssml = real(radix(0._wp), wp)**( - floor( &
-       (minexponent(0._wp) - 1) * 0.5_wp))
+       (minexponent(0._wp) - digits(0._wp)) * 0.5_wp))
    real(wp), parameter :: sbig = real(radix(0._wp), wp)**( - ceiling( &
-       (maxexponent(0._wp) - digits(0._wp) + 1) * 0.5_wp))
+       (maxexponent(0._wp) + digits(0._wp) - 1) * 0.5_wp))
 !  ..
 !  .. Scalar Arguments ..
    integer :: incx, n
