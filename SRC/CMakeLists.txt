@@ -105,8 +105,8 @@ set(SLASRC
    slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
-   slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f slargv.f
-   slarrv.f slartv.f
+   slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f
+   slargv.f slarmm.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrz.f
@@ -141,7 +141,7 @@ set(SLASRC
    stgsja.f stgsna.f stgsy2.f stgsyl.f stpcon.f stprfs.f stptri.f
    stptrs.f
    strcon.f strevc.f strevc3.f strexc.f strrfs.f strsen.f strsna.f strsyl.f
-   strti2.f strtri.f strtrs.f stzrzf.f sstemr.f
+   strsyl3.f strti2.f strtri.f strtrs.f stzrzf.f sstemr.f
    slansf.f spftrf.f spftri.f spftrs.f ssfrk.f stfsm.f stftri.f stfttp.f
    stfttr.f stpttf.f stpttr.f strttf.f strttp.f
    sgejsv.f sgesvj.f sgsvj0.f sgsvj1.f
@@ -306,7 +306,7 @@ set(DLASRC
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
-   dlargv.f dlarrv.f dlartv.f
+   dlargv.f dlarmm.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrz.f dlauu2.f
@@ -342,7 +342,7 @@ set(DLASRC
    dtgsja.f dtgsna.f dtgsy2.f dtgsyl.f dtpcon.f dtprfs.f dtptri.f
    dtptrs.f
    dtrcon.f dtrevc.f dtrevc3.f dtrexc.f dtrrfs.f dtrsen.f dtrsna.f dtrsyl.f
-   dtrti2.f dtrtri.f dtrtrs.f dtzrzf.f dstemr.f
+   dtrsyl3.f dtrti2.f dtrtri.f dtrtrs.f dtzrzf.f dstemr.f
    dsgesv.f dsposv.f dlag2s.f slag2d.f dlat2s.f
    dlansf.f dpftrf.f dpftri.f dpftrs.f dsfrk.f dtfsm.f dtftri.f dtfttp.f
    dtfttr.f dtpttf.f dtpttr.f dtrttf.f dtrttp.f
