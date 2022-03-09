@@ -94,7 +94,7 @@
 *>          NB is INTEGER
 *>          The block size used for the storage of T.  K >= NB >= 1.
 *>          This must be the same value of NB used to generate T
-*>          in CGEQRT.
+*>          in SGEQRT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -102,7 +102,7 @@
 *>          V is REAL array, dimension (LDV,K)
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          CGEQRT in the first K columns of its array argument A.
+*>          SGEQRT in the first K columns of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by CGEQRT, stored as a NB-by-N matrix.
+*>          as returned by SGEQRT, stored as a NB-by-N matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
