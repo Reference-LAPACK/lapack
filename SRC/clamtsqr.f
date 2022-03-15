@@ -72,7 +72,7 @@
 *> \verbatim
 *>          MB is INTEGER
 *>          The block size to be used in the blocked QR.
-*>          MB > N. (must be the same as DLATSQR)
+*>          MB > N. (must be the same as CLATSQR)
 *> \endverbatim
 *>
 *> \param[in] NB
@@ -87,7 +87,7 @@
 *>          A is COMPLEX array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
 *>          blockedelementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by DLATSQR in the first k columns of
+*>          returned by CLATSQR in the first k columns of
 *>          its array argument A.
 *> \endverbatim
 *>
@@ -214,7 +214,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL    LEFT, RIGHT, TRAN, NOTRAN, LQUERY
-      INTEGER    I, II, KK, LW, CTR
+      INTEGER    I, II, KK, LW, CTR, Q
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -233,8 +233,10 @@
       RIGHT   = LSAME( SIDE, 'R' )
       IF (LEFT) THEN
         LW = N * NB
+        Q = M
       ELSE
         LW = M * NB
+        Q = N
       END IF
 *
       INFO = 0
@@ -242,13 +244,15 @@
          INFO = -1
       ELSE IF( .NOT.TRAN .AND. .NOT.NOTRAN ) THEN
          INFO = -2
-      ELSE IF( M.LT.0 ) THEN
-        INFO = -3
-      ELSE IF( N.LT.0 ) THEN
-        INFO = -4
       ELSE IF( K.LT.0 ) THEN
         INFO = -5
-      ELSE IF( LDA.LT.MAX( 1, K ) ) THEN
+      ELSE IF( N.LT.K ) THEN
+        INFO = -4
+      ELSE IF( M.LT.N ) THEN
+        INFO = -3
+      ELSE IF( K.LT.NB .OR. NB.LT.1 ) THEN
+        INFO = -7
+      ELSE IF( LDA.LT.MAX( 1, Q ) ) THEN
         INFO = -9
       ELSE IF( LDT.LT.MAX( 1, NB) ) THEN
         INFO = -11
