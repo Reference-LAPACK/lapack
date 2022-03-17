@@ -135,8 +135,8 @@
 *> \verbatim
 *>          LDA is INTEGER
 *>          The leading dimension of the array A.
-*>          If SIDE = 'L', LDC >= max(1,K);
-*>          If SIDE = 'R', LDC >= max(1,M).
+*>          If SIDE = 'L', LDA >= max(1,K);
+*>          If SIDE = 'R', LDA >= max(1,M).
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -232,14 +232,14 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, RIGHT, TRAN, NOTRAN
-      INTEGER            I, IB, NB, LB, KF, LDAQ
+      INTEGER            I, IB, NB, LB, KF, LDAQ, LDVQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DLARFB, DTPRFB
+      EXTERNAL           XERBLA, DTPRFB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -255,8 +255,10 @@
       NOTRAN = LSAME( TRANS, 'N' )
 *
       IF ( LEFT ) THEN
+         LDVQ = MAX( 1, M )
          LDAQ = MAX( 1, K )
       ELSE IF ( RIGHT ) THEN
+         LDVQ = MAX( 1, N )
          LDAQ = MAX( 1, M )
       END IF
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
@@ -273,7 +275,7 @@
          INFO = -6
       ELSE IF( MB.LT.1 .OR. (MB.GT.K .AND. K.GT.0) ) THEN
          INFO = -7
-      ELSE IF( LDV.LT.K ) THEN
+      ELSE IF( LDV.LT.LDVQ ) THEN
          INFO = -9
       ELSE IF( LDT.LT.MB ) THEN
          INFO = -11

@@ -35,13 +35,13 @@
 *>
 *> \verbatim
 *>
-*> ZGEMLQT overwrites the general real M-by-N matrix C with
+*> ZGEMLQT overwrites the general complex M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
 *> TRANS = 'C':   Q**H C            C Q**H
 *>
-*> where Q is a complex orthogonal matrix defined as the product of K
+*> where Q is a complex unitary matrix defined as the product of K
 *> elementary reflectors:
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**H
@@ -110,7 +110,9 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V. LDV >= max(1,K).
+*>          The leading dimension of the array V.
+*>          If SIDE = 'L', LDV >= max(1,M);
+*>          if SIDE = 'R', LDV >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] T
@@ -183,7 +185,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, RIGHT, TRAN, NOTRAN
-      INTEGER            I, IB, LDWORK, KF
+      INTEGER            I, IB, LDWORK, KF, Q
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -207,8 +209,10 @@
 *
       IF( LEFT ) THEN
          LDWORK = MAX( 1, N )
+         Q = M
       ELSE IF ( RIGHT ) THEN
          LDWORK = MAX( 1, M )
+         Q = N
       END IF
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
          INFO = -1
@@ -218,11 +222,11 @@
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
-      ELSE IF( K.LT.0) THEN
+      ELSE IF( K.LT.0 .OR. K.GT.Q ) THEN
          INFO = -5
       ELSE IF( MB.LT.1 .OR. (MB.GT.K .AND. K.GT.0)) THEN
          INFO = -6
-      ELSE IF( LDV.LT.MAX( 1, K ) ) THEN
+      ELSE IF( LDV.LT.MAX( 1, Q ) ) THEN
           INFO = -8
       ELSE IF( LDT.LT.MB ) THEN
          INFO = -10
