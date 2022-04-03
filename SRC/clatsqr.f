@@ -202,12 +202,12 @@
         INFO = -1
       ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
         INFO = -2
-      ELSE IF( MB.LE.N ) THEN
+      ELSE IF( MB.LT.1 ) THEN
         INFO = -3
       ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 )) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-        INFO = -5
+        INFO = -6
       ELSE IF( LDT.LT.NB ) THEN
         INFO = -8
       ELSE IF( LWORK.LT.(N*NB) .AND. (.NOT.LQUERY) ) THEN

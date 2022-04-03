@@ -25,7 +25,7 @@
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
 *> TRANS = 'C':      Q**H * C       C * Q**H
-*>      where Q is a real orthogonal matrix defined as the product
+*>      where Q is a complex unitary matrix defined as the product
 *>      of blocked elementary reflectors computed by tall skinny
 *>      QR factorization (ZLATSQR)
 *> \endverbatim
@@ -56,15 +56,14 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The number of columns of the matrix C. M >= N >= 0.
+*>          The number of columns of the matrix C. N >= 0.
 *> \endverbatim
 *>
 *> \param[in] K
 *> \verbatim
 *>          K is INTEGER
 *>          The number of elementary reflectors whose product defines
-*>          the matrix Q.
-*>          N >= K >= 0;
+*>          the matrix Q. M >= K >= 0;
 *>
 *> \endverbatim
 *>
@@ -164,8 +163,8 @@
 *  =====================
 *>
 *> \verbatim
-*> Tall-Skinny QR (TSQR) performs QR by a sequence of orthogonal transformations,
-*> representing Q as a product of other orthogonal matrices
+*> Tall-Skinny QR (TSQR) performs QR by a sequence of unitary transformations,
+*> representing Q as a product of other unitary matrices
 *>   Q = Q(1) * Q(2) * . . . * Q(k)
 *> where each Q(i) zeros out subdiagonal entries of a block of MB rows of A:
 *>   Q(1) zeros out the subdiagonal entries of rows 1:MB of A
@@ -244,12 +243,12 @@
          INFO = -1
       ELSE IF( .NOT.TRAN .AND. .NOT.NOTRAN ) THEN
          INFO = -2
+      ELSE IF( M.LT.K ) THEN
+        INFO = -3
+      ELSE IF( N.LT.0 ) THEN
+        INFO = -4
       ELSE IF( K.LT.0 ) THEN
         INFO = -5
-      ELSE IF( N.LT.K ) THEN
-        INFO = -4
-      ELSE IF( M.LT.N ) THEN
-        INFO = -3
       ELSE IF( K.LT.NB .OR. NB.LT.1 ) THEN
         INFO = -7
       ELSE IF( LDA.LT.MAX( 1, Q ) ) THEN

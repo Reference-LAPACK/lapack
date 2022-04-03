@@ -70,7 +70,7 @@
       PARAMETER          ( NMAX = 2 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J, NB
+      INTEGER            I, INFO, J, MB, NB
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
@@ -129,6 +129,35 @@
       INFOT = 8
       CALL ZGEQR( 3, 2, A, 3, TAU, 8, W, 0, INFO )
       CALL CHKXER( 'ZGEQR', INFOT, NOUT, LERR, OK )
+*
+*     ZLATSQR
+*
+      MB = 1
+      NB = 1
+      SRNAMT = 'ZLATSQR'
+      INFOT = 1
+      CALL ZLATSQR( -1, 0, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL ZLATSQR( 1, 2, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      CALL ZLATSQR( 0, -1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL ZLATSQR( 2, 1, -1, NB, A, 2, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL ZLATSQR( 2, 1, MB, 2, A, 2, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 6
+      CALL ZLATSQR( 2, 1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL ZLATSQR( 2, 1, MB, NB, A, 2, TAU, 0, W, 1, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL ZLATSQR( 2, 1, MB, NB, A, 2, TAU, 2, W, 0, INFO )
+      CALL CHKXER( 'ZLATSQR', INFOT, NOUT, LERR, OK )
 *
 *     ZGEMQR
 *
