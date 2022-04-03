@@ -110,9 +110,7 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDV >= max(1,M);
-*>          if SIDE = 'R', LDV >= max(1,N).
+*>          The leading dimension of the array V. LDV >= max(1,K).
 *> \endverbatim
 *>
 *> \param[in] T
@@ -226,7 +224,7 @@
          INFO = -5
       ELSE IF( MB.LT.1 .OR. (MB.GT.K .AND. K.GT.0)) THEN
          INFO = -6
-      ELSE IF( LDV.LT.MAX( 1, Q ) ) THEN
+      ELSE IF( LDV.LT.MAX( 1, K ) ) THEN
           INFO = -8
       ELSE IF( LDT.LT.MB ) THEN
          INFO = -10

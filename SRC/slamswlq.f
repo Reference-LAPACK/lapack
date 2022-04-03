@@ -56,7 +56,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The number of columns of the matrix C. N >= M.
+*>          The number of columns of the matrix C. N >= 0.
 *> \endverbatim
 *>
 *> \param[in] K
@@ -94,9 +94,7 @@
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          The leading dimension of the array A. LDA >= max(1,K).
 *> \endverbatim
 *>
 *> \param[in] T
@@ -213,7 +211,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL    LEFT, RIGHT, TRAN, NOTRAN, LQUERY
-      INTEGER    I, II, KK, LW, CTR, Q
+      INTEGER    I, II, KK, LW, CTR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -232,10 +230,8 @@
       RIGHT   = LSAME( SIDE, 'R' )
       IF (LEFT) THEN
         LW = N * MB
-        Q = M
       ELSE
         LW = M * MB
-        Q = N
       END IF
 *
       INFO = 0
@@ -247,11 +243,11 @@
         INFO = -5
       ELSE IF( M.LT.K ) THEN
         INFO = -3
-      ELSE IF( N.LT.M ) THEN
+      ELSE IF( N.LT.0 ) THEN
         INFO = -4
       ELSE IF( K.LT.MB .OR. MB.LT.1) THEN
         INFO = -6
-      ELSE IF( LDA.LT.MAX( 1, Q ) ) THEN
+      ELSE IF( LDA.LT.MAX( 1, K ) ) THEN
         INFO = -9
       ELSE IF( LDT.LT.MAX( 1, MB) ) THEN
         INFO = -11

@@ -218,6 +218,37 @@
       CALL CGELQ( 2, 3, A, 3, TAU, 8, W, 0, INFO )
       CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
 *
+*     CLASWLQ
+*
+      MB = 1
+      NB = 1
+      SRNAMT = 'CLASWLQ'
+      INFOT = 1
+      CALL CLASWLQ( -1, 0, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CLASWLQ( 2, 1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      CALL CLASWLQ( 0, -1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL CLASWLQ( 1, 2, -1, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      CALL CLASWLQ( 1, 1, 2, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CLASWLQ( 1, 2, MB, -1, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 6
+      CALL CLASWLQ( 1, 2, MB, NB, A, 0, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CLASWLQ( 1, 2, MB, NB, A, 1, TAU, 0, W, 1, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL CLASWLQ( 1, 2, MB, NB, A, 1, TAU, 1, W, 0, INFO )
+      CALL CHKXER( 'CLASWLQ', INFOT, NOUT, LERR, OK )
+*
 *     CGEMLQ
 *
       TAU(1)=1

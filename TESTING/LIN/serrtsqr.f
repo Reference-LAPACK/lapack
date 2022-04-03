@@ -220,6 +220,37 @@
       CALL SGELQ( 2, 3, A, 3, TAU, 7, W, 0, INFO )
       CALL CHKXER( 'SGELQ', INFOT, NOUT, LERR, OK )
 *
+*     SLASWLQ
+*
+      MB = 1
+      NB = 1
+      SRNAMT = 'SLASWLQ'
+      INFOT = 1
+      CALL SLASWLQ( -1, 0, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL SLASWLQ( 2, 1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      CALL SLASWLQ( 0, -1, MB, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SLASWLQ( 1, 2, -1, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      CALL SLASWLQ( 1, 1, 2, NB, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SLASWLQ( 1, 2, MB, -1, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 6
+      CALL SLASWLQ( 1, 2, MB, NB, A, 0, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL SLASWLQ( 1, 2, MB, NB, A, 1, TAU, 0, W, 1, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL SLASWLQ( 1, 2, MB, NB, A, 1, TAU, 1, W, 0, INFO )
+      CALL CHKXER( 'SLASWLQ', INFOT, NOUT, LERR, OK )
+*
 *     SGEMLQ
 *
       TAU(1)=1

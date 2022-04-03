@@ -103,9 +103,7 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDV >= max(1,M);
-*>          if SIDE = 'R', LDV >= max(1,N).
+*>          The leading dimension of the array V. LDV >= K.
 *> \endverbatim
 *>
 *> \param[in] T
@@ -232,7 +230,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, RIGHT, TRAN, NOTRAN
-      INTEGER            I, IB, NB, LB, KF, LDAQ, LDVQ
+      INTEGER            I, IB, NB, LB, KF, LDAQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -255,10 +253,8 @@
       NOTRAN = LSAME( TRANS, 'N' )
 *
       IF ( LEFT ) THEN
-         LDVQ = MAX( 1, M )
          LDAQ = MAX( 1, K )
       ELSE IF ( RIGHT ) THEN
-         LDVQ = MAX( 1, N )
          LDAQ = MAX( 1, M )
       END IF
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
@@ -275,7 +271,7 @@
          INFO = -6
       ELSE IF( MB.LT.1 .OR. (MB.GT.K .AND. K.GT.0) ) THEN
          INFO = -7
-      ELSE IF( LDV.LT.LDVQ ) THEN
+      ELSE IF( LDV.LT.K ) THEN
          INFO = -9
       ELSE IF( LDT.LT.MB ) THEN
          INFO = -11
