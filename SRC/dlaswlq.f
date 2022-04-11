@@ -60,7 +60,7 @@
 *> \verbatim
 *>          NB is INTEGER
 *>          The column block size to be used in the blocked QR.
-*>          NB > M.
+*>          NB > 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -202,10 +202,10 @@
         INFO = -2
       ELSE IF( MB.LT.1 .OR. ( MB.GT.M .AND. M.GT.0 )) THEN
         INFO = -3
-      ELSE IF( NB.LE.M ) THEN
+      ELSE IF( NB.LT.0 ) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-        INFO = -5
+        INFO = -6
       ELSE IF( LDT.LT.MB ) THEN
         INFO = -8
       ELSE IF( ( LWORK.LT.M*MB) .AND. (.NOT.LQUERY) ) THEN
