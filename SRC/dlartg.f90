@@ -114,7 +114,7 @@ subroutine DLARTG( f, g, c, s, r )
    only: wp=>dp, zero=>dzero, half=>dhalf, one=>done, &
          rtmin=>drtmin, rtmax=>drtmax, safmin=>dsafmin, safmax=>dsafmax
 !
-!  -- LAPACK auxiliary routine (version 3.10.0) --
+!  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     February 2021
