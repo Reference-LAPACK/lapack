@@ -183,17 +183,16 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
-      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW,
-     $                   SCLLEN, MNK, TSZO, TSZM, LWO, LWM, LW1, LW2,
+      INTEGER            I, IASCL, IBSCL, J, MAXMN, BROW,
+     $                   SCLLEN, TSZO, TSZM, LWO, LWM, LW1, LW2,
      $                   WSIZEO, WSIZEM, INFO2
       REAL               ANRM, BIGNUM, BNRM, SMLNUM, DUM( 1 )
       COMPLEX            TQ( 5 ), WORKQ( 1 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
       REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, ILAENV, SLABAD, SLAMCH, CLANGE
+      EXTERNAL           LSAME, SLABAD, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEQR, CGEMQR, CLASCL, CLASET,
@@ -207,9 +206,7 @@
 *     Test the input arguments.
 *
       INFO = 0
-      MINMN = MIN( M, N )
       MAXMN = MAX( M, N )
-      MNK   = MAX( MINMN, NRHS )
       TRAN  = LSAME( TRANS, 'C' )
 *
       LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
@@ -230,7 +227,7 @@
 *
       IF( INFO.EQ.0 ) THEN
 *
-*     Determine the block size and minimum LWORK
+*     Determine the optimum and minimum LWORK
 *
        IF( M.GE.N ) THEN
          CALL CGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
@@ -268,15 +265,15 @@
           INFO = -10
        END IF
 *
+       WORK( 1 ) = REAL( WSIZEO )
+*
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CGETSLS', -INFO )
-        WORK( 1 ) = REAL( WSIZEO )
         RETURN
       END IF
       IF( LQUERY ) THEN
-        IF( LWORK.EQ.-1 ) WORK( 1 ) = REAL( WSIZEO )
         IF( LWORK.EQ.-2 ) WORK( 1 ) = REAL( WSIZEM )
         RETURN
       END IF
