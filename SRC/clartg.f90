@@ -119,7 +119,7 @@ subroutine CLARTG( f, g, c, s, r )
    only: wp=>sp, zero=>szero, one=>sone, two=>stwo, czero, &
          rtmin=>srtmin, rtmax=>srtmax, safmin=>ssafmin, safmax=>ssafmax
 !
-!  -- LAPACK auxiliary routine (version 3.10.0) --
+!  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     February 2021
