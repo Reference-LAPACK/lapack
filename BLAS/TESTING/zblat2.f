@@ -481,7 +481,7 @@
       LOGICAL            LZE, LZERES
       EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           ZGBMV, ZGEMV, ZMAKE, ZMVCH
+      EXTERNAL           ZGBMV, ZGEMV, ZMAKE, ZMVCH, ZREGR1
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -735,6 +735,34 @@
   110    CONTINUE
 *
   120 CONTINUE
+*
+*     Regression test to verify preservation of y when m zero, n nonzero.
+*
+      CALL ZREGR1( TRANS, M, N, LY, KL, KU, ALPHA, AA, LDA, XX, INCX,
+     $   BETA, YY, INCY, YS )
+      IF( FULL )THEN
+         IF( TRACE )
+     $      WRITE( NTRA, FMT = 9994 )NC, SNAME, TRANS, M, N, ALPHA, LDA,
+     $      INCX, BETA, INCY
+         IF( REWI )
+     $      REWIND NTRA
+         CALL ZGEMV( TRANS, M, N, ALPHA, AA, LDA, XX, INCX, BETA, YY,
+     $      INCY )
+      ELSE IF( BANDED )THEN
+         IF( TRACE )
+     $      WRITE( NTRA, FMT = 9995 )NC, SNAME, TRANS, M, N, KL, KU,
+     $      ALPHA, LDA, INCX, BETA, INCY
+         IF( REWI )
+     $      REWIND NTRA
+         CALL ZGBMV( TRANS, M, N, KL, KU, ALPHA, AA, LDA, XX, INCX,
+     $      BETA, YY, INCY )
+      END IF
+      NC = NC + 1
+      IF( .NOT.LZE( YS, YY, LY ) )THEN
+         WRITE( NOUT, FMT = 9998 )NARGS - 1
+         FATAL = .TRUE.
+         GO TO 130
+      END IF
 *
 *     Report result.
 *
@@ -3227,6 +3255,39 @@
 *
 *     End of CHKXER
 *
+      END
+      SUBROUTINE ZREGR1( TRANS, M, N, LY, KL, KU, ALPHA, A, LDA, X,
+     $   INCX, BETA, Y, INCY, YS )
+*
+*  Input initialization for regression test.
+*
+*     .. Scalar Arguments ..
+      CHARACTER*1        TRANS
+      INTEGER            LY, M, N, KL, KU, LDA, INCX, INCY
+      COMPLEX*16         ALPHA, BETA
+*     .. Array Arguments ..
+      COMPLEX*16         A(LDA,*), X(*), Y(*), YS(*)
+*     .. Local Scalars ..
+      INTEGER            I
+*     .. Intrinsic Functions ..
+      INTRINSIC          DBLE, DCMPLX
+*     .. Executable Statements ..
+      TRANS = 'T'
+      M = 0
+      N = 5
+      KL = 0
+      KU = 0
+      ALPHA = DCMPLX( 1.0D0 )
+      LDA = MAX( 1, M )
+      INCX = 1
+      BETA = DCMPLX( -0.7D0, -0.8D0 )
+      INCY = 1
+      LY = ABS( INCY )*N
+      DO 10 I = 1, LY
+         Y( I ) = DCMPLX( 42.0D0, DBLE( I ) )
+         YS( I ) = Y( I )
+  10  CONTINUE
+      RETURN
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
 *
