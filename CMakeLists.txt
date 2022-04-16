@@ -43,6 +43,11 @@ endif()
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+# Packaging systems often want to install static and shared libs for the users. It helps
+# having both in a consistent manner built from one build configuration. This is how
+# it works with autotools and ./configure --enable-shared --enable-static
+# (at least sometimes;-).
+option(BUILD_STATIC_LIBS "Enable this and BUILD_SHARED_LIBS to build both static and shared libs in one go (default is just static)." OFF)
 
 # By default build index32 library
 option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
@@ -173,6 +178,11 @@ endif()
 
 
 # --------------------------------------------------
+
+option(LAPACK "Whether to build or use LAPACK (to enable a BLAS-only build when off)" ON)
+
+if(LAPACK)
+
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
 macro(lapack_install_library lib)
@@ -183,6 +193,18 @@ macro(lapack_install_library lib)
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT RuntimeLibraries
   )
 endmacro()
+
+else()
+
+macro(lapack_install_library lib)
+  install(TARGETS ${lib}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT RuntimeLibraries
+  )
+endmacro()
+
+endif()
 
 set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
@@ -260,31 +282,41 @@ endif()
 option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
 
 # Check the usage of the user provided BLAS libraries
-if(BLAS_LIBRARIES)
-  include(CheckFortranFunctionExists)
-  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
-  unset(CMAKE_REQUIRED_LIBRARIES)
-  if(BLAS_FOUND)
-    message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
+if(USE_OPTIMIZED_BLAS)
+  if(BLAS_LIBRARIES)
+    include(CheckFortranFunctionExists)
+    set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
+    CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(BLAS_FOUND)
+      message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
+    else()
+      message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
+      message(ERROR "-->     Fix BLAS_LIBRARIES or ensure that USE_OPTIMIZED_BLAS is off for REFERENCE BLAS.")
+    endif()
+  # User did not provide a BLAS Library but specified to search for one
   else()
-    message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
-    message(ERROR "-->     Will use REFERENCE BLAS (by default)")
-    message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
-    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_BLAS")
+    find_package(BLAS)
   endif()
-
-# User did not provide a BLAS Library but specified to search for one
-elseif(USE_OPTIMIZED_BLAS)
-  find_package(BLAS)
+else()
+  if(BLAS_LIBRARIES)
+    message(FATAL_ERROR "USE_OPTIMIZED_BLAS unset but BLAS provided. Accident?")
+  endif()
 endif()
 
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
+  if(USE_OPTIMIZED_BLAS)
+    message(FATAL_ERROR "USE_OPTIMIZED_BLAS set but no usable BLAS provided.")
+  endif()
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
+  set(BLAS_PCLIBS -l${BLASLIB})
 else()
+  # This is the full path to a .so file from find_package, possibly.
+  # not ideal. Better ideas?
+  set(BLAS_PCLIBS ${BLAS_LIBRARIES})
   set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
@@ -315,36 +347,48 @@ endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
+if(LAPACK)
+
 # --------------------------------------------------
 # LAPACK
-# User did not provide a LAPACK Library but specified to search for one
-if(USE_OPTIMIZED_LAPACK)
-  find_package(LAPACK)
-endif()
 
 # Check the usage of the user provided or automatically found LAPACK libraries
-if(LAPACK_LIBRARIES)
-  include(CheckFortranFunctionExists)
-  set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-  # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
-  unset(CMAKE_REQUIRED_LIBRARIES)
-  if(LATESTLAPACK_FOUND)
-    message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+if(USE_OPTIMIZED_LAPACK)
+  if(LAPACK_LIBRARIES)
+    include(CheckFortranFunctionExists)
+    set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
+    # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
+    CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LAPACK_FOUND)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(LAPACK_FOUND)
+      message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+    else()
+      message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
+      message(ERROR "-->     Fix LAPACK_LIBRARIES or ensure that USE_OPTIMIZED_LAPACK is off for REFERENCE LAPACK.")
+    endif()
   else()
-    message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
-    message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
-    message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
-    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
+    # Let's hope for any working LAPACK.
+    find_package(LAPACK)
+  endif()
+else()
+  if(LAPACK_LIBRARIES)
+    message(FATAL_ERROR "USE_OPTIMIZED_LAPACK unset but LAPACK provided. Accident?")
   endif()
 endif()
 
 # Neither user specified or optimized LAPACK libraries can be used
-if(NOT LATESTLAPACK_FOUND)
+if(NOT LAPACK_FOUND)
+  if(USE_OPTIMIZED_LAPACK)
+    message(FATAL_ERROR "USE_OPTIMIZED_LAPACK set but no usable LAPACK provided.")
+  endif()
   message(STATUS "Using supplied NETLIB LAPACK implementation")
   set(LAPACK_LIBRARIES ${LAPACKLIB})
+  set(LAPACK_PCLIBS -l${LAPACKLIB})
   add_subdirectory(SRC)
 else()
+  # This is the full path to a .so file from find_package, possibly.
+  # not ideal. Better ideas?
+  set(LAPACK_PCLIBS ${LAPACK_LIBRARIES})
   set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
@@ -354,6 +398,8 @@ else()
   set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
+endif()
+
 endif()
 
 if(BUILD_TESTING)
@@ -480,10 +526,14 @@ if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
-if(NOT LATESTLAPACK_FOUND)
+if(LAPACK)
+if(NOT LAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
+  set(BUILD_LAPACK ON)
+endif()
 endif()
 
+if(LAPACK)
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
@@ -496,6 +546,7 @@ if(ALL_TARGETS)
   # Choose one of the lapack targets to use as a guard for
   # lapack-config.cmake to load targets from the install tree.
   list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
+endif()
 endif()
 
 # Include cblas in targets exported from the build tree.
@@ -511,6 +562,8 @@ endif()
 if(NOT LAPACK_WITH_TMGLIB_FOUND AND LAPACKE_WITH_TMG)
   set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
+
+if(BUILD_LAPACK)
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
@@ -549,6 +602,9 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
+
+endif() # BUILD_LAPACK
+
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
