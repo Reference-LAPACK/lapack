@@ -21,7 +21,8 @@
 *>
 *> \verbatim
 *>
-*> ZERRBD tests the error exits for ZGEBRD, ZUNGBR, ZUNMBR, and ZBDSQR.
+*> ZERRBD tests the error exits for ZGEBD2, ZGEBRD, ZUNGBR, ZUNMBR,
+*> and ZBDSQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -81,7 +82,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZBDSQR, ZGEBRD, ZUNGBR, ZUNMBR
+      EXTERNAL           CHKXER, ZBDSQR, ZGEBD2, ZGEBRD, ZUNGBR,
+     $                   ZUNMBR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -131,6 +133,20 @@
          CALL ZGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
          CALL CHKXER( 'ZGEBRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
+*
+*        ZGEBD2
+*
+         SRNAMT = 'ZGEBD2'
+         INFOT = 1
+         CALL ZGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'ZGEBD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'ZGEBD2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'ZGEBD2', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *        ZUNGBR
 *
