@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> DERRHS tests the error exits for DGEBAK, SGEBAL, SGEHRD, DORGHR,
-*> DORMHR, DHSEQR, SHSEIN, and DTREVC.
+*> DERRHS tests the error exits for DGEBAK, DGEBAL, DGEHRD, DORGHR,
+*> DORMHR, DHSEQR, DHSEIN, DTREVC, and DTREVC3.
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGEBAK, DGEBAL, DGEHRD, DHSEIN, DHSEQR,
-     $                   DORGHR, DORMHR, DTREVC
+     $                   DORGHR, DORMHR, DTREVC, DTREVC3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -328,7 +328,11 @@
          CALL DHSEQR( 'E', 'V', 2, 1, 2, A, 2, WR, WI, C, 1, W, 1,
      $                INFO )
          CALL CHKXER( 'DHSEQR', INFOT, NOUT, LERR, OK )
-         NT = NT + 9
+         INFOT = 13
+         CALL DHSEQR( 'E', 'N', 2, 1, 2, A, 2, WR, WI, C, 1, W, 1,
+     $                INFO )
+         CALL CHKXER( 'DHSEQR', INFOT, NOUT, LERR, OK )
+         NT = NT + 10
 *
 *        DHSEIN
 *
@@ -399,6 +403,43 @@
      $                INFO )
          CALL CHKXER( 'DTREVC', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        DTREVC3
+*
+         SRNAMT = 'DTREVC3'
+         INFOT = 1
+         CALL DTREVC3( '/', 'A', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DTREVC3( 'L', '/', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DTREVC3( 'L', 'A', SEL, -1, A, 1, VL, 1, VR, 1, 0, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DTREVC3( 'L', 'A', SEL, 2, A, 1, VL, 2, VR, 1, 4, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DTREVC3( 'L', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DTREVC3( 'R', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL DTREVC3( 'L', 'A', SEL, 2, A, 2, VL, 2, VR, 1, 1, M, W,
+     $                 LW, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         INFOT = 14
+         CALL DTREVC3( 'L', 'A', SEL, 2, A, 2, VL, 2, VR, 1, 2, M, W,
+     $                 2, INFO )
+         CALL CHKXER( 'DTREVC3', INFOT, NOUT, LERR, OK )
+         NT = NT + 8
       END IF
 *
 *     Print a summary line.
