@@ -27,6 +27,7 @@ TESTING/LIN/xlintst*
 TESTING/EIG/xeigtst*
 TESTING/*.out
 TESTING/*.txt
+!TESTING/CMakeLists.txt
 TESTING/x*
 
 # LAPACKE example
