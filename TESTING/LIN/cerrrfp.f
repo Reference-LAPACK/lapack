@@ -89,10 +89,10 @@
 *
       NOUT = NUNIT
       OK = .TRUE.
-      A( 1, 1 ) = CMPLX( 1.D0 , 1.D0  )
-      B( 1, 1 ) = CMPLX( 1.D0 , 1.D0  )
-      ALPHA     = CMPLX( 1.D0 , 1.D0  )
-      BETA      = CMPLX( 1.D0 , 1.D0  )
+      A( 1, 1 ) = CMPLX( 1.0 , 1.0 )
+      B( 1, 1 ) = CMPLX( 1.0 , 1.0  )
+      ALPHA     = CMPLX( 1.0 , 1.0  )
+      BETA      = CMPLX( 1.0 , 1.0  )
 *
       SRNAMT = 'CPFTRF'
       INFOT = 1

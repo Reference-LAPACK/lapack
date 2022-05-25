@@ -156,7 +156,7 @@
       EXTERNAL           SLASET, SLAVSY, SSWAP, STRMM, SLACPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE
+      INTRINSIC          REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -248,7 +248,7 @@
          IF( RESID.NE.ZERO )
      $      RESID = ONE / EPS
       ELSE
-         RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
+         RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
       END IF
 *
       RETURN

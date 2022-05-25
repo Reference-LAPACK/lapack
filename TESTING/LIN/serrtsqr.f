@@ -101,11 +101,11 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.D0 / REAL( I+J )
-            C( I, J ) = 1.D0 / REAL( I+J )
-            T( I, J ) = 1.D0 / REAL( I+J )
+            A( I, J ) = 1. / REAL( I+J )
+            C( I, J ) = 1. / REAL( I+J )
+            T( I, J ) = 1. / REAL( I+J )
          END DO
-         W( J ) = 0.D0
+         W( J ) = 0.
       END DO
       OK = .TRUE.
 *
