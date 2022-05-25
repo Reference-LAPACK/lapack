@@ -21,7 +21,8 @@
 *>
 *> \verbatim
 *>
-*> CERRBD tests the error exits for CGEBRD, CUNGBR, CUNMBR, and CBDSQR.
+*> CERRBD tests the error exits for CGEBD2, CGEBRD, CUNGBR, CUNMBR,
+*> and CBDSQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -81,7 +82,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CBDSQR, CGEBRD, CHKXER, CUNGBR, CUNMBR
+      EXTERNAL           CHKXER, CBDSQR, CGEBD2, CGEBRD, CUNGBR,
+     $                   CUNMBR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -131,6 +133,20 @@
          CALL CGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
          CALL CHKXER( 'CGEBRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
+*
+*        CGEBD2
+*
+         SRNAMT = 'CGEBD2'
+         INFOT = 1
+         CALL CGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'CGEBD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'CGEBD2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'CGEBD2', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *        CUNGBR
 *

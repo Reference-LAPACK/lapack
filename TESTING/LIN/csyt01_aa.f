@@ -141,9 +141,10 @@
 *
 *     .. Parameters ..
       REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CZERO, CONE
-      PARAMETER          ( CZERO = 0.0E+0, CONE = 1.0E+0 )
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
+     $                     CONE  = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
@@ -158,7 +159,7 @@
       EXTERNAL           CLASET, CLAVSY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE
+      INTRINSIC          REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -250,7 +251,7 @@
          IF( RESID.NE.ZERO )
      $      RESID = ONE / EPS
       ELSE
-         RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
+         RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
       END IF
 *
       RETURN
