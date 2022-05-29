@@ -173,8 +173,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ALPHA, REALZERO
-      PARAMETER          ( ALPHA = 0.1E0, REALZERO = 0.0E0 )
+      REAL               ALPHA, REALONE, REALZERO
+      PARAMETER          ( ALPHA = 0.01E0, REALONE = 1.0E0,
+     $                     REALZERO = 0.0E0 )
       REAL               NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0, ZERO = 0.0E0 )
 *     ..
@@ -228,7 +229,7 @@
 *     and an assertion added comparing the norm with one. Alas, Fortran
 *     never made it into 1989 when assert() was introduced into the C
 *     programming language.
-      NORM = 1.0E0
+      NORM = REALONE
 *
       IF( M1 .EQ. 0 ) THEN
          DO I = 1, N
