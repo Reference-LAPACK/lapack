@@ -105,7 +105,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Executable Statements ..
-      SRNAME = ''
+      SRNAME = ' '
       DO I = 1, MIN( SRNAME_LEN, LEN( SRNAME ) )
          SRNAME( I:I ) = SRNAME_ARRAY( I )
       END DO
