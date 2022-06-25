@@ -92,14 +92,14 @@
       INTEGER            KLAEXC, KLALN2, KLANV2, KLAQTR, KLASY2, KTREXC,
      $                   KTRSEN, KTRSNA, KTRSYL, LLAEXC, LLALN2, LLANV2,
      $                   LLAQTR, LLASY2, LTREXC, LTRSYL, NLANV2, NLAQTR,
-     $                   NLASY2, NTESTS, NTRSYL, KTGEXC, NTGEXC, LTGEXC
+     $                   NLASY2, NTESTS, NTRSYL, KTGEXC, LTGEXC
       DOUBLE PRECISION   EPS, RLAEXC, RLALN2, RLANV2, RLAQTR, RLASY2,
      $                   RTREXC, RTRSYL, SFMIN, RTGEXC
 *     ..
 *     .. Local Arrays ..
       INTEGER            LTRSEN( 3 ), LTRSNA( 3 ), NLAEXC( 2 ),
-     $                   NLALN2( 2 ), NTREXC( 3 ), NTRSEN( 3 ),
-     $                   NTRSNA( 3 )
+     $                   NLALN2( 2 ), NTGEXC( 2 ), NTREXC( 3 ),
+     $                   NTRSEN( 3 ), NTRSNA( 3 )
       DOUBLE PRECISION   RTRSEN( 3 ), RTRSNA( 3 )
 *     ..
 *     .. External Subroutines ..
@@ -227,7 +227,7 @@
  9987 FORMAT( ' Routines pass computational tests if test ratio is les',
      $      's than', F8.2, / / )
  9986 FORMAT( ' Error in DTGEXC: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
-     $      'INFO=', I8, ' KNT=', I8 )
+     $      'INFO=', 2I8, ' KNT=', I8 )
 *
 *     End of DCHKEC
 *

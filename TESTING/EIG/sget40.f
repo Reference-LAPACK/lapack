@@ -12,10 +12,10 @@
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN
-*       REAL   RMAX
+*       REAL               RMAX
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            NINFO( 3 )
+*       INTEGER            NINFO( 2 )
 *
 *
 *> \par Purpose:
@@ -53,8 +53,9 @@
 *>
 *> \param[out] NINFO
 *> \verbatim
-*>          NINFO is INTEGER
-*>          Number of examples where INFO is nonzero.
+*>          NINFO is INTEGER array, dimension (2)
+*>          NINFO( 1 ) = STGEXC without accumulation returned INFO nonzero
+*>          NINFO( 2 ) = STGEXC with accumulation returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -63,9 +64,10 @@
 *>          Total number of examples tested.
 *> \endverbatim
 *>
-*> \param[out] NIN
+*> \param[in] NIN
 *> \verbatim
-*>          NINFO is INTEGER
+*>          NIN is INTEGER
+*>          Input logical unit number.
 *> \endverbatim
 *
 *  Authors:
@@ -90,7 +92,7 @@
       REAL               RMAX
 *     ..
 *     .. Array Arguments ..
-      INTEGER            NINFO( 3 )
+      INTEGER            NINFO( 2 )
 *     ..
 *
 *  =====================================================================
@@ -103,7 +105,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IFST, IFST1, IFST2, IFSTSV, ILST, ILST1,
-     $                   ILST2, ILSTSV, INFO1, INFO2, J, LOC, N
+     $                   ILST2, ILSTSV, J, LOC, N
       REAL               EPS, RES
 *     ..
 *     .. Local Arrays ..
@@ -130,7 +132,6 @@
       KNT = 0
       NINFO( 1 ) = 0
       NINFO( 2 ) = 0
-      NINFO( 3 ) = 0
 *
 *     Read input data until N=0
 *
@@ -164,7 +165,7 @@
       CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
       CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDT )
       CALL STGEXC( .FALSE., .FALSE., N, T1, LDT, S1, LDT, Q, LDT,
-     $             Z, LDT, IFST1, ILST1, WORK, LWORK, INFO1 )
+     $             Z, LDT, IFST1, ILST1, WORK, LWORK, NINFO( 1 ) )
       DO 40 I = 1, N
          DO 30 J = 1, N
             IF( I.EQ.J .AND. Q( I, J ).NE.ONE )
@@ -183,7 +184,7 @@
       CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
       CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDT )
       CALL STGEXC( .TRUE., .TRUE., N, T2, LDT, S2, LDT, Q, LDT,
-     $             Z, LDT, IFST2, ILST2, WORK, LWORK, INFO2 )
+     $             Z, LDT, IFST2, ILST2, WORK, LWORK, NINFO( 2 ) )
 *
 *     Compare T1 with T2 and S1 with S2
 *
@@ -199,7 +200,7 @@
      $   RES = RES + ONE / EPS
       IF( ILST1.NE.ILST2 )
      $   RES = RES + ONE / EPS
-      IF( INFO1.NE.INFO2 )
+      IF( NINFO( 1 ).NE.NINFO( 2 ) )
      $   RES = RES + ONE / EPS
 *
 *     Test orthogonality of Q and Z and backward error on T2 and S2
