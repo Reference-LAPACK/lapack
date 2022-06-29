@@ -840,8 +840,9 @@
       CALL SLASUM( 'SSB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' SCHKSB2STG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
-     $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9999 FORMAT( ' SCHKSB2STG: ', A, ' returned INFO=', I6, '.', / 9X,
+     $      'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
+     $      ')' )
 *
  9998 FORMAT( / 1X, A3,
      $      ' -- Real Symmetric Banded Tridiagonal Reduction Routines' )
