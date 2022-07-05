@@ -1,3 +1,8 @@
+if(NOT LAPACKE)
+    return()
+endif()
+
+
 # Create a header file lapacke_mangling.h for the routines called in my C programs
 include(FortranCInterface)
 ## Ensure that the fortran compiler and c compiler specified are compatible
@@ -12,11 +17,6 @@ if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
 endif()
 
 add_subdirectory(include)
-
-
-if(NOT LAPACKE)
-    return()
-endif()
 
 
 message(STATUS "LAPACKE enabled")

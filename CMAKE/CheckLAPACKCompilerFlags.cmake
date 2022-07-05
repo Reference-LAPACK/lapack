@@ -22,6 +22,9 @@ if ( FORTRAN_ILP )
         else ()
             set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -integer-size 64")
         endif()
+    elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
+            (CMAKE_Fortran_COMPILER_ID STREQUAL "XL" ) )          # CMake 2.8
+        set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qintsize=8")
     elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
         if ( WIN32 )
             set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /i8")
