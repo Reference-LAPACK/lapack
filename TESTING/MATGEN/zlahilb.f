@@ -161,15 +161,21 @@
       INTEGER NMAX_EXACT, NMAX_APPROX, SIZE_D
       PARAMETER (NMAX_EXACT = 6, NMAX_APPROX = 11, SIZE_D = 8)
 *
-*     d's are generated from random permutation of those eight elements.
-      COMPLEX*16 d1(8), d2(8), invd1(8), invd2(8)
-      DATA D1 /(-1,0),(0,1),(-1,-1),(0,-1),(1,0),(-1,1),(1,1),(1,-1)/
-      DATA D2 /(-1,0),(0,-1),(-1,1),(0,1),(1,0),(-1,-1),(1,-1),(1,1)/
+*     D's are generated from random permutation of those eight elements.
+      COMPLEX*16 D1(8), D2(8), INVD1(8), INVD2(8)
+      DATA D1 /(-1.0D0,0.0D0),(0.0D0,1.0D0),(-1.0D0,-1.0D0),
+     $     (0.0D0,-1.0D0),(1.0D0,0.0D0),(-1.0D0,1.0D0),(1.0D0,1.0D0),
+     $     (1.0D0,-1.0D0)/
+      DATA D2 /(-1.0D0,0.0D0),(0.0D0,-1.0D0),(-1.0D0,1.0D0),
+     $     (0.0D0,1.0D0),(1.0D0,0.0D0),(-1.0D0,-1.0D0),(1.0D0,-1.0D0),
+     $     (1.0D0,1.0D0)/
 
-      DATA INVD1 /(-1,0),(0,-1),(-.5,.5),(0,1),(1,0),
-     $     (-.5,-.5),(.5,-.5),(.5,.5)/
-      DATA INVD2 /(-1,0),(0,1),(-.5,-.5),(0,-1),(1,0),
-     $     (-.5,.5),(.5,.5),(.5,-.5)/
+      DATA INVD1 /(-1.0D0,0.0D0),(0.0D0,-1.0D0),(-0.5D0,0.5D0),
+     $     (0.0D0,1.0D0),(1.0D0,0.0D0),(-0.5D0,-0.5D0),(0.5D0,-0.5D0),
+     $     (0.5D0,0.5D0)/
+      DATA INVD2 /(-1.0D0,0.0D0),(0.0D0,1.0D0),(-0.5D0,-0.5D0),
+     $     (0.0D0,-1.0D0),(1.0D0,0.0D0),(-0.5D0,0.5D0),(0.5D0,0.5D0),
+     $     (0.5D0,-0.5D0)/
 *     ..
 *     .. External Subroutines ..
       EXTERNAL XERBLA

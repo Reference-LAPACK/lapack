@@ -25,6 +25,12 @@ if ( FORTRAN_ILP )
     elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
             (CMAKE_Fortran_COMPILER_ID STREQUAL "XL" ) )          # CMake 2.8
         set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qintsize=8")
+    elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
+        if ( WIN32 )
+            set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /i8")
+        else ()
+            set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -i8")
+        endif()
     else()
         set(CPE_ENV $ENV{PE_ENV})
         if(CPE_ENV STREQUAL "CRAY")
@@ -88,6 +94,48 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "HP" )
        CACHE STRING "Flags used by the compiler during release builds" FORCE )
   set( CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_RELWITHDEBINFO} +O2 -g"
        CACHE STRING "Flags used by the compiler during release with debug info builds" FORCE )
+
+# NAG Fortran
+elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
+  if( "${CMAKE_Fortran_FLAGS}" MATCHES "[-/]ieee=(stop|nonstd)" )
+    set( FPE_EXIT TRUE )
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]ieee=full") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ieee=full")
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]dcfuns") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -dcfuns")
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]thread_safe") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -thread_safe")
+  endif()
+
+  # Disable warnings
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]w=obs") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -w=obs")
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]w=x77") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -w=x77")
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]w=ques") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -w=ques")
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]w=unused") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -w=unused")
+  endif()
+
+  # Suppress compiler banner and summary
+  check_fortran_compiler_flag("-quiet" _quiet)
+  if( _quiet AND NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]quiet") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -quiet")
+  endif()
+
 else()
 endif()
 
