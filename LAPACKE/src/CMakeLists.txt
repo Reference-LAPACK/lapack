@@ -1169,6 +1169,8 @@ lapacke_dtrsna.c
 lapacke_dtrsna_work.c
 lapacke_dtrsyl.c
 lapacke_dtrsyl_work.c
+lapacke_dtrsyl3.c
+lapacke_dtrsyl3_work.c
 lapacke_dtrtri.c
 lapacke_dtrtri_work.c
 lapacke_dtrtrs.c
@@ -1740,6 +1742,8 @@ lapacke_strsna.c
 lapacke_strsna_work.c
 lapacke_strsyl.c
 lapacke_strsyl_work.c
+lapacke_strsyl3.c
+lapacke_strsyl3_work.c
 lapacke_strtri.c
 lapacke_strtri_work.c
 lapacke_strtrs.c

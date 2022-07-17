@@ -39,7 +39,7 @@ include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+	$(CC) $(CFLAGS) -Wall -I../include -c -o $@ $<
 
 OBJ = \
 lapacke_ilaver.o \
@@ -1216,6 +1216,8 @@ lapacke_dtrsna.o \
 lapacke_dtrsna_work.o \
 lapacke_dtrsyl.o \
 lapacke_dtrsyl_work.o \
+lapacke_dtrsyl3.o \
+lapacke_dtrsyl3_work.o \
 lapacke_dtrtri.o \
 lapacke_dtrtri_work.o \
 lapacke_dtrtrs.o \
@@ -1782,6 +1784,8 @@ lapacke_strsna.o \
 lapacke_strsna_work.o \
 lapacke_strsyl.o \
 lapacke_strsyl_work.o \
+lapacke_strsyl3.o \
+lapacke_strsyl3_work.o \
 lapacke_strtri.o \
 lapacke_strtri_work.o \
 lapacke_strtrs.o \
