@@ -77,7 +77,7 @@ set(DEIGTST dchkee.F
    dget54.f dglmts.f dgqrts.f dgrqts.f dgsvts3.f
    dhst01.f dlarfy.f dlarhs.f dlatm4.f dlctes.f dlctsx.f dlsets.f dort01.f
    dort03.f dsbt21.f dsgt01.f dslect.f dspt21.f dstt21.f
-   dstt22.f dsyt21.f dsyt22.f)
+   dstt22.f dsyl01.f dsyt21.f dsyt22.f)
 
 set(ZEIGTST zchkee.F
    zbdt01.f zbdt02.f zbdt03.f zbdt05.f
@@ -93,7 +93,7 @@ set(ZEIGTST zchkee.F
    zget54.f zglmts.f zgqrts.f zgrqts.f zgsvts3.f
    zhbt21.f zhet21.f zhet22.f zhpt21.f zhst01.f
    zlarfy.f zlarhs.f zlatm4.f zlctes.f zlctsx.f zlsets.f zsbmv.f
-   zsgt01.f zslect.f
+   zsgt01.f zslect.f zsyl01.f
    zstt21.f zstt22.f zunt01.f zunt03.f)
 
 macro(add_eig_executable name)

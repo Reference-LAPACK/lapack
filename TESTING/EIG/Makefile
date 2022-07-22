@@ -99,7 +99,7 @@ DEIGTST = dchkee.o \
    dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts3.o \
    dhst01.o dlarfy.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
-   dstt22.o dsyt21.o dsyt22.o
+   dstt22.o dsyl01.o dsyt21.o dsyt22.o
 
 ZEIGTST = zchkee.o \
    zbdt01.o zbdt02.o zbdt03.o zbdt05.o \
@@ -115,7 +115,7 @@ ZEIGTST = zchkee.o \
    zget54.o zglmts.o zgqrts.o zgrqts.o zgsvts3.o \
    zhbt21.o zhet21.o zhet22.o zhpt21.o zhst01.o \
    zlarfy.o zlarhs.o zlatm4.o zlctes.o zlctsx.o zlsets.o zsbmv.o \
-   zsgt01.o zslect.o \
+   zsgt01.o zslect.o zsyl01.o\
    zstt21.o zstt22.o zunt01.o zunt03.o
 
 .PHONY: all

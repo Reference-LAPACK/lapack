@@ -475,7 +475,8 @@
                NB = MIN( MAX( 48, INT( ( MIN( N1, N2 ) * 16 ) / 100) ),
      $                   240 )
             ELSE
-               NB = -1
+               NB = MIN( MAX( 24, INT( ( MIN( N1, N2 ) * 8 ) / 100) ),
+     $                   80 )
             END IF
          END IF
       ELSE IF( C2.EQ.'LA' ) THEN
