@@ -604,6 +604,8 @@ lapacke_ctrsna.o \
 lapacke_ctrsna_work.o \
 lapacke_ctrsyl.o \
 lapacke_ctrsyl_work.o \
+lapacke_ctrsyl3.o \
+lapacke_ctrsyl3_work.o \
 lapacke_ctrtri.o \
 lapacke_ctrtri_work.o \
 lapacke_ctrtrs.o \
@@ -2360,6 +2362,8 @@ lapacke_ztrsna.o \
 lapacke_ztrsna_work.o \
 lapacke_ztrsyl.o \
 lapacke_ztrsyl_work.o \
+lapacke_ztrsyl3.o \
+lapacke_ztrsyl3_work.o \
 lapacke_ztrtri.o \
 lapacke_ztrtri_work.o \
 lapacke_ztrtrs.o \
