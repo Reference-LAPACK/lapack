@@ -78,7 +78,7 @@ CEIGTST = cchkee.o \
    cget54.o cglmts.o cgqrts.o cgrqts.o cgsvts3.o \
    chbt21.o chet21.o chet22.o chpt21.o chst01.o \
    clarfy.o clarhs.o clatm4.o clctes.o clctsx.o clsets.o csbmv.o \
-   csgt01.o cslect.o \
+   csgt01.o cslect.o csyl01.o\
    cstt21.o cstt22.o cunt01.o cunt03.o
 
 DZIGTST = dlafts.o dlahd2.o dlasum.o dlatb9.o dstech.o dstect.o \

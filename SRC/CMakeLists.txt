@@ -242,7 +242,7 @@ set(CLASRC
    ctgexc.f ctgsen.f ctgsja.f ctgsna.f ctgsy2.f ctgsyl.f ctpcon.f
    ctprfs.f ctptri.f
    ctptrs.f ctrcon.f ctrevc.f ctrevc3.f ctrexc.f ctrrfs.f ctrsen.f ctrsna.f
-   ctrsyl.f ctrti2.f ctrtri.f ctrtrs.f ctzrzf.f cung2l.f cung2r.f
+   ctrsyl.f ctrsyl3.f ctrti2.f ctrtri.f ctrtrs.f ctzrzf.f cung2l.f cung2r.f
    cungbr.f cunghr.f cungl2.f cunglq.f cungql.f cungqr.f cungr2.f
    cungrq.f cungtr.f cungtsqr.f cungtsqr_row.f cunm2l.f cunm2r.f cunmbr.f cunmhr.f cunml2.f cunm22.f
    cunmlq.f cunmql.f cunmqr.f cunmr2.f cunmr3.f cunmrq.f cunmrz.f

@@ -56,7 +56,7 @@ set(CEIGTST cchkee.F
    cget54.f cglmts.f cgqrts.f cgrqts.f cgsvts3.f
    chbt21.f chet21.f chet22.f chpt21.f chst01.f
    clarfy.f clarhs.f clatm4.f clctes.f clctsx.f clsets.f csbmv.f
-   csgt01.f cslect.f
+   csgt01.f cslect.f csyl01.f
    cstt21.f cstt22.f cunt01.f cunt03.f)
 
 set(DZIGTST dlafts.f dlahd2.f dlasum.f dlatb9.f dstech.f dstect.f

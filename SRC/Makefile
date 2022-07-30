@@ -275,7 +275,7 @@ CLASRC = \
    ctgexc.o ctgsen.o ctgsja.o ctgsna.o ctgsy2.o ctgsyl.o ctpcon.o \
    ctprfs.o ctptri.o \
    ctptrs.o ctrcon.o ctrevc.o ctrevc3.o ctrexc.o ctrrfs.o ctrsen.o ctrsna.o \
-   ctrsyl.o ctrti2.o ctrtri.o ctrtrs.o ctzrzf.o cung2l.o cung2r.o \
+   ctrsyl.o ctrsyl3.o ctrti2.o ctrtri.o ctrtrs.o ctzrzf.o cung2l.o cung2r.o \
    cungbr.o cunghr.o cungl2.o cunglq.o cungql.o cungqr.o cungr2.o \
    cungrq.o cungtr.o cungtsqr.o cungtsqr_row.o cunm2l.o cunm2r.o cunmbr.o cunmhr.o cunml2.o cunm22.o \
    cunmlq.o cunmql.o cunmqr.o cunmr2.o cunmr3.o cunmrq.o cunmrz.o \
