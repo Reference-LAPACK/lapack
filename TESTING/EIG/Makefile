@@ -62,7 +62,7 @@ SEIGTST = schkee.o \
    sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts3.o \
    shst01.o slarfy.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
    sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
-   sstt22.o ssyt21.o ssyt22.o
+   sstt22.o ssyl01.o ssyt21.o ssyt22.o
 
 CEIGTST = cchkee.o \
    cbdt01.o cbdt02.o cbdt03.o cbdt05.o \

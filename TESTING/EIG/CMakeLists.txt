@@ -40,7 +40,7 @@ set(SEIGTST schkee.F
    sget54.f sglmts.f sgqrts.f sgrqts.f sgsvts3.f
    shst01.f slarfy.f slarhs.f slatm4.f slctes.f slctsx.f slsets.f sort01.f
    sort03.f ssbt21.f ssgt01.f sslect.f sspt21.f sstt21.f
-   sstt22.f ssyt21.f ssyt22.f)
+   sstt22.f ssyl01.f ssyt21.f ssyt22.f)
 
 set(CEIGTST cchkee.F
    cbdt01.f cbdt02.f cbdt03.f cbdt05.f
