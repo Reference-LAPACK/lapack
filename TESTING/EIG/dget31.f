@@ -65,7 +65,7 @@
 *>
 *> \param[out] NINFO
 *> \verbatim
-*>          NINFO is INTEGER array, dimension (3)
+*>          NINFO is INTEGER array, dimension (2)
 *>          NINFO(1) = number of examples with INFO less than 0
 *>          NINFO(2) = number of examples with INFO greater than 0
 *> \endverbatim
