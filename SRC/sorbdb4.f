@@ -131,7 +131,7 @@
 *>
 *> \param[out] TAUP2
 *> \verbatim
-*>          TAUP2 is REAL array, dimension (M-Q)
+*>          TAUP2 is REAL array, dimension (M-P)
 *>           The scalar factors of the elementary reflectors that define
 *>           P2.
 *> \endverbatim
