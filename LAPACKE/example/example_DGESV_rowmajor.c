@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
         /* Check for the exact singularity */
         if( info > 0 ) {
                 printf( "The diagonal element of the triangular factor of A,\n" );
-                printf( "U(%i,%i) is zero, so that A is singular;\n", info, info );
+                printf( "U(%" LAPACK_IFMT ",%" LAPACK_IFMT ") is zero, so that A is singular;\n", info, info );
                 printf( "the solution could not be computed.\n" );
                 exit( 1 );
         }
