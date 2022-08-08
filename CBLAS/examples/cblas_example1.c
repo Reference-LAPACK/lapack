@@ -61,7 +61,7 @@ int main ( )
                 y, incy );
    /* Print y */
    for( i = 0; i < n; i++ )
-      printf(" y%d = %f\n", i, y[i]);
+      printf(" y%" CBLAS_IFMT " = %f\n", i, y[i]);
    free(a);
    free(x);
    free(y);
