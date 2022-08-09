@@ -84,7 +84,9 @@ extern "C" {
 #define lapack_int     int32_t
 #endif
 
+#ifndef LAPACK_IFMT
 #define LAPACK_IFMT    PRId32
+#endif
 
 #ifndef lapack_logical
 #define lapack_logical lapack_int
