@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+#include <inttypes.h>
 
 /* It seems all current Fortran compilers put strlen at end.
 *  Some historical compilers put strlen after the str argument
@@ -80,8 +81,10 @@ extern "C" {
 
 /*----------------------------------------------------------------------------*/
 #ifndef lapack_int
-#define lapack_int     int
+#define lapack_int     int32_t
 #endif
+
+#define LAPACK_IFMT    PRId32
 
 #ifndef lapack_logical
 #define lapack_logical lapack_int
