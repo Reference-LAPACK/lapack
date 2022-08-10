@@ -63,7 +63,8 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO
-      COMPLEX            ALPHA, BETA
+      COMPLEX            ALPHACMPLX
+      REAL               ALPHA, BETA
 *     ..
 *     .. Local Arrays ..
       COMPLEX            A( 1, 1), B( 1, 1)
@@ -91,8 +92,9 @@
       OK = .TRUE.
       A( 1, 1 ) = CMPLX( 1.0 , 1.0 )
       B( 1, 1 ) = CMPLX( 1.0 , 1.0  )
-      ALPHA     = CMPLX( 1.0 , 1.0  )
-      BETA      = CMPLX( 1.0 , 1.0  )
+      ALPHACMPLX = CMPLX( 1.0 , 1.0  )
+      ALPHA = 1.0
+      BETA = 1.0
 *
       SRNAMT = 'CPFTRF'
       INFOT = 1
@@ -135,28 +137,28 @@
 *
       SRNAMT = 'CTFSM '
       INFOT = 1
-      CALL CTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, ALPHA, A, B, 1 )
+      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, ALPHACMPLX, A, B, 1 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 0 )
+      CALL CTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, ALPHACMPLX, A, B, 0 )
       CALL CHKXER( 'CTFSM ', INFOT, NOUT, LERR, OK )
 *
       SRNAMT = 'CTFTRI'

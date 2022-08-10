@@ -273,7 +273,7 @@
 *     Compute |I - (Q**T)*Q| / ( eps * m ) and store in RESULT(2)
 *
       CALL ZLASET( 'Full', M, M, CZERO, CONE, R, M )
-      CALL ZHERK( 'U', 'C', M, M, -CONE, Q, M, CONE, R, M )
+      CALL ZHERK( 'U', 'C', M, M, REAL(-CONE), Q, M, REAL(CONE), R, M )
       RESID = ZLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
 *
