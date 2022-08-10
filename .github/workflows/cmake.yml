@@ -34,7 +34,7 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic"
+  CFLAGS: "-flto -Wall -pedantic-errors"
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
 
 defaults:
@@ -61,8 +61,8 @@ jobs:
       matrix:
         os: [ macos-latest, ubuntu-latest ]
         fflags: [
-          "-fimplicit-none -frecursive -fcheck=all",
-          "-fimplicit-none -frecursive -fcheck=all -fopenmp" ]
+          "-flto -Wall -fimplicit-none -frecursive -fcheck=all",
+          "-flto -Wall -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
     
     steps:
     
