@@ -181,7 +181,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IX
-      REAL               EPS, NORM, NORM_NEW, SCL, SSQ
+      DOUBLE PRECISION   EPS, NORM, NORM_NEW, SCL, SSQ
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH

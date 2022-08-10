@@ -185,7 +185,7 @@
       DOUBLE PRECISION   EPS, NORM, NORM_NEW, SCL, SSQ
 *     ..
 *     .. External Functions ..
-      REAL               DLAMCH
+      DOUBLE PRECISION   DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV, ZLASSQ, XERBLA
