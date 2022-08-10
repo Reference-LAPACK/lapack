@@ -352,7 +352,7 @@
   200             CONTINUE
                   RTEMP = ZERO
                   DO 210 L = 1,K
-                      RTEMP = RTEMP + CONJG(A(L,J))*A(L,J)
+                      RTEMP = RTEMP + REAL(CONJG(A(L,J))*A(L,J))
   210             CONTINUE
                   IF (BETA.EQ.ZERO) THEN
                       C(J,J) = ALPHA*RTEMP
@@ -364,7 +364,7 @@
               DO 260 J = 1,N
                   RTEMP = ZERO
                   DO 230 L = 1,K
-                      RTEMP = RTEMP + CONJG(A(L,J))*A(L,J)
+                      RTEMP = RTEMP + REAL(CONJG(A(L,J))*A(L,J))
   230             CONTINUE
                   IF (BETA.EQ.ZERO) THEN
                       C(J,J) = ALPHA*RTEMP
