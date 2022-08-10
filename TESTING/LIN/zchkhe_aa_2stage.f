@@ -185,7 +185,8 @@
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+     $                   WORK( * ), X( * ), XACT( * )
+      DOUBLE PRECISION   RWORK( * )
 *     ..
 *
 *  =====================================================================

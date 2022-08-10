@@ -96,8 +96,9 @@
 *     ..
 *     .. Local allocatable arrays
       COMPLEX, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  R(:,:), RWORK(:), WORK( : ), T(:),
+     $  R(:,:), WORK( : ), T(:),
      $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:), LQ(:,:)
+      REAL, ALLOCATABLE :: RWORK(:)
 *
 *     .. Parameters ..
       REAL ZERO
