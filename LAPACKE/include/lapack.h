@@ -81,15 +81,26 @@ extern "C" {
 
 /*----------------------------------------------------------------------------*/
 #ifndef lapack_int
-#define lapack_int     int32_t
+#if defined(LAPACK_ILP64)
+#define lapack_int        int64_t
+#else
+#define lapack_int        int32_t
+#endif
 #endif
 
+/*
+ * Integer format string
+ */
 #ifndef LAPACK_IFMT
-#define LAPACK_IFMT    PRId32
+#if defined(LAPACK_ILP64)
+#define LAPACK_IFMT       PRId64
+#else
+#define LAPACK_IFMT       PRId32
+#endif
 #endif
 
 #ifndef lapack_logical
-#define lapack_logical lapack_int
+#define lapack_logical    lapack_int
 #endif
 
 /* f2c, hence clapack and MacOS Accelerate, returns double instead of float

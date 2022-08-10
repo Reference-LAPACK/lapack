@@ -46,9 +46,9 @@ extern "C" {
 
 #ifndef lapack_int
 #if defined(LAPACK_ILP64)
-#define lapack_int              int64_t
+#define lapack_int        int64_t
 #else
-#define lapack_int              int32_t
+#define lapack_int        int32_t
 #endif
 #endif
 
@@ -57,14 +57,14 @@ extern "C" {
  */
 #ifndef LAPACK_IFMT
 #if defined(LAPACK_ILP64)
-   #define LAPACK_IFMT PRId64
+#define LAPACK_IFMT       PRId64
 #else
-   #define LAPACK_IFMT PRId32
+#define LAPACK_IFMT       PRId32
 #endif
 #endif
 
 #ifndef lapack_logical
-#define lapack_logical          lapack_int
+#define lapack_logical    lapack_int
 #endif
 
 #ifndef LAPACK_COMPLEX_CUSTOM
