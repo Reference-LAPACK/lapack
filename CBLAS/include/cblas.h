@@ -2,6 +2,7 @@
 #define CBLAS_H
 #include <stddef.h>
 #include <stdint.h>
+#include <inttypes.h>
 
 
 #ifdef __cplusplus
@@ -21,6 +22,17 @@ extern "C" {            /* Assume C declarations for C++ */
    #define CBLAS_INT int64_t
 #else
    #define CBLAS_INT int32_t
+#endif
+#endif
+
+/*
+ * Integer format string
+ */
+#ifndef CBLAS_IFMT
+#ifdef WeirdNEC
+   #define CBLAS_IFMT PRId64
+#else
+   #define CBLAS_IFMT PRId32
 #endif
 #endif
 
