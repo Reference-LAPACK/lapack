@@ -34,7 +34,7 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-flto -Wall -pedantic-errors"
+  CFLAGS: "-Wall -pedantic"
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
 
 defaults:
@@ -61,8 +61,8 @@ jobs:
       matrix:
         os: [ macos-latest, ubuntu-latest ]
         fflags: [
-          "-flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
-          "-flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
+          "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
+          "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
     
     steps:
     
