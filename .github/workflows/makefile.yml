@@ -35,7 +35,7 @@ env:
   CC: "gcc"
   FC: "gfortran"
   CFLAGS: "-O3 -flto -Wall -pedantic-errors"
-  FFLAGS: "-O2 -flto -Wall -fimplicit-none -frecursive -fopenmp -fcheck=all"
+  FFLAGS: "-O2 -flto -Wall -Werror=conversion -pedantic -fimplicit-none -frecursive -fopenmp -fcheck=all"
   FFLAGS_NOOPT: "-O0 -flto -Wall -fimplicit-none -frecursive -fopenmp -fcheck=all"
   LDFLAGS: ""
   AR: "ar"

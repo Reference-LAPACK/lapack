@@ -61,8 +61,8 @@ jobs:
       matrix:
         os: [ macos-latest, ubuntu-latest ]
         fflags: [
-          "-flto -Wall -fimplicit-none -frecursive -fcheck=all",
-          "-flto -Wall -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
+          "-flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
+          "-flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
     
     steps:
     
