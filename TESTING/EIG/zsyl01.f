@@ -122,7 +122,7 @@
 *     .. Local Arrays ..
       COMPLEX*16         A( MAXM, MAXM ), B( MAXN, MAXN ),
      $                   C( MAXM, MAXN ), CC( MAXM, MAXN ),
-     $                   WA( MAXM ), WB( MAXN ), X( MAXM, MAXN ),
+     $                   X( MAXM, MAXN ),
      $                   DUML( MAXM ), DUMR( MAXN ),
      $                   D( MIN( MAXM, MAXN ) )
       DOUBLE PRECISION   SWORK( LDSWORK, 103 ), DUM( MAXN ), VM( 2 )

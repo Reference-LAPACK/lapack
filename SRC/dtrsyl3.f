@@ -215,7 +215,7 @@
       EXTERNAL           DGEMM, DLASCL, DSCAL, DTRSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, EXPONENT, DBLE, MAX, MIN
+      INTRINSIC          ABS, DBLE, EXPONENT, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -264,10 +264,6 @@
          INFO = -9
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
          INFO = -11
-      ELSE IF( .NOT.LQUERY .AND. LIWORK.LT.IWORK(1) ) THEN
-         INFO = -14
-      ELSE IF( .NOT.LQUERY .AND. LDSWORK.LT.MAX( NBA, NBB ) ) THEN
-         INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DTRSYL3', -INFO )
@@ -278,12 +274,15 @@
 *
 *     Quick return if possible
 *
+      SCALE = ONE
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
 *
-*     Use unblocked code for small problems
+*     Use unblocked code for small problems or if insufficient
+*     workspaces are provided
 *
-      IF( NBA.EQ.1 .OR. NBB.EQ.1 ) THEN
+      IF( MIN( NBA, NBB ).EQ.1 .OR. LDSWORK.LT.MAX( NBA, NBB ) .OR.
+     $    LIWORK.LT.IWORK(1) ) THEN
         CALL DTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
      $               C, LDC, SCALE, INFO )
         RETURN

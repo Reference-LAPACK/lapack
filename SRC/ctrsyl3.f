@@ -184,14 +184,14 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLARMM, CLANGE
-      EXTERNAL           SLAMCH, SLARMM, ILAENV, LSAME, CLANGE
+      REAL               CLANGE, SLAMCH, SLARMM
+      EXTERNAL           CLANGE, ILAENV, LSAME, SLAMCH, SLARMM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CSSCAL, CGEMM, CLASCL, CTRSYL
+      EXTERNAL           CSSCAL, CGEMM, CLASCL, CTRSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, EXPONENT, REAL, AIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, EXPONENT, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -237,8 +237,6 @@
          INFO = -9
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
          INFO = -11
-      ELSE IF( .NOT.LQUERY .AND. LDSWORK.LT.MAX( NBA, NBB ) ) THEN
-         INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CTRSYL3', -INFO )
@@ -249,12 +247,14 @@
 *
 *     Quick return if possible
 *
+      SCALE = ONE
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
 *
-*     Use unblocked code for small problems
+*     Use unblocked code for small problems or if insufficient
+*     workspace is provided
 *
-      IF( NBA.EQ.1 .OR. NBB.EQ.1 ) THEN
+      IF( MIN( NBA, NBB ).EQ.1 .OR. LDSWORK.LT.MAX( NBA, NBB ) ) THEN
         CALL CTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
      $               C, LDC, SCALE, INFO )
         RETURN

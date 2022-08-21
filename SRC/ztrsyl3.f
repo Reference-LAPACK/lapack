@@ -192,7 +192,7 @@
       EXTERNAL           XERBLA, ZDSCAL, ZGEMM, ZLASCL, ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, EXPONENT, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, DBLE, DIMAG, EXPONENT, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -238,8 +238,6 @@
          INFO = -9
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
          INFO = -11
-      ELSE IF( .NOT.LQUERY .AND. LDSWORK.LT.MAX( NBA, NBB ) ) THEN
-         INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZTRSYL3', -INFO )
@@ -250,12 +248,14 @@
 *
 *     Quick return if possible
 *
+      SCALE = ONE
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
 *
-*     Use unblocked code for small problems
+*     Use unblocked code for small problems or if insufficient
+*     workspace is provided
 *
-      IF( NBA.EQ.1 .OR. NBB.EQ.1 ) THEN
+      IF( MIN( NBA, NBB ).EQ.1 .OR. LDSWORK.LT.MAX( NBA, NBB ) ) THEN
         CALL ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
      $               C, LDC, SCALE, INFO )
         RETURN

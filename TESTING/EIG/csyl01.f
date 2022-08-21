@@ -122,7 +122,7 @@
 *     .. Local Arrays ..
       COMPLEX            A( MAXM, MAXM ), B( MAXN, MAXN ),
      $                   C( MAXM, MAXN ), CC( MAXM, MAXN ),
-     $                   WA( MAXM ), WB( MAXN ), X( MAXM, MAXN ),
+     $                   X( MAXM, MAXN ),
      $                   DUML( MAXM ), DUMR( MAXN ),
      $                   D( MIN( MAXM, MAXN ) )
       REAL               SWORK( LDSWORK, 54 ), DUM( MAXN ), VM( 2 )
