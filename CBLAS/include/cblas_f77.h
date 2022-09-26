@@ -93,6 +93,11 @@
 #define F77_dznrm2_sub_base 	F77_GLOBAL(dznrm2sub,DZNRM2SUB)
 #define F77_dzasum_sub_base 	F77_GLOBAL(dzasumsub,DZASUMSUB)
 #define F77_sdsdot_sub_base 	F77_GLOBAL(sdsdotsub,SDSDOTSUB)
+#define F77_crotg_base		F77_GLOBAL(crotg, CROTG)
+#define F77_csrot_base		F77_GLOBAL(csrot, CSROT)
+#define F77_zrotg_base		F77_GLOBAL(zrotg, ZROTG)
+#define F77_zdrot_base		F77_GLOBAL(zdrot, ZDROT)
+
 /*
  * Level 2 BLAS
  */
@@ -200,6 +205,7 @@
  * Level 1 Fortran variadic definitions
  */
 
+
 /* Single Precision */
 
    #define F77_srot(...) F77_srot_base(__VA_ARGS__)
@@ -235,6 +241,8 @@
 
 /* Single Complex Precision */
 
+   #define F77_crotg(...) F77_crotg_base(__VA_ARGS__)
+   #define F77_csrot(...) F77_csrot_base(__VA_ARGS__)
    #define F77_cswap(...) F77_cswap_base(__VA_ARGS__)
    #define F77_ccopy(...) F77_ccopy_base(__VA_ARGS__)
    #define F77_caxpy(...) F77_caxpy_base(__VA_ARGS__)
@@ -249,6 +257,8 @@
 
 /* Double Complex Precision */
 
+   #define F77_zrotg(...) F77_zrotg_base(__VA_ARGS__)
+   #define F77_zdrot(...) F77_zdrot_base(__VA_ARGS__)
    #define F77_zswap(...) F77_zswap_base(__VA_ARGS__)
    #define F77_zcopy(...) F77_zcopy_base(__VA_ARGS__)
    #define F77_zaxpy(...) F77_zaxpy_base(__VA_ARGS__)
@@ -579,6 +589,8 @@ void F77_xerbla_base(FCHAR, void *
 
 /* Single Complex Precision */
 
+   void F77_crotg_base(void *, void *, float *, void *);
+   void F77_csrot_base(FINT, void *X, FINT, void *, FINT, const float *, const float *);
    void F77_cswap_base( FINT, void *, FINT, void *, FINT);
    void F77_ccopy_base( FINT, const void *, FINT, void *, FINT);
    void F77_caxpy_base( FINT, const void *, const void *, FINT, void *, FINT);
@@ -593,6 +605,8 @@ void F77_xerbla_base(FCHAR, void *
 
 /* Double Complex Precision */
 
+   void F77_zrotg_base(void *, void *, double *, void *);
+   void F77_zdrot_base(FINT, void *X, FINT, void *, FINT, const double *, const double *);
    void F77_zswap_base( FINT, void *, FINT, void *, FINT);
    void F77_zcopy_base( FINT, const void *, FINT, void *, FINT);
    void F77_zaxpy_base( FINT, const void *, const void *, FINT, void *, FINT);
