@@ -62,7 +62,6 @@ float LAPACKE_clangb_work( int matrix_layout, char norm, lapack_int n,
         LAPACKE_cgb_trans( matrix_layout, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         res = LAPACK_clangb( &norm, &n, &kl, &ku, ab_t, &ldab_t, work );
-        info = 0;  /* LAPACK call is ok! */
         /* Release memory and exit */
         LAPACKE_free( ab_t );
 exit_level_0:
