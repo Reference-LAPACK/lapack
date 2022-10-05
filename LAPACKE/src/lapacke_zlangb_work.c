@@ -27,7 +27,7 @@
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function zlangb
-* Author: Intel Corporation
+* Author: Simon Märtens
 *****************************************************************************/
 
 #include "lapacke_utils.h"
