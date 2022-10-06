@@ -26,15 +26,19 @@ set(DLEV1 cblas_drotg.c cblas_drotmg.c cblas_drot.c cblas_drotm.c
          dasumsub.f idamaxsub.f)
 
 # Files for level 1 single precision complex
-set(CLEV1 cblas_cswap.c cblas_cscal.c cblas_csscal.c cblas_ccopy.c
+set(CLEV1 cblas_crotg.c cblas_csrot.c
+         cblas_cswap.c cblas_cscal.c cblas_csscal.c cblas_ccopy.c
          cblas_caxpy.c cblas_cdotu_sub.c cblas_cdotc_sub.c
-         cblas_icamax.c cdotcsub.f cdotusub.f icamaxsub.f)
+         cblas_icamax.c cdotcsub.f cdotusub.f icamaxsub.f
+         cblas_scabs1.c scabs1sub.f )
 
 # Files for level 1 double precision complex
-set(ZLEV1 cblas_zswap.c cblas_zscal.c cblas_zdscal.c cblas_zcopy.c
+set(ZLEV1 cblas_zrotg.c cblas_zdrot.c
+         cblas_zswap.c cblas_zscal.c cblas_zdscal.c cblas_zcopy.c
          cblas_zaxpy.c cblas_zdotu_sub.c cblas_zdotc_sub.c cblas_dznrm2.c
          cblas_dzasum.c cblas_izamax.c zdotcsub.f zdotusub.f
-         dzasumsub.f dznrm2sub.f izamaxsub.f)
+         dzasumsub.f dznrm2sub.f izamaxsub.f
+         cblas_dcabs1.c dcabs1sub.f)
 
 # Common files for level 1 single precision
 set(SCLEV1 cblas_scasum.c scasumsub.f cblas_scnrm2.c scnrm2sub.f)

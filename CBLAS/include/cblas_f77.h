@@ -93,6 +93,13 @@
 #define F77_dznrm2_sub_base 	F77_GLOBAL(dznrm2sub,DZNRM2SUB)
 #define F77_dzasum_sub_base 	F77_GLOBAL(dzasumsub,DZASUMSUB)
 #define F77_sdsdot_sub_base 	F77_GLOBAL(sdsdotsub,SDSDOTSUB)
+#define F77_crotg_base		F77_GLOBAL(crotg, CROTG)
+#define F77_csrot_base		F77_GLOBAL(csrot, CSROT)
+#define F77_zrotg_base		F77_GLOBAL(zrotg, ZROTG)
+#define F77_zdrot_base		F77_GLOBAL(zdrot, ZDROT)
+#define F77_scabs1_sub_base F77_GLOBAL(scabs1sub, SCABS1SUB)
+#define F77_dcabs1_sub_base F77_GLOBAL(dcabs1sub, DCABS1SUB)
+
 /*
  * Level 2 BLAS
  */
@@ -200,6 +207,7 @@
  * Level 1 Fortran variadic definitions
  */
 
+
 /* Single Precision */
 
    #define F77_srot(...) F77_srot_base(__VA_ARGS__)
@@ -215,6 +223,7 @@
    #define F77_snrm2_sub(...) F77_snrm2_sub_base(__VA_ARGS__)
    #define F77_sasum_sub(...) F77_sasum_sub_base(__VA_ARGS__)
    #define F77_isamax_sub(...) F77_isamax_sub_base(__VA_ARGS__)
+   #define F77_scabs1_sub(...) F77_scabs1_sub_base(__VA_ARGS__)
 
 /* Double Precision */
 
@@ -232,9 +241,12 @@
    #define F77_dnrm2_sub(...) F77_dnrm2_sub_base(__VA_ARGS__)
    #define F77_dasum_sub(...) F77_dasum_sub_base(__VA_ARGS__)
    #define F77_idamax_sub(...) F77_idamax_sub_base(__VA_ARGS__)
+   #define F77_dcabs1_sub(...) F77_dcabs1_sub_base(__VA_ARGS__)
 
 /* Single Complex Precision */
 
+   #define F77_crotg(...) F77_crotg_base(__VA_ARGS__)
+   #define F77_csrot(...) F77_csrot_base(__VA_ARGS__)
    #define F77_cswap(...) F77_cswap_base(__VA_ARGS__)
    #define F77_ccopy(...) F77_ccopy_base(__VA_ARGS__)
    #define F77_caxpy(...) F77_caxpy_base(__VA_ARGS__)
@@ -249,6 +261,8 @@
 
 /* Double Complex Precision */
 
+   #define F77_zrotg(...) F77_zrotg_base(__VA_ARGS__)
+   #define F77_zdrot(...) F77_zdrot_base(__VA_ARGS__)
    #define F77_zswap(...) F77_zswap_base(__VA_ARGS__)
    #define F77_zcopy(...) F77_zcopy_base(__VA_ARGS__)
    #define F77_zaxpy(...) F77_zaxpy_base(__VA_ARGS__)
@@ -579,6 +593,8 @@ void F77_xerbla_base(FCHAR, void *
 
 /* Single Complex Precision */
 
+   void F77_crotg_base(void *, void *, float *, void *);
+   void F77_csrot_base(FINT, void *X, FINT, void *, FINT, const float *, const float *);
    void F77_cswap_base( FINT, void *, FINT, void *, FINT);
    void F77_ccopy_base( FINT, const void *, FINT, void *, FINT);
    void F77_caxpy_base( FINT, const void *, const void *, FINT, void *, FINT);
@@ -590,9 +606,12 @@ void F77_xerbla_base(FCHAR, void *
    void F77_csscal_base( FINT, const float *, void *, FINT);
    void F77_scnrm2_sub_base( FINT, const void *, FINT, float *);
    void F77_scasum_sub_base( FINT, const void *, FINT, float *);
+   void F77_scabs1_sub_base( const void *, float *);
 
 /* Double Complex Precision */
 
+   void F77_zrotg_base(void *, void *, double *, void *);
+   void F77_zdrot_base(FINT, void *X, FINT, void *, FINT, const double *, const double *);
    void F77_zswap_base( FINT, void *, FINT, void *, FINT);
    void F77_zcopy_base( FINT, const void *, FINT, void *, FINT);
    void F77_zaxpy_base( FINT, const void *, const void *, FINT, void *, FINT);
@@ -604,6 +623,7 @@ void F77_xerbla_base(FCHAR, void *
    void F77_dznrm2_sub_base( FINT, const void *, FINT, double *);
    void F77_dzasum_sub_base( FINT, const void *, FINT, double *);
    void F77_izamax_sub_base( FINT, const void *, FINT, FINT2);
+   void F77_dcabs1_sub_base( const void *, double *);
 
 /*
  * Level 2 Fortran Prototypes
