@@ -380,7 +380,7 @@
 *                       This line is needed on a Sun SPARCstation.
 *
                         IF( N.GT.0 )
-     $                     DUMMY = A( 1 )
+     $                     DUMMY = DBLE( A( 1 ) )
 *
                         CALL ZTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA,
      $                               X, LDA, B, LDA, WORK, RWORK,

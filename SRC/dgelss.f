@@ -305,7 +305,7 @@
 *                 Compute space needed for DGELQF
                   CALL DGELQF( M, N, A, LDA, DUM(1), DUM(1),
      $                -1, INFO )
-                  LWORK_DGELQF=DUM(1)
+                  LWORK_DGELQF = INT( DUM(1) )
 *                 Compute space needed for DGEBRD
                   CALL DGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
      $                      DUM(1), DUM(1), -1, INFO )

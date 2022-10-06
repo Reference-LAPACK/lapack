@@ -32,8 +32,15 @@ on:
     - '!**md'
 
 env:
-  CFLAGS: "-Wall -pedantic"
-  FFLAGS: "-fimplicit-none -frecursive -fopenmp -fcheck=all"
+  CC: "gcc"
+  FC: "gfortran"
+  CFLAGS: "-O3 -flto -Wall -pedantic-errors"
+  FFLAGS: "-O2 -flto -Wall -Werror=conversion -pedantic -fimplicit-none -frecursive -fopenmp -fcheck=all"
+  FFLAGS_NOOPT: "-O0 -flto -Wall -fimplicit-none -frecursive -fopenmp -fcheck=all"
+  LDFLAGS: ""
+  AR: "ar"
+  ARFLAGS: "cr"
+  RANLIB: "ranlib"
 
 defaults:
   run:
@@ -46,9 +53,19 @@ jobs:
     steps:
     - name: Checkout LAPACK
       uses: actions/checkout@v2
+    - name: Set configurations
+      run: |
+        echo "SHELL = /bin/sh" >> make.inc
+        echo "FFLAGS_DRV = ${{env.FFLAGS}}" >> make.inc
+        echo "TIMER = INT_ETIME" >> make.inc
+        echo "BLASLIB = ${{github.workspace}}/librefblas.a" >> make.inc
+        echo "CBLASLIB = ${{github.workspace}}/libcblas.a" >> make.inc
+        echo "LAPACKLIB = ${{github.workspace}}/liblapack.a" >> make.inc
+        echo "TMGLIB = ${{github.workspace}}/libtmglib.a" >> make.inc
+        echo "LAPACKELIB = ${{github.workspace}}/liblapacke.a" >> make.inc
+        echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
     - name: Install
       run: |
-        cp make.inc.example make.inc
         make -s -j2 all
         make -j2 lapack_install
 
@@ -57,12 +74,22 @@ jobs:
     steps:
     - name: Checkout LAPACK
       uses: actions/checkout@v2
+    - name: Set configurations
+      run: |
+        echo "SHELL = /bin/sh" >> make.inc
+        echo "FFLAGS_DRV = ${{env.FFLAGS}}" >> make.inc
+        echo "TIMER = INT_ETIME" >> make.inc
+        echo "BLASLIB = ${{github.workspace}}/librefblas.a" >> make.inc
+        echo "CBLASLIB = ${{github.workspace}}/libcblas.a" >> make.inc
+        echo "LAPACKLIB = ${{github.workspace}}/liblapack.a" >> make.inc
+        echo "TMGLIB = ${{github.workspace}}/libtmglib.a" >> make.inc
+        echo "LAPACKELIB = ${{github.workspace}}/liblapacke.a" >> make.inc
+        echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
     - name: Alias for GCC compilers
       run: |
         sudo ln -s $(which gcc-11) /usr/local/bin/gcc
         sudo ln -s $(which gfortran-11) /usr/local/bin/gfortran
     - name: Install
       run: |
-        cp make.inc.example make.inc
         make -s -j2 all
         make -j2 lapack_install
