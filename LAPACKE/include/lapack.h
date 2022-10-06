@@ -22002,6 +22002,84 @@ void LAPACK_ztrsyl_base(
     #define LAPACK_ztrsyl(...) LAPACK_ztrsyl_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_ctrsyl3_base LAPACK_GLOBAL(ctrsyl3,CTRSYL3)
+void LAPACK_ctrsyl3_base(
+    char const* trana, char const* tranb,
+    lapack_int const* isgn, lapack_int const* m, lapack_int const* n,
+    lapack_complex_float const* A, lapack_int const* lda,
+    lapack_complex_float const* B, lapack_int const* ldb,
+    lapack_complex_float* C, lapack_int const* ldc, float* scale,
+    float* swork, lapack_int const *ldswork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , size_t, size_t
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_ctrsyl3(...) LAPACK_ctrsyl3_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_ctrsyl3(...) LAPACK_ctrsyl3_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dtrsyl3_base LAPACK_GLOBAL(dtrsyl3,DTRSYL3)
+void LAPACK_dtrsyl3_base(
+    char const* trana, char const* tranb,
+    lapack_int const* isgn, lapack_int const* m, lapack_int const* n,
+    double const* A, lapack_int const* lda,
+    double const* B, lapack_int const* ldb,
+    double* C, lapack_int const* ldc, double* scale,
+    lapack_int* iwork, lapack_int const* liwork,
+    double* swork, lapack_int const *ldswork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , size_t, size_t
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dtrsyl3(...) LAPACK_dtrsyl3_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dtrsyl3(...) LAPACK_dtrsyl3_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_strsyl3_base LAPACK_GLOBAL(strsyl3,STRSYL3)
+void LAPACK_strsyl3_base(
+    char const* trana, char const* tranb,
+    lapack_int const* isgn, lapack_int const* m, lapack_int const* n,
+    float const* A, lapack_int const* lda,
+    float const* B, lapack_int const* ldb,
+    float* C, lapack_int const* ldc, float* scale,
+    lapack_int* iwork, lapack_int const* liwork,
+    float* swork, lapack_int const *ldswork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , size_t, size_t
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_strsyl3(...) LAPACK_strsyl3_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_strsyl3(...) LAPACK_strsyl3_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_ztrsyl3_base LAPACK_GLOBAL(ztrsyl3,ZTRSYL3)
+void LAPACK_ztrsyl3_base(
+    char const* trana, char const* tranb,
+    lapack_int const* isgn, lapack_int const* m, lapack_int const* n,
+    lapack_complex_double const* A, lapack_int const* lda,
+    lapack_complex_double const* B, lapack_int const* ldb,
+    lapack_complex_double* C, lapack_int const* ldc, double* scale,
+    double* swork, lapack_int const *ldswork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , size_t, size_t
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_ztrsyl3(...) LAPACK_ztrsyl3_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_ztrsyl3(...) LAPACK_ztrsyl3_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_ctrtri_base LAPACK_GLOBAL(ctrtri,CTRTRI)
 void LAPACK_ctrtri_base(
     char const* uplo, char const* diag,

@@ -39,7 +39,7 @@ include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+	$(CC) $(CFLAGS) -Wall -I../include -c -o $@ $<
 
 OBJ = \
 lapacke_ilaver.o \
@@ -604,6 +604,8 @@ lapacke_ctrsna.o \
 lapacke_ctrsna_work.o \
 lapacke_ctrsyl.o \
 lapacke_ctrsyl_work.o \
+lapacke_ctrsyl3.o \
+lapacke_ctrsyl3_work.o \
 lapacke_ctrtri.o \
 lapacke_ctrtri_work.o \
 lapacke_ctrtrs.o \
@@ -1216,6 +1218,8 @@ lapacke_dtrsna.o \
 lapacke_dtrsna_work.o \
 lapacke_dtrsyl.o \
 lapacke_dtrsyl_work.o \
+lapacke_dtrsyl3.o \
+lapacke_dtrsyl3_work.o \
 lapacke_dtrtri.o \
 lapacke_dtrtri_work.o \
 lapacke_dtrtrs.o \
@@ -1782,6 +1786,8 @@ lapacke_strsna.o \
 lapacke_strsna_work.o \
 lapacke_strsyl.o \
 lapacke_strsyl_work.o \
+lapacke_strsyl3.o \
+lapacke_strsyl3_work.o \
 lapacke_strtri.o \
 lapacke_strtri_work.o \
 lapacke_strtrs.o \
@@ -2356,6 +2362,8 @@ lapacke_ztrsna.o \
 lapacke_ztrsna_work.o \
 lapacke_ztrsyl.o \
 lapacke_ztrsyl_work.o \
+lapacke_ztrsyl3.o \
+lapacke_ztrsyl3_work.o \
 lapacke_ztrtri.o \
 lapacke_ztrtri_work.o \
 lapacke_ztrtrs.o \
