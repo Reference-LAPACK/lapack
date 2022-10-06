@@ -309,6 +309,8 @@ lapacke_clacrm.c
 lapacke_clacrm_work.c
 lapacke_clag2z.c
 lapacke_clag2z_work.c
+lapacke_clangb.c
+lapacke_clangb_work.c
 lapacke_clange.c
 lapacke_clange_work.c
 lapacke_clanhe.c
@@ -791,6 +793,8 @@ lapacke_dlag2s.c
 lapacke_dlag2s_work.c
 lapacke_dlamch.c
 lapacke_dlamch_work.c
+lapacke_dlangb.c
+lapacke_dlangb_work.c
 lapacke_dlange.c
 lapacke_dlange_work.c
 lapacke_dlansy.c
@@ -1366,6 +1370,8 @@ lapacke_slag2d.c
 lapacke_slag2d_work.c
 lapacke_slamch.c
 lapacke_slamch_work.c
+lapacke_slangb.c
+lapacke_slangb_work.c
 lapacke_slange.c
 lapacke_slange_work.c
 lapacke_slansy.c
@@ -2066,6 +2072,8 @@ lapacke_zlacrm.c
 lapacke_zlacrm_work.c
 lapacke_zlag2c.c
 lapacke_zlag2c_work.c
+lapacke_zlangb.c
+lapacke_zlangb_work.c
 lapacke_zlange.c
 lapacke_zlange_work.c
 lapacke_zlanhe.c
