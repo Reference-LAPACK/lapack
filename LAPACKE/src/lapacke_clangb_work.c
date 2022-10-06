@@ -43,27 +43,35 @@ float LAPACKE_clangb_work( int matrix_layout, char norm, lapack_int n,
         /* Call LAPACK function and adjust info */
         res = LAPACK_clangb( &norm, &n, &kl, &ku, ab, &ldab, work );
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int ldab_t = MAX(1,kl+ku+1);
-        lapack_complex_float* ab_t = NULL;
+        char norm_lapack;
+        float* work_lapack = NULL;
         /* Check leading dimension(s) */
         if( ldab < kl+ku+1 ) {
             info = -7;
             LAPACKE_xerbla( "LAPACKE_clangb_work", info );
             return info;
         }
-        /* Allocate memory for temporary array(s) */
-        ab_t = (lapack_complex_float*)
-            LAPACKE_malloc( sizeof(lapack_complex_float) * ldab_t * MAX(1,n) );
-        if( ab_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+        if( LAPACKE_lsame( norm, '1' ) || LAPACKE_lsame( norm, 'o' ) ) {
+            norm_lapack = 'i';
+        } else if( LAPACKE_lsame( norm, 'i' ) ) {
+            norm_lapack = '1';
+        } else {
+            norm_lapack = norm;
         }
-        /* Transpose input matrices */
-        LAPACKE_cgb_trans( matrix_layout, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
-        /* Call LAPACK function and adjust info */
-        res = LAPACK_clangb( &norm, &n, &kl, &ku, ab_t, &ldab_t, work );
+        /* Allocate memory for work array(s) */
+        if( LAPACKE_lsame( norm_lapack, 'i' ) ) {
+            work_lapack = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,n) );
+            if( work_lapack == NULL ) {
+                info = LAPACK_WORK_MEMORY_ERROR;
+                goto exit_level_0;
+            }
+        }
+        /* Call LAPACK function */
+        res = LAPACK_clangb( &norm, &n, &ku, &kl, ab, &ldab, work );
         /* Release memory and exit */
-        LAPACKE_free( ab_t );
+        if( work_lapack ) {
+            LAPACKE_free( work_lapack );
+        }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
             LAPACKE_xerbla( "LAPACKE_clangb_work", info );
