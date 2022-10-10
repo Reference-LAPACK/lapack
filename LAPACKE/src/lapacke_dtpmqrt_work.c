@@ -49,8 +49,8 @@ lapack_int LAPACKE_dtpmqrt_work( int matrix_layout, char side, char trans,
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrowsA, ncolsA, nrowsV;
-        if      ( side == 'L' ) { nrowsA = k; ncolsA = n; nrowsV = m; }
-        else if ( side == 'R' ) { nrowsA = m; ncolsA = k; nrowsV = n; }
+        if      ( side == LAPACKE_lsame(side, 'l') ) { nrowsA = k; ncolsA = n; nrowsV = m; }
+        else if ( side == LAPACKE_lsame(side, 'r') ) { nrowsA = m; ncolsA = k; nrowsV = n; }
         else {
             info = -2;
             LAPACKE_xerbla( "LAPACKE_dtpmqrt_work", info );
@@ -118,8 +118,8 @@ lapack_int LAPACKE_dtpmqrt_work( int matrix_layout, char side, char trans,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, ncolsA, nrowsA, a_t, lda_t, a, lda );
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, m, b_t, ldb_t, b, ldb );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, nrowsA, ncolsA, a_t, lda_t, a, lda );
+        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_3:
