@@ -65,7 +65,7 @@ lapack_int LAPACKE_dtpmqrt_work( int matrix_layout, char side, char trans,
         double* a_t = NULL;
         double* b_t = NULL;
         /* Check leading dimension(s) */
-        if ( lda < ncolsA ) {
+        if( lda < ncolsA ) {
             info = -14;
             LAPACKE_xerbla( "LAPACKE_dtpmqrt_work", info );
             return info;
