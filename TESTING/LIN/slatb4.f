@@ -518,17 +518,18 @@
 *
 *        Set the norm and condition number.
 *
-         IF( IMAT.EQ.2 .OR. IMAT.EQ.8 ) THEN
+         MAT = ABS( IMAT )
+         IF( MAT.EQ.2 .OR. MAT.EQ.8 ) THEN
             CNDNUM = BADC1
-         ELSE IF( IMAT.EQ.3 .OR. IMAT.EQ.9 ) THEN
+         ELSE IF( MAT.EQ.3 .OR. MAT.EQ.9 ) THEN
             CNDNUM = BADC2
          ELSE
             CNDNUM = TWO
          END IF
 *
-         IF( IMAT.EQ.4 ) THEN
+         IF( MAT.EQ.4 ) THEN
             ANORM = SMALL
-         ELSE IF( IMAT.EQ.5 ) THEN
+         ELSE IF( MAT.EQ.5 ) THEN
             ANORM = LARGE
          ELSE
             ANORM = ONE

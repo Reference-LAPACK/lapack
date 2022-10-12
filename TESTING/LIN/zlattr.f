@@ -201,7 +201,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call ZLATB4 to set parameters for CLATMS.
+*     Call ZLATB4 to set parameters for ZLATMS.
 *
       UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
