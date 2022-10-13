@@ -187,7 +187,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call DLATB4 to set parameters for SLATMS.
+*     Call DLATB4 to set parameters for DLATMS.
 *
       UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
