@@ -4,8 +4,11 @@
                          B, LDB, W,  LDW,   S, LDS,        &
                          WORK, LWORK, IWORK, LIWORK, INFO )
 !.....
-!      USE PRECISION, ONLY: WP => SP
-!      IMPLICIT NONE
+      !USE PRECISION, ONLY: WP => SP
+      use iso_fortran_env, only: real32
+      IMPLICIT NONE
+      integer, parameter :: WP = real32
+
 !.....
 !     Scalar arguments
       CHARACTER, INTENT(IN)   :: JOBS,   JOBZ,  JOBR,  JOBF
@@ -13,15 +16,15 @@
                                  NRNK, LDZ, LDB, LDW,  LDS, &
                                  LWORK,  LIWORK
       INTEGER,   INTENT(OUT)  :: K, INFO
-      REAL, INTENT(IN) ::  TOL
+      REAL(KIND=WP), INTENT(IN) ::  TOL
 !     Array arguments
-      REAL,    INTENT(INOUT) :: X(LDX,*), Y(LDY,*)
-      REAL,    INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), &
-                                          W(LDW,*), S(LDS,*)
-      REAL,    INTENT(OUT)   :: REIG(*),  IMEIG(*), &
-                                          RES(*)
-      REAL,    INTENT(OUT)   :: WORK(*)
-      INTEGER, INTENT(OUT)   :: IWORK(*)
+      REAL(KIND=WP), INTENT(INOUT) :: X(LDX,*), Y(LDY,*)
+      REAL(KIND=WP), INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), &
+                                      W(LDW,*), S(LDS,*)
+      REAL(KIND=WP), INTENT(OUT)   :: REIG(*),  IMEIG(*), &
+                                      RES(*)
+      REAL(KIND=WP), INTENT(OUT)   :: WORK(*)
+      INTEGER,       INTENT(OUT)   :: IWORK(*)
 !............................................................
 !     Purpose
 !     =======
@@ -408,12 +411,12 @@
 !.............................................................
 !     Parameters
 !     ~~~~~~~~~~
-      REAL, PARAMETER ::  ONE = 1.0
-      REAL, PARAMETER :: ZERO = 0.0
+      REAL(KIND=WP), PARAMETER ::  ONE = 1.0_WP
+      REAL(KIND=WP), PARAMETER :: ZERO = 0.0_WP
 
 !     Local scalars
 !     ~~~~~~~~~~~~~
-      REAL          :: OFL,   ROOTSC, SCALE,  SMALL,   &
+      REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,   &
                        SSUM,  XSCL1,  XSCL2
       INTEGER       ::  i,  j, IMINWR,  INFO1,   &
                        LWRKEV, LWRSDD, LWRSVD, &
@@ -427,11 +430,11 @@
 
 !     Local arrays
 !     ~~~~~~~~~~~~
-      REAL          :: AB(2,2), RDUMMY(2), RDUMMY2(2)
+      REAL(KIND=WP) :: AB(2,2), RDUMMY(2), RDUMMY2(2)
 
 !     External funcions (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~
-      REAL          SLANGE, SLAMCH, SNRM2
+      REAL(KIND=WP) SLANGE, SLAMCH, SNRM2
       EXTERNAL      SLANGE, SLAMCH, SNRM2, ISAMAX
       INTEGER       ISAMAX
       LOGICAL       SISNAN, LSAME

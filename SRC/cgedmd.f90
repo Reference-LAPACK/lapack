@@ -5,8 +5,10 @@
                          RWORK, LRWORK, IWORK, LIWORK, INFO )
 ! August 2022
 !.....
-!      USE PRECISION, ONLY: WP => SP
-!      IMPLICIT NONE
+      !USE PRECISION, ONLY: WP => SP
+      use iso_fortran_env, only: real32
+      IMPLICIT NONE
+      integer, parameter :: WP = real32
 !.....
 !     Scalar arguments
       CHARACTER, INTENT(IN)   :: JOBS,   JOBZ,  JOBR,  JOBF
@@ -14,16 +16,16 @@
                                  NRNK, LDZ, LDB, LDW,  LDS, &
                                  LIWORK, LRWORK, LZWORK
       INTEGER,       INTENT(OUT)  :: K, INFO
-      REAL,          INTENT(IN)   ::    TOL
+      REAL(KIND=WP), INTENT(IN)   ::    TOL
 !     Array arguments
-      COMPLEX,       INTENT(INOUT) :: X(LDX,*), Y(LDY,*)
-      COMPLEX,       INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), &
-                                      W(LDW,*), S(LDS,*)
-      COMPLEX,       INTENT(OUT)   :: EIGS(*)
-      COMPLEX,       INTENT(OUT)   :: ZWORK(*)
-      REAL,          INTENT(OUT)   :: RES(*)
-      REAL,          INTENT(OUT)   :: RWORK(*)
-      INTEGER,       INTENT(OUT)   :: IWORK(*)
+      COMPLEX(KIND=WP), INTENT(INOUT) :: X(LDX,*), Y(LDY,*)
+      COMPLEX(KIND=WP), INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), &
+                                         W(LDW,*), S(LDS,*)
+      COMPLEX(KIND=WP), INTENT(OUT)   :: EIGS(*)
+      COMPLEX(KIND=WP), INTENT(OUT)   :: ZWORK(*)
+      REAL(KIND=WP),    INTENT(OUT)   :: RES(*)
+      REAL(KIND=WP),    INTENT(OUT)   :: RWORK(*)
+      INTEGER,          INTENT(OUT)   :: IWORK(*)
 !............................................................
 !     Purpose
 !     =======
@@ -393,32 +395,32 @@
 !.............................................................
 !     Parameters
 !     ~~~~~~~~~~
-      REAL, PARAMETER ::  ONE = 1.0
-      REAL, PARAMETER :: ZERO = 0.0
-      COMPLEX, PARAMETER ::  ZONE = ( 1.0, 0.0 )
-      COMPLEX, PARAMETER :: ZZERO = ( 0.0, 0.0 )
+      REAL(KIND=WP), PARAMETER ::  ONE = 1.0_WP
+      REAL(KIND=WP), PARAMETER :: ZERO = 0.0_WP
+      COMPLEX(KIND=WP), PARAMETER ::  ZONE = ( 1.0_WP, 0.0_WP )
+      COMPLEX(KIND=WP), PARAMETER :: ZZERO = ( 0.0_WP, 0.0_WP )
 
 !     Local scalars
 !     ~~~~~~~~~~~~~
-      REAL      :: OFL,   ROOTSC, SCALE,  SMALL,   &
-                   SSUM,  XSCL1,  XSCL2
-      INTEGER   ::  i,  j, IMINWR,  INFO1, &
-                    LWRKEV, LWRSDD, LWRSVD, LWRSVJ, &
-                   LWRSVQ, MLWORK, MWRKEV, MWRSDD, &
-                   MWRSVD, MWRSVJ, MWRSVQ, NUMRNK, &
-                   OLWORK, MLRWRK
-      LOGICAL   ::  BADXY, LQUERY, SCCOLX, SCCOLY, &
-                    WNTEX, WNTREF, WNTRES, WNTVEC
-      CHARACTER ::  JOBZL, T_OR_N
-      CHARACTER ::  JSVOPT
+      REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,   &
+                       SSUM,  XSCL1,  XSCL2
+      INTEGER       ::  i,  j, IMINWR,  INFO1, &
+                        LWRKEV, LWRSDD, LWRSVD, LWRSVJ, &
+                       LWRSVQ, MLWORK, MWRKEV, MWRSDD, &
+                       MWRSVD, MWRSVJ, MWRSVQ, NUMRNK, &
+                       OLWORK, MLRWRK
+      LOGICAL       ::  BADXY, LQUERY, SCCOLX, SCCOLY, &
+                        WNTEX, WNTREF, WNTRES, WNTVEC
+      CHARACTER     ::  JOBZL, T_OR_N
+      CHARACTER     ::  JSVOPT
 
 !     Local arrays
 !     ~~~~~~~~~~~~
-      REAL :: RDUMMY(2)
+      REAL(KIND=WP) :: RDUMMY(2)
 
 !     External funcions (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~
-      REAL          CLANGE, SLAMCH, SCNRM2
+      REAL(KIND=WP) CLANGE, SLAMCH, SCNRM2
       EXTERNAL      CLANGE, SLAMCH, SCNRM2, ICAMAX
       INTEGER                               ICAMAX
       LOGICAL       SISNAN, LSAME
@@ -862,8 +864,7 @@
           END DO
           DO j = 1, N
              DO i = 1, K
-                 !W(i,j) = CMPLX(RWORK(N+i),ZERO,KIND=WP)*W(i,j)
-                 W(i,j) = CMPLX(RWORK(N+i),ZERO)*W(i,j)
+                 W(i,j) = CMPLX(RWORK(N+i),ZERO,KIND=WP)*W(i,j)
              END DO
           END DO
       END IF
