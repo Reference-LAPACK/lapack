@@ -376,6 +376,10 @@ lapack_logical LAPACKE_ctr_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const lapack_complex_float *a,
                                       lapack_int lda );
+lapack_logical LAPACKE_ctz_nancheck( int matrix_layout, char direct, char uplo,
+                                     char diag, lapack_int m, lapack_int n,
+                                     const lapack_complex_float *a,
+                                     lapack_int lda );
 
 lapack_logical LAPACKE_dgb_nancheck( int matrix_layout, lapack_int m,
                                       lapack_int n, lapack_int kl,
@@ -440,6 +444,9 @@ lapack_logical LAPACKE_dtr_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const double *a,
                                       lapack_int lda );
+lapack_logical LAPACKE_dtz_nancheck( int matrix_layout, char direct, char uplo,
+                                     char diag, lapack_int m, lapack_int n,
+                                     const double *a, lapack_int lda );
 
 lapack_logical LAPACKE_sgb_nancheck( int matrix_layout, lapack_int m,
                                       lapack_int n, lapack_int kl,
@@ -504,6 +511,9 @@ lapack_logical LAPACKE_str_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const float *a,
                                       lapack_int lda );
+lapack_logical LAPACKE_stz_nancheck( int matrix_layout, char direct, char uplo,
+                                     char diag, lapack_int m, lapack_int n,
+                                     const float *a, lapack_int lda );
 
 lapack_logical LAPACKE_zgb_nancheck( int matrix_layout, lapack_int m,
                                       lapack_int n, lapack_int kl,
@@ -574,6 +584,10 @@ lapack_logical LAPACKE_ztr_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const lapack_complex_double *a,
                                       lapack_int lda );
+lapack_logical LAPACKE_ztz_nancheck( int matrix_layout, char direct, char uplo,
+                                     char diag, lapack_int m, lapack_int n,
+                                     const lapack_complex_double *a,
+                                     lapack_int lda );
 
 #ifdef __cplusplus
 }
