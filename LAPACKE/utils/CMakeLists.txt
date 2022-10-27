@@ -43,11 +43,3 @@ lapacke_make_complex_float.c                                                    
 lapacke_lsame.c
 lapacke_xerbla.c
 )
-
-
-
-
-
-
-
-
