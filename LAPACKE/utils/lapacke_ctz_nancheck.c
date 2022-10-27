@@ -132,11 +132,13 @@ lapack_logical LAPACKE_ctz_nancheck( int matrix_layout, char direct, char uplo,
 
     /* Check rectangular part */
     if( rect_offset >= 0 ) {
-        if( LAPACKE_cge_nancheck(matrix_layout, rect_m, rect_n, &a[rect_offset], lda) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, rect_m, rect_n,
+                                  &a[rect_offset], lda) ) {
             return (lapack_logical) 1;
         }
     }
 
     /* Check triangular part */
-    return LAPACKE_ctr_nancheck(matrix_layout, uplo, diag, tri_n, &a[tri_offset], lda);
+    return LAPACKE_ctr_nancheck( matrix_layout, uplo, diag, tri_n,
+                                 &a[tri_offset], lda );
 }
