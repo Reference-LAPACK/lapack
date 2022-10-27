@@ -76,7 +76,7 @@ OBJ = lapacke_cgb_nancheck.o \
       lapacke_ctp_trans.o \
       lapacke_ctr_nancheck.o \
       lapacke_ctr_trans.o \
-			lapacke_ctz_nancheck.o \
+      lapacke_ctz_nancheck.o \
       lapacke_dgb_nancheck.o \
       lapacke_dgb_trans.o \
       lapacke_dge_nancheck.o \
