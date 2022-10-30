@@ -38,6 +38,7 @@ lapacke_ctp_trans.c           lapacke_dtp_trans.c           lapacke_stp_trans.c 
 lapacke_ctr_nancheck.c        lapacke_dtr_nancheck.c        lapacke_str_nancheck.c        lapacke_ztr_nancheck.c
 lapacke_ctr_trans.c           lapacke_dtr_trans.c           lapacke_str_trans.c           lapacke_ztr_trans.c
 lapacke_ctz_nancheck.c        lapacke_dtz_nancheck.c        lapacke_stz_nancheck.c        lapacke_ztz_nancheck.c
+lapacke_ctz_trans.c           lapacke_dtz_trans.c           lapacke_stz_trans.c           lapacke_ztz_trans.c
 
 lapacke_make_complex_float.c                                                              lapacke_make_complex_double.c
 lapacke_lsame.c
