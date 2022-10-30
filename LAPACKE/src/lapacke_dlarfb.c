@@ -41,7 +41,7 @@ lapack_int LAPACKE_dlarfb( int matrix_layout, char side, char trans, char direct
     lapack_int info = 0;
     lapack_int ldwork;
     double* work = NULL;
-    lapack_int ncols_v, nrows_v;
+    lapack_int nrows_v, ncols_v;
     lapack_logical left, col, forward;
     char uplo;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
@@ -55,8 +55,8 @@ lapack_int LAPACKE_dlarfb( int matrix_layout, char side, char trans, char direct
         col = LAPACKE_lsame( storev, 'c' );
         forward = LAPACKE_lsame( direct, 'f' );
 
-        ncols_v = ( !col && left ) ? m : ( ( !col && !left ) ? n : ( col ? k : 1 ) );
         nrows_v = ( col && left ) ? m : ( ( col && !left ) ? n : ( !col ? k : 1) );
+        ncols_v = ( !col && left ) ? m : ( ( !col && !left ) ? n : ( col ? k : 1 ) );
         uplo = ( ( left && col ) || !( left || col ) ) ? 'l' : 'u';
 
         if( !forward && ( col && k > nrows_v ) || ( !col && k > ncols_v )) {
@@ -64,7 +64,7 @@ lapack_int LAPACKE_dlarfb( int matrix_layout, char side, char trans, char direct
             return -8;
         }
         if( LAPACKE_dtz_nancheck( matrix_layout, direct, uplo, 'u',
-                                  ncols_v, nrows_v, v, ldv ) ) {
+                                  nrows_v, ncols_v, v, ldv ) ) {
             return -9;
         }
         if( LAPACKE_dge_nancheck( matrix_layout, k, k, t, ldt ) ) {
