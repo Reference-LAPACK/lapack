@@ -94,7 +94,7 @@ lapack_logical LAPACKE_stz_nancheck( int matrix_layout, char direct, char uplo,
     unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !front  && !LAPACKE_lsame( uplo, 'b' ) ) ||
+        ( !front  && !LAPACKE_lsame( direct, 'b' ) ) ||
         ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
