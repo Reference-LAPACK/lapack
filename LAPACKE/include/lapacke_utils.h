@@ -128,6 +128,10 @@ void LAPACKE_ctp_trans( int matrix_layout, char uplo, char diag,
 void LAPACKE_ctr_trans( int matrix_layout, char uplo, char diag, lapack_int n,
                         const lapack_complex_float *in, lapack_int ldin,
                         lapack_complex_float *out, lapack_int ldout );
+void LAPACKE_ctz_trans( int matrix_layout, char direct, char uplo,
+                        char diag, lapack_int m, lapack_int n,
+                        const lapack_complex_float *in, lapack_int ldin,
+                        lapack_complex_float *out, lapack_int ldout );
 
 void LAPACKE_dgb_trans( int matrix_layout, lapack_int m, lapack_int n,
                         lapack_int kl, lapack_int ku,
@@ -178,6 +182,10 @@ void LAPACKE_dtp_trans( int matrix_layout, char uplo, char diag,
 void LAPACKE_dtr_trans( int matrix_layout, char uplo, char diag, lapack_int n,
                         const double *in, lapack_int ldin,
                         double *out, lapack_int ldout );
+void LAPACKE_dtz_trans( int matrix_layout, char direct, char uplo,
+                        char diag, lapack_int m, lapack_int n,
+                        const double *in, lapack_int ldin,
+                        double *out, lapack_int ldout );
 
 void LAPACKE_sgb_trans( int matrix_layout, lapack_int m, lapack_int n,
                         lapack_int kl, lapack_int ku,
@@ -226,6 +234,10 @@ void LAPACKE_stp_trans( int matrix_layout, char uplo, char diag,
                         lapack_int n, const float *in,
                         float *out );
 void LAPACKE_str_trans( int matrix_layout, char uplo, char diag, lapack_int n,
+                        const float *in, lapack_int ldin,
+                        float *out, lapack_int ldout );
+void LAPACKE_stz_trans( int matrix_layout, char direct, char uplo,
+                        char diag, lapack_int m, lapack_int n,
                         const float *in, lapack_int ldin,
                         float *out, lapack_int ldout );
 
@@ -282,6 +294,10 @@ void LAPACKE_ztp_trans( int matrix_layout, char uplo, char diag,
                         lapack_int n, const lapack_complex_double *in,
                         lapack_complex_double *out );
 void LAPACKE_ztr_trans( int matrix_layout, char uplo, char diag, lapack_int n,
+                        const lapack_complex_double *in, lapack_int ldin,
+                        lapack_complex_double *out, lapack_int ldout );
+void LAPACKE_ztz_trans( int matrix_layout, char direct, char uplo,
+                        char diag, lapack_int m, lapack_int n,
                         const lapack_complex_double *in, lapack_int ldin,
                         lapack_complex_double *out, lapack_int ldout );
 
