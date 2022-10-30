@@ -112,18 +112,18 @@ lapack_logical LAPACKE_ctz_nancheck( int matrix_layout, char direct, char uplo,
     /* Fix offsets depending on the shape of the matrix */
     if( front ) {
         if( lower && m > n) {
-            rect_offset = tri_n * (!colmaj ? lda : 1);
+            rect_offset = tri_n * ( !colmaj ? lda : 1 );
         } else if( !lower && n > m) {
-            rect_offset = tri_n * (colmaj ? lda : 1);
+            rect_offset = tri_n * ( colmaj ? lda : 1 );
         }
     } else {
         if( m > n) {
-            tri_offset = rect_m * (!colmaj ? lda : 1);
+            tri_offset = rect_m * ( !colmaj ? lda : 1 );
             if( !lower ) {
                 rect_offset = 0;
             }
         } else if( n > m) {
-            tri_offset = rect_n * (colmaj ? lda : 1);
+            tri_offset = rect_n * ( colmaj ? lda : 1 );
             if( lower ) {
                 rect_offset = 0;
             }
