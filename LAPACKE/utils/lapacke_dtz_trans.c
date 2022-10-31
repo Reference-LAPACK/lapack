@@ -33,10 +33,11 @@
 #include "lapacke_utils.h"
 
 /*****************************************************************************
-  Check a trapezoidal matrix for NaN entries. The shape of the trapezoidal
-  matrix is determined by the arguments `direct` and `uplo`. `Direct` chooses
-  the diagonal which shall be considered and `uplo` tells us whether we use the
-  upper or lower part of the matrix with respect to the chosen diagonal.
+  Converts input triangular matrix from row-major(C) to column-major(Fortran)
+  layout or vice versa. The shape of the trapezoidal matrix is determined by
+  the arguments `direct` and `uplo`. `Direct` chooses the diagonal which shall
+  be considered and `uplo` tells us whether we use the upper or lower part of
+  the matrix with respect to the chosen diagonal.
 
       Diagonals 'F' (front / forward) and 'B' (back / backward):
 
@@ -80,14 +81,14 @@
 
 *****************************************************************************/
 
-lapack_logical LAPACKE_ztz_nancheck( int matrix_layout, char direct, char uplo,
-                                     char diag, lapack_int m, lapack_int n,
-                                     const lapack_complex_double *a,
-                                     lapack_int lda )
+void LAPACKE_dtz_trans( int matrix_layout, char direct, char uplo,
+                        char diag, lapack_int m, lapack_int n,
+                        const double *in, lapack_int ldin,
+                        double *out, lapack_int ldout )
 {
     lapack_logical colmaj, front, lower, unit;
 
-    if( a == NULL ) return (lapack_logical) 0;
+    if( in == NULL || out == NULL ) return ;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
     front  = LAPACKE_lsame( direct, 'f' );
@@ -99,46 +100,54 @@ lapack_logical LAPACKE_ztz_nancheck( int matrix_layout, char direct, char uplo,
         ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
-        return (lapack_logical) 0;
+        return;
     }
 
     /* Initial offsets and sizes of triangular and rectangular parts */
-    lapack_int tri_offset = 0;
+    lapack_int tri_in_offset = 0;
+    lapack_int tri_out_offset = 0;
     lapack_int tri_n = MIN(m,n);
-    lapack_int rect_offset = -1;
+    lapack_int rect_in_offset = -1;
+    lapack_int rect_out_offset = -1;
     lapack_int rect_m = ( m > n ) ? m - n : m;
     lapack_int rect_n = ( n > m ) ? n - m : n;
 
     /* Fix offsets depending on the shape of the matrix */
     if( front ) {
         if( lower && m > n ) {
-            rect_offset = tri_n * ( !colmaj ? lda : 1 );
+            rect_in_offset = tri_n * ( !colmaj ? ldin : 1 );
+            rect_out_offset = tri_n * ( colmaj ? ldout : 1 );
         } else if( !lower && n > m ) {
-            rect_offset = tri_n * ( colmaj ? lda : 1 );
+            rect_in_offset = tri_n * ( colmaj ? ldin : 1 );
+            rect_out_offset = tri_n * ( !colmaj ? ldout : 1 );
         }
     } else {
         if( m > n ) {
-            tri_offset = rect_m * ( !colmaj ? lda : 1 );
+            tri_in_offset = rect_m * ( !colmaj ? ldin : 1 );
+            tri_out_offset = rect_m * ( colmaj ? ldout : 1 );
             if( !lower ) {
-                rect_offset = 0;
+                rect_in_offset = 0;
+                rect_out_offset = 0;
             }
         } else if( n > m ) {
-            tri_offset = rect_n * ( colmaj ? lda : 1 );
+            tri_in_offset = rect_n * ( colmaj ? ldin : 1 );
+            tri_out_offset = rect_n * ( !colmaj ? ldout : 1 );
             if( lower ) {
-                rect_offset = 0;
+                rect_in_offset = 0;
+                rect_out_offset = 0;
             }
         }
     }
 
-    /* Check rectangular part */
-    if( rect_offset >= 0 ) {
-        if( LAPACKE_zge_nancheck( matrix_layout, rect_m, rect_n,
-                                  &a[rect_offset], lda) ) {
-            return (lapack_logical) 1;
-        }
+    /* Copy & transpose rectangular part */
+    if( rect_in_offset >= 0 && rect_out_offset >= 0 ) {
+        LAPACKE_dge_trans( matrix_layout, rect_m, rect_n,
+                           &in[rect_in_offset], ldin,
+                           &out[rect_out_offset], ldout );
     }
 
-    /* Check triangular part */
-    return LAPACKE_ztr_nancheck( matrix_layout, uplo, diag, tri_n,
-                                 &a[tri_offset], lda );
+    /* Copy & transpose triangular part */
+    return LAPACKE_dtr_trans( matrix_layout, uplo, diag, tri_n,
+                              &in[tri_in_offset], ldin,
+                              &out[tri_out_offset], ldout );
 }

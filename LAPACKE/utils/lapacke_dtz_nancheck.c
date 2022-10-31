@@ -94,7 +94,7 @@ lapack_logical LAPACKE_dtz_nancheck( int matrix_layout, char direct, char uplo,
     unit   = LAPACKE_lsame( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !front  && !LAPACKE_lsame( uplo, 'b' ) ) ||
+        ( !front  && !LAPACKE_lsame( direct, 'b' ) ) ||
         ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
@@ -105,24 +105,24 @@ lapack_logical LAPACKE_dtz_nancheck( int matrix_layout, char direct, char uplo,
     lapack_int tri_offset = 0;
     lapack_int tri_n = MIN(m,n);
     lapack_int rect_offset = -1;
-    lapack_int rect_m = (m > n) ? m - n : m;
-    lapack_int rect_n = (n > m) ? n - m : n;
+    lapack_int rect_m = ( m > n ) ? m - n : m;
+    lapack_int rect_n = ( n > m ) ? n - m : n;
 
     /* Fix offsets depending on the shape of the matrix */
     if( front ) {
-        if( lower && m > n) {
-            rect_offset = tri_n * (!colmaj ? lda : 1);
-        } else if( !lower && n > m) {
-            rect_offset = tri_n * (colmaj ? lda : 1);
+        if( lower && m > n ) {
+            rect_offset = tri_n * ( !colmaj ? lda : 1 );
+        } else if( !lower && n > m ) {
+            rect_offset = tri_n * ( colmaj ? lda : 1 );
         }
     } else {
-        if( m > n) {
-            tri_offset = rect_m * (!colmaj ? lda : 1);
+        if( m > n ) {
+            tri_offset = rect_m * ( !colmaj ? lda : 1 );
             if( !lower ) {
                 rect_offset = 0;
             }
-        } else if( n > m) {
-            tri_offset = rect_n * (colmaj ? lda : 1);
+        } else if( n > m ) {
+            tri_offset = rect_n * ( colmaj ? lda : 1 );
             if( lower ) {
                 rect_offset = 0;
             }
@@ -132,7 +132,7 @@ lapack_logical LAPACKE_dtz_nancheck( int matrix_layout, char direct, char uplo,
     /* Check rectangular part */
     if( rect_offset >= 0 ) {
         if( LAPACKE_dge_nancheck( matrix_layout, rect_m, rect_n,
-                                  &a[rect_offset], lda) ) {
+                                  &a[rect_offset], lda ) ) {
             return (lapack_logical) 1;
         }
     }
