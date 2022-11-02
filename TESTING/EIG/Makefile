@@ -101,6 +101,8 @@ DEIGTST = dchkee.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
    dstt22.o dsyl01.o dsyt21.o dsyt22.o
 
+DMDEIGTST = dchkdmd.o
+
 ZEIGTST = zchkee.o \
    zbdt01.o zbdt02.o zbdt03.o zbdt05.o \
    zchkbb.o zchkbd.o zchkbk.o zchkbl.o zchkec.o \
@@ -124,8 +126,11 @@ all: single complex double complex16
 .PHONY: single complex double complex16
 single: xeigtsts
 complex: xeigtstc
-double: xeigtstd
+double: xeigtstd xdmdeigtstd
 complex16: xeigtstz
+
+xdmdeigtstd: $(DMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
@@ -139,6 +144,7 @@ xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+$(DMDEIGTST): $(FRC)
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
 $(DZIGTST): $(FRC)
@@ -155,7 +161,7 @@ clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o
 cleanexe:
-	rm -f xeigtst*
+	rm -f xeigtst* xdmdeigtst*
 
 schkee.o: schkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
@@ -164,4 +170,6 @@ dchkee.o: dchkee.F
 cchkee.o: cchkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkee.o: zchkee.F
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<

@@ -597,8 +597,8 @@ SUBROUTINE ZGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
             MLWGQR = MAX(1,N)
             MLWORK = MAX(MLWORK,MINMN+MLWGQR)
             IF ( LQUERY ) THEN
-                CALL ZUNGQR( M, MINMN, MINMN, F, LDF, WORK, &
-                             WORK, -1, INFO1 )
+                CALL ZUNGQR( M, MINMN, MINMN, F, LDF, ZWORK, &
+                             ZWORK, -1, INFO1 )
                 OLWGQR = INT(WORK(1))
                 OLWORK = MAX(OLWORK,MINMN+OLWGQR)
             END IF
