@@ -18,14 +18,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSRSCL( N, SA, SX, INCX )
+*       SUBROUTINE CSRSCL( N, SA, CX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
 *       REAL               SA
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX            SX( * )
+*       COMPLEX            CX( * )
 *       ..
 *
 *
@@ -55,9 +55,9 @@
 *>          SA must be >= 0, or the subroutine will divide by zero.
 *> \endverbatim
 *>
-*> \param[in,out] SX
+*> \param[in,out] CX
 *> \verbatim
-*>          SX is COMPLEX array, dimension
+*>          CX is COMPLEX array, dimension
 *>                         (1+(N-1)*abs(INCX))
 *>          The n-element vector x.
 *> \endverbatim
@@ -65,8 +65,8 @@
 *> \param[in] INCX
 *> \verbatim
 *>          INCX is INTEGER
-*>          The increment between successive values of the vector SX.
-*>          > 0:  SX(1) = X(1) and SX(1+(i-1)*INCX) = x(i),     1< i<= n
+*>          The increment between successive values of the vector CX.
+*>          > 0:  CX(1) = X(1) and CX(1+(i-1)*INCX) = x(i),     1< i<= n
 *> \endverbatim
 *
 *  Authors:
@@ -80,7 +80,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CSRSCL( N, SA, SX, INCX )
+      SUBROUTINE CSRSCL( N, SA, CX, INCX )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,79 +91,38 @@
       REAL               SA
 *     ..
 *     .. Array Arguments ..
-      COMPLEX            SX( * )
+      COMPLEX            CX( * )
 *     ..
 *
 * =====================================================================
 *
-*     .. Parameters ..
-      REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
-      LOGICAL            DONE
-      REAL               BIGNUM, CDEN, CDEN1, CNUM, CNUM1, MUL, SMLNUM
+      INTEGER I,NINCX
 *     ..
-*     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           CSSCAL, SLABAD
+*     .. Parameters ..
+      REAL ONE
+      PARAMETER (ONE=1.0E+0)
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS
+      INTRINSIC AIMAG,CMPLX,REAL
 *     ..
-*     .. Executable Statements ..
+      IF (N.LE.0 .OR. INCX.LE.0 .OR. SA.EQ.ONE) RETURN
+      IF (INCX.EQ.1) THEN
 *
-*     Quick return if possible
+*        code for increment equal to 1
 *
-      IF( N.LE.0 )
-     $   RETURN
-*
-*     Get machine parameters
-*
-      SMLNUM = SLAMCH( 'S' )
-      BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
-*
-*     Initialize the denominator to SA and the numerator to 1.
-*
-      CDEN = SA
-      CNUM = ONE
-*
-   10 CONTINUE
-      CDEN1 = CDEN*SMLNUM
-      CNUM1 = CNUM / BIGNUM
-      IF( ABS( CDEN1 ).GT.ABS( CNUM ) .AND. CNUM.NE.ZERO ) THEN
-*
-*        Pre-multiply X by SMLNUM if CDEN is large compared to CNUM.
-*
-         MUL = SMLNUM
-         DONE = .FALSE.
-         CDEN = CDEN1
-      ELSE IF( ABS( CNUM1 ).GT.ABS( CDEN ) ) THEN
-*
-*        Pre-multiply X by BIGNUM if CDEN is small compared to CNUM.
-*
-         MUL = BIGNUM
-         DONE = .FALSE.
-         CNUM = CNUM1
+         DO I = 1,N
+            CX(I) = CMPLX(REAL(CX(I))/SA,AIMAG(CX(I))/SA)
+         END DO
       ELSE
 *
-*        Multiply X by CNUM / CDEN and return.
+*        code for increment not equal to 1
 *
-         MUL = CNUM / CDEN
-         DONE = .TRUE.
+         NINCX = N*INCX
+         DO I = 1,NINCX,INCX
+            CX(I) = CMPLX(REAL(CX(I))/SA,AIMAG(CX(I))/SA)
+         END DO
       END IF
-*
-*     Scale the vector X by MUL
-*
-      CALL CSSCAL( N, MUL, SX, INCX )
-*
-      IF( .NOT.DONE )
-     $   GO TO 10
-*
       RETURN
 *
 *     End of CSRSCL

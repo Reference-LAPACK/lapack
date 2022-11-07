@@ -96,74 +96,30 @@
 *
 * =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
 *     .. Local Scalars ..
-      LOGICAL            DONE
-      REAL               BIGNUM, CDEN, CDEN1, CNUM, CNUM1, MUL, SMLNUM
+      INTEGER I,NINCX
 *     ..
-*     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+*     .. Parameters ..
+      REAL ONE
+      PARAMETER (ONE=1.0E+0)
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           SLABAD, SSCAL
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS
-*     ..
-*     .. Executable Statements ..
+      IF (N.LE.0 .OR. INCX.LE.0 .OR. SA.EQ.ONE) RETURN
+      IF (INCX.EQ.1) THEN
 *
-*     Quick return if possible
+*        code for increment equal to 1
 *
-      IF( N.LE.0 )
-     $   RETURN
-*
-*     Get machine parameters
-*
-      SMLNUM = SLAMCH( 'S' )
-      BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
-*
-*     Initialize the denominator to SA and the numerator to 1.
-*
-      CDEN = SA
-      CNUM = ONE
-*
-   10 CONTINUE
-      CDEN1 = CDEN*SMLNUM
-      CNUM1 = CNUM / BIGNUM
-      IF( ABS( CDEN1 ).GT.ABS( CNUM ) .AND. CNUM.NE.ZERO ) THEN
-*
-*        Pre-multiply X by SMLNUM if CDEN is large compared to CNUM.
-*
-         MUL = SMLNUM
-         DONE = .FALSE.
-         CDEN = CDEN1
-      ELSE IF( ABS( CNUM1 ).GT.ABS( CDEN ) ) THEN
-*
-*        Pre-multiply X by BIGNUM if CDEN is small compared to CNUM.
-*
-         MUL = BIGNUM
-         DONE = .FALSE.
-         CNUM = CNUM1
+         DO I = 1,N
+            SX(I) = SX(I)/SA
+         END DO
       ELSE
 *
-*        Multiply X by CNUM / CDEN and return.
+*        code for increment not equal to 1
 *
-         MUL = CNUM / CDEN
-         DONE = .TRUE.
+         NINCX = N*INCX
+         DO I = 1,NINCX,INCX
+            SX(I) = SX(I)/SA
+         END DO
       END IF
-*
-*     Scale the vector X by MUL
-*
-      CALL SSCAL( N, MUL, SX, INCX )
-*
-      IF( .NOT.DONE )
-     $   GO TO 10
-*
       RETURN
 *
 *     End of SRSCL
