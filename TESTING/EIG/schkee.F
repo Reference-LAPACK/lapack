@@ -1893,6 +1893,7 @@
 *
 *        Test M = 0 on SLARRV:
 *
+         WRITE( NOUT, FMT = 9958 )'M'
          CALL SCOPY( 8, A, 1, WORK, 1 )
          IWORK(1) = 100
          CALL SLARRV( 1, 1.0E0, 1.0E0, A(1,1), A(2,1),
@@ -1907,7 +1908,6 @@
             DO K = 1, 8
                IF( A(K,1) .NE. WORK(K) ) THEN
                   WRITE( NOUT, FMT = 9958 )'M'
-                  EXIT
                END IF
             END DO
          END IF
