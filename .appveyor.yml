@@ -19,7 +19,7 @@ environment:
     CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
 
 install:
-  - call %CONDA_INSTALL_LOCN%\conda update --yes conda
+  - call %CONDA_INSTALL_LOCN%\Scripts\conda update --yes conda
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
 #  - conda config --set auto_update_conda false
 #  - conda install --yes conda=4.3.8 --force
