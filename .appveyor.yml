@@ -27,7 +27,7 @@ install:
 #  - conda update --yes -n base conda
 #  - conda config --add channels conda-forge --force
 #  - conda clean --all --yes
-  - conda install -c conda-forge --yes --quiet flang
+  - %CONDA_INSTALL_LOCN%\conda install -c conda-forge --yes --quiet flang
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
   - set "CPATH=%CONDA_INSTALL_LOCN%\Library\include;%CPATH%"
