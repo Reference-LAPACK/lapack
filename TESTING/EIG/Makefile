@@ -101,7 +101,7 @@ DEIGTST = dchkee.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
    dstt22.o dsyl01.o dsyt21.o dsyt22.o
 
-DMDEIGTST = dchkdmd.o
+DDMDEIGTST = dchkdmd.o
 
 ZEIGTST = zchkee.o \
    zbdt01.o zbdt02.o zbdt03.o zbdt05.o \
@@ -129,7 +129,7 @@ complex: xeigtstc
 double: xeigtstd xdmdeigtstd
 complex16: xeigtstz
 
-xdmdeigtstd: $(DMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
+xdmdeigtstd: $(DDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
@@ -144,7 +144,7 @@ xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-$(DMDEIGTST): $(FRC)
+$(DDMDEIGTST): $(FRC)
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
 $(DZIGTST): $(FRC)
