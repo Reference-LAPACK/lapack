@@ -11,8 +11,8 @@ skip_commits:
 # Add [av skip] to commit messages
   message: /\[av skip\]/
 
-cache:
-  - '%APPVEYOR_BUILD_FOLDER%\build'
+#cache:
+#  - '%APPVEYOR_BUILD_FOLDER%\build'
 
 environment:
   global:
