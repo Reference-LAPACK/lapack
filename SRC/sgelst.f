@@ -1,4 +1,4 @@
-*> \brief <b> SGELST solves overdetermined or underdetermined systems for GE matrices using QR or LQ factorization with compact WY representaion of Q.</b>
+*> \brief <b> SGELST solves overdetermined or underdetermined systems for GE matrices using QR or LQ factorization with compact WY representation of Q.</b>
 *
 *  =========== DOCUMENTATION ===========
 *
