@@ -77,8 +77,7 @@
                      SINGVQX, WORK
       INTEGER      , ALLOCATABLE, DIMENSION(:)   ::   IWORK
       REAL(KIND=WP) :: AB(2,2),   WDUMMY(2)
-      INTEGER       :: IDUMMY(2), ISEED(4), RJOBDATA(8),     &
-                       ZJOBDATA(8)
+      INTEGER       :: IDUMMY(2), ISEED(4), RJOBDATA(8)
       REAL(KIND=WP) :: ANORM, COND, CONDL, CONDR, DMAX, EPS, &
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_ZXW, &
@@ -90,8 +89,7 @@
                  NFAIL, NFAIL_AU, NFAIL_F_QR, NFAIL_REZ,     &
                  NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL,      &
                  NFAIL_Z_XV, MODE, MODEL, MODER, WHTSVD
-      INTEGER    iSCALEd, iJOBZd, iNRNK, iWHTSVD,  iTOL,     &
-                 iREF, LWMINOPT
+      INTEGER    iNRNK, iWHTSVD,  iTOL, LWMINOPT
       CHARACTER(LEN=1) GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
                        SCALE, RESIDS, WANTQ, WANTR
 
