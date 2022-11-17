@@ -64,6 +64,8 @@ SEIGTST = schkee.o \
    sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
    sstt22.o ssyl01.o ssyt21.o ssyt22.o
 
+SDMDEIGTST = schkdmd.o
+
 CEIGTST = cchkee.o \
    cbdt01.o cbdt02.o cbdt03.o cbdt05.o \
    cchkbb.o cchkbd.o cchkbk.o cchkbl.o cchkec.o \
@@ -120,16 +122,24 @@ ZEIGTST = zchkee.o \
    zsgt01.o zslect.o zsyl01.o\
    zstt21.o zstt22.o zunt01.o zunt03.o
 
+ZDMDEIGTST = zchkdmd.o
+
 .PHONY: all
 all: single complex double complex16
 
 .PHONY: single complex double complex16
-single: xeigtsts
+single: xeigtsts xdmdeigtsts
 complex: xeigtstc
 double: xeigtstd xdmdeigtstd
-complex16: xeigtstz
+complex16: xeigtstz xdmdeigtstz
+
+xdmdeigtsts: $(SDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xdmdeigtstd: $(DDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+xdmdeigtstz: $(ZDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
@@ -144,7 +154,9 @@ xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+$(SDMDEIGTST): $(FRC)
 $(DDMDEIGTST): $(FRC)
+$(ZDMDEIGTST): $(FRC)
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
 $(DZIGTST): $(FRC)
@@ -171,5 +183,9 @@ cchkee.o: cchkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkee.o: zchkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+schkdmd.o: schkdmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 dchkdmd.o: dchkdmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+zchkdmd.o: zchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
