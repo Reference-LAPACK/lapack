@@ -29,9 +29,7 @@ matrix:
   - os: osx
     name: "CMake Release Test on macOS Big Sur"
     osx_image: xcode12.3
-    env:
-      - CMAKE_BUILD_TYPE=Release
-      - ADDITIONAL_CMAKE_OPTIONS="-DUSE_FLAT_NAMESPACE:BOOL=ON"
+    env: CMAKE_BUILD_TYPE=Release
   - os: osx
     osx_image: xcode12.3
     name: "Makefile Test on on macOS Big Sur"
@@ -64,7 +62,6 @@ script:
     -DBUILD_SHARED_LIBS:BOOL=ON
     -DCMAKE_Fortran_FLAGS:STRING="-fimplicit-none -frecursive -fcheck=all"
     -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
-    ${ADDITIONAL_CMAKE_OPTIONS}
     ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
