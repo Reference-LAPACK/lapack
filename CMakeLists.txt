@@ -207,6 +207,22 @@ if(CMAKE_Fortran_COMPILER_ID STREQUAL Compaq)
   endif()
 endif()
 
+# Add option to enable flat namespace for symbol resolution on macOS
+if(APPLE)
+  option(USE_FLAT_NAMESPACE "Use flat namespaces for symbol resolution during build and runtime." OFF)
+
+  if(USE_FLAT_NAMESPACE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flat_namespace")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-flat_namespace")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-flat_namespace")
+  else()
+    if(BUILD_SHARED_LIBS AND BUILD_TESTING)
+      message(WARNING
+        "LAPACK test suite might fail with shared libraries and the default two-level namespace. "
+        "Disable shared libraries or enable flat namespace for symbol resolution via -DUSE_FLAT_NAMESPACE=ON.")
+    endif()
+  endif()
+endif()
 
 # --------------------------------------------------
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)

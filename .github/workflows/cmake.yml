@@ -75,6 +75,7 @@ jobs:
         cmake -B build
         -D CMAKE_C_COMPILER="gcc-11"
         -D CMAKE_Fortran_COMPILER="gfortran-11"
+        -D USE_FLAT_NAMESPACE:BOOL=ON
 
     # - name: Use Unix Makefiles on Windows
     #   if: ${{ matrix.os == 'windows-latest' }}
