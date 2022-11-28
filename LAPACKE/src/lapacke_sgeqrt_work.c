@@ -45,7 +45,7 @@ lapack_int LAPACKE_sgeqrt_work( int matrix_layout, lapack_int m, lapack_int n,
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
-        lapack_int ldt_t = MAX(1,ldt);
+        lapack_int ldt_t = MAX(1,nb);
         float* a_t = NULL;
         float* t_t = NULL;
         /* Check leading dimension(s) */
@@ -72,6 +72,7 @@ lapack_int LAPACKE_sgeqrt_work( int matrix_layout, lapack_int m, lapack_int n,
         }
         /* Transpose input matrices */
         LAPACKE_sge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_sge_trans( matrix_layout, nb, MIN(m,n), t, ldt, t_t, ldt_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgeqrt( &m, &n, &nb, a_t, &lda_t, t_t, &ldt_t, work, &info );
         if( info < 0 ) {
@@ -79,7 +80,7 @@ lapack_int LAPACKE_sgeqrt_work( int matrix_layout, lapack_int m, lapack_int n,
         }
         /* Transpose output matrices */
         LAPACKE_sge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, ldt, MIN(m,n), t_t, ldt_t, t,
+        LAPACKE_sge_trans( LAPACK_COL_MAJOR, nb, MIN(m,n), t_t, ldt_t, t,
                            ldt );
         /* Release memory and exit */
         LAPACKE_free( t_t );
