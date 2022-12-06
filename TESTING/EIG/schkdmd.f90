@@ -266,7 +266,6 @@
       ELSE
           ! single trajectory
       CALL SLARNV(2, ISEED, M, F(1,1) )
-      F(1:M,1) = 1.0D37*F(1:M,1)
       DO i = 1, N
          CALL SGEMV( 'N', M, M, ONE, A, M, F(1,i), 1, ZERO, &
               F(1,i+1), 1 )

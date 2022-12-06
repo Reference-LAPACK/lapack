@@ -598,7 +598,7 @@ SUBROUTINE CGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
             IF ( LQUERY ) THEN
                 CALL CUNGQR( M, MINMN, MINMN, F, LDF, ZWORK, &
                              ZWORK, -1, INFO1 )
-                OLWGQR = INT(WORK(1))
+                OLWGQR = INT(ZWORK(1))
                 OLWORK = MAX(OLWORK,MINMN+OLWGQR)
             END IF
          END IF

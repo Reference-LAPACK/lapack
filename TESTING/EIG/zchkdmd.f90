@@ -392,6 +392,7 @@
          WHTSVD   = iWHTSVD
          WHTSVDsp = iWHTSVD
       DO LWMINOPT = 1, 2
+      !DO LWMINOPT = 2, 2
          ! Workspace query for the minimal (1) and for the optimal
          ! (2) workspace lengths determined by workspace query.
 
@@ -525,10 +526,12 @@
       WRITE(*,*) 'Done! INFO = ', INFO
 
       LZWORK = INT(ZDUMMY(LWMINOPT))
+      WRITE(*,*) 'LZWORK = ', LZWORK
       !IF ( LZWORK == 0 ) THEN
       !   LZWORK = 1
       !END IF
       !LZWORK = INT(ZDUMMY(2))
+
       ALLOCATE( ZWORK(LZWORK) )
       LIWORK = IDUMMY(1)
       ALLOCATE(IWORK(LIWORK))
