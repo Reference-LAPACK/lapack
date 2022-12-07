@@ -46,7 +46,7 @@ lapack_int LAPACKE_zgeqrt_work( int matrix_layout, lapack_int m, lapack_int n,
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
-        lapack_int ldt_t = MAX(1,nb);
+        lapack_int ldt_t = MAX(1,ldt);
         lapack_complex_double* a_t = NULL;
         lapack_complex_double* t_t = NULL;
         /* Check leading dimension(s) */
