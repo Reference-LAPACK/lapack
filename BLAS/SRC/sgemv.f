@@ -210,11 +210,6 @@
           RETURN
       END IF
 *
-*     Quick return if possible.
-*
-      IF ((M.EQ.0) .OR. (N.EQ.0) .OR.
-     +    ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
-*
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
@@ -235,6 +230,11 @@
       ELSE
           KY = 1 - (LENY-1)*INCY
       END IF
+*
+*     Return, if Y does not change
+*
+      IF ((LENY.EQ.0) .OR. ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE)))
+     +    RETURN
 *
 *     Start the operations. In this version the elements of A are
 *     accessed sequentially with one pass through A.
@@ -267,7 +267,11 @@
               END IF
           END IF
       END IF
-      IF (ALPHA.EQ.ZERO) RETURN
+*
+*     Return, if Y does not change after scale
+*
+      IF ((ALPHA.EQ.ZERO) .OR. (LENX.EQ.0)) RETURN
+*
       IF (LSAME(TRANS,'N')) THEN
 *
 *        Form  y := alpha*A*x + y.
