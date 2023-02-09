@@ -60,9 +60,9 @@
 !
       PROGRAM DMD_TEST
 !
-      use iso_fortran_env, only: real64
+      use iso_fortran_env, only: real32
       IMPLICIT NONE
-      integer, parameter :: WP = real64
+      integer, parameter :: WP = real32
 
 !............................................................
       REAL(KIND=WP), PARAMETER ::  ONE = 1.0_WP
@@ -85,6 +85,16 @@
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_ZXW, &
                        TMP_EX, XNORM, YNORM
+!..... for real data, single precision tests
+      REAL(KIND=WP), ALLOCATABLE, DIMENSION(:,:) ::          &
+                     Asp, AUsp, Fsp, F1sp, LAMBDAsp,         &
+                     LAMBDAQsp, Ssp, Wsp, Xsp, Ysp,  Zsp
+      REAL(KIND=WP), ALLOCATABLE, DIMENSION(:)   ::          &
+                     IEIGsp, IEIGQsp, REIGsp, REIGQsp, RESsp,&
+                     SWORK
+      REAL(KIND=WP) :: WDUMMYsp(2)
+      REAL(KIND=WP) :: EPSsp, TOLsp
+      INTEGER :: Ksp, KQsp
 !............................................................
       COMPLEX(KIND=WP) ZMAX
       INTEGER LZWORK
@@ -94,6 +104,12 @@
       COMPLEX(KIND=WP), ALLOCATABLE, DIMENSION(:)   ::       &
                         ZDA, ZDR, ZDL, ZEIGS, ZEIGSA, ZWORK
       COMPLEX(KIND=WP) ZDUMMY(22)
+!..... for complex data, single precision test
+      COMPLEX(KIND=WP), ALLOCATABLE, DIMENSION(:,:) ::       &
+                 ZAUsp, ZFsp, ZSsp, ZWsp, ZXsp, ZYsp, ZZsp
+      COMPLEX(KIND=WP), ALLOCATABLE, DIMENSION(:)   ::       &
+                        ZEIGSsp, ZWORKsp
+      COMPLEX(KIND=WP) ZDUMMYsp(22)
 !............................................................
       INTEGER :: K, KQ, LDF, LDS, LDA, LDAU, LDW, LDX, LDY,  &
                  LDZ, LIWORK, LWORK, M, N, L, LLOOP, NRNK, NRNKsp
@@ -117,12 +133,13 @@
       EXTERNAL ZLARNV, ZLATMR
 !.....external subroutines DMD package, part 1
 !     subroutines under test
-      EXTERNAL DGEDMD, DGEDMDQ
-      EXTERNAL ZGEDMD, ZGEDMDQ
+      EXTERNAL DGEDMD, DGEDMDQ, SGEDMD, SGEDMDQ
+      EXTERNAL ZGEDMD, ZGEDMDQ, CGEDMD, CGEDMDQ
 
 !..... external functions (BLAS and LAPACK)
-      EXTERNAL         DLAMCH, DLANGE, DNRM2
+      EXTERNAL         DLAMCH, DLANGE, DNRM2, SLAMCH
       REAL(KIND=WP) :: DLAMCH, DLANGE, DNRM2
+      REAL(KIND=WP) :: SLAMCH
       EXTERNAL IZAMAX
       INTEGER  IZAMAX
       EXTERNAL         LSAME
@@ -132,14 +149,16 @@
 !............................................................
 
       EPS   = DLAMCH( 'P' )  ! machine precision DP
+      EPSsp = SLAMCH( 'P' )  ! machine precision SP
 
          REAL_DATA = .FALSE.
           KEYBIN       = .FALSE.
           VISUAL_CHECK = .FALSE.
           MANUAL_TEST  = .FALSE.
 
-      ! Automatically loop over trajectories testing
-      ! both 1 trajectory and 2 trajectories
+      TEST_SP = .TRUE.
+      TESTQ_SP = .TRUE.
+
       DO K = 1, 2
 
       IF ( K == 1) THEN
@@ -155,6 +174,7 @@
       END IF
 
       ! Set the dimensions of the problem ...
+      !READ( NIN, FMT = * )( IOLDSD( I ), I = 1, 4 )
       READ(*,*) L
       WRITE(*,*) 'L = ', L
       DO LLOOP = 1, L
@@ -208,7 +228,7 @@
       ALLOCATE( ZAC(LDA,M) )
       ALLOCATE(ZDL(M))
       ALLOCATE(ZDR(M))
-      CALL ZLATMR( M, M, 'S', ISEED, 'N', ZDA, MODE, COND, &
+      CALL CLATMR( M, M, 'S', ISEED, 'N', ZDA, MODE, COND, &
                    ZMAX, RSIGN, GRADE, ZDL, MODEL,  CONDL, &
                    ZDR, MODER, CONDR, PIVTNG, IWORK, M, M, &
                    ZERO, -ONE, 'N', ZA, LDA, IWORK(M+1), INFO )
@@ -217,29 +237,30 @@
 
       !'Compute and store the eigenvalues &
       !           &and eigenvectors of A (ZGEEV) . ..'
+
       LZWORK = MAX(1,2*M)
       ALLOCATE( ZEIGSA(M) )
       ALLOCATE(ZVA(LDA,M))
       ALLOCATE( ZWORK(LZWORK) )
       ALLOCATE( WORK(2*M) )
       ZAC = ZA
-      CALL ZGEEV( 'N','V', M, ZAC, LDA, ZEIGSA, ZVA, M, &
+      CALL CGEEV( 'N','V', M, ZAC, LDA, ZEIGSA, ZVA, M, &
                   ZVA, M, ZWORK, LZWORK, WORK, INFO ) ! LAPACK CALL
       DEALLOCATE(WORK)
       DEALLOCATE(ZWORK)
 
       TMP = ABS(ZEIGSA(IZAMAX(M, ZEIGSA, 1))) ! The spectral radius of ZA
 
-      CALL ZLASCL( 'G',0, 0, TMP, ONE, M, M, &
+      CALL CLASCL( 'G',0, 0, TMP, ONE, M, M, &
                    ZA, LDA, INFO )
-      CALL ZLASCL( 'G',0, 0, TMP, ONE, M, 1, &
+      CALL CLASCL( 'G',0, 0, TMP, ONE, M, 1, &
                    ZEIGSA, M, INFO )
 
       ALLOCATE( ZF(LDF,N+1) )
       ALLOCATE( ZF0(LDF,N+1) )
-      CALL ZLARNV(2, ISEED, M, ZF(1,1) )
+      CALL CLARNV(2, ISEED, M, ZF(1,1) )
       DO i = 1, N
-         CALL ZGEMV( 'N', M, M, ZONE, ZA, M, ZF(1,i), 1, ZZERO, &
+         CALL CGEMV( 'N', M, M, ZONE, ZA, M, ZF(1,i), 1, ZZERO, &
               ZF(1,i+1), 1 )
       END DO
       ZF0(1:M,1:N+1) = ZF(1:M,1:N+1)
@@ -257,10 +278,26 @@
       ZX(1:M,1:N) = ZF0(1:M,1:N)
       ZY(1:M,1:N) = ZF0(1:M,2:N+1)
 
-      TOL   = M*EPS
+      IF ( TEST_SP ) THEN
+          ALLOCATE( ZXsp(LDX,N) )
+          ALLOCATE( ZYsp(LDY,N+1) )
+          ALLOCATE( ZFsp(LDF,N+1) )
+          ALLOCATE( ZEIGSsp(N))
+          ALLOCATE( RESsp(N) )
+          ALLOCATE( ZWsp(LDW,N) )
+          ALLOCATE( ZAUsp(LDAU,N) )
+          ALLOCATE( ZZsp(LDZ,N) )
+          ALLOCATE( ZSsp(LDS,N) )
+          ZXsp(1:M,1:N) = ZX(1:M,1:N)
+          ZYsp(1:M,1:N) = ZY(1:M,1:N)
+          ZFsp(1:M,1:N+1) = ZF(1:M,1:N+1)
+      END IF
 
+      TOL   = M*EPS
+      TOLsp = M*EPSsp
       ! here nested doo loops
-      DO iJOBZ = 1, 4
+
+            DO iJOBZ = 1, 4
 
           SELECT CASE ( iJOBZ )
           CASE(1)
@@ -310,15 +347,15 @@
          ! via the SVD.
          WHTSVD   = iWHTSVD
          WHTSVDsp = iWHTSVD
-      ! Workspace query for the minimal (1) and for the optimal
-      ! (2) workspace lengths determined by workspace query.
       DO LWMINOPT = 1, 2
+         ! Workspace query for the minimal (1) and for the optimal
+         ! (2) workspace lengths determined by workspace query.
 
       ZX(1:M,1:N) = ZF0(1:M,1:N)
       ZY(1:M,1:N) = ZF0(1:M,2:N+1)
       ZF(1:M,1:N+1) = ZF0(1:M,1:N+1)
 
-      CALL ZGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,  &
+      CALL CGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,  &
                    M,  N, ZX, LDX, ZY, LDY, NRNK, TOL,  &
                    K, ZEIGS, ZZ, LDZ,  RES,  &
                    ZAU, LDAU, ZW,  LDW,   ZS, LDS,        &
@@ -331,7 +368,7 @@
      LWORK = INT(WDUMMY(1))
      ALLOCATE(WORK(LWORK))
 
-     CALL ZGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,   &
+     CALL CGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,   &
                    M,  N, ZX, LDX, ZY, LDY, NRNK, TOL,   &
                    K, ZEIGS, ZZ, LDZ,  RES, ZAU, LDAU,   &
                    ZW,  LDW,   ZS, LDS,ZWORK, LZWORK,    &
@@ -345,7 +382,8 @@
          ZJOBDATA(6) = 1
          WANTQ = 'Q'
          WANTR = 'R'
-         CALL ZGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
+
+         CALL CGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
                        WHTSVD, M, N+1, ZF, LDF,  ZX, LDX,  ZY, LDY,  &
                        NRNK,  TOL, K, ZEIGS, ZZ, LDZ, RES,  ZAU,  &
                        LDAU, ZW, LDW, ZS, LDS, ZDUMMY, LZWORK,   &
@@ -358,7 +396,7 @@
          LWORK = INT(WDUMMY(1))
          ALLOCATE(WORK(LWORK))
 
-         CALL ZGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
+         CALL CGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
                        WHTSVD, M, N+1, ZF, LDF,  ZX, LDX,  ZY, LDY,  &
                        NRNK,  TOL, KQ, ZEIGS, ZZ, LDZ, RES,  ZAU,  &
                        LDAU, ZW, LDW, ZS, LDS, ZWORK, LZWORK,   &
@@ -370,6 +408,67 @@
 
       END IF ! TEST_QRDMD
 
+      IF ( TEST_SP ) THEN
+         ZJOBDATA(7) = 1
+           TOLsp = M*EPSsp
+           ZXsp(1:M,1:N) = ZF0(1:M,1:N)
+           ZYsp(1:M,1:N) = ZF0(1:M,2:N+1)
+
+        CALL CGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,   &
+                     M,  N, ZXsp, LDX, ZYsp, LDY, NRNK,     &
+                     TOLsp, K, ZEIGSsp, ZZsp, LDZ,  RESsp,  &
+                     ZAUsp, LDAU, ZWsp,  LDW,   ZSsp, LDS,  &
+                     ZDUMMYsp, -1, WDUMMYsp, LWORK, IDUMMY, &
+                     LIWORK, INFO)
+
+       LZWORK = INT(ZDUMMYsp(LWMINOPT))
+       ALLOCATE(ZWORKsp(LZWORK))
+       LIWORK = IDUMMY(1)
+       ALLOCATE(IWORK(LIWORK))
+       LWORK = INT(WDUMMYsp(1))
+       ALLOCATE(SWORK(LWORK))
+
+       CALL CGEDMD( SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,  &
+                     M,  N, ZXsp, LDX, ZYsp, LDY, NRNK, TOLsp,  &
+                     K, ZEIGSsp, ZZsp, LDZ,  RESsp,  &
+                     ZAUsp, LDAU, ZWsp,  LDW,   ZSsp, LDS,        &
+                     ZWORKsp, LZWORK, SWORK, LWORK,      &
+                     IWORK, LIWORK, INFO )
+
+       DEALLOCATE(ZWORKsp)
+       DEALLOCATE(SWORK)
+       DEALLOCATE(IWORK)
+
+       IF ( TEST_QRDMD ) THEN
+       ZJOBDATA(8) = 1
+       ZFsp(1:M,1:N+1) = ZF0(1:M,1:N+1)
+
+       CALL CGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
+                     WHTSVD, M, N+1, ZFsp, LDF,  ZXsp, LDX,  ZYsp,  &
+                     LDY, NRNK,  TOLsp, K, ZEIGSsp, ZZsp, LDZ,  &
+                     RESsp, ZAUsp, LDAU, ZWsp, LDW, ZSsp, LDS,  &
+                     ZDUMMYsp, -1, WDUMMYsp,  -1, IDUMMY, -1, INFO )
+
+      LZWORK = INT(ZDUMMYsp(LWMINOPT))
+      ALLOCATE(ZWORKsp(LZWORK))
+      LIWORK = IDUMMY(1)
+      ALLOCATE(IWORK(LIWORK))
+      LWORK = INT(WDUMMYsp(1))
+      ALLOCATE(SWORK(LWORK))
+
+      CALL CGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, JOBREF, &
+                    WHTSVD, M, N+1, ZFsp, LDF,  ZXsp, LDX,  ZYsp, &
+                    LDY, NRNK,  TOLsp, KQ, ZEIGSsp, ZZsp, LDZ, RESsp, &
+                    ZAUsp, LDAU, ZWsp, LDW, ZSsp, LDS, ZWORKsp,   &
+                    LZWORK, SWORK,  LWORK, IWORK, LIWORK, INFO )
+
+      DEALLOCATE(IWORK)
+      DEALLOCATE(SWORK)
+      DEALLOCATE(ZWORKsp)
+      END IF ! TEST_QRDMD SINGLE COMPLEX
+
+
+      END IF ! TEST_SP
       END DO
       END DO
       END DO
@@ -395,6 +494,17 @@
       DEALLOCATE(RES)
       DEALLOCATE(ZEIGS)
 
+      IF ( TEST_SP ) THEN
+          DEALLOCATE(ZXsp)
+          DEALLOCATE(ZYsp)
+          DEALLOCATE(ZFsp)
+          DEALLOCATE(ZEIGSsp)
+          DEALLOCATE(RESsp)
+          DEALLOCATE(ZWsp)
+          DEALLOCATE(ZAUsp)
+          DEALLOCATE(ZZsp)
+          DEALLOCATE(ZSsp)
+      END IF
 
       END DO
       END DO

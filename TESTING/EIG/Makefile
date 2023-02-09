@@ -83,6 +83,8 @@ CEIGTST = cchkee.o \
    csgt01.o cslect.o csyl01.o\
    cstt21.o cstt22.o cunt01.o cunt03.o
 
+CDMDEIGTST = cchkdmd.o
+
 DZIGTST = dlafts.o dlahd2.o dlasum.o dlatb9.o dstech.o dstect.o \
    dsvdch.o dsvdct.o dsxt1.o
 
@@ -129,11 +131,14 @@ all: single complex double complex16
 
 .PHONY: single complex double complex16
 single: xeigtsts xdmdeigtsts
-complex: xeigtstc
+complex: xeigtstc xdmdeigtstc
 double: xeigtstd xdmdeigtstd
 complex16: xeigtstz xdmdeigtstz
 
 xdmdeigtsts: $(SDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+xdmdeigtstc: $(CDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xdmdeigtstd: $(DDMDEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
@@ -155,6 +160,7 @@ xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 $(SDMDEIGTST): $(FRC)
+$(CDMDEIGTST): $(FRC)
 $(DDMDEIGTST): $(FRC)
 $(ZDMDEIGTST): $(FRC)
 $(AEIGTST): $(FRC)
@@ -184,6 +190,8 @@ cchkee.o: cchkee.F
 zchkee.o: zchkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 schkdmd.o: schkdmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+cchkdmd.o: cchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<

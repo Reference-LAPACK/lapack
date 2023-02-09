@@ -8,9 +8,9 @@ SUBROUTINE ZGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
 !.....
 !      USE PRECISION, ONLY: WP => DP ! double precision
 !      IMPLICIT NONE
-       use iso_fortran_env, only: real32
+       use iso_fortran_env, only: real64
        IMPLICIT NONE
-       integer, parameter :: WP = real32
+       integer, parameter :: WP = real64
 
 !.....
 !     Scalar arguments
@@ -616,6 +616,8 @@ SUBROUTINE ZGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
           ZWORK(1) = MLWORK
           ZWORK(2) = OLWORK
           WORK(1)  = MLRWRK
+          !WRITE(*,*) 'ZWORK(1) = ', ZWORK(1)
+          !WRITE(*,*) 'ZWORK(2) = ', ZWORK(2)
           RETURN
       END IF
 !.....
@@ -645,6 +647,7 @@ SUBROUTINE ZGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
                   EIGS, Z, LDZ, RES, B,  LDB,   V, LDV,    &
                   S, LDS, ZWORK(MINMN+1), LZWORK-MINMN, &
                   WORK,   LWORK, IWORK, LIWORK, INFO1 )
+                  !S, LDS, ZWORK(MINMN+1), LZWORK-MINMN, &
       IF ( INFO1 == 2 .OR. INFO1 == 3 ) THEN
           ! Return with error code. See ZGEDMD for details.
           INFO = INFO1
