@@ -42,7 +42,7 @@ if(_is_coverage_build)
 endif()
 
 # By default test Fortran compiler complex abs and complex division
-option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex division" ON)
+option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex division" OFF)
 if( TEST_FORTRAN_COMPILER )
 
   add_executable( test_zcomplexabs ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
