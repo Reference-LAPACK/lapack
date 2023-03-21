@@ -11,6 +11,7 @@ lapack_int LAPACKE_dtrsyl3( int matrix_layout, char trana, char tranb,
     double* swork = NULL;
     lapack_int ldswork = -1;
     lapack_int swork_size = -1;
+    lapack_int iwork_query;
     lapack_int* iwork = NULL;
     lapack_int liwork = -1;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
@@ -33,7 +34,7 @@ lapack_int LAPACKE_dtrsyl3( int matrix_layout, char trana, char tranb,
 #endif
     /* Query optimal working array sizes */
     info = LAPACKE_dtrsyl3_work( matrix_layout, trana, tranb, isgn, m, n, a, lda,
-                                 b, ldb, c, ldc, scale, iwork, liwork,
+                                 b, ldb, c, ldc, scale, &iwork_query, liwork,
                                  swork_query, ldswork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -45,8 +46,9 @@ lapack_int LAPACKE_dtrsyl3( int matrix_layout, char trana, char tranb,
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
+    liwork = iwork_query;
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
-    if (iwork == NULL ) {
+    if ( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
     }

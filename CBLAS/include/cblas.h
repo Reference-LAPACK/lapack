@@ -608,7 +608,11 @@ void cblas_zher2k(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const CBLAS_INT ldb, const double beta,
                   void *C, const CBLAS_INT ldc);
 
-void cblas_xerbla(CBLAS_INT p, const char *rout, const char *form, ...);
+void
+#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
+__attribute__((weak))
+#endif
+cblas_xerbla(CBLAS_INT p, const char *rout, const char *form, ...);
 
 #ifdef __cplusplus
 }

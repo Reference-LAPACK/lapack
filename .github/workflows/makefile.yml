@@ -31,6 +31,9 @@ on:
     - '!**CMakeLists.txt'
     - '!**md'
 
+permissions:
+  contents: read
+
 env:
   CC: "gcc"
   FC: "gfortran"

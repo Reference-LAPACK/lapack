@@ -235,7 +235,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHBGV ', -INFO )
+         CALL XERBLA( 'CHBGV', -INFO )
          RETURN
       END IF
 *

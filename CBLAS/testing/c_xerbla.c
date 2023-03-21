@@ -7,8 +7,8 @@
 
 void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 {
-   extern int cblas_lerr, cblas_info, cblas_ok;
-   extern int link_xerbla;
+   extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
+   extern CBLAS_INT link_xerbla;
    extern int RowMajorStrg;
    extern char *cblas_rout;
 
@@ -101,9 +101,9 @@ void F77_xerbla(char *srname, void *vinfo)
    F77_Integer i;
    extern F77_Integer link_xerbla;
 #else
-   int *info=vinfo;
-   int i;
-   extern int link_xerbla;
+   CBLAS_INT *info=vinfo;
+   CBLAS_INT i;
+   extern CBLAS_INT link_xerbla;
 #endif
 #ifdef F77_Char
    srname = F2C_STR(F77_srname, XerblaStrLen);
