@@ -254,8 +254,7 @@
       EXTERNAL           LSAME, ISAMAX, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMV, SLABAD, SLALN2, SSCAL,
-     $                   XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -341,7 +340,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM

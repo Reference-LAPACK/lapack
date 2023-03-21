@@ -232,8 +232,7 @@
       COMPLEX*16 :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
-      EXTERNAL :: XERBLA, DLABAD, ZLASET, ZLARTG, ZROT, ZLAQZ1, ZGEMM,
-     $            ZLACPY
+      EXTERNAL :: XERBLA, ZLASET, ZLARTG, ZROT, ZLAQZ1, ZGEMM, ZLACPY
       DOUBLE PRECISION, EXTERNAL :: DLAMCH
 
       INFO = 0
@@ -260,7 +259,6 @@
 *     Get machine constants
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
 
       IF ( ILO .GE. IHI ) THEN
          RETURN

@@ -138,7 +138,7 @@
       COMPLEX            TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASWP, CSCAL, SLABAD
+      EXTERNAL           CLASWP, CSCAL
 *     ..
 *     .. External Functions ..
       INTEGER            ICAMAX
@@ -155,7 +155,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *

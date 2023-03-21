@@ -236,7 +236,7 @@
       EXTERNAL           CLADIV, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLARFG, CSCAL, SLABAD
+      EXTERNAL           CCOPY, CLARFG, CSCAL
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -298,7 +298,6 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( NH ) / ULP )
 *

@@ -302,7 +302,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR, CLARF,
-     $                   CLARFG, CLASET, CTREXC, CUNMHR, SLABAD
+     $                   CLARFG, CLASET, CTREXC, CUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, MAX, MIN, REAL
@@ -360,7 +360,6 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *

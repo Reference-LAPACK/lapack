@@ -236,7 +236,7 @@
       EXTERNAL           ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEQP3, DLABAD, DLAIC1, DLASCL, DLASET,
+      EXTERNAL           DCOPY, DGEQP3, DLAIC1, DLASCL, DLASET,
      $                   DORMQR, DORMRZ, DTRSM, DTZRZF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -305,7 +305,6 @@
 *
       SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *

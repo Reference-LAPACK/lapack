@@ -337,7 +337,7 @@
       EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLABAD, DLACPY, DLAG2, DLALN2, XERBLA
+      EXTERNAL           DGEMV, DLACPY, DLAG2, DLALN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -463,7 +463,6 @@
 *
       SAFMIN = DLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, BIG )
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL

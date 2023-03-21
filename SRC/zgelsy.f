@@ -242,7 +242,7 @@
       COMPLEX*16         C1, C2, S1, S2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZCOPY, ZGEQP3, ZLAIC1, ZLASCL,
+      EXTERNAL           XERBLA, ZCOPY, ZGEQP3, ZLAIC1, ZLASCL,
      $                   ZLASET, ZTRSM, ZTZRZF, ZUNMQR, ZUNMRZ
 *     ..
 *     .. External Functions ..
@@ -303,7 +303,6 @@
 *
       SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *

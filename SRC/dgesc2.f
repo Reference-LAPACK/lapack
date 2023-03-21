@@ -136,7 +136,7 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASWP, DSCAL, DLABAD
+      EXTERNAL           DLASWP, DSCAL
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
@@ -153,7 +153,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *

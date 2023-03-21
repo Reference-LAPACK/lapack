@@ -302,7 +302,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR,
+      EXTERNAL           ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR,
      $                   ZLARF, ZLARFG, ZLASET, ZTREXC, ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
@@ -361,7 +361,6 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *

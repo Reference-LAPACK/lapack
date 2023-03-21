@@ -259,7 +259,7 @@
       EXTERNAL           LSAME, SLAMCH, CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, SLABAD, XERBLA
+      EXTERNAL           CGEMV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
@@ -367,7 +367,6 @@
 *
       SAFMIN = SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, BIG )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL

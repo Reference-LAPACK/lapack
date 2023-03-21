@@ -132,7 +132,7 @@
       REAL               BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGER, SLABAD, SSWAP
+      EXTERNAL           SGER, SSWAP
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -155,7 +155,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Handle the case N=1 by itself
 *

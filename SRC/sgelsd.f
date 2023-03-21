@@ -235,8 +235,8 @@
       REAL               ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBRD, SGELQF, SGEQRF, SLABAD, SLACPY, SLALSD,
-     $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR, XERBLA
+      EXTERNAL           SGEBRD, SGELQF, SGEQRF, SLACPY, SLALSD, SLASCL,
+     $                   SLASET, SORMBR, SORMLQ, SORMQR, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -382,7 +382,6 @@
       SFMIN = SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max entry outside range [SMLNUM,BIGNUM].
 *

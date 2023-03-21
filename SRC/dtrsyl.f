@@ -196,7 +196,7 @@
       EXTERNAL           LSAME, DDOT, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLALN2, DLASY2, DSCAL, XERBLA
+      EXTERNAL           DLALN2, DLASY2, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -244,7 +244,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*DBLE( M*N ) / EPS
       BIGNUM = ONE / SMLNUM
 *

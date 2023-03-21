@@ -202,7 +202,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SBDSQR, SCOPY, SGEBRD, SGELQF, SGEMM, SGEMV,
-     $                   SGEQRF, SLABAD, SLACPY, SLASCL, SLASET, SORGBR,
+     $                   SGEQRF, SLACPY, SLASCL, SLASET, SORGBR,
      $                   SORMBR, SORMLQ, SORMQR, SRSCL, XERBLA
 *     ..
 *     .. External Functions ..
@@ -381,7 +381,6 @@
       SFMIN = SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *

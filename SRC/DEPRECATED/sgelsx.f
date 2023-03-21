@@ -208,7 +208,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQPF, SLABAD, SLAIC1, SLASCL, SLASET, SLATZM,
+      EXTERNAL           SGEQPF, SLAIC1, SLASCL, SLASET, SLATZM,
      $                   SORM2R, STRSM, STZRQF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -251,7 +251,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max elements outside range [SMLNUM,BIGNUM]
 *

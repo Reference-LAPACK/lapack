@@ -257,9 +257,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLABAD,
-     $                   SLACPY, SLASCL, SLASET, SORGQR, SORMQR, STGEVC,
-     $                   XERBLA
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
+     $                   SLASCL, SLASET, SORGQR, SORMQR, STGEVC, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -358,7 +357,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *

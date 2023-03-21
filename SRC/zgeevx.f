@@ -323,9 +323,9 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLASCL, XERBLA, ZDSCAL, ZGEBAK, ZGEBAL,
-     $                   ZGEHRD, ZHSEQR, ZLACPY, ZLASCL, ZSCAL, ZTREVC3,
-     $                   ZTRSNA, ZUNGHR
+      EXTERNAL           DLASCL, XERBLA, ZDSCAL, ZGEBAK, ZGEBAL, ZGEHRD,
+     $                   ZHSEQR, ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZTRSNA,
+     $                   ZUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -458,7 +458,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *

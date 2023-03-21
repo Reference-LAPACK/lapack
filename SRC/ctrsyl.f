@@ -191,7 +191,7 @@
       EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU, CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSSCAL, SLABAD, XERBLA
+      EXTERNAL           CSSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
@@ -237,7 +237,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*REAL( M*N ) / EPS
       BIGNUM = ONE / SMLNUM
       SMIN = MAX( SMLNUM, EPS*CLANGE( 'M', M, M, A, LDA, DUM ),

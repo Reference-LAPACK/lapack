@@ -307,9 +307,8 @@
       EXTERNAL           SLAMCH, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEHRD, SGEMM, SLABAD, SLACPY, SLAHQR,
-     $                   SLANV2, SLAQR4, SLARF, SLARFG, SLASET, SORMHR,
-     $                   STREXC
+      EXTERNAL           SCOPY, SGEHRD, SGEMM, SLACPY, SLAHQR, SLANV2,
+     $                   SLAQR4, SLARF, SLARFG, SLASET, SORMHR, STREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX, MIN, REAL, SQRT
@@ -367,7 +366,6 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *

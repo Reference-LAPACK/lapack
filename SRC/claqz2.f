@@ -257,7 +257,7 @@
       COMPLEX :: S, S1, TEMP
 
 *     External Functions
-      EXTERNAL :: XERBLA, CLAQZ0, CLAQZ1, SLABAD, CLACPY, CLASET, CGEMM,
+      EXTERNAL :: XERBLA, CLAQZ0, CLAQZ1, CLACPY, CLASET, CGEMM,
      $            CTGEXC, CLARTG, CROT
       REAL, EXTERNAL :: SLAMCH
 
@@ -296,7 +296,6 @@
 *     Get machine constants
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N )/ULP )
 

@@ -136,7 +136,7 @@
       REAL               BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLASWP, SSCAL
+      EXTERNAL           SLASWP, SSCAL
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
@@ -153,7 +153,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
