@@ -8,13 +8,13 @@
 #include "cblas.h"
 #include "cblas_test.h"
 
-void F77_cgemv(int *layout, char *transp, int *m, int *n,
+void F77_cgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n,
           const void *alpha,
-          CBLAS_TEST_COMPLEX *a, int *lda, const void *x, int *incx,
-          const void *beta, void *y, int *incy) {
+          CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, const void *x, CBLAS_INT *incx,
+          const void *beta, void *y, CBLAS_INT *incy) {
 
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_TRANSPOSE trans;
 
   get_transpose_type(transp, &trans);
@@ -38,13 +38,13 @@ void F77_cgemv(int *layout, char *transp, int *m, int *n,
                   *m, *n, alpha, a, *lda, x, *incx, beta, y, *incy );
 }
 
-void F77_cgbmv(int *layout, char *transp, int *m, int *n, int *kl, int *ku,
-	      CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, int *lda,
-	      CBLAS_TEST_COMPLEX *x, int *incx,
-	      CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, int *incy) {
+void F77_cgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLAS_INT *kl, CBLAS_INT *ku,
+	      CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
+	      CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx,
+	      CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy) {
 
   CBLAS_TEST_COMPLEX *A;
-  int i,j,irow,jcol,LDA;
+  CBLAS_INT i,j,irow,jcol,LDA;
   CBLAS_TRANSPOSE trans;
 
   get_transpose_type(transp, &trans);
@@ -85,12 +85,12 @@ void F77_cgbmv(int *layout, char *transp, int *m, int *n, int *kl, int *ku,
 		  *incx, beta, y, *incy );
 }
 
-void F77_cgeru(int *layout, int *m, int *n, CBLAS_TEST_COMPLEX *alpha,
-	 CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *y, int *incy,
-         CBLAS_TEST_COMPLEX *a, int *lda){
+void F77_cgeru(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+	 CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy,
+         CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda){
 
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
 
   if (*layout == TEST_ROW_MJR) {
      LDA = *n+1;
@@ -114,11 +114,11 @@ void F77_cgeru(int *layout, int *m, int *n, CBLAS_TEST_COMPLEX *alpha,
      cblas_cgeru( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
-void F77_cgerc(int *layout, int *m, int *n, CBLAS_TEST_COMPLEX *alpha,
-	 CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *y, int *incy,
-         CBLAS_TEST_COMPLEX *a, int *lda) {
+void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+	 CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy,
+         CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda) {
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
 
   if (*layout == TEST_ROW_MJR) {
      LDA = *n+1;
@@ -142,12 +142,12 @@ void F77_cgerc(int *layout, int *m, int *n, CBLAS_TEST_COMPLEX *alpha,
      cblas_cgerc( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
-void F77_chemv(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
-      CBLAS_TEST_COMPLEX *a, int *lda, CBLAS_TEST_COMPLEX *x,
-      int *incx, CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, int *incy){
+void F77_chemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+      CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
+      CBLAS_INT *incx, CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy){
 
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
@@ -172,13 +172,13 @@ void F77_chemv(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
 	   beta, y, *incy );
 }
 
-void F77_chbmv(int *layout, char *uplow, int *n, int *k,
-     CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, int *lda,
-     CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *beta,
-     CBLAS_TEST_COMPLEX *y, int *incy){
+void F77_chbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k,
+     CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
+     CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *beta,
+     CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy){
 
 CBLAS_TEST_COMPLEX *A;
-int i,irow,j,jcol,LDA;
+CBLAS_INT i,irow,j,jcol,LDA;
 
   CBLAS_UPLO uplo;
 
@@ -236,12 +236,12 @@ int i,irow,j,jcol,LDA;
                  beta, y, *incy );
 }
 
-void F77_chpmv(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
-     CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, int *incx,
-     CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, int *incy){
+void F77_chpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+     CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx,
+     CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy){
 
   CBLAS_TEST_COMPLEX *A, *AP;
-  int i,j,k,LDA;
+  CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
@@ -292,11 +292,11 @@ void F77_chpmv(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
                   *incy );
 }
 
-void F77_ctbmv(int *layout, char *uplow, char *transp, char *diagn,
-     int *n, int *k, CBLAS_TEST_COMPLEX *a, int *lda, CBLAS_TEST_COMPLEX *x,
-     int *incx) {
+void F77_ctbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+     CBLAS_INT *n, CBLAS_INT *k, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
+     CBLAS_INT *incx) {
   CBLAS_TEST_COMPLEX *A;
-  int irow, jcol, i, j, LDA;
+  CBLAS_INT irow, jcol, i, j, LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -355,12 +355,12 @@ void F77_ctbmv(int *layout, char *uplow, char *transp, char *diagn,
      cblas_ctbmv(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
-void F77_ctbsv(int *layout, char *uplow, char *transp, char *diagn,
-      int *n, int *k, CBLAS_TEST_COMPLEX *a, int *lda, CBLAS_TEST_COMPLEX *x,
-      int *incx) {
+void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+      CBLAS_INT *n, CBLAS_INT *k, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
+      CBLAS_INT *incx) {
 
   CBLAS_TEST_COMPLEX *A;
-  int irow, jcol, i, j, LDA;
+  CBLAS_INT irow, jcol, i, j, LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -419,10 +419,10 @@ void F77_ctbsv(int *layout, char *uplow, char *transp, char *diagn,
      cblas_ctbsv(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
-void F77_ctpmv(int *layout, char *uplow, char *transp, char *diagn,
-      int *n, CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, int *incx) {
+void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+      CBLAS_INT *n, CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx) {
   CBLAS_TEST_COMPLEX *A, *AP;
-  int i, j, k, LDA;
+  CBLAS_INT i, j, k, LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -474,10 +474,10 @@ void F77_ctpmv(int *layout, char *uplow, char *transp, char *diagn,
      cblas_ctpmv( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
 }
 
-void F77_ctpsv(int *layout, char *uplow, char *transp, char *diagn,
-     int *n, CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, int *incx) {
+void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+     CBLAS_INT *n, CBLAS_TEST_COMPLEX *ap, CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx) {
   CBLAS_TEST_COMPLEX *A, *AP;
-  int i, j, k, LDA;
+  CBLAS_INT i, j, k, LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -529,11 +529,11 @@ void F77_ctpsv(int *layout, char *uplow, char *transp, char *diagn,
      cblas_ctpsv( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
 }
 
-void F77_ctrmv(int *layout, char *uplow, char *transp, char *diagn,
-     int *n, CBLAS_TEST_COMPLEX *a, int *lda, CBLAS_TEST_COMPLEX *x,
-      int *incx) {
+void F77_ctrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+     CBLAS_INT *n, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
+      CBLAS_INT *incx) {
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -558,11 +558,11 @@ void F77_ctrmv(int *layout, char *uplow, char *transp, char *diagn,
   else
      cblas_ctrmv(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx);
 }
-void F77_ctrsv(int *layout, char *uplow, char *transp, char *diagn,
-       int *n, CBLAS_TEST_COMPLEX *a, int *lda, CBLAS_TEST_COMPLEX *x,
-              int *incx) {
+void F77_ctrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
+       CBLAS_INT *n, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
+              CBLAS_INT *incx) {
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_TRANSPOSE trans;
   CBLAS_UPLO uplo;
   CBLAS_DIAG diag;
@@ -588,10 +588,10 @@ void F77_ctrsv(int *layout, char *uplow, char *transp, char *diagn,
      cblas_ctrsv(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx );
 }
 
-void F77_chpr(int *layout, char *uplow, int *n, float *alpha,
-	     CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *ap) {
+void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
+	     CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *ap) {
   CBLAS_TEST_COMPLEX *A, *AP;
-  int i,j,k,LDA;
+  CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
@@ -663,11 +663,11 @@ void F77_chpr(int *layout, char *uplow, int *n, float *alpha,
      cblas_chpr(UNDEFINED, uplo, *n, *alpha, x, *incx, ap );
 }
 
-void F77_chpr2(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
-       CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *y, int *incy,
+void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+       CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy,
        CBLAS_TEST_COMPLEX *ap) {
   CBLAS_TEST_COMPLEX *A, *AP;
-  int i,j,k,LDA;
+  CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
@@ -740,10 +740,10 @@ void F77_chpr2(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
      cblas_chpr2( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, ap );
 }
 
-void F77_cher(int *layout, char *uplow, int *n, float *alpha,
-  CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *a, int *lda) {
+void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
+  CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda) {
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
@@ -772,12 +772,12 @@ void F77_cher(int *layout, char *uplow, int *n, float *alpha,
      cblas_cher( UNDEFINED, uplo, *n, *alpha, x, *incx, a, *lda );
 }
 
-void F77_cher2(int *layout, char *uplow, int *n, CBLAS_TEST_COMPLEX *alpha,
-          CBLAS_TEST_COMPLEX *x, int *incx, CBLAS_TEST_COMPLEX *y, int *incy,
-	  CBLAS_TEST_COMPLEX *a, int *lda) {
+void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
+          CBLAS_TEST_COMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_COMPLEX *y, CBLAS_INT *incy,
+	  CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda) {
 
   CBLAS_TEST_COMPLEX *A;
-  int i,j,LDA;
+  CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
 
   get_uplo_type(uplow,&uplo);
