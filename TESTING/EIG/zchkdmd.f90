@@ -1,48 +1,46 @@
-! This is a test program for checking the implementations of
-! the implementations of the following subroutines
+!     This is a test program for checking the implementations of
+!     the implementations of the following subroutines
 !
-! ZGEDMD,  for computation of the
-!          Dynamic Mode Decomposition (DMD)
-! ZGEDMDQ, for computation of a
-!          QR factorization based compressed DMD
+!     ZGEDMD,  for computation of the
+!              Dynamic Mode Decomposition (DMD)
+!     ZGEDMDQ, for computation of a
+!              QR factorization based compressed DMD
 !
-! Developed and supported by:
-! ===========================
-! Developed and coded by Zlatko Drmac, Faculty of Science,
-! University of Zagreb;  drmac@math.hr
-! In cooperation with
-! AIMdyn Inc., Santa Barbara, CA.
-!   ========================================================
-!   How to run the code (compiler, link info)
-!   ========================================================
-!   Compile as FORTRAN 90 (or later) and link with BLAS and
-!   LAPACK libraries.
-!   NOTE: The code is developed and tested on top of the
-!   Intel MKL library (versions 2022.0.3 and 2022.2.0),
-!   using the Intel Fortran compiler.
+!     Developed and supported by:
+!     ===========================
+!     Developed and coded by Zlatko Drmac, Faculty of Science,
+!     University of Zagreb;  drmac@math.hr
+!     In cooperation with
+!     AIMdyn Inc., Santa Barbara, CA.
+!     ========================================================
+!     How to run the code (compiler, link info)
+!     ========================================================
+!     Compile as FORTRAN 90 (or later) and link with BLAS and
+!     LAPACK libraries.
+!     NOTE: The code is developed and tested on top of the
+!     Intel MKL library (versions 2022.0.3 and 2022.2.0),
+!     using the Intel Fortran compiler.
 !
-!   For developers of the C++ implementation
-!   ========================================================
-!   See the LAPACK++ and Template Numerical Toolkit (TNT)
+!     For developers of the C++ implementation
+!     ========================================================
+!     See the LAPACK++ and Template Numerical Toolkit (TNT)
 !
-!   Note on a development of the GPU HP implementation
-!   ========================================================
-!   Work in progress. See CUDA, MAGMA, SLATE.
-!   NOTE: The four SVD subroutines used in this code are
-!   included as a part of R&D and for the completeness.
-!   This was also an opportunity to test those SVD codes.
-!   If the scaling option is used all four are essentially
-!   equally good. For implementations on HP platforms,
-!   one can use whichever SVD is available.
+!     Note on a development of the GPU HP implementation
+!     ========================================================
+!     Work in progress. See CUDA, MAGMA, SLATE.
+!     NOTE: The four SVD subroutines used in this code are
+!     included as a part of R&D and for the completeness.
+!     This was also an opportunity to test those SVD codes.
+!     If the scaling option is used all four are essentially
+!     equally good. For implementations on HP platforms,
+!     one can use whichever SVD is available.
 !............................................................
 
 !............................................................
 !............................................................
 !
       PROGRAM DMD_TEST
-
-
-      use iso_fortran_env
+      use iso_fortran_env, only: real64
       IMPLICIT NONE
       integer, parameter :: WP = real64
 
@@ -55,7 +53,7 @@
 !............................................................
       REAL(KIND=WP), ALLOCATABLE, DIMENSION(:)   :: RES, &
                      RES1, RESEX, SINGVX, SINGVQX, WORK
-      INTEGER      , ALLOCATABLE, DIMENSION(:)   ::   IWORK
+      INTEGER      , ALLOCATABLE, DIMENSION(:)   :: IWORK
       REAL(KIND=WP) :: WDUMMY(2)
       INTEGER       :: IDUMMY(4), ISEED(4)
       REAL(KIND=WP) :: ANORM, COND, CONDL, CONDR, EPS,       &
@@ -80,7 +78,7 @@
                  NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL, NFAILQ_TOTAL,  &
                  NFAIL_Z_XV,  MODE, MODEL, MODER, WHTSVD,     &
                  WHTSVDsp
-      INTEGER :: iNRNK, iWHTSVD,  K_traj, LWMINOPT
+      INTEGER :: iNRNK, iWHTSVD,  K_TRAJ, LWMINOPT
       CHARACTER :: GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
                        SCALE, RESIDS, WANTQ, WANTR
       LOGICAL :: TEST_QRDMD
@@ -116,7 +114,7 @@
       WANTR = 'R'
 !.................................................................................
 
-      EPS   = DLAMCH( 'P' )  ! machine precision DP
+      EPS = DLAMCH( 'P' )  ! machine precision DP
 
       ! Global counters of failures of some particular tests
       NFAIL      = 0
@@ -142,7 +140,7 @@
       READ(*,*) N
       WRITE(*,*) N
 
-!     Test the dimensions
+      ! ... Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
           STOP
@@ -156,14 +154,12 @@
 
       LDA  = M
       LDF  = M
-      LDX = M
-      LDY = M
+      LDX  = M
+      LDY  = M
       LDW  = N
-      LDZ = M
+      LDZ  = M
       LDAU = M
       LDS  = N
-
-
 
       TMP_ZXW  = ZERO
       TMP_AU   = ZERO
@@ -194,14 +190,14 @@
       ALLOCATE( SINGVX(N) )
       ALLOCATE( SINGVQX(N) )
 
-      TOL   = M*EPS
+      TOL  = M*EPS
       ! This mimics O(M*N)*EPS bound for accumulated roundoff error.
       ! The factor 10 is somewhat arbitrary.
-      TOL2  = 10*M*N*EPS
+      TOL2 = 10*M*N*EPS
 
 !.............
 
-      DO K_traj = 1, 2
+      DO K_TRAJ = 1, 2
       !  Number of intial conditions in the simulation/trajectories (1 or 2)
 
       COND = 1.0D4
@@ -213,8 +209,8 @@
       MODER = 6
       CONDR = 1.0D1
       PIVTNG = 'N'
-      ! Loop over all parameter MODE values for ZLATMR (+-1,..,+-6)
 
+      ! Loop over all parameter MODE values for ZLATMR (+1,..,+6)
       DO MODE = 1, 6
 
       ALLOCATE( IWORK(2*M) )
@@ -249,8 +245,7 @@
                    ZEIGSA, M, INFO )
       ANORM = ZLANGE( 'F', M, M, ZA, LDA, WDUMMY )
 
-!
-      IF ( K_traj == 2 ) THEN
+      IF ( K_TRAJ == 2 ) THEN
           ! generate data as two trajectories
           ! with two inital conditions
           CALL ZLARNV(2, ISEED, M, ZF(1,1) )
@@ -385,7 +380,7 @@
 
       SINGVX(1:N) = WORK(1:N)
 
-!...... ZGEDMD check point
+      !...... ZGEDMD check point
       IF ( LSAME(JOBZ,'V')  ) THEN
           ! Check that Z = X*W, on return from ZGEDMD
           ! This checks that the returned eigenvectors in Z are
@@ -413,7 +408,7 @@
       END IF
 
 
-!...... ZGEDMD check point
+      !...... ZGEDMD check point
       IF ( LSAME(JOBREF,'R') ) THEN
            ! The matrix A*U is returned for computing refined Ritz vectors.
            ! Check that A*U is computed correctly using the formula
@@ -458,7 +453,7 @@
                 RESEX(i) = DZNRM2( M, ZY1(1,i), 1) / DZNRM2(M,ZAU(1,i),1)
                END DO
       END IF
-!...... ZGEDMD check point
+      !...... ZGEDMD check point
 
       IF ( LSAME(RESIDS, 'R') ) THEN
           ! Compare the residuals returned by ZGEDMD with the
@@ -506,7 +501,7 @@
       DEALLOCATE(WORK)
       DEALLOCATE(IWORK)
 
-      IF ( TEST_QRDMD .AND. (K_traj == 1) ) THEN
+      IF ( TEST_QRDMD .AND. (K_TRAJ == 1) ) THEN
 
       ZF(1:M,1:N+1) = ZF0(1:M,1:N+1)
 
@@ -540,7 +535,7 @@
       END IF
       SINGVQX(1:N) = WORK(1:N)
 
-!..... ZGEDMDQ check point
+      !..... ZGEDMDQ check point
 
           IF ( 1 == 0 ) THEN
               ! Comparison of ZGEDMD and ZGEDMDQ singular values disabled
@@ -551,19 +546,17 @@
           END DO
           SVDIFF = MAX( SVDIFF, TMP )
           IF ( TMP > M*N*EPS ) THEN
-              WRITE(*,*) 'FAILED! Something was wrong with the run.'
+             WRITE(*,*) 'FAILED! Something was wrong with the run.'
              NFAIL_SVDIFF = NFAIL_SVDIFF + 1
-             do j =1, 3
+             DO j =1, 3
                  write(*,*) j, SINGVX(j), SINGVQX(j)
                  read(*,*)
-             end do
+             END DO
 
           END IF
           END IF
 
-!..... ZGEDMDQ check point
-
-       !..... ZGEDMDQ check point
+      !..... ZGEDMDQ check point
       IF ( LSAME(WANTQ,'Q') .AND. LSAME(WANTR,'R') ) THEN
          ! Check that the QR factors are computed and returned
          ! as requested. The residual ||F-Q*R||_F / ||F||_F
@@ -580,9 +573,8 @@
              !WRITE(*,*) '........ PASSED.'
          END IF
       END IF
-!..... ZGEDMDQ checkpoint
 
-       !..... ZGEDMDQ checkpoint
+      !..... ZGEDMDQ check point
       IF ( LSAME(RESIDS, 'R') ) THEN
           ! Compare the residuals returned by ZGEDMDQ with the
           ! explicitly computed residuals using the matrix A.
@@ -613,13 +605,11 @@
               STOP
           END IF
 
-    END IF
-
+      END IF
 
       DEALLOCATE( ZWORK )
       DEALLOCATE( WORK  )
       DEALLOCATE( IWORK )
-
 
       END IF ! ZGEDMDQ
 
@@ -667,18 +657,17 @@
 
       END DO ! LLOOP
 
-
-     WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
-     WRITE(*,*) ' Test summary for ZGEDMD :'
-     WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
-     WRITE(*,*)
-     IF ( NFAIL_Z_XV == 0 ) THEN
-        WRITE(*,*) '>>>> Z - U*V test PASSED.'
-     ELSE
-        WRITE(*,*) 'Z - U*V test FAILED ', NFAIL_Z_XV, ' time(s)'
-        WRITE(*,*) 'Max error ||Z-U*V||_F was ', TMP_ZXW
-        NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_Z_XV
-     END IF
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*) ' Test summary for ZGEDMD :'
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*)
+      IF ( NFAIL_Z_XV == 0 ) THEN
+         WRITE(*,*) '>>>> Z - U*V test PASSED.'
+      ELSE
+         WRITE(*,*) 'Z - U*V test FAILED ', NFAIL_Z_XV, ' time(s)'
+         WRITE(*,*) 'Max error ||Z-U*V||_F was ', TMP_ZXW
+         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_Z_XV
+      END IF
       IF ( NFAIL_AU == 0 ) THEN
         WRITE(*,*) '>>>> A*U test PASSED. '
       ELSE
@@ -704,51 +693,51 @@
         WRITE(*,*) '>>>>>>>>>>>>>> ZGEDMD :: TESTS FAILED. CHECK THE IMPLEMENTATION.'
       END IF
 
-    IF ( TEST_QRDMD ) THEN
-    WRITE(*,*)
-    WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    WRITE(*,*) ' Test summary for ZGEDMDQ :'
-    WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    WRITE(*,*)
+      IF ( TEST_QRDMD ) THEN
+      WRITE(*,*)
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*) ' Test summary for ZGEDMDQ :'
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*)
 
       IF ( NFAIL_SVDIFF == 0 ) THEN
-        WRITE(*,*) '>>>> ZGEDMD and ZGEDMDQ computed singular &
-            &values test PASSED.'
-    ELSE
-        WRITE(*,*) 'ZGEDMD and ZGEDMDQ discrepancies in &
-            &the singular values unacceptable ', &
-            NFAIL_SVDIFF, ' times. Test FAILED.'
-        WRITE(*,*) 'The maximal discrepancy in the singular values (relative to the norm) was ', SVDIFF
-        WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-        NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_SVDIFF
-     END IF
-
-     IF ( NFAIL_F_QR == 0 ) THEN
-         WRITE(*,*) '>>>> F - Q*R test PASSED.'
-     ELSE
-         WRITE(*,*) 'F - Q*R test FAILED ', NFAIL_F_QR, ' time(s)'
-         WRITE(*,*) 'The largest relative residual was ', TMP_FQR
+          WRITE(*,*) '>>>> ZGEDMD and ZGEDMDQ computed singular &
+              &values test PASSED.'
+      ELSE
+         WRITE(*,*) 'ZGEDMD and ZGEDMDQ discrepancies in &
+             &the singular values unacceptable ', &
+             NFAIL_SVDIFF, ' times. Test FAILED.'
+         WRITE(*,*) 'The maximal discrepancy in the singular values (relative to the norm) was ', SVDIFF
          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_F_QR
-     END IF
+         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_SVDIFF
+      END IF
 
-     IF ( NFAIL_REZQ == 0 ) THEN
-         WRITE(*,*) '>>>> Rezidual computation test PASSED.'
-     ELSE
-         WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
-         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
-         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
-     END IF
+      IF ( NFAIL_F_QR == 0 ) THEN
+          WRITE(*,*) '>>>> F - Q*R test PASSED.'
+      ELSE
+          WRITE(*,*) 'F - Q*R test FAILED ', NFAIL_F_QR, ' time(s)'
+          WRITE(*,*) 'The largest relative residual was ', TMP_FQR
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_F_QR
+      END IF
 
-     IF ( NFAILQ_TOTAL == 0 ) THEN
-         WRITE(*,*) '>>>>>>> ZGEDMDQ :: ALL TESTS PASSED.'
-     ELSE
-        WRITE(*,*) NFAILQ_TOTAL, 'FAILURES!'
-        WRITE(*,*) '>>>>>>> ZGEDMDQ :: TESTS FAILED. CHECK THE IMPLEMENTATION.'
-    END IF
+      IF ( NFAIL_REZQ == 0 ) THEN
+          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+      ELSE
+          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
+          WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
+      END IF
 
-    END IF
+      IF ( NFAILQ_TOTAL == 0 ) THEN
+          WRITE(*,*) '>>>>>>> ZGEDMDQ :: ALL TESTS PASSED.'
+      ELSE
+         WRITE(*,*) NFAILQ_TOTAL, 'FAILURES!'
+         WRITE(*,*) '>>>>>>> ZGEDMDQ :: TESTS FAILED. CHECK THE IMPLEMENTATION.'
+      END IF
+
+      END IF
 
       WRITE(*,*)
       WRITE(*,*) 'Test completed.'

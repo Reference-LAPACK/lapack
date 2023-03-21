@@ -1,65 +1,64 @@
-! This is a test program for checking the implementations of
-! the implementations of the following subroutines
+!     This is a test program for checking the implementations of
+!     the implementations of the following subroutines
 !
-! SGEDMD  for computation of the
-!         Dynamic Mode Decomposition (DMD)
-! SGEDMDQ for computation of a
-!         QR factorization based compressed DMD
+!     SGEDMD  for computation of the
+!             Dynamic Mode Decomposition (DMD)
+!     SGEDMDQ for computation of a
+!             QR factorization based compressed DMD
 !
-! Developed and supported by:
-! ===========================
-! Developed and coded by Zlatko Drmac, Faculty of Science,
-! University of Zagreb;  drmac@math.hr
-! In cooperation with
-! AIMdyn Inc., Santa Barbara, CA.
-!   ========================================================
-!   How to run the code (compiler, link info)
-!   ========================================================
-!   Compile as FORTRAN 90 (or later) and link with BLAS and
-!   LAPACK libraries.
-!   NOTE: The code is developed and tested on top of the
-!   Intel MKL library (versions 2022.0.3 and 2022.2.0),
-!   using the Intel Fortran compiler.
+!     Developed and supported by:
+!     ===========================
+!     Developed and coded by Zlatko Drmac, Faculty of Science,
+!     University of Zagreb;  drmac@math.hr
+!     In cooperation with
+!     AIMdyn Inc., Santa Barbara, CA.
+!     ========================================================
+!     How to run the code (compiler, link info)
+!     ========================================================
+!     Compile as FORTRAN 90 (or later) and link with BLAS and
+!     LAPACK libraries.
+!     NOTE: The code is developed and tested on top of the
+!     Intel MKL library (versions 2022.0.3 and 2022.2.0),
+!     using the Intel Fortran compiler.
 !
-!   For developers of the C++ implementation
-!   ========================================================
-!   See the LAPACK++ and Template Numerical Toolkit (TNT)
+!     For developers of the C++ implementation
+!     ========================================================
+!     See the LAPACK++ and Template Numerical Toolkit (TNT)
 !
-!   Note on a development of the GPU HP implementation
-!   ========================================================
-!   Work in progress. See CUDA, MAGMA, SLATE.
-!   NOTE: The four SVD subroutines used in this code are
-!   included as a part of R&D and for the completeness.
-!   This was also an opportunity to test those SVD codes.
-!   If the scaling option is used all four are essentially
-!   equally good. For implementations on HP platforms,
-!   one can use whichever SVD is available.
-!............................................................
-!   NOTE:
-!   When using the Intel MKL 2022.0.3 the subroutine xGESVDQ
-!   (optionally used in xGEDMD) may cause access violation
-!   error for x = S, D, C, Z, but only if called with the
-!   work space query. (At least in our Windows 10 MSVS 2019.)
-!   The problem can be mitigated by downloading the source
-!   code of xGESVDQ from the LAPACK repository and use it
-!   localy instead of the one in the MKL. This seems to
-!   indicate that the problem is indeed in the MKL.
-!   This problem did not appear whith Intel MKL 2022.2.0.
+!     Note on a development of the GPU HP implementation
+!     ========================================================
+!     Work in progress. See CUDA, MAGMA, SLATE.
+!     NOTE: The four SVD subroutines used in this code are
+!     included as a part of R&D and for the completeness.
+!     This was also an opportunity to test those SVD codes.
+!     If the scaling option is used all four are essentially
+!     equally good. For implementations on HP platforms,
+!     one can use whichever SVD is available.
+!...  .........................................................
+!     NOTE:
+!     When using the Intel MKL 2022.0.3 the subroutine xGESVDQ
+!     (optionally used in xGEDMD) may cause access violation
+!     error for x = S, D, C, Z, but only if called with the
+!     work space query. (At least in our Windows 10 MSVS 2019.)
+!     The problem can be mitigated by downloading the source
+!     code of xGESVDQ from the LAPACK repository and use it
+!     localy instead of the one in the MKL. This seems to
+!     indicate that the problem is indeed in the MKL.
+!     This problem did not appear whith Intel MKL 2022.2.0.
 !
-!   NOTE:
-!   xGESDD seems to have a problem with workspace. In some
-!   cases the length of the optimal workspace is returned
-!   smaller than the minimal workspace, as specified in the
-!   code. As a precaution, all optimal workspaces are
-!   set as MAX(minimal, optimal).
-!   Latest implementations of complex xGESDD have different
-!   length of the real worksapce. We use max value over
-!   two versions.
+!     NOTE:
+!     xGESDD seems to have a problem with workspace. In some
+!     cases the length of the optimal workspace is returned
+!     smaller than the minimal workspace, as specified in the
+!     code. As a precaution, all optimal workspaces are
+!     set as MAX(minimal, optimal).
+!     Latest implementations of complex xGESDD have different
+!     length of the real worksapce. We use max value over
+!     two versions.
 !............................................................
 !............................................................
 !
       PROGRAM DMD_TEST
-!
       use iso_fortran_env, only: real32
       IMPLICIT NONE
       integer, parameter :: WP = real32
@@ -87,13 +86,13 @@
                  LDZ, LIWORK, LWORK, M, N, L, LLOOP, NRNK
       INTEGER :: i, iJOBREF, iJOBZ, iSCALE, INFO, KDIFF,     &
                  NFAIL, NFAIL_AU, NFAIL_F_QR, NFAIL_REZ,     &
-                 NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL,      &
+                 NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL, NFAILQ_TOTAL, &
                  NFAIL_Z_XV, MODE, MODEL, MODER, WHTSVD
-      INTEGER    iNRNK, iWHTSVD,  iTOL, LWMINOPT
+      INTEGER    iNRNK, iWHTSVD, K_TRAJ, LWMINOPT
       CHARACTER(LEN=1) GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
                        SCALE, RESIDS, WANTQ, WANTR
 
-      LOGICAL          TEST_QRDMD, TWO_TRAJ
+      LOGICAL          TEST_QRDMD
 !..... external subroutines (BLAS and LAPACK)
       EXTERNAL SAXPY,  SGEEV, SGEMM, SGEMV, SLACPY, SLASCL
       EXTERNAL SLARNV, SLATMR
@@ -110,48 +109,57 @@
       INTRINSIC ABS, INT, MIN, MAX
 !............................................................
 
+      ! The test is always in pairs : ( SGEDMD and SGEDMDQ )
+      ! because the test includes comparing the results (in pairs).
+!.....................................................................................
+      TEST_QRDMD = .TRUE. ! This code by default performs tests on SGEDMDQ
+                          ! Since the QR factorizations based algorithm is designed for
+                          ! single trajectory data, only single trajectory tests will
+                          ! be performed with xGEDMDQ.
+      WANTQ = 'Q'
+      WANTR = 'R'
+!.................................................................................
+
       EPS = SLAMCH( 'P' )  ! machine precision SP
 
-      ! Automatically loop over trajectories testing
-      ! both 1 trajectory and 2 trajectories
-      DO K = 1, 2
+      ! Global counters of failures of some particular tests
+      NFAIL      = 0
+      NFAIL_REZ  = 0
+      NFAIL_REZQ = 0
+      NFAIL_Z_XV = 0
+      NFAIL_F_QR = 0
+      NFAIL_AU   = 0
+      KDIFF      = 0
+      NFAIL_SVDIFF = 0
+      NFAIL_TOTAL  = 0
+      NFAILQ_TOTAL = 0
 
-      IF ( K == 1) THEN
-          TWO_TRAJ = .FALSE.
-      ELSE IF ( K == 2 ) THEN
-          TWO_TRAJ = .TRUE.
-      END IF
 
-      IF ( TWO_TRAJ ) THEN
-          TEST_QRDMD = .FALSE.
-      ELSE                    ! This version (ZGEDMDQ) is for
-          TEST_QRDMD = .TRUE. ! one trajectory stream of data.
-      END IF
+      DO LLOOP = 1, 4
+
+      WRITE(*,*) 'L Loop Index = ', LLOOP
 
       ! Set the dimensions of the problem ...
-      !READ( NIN, FMT = * )( IOLDSD( I ), I = 1, 4 )
-      READ(*,*) L
-      WRITE(*,*) 'L = ', L
-      DO LLOOP = 1, L
-      WRITE(*,*) 'L Loop Index = ', LLOOP
+      WRITE(*,*) 'M = '
       READ(*,*) M
-      WRITE(*,*) 'M = ', M
-!     ... and the number of snapshots.
+      WRITE(*,*) M
+      ! ... and the number of snapshots.
+      WRITE(*,*) 'N = '
       READ(*,*) N
-      WRITE(*,*) 'N = ', N
+      WRITE(*,*) N
+
+      ! ... Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
           STOP
       END IF
+!.............
+      ! The seed inside the LLOOP so that each pass can be reproduced easily.
 
       ISEED(1) = 4
       ISEED(2) = 3
       ISEED(3) = 2
       ISEED(4) = 1
-
-      ! Loop over all parameter MODE values for SLATMR (+-1,..,+-6)
-      DO MODE = -6, 6, 1
-!..............................................................
 
       LDA = M
       LDF = M
@@ -161,6 +169,13 @@
       LDZ = M
       LDAU = MAX(M,N+1)
       LDS = N
+
+      TMP_ZXW  = ZERO
+      TMP_AU   = ZERO
+      TMP_REZ  = ZERO
+      TMP_REZQ = ZERO
+      SVDIFF   = ZERO
+      TMP_EX   = ZERO
 
       !
       ! Test the subroutines on real data snapshots. All
@@ -201,11 +216,15 @@
       ALLOCATE( AU(LDAU,N) )
       ALLOCATE( S(N,N) )
 
-!............................................................
-!     Generate random M-by-M matrix A. Use SLATMR from
-!     LAPACK. The test uses a single test matrix and then
-!     runs the subroutines under test with different
-!     options set by the input parameters.
+      TOL  = M*EPS
+      ! This mimics O(M*N)*EPS bound for accumulated roundoff error.
+      ! The factor 10 is somewhat arbitrary.
+      TOL2 = 10*M*N*EPS
+
+!.............
+
+      DO K_TRAJ = 1, 2
+      !  Number of intial conditions in the simulation/trajectories (1 or 2)
 
       COND = 1.0D8
       DMAX = 1.0D2
@@ -216,6 +235,10 @@
       MODER = 6
       CONDR = 1.0D2
       PIVTNG = 'N'
+
+      ! Loop over all parameter MODE values for ZLATMR (+1,..,+6)
+      DO MODE = 1, 6
+
       ALLOCATE( IWORK(2*M) )
       ALLOCATE(DR(N))
       CALL SLATMR( M, M, 'S', ISEED, 'N', DA, MODE, COND, &
@@ -233,9 +256,9 @@
       DEALLOCATE(WORK)
       TMP = ZERO
       DO i = 1, M
-       EIGA(i,1) = REIGA(i)
-       EIGA(i,2) = IEIGA(i)
-       TMP = MAX( TMP, SQRT(REIGA(i)**2+IEIGA(i)**2))
+          EIGA(i,1) = REIGA(i)
+          EIGA(i,2) = IEIGA(i)
+          TMP = MAX( TMP, SQRT(REIGA(i)**2+IEIGA(i)**2))
       END DO
 
       ! Scale A to have the desirable spectral radius.
@@ -245,7 +268,7 @@
       ! Compute the norm of A
       ANORM = SLANGE( 'F', N, N, A, M, WDUMMY )
 
-      IF ( TWO_TRAJ ) THEN
+      IF ( K_TRAJ == 2 ) THEN
           ! generate data with two inital conditions
       CALL SLARNV(2, ISEED, M, F1(1,1) )
       F1(1:M,1) = 1.0E-10*F1(1:M,1)
@@ -278,27 +301,6 @@
       YNORM = SLANGE( 'F', M, N, Y0, LDX, WDUMMY )
 !............................................................
 
-      TOL = M*EPS
-
-      iTOL = 1
-
-      NFAIL      = 0
-      NFAIL_REZ  = 0
-      NFAIL_REZQ = 0
-      NFAIL_Z_XV = 0
-      NFAIL_F_QR = 0
-      NFAIL_AU   = 0
-      KDIFF      = 0
-      NFAIL_SVDIFF = 0
-      NFAIL_TOTAL  = 0
-      TMP_ZXW  = ZERO
-      TMP_AU   = ZERO
-      TMP_REZ  = ZERO
-      TMP_REZQ = ZERO
-      SVDIFF   = ZERO
-      TMP_EX   = ZERO
-      TOL2     = 10*M*N*EPS ! This mimics O(M*N)*EPS bound &
-                            ! for accumulated roundoff error
       DO iJOBZ = 1, 4
 
           SELECT CASE ( iJOBZ )
@@ -341,20 +343,20 @@
           END SELECT
 
       DO iNRNK = -1, -2, -1
-         ! Two truncation strategies. The "-2" case for R&D
-         ! purposes only - it uses possibly low accuracy small
-         ! singular values, in which case the formulas used in
-         ! the DMD are highly sensitive.
-         NRNK   = iNRNK
+          ! Two truncation strategies. The "-2" case for R&D
+          ! purposes only - it uses possibly low accuracy small
+          ! singular values, in which case the formulas used in
+          ! the DMD are highly sensitive.
+          NRNK   = iNRNK
 
       DO iWHTSVD = 1, 4
-         ! Check all four options to compute the POD basis
-         ! via the SVD.
-         WHTSVD   = iWHTSVD
+          ! Check all four options to compute the POD basis
+          ! via the SVD.
+          WHTSVD   = iWHTSVD
 
       DO LWMINOPT = 1, 2
-         ! Workspace query for the minimal (1) and for the optimal
-         ! (2) workspace lengths determined by workspace query.
+          ! Workspace query for the minimal (1) and for the optimal
+          ! (2) workspace lengths determined by workspace query.
 
        X(1:M,1:N) = X0(1:M,1:N)
        Y(1:M,1:N) = Y0(1:M,1:N)
@@ -378,7 +380,7 @@
 
        SINGVX(1:N) = WORK(1:N)
 
-!...... SGEDMD check point
+       !...... SGEDMD check point
        IF ( LSAME(JOBZ,'V')  ) THEN
           ! Check that Z = X*W, on return from SGEDMD
           ! This checks that the returned aigenvectors in Z are
@@ -399,7 +401,8 @@
           END IF
 
        END IF
-!...... SGEDMD check point
+
+       !...... SGEDMD check point
        IF ( LSAME(JOBREF,'R') ) THEN
            ! The matrix A*U is returned for computing refined Ritz vectors.
            ! Check that A*U is computed correctly using the formula
@@ -461,15 +464,16 @@
        END DO
 
        END IF
-!...... SGEDMD check point
+
+      !...... SGEDMD check point
       IF ( LSAME(RESIDS, 'R') ) THEN
-          ! Compare the residuals returned by DGEDMD with the
+          ! Compare the residuals returned by SGEDMD with the
           ! explicitly computed residuals using the matrix A.
           ! Compute explicitly Y1 = A*Z
           CALL SGEMM( 'N', 'N', M, K, M, ONE, A, LDA, Z, LDZ, ZERO, Y1, M )
           ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
           ! of the invariant subspaces that correspond to complex conjugate
-          ! pairs of eigencalues. (See the description of Z in DGEDMD,)
+          ! pairs of eigencalues. (See the description of Z in SGEDMD,)
           i = 1
           DO WHILE ( i <= K )
             IF ( IEIG(i) == ZERO ) THEN
@@ -517,7 +521,8 @@
          END IF
 
       END IF
-!   ... store the results for inspection
+
+      ! ... store the results for inspection
       DO i = 1, K
           LAMBDA(i,1) = REIG(i)
           LAMBDA(i,2) = IEIG(i)
@@ -526,16 +531,14 @@
       DEALLOCATE(IWORK)
       DEALLOCATE(WORK)
 
-!======================================================================
-!     Now test the SGEDMDQ, if requested.
-!======================================================================
+      !======================================================================
+      !     Now test the SGEDMDQ, if requested.
+      !======================================================================
       IF ( TEST_QRDMD ) THEN
           RJOBDATA(2) = 1
-          WANTQ = 'Q'   ! Always return Q and R from the
-          WANTR = 'R'   ! initial QR factorization
           F1 = F
 
-          ! DGEDMDQ test: Workspace query and workspace allocation
+          ! SGEDMDQ test: Workspace query and workspace allocation
           CALL SGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, &
                JOBREF, WHTSVD, M, N+1, F1, LDF, X, LDX, Y, &
                LDY, NRNK, TOL, KQ, REIGQ, IEIGQ, Z, LDZ,   &
@@ -545,6 +548,7 @@
           ALLOCATE( IWORK(LIWORK) )
           LWORK = INT(WDUMMY(LWMINOPT))
           ALLOCATE(WORK(LWORK))
+
           ! SGEDMDQ test: CALL SGEDMDQ
           CALL SGEDMDQ( SCALE, JOBZ, RESIDS, WANTQ, WANTR, &
                JOBREF, WHTSVD, M, N+1, F1, LDF, X, LDX, Y, &
@@ -553,7 +557,8 @@
                WORK, LWORK, IWORK, LIWORK, INFO )
 
           SINGVQX(1:KQ) = WORK(MIN(M,N+1)+1: MIN(M,N+1)+KQ)
-!..... SGEDMDQ check point
+
+          !..... SGEDMDQ check point
           IF ( KQ /= K ) THEN
              KDIFF = KDIFF+1
           END IF
@@ -567,7 +572,8 @@
           IF ( TMP > M*N*EPS ) THEN
              NFAIL_SVDIFF = NFAIL_SVDIFF + 1
           END IF
-!..... SGEDMDQ check point
+
+          !..... SGEDMDQ check point
           IF ( LSAME(WANTQ,'Q') .AND. LSAME(WANTR,'R') ) THEN
              ! Check that the QR factors are computed and returned
              ! as requested. The residual ||F-Q*R||_F / ||F||_F
@@ -581,15 +587,16 @@
                  NFAIL_F_QR = NFAIL_F_QR + 1
              END IF
           END IF
-!..... SGEDMDQ checkpoint
+
+          !..... SGEDMDQ checkpoint
           IF ( LSAME(RESIDS, 'R') ) THEN
-              ! Compare the residuals returned by DGEDMDQ with the
+              ! Compare the residuals returned by SGEDMDQ with the
               ! explicitly computed residuals using the matrix A.
               ! Compute explicitly Y1 = A*Z
               CALL SGEMM( 'N', 'N', M, KQ, M, ONE, A, M, Z, M, ZERO, Y1, M )
               ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
               ! of the invariant subspaces that correspond to complex conjugate
-              ! pairs of eigencalues. (See the description of Z in DGEDMDQ)
+              ! pairs of eigencalues. (See the description of Z in SGEDMDQ)
               i = 1
               DO WHILE ( i <= KQ )
                 IF ( IEIGQ(i) == ZERO ) THEN
@@ -642,11 +649,22 @@
 !======================================================================
 
       END DO ! LWMINOPT
+      !write(*,*) 'LWMINOPT loop completed'
       END DO ! WHTSVD LOOP
+      !write(*,*) 'WHTSVD loop completed'
       END DO ! NRNK LOOP
+      !write(*,*) 'NRNK loop completed'
       END DO ! SCALE LOOP
+      !write(*,*) 'SCALE loop completed'
       END DO ! JOBF LOOP
+      !write(*,*) 'JOBREF loop completed'
       END DO ! JOBZ LOOP
+      !write(*,*) 'JOBZ loop completed'
+
+      END DO ! MODE -6:6
+      !write(*,*) 'MODE loop completed'
+      END DO ! 1 or 2 trajectories
+      !write(*,*) 'trajectories  loop completed'
 
       DEALLOCATE(A)
       DEALLOCATE(AC)
@@ -682,54 +700,93 @@
       DEALLOCATE(S)
 
 !............................................................
-!     Generate random M-by-M matrix A. Use DLATMR from
-      END DO ! LOOP OVER M AND N
-      END DO ! DLAMTR GENERATION
-      END DO ! K LOOP OVER TRAJECTORIES
+      !     Generate random M-by-M matrix A. Use DLATMR from
+      END DO ! LLOOP
 
-      IF ( NFAIL_Z_XV /= 0 ) THEN
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
+
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*) ' Test summary for SGEDMD :'
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*)
+      IF ( NFAIL_Z_XV == 0 ) THEN
+          WRITE(*,*) '>>>> Z - U*V test PASSED.'
+      ELSE
+          WRITE(*,*) 'Z - U*V test FAILED ', NFAIL_Z_XV, ' time(s)'
+          WRITE(*,*) 'Max error ||Z-U*V||_F was ', TMP_ZXW
+          NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_Z_XV
       END IF
-
-      IF ( NFAIL_AU /= 0 ) THEN
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
-      END IF
-
-      IF ( NFAIL_REZ /= 0 ) THEN
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
-      END IF
-
-      IF ( NFAIL_F_QR /= 0 ) THEN
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
-      END IF
-
-      IF ( KDIFF /= 0 ) THEN
-          WRITE(*,*) 'DGESVD and DGESVDQ computed different &
-              &number of modes ', KDIFF, ' times.'
-      END IF
-
-      IF ( NFAIL_SVDIFF /= 0 ) THEN
-          WRITE(*,*) 'SGESVD and SGESVDQ discrepancies in &
-              &the singular values unacceptable ', &
-              NFAIL_SVDIFF, ' times'
-          WRITE(*,*) 'The maximal discrepancy in the singular values was ', SVDIFF
+      IF ( NFAIL_AU == 0 ) THEN
+          WRITE(*,*) '>>>> A*U test PASSED. '
+      ELSE
+          WRITE(*,*) 'A*U test FAILED ', NFAIL_AU, ' time(s)'
+          WRITE(*,*) 'Max A*U test adjusted error measure was ', TMP_AU
           WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
+          NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_AU
       END IF
 
-      IF ( NFAIL_REZQ /= 0 ) THEN
-!          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
-          NFAIL_TOTAL = NFAIL_TOTAL + 1
+      IF ( NFAIL_REZ == 0 ) THEN
+          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+      ELSE
+          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZ, 'time(s)'
+          WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZ
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
       END IF
 
       IF ( NFAIL_TOTAL == 0 ) THEN
-          WRITE(*,*) '>>>>>>> ALL TESTS PASSED.'
+          WRITE(*,*) '>>>> SGEDMD :: ALL TESTS PASSED.'
       ELSE
-          WRITE(*,*) NFAIL_TOTAL, &
-          '>>>>>>> TESTS FAILED. CHECK THE IMPLEMENTATION.'
+          WRITE(*,*) NFAIL_TOTAL, 'FAILURES!'
+          WRITE(*,*) '>>>>>>>>>>>>>> SGEDMD :: TESTS FAILED. CHECK THE IMPLEMENTATION.'
       END IF
 
+      IF ( TEST_QRDMD ) THEN
+      WRITE(*,*)
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*) ' Test summary for SGEDMDQ :'
+      WRITE(*,*) '>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      WRITE(*,*)
+
+      IF ( NFAIL_SVDIFF == 0 ) THEN
+          WRITE(*,*) '>>>> SGEDMD and SGEDMDQ computed singular &
+              &values test PASSED.'
+      ELSE
+          WRITE(*,*) 'SGEDMD and SGEDMDQ discrepancies in &
+              &the singular values unacceptable ', &
+              NFAIL_SVDIFF, ' times. Test FAILED.'
+          WRITE(*,*) 'The maximal discrepancy in the singular values (relative to the norm) was ', SVDIFF
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_SVDIFF
+      END IF
+
+      IF ( NFAIL_F_QR == 0 ) THEN
+          WRITE(*,*) '>>>> F - Q*R test PASSED.'
+      ELSE
+          WRITE(*,*) 'F - Q*R test FAILED ', NFAIL_F_QR, ' time(s)'
+          WRITE(*,*) 'The largest relative residual was ', TMP_FQR
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_F_QR
+      END IF
+
+      IF ( NFAIL_REZQ == 0 ) THEN
+          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+      ELSE
+          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
+          WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
+      END IF
+
+      IF ( NFAILQ_TOTAL == 0 ) THEN
+          WRITE(*,*) '>>>>>>> SGEDMDQ :: ALL TESTS PASSED.'
+      ELSE
+         WRITE(*,*) NFAILQ_TOTAL, 'FAILURES!'
+         WRITE(*,*) '>>>>>>> SGEDMDQ :: TESTS FAILED. CHECK THE IMPLEMENTATION.'
+      END IF
+
+      END IF
+
+      WRITE(*,*)
+      WRITE(*,*) 'Test completed.'
       STOP
-
       END
-
