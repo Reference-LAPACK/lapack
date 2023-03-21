@@ -688,7 +688,7 @@
             NFAIL_SVDIFF, ' times. Test FAILED.'
         WRITE(*,*) 'The maximal discrepancy in the singular values (relative to the norm) was ', SVDIFF
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-        NFAILQ_TOTAL = NFAILQ_TOTAL + SVDIFF
+        NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_SVDIFF
       END IF
       IF ( NFAIL_F_QR == 0 ) THEN
         WRITE(*,*) '>>>> F - Q*R test PASSED.'
