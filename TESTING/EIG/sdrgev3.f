@@ -455,8 +455,8 @@
       EXTERNAL           ILAENV, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SGET52, SGGEV3, SLABAD, SLACPY, SLARFG,
-     $                   SLASET, SLATM4, SORM2R, XERBLA
+      EXTERNAL           ALASVM, SGET52, SGGEV3, SLACPY, SLARFG, SLASET,
+     $                   SLATM4, SORM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -546,7 +546,6 @@
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.

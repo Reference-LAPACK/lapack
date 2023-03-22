@@ -451,7 +451,7 @@
       EXTERNAL           ILAENV, DLAMCH, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLABAD, XERBLA, ZGET52, ZGGEV, ZLACPY,
+      EXTERNAL           ALASVM, XERBLA, ZGET52, ZGGEV, ZLACPY,
      $                   ZLARFG, ZLASET, ZLATM4, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
@@ -546,7 +546,6 @@
       SAFMIN = DLAMCH( 'Safe minimum' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.

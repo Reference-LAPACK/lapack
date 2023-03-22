@@ -420,7 +420,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CHBGV, CHBGVD, CHBGVX, CHEGV, CHEGVD, CHEGVX,
      $                   CHPGV, CHPGVD, CHPGVX, CLACPY, CLASET, CLATMR,
-     $                   CLATMS, CSGT01, SLABAD, SLAFTS, SLASUM, XERBLA
+     $                   CLATMS, CSGT01, SLAFTS, SLASUM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -481,7 +481,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

@@ -395,7 +395,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGESVD, CGET51, CGGESX, CLACPY, CLAKF2,
-     $                   CLASET, CLATM5, SLABAD, XERBLA
+     $                   CLASET, CLATM5, XERBLA
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            FS
@@ -478,7 +478,6 @@
       ULPINV = ONE / ULP
       SMLNUM = SLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0

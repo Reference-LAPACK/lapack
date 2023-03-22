@@ -444,8 +444,8 @@
       EXTERNAL           SSLECT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEES, SHST01, SLABAD, SLACPY, SLASUM, SLATME,
-     $                   SLATMR, SLATMS, SLASET, XERBLA
+      EXTERNAL           SGEES, SHST01, SLACPY, SLASUM, SLATME, SLATMR,
+     $                   SLATMS, SLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -514,7 +514,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

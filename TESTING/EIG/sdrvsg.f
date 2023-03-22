@@ -399,7 +399,7 @@
       EXTERNAL           LSAME, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
+      EXTERNAL           SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
      $                   SLATMS, SSBGV, SSBGVD, SSBGVX, SSGT01, SSPGV,
      $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX, XERBLA
 *     ..
@@ -460,7 +460,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

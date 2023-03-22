@@ -145,9 +145,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           SLABAD
-*     ..
 *     .. Save statement ..
       SAVE               EPS, SMALL, LARGE, BADC1, BADC2, FIRST
 *     ..
@@ -165,11 +162,6 @@
          BADC1 = SQRT( BADC2 )
          SMALL = SLAMCH( 'Safe minimum' )
          LARGE = ONE / SMALL
-*
-*        If it looks like we're on a Cray, take the square root of
-*        SMALL and LARGE to avoid overflow and underflow problems.
-*
-         CALL SLABAD( SMALL, LARGE )
          SMALL = SHRINK*( SMALL / EPS )
          LARGE = ONE / SMALL
       END IF

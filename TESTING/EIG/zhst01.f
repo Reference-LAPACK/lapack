@@ -166,7 +166,7 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZLACPY, ZUNT01
+      EXTERNAL           ZGEMM, ZLACPY, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, MAX, MIN
@@ -184,7 +184,6 @@
       UNFL = DLAMCH( 'Safe minimum' )
       EPS = DLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )

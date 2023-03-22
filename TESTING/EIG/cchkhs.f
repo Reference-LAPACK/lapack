@@ -473,7 +473,7 @@
       EXTERNAL           CCOPY, CGEHRD, CGEMM, CGET10, CGET22, CHSEIN,
      $                   CHSEQR, CHST01, CLACPY, CLASET, CLATME, CLATMR,
      $                   CLATMS, CTREVC, CTREVC3, CUNGHR, CUNMHR,
-     $                   SLABAD, SLAFTS, SLASUM, XERBLA
+     $                   SLAFTS, SLASUM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -533,7 +533,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

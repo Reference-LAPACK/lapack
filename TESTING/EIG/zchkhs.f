@@ -470,10 +470,10 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD,
-     $                   ZGEMM, ZGET10, ZGET22, ZHSEIN, ZHSEQR, ZHST01,
-     $                   ZLACPY, ZLASET, ZLATME, ZLATMR, ZLATMS, ZTREVC,
-     $                   ZTREVC3, ZUNGHR, ZUNMHR
+      EXTERNAL           DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD, ZGEMM,
+     $                   ZGET10, ZGET22, ZHSEIN, ZHSEQR, ZHST01, ZLACPY,
+     $                   ZLASET, ZLATME, ZLATMR, ZLATMS, ZTREVC, ZTREVC3,
+     $                   ZUNGHR, ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -533,7 +533,6 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

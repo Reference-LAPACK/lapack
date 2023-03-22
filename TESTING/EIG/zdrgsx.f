@@ -394,7 +394,7 @@
       EXTERNAL           ZLCTSX, ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLABAD, XERBLA, ZGESVD, ZGET51, ZGGESX,
+      EXTERNAL           ALASVM, XERBLA, ZGESVD, ZGET51, ZGGESX,
      $                   ZLACPY, ZLAKF2, ZLASET, ZLATM5
 *     ..
 *     .. Scalars in Common ..
@@ -479,7 +479,6 @@
       ULPINV = ONE / ULP
       SMLNUM = DLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0

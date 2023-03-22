@@ -198,7 +198,7 @@
       EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLABAD, SSCAL, STRMV
+      EXTERNAL           SAXPY, SCOPY, SSCAL, STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
@@ -214,7 +214,6 @@
       EPS = SLAMCH( 'Epsilon' )
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Compute the norm of the triangular matrix A using the column
 *     norms already computed by SLATRS.

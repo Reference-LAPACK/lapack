@@ -469,9 +469,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEHRD, DGEMM, DGET10, DGET22, DHSEIN,
-     $                   DHSEQR, DHST01, DLABAD, DLACPY, DLAFTS, DLASET,
-     $                   DLASUM, DLATME, DLATMR, DLATMS, DORGHR, DORMHR,
-     $                   DTREVC, DTREVC3, XERBLA
+     $                   DHSEQR, DHST01, DLACPY, DLAFTS, DLASET, DLASUM,
+     $                   DLATME, DLATMR, DLATMS, DORGHR, DORMHR, DTREVC,
+     $                   DTREVC3, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -531,7 +531,6 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

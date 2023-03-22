@@ -444,8 +444,8 @@
       EXTERNAL           DSLECT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEES, DHST01, DLABAD, DLACPY, DLASET, DLASUM,
-     $                   DLATME, DLATMR, DLATMS, XERBLA
+      EXTERNAL           DGEES, DHST01, DLACPY, DLASET, DLASUM, DLATME,
+     $                   DLATMR, DLATMS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -514,7 +514,6 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

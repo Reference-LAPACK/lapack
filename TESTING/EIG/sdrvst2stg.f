@@ -502,7 +502,7 @@
       EXTERNAL           SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SLABAD, SLACPY, SLAFTS, SLASET, SLATMR,
+      EXTERNAL           ALASVM, SLACPY, SLAFTS, SLASET, SLATMR,
      $                   SLATMS, SSBEV, SSBEVD, SSBEVX, SSPEV, SSPEVD,
      $                   SSPEVX, SSTEV, SSTEVD, SSTEVR, SSTEVX, SSTT21,
      $                   SSTT22, SSYEV, SSYEVD, SSYEVR, SSYEVX, SSYT21,
@@ -577,7 +577,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

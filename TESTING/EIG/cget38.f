@@ -136,7 +136,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEHRD, CHSEQR, CHST01, CLACPY, CSSCAL, CTRSEN,
-     $                   CUNGHR, SLABAD
+     $                   CUNGHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, MAX, REAL, SQRT
@@ -146,7 +146,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *

@@ -683,10 +683,10 @@
       EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLABAD, SLASUM, SSTEBZ, SSTECH, SSTERF,
-     $                   XERBLA, CCOPY, CHET21, CHETRD, CHPT21, CHPTRD,
-     $                   CLACPY, CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC,
-     $                   CSTEMR, CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR,
+      EXTERNAL           SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XERBLA,
+     $                   CCOPY, CHET21, CHETRD, CHPT21, CHPTRD, CLACPY,
+     $                   CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC, CSTEMR,
+     $                   CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR,
      $                   CUPGTR, CHETRD_2STAGE, SLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -754,7 +754,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )

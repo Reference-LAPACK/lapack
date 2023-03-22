@@ -544,8 +544,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,
      $                   SBDT02, SBDT03, SBDT04, SCOPY, SGEBRD,
-     $                   SGEMM, SLABAD, SLACPY, SLAHD2, SLASET,
-     $                   SLATMR, SLATMS, SORGBR, SORT01, XERBLA
+     $                   SGEMM, SLACPY, SLAHD2, SLASET, SLATMR,
+     $                   SLATMS, SORGBR, SORT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -627,7 +627,6 @@
       NTEST = 0
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )

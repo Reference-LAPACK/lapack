@@ -177,8 +177,8 @@
       EXTERNAL           LSAME, IZAMAX, DLAMCH, DLARND, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLARNV, ZCOPY, ZDSCAL, ZLARNV, ZLATB4,
-     $                   ZLATMS, ZSWAP
+      EXTERNAL           DLARNV, ZCOPY, ZDSCAL, ZLARNV, ZLATB4, ZLATMS,
+     $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN, SQRT
@@ -191,7 +191,6 @@
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.6 .AND. IMAT.LE.9 ) .OR. IMAT.EQ.17 ) THEN
          DIAG = 'U'
       ELSE

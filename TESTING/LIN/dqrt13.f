@@ -117,7 +117,7 @@
       EXTERNAL           DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLARNV, DLASCL
+      EXTERNAL           DLARNV, DLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SIGN
@@ -146,7 +146,6 @@
          NORMA = DLANGE( 'Max', M, N, A, LDA, DUMMY )
          SMLNUM = DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL DLABAD( SMLNUM, BIGNUM )
          SMLNUM = SMLNUM / DLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *

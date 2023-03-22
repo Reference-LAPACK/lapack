@@ -131,8 +131,8 @@
       EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEHRD, DHSEQR, DLABAD, DLACPY, DSCAL,
-     $                   DTREVC, DTRSNA
+      EXTERNAL           DCOPY, DGEHRD, DHSEQR, DLACPY, DSCAL, DTREVC,
+     $                   DTRSNA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
@@ -142,7 +142,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *

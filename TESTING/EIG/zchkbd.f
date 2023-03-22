@@ -463,9 +463,9 @@
       EXTERNAL           DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, DCOPY, DLABAD, DLAHD2, DSVDCH, XERBLA,
-     $                   ZBDSQR, ZBDT01, ZBDT02, ZBDT03, ZGEBRD, ZGEMM,
-     $                   ZLACPY, ZLASET, ZLATMR, ZLATMS, ZUNGBR, ZUNT01
+      EXTERNAL           ALASUM, DCOPY, DLAHD2, DSVDCH, XERBLA, ZBDSQR,
+     $                   ZBDT01, ZBDT02, ZBDT03, ZGEBRD, ZGEMM, ZLACPY,
+     $                   ZLASET, ZLATMR, ZLATMS, ZUNGBR, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -547,7 +547,6 @@
       NTEST = 0
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )

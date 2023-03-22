@@ -135,8 +135,8 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZDSCAL, ZGEHRD, ZHSEQR, ZHST01, ZLACPY,
-     $                   ZTRSEN, ZUNGHR
+      EXTERNAL           ZDSCAL, ZGEHRD, ZHSEQR, ZHST01, ZLACPY, ZTRSEN,
+     $                   ZUNGHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG, MAX, SQRT
@@ -146,7 +146,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *

@@ -561,9 +561,9 @@
       EXTERNAL           SLAMCH, SLANGE, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQR2, SGET51, SGET52, SGGHRD, SHGEQZ, SLABAD,
-     $                   SLACPY, SLARFG, SLASET, SLASUM, SLATM4, SORM2R,
-     $                   STGEVC, XERBLA
+      EXTERNAL           SGEQR2, SGET51, SGET52, SGGHRD, SHGEQZ, SLACPY,
+     $                   SLARFG, SLASET, SLASUM, SLATM4, SORM2R, STGEVC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -641,7 +641,6 @@
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.

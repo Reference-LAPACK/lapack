@@ -113,8 +113,7 @@
       EXTERNAL           DASUM, DLAMCH, DLANGE, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DBDSQR, DGEBD2, DLABAD, DLASCL, DLASET,
-     $                   XERBLA
+      EXTERNAL           DAXPY, DBDSQR, DGEBD2, DLASCL, DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -155,7 +154,6 @@
 *
       SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale work if max entry outside range [SMLNUM,BIGNUM]
 *

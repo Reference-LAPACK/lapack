@@ -665,8 +665,7 @@
       EXTERNAL           CCOPY, CHET21, CHETRD, CHPT21, CHPTRD, CLACPY,
      $                   CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC, CSTEMR,
      $                   CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR, CUPGTR,
-     $                   SCOPY, SLABAD, SLASUM, SSTEBZ, SSTECH, SSTERF,
-     $                   XERBLA
+     $                   SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, INT, LOG, MAX, MIN, REAL, SQRT
@@ -733,7 +732,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
