@@ -196,7 +196,7 @@
       EXTERNAL           LSAME, SDOT, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLALN2, SLASY2, SSCAL, XERBLA
+      EXTERNAL           SLALN2, SLASY2, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -244,7 +244,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*REAL( M*N ) / EPS
       BIGNUM = ONE / SMLNUM
 *

@@ -438,7 +438,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEES, CHST01, CLACPY, CLATME, CLATMR, CLATMS,
-     $                   CLASET, SLABAD, SLASUM, XERBLA
+     $                   CLASET, SLASUM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -507,7 +507,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

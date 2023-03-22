@@ -226,8 +226,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGELQT, DGEQRT, DGEMLQT, DGEMQRT, DLABAD,
-     $                   DLASCL, DLASET, DTRTRS, XERBLA
+      EXTERNAL           DGELQT, DGEQRT, DGEMLQT, DGEMQRT, DLASCL,
+     $                   DLASET, DTRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -309,7 +309,6 @@
 *
       SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *

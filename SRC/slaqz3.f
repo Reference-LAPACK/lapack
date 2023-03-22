@@ -258,7 +258,7 @@
       REAL :: S, SMLNUM, ULP, SAFMIN, SAFMAX, C1, S1, TEMP
 
 *     External Functions
-      EXTERNAL :: XERBLA, STGEXC, SLABAD, SLAQZ0, SLACPY, SLASET,
+      EXTERNAL :: XERBLA, STGEXC, SLAQZ0, SLACPY, SLASET,
      $            SLAQZ2, SROT, SLARTG, SLAG2, SGEMM
       REAL, EXTERNAL :: SLAMCH
 
@@ -300,7 +300,6 @@
 *     Get machine constants
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N )/ULP )
 

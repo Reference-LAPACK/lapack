@@ -122,7 +122,7 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZTRSYL
+      EXTERNAL           ZGEMM, ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -134,7 +134,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *

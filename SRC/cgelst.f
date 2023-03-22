@@ -228,7 +228,7 @@
       EXTERNAL           LSAME, ILAENV, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGELQT, CGEQRT, CGEMLQT, CGEMQRT, SLABAD,
+      EXTERNAL           CGELQT, CGEQRT, CGEMLQT, CGEMQRT,
      $                   CLASCL, CLASET, CTRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -311,7 +311,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *

@@ -306,8 +306,7 @@
       DOUBLE PRECISION   VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLABAD, DLACPY, DLAQR1, DLARFG, DLASET,
-     $                   DTRMM
+      EXTERNAL           DGEMM, DLACPY, DLAQR1, DLARFG, DLASET, DTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -353,7 +352,6 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *

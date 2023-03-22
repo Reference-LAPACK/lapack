@@ -230,8 +230,7 @@
       COMPLEX :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
-      EXTERNAL :: XERBLA, SLABAD, CLASET, CLARTG, CROT, CLAQZ1, CGEMM,
-     $            CLACPY
+      EXTERNAL :: XERBLA, CLASET, CLARTG, CROT, CLAQZ1, CGEMM, CLACPY
       REAL, EXTERNAL :: SLAMCH
 
       INFO = 0
@@ -258,7 +257,6 @@
 *     Get machine constants
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
 
       IF ( ILO .GE. IHI ) THEN
          RETURN

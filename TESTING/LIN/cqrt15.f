@@ -184,7 +184,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CLARF, CLARNV, CLAROR, CLASCL, CLASET,
-     $                   CSSCAL, SLABAD, SLAORD, SLASCL, XERBLA
+     $                   CSSCAL, SLAORD, SLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN
@@ -199,7 +199,6 @@
 *
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       EPS = SLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM

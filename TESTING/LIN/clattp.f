@@ -169,7 +169,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLARNV, CLATB4, CLATMS, CROT, CROTG, CSSCAL,
-     $                   SLABAD, SLARNV
+     $                   SLARNV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG, MAX, REAL, SQRT
@@ -182,7 +182,6 @@
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE

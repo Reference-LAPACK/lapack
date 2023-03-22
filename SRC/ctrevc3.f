@@ -283,7 +283,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
-     $                   CLATRS, CLACPY, SLABAD
+     $                   CLATRS, CLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX
@@ -371,7 +371,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *

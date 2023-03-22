@@ -183,8 +183,8 @@
       EXTERNAL           DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLAORD, DLASCL, XERBLA, ZDSCAL, ZGEMM,
-     $                   ZLARF, ZLARNV, ZLAROR, ZLASCL, ZLASET
+      EXTERNAL           DLAORD, DLASCL, XERBLA, ZDSCAL, ZGEMM, ZLARF,
+     $                   ZLARNV, ZLAROR, ZLASCL, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX, MIN
@@ -199,7 +199,6 @@
 *
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       EPS = DLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM

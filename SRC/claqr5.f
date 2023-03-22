@@ -300,8 +300,7 @@
       COMPLEX            VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET, CTRMM,
-     $                   SLABAD
+      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET, CTRMM
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -331,7 +330,6 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *

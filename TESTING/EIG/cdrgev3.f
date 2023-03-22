@@ -452,7 +452,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET52, CGGEV3, CLACPY, CLARFG, CLASET,
-     $                   CLATM4, CUNM2R, SLABAD, XERBLA
+     $                   CLATM4, CUNM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN
@@ -546,7 +546,6 @@
       SAFMIN = SLAMCH( 'Safe minimum' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.

@@ -468,9 +468,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEHRD, SGEMM, SGET10, SGET22, SHSEIN,
-     $                   SHSEQR, SHST01, SLABAD, SLACPY, SLAFTS, SLASET,
-     $                   SLASUM, SLATME, SLATMR, SLATMS, SORGHR, SORMHR,
-     $                   STREVC, STREVC3, XERBLA
+     $                   SHSEQR, SHST01, SLACPY, SLAFTS, SLASET, SLASUM,
+     $                   SLATME, SLATMR, SLATMS, SORGHR, SORMHR, STREVC,
+     $                   STREVC3, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -530,7 +530,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )

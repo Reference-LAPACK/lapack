@@ -134,8 +134,8 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEHRD, SHSEQR, SHST01, SLABAD, SLACPY,
-     $                   SORGHR, SSCAL, STRSEN
+      EXTERNAL           SCOPY, SGEHRD, SHSEQR, SHST01, SLACPY, SORGHR,
+     $                   SSCAL, STRSEN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -145,7 +145,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *

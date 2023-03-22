@@ -300,7 +300,7 @@
       EXTERNAL           LSAME, SDOT, SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLACN2, SLACPY, SLAQTR, STREXC, XERBLA
+      EXTERNAL           SLACN2, SLACPY, SLAQTR, STREXC, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -392,7 +392,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
       KS = 0
       PAIR = .FALSE.

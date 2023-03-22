@@ -152,9 +152,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           DLABAD
-*     ..
 *     .. Executable Statements ..
 *
       EPS = DLAMCH( 'Epsilon' )
@@ -191,7 +188,6 @@
 *
          SMLNUM = DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL DLABAD( SMLNUM, BIGNUM )
          ANORM = DLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, WORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )

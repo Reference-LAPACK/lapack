@@ -266,7 +266,7 @@
      $                   CDOTU, CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CSSCAL, CTPSV, SLABAD, SSCAL, XERBLA
+      EXTERNAL           CAXPY, CSSCAL, CTPSV, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
@@ -315,7 +315,6 @@
 *
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM / SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE

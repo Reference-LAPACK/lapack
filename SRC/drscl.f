@@ -109,7 +109,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DLABAD
+      EXTERNAL           DSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -125,7 +125,6 @@
 *
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Initialize the denominator to SA and the numerator to 1.
 *

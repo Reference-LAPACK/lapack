@@ -113,8 +113,7 @@
       EXTERNAL           SASUM, SLAMCH, SLANGE, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SBDSQR, SGEBD2, SLABAD, SLASCL, SLASET,
-     $                   XERBLA
+      EXTERNAL           SAXPY, SBDSQR, SGEBD2, SLASCL, SLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -155,7 +154,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale work if max entry outside range [SMLNUM,BIGNUM]
 *

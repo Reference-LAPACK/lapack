@@ -323,7 +323,7 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLASCL, XERBLA, CSSCAL, CGEBAK, CGEBAL,
+      EXTERNAL           SLASCL, XERBLA, CSSCAL, CGEBAK, CGEBAL,
      $                   CGEHRD, CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3,
      $                   CTRSNA, CUNGHR
 *     ..
@@ -458,7 +458,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *

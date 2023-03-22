@@ -492,7 +492,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLASUM, XERBLA, ZGET24, ZLASET, ZLATME,
+      EXTERNAL           DLASUM, XERBLA, ZGET24, ZLASET, ZLATME,
      $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
@@ -567,7 +567,6 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

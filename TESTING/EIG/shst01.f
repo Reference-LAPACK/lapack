@@ -159,7 +159,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLABAD, SLACPY, SORT01
+      EXTERNAL           SGEMM, SLACPY, SORT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,7 +177,6 @@
       UNFL = SLAMCH( 'Safe minimum' )
       EPS = SLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )

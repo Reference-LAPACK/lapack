@@ -236,7 +236,7 @@
       EXTERNAL           ZLADIV, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZCOPY, ZLARFG, ZSCAL
+      EXTERNAL           ZCOPY, ZLARFG, ZSCAL
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -298,7 +298,6 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( NH ) / ULP )
 *

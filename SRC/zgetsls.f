@@ -192,7 +192,7 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLABAD, DLAMCH, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEQR, ZGEMQR, ZLASCL, ZLASET,
@@ -297,7 +297,6 @@
 *
        SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
        BIGNUM = ONE / SMLNUM
-       CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *

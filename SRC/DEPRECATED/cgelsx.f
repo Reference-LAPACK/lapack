@@ -216,7 +216,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEQPF, CLAIC1, CLASCL, CLASET, CLATZM, CTRSM,
-     $                   CTZRQF, CUNM2R, SLABAD, XERBLA
+     $                   CTZRQF, CUNM2R, XERBLA
 *     ..
 *     .. External Functions ..
       REAL               CLANGE, SLAMCH
@@ -262,7 +262,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max elements outside range [SMLNUM,BIGNUM]
 *

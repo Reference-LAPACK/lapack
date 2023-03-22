@@ -329,7 +329,7 @@
       CHARACTER :: JBCMPZ*3
 
 *     External Functions
-      EXTERNAL :: XERBLA, SHGEQZ, SLAQZ3, SLAQZ4, SLASET, SLABAD,
+      EXTERNAL :: XERBLA, SHGEQZ, SLAQZ3, SLAQZ4, SLASET,
      $            SLARTG, SROT
       REAL, EXTERNAL :: SLAMCH, SLANHS
       LOGICAL, EXTERNAL :: LSAME
@@ -479,7 +479,6 @@
 *     Get machine constants
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE/SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N )/ULP )
 

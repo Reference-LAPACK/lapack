@@ -306,8 +306,7 @@
       REAL               VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLABAD, SLACPY, SLAQR1, SLARFG, SLASET,
-     $                   STRMM
+      EXTERNAL           SGEMM, SLACPY, SLAQR1, SLARFG, SLASET, STRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -353,7 +352,6 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *

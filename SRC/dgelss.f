@@ -203,7 +203,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DBDSQR, DCOPY, DGEBRD, DGELQF, DGEMM, DGEMV,
-     $                   DGEQRF, DLABAD, DLACPY, DLASCL, DLASET, DORGBR,
+     $                   DGEQRF, DLACPY, DLASCL, DLASET, DORGBR,
      $                   DORMBR, DORMLQ, DORMQR, DRSCL, XERBLA
 *     ..
 *     .. External Functions ..
@@ -385,7 +385,6 @@
       SFMIN = DLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *

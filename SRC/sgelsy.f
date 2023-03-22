@@ -236,7 +236,7 @@
       EXTERNAL           ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEQP3, SLABAD, SLAIC1, SLASCL, SLASET,
+      EXTERNAL           SCOPY, SGEQP3, SLAIC1, SLASCL, SLASET,
      $                   SORMQR, SORMRZ, STRSM, STZRZF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -305,7 +305,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *

@@ -243,7 +243,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEQP3, CLAIC1, CLASCL, CLASET, CTRSM,
-     $                   CTZRZF, CUNMQR, CUNMRZ, SLABAD, XERBLA
+     $                   CTZRZF, CUNMQR, CUNMRZ, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -303,7 +303,6 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *

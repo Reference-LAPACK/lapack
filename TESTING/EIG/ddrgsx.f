@@ -400,7 +400,7 @@
       EXTERNAL           DLCTSX, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DGESVD, DGET51, DGET53, DGGESX, DLABAD,
+      EXTERNAL           ALASVM, DGESVD, DGET51, DGET53, DGGESX,
      $                   DLACPY, DLAKF2, DLASET, DLATM5, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -478,7 +478,6 @@
       ULPINV = ONE / ULP
       SMLNUM = DLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0

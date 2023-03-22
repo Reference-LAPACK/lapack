@@ -132,7 +132,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEHRD, CHSEQR, CLACPY, CSSCAL, CTREVC,
-     $                   CTRSNA, SCOPY, SLABAD, SSCAL
+     $                   CTRSNA, SCOPY, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, MAX, REAL, SQRT
@@ -142,7 +142,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *

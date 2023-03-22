@@ -559,9 +559,9 @@
       EXTERNAL           DLAMCH, ZLANGE, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLASUM, XERBLA, ZGEQR2, ZGET51, ZGET52,
-     $                   ZGGHRD, ZHGEQZ, ZLACPY, ZLARFG, ZLASET, ZLATM4,
-     $                   ZTGEVC, ZUNM2R
+      EXTERNAL           DLASUM, XERBLA, ZGEQR2, ZGET51, ZGET52, ZGGHRD,
+     $                   ZHGEQZ, ZLACPY, ZLARFG, ZLASET, ZLATM4, ZTGEVC,
+     $                   ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SIGN
@@ -639,7 +639,6 @@
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.
