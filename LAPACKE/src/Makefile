@@ -762,6 +762,8 @@ lapacke_dgesdd.o \
 lapacke_dgesdd_work.o \
 lapacke_dgedmd.o \
 lapacke_dgedmd_work.o \
+lapacke_dgedmdq.o \
+lapacke_dgedmdq_work.o \
 lapacke_dgesv.o \
 lapacke_dgesv_work.o \
 lapacke_dgesvd.o \

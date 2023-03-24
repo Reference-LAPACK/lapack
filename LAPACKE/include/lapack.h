@@ -3379,6 +3379,24 @@ void LAPACK_zgedmd(
     lapack_complex_double* iwork, lapack_int const* liwork,
     lapack_int* info );
 
+#define LAPACK_dgedmdq LAPACK_GLOBAL(dgedmdq,DGEDMDQ)
+void LAPACK_dgedmdq(
+    char const* jobs, char const* jobz, char const* jobr, char const* jobq,
+    char const* jobt, char const* jobf, lapack_int const* whtsvd,
+    lapack_int const* m, lapack_int const* n,
+    double* f, lapack_int const* ldf,
+    double* x, lapack_int const* ldx,
+    double* y, lapack_int const* ldy, lapack_int const* nrnk,
+    double const tol, lapack_int const* k,
+    double* reig, double* imeig,
+    double* z, lapack_int const* ldz, double* res,
+    double* b, lapack_int const* ldb,
+    double* v, lapack_int const* ldv,
+    double* s, lapack_int const* lds,
+    double* work, lapack_int const* lwork,
+    double* iwork, lapack_int const* liwork,
+    lapack_int* info );
+
 #define LAPACK_cgesv LAPACK_GLOBAL(cgesv,CGESV)
 void LAPACK_cgesv(
     lapack_int const* n, lapack_int const* nrhs,

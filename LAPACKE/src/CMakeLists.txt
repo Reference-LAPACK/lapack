@@ -715,6 +715,8 @@ lapacke_dgesdd.c
 lapacke_dgesdd_work.c
 lapacke_dgedmd.c
 lapacke_dgedmd_work.c
+lapacke_dgedmdq.c
+lapacke_dgedmdq_work.c
 lapacke_dgesv.c
 lapacke_dgesv_work.c
 lapacke_dgesvd.c
