@@ -354,22 +354,20 @@
 *
             IF( C.EQ.ZERO .OR. R.EQ.ZERO ) CYCLE
 *
+*           Exit if NaN to avoid infinite loop
+*
+            IF( DISNAN( C+CA+R+RA ) ) THEN
+               INFO = -3
+               CALL XERBLA( 'ZGEBAL', -INFO )
+               RETURN
+            END IF
+*
             G = R / SCLFAC
             F = ONE
             S = C + R
 *
             DO WHILE( C.LT.G .AND. MAX( F, C, CA ).LT.SFMAX2 .AND.
      $                MIN( R, G, RA ).GT.SFMIN2 )
-*
-               IF( DISNAN( C+F+CA+R+G+RA ) ) THEN
-*
-*                 Exit if NaN to avoid infinite loop
-*
-                  INFO = -3
-                  CALL XERBLA( 'ZGEBAL', -INFO )
-                  RETURN
-               END IF
-*
                F = F*SCLFAC
                C = C*SCLFAC
                CA = CA*SCLFAC
