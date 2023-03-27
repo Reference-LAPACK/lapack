@@ -104,31 +104,31 @@ lapack_int LAPACKE_dgedmd_work( int matrix_layout, char jobs, char jobz,
         }
         /* Allocate memory for temporary array(s) */
         x_t = (double*)LAPACKE_malloc( sizeof(double) * ldx_t * MAX(1,n) );
-        y_t = (double*)LAPACKE_malloc( sizeof(double) * ldy_t * MAX(1,n) );
-        z_t = (double*)LAPACKE_malloc( sizeof(double) * ldz_t * MAX(1,n) );
-        b_t = (double*)LAPACKE_malloc( sizeof(double) * ldb_t * MAX(1,n) );
-        w_t = (double*)LAPACKE_malloc( sizeof(double) * ldw_t * MAX(1,n) );
-        s_t = (double*)LAPACKE_malloc( sizeof(double) * lds_t * MAX(1,n) );
         if( x_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        y_t = (double*)LAPACKE_malloc( sizeof(double) * ldy_t * MAX(1,n) );
         if( y_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        z_t = (double*)LAPACKE_malloc( sizeof(double) * ldz_t * MAX(1,n) );
         if( z_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        b_t = (double*)LAPACKE_malloc( sizeof(double) * ldb_t * MAX(1,n) );
         if( b_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        w_t = (double*)LAPACKE_malloc( sizeof(double) * ldw_t * MAX(1,n) );
         if( w_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        s_t = (double*)LAPACKE_malloc( sizeof(double) * lds_t * MAX(1,n) );
         if( s_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
@@ -155,6 +155,7 @@ lapack_int LAPACKE_dgedmd_work( int matrix_layout, char jobs, char jobz,
         LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, w_t, ldw_t, w, ldw );
         LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, s_t, lds_t, s, lds );
         /* Release memory and exit */
+exit_level_1:
         LAPACKE_free( x_t );
         LAPACKE_free( y_t );
         LAPACKE_free( z_t );
