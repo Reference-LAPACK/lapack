@@ -10,6 +10,10 @@ set(
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
+# Allow setting a prefix for the library names
+set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
+set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
+
 # Add the CMake directory for custom CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
