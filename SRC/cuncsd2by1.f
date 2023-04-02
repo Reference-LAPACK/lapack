@@ -218,7 +218,7 @@
 *>          and RWORK array, respectively, and no error message related
 *>          to LWORK or LRWORK is issued by XERBLA.
 *> \endverbatim
-*
+*>
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, dimension (M-MIN(P,M-P,Q,M-Q))
