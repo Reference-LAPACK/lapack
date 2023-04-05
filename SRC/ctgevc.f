@@ -53,7 +53,7 @@
 *>
 *>    S*x = w*P*x,  (y**H)*S = w*(y**H)*P,
 *>
-*> where y**H denotes the conjugate tranpose of y.
+*> where y**H denotes the conjugate transpose of y.
 *> The eigenvalues are not input to this routine, but are computed
 *> directly from the diagonal elements of S and P.
 *>
