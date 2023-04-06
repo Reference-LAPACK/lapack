@@ -154,7 +154,7 @@
 *> \verbatim
 *>          VR is COMPLEX*16 array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
-*>          contain an N-by-N matrix Q (usually the unitary matrix Z
+*>          contain an N-by-N matrix Z (usually the unitary matrix Z
 *>          of right Schur vectors returned by ZHGEQZ).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
