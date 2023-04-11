@@ -516,7 +516,7 @@ set(CPACK_MONOLITHIC_INSTALL ON)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
 if(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backlasshes.
+  # sure there is at least one set of four (4) backslashes.
   set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
   set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/lapack")
   set(CPACK_NSIS_CONTACT "lapack@eecs.utk.edu")

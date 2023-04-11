@@ -234,7 +234,7 @@
 *>
 *>  B       DOUBLE PRECISION array, dimension (LDB , max(NN))
 *>          Used to hold the symmetric positive definite matrix for
-*>          the generailzed problem.
+*>          the generalized problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.

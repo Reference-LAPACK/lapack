@@ -214,7 +214,7 @@
 *>          Not modified.
 *>
 *>  D1      REAL             array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by SSTEQR simultaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.

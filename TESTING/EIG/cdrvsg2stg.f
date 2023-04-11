@@ -242,7 +242,7 @@
 *>
 *>  B       COMPLEX array, dimension (LDB , max(NN))
 *>          Used to hold the Hermitian positive definite matrix for
-*>          the generailzed problem.
+*>          the generalized problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.

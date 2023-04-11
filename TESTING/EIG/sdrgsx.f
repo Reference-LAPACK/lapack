@@ -984,7 +984,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
      $      / '  2:  A and B are upper triangular matrices, ',
      $      / '  3:  A and B are as type 2, but each second diagonal ',
      $      'block in A_11 and ', /
-     $      '      each third diaongal block in A_22 are 2x2 blocks,',
+     $      '      each third diagonal block in A_22 are 2x2 blocks,',
      $      / '  4:  A and B are block diagonal matrices, ',
      $      / '  5:  (A,B) has potentially close or common ',
      $      'eigenvalues.', / )
