@@ -385,7 +385,7 @@
 *> \verbatim
 *>          D1 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by ZSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by ZSTEQR simultaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *> \endverbatim
