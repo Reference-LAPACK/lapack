@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> ZERRHS tests the error exits for ZGEBAK, ZGEBAL, ZGEHRD, ZUNGHR,
-*> ZUNMHR, ZHSEQR, ZHSEIN, ZTREVC, and ZTREVC3.
+*> ZERRHS tests the error exits for ZGEBAK, ZGEBAL, ZGEHRD, ZGEHD2,
+*> ZUNGHR, ZUNMHR, ZHSEQR, ZHSEIN, ZTREVC, and ZTREVC3.
 *> \endverbatim
 *
 *  Arguments:
@@ -192,6 +192,29 @@
          CALL ZGEHRD( 2, 1, 2, A, 2, TAU, W, 1, INFO )
          CALL CHKXER( 'ZGEHRD', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        ZGEHD2
+*
+         SRNAMT = 'ZGEHD2'
+         INFOT = 1
+         CALL ZGEHD2( -1, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZGEHD2( 0, 0, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZGEHD2( 0, 2, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZGEHD2( 1, 1, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZGEHD2( 0, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZGEHD2( 2, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'ZGEHD2', INFOT, NOUT, LERR, OK )
+         NT = NT + 6
 *
 *        ZUNGHR
 *
