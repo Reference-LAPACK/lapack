@@ -70,32 +70,32 @@ lapack_int LAPACKE_zgedmd_work( int matrix_layout, char jobs, char jobz,
         lapack_complex_double* s_t = NULL;
         /* Check leading dimension(s) */
         if( ldx < n ) {
-            info = -5;
+            info = -9;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
         if( ldy < n ) {
-            info = -5;
+            info = -11;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
         if( ldz < n ) {
-            info = -5;
+            info = -16;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
         if( ldb < n ) {
-            info = -5;
+            info = -19;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
         if( ldw < n ) {
-            info = -5;
+            info = -21;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
         if( lds < n ) {
-            info = -5;
+            info = -23;
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );
             return info;
         }
@@ -115,27 +115,27 @@ lapack_int LAPACKE_zgedmd_work( int matrix_layout, char jobs, char jobz,
         y_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldy_t * MAX(1,n) );
         if( y_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+            goto exit_level_1;
         }
         z_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldz_t * MAX(1,n) );
         if( z_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+            goto exit_level_2;
         }
         b_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldb_t * MAX(1,n) );
         if( b_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+            goto exit_level_3;
         }
         w_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldw_t * MAX(1,n) );
         if( w_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+            goto exit_level_4;
         }
         s_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lds_t * MAX(1,n) );
         if( s_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+            goto exit_level_5;
         }
         /* Transpose input matrices */
         LAPACKE_zge_trans( matrix_layout, m, n, x, ldx, x_t, ldx_t );
@@ -159,13 +159,17 @@ lapack_int LAPACKE_zgedmd_work( int matrix_layout, char jobs, char jobz,
         LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, w_t, ldw_t, w, ldw );
         LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, s_t, lds_t, s, lds );
         /* Release memory and exit */
+        LAPACKE_free( s_t );
+exit_level_5:
+        LAPACKE_free( w_t );
+exit_level_4:
+        LAPACKE_free( b_t );
+exit_level_3:
+        LAPACKE_free( z_t );
+exit_level_2:
+        LAPACKE_free( y_t );
 exit_level_1:
         LAPACKE_free( x_t );
-        LAPACKE_free( y_t );
-        LAPACKE_free( z_t );
-        LAPACKE_free( b_t );
-        LAPACKE_free( w_t );
-        LAPACKE_free( s_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
             LAPACKE_xerbla( "LAPACKE_zgedmd_work", info );

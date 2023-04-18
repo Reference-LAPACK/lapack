@@ -57,22 +57,22 @@ lapack_int LAPACKE_cgedmd( int matrix_layout, char jobs, char jobz, char jobf,
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_cge_nancheck( matrix_layout, m, n, x, ldx ) ) {
-            return -4;
+            return -8;
         }
         if( LAPACKE_cge_nancheck( matrix_layout, m, n, y, ldy ) ) {
-            return -4;
+            return -10;
         }
         if( LAPACKE_cge_nancheck( matrix_layout, m, n, z, ldz ) ) {
-            return -4;
+            return -15;
         }
         if( LAPACKE_cge_nancheck( matrix_layout, m, n, b, ldb ) ) {
-            return -4;
-        }
-        if( LAPACKE_cge_nancheck( matrix_layout, m, n, s, lds ) ) {
-            return -4;
+            return -18;
         }
         if( LAPACKE_cge_nancheck( matrix_layout, m, n, w, ldw ) ) {
-            return -4;
+            return -20;
+        }
+        if( LAPACKE_cge_nancheck( matrix_layout, m, n, s, lds ) ) {
+            return -22;
         }
     }
 #endif
@@ -89,14 +89,14 @@ lapack_int LAPACKE_cgedmd( int matrix_layout, char jobs, char jobz, char jobf,
     liwork = (lapack_int) iwork_query;
     /* Allocate memory for work arrays */
     work  = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * lwork );
-    iwork = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * liwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
+    iwork = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * liwork );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_1;
     }
     /* Call middle-level interface */
     info = LAPACKE_cgedmd_work( matrix_layout, jobs, jobz, jobf, whtsvd, m, n,
@@ -104,8 +104,9 @@ lapack_int LAPACKE_cgedmd( int matrix_layout, char jobs, char jobz, char jobf,
                                 b, ldb, w, ldw, s, lds, work, lwork, iwork,
                                 liwork );
     /* Release memory and exit */
-    LAPACKE_free( work );
     LAPACKE_free( iwork );
+exit_level_1:
+    LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         LAPACKE_xerbla( "LAPACKE_cgedmd", info );

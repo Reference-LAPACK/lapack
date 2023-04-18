@@ -60,25 +60,25 @@ lapack_int LAPACKE_zgedmdq( int matrix_layout, char jobs, char jobz, char jobr,
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, f, ldf ) ) {
-            return -4;
+            return -11;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, x, ldx ) ) {
-            return -4;
+            return -13;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, y, ldy ) ) {
-            return -4;
+            return -15;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, z, ldz ) ) {
-            return -4;
+            return -22;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, b, ldb ) ) {
-            return -4;
+            return -25;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, v, ldv ) ) {
-            return -4;
+            return -27;
         }
         if( LAPACKE_zge_nancheck( matrix_layout, m, n, s, lds ) ) {
-            return -4;
+            return -29;
         }
     }
 #endif
@@ -96,14 +96,14 @@ lapack_int LAPACKE_zgedmdq( int matrix_layout, char jobs, char jobz, char jobr,
     liwork = (lapack_int) iwork_query;
     /* Allocate memory for work arrays */
     work  = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
-    iwork = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * liwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
+    iwork = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * liwork );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_1;
     }
     /* Call middle-level interface */
     info = LAPACKE_zgedmdq_work( matrix_layout, jobs, jobz, jobr, jobq, jobt,
@@ -112,8 +112,9 @@ lapack_int LAPACKE_zgedmdq( int matrix_layout, char jobs, char jobz, char jobr,
                                  b, ldb, v, ldv, s, lds, work, lwork, iwork,
                                  liwork );
     /* Release memory and exit */
-    LAPACKE_free( work );
     LAPACKE_free( iwork );
+exit_level_1:
+    LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         LAPACKE_xerbla( "LAPACKE_zgedmdq", info );
