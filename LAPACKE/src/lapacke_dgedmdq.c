@@ -89,14 +89,14 @@ lapack_int LAPACKE_dgedmdq( int matrix_layout, char jobs, char jobz, char jobr,
         goto exit_level_0;
     }
     lwork  = (lapack_int) work_query;
-    liwork = (lapack_int) iwork_query;
+    liwork = iwork_query;
     /* Allocate memory for work arrays */
     work  = (double*)LAPACKE_malloc( sizeof(double) * lwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
-    iwork = (double*)LAPACKE_malloc( sizeof(double) * liwork );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
