@@ -14,6 +14,7 @@ skip_commits:
 environment:
   global:
     CONDA_INSTALL_LOCN: C:\\Miniconda37-x64
+    CTEST_OUTPUT_ON_FAILURE: 1
 
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
