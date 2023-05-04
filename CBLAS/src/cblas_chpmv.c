@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_chpmv(const CBLAS_LAYOUT layout,
+void API_SUFFIX(cblas_chpmv)(const CBLAS_LAYOUT layout,
                  const CBLAS_UPLO Uplo,const CBLAS_INT N,
                  const void *alpha, const void  *AP,
                  const void  *X, const CBLAS_INT incX, const void *beta,
@@ -44,7 +44,7 @@ void cblas_chpmv(const CBLAS_LAYOUT layout,
       else if (Uplo == CblasUpper) UL = 'U';
       else
       {
-         cblas_xerbla(2, "cblas_chpmv","Illegal Uplo setting, %d\n",Uplo );
+         API_SUFFIX(cblas_xerbla)(2, "cblas_chpmv","Illegal Uplo setting, %d\n",Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -119,7 +119,7 @@ void cblas_chpmv(const CBLAS_LAYOUT layout,
       else if (Uplo == CblasLower) UL = 'U';
       else
       {
-         cblas_xerbla(2, "cblas_chpmv","Illegal Uplo setting, %d\n", Uplo );
+         API_SUFFIX(cblas_xerbla)(2, "cblas_chpmv","Illegal Uplo setting, %d\n", Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -133,7 +133,7 @@ void cblas_chpmv(const CBLAS_LAYOUT layout,
    }
    else
    {
-      cblas_xerbla(1, "cblas_chpmv","Illegal layout setting, %d\n", layout);
+      API_SUFFIX(cblas_xerbla)(1, "cblas_chpmv","Illegal layout setting, %d\n", layout);
       CBLAS_CallFromC = 0;
       RowMajorStrg = 0;
       return;

@@ -1,4 +1,4 @@
-set(CBLAS_INCLUDE cblas.h cblas_f77.h)
+set(CBLAS_INCLUDE cblas.h cblas_f77.h cblas_64.h)
 
 file(COPY ${CBLAS_INCLUDE} DESTINATION ${LAPACK_BINARY_DIR}/include)
 
