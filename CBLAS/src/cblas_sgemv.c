@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_sgemv(const CBLAS_LAYOUT layout,
+void API_SUFFIX(cblas_sgemv)(const CBLAS_LAYOUT layout,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_INT M, const CBLAS_INT N,
                  const float alpha, const float  *A, const CBLAS_INT lda,
                  const float  *X, const CBLAS_INT incX, const float beta,
@@ -42,7 +42,7 @@ void cblas_sgemv(const CBLAS_LAYOUT layout,
       else if (TransA == CblasConjTrans) TA = 'C';
       else
       {
-         cblas_xerbla(2, "cblas_sgemv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_sgemv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
       }
@@ -60,7 +60,7 @@ void cblas_sgemv(const CBLAS_LAYOUT layout,
       else if (TransA == CblasConjTrans) TA = 'N';
       else
       {
-         cblas_xerbla(2, "cblas_sgemv", "Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_sgemv", "Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -71,7 +71,7 @@ void cblas_sgemv(const CBLAS_LAYOUT layout,
       F77_sgemv(F77_TA, &F77_N, &F77_M, &alpha, A, &F77_lda, X,
                 &F77_incX, &beta, Y, &F77_incY);
    }
-   else cblas_xerbla(1, "cblas_sgemv", "Illegal layout setting, %d\n", layout);
+   else API_SUFFIX(cblas_xerbla)(1, "cblas_sgemv", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

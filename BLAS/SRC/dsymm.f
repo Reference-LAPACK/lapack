@@ -234,7 +234,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
+      IF ((.NOT.LSAME(SIDE,'L')) .AND.
+     +    (.NOT.LSAME(SIDE,'R'))) THEN
           INFO = 1
       ELSE IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
           INFO = 2

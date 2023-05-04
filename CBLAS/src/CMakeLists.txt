@@ -117,7 +117,41 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${CBLASLIB} ${SOURCES})
+add_library(${CBLASLIB}_obj OBJECT ${SOURCES})
+target_compile_options(${CBLASLIB}_obj PRIVATE -fPIC)
+
+if(BUILD_INDEX64_EXT_API)
+  # 64bit Integer Interface
+  set(SOURCES_64_C)
+  set(SOURCES_64_F)
+  list(APPEND SOURCES_64_C ${SOURCES})
+  list(APPEND SOURCES_64_F ${SOURCES})
+  list(FILTER SOURCES_64_C  EXCLUDE REGEX "\.f$")
+  list(FILTER SOURCES_64_F  INCLUDE REGEX "\.f$")
+  list(REMOVE_ITEM SOURCES_64_C cblas_globals.c)
+  #Add suffix to all Fortran functions via macros
+  set(COPT_64_F)
+  list(APPEND COPT_64_F -cpp)
+  foreach(F IN LISTS SOURCES_64_F)
+      file(STRINGS ${F} ${F}.lst)
+      list(FILTER ${F}.lst INCLUDE REGEX "subroutine|external")
+      foreach(FUNC IN LISTS ${F}.lst)
+        string(REGEX REPLACE "[ ]*(subroutine|external)[ ]*" "" FUNC ${FUNC})
+        string(REGEX REPLACE "[(][a-zA-Z0-9, ]*[)]" "" FUNC ${FUNC})
+        list(APPEND COPT_64_F "-D${FUNC}=${FUNC}_64")
+      endforeach()
+  endforeach()
+  add_library(${CBLASLIB}_64_cobj OBJECT ${SOURCES_64_C})
+  add_library(${CBLASLIB}_64_fobj OBJECT ${SOURCES_64_F})
+  target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64 -fPIC)
+  target_compile_options(${CBLASLIB}_64_fobj PRIVATE -fPIC ${FOPT_ILP64} ${COPT_64_F})
+endif()
+
+add_library(${CBLASLIB}
+        $<TARGET_OBJECTS:${CBLASLIB}_obj>
+        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${CBLASLIB}_64_cobj>>
+        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${CBLASLIB}_64_fobj>>)
+
 set_target_properties(
   ${CBLASLIB} PROPERTIES
   LINKER_LANGUAGE C
