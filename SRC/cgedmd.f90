@@ -304,7 +304,7 @@
 !     If on entry LZWORK = -1, then a workspace query is
 !     assumed and the procedure only computes the minimal
 !     and the optimal workspace lengths and returns them in
-!     LZWORK(1) and LZORK(2), respectively.
+!     LZWORK(1) and LZWORK(2), respectively.
 !.....
 !     RWORK (workspace/output) REAL(KIND=WP) LRWORK-by-1 array
 !     On exit, RWORK(1:N) contains the singular values of
