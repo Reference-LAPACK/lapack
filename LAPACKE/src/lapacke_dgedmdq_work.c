@@ -42,7 +42,7 @@ lapack_int LAPACKE_dgedmdq_work( int matrix_layout, char jobs, char jobz,
                                  lapack_int ldz, double* res, double* b,
                                  lapack_int ldb, double* v, lapack_int ldv,
                                  double* s, lapack_int lds, double* work,
-                                 lapack_int lwork, double* iwork,
+                                 lapack_int lwork, lapack_int* iwork,
                                  lapack_int liwork )
 {
     lapack_int info = 0;

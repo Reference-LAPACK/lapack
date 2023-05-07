@@ -40,7 +40,8 @@ lapack_int LAPACKE_sgedmd_work( int matrix_layout, char jobs, char jobz,
                                 lapack_int ldz, float* res, float* b,
                                 lapack_int ldb, float* w, lapack_int ldw,
                                 float* s, lapack_int lds, float* work,
-                                lapack_int lwork, float* iwork, lapack_int liwork )
+                                lapack_int lwork, lapack_int* iwork,
+                                lapack_int liwork )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {

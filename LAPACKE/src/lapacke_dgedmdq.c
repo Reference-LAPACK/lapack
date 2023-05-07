@@ -45,9 +45,9 @@ lapack_int LAPACKE_dgedmdq( int matrix_layout, char jobs, char jobz, char jobr,
     lapack_int lwork = -1;
     lapack_int liwork = -1;
     double* work = NULL;
-    double* iwork = NULL;
+    lapack_int* iwork = NULL;
     double work_query;
-    double iwork_query;
+    lapack_int iwork_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgedmdq", -1 );
         return -1;
