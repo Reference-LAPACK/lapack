@@ -70,7 +70,7 @@ jobs:
     steps:
     
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Use GCC-11 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
@@ -134,7 +134,7 @@ jobs:
     steps:     
     
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
