@@ -189,6 +189,7 @@
                      A( J+I, J ) = A( J+I, J ) / A( J, J )
    20             CONTINUE
                END IF
+            !    CALL CRSCL( M-J, A( J, J ), A( J+1, J ), 1 )
             END IF
 *
          ELSE IF( INFO.EQ.0 ) THEN

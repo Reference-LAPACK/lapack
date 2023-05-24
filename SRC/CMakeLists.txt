@@ -227,7 +227,7 @@ set(CLASRC
    cppcon.f cppequ.f cpprfs.f cppsv.f  cppsvx.f cpptrf.f cpptri.f cpptrs.f
    cptcon.f cpteqr.f cptrfs.f cptsv.f  cptsvx.f cpttrf.f cpttrs.f cptts2.f
    crot.f   cspcon.f cspmv.f  cspr.f   csprfs.f cspsv.f
-   cspsvx.f csptrf.f csptri.f csptrs.f csrscl.f cstedc.f
+   cspsvx.f csptrf.f csptri.f csptrs.f csrscl.f crscl.f cstedc.f
    cstegr.f cstein.f csteqr.f csycon.f csymv.f
    csyr.f   csyrfs.f csysv.f  csysvx.f csytf2.f csytrf.f csytri.f
    csytri2.f csytri2x.f csyswapr.f
