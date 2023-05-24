@@ -368,7 +368,15 @@ endif()
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
 unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 
-add_subdirectory(LAPACKE)
+
+#-------------------------------------
+# LAPACKE
+# Include lapack.h and lapacke_mangling.h even if LAPACKE is not built
+add_subdirectory(LAPACKE/include)
+
+if(LAPACKE)
+  add_subdirectory(LAPACKE)
+endif()
 
 
 #-------------------------------------
