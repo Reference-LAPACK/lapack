@@ -1,8 +1,6 @@
 message(STATUS "LAPACKE enabled")
 enable_language(C)
 
-add_subdirectory(include)
-
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
 
 include_directories(include ${LAPACK_BINARY_DIR}/include)
