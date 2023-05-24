@@ -1,4 +1,4 @@
-message(STATUS "CBLAS enable")
+message(STATUS "CBLAS enabled")
 enable_language(C)
 
 set(LAPACK_INSTALL_EXPORT_NAME ${CBLASLIB}-targets)

@@ -1,3 +1,9 @@
+enable_language(Fortran)
+
+# Check for any necessary platform specific compiler flags
+include(CheckLAPACKCompilerFlags)
+CheckLAPACKCompilerFlags()
+
 if(MSVC_VERSION)
 #  string(REPLACE "/STACK:10000000" "/STACK:900000000000000000"
 #    CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
