@@ -76,7 +76,6 @@ lapack_int LAPACKE_cgeqrt_work( int matrix_layout, lapack_int m, lapack_int n,
         }
         /* Transpose input matrices */
         LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
-        LAPACKE_cge_trans( matrix_layout, nb, MIN(m,n), t, ldt, t_t, ldt_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgeqrt( &m, &n, &nb, a_t, &lda_t, t_t, &ldt_t, work, &info );
         if( info < 0 ) {
