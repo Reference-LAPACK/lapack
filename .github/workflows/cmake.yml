@@ -87,7 +87,7 @@ jobs:
       if: ${{ matrix.os == 'windows-latest' }}
       run: >
         cmake -B build -G Ninja
-        -D CMAKE_EXE_LINKER_FLAGS="-Wl,--allow-multiple-definition,--stack=1000000000"
+        -D CMAKE_EXE_LINKER_FLAGS="-Wl,--stack=2097152"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
