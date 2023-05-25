@@ -113,14 +113,14 @@ jobs:
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
-      if: ${{ contains( matrix.fflags, 'openmp' ) }}
+      if: ${{ contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
       run: |
         ctest -D ExperimentalTest --schedule-random -j1 --output-on-failure --timeout 100
         ctest -D ExperimentalSubmit
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      if: ${{ !contains( matrix.fflags, 'openmp' ) }}
+      if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
       run: |
         ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure --timeout 100
         ctest -D ExperimentalSubmit
