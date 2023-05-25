@@ -29,6 +29,8 @@
 #  Level 1 BLAS
 #---------------------------------------------------------
 
+set(LAPACK_INSTALL_EXPORT_NAME ${BLASLIB}-targets)
+
 set(SBLAS1 isamax.f sasum.f saxpy.f scopy.f sdot.f snrm2.f90
 	srot.f srotg.f90 sscal.f sswap.f sdsdot.f srotmg.f srotm.f)
 
@@ -116,6 +118,14 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 lapack_install_library(${BLASLIB})
+
+add_library(BLAS::BLAS ALIAS ${BLASLIB})
+install(EXPORT ${BLASLIB}-targets
+    FILE ${BLASLIB}-targets.cmake
+    NAMESPACE BLAS::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
+    COMPONENT Development
+)
 
 if( TEST_FORTRAN_COMPILER )
   add_dependencies( ${BLASLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
