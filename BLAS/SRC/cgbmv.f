@@ -148,6 +148,7 @@
 *>           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.
 *>           Before entry, the incremented array Y must contain the
 *>           vector y. On exit, Y is overwritten by the updated vector y.
+*>           If either m or n is zero, then Y not referenced.
 *> \endverbatim
 *>
 *> \param[in] INCY
