@@ -130,11 +130,14 @@ jobs:
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
-        cmake -B build
+        cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
@@ -182,3 +185,39 @@ jobs:
 
     - name: Install
       run: cmake --build build --target install -j2
+
+  memory-check:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_TYPE: Debug
+      FFLAGS: "-fopenmp"
+
+    steps:
+
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+    
+    - name: Install Valgrind
+      run: |
+        sudo apt update
+        sudo apt install -y valgrind
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure
