@@ -101,9 +101,8 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      REAL               BIGNUM, SMLNUM, HUGE, AR, AI, ABSR, ABSI, UR
+      REAL               SAFMAX, SAFMIN, OV, AR, AI, ABSR, ABSI, UR
      %                   , UI
-      COMPLEX            INVA
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -111,7 +110,7 @@
       EXTERNAL           SLAMCH, CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSSCAL
+      EXTERNAL           CSCAL, CSSCAL, CSRSCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -125,9 +124,9 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' )
-      BIGNUM = ONE / SMLNUM
-      HUGE   = SLAMCH( 'O' )
+      SAFMIN = SLAMCH( 'S' )
+      SAFMAX = ONE / SAFMIN
+      OV   = SLAMCH( 'O' )
 *
 *     Initialize constants related to A.
 *
@@ -136,68 +135,63 @@
       ABSR = ABS( AR )
       ABSI = ABS( AI )
 *
-      IF( ABSI.EQ.ZERO ) THEN
+      IF( AI.EQ.ZERO ) THEN
 *        If alpha is real, then we can use csrscl
          CALL CSRSCL( N, AR, X, INCX )
 *
-      ELSE IF( ABSR.EQ.ZERO ) THEN
+      ELSE IF( AR.EQ.ZERO ) THEN
 *        If alpha has a zero real part, then we follow the same rules as if
 *        alpha were real.
-         IF( ABSI.GT.BIGNUM ) THEN
-            INVA = CMPLX( ZERO, -BIGNUM / AI )
-            CALL CSSCAL( N, SMLNUM, X, INCX )
-            CALL CSCAL( N, INVA, X, INCX )
-         ELSE IF( ABSI.LT.SMLNUM ) THEN
-            INVA = CMPLX( ZERO, -SMLNUM / AI )
-            CALL CSCAL( N, INVA, X, INCX )
-            CALL CSSCAL( N, BIGNUM, X, INCX )
+         IF( ABSI.GT.SAFMAX ) THEN
+            CALL CSSCAL( N, SAFMIN, X, INCX )
+            CALL CSCAL( N, CMPLX( ZERO, -SAFMAX / AI ), X, INCX )
+         ELSE IF( ABSI.LT.SAFMIN ) THEN
+            CALL CSCAL( N, CMPLX( ZERO, -SAFMIN / AI ), X, INCX )
+            CALL CSSCAL( N, SAFMAX, X, INCX )
          ELSE
-            INVA = CMPLX( ZERO, -ONE / AI )
-            CALL CSCAL( N, INVA, X, INCX )
+            CALL CSCAL( N, CMPLX( ZERO, -ONE / AI ), X, INCX )
          END IF
 *
-      ELSE IF( (ABSR.GE.BIGNUM).OR.(ABSI.GE.BIGNUM) ) THEN
-*        Either real or imaginary part is too large.
-         INVA = CLADIV( CMPLX( BIGNUM, ZERO ), A )
-         CALL CSSCAL( N, SMLNUM, X, INCX )
-         CALL CSCAL( N, INVA, X, INCX )
-*
       ELSE
-*        The following numbers can be computed without NaNs and zeros.
-*        They do not overflow simultaneously.
+*        The following numbers can be computed.
 *        They are the inverse of the real and imaginary parts of 1/alpha.
+*        Note that a and b are always different from zero.
+*        NaNs are only possible if either:
+*        1. alphaR or alphaI is NaN.
+*        2. alphaR and alphaI are both infinite, in which case it makes sense
+*        to propagate a NaN.
          UR = AR + AI * ( AI / AR )
          UI = AI + AR * ( AR / AI )
 *
-         IF( (ABS( UR ).LT.SMLNUM).OR.(ABS( UI ).LT.SMLNUM) ) THEN
-            INVA = CMPLX( SMLNUM / UR, -SMLNUM / UI )
-            CALL CSCAL( N, INVA, X, INCX )
-            CALL CSSCAL( N, BIGNUM, X, INCX )
-         ELSE IF( ABS( UR ).GT.HUGE ) THEN
-            IF( ABSR.GE.ABSI ) THEN
-               UR = (SMLNUM * AR) + AI * (SMLNUM * (AI / AR))
+         IF( (ABS( UR ).LT.SAFMIN).OR.(ABS( UI ).LT.SAFMIN) ) THEN
+*           This means that both alphaR and alphaI are very small.
+            CALL CSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI ), X, INCX )
+            CALL CSSCAL( N, SAFMAX, X, INCX )
+         ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
+            IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
+*              This means that a and b are both Inf. No need for scaling.
+               CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X, INCX )
             ELSE
-               UR = (SMLNUM * AR) + AI * ((SMLNUM * AI) / AR)
+               CALL CSSCAL( N, SAFMIN, X, INCX )
+               IF( (ABS( UR ).GT.OV).OR.(ABS( UI ).GT.OV) ) THEN
+*                 Infs were generated. We do proper scaling to avoid them.
+                  IF( ABSR.GE.ABSI ) THEN
+*                    ABS( UR ) <= ABS( UI )
+                     UR = (SAFMIN * AR) + SAFMIN * (AI * ( AI / AR ))
+                     UI = (SAFMIN * AI) + AR * ( (SAFMIN * AR) / AI )
+                  ELSE
+*                    ABS( UR ) > ABS( UI )
+                     UR = (SAFMIN * AR) + AI * ( (SAFMIN * AI) / AR )
+                     UI = (SAFMIN * AI) + SAFMIN * (AR * ( AR / AI ))
+                  END IF
+                  CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X, INCX )
+               ELSE
+                  CALL CSCAL( N, CMPLX( SAFMAX / UR, -SAFMAX / UI ),
+     $                        X, INCX )
+               END IF
             END IF
-            INVA = CMPLX( ONE / UR, -BIGNUM / UI )
-            CALL CSSCAL( N, SMLNUM, X, INCX )
-            CALL CSCAL( N, INVA, X, INCX )
-         ELSE IF( ABS( UI ).GT.HUGE ) THEN
-            IF( ABSI.GE.ABSR ) THEN
-               UI = (SMLNUM * AI) + AR * (SMLNUM * (AR / AI))
-            ELSE
-               UI = (SMLNUM * AI) + AR * ((SMLNUM * AR) / AI)
-            END IF
-            INVA = CMPLX( BIGNUM / UR, -ONE / UI )
-            CALL CSSCAL( N, SMLNUM, X, INCX )
-            CALL CSCAL( N, INVA, X, INCX )
-         ELSE IF( (ABS( UR ).GT.BIGNUM).OR.(ABS( UI ).GT.BIGNUM) ) THEN
-            INVA = CMPLX( BIGNUM / UR, -BIGNUM / UI )
-            CALL CSSCAL( N, SMLNUM, X, INCX )
-            CALL CSCAL( N, INVA, X, INCX )
          ELSE
-            INVA = CMPLX( ONE / UR, -ONE / UI )
-            CALL CSCAL( N, INVA, X, INCX )
+            CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X, INCX )
          END IF
       END IF
 *

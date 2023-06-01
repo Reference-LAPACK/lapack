@@ -260,7 +260,7 @@ CLASRC = \
    cppcon.o cppequ.o cpprfs.o cppsv.o  cppsvx.o cpptrf.o cpptri.o cpptrs.o \
    cptcon.o cpteqr.o cptrfs.o cptsv.o  cptsvx.o cpttrf.o cpttrs.o cptts2.o \
    crot.o   cspcon.o cspmv.o  cspr.o   csprfs.o cspsv.o \
-   cspsvx.o csptrf.o csptri.o csptrs.o csrscl.o cstedc.o \
+   cspsvx.o csptrf.o csptri.o csptrs.o csrscl.o crscl.o cstedc.o \
    cstegr.o cstein.o csteqr.o \
    csycon.o csymv.o \
    csyr.o csyrfs.o csysv.o csysvx.o csytf2.o csytrf.o csytri.o csytri2.o csytri2x.o \
