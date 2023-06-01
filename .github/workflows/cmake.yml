@@ -189,8 +189,7 @@ jobs:
   memory-check:
     runs-on: ubuntu-latest
     env:
-      BUILD_TYPE: Debug
-      FFLAGS: "-fopenmp"
+      BUILD_TYPE: Release
 
     steps:
 
@@ -200,10 +199,10 @@ jobs:
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
     
-    - name: Install Valgrind
+    - name: Install APT packages
       run: |
         sudo apt update
-        sudo apt install -y valgrind
+        sudo apt install -y cmake valgrind gfortran
 
     - name: Configure CMake
       run: >
