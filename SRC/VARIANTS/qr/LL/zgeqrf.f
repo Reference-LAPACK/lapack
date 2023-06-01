@@ -23,7 +23,7 @@ C> \brief \b ZGEQRF VARIANT: left-looking Level 3 BLAS of the algorithm.
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> ZGEQRF computes a QR factorization of a real M-by-N matrix A:
+C> ZGEQRF computes a QR factorization of a complex M-by-N matrix A:
 C> A = Q * R.
 C>
 C> This is the left-looking Level 3 BLAS version of the algorithm.
