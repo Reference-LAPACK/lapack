@@ -387,7 +387,7 @@
 !     ~~~~~~~~~~~~~
       REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,   &
                        SSUM,  XSCL1,  XSCL2
-      INTEGER       ::  i,  j, IMINWR,  INFO1, &
+      INTEGER       ::  i,  j, IMINWR,  INFO1, INFO2,   &
                         LWRKEV, LWRSDD, LWRSVD, LWRSVJ, &
                        LWRSVQ, MLWORK, MWRKEV, MWRSDD, &
                        MWRSVD, MWRSVJ, MWRSVQ, NUMRNK, &
@@ -628,13 +628,13 @@
 !                 of X(:,i). The relative backward and forward
 !                 errors are small in the ell_2 norm.
                   CALL CLASCL( 'G', 0, 0, SCALE, ONE/ROOTSC, &
-                               M, 1, X(1,i), LDX, INFO1 )
+                               M, 1, X(1,i), LDX, INFO2 )
                   RWORK(i) = - SCALE * ( ROOTSC / FLOAT(M) )
                ELSE
 !                 X(:,i) will be scaled to unit 2-norm
                   RWORK(i) =   SCALE * ROOTSC
                   CALL CLASCL( 'G',0, 0, RWORK(i), ONE, M, 1, &
-                               X(1,i), LDX, INFO1 )             ! LAPACK CALL
+                               X(1,i), LDX, INFO2 )             ! LAPACK CALL
 !                 X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i)          ! INTRINSIC
                END IF
             ELSE
@@ -657,7 +657,7 @@
 !               Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i)      ! INTRINSIC
             ELSE IF ( RWORK(i) < ZERO ) THEN
                 CALL CLASCL( 'G', 0, 0, -RWORK(i),          &
-                     ONE/FLOAT(M), M, 1, Y(1,i), LDY, INFO1 ) ! LAPACK CALL
+                     ONE/FLOAT(M), M, 1, Y(1,i), LDY, INFO2 ) ! LAPACK CALL
             ELSE IF ( ABS(Y(ICAMAX(M, Y(1,i),1),i ))  &
                                             /= ZERO ) THEN
 !               X(:,i) is zero vector. For consistency,
@@ -701,13 +701,13 @@
 !                 of Y(:,i). The relative backward and forward
 !                 errors are small in the ell_2 norm.
                   CALL CLASCL( 'G', 0, 0, SCALE, ONE/ROOTSC, &
-                               M, 1, Y(1,i), LDY, INFO1 )
+                               M, 1, Y(1,i), LDY, INFO2 )
                   RWORK(i) = - SCALE * ( ROOTSC / FLOAT(M) )
                ELSE
 !                 Y(:,i) will be scaled to unit 2-norm
                   RWORK(i) =   SCALE * ROOTSC
                   CALL CLASCL( 'G',0, 0, RWORK(i), ONE, M, 1, &
-                               Y(1,i), LDY, INFO1 )              ! LAPACK CALL
+                               Y(1,i), LDY, INFO2 )              ! LAPACK CALL
 !                 Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i)          ! INTRINSIC
                END IF
             ELSE
@@ -721,7 +721,7 @@
 !               X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i)      ! INTRINSIC
             ELSE IF ( RWORK(i) < ZERO ) THEN
                 CALL CLASCL( 'G', 0, 0, -RWORK(i),          &
-                     ONE/FLOAT(M), M, 1, X(1,i), LDX, INFO1 ) ! LAPACK CALL
+                     ONE/FLOAT(M), M, 1, X(1,i), LDX, INFO2 ) ! LAPACK CALL
             ELSE IF ( ABS(X(ICAMAX(M, X(1,i),1),i ))  &
                                            /= ZERO ) THEN
 !               Y(:,i) is zero vector.  If X(:,i) is not
@@ -771,7 +771,7 @@
                  ! In that case CGEJSV can return the SVD
                  ! in scaled form. The scaling factor can be used
                  ! to rescale the data (X and Y).
-                 CALL CLASCL( 'G', 0, 0, XSCL1, XSCL2, M, N, Y, LDY, INFO1  )
+                 CALL CLASCL( 'G', 0, 0, XSCL1, XSCL2, M, N, Y, LDY, INFO2  )
               END IF
       END SELECT
 !

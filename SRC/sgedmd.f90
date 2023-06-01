@@ -3,11 +3,11 @@
                          K, REIG,  IMEIG,   Z, LDZ,  RES,  &
                          B, LDB, W,  LDW,   S, LDS,        &
                          WORK, LWORK, IWORK, LIWORK, INFO )
-! March 2023    
+! March 2023
 !.....
-      USE                   iso_fortran_env 
+      USE                   iso_fortran_env
       IMPLICIT NONE
-      INTEGER, PARAMETER :: WP = real32      
+      INTEGER, PARAMETER :: WP = real32
 !.....
 !     Scalar arguments
       CHARACTER, INTENT(IN)   :: JOBS,   JOBZ,  JOBR,  JOBF
@@ -16,13 +16,13 @@
                                  LWORK,  LIWORK
       INTEGER,   INTENT(OUT)  :: K, INFO
       REAL(KIND=WP), INTENT(IN) ::  TOL
-!     Array arguments      
+!     Array arguments
       REAL(KIND=WP), INTENT(INOUT) :: X(LDX,*), Y(LDY,*)
-      REAL(KIND=WP), INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), & 
+      REAL(KIND=WP), INTENT(OUT)   :: Z(LDZ,*), B(LDB,*), &
                                       W(LDW,*), S(LDS,*)
       REAL(KIND=WP), INTENT(OUT)   :: REIG(*),  IMEIG(*), &
                                       RES(*)
-      REAL(KIND=WP), INTENT(OUT)   :: WORK(*)  
+      REAL(KIND=WP), INTENT(OUT)   :: WORK(*)
       INTEGER,       INTENT(OUT)   :: IWORK(*)
 !............................................................
 !     Purpose
@@ -32,8 +32,8 @@
 !     X and Y such that Y = A*X with an unaccessible matrix
 !     A, SGEDMD computes a certain number of Ritz pairs of A using
 !     the standard Rayleigh-Ritz extraction from a subspace of
-!     range(X) that is determined using the leading left singular 
-!     vectors of X. Optionally, SGEDMD returns the residuals 
+!     range(X) that is determined using the leading left singular
+!     vectors of X. Optionally, SGEDMD returns the residuals
 !     of the computed Ritz pairs, the information needed for
 !     a refinement of the Ritz vectors, or the eigenvectors of
 !     the Exact DMD.
@@ -51,11 +51,11 @@
 !     [3] Z. Drmac: A LAPACK implementation of the Dynamic
 !         Mode Decomposition I. Technical report. AIMDyn Inc.
 !         and LAPACK Working Note 298.
-!     [4] J. Tu, C. W. Rowley, D. M. Luchtenburg, S. L. 
+!     [4] J. Tu, C. W. Rowley, D. M. Luchtenburg, S. L.
 !         Brunton, N. Kutz: On Dynamic Mode Decomposition:
 !         Theory and Applications, Journal of Computational
 !         Dynamics 1(2), 391 -421, 2014.
-!         
+!
 !......................................................................
 !     Developed and supported by:
 !     ===========================
@@ -72,15 +72,15 @@
 !     - DARPA MoDyL project "A Data-Driven, Operator-Theoretic
 !     Framework for Space-Time Analysis of Process Dynamics"
 !     Contract No: HR0011-16-C-0116
-!     Any opinions, findings and conclusions or recommendations 
-!     expressed in this material are those of the author and 
-!     do not necessarily reflect the views of the DARPA SBIR 
+!     Any opinions, findings and conclusions or recommendations
+!     expressed in this material are those of the author and
+!     do not necessarily reflect the views of the DARPA SBIR
 !     Program Office
 !============================================================
-!     Distribution Statement A: 
+!     Distribution Statement A:
 !     Approved for Public Release, Distribution Unlimited.
-!     Cleared by DARPA on September 29, 2022  
-!============================================================      
+!     Cleared by DARPA on September 29, 2022
+!============================================================
 !......................................................................
 !     Arguments
 !     =========
@@ -114,7 +114,7 @@
 !            See the descriptions of K, X, W, Z.
 !     'N' :: The eigenvectors are not computed.
 !.....
-!     JOBR (input) CHARACTER*1 
+!     JOBR (input) CHARACTER*1
 !     Determines whether to compute the residuals.
 !     'R' :: The residuals for the computed eigenpairs will be
 !            computed and stored in the array RES.
@@ -128,7 +128,7 @@
 !     'R' :: The matrix needed for the refinement of the Ritz
 !            vectors is computed and stored in the array B.
 !            See the description of B.
-!     'E' :: The unscaled eigenvectors of the Exact DMD are 
+!     'E' :: The unscaled eigenvectors of the Exact DMD are
 !            computed and returned in the array B. See the
 !            description of B.
 !     'N' :: No eigenvector refinement data is computed.
@@ -149,7 +149,7 @@
 !     ill-conditioned. If small (smaller than EPS*||X||)
 !     singular values are of interest and JOBS=='N',  then
 !     the options (3, 4) give the most accurate results, where
-!     the option 4 is slightly better and with stronger 
+!     the option 4 is slightly better and with stronger
 !     theoretical background.
 !     If JOBS=='S', i.e. the columns of X will be normalized,
 !     then all methods give nearly equally accurate results.
@@ -162,14 +162,14 @@
 !     (the number of columns of X and Y).
 !.....
 !     X (input/output) REAL(KIND=WP) M-by-N array
-!     > On entry, X contains the data snapshot matrix X. It is 
+!     > On entry, X contains the data snapshot matrix X. It is
 !     assumed that the column norms of X are in the range of
-!     the normalized floating point numbers. 
+!     the normalized floating point numbers.
 !     < On exit, the leading K columns of X contain a POD basis,
 !     i.e. the leading K left singular vectors of the input
 !     data matrix X, U(:,1:K). All N columns of X contain all
 !     left singular vectors of the input matrix X.
-!     See the descriptions of K, Z and W.  
+!     See the descriptions of K, Z and W.
 !.....
 !     LDX (input) INTEGER, LDX >= M
 !     The leading dimension of the array X.
@@ -181,7 +181,7 @@
 !     the residual vectors for the computed Ritz pairs.
 !     See the description of RES.
 !     If JOBR == 'N', Y contains the original input data,
-!                     scaled according to the value of JOBS.      
+!                     scaled according to the value of JOBS.
 !.....
 !     LDY (input) INTEGER , LDY >= M
 !     The leading dimension of the array Y.
@@ -192,14 +192,14 @@
 !     matrix X. On input, if
 !     NRNK = -1 :: i-th singular value sigma(i) is truncated
 !                  if sigma(i) <= TOL*sigma(1)
-!                  This option is recommended.   
+!                  This option is recommended.
 !     NRNK = -2 :: i-th singular value sigma(i) is truncated
 !                  if sigma(i) <= TOL*sigma(i-1)
 !                  This option is included for R&D purposes.
 !                  It requires highly accurate SVD, which
-!                  may not be feasible.         
-!     The numerical rank can be enforced by using positive 
-!     value of NRNK as follows:      
+!                  may not be feasible.
+!     The numerical rank can be enforced by using positive
+!     value of NRNK as follows:
 !     0 < NRNK <= N :: at most NRNK largest singular values
 !     will be used. If the number of the computed nonzero
 !     singular values is less than NRNK, then only those
@@ -240,7 +240,7 @@
 !     indices (i,i+1), with the positive imaginary part
 !     listed first.
 !     See the descriptions of K, REIG, and Z.
-!.....      
+!.....
 !     Z (workspace/output) REAL(KIND=WP)  M-by-N array
 !     If JOBZ =='V' then
 !        Z contains real Ritz vectors as follows:
@@ -256,10 +256,10 @@
 !        Z(:,i) - sqrt(-1)*Z(:,i+1), respectively.
 !        || Z(:,i:i+1)||_F = 1.
 !     If JOBZ == 'F', then the above descriptions hold for
-!     the columns of X(:,1:K)*W(1:K,1:K), where the columns 
-!     of W(1:k,1:K) are the computed eigenvectors of the 
+!     the columns of X(:,1:K)*W(1:K,1:K), where the columns
+!     of W(1:k,1:K) are the computed eigenvectors of the
 !     K-by-K Rayleigh quotient. The columns of W(1:K,1:K)
-!     are similarly structured: If IMEIG(i) == 0 then 
+!     are similarly structured: If IMEIG(i) == 0 then
 !     X(:,1:K)*W(:,i) is an eigenvector, and if IMEIG(i)>0
 !     then X(:,1:K)*W(:,i)+sqrt(-1)*X(:,1:K)*W(:,i+1) and
 !          X(:,1:K)*W(:,i)-sqrt(-1)*X(:,1:K)*W(:,i+1)
@@ -270,8 +270,8 @@
 !     The leading dimension of the array Z.
 !.....
 !     RES (output) REAL(KIND=WP) N-by-1 array
-!     RES(1:K) contains the residuals for the K computed 
-!     Ritz pairs. 
+!     RES(1:K) contains the residuals for the K computed
+!     Ritz pairs.
 !     If LAMBDA(i) is real, then
 !        RES(i) = || A * Z(:,i) - LAMBDA(i)*Z(:,i))||_2.
 !     If [LAMBDA(i), LAMBDA(i+1)] is a complex conjugate pair
@@ -288,19 +288,19 @@
 !.....
 !     B (output) REAL(KIND=WP)  M-by-N array.
 !     IF JOBF =='R', B(1:M,1:K) contains A*U(:,1:K), and can
-!     be used for computing the refined vectors; see further 
-!     details in the provided references. 
-!     If JOBF == 'E', B(1:M,1;K) contains 
+!     be used for computing the refined vectors; see further
+!     details in the provided references.
+!     If JOBF == 'E', B(1:M,1;K) contains
 !     A*U(:,1:K)*W(1:K,1:K), which are the vectors from the
-!     Exact DMD, up to scaling by the inverse eigenvalues.      
+!     Exact DMD, up to scaling by the inverse eigenvalues.
 !     If JOBF =='N', then B is not referenced.
-!     See the descriptions of X, W, K.      
+!     See the descriptions of X, W, K.
 !.....
 !     LDB (input) INTEGER, LDB >= M
 !     The leading dimension of the array B.
 !.....
 !     W (workspace/output) REAL(KIND=WP) N-by-N array
-!     On exit, W(1:K,1:K) contains the K computed 
+!     On exit, W(1:K,1:K) contains the K computed
 !     eigenvectors of the matrix Rayleigh quotient (real and
 !     imaginary parts for each complex conjugate pair of the
 !     eigenvalues). The Ritz vectors (returned in Z) are the
@@ -311,7 +311,7 @@
 !.....
 !     LDW (input) INTEGER, LDW >= N
 !     The leading dimension of the array W.
-!.....      
+!.....
 !     S (workspace/output) REAL(KIND=WP) N-by-N array
 !     The array S(1:K,1:K) is used for the matrix Rayleigh
 !     quotient. This content is overwritten during
@@ -322,13 +322,13 @@
 !     The leading dimension of the array S.
 !.....
 !     WORK (workspace/output) REAL(KIND=WP) LWORK-by-1 array
-!     On exit, WORK(1:N) contains the singular values of 
+!     On exit, WORK(1:N) contains the singular values of
 !     X (for JOBS=='N') or column scaled X (JOBS=='S', 'C').
 !     If WHTSVD==4, then WORK(N+1) and WORK(N+2) contain
 !     scaling factor WORK(N+2)/WORK(N+1) used to scale X
 !     and Y to avoid overflow in the SVD of X.
 !     This may be of interest if the scaling option is off
-!     and as many as possible smallest eigenvalues are 
+!     and as many as possible smallest eigenvalues are
 !     desired to the highest feasible accuracy.
 !     If the call to SGEDMD is only workspace query, then
 !     WORK(1) contains the minimal workspace length and
@@ -369,13 +369,13 @@
 !        Here LWORK_SVD = MAX(7,2*M+N,6*N+2*N*N) is the
 !        minimal workspace length of SGEJSV.
 !     The above expressions are not simplified in order to
-!     make the usage of WORK more transparent, and for 
-!     easier checking. In any case, LWORK >= 2.     
+!     make the usage of WORK more transparent, and for
+!     easier checking. In any case, LWORK >= 2.
 !     If on entry LWORK = -1, then a workspace query is
 !     assumed and the procedure only computes the minimal
 !     and the optimal workspace lengths for both WORK and
-!     IWORK. See the descriptions of WORK and IWORK.     
-!.....          
+!     IWORK. See the descriptions of WORK and IWORK.
+!.....
 !     IWORK (workspace/output) INTEGER LIWORK-by-1 array
 !     Workspace that is required only if WHTSVD equals
 !     2 , 3 or 4. (See the description of WHTSVD).
@@ -417,12 +417,12 @@
 !     ~~~~~~~~~~
       REAL(KIND=WP), PARAMETER ::  ONE = 1.0_WP
       REAL(KIND=WP), PARAMETER :: ZERO = 0.0_WP
-      
+
 !     Local scalars
 !     ~~~~~~~~~~~~~
-      REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,   & 
+      REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,   &
                        SSUM,  XSCL1,  XSCL2
-      INTEGER       ::  i,  j, IMINWR,  INFO1,   & 
+      INTEGER       ::  i,  j, IMINWR,  INFO1, INFO2,  &
                        LWRKEV, LWRSDD, LWRSVD, &
                        LWRSVQ, MLWORK, MWRKEV, MWRSDD, &
                        MWRSVD, MWRSVJ, MWRSVQ, NUMRNK, &
@@ -431,29 +431,29 @@
                         WNTEX, WNTREF, WNTRES, WNTVEC
       CHARACTER     ::  JOBZL, T_OR_N
       CHARACTER     ::  JSVOPT
-      
-!     Local arrays      
-!     ~~~~~~~~~~~~      
+
+!     Local arrays
+!     ~~~~~~~~~~~~
       REAL(KIND=WP) :: AB(2,2), RDUMMY(2), RDUMMY2(2)
-      
+
 !     External functions (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~
       REAL(KIND=WP) SLANGE, SLAMCH, SNRM2
       EXTERNAL      SLANGE, SLAMCH, SNRM2, ISAMAX
       INTEGER       ISAMAX
       LOGICAL       SISNAN, LSAME
-      EXTERNAL      SISNAN, LSAME 
+      EXTERNAL      SISNAN, LSAME
 
 !     External subroutines (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~~~~
-      EXTERNAL      SAXPY,  SGEMM,  SSCAL 
+      EXTERNAL      SAXPY,  SGEMM,  SSCAL
       EXTERNAL      SGEEV,  SGEJSV, SGESDD, SGESVD, SGESVDQ, &
                     SLACPY, SLASCL, SLASSQ, XERBLA
-      
+
 !     Intrinsic functions
 !     ~~~~~~~~~~~~~~~~~~~
-      INTRINSIC     INT, FLOAT, MAX, SQRT       
-!............................................................  
+      INTRINSIC     INT, FLOAT, MAX, SQRT
+!............................................................
 !
 !    Test the input arguments
 !
@@ -461,7 +461,7 @@
       SCCOLX = LSAME(JOBS,'S') .OR. LSAME(JOBS,'C')
       SCCOLY = LSAME(JOBS,'Y')
       WNTVEC = LSAME(JOBZ,'V')
-      WNTREF = LSAME(JOBF,'R') 
+      WNTREF = LSAME(JOBF,'R')
       WNTEX  = LSAME(JOBF,'E')
       INFO   = 0
       LQUERY = ( ( LWORK == -1 ) .OR. ( LIWORK == -1 ) )
@@ -469,16 +469,16 @@
       IF ( .NOT. (SCCOLX .OR. SCCOLY .OR. &
                                   LSAME(JOBS,'N')) )   THEN
           INFO = -1
-      ELSE IF ( .NOT. (WNTVEC .OR. LSAME(JOBZ,'N')        & 
+      ELSE IF ( .NOT. (WNTVEC .OR. LSAME(JOBZ,'N')        &
                               .OR. LSAME(JOBZ,'F')) )  THEN
           INFO = -2
-      ELSE IF ( .NOT. (WNTRES .OR. LSAME(JOBR,'N')) .OR.  & 
+      ELSE IF ( .NOT. (WNTRES .OR. LSAME(JOBR,'N')) .OR.  &
                 ( WNTRES .AND. (.NOT.WNTVEC) ) )       THEN
           INFO = -3
-      ELSE IF ( .NOT. (WNTREF .OR. WNTEX .OR.             & 
+      ELSE IF ( .NOT. (WNTREF .OR. WNTEX .OR.             &
                 LSAME(JOBF,'N') ) )                    THEN
           INFO = -4
-      ELSE IF ( .NOT.((WHTSVD == 1) .OR. (WHTSVD == 2) .OR.  & 
+      ELSE IF ( .NOT.((WHTSVD == 1) .OR. (WHTSVD == 2) .OR.  &
                       (WHTSVD == 3) .OR. (WHTSVD == 4) )) THEN
           INFO = -5
       ELSE IF ( M < 0 )   THEN
@@ -489,7 +489,7 @@
           INFO = -9
       ELSE IF ( LDY < M ) THEN
           INFO = -11
-      ELSE IF ( .NOT. (( NRNK == -2).OR.(NRNK == -1).OR. & 
+      ELSE IF ( .NOT. (( NRNK == -2).OR.(NRNK == -1).OR. &
                 ((NRNK >= 1).AND.(NRNK <=N ))) )      THEN
           INFO = -12
       ELSE IF ( ( TOL < ZERO ) .OR. ( TOL >= ONE ) )  THEN
@@ -503,25 +503,25 @@
       ELSE IF ( LDS < N ) THEN
           INFO = -25
       END IF
-!      
-      IF ( INFO == 0 ) THEN  
-          ! Compute the minimal and the optimal workspace 
-          ! requirements. Simulate running the code and 
+!
+      IF ( INFO == 0 ) THEN
+          ! Compute the minimal and the optimal workspace
+          ! requirements. Simulate running the code and
           ! determine minimal and optimal sizes of the
           ! workspace at any moment of the run.
          IF ( N == 0 ) THEN
-             ! Quick return. All output except K is void. 
+             ! Quick return. All output except K is void.
              ! INFO=1 signals the void input.
-             ! In case of a workspace query, the default 
-             ! minimal workspace lengths are returned.             
-            IF ( LQUERY ) THEN  
+             ! In case of a workspace query, the default
+             ! minimal workspace lengths are returned.
+            IF ( LQUERY ) THEN
                 IWORK(1) = 1
                 WORK(1)  = 2
                 WORK(2)  = 2
-            ELSE                
+            ELSE
                K = 0
-            END IF             
-            INFO = 1  
+            END IF
+            INFO = 1
             RETURN
          END IF
          MLWORK = MAX(2,N)
@@ -529,84 +529,84 @@
          IMINWR = 1
          SELECT CASE ( WHTSVD )
          CASE (1)
-             ! The following is specified as the minimal 
+             ! The following is specified as the minimal
              ! length of WORK in the definition of SGESVD:
              ! MWRSVD = MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N))
              MWRSVD = MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N))
-             MLWORK = MAX(MLWORK,N + MWRSVD)        
-             IF ( LQUERY ) THEN 
-                CALL SGESVD( 'O', 'S', M, N, X, LDX, WORK, & 
-                           B, LDB, W, LDW, RDUMMY, -1, INFO1 )   
+             MLWORK = MAX(MLWORK,N + MWRSVD)
+             IF ( LQUERY ) THEN
+                CALL SGESVD( 'O', 'S', M, N, X, LDX, WORK, &
+                           B, LDB, W, LDW, RDUMMY, -1, INFO1 )
                 LWRSVD = MAX( MWRSVD, INT( RDUMMY(1) ) )
-                OLWORK = MAX(OLWORK,N + LWRSVD)           
-             END IF  
+                OLWORK = MAX(OLWORK,N + LWRSVD)
+             END IF
          CASE (2)
-             ! The following is specified as the minimal 
+             ! The following is specified as the minimal
              ! length of WORK in the definition of SGESDD:
-             ! MWRSDD = 3*MIN(M,N)*MIN(M,N) + 
+             ! MWRSDD = 3*MIN(M,N)*MIN(M,N) +
              ! MAX( MAX(M,N),5*MIN(M,N)*MIN(M,N)+4*MIN(M,N) )
              ! IMINWR = 8*MIN(M,N)
              MWRSDD = 3*MIN(M,N)*MIN(M,N) +                &
               MAX( MAX(M,N),5*MIN(M,N)*MIN(M,N)+4*MIN(M,N) )
-             MLWORK = MAX(MLWORK,N + MWRSDD) 
-             IMINWR = 8*MIN(M,N) 
+             MLWORK = MAX(MLWORK,N + MWRSDD)
+             IMINWR = 8*MIN(M,N)
              IF ( LQUERY ) THEN
                 CALL SGESDD( 'O', M, N, X, LDX, WORK, B,     &
-                     LDB, W, LDW, RDUMMY, -1, IWORK, INFO1 ) 
+                     LDB, W, LDW, RDUMMY, -1, IWORK, INFO1 )
                 LWRSDD = MAX( MWRSDD, INT( RDUMMY(1) ) )
                 OLWORK = MAX(OLWORK,N + LWRSDD)
-             END IF                     
+             END IF
          CASE (3)
              !LWQP3 = 3*N+1
              !LWORQ = MAX(N, 1)
              !MWRSVD = MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N))
              !MWRSVQ = N + MAX( LWQP3, MWRSVD, LWORQ )+ MAX(M,2)
-             !MLWORK = N + MWRSVQ 
-             !IMINWR = M+N-1         
+             !MLWORK = N + MWRSVQ
+             !IMINWR = M+N-1
              CALL SGESVDQ( 'H', 'P', 'N', 'R', 'R', M, N, &
-                          X, LDX, WORK, Z, LDZ, W, LDW,   & 
+                          X, LDX, WORK, Z, LDZ, W, LDW,   &
                              NUMRNK, IWORK, -1, RDUMMY,   &
                              -1, RDUMMY2, -1, INFO1 )
              IMINWR = IWORK(1)
              MWRSVQ = INT(RDUMMY(2))
-             MLWORK = MAX(MLWORK,N+MWRSVQ+INT(RDUMMY2(1))) 
-             IF ( LQUERY ) THEN   
-                LWRSVQ = INT(RDUMMY(1)) 
+             MLWORK = MAX(MLWORK,N+MWRSVQ+INT(RDUMMY2(1)))
+             IF ( LQUERY ) THEN
+                LWRSVQ = INT(RDUMMY(1))
                 OLWORK = MAX(OLWORK,N+LWRSVQ+INT(RDUMMY2(1)))
-             END IF  
-         CASE (4) 
+             END IF
+         CASE (4)
              JSVOPT = 'J'
              !MWRSVJ = MAX( 7, 2*M+N, 6*N+2*N*N )! for JSVOPT='V'
              MWRSVJ = MAX( 7, 2*M+N, 4*N+N*N, 2*N+N*N+6 )
-             MLWORK = MAX(MLWORK,N+MWRSVJ) 
+             MLWORK = MAX(MLWORK,N+MWRSVJ)
              IMINWR = MAX( 3, M+3*N )
-             IF ( LQUERY ) THEN 
+             IF ( LQUERY ) THEN
                 OLWORK = MAX(OLWORK,N+MWRSVJ)
              END IF
          END SELECT
-         IF ( WNTVEC .OR. WNTEX .OR. LSAME(JOBZ,'F') ) THEN 
+         IF ( WNTVEC .OR. WNTEX .OR. LSAME(JOBZ,'F') ) THEN
              JOBZL = 'V'
          ELSE
              JOBZL = 'N'
          END IF
          ! Workspace calculation to the SGEEV call
-         IF ( LSAME(JOBZL,'V') ) THEN 
+         IF ( LSAME(JOBZL,'V') ) THEN
              MWRKEV = MAX( 1, 4*N )
          ELSE
              MWRKEV = MAX( 1, 3*N )
-         END IF 
-         MLWORK = MAX(MLWORK,N+MWRKEV) 
-         IF ( LQUERY ) THEN 
-                CALL SGEEV( 'N', JOBZL, N, S, LDS, REIG, & 
+         END IF
+         MLWORK = MAX(MLWORK,N+MWRKEV)
+         IF ( LQUERY ) THEN
+                CALL SGEEV( 'N', JOBZL, N, S, LDS, REIG, &
                     IMEIG, W, LDW, W, LDW, RDUMMY, -1, INFO1 )
                 LWRKEV = MAX( MWRKEV, INT(RDUMMY(1)) )
                 OLWORK = MAX( OLWORK, N+LWRKEV )
-         END IF 
-!        
+         END IF
+!
          IF ( LIWORK < IMINWR .AND. (.NOT.LQUERY) ) INFO = -29
          IF (  LWORK < MLWORK .AND. (.NOT.LQUERY) ) INFO = -27
       END IF
-!      
+!
       IF( INFO /= 0 ) THEN
          CALL XERBLA( 'SGEDMD', -INFO )
          RETURN
@@ -616,225 +616,225 @@
           WORK(1)  = MLWORK
           WORK(2)  = OLWORK
           RETURN
-      END IF   
+      END IF
 !............................................................
-!      
+!
       OFL   = SLAMCH('O')
       SMALL = SLAMCH('S')
       BADXY = .FALSE.
 !
 !     <1> Optional scaling of the snapshots (columns of X, Y)
 !     ==========================================================
-      IF ( SCCOLX ) THEN 
-          ! The columns of X will be normalized. 
-          ! To prevent overflows, the column norms of X are 
-          ! carefully computed using SLASSQ.    
-          K = 0 
+      IF ( SCCOLX ) THEN
+          ! The columns of X will be normalized.
+          ! To prevent overflows, the column norms of X are
+          ! carefully computed using SLASSQ.
+          K = 0
           DO i = 1, N
-            !WORK(i) = DNRM2( M, X(1,i), 1 )  
+            !WORK(i) = DNRM2( M, X(1,i), 1 )
             SCALE  = ZERO
             CALL SLASSQ( M, X(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
-                K    =  0 
-                INFO = -8 
+                K    =  0
+                INFO = -8
                 CALL XERBLA('SGEDMD',-INFO)
-            END IF 
-            IF ( (SCALE /= ZERO) .AND. (SSUM /= ZERO) ) THEN 
+            END IF
+            IF ( (SCALE /= ZERO) .AND. (SSUM /= ZERO) ) THEN
                ROOTSC = SQRT(SSUM)
-               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN 
-!                 Norm of X(:,i) overflows. First, X(:,i) 
+               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN
+!                 Norm of X(:,i) overflows. First, X(:,i)
 !                 is scaled by
-!                 ( ONE / ROOTSC ) / SCALE = 1/||X(:,i)||_2. 
+!                 ( ONE / ROOTSC ) / SCALE = 1/||X(:,i)||_2.
 !                 Next, the norm of X(:,i) is stored without
-!                 overflow as WORK(i) = - SCALE * (ROOTSC/M), 
-!                 the minus sign indicating the 1/M factor.  
+!                 overflow as WORK(i) = - SCALE * (ROOTSC/M),
+!                 the minus sign indicating the 1/M factor.
 !                 Scaling is performed without overflow, and
 !                 underflow may occur in the smallest entries
 !                 of X(:,i). The relative backward and forward
-!                 errors are small in the ell_2 norm.                      
+!                 errors are small in the ell_2 norm.
                   CALL SLASCL( 'G', 0, 0, SCALE, ONE/ROOTSC, &
-                               M, 1, X(1,i), M, INFO1 )                 
+                               M, 1, X(1,i), M, INFO2 )
                   WORK(i) = - SCALE * ( ROOTSC / FLOAT(M) )
-               ELSE 
+               ELSE
 !                 X(:,i) will be scaled to unit 2-norm
-                  WORK(i) =   SCALE * ROOTSC 
+                  WORK(i) =   SCALE * ROOTSC
                   CALL SLASCL( 'G',0, 0, WORK(i), ONE, M, 1, &
-                               X(1,i), M, INFO1 )              ! LAPACK CALL
+                               X(1,i), M, INFO2 )              ! LAPACK CALL
 !                 X(1:M,i) = (ONE/WORK(i)) * X(1:M,i)          ! INTRINSIC
-               END IF 
+               END IF
             ELSE
                WORK(i) = ZERO
-               K = K + 1 
-            END IF          
+               K = K + 1
+            END IF
           END DO
           IF ( K == N ) THEN
           ! All columns of X are zero. Return error code -8.
           ! (the 8th input variable had an illegal value)
-          K = 0 
+          K = 0
           INFO = -8
           CALL XERBLA('SGEDMD',-INFO)
-          RETURN       
+          RETURN
           END IF
           DO i = 1, N
-!           Now, apply the same scaling to the columns of Y.        
-            IF ( WORK(i) >  ZERO ) THEN 
+!           Now, apply the same scaling to the columns of Y.
+            IF ( WORK(i) >  ZERO ) THEN
                 CALL SSCAL( M, ONE/WORK(i), Y(1,i), 1 )  ! BLAS CALL
-!               Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i)      ! INTRINSIC                 
-            ELSE IF ( WORK(i) < ZERO ) THEN 
-                CALL SLASCL( 'G', 0, 0, -WORK(i),          & 
-                     ONE/FLOAT(M), M, 1, Y(1,i), M, INFO1 ) ! LAPACK CALL
-            ELSE IF ( Y(ISAMAX(M, Y(1,i),1),i )  & 
-                                            /= ZERO ) THEN 
-!               X(:,i) is zero vector. For consistency, 
+!               Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i)      ! INTRINSIC
+            ELSE IF ( WORK(i) < ZERO ) THEN
+                CALL SLASCL( 'G', 0, 0, -WORK(i),          &
+                     ONE/FLOAT(M), M, 1, Y(1,i), M, INFO2 ) ! LAPACK CALL
+            ELSE IF ( Y(ISAMAX(M, Y(1,i),1),i )  &
+                                            /= ZERO ) THEN
+!               X(:,i) is zero vector. For consistency,
 !               Y(:,i) should also be zero. If Y(:,i) is not
 !               zero, then the data might be inconsistent or
-!               corrupted. If JOBS == 'C', Y(:,i) is set to 
-!               zero and a warning flag is raised. 
+!               corrupted. If JOBS == 'C', Y(:,i) is set to
+!               zero and a warning flag is raised.
 !               The computation continues but the
 !               situation will be reported in the output.
                 BADXY = .TRUE.
-                IF ( LSAME(JOBS,'C')) & 
-                CALL SSCAL( M, ZERO, Y(1,i), 1 )  ! BLAS CALL                  
-            END IF         
+                IF ( LSAME(JOBS,'C')) &
+                CALL SSCAL( M, ZERO, Y(1,i), 1 )  ! BLAS CALL
+            END IF
           END DO
-      END IF  
-  ! 
-      IF ( SCCOLY ) THEN 
-          ! The columns of Y will be normalized. 
-          ! To prevent overflows, the column norms of Y are 
-          ! carefully computed using SLASSQ.         
+      END IF
+  !
+      IF ( SCCOLY ) THEN
+          ! The columns of Y will be normalized.
+          ! To prevent overflows, the column norms of Y are
+          ! carefully computed using SLASSQ.
           DO i = 1, N
-            !WORK(i) = DNRM2( M, Y(1,i), 1 )  
+            !WORK(i) = DNRM2( M, Y(1,i), 1 )
             SCALE  = ZERO
             CALL SLASSQ( M, Y(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
-                K    =  0 
+                K    =  0
                 INFO = -10
                 CALL XERBLA('SGEDMD',-INFO)
             END IF
-            IF ( SCALE /= ZERO  .AND. (SSUM /= ZERO) ) THEN 
+            IF ( SCALE /= ZERO  .AND. (SSUM /= ZERO) ) THEN
                ROOTSC = SQRT(SSUM)
-               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN 
-!                 Norm of Y(:,i) overflows. First, Y(:,i) 
+               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN
+!                 Norm of Y(:,i) overflows. First, Y(:,i)
 !                 is scaled by
-!                 ( ONE / ROOTSC ) / SCALE = 1/||Y(:,i)||_2. 
+!                 ( ONE / ROOTSC ) / SCALE = 1/||Y(:,i)||_2.
 !                 Next, the norm of Y(:,i) is stored without
-!                 overflow as WORK(i) = - SCALE * (ROOTSC/M), 
-!                 the minus sign indicating the 1/M factor.  
+!                 overflow as WORK(i) = - SCALE * (ROOTSC/M),
+!                 the minus sign indicating the 1/M factor.
 !                 Scaling is performed without overflow, and
 !                 underflow may occur in the smallest entries
 !                 of Y(:,i). The relative backward and forward
-!                 errors are small in the ell_2 norm.                      
+!                 errors are small in the ell_2 norm.
                   CALL SLASCL( 'G', 0, 0, SCALE, ONE/ROOTSC, &
-                               M, 1, Y(1,i), M, INFO1 )                 
+                               M, 1, Y(1,i), M, INFO2 )
                   WORK(i) = - SCALE * ( ROOTSC / FLOAT(M) )
-               ELSE 
+               ELSE
 !                 X(:,i) will be scaled to unit 2-norm
-                  WORK(i) =   SCALE * ROOTSC 
+                  WORK(i) =   SCALE * ROOTSC
                   CALL SLASCL( 'G',0, 0, WORK(i), ONE, M, 1, &
-                               Y(1,i), M, INFO1 )              ! LAPACK CALL
+                               Y(1,i), M, INFO2 )              ! LAPACK CALL
 !                 Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i)          ! INTRINSIC
-               END IF 
+               END IF
             ELSE
                WORK(i) = ZERO
-            END IF          
+            END IF
          END DO
          DO i = 1, N
-!           Now, apply the same scaling to the columns of X.              
-            IF ( WORK(i) >  ZERO ) THEN 
+!           Now, apply the same scaling to the columns of X.
+            IF ( WORK(i) >  ZERO ) THEN
                 CALL SSCAL( M, ONE/WORK(i), X(1,i), 1 )  ! BLAS CALL
-!               X(1:M,i) = (ONE/WORK(i)) * X(1:M,i)      ! INTRINSIC                 
-            ELSE IF ( WORK(i) < ZERO ) THEN 
-                CALL SLASCL( 'G', 0, 0, -WORK(i),          & 
-                     ONE/FLOAT(M), M, 1, X(1,i), M, INFO1 ) ! LAPACK CALL
-            ELSE IF ( X(ISAMAX(M, X(1,i),1),i )  & 
-                                           /= ZERO ) THEN 
+!               X(1:M,i) = (ONE/WORK(i)) * X(1:M,i)      ! INTRINSIC
+            ELSE IF ( WORK(i) < ZERO ) THEN
+                CALL SLASCL( 'G', 0, 0, -WORK(i),          &
+                     ONE/FLOAT(M), M, 1, X(1,i), M, INFO2 ) ! LAPACK CALL
+            ELSE IF ( X(ISAMAX(M, X(1,i),1),i )  &
+                                           /= ZERO ) THEN
 !               Y(:,i) is zero vector.  If X(:,i) is not
-!               zero, then a warning flag is raised. 
+!               zero, then a warning flag is raised.
 !               The computation continues but the
 !               situation will be reported in the output.
                 BADXY = .TRUE.
-            END IF         
+            END IF
          END DO
-       END IF  
-!      
+       END IF
+!
 !     <2> SVD of the data snapshot matrix X.
-!     ===================================== 
+!     =====================================
 !     The left singular vectors are stored in the array X.
-!     The right singular vectors are in the array W. 
-!     The array W will later on contain the eigenvectors 
+!     The right singular vectors are in the array W.
+!     The array W will later on contain the eigenvectors
 !     of a Rayleigh quotient.
-      NUMRNK = N 
+      NUMRNK = N
       SELECT CASE ( WHTSVD )
-         CASE (1) 
-             CALL SGESVD( 'O', 'S', M, N, X, LDX, WORK, B, & 
+         CASE (1)
+             CALL SGESVD( 'O', 'S', M, N, X, LDX, WORK, B, &
                   LDB, W, LDW, WORK(N+1), LWORK-N, INFO1 ) ! LAPACK CALL
              T_OR_N = 'T'
-         CASE (2) 
+         CASE (2)
             CALL SGESDD( 'O', M, N, X, LDX, WORK, B, LDB, W, &
                  LDW, WORK(N+1), LWORK-N, IWORK, INFO1 )   ! LAPACK CALL
             T_OR_N = 'T'
-         CASE (3)  
+         CASE (3)
               CALL SGESVDQ( 'H', 'P', 'N', 'R', 'R', M, N, &
-                   X, LDX, WORK, Z, LDZ, W, LDW, & 
-                   NUMRNK, IWORK, LIWORK, WORK(N+MAX(2,M)+1),& 
-                   LWORK-N-MAX(2,M), WORK(N+1), MAX(2,M), INFO1)     ! LAPACK CALL  
-              CALL SLACPY( 'A', M, NUMRNK, Z, LDZ, X, LDX )   ! LAPACK CALL 
+                   X, LDX, WORK, Z, LDZ, W, LDW, &
+                   NUMRNK, IWORK, LIWORK, WORK(N+MAX(2,M)+1),&
+                   LWORK-N-MAX(2,M), WORK(N+1), MAX(2,M), INFO1)     ! LAPACK CALL
+              CALL SLACPY( 'A', M, NUMRNK, Z, LDZ, X, LDX )   ! LAPACK CALL
          T_OR_N = 'T'
-         CASE (4) 
-              CALL SGEJSV( 'F', 'U', JSVOPT, 'N', 'N', 'P', M, & 
+         CASE (4)
+              CALL SGEJSV( 'F', 'U', JSVOPT, 'N', 'N', 'P', M, &
                    N, X, LDX, WORK, Z, LDZ, W, LDW, &
-                   WORK(N+1), LWORK-N, IWORK, INFO1 )    ! LAPACK CALL 
+                   WORK(N+1), LWORK-N, IWORK, INFO1 )    ! LAPACK CALL
               CALL SLACPY( 'A', M, N, Z, LDZ, X, LDX )   ! LAPACK CALL
               T_OR_N = 'N'
               XSCL1 = WORK(N+1)
               XSCL2 = WORK(N+2)
-              IF ( XSCL1 /=  XSCL2 ) THEN 
+              IF ( XSCL1 /=  XSCL2 ) THEN
                  ! This is an exceptional situation. If the
-                 ! data matrices are not scaled and the 
-                 ! largest singular value of X overflows. 
+                 ! data matrices are not scaled and the
+                 ! largest singular value of X overflows.
                  ! In that case SGEJSV can return the SVD
-                 ! in scaled form. The scaling factor can be used 
-                 ! to rescale the data (X and Y).              
-                 CALL SLASCL( 'G', 0, 0, XSCL1, XSCL2, M, N, Y, LDY, INFO1  )    
-              END IF       
-      END SELECT  
-!         
-      IF ( INFO1 > 0 ) THEN 
-         ! The SVD selected subroutine did not converge. 
-         ! Return with an error code.  
-         INFO = 2 
+                 ! in scaled form. The scaling factor can be used
+                 ! to rescale the data (X and Y).
+                 CALL SLASCL( 'G', 0, 0, XSCL1, XSCL2, M, N, Y, LDY, INFO2  )
+              END IF
+      END SELECT
+!
+      IF ( INFO1 > 0 ) THEN
+         ! The SVD selected subroutine did not converge.
+         ! Return with an error code.
+         INFO = 2
          RETURN
-      END IF       
-! 
+      END IF
+!
       IF ( WORK(1) == ZERO ) THEN
           ! The largest computed singular value of (scaled)
-          ! X is zero. Return error code -8 
+          ! X is zero. Return error code -8
           ! (the 8th input variable had an illegal value).
-          K = 0 
-          INFO = -8 
+          K = 0
+          INFO = -8
           CALL XERBLA('SGEDMD',-INFO)
-          RETURN       
+          RETURN
       END IF
-!      
-      !<3> Determine the numerical rank of the data 
-      !    snapshots matrix X. This depends on the 
+!
+      !<3> Determine the numerical rank of the data
+      !    snapshots matrix X. This depends on the
       !    parameters NRNK and TOL.
-                
+
       SELECT CASE ( NRNK )
           CASE ( -1 )
-               K = 1 
-               DO i = 2, NUMRNK 
+               K = 1
+               DO i = 2, NUMRNK
                  IF ( ( WORK(i) <= WORK(1)*TOL ) .OR. &
-                      ( WORK(i) <= SMALL ) ) EXIT  
-                 K = K + 1     
+                      ( WORK(i) <= SMALL ) ) EXIT
+                 K = K + 1
                END DO
           CASE ( -2 )
-               K = 1 
-               DO i = 1, NUMRNK-1 
-                 IF ( ( WORK(i+1) <= WORK(i)*TOL  ) .OR. & 
-                      ( WORK(i) <= SMALL ) ) EXIT  
-                 K = K + 1     
+               K = 1
+               DO i = 1, NUMRNK-1
+                 IF ( ( WORK(i+1) <= WORK(i)*TOL  ) .OR. &
+                      ( WORK(i) <= SMALL ) ) EXIT
+                 K = K + 1
                END DO
           CASE DEFAULT
                K = 1
@@ -842,132 +842,132 @@
                   IF ( WORK(i) <= SMALL ) EXIT
                   K = K + 1
                END DO
-          END SELECT       
-      !   Now, U = X(1:M,1:K) is the SVD/POD basis for the  
+          END SELECT
+      !   Now, U = X(1:M,1:K) is the SVD/POD basis for the
       !   snapshot data in the input matrix X.
-       
+
       !<4> Compute the Rayleigh quotient S = U^T * A * U.
       !    Depending on the requested outputs, the computation
-      !    is organized to compute additional auxiliary 
+      !    is organized to compute additional auxiliary
       !    matrices (for the residuals and refinements).
-      !    
+      !
       !    In all formulas below, we need V_k*Sigma_k^(-1)
       !    where either V_k is in W(1:N,1:K), or V_k^T is in
       !    W(1:K,1:N). Here Sigma_k=diag(WORK(1:K)).
       IF ( LSAME(T_OR_N, 'N') ) THEN
-          DO i = 1, K 
-           CALL SSCAL( N, ONE/WORK(i), W(1,i), 1 )    ! BLAS CALL   
+          DO i = 1, K
+           CALL SSCAL( N, ONE/WORK(i), W(1,i), 1 )    ! BLAS CALL
            ! W(1:N,i) = (ONE/WORK(i)) * W(1:N,i)      ! INTRINSIC
           END DO
       ELSE
           ! This non-unit stride access is due to the fact
-          ! that SGESVD, SGESVDQ and SGESDD return the 
+          ! that SGESVD, SGESVDQ and SGESDD return the
           ! transposed matrix of the right singular vectors.
-          !DO i = 1, K 
-          ! CALL SSCAL( N, ONE/WORK(i), W(i,1), LDW )    ! BLAS CALL   
+          !DO i = 1, K
+          ! CALL SSCAL( N, ONE/WORK(i), W(i,1), LDW )    ! BLAS CALL
           ! ! W(i,1:N) = (ONE/WORK(i)) * W(i,1:N)      ! INTRINSIC
           !END DO
           DO i = 1, K
               WORK(N+i) = ONE/WORK(i)
-          END DO      
-          DO j = 1, N 
-             DO i = 1, K 
+          END DO
+          DO j = 1, N
+             DO i = 1, K
                  W(i,j) = (WORK(N+i))*W(i,j)
              END DO
-          END DO       
+          END DO
       END IF
-!      
-      IF ( WNTREF ) THEN      
+!
+      IF ( WNTREF ) THEN
          !
-         ! Need A*U(:,1:K)=Y*V_k*inv(diag(WORK(1:K))) 
-         ! for computing the refined Ritz vectors 
+         ! Need A*U(:,1:K)=Y*V_k*inv(diag(WORK(1:K)))
+         ! for computing the refined Ritz vectors
          ! (optionally, outside SGEDMD).
-          CALL SGEMM( 'N', T_OR_N, M, K, N, ONE, Y, LDY, W, & 
-                      LDW, ZERO, Z, LDZ )                        ! BLAS CALL  
+          CALL SGEMM( 'N', T_OR_N, M, K, N, ONE, Y, LDY, W, &
+                      LDW, ZERO, Z, LDZ )                        ! BLAS CALL
           ! Z(1:M,1:K)=MATMUL(Y(1:M,1:N),TRANSPOSE(W(1:K,1:N)))  ! INTRINSIC, for T_OR_N=='T'
-          ! Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K))             ! INTRINSIC, for T_OR_N=='N'                      
-          !          
+          ! Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K))             ! INTRINSIC, for T_OR_N=='N'
+          !
           ! At this point Z contains
-          ! A * U(:,1:K) = Y * V_k * Sigma_k^(-1), and 
-          ! this is needed for computing the residuals. 
+          ! A * U(:,1:K) = Y * V_k * Sigma_k^(-1), and
+          ! this is needed for computing the residuals.
           ! This matrix is  returned in the array B and
           ! it can be used to compute refined Ritz vectors.
           CALL SLACPY( 'A', M, K, Z, LDZ, B, LDB )   ! BLAS CALL
-          ! B(1:M,1:K) = Z(1:M,1:K)                  ! INTRINSIC 
-          
-          CALL SGEMM( 'T', 'N', K, K, M, ONE, X, LDX, Z, & 
+          ! B(1:M,1:K) = Z(1:M,1:K)                  ! INTRINSIC
+
+          CALL SGEMM( 'T', 'N', K, K, M, ONE, X, LDX, Z, &
                       LDZ, ZERO, S, LDS )                        ! BLAS CALL
           ! S(1:K,1:K) = MATMUL(TANSPOSE(X(1:M,1:K)),Z(1:M,1:K)) ! INTRINSIC
-          ! At this point S = U^T * A * U is the Rayleigh quotient.     
-      ELSE         
-        ! A * U(:,1:K) is not explicitly needed and the 
+          ! At this point S = U^T * A * U is the Rayleigh quotient.
+      ELSE
+        ! A * U(:,1:K) is not explicitly needed and the
         ! computation is organized differently. The Rayleigh
-        ! quotient is computed more efficiently.   
-        CALL SGEMM( 'T', 'N', K, N, M, ONE, X, LDX, Y, LDY, & 
+        ! quotient is computed more efficiently.
+        CALL SGEMM( 'T', 'N', K, N, M, ONE, X, LDX, Y, LDY, &
                    ZERO, Z, LDZ )                                   ! BLAS CALL
         ! Z(1:K,1:N) = MATMUL( TRANSPOSE(X(1:M,1:K)), Y(1:M,1:N) )  ! INTRINSIC
         ! In the two SGEMM calls here, can use K for LDZ
-        CALL SGEMM( 'N', T_OR_N, K, K, N, ONE, Z, LDZ, W, & 
-                    LDW, ZERO, S, LDS )                         ! BLAS CALL       
+        CALL SGEMM( 'N', T_OR_N, K, K, N, ONE, Z, LDZ, W, &
+                    LDW, ZERO, S, LDS )                         ! BLAS CALL
         ! S(1:K,1:K) = MATMUL(Z(1:K,1:N),TRANSPOSE(W(1:K,1:N))) ! INTRINSIC, for T_OR_N=='T'
         ! S(1:K,1:K) = MATMUL(Z(1:K,1:N),(W(1:N,1:K)))          ! INTRINSIC, for T_OR_N=='N'
         ! At this point S = U^T * A * U is the Rayleigh quotient.
-        ! If the residuals are requested, save scaled V_k into Z. 
+        ! If the residuals are requested, save scaled V_k into Z.
         ! Recall that V_k or V_k^T is stored in W.
         IF ( WNTRES .OR. WNTEX ) THEN
-          IF ( LSAME(T_OR_N, 'N') ) THEN 
+          IF ( LSAME(T_OR_N, 'N') ) THEN
               CALL SLACPY( 'A', N, K, W, LDW, Z, LDZ )
           ELSE
-              CALL SLACPY( 'A', K, N, W, LDW, Z, LDZ )           
-          END IF       
+              CALL SLACPY( 'A', K, N, W, LDW, Z, LDZ )
+          END IF
         END IF
       END IF
-!      
-      !<5> Compute the Ritz values and (if requested) the 
+!
+      !<5> Compute the Ritz values and (if requested) the
       !   right eigenvectors of the Rayleigh quotient.
       !
-      CALL SGEEV( 'N', JOBZL, K, S, LDS, REIG, IMEIG, W, & 
+      CALL SGEEV( 'N', JOBZL, K, S, LDS, REIG, IMEIG, W, &
                   LDW, W, LDW, WORK(N+1), LWORK-N, INFO1 )   ! LAPACK CALL
       !
-      ! W(1:K,1:K) contains the eigenvectors of the Rayleigh 
-      ! quotient. Even in the case of complex spectrum, all 
-      ! computation is done in real arithmetic. REIG and 
-      ! IMEIG are the real and the imaginary parts of the 
+      ! W(1:K,1:K) contains the eigenvectors of the Rayleigh
+      ! quotient. Even in the case of complex spectrum, all
+      ! computation is done in real arithmetic. REIG and
+      ! IMEIG are the real and the imaginary parts of the
       ! eigenvalues, so that the spectrum is given as
       ! REIG(:) + sqrt(-1)*IMEIG(:). Complex conjugate pairs
-      ! are listed at consecutive positions. For such a 
-      ! complex conjugate pair of the eigenvalues, the 
-      ! corresponding eigenvectors are also a complex 
-      ! conjugate pair with the real and imaginary parts 
-      ! stored column-wise in W at the corresponding 
+      ! are listed at consecutive positions. For such a
+      ! complex conjugate pair of the eigenvalues, the
+      ! corresponding eigenvectors are also a complex
+      ! conjugate pair with the real and imaginary parts
+      ! stored column-wise in W at the corresponding
       ! consecutive column indices. See the description of Z.
       ! Also, see the description of SGEEV.
       IF ( INFO1 > 0 ) THEN
-         ! SGEEV failed to compute the eigenvalues and 
-         ! eigenvectors of the Rayleigh quotient. 
-         INFO = 3 
+         ! SGEEV failed to compute the eigenvalues and
+         ! eigenvectors of the Rayleigh quotient.
+         INFO = 3
          RETURN
       END IF
-!      
-      ! <6> Compute the eigenvectors (if requested) and, 
+!
+      ! <6> Compute the eigenvectors (if requested) and,
       ! the residuals (if requested).
       !
-      IF ( WNTVEC .OR. WNTEX ) THEN        
+      IF ( WNTVEC .OR. WNTEX ) THEN
       IF ( WNTRES ) THEN
-          IF ( WNTREF ) THEN 
-            ! Here, if the refinement is requested, we have 
-            ! A*U(:,1:K) already computed and stored in Z. 
+          IF ( WNTREF ) THEN
+            ! Here, if the refinement is requested, we have
+            ! A*U(:,1:K) already computed and stored in Z.
             ! For the residuals, need Y = A * U(:,1;K) * W.
-            CALL SGEMM( 'N', 'N', M, K, K, ONE, Z, LDZ, W, & 
-                       LDW, ZERO, Y, LDY )               ! BLAS CALL 
+            CALL SGEMM( 'N', 'N', M, K, K, ONE, Z, LDZ, W, &
+                       LDW, ZERO, Y, LDY )               ! BLAS CALL
             ! Y(1:M,1:K) = Z(1:M,1:K) * W(1:K,1:K)       ! INTRINSIC
             ! This frees Z; Y contains A * U(:,1:K) * W.
           ELSE
-            ! Compute S = V_k * Sigma_k^(-1) * W, where  
-            ! V_k * Sigma_k^(-1) is stored in Z 
+            ! Compute S = V_k * Sigma_k^(-1) * W, where
+            ! V_k * Sigma_k^(-1) is stored in Z
             CALL SGEMM( T_OR_N, 'N', N, K, K, ONE, Z, LDZ, &
-                       W, LDW, ZERO, S, LDS ) 
-            ! Then, compute Z = Y * S = 
+                       W, LDW, ZERO, S, LDS )
+            ! Then, compute Z = Y * S =
             ! = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) =
             ! = A * U(:,1:K) * W(1:K,1:K)
             CALL SGEMM( 'N', 'N', M, K, N, ONE, Y, LDY, S, &
@@ -976,13 +976,13 @@
             ! the Ritz vectors.
             CALL SLACPY( 'A', M, K, Z, LDZ, Y, LDY )
             IF ( WNTEX ) CALL SLACPY( 'A', M, K, Z, LDZ, B, LDB )
-          END IF   
+          END IF
       ELSE IF ( WNTEX ) THEN
-          ! Compute S = V_k * Sigma_k^(-1) * W, where  
-            ! V_k * Sigma_k^(-1) is stored in Z 
+          ! Compute S = V_k * Sigma_k^(-1) * W, where
+            ! V_k * Sigma_k^(-1) is stored in Z
             CALL SGEMM( T_OR_N, 'N', N, K, K, ONE, Z, LDZ, &
-                       W, LDW, ZERO, S, LDS ) 
-            ! Then, compute Z = Y * S = 
+                       W, LDW, ZERO, S, LDS )
+            ! Then, compute Z = Y * S =
             ! = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) =
             ! = A * U(:,1:K) * W(1:K,1:K)
             CALL SGEMM( 'N', 'N', M, K, N, ONE, Y, LDY, S, &
@@ -995,28 +995,28 @@
             ! the Ritz vectors.
             ! CALL SLACPY( 'A', M, K, Z, LDZ, B, LDB )
       END IF
-!      
+!
       ! Compute the real form of the Ritz vectors
-      IF ( WNTVEC ) CALL SGEMM( 'N', 'N', M, K, K, ONE, X, LDX, W, LDW, & 
+      IF ( WNTVEC ) CALL SGEMM( 'N', 'N', M, K, K, ONE, X, LDX, W, LDW, &
                    ZERO, Z, LDZ )                           ! BLAS CALL
-      ! Z(1:M,1:K) = MATMUL(X(1:M,1:K), W(1:K,1:K))         ! INTRINSIC 
-!      
+      ! Z(1:M,1:K) = MATMUL(X(1:M,1:K), W(1:K,1:K))         ! INTRINSIC
+!
       IF ( WNTRES ) THEN
-         i = 1  
-         DO WHILE ( i <= K ) 
-            IF ( IMEIG(i) == ZERO ) THEN  
+         i = 1
+         DO WHILE ( i <= K )
+            IF ( IMEIG(i) == ZERO ) THEN
                 ! have a real eigenvalue with real eigenvector
                 CALL SAXPY( M, -REIG(i), Z(1,i), 1, Y(1,i), 1 )       ! BLAS CALL
                 ! Y(1:M,i) = Y(1:M,i) - REIG(i) * Z(1:M,i)            ! INTRINSIC
                 RES(i) = SNRM2( M, Y(1,i), 1 )                         ! BLAS CALL
-                i = i + 1 
+                i = i + 1
             ELSE
-               ! Have a complex conjugate pair 
+               ! Have a complex conjugate pair
                ! REIG(i) +- sqrt(-1)*IMEIG(i).
-               ! Since all computation is done in real 
+               ! Since all computation is done in real
                ! arithmetic, the formula for the residual
-               ! is recast for real representation of the 
-               ! complex conjugate eigenpair. See the 
+               ! is recast for real representation of the
+               ! complex conjugate eigenpair. See the
                ! description of RES.
                AB(1,1) =  REIG(i)
                AB(2,1) = -IMEIG(i)
@@ -1025,30 +1025,30 @@
                CALL SGEMM( 'N', 'N', M, 2, 2, -ONE, Z(1,i), &
                            LDZ, AB, 2, ONE, Y(1,i), LDY )          ! BLAS CALL
                ! Y(1:M,i:i+1) = Y(1:M,i:i+1) - Z(1:M,i:i+1) * AB   ! INTRINSIC
-               RES(i)   = SLANGE( 'F', M, 2, Y(1,i), LDY, & 
-                                  WORK(N+1) )                      ! LAPACK CALL 
+               RES(i)   = SLANGE( 'F', M, 2, Y(1,i), LDY, &
+                                  WORK(N+1) )                      ! LAPACK CALL
                RES(i+1) = RES(i)
-               i = i + 2     
-            END IF         
+               i = i + 2
+            END IF
          END DO
       END IF
-      END IF 
-!      
-      IF ( WHTSVD == 4 ) THEN 
+      END IF
+!
+      IF ( WHTSVD == 4 ) THEN
           WORK(N+1) = XSCL1
           WORK(N+2) = XSCL2
-      END IF      
-!      
-!     Successful exit.     
-      IF ( .NOT. BADXY ) THEN 
+      END IF
+!
+!     Successful exit.
+      IF ( .NOT. BADXY ) THEN
          INFO = 0
       ELSE
-         ! A warning on possible data inconsistency. 
-         ! This should be a rare event. 
+         ! A warning on possible data inconsistency.
+         ! This should be a rare event.
          INFO = 4
       END IF
-!............................................................      
+!............................................................
       RETURN
 !     ......
-      END SUBROUTINE SGEDMD 
-    
+      END SUBROUTINE SGEDMD
+
