@@ -567,8 +567,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGET23, SLABAD, SLASUM, SLATME, SLATMR, SLATMS,
-     $                   SLASET, XERBLA
+      EXTERNAL           SGET23, SLASUM, SLATME, SLATMR, SLATMS, SLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -643,7 +643,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

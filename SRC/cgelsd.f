@@ -255,7 +255,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CGEBRD, CGELQF, CGEQRF, CLACPY,
      $                   CLALSD, CLASCL, CLASET, CUNMBR,
-     $                   CUNMLQ, CUNMQR, SLABAD, SLASCL,
+     $                   CUNMLQ, CUNMQR, SLASCL,
      $                   SLASET, XERBLA
 *     ..
 *     .. External Functions ..
@@ -402,7 +402,6 @@
       SFMIN = SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max entry outside range [SMLNUM,BIGNUM].
 *

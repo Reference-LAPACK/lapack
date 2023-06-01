@@ -452,7 +452,7 @@
       EXTERNAL           SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEEV, SGET22, SLABAD, SLACPY, SLASUM, SLATME,
+      EXTERNAL           SGEEV, SGET22, SLACPY, SLASUM, SLATME,
      $                   SLATMR, SLATMS, SLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -525,7 +525,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

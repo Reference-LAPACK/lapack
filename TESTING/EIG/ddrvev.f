@@ -452,7 +452,7 @@
       EXTERNAL           DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEEV, DGET22, DLABAD, DLACPY, DLASET, DLASUM,
+      EXTERNAL           DGEEV, DGET22, DLACPY, DLASET, DLASUM,
      $                   DLATME, DLATMR, DLATMS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -525,7 +525,6 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )

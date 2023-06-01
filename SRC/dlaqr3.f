@@ -307,9 +307,8 @@
       EXTERNAL           DLAMCH, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEHRD, DGEMM, DLABAD, DLACPY, DLAHQR,
-     $                   DLANV2, DLAQR4, DLARF, DLARFG, DLASET, DORMHR,
-     $                   DTREXC
+      EXTERNAL           DCOPY, DGEHRD, DGEMM, DLACPY, DLAHQR, DLANV2,
+     $                   DLAQR4, DLARF, DLARFG, DLASET, DORMHR, DTREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN, SQRT
@@ -367,7 +366,6 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *

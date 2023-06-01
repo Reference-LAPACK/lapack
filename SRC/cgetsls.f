@@ -192,7 +192,7 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, SLABAD, SLAMCH, CLANGE
+      EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEQR, CGEMQR, CLASCL, CLASET,
@@ -297,7 +297,6 @@
 *
        SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
        BIGNUM = ONE / SMLNUM
-       CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *

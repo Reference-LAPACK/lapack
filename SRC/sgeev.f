@@ -223,9 +223,8 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLABAD, SLACPY,
-     $                   SLARTG, SLASCL, SORGHR, SROT, SSCAL, STREVC3,
-     $                   XERBLA
+      EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLACPY, SLARTG,
+     $                   SLASCL, SORGHR, SROT, SSCAL, STREVC3, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -336,7 +335,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *

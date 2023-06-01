@@ -133,7 +133,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )*FOUR / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *

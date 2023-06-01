@@ -348,7 +348,7 @@
       EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGEMV, ZLACPY, ZTGEXC, ZTGSYL
+      EXTERNAL           XERBLA, ZGEMV, ZLACPY, ZTGEXC, ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -428,7 +428,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       KS = 0
       DO 20 K = 1, N
 *

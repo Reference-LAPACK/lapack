@@ -321,9 +321,8 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLABAD,
-     $                   SLACPY, SLASCL, SLASET, SORGQR, SORMQR, STGSEN,
-     $                   XERBLA
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
+     $                   SLASCL, SLASET, SORGQR, SORMQR, STGSEN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -431,7 +430,6 @@
       EPS = SLAMCH( 'P' )
       SAFMIN = SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
       SMLNUM = SQRT( SAFMIN ) / EPS
       BIGNUM = ONE / SMLNUM
 *

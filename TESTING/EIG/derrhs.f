@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> DERRHS tests the error exits for DGEBAK, DGEBAL, DGEHRD, DORGHR,
-*> DORMHR, DHSEQR, DHSEIN, DTREVC, and DTREVC3.
+*> DERRHS tests the error exits for DGEBAK, DGEBAL, DGEHRD, DGEHD2,
+*> DORGHR, DORMHR, DHSEQR, DHSEIN, DTREVC, and DTREVC3.
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGEBAK, DGEBAL, DGEHRD, DHSEIN, DHSEQR,
-     $                   DORGHR, DORMHR, DTREVC, DTREVC3
+     $                   DORGHR, DORMHR, DTREVC, DTREVC3, DGEHD2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -193,6 +193,29 @@
          CALL DGEHRD( 2, 1, 2, A, 2, TAU, W, 1, INFO )
          CALL CHKXER( 'DGEHRD', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        DGEHD2
+*
+         SRNAMT = 'DGEHD2'
+         INFOT = 1
+         CALL DGEHD2( -1, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGEHD2( 0, 0, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGEHD2( 0, 2, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGEHD2( 1, 1, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGEHD2( 0, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DGEHD2( 2, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'DGEHD2', INFOT, NOUT, LERR, OK )
+         NT = NT + 6
 *
 *        DORGHR
 *

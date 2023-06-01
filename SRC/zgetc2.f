@@ -132,7 +132,7 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGERU, ZSWAP, DLABAD
+      EXTERNAL           ZGERU, ZSWAP
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -155,7 +155,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Handle the case N=1 by itself
 *

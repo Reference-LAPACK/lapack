@@ -544,8 +544,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01,
      $                   DBDT02, DBDT03, DBDT04, DCOPY, DGEBRD,
-     $                   DGEMM, DLABAD, DLACPY, DLAHD2, DLASET,
-     $                   DLATMR, DLATMS, DORGBR, DORT01, XERBLA
+     $                   DGEMM, DLACPY, DLAHD2, DLASET, DLATMR,
+     $                   DLATMS, DORGBR, DORT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -627,7 +627,6 @@
       NTEST = 0
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )

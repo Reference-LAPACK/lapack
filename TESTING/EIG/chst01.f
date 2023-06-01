@@ -166,7 +166,7 @@
       EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CUNT01, SLABAD
+      EXTERNAL           CGEMM, CLACPY, CUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN
@@ -184,7 +184,6 @@
       UNFL = SLAMCH( 'Safe minimum' )
       EPS = SLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )

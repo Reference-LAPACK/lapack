@@ -138,7 +138,7 @@
       COMPLEX*16         TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASWP, ZSCAL, DLABAD
+      EXTERNAL           ZLASWP, ZSCAL
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX
@@ -155,7 +155,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *

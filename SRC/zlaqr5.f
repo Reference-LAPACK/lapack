@@ -300,8 +300,7 @@
       COMPLEX*16         VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZLACPY, ZLAQR1, ZLARFG, ZLASET,
-     $                   ZTRMM
+      EXTERNAL           ZGEMM, ZLACPY, ZLAQR1, ZLARFG, ZLASET, ZTRMM
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -331,7 +330,6 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *

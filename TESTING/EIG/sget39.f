@@ -130,7 +130,7 @@
       EXTERNAL           ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLABAD, SLAQTR
+      EXTERNAL           SCOPY, SGEMV, SLAQTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, MAX, REAL, SIN, SQRT
@@ -159,7 +159,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *

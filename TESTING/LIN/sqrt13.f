@@ -117,7 +117,7 @@
       EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLARNV, SLASCL
+      EXTERNAL           SLARNV, SLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SIGN
@@ -146,7 +146,6 @@
          NORMA = SLANGE( 'Max', M, N, A, LDA, DUMMY )
          SMLNUM = SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL SLABAD( SMLNUM, BIGNUM )
          SMLNUM = SMLNUM / SLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *

@@ -212,10 +212,9 @@
       COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY,
-     $                   ZDRSCL, ZGEBRD, ZGELQF, ZGEMM, ZGEMV, ZGEQRF,
-     $                   ZLACPY, ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ,
-     $                   ZUNMQR
+      EXTERNAL           DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY, ZDRSCL,
+     $                   ZGEBRD, ZGELQF, ZGEMM, ZGEMV, ZGEQRF, ZLACPY,
+     $                   ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -388,7 +387,6 @@
       SFMIN = DLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *

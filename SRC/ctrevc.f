@@ -253,7 +253,7 @@
       EXTERNAL           LSAME, ICAMAX, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMV, CLATRS, CSSCAL, SLABAD, XERBLA
+      EXTERNAL           CCOPY, CGEMV, CLATRS, CSSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, REAL
@@ -319,7 +319,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *

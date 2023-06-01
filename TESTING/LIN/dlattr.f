@@ -166,7 +166,7 @@
       EXTERNAL           LSAME, IDAMAX, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLABAD, DLARNV, DLATB4, DLATMS, DROT,
+      EXTERNAL           DCOPY, DLARNV, DLATB4, DLATMS, DROT,
      $                   DROTG, DSCAL, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -180,7 +180,6 @@
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE

@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
     - name: Set configurations
       run: |
         echo "SHELL = /bin/sh" >> make.inc
@@ -76,7 +76,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
     - name: Set configurations
       run: |
         echo "SHELL = /bin/sh" >> make.inc

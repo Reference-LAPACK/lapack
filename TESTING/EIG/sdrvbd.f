@@ -420,8 +420,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGEJSV, SGESDD, SGESVD,
-     $                   SGESVDQ, SGESVDX, SGESVJ, SLABAD, SLACPY,
-     $                   SLASET, SLATMS, SORT01, SORT03, XERBLA
+     $                   SGESVDQ, SGESVDX, SGESVJ, SLACPY, SLASET,
+     $                   SLATMS, SORT01, SORT03, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, INT, MAX, MIN
@@ -497,7 +497,6 @@
       NTEST = 0
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       RTUNFL = SQRT( UNFL )
       ULPINV = ONE / ULP

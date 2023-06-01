@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> SERRHS tests the error exits for SGEBAK, SGEBAL, SGEHRD, SORGHR,
-*> SORMHR, SHSEQR, SHSEIN, STREVC, and STREVC3.
+*> SERRHS tests the error exits for SGEBAK, SGEBAL, SGEHRD, SGEHD2,
+*> SORGHR, SORMHR, SHSEQR, SHSEIN, STREVC, and STREVC3.
 *> \endverbatim
 *
 *  Arguments:
@@ -85,7 +85,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, SGEBAK, SGEBAL, SGEHRD, SHSEIN, SHSEQR,
-     $                   SORGHR, SORMHR, STREVC, STREVC3
+     $                   SORGHR, SORMHR, STREVC, STREVC3, SGEHD2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -192,6 +192,29 @@
          CALL SGEHRD( 2, 1, 2, A, 2, TAU, W, 1, INFO )
          CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        SGEHD2
+*
+         SRNAMT = 'SGEHD2'
+         INFOT = 1
+         CALL SGEHD2( -1, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGEHD2( 0, 0, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGEHD2( 0, 2, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGEHD2( 1, 1, 0, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGEHD2( 0, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGEHD2( 2, 1, 1, A, 1, TAU, W, INFO )
+         CALL CHKXER( 'SGEHD2', INFOT, NOUT, LERR, OK )
+         NT = NT + 6
 *
 *        SORGHR
 *

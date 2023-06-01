@@ -420,8 +420,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DBDT01, DGEJSV, DGESDD, DGESVD,
-     $                   DGESVDQ, DGESVDX, DGESVJ, DLABAD, DLACPY,
-     $                   DLASET, DLATMS, DORT01, DORT03, XERBLA
+     $                   DGESVDQ, DGESVDX, DGESVJ, DLACPY, DLASET,
+     $                   DLATMS, DORT01, DORT03, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN
@@ -497,7 +497,6 @@
       NTEST = 0
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       RTUNFL = SQRT( UNFL )
       ULPINV = ONE / ULP

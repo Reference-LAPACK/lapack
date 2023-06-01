@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-    - try-github-actions
+    - try-github-actions-for-windows
     paths:
     - .github/workflows/cmake.yml
     - '**CMakeLists.txt'
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ macos-latest, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
         fflags: [
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
@@ -70,28 +70,30 @@ jobs:
     steps:
     
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Use GCC-11 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
       run: >
-        cmake -B build
+        cmake -B build -G Ninja
         -D CMAKE_C_COMPILER="gcc-11"
         -D CMAKE_Fortran_COMPILER="gfortran-11"
         -D USE_FLAT_NAMESPACE:BOOL=ON
 
-    # - name: Use Unix Makefiles on Windows
-    #   if: ${{ matrix.os == 'windows-latest' }}
-    #   run: >
-    #     cmake -B build
-    #     -G "Unix Makefiles"
-    #     -D CMAKE_C_FLAGS="${{env.CFLAGS}} -Wl,--stack=1000000000"
+    - name: Special flags for Windows
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_EXE_LINKER_FLAGS="-Wl,--stack=2097152"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
-        cmake -B build
+        cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
@@ -107,18 +109,18 @@ jobs:
       run: |
         ctest -D ExperimentalStart
         ctest -D ExperimentalConfigure
-        ctest -D ExperimentalBuild -j2
+        ctest -D ExperimentalBuild
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
-      if: ${{ contains( matrix.fflags, 'openmp' ) }}
+      if: ${{ contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
       run: |
         ctest -D ExperimentalTest --schedule-random -j1 --output-on-failure --timeout 100
         ctest -D ExperimentalSubmit
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      if: ${{ !contains( matrix.fflags, 'openmp' ) }}
+      if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
       run: |
         ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure --timeout 100
         ctest -D ExperimentalSubmit
@@ -134,7 +136,7 @@ jobs:
     steps:     
     
     - name: Checkout LAPACK
-      uses: actions/checkout@v2
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.

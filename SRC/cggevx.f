@@ -416,7 +416,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CTGSNA, CUNGQR, CUNMQR,
-     $                   SLABAD, SLASCL, XERBLA
+     $                   SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -545,7 +545,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *

@@ -348,7 +348,7 @@
       EXTERNAL           LSAME, SCNRM2, SLAMCH, SLAPY2, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL, SLABAD, XERBLA
+      EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX
@@ -428,7 +428,6 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       KS = 0
       DO 20 K = 1, N
 *

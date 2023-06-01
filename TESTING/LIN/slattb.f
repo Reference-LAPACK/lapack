@@ -168,8 +168,7 @@
       EXTERNAL           LSAME, ISAMAX, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLABAD, SLARNV, SLATB4, SLATMS, SSCAL,
-     $                   SSWAP
+      EXTERNAL           SCOPY, SLARNV, SLATB4, SLATMS, SSCAL, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN, SQRT
@@ -182,7 +181,6 @@
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.6 .AND. IMAT.LE.9 ) .OR. IMAT.EQ.17 ) THEN
          DIAG = 'U'
       ELSE

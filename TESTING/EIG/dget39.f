@@ -130,7 +130,7 @@
       EXTERNAL           IDAMAX, DASUM, DDOT, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DLABAD, DLAQTR
+      EXTERNAL           DCOPY, DGEMV, DLAQTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, DBLE, MAX, SIN, SQRT
@@ -159,7 +159,6 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *

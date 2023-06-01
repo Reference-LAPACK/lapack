@@ -204,7 +204,7 @@
       EXTERNAL           LSAME, IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLABAD, DSCAL, DTBMV
+      EXTERNAL           DAXPY, DCOPY, DSCAL, DTBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX
@@ -220,7 +220,6 @@
       EPS = DLAMCH( 'Epsilon' )
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Compute the norm of the triangular matrix A using the column
 *     norms already computed by DLATBS.

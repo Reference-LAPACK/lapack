@@ -548,8 +548,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGET23, CLATME, CLATMR, CLATMS, CLASET, SLABAD,
-     $                   SLASUM, XERBLA
+      EXTERNAL           CGET23, CLATME, CLATMR, CLATMS, CLASET, SLASUM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -624,7 +624,6 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
