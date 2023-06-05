@@ -25,6 +25,7 @@ CBLAS/examples/cblas_ex2
 # LAPACK testing
 TESTING/LIN/xlintst*
 TESTING/EIG/xeigtst*
+TESTING/EIG/xdmd*
 TESTING/*.out
 TESTING/*.txt
 !TESTING/CMakeLists.txt

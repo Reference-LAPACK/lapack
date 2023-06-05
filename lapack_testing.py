@@ -199,6 +199,8 @@ elif test=='mixed':
     range_prec=[1,3]
 elif test=='rfp':
     range_test=[18]
+elif test=='dmd':
+    range_test=[20]
 elif test=='eig':
     range_test=list(range(16))
 else:
@@ -227,19 +229,19 @@ for dtype in range_prec:
     letter+"gd",letter+"sb",letter+"sg",
     letter+"bb","glm","gqr",
     "gsv","csd","lse",
-    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp"),
+    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
     ("Nonsymmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem-2-stage", "Singular-Value-Decomposition",
     "Eigen-Condition","Nonsymmetric-Eigenvalue","Nonsymmetric-Generalized-Eigenvalue-Problem",
     "Nonsymmetric-Generalized-Eigenvalue-Problem-driver", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Generalized-Problem",
     "Banded-Singular-Value-Decomposition-routines", "Generalized-Linear-Regression-Model-routines", "Generalized-QR-and-RQ-factorization-routines",
     "Generalized-Singular-Value-Decomposition-routines", "CS-Decomposition-routines", "Constrained-Linear-Least-Squares-routines",
-    "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines"),
+    "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines","Dynamic-Mode-Decomposition"),
     (letter+"nep", letter+"sep", letter+"se2", letter+"svd",
     letter+"ec",letter+"ed",letter+"gg",
     letter+"gd",letter+"sb",letter+"sg",
     letter+"bb",letter+"glm",letter+"gqr",
     letter+"gsv",letter+"csd",letter+"lse",
-    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp"),
+    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
     )
 
 
@@ -260,6 +262,9 @@ for dtype in range_prec:
             elif dtest==18:
                 # PROTO LIN TESTS
                 cmdbase="xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+            elif dtest==20:
+                # DMD EIG TESTS
+                cmdbase="xdmdeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             else:
                 # EIG TESTS
                 cmdbase="xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
