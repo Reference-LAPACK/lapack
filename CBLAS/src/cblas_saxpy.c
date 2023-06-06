@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_saxpy( const CBLAS_INT N, const float alpha, const float *X,
+void API_SUFFIX(cblas_saxpy)( const CBLAS_INT N, const float alpha, const float *X,
                        const CBLAS_INT incX, float *Y, const CBLAS_INT incY)
 {
 #ifdef F77_INT
