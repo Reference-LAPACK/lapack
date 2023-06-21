@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-double API_SUFFIX(cblas_dznrm2)( const CBLAS_INT N, const void *X, const CBLAS_INT incX)
+double cblas_dznrm2( const CBLAS_INT N, const void *X, const CBLAS_INT incX)
 {
    double nrm2;
 #ifdef F77_INT

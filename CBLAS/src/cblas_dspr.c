@@ -9,7 +9,7 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_dspr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
+void cblas_dspr(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                 const CBLAS_INT N, const double alpha, const double *X,
                 const CBLAS_INT incX, double *Ap)
 {
@@ -36,7 +36,7 @@ void API_SUFFIX(cblas_dspr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasUpper) UL = 'U';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_dspr","Illegal Uplo setting, %d\n",Uplo );
+         cblas_xerbla(2, "cblas_dspr","Illegal Uplo setting, %d\n",Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -54,7 +54,7 @@ void API_SUFFIX(cblas_dspr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasUpper) UL = 'L';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_dspr","Illegal Uplo setting, %d\n",Uplo );
+         cblas_xerbla(2, "cblas_dspr","Illegal Uplo setting, %d\n",Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -63,7 +63,7 @@ void API_SUFFIX(cblas_dspr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
          F77_UL = C2F_CHAR(&UL);
       #endif
       F77_dspr(F77_UL, &F77_N, &alpha, X, &F77_incX, Ap);
-   } else API_SUFFIX(cblas_xerbla)(1, "cblas_dspr", "Illegal layout setting, %d\n", layout);
+   } else cblas_xerbla(1, "cblas_dspr", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

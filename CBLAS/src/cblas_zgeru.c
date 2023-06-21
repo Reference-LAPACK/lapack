@@ -7,7 +7,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_zgeru)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
+void cblas_zgeru(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
                  const void *alpha, const void *X, const CBLAS_INT incX,
                  const void *Y, const CBLAS_INT incY, void *A, const CBLAS_INT lda)
 {
@@ -37,7 +37,7 @@ void API_SUFFIX(cblas_zgeru)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
       F77_zgeru( &F77_N, &F77_M, alpha, Y, &F77_incY, X, &F77_incX, A,
                       &F77_lda);
    }
-   else API_SUFFIX(cblas_xerbla)(1, "cblas_zgeru", "Illegal layout setting, %d\n", layout);
+   else cblas_xerbla(1, "cblas_zgeru", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

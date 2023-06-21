@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_ssbmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
+void cblas_ssbmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
            const CBLAS_INT N, const CBLAS_INT K, const float alpha, const float *A,
            const CBLAS_INT lda, const float *X, const CBLAS_INT incX,
            const float beta, float *Y, const CBLAS_INT incY)
@@ -41,7 +41,7 @@ void API_SUFFIX(cblas_ssbmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasLower) UL = 'L';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_ssbmv","Illegal Uplo setting, %d\n",Uplo );
+         cblas_xerbla(2, "cblas_ssbmv","Illegal Uplo setting, %d\n",Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -58,7 +58,7 @@ void API_SUFFIX(cblas_ssbmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasLower) UL = 'U';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_ssbmv","Illegal Uplo setting, %d\n", Uplo);
+         cblas_xerbla(2, "cblas_ssbmv","Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -69,7 +69,7 @@ void API_SUFFIX(cblas_ssbmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       F77_ssbmv(F77_UL, &F77_N, &F77_K, &alpha, A, &F77_lda, X,
       &F77_incX, &beta, Y, &F77_incY);
    }
-   else API_SUFFIX(cblas_xerbla)(1, "cblas_ssbmv", "Illegal layout setting, %d\n", layout);
+   else cblas_xerbla(1, "cblas_ssbmv", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;
