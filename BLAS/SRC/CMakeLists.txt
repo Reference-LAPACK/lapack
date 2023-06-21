@@ -109,35 +109,7 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${BLASLIB}_obj OBJECT ${SOURCES})
-target_compile_options(${BLASLIB}_obj PRIVATE -fPIC)
-
-if(BUILD_INDEX64_EXT_API)
-  #Add _64 suffix to all Fortran functions via macros
-  set(COPT_64_F)
-  list(APPEND COPT_64_F -cpp)
-  foreach(F IN LISTS SOURCES)
-      file(STRINGS ${F} ${F}.lst)
-      list(FILTER ${F}.lst INCLUDE REGEX "subroutine|SUBROUTINE|external|EXTERNAL|function|FUNCTION")
-      list(FILTER ${F}.lst EXCLUDE REGEX "^!.*")
-      list(FILTER ${F}.lst EXCLUDE REGEX "^[*].*")
-      list(FILTER ${F}.lst EXCLUDE REGEX "end|END")
-      foreach(FUNC IN LISTS ${F}.lst)
-        string(REGEX REPLACE "^[a-zA-Z0-9_ *]*(subroutine|SUBROUTINE|external|EXTERNAL|function|FUNCTION)[ ]*[*]?" "" FUNC ${FUNC})
-        string(REGEX REPLACE "[(][a-zA-Z0-9_, )]*$" "" FUNC ${FUNC})
-        string(STRIP ${FUNC} FUNC)
-        list(APPEND COPT_64_F "-D${FUNC}=${FUNC}_64")
-      endforeach()
-  endforeach()
-  list(REMOVE_DUPLICATES COPT_64_F)
-  add_library(${BLASLIB}_64_obj OBJECT ${SOURCES})
-  target_compile_options(${BLASLIB}_64_obj PRIVATE -fPIC ${FOPT_ILP64} ${COPT_64_F})
-endif()
-
-add_library(${BLASLIB}
-        $<TARGET_OBJECTS:${BLASLIB}_obj>
-        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>)
-
+add_library(${BLASLIB} ${SOURCES})
 set_target_properties(
   ${BLASLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}

@@ -9,7 +9,7 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
+void cblas_strsm(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
                  const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
                  const CBLAS_DIAG Diag, const CBLAS_INT M, const CBLAS_INT N,
                  const float alpha, const float  *A, const CBLAS_INT lda,
@@ -46,7 +46,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Side == CblasLeft ) SD='L';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_strsm", "Illegal Side setting, %d\n", Side);
+         cblas_xerbla(2, "cblas_strsm", "Illegal Side setting, %d\n", Side);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -55,7 +55,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Uplo == CblasLower ) UL='L';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_strsm", "Illegal Uplo setting, %d\n", Uplo);
+         cblas_xerbla(3, "cblas_strsm", "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -65,7 +65,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( TransA == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_strsm", "Illegal Trans setting, %d\n", TransA);
+         cblas_xerbla(4, "cblas_strsm", "Illegal Trans setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -74,7 +74,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Diag == CblasNonUnit ) DI='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(5, "cblas_strsm", "Illegal Diag setting, %d\n", Diag);
+         cblas_xerbla(5, "cblas_strsm", "Illegal Diag setting, %d\n", Diag);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -94,7 +94,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Side == CblasLeft ) SD='R';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_strsm", "Illegal Side setting, %d\n", Side);
+         cblas_xerbla(2, "cblas_strsm", "Illegal Side setting, %d\n", Side);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -103,7 +103,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Uplo == CblasLower ) UL='U';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_strsm", "Illegal Uplo setting, %d\n", Uplo);
+         cblas_xerbla(3, "cblas_strsm", "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -113,7 +113,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( TransA == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_strsm", "Illegal Trans setting, %d\n", TransA);
+         cblas_xerbla(4, "cblas_strsm", "Illegal Trans setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -122,7 +122,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
       else if ( Diag == CblasNonUnit ) DI='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(5, "cblas_strsm", "Illegal Diag setting, %d\n", Diag);
+         cblas_xerbla(5, "cblas_strsm", "Illegal Diag setting, %d\n", Diag);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -136,7 +136,7 @@ void API_SUFFIX(cblas_strsm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
 
       F77_strsm(F77_SD, F77_UL, F77_TA, F77_DI, &F77_N, &F77_M, &alpha, A, &F77_lda, B, &F77_ldb);
    }
-   else  API_SUFFIX(cblas_xerbla)(1, "cblas_strsm", "Illegal layout setting, %d\n", layout);
+   else  cblas_xerbla(1, "cblas_strsm", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

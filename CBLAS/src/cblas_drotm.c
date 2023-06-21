@@ -1,6 +1,6 @@
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_drotm)( const CBLAS_INT N, double *X, const CBLAS_INT incX, double *Y,
+void cblas_drotm( const CBLAS_INT N, double *X, const CBLAS_INT incX, double *Y,
                        const CBLAS_INT incY, const double *P)
 {
 #ifdef F77_INT

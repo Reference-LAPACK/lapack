@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-CBLAS_INDEX API_SUFFIX(cblas_izamax)( const CBLAS_INT N, const void *X, const CBLAS_INT incX)
+CBLAS_INDEX cblas_izamax( const CBLAS_INT N, const void *X, const CBLAS_INT incX)
 {
 #ifdef F77_INT
    F77_INT F77_N=N, F77_incX=incX, F77_iamax;

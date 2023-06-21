@@ -99,8 +99,6 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-# By default build standard API and extended _64 API
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
 
 include(GNUInstallDirs)
 

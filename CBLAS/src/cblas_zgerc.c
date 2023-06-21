@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
+void cblas_zgerc(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
                  const void *alpha, const void *X, const CBLAS_INT incX,
                  const void *Y, const CBLAS_INT incY, void *A, const CBLAS_INT lda)
 {
@@ -77,7 +77,7 @@ void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
       if(Y!=y)
          free(y);
 
-   } else API_SUFFIX(cblas_xerbla)(1, "cblas_zgerc", "Illegal layout setting, %d\n", layout);
+   } else cblas_xerbla(1, "cblas_zgerc", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

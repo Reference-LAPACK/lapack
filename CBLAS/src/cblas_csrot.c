@@ -6,7 +6,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_csrot)(const CBLAS_INT N, void *X, const CBLAS_INT incX,
+void cblas_csrot(const CBLAS_INT N, void *X, const CBLAS_INT incX,
    void *Y, const CBLAS_INT incY, const float c, const float s)
 {
 #ifdef F77_INT

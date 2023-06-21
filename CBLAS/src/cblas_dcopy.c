@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_dcopy)( const CBLAS_INT N, const double *X,
+void cblas_dcopy( const CBLAS_INT N, const double *X,
                       const CBLAS_INT incX, double *Y, const CBLAS_INT incY)
 {
 #ifdef F77_INT
