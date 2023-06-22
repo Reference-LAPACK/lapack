@@ -168,5 +168,5 @@ target_include_directories(${CBLASLIB} PUBLIC
   $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(${CBLASLIB} PRIVATE ${BLAS_LIBRARIES})
+target_link_libraries(${CBLASLIB} PUBLIC ${BLAS_LIBRARIES})
 lapack_install_library(${CBLASLIB})
