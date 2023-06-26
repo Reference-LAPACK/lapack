@@ -105,7 +105,7 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      COMPLEX            ZLADIV
+      COMPLEX*16         ZLADIV
       EXTERNAL           DLAMCH, ZLADIV
 *     ..
 *     .. External Subroutines ..
@@ -164,7 +164,8 @@
 *
          IF( (ABS( UR ).LT.SAFMIN).OR.(ABS( UI ).LT.SAFMIN) ) THEN
 *           This means that both alphaR and alphaI are very small.
-            CALL ZSCAL( N, DCMPLX( SAFMIN / UR, -SAFMIN / UI ), X, INCX )
+            CALL ZSCAL( N, DCMPLX( SAFMIN / UR, -SAFMIN / UI ), X,
+     $                  INCX )
             CALL ZDSCAL( N, SAFMAX, X, INCX )
          ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
             IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
@@ -183,7 +184,8 @@
                      UR = (SAFMIN * AR) + AI * ( (SAFMIN * AI) / AR )
                      UI = (SAFMIN * AI) + SAFMIN * (AR * ( AR / AI ))
                   END IF
-                  CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X, INCX )
+                  CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X,
+     $                        INCX )
                ELSE
                   CALL ZSCAL( N, DCMPLX( SAFMAX / UR, -SAFMAX / UI ),
      $                        X, INCX )
