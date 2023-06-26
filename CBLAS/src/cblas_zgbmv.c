@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zgbmv(const CBLAS_LAYOUT layout,
+void API_SUFFIX(cblas_zgbmv)(const CBLAS_LAYOUT layout,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_INT M, const CBLAS_INT N,
                  const CBLAS_INT KL, const CBLAS_INT KU,
                  const void *alpha, const void  *A, const CBLAS_INT lda,
@@ -51,7 +51,7 @@ void cblas_zgbmv(const CBLAS_LAYOUT layout,
       else if (TransA == CblasConjTrans) TA = 'C';
       else
       {
-         cblas_xerbla(2, "cblas_zgbmv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zgbmv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -131,7 +131,7 @@ void cblas_zgbmv(const CBLAS_LAYOUT layout,
       }
       else
       {
-         cblas_xerbla(2, "cblas_zgbmv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zgbmv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -159,7 +159,7 @@ void cblas_zgbmv(const CBLAS_LAYOUT layout,
          }
       }
    }
-   else cblas_xerbla(1, "cblas_zgbmv", "Illegal layout setting, %d\n", layout);
+   else API_SUFFIX(cblas_xerbla)(1, "cblas_zgbmv", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

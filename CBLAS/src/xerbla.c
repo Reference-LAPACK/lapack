@@ -40,7 +40,7 @@ F77_xerbla_base
    {
       for(i=0; i != XerblaStrLen; i++) rout[i+6] = tolower(srname[i]);
       rout[XerblaStrLen+6] = '\0';
-      cblas_xerbla(*info+1,rout,"");
+      API_SUFFIX(cblas_xerbla)(*info+1,rout,"");
    }
    else
    {

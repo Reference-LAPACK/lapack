@@ -183,7 +183,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      SUBROUTINE CGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,
+     +         BETA,C,LDC)
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
