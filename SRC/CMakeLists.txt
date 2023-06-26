@@ -427,7 +427,7 @@ set(ZLASRC
    zppcon.f zppequ.f zpprfs.f zppsv.f  zppsvx.f zpptrf.f zpptri.f zpptrs.f
    zptcon.f zpteqr.f zptrfs.f zptsv.f  zptsvx.f zpttrf.f zpttrs.f zptts2.f
    zrot.f   zspcon.f zspmv.f  zspr.f   zsprfs.f zspsv.f
-   zspsvx.f zsptrf.f zsptri.f zsptrs.f zdrscl.f zstedc.f
+   zspsvx.f zsptrf.f zsptri.f zsptrs.f zdrscl.f zrscl.f zstedc.f
    zstegr.f zstein.f zsteqr.f zsycon.f zsymv.f
    zsyr.f   zsyrfs.f zsysv.f  zsysvx.f zsytf2.f zsytrf.f zsytri.f
    zsytri2.f zsytri2x.f zsyswapr.f
