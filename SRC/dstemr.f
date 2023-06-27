@@ -344,7 +344,8 @@
      $                     MINRGP = 1.0D-3 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY
+      LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY,
+     $                   DLAESWAP 
       INTEGER            I, IBEGIN, IEND, IFIRST, IIL, IINDBL, IINDW,
      $                   IINDWK, IINFO, IINSPL, IIU, ILAST, IN, INDD,
      $                   INDE2, INDERR, INDGP, INDGRS, INDWRK, ITMP,
@@ -380,6 +381,7 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ).OR.( LIWORK.EQ.-1 ) )
       ZQUERY = ( NZC.EQ.-1 )
+      DLAESWAP = .FALSE.
 
 *     DSTEMR needs WORK of size 6*N, IWORK of size 3*N.
 *     In addition, DLARRE needs WORK of size 6*N, IWORK of size 5*N.
@@ -505,15 +507,11 @@
 *        DLAE2 and DLAEV2 outputs satisfy |R1| >= |R2|. However,
 *        the following DSTEMR requires R1 >= R2. Hence, we correct
 *        the order of R1, R2, CS, SN if R1 < R2 before further processing.
-         IF(R1.LT.R2) THEN
+         IF( R1.LT.R2 ) THEN
             E(2) = R1
             R1 = R2
             R2 = E(2)
-            IF(WANTZ.AND.(.NOT.ZQUERY)) THEN
-               E(2) = CS
-               CS = -SN
-               SN = E(2)
-            ENDIF
+            DLAESWAP = .TRUE.
          ENDIF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
@@ -522,8 +520,13 @@
             M = M+1
             W( M ) = R2
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               Z( 1, M ) = -SN
-               Z( 2, M ) = CS
+               IF( DLAESWAP ) THEN
+                  Z( 1, M ) = CS
+                  Z( 2, M ) = SN
+               ELSE
+                  Z( 1, M ) = -SN
+                  Z( 2, M ) = CS
+               ENDIF
 *              Note: At most one of SN and CS can be zero.
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
@@ -546,8 +549,13 @@
             M = M+1
             W( M ) = R1
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               Z( 1, M ) = CS
-               Z( 2, M ) = SN
+               IF( DLAESWAP ) THEN
+                  Z( 1, M ) = -SN
+                  Z( 2, M ) = CS
+               ELSE
+                  Z( 1, M ) = CS
+                  Z( 2, M ) = SN
+               ENDIF
 *              Note: At most one of SN and CS can be zero.
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
