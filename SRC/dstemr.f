@@ -502,6 +502,19 @@
          ELSE IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
             CALL DLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
          END IF
+*        DLAE2 and DLAEV2 outputs satisfy |R1| >= |R2|. However,
+*        the following DSTEMR requires R1 >= R2. Hence, we correct
+*        the order of R1, R2, CS, SN if R1 < R2 before further processing.
+         IF(R1.LT.R2) THEN
+            E(2) = R1
+            R1 = R2
+            R2 = E(2)
+            IF(WANTZ.AND.(.NOT.ZQUERY)) THEN
+               E(2) = CS
+               CS = -SN
+               SN = E(2)
+            ENDIF
+         ENDIF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
      $                  (R2.LE.WU)).OR.
