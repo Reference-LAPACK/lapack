@@ -345,7 +345,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY,
-     $                   DLAESWAP 
+     $                   DLAESWAP
       INTEGER            I, IBEGIN, IEND, IFIRST, IIL, IINDBL, IINDW,
      $                   IINDWK, IINFO, IINSPL, IIU, ILAST, IN, INDD,
      $                   INDE2, INDERR, INDGP, INDGRS, INDWRK, ITMP,
