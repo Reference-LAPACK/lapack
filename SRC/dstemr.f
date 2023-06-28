@@ -312,7 +312,8 @@
 *> Jim Demmel, University of California, Berkeley, USA \n
 *> Inderjit Dhillon, University of Texas, Austin, USA \n
 *> Osni Marques, LBNL/NERSC, USA \n
-*> Christof Voemel, University of California, Berkeley, USA
+*> Christof Voemel, University of California, Berkeley, USA \n
+*> Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n
 *
 *  =====================================================================
       SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
@@ -345,7 +346,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY,
-     $                   DLAESWAP
+     $                   LAESWAP
       INTEGER            I, IBEGIN, IEND, IFIRST, IIL, IINDBL, IINDW,
      $                   IINDWK, IINFO, IINSPL, IIU, ILAST, IN, INDD,
      $                   INDE2, INDERR, INDGP, INDGRS, INDWRK, ITMP,
@@ -381,7 +382,7 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ).OR.( LIWORK.EQ.-1 ) )
       ZQUERY = ( NZC.EQ.-1 )
-      DLAESWAP = .FALSE.
+      LAESWAP = .FALSE.
 
 *     DSTEMR needs WORK of size 6*N, IWORK of size 3*N.
 *     In addition, DLARRE needs WORK of size 6*N, IWORK of size 5*N.
@@ -504,14 +505,14 @@
          ELSE IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
             CALL DLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
          END IF
-*        DLAE2 and DLAEV2 outputs satisfy |R1| >= |R2|. However,
-*        the following DSTEMR requires R1 >= R2. Hence, we correct
+*        D/S/LAE2 and D/S/LAEV2 outputs satisfy |R1| >= |R2|. However,
+*        the following code requires R1 >= R2. Hence, we correct
 *        the order of R1, R2, CS, SN if R1 < R2 before further processing.
          IF( R1.LT.R2 ) THEN
             E(2) = R1
             R1 = R2
             R2 = E(2)
-            DLAESWAP = .TRUE.
+            LAESWAP = .TRUE.
          ENDIF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
@@ -520,7 +521,7 @@
             M = M+1
             W( M ) = R2
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               IF( DLAESWAP ) THEN
+               IF( LAESWAP ) THEN
                   Z( 1, M ) = CS
                   Z( 2, M ) = SN
                ELSE
@@ -549,7 +550,7 @@
             M = M+1
             W( M ) = R1
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               IF( DLAESWAP ) THEN
+               IF( LAESWAP ) THEN
                   Z( 1, M ) = -SN
                   Z( 2, M ) = CS
                ELSE
