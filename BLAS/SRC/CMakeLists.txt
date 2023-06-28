@@ -110,13 +110,20 @@ endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 add_library(${BLASLIB}_obj OBJECT ${SOURCES})
-target_compile_options(${BLASLIB}_obj PRIVATE -fPIC)
+set_target_properties(${BLASLIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(BUILD_INDEX64_EXT_API)
+  set(SOURCES_64_F)
+  # Copy files so we can set source property specific to /${BLASLIB}_64_obj target
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_obj)
+  file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_obj)
+  file(GLOB SOURCES_64_F ${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_obj/*.f*)
+  add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64_F})
+  target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${BLASLIB}_64_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
   #Add _64 suffix to all Fortran functions via macros
-  set(COPT_64_F)
-  list(APPEND COPT_64_F -cpp)
-  foreach(F IN LISTS SOURCES)
+  foreach(F IN LISTS SOURCES_64_F)
+      set(COPT_64_F -cpp)
       file(STRINGS ${F} ${F}.lst)
       list(FILTER ${F}.lst INCLUDE REGEX "subroutine|SUBROUTINE|external|EXTERNAL|function|FUNCTION")
       list(FILTER ${F}.lst EXCLUDE REGEX "^!.*")
@@ -128,10 +135,9 @@ if(BUILD_INDEX64_EXT_API)
         string(STRIP ${FUNC} FUNC)
         list(APPEND COPT_64_F "-D${FUNC}=${FUNC}_64")
       endforeach()
+      list(REMOVE_DUPLICATES COPT_64_F)
+      set_source_files_properties(${F} PROPERTIES COMPILE_OPTIONS "${COPT_64_F}")
   endforeach()
-  list(REMOVE_DUPLICATES COPT_64_F)
-  add_library(${BLASLIB}_64_obj OBJECT ${SOURCES})
-  target_compile_options(${BLASLIB}_64_obj PRIVATE -fPIC ${FOPT_ILP64} ${COPT_64_F})
 endif()
 
 add_library(${BLASLIB}
@@ -142,6 +148,7 @@ set_target_properties(
   ${BLASLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
+  POSITION_INDEPENDENT_CODE ON
   )
 lapack_install_library(${BLASLIB})
 
