@@ -67,12 +67,35 @@ if(LAPACKE_WITH_TMG)
 endif()
 list(APPEND SOURCES ${UTILS})
 
-add_library(${LAPACKELIB} ${SOURCES})
+add_library(${LAPACKELIB}_obj OBJECT ${SOURCES})
+set_target_properties(${LAPACKELIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+if(BUILD_INDEX64_EXT_API)
+  # 64bit Integer Extended Interface
+  set(SOURCES_64_C)
+  list(APPEND SOURCES_64_C ${SOURCES})
+  list(REMOVE_ITEM SOURCES_64_C src/lapacke_nancheck.c)
+  list(REMOVE_ITEM SOURCES_64_C utils/lapacke_make_complex_float.c)
+  list(REMOVE_ITEM SOURCES_64_C utils/lapacke_make_complex_double.c)
+  add_library(${LAPACKELIB}_64_obj OBJECT ${SOURCES_64_C})
+  set_target_properties(${LAPACKELIB}_64_obj PROPERTIES
+          POSITION_INDEPENDENT_CODE ON)
+  target_compile_options(${LAPACKELIB}_64_obj PRIVATE
+          -DLAPACK_ILP64
+          -DLAPACKE_API64
+          -DWeirdNEC
+          -DCBLAS_API64)
+endif()
+
+add_library(${LAPACKELIB} $<TARGET_OBJECTS:${LAPACKELIB}_obj>
+        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKELIB}_64_obj>>)
+
 set_target_properties(
   ${LAPACKELIB} PROPERTIES
   LINKER_LANGUAGE C
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
+  POSITION_INDEPENDENT_CODE ON
   )
 target_include_directories(${LAPACKELIB} PUBLIC
     $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>

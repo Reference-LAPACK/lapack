@@ -58,6 +58,21 @@ extern "C" {
 lapack_complex_float lapack_make_complex_float( float re, float im );
 lapack_complex_double lapack_make_complex_double( double re, double im );
 
+/*
+ * Integer specific API
+ */
+#ifdef LAPACKE_API64
+#ifndef API_SUFFIX
+#define API_SUFFIX(a) a##_64
+#endif
+#include "lapacke_64.h"
+#else
+#ifndef API_SUFFIX
+#define API_SUFFIX(a) a
+#endif
+#endif
+
+
 /* C-LAPACK function prototypes */
 
 lapack_int LAPACKE_sbdsdc( int matrix_layout, char uplo, char compq,
