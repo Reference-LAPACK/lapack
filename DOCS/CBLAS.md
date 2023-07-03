@@ -33,7 +33,7 @@ The naming scheme for the CBLAS interface is to take the Fortran BLAS routine na
 and add the prefix `cblas_`. For example, the BLAS routine `DGEMM` becomes `cblas_dgemm`.
 
 CBLAS routines also support `_64` suffix that enables large data arrays support in the LP64 interface library
-(default build configuration). This suffix allows to mix LP64 and ILP64 programming models in one application.
+(default build configuration). This suffix allows mixing LP64 and ILP64 programming models in one application.
 For example, `cblas_dgemm` with 32-bit integer type support can be mixed with `cblas_dgemm_64`
 that supports 64-bit integer type. 
 
