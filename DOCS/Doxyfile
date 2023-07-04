@@ -387,7 +387,7 @@ IDL_PROPERTY_SUPPORT   = YES
 # all members of a group must be documented explicitly.
 # The default value is: NO.
 
-DISTRIBUTE_GROUP_DOC   = YES
+DISTRIBUTE_GROUP_DOC   = NO
 
 # If one adds a struct or class to a group and this option is enabled, then also
 # any nested class or struct is added to the same group. By default this option
@@ -784,7 +784,7 @@ CITE_BIB_FILES         =
 # messages are off.
 # The default value is: NO.
 
-QUIET                  = YES
+QUIET                  = NO
 
 # The WARNINGS tag can be used to turn on/off the warning messages that are
 # generated to standard error (stderr) by doxygen. If WARNINGS is set to YES
@@ -817,7 +817,7 @@ WARN_IF_DOC_ERROR      = YES
 # EXTRACT_ALL is set to YES then this flag will automatically be disabled.
 # The default value is: NO.
 
-WARN_NO_PARAMDOC       = NO
+WARN_NO_PARAMDOC       = YES
 
 # If the WARN_AS_ERROR tag is set to YES then doxygen will immediately stop when
 # a warning is encountered. If the WARN_AS_ERROR tag is set to FAIL_ON_WARNINGS
@@ -842,7 +842,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           = output_err
+WARN_LOGFILE           = doxygen_error
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -854,8 +854,9 @@ WARN_LOGFILE           = output_err
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = . \
-                         DOCS/groups-usr.dox
+INPUT                  = BLAS CBLAS SRC INSTALL TESTING \
+                         DOCS/groups-usr.dox \
+                         README.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -902,34 +903,15 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = CMAKE \
-                         DOCS \
-                         .svn \
-                         CBLAS/.svn \
-                         CBLAS/src/.svn \
-                         CBLAS/testing/.svn \
-                         CBLAS/example/.svn \
-                         CBLAS/include/.svn \
-                         BLAS/.svn \
-                         BLAS/SRC/.svn \
-                         BLAS/TESTING/.svn \
-                         SRC/.svn \
-                         SRC/VARIANTS/.svn \
-                         SRC/VARIANTS/LIB/.svn \
-                         SRC/VARIANTS/cholesky/.svn \
-                         SRC/VARIANTS/cholesky/RL/.svn \
-                         SRC/VARIANTS/cholesky/TOP/.svn \
-                         SRC/VARIANTS/lu/.svn \
-                         SRC/VARIANTS/lu/CR/.svn \
-                         SRC/VARIANTS/lu/LL/.svn \
-                         SRC/VARIANTS/lu/REC/.svn \
-                         SRC/VARIANTS/qr/.svn \
-                         SRC/VARIANTS/qr/LL/.svn \
-                         INSTALL/.svn \
-                         TESTING/.svn \
-                         TESTING/EIG/.svn \
-                         TESTING/MATGEN/.svn \
-                         TESTING/LIN/.svn
+# Exclude functions that are duplicated, creating conflicts.
+EXCLUDE                = .git \
+                         .github \
+                         SRC/VARIANTS \
+                         BLAS/SRC/lsame.f \
+                         BLAS/SRC/xerbla.f \
+                         BLAS/SRC/xerbla_array.f \
+                         INSTALL/slamchf77.f \
+                         INSTALL/dlamchf77.f \
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
