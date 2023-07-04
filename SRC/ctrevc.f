@@ -196,7 +196,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup trevc
 *
 *> \par Further Details:
 *  =====================

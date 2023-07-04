@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup langt
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANGT( NORM, N, DL, D, DU )

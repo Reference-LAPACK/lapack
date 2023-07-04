@@ -200,7 +200,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup trevc
 *
 *> \par Further Details:
 *  =====================

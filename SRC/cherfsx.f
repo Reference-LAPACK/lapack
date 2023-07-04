@@ -391,7 +391,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup herfsx
 *
 *  =====================================================================
       SUBROUTINE CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,

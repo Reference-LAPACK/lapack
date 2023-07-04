@@ -199,7 +199,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsing
+*> \ingroup gesdd
 *
 *> \par Contributors:
 *  ==================

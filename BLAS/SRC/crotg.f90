@@ -69,7 +69,7 @@
 !
 !> \date December 2021
 !
-!> \ingroup single_blas_level1
+!> \ingroup rotg
 !
 !> \par Further Details:
 !  =====================

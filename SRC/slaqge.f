@@ -134,7 +134,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEauxiliary
+*> \ingroup laqge
 *
 *  =====================================================================
       SUBROUTINE SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,

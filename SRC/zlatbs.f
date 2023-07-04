@@ -163,7 +163,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup latbs
 *
 *> \par Further Details:
 *  =====================

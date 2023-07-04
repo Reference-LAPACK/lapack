@@ -222,7 +222,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup trevc3
 *
 *> \par Further Details:
 *  =====================

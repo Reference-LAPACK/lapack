@@ -150,7 +150,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetrf_rook
 *
 *> \par Further Details:
 *  =====================

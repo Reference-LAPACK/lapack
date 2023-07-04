@@ -244,7 +244,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYauxiliary
+*> \ingroup tgsy2
 *
 *> \par Contributors:
 *  ==================

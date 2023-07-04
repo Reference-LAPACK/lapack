@@ -60,7 +60,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lamch
 *
 *  =====================================================================
       REAL FUNCTION SLAMCH( CMACH )
@@ -154,7 +154,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b SLAMC1
 *> \details
 *> \b Purpose:
@@ -187,7 +186,8 @@
 *>          'round to nearest' style.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc1
 *>
 *> \details \b Further \b Details
 *> \verbatim
@@ -348,7 +348,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b SLAMC2
 *> \details
 *> \b Purpose:
@@ -357,7 +356,8 @@
 *> list.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc2
 *>
 *> \param[out] BETA
 *> \verbatim
@@ -414,6 +414,7 @@
 *>  The computation of  EPS  is based on a routine PARANOIA by
 *>  W. Kahan of the University of California at Berkeley.
 *> \endverbatim
+*>
       SUBROUTINE SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
 *  -- LAPACK auxiliary routine --
@@ -619,7 +620,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b SLAMC3
 *> \details
 *> \b Purpose:
@@ -635,7 +635,9 @@
 *> \verbatim
 *>          The values A and B.
 *> \endverbatim
-
+*>
+*> \ingroup lamc3
+*>
       REAL FUNCTION SLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine --
@@ -657,7 +659,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b SLAMC4
 *> \details
 *> \b Purpose:
@@ -681,6 +682,8 @@
 *> \verbatim
 *>          The base of the machine.
 *> \endverbatim
+*>
+*> \ingroup lamc4
 *>
       SUBROUTINE SLAMC4( EMIN, START, BASE )
 *
@@ -744,7 +747,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b SLAMC5
 *> \details
 *> \b Purpose:
@@ -788,6 +790,8 @@
 *> \verbatim
 *>          The largest machine floating-point number.
 *> \endverbatim
+*>
+*> \ingroup lamc5
 *>
       SUBROUTINE SLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *

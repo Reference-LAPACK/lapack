@@ -74,7 +74,7 @@
 !>
 !> Weslley Pereira, University of Colorado Denver, USA
 !
-!> \ingroup single_blas_level1
+!> \ingroup rotg
 !
 !> \par Further Details:
 !  =====================

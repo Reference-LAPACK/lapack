@@ -123,7 +123,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOsolve
+*> \ingroup posv
 *
 *  =====================================================================
       SUBROUTINE CPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )

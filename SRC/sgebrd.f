@@ -147,7 +147,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup gebrd
 *
 *> \par Further Details:
 *  =====================

@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPTcomputational
+*> \ingroup pttrf
 *
 *  =====================================================================
       SUBROUTINE CPTTRF( N, D, E, INFO )

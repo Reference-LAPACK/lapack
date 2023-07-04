@@ -392,7 +392,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup herfsx
 *
 *  =====================================================================
       SUBROUTINE CSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,

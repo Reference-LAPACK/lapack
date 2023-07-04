@@ -136,7 +136,7 @@
 *>               A and B are unchanged).
 *> \endverbatim
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup trsyl3
 *
 *  =====================================================================
 *  References:

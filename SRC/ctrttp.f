@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup trttp
 *
 *  =====================================================================
       SUBROUTINE CTRTTP( UPLO, N, A, LDA, AP, INFO )

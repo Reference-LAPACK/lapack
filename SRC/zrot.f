@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZROT   applies a plane rotation, where the cos (C) is real and the
+*> ZROT applies a plane rotation, where the cos (C) is real and the
 *> sin (S) is complex, and the vectors CX and CY are complex.
 *> \endverbatim
 *
@@ -96,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup rot
 *
 *  =====================================================================
       SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )

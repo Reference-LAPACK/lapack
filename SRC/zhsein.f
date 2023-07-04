@@ -226,7 +226,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup hsein
 *
 *> \par Further Details:
 *  =====================

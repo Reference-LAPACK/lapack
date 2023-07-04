@@ -61,7 +61,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lapy3
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAPY3( X, Y, Z )

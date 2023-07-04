@@ -103,7 +103,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lar2v
 *
 *  =====================================================================
       SUBROUTINE SLAR2V( N, X, Y, Z, INCX, C, S, INCC )

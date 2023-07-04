@@ -52,7 +52,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup isnan
 *
 *  =====================================================================
       LOGICAL FUNCTION DISNAN( DIN )

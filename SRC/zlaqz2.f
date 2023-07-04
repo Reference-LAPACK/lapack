@@ -224,7 +224,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup laqz2
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE ZLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,

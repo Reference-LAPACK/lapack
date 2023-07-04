@@ -133,7 +133,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup laqhb
 *
 *  =====================================================================
       SUBROUTINE SLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )

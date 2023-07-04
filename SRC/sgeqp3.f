@@ -120,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup geqp3
 *
 *> \par Further Details:
 *  =====================

@@ -181,7 +181,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYsolve
+*> \ingroup hesv_rook
 *
 *> \par Contributors:
 *  ==================

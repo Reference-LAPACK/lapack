@@ -158,7 +158,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup latrs
 *
 *> \par Further Details:
 *  =====================

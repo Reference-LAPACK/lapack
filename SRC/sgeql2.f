@@ -98,7 +98,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup geql2
 *
 *> \par Further Details:
 *  =====================

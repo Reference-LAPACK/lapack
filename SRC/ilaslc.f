@@ -71,7 +71,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup ilalc
 *
 *  =====================================================================
       INTEGER FUNCTION ILASLC( M, N, A, LDA )

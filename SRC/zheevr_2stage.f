@@ -265,7 +265,7 @@
 *>          indicating the nonzero elements in Z. The i-th eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
 *>          ISUPPZ( 2*i ). This is an output of ZSTEMR (tridiagonal
-*>          matrix). The support of the eigenvectors of A is typically 
+*>          matrix). The support of the eigenvectors of A is typically
 *>          1:N because of the unitary transformations applied by ZUNMTR.
 *>          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *> \endverbatim
@@ -279,12 +279,12 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  
+*>          The dimension of the array WORK.
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 26*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + N
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + N
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -354,7 +354,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEeigen
+*> \ingroup heevr_2stage
 *
 *> \par Contributors:
 *  ==================
@@ -382,7 +382,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -390,11 +390,11 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
@@ -643,9 +643,9 @@
 *
 *     Call ZHETRD_2STAGE to reduce Hermitian matrix to tridiagonal form.
 *
-      CALL ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, RWORK( INDRD ), 
+      CALL ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, RWORK( INDRD ),
      $                    RWORK( INDRE ), WORK( INDTAU ),
-     $                    WORK( INDHOUS ), LHTRD, 
+     $                    WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWK ), LLWORK, IINFO )
 *
 *     If all eigenvalues are desired

@@ -119,7 +119,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup tpqrt2
 *
 *> \par Further Details:
 *  =====================

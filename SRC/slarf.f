@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup larf
 *
 *  =====================================================================
       SUBROUTINE SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )

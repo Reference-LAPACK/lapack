@@ -142,7 +142,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup la_gercond
 *
 *  =====================================================================
       REAL FUNCTION SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,

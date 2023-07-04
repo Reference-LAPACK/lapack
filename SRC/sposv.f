@@ -123,7 +123,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOsolve
+*> \ingroup posv
 *
 *  =====================================================================
       SUBROUTINE SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )

@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16PTcomputational
+*> \ingroup pttrf
 *
 *  =====================================================================
       SUBROUTINE ZPTTRF( N, D, E, INFO )

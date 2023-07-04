@@ -153,7 +153,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEauxiliary
+*> \ingroup tgex2
 *
 *> \par Further Details:
 *  =====================

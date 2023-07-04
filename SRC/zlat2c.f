@@ -104,7 +104,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup _lat2_
 *
 *  =====================================================================
       SUBROUTINE ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )

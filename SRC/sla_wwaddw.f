@@ -74,7 +74,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup la_wwaddw
 *
 *  =====================================================================
       SUBROUTINE SLA_WWADDW( N, X, Y, W )

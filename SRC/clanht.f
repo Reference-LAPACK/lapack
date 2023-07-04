@@ -94,7 +94,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lanht
 *
 *  =====================================================================
       REAL             FUNCTION CLANHT( NORM, N, D, E )

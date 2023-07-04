@@ -116,7 +116,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBauxiliary
+*> \ingroup langb
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANGB( NORM, N, KL, KU, AB, LDAB,

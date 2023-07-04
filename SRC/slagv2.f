@@ -144,7 +144,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lagv2
 *
 *> \par Contributors:
 *  ==================

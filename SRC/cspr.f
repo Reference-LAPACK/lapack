@@ -125,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup hpr
 *
 *  =====================================================================
       SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )

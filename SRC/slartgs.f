@@ -83,7 +83,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lartgs
 *
 *  =====================================================================
       SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )

@@ -190,7 +190,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasd1
 *
 *> \par Contributors:
 *  ==================

@@ -51,7 +51,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup la_transtype
 *
 *  =====================================================================
       CHARACTER*1 FUNCTION CHLA_TRANSTYPE( TRANS )

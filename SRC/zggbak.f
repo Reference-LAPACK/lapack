@@ -131,7 +131,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GBcomputational
+*> \ingroup ggbak
 *
 *> \par Further Details:
 *  =====================

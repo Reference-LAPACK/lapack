@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 *
 *  =====================================================================
       SUBROUTINE SLADIV( A, B, C, D, P, Q )
@@ -170,7 +170,7 @@
 *
       END
 
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 
 
       SUBROUTINE SLADIV1( A, B, C, D, P, Q )
@@ -210,7 +210,7 @@
 *
       END
 
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 
       REAL FUNCTION SLADIV2( A, B, C, D, R, T )
 *

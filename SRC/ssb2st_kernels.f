@@ -164,6 +164,8 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup hb2st_kernels
+*>
 *  =====================================================================
       SUBROUTINE  SSB2ST_KERNELS( UPLO, WANTZ, TTYPE,
      $                            ST, ED, SWEEP, N, NB, IB,

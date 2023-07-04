@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup langt
 *
 *  =====================================================================
       REAL             FUNCTION CLANGT( NORM, N, DL, D, DU )

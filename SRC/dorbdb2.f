@@ -173,7 +173,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup unbdb2
 *
 *> \par Further Details:
 *  =====================

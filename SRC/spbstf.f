@@ -110,7 +110,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup pbstf
 *
 *> \par Further Details:
 *  =====================

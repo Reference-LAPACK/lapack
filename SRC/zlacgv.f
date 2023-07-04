@@ -67,7 +67,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lacgv
 *
 *  =====================================================================
       SUBROUTINE ZLACGV( N, X, INCX )

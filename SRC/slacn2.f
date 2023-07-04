@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lacn2
 *
 *> \par Further Details:
 *  =====================

@@ -228,7 +228,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup tgevc
 *
 *> \par Further Details:
 *  =====================

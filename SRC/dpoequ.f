@@ -105,7 +105,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePOcomputational
+*> \ingroup poequ
 *
 *  =====================================================================
       SUBROUTINE DPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )

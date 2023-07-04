@@ -54,7 +54,7 @@
 *>    Conference on Parallel Processing and Applied Mathematics, pages
 *>    68--78. Springer, 2017.
 *>
-*> \ingroup OTHERauxiliary
+*> \ingroup larmm
 *  =====================================================================
 
       DOUBLE PRECISION FUNCTION DLARMM( ANORM, BNORM, CNORM )

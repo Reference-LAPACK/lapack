@@ -166,6 +166,8 @@
 *>  the LQ factorization.
 *> \endverbatim
 *>
+*> \ingroup gelq
+*>
 *  =====================================================================
       SUBROUTINE SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )

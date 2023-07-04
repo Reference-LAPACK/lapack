@@ -116,7 +116,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYauxiliary
+*> \ingroup lanhe
 *
 *  =====================================================================
       REAL             FUNCTION CLANSY( NORM, UPLO, N, A, LDA, WORK )

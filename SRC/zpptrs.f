@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup pptrs
 *
 *  =====================================================================
       SUBROUTINE ZPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )

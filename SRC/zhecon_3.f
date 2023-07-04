@@ -144,7 +144,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hecon_3
 *
 *> \par Contributors:
 *  ==================

@@ -120,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGTsolve
+*> \ingroup gtsv
 *
 *  =====================================================================
       SUBROUTINE SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )

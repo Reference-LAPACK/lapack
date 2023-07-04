@@ -160,7 +160,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGBcomputational
+*> \ingroup la_gbrcond
 *
 *  =====================================================================
       REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,

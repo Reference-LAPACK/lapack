@@ -169,7 +169,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup ungtsqr_row
 *
 *> \par Contributors:
 *  ==================

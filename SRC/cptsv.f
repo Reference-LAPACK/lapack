@@ -108,7 +108,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPTsolve
+*> \ingroup ptsv
 *
 *  =====================================================================
       SUBROUTINE CPTSV( N, NRHS, D, E, B, LDB, INFO )

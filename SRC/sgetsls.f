@@ -154,7 +154,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsolve
+*> \ingroup getsls
 *
 *  =====================================================================
       SUBROUTINE SGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,

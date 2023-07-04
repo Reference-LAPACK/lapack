@@ -1,4 +1,6 @@
-*> \brief \b DLAGTS solves the system of equations (T-λI)x = y or (T-λI)Tx = y,where T is a general tridiagonal matrix and λ a scalar, using the LU factorization computed by slagtf.
+*> \brief \b DLAGTS solves the system of equations (T-λI)x = y
+*> or (T-λI)^Tx = y, where T is a general tridiagonal matrix
+*> and λ a scalar, using the LU factorization computed by slagtf.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -154,7 +156,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lagts
 *
 *  =====================================================================
       SUBROUTINE DLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )

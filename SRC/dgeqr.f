@@ -168,6 +168,8 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup geqr
+*>
 *  =====================================================================
       SUBROUTINE DGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )

@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ungl2
 *
 *  =====================================================================
       SUBROUTINE SORGL2( M, N, K, A, LDA, TAU, WORK, INFO )

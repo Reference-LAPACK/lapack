@@ -114,7 +114,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPTcomputational
+*> \ingroup pttrs
 *
 *  =====================================================================
       SUBROUTINE CPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )

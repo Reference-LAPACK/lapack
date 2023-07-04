@@ -1,3 +1,5 @@
+*> \addtogroup gesv
+*>
 *> \brief <b> SGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver)
 *
 *  =========== DOCUMENTATION ===========
@@ -115,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsolve
+*> \ingroup gesv
 *
 *  =====================================================================
       SUBROUTINE SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )

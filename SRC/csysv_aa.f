@@ -154,7 +154,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYsolve
+*> \ingroup hesv_aa
 *
 *  =====================================================================
       SUBROUTINE CSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,

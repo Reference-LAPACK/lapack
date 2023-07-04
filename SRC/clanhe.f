@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEauxiliary
+*> \ingroup lanhe
 *
 *  =====================================================================
       REAL             FUNCTION CLANHE( NORM, UPLO, N, A, LDA, WORK )

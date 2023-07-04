@@ -128,7 +128,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup launhr_col_getrfnp
 *
 *> \par Contributors:
 *  ==================

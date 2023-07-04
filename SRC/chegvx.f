@@ -293,7 +293,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEeigen
+*> \ingroup hegvx
 *
 *> \par Contributors:
 *  ==================

@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePTcomputational
+*> \ingroup ptts2
 *
 *  =====================================================================
       SUBROUTINE DPTTS2( N, NRHS, D, E, B, LDB )

@@ -254,7 +254,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup lals0
 *
 *> \par Contributors:
 *  ==================

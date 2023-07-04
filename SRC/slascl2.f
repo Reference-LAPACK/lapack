@@ -83,7 +83,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup lascl2
 *
 *  =====================================================================
       SUBROUTINE SLASCL2 ( M, N, D, X, LDX )

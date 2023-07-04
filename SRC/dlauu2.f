@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup lauu2
 *
 *  =====================================================================
       SUBROUTINE DLAUU2( UPLO, N, A, LDA, INFO )

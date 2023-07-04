@@ -89,7 +89,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lacon
 *
 *> \par Further Details:
 *  =====================

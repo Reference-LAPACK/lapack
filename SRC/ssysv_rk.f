@@ -205,7 +205,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleSYsolve
+*> \ingroup hesv_rk
 *
 *> \par Contributors:
 *  ==================

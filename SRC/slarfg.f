@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup larfg
 *
 *  =====================================================================
       SUBROUTINE SLARFG( N, ALPHA, X, INCX, TAU )

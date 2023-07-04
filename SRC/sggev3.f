@@ -217,7 +217,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEeigen
+*> \ingroup ggev3
 *
 *  =====================================================================
       SUBROUTINE SGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR,

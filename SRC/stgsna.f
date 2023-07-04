@@ -230,7 +230,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup tgsna
 *
 *> \par Further Details:
 *  =====================

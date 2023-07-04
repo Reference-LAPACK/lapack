@@ -93,7 +93,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lapll
 *
 *  =====================================================================
       SUBROUTINE ZLAPLL( N, X, INCX, Y, INCY, SSMIN )

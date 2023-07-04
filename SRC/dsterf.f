@@ -79,7 +79,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup sterf
 *
 *  =====================================================================
       SUBROUTINE DSTERF( N, D, E, INFO )

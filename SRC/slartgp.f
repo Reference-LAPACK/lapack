@@ -88,7 +88,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lartgp
 *
 *  =====================================================================
       SUBROUTINE SLARTGP( F, G, CS, SN, R )

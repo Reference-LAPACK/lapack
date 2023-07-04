@@ -248,7 +248,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERsolve
+*> \ingroup hpsvx
 *
 *> \par Further Details:
 *  =====================

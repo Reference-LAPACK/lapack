@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup syconv
 *
 *  =====================================================================
       SUBROUTINE CSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )

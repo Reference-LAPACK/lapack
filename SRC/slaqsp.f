@@ -118,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup laqhp
 *
 *  =====================================================================
       SUBROUTINE SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )

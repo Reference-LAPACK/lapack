@@ -189,7 +189,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleSYcomputational
+*> \ingroup syconvf
 *
 *> \par Contributors:
 *  ==================

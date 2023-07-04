@@ -315,7 +315,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYeigen
+*> \ingroup heevr
 *
 *> \par Contributors:
 *  ==================

@@ -60,7 +60,7 @@
 !
 !> \date August 2016
 !
-!> \ingroup single_blas_level1
+!> \ingroup nrm2
 !
 !> \par Contributors:
 !  ==================

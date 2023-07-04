@@ -2,23 +2,23 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download IPARAM2STAGE + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparam2stage.F"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparam2stage.F"> 
+*> Download IPARAM2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparam2stage.F">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparam2stage.F">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparam2stage.F"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparam2stage.F">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS, 
+*       INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS,
 *                                    NI, NBI, IBI, NXI )
 *       #if defined(_OPENMP)
 *           use omp_lib
@@ -36,8 +36,8 @@
 *>
 *>      This program sets problem and machine dependent parameters
 *>      useful for xHETRD_2STAGE, xHETRD_HE2HB, xHETRD_HB2ST,
-*>      xGEBRD_2STAGE, xGEBRD_GE2GB, xGEBRD_GB2BD 
-*>      and related subroutines for eigenvalue problems. 
+*>      xGEBRD_2STAGE, xGEBRD_GE2GB, xGEBRD_GB2BD
+*>      and related subroutines for eigenvalue problems.
 *>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21.
 *>      It is called whenever ILAENV2STAGE is called with 1 <= ISPEC <= 5
 *>      with a direct conversion ISPEC + 16.
@@ -58,8 +58,8 @@
 *>              ISPEC=18: the optimal blocksize ib for the eigenvectors
 *>                        singular vectors update routine
 *>
-*>              ISPEC=19: The length of the array that store the Housholder 
-*>                        representation for the second stage 
+*>              ISPEC=19: The length of the array that store the Housholder
+*>                        representation for the second stage
 *>                        Band to Tridiagonal or Bidiagonal
 *>
 *>              ISPEC=20: The workspace needed for the routine in input.
@@ -89,7 +89,7 @@
 *>
 *> \param[in] NBI
 *> \verbatim
-*>          NBI is INTEGER which is the used in the reduction, 
+*>          NBI is INTEGER which is the used in the reduction,
 *>          (e.g., the size of the band), needed to compute workspace
 *>          and LHOUS2.
 *> \endverbatim
@@ -108,12 +108,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup iparam2stage
 *
 *> \par Further Details:
 *  =====================
@@ -133,7 +133,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -141,16 +141,16 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS, 
+      INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS,
      $                              NI, NBI, IBI, NXI )
 #if defined(_OPENMP)
       use omp_lib
@@ -191,10 +191,10 @@
       ENDIF
 *
 *     Get the number of threads
-*      
+*
       NTHREADS = 1
 #if defined(_OPENMP)
-!$OMP PARALLEL 
+!$OMP PARALLEL
       NTHREADS = OMP_GET_NUM_THREADS()
 !$OMP END PARALLEL
 #endif
@@ -259,7 +259,7 @@
          CPREC = PREC.EQ.'C' .OR. PREC.EQ.'Z'
 *
 *        Invalid value for PRECISION
-*      
+*
          IF( .NOT.( RPREC .OR. CPREC ) ) THEN
              IPARAM2STAGE = -1
              RETURN
@@ -267,9 +267,9 @@
       ENDIF
 *      WRITE(*,*),'RPREC,CPREC ',RPREC,CPREC,
 *     $           '   ALGO ',ALGO,'    STAGE ',STAG
-*      
 *
-      IF (( ISPEC .EQ. 17 ) .OR. ( ISPEC .EQ. 18 )) THEN 
+*
+      IF (( ISPEC .EQ. 17 ) .OR. ( ISPEC .EQ. 18 )) THEN
 *
 *     ISPEC = 17, 18:  block size KD, IB
 *     Could be also dependent from N but for now it
@@ -305,7 +305,7 @@
 *
       ELSE IF ( ISPEC .EQ. 19 ) THEN
 *
-*     ISPEC = 19:  
+*     ISPEC = 19:
 *     LHOUS length of the Houselholder representation
 *     matrix (V,T) of the second stage. should be >= 1.
 *
@@ -325,18 +325,18 @@
 *
       ELSE IF ( ISPEC .EQ. 20 ) THEN
 *
-*     ISPEC = 20: (21 for future use)  
-*     LWORK length of the workspace for 
+*     ISPEC = 20: (21 for future use)
+*     LWORK length of the workspace for
 *     either or both stages for TRD and BRD. should be >= 1.
 *     TRD:
 *     TRD_stage 1: = LT + LW + LS1 + LS2
-*                  = LDT*KD + N*KD + N*MAX(KD,FACTOPTNB) + LDS2*KD 
+*                  = LDT*KD + N*KD + N*MAX(KD,FACTOPTNB) + LDS2*KD
 *                    where LDT=LDS2=KD
 *                  = N*KD + N*max(KD,FACTOPTNB) + 2*KD*KD
 *     TRD_stage 2: = (2NB+1)*N + KD*NTHREADS
 *     TRD_both   : = max(stage1,stage2) + AB ( AB=(KD+1)*N )
-*                  = N*KD + N*max(KD+1,FACTOPTNB) 
-*                    + max(2*KD*KD, KD*NTHREADS) 
+*                  = N*KD + N*max(KD+1,FACTOPTNB)
+*                    + max(2*KD*KD, KD*NTHREADS)
 *                    + (KD+1)*N
          LWORK        = -1
          SUBNAM(1:1)  = PREC
@@ -348,8 +348,8 @@
          FACTOPTNB    = MAX(QROPTNB, LQOPTNB)
          IF( ALGO.EQ.'TRD' ) THEN
             IF( STAG.EQ.'2STAG' ) THEN
-               LWORK = NI*NBI + NI*MAX(NBI+1,FACTOPTNB) 
-     $              + MAX(2*NBI*NBI, NBI*NTHREADS) 
+               LWORK = NI*NBI + NI*MAX(NBI+1,FACTOPTNB)
+     $              + MAX(2*NBI*NBI, NBI*NTHREADS)
      $              + (NBI+1)*NI
             ELSE IF( (STAG.EQ.'HE2HB').OR.(STAG.EQ.'SY2SB') ) THEN
                LWORK = NI*NBI + NI*MAX(NBI,FACTOPTNB) + 2*NBI*NBI
@@ -358,8 +358,8 @@
             ENDIF
          ELSE IF( ALGO.EQ.'BRD' ) THEN
             IF( STAG.EQ.'2STAG' ) THEN
-               LWORK = 2*NI*NBI + NI*MAX(NBI+1,FACTOPTNB) 
-     $              + MAX(2*NBI*NBI, NBI*NTHREADS) 
+               LWORK = 2*NI*NBI + NI*MAX(NBI+1,FACTOPTNB)
+     $              + MAX(2*NBI*NBI, NBI*NTHREADS)
      $              + (NBI+1)*NI
             ELSE IF( STAG.EQ.'GE2GB' ) THEN
                LWORK = NI*NBI + NI*MAX(NBI,FACTOPTNB) + 2*NBI*NBI
@@ -377,7 +377,7 @@
 *
       ELSE IF ( ISPEC .EQ. 21 ) THEN
 *
-*     ISPEC = 21 for future use 
+*     ISPEC = 21 for future use
          IPARAM2STAGE = NXI
       ENDIF
 *

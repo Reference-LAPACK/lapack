@@ -163,6 +163,8 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup hb2st_kernels
+*>
 *  =====================================================================
       SUBROUTINE  CHB2ST_KERNELS( UPLO, WANTZ, TTYPE,
      $                            ST, ED, SWEEP, N, NB, IB,

@@ -483,7 +483,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16POsolve
+*> \ingroup posvxx
 *
 *  =====================================================================
       SUBROUTINE ZPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,

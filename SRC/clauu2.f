@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lauu2
 *
 *  =====================================================================
       SUBROUTINE CLAUU2( UPLO, N, A, LDA, INFO )

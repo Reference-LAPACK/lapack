@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lacp2
 *
 *  =====================================================================
       SUBROUTINE ZLACP2( UPLO, M, N, A, LDA, B, LDB )

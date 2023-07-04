@@ -258,7 +258,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHEReigen
+*> \ingroup hpgvx
 *
 *> \par Contributors:
 *  ==================

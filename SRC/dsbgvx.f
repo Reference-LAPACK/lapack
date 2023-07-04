@@ -280,7 +280,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHEReigen
+*> \ingroup hbgvx
 *
 *> \par Contributors:
 *  ==================

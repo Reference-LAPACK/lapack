@@ -62,7 +62,7 @@
 *> \author NAG Ltd.
 *
 
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lamch
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
@@ -144,6 +144,7 @@
 *     End of DLAMCH
 *
       END
+
 ************************************************************************
 *> \brief \b DLAMC3
 *> \details
@@ -164,6 +165,8 @@
 *>          B is a DOUBLE PRECISION
 *>          The values A and B.
 *> \endverbatim
+*>
+*> \ingroup lamc3
 *>
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
 *

@@ -154,7 +154,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup la_heamv
 *
 *> \par Further Details:
 *  =====================

@@ -120,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYcomputational
+*> \ingroup hegs2
 *
 *  =====================================================================
       SUBROUTINE SSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )

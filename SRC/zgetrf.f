@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup getrf
 *
 *  =====================================================================
       SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )

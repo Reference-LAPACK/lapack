@@ -96,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup _lag2_
 *
 *  =====================================================================
       SUBROUTINE CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )

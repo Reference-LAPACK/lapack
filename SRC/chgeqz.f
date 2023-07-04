@@ -266,7 +266,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup hgeqz
 *
 *> \par Further Details:
 *  =====================

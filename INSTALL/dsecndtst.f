@@ -18,7 +18,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup test_second
 *
 *  =====================================================================      PROGRAM DSECNDTST
 *

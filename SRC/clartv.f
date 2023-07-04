@@ -100,7 +100,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lartv
 *
 *  =====================================================================
       SUBROUTINE CLARTV( N, X, INCX, Y, INCY, C, S, INCC )

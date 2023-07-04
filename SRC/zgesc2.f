@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEauxiliary
+*> \ingroup gesc2
 *
 *> \par Contributors:
 *  ==================

@@ -189,7 +189,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsolve
+*> \ingroup gelsd
 *
 *> \par Contributors:
 *  ==================

@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup pttrf
 *
 *  =====================================================================
       SUBROUTINE SPTTRF( N, D, E, INFO )

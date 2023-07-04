@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup larfgp
 *
 *  =====================================================================
       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )

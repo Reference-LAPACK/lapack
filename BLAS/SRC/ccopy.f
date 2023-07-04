@@ -65,7 +65,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level1
+*> \ingroup copy
 *
 *> \par Further Details:
 *  =====================

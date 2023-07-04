@@ -383,7 +383,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16POcomputational
+*> \ingroup porfsx
 *
 *  =====================================================================
       SUBROUTINE ZPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,

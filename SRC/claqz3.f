@@ -197,7 +197,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup complexGEcomputational
+*> \ingroup laqz3
 *>
 *  =====================================================================
       SUBROUTINE CLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSHIFTS,

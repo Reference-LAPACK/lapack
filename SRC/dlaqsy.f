@@ -126,7 +126,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYauxiliary
+*> \ingroup laqhe
 *
 *  =====================================================================
       SUBROUTINE DLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )

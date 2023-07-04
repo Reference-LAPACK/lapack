@@ -109,7 +109,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBcomputational
+*> \ingroup la_gbrpvgrw
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLA_GBRPVGRW( N, KL, KU, NCOLS, AB,

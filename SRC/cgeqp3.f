@@ -127,7 +127,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup geqp3
 *
 *> \par Further Details:
 *  =====================

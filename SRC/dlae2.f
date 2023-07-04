@@ -78,7 +78,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lae2
 *
 *> \par Further Details:
 *  =====================

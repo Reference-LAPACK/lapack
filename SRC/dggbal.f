@@ -160,7 +160,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBcomputational
+*> \ingroup ggbal
 *
 *> \par Further Details:
 *  =====================

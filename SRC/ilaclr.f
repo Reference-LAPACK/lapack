@@ -71,7 +71,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup ilalr
 *
 *  =====================================================================
       INTEGER FUNCTION ILACLR( M, N, A, LDA )

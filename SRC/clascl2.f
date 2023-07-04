@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup lascl2
 *
 *  =====================================================================
       SUBROUTINE CLASCL2 ( M, N, D, X, LDX )

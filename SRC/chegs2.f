@@ -121,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hegs2
 *
 *  =====================================================================
       SUBROUTINE CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )

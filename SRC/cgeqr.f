@@ -168,6 +168,8 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup geqr
+*>
 *  =====================================================================
       SUBROUTINE CGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )

@@ -77,7 +77,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup rscl
 *
 *  =====================================================================
       SUBROUTINE ZDRSCL( N, SA, SX, INCX )

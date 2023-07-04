@@ -244,7 +244,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup hsein
 *
 *> \par Further Details:
 *  =====================

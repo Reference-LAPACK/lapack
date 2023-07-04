@@ -88,7 +88,7 @@
 !
 !> \date July 2016
 !
-!> \ingroup OTHERauxiliary
+!> \ingroup lartg
 !
 !> \par Contributors:
 !  ==================

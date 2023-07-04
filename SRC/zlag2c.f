@@ -100,7 +100,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup _lag2_
 *
 *  =====================================================================
       SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )

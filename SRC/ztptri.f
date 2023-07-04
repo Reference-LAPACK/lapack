@@ -91,7 +91,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup tptri
 *
 *> \par Further Details:
 *  =====================

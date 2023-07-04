@@ -128,7 +128,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYauxiliary
+*> \ingroup her
 *
 *  =====================================================================
       SUBROUTINE ZSYR( UPLO, N, ALPHA, X, INCX, A, LDA )

@@ -350,7 +350,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup tgsja
 *
 *> \par Further Details:
 *  =====================

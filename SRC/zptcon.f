@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16PTcomputational
+*> \ingroup ptcon
 *
 *> \par Further Details:
 *  =====================

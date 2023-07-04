@@ -149,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lagtf
 *
 *  =====================================================================
       SUBROUTINE DLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )

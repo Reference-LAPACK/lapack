@@ -149,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleSYcomputational
+*> \ingroup hecon_3
 *
 *> \par Contributors:
 *  ==================

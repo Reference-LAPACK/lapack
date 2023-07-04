@@ -109,7 +109,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level2
+*> \ingroup ger
 *
 *> \par Further Details:
 *  =====================

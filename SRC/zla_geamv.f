@@ -167,7 +167,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup la_geamv
 *
 *  =====================================================================
       SUBROUTINE ZLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,

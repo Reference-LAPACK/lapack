@@ -124,7 +124,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lanhb
 *
 *  =====================================================================
       REAL             FUNCTION CLANHB( NORM, UPLO, N, K, AB, LDAB,

@@ -301,7 +301,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERsolve
+*> \ingroup pbsvx
 *
 *> \par Further Details:
 *  =====================

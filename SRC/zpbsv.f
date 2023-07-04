@@ -132,7 +132,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERsolve
+*> \ingroup pbsv
 *
 *> \par Further Details:
 *  =====================

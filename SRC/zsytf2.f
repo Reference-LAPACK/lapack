@@ -127,7 +127,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup hetf2
 *
 *> \par Further Details:
 *  =====================

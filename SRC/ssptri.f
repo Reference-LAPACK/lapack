@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup hptri
 *
 *  =====================================================================
       SUBROUTINE SSPTRI( UPLO, N, AP, IPIV, WORK, INFO )

@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPTcomputational
+*> \ingroup ptts2
 *
 *  =====================================================================
       SUBROUTINE CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )

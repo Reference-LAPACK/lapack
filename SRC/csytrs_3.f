@@ -142,7 +142,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetrs_3
 *
 *> \par Contributors:
 *  ==================

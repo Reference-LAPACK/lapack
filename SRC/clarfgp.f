@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larfgp
 *
 *  =====================================================================
       SUBROUTINE CLARFGP( N, ALPHA, X, INCX, TAU )

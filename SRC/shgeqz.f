@@ -282,7 +282,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup hgeqz
 *
 *> \par Further Details:
 *  =====================

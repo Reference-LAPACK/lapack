@@ -496,7 +496,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYsolve
+*> \ingroup hesvxx
 *
 *  =====================================================================
       SUBROUTINE ZSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,

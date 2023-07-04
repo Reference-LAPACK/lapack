@@ -137,7 +137,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup larrk
 *
 *  =====================================================================
       SUBROUTINE DLARRK( N, IW, GL, GU,

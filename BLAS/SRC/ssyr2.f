@@ -126,7 +126,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level2
+*> \ingroup her2
 *
 *> \par Further Details:
 *  =====================

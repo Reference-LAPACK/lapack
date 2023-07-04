@@ -75,7 +75,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup ieeeck
 *
 *  =====================================================================
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )

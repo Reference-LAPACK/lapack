@@ -229,7 +229,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetrf_rk
 *
 *> \par Further Details:
 *  =====================

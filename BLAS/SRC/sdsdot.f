@@ -82,7 +82,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level1
+*> \ingroup dot
 *
 *> \par Further Details:
 *  =====================

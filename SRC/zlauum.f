@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lauum
 *
 *  =====================================================================
       SUBROUTINE ZLAUUM( UPLO, N, A, LDA, INFO )

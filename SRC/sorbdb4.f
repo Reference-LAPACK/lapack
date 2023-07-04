@@ -184,7 +184,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup unbdb4
 *
 *> \par Further Details:
 *  =====================

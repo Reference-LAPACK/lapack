@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup getf2
 *
 *  =====================================================================
       SUBROUTINE CGETF2( M, N, A, LDA, IPIV, INFO )

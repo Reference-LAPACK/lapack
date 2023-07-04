@@ -28,7 +28,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup second
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DSECND( )

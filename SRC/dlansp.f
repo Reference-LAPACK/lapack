@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup lanhp
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANSP( NORM, UPLO, N, AP, WORK )

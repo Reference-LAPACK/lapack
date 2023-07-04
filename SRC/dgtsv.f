@@ -120,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGTsolve
+*> \ingroup gtsv
 *
 *  =====================================================================
       SUBROUTINE DGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )

@@ -91,7 +91,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup la_gerpvgrw
 *
 *  =====================================================================
       REAL FUNCTION CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )

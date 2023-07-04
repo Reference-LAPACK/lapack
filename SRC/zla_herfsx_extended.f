@@ -382,7 +382,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup la_herfsx_extended
 *
 *  =====================================================================
       SUBROUTINE ZLA_HERFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,

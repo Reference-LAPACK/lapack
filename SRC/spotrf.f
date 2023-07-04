@@ -100,7 +100,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOcomputational
+*> \ingroup potrf
 *
 *  =====================================================================
       SUBROUTINE SPOTRF( UPLO, N, A, LDA, INFO )

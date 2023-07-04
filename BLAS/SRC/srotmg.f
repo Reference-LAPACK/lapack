@@ -83,7 +83,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level1
+*> \ingroup rotmg
 *
 *  =====================================================================
       SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)

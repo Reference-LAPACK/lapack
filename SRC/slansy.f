@@ -115,7 +115,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYauxiliary
+*> \ingroup lanhe
 *
 *  =====================================================================
       REAL             FUNCTION SLANSY( NORM, UPLO, N, A, LDA, WORK )

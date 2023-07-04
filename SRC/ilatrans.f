@@ -51,7 +51,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup ilatrans
 *
 *  =====================================================================
       INTEGER FUNCTION ILATRANS( TRANS )

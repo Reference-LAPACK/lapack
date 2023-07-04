@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lanhs
 *
 *  =====================================================================
       REAL             FUNCTION CLANHS( NORM, N, A, LDA, WORK )

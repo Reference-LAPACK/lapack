@@ -328,7 +328,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsing
+*> \ingroup ggsvd3
 *
 *> \par Contributors:
 *  ==================

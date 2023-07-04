@@ -303,7 +303,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup stemr
 *
 *> \par Contributors:
 *  ==================

@@ -131,7 +131,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYcomputational
+*> \ingroup hetrs_aa_2stage
 *
 *  =====================================================================
       SUBROUTINE SSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,

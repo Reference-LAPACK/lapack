@@ -125,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetrf_aa
 *
 *  =====================================================================
       SUBROUTINE ZHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)

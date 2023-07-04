@@ -176,7 +176,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEsolve
+*> \ingroup gelst
 *
 *> \par Contributors:
 *  ==================

@@ -110,7 +110,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup disna
 *
 *  =====================================================================
       SUBROUTINE DDISNA( JOB, M, N, D, SEP, INFO )

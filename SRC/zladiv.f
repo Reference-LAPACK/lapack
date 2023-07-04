@@ -57,7 +57,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup ladiv
 *
 *  =====================================================================
       COMPLEX*16     FUNCTION ZLADIV( X, Y )

@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GTcomputational
+*> \ingroup gttrf
 *
 *  =====================================================================
       SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )

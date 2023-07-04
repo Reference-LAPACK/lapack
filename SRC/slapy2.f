@@ -56,7 +56,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lapy2
 *
 *  =====================================================================
       REAL             FUNCTION SLAPY2( X, Y )

@@ -104,7 +104,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup _lat2_
 *
 *  =====================================================================
       SUBROUTINE DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )

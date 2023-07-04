@@ -54,7 +54,7 @@
 *>    Conference on Parallel Processing and Applied Mathematics, pages
 *>    68--78. Springer, 2017.
 *>
-*> \ingroup OTHERauxiliary
+*> \ingroup larmm
 *  =====================================================================
 
       REAL FUNCTION SLARMM( ANORM, BNORM, CNORM )

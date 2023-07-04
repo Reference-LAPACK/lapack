@@ -197,7 +197,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYeigen
+*> \ingroup hegvd
 *
 *> \par Further Details:
 *  =====================

@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lapmt
 *
 *  =====================================================================
       SUBROUTINE ZLAPMT( FORWRD, M, N, X, LDX, K )

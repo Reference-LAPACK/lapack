@@ -155,7 +155,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePTcomputational
+*> \ingroup ptrfs
 *
 *  =====================================================================
       SUBROUTINE DPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,

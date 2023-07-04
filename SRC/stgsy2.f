@@ -259,7 +259,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYauxiliary
+*> \ingroup tgsy2
 *
 *> \par Contributors:
 *  ==================

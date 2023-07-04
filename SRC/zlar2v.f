@@ -104,7 +104,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lar2v
 *
 *  =====================================================================
       SUBROUTINE ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )

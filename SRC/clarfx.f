@@ -112,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larfx
 *
 *  =====================================================================
       SUBROUTINE CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )

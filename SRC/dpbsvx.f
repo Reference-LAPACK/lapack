@@ -302,7 +302,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERsolve
+*> \ingroup pbsvx
 *
 *> \par Further Details:
 *  =====================
