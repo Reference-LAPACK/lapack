@@ -5,18 +5,15 @@
 ! Online html documentation available at
 !            http://www.netlib.org/lapack/explore-html/
 !
-!  Definition:
-!  ===========
-!
-!  CROTG constructs a plane rotation
-!     [  c         s ] [ a ] = [ r ]
-!     [ -conjg(s)  c ] [ b ]   [ 0 ]
-!  where c is real, s is complex, and c**2 + conjg(s)*s = 1.
-!
 !> \par Purpose:
 !  =============
 !>
 !> \verbatim
+!>
+!> CROTG constructs a plane rotation
+!>    [  c         s ] [ a ] = [ r ]
+!>    [ -conjg(s)  c ] [ b ]   [ 0 ]
+!> where c is real, s is complex, and c**2 + conjg(s)*s = 1.
 !>
 !> The computation uses the formulas
 !>    |x| = sqrt( Re(x)**2 + Im(x)**2 )
@@ -33,6 +30,8 @@
 !> if the signs of a and b are not the same.
 !>
 !> \endverbatim
+!>
+!> @see lartg, @see lartgp
 !
 !  Arguments:
 !  ==========
@@ -181,7 +180,7 @@ subroutine CROTG( a, b, c, s )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )
@@ -237,7 +236,7 @@ subroutine CROTG( a, b, c, s )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )

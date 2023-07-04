@@ -5,18 +5,15 @@
 ! Online html documentation available at
 !            http://www.netlib.org/lapack/explore-html/
 !
-!  Definition:
-!  ===========
-!
-!  SROTG constructs a plane rotation
-!     [  c  s ] [ a ] = [ r ]
-!     [ -s  c ] [ b ]   [ 0 ]
-!  satisfying c**2 + s**2 = 1.
-!
 !> \par Purpose:
 !  =============
 !>
 !> \verbatim
+!>
+!> SROTG constructs a plane rotation
+!>    [  c  s ] [ a ] = [ r ]
+!>    [ -s  c ] [ b ]   [ 0 ]
+!> satisfying c**2 + s**2 = 1.
 !>
 !> The computation uses the formulas
 !>    sigma = sgn(a)    if |a| >  |b|
@@ -34,6 +31,8 @@
 !>    If |z| > 1, set c = 1/z and s = sqrt( 1 - c**2).
 !>
 !> \endverbatim
+!>
+!> @see lartg, @see lartgp
 !
 !  Arguments:
 !  ==========
