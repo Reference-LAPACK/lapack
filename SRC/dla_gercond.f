@@ -143,7 +143,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup la_gercond
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLA_GERCOND( TRANS, N, A, LDA, AF,

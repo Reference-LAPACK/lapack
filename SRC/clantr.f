@@ -134,7 +134,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lantr
 *
 *  =====================================================================
       REAL             FUNCTION CLANTR( NORM, UPLO, DIAG, M, N, A, LDA,

@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAGTM performs a matrix-vector product of the form
+*> ZLAGTM performs a matrix-matrix product of the form
 *>
 *>    B := alpha * A * X + beta * B
 *>
@@ -137,7 +137,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lagtm
 *
 *  =====================================================================
       SUBROUTINE ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,

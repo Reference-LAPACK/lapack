@@ -333,7 +333,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEsing
+*> \ingroup ggsvd3
 *
 *> \par Contributors:
 *  ==================

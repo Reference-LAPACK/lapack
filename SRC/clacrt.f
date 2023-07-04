@@ -98,7 +98,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lacrt
 *
 *  =====================================================================
       SUBROUTINE CLACRT( N, CX, INCX, CY, INCY, C, S )

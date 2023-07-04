@@ -673,22 +673,34 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
     set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
     set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
     set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
-    set(PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
     set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
     set(DOXYGEN_SOURCE_BROWSER YES)
-    set(DISTRIBUTE_GROUP_DOC YES)
     set(DOXYGEN_CREATE_SUBDIRS YES)
     set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
     set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_FILE_PATTERNS "*.f;*.c;*.h")
+    set(DOXYGEN_FILE_PATTERNS *.f *.f90 *.c *.h )
     set(DOXYGEN_RECURSIVE YES)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
-    set(DOXYGEN_QUIET YES)
-    set(DOXYGEN_WARNINGS NO)
+    set(DOXYGEN_QUIET NO)
+    set(DOXYGEN_WARNINGS YES)
+    set(DOXYGEN_WARN_NO_PARAMDOC YES)
+    set(DOXYGEN_WARN_LOGFILE doxygen_error)
     set(DOXYGEN_GENERATE_HTML NO)
     set(DOXYGEN_GENERATE_MAN NO)
+    set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
+    # Exclude functions that are duplicated, creating conflicts.
+    set(DOXYGEN_EXCLUDE .git
+                        .github
+                        SRC/VARIANTS
+                        BLAS/SRC/lsame.f
+                        BLAS/SRC/xerbla.f
+                        BLAS/SRC/xerbla_array.f
+                        INSTALL/slamchf77.f
+                        INSTALL/dlamchf77.f )
 
     if (BUILD_HTML_DOCUMENTATION)
         set(DOXYGEN_GENERATE_HTML YES)
@@ -699,13 +711,21 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
         doxygen_add_docs(
             html
-            ${PROJECT_SOURCE_DIR}
+
+            # Doxygen INPUT =
+            ${PROJECT_SOURCE_DIR}/README.md
+            ${PROJECT_SOURCE_DIR}/BLAS
+            ${PROJECT_SOURCE_DIR}/CBLAS
+            ${PROJECT_SOURCE_DIR}/SRC
+            ${PROJECT_SOURCE_DIR}/INSTALL
+            ${PROJECT_SOURCE_DIR}/TESTING
+            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
     endif()
     if (BUILD_MAN_DOCUMENTATION)
         set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_EXCLUDE SRC/VARIANTS)
         set(DOXYGEN_MAN_LINKS YES)
         set(DOXYGEN_INLINE_SOURCES NO)
         set(DOXYGEN_CALL_GRAPH NO)
@@ -713,7 +733,15 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
         doxygen_add_docs(
             man
-            ${PROJECT_SOURCE_DIR}
+
+            # Doxygen INPUT =
+            ${PROJECT_SOURCE_DIR}/BLAS
+            ${PROJECT_SOURCE_DIR}/CBLAS
+            ${PROJECT_SOURCE_DIR}/SRC
+            ${PROJECT_SOURCE_DIR}/INSTALL
+            ${PROJECT_SOURCE_DIR}/TESTING
+            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+
             COMMENT "Generating man LAPACK documentation"
         )
     endif()

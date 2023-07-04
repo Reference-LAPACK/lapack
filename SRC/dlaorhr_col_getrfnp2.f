@@ -149,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup launhr_col_getrfnp2
 *
 *> \par Contributors:
 *  ==================

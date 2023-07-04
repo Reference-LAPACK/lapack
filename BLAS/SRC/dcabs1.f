@@ -40,7 +40,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level1
+*> \ingroup abs1
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DCABS1(Z)

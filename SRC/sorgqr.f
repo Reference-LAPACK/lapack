@@ -121,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ungqr
 *
 *  =====================================================================
       SUBROUTINE SORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )

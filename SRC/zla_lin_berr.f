@@ -94,7 +94,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup la_lin_berr
 *
 *  =====================================================================
       SUBROUTINE ZLA_LIN_BERR( N, NZ, NRHS, RES, AYB, BERR )

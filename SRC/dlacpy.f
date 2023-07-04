@@ -96,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lacpy
 *
 *  =====================================================================
       SUBROUTINE DLACPY( UPLO, M, N, A, LDA, B, LDB )

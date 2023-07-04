@@ -294,7 +294,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup laqz0
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE SLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,

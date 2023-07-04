@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEauxiliary
+*> \ingroup lange
 *
 *  =====================================================================
       REAL             FUNCTION SLANGE( NORM, M, N, A, LDA, WORK )

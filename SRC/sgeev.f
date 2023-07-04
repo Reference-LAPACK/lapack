@@ -184,7 +184,7 @@
 *
 *  @generated from dgeev.f, fortran d -> s, Tue Apr 19 01:47:44 2016
 *
-*> \ingroup realGEeigen
+*> \ingroup geev
 *
 *  =====================================================================
       SUBROUTINE SGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,

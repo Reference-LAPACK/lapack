@@ -112,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup poequb
 *
 *  =====================================================================
       SUBROUTINE CPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )

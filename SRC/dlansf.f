@@ -115,7 +115,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup lanhf
 *
 *> \par Further Details:
 *  =====================

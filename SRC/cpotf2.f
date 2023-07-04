@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup potf2
 *
 *  =====================================================================
       SUBROUTINE CPOTF2( UPLO, N, A, LDA, INFO )

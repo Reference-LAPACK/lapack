@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup trtri
 *
 *  =====================================================================
       SUBROUTINE CTRTRI( UPLO, DIAG, N, A, LDA, INFO )

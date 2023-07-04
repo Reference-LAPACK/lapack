@@ -181,7 +181,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEauxiliary
+*> \ingroup tgex2
 *
 *> \par Further Details:
 *  =====================

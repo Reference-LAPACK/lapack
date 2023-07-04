@@ -1,3 +1,5 @@
+*> \addtogroup gesv
+*>
 *> \brief <b> DGESV computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
@@ -115,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsolve
+*> \ingroup gesv
 *
 *  =====================================================================
       SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )

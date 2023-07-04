@@ -250,7 +250,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ggsvp3
 *
 *> \par Further Details:
 *  =====================

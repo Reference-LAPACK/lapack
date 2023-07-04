@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup _lag2_
 *
 *  =====================================================================
       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )

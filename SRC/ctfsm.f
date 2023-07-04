@@ -182,7 +182,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup tfsm
 *
 *> \par Further Details:
 *  =====================

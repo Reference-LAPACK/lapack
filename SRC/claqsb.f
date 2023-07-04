@@ -134,7 +134,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup laqhb
 *
 *  =====================================================================
       SUBROUTINE CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )

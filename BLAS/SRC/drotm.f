@@ -89,7 +89,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level1
+*> \ingroup rotm
 *
 *  =====================================================================
       SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)

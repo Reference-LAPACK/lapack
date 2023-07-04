@@ -109,7 +109,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lanv2
 *
 *> \par Further Details:
 *  =====================

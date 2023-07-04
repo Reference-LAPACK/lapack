@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larcm
 *
 *  =====================================================================
       SUBROUTINE CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )

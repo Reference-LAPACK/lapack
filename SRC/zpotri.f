@@ -88,7 +88,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16POcomputational
+*> \ingroup potri
 *
 *  =====================================================================
       SUBROUTINE ZPOTRI( UPLO, N, A, LDA, INFO )

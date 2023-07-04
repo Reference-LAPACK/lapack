@@ -404,7 +404,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEsing
+*> \ingroup gesvdq
 *
 *  =====================================================================
       SUBROUTINE ZGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,

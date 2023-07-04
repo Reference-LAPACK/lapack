@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetri
 *
 *  =====================================================================
       SUBROUTINE CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )

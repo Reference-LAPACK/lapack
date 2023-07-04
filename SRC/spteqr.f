@@ -138,7 +138,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPTcomputational
+*> \ingroup pteqr
 *
 *  =====================================================================
       SUBROUTINE SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )

@@ -67,7 +67,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup laisnan
 *
 *  =====================================================================
       LOGICAL FUNCTION DLAISNAN( DIN1, DIN2 )

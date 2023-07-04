@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lapmt
 *
 *  =====================================================================
       SUBROUTINE SLAPMT( FORWRD, M, N, X, LDX, K )

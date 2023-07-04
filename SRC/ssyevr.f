@@ -317,7 +317,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYeigen
+*> \ingroup heevr
 *
 *> \par Contributors:
 *  ==================

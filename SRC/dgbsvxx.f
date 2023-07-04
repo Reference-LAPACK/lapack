@@ -549,7 +549,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBsolve
+*> \ingroup gbsvxx
 *
 *  =====================================================================
       SUBROUTINE DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,

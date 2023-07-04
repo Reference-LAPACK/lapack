@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEauxiliary
+*> \ingroup heswapr
 *
 *  =====================================================================
       SUBROUTINE ZHESWAPR( UPLO, N, A, LDA, I1, I2)

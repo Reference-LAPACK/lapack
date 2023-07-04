@@ -208,7 +208,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleSYcomputational
+*> \ingroup hetf2_rk
 *
 *> \par Further Details:
 *  =====================

@@ -290,7 +290,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup tgsen
 *
 *> \par Further Details:
 *  =====================

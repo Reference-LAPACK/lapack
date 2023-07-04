@@ -122,7 +122,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lanhb
 *
 *  =====================================================================
       REAL             FUNCTION CLANSB( NORM, UPLO, N, K, AB, LDAB,

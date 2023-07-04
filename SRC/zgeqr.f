@@ -168,6 +168,8 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup geqr
+*>
 *  =====================================================================
       SUBROUTINE ZGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )

@@ -79,7 +79,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup larnv
 *
 *> \par Further Details:
 *  =====================

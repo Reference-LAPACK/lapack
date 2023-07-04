@@ -67,7 +67,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lsamen
 *
 *  =====================================================================
       LOGICAL          FUNCTION LSAMEN( N, CA, CB )

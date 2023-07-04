@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larfg
 *
 *  =====================================================================
       SUBROUTINE CLARFG( N, ALPHA, X, INCX, TAU )

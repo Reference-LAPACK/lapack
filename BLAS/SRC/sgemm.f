@@ -166,7 +166,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level3
+*> \ingroup gemm
 *
 *> \par Further Details:
 *  =====================

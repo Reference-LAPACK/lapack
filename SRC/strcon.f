@@ -129,7 +129,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup trcon
 *
 *  =====================================================================
       SUBROUTINE STRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND, WORK,

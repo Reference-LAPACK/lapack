@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup tpttr
 *
 *  =====================================================================
       SUBROUTINE STPTTR( UPLO, N, AP, A, LDA, INFO )

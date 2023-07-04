@@ -67,7 +67,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup laisnan
 *
 *  =====================================================================
       LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )

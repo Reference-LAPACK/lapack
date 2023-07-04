@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup ladiv
 *
 *  =====================================================================
       SUBROUTINE DLADIV( A, B, C, D, P, Q )
@@ -170,7 +170,7 @@
 *
       END
 
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup ladiv
 
 
       SUBROUTINE DLADIV1( A, B, C, D, P, Q )
@@ -210,7 +210,7 @@
 *
       END
 
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup ladiv
 
       DOUBLE PRECISION FUNCTION DLADIV2( A, B, C, D, R, T )
 *

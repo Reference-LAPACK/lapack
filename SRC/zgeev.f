@@ -172,7 +172,7 @@
 *
 *  @precisions fortran z -> c
 *
-*> \ingroup complex16GEeigen
+*> \ingroup geev
 *
 *  =====================================================================
       SUBROUTINE ZGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,

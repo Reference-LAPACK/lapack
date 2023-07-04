@@ -132,7 +132,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lantb
 *
 *  =====================================================================
       REAL             FUNCTION SLANTB( NORM, UPLO, DIAG, N, K, AB,

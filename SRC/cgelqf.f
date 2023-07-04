@@ -118,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup gelqf
 *
 *> \par Further Details:
 *  =====================

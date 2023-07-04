@@ -384,7 +384,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePOcomputational
+*> \ingroup porfsx
 *
 *  =====================================================================
       SUBROUTINE DPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,

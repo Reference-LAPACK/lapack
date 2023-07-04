@@ -136,7 +136,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup lahef_aa
 *
 *  =====================================================================
       SUBROUTINE CLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,

@@ -203,7 +203,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsing
+*> \ingroup gesvd
 *
 *  =====================================================================
       SUBROUTINE DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU,

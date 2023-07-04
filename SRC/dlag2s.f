@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup _lag2_
 *
 *  =====================================================================
       SUBROUTINE DLAG2S( M, N, A, LDA, SA, LDSA, INFO )

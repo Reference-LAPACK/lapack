@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPTcomputational
+*> \ingroup pttrs
 *
 *  =====================================================================
       SUBROUTINE SPTTRS( N, NRHS, D, E, B, LDB, INFO )

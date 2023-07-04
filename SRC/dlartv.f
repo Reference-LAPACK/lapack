@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup lartv
 *
 *  =====================================================================
       SUBROUTINE DLARTV( N, X, INCX, Y, INCY, C, S, INCC )

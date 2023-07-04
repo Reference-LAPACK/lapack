@@ -178,7 +178,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup larrb
 *
 *> \par Contributors:
 *  ==================

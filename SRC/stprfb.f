@@ -194,7 +194,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup tprfb
 *
 *> \par Further Details:
 *  =====================

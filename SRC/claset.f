@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup laset
 *
 *  =====================================================================
       SUBROUTINE CLASET( UPLO, M, N, ALPHA, BETA, A, LDA )

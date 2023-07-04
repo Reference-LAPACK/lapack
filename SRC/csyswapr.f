@@ -93,7 +93,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYauxiliary
+*> \ingroup heswapr
 *
 *  =====================================================================
       SUBROUTINE CSYSWAPR( UPLO, N, A, LDA, I1, I2)

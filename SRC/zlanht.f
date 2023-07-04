@@ -94,7 +94,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lanht
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANHT( NORM, N, D, E )

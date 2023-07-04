@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lanhs
 *
 *  =====================================================================
       REAL             FUNCTION SLANHS( NORM, N, A, LDA, WORK )

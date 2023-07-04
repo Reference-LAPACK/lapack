@@ -83,7 +83,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup larscl2
 *
 *  =====================================================================
       SUBROUTINE DLARSCL2 ( M, N, D, X, LDX )

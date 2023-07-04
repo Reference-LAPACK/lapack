@@ -61,7 +61,7 @@
 *> \author NAG Ltd.
 *
 
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lamch
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
@@ -155,7 +155,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC1
 *> \details
 *> \b Purpose:
@@ -188,7 +187,8 @@
 *>          'round to nearest' style.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc1
 *>
 *> \details \b Further \b Details
 *> \verbatim
@@ -349,7 +349,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC2
 *> \details
 *> \b Purpose:
@@ -358,7 +357,8 @@
 *> list.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc2
 *>
 *> \param[out] BETA
 *> \verbatim
@@ -620,7 +620,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC3
 *> \details
 *> \b Purpose:
@@ -636,7 +635,9 @@
 *> \verbatim
 *>          The values A and B.
 *> \endverbatim
-
+*>
+*> \ingroup lamc3
+*>
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine --
@@ -658,7 +659,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC4
 *> \details
 *> \b Purpose:
@@ -682,6 +682,8 @@
 *> \verbatim
 *>          The base of the machine.
 *> \endverbatim
+*>
+*> \ingroup lamc4
 *>
       SUBROUTINE DLAMC4( EMIN, START, BASE )
 *
@@ -744,7 +746,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC5
 *> \details
 *> \b Purpose:
@@ -788,6 +789,8 @@
 *> \verbatim
 *>          The largest machine floating-point number.
 *> \endverbatim
+*>
+*> \ingroup lamc5
 *>
       SUBROUTINE DLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *

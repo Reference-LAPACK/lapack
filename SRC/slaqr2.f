@@ -263,7 +263,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup laqr2
 *
 *> \par Contributors:
 *  ==================

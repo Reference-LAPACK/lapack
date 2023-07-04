@@ -197,7 +197,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEsolve
+*> \ingroup gelsy
 *
 *> \par Contributors:
 *  ==================

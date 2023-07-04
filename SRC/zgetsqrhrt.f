@@ -160,7 +160,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup comlpex16OTHERcomputational
+*> \ingroup getsqrhrt
 *
 *> \par Contributors:
 *  ==================

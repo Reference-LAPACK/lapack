@@ -103,7 +103,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup laset
 *
 *  =====================================================================
       SUBROUTINE DLASET( UPLO, M, N, ALPHA, BETA, A, LDA )

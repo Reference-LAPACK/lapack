@@ -100,7 +100,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePOcomputational
+*> \ingroup potrf
 *
 *  =====================================================================
       SUBROUTINE DPOTRF( UPLO, N, A, LDA, INFO )

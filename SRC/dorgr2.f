@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup ungr2
 *
 *  =====================================================================
       SUBROUTINE DORGR2( M, N, K, A, LDA, TAU, WORK, INFO )

@@ -133,7 +133,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBsolve
+*> \ingroup gbsv
 *
 *> \par Further Details:
 *  =====================

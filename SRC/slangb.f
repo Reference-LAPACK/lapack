@@ -116,7 +116,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGBauxiliary
+*> \ingroup langb
 *
 *  =====================================================================
       REAL             FUNCTION SLANGB( NORM, N, KL, KU, AB, LDAB,

@@ -109,7 +109,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup ppequ
 *
 *  =====================================================================
       SUBROUTINE DPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )

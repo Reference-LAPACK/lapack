@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lanhp
 *
 *  =====================================================================
       REAL             FUNCTION SLANSP( NORM, UPLO, N, AP, WORK )

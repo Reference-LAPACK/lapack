@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup larscl2
 *
 *  =====================================================================
       SUBROUTINE CLARSCL2 ( M, N, D, X, LDX )

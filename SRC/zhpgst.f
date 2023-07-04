@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup hpgst
 *
 *  =====================================================================
       SUBROUTINE ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )

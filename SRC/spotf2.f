@@ -102,7 +102,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOcomputational
+*> \ingroup potf2
 *
 *  =====================================================================
       SUBROUTINE SPOTF2( UPLO, N, A, LDA, INFO )

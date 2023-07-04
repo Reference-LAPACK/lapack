@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERsolve
+*> \ingroup ppsv
 *
 *> \par Further Details:
 *  =====================

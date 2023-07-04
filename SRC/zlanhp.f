@@ -110,7 +110,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lanhp
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANHP( NORM, UPLO, N, AP, WORK )

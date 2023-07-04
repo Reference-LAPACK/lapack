@@ -161,7 +161,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larfb
 *
 *> \par Further Details:
 *  =====================

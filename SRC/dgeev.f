@@ -184,7 +184,7 @@
 *
 *  @precisions fortran d -> s
 *
-*> \ingroup doubleGEeigen
+*> \ingroup geev
 *
 *  =====================================================================
       SUBROUTINE DGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,

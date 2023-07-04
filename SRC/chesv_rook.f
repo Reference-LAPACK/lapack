@@ -184,7 +184,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEsolve
+*> \ingroup hesv_rook
 *>
 *> \verbatim
 *>

@@ -195,7 +195,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup tgexc
 *
 *> \par Contributors:
 *  ==================

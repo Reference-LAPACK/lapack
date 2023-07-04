@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup lanhs
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANHS( NORM, N, A, LDA, WORK )

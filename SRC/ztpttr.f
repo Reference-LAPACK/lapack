@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup tpttr
 *
 *  =====================================================================
       SUBROUTINE ZTPTTR( UPLO, N, AP, A, LDA, INFO )

@@ -429,7 +429,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGBcomputational
+*> \ingroup gbrfsx
 *
 *  =====================================================================
       SUBROUTINE CGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,

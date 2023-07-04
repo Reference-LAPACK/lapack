@@ -133,7 +133,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetrs_aa_2stage
 *
 *  =====================================================================
       SUBROUTINE CHETRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,

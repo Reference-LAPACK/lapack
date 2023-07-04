@@ -51,7 +51,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup ilaprec
 *
 *  =====================================================================
       INTEGER FUNCTION ILAPREC( PREC )

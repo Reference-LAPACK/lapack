@@ -125,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup hetrf_aa
 *
 *  =====================================================================
       SUBROUTINE DSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)

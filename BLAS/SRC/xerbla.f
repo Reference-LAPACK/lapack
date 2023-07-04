@@ -53,7 +53,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup aux_blas
+*> \ingroup xerbla
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )

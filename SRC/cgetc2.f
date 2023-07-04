@@ -98,7 +98,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEauxiliary
+*> \ingroup getc2
 *
 *> \par Contributors:
 *  ==================

@@ -319,7 +319,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup larrd
 *
 *  =====================================================================
       SUBROUTINE DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,

@@ -209,6 +209,7 @@
 *>          REC is INTEGER
 *>             REC indicates the current recursion level. Should be set
 *>             to 0 on first call.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -224,7 +225,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup complexGEcomputational
+*> \ingroup laqz2
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,

@@ -113,7 +113,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup larfx
 *
 *  =====================================================================
       SUBROUTINE DLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )

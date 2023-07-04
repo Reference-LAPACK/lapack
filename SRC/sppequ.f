@@ -109,7 +109,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ppequ
 *
 *  =====================================================================
       SUBROUTINE SPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )

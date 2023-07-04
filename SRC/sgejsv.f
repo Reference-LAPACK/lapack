@@ -391,7 +391,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsing
+*> \ingroup gejsv
 *
 *> \par Further Details:
 *  =====================

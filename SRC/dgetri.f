@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup getri
 *
 *  =====================================================================
       SUBROUTINE DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )

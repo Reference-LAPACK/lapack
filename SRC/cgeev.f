@@ -172,7 +172,7 @@
 *
 *  @generated from zgeev.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
-*> \ingroup complexGEeigen
+*> \ingroup geev
 *
 *  =====================================================================
       SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,

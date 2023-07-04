@@ -28,9 +28,6 @@
 *  ==========
 *
 *> \param[in] CA
-*> \verbatim
-*> \endverbatim
-*>
 *> \param[in] CB
 *> \verbatim
 *>          CA and CB specify the single characters to be compared.
@@ -44,7 +41,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lsame
 *
 *  =====================================================================
       LOGICAL FUNCTION LSAME( CA, CB )

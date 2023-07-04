@@ -99,7 +99,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePOcomputational
+*> \ingroup potrf2
 *
 *  =====================================================================
       RECURSIVE SUBROUTINE DPOTRF2( UPLO, N, A, LDA, INFO )

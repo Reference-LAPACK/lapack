@@ -352,7 +352,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEeigen
+*> \ingroup ggevx
 *
 *> \par Further Details:
 *  =====================

@@ -279,7 +279,7 @@
 *
 *  @precisions fortran z -> c
 *
-*> \ingroup complex16GEeigen
+*> \ingroup geevx
 *
 *  =====================================================================
       SUBROUTINE ZGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W, VL,

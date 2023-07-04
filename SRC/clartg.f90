@@ -96,7 +96,7 @@
 !
 !> \date December 2021
 !
-!> \ingroup OTHERauxiliary
+!> \ingroup lartg
 !
 !> \par Further Details:
 !  =====================
@@ -195,7 +195,7 @@ subroutine CLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )
@@ -251,7 +251,7 @@ subroutine CLARTG( f, g, c, s, r )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )

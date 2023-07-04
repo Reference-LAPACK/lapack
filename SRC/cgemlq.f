@@ -119,7 +119,7 @@
 *>          The dimension of the array WORK.
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
-*>          value as WORK(1), and no error message related to WORK 
+*>          value as WORK(1), and no error message related to WORK
 *>          is issued by XERBLA.
 *> \endverbatim
 *>
@@ -143,7 +143,7 @@
 *>
 *> \verbatim
 *>
-*> These details are particular for this LAPACK implementation. Users should not 
+*> These details are particular for this LAPACK implementation. Users should not
 *> take them for granted. These details may change in the future, and are not likely
 *> true for another LAPACK implementation. These details are relevant if one wants
 *> to try to understand the code. They are not part of the interface.
@@ -159,10 +159,12 @@
 *>  block sizes MB and NB returned by ILAENV, CGELQ will use either
 *>  CLASWLQ (if the matrix is wide-and-short) or CGELQT to compute
 *>  the LQ factorization.
-*>  This version of CGEMLQ will use either CLAMSWLQ or CGEMLQT to 
+*>  This version of CGEMLQ will use either CLAMSWLQ or CGEMLQT to
 *>  multiply matrix Q by another matrix.
 *>  Further Details in CLAMSWLQ or CGEMLQT.
 *> \endverbatim
+*>
+*> \ingroup gemlq
 *>
 *  =====================================================================
       SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,

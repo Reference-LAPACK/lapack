@@ -119,7 +119,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup laqhp
 *
 *  =====================================================================
       SUBROUTINE CLAQHP( UPLO, N, AP, S, SCOND, AMAX, EQUED )

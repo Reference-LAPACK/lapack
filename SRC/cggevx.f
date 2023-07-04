@@ -335,7 +335,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEeigen
+*> \ingroup ggevx
 *
 *> \par Further Details:
 *  =====================

@@ -212,7 +212,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHEReigen
+*> \ingroup hpgvd
 *
 *> \par Contributors:
 *  ==================

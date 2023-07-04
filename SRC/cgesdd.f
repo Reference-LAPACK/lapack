@@ -207,7 +207,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEsing
+*> \ingroup gesdd
 *
 *> \par Contributors:
 *  ==================

@@ -121,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup larf
 *
 *  =====================================================================
       SUBROUTINE CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )

@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup larfy
 *
 *  =====================================================================
       SUBROUTINE DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )

@@ -146,7 +146,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup hetrf_rook
 *
 *> \par Further Details:
 *  =====================

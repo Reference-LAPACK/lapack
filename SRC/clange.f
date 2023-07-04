@@ -108,7 +108,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEauxiliary
+*> \ingroup lange
 *
 *  =====================================================================
       REAL             FUNCTION CLANGE( NORM, M, N, A, LDA, WORK )

@@ -158,7 +158,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup hetrd_he2hb
 *
 *> \par Further Details:
 *  =====================

@@ -231,7 +231,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup trsen
 *
 *> \par Further Details:
 *  =====================

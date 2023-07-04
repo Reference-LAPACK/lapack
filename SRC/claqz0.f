@@ -274,7 +274,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup complexGEcomputational
+*> \ingroup laqz0
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,

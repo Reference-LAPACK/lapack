@@ -91,7 +91,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level1
+*> \ingroup rot
 *
 *  =====================================================================
       SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )

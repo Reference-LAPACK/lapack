@@ -136,7 +136,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYcomputational
+*> \ingroup lahef_aa
 *
 *  =====================================================================
       SUBROUTINE SLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,

@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPTsolve
+*> \ingroup ptsv
 *
 *  =====================================================================
       SUBROUTINE SPTSV( N, NRHS, D, E, B, LDB, INFO )

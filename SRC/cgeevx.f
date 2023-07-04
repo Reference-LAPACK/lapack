@@ -279,7 +279,7 @@
 *
 *  @generated from zgeevx.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
-*> \ingroup complexGEeigen
+*> \ingroup geevx
 *
 *  =====================================================================
       SUBROUTINE CGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W, VL,

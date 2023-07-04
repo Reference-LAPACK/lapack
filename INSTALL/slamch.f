@@ -61,7 +61,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lamch
 *
 *  =====================================================================
       REAL             FUNCTION SLAMCH( CMACH )
@@ -143,6 +143,7 @@
 *     End of SLAMCH
 *
       END
+
 ************************************************************************
 *> \brief \b SLAMC3
 *> \details
@@ -153,7 +154,8 @@
 *> might hold one of these in a register.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc3
 *>
 *> \param[in] A
 *> \verbatim

@@ -264,7 +264,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasd7
 *
 *> \par Contributors:
 *  ==================

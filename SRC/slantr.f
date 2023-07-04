@@ -133,7 +133,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lantr
 *
 *  =====================================================================
       REAL             FUNCTION SLANTR( NORM, UPLO, DIAG, M, N, A, LDA,

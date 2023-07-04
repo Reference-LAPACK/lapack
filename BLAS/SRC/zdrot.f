@@ -91,7 +91,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16_blas_level1
+*> \ingroup rot
 *
 *  =====================================================================
       SUBROUTINE ZDROT( N, ZX, INCX, ZY, INCY, C, S )

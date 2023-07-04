@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup hpgst
 *
 *  =====================================================================
       SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )

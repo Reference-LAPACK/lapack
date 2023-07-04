@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup getri
 *
 *  =====================================================================
       SUBROUTINE SGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )

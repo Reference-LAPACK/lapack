@@ -133,7 +133,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lantb
 *
 *  =====================================================================
       REAL             FUNCTION CLANTB( NORM, UPLO, DIAG, N, K, AB,

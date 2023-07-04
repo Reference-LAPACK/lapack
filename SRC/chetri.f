@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hetri
 *
 *  =====================================================================
       SUBROUTINE CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )

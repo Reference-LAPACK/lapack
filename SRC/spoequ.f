@@ -105,7 +105,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOcomputational
+*> \ingroup poequ
 *
 *  =====================================================================
       SUBROUTINE SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )

@@ -95,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lauum
 *
 *  =====================================================================
       SUBROUTINE SLAUUM( UPLO, N, A, LDA, INFO )

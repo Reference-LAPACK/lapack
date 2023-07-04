@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup ungr2
 *
 *  =====================================================================
       SUBROUTINE CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )

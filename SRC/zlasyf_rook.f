@@ -161,7 +161,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup lahef_rook
 *
 *> \par Contributors:
 *  ==================

@@ -287,7 +287,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHEReigen
+*> \ingroup stevr
 *
 *> \par Contributors:
 *  ==================

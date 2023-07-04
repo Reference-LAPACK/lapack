@@ -121,7 +121,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lanhb
 *
 *  =====================================================================
       REAL             FUNCTION SLANSB( NORM, UPLO, N, K, AB, LDAB,

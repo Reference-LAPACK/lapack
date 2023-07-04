@@ -241,7 +241,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup unhr_col
 *
 *> \par Contributors:
 *  ==================

@@ -44,7 +44,7 @@
 *
 *> \author Weslley Pereira, University of Colorado Denver, USA
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup roundup_lwork
 *
 *> \par Further Details:
 *  =====================

@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePTsolve
+*> \ingroup ptsv
 *
 *  =====================================================================
       SUBROUTINE DPTSV( N, NRHS, D, E, B, LDB, INFO )

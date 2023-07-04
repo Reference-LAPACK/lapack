@@ -92,7 +92,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lamrg
 *
 *  =====================================================================
       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )

@@ -54,7 +54,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup aux_blas
+*> \ingroup iamax
 *
 *> \par Further Details:
 *  =====================

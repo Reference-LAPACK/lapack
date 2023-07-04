@@ -81,7 +81,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lasrt
 *
 *  =====================================================================
       SUBROUTINE DLASRT( ID, N, D, INFO )

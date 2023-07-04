@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGTsolve
+*> \ingroup gtsv
 *
 *  =====================================================================
       SUBROUTINE CGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )

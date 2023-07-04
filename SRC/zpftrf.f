@@ -204,7 +204,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup pftrf
 *
 *  =====================================================================
       SUBROUTINE ZPFTRF( TRANSR, UPLO, N, A, INFO )

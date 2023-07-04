@@ -69,7 +69,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup sum1
 *
 *> \par Contributors:
 *  ==================

@@ -93,7 +93,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lanht
 *
 *  =====================================================================
       REAL             FUNCTION SLANST( NORM, N, D, E )

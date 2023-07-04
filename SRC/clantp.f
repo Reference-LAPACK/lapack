@@ -118,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lantp
 *
 *  =====================================================================
       REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP, WORK )

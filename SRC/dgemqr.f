@@ -120,7 +120,7 @@
 *>          The dimension of the array WORK.
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
-*>          value as WORK(1), and no error message related to WORK 
+*>          value as WORK(1), and no error message related to WORK
 *>          is issued by XERBLA.
 *> \endverbatim
 *>
@@ -144,7 +144,7 @@
 *>
 *> \verbatim
 *>
-*> These details are particular for this LAPACK implementation. Users should not 
+*> These details are particular for this LAPACK implementation. Users should not
 *> take them for granted. These details may change in the future, and are not likely
 *> true for another LAPACK implementation. These details are relevant if one wants
 *> to try to understand the code. They are not part of the interface.
@@ -160,11 +160,13 @@
 *>  block sizes MB and NB returned by ILAENV, DGEQR will use either
 *>  DLATSQR (if the matrix is tall-and-skinny) or DGEQRT to compute
 *>  the QR factorization.
-*>  This version of DGEMQR will use either DLAMTSQR or DGEMQRT to 
+*>  This version of DGEMQR will use either DLAMTSQR or DGEMQRT to
 *>  multiply matrix Q by another matrix.
 *>  Further Details in DLATMSQR or DGEMQRT.
 *>
 *> \endverbatim
+*>
+*> \ingroup gemqr
 *>
 *  =====================================================================
       SUBROUTINE DGEMQR( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,

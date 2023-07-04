@@ -125,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup hpr
 *
 *  =====================================================================
       SUBROUTINE ZSPR( UPLO, N, ALPHA, X, INCX, AP )

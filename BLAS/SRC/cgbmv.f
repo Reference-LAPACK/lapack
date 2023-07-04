@@ -165,7 +165,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level2
+*> \ingroup gbmv
 *
 *> \par Further Details:
 *  =====================

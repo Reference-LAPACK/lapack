@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lasq1
 *
 *  =====================================================================
       SUBROUTINE SLASQ1( N, D, E, WORK, INFO )

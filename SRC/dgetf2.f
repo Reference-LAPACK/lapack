@@ -101,7 +101,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup getf2
 *
 *  =====================================================================
       SUBROUTINE DGETF2( M, N, A, LDA, IPIV, INFO )

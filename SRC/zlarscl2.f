@@ -84,7 +84,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup larscl2
 *
 *  =====================================================================
       SUBROUTINE ZLARSCL2 ( M, N, D, X, LDX )

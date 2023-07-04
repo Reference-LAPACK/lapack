@@ -297,7 +297,7 @@
 *
 *  @generated from dgeevx.f, fortran d -> s, Tue Apr 19 01:47:44 2016
 *
-*> \ingroup realGEeigen
+*> \ingroup geevx
 *
 *  =====================================================================
       SUBROUTINE SGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,

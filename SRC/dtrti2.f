@@ -103,7 +103,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup trti2
 *
 *  =====================================================================
       SUBROUTINE DTRTI2( UPLO, DIAG, N, A, LDA, INFO )

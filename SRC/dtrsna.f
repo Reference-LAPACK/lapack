@@ -213,7 +213,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup trsna
 *
 *> \par Further Details:
 *  =====================

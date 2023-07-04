@@ -255,7 +255,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup unbdb
 *
 *> \par Further Details:
 *  =====================

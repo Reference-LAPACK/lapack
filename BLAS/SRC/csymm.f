@@ -168,7 +168,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level3
+*> \ingroup hemm
 *
 *> \par Further Details:
 *  =====================

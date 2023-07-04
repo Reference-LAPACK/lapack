@@ -148,7 +148,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level3
+*> \ingroup herk
 *
 *> \par Further Details:
 *  =====================

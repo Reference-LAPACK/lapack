@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup getrf2
 *
 *  =====================================================================
       RECURSIVE SUBROUTINE CGETRF2( M, N, A, LDA, IPIV, INFO )

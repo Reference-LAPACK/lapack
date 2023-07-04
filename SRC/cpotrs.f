@@ -103,7 +103,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup potrs
 *
 *  =====================================================================
       SUBROUTINE CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )

@@ -165,7 +165,7 @@
 *
 *> \date May 2020
 *
-*> \ingroup complexGEcomputational
+*> \ingroup laqz1
 *>
 *  =====================================================================
       SUBROUTINE CLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,

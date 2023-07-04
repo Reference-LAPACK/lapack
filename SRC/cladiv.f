@@ -57,7 +57,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup ladiv
 *
 *  =====================================================================
       COMPLEX FUNCTION CLADIV( X, Y )

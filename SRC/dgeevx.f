@@ -297,7 +297,7 @@
 *
 *  @precisions fortran d -> s
 *
-*> \ingroup doubleGEeigen
+*> \ingroup geevx
 *
 *  =====================================================================
       SUBROUTINE DGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,

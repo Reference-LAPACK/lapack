@@ -97,7 +97,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup largv
 *
 *  =====================================================================
       SUBROUTINE DLARGV( N, X, INCX, Y, INCY, C, INCC )
