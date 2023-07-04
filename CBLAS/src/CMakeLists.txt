@@ -122,16 +122,29 @@ set_target_properties(${CBLASLIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(BUILD_INDEX64_EXT_API)
   # 64bit Integer Interface
+  # Define list of C files
   set(SOURCES_64_C)
-  set(SOURCES_64_F)
   list(APPEND SOURCES_64_C ${SOURCES})
-  list(APPEND SOURCES_64_F ${SOURCES})
   list(FILTER SOURCES_64_C  EXCLUDE REGEX "\.f$")
-  list(FILTER SOURCES_64_F  INCLUDE REGEX "\.f$")
   list(REMOVE_ITEM SOURCES_64_C cblas_globals.c)
+  # Define list of Fortran files
+  set(SOURCES_64_F)
+  list(APPEND SOURCES_64_F ${SOURCES})
+  list(FILTER SOURCES_64_F  INCLUDE REGEX "\.f$")
+  # Copy files so we can set source property specific to /${CBLASLIB}_64_obj target
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}_64_fobj)
+  file(COPY ${SOURCES_64_F} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}_64_fobj)
+  file(GLOB SOURCES_64_F ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}_64_fobj/*)
+  add_library(${CBLASLIB}_64_cobj OBJECT ${SOURCES_64_C})
+  add_library(${CBLASLIB}_64_fobj OBJECT ${SOURCES_64_F})
+  set_target_properties(${CBLASLIB}_64_cobj ${CBLASLIB}_64_fobj PROPERTIES
+          POSITION_INDEPENDENT_CODE ON
+          Fortran_PREPROCESS ON)
+  target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64)
+  target_compile_options(${CBLASLIB}_64_fobj PRIVATE ${FOPT_ILP64})
   #Add suffix to all Fortran functions via macros
-  set(COPT_64_F)
   foreach(F IN LISTS SOURCES_64_F)
+      set(COPT_64_F)
       file(STRINGS ${F} ${F}.lst)
       list(FILTER ${F}.lst INCLUDE REGEX "subroutine|external")
       foreach(FUNC IN LISTS ${F}.lst)
@@ -139,14 +152,8 @@ if(BUILD_INDEX64_EXT_API)
         string(REGEX REPLACE "[(][a-zA-Z0-9, ]*[)]" "" FUNC ${FUNC})
         list(APPEND COPT_64_F "-D${FUNC}=${FUNC}_64")
       endforeach()
+      set_source_files_properties(${F} PROPERTIES COMPILE_OPTIONS "${COPT_64_F}")
   endforeach()
-  add_library(${CBLASLIB}_64_cobj OBJECT ${SOURCES_64_C})
-  add_library(${CBLASLIB}_64_fobj OBJECT ${SOURCES_64_F})
-  set_target_properties(${CBLASLIB}_64_cobj ${CBLASLIB}_64_fobj PROPERTIES
-          POSITION_INDEPENDENT_CODE ON
-          Fortran_PREPROCESS ON)
-  target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64)
-  target_compile_options(${CBLASLIB}_64_fobj PRIVATE ${FOPT_ILP64} ${COPT_64_F})
 endif()
 
 add_library(${CBLASLIB}
