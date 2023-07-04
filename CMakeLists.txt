@@ -690,7 +690,7 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
     set(DOXYGEN_WARN_LOGFILE doxygen_error)
     set(DOXYGEN_GENERATE_HTML NO)
     set(DOXYGEN_GENERATE_MAN NO)
-
+    set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
     # Exclude functions that are duplicated, creating conflicts.
     set(DOXYGEN_EXCLUDE .git
