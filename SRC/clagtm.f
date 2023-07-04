@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> CLAGTM performs a matrix-vector product of the form
+*> CLAGTM performs a matrix-matrix product of the form
 *>
 *>    B := alpha * A * X + beta * B
 *>
