@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLA_GERPVGRW multiplies a square real matrix by a complex matrix.
 *
 *  =========== DOCUMENTATION ===========

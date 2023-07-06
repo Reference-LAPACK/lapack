@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========

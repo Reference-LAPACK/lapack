@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZHETRS_AA_2STAGE
 *
 * @generated from SRC/dsytrs_aa_2stage.f, fortran d -> c, Mon Oct 30 11:59:02 2017

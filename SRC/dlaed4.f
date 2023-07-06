@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAED4 used by DSTEDC. Finds a single root of the secular equation.
 *
 *  =========== DOCUMENTATION ===========

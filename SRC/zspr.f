@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix.
 *
 *  =========== DOCUMENTATION ===========

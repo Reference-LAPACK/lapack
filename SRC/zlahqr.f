@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========

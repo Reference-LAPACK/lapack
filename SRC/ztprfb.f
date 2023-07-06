@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZTPRFB applies a complex "triangular-pentagonal" block reflector to a complex matrix, which is composed of two blocks.
 *
 *  =========== DOCUMENTATION ===========

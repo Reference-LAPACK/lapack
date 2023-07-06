@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========

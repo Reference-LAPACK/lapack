@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLA_GBAMV performs a matrix-vector operation to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========

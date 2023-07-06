@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========

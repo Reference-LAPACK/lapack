@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SSYSWAPR applies an elementary permutation on the rows and columns of a symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
 *
 *  =========== DOCUMENTATION ===========

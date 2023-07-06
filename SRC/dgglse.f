@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> DGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========

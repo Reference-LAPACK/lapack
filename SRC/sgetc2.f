@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
 *
 *  =========== DOCUMENTATION ===========

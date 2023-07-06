@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLAED0 used by CSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========

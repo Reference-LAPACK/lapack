@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAED2 used by DSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========

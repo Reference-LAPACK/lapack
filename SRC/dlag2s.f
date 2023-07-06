@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAG2S converts a double precision matrix to a single precision matrix.
 *
 *  =========== DOCUMENTATION ===========

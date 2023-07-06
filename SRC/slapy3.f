@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAPY3 returns sqrt(x2+y2+z2).
 *
 *  =========== DOCUMENTATION ===========

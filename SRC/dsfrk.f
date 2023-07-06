@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DSFRK performs a symmetric rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========

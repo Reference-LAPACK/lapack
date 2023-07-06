@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGBCON
 *
 *  =========== DOCUMENTATION ===========
@@ -141,8 +142,8 @@
 *> \ingroup gbcon
 *
 *  =====================================================================
-      SUBROUTINE SGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
-     $                   WORK, IWORK, INFO )
+      SUBROUTINE SGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM,
+     $                   RCOND, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -249,7 +250,8 @@
                      WORK( JP ) = WORK( J )
                      WORK( J ) = T
                   END IF
-                  CALL SAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ), 1 )
+                  CALL SAXPY( LM, -T, AB( KD+1, J ), 1,
+     $                     WORK( J+1 ), 1 )
    20          CONTINUE
             END IF
 *

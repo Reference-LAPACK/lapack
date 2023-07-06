@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

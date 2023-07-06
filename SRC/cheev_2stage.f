@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> CHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  @generated from zheev_2stage.f, fortran z -> c, Sat Nov  5 23:18:06 2016

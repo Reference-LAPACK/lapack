@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> ZHECON_ROOK estimates the reciprocal of the condition number fort HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges) </b>
 *
 *  =========== DOCUMENTATION ===========

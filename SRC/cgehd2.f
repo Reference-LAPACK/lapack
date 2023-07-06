@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========

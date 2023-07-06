@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLATPS solves a triangular system of equations with the matrix held in packed storage.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr. </b>
 *
 *  =========== DOCUMENTATION ===========

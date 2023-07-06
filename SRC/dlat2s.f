@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAT2S converts a double-precision triangular matrix to a single-precision triangular matrix.
 *
 *  =========== DOCUMENTATION ===========

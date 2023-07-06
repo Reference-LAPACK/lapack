@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========

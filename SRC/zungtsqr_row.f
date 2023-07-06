@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZUNGTSQR_ROW
 *
 *  =========== DOCUMENTATION ===========

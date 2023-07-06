@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DTRTTF copies a triangular matrix from the standard full format (TR) to the rectangular full packed format (TF).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========

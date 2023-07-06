@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 module LA_XISNAN
    interface LA_ISNAN
 

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by cgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

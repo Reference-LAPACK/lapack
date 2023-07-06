@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DGSVJ1 pre-processor for the routine dgesvj, applies Jacobi rotations targeting only particular pivots.
 *
 *  =========== DOCUMENTATION ===========

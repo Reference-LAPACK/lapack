@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAED5 used by SSTEDC. Solves the 2-by-2 secular equation.
 *
 *  =========== DOCUMENTATION ===========

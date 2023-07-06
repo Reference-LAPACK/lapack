@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASQ1 computes the singular values of a real square bidiagonal matrix. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========

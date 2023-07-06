@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines.
 *
 *  =========== DOCUMENTATION ===========

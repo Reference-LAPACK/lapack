@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

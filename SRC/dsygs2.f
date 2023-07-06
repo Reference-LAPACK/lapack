@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DSYGS2 reduces a symmetric definite generalized eigenproblem to standard form, using the factorization results obtained from spotrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

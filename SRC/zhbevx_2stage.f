@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> ZHBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  @precisions fortran z -> s d c

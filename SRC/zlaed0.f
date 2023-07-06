@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAED0 used by ZSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========

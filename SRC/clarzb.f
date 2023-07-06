@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLARZB applies a block reflector or its conjugate-transpose to a general matrix.
 *
 *  =========== DOCUMENTATION ===========

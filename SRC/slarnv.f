@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARNV returns a vector of random numbers from a uniform or normal distribution.
 *
 *  =========== DOCUMENTATION ===========

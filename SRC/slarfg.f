@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========

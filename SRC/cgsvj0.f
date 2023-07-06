@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CGSVJ0 pre-processor for the routine cgesvj.
 *
 *  =========== DOCUMENTATION ===========

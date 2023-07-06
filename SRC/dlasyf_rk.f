@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASYF_RK computes a partial factorization of a real symmetric indefinite matrix using bounded Bunch-Kaufman (rook) diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

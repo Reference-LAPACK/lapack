@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
 *
 *  =========== DOCUMENTATION ===========

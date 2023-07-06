@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARRB provides limited bisection to locate eigenvalues for more accuracy.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CHETRD_HE2HB
 *
 *  @generated from zhetrd_he2hb.f, fortran z -> c, Wed Dec  7 08:22:40 2016

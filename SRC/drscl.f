@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========

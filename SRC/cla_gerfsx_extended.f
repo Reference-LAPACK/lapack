@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLA_GERFSX_EXTENDED
 *
 *  =========== DOCUMENTATION ===========

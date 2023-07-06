@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

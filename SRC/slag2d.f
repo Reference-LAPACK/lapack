@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAG2D converts a single precision matrix to a double precision matrix.
 *
 *  =========== DOCUMENTATION ===========

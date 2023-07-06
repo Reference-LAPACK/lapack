@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASQ4 computes an approximation to the smallest eigenvalue using values of d from the previous transform. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========

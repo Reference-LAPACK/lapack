@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> ZHEEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  @precisions fortran z -> s d c

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> SGELSS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========

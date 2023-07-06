@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an unitary similarity transformation.
 *
 *  =========== DOCUMENTATION ===========

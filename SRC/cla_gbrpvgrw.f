@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========

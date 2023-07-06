@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAED6 used by DSTEDC. Computes one Newton step in solution of the secular equation.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLASV2 computes the singular value decomposition of a 2-by-2 triangular matrix.
 *
 *  =========== DOCUMENTATION ===========

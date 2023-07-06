@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

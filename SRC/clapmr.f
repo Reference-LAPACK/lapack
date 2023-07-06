@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLAPMR rearranges rows of a matrix as specified by a permutation vector.
 *
 *  =========== DOCUMENTATION ===========

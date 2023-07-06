@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CHB2ST_KERNELS
 *
 *  @generated from zhb2st_kernels.f, fortran z -> c, Wed Dec  7 08:22:40 2016

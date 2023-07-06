@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> DGGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices (blocked algorithm)</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASYF_ROOK *> DLASYF_ROOK computes a partial factorization of a real symmetric matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

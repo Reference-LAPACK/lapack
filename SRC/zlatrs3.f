@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLATRS3 solves a triangular system of equations with the scale factors set to prevent overflow.
 *
 *  Definition:

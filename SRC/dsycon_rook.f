@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> DSYCON_ROOK </b>
 *
 *  =========== DOCUMENTATION ===========

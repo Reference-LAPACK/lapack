@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CUNM22 multiplies a general matrix by a banded unitary matrix.
 *
 *  =========== DOCUMENTATION ===========

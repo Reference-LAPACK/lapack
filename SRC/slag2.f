@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAG2 computes the eigenvalues of a 2-by-2 generalized eigenvalue problem, with scaling as necessary to avoid over-/underflow.
 *
 *  =========== DOCUMENTATION ===========

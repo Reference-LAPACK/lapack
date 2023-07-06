@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAQR4 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
 *
 *  =========== DOCUMENTATION ===========

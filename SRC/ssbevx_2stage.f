@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> SSBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  @generated from dsbevx_2stage.f, fortran d -> s, Sat Nov  5 23:58:06 2016

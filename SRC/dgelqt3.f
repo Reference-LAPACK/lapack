@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DGELQT3 recursively computes a LQ factorization of a general real or complex matrix using the compact WY representation of Q.
 *
 *  =========== DOCUMENTATION ===========

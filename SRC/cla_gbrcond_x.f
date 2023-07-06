@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLA_GBRCOND_X computes the infinity norm condition number of op(A)*diag(x) for general banded matrices.
 *
 *  =========== DOCUMENTATION ===========

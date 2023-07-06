@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZSYMV computes a matrix-vector product for a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========

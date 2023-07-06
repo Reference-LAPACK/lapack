@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLARSCL2 performs reciprocal diagonal scaling on a matrix.
 *
 *  =========== DOCUMENTATION ===========

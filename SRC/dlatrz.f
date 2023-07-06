@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
 *
 *  =========== DOCUMENTATION ===========

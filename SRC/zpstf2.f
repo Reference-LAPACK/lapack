@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZPSTF2 computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========

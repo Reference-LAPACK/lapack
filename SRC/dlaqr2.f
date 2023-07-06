@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAQR2 performs the orthogonal similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZSYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

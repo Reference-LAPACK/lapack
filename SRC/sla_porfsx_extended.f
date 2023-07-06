@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations for symmetric or Hermitian positive-definite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
 *
 *  =========== DOCUMENTATION ===========

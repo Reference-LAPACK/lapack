@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAED9 used by SSTEDC. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b STGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

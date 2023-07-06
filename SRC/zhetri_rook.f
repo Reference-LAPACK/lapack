@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZHETRI_ROOK computes the inverse of HE matrix using the factorization obtained with the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

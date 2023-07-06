@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> SSYEVR_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  @generated from dsyevr_2stage.f, fortran d -> s, Sat Nov  5 23:50:10 2016

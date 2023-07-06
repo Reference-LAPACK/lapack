@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 * \brief \b CLAHEF_ROOK computes a partial factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (blocked algorithm, calling Level 3 BLAS).
 *
 *  =========== DOCUMENTATION ===========

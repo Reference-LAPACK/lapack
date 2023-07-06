@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CPSTF2 computes the Cholesky factorization with complete pivoting of complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========

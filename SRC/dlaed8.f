@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAED8 used by DSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLANSP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a symmetric matrix supplied in packed form.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========

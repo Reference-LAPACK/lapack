@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========

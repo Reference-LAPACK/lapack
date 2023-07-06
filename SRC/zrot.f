@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========

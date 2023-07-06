@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZTRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 !> \brief \b DLARTG generates a plane rotation with real cosine and real sine.
 !
 !  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZHETRD_HE2HB
 *
 *  @precisions fortran z -> s d c

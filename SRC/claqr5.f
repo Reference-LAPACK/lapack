@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========

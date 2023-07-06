@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CSYTF2_RK computes the factorization of a complex symmetric indefinite matrix using the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS2 unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

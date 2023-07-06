@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLAUNHR_COL_GETRFNP
 *
 *  =========== DOCUMENTATION ===========

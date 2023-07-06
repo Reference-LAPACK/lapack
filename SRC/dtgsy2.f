@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

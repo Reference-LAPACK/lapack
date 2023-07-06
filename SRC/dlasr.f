@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASR applies a sequence of plane rotations to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

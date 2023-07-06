@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLAEBZ computes the number of eigenvalues of a real symmetric tridiagonal matrix which are less than or equal to a given value, and performs other tasks required by the routine sstebz.
 *
 *  =========== DOCUMENTATION ===========

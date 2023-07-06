@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========

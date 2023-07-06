@@ -516,7 +516,31 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${LAPACKLIB} ${SOURCES})
+add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
+set_target_properties(
+  ${LAPACKLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  set(SOURCES_64)
+  list(APPEND SOURCES_64 ${SOURCES})
+  list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
+  list(REMOVE_ITEM SOURCES_64 ${SECOND_SRC})
+  list(REMOVE_ITEM SOURCES_64 ${DSECOND_SRC})
+  add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+  target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
+  set_target_properties(
+    ${LAPACKLIB}_64_obj PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    Fortran_PREPROCESS ON
+  )
+endif()
+
+add_library(${LAPACKLIB}
+  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
@@ -534,7 +558,7 @@ target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
 if(_is_coverage_build)
   target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB})
+  add_coverage(${LAPACKLIB}_obj)
 endif()
 
 lapack_install_library(${LAPACKLIB})

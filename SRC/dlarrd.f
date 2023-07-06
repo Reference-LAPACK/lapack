@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========

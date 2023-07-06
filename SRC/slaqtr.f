@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAQTR solves a real quasi-triangular system of equations, or a complex quasi-triangular system of special form, in real arithmetic.
 *
 *  =========== DOCUMENTATION ===========

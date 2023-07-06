@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SORGR2 generates all or part of the orthogonal matrix Q from an RQ factorization determined by sgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

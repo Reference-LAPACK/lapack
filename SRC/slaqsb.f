@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
 *
 *  =========== DOCUMENTATION ===========

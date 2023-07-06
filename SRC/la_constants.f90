@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 !> \brief \b LA_CONSTANTS is a module for the scaling constants for the compiled Fortran single and double precisions
 !
 !  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

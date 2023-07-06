@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CHETRD_2STAGE
 *
 *  @generated from zhetrd_2stage.f, fortran z -> c, Sun Nov  6 19:34:06 2016

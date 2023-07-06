@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> CSYSV_RK computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========

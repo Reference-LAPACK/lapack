@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZPOTRF2
 *
 *  =========== DOCUMENTATION ===========

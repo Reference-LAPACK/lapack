@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGSVJ1 pre-processor for the routine sgesvj, applies Jacobi rotations targeting only particular pivots.
 *
 *  =========== DOCUMENTATION ===========

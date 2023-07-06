@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by spttrf.
 *
 *  =========== DOCUMENTATION ===========

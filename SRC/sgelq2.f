@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

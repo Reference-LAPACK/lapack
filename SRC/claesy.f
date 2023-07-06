@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========

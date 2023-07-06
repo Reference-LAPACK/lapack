@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLA_GERCOND estimates the Skeel condition number for a general matrix.
 *
 *  =========== DOCUMENTATION ===========

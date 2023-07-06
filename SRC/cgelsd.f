@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> CGELSD computes the minimum-norm solution to a linear least squares problem for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

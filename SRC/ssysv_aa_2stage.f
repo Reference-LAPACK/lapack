@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> SSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========

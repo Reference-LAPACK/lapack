@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========

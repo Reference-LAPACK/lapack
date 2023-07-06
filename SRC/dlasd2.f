@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASD2 merges the two sets of singular values together into a single sorted set. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

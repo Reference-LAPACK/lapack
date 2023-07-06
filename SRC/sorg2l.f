@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SORG2L generates all or part of the orthogonal matrix Q from a QL factorization determined by sgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

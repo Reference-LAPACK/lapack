@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b CGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

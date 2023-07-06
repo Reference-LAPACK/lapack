@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 !> \brief \b CLARTG generates a plane rotation with real cosine and complex sine.
 !
 !  =========== DOCUMENTATION ===========

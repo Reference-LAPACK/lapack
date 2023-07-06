@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 !> \brief \b ZGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot matrices.
 !
 !  =========== DOCUMENTATION ===========

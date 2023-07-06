@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> DSYEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  @precisions fortran d -> s

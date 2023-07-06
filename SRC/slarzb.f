@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLARZB applies a block reflector or its transpose to a general matrix.
 *
 *  =========== DOCUMENTATION ===========

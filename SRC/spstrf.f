@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SPSTRF computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========

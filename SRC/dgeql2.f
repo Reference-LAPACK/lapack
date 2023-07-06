@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

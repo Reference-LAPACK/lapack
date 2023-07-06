@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========

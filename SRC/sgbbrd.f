@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGBBRD
 *
 *  =========== DOCUMENTATION ===========
@@ -230,7 +231,8 @@
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
+      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND.
+     $ .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SLASCL2 performs diagonal scaling on a matrix.
 *
 *  =========== DOCUMENTATION ===========

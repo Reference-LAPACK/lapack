@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ILACLC scans a matrix for its last non-zero column.
 *
 *  =========== DOCUMENTATION ===========

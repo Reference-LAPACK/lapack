@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief <b> CGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========

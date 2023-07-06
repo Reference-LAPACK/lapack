@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAED8 used by ZSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

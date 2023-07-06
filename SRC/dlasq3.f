@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DLASQ3 checks for deflation, computes a shift and calls dqds. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========

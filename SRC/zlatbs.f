@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========

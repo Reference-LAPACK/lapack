@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SORM2L multiplies a general matrix by the orthogonal matrix from a QL factorization determined by sgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

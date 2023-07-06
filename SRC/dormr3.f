@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b DORMR3 multiplies a general matrix by the orthogonal matrix from a RZ factorization determined by stzrzf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

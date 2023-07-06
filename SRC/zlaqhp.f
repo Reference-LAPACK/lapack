@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAQHP scales a Hermitian matrix stored in packed form.
 *
 *  =========== DOCUMENTATION ===========
