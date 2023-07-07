@@ -524,7 +524,7 @@
      $                     LDB, ZERO, WORK, N )
                CALL SLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL SGEMV( 'T', N, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
             CALL SCOPY( N, WORK, 1, B, 1 )
          END IF
@@ -621,7 +621,7 @@
                CALL SLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL SGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1, 1 ),
      $                  1, ZERO, WORK( IWORK ), 1 )
             CALL SCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
@@ -707,7 +707,7 @@
      $                     LDB, ZERO, WORK, N )
                CALL SLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL SGEMV( 'T', M, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
             CALL SCOPY( N, WORK, 1, B, 1 )
          END IF
