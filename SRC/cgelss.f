@@ -538,7 +538,7 @@
      $                     LDB, CZERO, WORK, N )
                CALL CLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL CGEMV( 'C', N, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
             CALL CCOPY( N, WORK, 1, B, 1 )
          END IF
@@ -643,7 +643,7 @@
                CALL CLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL CGEMV( 'C', M, M, CONE, WORK( IL ), LDWORK, B( 1, 1 ),
      $                  1, CZERO, WORK( IWORK ), 1 )
             CALL CCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
@@ -735,7 +735,7 @@
      $                     LDB, CZERO, WORK, N )
                CALL CLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL CGEMV( 'C', M, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
             CALL CCOPY( N, WORK, 1, B, 1 )
          END IF

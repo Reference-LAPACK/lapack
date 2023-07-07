@@ -528,7 +528,7 @@
      $                     LDB, ZERO, WORK, N )
                CALL DLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL DGEMV( 'T', N, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
             CALL DCOPY( N, WORK, 1, B, 1 )
          END IF
@@ -625,7 +625,7 @@
                CALL DLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL DGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1, 1 ),
      $                  1, ZERO, WORK( IWORK ), 1 )
             CALL DCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
@@ -711,7 +711,7 @@
      $                     LDB, ZERO, WORK, N )
                CALL DLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
-         ELSE
+         ELSE IF( NRHS.EQ.1 ) THEN
             CALL DGEMV( 'T', M, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
             CALL DCOPY( N, WORK, 1, B, 1 )
          END IF
