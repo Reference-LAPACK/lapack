@@ -176,7 +176,8 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+      SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C,
      $                    LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
      $                    INFO )
       IMPLICIT NONE
@@ -210,10 +211,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLANGE, SLAMCH, SLARMM
-      EXTERNAL           SLANGE, SLAMCH, SLARMM, ILAENV, LSAME
+      EXTERNAL           SLANGE, SLAMCH, SLARMM, ILAENV,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLASCL, SSCAL, STRSYL, XERBLA
+      EXTERNAL           SGEMM, SLASCL, SSCAL, STRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXPONENT, MAX, MIN, REAL

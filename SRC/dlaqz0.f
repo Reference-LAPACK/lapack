@@ -300,7 +300,8 @@
 *> \ingroup laqz0
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+      RECURSIVE SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI,
+     $                             A,
      $                             LDA, B, LDB, ALPHAR, ALPHAI, BETA,
      $                             Q, LDQ, Z, LDZ, WORK, LWORK, REC,
      $                             INFO )
@@ -440,7 +441,8 @@
       NBR = NSR+ITEMP1
 
       IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
-         CALL DHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+         CALL DHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $                LDB,
      $                ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                LWORK, INFO )
          RETURN
@@ -452,7 +454,8 @@
 
 *     Workspace query to dlaqz3
       NW = MAX( NWR, NMIN )
-      CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
+      CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
+     $             LDB,
      $             Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR,
      $             ALPHAI, BETA, WORK, NW, WORK, NW, WORK, -1, REC,
      $             AED_INFO )
@@ -477,8 +480,10 @@
 *
 *     Initialize Q and Z
 *
-      IF( IWANTQ.EQ.3 ) CALL DLASET( 'FULL', N, N, ZERO, ONE, Q, LDQ )
-      IF( IWANTZ.EQ.3 ) CALL DLASET( 'FULL', N, N, ZERO, ONE, Z, LDZ )
+      IF( IWANTQ.EQ.3 ) CALL DLASET( 'FULL', N, N, ZERO, ONE, Q,
+     $    LDQ )
+      IF( IWANTZ.EQ.3 ) CALL DLASET( 'FULL', N, N, ZERO, ONE, Z,
+     $    LDZ )
 
 *     Get machine constants
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
@@ -571,17 +576,20 @@
 *              to the top and deflate it
                
                DO K2 = K, ISTART2+1, -1
-                  CALL DLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
+                  CALL DLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1,
+     $                         S1,
      $                         TEMP )
                   B( K2-1, K2 ) = TEMP
                   B( K2-1, K2-1 ) = ZERO
 
                   CALL DROT( K2-2-ISTARTM+1, B( ISTARTM, K2 ), 1,
      $                       B( ISTARTM, K2-1 ), 1, C1, S1 )
-                  CALL DROT( MIN( K2+1, ISTOP )-ISTARTM+1, A( ISTARTM,
+                  CALL DROT( MIN( K2+1, ISTOP )-ISTARTM+1,
+     $                       A( ISTARTM,
      $                       K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
                   IF ( ILZ ) THEN
-                     CALL DROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1, C1,
+                     CALL DROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1,
+     $                          C1,
      $                          S1 )
                   END IF
 
@@ -591,9 +599,11 @@
                      A( K2, K2-1 ) = TEMP
                      A( K2+1, K2-1 ) = ZERO
 
-                     CALL DROT( ISTOPM-K2+1, A( K2, K2 ), LDA, A( K2+1,
+                     CALL DROT( ISTOPM-K2+1, A( K2, K2 ), LDA,
+     $                          A( K2+1,
      $                          K2 ), LDA, C1, S1 )
-                     CALL DROT( ISTOPM-K2+1, B( K2, K2 ), LDB, B( K2+1,
+                     CALL DROT( ISTOPM-K2+1, B( K2, K2 ), LDB,
+     $                          B( K2+1,
      $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL DROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
@@ -655,7 +665,8 @@
 *
 *        Time for AED
 *
-         CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
+         CALL DLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A,
+     $                LDA,
      $                B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED,
      $                ALPHAR, ALPHAI, BETA, WORK, NW, WORK( NW**2+1 ),
      $                NW, WORK( 2*NW**2+1 ), LWORK-2*NW**2, REC,
@@ -725,7 +736,8 @@
 *
 *        Time for a QZ sweep
 *
-         CALL DLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
+         CALL DLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS,
+     $                NBLOCK,
      $                ALPHAR( SHIFTPOS ), ALPHAI( SHIFTPOS ),
      $                BETA( SHIFTPOS ), A, LDA, B, LDB, Q, LDQ, Z, LDZ,
      $                WORK, NBLOCK, WORK( NBLOCK**2+1 ), NBLOCK,

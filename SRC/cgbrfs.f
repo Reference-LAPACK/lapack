@@ -201,7 +201,8 @@
 *> \ingroup gbrfs
 *
 *  =====================================================================
-      SUBROUTINE CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -245,7 +246,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGBMV, CGBTRS, CLACN2, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGBMV, CGBTRS, CLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -332,7 +334,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ), 1,
+         CALL CGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ),
+     $               1,
      $               CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -390,7 +393,8 @@
 *
 *           Update solution and try again.
 *
-            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK, N,
+            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL CAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )

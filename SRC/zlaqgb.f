@@ -156,7 +156,8 @@
 *> \ingroup laqgb
 *
 *  =====================================================================
-      SUBROUTINE ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+      SUBROUTINE ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND,
+     $                   COLCND,
      $                   AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine --

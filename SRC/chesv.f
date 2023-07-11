@@ -207,7 +207,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2

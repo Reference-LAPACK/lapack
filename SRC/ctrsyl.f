@@ -189,7 +189,8 @@
       LOGICAL            LSAME
       REAL               CLANGE, SLAMCH
       COMPLEX            CDOTC, CDOTU, CLADIV
-      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU, CLADIV
+      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU,
+     $                   CLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL, XERBLA

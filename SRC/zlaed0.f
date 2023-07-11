@@ -173,7 +173,8 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSTEQR, XERBLA, ZCOPY, ZLACRM, ZLAED7
+      EXTERNAL           DCOPY, DSTEQR, XERBLA, ZCOPY, ZLACRM,
+     $                   ZLAED7
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV

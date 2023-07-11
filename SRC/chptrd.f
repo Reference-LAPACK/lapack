@@ -277,19 +277,22 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
+               CALL CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ),
+     $                     1,
      $                     ZERO, TAU( I ), 1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, AP( II+1 ),
+               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1,
+     $                                   AP( II+1 ),
      $                 1 )
                CALL CAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
+               CALL CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ),
+     $                     1,
      $                     AP( I1I1 ) )
 *
             END IF

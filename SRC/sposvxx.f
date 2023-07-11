@@ -491,7 +491,8 @@
 *> \ingroup posvxx
 *
 *  =====================================================================
-      SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -541,7 +542,8 @@
       REAL               SLAMCH, SLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOEQUB, SPOTRF, SPOTRS, SLACPY, SLAQSY,
+      EXTERNAL           SPOEQUB, SPOTRF, SPOTRS, SLACPY,
+     $                   SLAQSY,
      $                   XERBLA, SLASCL2, SPORFSX
 *     ..
 *     .. Intrinsic Functions ..
@@ -649,7 +651,8 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK )
+            RPVGRW = SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF,
+     $                             WORK )
             RETURN
          ENDIF
       END IF

@@ -135,7 +135,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE CSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
+     $                        WORK,
      $                        INFO )
 *
 *  -- LAPACK computational routine --

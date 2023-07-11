@@ -238,7 +238,8 @@
       EXTERNAL           ILAENV, LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CLACPY, CLACRM, CLAED0, CSTEQR, CSWAP,
+      EXTERNAL           XERBLA, CLACPY, CLACRM, CLAED0, CSTEQR,
+     $                   CSWAP,
      $                   SLASCL, SLASET, SSTEDC, SSTEQR, SSTERF
 *     ..
 *     .. Intrinsic Functions ..
@@ -409,12 +410,15 @@
 *              Scale.
 *
                ORGNRM = SLANST( 'M', M, D( START ), E( START ) )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
-               CALL CLAED0( N, M, D( START ), E( START ), Z( 1, START ),
+               CALL CLAED0( N, M, D( START ), E( START ), Z( 1,
+     $                      START ),
      $                      LDZ, WORK, N, RWORK, IWORK, INFO )
                IF( INFO.GT.0 ) THEN
                   INFO = ( INFO / ( M+1 )+START-1 )*( N+1 ) +
@@ -424,13 +428,15 @@
 *
 *              Scale back.
 *
-               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
                CALL SSTEQR( 'I', M, D( START ), E( START ), RWORK, M,
      $                      RWORK( M*M+1 ), INFO )
-               CALL CLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK, N,
+               CALL CLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK,
+     $                      N,
      $                      RWORK( M*M+1 ) )
                CALL CLACPY( 'A', N, M, WORK, N, Z( 1, START ), LDZ )
                IF( INFO.GT.0 ) THEN

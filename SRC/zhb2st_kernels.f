@@ -288,7 +288,8 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = DCONJG( A( DPOS-NB, J1 ) )
-                  CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
+                  CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1,
+     $                         TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *
                   CALL ZLARFX( 'Right', LN-1, LM, V( VPOS ),

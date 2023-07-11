@@ -275,7 +275,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, D, E, INFO )
       ELSE
-         CALL SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK, LIWORK,
+         CALL SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+     $                LIWORK,
      $                INFO )
       END IF
 *

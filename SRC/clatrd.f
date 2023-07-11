@@ -224,7 +224,8 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEMV, CHEMV, CLACGV, CLARFG, CSCAL
+      EXTERNAL           CAXPY, CGEMV, CHEMV, CLACGV, CLARFG,
+     $                   CSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -257,7 +258,8 @@
      $                     LDA, W( I, IW+1 ), LDW, ONE, A( 1, I ), 1 )
                CALL CLACGV( N-I, W( I, IW+1 ), LDW )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL CGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 ),
+               CALL CGEMV( 'No transpose', I, N-I, -ONE, W( 1,
+     $                     IW+1 ),
      $                     LDW, A( I, I+1 ), LDA, ONE, A( 1, I ), 1 )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
                A( I, I ) = REAL( A( I, I ) )
@@ -333,17 +335,20 @@
                CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     W( I+1, 1 ), LDW, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 ),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1,
+     $                     1 ),
      $                     LDA, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
                CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 ),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1,
+     $                     1 ),
      $                     LDW, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
                CALL CSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
                ALPHA = -HALF*TAU( I )*CDOTC( N-I, W( I+1, I ), 1,
      $                 A( I+1, I ), 1 )
-               CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1 )
+               CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ),
+     $                     1 )
             END IF
 *
    20    CONTINUE

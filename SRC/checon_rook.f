@@ -135,7 +135,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
+     $                        WORK,
      $                        INFO )
 *
 *  -- LAPACK computational routine --

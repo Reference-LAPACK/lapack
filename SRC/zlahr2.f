@@ -225,7 +225,8 @@
 *           Update I-th column of A - Y * V**H
 *
             CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
+            CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1),
+     $                  LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
             CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
@@ -275,7 +276,8 @@
 *        Generate the elementary reflector H(I) to annihilate
 *        A(K+I+1:N,I)
 *
-         CALL ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
+         CALL ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ),
+     $                1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE

@@ -187,7 +187,8 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, RHO, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASCL, SLASD4, SLASET, XERBLA
+      EXTERNAL           SCOPY, SLASCL, SLASD4, SLASET,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SDOT, SLAMC3, SNRM2
@@ -296,11 +297,13 @@
 *        from doing x+(y+z).
 *
          DO 60 I = 1, J - 1
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJ )-DIFLJ )
+            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ),
+     $            DSIGJ )-DIFLJ )
      $                   / ( DSIGMA( I )+DJ )
    60    CONTINUE
          DO 70 I = J + 1, K
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJP )+DIFRJ )
+            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ),
+     $            DSIGJP )+DIFRJ )
      $                   / ( DSIGMA( I )+DJ )
    70    CONTINUE
          TEMP = SNRM2( K, WORK, 1 )

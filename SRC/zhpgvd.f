@@ -221,7 +221,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE ZHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE ZHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ,
+     $                   WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -250,7 +251,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHPEVD, ZHPGST, ZPPTRF, ZTPMV, ZTPSV
+      EXTERNAL           XERBLA, ZHPEVD, ZHPGST, ZPPTRF, ZTPMV,
+     $                   ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX

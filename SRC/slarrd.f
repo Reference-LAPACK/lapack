@@ -677,7 +677,8 @@
 *           Compute Eigenvalues
             ITMAX = INT( ( LOG( GU-GL+PIVMIN )-LOG( PIVMIN ) ) /
      $              LOG( TWO ) ) + 2
-            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
+            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI,
+     $                   PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), E2( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IOUT,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )

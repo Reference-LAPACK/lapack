@@ -235,7 +235,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+      SUBROUTINE CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
+     $                   SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -271,7 +272,8 @@
       INTEGER            ICAMAX, ISAMAX
       REAL               SCASUM, SLAMCH
       COMPLEX            CDOTC, CDOTU, CLADIV
-      EXTERNAL           LSAME, ICAMAX, ISAMAX, SCASUM, SLAMCH, CDOTC,
+      EXTERNAL           LSAME, ICAMAX, ISAMAX, SCASUM, SLAMCH,
+     $                   CDOTC,
      $                   CDOTU, CLADIV
 *     ..
 *     .. External Subroutines ..
@@ -787,7 +789,8 @@
                   IF( UPPER ) THEN
                      CSUMJ = CDOTU( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = CDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
+                     CSUMJ = CDOTU( N-J, A( J+1, J ), 1, X( J+1 ),
+     $                              1 )
                   END IF
                ELSE
 *
@@ -921,7 +924,8 @@
                   IF( UPPER ) THEN
                      CSUMJ = CDOTC( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = CDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
+                     CSUMJ = CDOTC( N-J, A( J+1, J ), 1, X( J+1 ),
+     $                              1 )
                   END IF
                ELSE
 *

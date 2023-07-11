@@ -249,7 +249,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE ZHBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                          LDZ,
      $                          WORK, LWORK, RWORK, LRWORK, IWORK,
      $                          LIWORK, INFO )
 *
@@ -293,7 +294,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZGEMM, ZLACPY,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZGEMM,
+     $                   ZLACPY,
      $                   ZLASCL, ZSTEDC, ZHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -313,9 +315,12 @@
          LRWMIN = 1
          LIWMIN = 1
       ELSE
-         IB    = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
+         IB    = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
          IF( WANTZ ) THEN
             LWMIN = 2*N**2
             LRWMIN = 1 + 5*N + 2*N**2
@@ -395,9 +400,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -421,7 +428,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2 ),
+         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), WORK, N,
+     $                WORK( INDWK2 ),
      $                LLWK2, RWORK( INDRWK ), LLRWK, IWORK, LIWORK,
      $                INFO )
          CALL ZGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,

@@ -320,7 +320,8 @@
       DOUBLE PRECISION   ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLAHQR, DLANV2, DLAQR2, DLAQR5
+      EXTERNAL           DLACPY, DLAHQR, DLANV2, DLAQR2,
+     $                   DLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN, MOD
@@ -523,7 +524,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL DLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL DLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, LS, LD, WR, WI, H( KV, 1 ), LDH,
      $                   NHO, H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH,
      $                   WORK, LWORK )
@@ -567,7 +569,8 @@
                      BB = SS
                      CC = WILK2*SS
                      DD = AA
-                     CALL DLANV2( AA, BB, CC, DD, WR( I-1 ), WI( I-1 ),
+                     CALL DLANV2( AA, BB, CC, DD, WR( I-1 ),
+     $                            WI( I-1 ),
      $                            WR( I ), WI( I ), CS, SN )
    30             CONTINUE
                   IF( KS.EQ.KTOP ) THEN

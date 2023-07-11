@@ -214,7 +214,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -254,7 +255,8 @@
       EXTERNAL           LSAME, IZAMAX, DLAMCH, DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV, ZLATRS
+      EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV,
+     $                   ZLATRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX
@@ -388,7 +390,8 @@
    60          CONTINUE
             ELSE
                IF( KI.GT.1 )
-     $            CALL ZGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 ),
+     $            CALL ZGEMV( 'N', N, KI-1, CMONE, VR, LDVR,
+     $                        WORK( 1 ),
      $                        1, DCMPLX( SCALE ), VR( 1, KI ), 1 )
 *
                II = IZAMAX( N, VR( 1, KI ), 1 )
@@ -437,7 +440,8 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+               CALL ZLATRS( 'Upper', 'Conjugate transpose',
+     $                      'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 ), SCALE, RWORK, INFO )
                WORK( KI ) = SCALE
@@ -457,7 +461,8 @@
   110          CONTINUE
             ELSE
                IF( KI.LT.N )
-     $            CALL ZGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDVL,
+     $            CALL ZGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ),
+     $                        LDVL,
      $                        WORK( KI+1 ), 1, DCMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *

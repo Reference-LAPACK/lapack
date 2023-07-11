@@ -243,7 +243,8 @@
 *> \ingroup laed7
 *
 *  =====================================================================
-      SUBROUTINE ZLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+      SUBROUTINE ZLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D,
+     $                   Q,
      $                   LDQ, RHO, INDXQ, QSTORE, QPTR, PRMPTR, PERM,
      $                   GIVPTR, GIVCOL, GIVNUM, WORK, RWORK, IWORK,
      $                   INFO )
@@ -271,7 +272,8 @@
      $                   INDXC, INDXP, IQ, IW, IZ, K, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAED9, DLAEDA, DLAMRG, XERBLA, ZLACRM, ZLAED8
+      EXTERNAL           DLAED9, DLAEDA, DLAMRG, XERBLA, ZLACRM,
+     $                   ZLAED8
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -357,7 +359,8 @@
          CALL DLAED9( K, 1, K, N, D, RWORK( IQ ), K, RHO,
      $                RWORK( IDLMDA ), RWORK( IW ),
      $                QSTORE( QPTR( CURR ) ), K, INFO )
-         CALL ZLACRM( QSIZ, K, WORK, QSIZ, QSTORE( QPTR( CURR ) ), K, Q,
+         CALL ZLACRM( QSIZ, K, WORK, QSIZ, QSTORE( QPTR( CURR ) ), K,
+     $                Q,
      $                LDQ, RWORK( IQ ) )
          QPTR( CURR+1 ) = QPTR( CURR ) + K**2
          IF( INFO.NE.0 ) THEN

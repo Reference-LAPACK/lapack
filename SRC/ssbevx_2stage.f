@@ -317,7 +317,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q,
+      SUBROUTINE SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
+     $                          Q,
      $                          LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                          LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
@@ -363,7 +364,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SSCAL,
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL,
+     $                   SSCAL,
      $                   SSTEBZ, SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA,
      $                   SSYTRD_SB2ST
 *     ..
@@ -494,9 +496,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA
@@ -514,7 +518,8 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, WORK( INDD ),
+      CALL SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB,
+     $                   WORK( INDD ),
      $                    WORK( INDE ), WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *

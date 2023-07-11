@@ -258,7 +258,8 @@
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
-         CALL ZTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
+         CALL ZTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H
@@ -273,7 +274,8 @@
 *                            V( 1:k, 1:l )**H * W( 1:n, 1:k )**H
 *
          IF( L.GT.0 )
-     $      CALL ZGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
+     $      CALL ZGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V,
+     $                  LDV,
      $                  WORK, LDWORK, ONE, C( M-L+1, 1 ), LDC )
 *
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
@@ -299,7 +301,8 @@
          DO 50 J = 1, K
             CALL ZLACGV( K-J+1, T( J, J ), 1 )
    50    CONTINUE
-         CALL ZTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
+         CALL ZTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
          DO 60 J = 1, K
             CALL ZLACGV( K-J+1, T( J, J ), 1 )
@@ -320,7 +323,8 @@
             CALL ZLACGV( K, V( 1, J ), 1 )
    90    CONTINUE
          IF( L.GT.0 )
-     $      CALL ZGEMM( 'No transpose', 'No transpose', M, L, K, -ONE,
+     $      CALL ZGEMM( 'No transpose', 'No transpose', M, L, K,
+     $                  -ONE,
      $                  WORK, LDWORK, V, LDV, ONE, C( 1, N-L+1 ), LDC )
          DO 100 J = 1, L
             CALL ZLACGV( K, V( 1, J ), 1 )

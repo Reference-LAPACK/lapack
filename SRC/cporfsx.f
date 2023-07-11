@@ -387,7 +387,8 @@
 *> \ingroup porfsx
 *
 *  =====================================================================
-      SUBROUTINE CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+      SUBROUTINE CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S,
+     $                    B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -452,7 +453,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           SLAMCH, CLANHE, CLA_PORCOND_X, CLA_PORCOND_C
+      EXTERNAL           SLAMCH, CLANHE, CLA_PORCOND_X,
+     $                   CLA_PORCOND_C
       REAL               SLAMCH, CLANHE, CLA_PORCOND_X, CLA_PORCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
@@ -509,7 +511,8 @@
 *
 *     Test input parameters.
 *
-      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2

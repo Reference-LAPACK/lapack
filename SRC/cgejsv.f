@@ -621,10 +621,10 @@
       EXTERNAL  ISAMAX, ICAMAX, LSAME, SLAMCH, SCNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  SLASSQ, CCOPY,  CGELQF, CGEQP3, CGEQRF, CLACPY, CLAPMR,
-     $          CLASCL, SLASCL, CLASET, CLASSQ, CLASWP, CUNGQR, CUNMLQ,
-     $          CUNMQR, CPOCON, SSCAL,  CSSCAL, CSWAP,  CTRSM,  CLACGV,
-     $          XERBLA
+      EXTERNAL  SLASSQ, CCOPY,  CGELQF, CGEQP3, CGEQRF, CLACPY,
+     $          CLAPMR, CLASCL, SLASCL, CLASET, CLASSQ, CLASWP,
+     $          CUNGQR, CUNMLQ, CUNMQR, CPOCON, SSCAL,  CSSCAL,
+     $          CSWAP,  CTRSM,  CLACGV, XERBLA
 *
       EXTERNAL  CGESVJ
 *     ..
@@ -656,7 +656,8 @@
          INFO = - 3
       ELSE IF ( .NOT. ( L2KILL .OR. DEFR ) )    THEN
          INFO = - 4
-      ELSE IF ( .NOT. ( LSAME(JOBT,'T') .OR. LSAME(JOBT,'N') ) ) THEN
+      ELSE IF ( .NOT. ( LSAME(JOBT,'T') .OR.
+     $          LSAME(JOBT,'N') ) ) THEN
          INFO = - 5
       ELSE IF ( .NOT. ( L2PERT .OR. LSAME( JOBP, 'N' ) ) ) THEN
          INFO = - 6
@@ -723,7 +724,8 @@
                   MINWRK = MAX( N+LWQP3, N+LWQRF, LWSVDJ )
               END IF
               IF ( LQUERY ) THEN 
-                  CALL CGESVJ( 'L', 'N', 'N', N, N, A, LDA, SVA, N, V, 
+                  CALL CGESVJ( 'L', 'N', 'N', N, N, A, LDA, SVA, N,
+     $                         V,
      $                 LDV, CDUMMY, -1, RDUMMY, -1, IERR )
                   LWRK_CGESVJ = INT( CDUMMY(1) )
                   IF ( ERREST ) THEN 
@@ -867,7 +869,8 @@
      $                LDU, CDUMMY, -1, IERR )
                  LWRK_CUNMQR = INT( CDUMMY(1) )
                  IF ( .NOT. JRACC ) THEN
-                     CALL CGEQP3( N,N, A, LDA, IWORK, CDUMMY,CDUMMY, -1,
+                     CALL CGEQP3( N,N, A, LDA, IWORK, CDUMMY,CDUMMY,
+     $                            -1,
      $                    RDUMMY, IERR )
                      LWRK_CGEQP3N = INT( CDUMMY(1) )
                      CALL CGESVJ( 'L', 'U', 'N', N, N, U, LDU, SVA,
@@ -911,10 +914,12 @@
                      CALL CGESVJ( 'L', 'U', 'V', N, N, U, LDU, SVA,
      $                    N, V, LDV, CDUMMY, -1, RDUMMY, -1, IERR )
                      LWRK_CGESVJV = INT( CDUMMY(1) )
-                     CALL CUNMQR( 'L', 'N', N, N, N, CDUMMY, N, CDUMMY,
+                     CALL CUNMQR( 'L', 'N', N, N, N, CDUMMY, N,
+     $                            CDUMMY,
      $                    V, LDV, CDUMMY, -1, IERR )
                      LWRK_CUNMQR = INT( CDUMMY(1) )
-                     CALL CUNMQR( 'L', 'N', M, N, N, A, LDA, CDUMMY, U,
+                     CALL CUNMQR( 'L', 'N', M, N, N, A, LDA, CDUMMY,
+     $                            U,
      $                    LDU, CDUMMY, -1, IERR )
                      LWRK_CUNMQRM = INT( CDUMMY(1) )
                      IF ( ERREST ) THEN 
@@ -1062,8 +1067,10 @@
             CALL CLACPY( 'A', M, 1, A, LDA, U, LDU )
 *           computing all M left singular vectors of the M x 1 matrix
             IF ( N1 .NE. N  ) THEN
-              CALL CGEQRF( M, N, U,LDU, CWORK, CWORK(N+1),LWORK-N,IERR )
-              CALL CUNGQR( M,N1,1, U,LDU,CWORK,CWORK(N+1),LWORK-N,IERR )
+              CALL CGEQRF( M, N, U,LDU, CWORK, CWORK(N+1),LWORK-N,
+     $                     IERR )
+              CALL CUNGQR( M,N1,1, U,LDU,CWORK,CWORK(N+1),LWORK-N,
+     $                     IERR )
               CALL CCOPY( M, A(1,1), 1, U(1,1), 1 )
             END IF
          END IF
@@ -1494,7 +1501,8 @@
 *
 *            .. second preconditioning using the QR factorization
 *
-            CALL CGEQRF( N,NR, A,LDA, CWORK, CWORK(N+1),LWORK-N, IERR )
+            CALL CGEQRF( N,NR, A,LDA, CWORK, CWORK(N+1),LWORK-N,
+     $                   IERR )
 *
 *           .. and transpose upper to lower triangular
             DO 1948 p = 1, NR - 1
@@ -1521,7 +1529,8 @@
  1949             CONTINUE
  1947          CONTINUE
             ELSE
-               CALL CLASET( 'U', NR-1, NR-1, CZERO, CZERO, A(1,2), LDA )
+               CALL CLASET( 'U', NR-1, NR-1, CZERO, CZERO, A(1,2),
+     $                      LDA )
             END IF
 *
 *           .. and one-sided Jacobi rotations are started on a lower
@@ -1561,7 +1570,8 @@
 *        accumulated product of Jacobi rotations, three are perfect )
 *
             CALL CLASET( 'L', NR-1,NR-1, CZERO, CZERO, A(2,1), LDA )
-            CALL CGELQF( NR,N, A, LDA, CWORK, CWORK(N+1), LWORK-N, IERR)
+            CALL CGELQF( NR,N, A, LDA, CWORK, CWORK(N+1), LWORK-N,
+     $                   IERR)
             CALL CLACPY( 'L', NR, NR, A, LDA, V, LDV )
             CALL CLASET( 'U', NR-1,NR-1, CZERO, CZERO, V(1,2), LDV )
             CALL CGEQRF( NR, NR, V, LDV, CWORK(N+1), CWORK(2*N+1),
@@ -1577,9 +1587,12 @@
             SCALEM  = RWORK(1)
             NUMRANK = NINT(RWORK(2))
             IF ( NR .LT. N ) THEN
-               CALL CLASET( 'A',N-NR, NR, CZERO,CZERO, V(NR+1,1),  LDV )
-               CALL CLASET( 'A',NR, N-NR, CZERO,CZERO, V(1,NR+1),  LDV )
-               CALL CLASET( 'A',N-NR,N-NR,CZERO,CONE, V(NR+1,NR+1),LDV )
+               CALL CLASET( 'A',N-NR, NR, CZERO,CZERO, V(NR+1,1),
+     $                      LDV )
+               CALL CLASET( 'A',NR, N-NR, CZERO,CZERO, V(1,NR+1),
+     $                      LDV )
+               CALL CLASET( 'A',N-NR,N-NR,CZERO,CONE, V(NR+1,NR+1),
+     $                      LDV )
             END IF
 *
          CALL CUNMLQ( 'L', 'C', N, N, NR, A, LDA, CWORK,
@@ -1634,10 +1647,13 @@
          NUMRANK = NINT(RWORK(2))
 *
          IF ( NR .LT. M ) THEN
-            CALL CLASET( 'A',  M-NR, NR,CZERO, CZERO, U(NR+1,1), LDU )
+            CALL CLASET( 'A',  M-NR, NR,CZERO, CZERO, U(NR+1,1),
+     $                   LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL CLASET( 'A',NR, N1-NR, CZERO, CZERO, U(1,NR+1),LDU )
-               CALL CLASET( 'A',M-NR,N1-NR,CZERO,CONE,U(NR+1,NR+1),LDU )
+               CALL CLASET( 'A',NR, N1-NR, CZERO, CZERO, U(1,NR+1),
+     $                      LDU )
+               CALL CLASET( 'A',M-NR,N1-NR,CZERO,CONE,U(NR+1,NR+1),
+     $                      LDU )
             END IF
          END IF
 *
@@ -1701,7 +1717,8 @@
  2968             CONTINUE
  2969          CONTINUE
             ELSE
-               CALL CLASET( 'U', NR-1, NR-1, CZERO, CZERO, V(1,2), LDV )
+               CALL CLASET( 'U', NR-1, NR-1, CZERO, CZERO, V(1,2),
+     $                      LDV )
             END IF
 *
 *           Estimate the row scaled condition number of R1
@@ -1810,7 +1827,8 @@
                CALL CLACPY( 'L',NR,NR,V,LDV,CWORK(2*N+N*NR+NR+1),NR )
                DO 4950 p = 1, NR
                   TEMP1 = SCNRM2( p, CWORK(2*N+N*NR+NR+p), NR )
-                  CALL CSSCAL( p, ONE/TEMP1, CWORK(2*N+N*NR+NR+p), NR )
+                  CALL CSSCAL( p, ONE/TEMP1, CWORK(2*N+N*NR+NR+p),
+     $                         NR )
  4950          CONTINUE
                CALL CPOCON( 'L',NR,CWORK(2*N+N*NR+NR+1),NR,ONE,TEMP1,
      $              CWORK(2*N+N*NR+NR+NR*NR+1),RWORK,IERR )
@@ -1839,7 +1857,8 @@
  4969             CONTINUE
  4968          CONTINUE
             ELSE
-               CALL CLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2), LDV )
+               CALL CLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2),
+     $                      LDV )
             END IF
 *
 *        Second preconditioning finished; continue with Jacobi SVD
@@ -1867,7 +1886,8 @@
 *                 equation is Q2*V2 = the product of the Jacobi rotations
 *                 used in CGESVJ, premultiplied with the orthogonal matrix
 *                 from the second QR factorization.
-                  CALL CTRSM('L','U','N','N', NR,NR,CONE, A,LDA, V,LDV)
+                  CALL CTRSM('L','U','N','N', NR,NR,CONE, A,LDA, V,
+     $                        LDV)
                ELSE
 *                 .. R1 is well conditioned, but non-square. Adjoint of R2
 *                 is inverted to get the product of the Jacobi rotations
@@ -1878,9 +1898,11 @@
                   IF ( NR .LT. N ) THEN
                   CALL CLASET('A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV)
                   CALL CLASET('A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
-                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                   END IF
-                  CALL CUNMQR('L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
+                  CALL CUNMQR('L','N',N,N,NR,CWORK(2*N+1),N,
+     $                         CWORK(N+1),
      $                V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR)
                END IF
 *
@@ -1890,7 +1912,8 @@
 *              is Q3^* * V3 = the product of the Jacobi rotations (applied to
 *              the lower triangular L3 from the LQ factorization of
 *              R2=L3*Q3), pre-multiplied with the transposed Q3.
-               CALL CGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR, U,
+               CALL CGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $              RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
@@ -1911,9 +1934,12 @@
  874              CONTINUE
  873           CONTINUE
                IF ( NR .LT. N ) THEN
-                  CALL CLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV )
-                  CALL CLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV )
-                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL CLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),
+     $                         LDV )
+                  CALL CLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),
+     $                         LDV )
+                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                END IF
                CALL CUNMQR( 'L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
      $              V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1929,15 +1955,19 @@
 *              defense ensures that CGEJSV completes the task.
 *              Compute the full SVD of L3 using CGESVJ with explicit
 *              accumulation of Jacobi rotations.
-               CALL CGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR, U,
+               CALL CGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $                         RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
                NUMRANK = NINT(RWORK(2))
                IF ( NR .LT. N ) THEN
-                  CALL CLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV )
-                  CALL CLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV )
-                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL CLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),
+     $                         LDV )
+                  CALL CLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),
+     $                         LDV )
+                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                END IF
                CALL CUNMQR( 'L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
      $              V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1975,7 +2005,8 @@
 *           At this moment, V contains the right singular vectors of A.
 *           Next, assemble the left singular vector matrix U (M x N).
             IF ( NR .LT. M ) THEN
-               CALL CLASET('A', M-NR, NR, CZERO, CZERO, U(NR+1,1), LDU)
+               CALL CLASET('A', M-NR, NR, CZERO, CZERO, U(NR+1,1),
+     $                      LDU)
                IF ( NR .LT. N1 ) THEN
                   CALL CLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
                   CALL CLASET('A',M-NR,N1-NR,CZERO,CONE,
@@ -2049,10 +2080,13 @@
 *           Assemble the left singular vector matrix U (M x N).
 *
             IF ( N .LT. M ) THEN
-               CALL CLASET( 'A',  M-N, N, CZERO, CZERO, U(N+1,1), LDU )
+               CALL CLASET( 'A',  M-N, N, CZERO, CZERO, U(N+1,1),
+     $                      LDU )
                IF ( N .LT. N1 ) THEN
-                  CALL CLASET('A',N,  N1-N, CZERO, CZERO,  U(1,N+1),LDU)
-                  CALL CLASET( 'A',M-N,N1-N, CZERO, CONE,U(N+1,N+1),LDU)
+                  CALL CLASET('A',N,  N1-N, CZERO, CZERO,  U(1,N+1),
+     $                         LDU)
+                  CALL CLASET( 'A',M-N,N1-N, CZERO, CONE,U(N+1,N+1),
+     $                         LDU)
                END IF
             END IF
             CALL CUNMQR( 'L', 'N', M, N1, N, A, LDA, CWORK, U,
@@ -2164,10 +2198,13 @@
 *           Next, assemble the left singular vector matrix U (M x N).
 *
          IF ( NR .LT. M ) THEN
-            CALL CLASET( 'A',  M-NR, NR, CZERO, CZERO, U(NR+1,1), LDU )
+            CALL CLASET( 'A',  M-NR, NR, CZERO, CZERO, U(NR+1,1),
+     $                   LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL CLASET('A',NR,  N1-NR, CZERO, CZERO,  U(1,NR+1),LDU)
-               CALL CLASET('A',M-NR,N1-NR, CZERO, CONE,U(NR+1,NR+1),LDU)
+               CALL CLASET('A',NR,  N1-NR, CZERO, CZERO,  U(1,NR+1),
+     $                      LDU)
+               CALL CLASET('A',M-NR,N1-NR, CZERO, CONE,U(NR+1,NR+1),
+     $                      LDU)
             END IF
          END IF
 *
@@ -2192,7 +2229,8 @@
 *     Undo scaling, if necessary (and possible)
 *
       IF ( USCAL2 .LE. (BIG/SVA(1))*USCAL1 ) THEN
-         CALL SLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N, IERR )
+         CALL SLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N,
+     $                IERR )
          USCAL1 = ONE
          USCAL2 = ONE
       END IF

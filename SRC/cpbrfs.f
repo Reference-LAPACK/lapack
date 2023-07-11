@@ -226,7 +226,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CHBMV, CLACN2, CPBTRS, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHBMV, CLACN2, CPBTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -412,7 +413,8 @@
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N,
+     $                      INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -423,7 +425,8 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N,
+     $                      INFO )
             END IF
             GO TO 100
          END IF

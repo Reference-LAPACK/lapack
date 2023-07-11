@@ -273,7 +273,8 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+      SUBROUTINE SLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
      $                   LDT, NV, WV, LDWV, WORK, LWORK )
 *
@@ -310,7 +311,8 @@
       EXTERNAL           SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEHRD, SGEMM, SLACPY, SLAHQR,
+      EXTERNAL           SCOPY, SGEHRD, SGEMM, SLACPY,
+     $                   SLAHQR,
      $                   SLANV2, SLARF, SLARFG, SLASET, SORMHR, STREXC
 *     ..
 *     .. Intrinsic Functions ..
@@ -332,7 +334,8 @@
 *
 *        ==== Workspace query call to SORMHR ====
 *
-         CALL SORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+         CALL SORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V,
+     $                LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
@@ -402,7 +405,8 @@
 *     .    here and there to keep track.) ====
 *
       CALL SLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL SCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
+      CALL SCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ),
+     $            LDT+1 )
 *
       CALL SLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
       CALL SLAHQR( .true., .true., JW, 1, JW, T, LDT, SR( KWTOP ),
@@ -449,7 +453,8 @@
 *              .    (STREXC can not fail in this case.) ====
 *
                IFST = NS
-               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                ILST = ILST + 1
             END IF
@@ -474,7 +479,8 @@
 *              .    ILST in case of a rare exchange failure. ====
 *
                IFST = NS
-               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                ILST = ILST + 2
             END IF
@@ -536,7 +542,8 @@
                SORTED = .false.
                IFST = I
                ILST = K
-               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                IF( INFO.EQ.0 ) THEN
                   I = ILST
@@ -593,7 +600,8 @@
             CALL SLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL SLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
+            CALL SLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
+     $                   LDT )
 *
             CALL SLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
@@ -618,7 +626,8 @@
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL SORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $      CALL SORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V,
+     $                   LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -632,7 +641,8 @@
             KLN = MIN( NV, KWTOP-KROW )
             CALL SGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL SLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
+            CALL SLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ),
+     $                   LDH )
    70    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -652,7 +662,8 @@
          IF( WANTZ ) THEN
             DO 90 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL SGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
+               CALL SGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW,
+     $                     KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
                CALL SLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )

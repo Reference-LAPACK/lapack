@@ -134,7 +134,8 @@
 *> \ingroup gbtrs
 *
 *  =====================================================================
-      SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+      SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B,
+     $                   LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -222,7 +223,8 @@
                L = IPIV( J )
                IF( L.NE.J )
      $            CALL DSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL DGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
+               CALL DGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J,
+     $                    1 ),
      $                    LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -231,7 +233,8 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
+            CALL DTBSV( 'Upper', 'No transpose', 'Non-unit', N,
+     $                  KL+KU,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
@@ -243,7 +246,8 @@
 *
 *           Solve U**T*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
+            CALL DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU,
+     $                  AB,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *

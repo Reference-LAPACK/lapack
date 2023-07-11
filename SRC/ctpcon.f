@@ -235,13 +235,15 @@
 *
 *              Multiply by inv(A).
 *
-               CALL CLATPS( UPLO, 'No transpose', DIAG, NORMIN, N, AP,
+               CALL CLATPS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      AP,
      $                      WORK, SCALE, RWORK, INFO )
             ELSE
 *
 *              Multiply by inv(A**H).
 *
-               CALL CLATPS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
+               CALL CLATPS( UPLO, 'Conjugate transpose', DIAG,
+     $                      NORMIN,
      $                      N, AP, WORK, SCALE, RWORK, INFO )
             END IF
             NORMIN = 'Y'

@@ -254,7 +254,8 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE ZHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE ZHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
@@ -299,7 +300,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZHETRD, ZLACPY, ZSTEIN, ZSTEQR, ZSWAP, ZUNGTR,
      $                   ZUNMTR
 *     ..
@@ -353,7 +355,8 @@
          ELSE
             LWKMIN = 2*N
             NB = ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'ZUNMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'ZUNMTR', UPLO, N, -1, -1,
+     $                -1 ) )
             LWKOPT = MAX( 1, ( NB + 1 )*N )
             WORK( 1 ) = LWKOPT
          END IF
@@ -505,7 +508,8 @@
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by ZSTEIN.
 *
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

@@ -249,7 +249,8 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
+            CALL DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *

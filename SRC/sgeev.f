@@ -188,7 +188,8 @@
 *> \ingroup geev
 *
 *  =====================================================================
-      SUBROUTINE SGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,
+      SUBROUTINE SGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL,
+     $                  VR,
      $                  LDVR, WORK, LWORK, INFO )
       implicit none
 *
@@ -224,7 +225,8 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLACPY, SLARTG,
+      EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLACPY,
+     $                   SLARTG,
      $                   SLASCL, SORGHR, SROT, SSCAL, STREVC3, XERBLA
 *     ..
 *     .. External Functions ..
@@ -247,7 +249,8 @@
       WANTVR = LSAME( JOBVR, 'V' )
       IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND.
+     $         ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -279,7 +282,8 @@
                MINWRK = 4*N
                MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
      $                       'SORGHR', ' ', N, 1, N, -1 ) )
-               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VL, LDVL,
+               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VL,
+     $                      LDVL,
      $                      WORK, -1, INFO )
                HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
@@ -293,7 +297,8 @@
                MINWRK = 4*N
                MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
      $                       'SORGHR', ' ', N, 1, N, -1 ) )
-               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VR, LDVR,
+               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VR,
+     $                      LDVR,
      $                      WORK, -1, INFO )
                HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
@@ -305,7 +310,8 @@
                MAXWRK = MAX( MAXWRK, 4*N )
             ELSE
                MINWRK = 3*N
-               CALL SHSEQR( 'E', 'N', N, 1, N, A, LDA, WR, WI, VR, LDVR,
+               CALL SHSEQR( 'E', 'N', N, 1, N, A, LDA, WR, WI, VR,
+     $                      LDVR,
      $                      WORK, -1, INFO )
                HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
@@ -378,14 +384,16 @@
 *        Generate orthogonal matrix in VL
 *        (Workspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *
-         CALL SORGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
+         CALL SORGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
 *        (Workspace: need N+1, prefer N+HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VL, LDVL,
+         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VL,
+     $                LDVL,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
          IF( WANTVR ) THEN
@@ -408,14 +416,16 @@
 *        Generate orthogonal matrix in VR
 *        (Workspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *
-         CALL SORGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
+         CALL SORGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
 *        (Workspace: need N+1, prefer N+HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR,
+         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VR,
+     $                LDVR,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
       ELSE
@@ -424,7 +434,8 @@
 *        (Workspace: need N+1, prefer N+HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( 'E', 'N', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR,
+         CALL SHSEQR( 'E', 'N', N, ILO, IHI, A, LDA, WR, WI, VR,
+     $                LDVR,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
       END IF
 *
@@ -438,7 +449,8 @@
 *        Compute left and/or right eigenvectors
 *        (Workspace: need 4*N, prefer N + N + 2*N*NB)
 *
-         CALL STREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL STREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
+     $                 LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1, IERR )
       END IF
 *
@@ -447,7 +459,8 @@
 *        Undo balancing of left eigenvectors
 *        (Workspace: need N)
 *
-         CALL SGEBAK( 'B', 'L', N, ILO, IHI, WORK( IBAL ), N, VL, LDVL,
+         CALL SGEBAK( 'B', 'L', N, ILO, IHI, WORK( IBAL ), N, VL,
+     $                LDVL,
      $                IERR )
 *
 *        Normalize left eigenvectors and make largest component real
@@ -477,7 +490,8 @@
 *        Undo balancing of right eigenvectors
 *        (Workspace: need N)
 *
-         CALL SGEBAK( 'B', 'R', N, ILO, IHI, WORK( IBAL ), N, VR, LDVR,
+         CALL SGEBAK( 'B', 'R', N, ILO, IHI, WORK( IBAL ), N, VR,
+     $                LDVR,
      $                IERR )
 *
 *        Normalize right eigenvectors and make largest component real
@@ -506,9 +520,11 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, WR( INFO+1 ),
+         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
+     $                WR( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
-         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, WI( INFO+1 ),
+         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
+     $                WI( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.GT.0 ) THEN
             CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, WR, N,

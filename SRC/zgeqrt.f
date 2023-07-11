@@ -196,9 +196,11 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL ZGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL ZGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT,
+     $                    IINFO )
          ELSE
-            CALL ZGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL ZGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT,
+     $                    IINFO )
          END IF
          IF( I+IB.LE.N ) THEN
 *

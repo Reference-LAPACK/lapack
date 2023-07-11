@@ -141,7 +141,8 @@
       EXTERNAL           ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGEMV, DSWAP, DTRSM, DTRTRI, XERBLA
+      EXTERNAL           DGEMM, DGEMV, DSWAP, DTRSM, DTRTRI,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -188,7 +189,8 @@
          IWS = MAX( LDWORK*NB, 1 )
          IF( LWORK.LT.IWS ) THEN
             NB = LWORK / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'DGETRI', ' ', N, -1, -1, -1 ) )
+            NBMIN = MAX( 2, ILAENV( 2, 'DGETRI', ' ', N, -1, -1,
+     $                   -1 ) )
          END IF
       ELSE
          IWS = N
@@ -239,7 +241,8 @@
      $         CALL DGEMM( 'No transpose', 'No transpose', N, JB,
      $                     N-J-JB+1, -ONE, A( 1, J+JB ), LDA,
      $                     WORK( J+JB ), LDWORK, ONE, A( 1, J ), LDA )
-            CALL DTRSM( 'Right', 'Lower', 'No transpose', 'Unit', N, JB,
+            CALL DTRSM( 'Right', 'Lower', 'No transpose', 'Unit', N,
+     $                  JB,
      $                  ONE, WORK( J ), LDWORK, A( 1, J ), LDA )
    50    CONTINUE
       END IF

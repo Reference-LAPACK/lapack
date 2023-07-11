@@ -189,7 +189,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -317,7 +318,8 @@
 *           Update the unreduced submatrix A(1:i-1,1:i-1), using an
 *           update of the form:  A := A - V*W**T - W*V**T
 *
-            CALL SSYR2K( UPLO, 'No transpose', I-1, NB, -ONE, A( 1, I ),
+            CALL SSYR2K( UPLO, 'No transpose', I-1, NB, -ONE, A( 1,
+     $                   I ),
      $                   LDA, WORK, LDWORK, ONE, A, LDA )
 *
 *           Copy superdiagonal elements back into A, and diagonal

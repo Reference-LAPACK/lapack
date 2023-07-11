@@ -213,7 +213,8 @@
 *> \ingroup ggev3
 *
 *  =====================================================================
-      SUBROUTINE ZGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+      SUBROUTINE ZGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA,
+     $                   BETA,
      $                   VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -254,7 +255,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHD3, ZLAQZ0,
+      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHD3,
+     $                   ZLAQZ0,
      $                   ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZUNGQR, ZUNMQR
 *     ..
 *     .. External Functions ..
@@ -499,7 +501,8 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), RWORK( IRWRK ),
      $                IERR )
          IF( IERR.NE.0 ) THEN

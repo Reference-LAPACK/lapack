@@ -165,7 +165,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZGERU, ZLACGV, ZDSCAL, ZSWAP, XERBLA
+      EXTERNAL           ZGEMV, ZGERU, ZLACGV, ZDSCAL, ZSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, DBLE
@@ -225,7 +226,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL ZGERU( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL ZGERU( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+     $                  LDB,
      $                  B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -250,7 +252,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL ZGERU( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL ZGERU( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+     $                  LDB,
      $                  B( 1, 1 ), LDB )
             CALL ZGERU( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                  LDB, B( 1, 1 ), LDB )
@@ -372,7 +375,8 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL ZGERU( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
+     $         CALL ZGERU( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K,
+     $                     1 ),
      $                     LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -398,7 +402,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL ZGERU( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
+               CALL ZGERU( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K,
+     $                     1 ),
      $                     LDB, B( K+2, 1 ), LDB )
                CALL ZGERU( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                     B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

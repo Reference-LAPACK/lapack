@@ -553,7 +553,8 @@
 *> \ingroup gbsvxx
 *
 *  =====================================================================
-      SUBROUTINE ZGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE ZGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB,
+     $                    AFB,
      $                    LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
      $                    RCOND, RPVGRW, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
@@ -604,7 +605,8 @@
       DOUBLE PRECISION   DLAMCH, ZLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGBEQUB, ZGBTRF, ZGBTRS, ZLACPY, ZLAQGB,
+      EXTERNAL           ZGBEQUB, ZGBTRF, ZGBTRS, ZLACPY,
+     $                   ZLAQGB,
      $                   XERBLA, ZLASCL2, ZGBRFSX
 *     ..
 *     .. Intrinsic Functions ..
@@ -711,7 +713,8 @@
 *
 *     Equilibrate the matrix.
 *
-            CALL ZLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+            CALL ZLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND,
+     $                   COLCND,
      $           AMAX, EQUED )
             ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
             COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
@@ -777,7 +780,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL ZGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      CALL ZGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $              LDAFB,
      $     IPIV, R, C, B, LDB, X, LDX, RCOND, BERR,
      $     N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $     WORK, RWORK, INFO )

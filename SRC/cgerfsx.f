@@ -408,7 +408,8 @@
 *> \ingroup gerfsx
 *
 *  =====================================================================
-      SUBROUTINE CGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE CGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -474,7 +475,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILATRANS, ILAPREC
-      EXTERNAL           SLAMCH, CLANGE, CLA_GERCOND_X, CLA_GERCOND_C
+      EXTERNAL           SLAMCH, CLANGE, CLA_GERCOND_X,
+     $                   CLA_GERCOND_C
       REAL               SLAMCH, CLANGE, CLA_GERCOND_X, CLA_GERCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
@@ -607,7 +609,8 @@
          NORM = '1'
       END IF
       ANORM = CLANGE( NORM, N, N, A, LDA, RWORK )
-      CALL CGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
+      CALL CGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK,
+     $             INFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -640,13 +643,16 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           C, .TRUE., INFO, WORK, RWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           R, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           C, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS

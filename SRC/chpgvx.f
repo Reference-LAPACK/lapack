@@ -303,7 +303,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPEVX, CHPGST, CPPTRF, CTPMV, CTPSV, XERBLA
+      EXTERNAL           CHPEVX, CHPGST, CPPTRF, CTPMV, CTPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -369,7 +370,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL CHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
+      CALL CHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL,
+     $             M,
      $             W, Z, LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN

@@ -249,7 +249,8 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL SSYMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
+               CALL SSYMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1,
+     $                     ZERO,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**T * v) * v
@@ -295,14 +296,16 @@
 *
 *              Compute  w := x - 1/2 * tau * (x**T * v) * v
 *
-               ALPHA = -HALF*TAUI*SDOT( N-I, TAU( I ), 1, A( I+1, I ),
+               ALPHA = -HALF*TAUI*SDOT( N-I, TAU( I ), 1, A( I+1,
+     $                                  I ),
      $                 1 )
                CALL SAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**T - w * v**T
 *
-               CALL SSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
+               CALL SSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ),
+     $                     1,
      $                     A( I+1, I+1 ), LDA )
 *
                A( I+1, I ) = E( I )

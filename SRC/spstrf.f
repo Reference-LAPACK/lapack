@@ -138,7 +138,8 @@
 *> \ingroup pstrf
 *
 *  =====================================================================
-      SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +173,8 @@
       EXTERNAL           SLAMCH, ILAENV, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SPSTF2, SSCAL, SSWAP, SSYRK, XERBLA
+      EXTERNAL           SGEMV, SPSTF2, SSCAL, SSWAP, SSYRK,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, MAXLOC
@@ -314,7 +316,8 @@
 *                 Compute elements J+1:N of row J.
 *
                   IF( J.LT.N ) THEN
-                     CALL SGEMV( 'Trans', J-K, N-J, -ONE, A( K, J+1 ),
+                     CALL SGEMV( 'Trans', J-K, N-J, -ONE, A( K,
+     $                           J+1 ),
      $                           LDA, A( K, J ), 1, ONE, A( J, J+1 ),
      $                           LDA )
                      CALL SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
@@ -378,11 +381,13 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ),
+     $                           LDA )
                      IF( PVT.LT.N )
      $                  CALL SSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )
-                     CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ),
+                     CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT,
+     $                           J+1 ),
      $                           LDA )
 *
 *                    Swap dot products and PIV

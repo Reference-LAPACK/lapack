@@ -174,7 +174,8 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+      SUBROUTINE CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU,
+     $                   VN1,
      $                   VN2, AUXV, F, LDF )
 *
 *  -- LAPACK auxiliary routine --
@@ -249,7 +250,8 @@
             DO 20 J = 1, K - 1
                F( K, J ) = CONJG( F( K, J ) )
    20       CONTINUE
-            CALL CGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK, 1 ),
+            CALL CGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK,
+     $                  1 ),
      $                  LDA, F( K, 1 ), LDF, CONE, A( RK, K ), 1 )
             DO 30 J = 1, K - 1
                F( K, J ) = CONJG( F( K, J ) )
@@ -259,7 +261,8 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL CLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL CLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1,
+     $                   TAU( K ) )
          ELSE
             CALL CLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
@@ -288,7 +291,8 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL CGEMV( 'Conjugate transpose', M-RK+1, K-1, -TAU( K ),
+            CALL CGEMV( 'Conjugate transpose', M-RK+1, K-1,
+     $                  -TAU( K ),
      $                  A( RK, 1 ), LDA, A( RK, K ), 1, CZERO,
      $                  AUXV( 1 ), 1 )
 *
@@ -300,7 +304,8 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H.
 *
          IF( K.LT.N ) THEN
-            CALL CGEMM( 'No transpose', 'Conjugate transpose', 1, N-K,
+            CALL CGEMM( 'No transpose', 'Conjugate transpose', 1,
+     $                  N-K,
      $                  K, -CONE, A( RK, 1 ), LDA, F( K+1, 1 ), LDF,
      $                  CONE, A( RK, K+1 ), LDA )
          END IF
@@ -341,7 +346,8 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**H.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL CGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-KB,
+         CALL CGEMM( 'No transpose', 'Conjugate transpose', M-RK,
+     $               N-KB,
      $               KB, -CONE, A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF,
      $               CONE, A( RK+1, KB+1 ), LDA )
       END IF

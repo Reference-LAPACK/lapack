@@ -159,7 +159,8 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+      SUBROUTINE DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK,
+     $                   IWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -182,7 +183,8 @@
      $                   IW, IZ, K, N1, N2, ZPP1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAED2, DLAED3, DLAMRG, XERBLA
+      EXTERNAL           DCOPY, DLAED2, DLAED3, DLAMRG,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -230,7 +232,8 @@
 *
       CALL DCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
       ZPP1 = CUTPNT + 1
-      CALL DCOPY( N-CUTPNT, Q( ZPP1, ZPP1 ), LDQ, WORK( IZ+CUTPNT ), 1 )
+      CALL DCOPY( N-CUTPNT, Q( ZPP1, ZPP1 ), LDQ, WORK( IZ+CUTPNT ),
+     $            1 )
 *
 *     Deflate eigenvalues.
 *

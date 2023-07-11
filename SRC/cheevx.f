@@ -254,7 +254,8 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
@@ -299,7 +300,8 @@
       EXTERNAL           LSAME, ILAENV, SLAMCH, CLANHE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA,
+     $                   CSSCAL,
      $                   CHETRD, CLACPY, CSTEIN, CSTEQR, CSWAP, CUNGTR,
      $                   CUNMTR
 *     ..
@@ -505,7 +507,8 @@
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by CSTEIN.
 *
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

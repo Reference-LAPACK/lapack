@@ -226,7 +226,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -264,7 +265,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT, DGEMM,
+      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT,
+     $                   DGEMM,
      $                   DGEMV, DTRMV, DLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -388,7 +390,8 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK, NBLST )
+            CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK,
+     $                   NBLST )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
                CALL DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
@@ -585,10 +588,12 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', LEN,
+                     CALL DTRMV( 'Upper', 'Transpose', 'Non-unit',
+     $                           LEN,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL DTRMV( 'Lower', 'Transpose', 'Non-unit', NNB,
+                     CALL DTRMV( 'Lower', 'Transpose', 'Non-unit',
+     $                           NNB,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
                      CALL DGEMV( 'Transpose', NNB, LEN, ONE,
@@ -777,7 +782,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL DORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -808,7 +814,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL DORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -888,7 +895,8 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB,
+     $                Q,
      $                LDQ, Z, LDZ, IERR )
 *
       WORK( 1 ) = DBLE( LWKOPT )

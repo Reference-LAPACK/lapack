@@ -278,7 +278,8 @@
       EXTERNAL           IDAMAX, LSAME, DDOT, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLASCL, DLASSQ, DROTM, DSWAP,
+      EXTERNAL           DAXPY, DCOPY, DLASCL, DLASSQ, DROTM,
+     $                   DSWAP,
      $                   XERBLA
 *     ..
 *     .. Executable Statements ..
@@ -424,12 +425,15 @@
                                  ROTOK = ( SMALL*AAQQ ).LE.AAPP
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( DDOT( M, A( 1, p ), 1, A( 1,
+                                 AAPQ = ( DDOT( M, A( 1, p ), 1,
+     $                                    A( 1,
      $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
      $                                  / AAPP
                               ELSE
-                                 CALL DCOPY( M, A( 1, p ), 1, WORK, 1 )
-                                 CALL DLASCL( 'G', 0, 0, AAPP, D( p ),
+                                 CALL DCOPY( M, A( 1, p ), 1, WORK,
+     $                                       1 )
+                                 CALL DLASCL( 'G', 0, 0, AAPP,
+     $                                        D( p ),
      $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = DDOT( M, WORK, 1, A( 1, q ),
      $                                  1 )*D( q ) / AAQQ
@@ -441,12 +445,15 @@
                                  ROTOK = AAQQ.LE.( AAPP / SMALL )
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( DDOT( M, A( 1, p ), 1, A( 1,
+                                 AAPQ = ( DDOT( M, A( 1, p ), 1,
+     $                                    A( 1,
      $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
      $                                  / AAPP
                               ELSE
-                                 CALL DCOPY( M, A( 1, q ), 1, WORK, 1 )
-                                 CALL DLASCL( 'G', 0, 0, AAQQ, D( q ),
+                                 CALL DCOPY( M, A( 1, q ), 1, WORK,
+     $                                       1 )
+                                 CALL DLASCL( 'G', 0, 0, AAQQ,
+     $                                        D( q ),
      $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = DDOT( M, WORK, 1, A( 1, p ),
      $                                  1 )*D( p ) / AAPP
@@ -510,7 +517,8 @@
                                           FASTR( 4 ) = -T*AQOAP
                                           D( p ) = D( p )*CS
                                           D( q ) = D( q )*CS
-                                          CALL DROTM( M, A( 1, p ), 1,
+                                          CALL DROTM( M, A( 1, p ),
+     $                                                1,
      $                                                A( 1, q ), 1,
      $                                                FASTR )
                                           IF( RSVEC )CALL DROTM( MVL,
@@ -524,7 +532,8 @@
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL DAXPY( MVL, -T*AQOAP,
+                                             CALL DAXPY( MVL,
+     $                                                   -T*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
                                              CALL DAXPY( MVL,
@@ -540,11 +549,13 @@
                                           CALL DAXPY( M, T*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
-                                          CALL DAXPY( M, -CS*SN*AQOAP,
+                                          CALL DAXPY( M,
+     $                                                -CS*SN*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL DAXPY( MVL, T*APOAQ,
+                                             CALL DAXPY( MVL,
+     $                                                   T*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
                                              CALL DAXPY( MVL,
@@ -559,7 +570,8 @@
                                              CALL DAXPY( M, -T*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
-                                             CALL DAXPY( M, CS*SN*APOAQ,
+                                             CALL DAXPY( M,
+     $                                                   CS*SN*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
                                              D( p ) = D( p )*CS
@@ -600,34 +612,42 @@
 
                               ELSE
                                  IF( AAPP.GT.AAQQ ) THEN
-                                    CALL DCOPY( M, A( 1, p ), 1, WORK,
+                                    CALL DCOPY( M, A( 1, p ), 1,
+     $                                          WORK,
      $                                          1 )
-                                    CALL DLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL DLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, WORK, LDA, IERR )
-                                    CALL DLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL DLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*D( p ) / D( q )
                                     CALL DAXPY( M, TEMP1, WORK, 1,
      $                                          A( 1, q ), 1 )
-                                    CALL DLASCL( 'G', 0, 0, ONE, AAQQ,
+                                    CALL DLASCL( 'G', 0, 0, ONE,
+     $                                           AAQQ,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     SVA( q ) = AAQQ*DSQRT( MAX( ZERO,
      $                                         ONE-AAPQ*AAPQ ) )
                                     MXSINJ = MAX( MXSINJ, SFMIN )
                                  ELSE
-                                    CALL DCOPY( M, A( 1, q ), 1, WORK,
+                                    CALL DCOPY( M, A( 1, q ), 1,
+     $                                          WORK,
      $                                          1 )
-                                    CALL DLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL DLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, WORK, LDA, IERR )
-                                    CALL DLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL DLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*D( q ) / D( p )
                                     CALL DAXPY( M, TEMP1, WORK, 1,
      $                                          A( 1, p ), 1 )
-                                    CALL DLASCL( 'G', 0, 0, ONE, AAPP,
+                                    CALL DLASCL( 'G', 0, 0, ONE,
+     $                                           AAPP,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     SVA( p ) = AAPP*DSQRT( MAX( ZERO,
@@ -643,7 +663,8 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = DNRM2( M, A( 1, q ), 1 )*
+                                    SVA( q ) = DNRM2( M, A( 1, q ),
+     $                                   1 )*
      $                                         D( q )
                                  ELSE
                                     T = ZERO

@@ -204,7 +204,8 @@
 *> \ingroup gtrfs
 *
 *  =====================================================================
-      SUBROUTINE SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+      SUBROUTINE SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+     $                   DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
      $                   INFO )
 *
@@ -245,7 +246,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGTTRS, SLACN2, SLAGTM, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGTTRS, SLACN2, SLAGTM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -318,7 +320,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL SLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
+         CALL SLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX,
+     $                ONE,
      $                WORK( N+1 ), N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -429,7 +432,8 @@
 *
          KASE = 0
    70    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

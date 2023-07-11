@@ -381,7 +381,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARRV, CSWAP, SCOPY, SLAE2, SLAEV2, SLARRC,
+      EXTERNAL           CLARRV, CSWAP, SCOPY, SLAE2, SLAEV2,
+     $                   SLARRC,
      $                   SLARRE, SLARRJ, SLARRR, SLASRT, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

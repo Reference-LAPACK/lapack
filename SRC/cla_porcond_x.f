@@ -119,7 +119,8 @@
 *> \ingroup la_porcond
 *
 *  =====================================================================
-      REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
+      REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X,
+     $                             INFO,
      $                             WORK, RWORK )
 *
 *  -- LAPACK computational routine --

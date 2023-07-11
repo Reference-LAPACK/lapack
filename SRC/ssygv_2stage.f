@@ -222,7 +222,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+      SUBROUTINE SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB,
+     $                         W,
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -257,7 +258,8 @@
       EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYGST, STRMM, STRSM, XERBLA,
+      EXTERNAL           SPOTRF, SSYGST, STRMM, STRSM,
+     $                   XERBLA,
      $                   SSYEV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -287,10 +289,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                         -1 )
+         IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -322,7 +328,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+      CALL SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -342,7 +349,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -356,7 +364,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF

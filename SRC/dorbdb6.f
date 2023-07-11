@@ -155,7 +155,8 @@
 *> \ingroup unbdb6
 *
 *  =====================================================================
-      SUBROUTINE DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1,
+     $                    Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -238,11 +239,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
@@ -284,11 +287,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )

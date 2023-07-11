@@ -385,7 +385,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
+      SUBROUTINE DGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR, ILO,
      $                   IHI, LSCALE, RSCALE, ABNRM, BBNRM, RCONDE,
      $                   RCONDV, WORK, LWORK, IWORK, BWORK, INFO )
@@ -428,7 +429,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ, DLACPY,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ,
+     $                   DLACPY,
      $                   DLASCL, DLASET, DORGQR, DORMQR, DTGEVC, DTGSNA,
      $                   XERBLA
 *     ..
@@ -479,7 +481,9 @@
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.( LSAME( BALANC, 'N' ) .OR. LSAME( BALANC,
-     $    'S' ) .OR. LSAME( BALANC, 'P' ) .OR. LSAME( BALANC, 'B' ) ) )
+     $    'S' ) .OR.
+     $                      LSAME( BALANC, 'P' ) .OR.
+     $                      LSAME( BALANC, 'B' ) ) )
      $     THEN
          INFO = -1
       ELSE IF( IJOBVL.LE.0 ) THEN
@@ -527,12 +531,15 @@
             END IF
             MAXWRK = MINWRK
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'DGEQRF', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'DGEQRF', ' ', N, 1, N,
+     $                                  0 ) )
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'DORMQR', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'DORMQR', ' ', N, 1, N,
+     $                                  0 ) )
             IF( ILVL ) THEN
                MAXWRK = MAX( MAXWRK, N +
-     $                       N*ILAENV( 1, 'DORGQR', ' ', N, 1, N, 0 ) )
+     $                       N*ILAENV( 1, 'DORGQR', ' ', N, 1, N,
+     $                                 0 ) )
             END IF
          END IF
          WORK( 1 ) = MAXWRK
@@ -594,7 +601,8 @@
 *     Permute and/or balance the matrix pair (A,B)
 *     (Workspace: need 6*N if BALANC = 'S' or 'B', 1 otherwise)
 *
-      CALL DGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL DGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+     $             RSCALE,
      $             WORK, IERR )
 *
 *     Compute ABNRM and BBNRM
@@ -779,7 +787,8 @@
 *     (Workspace: none needed)
 *
       IF( ILVL ) THEN
-         CALL DGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N, VL,
+         CALL DGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VL,
      $                LDVL, IERR )
 *
          DO 70 JC = 1, N
@@ -812,7 +821,8 @@
    70    CONTINUE
       END IF
       IF( ILVR ) THEN
-         CALL DGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N, VR,
+         CALL DGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VR,
      $                LDVR, IERR )
          DO 120 JC = 1, N
             IF( ALPHAI( JC ).LT.ZERO )
@@ -849,8 +859,10 @@
   130 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

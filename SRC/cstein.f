@@ -223,7 +223,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, REAL, SQRT
@@ -366,7 +367,8 @@
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
+            CALL SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ,
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -387,7 +389,8 @@
 *
 *           Solve the system LU = Pb.
 *
-            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
+            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ),
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *

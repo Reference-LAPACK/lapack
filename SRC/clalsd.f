@@ -217,7 +217,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET, CSROT,
+      EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET,
+     $                   CSROT,
      $                   SGEMM, SLARTG, SLASCL, SLASDA, SLASDQ, SLASET,
      $                   SLASRT, XERBLA
 *     ..
@@ -263,7 +264,8 @@
             CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL CLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL CLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
+     $                   INFO )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -289,7 +291,8 @@
                DO 20 J = 1, N - 1
                   CS = RWORK( J*2-1 )
                   SN = RWORK( J*2 )
-                  CALL CSROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL CSROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS,
+     $                        SN )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -361,9 +364,11 @@
          TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
          DO 100 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ),
+     $                      LDB )
             ELSE
-               CALL CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I,
+     $                      1 ),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
@@ -591,7 +596,8 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ), N )
+            CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ),
+     $                   N )
          ELSE
             RANK = RANK + 1
             CALL CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
@@ -654,7 +660,8 @@
   300          CONTINUE
   310       CONTINUE
          ELSE
-            CALL CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ),
+     $                   N,
      $                   B( ST, 1 ), LDB, RWORK( U+ST1 ), N,
      $                   RWORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   RWORK( DIFL+ST1 ), RWORK( DIFR+ST1 ),

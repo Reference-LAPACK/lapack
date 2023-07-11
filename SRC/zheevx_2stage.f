@@ -348,7 +348,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZLACPY, ZSTEIN, ZSTEQR, ZSWAP, ZUNGTR, ZUNMTR,
      $                   ZHETRD_2STAGE
 *     ..
@@ -563,7 +564,8 @@
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by ZSTEIN.
 *
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

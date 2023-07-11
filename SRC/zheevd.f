@@ -194,7 +194,8 @@
 *> at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+      SUBROUTINE ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -234,7 +235,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHETRD, ZLACPY, ZLASCL,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHETRD, ZLACPY,
+     $                   ZLASCL,
      $                   ZSTEDC, ZUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -278,7 +280,8 @@
                LIWMIN = 1
             END IF
             LOPT = MAX( LWMIN, N +
-     $                  N*ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 ) )
+     $                  N*ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1,
+     $                            -1 ) )
             LROPT = LRWMIN
             LIOPT = LIWMIN
          END IF

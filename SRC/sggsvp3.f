@@ -306,7 +306,8 @@
       EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQP3, SGEQR2, SGERQ2, SLACPY, SLAPMT,
+      EXTERNAL           SGEQP3, SGEQR2, SGERQ2, SLACPY,
+     $                   SLAPMT,
      $                   SLASET, SORG2R, SORM2R, SORMR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -443,7 +444,8 @@
 *
 *           Update Q := Q*Z**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU, Q,
+            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU,
+     $                   Q,
      $                   LDQ, WORK, INFO )
          END IF
 *
@@ -490,7 +492,8 @@
 *
          CALL SLASET( 'Full', M, M, ZERO, ZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
+     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2,
+     $                   1 ),
      $                   LDU )
          CALL SORG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
@@ -511,7 +514,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ), LDA )
+     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -523,7 +527,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA, TAU,
+            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA,
+     $                   TAU,
      $                   Q, LDQ, WORK, INFO )
          END IF
 *
@@ -548,7 +553,8 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL SORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
+            CALL SORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K,
+     $                   L ),
      $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
      $                   WORK, INFO )
          END IF

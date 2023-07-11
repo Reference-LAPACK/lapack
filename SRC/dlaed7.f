@@ -254,7 +254,8 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+      SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D,
+     $                   Q,
      $                   LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
      $                   PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
      $                   INFO )
@@ -286,7 +287,8 @@
      $                   IQ2, IS, IW, IZ, K, LDQ2, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLAED8, DLAED9, DLAEDA, DLAMRG, XERBLA
+      EXTERNAL           DGEMM, DLAED8, DLAED9, DLAEDA, DLAMRG,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -375,7 +377,8 @@
 *     Solve Secular Equation.
 *
       IF( K.NE.0 ) THEN
-         CALL DLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA ),
+         CALL DLAED9( K, 1, K, N, D, WORK( IS ), K, RHO,
+     $                WORK( IDLMDA ),
      $                WORK( IW ), QSTORE( QPTR( CURR ) ), K, INFO )
          IF( INFO.NE.0 )
      $      GO TO 30

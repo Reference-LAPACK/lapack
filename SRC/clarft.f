@@ -248,7 +248,8 @@
 *
 *              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
 *
-               CALL CTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T,
+               CALL CTRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
+     $                     T,
      $                     LDT, T( 1, I ), 1 )
                T( I, I ) = TAU( I )
                IF( I.GT.1 ) THEN
@@ -300,14 +301,16 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H
 *
-                     CALL CGEMM( 'N', 'C', K-I, 1, N-K+I-J, -TAU( I ),
+                     CALL CGEMM( 'N', 'C', K-I, 1, N-K+I-J,
+     $                           -TAU( I ),
      $                           V( I+1, J ), LDV, V( I, J ), LDV,
      $                           ONE, T( I+1, I ), LDT )
                   END IF
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-                  CALL CTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+                  CALL CTRMV( 'Lower', 'No transpose', 'Non-unit',
+     $                        K-I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
                   IF( I.GT.1 ) THEN
                      PREVLASTV = MIN( PREVLASTV, LASTV )

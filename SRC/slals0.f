@@ -263,7 +263,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+      SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX,
+     $                   LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, WORK, INFO )
 *
@@ -294,7 +295,8 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SROT, SSCAL,
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SROT,
+     $                   SSCAL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -358,7 +360,8 @@
 *
          CALL SCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL SCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
+            CALL SCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ),
+     $                  LDBX )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
@@ -412,7 +415,8 @@
    40          CONTINUE
                WORK( 1 ) = NEGONE
                TEMP = SNRM2( K, WORK, 1 )
-               CALL SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
+               CALL SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1,
+     $                     ZERO,
      $                     B( J, 1 ), LDB )
                CALL SLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
      $                      LDB, INFO )
@@ -451,7 +455,8 @@
 *                    parentheses (x+y)+z. The goal is to prevent
 *                    optimizing compilers from doing x+(y+z).
 *
-                     WORK( I ) = Z( J ) / ( SLAMC3( DSIGJ, -POLES( I+1,
+                     WORK( I ) = Z( J ) / ( SLAMC3( DSIGJ,
+     $                     -POLES( I+1,
      $                           2 ) )-DIFR( I, 1 ) ) /
      $                           ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -475,10 +480,12 @@
 *
          IF( SQRE.EQ.1 ) THEN
             CALL SCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL SROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
+            CALL SROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C,
+     $                 S )
          END IF
          IF( K.LT.MAX( M, N ) )
-     $      CALL SLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1 ),
+     $      CALL SLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1,
+     $                   1 ),
      $                   LDBX )
 *
 *        Step (3R): permute rows of B.
@@ -488,7 +495,8 @@
             CALL SCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 90 I = 2, N
-            CALL SCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
+            CALL SCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ),
+     $                  LDB )
    90    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.

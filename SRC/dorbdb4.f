@@ -208,7 +208,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE DORBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE DORBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, PHANTOM, WORK, LWORK,
      $                    INFO )
 *
@@ -238,7 +239,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, DSCAL, XERBLA
+      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, DSCAL,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2
@@ -301,13 +303,15 @@
      $                    LORBDB5, CHILDINFO )
             CALL DSCAL( P, NEGONE, PHANTOM(1), 1 )
             CALL DLARFGP( P, PHANTOM(1), PHANTOM(2), 1, TAUP1(1) )
-            CALL DLARFGP( M-P, PHANTOM(P+1), PHANTOM(P+2), 1, TAUP2(1) )
+            CALL DLARFGP( M-P, PHANTOM(P+1), PHANTOM(P+2), 1,
+     $                    TAUP2(1) )
             THETA(I) = ATAN2( PHANTOM(1), PHANTOM(P+1) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
             PHANTOM(1) = ONE
             PHANTOM(P+1) = ONE
-            CALL DLARF( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11, LDX11,
+            CALL DLARF( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
+     $                  LDX11,
      $                  WORK(ILARF) )
             CALL DLARF( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1), X21,
      $                  LDX21, WORK(ILARF) )
@@ -316,7 +320,8 @@
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
      $                    LDX21, WORK(IORBDB5), LORBDB5, CHILDINFO )
             CALL DSCAL( P-I+1, NEGONE, X11(I,I-1), 1 )
-            CALL DLARFGP( P-I+1, X11(I,I-1), X11(I+1,I-1), 1, TAUP1(I) )
+            CALL DLARFGP( P-I+1, X11(I,I-1), X11(I+1,I-1), 1,
+     $                    TAUP1(I) )
             CALL DLARFGP( M-P-I+1, X21(I,I-1), X21(I+1,I-1), 1,
      $                    TAUP2(I) )
             THETA(I) = ATAN2( X11(I,I-1), X21(I,I-1) )
@@ -360,10 +365,12 @@
 *     Reduce the bottom-right portion of X21 to [ 0 I ]
 *
       DO I = P + 1, Q
-         CALL DLARFGP( Q-I+1, X21(M-Q+I-P,I), X21(M-Q+I-P,I+1), LDX21,
+         CALL DLARFGP( Q-I+1, X21(M-Q+I-P,I), X21(M-Q+I-P,I+1),
+     $                 LDX21,
      $                 TAUQ1(I) )
          X21(M-Q+I-P,I) = ONE
-         CALL DLARF( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21, TAUQ1(I),
+         CALL DLARF( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
+     $               TAUQ1(I),
      $               X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
       END DO
 *

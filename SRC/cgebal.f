@@ -197,7 +197,8 @@
       LOGICAL            SISNAN, LSAME
       INTEGER            ICAMAX
       REAL               SLAMCH, SCNRM2
-      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH, SCNRM2
+      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH,
+     $                   SCNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CSSCAL, CSWAP
@@ -208,8 +209,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -267,7 +270,8 @@
                   SCALE( L ) = I
                   IF( I.NE.L ) THEN
                      CALL CSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
-                     CALL CSWAP( N-K+1, A( I, K ), LDA, A( L, K ), LDA )
+                     CALL CSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *
@@ -303,7 +307,8 @@
                   SCALE( K ) = J
                   IF( J.NE.K ) THEN
                      CALL CSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
-                     CALL CSWAP( N-K+1, A( J, K ), LDA, A( K, K ), LDA )
+                     CALL CSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *

@@ -214,7 +214,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CUNGQR', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'CUNGQR', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -268,7 +269,8 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL CUNG2R( M-I+1, IB, IB, A( I, I ), LDA, TAU( I ), WORK,
+            CALL CUNG2R( M-I+1, IB, IB, A( I, I ), LDA, TAU( I ),
+     $                   WORK,
      $                   IINFO )
 *
 *           Set rows 1:i-1 of current block to zero

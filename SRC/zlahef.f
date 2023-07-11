@@ -174,7 +174,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
+      SUBROUTINE ZLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -211,7 +212,8 @@
       EXTERNAL           LSAME, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZDSCAL, ZGEMM, ZGEMV, ZLACGV, ZSWAP
+      EXTERNAL           ZCOPY, ZDSCAL, ZGEMM, ZGEMV, ZLACGV,
+     $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SQRT
@@ -256,7 +258,8 @@
          CALL ZCOPY( K-1, A( 1, K ), 1, W( 1, KW ), 1 )
          W( K, KW ) = DBLE( A( K, K ) )
          IF( K.LT.N ) THEN
-            CALL ZGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), LDA,
+            CALL ZGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
+     $                  LDA,
      $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
             W( K, KW ) = DBLE( W( K, KW ) )
          END IF
@@ -624,7 +627,8 @@
          W( K, K ) = DBLE( A( K, K ) )
          IF( K.LT.N )
      $      CALL ZCOPY( N-K, A( K+1, K ), 1, W( K+1, K ), 1 )
-         CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ), LDA,
+         CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+     $               LDA,
      $               W( K, 1 ), LDW, CONE, W( K, K ), 1 )
          W( K, K ) = DBLE( W( K, K ) )
 *
@@ -671,13 +675,15 @@
 *
 *              Copy column IMAX to column K+1 of W and update it
 *
-               CALL ZCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1 )
+               CALL ZCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $                     1 )
                CALL ZLACGV( IMAX-K, W( K, K+1 ), 1 )
                W( IMAX, K+1 ) = DBLE( A( IMAX, IMAX ) )
                IF( IMAX.LT.N )
      $            CALL ZCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
      $                        W( IMAX+1, K+1 ), 1 )
-               CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+               CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K,
+     $                     1 ),
      $                     LDA, W( IMAX, 1 ), LDW, CONE, W( K, K+1 ),
      $                     1 )
                W( IMAX, K+1 ) = DBLE( W( IMAX, K+1 ) )
@@ -751,7 +757,8 @@
      $                     LDA )
                CALL ZLACGV( KP-KK-1, A( KP, KK+1 ), LDA )
                IF( KP.LT.N )
-     $            CALL ZCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL ZCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
 *              (columns K (or K and K+1 for 2-by-2 pivot) of A will be

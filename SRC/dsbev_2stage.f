@@ -200,7 +200,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                         LDZ,
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -237,7 +238,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DSCAL, DSTEQR, DSTERF, XERBLA,
+      EXTERNAL           DLASCL, DSCAL, DSTEQR, DSTERF,
+     $                   XERBLA,
      $                   DSYTRD_SB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -330,9 +332,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -352,7 +356,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                INFO )
       END IF
 *

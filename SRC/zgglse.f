@@ -176,7 +176,8 @@
 *> \ingroup gglse
 *
 *  =====================================================================
-      SUBROUTINE ZGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+      SUBROUTINE ZGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK,
+     $                   LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine --
@@ -203,7 +204,8 @@
      $                   NB4, NR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGGRQF, ZTRMV,
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGGRQF,
+     $                   ZTRMV,
      $                   ZTRTRS, ZUNMQR, ZUNMRQ
 *     ..
 *     .. External Functions ..
@@ -304,7 +306,8 @@
 *
 *        Update c1
 *
-         CALL ZGEMV( 'No transpose', N-P, P, -CONE, A( 1, N-P+1 ), LDA,
+         CALL ZGEMV( 'No transpose', N-P, P, -CONE, A( 1, N-P+1 ),
+     $               LDA,
      $               D, 1, CONE, C, 1 )
       END IF
 *
@@ -329,7 +332,8 @@
       IF( M.LT.N ) THEN
          NR = M + P - N
          IF( NR.GT.0 )
-     $      CALL ZGEMV( 'No transpose', NR, N-M, -CONE, A( N-P+1, M+1 ),
+     $      CALL ZGEMV( 'No transpose', NR, N-M, -CONE, A( N-P+1,
+     $                  M+1 ),
      $                  LDA, D( NR+1 ), 1, CONE, C( N-P+1 ), 1 )
       ELSE
          NR = P

@@ -166,7 +166,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP, SGEMM,
+      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP,
+     $                   SGEMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

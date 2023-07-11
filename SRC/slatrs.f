@@ -234,7 +234,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+      SUBROUTINE SLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
+     $                   SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -269,7 +270,8 @@
       LOGICAL            LSAME
       INTEGER            ISAMAX
       REAL               SASUM, SDOT, SLAMCH, SLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
+      EXTERNAL           LSAME, ISAMAX, SASUM, SDOT, SLAMCH,
+     $                   SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SSCAL, STRSV, XERBLA
@@ -366,8 +368,8 @@
 *              A is upper triangular.
 *
                DO J = 2, N
-                  TMAX = MAX( SLANGE( 'M', J-1, 1, A( 1, J ), 1, WORK ),
-     $                        TMAX )
+                  TMAX = MAX( SLANGE( 'M', J-1, 1, A( 1, J ), 1,
+     $                        WORK ), TMAX )
                END DO
             ELSE
 *

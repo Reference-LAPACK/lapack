@@ -349,7 +349,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA,
+     $                   CSSCAL,
      $                   CLACPY, CSTEIN, CSTEQR, CSWAP, CUNGTR, CUNMTR,
      $                   CHETRD_2STAGE
 *     ..
@@ -564,7 +565,8 @@
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by CSTEIN.
 *
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

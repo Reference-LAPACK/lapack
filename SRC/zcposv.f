@@ -245,7 +245,8 @@
       COMPLEX*16         ZDUM
 *
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C, CLAG2Z,
+      EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C,
+     $                   CLAG2Z,
      $                   CPOTRF, CPOTRS, XERBLA, ZPOTRF, ZPOTRS
 *     ..
 *     .. External Functions ..
@@ -269,7 +270,8 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -388,7 +390,8 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
+         CALL CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ),
+     $                N,
      $                INFO )
 *
 *        Convert SX back to double precision and update the current

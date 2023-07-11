@@ -103,7 +103,8 @@
 *> \ingroup la_porpvgrw
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION ZLA_PORPVGRW( UPLO, NCOLS, A, LDA,
+     $                                        AF,
      $                                        LDAF, WORK )
 *
 *  -- LAPACK computational routine --

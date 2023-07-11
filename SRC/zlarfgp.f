@@ -129,7 +129,8 @@
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLAPY3, DLAPY2, DZNRM2
       COMPLEX*16         ZLADIV
-      EXTERNAL           DLAMCH, DLAPY3, DLAPY2, DZNRM2, ZLADIV
+      EXTERNAL           DLAMCH, DLAPY3, DLAPY2, DZNRM2,
+     $                   ZLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN

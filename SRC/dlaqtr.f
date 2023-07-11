@@ -161,7 +161,8 @@
 *> \ingroup laqtr
 *
 *  =====================================================================
-      SUBROUTINE DLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
+      SUBROUTINE DLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X,
+     $                   WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -315,7 +316,8 @@
                      END IF
                   END IF
                   IF( J1.GT.1 ) THEN
-                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
                      K = IDAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
@@ -358,8 +360,10 @@
 *                 Update right-hand side
 *
                   IF( J1.GT.1 ) THEN
-                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
-                     CALL DAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
+                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
+                     CALL DAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X,
+     $                           1 )
                      K = IDAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
@@ -403,7 +407,8 @@
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - DDOT( J1-1, T( 1, J1 ), 1, X, 1 )
+                  X( J1 ) = X( J1 ) - DDOT( J1-1, T( 1, J1 ), 1, X,
+     $               1 )
 *
                   XJ = ABS( X( J1 ) )
                   TJJ = ABS( T( J1, J1 ) )
@@ -533,7 +538,8 @@
                   END IF
 *
                   IF( J1.GT.1 ) THEN
-                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
                      CALL DAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
 *
@@ -555,7 +561,8 @@
                   D( 2, 1 ) = X( J2 )
                   D( 1, 2 ) = X( N+J1 )
                   D( 2, 2 ) = X( N+J2 )
-                  CALL DLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1, J1 ),
+                  CALL DLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1,
+     $                         J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, -W, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -587,8 +594,10 @@
 *                 Update the right-hand side.
 *
                   IF( J1.GT.1 ) THEN
-                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
-                     CALL DAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
+                     CALL DAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
+                     CALL DAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X,
+     $                           1 )
 *
                      CALL DAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
@@ -645,7 +654,8 @@
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - DDOT( J1-1, T( 1, J1 ), 1, X, 1 )
+                  X( J1 ) = X( J1 ) - DDOT( J1-1, T( 1, J1 ), 1, X,
+     $               1 )
                   X( N+J1 ) = X( N+J1 ) - DDOT( J1-1, T( 1, J1 ), 1,
      $                        X( N+1 ), 1 )
                   IF( J1.GT.1 ) THEN

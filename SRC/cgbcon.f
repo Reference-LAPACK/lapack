@@ -143,7 +143,8 @@
 *> \ingroup gbcon
 *
 *  =====================================================================
-      SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
+      SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM,
+     $                   RCOND,
      $                   WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -185,7 +186,8 @@
       EXTERNAL           LSAME, ICAMAX, SLAMCH, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CLACN2, CLATBS, CSRSCL, XERBLA
+      EXTERNAL           CAXPY, CLACN2, CLATBS, CSRSCL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MIN, REAL
@@ -260,13 +262,15 @@
                      WORK( JP ) = WORK( J )
                      WORK( J ) = T
                   END IF
-                  CALL CAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ), 1 )
+                  CALL CAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ),
+     $                        1 )
    20          CONTINUE
             END IF
 *
 *           Multiply by inv(U).
 *
-            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KL+KU, AB, LDAB, WORK, SCALE, RWORK, INFO )
          ELSE
 *
@@ -281,7 +285,8 @@
             IF( LNOTI ) THEN
                DO 30 J = N - 1, 1, -1
                   LM = MIN( KL, N-J )
-                  WORK( J ) = WORK( J ) - CDOTC( LM, AB( KD+1, J ), 1,
+                  WORK( J ) = WORK( J ) - CDOTC( LM, AB( KD+1, J ),
+     $                  1,
      $                        WORK( J+1 ), 1 )
                   JP = IPIV( J )
                   IF( JP.NE.J ) THEN

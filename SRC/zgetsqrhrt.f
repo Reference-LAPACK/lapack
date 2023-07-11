@@ -177,7 +177,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT, WORK,
+      SUBROUTINE ZGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT,
+     $                       WORK,
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
@@ -204,7 +205,8 @@
      $                   NB1LOCAL, NB2LOCAL, NUM_ALL_ROW_BLOCKS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZLATSQR, ZUNGTSQR_ROW, ZUNHR_COL,
+      EXTERNAL           ZCOPY, ZLATSQR, ZUNGTSQR_ROW,
+     $                   ZUNHR_COL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -341,7 +343,8 @@
                A( I, J ) = -CONE * WORK( LWT+N*(J-1)+I )
             END DO
          ELSE
-            CALL ZCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ), LDA )
+            CALL ZCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ),
+     $                  LDA )
          END IF
       END DO
 *

@@ -129,7 +129,8 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZGETRF2, ZLASWP, ZTRSM
+      EXTERNAL           XERBLA, ZGEMM, ZGETRF2, ZLASWP,
+     $                   ZTRSM
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -178,7 +179,8 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL ZGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL ZGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ),
+     $                    IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -201,14 +203,16 @@
 *
 *              Compute block row of U.
 *
-               CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
+               CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+     $                     JB,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL ZGEMM( 'No transpose', 'No transpose', M-J-JB+1,
+                  CALL ZGEMM( 'No transpose', 'No transpose',
+     $                        M-J-JB+1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )

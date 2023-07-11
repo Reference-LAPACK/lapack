@@ -283,7 +283,8 @@
 *> \ingroup geevx
 *
 *  =====================================================================
-      SUBROUTINE ZGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W, VL,
+      SUBROUTINE ZGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W,
+     $                   VL,
      $                   LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM, RCONDE,
      $                   RCONDV, WORK, LWORK, RWORK, INFO )
       implicit none
@@ -324,7 +325,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, XERBLA, ZDSCAL, ZGEBAK, ZGEBAL, ZGEHRD,
+      EXTERNAL           DLASCL, XERBLA, ZDSCAL, ZGEBAK, ZGEBAL,
+     $                   ZGEHRD,
      $                   ZHSEQR, ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZTRSNA,
      $                   ZUNGHR
 *     ..
@@ -332,7 +334,8 @@
       LOGICAL            LSAME
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DZNRM2, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2, ZLANGE
+      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2,
+     $                   ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, CONJG, AIMAG, MAX, SQRT
@@ -349,12 +352,15 @@
       WNTSNE = LSAME( SENSE, 'E' )
       WNTSNV = LSAME( SENSE, 'V' )
       WNTSNB = LSAME( SENSE, 'B' )
-      IF( .NOT.( LSAME( BALANC, 'N' ) .OR. LSAME( BALANC, 'S' ) .OR.
+      IF( .NOT.( LSAME( BALANC, 'N' ) .OR.
+     $    LSAME( BALANC, 'S' ) .OR.
      $    LSAME( BALANC, 'P' ) .OR. LSAME( BALANC, 'B' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVL ) .AND.
+     $         ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND.
+     $         ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( .NOT.( WNTSNN .OR. WNTSNE .OR. WNTSNB .OR. WNTSNV ) .OR.
      $         ( ( WNTSNE .OR. WNTSNB ) .AND. .NOT.( WANTVL .AND.
@@ -406,10 +412,12 @@
      $                WORK, -1, INFO )
             ELSE
                IF( WNTSNN ) THEN
-                  CALL ZHSEQR( 'E', 'N', N, 1, N, A, LDA, W, VR, LDVR,
+                  CALL ZHSEQR( 'E', 'N', N, 1, N, A, LDA, W, VR,
+     $                         LDVR,
      $                WORK, -1, INFO )
                ELSE
-                  CALL ZHSEQR( 'S', 'N', N, 1, N, A, LDA, W, VR, LDVR,
+                  CALL ZHSEQR( 'S', 'N', N, 1, N, A, LDA, W, VR,
+     $                         LDVR,
      $                WORK, -1, INFO )
                END IF
             END IF
@@ -427,7 +435,8 @@
                IF( .NOT.( WNTSNN .OR. WNTSNE ) )
      $            MINWRK = MAX( MINWRK, N*N + 2*N )
                MAXWRK = MAX( MAXWRK, HSWORK )
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'ZUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'ZUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                IF( .NOT.( WNTSNN .OR. WNTSNE ) )
      $            MAXWRK = MAX( MAXWRK, N*N + 2*N )
@@ -508,7 +517,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL ZUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
+         CALL ZUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
@@ -540,7 +550,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL ZUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
+         CALL ZUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
@@ -581,7 +592,8 @@
 *        (CWorkspace: need 2*N, prefer N + 2*N*NB)
 *        (RWorkspace: need N)
 *
-         CALL ZTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL ZTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
+     $                 LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1,
      $                 RWORK, N, IERR )
       END IF
@@ -591,7 +603,8 @@
 *     (RWorkspace: need 2*N unless SENSE = 'E')
 *
       IF( .NOT.WNTSNN ) THEN
-         CALL ZTRSNA( SENSE, 'A', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL ZTRSNA( SENSE, 'A', SELECT, N, A, LDA, VL, LDVL, VR,
+     $                LDVR,
      $                RCONDE, RCONDV, N, NOUT, WORK( IWRK ), N, RWORK,
      $                ICOND )
       END IF
@@ -646,14 +659,16 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, W( INFO+1 ),
+         CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
+     $                W( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.EQ.0 ) THEN
             IF( ( WNTSNV .OR. WNTSNB ) .AND. ICOND.EQ.0 )
      $         CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, RCONDV, N,
      $                      IERR )
          ELSE
-            CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N, IERR )
+            CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N,
+     $                   IERR )
          END IF
       END IF
 *

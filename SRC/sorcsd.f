@@ -293,7 +293,8 @@
 *> \ingroup uncsd
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE SORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+      RECURSIVE SUBROUTINE SORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T,
+     $                             TRANS,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -408,7 +409,8 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL SORCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M,
+         CALL SORCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST,
+     $                M,
      $                Q, P, X11, LDX11, X21, LDX21, X12, LDX12, X22,
      $                LDX22, THETA, V1T, LDV1T, V2T, LDV2T, U1, LDU1,
      $                U2, LDU2, WORK, LWORK, IWORK, INFO )
@@ -441,12 +443,14 @@
          ITAUQ1 = ITAUP2 + MAX( 1, M - P )
          ITAUQ2 = ITAUQ1 + MAX( 1, Q )
          IORGQR = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGQR( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
+         CALL SORGQR( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK,
+     $                -1,
      $                CHILDINFO )
          LORGQRWORKOPT = INT( WORK(1) )
          LORGQRWORKMIN = MAX( 1, M - Q )
          IORGLQ = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGLQ( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
+         CALL SORGLQ( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK,
+     $                -1,
      $                CHILDINFO )
          LORGLQWORKOPT = INT( WORK(1) )
          LORGLQWORKMIN = MAX( 1, M - Q )
@@ -498,7 +502,8 @@
 *
 *     Transform to bidiagonal block form
 *
-      CALL SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21,
+      CALL SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+     $             X21,
      $             LDX21, X22, LDX22, THETA, WORK(IPHI), WORK(ITAUP1),
      $             WORK(ITAUP2), WORK(ITAUQ1), WORK(ITAUQ2),
      $             WORK(IORBDB), LORBDBWORK, CHILDINFO )
@@ -508,7 +513,8 @@
       IF( COLMAJOR ) THEN
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL SLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL SORGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL SORGQR( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGQR),
      $                   LORGQRWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -524,7 +530,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -537,7 +544,8 @@
       ELSE
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL SLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
-            CALL SORGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ),
+            CALL SORGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGLQ),
      $                   LORGLQWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -553,7 +561,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL SORGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL SORGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -567,7 +576,8 @@
 *
 *     Compute the CSD of the matrix in bidiagonal-block form
 *
-      CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THETA,
+      CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+     $             THETA,
      $             WORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $             LDV2T, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $             WORK(IB12E), WORK(IB21D), WORK(IB21E), WORK(IB22D),

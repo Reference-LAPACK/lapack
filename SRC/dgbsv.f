@@ -159,7 +159,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
+      SUBROUTINE DGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+     $                  INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -211,7 +212,8 @@
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL DGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB, IPIV,
+         CALL DGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB,
+     $                IPIV,
      $                B, LDB, INFO )
       END IF
       RETURN

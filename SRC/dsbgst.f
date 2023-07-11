@@ -155,7 +155,8 @@
 *> \ingroup hbgst
 *
 *  =====================================================================
-      SUBROUTINE DSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+      SUBROUTINE DSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB,
+     $                   X,
      $                   LDX, WORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -188,7 +189,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DLAR2V, DLARGV, DLARTG, DLARTV, DLASET,
+      EXTERNAL           DGER, DLAR2V, DLARGV, DLARTG, DLARTV,
+     $                   DLASET,
      $                   DROT, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -428,7 +430,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL DLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ), KA1,
+     $         CALL DLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ),
+     $                      KA1,
      $                      WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -652,7 +655,8 @@
 *
 *                 generate rotation to annihilate a(i-k+ka+1,i)
 *
-                  CALL DLARTG( AB( KA1-K, I ), RA1, WORK( N+I-K+KA-M ),
+                  CALL DLARTG( AB( KA1-K, I ), RA1,
+     $                         WORK( N+I-K+KA-M ),
      $                         WORK( I-K+KA-M ), RA )
 *
 *                 create nonzero element a(i-k+ka+1,i-k) outside the
@@ -688,7 +692,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL DLARGV( NRT, AB( KA1, J2T-KA ), INCA, WORK( J2T-M ),
+     $         CALL DLARGV( NRT, AB( KA1, J2T-KA ), INCA,
+     $                      WORK( J2T-M ),
      $                      KA1, WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -703,7 +708,8 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL DLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL DLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, WORK( N+J2-M ), WORK( J2-M ), KA1 )
 *
             END IF
@@ -784,7 +790,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL DLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ), KA1,
+               CALL DLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ),
+     $                      KA1,
      $                      WORK( N+J2 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -798,7 +805,8 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL DLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL DLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, WORK( N+J2 ), WORK( J2 ), KA1 )
 *
             END IF
@@ -937,7 +945,8 @@
 *
                CALL DSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL DGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB, I+1 ),
+     $            CALL DGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB,
+     $                       I+1 ),
      $                       LDBB-1, X( 1, I+1 ), LDX )
             END IF
 *
@@ -995,7 +1004,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL DLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ), KA1,
+     $         CALL DLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -1095,7 +1105,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL DLARGV( NR, AB( 1, J1+KA ), INCA, WORK( M-KB+J1 ),
+               CALL DLARGV( NR, AB( 1, J1+KA ), INCA,
+     $                      WORK( M-KB+J1 ),
      $                      KA1, WORK( N+M-KB+J1 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -1201,7 +1212,8 @@
 *
                CALL DSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL DGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ), 1,
+     $            CALL DGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ),
+     $                       1,
      $                       X( 1, I+1 ), LDX )
             END IF
 *
@@ -1259,14 +1271,16 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL DLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ), KA1,
+     $         CALL DLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the right
 *
                DO 810 L = 1, KA - 1
-                  CALL DLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL DLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, WORK( N+J1 ), WORK( J1 ), KA1 )
   810          CONTINUE
 *
@@ -1364,7 +1378,8 @@
 *              apply rotations in 2nd set from the right
 *
                DO 890 L = 1, KA - 1
-                  CALL DLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL DLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, WORK( N+M-KB+J1 ), WORK( M-KB+J1 ),
      $                         KA1 )
   890          CONTINUE

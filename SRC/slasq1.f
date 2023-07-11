@@ -129,7 +129,8 @@
       REAL               EPS, SCALE, SAFMIN, SIGMN, SIGMX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAS2, SLASCL, SLASQ2, SLASRT, XERBLA
+      EXTERNAL           SCOPY, SLAS2, SLASCL, SLASQ2, SLASRT,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH

@@ -227,7 +227,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -270,7 +271,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT, CGEMM,
+      EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT,
+     $                   CGEMM,
      $                   CGEMV, CTRMV, CLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -394,7 +396,8 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK, NBLST )
+            CALL CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK,
+     $                   NBLST )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
                CALL CLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
@@ -587,10 +590,12 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL CTRMV( 'Upper', 'Conjugate', 'Non-unit', LEN,
+                     CALL CTRMV( 'Upper', 'Conjugate', 'Non-unit',
+     $                           LEN,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL CTRMV( 'Lower', 'Conjugate', 'Non-unit', NNB,
+                     CALL CTRMV( 'Lower', 'Conjugate', 'Non-unit',
+     $                           NNB,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
                      CALL CGEMV( 'Conjugate', NNB, LEN, CONE,
@@ -759,9 +764,11 @@
                END DO
             ELSE
 *
-               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO,
+     $                      CZERO,
      $                      A( JCOL + 2, JCOL ), LDA )
-               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO,
+     $                      CZERO,
      $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
@@ -781,7 +788,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL CUNM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -812,7 +820,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL CUNM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -892,7 +901,8 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL CGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL CGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB,
+     $                Q,
      $                LDQ, Z, LDZ, IERR )
 *
       WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )

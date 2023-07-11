@@ -304,7 +304,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQP3, DGEQR2, DGERQ2, DLACPY, DLAPMT,
+      EXTERNAL           DGEQP3, DGEQR2, DGERQ2, DLACPY,
+     $                   DLAPMT,
      $                   DLASET, DORG2R, DORM2R, DORMR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -441,7 +442,8 @@
 *
 *           Update Q := Q*Z**T
 *
-            CALL DORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU, Q,
+            CALL DORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU,
+     $                   Q,
      $                   LDQ, WORK, INFO )
          END IF
 *
@@ -488,7 +490,8 @@
 *
          CALL DLASET( 'Full', M, M, ZERO, ZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL DLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
+     $      CALL DLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2,
+     $                   1 ),
      $                   LDU )
          CALL DORG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
@@ -509,7 +512,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL DLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ), LDA )
+     $   CALL DLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -521,7 +525,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T
 *
-            CALL DORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA, TAU,
+            CALL DORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA,
+     $                   TAU,
      $                   Q, LDQ, WORK, INFO )
          END IF
 *
@@ -546,7 +551,8 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL DORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
+            CALL DORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K,
+     $                   L ),
      $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
      $                   WORK, INFO )
          END IF

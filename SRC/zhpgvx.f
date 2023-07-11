@@ -303,7 +303,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHPEVX, ZHPGST, ZPPTRF, ZTPMV, ZTPSV
+      EXTERNAL           XERBLA, ZHPEVX, ZHPGST, ZPPTRF, ZTPMV,
+     $                   ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -369,7 +370,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
+      CALL ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL,
+     $             M,
      $             W, Z, LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN

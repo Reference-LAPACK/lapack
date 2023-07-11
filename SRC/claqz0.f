@@ -278,7 +278,8 @@
 *> \ingroup laqz0
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+      RECURSIVE SUBROUTINE CLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI,
+     $                             A,
      $                             LDA, B, LDB, ALPHA, BETA, Q, LDQ, Z,
      $                             LDZ, WORK, LWORK, RWORK, REC,
      $                             INFO )
@@ -418,7 +419,8 @@
       NBR = NSR+ITEMP1
 
       IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
-         CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+         CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $                LDB,
      $                ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK,
      $                INFO )
          RETURN
@@ -430,7 +432,8 @@
 
 *     Workspace query to CLAQZ2
       NW = MAX( NWR, NMIN )
-      CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
+      CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
+     $             LDB,
      $             Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA,
      $             BETA, WORK, NW, WORK, NW, WORK, -1, RWORK, REC,
      $             AED_INFO )
@@ -537,17 +540,20 @@
 *              to the top and deflate it
                
                DO K2 = K, ISTART2+1, -1
-                  CALL CLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
+                  CALL CLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1,
+     $                         S1,
      $                         TEMP )
                   B( K2-1, K2 ) = TEMP
                   B( K2-1, K2-1 ) = CZERO
 
                   CALL CROT( K2-2-ISTARTM+1, B( ISTARTM, K2 ), 1,
      $                       B( ISTARTM, K2-1 ), 1, C1, S1 )
-                  CALL CROT( MIN( K2+1, ISTOP )-ISTARTM+1, A( ISTARTM,
+                  CALL CROT( MIN( K2+1, ISTOP )-ISTARTM+1,
+     $                       A( ISTARTM,
      $                       K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
                   IF ( ILZ ) THEN
-                     CALL CROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1, C1,
+                     CALL CROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1,
+     $                          C1,
      $                          S1 )
                   END IF
 
@@ -557,9 +563,11 @@
                      A( K2, K2-1 ) = TEMP
                      A( K2+1, K2-1 ) = CZERO
 
-                     CALL CROT( ISTOPM-K2+1, A( K2, K2 ), LDA, A( K2+1,
+                     CALL CROT( ISTOPM-K2+1, A( K2, K2 ), LDA,
+     $                          A( K2+1,
      $                          K2 ), LDA, C1, S1 )
-                     CALL CROT( ISTOPM-K2+1, B( K2, K2 ), LDB, B( K2+1,
+                     CALL CROT( ISTOPM-K2+1, B( K2, K2 ), LDB,
+     $                          B( K2+1,
      $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL CROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
@@ -621,7 +629,8 @@
 *
 *        Time for AED
 *
-         CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
+         CALL CLAQZ2( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A,
+     $                LDA,
      $                B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED,
      $                ALPHA, BETA, WORK, NW, WORK( NW**2+1 ), NW,
      $                WORK( 2*NW**2+1 ), LWORK-2*NW**2, RWORK, REC,
@@ -664,7 +673,8 @@
 *
 *        Time for a QZ sweep
 *
-         CALL CLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
+         CALL CLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS,
+     $                NBLOCK,
      $                ALPHA( SHIFTPOS ), BETA( SHIFTPOS ), A, LDA, B,
      $                LDB, Q, LDQ, Z, LDZ, WORK, NBLOCK, WORK( NBLOCK**
      $                2+1 ), NBLOCK, WORK( 2*NBLOCK**2+1 ),

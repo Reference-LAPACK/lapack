@@ -502,7 +502,8 @@
 *> \ingroup hesvxx
 *
 *  =====================================================================
-      SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -630,7 +631,8 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
+         CALL SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                 INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
@@ -649,7 +651,8 @@
 *        Compute the LDL^T or UDU^T factorization of A.
 *
          CALL SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
+         CALL SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N),
+     $                INFO )
 *
 *        Return if INFO is non-zero.
 *

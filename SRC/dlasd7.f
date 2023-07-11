@@ -274,7 +274,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, VL,
+      SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW,
+     $                   VL,
      $                   VLW, ALPHA, BETA, DSIGMA, IDX, IDXP, IDXQ,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   C, S, INFO )

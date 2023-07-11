@@ -265,7 +265,8 @@
 *> \ingroup gges
 *
 *  =====================================================================
-      SUBROUTINE ZGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
+      SUBROUTINE ZGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
+     $                  LDB,
      $                  SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
      $                  LWORK, RWORK, BWORK, INFO )
 *
@@ -312,7 +313,8 @@
       DOUBLE PRECISION   DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD, ZHGEQZ,
+      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD,
+     $                   ZHGEQZ,
      $                   ZLACPY, ZLASCL, ZLASET, ZTGSEN, ZUNGQR, ZUNMQR
 *     ..
 *     .. External Functions ..
@@ -360,7 +362,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -383,7 +386,8 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
-         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) )
+         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N,
+     $                 0 ) )
          LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N, -1 ) )
          IF( ILVSL ) THEN
@@ -527,9 +531,11 @@
 *        Undo scaling on eigenvalues before selecting
 *
          IF( ILASCL )
-     $      CALL ZLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N, IERR )
+     $      CALL ZLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N,
+     $                   IERR )
          IF( ILBSCL )
-     $      CALL ZLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N, IERR )
+     $      CALL ZLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *
@@ -537,7 +543,8 @@
             BWORK( I ) = SELCTG( ALPHA( I ), BETA( I ) )
    10    CONTINUE
 *
-         CALL ZTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHA,
+         CALL ZTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
+     $                ALPHA,
      $                BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL, PVSR,
      $                DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1, IERR )
          IF( IERR.EQ.1 )

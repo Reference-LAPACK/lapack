@@ -500,7 +500,8 @@
                                     T  = HALF / THETA
                                     CS = ONE
 
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL CROT( M, A(1,p), 1, A(1,q),
+     $                                         1,
      $                                          CS, CONJG(OMPQ)*T )
                                     IF ( RSVEC ) THEN
                                         CALL CROT( MVL, V(1,p), 1,
@@ -529,7 +530,8 @@
                                     AAPP = AAPP*SQRT( MAX( ZERO,
      $                                      ONE-T*AQOAP*AAPQ1 ) )
 *
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL CROT( M, A(1,p), 1, A(1,q),
+     $                                         1,
      $                                          CS, CONJG(OMPQ)*SN )
                                     IF ( RSVEC ) THEN
                                         CALL CROT( MVL, V(1,p), 1,
@@ -542,14 +544,17 @@
 *              .. have to use modified Gram-Schmidt like transformation
                                  CALL CCOPY( M, A( 1, p ), 1,
      $                                       WORK, 1 )
-                                 CALL CLASCL( 'G', 0, 0, AAPP, ONE, M,
+                                 CALL CLASCL( 'G', 0, 0, AAPP, ONE,
+     $                                        M,
      $                                        1, WORK, LDA,
      $                                        IERR )
-                                 CALL CLASCL( 'G', 0, 0, AAQQ, ONE, M,
+                                 CALL CLASCL( 'G', 0, 0, AAQQ, ONE,
+     $                                        M,
      $                                        1, A( 1, q ), LDA, IERR )
                                  CALL CAXPY( M, -AAPQ, WORK, 1,
      $                                       A( 1, q ), 1 )
-                                 CALL CLASCL( 'G', 0, 0, ONE, AAQQ, M,
+                                 CALL CLASCL( 'G', 0, 0, ONE, AAQQ,
+     $                                        M,
      $                                        1, A( 1, q ), LDA, IERR )
                                  SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                      ONE-AAPQ1*AAPQ1 ) )
@@ -564,7 +569,8 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = SCNRM2( M, A( 1, q ), 1 )
+                                    SVA( q ) = SCNRM2( M, A( 1, q ),
+     $                                   1 )
                                  ELSE
                                     T = ZERO
                                     AAQQ = ONE
@@ -716,7 +722,8 @@
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
                                     T  = HALF / THETA
                                     CS = ONE
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL CROT( M, A(1,p), 1, A(1,q),
+     $                                         1,
      $                                          CS, CONJG(OMPQ)*T )
                                     IF( RSVEC ) THEN
                                         CALL CROT( MVL, V(1,p), 1,
@@ -743,7 +750,8 @@
                                     AAPP = AAPP*SQRT( MAX( ZERO,
      $                                         ONE-T*AQOAP*AAPQ1 ) )
 *
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL CROT( M, A(1,p), 1, A(1,q),
+     $                                         1,
      $                                          CS, CONJG(OMPQ)*SN )
                                     IF( RSVEC ) THEN
                                         CALL CROT( MVL, V(1,p), 1,
@@ -757,15 +765,18 @@
                                IF( AAPP.GT.AAQQ ) THEN
                                     CALL CCOPY( M, A( 1, p ), 1,
      $                                          WORK, 1 )
-                                    CALL CLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL CLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, WORK,LDA,
      $                                           IERR )
-                                    CALL CLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL CLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     CALL CAXPY( M, -AAPQ, WORK,
      $                                          1, A( 1, q ), 1 )
-                                    CALL CLASCL( 'G', 0, 0, ONE, AAQQ,
+                                    CALL CLASCL( 'G', 0, 0, ONE,
+     $                                           AAQQ,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     SVA( q ) = AAQQ*SQRT( MAX( ZERO,
@@ -774,15 +785,18 @@
                                ELSE
                                    CALL CCOPY( M, A( 1, q ), 1,
      $                                          WORK, 1 )
-                                    CALL CLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL CLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, WORK,LDA,
      $                                           IERR )
-                                    CALL CLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL CLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     CALL CAXPY( M, -CONJG(AAPQ),
      $                                   WORK, 1, A( 1, p ), 1 )
-                                    CALL CLASCL( 'G', 0, 0, ONE, AAPP,
+                                    CALL CLASCL( 'G', 0, 0, ONE,
+     $                                           AAPP,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     SVA( p ) = AAPP*SQRT( MAX( ZERO,
@@ -798,7 +812,8 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = SCNRM2( M, A( 1, q ), 1)
+                                    SVA( q ) = SCNRM2( M, A( 1, q ),
+     $                                   1)
                                   ELSE
                                     T = ZERO
                                     AAQQ = ONE

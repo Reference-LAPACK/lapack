@@ -347,7 +347,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZLACPY, ZLAHQR, ZLAQR0, ZLASET
+      EXTERNAL           XERBLA, ZCOPY, ZLACPY, ZLAHQR, ZLAQR0,
+     $                   ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -398,7 +399,8 @@
 *
 *        ==== Quick return in case of a workspace query ====
 *
-         CALL ZLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI, Z,
+         CALL ZLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+     $                Z,
      $                LDZ, WORK, LWORK, INFO )
 *        ==== Ensure reported workspace size is backward-compatible with
 *        .    previous LAPACK versions. ====
@@ -413,7 +415,8 @@
          IF( ILO.GT.1 )
      $      CALL ZCOPY( ILO-1, H, LDH+1, W, 1 )
          IF( IHI.LT.N )
-     $      CALL ZCOPY( N-IHI, H( IHI+1, IHI+1 ), LDH+1, W( IHI+1 ), 1 )
+     $      CALL ZCOPY( N-IHI, H( IHI+1, IHI+1 ), LDH+1, W( IHI+1 ),
+     $                  1 )
 *
 *        ==== Initialize Z, if requested ====
 *
@@ -436,13 +439,15 @@
 *        ==== ZLAQR0 for big matrices; ZLAHQR for small ones ====
 *
          IF( N.GT.NMIN ) THEN
-            CALL ZLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+            CALL ZLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO,
+     $                   IHI,
      $                   Z, LDZ, WORK, LWORK, INFO )
          ELSE
 *
 *           ==== Small matrix ====
 *
-            CALL ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+            CALL ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO,
+     $                   IHI,
      $                   Z, LDZ, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -469,9 +474,11 @@
 *
                   CALL ZLACPY( 'A', N, N, H, LDH, HL, NL )
                   HL( N+1, N ) = ZERO
-                  CALL ZLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1, N+1 ),
+                  CALL ZLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1,
+     $                         N+1 ),
      $                         NL )
-                  CALL ZLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL, W,
+                  CALL ZLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL,
+     $                         W,
      $                         ILO, IHI, Z, LDZ, WORKL, NL, INFO )
                   IF( WANTT .OR. INFO.NE.0 )
      $               CALL ZLACPY( 'A', N, N, HL, NL, H, LDH )

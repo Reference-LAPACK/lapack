@@ -178,7 +178,8 @@
 *> \ingroup trrfs
 *
 *  =====================================================================
-      SUBROUTINE CTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB, X,
+      SUBROUTINE CTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB,
+     $                   X,
      $                   LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -214,7 +215,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CLACN2, CTRMV, CTRSV, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CLACN2, CTRMV, CTRSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL

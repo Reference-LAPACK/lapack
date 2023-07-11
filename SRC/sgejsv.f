@@ -515,7 +515,8 @@
       EXTERNAL  ISAMAX, LSAME, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  SCOPY,  SGELQF, SGEQP3, SGEQRF, SLACPY, SLASCL,
+      EXTERNAL  SCOPY,  SGELQF, SGEQP3, SGEQRF, SLACPY,
+     $                   SLASCL,
      $          SLASET, SLASSQ, SLASWP, SORGQR, SORMLQ,
      $          SORMQR, SPOCON, SSCAL,  SSWAP,  STRSM,  XERBLA
 *
@@ -693,8 +694,10 @@
             CALL SLACPY( 'A', M, 1, A, LDA, U, LDU )
 *           computing all M left singular vectors of the M x 1 matrix
             IF ( N1 .NE. N  ) THEN
-               CALL SGEQRF( M, N, U,LDU, WORK, WORK(N+1),LWORK-N,IERR )
-               CALL SORGQR( M,N1,1, U,LDU,WORK,WORK(N+1),LWORK-N,IERR )
+               CALL SGEQRF( M, N, U,LDU, WORK, WORK(N+1),LWORK-N,
+     $                      IERR )
+               CALL SORGQR( M,N1,1, U,LDU,WORK,WORK(N+1),LWORK-N,
+     $                      IERR )
                CALL SCOPY( M, A(1,1), 1, U(1,1), 1 )
             END IF
          END IF
@@ -1116,7 +1119,8 @@
  1949             CONTINUE
  1947          CONTINUE
             ELSE
-               CALL SLASET( 'U', NR-1, NR-1, ZERO, ZERO, A(1,2), LDA )
+               CALL SLASET( 'U', NR-1, NR-1, ZERO, ZERO, A(1,2),
+     $                      LDA )
             END IF
 *
 *           .. and one-sided Jacobi rotations are started on a lower
@@ -1140,7 +1144,8 @@
             DO 1998 p = 1, NR
                CALL SCOPY( N-p+1, A(p,p), LDA, V(p,p), 1 )
  1998       CONTINUE
-            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
+            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2),
+     $                   LDV )
 *
             CALL SGESVJ( 'L','U','N', N, NR, V,LDV, SVA, NR, A,LDA,
      $                  WORK, LWORK, INFO )
@@ -1152,25 +1157,32 @@
 *        .. two more QR factorizations ( one QRF is not enough, two require
 *        accumulated product of Jacobi rotations, three are perfect )
 *
-            CALL SLASET( 'Lower', NR-1, NR-1, ZERO, ZERO, A(2,1), LDA )
-            CALL SGELQF( NR, N, A, LDA, WORK, WORK(N+1), LWORK-N, IERR)
+            CALL SLASET( 'Lower', NR-1, NR-1, ZERO, ZERO, A(2,1),
+     $                   LDA )
+            CALL SGELQF( NR, N, A, LDA, WORK, WORK(N+1), LWORK-N,
+     $                   IERR)
             CALL SLACPY( 'Lower', NR, NR, A, LDA, V, LDV )
-            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
+            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2),
+     $                   LDV )
             CALL SGEQRF( NR, NR, V, LDV, WORK(N+1), WORK(2*N+1),
      $                   LWORK-2*N, IERR )
             DO 8998 p = 1, NR
                CALL SCOPY( NR-p+1, V(p,p), LDV, V(p,p), 1 )
  8998       CONTINUE
-            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
+            CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2),
+     $                   LDV )
 *
             CALL SGESVJ( 'Lower', 'U','N', NR, NR, V,LDV, SVA, NR, U,
      $                  LDU, WORK(N+1), LWORK-N, INFO )
             SCALEM  = WORK(N+1)
             NUMRANK = NINT(WORK(N+2))
             IF ( NR .LT. N ) THEN
-               CALL SLASET( 'A',N-NR, NR, ZERO,ZERO, V(NR+1,1),   LDV )
-               CALL SLASET( 'A',NR, N-NR, ZERO,ZERO, V(1,NR+1),   LDV )
-               CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE, V(NR+1,NR+1), LDV )
+               CALL SLASET( 'A',N-NR, NR, ZERO,ZERO, V(NR+1,1),
+     $                      LDV )
+               CALL SLASET( 'A',NR, N-NR, ZERO,ZERO, V(1,NR+1),
+     $                      LDV )
+               CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE, V(NR+1,NR+1),
+     $                      LDV )
             END IF
 *
          CALL SORMLQ( 'Left', 'Transpose', N, N, NR, A, LDA, WORK,
@@ -1214,8 +1226,10 @@
          IF ( NR .LT. M ) THEN
             CALL SLASET( 'A',  M-NR, NR,ZERO, ZERO, U(NR+1,1), LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL SLASET( 'A',NR, N1-NR, ZERO, ZERO, U(1,NR+1), LDU )
-               CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,U(NR+1,NR+1), LDU )
+               CALL SLASET( 'A',NR, N1-NR, ZERO, ZERO, U(1,NR+1),
+     $                      LDU )
+               CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,U(NR+1,NR+1),
+     $                      LDU )
             END IF
          END IF
 *
@@ -1277,7 +1291,8 @@
  2968             CONTINUE
  2969          CONTINUE
             ELSE
-               CALL SLASET( 'U', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
+               CALL SLASET( 'U', NR-1, NR-1, ZERO, ZERO, V(1,2),
+     $                      LDV )
             END IF
 *
 *           Estimate the row scaled condition number of R1
@@ -1433,7 +1448,8 @@
 *                 equation is Q2*V2 = the product of the Jacobi rotations
 *                 used in SGESVJ, premultiplied with the orthogonal matrix
 *                 from the second QR factorization.
-                  CALL STRSM( 'L','U','N','N', NR,NR,ONE, A,LDA, V,LDV )
+                  CALL STRSM( 'L','U','N','N', NR,NR,ONE, A,LDA, V,
+     $                        LDV )
                ELSE
 *                 .. R1 is well conditioned, but non-square. Transpose(R2)
 *                 is inverted to get the product of the Jacobi rotations
@@ -1444,7 +1460,8 @@
                   IF ( NR .LT. N ) THEN
                     CALL SLASET('A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV)
                     CALL SLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
-                    CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV)
+                    CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                           LDV)
                   END IF
                   CALL SORMQR('L','N',N,N,NR,WORK(2*N+1),N,WORK(N+1),
      $                 V,LDV,WORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR)
@@ -1458,7 +1475,8 @@
 *              is Q3^T*V3 = the product of the Jacobi rotations (applied to
 *              the lower triangular L3 from the LQ factorization of
 *              R2=L3*Q3), pre-multiplied with the transposed Q3.
-               CALL SGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR, U,
+               CALL SGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, WORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR, INFO )
                SCALEM  = WORK(2*N+N*NR+NR+1)
                NUMRANK = NINT(WORK(2*N+N*NR+NR+2))
@@ -1466,7 +1484,8 @@
                   CALL SCOPY( NR, V(1,p), 1, U(1,p), 1 )
                   CALL SSCAL( NR, SVA(p),    U(1,p), 1 )
  3870          CONTINUE
-               CALL STRSM('L','U','N','N',NR,NR,ONE,WORK(2*N+1),N,U,LDU)
+               CALL STRSM('L','U','N','N',NR,NR,ONE,WORK(2*N+1),N,U,
+     $                     LDU)
 *              .. apply the permutation from the second QR factorization
                DO 873 q = 1, NR
                   DO 872 p = 1, NR
@@ -1479,7 +1498,8 @@
                IF ( NR .LT. N ) THEN
                   CALL SLASET( 'A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV )
                   CALL SLASET( 'A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV )
-                  CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV )
+                  CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV )
                END IF
                CALL SORMQR( 'L','N',N,N,NR,WORK(2*N+1),N,WORK(N+1),
      $              V,LDV,WORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1495,14 +1515,16 @@
 *              defense ensures that SGEJSV completes the task.
 *              Compute the full SVD of L3 using SGESVJ with explicit
 *              accumulation of Jacobi rotations.
-               CALL SGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR, U,
+               CALL SGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, WORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR, INFO )
                SCALEM  = WORK(2*N+N*NR+NR+1)
                NUMRANK = NINT(WORK(2*N+N*NR+NR+2))
                IF ( NR .LT. N ) THEN
                   CALL SLASET( 'A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV )
                   CALL SLASET( 'A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV )
-                  CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV )
+                  CALL SLASET( 'A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV )
                END IF
                CALL SORMQR( 'L','N',N,N,NR,WORK(2*N+1),N,WORK(N+1),
      $              V,LDV,WORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1540,10 +1562,12 @@
 *           At this moment, V contains the right singular vectors of A.
 *           Next, assemble the left singular vector matrix U (M x N).
             IF ( NR .LT. M ) THEN
-               CALL SLASET( 'A', M-NR, NR, ZERO, ZERO, U(NR+1,1), LDU )
+               CALL SLASET( 'A', M-NR, NR, ZERO, ZERO, U(NR+1,1),
+     $                      LDU )
                IF ( NR .LT. N1 ) THEN
                   CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
-                  CALL SLASET('A',M-NR,N1-NR,ZERO,ONE,U(NR+1,NR+1),LDU)
+                  CALL SLASET('A',M-NR,N1-NR,ZERO,ONE,U(NR+1,NR+1),
+     $                         LDU)
                END IF
             END IF
 *
@@ -1612,8 +1636,10 @@
             IF ( N .LT. M ) THEN
                CALL SLASET( 'A',  M-N, N, ZERO, ZERO, U(N+1,1), LDU )
                IF ( N .LT. N1 ) THEN
-                  CALL SLASET( 'A',N,  N1-N, ZERO, ZERO,  U(1,N+1),LDU )
-                  CALL SLASET( 'A',M-N,N1-N, ZERO, ONE,U(N+1,N+1),LDU )
+                  CALL SLASET( 'A',N,  N1-N, ZERO, ZERO,  U(1,N+1),
+     $                         LDU )
+                  CALL SLASET( 'A',M-N,N1-N, ZERO, ONE,U(N+1,N+1),
+     $                         LDU )
                END IF
             END IF
             CALL SORMQR( 'Left', 'No Tr', M, N1, N, A, LDA, WORK, U,
@@ -1720,8 +1746,10 @@
          IF ( NR .LT. M ) THEN
             CALL SLASET( 'A',  M-NR, NR, ZERO, ZERO, U(NR+1,1), LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL SLASET( 'A',NR,  N1-NR, ZERO, ZERO,  U(1,NR+1),LDU )
-               CALL SLASET( 'A',M-NR,N1-NR, ZERO, ONE,U(NR+1,NR+1),LDU )
+               CALL SLASET( 'A',NR,  N1-NR, ZERO, ZERO,  U(1,NR+1),
+     $                      LDU )
+               CALL SLASET( 'A',M-NR,N1-NR, ZERO, ONE,U(NR+1,NR+1),
+     $                      LDU )
             END IF
          END IF
 *
@@ -1746,7 +1774,8 @@
 *     Undo scaling, if necessary (and possible)
 *
       IF ( USCAL2 .LE. (BIG/SVA(1))*USCAL1 ) THEN
-         CALL SLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N, IERR )
+         CALL SLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N,
+     $                IERR )
          USCAL1 = ONE
          USCAL2 = ONE
       END IF

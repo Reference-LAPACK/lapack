@@ -251,7 +251,8 @@
             IF( K.GT.2 ) THEN
                CALL SGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
-               CALL SGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
+               CALL SGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1,
+     $                    1 ),
      $                    LDB, B( 1, 1 ), LDB )
             END IF
 *
@@ -389,7 +390,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL SGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
+               CALL SGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K,
+     $                    1 ),
      $                    LDB, B( K+2, 1 ), LDB )
                CALL SGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

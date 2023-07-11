@@ -175,7 +175,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DSBTRD, DSCAL, DSTEQR, DSTERF, XERBLA
+      EXTERNAL           DLASCL, DSBTRD, DSCAL, DSTEQR, DSTERF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -245,9 +246,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -255,7 +258,8 @@
 *
       INDE = 1
       INDWRK = INDE + N
-      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z,
+     $             LDZ,
      $             WORK( INDWRK ), IINFO )
 *
 *     For eigenvalues only, call DSTERF.  For eigenvectors, call SSTEQR.
@@ -263,7 +267,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                INFO )
       END IF
 *

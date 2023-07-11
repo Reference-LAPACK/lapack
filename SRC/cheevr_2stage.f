@@ -452,7 +452,8 @@
      $                   SROUNDUP_LWORK 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA,
+     $                   CSSCAL,
      $                   CHETRD_2STAGE, CSTEMR, CSTEIN, CSWAP, CUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -734,7 +735,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

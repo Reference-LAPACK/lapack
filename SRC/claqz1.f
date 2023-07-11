@@ -169,7 +169,8 @@
 *> \ingroup laqz1
 *>
 *  =====================================================================
-      SUBROUTINE CLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
+      SUBROUTINE CLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA,
+     $                   B,
      $                   LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
       IMPLICIT NONE
 *
@@ -204,7 +205,8 @@
          CALL CROT( IHI-ISTARTM+1, A( ISTARTM, IHI ), 1, A( ISTARTM,
      $              IHI-1 ), 1, C, S )
          IF ( ILZ ) THEN
-            CALL CROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1, IHI-1-ZSTART+
+            CALL CROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1,
+     $                 IHI-1-ZSTART+
      $                 1 ), 1, C, S )
          END IF
 *
@@ -220,10 +222,12 @@
          B( K+1, K ) = CZERO
          CALL CROT( K+2-ISTARTM+1, A( ISTARTM, K+1 ), 1, A( ISTARTM,
      $              K ), 1, C, S )
-         CALL CROT( K-ISTARTM+1, B( ISTARTM, K+1 ), 1, B( ISTARTM, K ),
+         CALL CROT( K-ISTARTM+1, B( ISTARTM, K+1 ), 1, B( ISTARTM,
+     $              K ),
      $              1, C, S )
          IF ( ILZ ) THEN
-            CALL CROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1, K-ZSTART+1 ),
+            CALL CROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1,
+     $                 K-ZSTART+1 ),
      $                 1, C, S )
          END IF
 *
@@ -232,9 +236,11 @@
          CALL CLARTG( A( K+1, K ), A( K+2, K ), C, S, TEMP )
          A( K+1, K ) = TEMP
          A( K+2, K ) = CZERO
-         CALL CROT( ISTOPM-K, A( K+1, K+1 ), LDA, A( K+2, K+1 ), LDA, C,
+         CALL CROT( ISTOPM-K, A( K+1, K+1 ), LDA, A( K+2, K+1 ), LDA,
+     $              C,
      $              S )
-         CALL CROT( ISTOPM-K, B( K+1, K+1 ), LDB, B( K+2, K+1 ), LDB, C,
+         CALL CROT( ISTOPM-K, B( K+1, K+1 ), LDB, B( K+2, K+1 ), LDB,
+     $              C,
      $              S )
          IF ( ILQ ) THEN
             CALL CROT( NQ, Q( 1, K+1-QSTART+1 ), 1, Q( 1, K+2-QSTART+

@@ -239,7 +239,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
+      SUBROUTINE ZLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB,
+     $                   X,
      $                   SCALE, CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -275,7 +276,8 @@
       INTEGER            IDAMAX, IZAMAX
       DOUBLE PRECISION   DLAMCH, DZASUM
       COMPLEX*16         ZDOTC, ZDOTU, ZLADIV
-      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM, ZDOTC,
+      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM,
+     $                   ZDOTC,
      $                   ZDOTU, ZLADIV
 *     ..
 *     .. External Subroutines ..

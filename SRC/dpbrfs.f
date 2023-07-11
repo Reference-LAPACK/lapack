@@ -225,7 +225,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DPBTRS, DSBMV, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DPBTRS, DSBMV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -398,14 +399,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ),
+     $                      N,
      $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
@@ -417,7 +420,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
   120          CONTINUE
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ),
+     $                      N,
      $                      INFO )
             END IF
             GO TO 100

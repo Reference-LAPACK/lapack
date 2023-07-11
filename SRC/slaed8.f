@@ -276,7 +276,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -371,7 +372,8 @@
          ELSE
             DO 60 J = 1, N
                PERM( J ) = INDXQ( INDX( J ) )
-               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ),
+     $                     1 )
    60       CONTINUE
             CALL SLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
      $                   LDQ )

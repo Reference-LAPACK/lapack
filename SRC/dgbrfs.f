@@ -200,7 +200,8 @@
 *> \ingroup gbrfs
 *
 *  =====================================================================
-      SUBROUTINE DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
      $                   INFO )
 *
@@ -242,7 +243,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGBMV, DGBTRS, DLACN2, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DGBMV, DGBTRS, DLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -321,7 +323,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL DGBMV( TRANS, N, N, KL, KU, -ONE, AB, LDAB, X( 1, J ), 1,
+         CALL DGBMV( TRANS, N, N, KL, KU, -ONE, AB, LDAB, X( 1, J ),
+     $               1,
      $               ONE, WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -419,7 +422,8 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

@@ -201,7 +201,8 @@
 *
 *
 *  =====================================================================
-      SUBROUTINE ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+     $                       WORK,
      $                       LWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -240,7 +241,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -280,7 +282,8 @@
 *
 *        Solve with TRS ( Use Level BLAS 2)
 *
-         CALL ZHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+         CALL ZHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+     $                     INFO )
 *
       END IF
 *

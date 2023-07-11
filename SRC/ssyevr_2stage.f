@@ -424,7 +424,8 @@
      $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
+      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR,
+     $                   SSTEIN,
      $                   SSTERF, SSWAP, SSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -699,7 +700,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -153,7 +153,8 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE ZTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+      SUBROUTINE ZTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C,
      $                    LDC, SCALE, SWORK, LDSWORK, INFO )
       IMPLICIT NONE
 *
@@ -187,10 +188,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, DLARMM, ZLANGE
-      EXTERNAL           DLAMCH, DLARMM, ILAENV, LSAME, ZLANGE
+      EXTERNAL           DLAMCH, DLARMM, ILAENV, LSAME,
+     $                   ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEMM, ZLASCL, ZTRSYL
+      EXTERNAL           XERBLA, ZDSCAL, ZGEMM, ZLASCL,
+     $                   ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, EXPONENT, MAX, MIN

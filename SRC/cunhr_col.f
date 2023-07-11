@@ -282,7 +282,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLAUNHR_COL_GETRFNP, CSCAL, CTRSM,
+      EXTERNAL           CCOPY, CLAUNHR_COL_GETRFNP, CSCAL,
+     $                   CTRSM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

@@ -313,7 +313,8 @@
       REAL               ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLAHQR, SLANV2, SLAQR3, SLAQR4, SLAQR5
+      EXTERNAL           SLACPY, SLAHQR, SLANV2, SLAQR3, SLAQR4,
+     $                   SLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX, MIN, MOD, REAL
@@ -516,7 +517,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, LS, LD, WR, WI, H( KV, 1 ), LDH,
      $                   NHO, H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH,
      $                   WORK, LWORK )
@@ -560,7 +562,8 @@
                      BB = SS
                      CC = WILK2*SS
                      DD = AA
-                     CALL SLANV2( AA, BB, CC, DD, WR( I-1 ), WI( I-1 ),
+                     CALL SLANV2( AA, BB, CC, DD, WR( I-1 ),
+     $                            WI( I-1 ),
      $                            WR( I ), WI( I ), CS, SN )
    30             CONTINUE
                   IF( KS.EQ.KTOP ) THEN

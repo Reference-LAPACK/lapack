@@ -214,7 +214,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -254,7 +255,8 @@
       EXTERNAL           LSAME, ICAMAX, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMV, CLATRS, CSSCAL, XERBLA
+      EXTERNAL           CCOPY, CGEMV, CLATRS, CSSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, REAL
@@ -388,7 +390,8 @@
    60          CONTINUE
             ELSE
                IF( KI.GT.1 )
-     $            CALL CGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 ),
+     $            CALL CGEMV( 'N', N, KI-1, CMONE, VR, LDVR,
+     $                        WORK( 1 ),
      $                        1, CMPLX( SCALE ), VR( 1, KI ), 1 )
 *
                II = ICAMAX( N, VR( 1, KI ), 1 )
@@ -437,7 +440,8 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+               CALL CLATRS( 'Upper', 'Conjugate transpose',
+     $                      'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 ), SCALE, RWORK, INFO )
                WORK( KI ) = SCALE
@@ -457,7 +461,8 @@
   110          CONTINUE
             ELSE
                IF( KI.LT.N )
-     $            CALL CGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDVL,
+     $            CALL CGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ),
+     $                        LDVL,
      $                        WORK( KI+1 ), 1, CMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *

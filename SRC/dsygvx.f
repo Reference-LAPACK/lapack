@@ -328,7 +328,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DPOTRF, DSYEVX, DSYGST, DTRMM, DTRSM, XERBLA
+      EXTERNAL           DPOTRF, DSYEVX, DSYGST, DTRMM, DTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -413,7 +414,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+     $             ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -433,7 +435,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE,
+     $                  B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -447,7 +450,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE,
+     $                  B,
      $                  LDB, Z, LDZ )
          END IF
       END IF

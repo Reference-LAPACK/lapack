@@ -181,7 +181,8 @@
       EXTERNAL           LSAME, ISAMAX, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SLACN2, SLATBS, SRSCL, XERBLA
+      EXTERNAL           SAXPY, SLACN2, SLATBS, SRSCL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN
@@ -257,7 +258,8 @@
 *
 *           Multiply by inv(U).
 *
-            CALL SLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL SLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KL+KU, AB, LDAB, WORK, SCALE, WORK( 2*N+1 ),
      $                   INFO )
          ELSE

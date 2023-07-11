@@ -223,7 +223,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAGTF, DLAGTS, DLARNV, DSCAL, XERBLA
+      EXTERNAL           DCOPY, DLAGTF, DLAGTS, DLARNV, DSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, SQRT
@@ -366,7 +367,8 @@
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
+            CALL DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ,
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -387,7 +389,8 @@
 *
 *           Solve the system LU = Pb.
 *
-            CALL DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
+            CALL DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ),
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *

@@ -139,7 +139,8 @@
 *> \ingroup tbcon
 *
 *  =====================================================================
-      SUBROUTINE STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND,
+     $                   WORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -239,19 +240,22 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL SLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL SLATBS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      KD,
      $                      AB, LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
 *              Multiply by inv(A**T).
 *
-               CALL SLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, AB,
+               CALL SLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD,
+     $                      AB,
      $                      LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             END IF
             NORMIN = 'Y'

@@ -204,25 +204,29 @@
 *
 *           Multiply by inv(U**T).
 *
-            CALL SLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL SLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL SLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL SLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL SLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL SLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**T).
 *
-            CALL SLATRS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL SLATRS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          END IF
 *

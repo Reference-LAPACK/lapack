@@ -238,7 +238,8 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
             END IF
             KSTEP = 1
@@ -263,15 +264,18 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         REAL( CDOTC( K-1, WORK, 1, A( 1, K+1 ),
+     $                         REAL( CDOTC( K-1, WORK, 1, A( 1,
+     $                               K+1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -384,7 +388,8 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
@@ -409,18 +414,22 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       CDOTC( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         REAL( CDOTC( N-K, WORK, 1, A( K+1, K-1 ),
+     $                         REAL( CDOTC( N-K, WORK, 1, A( K+1,
+     $                               K-1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -435,7 +444,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 90 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )
@@ -460,7 +470,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 100 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )
@@ -486,7 +497,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 110 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )

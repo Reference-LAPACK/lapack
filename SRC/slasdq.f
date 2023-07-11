@@ -207,7 +207,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDVT,
+      SUBROUTINE SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT,
+     $                   LDVT,
      $                   U, LDU, C, LDC, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -235,7 +236,8 @@
       REAL               CS, R, SMIN, SN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSQR, SLARTG, SLASR, SSWAP, XERBLA
+      EXTERNAL           SBDSQR, SLARTG, SLASR, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -396,7 +398,8 @@
             D( ISUB ) = D( I )
             D( I ) = SMIN
             IF( NCVT.GT.0 )
-     $         CALL SSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ), LDVT )
+     $         CALL SSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ),
+     $                     LDVT )
             IF( NRU.GT.0 )
      $         CALL SSWAP( NRU, U( 1, ISUB ), 1, U( 1, I ), 1 )
             IF( NCC.GT.0 )

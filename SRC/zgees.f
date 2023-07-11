@@ -230,7 +230,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGEBAK, ZGEBAL, ZGEHRD,
+      EXTERNAL           XERBLA, ZCOPY, ZGEBAK, ZGEBAL,
+     $                   ZGEHRD,
      $                   ZHSEQR, ZLACPY, ZLASCL, ZTRSEN, ZUNGHR
 *     ..
 *     .. External Functions ..
@@ -252,7 +253,8 @@
       WANTST = LSAME( SORT, 'S' )
       IF( ( .NOT.WANTVS ) .AND. ( .NOT.LSAME( JOBVS, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -288,7 +290,8 @@
             IF( .NOT.WANTVS ) THEN
                MAXWRK = MAX( MAXWRK, HSWORK )
             ELSE
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'ZUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'ZUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                MAXWRK = MAX( MAXWRK, HSWORK )
             END IF
@@ -362,7 +365,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL ZUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK ),
+         CALL ZUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
       END IF
 *
@@ -391,7 +395,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: none)
 *
-         CALL ZTRSEN( 'N', JOBVS, BWORK, N, A, LDA, VS, LDVS, W, SDIM,
+         CALL ZTRSEN( 'N', JOBVS, BWORK, N, A, LDA, VS, LDVS, W,
+     $                SDIM,
      $                S, SEP, WORK( IWRK ), LWORK-IWRK+1, ICOND )
       END IF
 *
@@ -401,7 +406,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL ZGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS, LDVS,
+         CALL ZGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS,
+     $                LDVS,
      $                IERR )
       END IF
 *

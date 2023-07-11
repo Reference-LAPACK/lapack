@@ -183,7 +183,8 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CLAQP2, CLAQPS, CSWAP, CUNMQR, XERBLA
+      EXTERNAL           CGEQRF, CLAQP2, CLAQPS, CSWAP, CUNMQR,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -266,7 +267,8 @@
 *CC         CALL CUNM2R( 'Left', 'Conjugate Transpose', M, N-NA,
 *CC  $                   NA, A, LDA, TAU, A( 1, NA+1 ), LDA, WORK,
 *CC  $                   INFO )
-            CALL CUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA, A,
+            CALL CUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA,
+     $                   A,
      $                   LDA, TAU, A( 1, NA+1 ), LDA, WORK, LWORK,
      $                   INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
@@ -308,7 +310,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = LWORK / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'CGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'CGEQRF', ' ', SM,
+     $                         SN,
      $                    -1, -1 ) )
 *
 *

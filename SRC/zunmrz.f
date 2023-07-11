@@ -183,7 +183,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE ZUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C,
+     $                   LDC,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -268,7 +269,8 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'ZUNMRQ', SIDE // TRANS, M, N,
+            NB = MIN( NBMAX, ILAENV( 1, 'ZUNMRQ', SIDE // TRANS, M,
+     $                N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -298,7 +300,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.LWKOPT ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'ZUNMRQ', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'ZUNMRQ', SIDE // TRANS, M, N,
+     $                   K,
      $              -1 ) )
          END IF
       END IF
@@ -347,7 +350,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL ZLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LDA,
+            CALL ZLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ),
+     $                   LDA,
      $                   TAU( I ), WORK( IWT ), LDT )
 *
             IF( LEFT ) THEN

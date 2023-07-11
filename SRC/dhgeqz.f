@@ -299,7 +299,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+      SUBROUTINE DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T,
+     $                   LDT,
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                   LWORK, INFO )
 *
@@ -348,10 +349,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH, DLANHS, DLAPY2, DLAPY3
-      EXTERNAL           LSAME, DLAMCH, DLANHS, DLAPY2, DLAPY3
+      EXTERNAL           LSAME, DLAMCH, DLANHS, DLAPY2,
+     $                   DLAPY3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAG2, DLARFG, DLARTG, DLASET, DLASV2, DROT,
+      EXTERNAL           DLAG2, DLARFG, DLARTG, DLASET, DLASV2,
+     $                   DROT,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -598,7 +601,8 @@
                      CALL DROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, S )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -625,12 +629,14 @@
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = ZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL DROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
+     $                  CALL DROT( ILASTM-JCH-1, T( JCH, JCH+2 ),
+     $                             LDT,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
                      CALL DROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, S )
                      TEMP = H( JCH+1, JCH )
                      CALL DLARTG( TEMP, H( JCH+1, JCH-1 ), C, S,
@@ -641,7 +647,8 @@
                      CALL DROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL DROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
+     $                  CALL DROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ),
+     $                             1,
      $                             C, S )
    50             CONTINUE
                   GO TO 70
@@ -676,7 +683,8 @@
          CALL DROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL DROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
+     $      CALL DROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C,
+     $                 S )
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI,
 *                              and BETA
@@ -908,10 +916,12 @@
      $                    T( IFRSTM, ILAST ), 1, CR, SR )
 *
             IF( ILQ )
-     $         CALL DROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1, CL,
+     $         CALL DROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1,
+     $                    CL,
      $                    SL )
             IF( ILZ )
-     $         CALL DROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1, CR,
+     $         CALL DROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1,
+     $                    CR,
      $                    SR )
 *
             T( ILAST-1, ILAST-1 ) = B11

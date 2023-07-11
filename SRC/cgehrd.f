@@ -164,7 +164,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE CGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -194,7 +195,8 @@
       COMPLEX            EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEHD2, CGEMM, CLAHR2, CLARFB, CTRMM,
+      EXTERNAL           CAXPY, CGEHD2, CGEMM, CLAHR2, CLARFB,
+     $                   CTRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

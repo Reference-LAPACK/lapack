@@ -146,7 +146,8 @@
 *> \ingroup upmtr
 *
 *  =====================================================================
-      SUBROUTINE ZUPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
+      SUBROUTINE ZUPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC,
+     $                   WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine --

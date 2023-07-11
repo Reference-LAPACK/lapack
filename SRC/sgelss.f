@@ -202,7 +202,8 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSQR, SCOPY, SGEBRD, SGELQF, SGEMM, SGEMV,
+      EXTERNAL           SBDSQR, SCOPY, SGEBRD, SGELQF, SGEMM,
+     $                   SGEMV,
      $                   SGEQRF, SLACPY, SLASCL, SLASET, SORGBR,
      $                   SORMBR, SORMLQ, SORMQR, SRSCL, XERBLA
 *     ..
@@ -275,7 +276,8 @@
      $                      DUM(1), DUM(1), -1, INFO )
                LWORK_SGEBRD = INT( DUM(1) )
 *              Compute space needed for SORMBR
-               CALL SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, DUM(1),
+               CALL SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA,
+     $                      DUM(1),
      $                B, LDB, DUM(1), -1, INFO )
                LWORK_SORMBR = INT( DUM(1) )
 *              Compute space needed for SORGBR
@@ -417,13 +419,15 @@
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
@@ -451,13 +455,15 @@
 *           Multiply B by transpose(Q)
 *           (Workspace: need N+NRHS, prefer N+NRHS*NB)
 *
-            CALL SORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ), B,
+            CALL SORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ),
+     $                   B,
      $                   LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *           Zero out below R
 *
             IF( N.GT.1 )
-     $         CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+     $         CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
+     $                      LDA )
          END IF
 *
          IE = 1
@@ -475,7 +481,8 @@
 *        Multiply B by transpose of left bidiagonalizing vectors of R
 *        (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB)
 *
-         CALL SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA,
+     $                WORK( ITAUQ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors of R in A
@@ -506,7 +513,8 @@
                CALL SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ),
+     $                      LDB )
             END IF
    10    CONTINUE
 *
@@ -514,14 +522,16 @@
 *        (Workspace: need N, prefer N*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, A, LDA, B, LDB, ZERO,
+            CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, A, LDA, B, LDB,
+     $                  ZERO,
      $                  WORK, LDB )
             CALL SLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 20 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL SGEMM( 'T', 'N', N, BL, N, ONE, A, LDA, B( 1, I ),
+               CALL SGEMM( 'T', 'N', N, BL, N, ONE, A, LDA, B( 1,
+     $                     I ),
      $                     LDB, ZERO, WORK, N )
                CALL SLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
@@ -576,7 +586,8 @@
 *        Generate right bidiagonalizing vectors of R in WORK(IL)
 *        (Workspace: need M*M+5*M-1, prefer M*M+4*M+(M-1)*NB)
 *
-         CALL SORGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP ),
+         CALL SORGBR( 'P', M, M, M, WORK( IL ), LDWORK,
+     $                WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IWORK = IE + M
 *
@@ -601,7 +612,8 @@
                CALL SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ),
+     $                      LDB )
             END IF
    30    CONTINUE
          IWORK = IE
@@ -610,21 +622,23 @@
 *        (Workspace: need M*M+2*M, prefer M*M+M+M*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS+IWORK-1 .AND. NRHS.GT.1 ) THEN
-            CALL SGEMM( 'T', 'N', M, NRHS, M, ONE, WORK( IL ), LDWORK,
+            CALL SGEMM( 'T', 'N', M, NRHS, M, ONE, WORK( IL ),
+     $                  LDWORK,
      $                  B, LDB, ZERO, WORK( IWORK ), LDB )
             CALL SLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = ( LWORK-IWORK+1 ) / M
             DO 40 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL SGEMM( 'T', 'N', M, BL, M, ONE, WORK( IL ), LDWORK,
+               CALL SGEMM( 'T', 'N', M, BL, M, ONE, WORK( IL ),
+     $                     LDWORK,
      $                     B( 1, I ), LDB, ZERO, WORK( IWORK ), M )
                CALL SLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
          ELSE IF( NRHS.EQ.1 ) THEN
-            CALL SGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1, 1 ),
-     $                  1, ZERO, WORK( IWORK ), 1 )
+            CALL SGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1,
+     $                  1 ), 1, ZERO, WORK( IWORK ), 1 )
             CALL SCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
          END IF
 *
@@ -658,7 +672,8 @@
 *        Multiply B by transpose of left bidiagonalizing vectors
 *        (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB)
 *
-         CALL SORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL SORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA,
+     $                WORK( ITAUQ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors in A
@@ -689,7 +704,8 @@
                CALL SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL SLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ),
+     $                      LDB )
             END IF
    50    CONTINUE
 *
@@ -697,14 +713,16 @@
 *        (Workspace: need N, prefer N*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL SGEMM( 'T', 'N', N, NRHS, M, ONE, A, LDA, B, LDB, ZERO,
+            CALL SGEMM( 'T', 'N', N, NRHS, M, ONE, A, LDA, B, LDB,
+     $                  ZERO,
      $                  WORK, LDB )
             CALL SLACPY( 'F', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 60 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL SGEMM( 'T', 'N', N, BL, M, ONE, A, LDA, B( 1, I ),
+               CALL SGEMM( 'T', 'N', N, BL, M, ONE, A, LDA, B( 1,
+     $                     I ),
      $                     LDB, ZERO, WORK, N )
                CALL SLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
@@ -717,18 +735,22 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       END IF
 *
    70 CONTINUE

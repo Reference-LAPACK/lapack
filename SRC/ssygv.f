@@ -171,7 +171,8 @@
 *> \ingroup hegv
 *
 *  =====================================================================
-      SUBROUTINE SSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE SSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                  WORK,
      $                  LWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -204,7 +205,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYEV, SSYGST, STRMM, STRSM, XERBLA
+      EXTERNAL           SPOTRF, SSYEV, SSYGST, STRMM, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -286,7 +288,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -300,7 +303,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF

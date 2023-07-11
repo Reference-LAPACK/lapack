@@ -422,7 +422,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLACPY, SLAG2, STGEXC, STGSYL, XERBLA
+      EXTERNAL           SGEMV, SLACPY, SLAG2, STGEXC, STGSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -560,7 +561,8 @@
      $                SNRM2( N, VR( 1, KS+1 ), 1 ) )
                LNRM = SLAPY2( SNRM2( N, VL( 1, KS ), 1 ),
      $                SNRM2( N, VL( 1, KS+1 ), 1 ) )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -570,7 +572,8 @@
                TMPIR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHAV = TMPRR + TMPII
                UHAVI = TMPIR - TMPRI
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -592,10 +595,12 @@
 *
                RNRM = SNRM2( N, VR( 1, KS ), 1 )
                LNRM = SNRM2( N, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHAV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHBV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                COND = SLAPY2( UHAV, UHBV )
@@ -647,7 +652,8 @@
             IFST = K
             ILST = 1
 *
-            CALL STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ), N,
+            CALL STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+     $                   N,
      $                   DUMMY, 1, DUMMY1, 1, IFST, ILST,
      $                   WORK( N*N*2+1 ), LWORK-2*N*N, IERR )
 *
@@ -673,7 +679,8 @@
                ELSE
                   I = N*N + 1
                   IZ = 2*N*N + 1
-                  CALL STGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL STGSYL( 'N', DIFDRI, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ),

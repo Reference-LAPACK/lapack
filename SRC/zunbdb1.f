@@ -199,7 +199,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -228,7 +229,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, XERBLA
+      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT,
+     $                   XERBLA
       EXTERNAL           ZLACGV
 *     ..
 *     .. External Functions ..
@@ -291,14 +293,16 @@
          X21(I,I) = ONE
          CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
      $               X11(I,I+1), LDX11, WORK(ILARF) )
-         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, DCONJG(TAUP2(I)),
+         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $               DCONJG(TAUP2(I)),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
 *
          IF( I .LT. Q ) THEN
             CALL ZDROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C,
      $                  S )
             CALL ZLACGV( Q-I, X21(I,I+1), LDX21 )
-            CALL ZLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, TAUQ1(I) )
+            CALL ZLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21,
+     $                    TAUQ1(I) )
             S = DBLE( X21(I,I+1) )
             X21(I,I+1) = ONE
             CALL ZLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),

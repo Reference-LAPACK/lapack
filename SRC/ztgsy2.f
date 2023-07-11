@@ -254,7 +254,8 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
      $                   INFO )
 *
@@ -294,7 +295,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZGESC2, ZGETC2, ZLATDF, ZSCAL
+      EXTERNAL           XERBLA, ZAXPY, ZGESC2, ZGETC2, ZLATDF,
+     $                   ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, DCONJG, MAX
@@ -391,8 +393,10 @@
 *
                IF( I.GT.1 ) THEN
                   ALPHA = -RHS( 1 )
-                  CALL ZAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 )
-                  CALL ZAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 )
+                  CALL ZAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ),
+     $                        1 )
+                  CALL ZAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ),
+     $                        1 )
                END IF
                IF( J.LT.N ) THEN
                   CALL ZAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,
@@ -436,9 +440,11 @@
                CALL ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                IF( SCALOC.NE.ONE ) THEN
                   DO 40 K = 1, N
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1,
+     $                           K ),
      $                           1 )
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1,
+     $                           K ),
      $                           1 )
    40             CONTINUE
                   SCALE = SCALE*SCALOC

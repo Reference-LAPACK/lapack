@@ -245,7 +245,8 @@
          IWS = LDWORK*NB
          IF( LWORK.LT.IWS ) THEN
             NB = MAX( LWORK / LDWORK, 1 )
-            NBMIN = MAX( 2, ILAENV( 2, 'ZHETRF', UPLO, N, -1, -1, -1 ) )
+            NBMIN = MAX( 2, ILAENV( 2, 'ZHETRF', UPLO, N, -1, -1,
+     $                   -1 ) )
          END IF
       ELSE
          IWS = 1
@@ -274,7 +275,8 @@
 *           Factorize columns k-kb+1:k of A and use blocked code to
 *           update columns 1:k-kb
 *
-            CALL ZLAHEF( UPLO, K, NB, KB, A, LDA, IPIV, WORK, N, IINFO )
+            CALL ZLAHEF( UPLO, K, NB, KB, A, LDA, IPIV, WORK, N,
+     $                   IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns 1:k of A
@@ -314,13 +316,15 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL ZLAHEF( UPLO, N-K+1, NB, KB, A( K, K ), LDA, IPIV( K ),
+            CALL ZLAHEF( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+     $                   IPIV( K ),
      $                   WORK, N, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns k:n of A
 *
-            CALL ZHETF2( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ), IINFO )
+            CALL ZHETF2( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ),
+     $                   IINFO )
             KB = N - K + 1
          END IF
 *

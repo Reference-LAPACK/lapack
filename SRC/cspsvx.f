@@ -273,7 +273,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+      SUBROUTINE CSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB,
+     $                   X,
      $                   LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -308,7 +309,8 @@
       EXTERNAL           LSAME, CLANSP, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CSPCON, CSPRFS, CSPTRF, CSPTRS,
+      EXTERNAL           CCOPY, CLACPY, CSPCON, CSPRFS, CSPTRF,
+     $                   CSPTRS,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -322,7 +324,8 @@
       NOFACT = LSAME( FACT, 'N' )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -370,7 +373,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL CSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR,
+      CALL CSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+     $             FERR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

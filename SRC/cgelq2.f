@@ -187,7 +187,8 @@
 *           Apply H(i) to A(i+1:m,i:n) from the right
 *
             A( I, I ) = ONE
-            CALL CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA, TAU( I ),
+            CALL CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $                  TAU( I ),
      $                  A( I+1, I ), LDA, WORK )
          END IF
          A( I, I ) = ALPHA

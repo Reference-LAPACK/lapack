@@ -202,7 +202,8 @@
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
-      SUBROUTINE DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+      SUBROUTINE DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND,
+     $                   RANK,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -239,7 +240,8 @@
       EXTERNAL           ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEQP3, DLAIC1, DLASCL, DLASET,
+      EXTERNAL           DCOPY, DGEQP3, DLAIC1, DLASCL,
+     $                   DLASET,
      $                   DORMQR, DORMRZ, DTRSM, DTZRZF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -340,13 +342,15 @@
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
@@ -413,7 +417,8 @@
 *
 *     B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-      CALL DORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 ),
+      CALL DORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA,
+     $             WORK( 1 ),
      $             B, LDB, WORK( 2*MN+1 ), LWORK-2*MN, INFO )
       WSIZE = MAX( WSIZE, 2*MN+WORK( 2*MN+1 ) )
 *
@@ -454,18 +459,22 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL DLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL DLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       END IF
 *
    70 CONTINUE

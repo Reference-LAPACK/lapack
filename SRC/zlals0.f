@@ -265,7 +265,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+      SUBROUTINE ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX,
+     $                   LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
@@ -297,7 +298,8 @@
       DOUBLE PRECISION   DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, XERBLA, ZCOPY, ZDROT, ZDSCAL, ZLACPY,
+      EXTERNAL           DGEMV, XERBLA, ZCOPY, ZDROT, ZDSCAL,
+     $                   ZLACPY,
      $                   ZLASCL
 *     ..
 *     .. External Functions ..
@@ -361,7 +363,8 @@
 *
          CALL ZCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL ZCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
+            CALL ZCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ),
+     $                  LDBX )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
@@ -481,7 +484,8 @@
 *                    parentheses (x+y)+z. The goal is to prevent
 *                    optimizing compilers from doing x+(y+z).
 *
-                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I+1,
+                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ,
+     $                      -POLES( I+1,
      $                            2 ) )-DIFR( I, 1 ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -490,7 +494,8 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      RWORK( I ) = ZERO
                   ELSE
-                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I,
+                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ,
+     $                      -POLES( I,
      $                            2 ) )-DIFL( I ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -532,10 +537,12 @@
 *
          IF( SQRE.EQ.1 ) THEN
             CALL ZCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL ZDROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
+            CALL ZDROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C,
+     $                  S )
          END IF
          IF( K.LT.MAX( M, N ) )
-     $      CALL ZLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1 ),
+     $      CALL ZLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1,
+     $                   1 ),
      $                   LDBX )
 *
 *        Step (3R): permute rows of B.
@@ -545,7 +552,8 @@
             CALL ZCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 190 I = 2, N
-            CALL ZCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
+            CALL ZCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ),
+     $                  LDB )
   190    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.

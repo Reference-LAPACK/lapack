@@ -182,7 +182,8 @@
       EXTERNAL           LSAME, CLANHB, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHBTRD, CLASCL, CSTEQR, SSCAL, SSTERF, XERBLA
+      EXTERNAL           CHBTRD, CLASCL, CSTEQR, SSCAL, SSTERF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -252,9 +253,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *

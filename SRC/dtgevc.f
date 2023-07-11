@@ -338,7 +338,8 @@
       EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLACPY, DLAG2, DLALN2, XERBLA
+      EXTERNAL           DGEMV, DLACPY, DLAG2, DLALN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -765,7 +766,8 @@
 *              Solve  ( a A - b B )  y = SUM(,)
 *              with scaling and perturbation of the denominator
 *
-               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), LDS,
+               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ),
+     $                      LDS,
      $                      BDIAG( 1 ), BDIAG( 2 ), SUM, 2, BCOEFR,
      $                      BCOEFI, WORK( 2*N+J ), N, SCALE, TEMP,
      $                      IINFO )
@@ -791,11 +793,13 @@
      $                        WORK( ( JW+2 )*N+JE ), 1, ZERO,
      $                        WORK( ( JW+4 )*N+1 ), 1 )
   170          CONTINUE
-               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE ),
+               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1,
+     $                      JE ),
      $                      LDVL )
                IBEG = 1
             ELSE
-               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG ),
+               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1,
+     $                      IEIG ),
      $                      LDVL )
                IBEG = JE
             END IF
@@ -954,7 +958,8 @@
 *
 *              Complex eigenvalue
 *
-               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP,
+               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ),
+     $                     LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                IF( BCOEFI.EQ.ZERO ) THEN

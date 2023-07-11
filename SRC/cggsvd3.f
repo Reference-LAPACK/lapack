@@ -429,7 +429,8 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+         CALL CGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+     $                 TOLA,
      $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
      $                 WORK, WORK, -1, INFO )
          LWKOPT = N + INT( WORK( 1 ) )

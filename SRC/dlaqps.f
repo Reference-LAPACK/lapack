@@ -173,7 +173,8 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+      SUBROUTINE DLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU,
+     $                   VN1,
      $                   VN2, AUXV, F, LDF )
 *
 *  -- LAPACK auxiliary routine --
@@ -241,14 +242,16 @@
 *        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**T.
 *
          IF( K.GT.1 ) THEN
-            CALL DGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK, 1 ),
+            CALL DGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK,
+     $                  1 ),
      $                  LDA, F( K, 1 ), LDF, ONE, A( RK, K ), 1 )
          END IF
 *
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL DLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL DLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1,
+     $                   TAU( K ) )
          ELSE
             CALL DLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
@@ -277,7 +280,8 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL DGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK, 1 ),
+            CALL DGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK,
+     $                  1 ),
      $                  LDA, A( RK, K ), 1, ZERO, AUXV( 1 ), 1 )
 *
             CALL DGEMV( 'No transpose', N, K-1, ONE, F( 1, 1 ), LDF,
@@ -288,7 +292,8 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T.
 *
          IF( K.LT.N ) THEN
-            CALL DGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ), LDF,
+            CALL DGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ),
+     $                  LDF,
      $                  A( RK, 1 ), LDA, ONE, A( RK, K+1 ), LDA )
          END IF
 *
@@ -328,7 +333,8 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**T.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL DGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB, -ONE,
+         CALL DGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB,
+     $               -ONE,
      $               A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF, ONE,
      $               A( RK+1, KB+1 ), LDA )
       END IF

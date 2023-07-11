@@ -260,7 +260,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLACPY,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0,
+     $                   DLACPY,
      $                   DLASCL, DLASET, DORGQR, DORMQR, DTGEVC, XERBLA
 *     ..
 *     .. External Functions ..
@@ -498,7 +499,8 @@
          ELSE
             CHTEMP = 'R'
          END IF
-         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), IERR )
          IF( IERR.NE.0 ) THEN
             INFO = N + 2
@@ -581,8 +583,10 @@
   110 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

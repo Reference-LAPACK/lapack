@@ -378,7 +378,8 @@
 *> \ingroup la_porfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, COLEQU, C, B, LDB, Y,
      $                                LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -447,7 +448,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DAXPY, DCOPY, DPOTRS, DSYMV, BLAS_DSYMV_X,
+      EXTERNAL          DAXPY, DCOPY, DPOTRS, DSYMV,
+     $                   BLAS_DSYMV_X,
      $                  BLAS_DSYMV2_X, DLA_SYAMV, DLA_WWADDW,
      $                  DLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
@@ -655,7 +657,8 @@
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0, RES,
+         CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0,
+     $               RES,
      $     1 )
 
          DO I = 1, N

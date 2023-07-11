@@ -291,7 +291,8 @@
                CALL DPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE, A( 0 ), N,
+               CALL DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE, A( 0 ),
+     $                     N,
      $                     A( N1 ), N )
                CALL DSYRK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
      $                     A( N ), N )
@@ -308,7 +309,8 @@
                CALL DPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRSM( 'L', 'L', 'N', 'N', N1, N2, ONE, A( N2 ), N,
+               CALL DTRSM( 'L', 'L', 'N', 'N', N1, N2, ONE, A( N2 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL DSYRK( 'U', 'T', N2, N1, -ONE, A( 0 ), N, ONE,
      $                     A( N1 ), N )
@@ -331,9 +333,11 @@
                CALL DPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE, A( 0 ), N1,
+               CALL DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE, A( 0 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
-               CALL DSYRK( 'L', 'T', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
+               CALL DSYRK( 'L', 'T', N2, N1, -ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 1 ), N1 )
                CALL DPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
@@ -348,7 +352,8 @@
                CALL DPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRSM( 'R', 'U', 'N', 'N', N2, N1, ONE, A( N2*N2 ),
+               CALL DTRSM( 'R', 'U', 'N', 'N', N2, N1, ONE,
+     $                     A( N2*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL DSYRK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
      $                     A( N1*N2 ), N2 )
@@ -377,7 +382,8 @@
                CALL DPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRSM( 'R', 'L', 'T', 'N', K, K, ONE, A( 1 ), N+1,
+               CALL DTRSM( 'R', 'L', 'T', 'N', K, K, ONE, A( 1 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL DSYRK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
      $                     A( 0 ), N+1 )
@@ -419,7 +425,8 @@
      $            RETURN
                CALL DTRSM( 'L', 'U', 'T', 'N', K, K, ONE, A( K ), N1,
      $                     A( K*( K+1 ) ), K )
-               CALL DSYRK( 'L', 'T', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
+               CALL DSYRK( 'L', 'T', K, K, -ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( 0 ), K )
                CALL DPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )

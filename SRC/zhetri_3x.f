@@ -156,7 +156,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      SUBROUTINE ZHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
+     $                      INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,7 +193,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHESWAPR, ZTRTRI, ZTRMM, XERBLA
+      EXTERNAL           ZGEMM, ZHESWAPR, ZTRTRI, ZTRMM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, DBLE, MAX
@@ -437,8 +439,10 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *
@@ -633,8 +637,10 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *

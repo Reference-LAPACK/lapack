@@ -217,7 +217,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
-      SUBROUTINE SSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE SSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                   WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -250,7 +251,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYEVD, SSYGST, STRMM, STRSM, XERBLA
+      EXTERNAL           SPOTRF, SSYEVD, SSYGST, STRMM, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -324,7 +326,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK, LIWORK,
+      CALL SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
+     $             LIWORK,
      $             INFO )
       LOPT = INT( MAX( REAL( LOPT ), REAL( WORK( 1 ) ) ) )
       LIOPT = INT( MAX( REAL( LIOPT ), REAL( IWORK( 1 ) ) ) )

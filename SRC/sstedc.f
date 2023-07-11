@@ -213,7 +213,8 @@
       EXTERNAL           ILAENV, LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLAED0, SLASCL, SLASET, SLASRT,
+      EXTERNAL           SGEMM, SLACPY, SLAED0, SLASCL, SLASET,
+     $                   SLASRT,
      $                   SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -378,9 +379,11 @@
 *              Scale.
 *
                ORGNRM = SLANST( 'M', M, D( START ), E( START ) )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
                IF( ICOMPZ.EQ.1 ) THEN
@@ -399,7 +402,8 @@
 *
 *              Scale back.
 *
-               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
@@ -409,7 +413,8 @@
 *                 the length of D, we must solve the sub-problem in a
 *                 workspace and then multiply back into Z.
 *
-                  CALL SSTEQR( 'I', M, D( START ), E( START ), WORK, M,
+                  CALL SSTEQR( 'I', M, D( START ), E( START ), WORK,
+     $                         M,
      $                         WORK( M*M+1 ), INFO )
                   CALL SLACPY( 'A', N, M, Z( 1, START ), LDZ,
      $                         WORK( STOREZ ), N )

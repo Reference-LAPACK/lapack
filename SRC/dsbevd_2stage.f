@@ -224,7 +224,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE DSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                          LDZ,
      $                          WORK, LWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -263,7 +264,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLASCL, DSCAL, DSTEDC,
+      EXTERNAL           DGEMM, DLACPY, DLASCL, DSCAL,
+     $                   DSTEDC,
      $                   DSTERF, XERBLA, DSYTRD_SB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -282,9 +284,12 @@
          LIWMIN = 1
          LWMIN = 1
       ELSE
-         IB    = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', JOBZ, N, KD, IB, -1 )
+         IB    = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
          IF( WANTZ ) THEN
             LIWMIN = 3 + 5*N
             LWMIN = 1 + 5*N + 2*N**2
@@ -359,9 +364,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -385,7 +392,8 @@
       ELSE
          CALL DSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
+         CALL DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ),
+     $               N,
      $               ZERO, WORK( INDWK2 ), N )
          CALL DLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF

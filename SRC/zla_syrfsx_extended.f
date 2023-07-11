@@ -386,7 +386,8 @@
 *> \ingroup la_herfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE ZLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE ZLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -458,7 +459,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZSYTRS, ZSYMV, BLAS_ZSYMV_X,
+      EXTERNAL           ZAXPY, ZCOPY, ZSYTRS, ZSYMV,
+     $                   BLAS_ZSYMV_X,
      $                   BLAS_ZSYMV2_X, ZLA_SYAMV, ZLA_WWADDW,
      $                   ZLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
@@ -538,7 +540,8 @@
 *
             CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL ZSYMV( UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y(1,J), 1,
+               CALL ZSYMV( UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y(1,J),
+     $                     1,
      $              DCMPLX(1.0D+0), RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_ZSYMV_X( UPLO2, N, DCMPLX(-1.0D+0), A, LDA,

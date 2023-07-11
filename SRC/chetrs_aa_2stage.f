@@ -218,7 +218,8 @@
 *
 *           Compute (U**T \ B) -> B    [ (U**T \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'U', 'C', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL CTRSM( 'L', 'U', 'C', 'U', N-NB, NRHS, ONE, A(1,
+     $                  NB+1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
@@ -231,7 +232,8 @@
 *
 *           Compute (U \ B) -> B   [ U \ (T \ (U**T \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL CTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1,
+     $                  NB+1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
@@ -252,7 +254,8 @@
 *
 *           Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL CTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1,
+     $                  1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
@@ -265,7 +268,8 @@
 *
 *           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'L', 'C', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL CTRSM( 'L', 'L', 'C', 'U', N-NB, NRHS, ONE, A(NB+1,
+     $                  1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]

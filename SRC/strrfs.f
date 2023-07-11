@@ -178,7 +178,8 @@
 *> \ingroup trrfs
 *
 *  =====================================================================
-      SUBROUTINE STRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB, X,
+      SUBROUTINE STRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB,
+     $                   X,
      $                   LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -213,7 +214,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, STRMV, STRSV, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLACN2, STRMV, STRSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -427,14 +429,16 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL STRSV( UPLO, TRANST, DIAG, N, A, LDA, WORK( N+1 ),
+               CALL STRSV( UPLO, TRANST, DIAG, N, A, LDA,
+     $                     WORK( N+1 ),
      $                     1 )
                DO 220 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )

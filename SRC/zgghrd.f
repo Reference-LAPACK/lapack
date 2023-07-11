@@ -200,7 +200,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE ZGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, INFO )
 *
 *  -- LAPACK computational routine --
@@ -344,11 +345,13 @@
             CALL ZLARTG( CTEMP, B( JROW, JROW-1 ), C, S,
      $                   B( JROW, JROW ) )
             B( JROW, JROW-1 ) = CZERO
-            CALL ZROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C, S )
+            CALL ZROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C,
+     $                 S )
             CALL ZROT( JROW-1, B( 1, JROW ), 1, B( 1, JROW-1 ), 1, C,
      $                 S )
             IF( ILZ )
-     $         CALL ZROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C, S )
+     $         CALL ZROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C,
+     $                    S )
    30    CONTINUE
    40 CONTINUE
 *

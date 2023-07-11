@@ -136,7 +136,8 @@
       REAL               AJJ, AKK, BJJ, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSCAL, SSPMV, SSPR2, STPMV, STPSV,
+      EXTERNAL           SAXPY, SSCAL, SSPMV, SSPR2, STPMV,
+     $                   STPSV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -182,7 +183,8 @@
                CALL SSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
      $                     AP( J1 ), 1 )
                CALL SSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-SDOT( J-1, AP( J1 ), 1, BP( J1 ),
+               AP( JJ ) = ( AP( JJ )-SDOT( J-1, AP( J1 ), 1,
+     $             BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE

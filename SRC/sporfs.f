@@ -219,7 +219,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, SPOTRS, SSYMV, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLACN2, SPOTRS, SSYMV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -387,14 +388,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
+               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N,
+     $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   110          CONTINUE
@@ -405,7 +408,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
+               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N,
+     $                      INFO )
             END IF
             GO TO 100
          END IF

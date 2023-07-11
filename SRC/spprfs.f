@@ -167,7 +167,8 @@
 *> \ingroup pprfs
 *
 *  =====================================================================
-      SUBROUTINE SPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
+      SUBROUTINE SPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX,
+     $                   FERR,
      $                   BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -207,7 +208,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, SPPTRS, SSPMV, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLACN2, SPPTRS, SSPMV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -270,7 +272,8 @@
 *        Compute residual R = B - A * X
 *
          CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL SSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE, WORK( N+1 ),
+         CALL SSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE,
+     $               WORK( N+1 ),
      $               1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -378,7 +381,8 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

@@ -250,7 +250,8 @@
 *
 *              Compute multipliers.
 *
-               CALL SSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 )
+               CALL SSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
+     $                     1 )
 *
 *              Update trailing submatrix within the band.
 *

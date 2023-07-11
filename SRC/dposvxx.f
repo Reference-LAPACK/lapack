@@ -488,7 +488,8 @@
 *> \ingroup posvxx
 *
 *  =====================================================================
-      SUBROUTINE DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -538,7 +539,8 @@
       DOUBLE PRECISION   DLAMCH, DLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DPOEQUB, DPOTRF, DPOTRS, DLACPY, DLAQSY,
+      EXTERNAL           DPOEQUB, DPOTRF, DPOTRS, DLACPY,
+     $                   DLAQSY,
      $                   XERBLA, DLASCL2, DPORFSX
 *     ..
 *     .. Intrinsic Functions ..
@@ -646,7 +648,8 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = DLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK )
+            RPVGRW = DLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF,
+     $                             WORK )
             RETURN
          ENDIF
       END IF

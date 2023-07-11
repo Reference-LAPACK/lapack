@@ -170,7 +170,8 @@
 *> \ingroup tprfs
 *
 *  =====================================================================
-      SUBROUTINE ZTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
+      SUBROUTINE ZTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X,
+     $                   LDX,
      $                   FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -205,7 +206,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZLACN2, ZTPMV, ZTPSV
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZLACN2, ZTPMV,
+     $                   ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX

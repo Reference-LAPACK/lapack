@@ -164,7 +164,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -194,7 +195,8 @@
       REAL               EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SGEHD2, SGEMM, SLAHR2, SLARFB, STRMM,
+      EXTERNAL           SAXPY, SGEHD2, SGEMM, SLAHR2, SLARFB,
+     $                   STRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

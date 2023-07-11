@@ -396,7 +396,8 @@
 *> \ingroup herfsx
 *
 *  =====================================================================
-      SUBROUTINE SSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE SSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -518,7 +519,8 @@
 *
 *     Test input parameters.
 *
-      IF ( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF ( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
@@ -657,7 +659,8 @@
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV,
+               RCOND_TMP = SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF,
+     $                                  IPIV,
      $              1, X(1,J), INFO, WORK, IWORK )
             ELSE
                RCOND_TMP = 0.0

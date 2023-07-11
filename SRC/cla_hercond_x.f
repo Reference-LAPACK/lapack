@@ -127,7 +127,8 @@
 *> \ingroup la_hercond
 *
 *  =====================================================================
-      REAL FUNCTION CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV, X,
+      REAL FUNCTION CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV,
+     $                             X,
      $                             INFO, WORK, RWORK )
 *
 *  -- LAPACK computational routine --

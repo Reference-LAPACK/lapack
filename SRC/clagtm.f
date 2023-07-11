@@ -141,7 +141,8 @@
 *> \ingroup lagtm
 *
 *  =====================================================================
-      SUBROUTINE CLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+      SUBROUTINE CLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX,
+     $                   BETA,
      $                   B, LDB )
 *
 *  -- LAPACK auxiliary routine --

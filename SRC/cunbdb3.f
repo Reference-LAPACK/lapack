@@ -198,7 +198,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE CUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE CUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -227,7 +228,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CLACGV, XERBLA
+      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CLACGV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2, SROUNDUP_LWORK
@@ -303,12 +305,14 @@
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
          CALL CLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL CLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
+            CALL CLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1,
+     $                    TAUP2(I) )
             PHI(I) = ATAN2( REAL( X21(I+1,I) ), REAL( X11(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X21(I+1,I) = ONE
-            CALL CLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1, CONJG(TAUP2(I)),
+            CALL CLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1,
+     $                  CONJG(TAUP2(I)),
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
          X11(I,I) = ONE

@@ -359,7 +359,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A, LDA,
+      SUBROUTINE SGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A,
+     $                   LDA,
      $                   B, LDB, SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL,
      $                   VSR, LDVSR, RCONDE, RCONDV, WORK, LWORK, IWORK,
      $                   LIWORK, BWORK, INFO )
@@ -406,7 +407,8 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ,
+     $                   SLACPY,
      $                   SLASCL, SLASET, SORGQR, SORMQR, STGSEN, XERBLA
 *     ..
 *     .. External Functions ..
@@ -467,7 +469,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .OR.
      $         ( .NOT.WANTST .AND. .NOT.WANTSN ) ) THEN
@@ -661,12 +664,14 @@
      $                   IERR )
          END IF
          IF( ILBSCL )
-     $      CALL SLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+     $      CALL SLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *
          DO 10 I = 1, N
-            BWORK( I ) = SELCTG( ALPHAR( I ), ALPHAI( I ), BETA( I ) )
+            BWORK( I ) = SELCTG( ALPHAR( I ), ALPHAI( I ),
+     $             BETA( I ) )
    10    CONTINUE
 *
 *        Reorder eigenvalues, transform Generalized Schur vectors, and
@@ -754,8 +759,10 @@
 *
       IF( ILASCL ) THEN
          CALL SLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

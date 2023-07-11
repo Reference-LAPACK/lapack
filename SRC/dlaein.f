@@ -168,7 +168,8 @@
 *> \ingroup laein
 *
 *  =====================================================================
-      SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+      SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI,
+     $                   B,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -333,7 +334,8 @@
 *             or U**T*x = scale*v for a left eigenvector,
 *           overwriting x on v.
 *
-            CALL DLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB,
+            CALL DLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B,
+     $                   LDB,
      $                   VR, SCALE, WORK, IERR )
             NORMIN = 'Y'
 *
@@ -570,7 +572,8 @@
 *
 *                 Divide by diagonal element of B.
 *
-                  CALL DLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I ),
+                  CALL DLADIV( XR, XI, B( I, I ), B( I+1, I ),
+     $                         VR( I ),
      $                         VI( I ) )
                   VMAX = MAX( ABS( VR( I ) )+ABS( VI( I ) ), VMAX )
                   VCRIT = BIGNUM / VMAX

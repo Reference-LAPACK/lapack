@@ -243,7 +243,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -288,7 +289,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY, ZLASCL,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY,
+     $                   ZLASCL,
      $                   ZSTEDC, ZUNMTR, ZHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..

@@ -239,7 +239,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
-      SUBROUTINE ZHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE ZHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                   WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -272,7 +273,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHEEVD, ZHEGST, ZPOTRF, ZTRMM, ZTRSM
+      EXTERNAL           XERBLA, ZHEEVD, ZHEGST, ZPOTRF, ZTRMM,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
@@ -353,7 +355,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, LRWORK,
+      CALL ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+     $             LRWORK,
      $             IWORK, LIWORK, INFO )
       LOPT = INT( MAX( DBLE( LOPT ), DBLE( WORK( 1 ) ) ) )
       LROPT = INT( MAX( DBLE( LROPT ), DBLE( RWORK( 1 ) ) ) )

@@ -159,7 +159,8 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+      SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK,
+     $                   IWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -182,7 +183,8 @@
      $                   IQ2, IS, IW, IZ, K, N1, N2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAED2, SLAED3, SLAMRG, XERBLA
+      EXTERNAL           SCOPY, SLAED2, SLAED3, SLAMRG,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -230,7 +232,8 @@
 *
       CALL SCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
       CPP1 = CUTPNT + 1
-      CALL SCOPY( N-CUTPNT, Q( CPP1, CPP1 ), LDQ, WORK( IZ+CUTPNT ), 1 )
+      CALL SCOPY( N-CUTPNT, Q( CPP1, CPP1 ), LDQ, WORK( IZ+CUTPNT ),
+     $            1 )
 *
 *     Deflate eigenvalues.
 *

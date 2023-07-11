@@ -240,7 +240,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
+      SUBROUTINE ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W,
+     $                   VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, IFAILL,
      $                   IFAILR, INFO )
 *
@@ -397,7 +398,8 @@
 *              Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it
 *              has not ben computed before.
 *
-               HNORM = ZLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK )
+               HNORM = ZLANHS( 'I', KR-KL+1, H( KL, KL ), LDH,
+     $                         RWORK )
                IF( DISNAN( HNORM ) ) THEN
                   INFO = -6
                   RETURN
@@ -426,7 +428,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL ZLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL ZLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ),
+     $                      LDH,
      $                      WK, VL( KL, KS ), WORK, LDWORK, RWORK, EPS3,
      $                      SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
@@ -443,7 +446,8 @@
 *
 *              Compute right eigenvector.
 *
-               CALL ZLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1, KS ),
+               CALL ZLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1,
+     $                      KS ),
      $                      WORK, LDWORK, RWORK, EPS3, SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
                   INFO = INFO + 1

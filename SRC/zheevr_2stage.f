@@ -448,10 +448,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
       DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSY, ILAENV, ILAENV2STAGE
+      EXTERNAL           LSAME, DLAMCH, ZLANSY, ILAENV,
+     $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZHETRD_2STAGE, ZSTEMR, ZSTEIN, ZSWAP, ZUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -733,7 +735,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -229,7 +229,8 @@
 *> \ingroup laqz2
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,
+      RECURSIVE SUBROUTINE CLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI,
+     $                             NW,
      $                             A, LDA, B, LDB, Q, LDQ, Z, LDZ, NS,
      $                             ND, ALPHA, BETA, QC, LDQC, ZC, LDZC,
      $                             WORK, LWORK, RWORK, REC, INFO )
@@ -320,7 +321,8 @@
 
 *     Store window in case of convergence failure
       CALL CLACPY( 'ALL', JW, JW, A( KWTOP, KWTOP ), LDA, WORK, JW )
-      CALL CLACPY( 'ALL', JW, JW, B( KWTOP, KWTOP ), LDB, WORK( JW**2+
+      CALL CLACPY( 'ALL', JW, JW, B( KWTOP, KWTOP ), LDB,
+     $             WORK( JW**2+
      $             1 ), JW )
 
 *     Transform window to real schur form
@@ -335,7 +337,8 @@
 *        Convergence failure, restore the window and exit
          ND = 0
          NS = JW-QZ_SMALL_INFO
-         CALL CLACPY( 'ALL', JW, JW, WORK, JW, A( KWTOP, KWTOP ), LDA )
+         CALL CLACPY( 'ALL', JW, JW, WORK, JW, A( KWTOP, KWTOP ),
+     $                LDA )
          CALL CLACPY( 'ALL', JW, JW, WORK( JW**2+1 ), JW, B( KWTOP,
      $                KWTOP ), LDB )
          RETURN
@@ -392,11 +395,14 @@
             A( K, KWTOP-1 ) = TEMP
             A( K+1, KWTOP-1 ) = CZERO
             K2 = MAX( KWTOP, K-1 )
-            CALL CROT( IHI-K2+1, A( K, K2 ), LDA, A( K+1, K2 ), LDA, C1,
+            CALL CROT( IHI-K2+1, A( K, K2 ), LDA, A( K+1, K2 ), LDA,
+     $                 C1,
      $                 S1 )
-            CALL CROT( IHI-( K-1 )+1, B( K, K-1 ), LDB, B( K+1, K-1 ),
+            CALL CROT( IHI-( K-1 )+1, B( K, K-1 ), LDB, B( K+1,
+     $                 K-1 ),
      $                 LDB, C1, S1 )
-            CALL CROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1, K+1-KWTOP+1 ),
+            CALL CROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1,
+     $                 K+1-KWTOP+1 ),
      $                 1, C1, CONJG( S1 ) )
          END DO
 
@@ -438,25 +444,29 @@
      $                IHI+1 ), LDB )
       END IF
       IF ( ILQ ) THEN
-         CALL CGEMM( 'N', 'N', N, JW, JW, CONE, Q( 1, KWTOP ), LDQ, QC,
+         CALL CGEMM( 'N', 'N', N, JW, JW, CONE, Q( 1, KWTOP ), LDQ,
+     $               QC,
      $               LDQC, CZERO, WORK, N )
          CALL CLACPY( 'ALL', N, JW, WORK, N, Q( 1, KWTOP ), LDQ )
       END IF
 
       IF ( KWTOP-1-ISTARTM+1 > 0 ) THEN
-         CALL CGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, CONE, A( ISTARTM,
+         CALL CGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, CONE,
+     $               A( ISTARTM,
      $               KWTOP ), LDA, ZC, LDZC, CZERO, WORK,
      $               KWTOP-ISTARTM )
         CALL CLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
      $               A( ISTARTM, KWTOP ), LDA )
-         CALL CGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, CONE, B( ISTARTM,
+         CALL CGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, CONE,
+     $               B( ISTARTM,
      $               KWTOP ), LDB, ZC, LDZC, CZERO, WORK,
      $               KWTOP-ISTARTM )
         CALL CLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
      $               B( ISTARTM, KWTOP ), LDB )
       END IF
       IF ( ILZ ) THEN
-         CALL CGEMM( 'N', 'N', N, JW, JW, CONE, Z( 1, KWTOP ), LDZ, ZC,
+         CALL CGEMM( 'N', 'N', N, JW, JW, CONE, Z( 1, KWTOP ), LDZ,
+     $               ZC,
      $               LDZC, CZERO, WORK, N )
          CALL CLACPY( 'ALL', N, JW, WORK, N, Z( 1, KWTOP ), LDZ )
       END IF

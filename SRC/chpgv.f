@@ -161,7 +161,8 @@
 *> \ingroup hpgv
 *
 *  =====================================================================
-      SUBROUTINE CHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE CHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ,
+     $                  WORK,
      $                  RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -189,7 +190,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPEV, CHPGST, CPPTRF, CTPMV, CTPSV, XERBLA
+      EXTERNAL           CHPEV, CHPGST, CPPTRF, CTPMV, CTPSV,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *

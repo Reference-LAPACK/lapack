@@ -264,10 +264,12 @@
       LOGICAL            LSAME
       INTEGER            ISAMAX
       REAL               SDOT, SLAMCH, SNRM2
-      EXTERNAL           ISAMAX, LSAME, SAXPY, SDOT, SLAMCH, SNRM2
+      EXTERNAL           ISAMAX, LSAME, SAXPY, SDOT, SLAMCH,
+     $                   SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASET, SSCAL, SSWAP, SSTEVX, XERBLA
+      EXTERNAL           SCOPY, SLASET, SSCAL, SSWAP, SSTEVX,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, SIGN, SQRT
@@ -424,7 +426,8 @@
          IF( NS.EQ.0 ) THEN
             RETURN
          ELSE
-            IF( WANTZ ) CALL SLASET( 'F', N*2, NS, ZERO, ZERO, Z, LDZ )
+            IF( WANTZ ) CALL SLASET( 'F', N*2, NS, ZERO, ZERO, Z,
+     $          LDZ )
          END IF
       ELSE IF( INDSV ) THEN
 *
@@ -461,7 +464,8 @@
 *
          IF( VLTGK.EQ.VUTGK ) VLTGK = VLTGK - TOL
 *
-         IF( WANTZ ) CALL SLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z, LDZ)
+         IF( WANTZ ) CALL SLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z,
+     $       LDZ)
       END IF
 *
 *     Initialize variables and pointers for S, Z, and WORK.
@@ -588,7 +592,8 @@
 *                 WORK( ITEMP: ): 2*5*NTGK
 *                 IWORK( 1: ): 2*6*NTGK
 *
-                  CALL SSTEVX( JOBZ, RNGVX, NTGK, WORK( IDTGK+ISPLT-1 ),
+                  CALL SSTEVX( JOBZ, RNGVX, NTGK,
+     $                         WORK( IDTGK+ISPLT-1 ),
      $                         WORK( IETGK+ISPLT-1 ), VLTGK, VUTGK,
      $                         ILTGK, IUTGK, ABSTOL, NSL, S( ISBEG ),
      $                         Z( IROWZ,ICOLZ ), LDZ, WORK( ITEMP ),
@@ -643,13 +648,15 @@
      $                      ABS( NRMU-ORTOL )*SQRT2.GT.ONE )
      $                      THEN
                            DO J = 0, I-1
-                              ZJTJI = -SDOT( NRU, Z( IROWU, ICOLZ+J ),
+                              ZJTJI = -SDOT( NRU, Z( IROWU,
+     $                                       ICOLZ+J ),
      $                                       2, Z( IROWU, ICOLZ+I ), 2 )
                               CALL SAXPY( NRU, ZJTJI,
      $                                    Z( IROWU, ICOLZ+J ), 2,
      $                                    Z( IROWU, ICOLZ+I ), 2 )
                            END DO
-                           NRMU = SNRM2( NRU, Z( IROWU, ICOLZ+I ), 2 )
+                           NRMU = SNRM2( NRU, Z( IROWU, ICOLZ+I ),
+     $                                   2 )
                            CALL SSCAL( NRU, ONE/NRMU,
      $                                 Z( IROWU,ICOLZ+I ), 2 )
                         END IF
@@ -666,13 +673,15 @@
      $                      ABS( NRMV-ORTOL )*SQRT2.GT.ONE )
      $                      THEN
                            DO J = 0, I-1
-                              ZJTJI = -SDOT( NRV, Z( IROWV, ICOLZ+J ),
+                              ZJTJI = -SDOT( NRV, Z( IROWV,
+     $                                       ICOLZ+J ),
      $                                       2, Z( IROWV, ICOLZ+I ), 2 )
                               CALL SAXPY( NRU, ZJTJI,
      $                                    Z( IROWV, ICOLZ+J ), 2,
      $                                    Z( IROWV, ICOLZ+I ), 2 )
                            END DO
-                           NRMV = SNRM2( NRV, Z( IROWV, ICOLZ+I ), 2 )
+                           NRMV = SNRM2( NRV, Z( IROWV, ICOLZ+I ),
+     $                                   2 )
                            CALL SSCAL( NRV, ONE/NRMV,
      $                                 Z( IROWV,ICOLZ+I ), 2 )
                         END IF
@@ -752,7 +761,8 @@
          IF( K.NE.NS+1-I ) THEN
             S( K ) = S( NS+1-I )
             S( NS+1-I ) = SMIN
-            IF( WANTZ ) CALL SSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ), 1 )
+            IF( WANTZ ) CALL SSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ),
+     $          1 )
          END IF
       END DO
 *

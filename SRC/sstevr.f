@@ -301,7 +301,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+      SUBROUTINE SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+     $                   ABSTOL,
      $                   M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
 *
@@ -341,7 +342,8 @@
       EXTERNAL           LSAME, ILAENV, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTEMR, SSTEIN, SSTERF,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
+     $                   SSTERF,
      $                   SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -523,12 +525,14 @@
          ORDER = 'E'
       END IF
 
-      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
+      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
+     $             M,
      $             NSPLIT, W, IWORK( INDIBL ), IWORK( INDISP ), WORK,
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL SSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP ),
+         CALL SSTEIN( N, D, E, M, W, IWORK( INDIBL ),
+     $                IWORK( INDISP ),
      $                Z, LDZ, WORK, IWORK( INDIWO ), IWORK( INDIFL ),
      $                INFO )
       END IF

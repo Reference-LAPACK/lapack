@@ -282,7 +282,8 @@
 *
 *     Update B := Q**H*B.
 *
-      CALL CUNMQR( 'Left', 'Conjugate Transpose', N, P, MIN( N, M ), A,
+      CALL CUNMQR( 'Left', 'Conjugate Transpose', N, P, MIN( N, M ),
+     $             A,
      $             LDA, TAUA, B, LDB, WORK, LWORK, INFO )
       LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
 *

@@ -247,7 +247,8 @@
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL STRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
@@ -273,7 +274,8 @@
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (D \ (U \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'U', 'T', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'U', 'T', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (U**T \ (D \ (U \P**T * B) )) ]
 *
@@ -314,7 +316,8 @@
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL STRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
@@ -340,7 +343,8 @@
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (D \ (L \P**T * B) ) ]
 *
-         CALL STRSM('L', 'L', 'T', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM('L', 'L', 'T', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (L**T \ (D \ (L \P**T * B) )) ]
 *

@@ -199,7 +199,8 @@
 *        Compute elementary reflector H(i) to annihilate A(i+2:ihi,i)
 *
          ALPHA = A( I+1, I )
-         CALL ZLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU( I ) )
+         CALL ZLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1,
+     $                TAU( I ) )
          A( I+1, I ) = ONE
 *
 *        Apply H(i) to A(1:ihi,i+1:ihi) from the right

@@ -282,7 +282,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE DORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+      SUBROUTINE DORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12,
+     $                   LDX12,
      $                   X21, LDX21, X22, LDX22, THETA, PHI, TAUP1,
      $                   TAUP2, TAUQ1, TAUQ2, WORK, LWORK, INFO )
 *
@@ -316,7 +317,8 @@
       DOUBLE PRECISION   Z1, Z2, Z3, Z4
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLARF, DLARFGP, DSCAL, XERBLA
+      EXTERNAL           DAXPY, DLARF, DLARFGP, DSCAL,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2
@@ -399,14 +401,16 @@
                CALL DSCAL( P-I+1, Z1, X11(I,I), 1 )
             ELSE
                CALL DSCAL( P-I+1, Z1*COS(PHI(I-1)), X11(I,I), 1 )
-               CALL DAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I,I-1),
+               CALL DAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I,
+     $                     I-1),
      $                     1, X11(I,I), 1 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL DSCAL( M-P-I+1, Z2, X21(I,I), 1 )
             ELSE
                CALL DSCAL( M-P-I+1, Z2*COS(PHI(I-1)), X21(I,I), 1 )
-               CALL DAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I,I-1),
+               CALL DAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I,
+     $                     I-1),
      $                     1, X21(I,I), 1 )
             END IF
 *
@@ -414,7 +418,8 @@
      $                 DNRM2( P-I+1, X11(I,I), 1 ) )
 *
             IF( P .GT. I ) THEN
-               CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
+               CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1,
+     $                       TAUP1(I) )
             ELSE IF( P .EQ. I ) THEN
                CALL DLARFGP( P-I+1, X11(I,I), X11(I,I), 1, TAUP1(I) )
             END IF
@@ -423,7 +428,8 @@
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1,
      $                       TAUP2(I) )
             ELSE IF ( M-P .EQ. I ) THEN
-               CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I), 1, TAUP2(I) )
+               CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I), 1,
+     $                       TAUP2(I) )
             END IF
             X21(I,I) = ONE
 *
@@ -432,7 +438,8 @@
      $                     X11(I,I+1), LDX11, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'L', P-I+1, M-Q-I+1, X11(I,I), 1, TAUP1(I),
+               CALL DLARF( 'L', P-I+1, M-Q-I+1, X11(I,I), 1,
+     $                     TAUP1(I),
      $                     X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
@@ -440,18 +447,22 @@
      $                     X21(I,I+1), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1, TAUP2(I),
+               CALL DLARF( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1,
+     $                     TAUP2(I),
      $                     X22(I,I), LDX22, WORK )
             END IF
 *
             IF( I .LT. Q ) THEN
                CALL DSCAL( Q-I, -Z1*Z3*SIN(THETA(I)), X11(I,I+1),
      $                     LDX11 )
-               CALL DAXPY( Q-I, Z2*Z3*COS(THETA(I)), X21(I,I+1), LDX21,
+               CALL DAXPY( Q-I, Z2*Z3*COS(THETA(I)), X21(I,I+1),
+     $                     LDX21,
      $                     X11(I,I+1), LDX11 )
             END IF
-            CALL DSCAL( M-Q-I+1, -Z1*Z4*SIN(THETA(I)), X12(I,I), LDX12 )
-            CALL DAXPY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I), LDX22,
+            CALL DSCAL( M-Q-I+1, -Z1*Z4*SIN(THETA(I)), X12(I,I),
+     $                  LDX12 )
+            CALL DAXPY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I),
+     $                  LDX22,
      $                  X12(I,I), LDX12 )
 *
             IF( I .LT. Q )
@@ -480,13 +491,16 @@
             X12(I,I) = ONE
 *
             IF( I .LT. Q ) THEN
-               CALL DLARF( 'R', P-I, Q-I, X11(I,I+1), LDX11, TAUQ1(I),
+               CALL DLARF( 'R', P-I, Q-I, X11(I,I+1), LDX11,
+     $                     TAUQ1(I),
      $                     X11(I+1,I+1), LDX11, WORK )
-               CALL DLARF( 'R', M-P-I, Q-I, X11(I,I+1), LDX11, TAUQ1(I),
+               CALL DLARF( 'R', M-P-I, Q-I, X11(I,I+1), LDX11,
+     $                     TAUQ1(I),
      $                     X21(I+1,I+1), LDX21, WORK )
             END IF
             IF ( P .GT. I ) THEN
-               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12, TAUQ2(I),
+               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
+     $                     TAUQ2(I),
      $                     X12(I+1,I), LDX12, WORK )
             END IF
             IF ( M-P .GT. I ) THEN
@@ -511,7 +525,8 @@
             X12(I,I) = ONE
 *
             IF ( P .GT. I ) THEN
-               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12, TAUQ2(I),
+               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
+     $                     TAUQ2(I),
      $                     X12(I+1,I), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
@@ -534,7 +549,8 @@
             END IF
             X22(Q+I,P+I) = ONE
             IF ( I .LT. M-P-Q ) THEN
-               CALL DLARF( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I), LDX22,
+               CALL DLARF( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I),
+     $                     LDX22,
      $                     TAUQ2(P+I), X22(Q+I+1,P+I), LDX22, WORK )
             END IF
 *
@@ -550,21 +566,25 @@
                CALL DSCAL( P-I+1, Z1, X11(I,I), LDX11 )
             ELSE
                CALL DSCAL( P-I+1, Z1*COS(PHI(I-1)), X11(I,I), LDX11 )
-               CALL DAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I-1,I),
+               CALL DAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I-1,
+     $                     I),
      $                     LDX12, X11(I,I), LDX11 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL DSCAL( M-P-I+1, Z2, X21(I,I), LDX21 )
             ELSE
-               CALL DSCAL( M-P-I+1, Z2*COS(PHI(I-1)), X21(I,I), LDX21 )
-               CALL DAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I-1,I),
+               CALL DSCAL( M-P-I+1, Z2*COS(PHI(I-1)), X21(I,I),
+     $                     LDX21 )
+               CALL DAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I-1,
+     $                     I),
      $                     LDX22, X21(I,I), LDX21 )
             END IF
 *
             THETA(I) = ATAN2( DNRM2( M-P-I+1, X21(I,I), LDX21 ),
      $                 DNRM2( P-I+1, X11(I,I), LDX11 ) )
 *
-            CALL DLARFGP( P-I+1, X11(I,I), X11(I,I+1), LDX11, TAUP1(I) )
+            CALL DLARFGP( P-I+1, X11(I,I), X11(I,I+1), LDX11,
+     $                    TAUP1(I) )
             X11(I,I) = ONE
             IF ( I .EQ. M-P ) THEN
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I), LDX21,
@@ -576,7 +596,8 @@
             X21(I,I) = ONE
 *
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'R', Q-I, P-I+1, X11(I,I), LDX11, TAUP1(I),
+               CALL DLARF( 'R', Q-I, P-I+1, X11(I,I), LDX11,
+     $                     TAUP1(I),
      $                     X11(I+1,I), LDX11, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
@@ -584,7 +605,8 @@
      $                     TAUP1(I), X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'R', Q-I, M-P-I+1, X21(I,I), LDX21, TAUP2(I),
+               CALL DLARF( 'R', Q-I, M-P-I+1, X21(I,I), LDX21,
+     $                     TAUP2(I),
      $                     X21(I+1,I), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
@@ -633,7 +655,8 @@
             CALL DLARF( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
      $                  X12(I,I+1), LDX12, WORK )
             IF ( M-P-I .GT. 0 ) THEN
-               CALL DLARF( 'L', M-Q-I+1, M-P-I, X12(I,I), 1, TAUQ2(I),
+               CALL DLARF( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,
+     $                     TAUQ2(I),
      $                     X22(I,I+1), LDX22, WORK )
             END IF
 *
@@ -644,7 +667,8 @@
          DO I = Q + 1, P
 *
             CALL DSCAL( M-Q-I+1, -Z1*Z4, X12(I,I), 1 )
-            CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I+1,I), 1, TAUQ2(I) )
+            CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I+1,I), 1,
+     $                    TAUQ2(I) )
             X12(I,I) = ONE
 *
             IF ( P .GT. I ) THEN
@@ -652,7 +676,8 @@
      $                  X12(I,I+1), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
-     $         CALL DLARF( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1, TAUQ2(I),
+     $         CALL DLARF( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1,
+     $                     TAUQ2(I),
      $                     X22(I,Q+1), LDX22, WORK )
 *
          END DO
@@ -663,10 +688,12 @@
 *
             CALL DSCAL( M-P-Q-I+1, Z2*Z4, X22(P+I,Q+I), 1 )
             IF ( M-P-Q .EQ. I ) THEN
-               CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I,Q+I), 1,
+               CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I,Q+I),
+     $                       1,
      $                       TAUQ2(P+I) )
             ELSE
-               CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I+1,Q+I), 1,
+               CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I+1,Q+I),
+     $                       1,
      $                       TAUQ2(P+I) )
                CALL DLARF( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I), 1,
      $                  TAUQ2(P+I), X22(P+I,Q+I+1), LDX22, WORK )

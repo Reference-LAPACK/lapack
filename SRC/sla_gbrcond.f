@@ -164,7 +164,8 @@
 *> \ingroup la_gbrcond
 *
 *  =====================================================================
-      REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,
+      REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+     $                           LDAFB,
      $                           IPIV, CMODE, C, INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine --
@@ -293,7 +294,8 @@
                CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             END IF
 *
@@ -323,7 +325,8 @@
             END IF
 
             IF ( NOTRANS ) THEN
-               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             ELSE
                CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,

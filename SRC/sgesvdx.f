@@ -295,7 +295,8 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSVDX, SGEBRD, SGELQF, SGEQRF, SLACPY,
+      EXTERNAL           SBDSVDX, SGEBRD, SGELQF, SGEQRF,
+     $                   SLACPY,
      $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR,
      $                   SCOPY, XERBLA
 *     ..
@@ -385,7 +386,8 @@
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
@@ -420,7 +422,8 @@
                   MINWRK = MAX(N*(N*2+19),4*N+M)
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
@@ -542,8 +545,10 @@
             ITAUP = ITAUQ + N
             ITEMP = ITAUP + N
             CALL SLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
-            CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ), N )
-            CALL SGEBRD( N, N, WORK( IQRF ), N, WORK( ID ), WORK( IE ),
+            CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ),
+     $                   N )
+            CALL SGEBRD( N, N, WORK( IQRF ), N, WORK( ID ),
+     $                   WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -552,7 +557,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -564,7 +570,8 @@
                   CALL SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ),
+     $                      LDU )
 *
 *              Call SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -621,7 +628,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -633,7 +641,8 @@
                   CALL SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ),
+     $                      LDU )
 *
 *              Call SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -690,8 +699,10 @@
             ITAUP = ITAUQ + M
             ITEMP = ITAUP + M
             CALL SLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
-            CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ), M )
-            CALL SGEBRD( M, M, WORK( ILQF ), M, WORK( ID ), WORK( IE ),
+            CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ),
+     $                   M )
+            CALL SGEBRD( M, M, WORK( ILQF ), M, WORK( ID ),
+     $                   WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -700,7 +711,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL SBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -729,7 +741,8 @@
                   CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ),
+     $                      LDVT)
 *
 *              Call SORMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
@@ -769,7 +782,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL SBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL SBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -798,7 +812,8 @@
                   CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ),
+     $                      LDVT)
 *
 *              Call SORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)

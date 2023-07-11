@@ -176,7 +176,8 @@
 *> \ingroup hprfs
 *
 *  =====================================================================
-      SUBROUTINE CHPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+      SUBROUTINE CHPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+     $                   LDX,
      $                   FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -218,7 +219,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CHPMV, CHPTRS, CLACN2, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHPMV, CHPTRS, CLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL

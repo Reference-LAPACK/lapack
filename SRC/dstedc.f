@@ -213,7 +213,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLAED0, DLASCL, DLASET, DLASRT,
+      EXTERNAL           DGEMM, DLACPY, DLAED0, DLASCL, DLASET,
+     $                   DLASRT,
      $                   DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -378,9 +379,11 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
                IF( ICOMPZ.EQ.1 ) THEN
@@ -399,7 +402,8 @@
 *
 *              Scale back.
 *
-               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
@@ -409,7 +413,8 @@
 *                 the length of D, we must solve the sub-problem in a
 *                 workspace and then multiply back into Z.
 *
-                  CALL DSTEQR( 'I', M, D( START ), E( START ), WORK, M,
+                  CALL DSTEQR( 'I', M, D( START ), E( START ), WORK,
+     $                         M,
      $                         WORK( M*M+1 ), INFO )
                   CALL DLACPY( 'A', N, M, Z( 1, START ), LDZ,
      $                         WORK( STOREZ ), N )

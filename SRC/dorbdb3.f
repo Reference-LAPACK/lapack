@@ -197,7 +197,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -226,7 +227,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, XERBLA
+      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2
@@ -280,7 +282,8 @@
       DO I = 1, M-P
 *
          IF( I .GT. 1 ) THEN
-            CALL DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C, S )
+            CALL DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C,
+     $                 S )
          END IF
 *
          CALL DLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
@@ -299,7 +302,8 @@
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
          CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL DLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
+            CALL DLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1,
+     $                    TAUP2(I) )
             PHI(I) = ATAN2( X21(I+1,I), X11(I,I) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
@@ -308,7 +312,8 @@
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
          X11(I,I) = ONE
-         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
+         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
+     $               I+1),
      $               LDX11, WORK(ILARF) )
 *
       END DO
@@ -318,7 +323,8 @@
       DO I = M-P + 1, Q
          CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          X11(I,I) = ONE
-         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
+         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
+     $               I+1),
      $               LDX11, WORK(ILARF) )
       END DO
 *

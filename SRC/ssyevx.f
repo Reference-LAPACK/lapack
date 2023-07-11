@@ -248,7 +248,8 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, IWORK,
      $                   IFAIL, INFO )
 *
@@ -290,7 +291,8 @@
       EXTERNAL           LSAME, ILAENV, SLAMCH, SLANSY, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL, SSTEBZ,
+      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL,
+     $                   SSTEBZ,
      $                   SSTEIN, SSTEQR, SSTERF, SSWAP, SSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -343,7 +345,8 @@
          ELSE
             LWKMIN = 8*N
             NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1,
+     $                -1 ) )
             LWKOPT = MAX( LWKMIN, ( NB + 3 )*N )
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
@@ -495,7 +498,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -197,7 +197,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -227,7 +228,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZSCAL, ZLACGV,
+      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZSCAL,
+     $                   ZLACGV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -309,11 +311,13 @@
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X11(I+1,I) = ONE
-            CALL ZLARF( 'L', P-I, Q-I, X11(I+1,I), 1, DCONJG(TAUP1(I)),
+            CALL ZLARF( 'L', P-I, Q-I, X11(I+1,I), 1,
+     $                  DCONJG(TAUP1(I)),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
          END IF
          X21(I,I) = ONE
-         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, DCONJG(TAUP2(I)),
+         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $               DCONJG(TAUP2(I)),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
 *
       END DO
@@ -323,7 +327,8 @@
       DO I = P + 1, Q
          CALL ZLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
          X21(I,I) = ONE
-         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, DCONJG(TAUP2(I)),
+         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $               DCONJG(TAUP2(I)),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
       END DO
 *

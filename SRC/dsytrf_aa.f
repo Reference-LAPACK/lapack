@@ -165,7 +165,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASYF_AA, DGEMM, DGEMV, DSCAL, DCOPY, DSWAP,
+      EXTERNAL           DLASYF_AA, DGEMM, DGEMV, DSCAL, DCOPY,
+     $                   DSWAP,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

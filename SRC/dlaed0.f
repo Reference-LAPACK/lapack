@@ -198,7 +198,8 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED1, DLAED7, DSTEQR,
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED1, DLAED7,
+     $                   DSTEQR,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -374,7 +375,8 @@
      $                      E( SUBMAT+MSD2-1 ), MSD2, WORK,
      $                      IWORK( SUBPBS+1 ), INFO )
             ELSE
-               CALL DLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL, CURPRB,
+               CALL DLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL,
+     $                      CURPRB,
      $                      D( SUBMAT ), QSTORE( 1, SUBMAT ), LDQS,
      $                      IWORK( INDXQ+SUBMAT ), E( SUBMAT+MSD2-1 ),
      $                      MSD2, WORK( IQ ), IWORK( IQPTR ),

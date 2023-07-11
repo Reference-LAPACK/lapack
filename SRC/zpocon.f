@@ -217,13 +217,15 @@
 *
 *           Multiply by inv(U).
 *
-            CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL ZLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL ZLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *

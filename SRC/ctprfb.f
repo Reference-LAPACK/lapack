@@ -433,7 +433,8 @@
 *
          CALL CGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ),
+     $               LDWORK,
      $               V( NP, KP ), LDV, ONE, B( 1, NP ), LDB )
          CALL CTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
@@ -674,7 +675,8 @@
 *
          CALL CGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL CGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ),
+     $               LDWORK,
      $               V( KP, NP ), LDV, ONE, B( 1, NP ), LDB )
          CALL CTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )

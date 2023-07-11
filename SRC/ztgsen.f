@@ -428,7 +428,8 @@
 *>      1996.
 *>
 *  =====================================================================
-      SUBROUTINE ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
+      SUBROUTINE ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, M, PL, PR, DIF,
      $                   WORK, LWORK, IWORK, LIWORK, INFO )
 *
@@ -469,7 +470,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACN2, ZLACPY, ZLASSQ, ZSCAL, ZTGEXC,
+      EXTERNAL           XERBLA, ZLACN2, ZLACPY, ZLASSQ, ZSCAL,
+     $                   ZTGEXC,
      $                   ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
@@ -593,7 +595,8 @@
 *           and Z that will swap adjacent diagonal blocks in (A, B).
 *
             IF( K.NE.KS )
-     $         CALL ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+     $         CALL ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $                      Z,
      $                      LDZ, K, KS, IERR )
 *
             IF( IERR.GT.0 ) THEN
@@ -623,7 +626,8 @@
          N2 = N - M
          I = N1 + 1
          CALL ZLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 )
-         CALL ZLACPY( 'Full', N1, N2, B( 1, I ), LDB, WORK( N1*N2+1 ),
+         CALL ZLACPY( 'Full', N1, N2, B( 1, I ), LDB,
+     $                WORK( N1*N2+1 ),
      $                N1 )
          IJB = 0
          CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
@@ -665,14 +669,16 @@
 *
 *           Frobenius norm-based Difu estimate.
 *
-            CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
+            CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+     $                   WORK,
      $                   N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ),
      $                   N1, DSCALE, DIF( 1 ), WORK( N1*N2*2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
 *
 *           Frobenius norm-based Difl estimate.
 *
-            CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA, WORK,
+            CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+     $                   WORK,
      $                   N2, B( I, I ), LDB, B, LDB, WORK( N1*N2+1 ),
      $                   N2, DSCALE, DIF( 2 ), WORK( N1*N2*2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
@@ -700,7 +706,8 @@
 *
 *                 Solve generalized Sylvester equation
 *
-                  CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
@@ -709,7 +716,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL ZTGSYL( 'C', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL ZTGSYL( 'C', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
@@ -729,7 +737,8 @@
 *
 *                 Solve generalized Sylvester equation
 *
-                  CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
@@ -738,7 +747,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL ZTGSYL( 'C', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL ZTGSYL( 'C', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,

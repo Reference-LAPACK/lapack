@@ -268,7 +268,8 @@
 *> \ingroup stebz
 *
 *  =====================================================================
-      SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
+      SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D,
+     $                   E,
      $                   M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
      $                   INFO )
 *
@@ -481,7 +482,8 @@
          IWORK( 5 ) = IL - 1
          IWORK( 6 ) = IU
 *
-         CALL SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D, E,
+         CALL SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D,
+     $                E,
      $                WORK, IWORK( 5 ), WORK( N+1 ), WORK( N+5 ), IOUT,
      $                IWORK, W, IBLOCK, IINFO )
 *
@@ -623,7 +625,8 @@
 *
             ITMAX = INT( ( LOG( GU-GL+PIVMIN )-LOG( PIVMIN ) ) /
      $              LOG( TWO ) ) + 2
-            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
+            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI,
+     $                   PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), WORK( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IOUT,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )

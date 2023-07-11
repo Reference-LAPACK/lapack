@@ -533,7 +533,8 @@
 *> \ingroup gesvxx
 *
 *  =====================================================================
-      SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK,
@@ -584,7 +585,8 @@
       DOUBLE PRECISION   DLAMCH, ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY, ZLAQGE,
+      EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY,
+     $                   ZLAQGE,
      $                   XERBLA, ZLASCL2, ZGERFSX
 *     ..
 *     .. Intrinsic Functions ..

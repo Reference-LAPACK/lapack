@@ -210,7 +210,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
+      SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T,
+     $                    LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
 *  -- LAPACK computational routine --

@@ -173,7 +173,8 @@
 *> \ingroup hbgv
 *
 *  =====================================================================
-      SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+      SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+     $                  Z,
      $                  LDZ, WORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -201,7 +202,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPBSTF, SSBGST, SSBTRD, SSTEQR, SSTERF, XERBLA
+      EXTERNAL           SPBSTF, SSBGST, SSBTRD, SSTEQR, SSTERF,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -260,7 +262,8 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z,
+     $             LDZ,
      $             WORK( INDWRK ), IINFO )
 *
 *     For eigenvalues only, call SSTERF.  For eigenvectors, call SSTEQR.
@@ -268,7 +271,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                INFO )
       END IF
       RETURN

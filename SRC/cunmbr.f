@@ -273,18 +273,22 @@
          IF( M.GT.0 .AND. N.GT.0 ) THEN
             IF( APPLYQ ) THEN
                IF( LEFT ) THEN
-                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M-1, N, M-1,
+                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M-1, N,
+     $                         M-1,
      $                         -1 )
                ELSE
-                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N-1, N-1,
+                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N-1,
+     $                         N-1,
      $                         -1 )
                END IF
             ELSE
                IF( LEFT ) THEN
-                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M-1, N, M-1,
+                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M-1, N,
+     $                         M-1,
      $                         -1 )
                ELSE
-                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M, N-1, N-1,
+                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M, N-1,
+     $                         N-1,
      $                         -1 )
                END IF
             END IF
@@ -332,7 +336,8 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL CUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+            CALL CUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA,
+     $                   TAU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE

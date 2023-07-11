@@ -175,7 +175,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHERK, CPBTF2, CPOTF2, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CHERK, CPBTF2, CPOTF2, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -272,14 +273,16 @@
 *
 *                    Update A12
 *
-                     CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL CTRSM( 'Left', 'Upper',
+     $                           'Conjugate transpose',
      $                           'Non-unit', IB, I2, CONE,
      $                           AB( KD+1, I ), LDAB-1,
      $                           AB( KD+1-IB, I+IB ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL CHERK( 'Upper', 'Conjugate transpose', I2, IB,
+                     CALL CHERK( 'Upper', 'Conjugate transpose', I2,
+     $                           IB,
      $                           -ONE, AB( KD+1-IB, I+IB ), LDAB-1, ONE,
      $                           AB( KD+1, I+IB ), LDAB-1 )
                   END IF
@@ -296,7 +299,8 @@
 *
 *                    Update A13 (in the work array).
 *
-                     CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL CTRSM( 'Left', 'Upper',
+     $                           'Conjugate transpose',
      $                           'Non-unit', IB, I3, CONE,
      $                           AB( KD+1, I ), LDAB-1, WORK, LDWORK )
 *
@@ -311,7 +315,8 @@
 *
 *                    Update A33
 *
-                     CALL CHERK( 'Upper', 'Conjugate transpose', I3, IB,
+                     CALL CHERK( 'Upper', 'Conjugate transpose', I3,
+     $                           IB,
      $                           -ONE, WORK, LDWORK, ONE,
      $                           AB( KD+1, I+KD ), LDAB-1 )
 *
@@ -381,7 +386,8 @@
 *
 *                    Update A22
 *
-                     CALL CHERK( 'Lower', 'No transpose', I2, IB, -ONE,
+                     CALL CHERK( 'Lower', 'No transpose', I2, IB,
+     $                           -ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -414,7 +420,8 @@
 *
 *                    Update A33
 *
-                     CALL CHERK( 'Lower', 'No transpose', I3, IB, -ONE,
+                     CALL CHERK( 'Lower', 'No transpose', I3, IB,
+     $                           -ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *

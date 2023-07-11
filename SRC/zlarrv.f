@@ -335,7 +335,8 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLARRB, DLARRF, ZDSCAL, ZLAR1V,
+      EXTERNAL           DCOPY, DLARRB, DLARRF, ZDSCAL,
+     $                   ZLAR1V,
      $                   ZLASET
 *     ..
 *     .. Intrinsic Functions ..

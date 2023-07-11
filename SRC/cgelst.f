@@ -190,7 +190,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CGELST( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+      SUBROUTINE CGELST( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK,
+     $                   LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine --
@@ -242,7 +243,8 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'C' ) ) ) THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
+     $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -379,13 +381,15 @@
 *           using the compact WY representation of Q,
 *           workspace at least NRHS, optimally NRHS*NB.
 *
-            CALL CGEMQRT( 'Left', 'Conjugate transpose', M, NRHS, N, NB,
+            CALL CGEMQRT( 'Left', 'Conjugate transpose', M, NRHS, N,
+     $                    NB,
      $                    A, LDA, WORK( 1 ), NB, B, LDB,
      $                    WORK( MN*NB+1 ), INFO )
 *
 *           Compute B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
+            CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', N,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -452,7 +456,8 @@
 *
 *           Block 1: B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL CTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
+            CALL CTRTRS( 'Lower', 'No transpose', 'Non-unit', M,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -472,7 +477,8 @@
 *           using the compact WY representation of Q,
 *           workspace at least NRHS, optimally NRHS*NB.
 *
-            CALL CGEMLQT( 'Left', 'Conjugate transpose', N, NRHS, M, NB,
+            CALL CGEMLQT( 'Left', 'Conjugate transpose', N, NRHS, M,
+     $                    NB,
      $                   A, LDA, WORK( 1 ), NB, B, LDB,
      $                   WORK( MN*NB+1 ), INFO )
 *

@@ -150,7 +150,8 @@
       REAL               AKK, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSCAL, SSYR2, STRMV, STRSV, XERBLA
+      EXTERNAL           SAXPY, SSCAL, SSYR2, STRMV, STRSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -222,10 +223,12 @@
                IF( K.LT.N ) THEN
                   CALL SSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
                   CT = -HALF*AKK
-                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL SSYR2( UPLO, N-K, -ONE, A( K+1, K ), 1,
      $                        B( K+1, K ), 1, A( K+1, K+1 ), LDA )
-                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL STRSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K+1, K ), 1 )
                END IF
@@ -246,7 +249,8 @@
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
                CALL SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL SSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K ), 1,
+               CALL SSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K ),
+     $                     1,
      $                     A, LDA )
                CALL SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
                CALL SSCAL( K-1, BKK, A( 1, K ), 1 )
@@ -262,7 +266,8 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B, LDB,
+               CALL STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B,
+     $                     LDB,
      $                     A( K, 1 ), LDA )
                CT = HALF*AKK
                CALL SAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )

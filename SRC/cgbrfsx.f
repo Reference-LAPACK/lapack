@@ -433,7 +433,8 @@
 *> \ingroup gbrfsx
 *
 *  =====================================================================
-      SUBROUTINE CGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE CGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB,
+     $                    AFB,
      $                    LDAFB, IPIV, R, C, B, LDB, X, LDX, RCOND,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK,
@@ -497,7 +498,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILATRANS, ILAPREC
-      EXTERNAL           SLAMCH, CLANGB, CLA_GBRCOND_X, CLA_GBRCOND_C
+      EXTERNAL           SLAMCH, CLANGB, CLA_GBRCOND_X,
+     $                   CLA_GBRCOND_C
       REAL               SLAMCH, CLANGB, CLA_GBRCOND_X, CLA_GBRCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
@@ -644,7 +646,8 @@
          PREC_TYPE = ILAPREC( 'D' )
 
          IF ( NOTRAN ) THEN
-            CALL CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL,
+     $                                KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK, RWORK, WORK(N+1),
@@ -652,7 +655,8 @@
      $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          ELSE
-            CALL CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL,
+     $                                KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK, RWORK, WORK(N+1),
@@ -668,13 +672,16 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB,
+     $                                 AFB,
      $           LDAFB, IPIV, C, .TRUE., INFO, WORK, RWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB,
+     $                                 AFB,
      $           LDAFB, IPIV, R, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB,
+     $                                 AFB,
      $           LDAFB, IPIV, C, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS

@@ -235,7 +235,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+      SUBROUTINE ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
+     $                   SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -271,7 +272,8 @@
       INTEGER            IDAMAX, IZAMAX
       DOUBLE PRECISION   DLAMCH, DZASUM
       COMPLEX*16         ZDOTC, ZDOTU, ZLADIV
-      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM, ZDOTC,
+      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM,
+     $                   ZDOTC,
      $                   ZDOTU, ZLADIV
 *     ..
 *     .. External Subroutines ..
@@ -787,7 +789,8 @@
                   IF( UPPER ) THEN
                      CSUMJ = ZDOTU( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = ZDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
+                     CSUMJ = ZDOTU( N-J, A( J+1, J ), 1, X( J+1 ),
+     $                              1 )
                   END IF
                ELSE
 *
@@ -921,7 +924,8 @@
                   IF( UPPER ) THEN
                      CSUMJ = ZDOTC( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = ZDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
+                     CSUMJ = ZDOTC( N-J, A( J+1, J ), 1, X( J+1 ),
+     $                              1 )
                   END IF
                ELSE
 *

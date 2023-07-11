@@ -592,7 +592,8 @@
                   SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL SLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -776,7 +777,8 @@
      $                         B( L2, MIN(L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL SLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -969,7 +971,8 @@
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL SLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )

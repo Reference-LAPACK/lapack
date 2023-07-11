@@ -273,7 +273,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
+      SUBROUTINE DTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA,
+     $                  A,
      $                  B, LDB )
 *
 *  -- LAPACK computational routine --
@@ -328,7 +329,8 @@
          INFO = -3
       ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -4
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND.
+     $         .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -5
       ELSE IF( M.LT.0 ) THEN
@@ -400,12 +402,15 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL DTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'L', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A, M, B, LDB )
                      ELSE
-                        CALL DTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'L', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M, B, LDB )
-                        CALL DGEMM( 'N', 'N', M2, N, M1, -ONE, A( M1 ),
+                        CALL DGEMM( 'N', 'N', M2, N, M1, -ONE,
+     $                              A( M1 ),
      $                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
                         CALL DTRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
      $                              A( M ), M, B( M1, 0 ), LDB )
@@ -417,12 +422,15 @@
 *                    TRANS = 'T'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL DTRSM( 'L', 'L', 'T', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'L', 'T', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M, B, LDB )
                      ELSE
-                        CALL DTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
+                        CALL DTRSM( 'L', 'U', 'N', DIAG, M2, N,
+     $                              ALPHA,
      $                              A( M ), M, B( M1, 0 ), LDB )
-                        CALL DGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ),
+                        CALL DGEMM( 'T', 'N', M1, N, M2, -ONE,
+     $                              A( M1 ),
      $                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
                         CALL DTRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
      $                              A( 0 ), M, B, LDB )
@@ -441,7 +449,8 @@
 *
                      CALL DTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
      $                           A( M2 ), M, B, LDB )
-                     CALL DGEMM( 'T', 'N', M2, N, M1, -ONE, A( 0 ), M,
+                     CALL DGEMM( 'T', 'N', M2, N, M1, -ONE, A( 0 ),
+     $                           M,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL DTRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
@@ -453,7 +462,8 @@
 *
                      CALL DTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
-                     CALL DGEMM( 'N', 'N', M1, N, M2, -ONE, A( 0 ), M,
+                     CALL DGEMM( 'N', 'N', M1, N, M2, -ONE, A( 0 ),
+     $                           M,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL DTRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
      $                           A( M2 ), M, B, LDB )
@@ -476,10 +486,12 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL DTRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'U', 'T', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL DTRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'U', 'T', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                         CALL DGEMM( 'T', 'N', M2, N, M1, -ONE,
      $                              A( M1*M1 ), M1, B, LDB, ALPHA,
@@ -494,10 +506,12 @@
 *                    TRANS = 'T'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL DTRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA,
+                        CALL DTRSM( 'L', 'U', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL DTRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
+                        CALL DTRSM( 'L', 'L', 'T', DIAG, M2, N,
+     $                              ALPHA,
      $                              A( 1 ), M1, B( M1, 0 ), LDB )
                         CALL DGEMM( 'N', 'N', M1, N, M2, -ONE,
      $                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
@@ -519,7 +533,8 @@
 *
                      CALL DTRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
      $                           A( M2*M2 ), M2, B, LDB )
-                     CALL DGEMM( 'N', 'N', M2, N, M1, -ONE, A( 0 ), M2,
+                     CALL DGEMM( 'N', 'N', M2, N, M1, -ONE, A( 0 ),
+     $                           M2,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL DTRSM( 'L', 'L', 'N', DIAG, M2, N, ONE,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
@@ -531,7 +546,8 @@
 *
                      CALL DTRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
-                     CALL DGEMM( 'T', 'N', M1, N, M2, -ONE, A( 0 ), M2,
+                     CALL DGEMM( 'T', 'N', M1, N, M2, -ONE, A( 0 ),
+     $                           M2,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL DTRSM( 'L', 'U', 'N', DIAG, M1, N, ONE,
      $                           A( M2*M2 ), M2, B, LDB )
@@ -591,7 +607,8 @@
 *
                      CALL DTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
      $                           A( K+1 ), M+1, B, LDB )
-                     CALL DGEMM( 'T', 'N', K, N, K, -ONE, A( 0 ), M+1,
+                     CALL DGEMM( 'T', 'N', K, N, K, -ONE, A( 0 ),
+     $                           M+1,
      $                           B, LDB, ALPHA, B( K, 0 ), LDB )
                      CALL DTRSM( 'L', 'U', 'T', DIAG, K, N, ONE,
      $                           A( K ), M+1, B( K, 0 ), LDB )
@@ -602,7 +619,8 @@
 *                    and TRANS = 'T'
                      CALL DTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
      $                           A( K ), M+1, B( K, 0 ), LDB )
-                     CALL DGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ), M+1,
+                     CALL DGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ),
+     $                           M+1,
      $                           B( K, 0 ), LDB, ALPHA, B, LDB )
                      CALL DTRSM( 'L', 'L', 'T', DIAG, K, N, ONE,
      $                           A( K+1 ), M+1, B, LDB )
@@ -658,7 +676,8 @@
 *
                      CALL DTRSM( 'L', 'U', 'T', DIAG, K, N, ALPHA,
      $                           A( K*( K+1 ) ), K, B, LDB )
-                     CALL DGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ), K, B,
+                     CALL DGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ), K,
+     $                           B,
      $                           LDB, ALPHA, B( K, 0 ), LDB )
                      CALL DTRSM( 'L', 'L', 'N', DIAG, K, N, ONE,
      $                           A( K*K ), K, B( K, 0 ), LDB )
@@ -724,7 +743,8 @@
 *
                      CALL DTRSM( 'R', 'U', 'T', DIAG, M, N2, ALPHA,
      $                           A( N ), N, B( 0, N1 ), LDB )
-                     CALL DGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0, N1 ),
+                     CALL DGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'L', 'N', DIAG, M, N1, ONE,
@@ -737,7 +757,8 @@
 *
                      CALL DTRSM( 'R', 'L', 'T', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N, B( 0, 0 ), LDB )
-                     CALL DGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0, 0 ),
+                     CALL DGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0,
+     $                           0 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'U', 'N', DIAG, M, N2, ONE,
@@ -756,7 +777,8 @@
 *
                      CALL DTRSM( 'R', 'L', 'T', DIAG, M, N1, ALPHA,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
-                     CALL DGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0, 0 ),
+                     CALL DGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0,
+     $                           0 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'U', 'N', DIAG, M, N2, ONE,
@@ -769,7 +791,8 @@
 *
                      CALL DTRSM( 'R', 'U', 'T', DIAG, M, N2, ALPHA,
      $                           A( N1 ), N, B( 0, N1 ), LDB )
-                     CALL DGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0, N1 ),
+                     CALL DGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, 0 ), LDB )
                      CALL DTRSM( 'R', 'L', 'N', DIAG, M, N1, ONE,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
@@ -793,7 +816,8 @@
 *
                      CALL DTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( 1 ), N1, B( 0, N1 ), LDB )
-                     CALL DGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0, N1 ),
+                     CALL DGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'U', 'T', DIAG, M, N1, ONE,
@@ -806,7 +830,8 @@
 *
                      CALL DTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N1, B( 0, 0 ), LDB )
-                     CALL DGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0, 0 ),
+                     CALL DGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0,
+     $                           0 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'L', 'T', DIAG, M, N2, ONE,
@@ -825,7 +850,8 @@
 *
                      CALL DTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
-                     CALL DGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0, 0 ),
+                     CALL DGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0,
+     $                           0 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'L', 'T', DIAG, M, N2, ONE,
@@ -838,7 +864,8 @@
 *
                      CALL DTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
-                     CALL DGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0, N1 ),
+                     CALL DGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL DTRSM( 'R', 'U', 'T', DIAG, M, N1, ONE,

@@ -173,9 +173,11 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = DBLE( ZDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 ) )
+            AP( JJ ) = DBLE( ZDOTC( N-J+1, AP( JJ ), 1, AP( JJ ),
+     $          1 ) )
             IF( J.LT.N )
-     $         CALL ZTPMV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $         CALL ZTPMV( 'Lower', 'Conjugate transpose',
+     $                     'Non-unit',
      $                     N-J, AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE

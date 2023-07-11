@@ -179,7 +179,8 @@
 *> \ingroup hbgv
 *
 *  =====================================================================
-      SUBROUTINE ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+      SUBROUTINE ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+     $                  Z,
      $                  LDZ, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -208,7 +209,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSTERF, XERBLA, ZHBGST, ZHBTRD, ZPBSTF, ZSTEQR
+      EXTERNAL           DSTERF, XERBLA, ZHBGST, ZHBTRD, ZPBSTF,
+     $                   ZSTEQR
 *     ..
 *     .. Executable Statements ..
 *

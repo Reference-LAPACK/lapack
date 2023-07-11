@@ -254,7 +254,8 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
      $                   INFO )
 *
@@ -294,7 +295,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGESC2, CGETC2, CSCAL, CLATDF, XERBLA
+      EXTERNAL           CAXPY, CGESC2, CGETC2, CSCAL, CLATDF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, CONJG, MAX
@@ -370,9 +372,11 @@
                   CALL CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 10 K = 1, N
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1,
+     $                              K ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1,
+     $                              K ),
      $                              1 )
    10                CONTINUE
                      SCALE = SCALE*SCALOC
@@ -391,8 +395,10 @@
 *
                IF( I.GT.1 ) THEN
                   ALPHA = -RHS( 1 )
-                  CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 )
-                  CALL CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 )
+                  CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ),
+     $                        1 )
+                  CALL CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ),
+     $                        1 )
                END IF
                IF( J.LT.N ) THEN
                   CALL CAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,

@@ -243,7 +243,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -288,7 +289,8 @@
       EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY, CLASCL,
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY,
+     $                   CLASCL,
      $                   CSTEDC, CUNMTR, CHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..

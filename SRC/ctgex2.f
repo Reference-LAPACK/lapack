@@ -339,10 +339,14 @@
 *     If the swap is accepted ("weakly" and "strongly"), apply the
 *     equivalence transformations to the original matrix pair (A,B)
 *
-      CALL CROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
-      CALL CROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
-      CALL CROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ )
-      CALL CROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ )
+      CALL CROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ,
+     $           CONJG( SZ ) )
+      CALL CROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ,
+     $           CONJG( SZ ) )
+      CALL CROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ,
+     $           SQ )
+      CALL CROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ,
+     $           SQ )
 *
 *     Set  N1 by N2 (2,1) blocks to 0
 *
@@ -352,9 +356,11 @@
 *     Accumulate transformations into Q and Z if requested.
 *
       IF( WANTZ )
-     $   CALL CROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
+     $   CALL CROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ,
+     $              CONJG( SZ ) )
       IF( WANTQ )
-     $   CALL CROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ, CONJG( SQ ) )
+     $   CALL CROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ,
+     $              CONJG( SQ ) )
 *
 *     Exit with INFO = 0 if swap was successfully performed.
 *

@@ -147,11 +147,13 @@
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
-            IF( ANORM.LT.ABS( DL( I ) ) .OR. DISNAN( ABS( DL( I ) ) ) )
+            IF( ANORM.LT.ABS( DL( I ) ) .OR.
+     $          DISNAN( ABS( DL( I ) ) ) )
      $           ANORM = ABS(DL(I))
             IF( ANORM.LT.ABS( D( I ) ) .OR. DISNAN( ABS( D( I ) ) ) )
      $           ANORM = ABS(D(I))
-            IF( ANORM.LT.ABS( DU( I ) ) .OR. DISNAN (ABS( DU( I ) ) ) )
+            IF( ANORM.LT.ABS( DU( I ) ) .OR.
+     $          DISNAN (ABS( DU( I ) ) ) )
      $           ANORM = ABS(DU(I))
    10    CONTINUE
       ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' ) THEN
@@ -184,7 +186,8 @@
                IF( ANORM .LT. TEMP .OR. DISNAN( TEMP ) ) ANORM = TEMP
    30       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *

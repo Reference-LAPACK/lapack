@@ -219,7 +219,8 @@
 *
             IF( K.GT.1 ) THEN
                CALL CCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL CSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL CSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        CDOTU( K-1, WORK, 1, AP( KC ), 1 )
@@ -244,18 +245,21 @@
 *
             IF( K.GT.1 ) THEN
                CALL CCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL CSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL CSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        CDOTU( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            CDOTU( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            CDOTU( K-1, AP( KC ), 1,
+     $                                   AP( KCNEXT ),
      $                            1 )
                CALL CCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL CSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          CDOTU( K-1, WORK, 1, AP( KCNEXT ), 1 )
+     $                          CDOTU( K-1, WORK, 1, AP( KCNEXT ),
+     $                                 1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT + K + 1
@@ -346,7 +350,8 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL CSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL CSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KC+1 ), 1 )
                AP( KC ) = AP( KC ) - CDOTU( N-K, WORK, 1, AP( KC+1 ),
      $                    1 )
@@ -354,10 +359,12 @@
      $                          CDOTU( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL CCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL CSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL CSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        CDOTU( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )
+     $                        CDOTU( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                               1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT - ( N-K+3 )

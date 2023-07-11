@@ -233,7 +233,8 @@
       COMPLEX*16 :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
-      EXTERNAL :: XERBLA, ZLASET, ZLARTG, ZROT, ZLAQZ1, ZGEMM, ZLACPY
+      EXTERNAL :: XERBLA, ZLASET, ZLARTG, ZROT, ZLAQZ1, ZGEMM,
+     $            ZLACPY
       DOUBLE PRECISION, EXTERNAL :: DLAMCH
 
       INFO = 0
@@ -328,17 +329,20 @@
       SHEIGHT = NS+1
       SWIDTH = ISTOPM-( ILO+NS )+1
       IF ( SWIDTH > 0 ) THEN
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
+         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $               LDQC,
      $               A( ILO, ILO+NS ), LDA, CZERO, WORK, SHEIGHT )
          CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ILO,
      $                ILO+NS ), LDA )
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
+         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $               LDQC,
      $               B( ILO, ILO+NS ), LDB, CZERO, WORK, SHEIGHT )
          CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ILO,
      $                ILO+NS ), LDB )
       END IF
       IF ( ILQ ) THEN
-         CALL ZGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, CONE, Q( 1, ILO ),
+         CALL ZGEMM( 'N', 'N', N, SHEIGHT, SHEIGHT, CONE, Q( 1,
+     $               ILO ),
      $               LDQ, QC, LDQC, CZERO, WORK, N )
          CALL ZLACPY( 'ALL', N, SHEIGHT, WORK, N, Q( 1, ILO ), LDQ )
       END IF
@@ -351,12 +355,14 @@
          CALL ZGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, CONE,
      $               A( ISTARTM, ILO ), LDA, ZC, LDZC, CZERO, WORK,
      $               SHEIGHT )
-         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                A( ISTARTM,
      $                ILO ), LDA )
          CALL ZGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, CONE,
      $               B( ISTARTM, ILO ), LDB, ZC, LDZC, CZERO, WORK,
      $               SHEIGHT )
-         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                B( ISTARTM,
      $                ILO ), LDB )
       END IF
       IF ( ILZ ) THEN
@@ -388,7 +394,8 @@
 *              Move down the block with index k+i+j, updating
 *              the (ns+np x ns+np) block:
 *              (k:k+ns+np,k:k+ns+np-1)
-               CALL ZLAQZ1( .TRUE., .TRUE., K+I+J, ISTARTB, ISTOPB, IHI,
+               CALL ZLAQZ1( .TRUE., .TRUE., K+I+J, ISTARTB, ISTOPB,
+     $                      IHI,
      $                      A, LDA, B, LDB, NBLOCK, K+1, QC, LDQC,
      $                      NBLOCK, K, ZC, LDZC )
             END DO
@@ -405,18 +412,22 @@
             CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
      $                  LDQC, A( K+1, K+NS+NP ), LDA, CZERO, WORK,
      $                  SHEIGHT )
-            CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
+            CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                   A( K+1,
      $                   K+NS+NP ), LDA )
             CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
      $                  LDQC, B( K+1, K+NS+NP ), LDB, CZERO, WORK,
      $                  SHEIGHT )
-            CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
+            CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                   B( K+1,
      $                   K+NS+NP ), LDB )
          END IF
          IF ( ILQ ) THEN
-            CALL ZGEMM( 'N', 'N', N, NBLOCK, NBLOCK, CONE, Q( 1, K+1 ),
+            CALL ZGEMM( 'N', 'N', N, NBLOCK, NBLOCK, CONE, Q( 1,
+     $                  K+1 ),
      $                  LDQ, QC, LDQC, CZERO, WORK, N )
-            CALL ZLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ), LDQ )
+            CALL ZLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ),
+     $                   LDQ )
          END IF
 
 *        Update A(istartm:k,k:k+ns+npos-1) and B(istartm:k,k:k+ns+npos-1)
@@ -459,7 +470,8 @@
       DO I = 1, NS
 *        Chase the shift down to the bottom right corner
          DO ISHIFT = IHI-I, IHI-1
-            CALL ZLAQZ1( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB, IHI,
+            CALL ZLAQZ1( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB,
+     $                   IHI,
      $                   A, LDA, B, LDB, NS, IHI-NS+1, QC, LDQC, NS+1,
      $                   IHI-NS, ZC, LDZC )
          END DO
@@ -473,17 +485,20 @@
       SHEIGHT = NS
       SWIDTH = ISTOPM-( IHI+1 )+1
       IF ( SWIDTH > 0 ) THEN
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
+         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $               LDQC,
      $               A( IHI-NS+1, IHI+1 ), LDA, CZERO, WORK, SHEIGHT )
          CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
      $                A( IHI-NS+1, IHI+1 ), LDA )
-         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC, LDQC,
+         CALL ZGEMM( 'C', 'N', SHEIGHT, SWIDTH, SHEIGHT, CONE, QC,
+     $               LDQC,
      $               B( IHI-NS+1, IHI+1 ), LDB, CZERO, WORK, SHEIGHT )
          CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
      $                B( IHI-NS+1, IHI+1 ), LDB )
       END IF
       IF ( ILQ ) THEN
-         CALL ZGEMM( 'N', 'N', N, NS, NS, CONE, Q( 1, IHI-NS+1 ), LDQ,
+         CALL ZGEMM( 'N', 'N', N, NS, NS, CONE, Q( 1, IHI-NS+1 ),
+     $               LDQ,
      $               QC, LDQC, CZERO, WORK, N )
          CALL ZLACPY( 'ALL', N, NS, WORK, N, Q( 1, IHI-NS+1 ), LDQ )
       END IF
@@ -496,16 +511,19 @@
          CALL ZGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, CONE,
      $               A( ISTARTM, IHI-NS ), LDA, ZC, LDZC, CZERO, WORK,
      $               SHEIGHT )
-         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                A( ISTARTM,
      $                IHI-NS ), LDA )
          CALL ZGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, CONE,
      $               B( ISTARTM, IHI-NS ), LDB, ZC, LDZC, CZERO, WORK,
      $               SHEIGHT )
-         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+         CALL ZLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                B( ISTARTM,
      $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
-         CALL ZGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ), LDZ,
+         CALL ZGEMM( 'N', 'N', N, NS+1, NS+1, CONE, Z( 1, IHI-NS ),
+     $               LDZ,
      $               ZC, LDZC, CZERO, WORK, N )
          CALL ZLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF

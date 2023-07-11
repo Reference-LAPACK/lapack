@@ -220,7 +220,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZLACN2, ZPOTRS
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZLACN2,
+     $                   ZPOTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -293,7 +294,8 @@
 *        Compute residual R = B - A * X
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
+         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK,
+     $               1 )
 *
 *        Compute componentwise relative backward error from formula
 *

@@ -162,7 +162,8 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+      SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM,
+     $                   GIVPTR,
      $                   GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
 *
 *  -- LAPACK computational routine --
@@ -287,7 +288,8 @@
             CALL DGEMV( 'T', BSIZ1, BSIZ1, ONE, Q( QPTR( CURR ) ),
      $                  BSIZ1, ZTEMP( 1 ), 1, ZERO, Z( ZPTR1 ), 1 )
          END IF
-         CALL DCOPY( PSIZ1-BSIZ1, ZTEMP( BSIZ1+1 ), 1, Z( ZPTR1+BSIZ1 ),
+         CALL DCOPY( PSIZ1-BSIZ1, ZTEMP( BSIZ1+1 ), 1,
+     $               Z( ZPTR1+BSIZ1 ),
      $               1 )
          IF( BSIZ2.GT.0 ) THEN
             CALL DGEMV( 'T', BSIZ2, BSIZ2, ONE, Q( QPTR( CURR+1 ) ),

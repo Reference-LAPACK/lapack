@@ -190,7 +190,8 @@
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS,
+         CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N,
+     $               NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
@@ -203,12 +204,14 @@
 *
 *        Solve U**T *X = B, overwriting B with X.
 *
-         CALL DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRHS,
+         CALL DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N,
+     $               NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, overwriting B with X.
 *
-         CALL DTRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS, ONE,
+         CALL DTRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS,
+     $               ONE,
      $               A, LDA, B, LDB )
 *
 *        Apply row interchanges to the solution vectors.

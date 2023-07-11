@@ -166,7 +166,8 @@
       EXTERNAL     LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     CLAHEF_AA, CGEMM, CCOPY, CSWAP, CSCAL, XERBLA
+      EXTERNAL     CLAHEF_AA, CGEMM, CCOPY, CSWAP, CSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    REAL, CONJG, MAX
@@ -440,7 +441,8 @@
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL CGEMM( 'No transpose', 'Conjugate transpose',
+                     CALL CGEMM( 'No transpose',
+     $                           'Conjugate transpose',
      $                           MJ, 1, JB+1,
      $                          -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,

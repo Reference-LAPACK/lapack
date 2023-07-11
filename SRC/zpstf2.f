@@ -139,7 +139,8 @@
 *> \ingroup pstf2
 *
 *  =====================================================================
-      SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,7 +177,8 @@
       EXTERNAL           DLAMCH, LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZGEMV, ZLACGV, ZSWAP, XERBLA
+      EXTERNAL           ZDSCAL, ZGEMV, ZLACGV, ZSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX, SQRT
@@ -301,7 +303,8 @@
 *
             IF( J.LT.N ) THEN
                CALL ZLACGV( J-1, A( 1, J ), 1 )
-               CALL ZGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ), LDA,
+               CALL ZGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ),
+     $                     LDA,
      $                     A( 1, J ), 1, CONE, A( J, J+1 ), LDA )
                CALL ZLACGV( J-1, A( 1, J ), 1 )
                CALL ZDSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
@@ -347,7 +350,8 @@
                A( PVT, PVT ) = A( J, J )
                CALL ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                IF( PVT.LT.N )
-     $            CALL ZSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT ),
+     $            CALL ZSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1,
+     $                        PVT ),
      $                        1 )
                DO 170 I = J + 1, PVT - 1
                   ZTEMP = DCONJG( A( I, J ) )

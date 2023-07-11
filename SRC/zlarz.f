@@ -167,7 +167,8 @@
      $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGEMV, ZGERC, ZGERU, ZLACGV
+      EXTERNAL           ZAXPY, ZCOPY, ZGEMV, ZGERC, ZGERU,
+     $                   ZLACGV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -188,7 +189,8 @@
 *
 *           w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) )
 *
-            CALL ZGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1, 1 ),
+            CALL ZGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1,
+     $                  1 ),
      $                  LDC, V, INCV, ONE, WORK, 1 )
             CALL ZLACGV( N, WORK, 1 )
 *
@@ -215,7 +217,8 @@
 *
 *           w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l )
 *
-            CALL ZGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC,
+            CALL ZGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ),
+     $                  LDC,
      $                  V, INCV, ONE, WORK, 1 )
 *
 *           C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m )

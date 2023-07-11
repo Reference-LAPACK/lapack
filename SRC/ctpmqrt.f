@@ -212,7 +212,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
+      SUBROUTINE CTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T,
+     $                    LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
 *  -- LAPACK computational routine --

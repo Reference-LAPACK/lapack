@@ -368,7 +368,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
+      SUBROUTINE ZGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHA, BETA, VL, LDVL, VR, LDVR, ILO, IHI,
      $                   LSCALE, RSCALE, ABNRM, BBNRM, RCONDE, RCONDV,
      $                   WORK, LWORK, RWORK, IWORK, BWORK, INFO )
@@ -415,7 +416,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD,
+      EXTERNAL           DLASCL, XERBLA, ZGEQRF, ZGGBAK, ZGGBAL,
+     $                   ZGGHRD,
      $                   ZHGEQZ, ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZTGSNA,
      $                   ZUNGQR, ZUNMQR
 *     ..
@@ -514,12 +516,15 @@
             END IF
             MAXWRK = MINWRK
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N,
+     $                                  0 ) )
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N,
+     $                                  0 ) )
             IF( ILVL ) THEN
                MAXWRK = MAX( MAXWRK, N +
-     $                       N*ILAENV( 1, 'ZUNGQR', ' ', N, 1, N, 0 ) )
+     $                       N*ILAENV( 1, 'ZUNGQR', ' ', N, 1, N,
+     $                                 0 ) )
             END IF
          END IF
          WORK( 1 ) = MAXWRK
@@ -580,7 +585,8 @@
 *     Permute and/or balance the matrix pair (A,B)
 *     (Real Workspace: need 6*N if BALANC = 'S' or 'B', 1 otherwise)
 *
-      CALL ZGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL ZGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+     $             RSCALE,
      $             RWORK, IERR )
 *
 *     Compute ABNRM and BBNRM
@@ -749,7 +755,8 @@
 *     (Workspace: none needed)
 *
       IF( ILVL ) THEN
-         CALL ZGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N, VL,
+         CALL ZGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VL,
      $                LDVL, IERR )
 *
          DO 50 JC = 1, N
@@ -767,7 +774,8 @@
       END IF
 *
       IF( ILVR ) THEN
-         CALL ZGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N, VR,
+         CALL ZGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VR,
      $                LDVR, IERR )
          DO 80 JC = 1, N
             TEMP = ZERO

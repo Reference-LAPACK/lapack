@@ -355,7 +355,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
@@ -400,7 +401,8 @@
       EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP, CUNMTR,
+      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP,
+     $                   CUNMTR,
      $                   SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -677,7 +679,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

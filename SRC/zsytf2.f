@@ -482,7 +482,8 @@
                JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 )
+                  JMAX = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ),
+     $                                  1 )
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -514,7 +515,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
                CALL ZSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
                T = A( KK, KK )

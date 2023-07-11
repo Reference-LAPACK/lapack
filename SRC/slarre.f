@@ -357,7 +357,8 @@
 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLARNV, SLARRA, SLARRB, SLARRC, SLARRD,
+      EXTERNAL           SCOPY, SLARNV, SLARRA, SLARRB, SLARRC,
+     $                   SLARRD,
      $                   SLASQ2, SLARRK
 *     ..
 *     .. Intrinsic Functions ..

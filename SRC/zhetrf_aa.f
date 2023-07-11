@@ -165,7 +165,8 @@
       EXTERNAL     LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     ZLAHEF_AA, ZGEMM, ZGEMV, ZCOPY, ZSCAL, ZSWAP, XERBLA
+      EXTERNAL     ZLAHEF_AA, ZGEMM, ZGEMV, ZCOPY, ZSCAL, ZSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    DBLE, DCONJG, MAX
@@ -439,7 +440,8 @@
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL ZGEMM( 'No transpose', 'Conjugate transpose',
+                     CALL ZGEMM( 'No transpose',
+     $                           'Conjugate transpose',
      $                           MJ, 1, JB+1,
      $                          -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,

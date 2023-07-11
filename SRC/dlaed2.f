@@ -208,7 +208,8 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE DLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA, W,
+      SUBROUTINE DLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA,
+     $                   W,
      $                   Q2, INDX, INDXC, INDXP, COLTYP, INFO )
 *
 *  -- LAPACK computational routine --
@@ -247,7 +248,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DLAMRG, DROT, DSCAL, XERBLA
+      EXTERNAL           DCOPY, DLACPY, DLAMRG, DROT, DSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT

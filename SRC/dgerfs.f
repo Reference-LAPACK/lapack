@@ -181,7 +181,8 @@
 *> \ingroup gerfs
 *
 *  =====================================================================
-      SUBROUTINE DGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE DGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -222,7 +223,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DGETRS, DLACN2, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DGEMV, DGETRS, DLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -393,14 +395,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL DGETRS( TRANST, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+               CALL DGETRS( TRANST, N, 1, AF, LDAF, IPIV,
+     $                      WORK( N+1 ),
      $                      N, INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -412,7 +416,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL DGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
+               CALL DGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+     $                      N,
      $                      INFO )
             END IF
             GO TO 100

@@ -279,7 +279,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+      SUBROUTINE CHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T,
+     $                   LDT,
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
      $                   RWORK, INFO )
 *
@@ -579,7 +580,8 @@
                      CALL CROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL CROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL CROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, CONJG( S ) )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -606,12 +608,14 @@
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = CZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL CROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
+     $                  CALL CROT( ILASTM-JCH-1, T( JCH, JCH+2 ),
+     $                             LDT,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
                      CALL CROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL CROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL CROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, CONJG( S ) )
                      CTEMP = H( JCH+1, JCH )
                      CALL CLARTG( CTEMP, H( JCH+1, JCH-1 ), C, S,
@@ -622,7 +626,8 @@
                      CALL CROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL CROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
+     $                  CALL CROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ),
+     $                             1,
      $                             C, S )
    30             CONTINUE
                   GO TO 50
@@ -657,7 +662,8 @@
          CALL CROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL CROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
+     $      CALL CROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C,
+     $                 S )
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA
 *
@@ -667,8 +673,10 @@
             SIGNBC = CONJG( T( ILAST, ILAST ) / ABSB )
             T( ILAST, ILAST ) = ABSB
             IF( ILSCHR ) THEN
-               CALL CSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ), 1 )
-               CALL CSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST ),
+               CALL CSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ),
+     $                     1 )
+               CALL CSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM,
+     $                     ILAST ),
      $                     1 )
             ELSE
                CALL CSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )

@@ -156,7 +156,8 @@
 *> \ingroup hpgv
 *
 *  =====================================================================
-      SUBROUTINE SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ,
+     $                  WORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine --
@@ -184,7 +185,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPPTRF, SSPEV, SSPGST, STPMV, STPSV, XERBLA
+      EXTERNAL           SPPTRF, SSPEV, SSPGST, STPMV, STPSV,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *

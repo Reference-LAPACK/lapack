@@ -260,7 +260,8 @@
 *> \ingroup hbevx
 *
 *  =====================================================================
-      SUBROUTINE DSBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ, VL,
+      SUBROUTINE DSBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ,
+     $                   VL,
      $                   VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK, IWORK,
      $                   IFAIL, INFO )
 *
@@ -300,7 +301,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DLACPY, DLASCL, DSBTRD, DSCAL,
+      EXTERNAL           DCOPY, DGEMV, DLACPY, DLASCL, DSBTRD,
+     $                   DSCAL,
      $                   DSTEBZ, DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -408,9 +410,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA

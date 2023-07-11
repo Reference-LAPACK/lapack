@@ -203,7 +203,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSP, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SOPMTR, SSCAL, SSPTRD, SSTEDC, SSTERF, XERBLA
+      EXTERNAL           SOPMTR, SSCAL, SSPTRD, SSTEDC, SSTERF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -218,7 +219,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR.
+     $         LSAME( UPLO, 'L' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -297,7 +299,8 @@
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
+      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ),
+     $             IINFO )
 *
 *     For eigenvalues only, call SSTERF.  For eigenvectors, first call
 *     SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
@@ -309,9 +312,11 @@
       ELSE
          INDWRK = INDTAU + N
          LLWORK = LWORK - INDWRK + 1
-         CALL SSTEDC( 'I', N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL SSTEDC( 'I', N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                LLWORK, IWORK, LIWORK, INFO )
-         CALL SOPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL SOPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z,
+     $                LDZ,
      $                WORK( INDWRK ), IINFO )
       END IF
 *

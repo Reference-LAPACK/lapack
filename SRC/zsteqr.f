@@ -169,7 +169,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANST, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAE2, DLAEV2, DLARTG, DLASCL, DLASRT, XERBLA,
+      EXTERNAL           DLAE2, DLAEV2, DLARTG, DLASCL, DLASRT,
+     $                   XERBLA,
      $                   ZLASET, ZLASR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -275,13 +276,15 @@
      $   GO TO 10
       IF( ANORM.GT.SSFMAX ) THEN
          ISCALE = 1
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ),
+     $                N,
      $                INFO )
          CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
      $                INFO )
       ELSE IF( ANORM.LT.SSFMIN ) THEN
          ISCALE = 2
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ),
+     $                N,
      $                INFO )
          CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
      $                INFO )
@@ -324,7 +327,8 @@
 *
          IF( M.EQ.L+1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL DLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C, S )
+               CALL DLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C,
+     $                      S )
                WORK( L ) = C
                WORK( N-1+L ) = S
                CALL ZLASR( 'R', 'V', 'B', N, 2, WORK( L ),
@@ -383,7 +387,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = M - L + 1
-            CALL ZLASR( 'R', 'V', 'B', N, MM, WORK( L ), WORK( N-1+L ),
+            CALL ZLASR( 'R', 'V', 'B', N, MM, WORK( L ),
+     $                  WORK( N-1+L ),
      $                  Z( 1, L ), LDZ )
          END IF
 *
@@ -431,7 +436,8 @@
 *
          IF( M.EQ.L-1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL DLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C, S )
+               CALL DLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C,
+     $                      S )
                WORK( M ) = C
                WORK( N-1+M ) = S
                CALL ZLASR( 'R', 'V', 'F', N, 2, WORK( M ),
@@ -490,7 +496,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = L - M + 1
-            CALL ZLASR( 'R', 'V', 'F', N, MM, WORK( M ), WORK( N-1+M ),
+            CALL ZLASR( 'R', 'V', 'F', N, MM, WORK( M ),
+     $                  WORK( N-1+M ),
      $                  Z( 1, M ), LDZ )
          END IF
 *
@@ -516,12 +523,14 @@
       IF( ISCALE.EQ.1 ) THEN
          CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1,
+     $                E( LSV ),
      $                N, INFO )
       ELSE IF( ISCALE.EQ.2 ) THEN
          CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1,
+     $                E( LSV ),
      $                N, INFO )
       END IF
 *

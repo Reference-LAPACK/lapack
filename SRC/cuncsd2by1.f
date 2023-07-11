@@ -251,7 +251,8 @@
 *> \ingroup uncsd2by1
 *
 *  =====================================================================
-      SUBROUTINE CUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11, LDX11,
+      SUBROUTINE CUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11,
+     $                       LDX11,
      $                       X21, LDX21, THETA, U1, LDU1, U2, LDU2, V1T,
      $                       LDV1T, WORK, LWORK, RWORK, LRWORK, IWORK,
      $                       INFO )
@@ -294,7 +295,8 @@
       COMPLEX            CDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CBBCSD, CCOPY, CLACPY, CLAPMR, CLAPMT, CUNBDB1,
+      EXTERNAL           CBBCSD, CCOPY, CLACPY, CLAPMR, CLAPMT,
+     $                   CUNBDB1,
      $                   CUNBDB2, CUNBDB3, CUNBDB4, CUNGLQ, CUNGQR,
      $                   XERBLA
 *     ..
@@ -413,17 +415,20 @@
                LORGLQMIN = MAX( LORGLQMIN, Q-1 )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL CBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
+            CALL CBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q,
+     $                   THETA,
      $                   DUM(1), U1, LDU1, U2, LDU2, V1T, LDV1T, CDUM,
      $                   1, DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE IF( R .EQ. P ) THEN
-            CALL CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
+            CALL CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM,
      $                    CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL CUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, CDUM, WORK(1),
+               CALL CUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, CDUM,
+     $                      WORK(1),
      $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
@@ -440,13 +445,15 @@
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL CBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
+            CALL CBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P,
+     $                   THETA,
      $                   DUM, V1T, LDV1T, CDUM, 1, U1, LDU1, U2, LDU2,
      $                   DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE IF( R .EQ. M-P ) THEN
-            CALL CUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
+            CALL CUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM,
      $                    CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
@@ -473,7 +480,8 @@
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE
-            CALL CUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
+            CALL CUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM,
      $                    CDUM, CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO
      $                  )
             LORBDB = M + INT( WORK(1) )
@@ -484,7 +492,8 @@
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL CUNGQR( M-P, M-P, M-Q, U2, LDU2, CDUM, WORK(1), -1,
+               CALL CUNGQR( M-P, M-P, M-Q, U2, LDU2, CDUM, WORK(1),
+     $                      -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
@@ -544,7 +553,8 @@
 *
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL CLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGQR),
      $                   LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -560,7 +570,8 @@
             END DO
             CALL CLACPY( 'U', Q-1, Q-1, X21(1,2), LDX21, V1T(2,2),
      $                   LDV1T )
-            CALL CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
          END IF
 *
@@ -603,7 +614,8 @@
                U1(1,J) = ZERO
                U1(J,1) = ZERO
             END DO
-            CALL CLACPY( 'L', P-1, P-1, X11(2,1), LDX11, U1(2,2), LDU1 )
+            CALL CLACPY( 'L', P-1, P-1, X11(2,1), LDX11, U1(2,2),
+     $                   LDU1 )
             CALL CUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, WORK(ITAUP1),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
@@ -653,7 +665,8 @@
 *
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL CLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGQR),
      $                   LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -737,7 +750,8 @@
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
             CALL CLACPY( 'U', M-Q, Q, X21, LDX21, V1T, LDV1T )
-            CALL CLACPY( 'U', P-(M-Q), Q-(M-Q), X11(M-Q+1,M-Q+1), LDX11,
+            CALL CLACPY( 'U', P-(M-Q), Q-(M-Q), X11(M-Q+1,M-Q+1),
+     $                   LDX11,
      $                   V1T(M-Q+1,M-Q+1), LDV1T )
             CALL CLACPY( 'U', -P+Q, Q-P, X21(M-Q+1,P+1), LDX21,
      $                   V1T(P+1,P+1), LDV1T )

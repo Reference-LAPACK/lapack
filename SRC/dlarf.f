@@ -195,7 +195,8 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-            CALL DGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, INCV,
+            CALL DGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V,
+     $                  INCV,
      $           ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T

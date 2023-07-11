@@ -209,7 +209,8 @@
 *           Compute elements J+1:N of column J.
 *
             IF( J.LT.N ) THEN
-               CALL DGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1, 1 ),
+               CALL DGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1,
+     $                     1 ),
      $                     LDA, A( J, 1 ), LDA, ONE, A( J+1, J ), 1 )
                CALL DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF

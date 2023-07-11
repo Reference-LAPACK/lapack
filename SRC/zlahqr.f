@@ -288,7 +288,8 @@
             CALL ZSCAL( MIN( JHI, I+1 )-JLO+1, DCONJG( SC ),
      $                  H( JLO, I ), 1 )
             IF( WANTZ )
-     $         CALL ZSCAL( IHIZ-ILOZ+1, DCONJG( SC ), Z( ILOZ, I ), 1 )
+     $         CALL ZSCAL( IHIZ-ILOZ+1, DCONJG( SC ), Z( ILOZ, I ),
+     $                     1 )
          END IF
    20 CONTINUE
 *
@@ -525,7 +526,8 @@
                   IF( J.NE.M+1 ) THEN
                      IF( I2.GT.J )
      $                  CALL ZSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
-                     CALL ZSCAL( J-I1, DCONJG( TEMP ), H( I1, J ), 1 )
+                     CALL ZSCAL( J-I1, DCONJG( TEMP ), H( I1, J ),
+     $                           1 )
                      IF( WANTZ ) THEN
                         CALL ZSCAL( NZ, DCONJG( TEMP ), Z( ILOZ, J ),
      $                              1 )

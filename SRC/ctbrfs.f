@@ -220,7 +220,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CLACN2, CTBMV, CTBSV, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CLACN2, CTBMV, CTBSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL

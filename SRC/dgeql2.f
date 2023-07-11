@@ -180,7 +180,8 @@
 *
          AII = A( M-K+I, N-K+I )
          A( M-K+I, N-K+I ) = ONE
-         CALL DLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1, TAU( I ),
+         CALL DLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
+     $               TAU( I ),
      $               A, LDA, WORK )
          A( M-K+I, N-K+I ) = AII
    10 CONTINUE

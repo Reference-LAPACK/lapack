@@ -119,7 +119,8 @@
 *> \ingroup la_herpvgrw
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION ZLA_HERPVGRW( UPLO, N, INFO, A, LDA,
+     $                                        AF,
      $                                        LDAF, IPIV, WORK )
 *
 *  -- LAPACK computational routine --

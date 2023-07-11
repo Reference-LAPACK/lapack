@@ -192,7 +192,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGBTRF, ZGEMM, ZGETRF,  
+      EXTERNAL           XERBLA, ZCOPY, ZGBTRF, ZGEMM,
+     $                   ZGETRF,
      $                   ZLACPY, ZLASET, ZLASWP, ZTRSM, ZSWAP 
 *     ..
 *     .. Intrinsic Functions ..

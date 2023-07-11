@@ -231,7 +231,8 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
@@ -243,7 +244,8 @@
 *
 *              Multiply by inv(A**T).
 *
-               CALL SLATRS( UPLO, 'Transpose', DIAG, NORMIN, N, A, LDA,
+               CALL SLATRS( UPLO, 'Transpose', DIAG, NORMIN, N, A,
+     $                      LDA,
      $                      WORK, SCALE, WORK( 2*N+1 ), INFO )
             END IF
             NORMIN = 'Y'

@@ -318,7 +318,8 @@
 *        the matrices X and Y which are needed to update the unreduced
 *        part of the matrix
 *
-         CALL CLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ), E( I ),
+         CALL CLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ),
+     $                E( I ),
      $                TAUQ( I ), TAUP( I ), WORK, LDWRKX,
      $                WORK( LDWRKX*NB+1 ), LDWRKY )
 *
@@ -329,7 +330,8 @@
      $               N-I-NB+1, NB, -ONE, A( I+NB, I ), LDA,
      $               WORK( LDWRKX*NB+NB+1 ), LDWRKY, ONE,
      $               A( I+NB, I+NB ), LDA )
-         CALL CGEMM( 'No transpose', 'No transpose', M-I-NB+1, N-I-NB+1,
+         CALL CGEMM( 'No transpose', 'No transpose', M-I-NB+1,
+     $               N-I-NB+1,
      $               NB, -ONE, WORK( NB+1 ), LDWRKX, A( I, I+NB ), LDA,
      $               ONE, A( I+NB, I+NB ), LDA )
 *

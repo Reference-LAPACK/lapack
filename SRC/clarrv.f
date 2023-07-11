@@ -335,7 +335,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLAR1V, CLASET, CSSCAL, SCOPY, SLARRB,
+      EXTERNAL           CLAR1V, CLASET, CSSCAL, SCOPY,
+     $                   SLARRB,
      $                   SLARRF
 *     ..
 *     .. Intrinsic Functions ..

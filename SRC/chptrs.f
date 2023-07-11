@@ -144,7 +144,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CLACGV, CSSCAL, CSWAP, XERBLA
+      EXTERNAL           CGEMV, CGERU, CLACGV, CSSCAL, CSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, REAL
@@ -370,7 +371,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL CGERU( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K, 1 ),
+               CALL CGERU( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K,
+     $                     1 ),
      $                     LDB, B( K+2, 1 ), LDB )
                CALL CGERU( N-K-1, NRHS, -ONE, AP( KC+N-K+2 ), 1,
      $                     B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

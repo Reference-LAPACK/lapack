@@ -239,7 +239,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
+      SUBROUTINE CLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB,
+     $                   X,
      $                   SCALE, CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -275,7 +276,8 @@
       INTEGER            ICAMAX, ISAMAX
       REAL               SCASUM, SLAMCH
       COMPLEX            CDOTC, CDOTU, CLADIV
-      EXTERNAL           LSAME, ICAMAX, ISAMAX, SCASUM, SLAMCH, CDOTC,
+      EXTERNAL           LSAME, ICAMAX, ISAMAX, SCASUM, SLAMCH,
+     $                   CDOTC,
      $                   CDOTU, CLADIV
 *     ..
 *     .. External Subroutines ..

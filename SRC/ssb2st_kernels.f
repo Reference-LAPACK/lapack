@@ -289,7 +289,8 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = ( A( DPOS-NB, J1 ) )
-                  CALL SLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
+                  CALL SLARFG( LM, CTMP, V( VPOS+1 ), 1,
+     $                         TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *
                   CALL SLARFX( 'Right', LN-1, LM, V( VPOS ),

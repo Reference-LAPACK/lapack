@@ -618,7 +618,8 @@
 *                    Compute the update
 *                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j)
 *
-                     CALL SAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1, X,
+                     CALL SAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1,
+     $                           X,
      $                           1 )
                      I = ISAMAX( J-1, X, 1 )
                      XMAX = ABS( X( I ) )

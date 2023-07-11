@@ -165,10 +165,12 @@
          DO 10 I = 1, N
             AII = REAL( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ), LDA,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ),
+     $            LDA,
      $                     A( I, I+1 ), LDA ) )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1,
+     $                     I+1 ),
      $                     LDA, A( I, I+1 ), LDA, CMPLX( AII ),
      $                     A( 1, I ), 1 )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
@@ -184,7 +186,8 @@
          DO 20 I = 1, N
             AII = REAL( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ), 1,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ),
+     $            1,
      $                     A( I+1, I ), 1 ) )
                CALL CLACGV( I-1, A( I, 1 ), LDA )
                CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,

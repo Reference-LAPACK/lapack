@@ -500,7 +500,8 @@
 *> \ingroup hesvxx
 *
 *  =====================================================================
-      SUBROUTINE ZSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
@@ -628,7 +629,8 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL ZSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
+         CALL ZSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                 INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
@@ -648,7 +650,8 @@
 *        Compute the LDL^T or UDU^T factorization of A.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL ZSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
+         CALL ZSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N),
+     $                INFO )
 *
 *        Return if INFO is non-zero.
 *

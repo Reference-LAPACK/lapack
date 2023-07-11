@@ -219,7 +219,8 @@
 *
             IF( K.GT.1 ) THEN
                CALL ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL ZSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL ZSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        ZDOTU( K-1, WORK, 1, AP( KC ), 1 )
@@ -244,18 +245,21 @@
 *
             IF( K.GT.1 ) THEN
                CALL ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL ZSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL ZSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        ZDOTU( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            ZDOTU( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            ZDOTU( K-1, AP( KC ), 1,
+     $                                   AP( KCNEXT ),
      $                            1 )
                CALL ZCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL ZSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          ZDOTU( K-1, WORK, 1, AP( KCNEXT ), 1 )
+     $                          ZDOTU( K-1, WORK, 1, AP( KCNEXT ),
+     $                                 1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT + K + 1
@@ -346,7 +350,8 @@
 *
             IF( K.LT.N ) THEN
                CALL ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL ZSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL ZSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KC+1 ), 1 )
                AP( KC ) = AP( KC ) - ZDOTU( N-K, WORK, 1, AP( KC+1 ),
      $                    1 )
@@ -354,10 +359,12 @@
      $                          ZDOTU( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL ZCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL ZSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL ZSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        ZDOTU( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )
+     $                        ZDOTU( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                               1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT - ( N-K+3 )

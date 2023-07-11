@@ -173,7 +173,8 @@
       EXTERNAL           LSAME, ILAENV, ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SGEMV, SSCAL, SCOPY, SSWAP, SLASET,
+      EXTERNAL           SAXPY, SGEMV, SSCAL, SCOPY, SSWAP,
+     $                   SLASET,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

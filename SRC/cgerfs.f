@@ -182,7 +182,8 @@
 *> \ingroup gerfs
 *
 *  =====================================================================
-      SUBROUTINE CGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE CGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -230,7 +231,8 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGETRS, CLACN2, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGETRS, CLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -308,7 +310,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK,
+         CALL CGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
+     $               WORK,
      $               1 )
 *
 *        Compute componentwise relative backward error from formula

@@ -200,7 +200,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE SSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                         LDZ,
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -238,7 +239,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, SSCAL, SSTEQR, SSTERF, XERBLA,
+      EXTERNAL           SLASCL, SSCAL, SSTEQR, SSTERF,
+     $                   XERBLA,
      $                   SSYTRD_SB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -331,9 +333,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -353,7 +357,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                INFO )
       END IF
 *

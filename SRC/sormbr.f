@@ -328,7 +328,8 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL SORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+            CALL SORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA,
+     $                   TAU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE

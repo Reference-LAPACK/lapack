@@ -294,7 +294,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
+      SUBROUTINE CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA,
+     $                  A,
      $                  B, LDB )
 *
 *  -- LAPACK computational routine --
@@ -349,7 +350,8 @@
          INFO = -3
       ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -4
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND.
+     $         .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -5
       ELSE IF( M.LT.0 ) THEN
@@ -420,12 +422,15 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A, M, B, LDB )
                      ELSE
-                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M, B, LDB )
-                        CALL CGEMM( 'N', 'N', M2, N, M1, -CONE, A( M1 ),
+                        CALL CGEMM( 'N', 'N', M2, N, M1, -CONE,
+     $                              A( M1 ),
      $                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
                         CALL CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
      $                              A( M ), M, B( M1, 0 ), LDB )
@@ -437,12 +442,15 @@
 *                    TRANS = 'C'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M, B, LDB )
                      ELSE
-                        CALL CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
+                        CALL CTRSM( 'L', 'U', 'N', DIAG, M2, N,
+     $                              ALPHA,
      $                              A( M ), M, B( M1, 0 ), LDB )
-                        CALL CGEMM( 'C', 'N', M1, N, M2, -CONE, A( M1 ),
+                        CALL CGEMM( 'C', 'N', M1, N, M2, -CONE,
+     $                              A( M1 ),
      $                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
                         CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
      $                              A( 0 ), M, B, LDB )
@@ -461,7 +469,8 @@
 *
                      CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
      $                           A( M2 ), M, B, LDB )
-                     CALL CGEMM( 'C', 'N', M2, N, M1, -CONE, A( 0 ), M,
+                     CALL CGEMM( 'C', 'N', M2, N, M1, -CONE, A( 0 ),
+     $                           M,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
@@ -473,7 +482,8 @@
 *
                      CALL CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
-                     CALL CGEMM( 'N', 'N', M1, N, M2, -CONE, A( 0 ), M,
+                     CALL CGEMM( 'N', 'N', M1, N, M2, -CONE, A( 0 ),
+     $                           M,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
      $                           A( M2 ), M, B, LDB )
@@ -496,10 +506,12 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                         CALL CGEMM( 'C', 'N', M2, N, M1, -CONE,
      $                              A( M1*M1 ), M1, B, LDB, ALPHA,
@@ -514,10 +526,12 @@
 *                    TRANS = 'C'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA,
+                        CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N,
+     $                              ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA,
+                        CALL CTRSM( 'L', 'L', 'C', DIAG, M2, N,
+     $                              ALPHA,
      $                              A( 1 ), M1, B( M1, 0 ), LDB )
                         CALL CGEMM( 'N', 'N', M1, N, M2, -CONE,
      $                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
@@ -539,7 +553,8 @@
 *
                      CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
      $                           A( M2*M2 ), M2, B, LDB )
-                     CALL CGEMM( 'N', 'N', M2, N, M1, -CONE, A( 0 ), M2,
+                     CALL CGEMM( 'N', 'N', M2, N, M1, -CONE, A( 0 ),
+     $                           M2,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL CTRSM( 'L', 'L', 'N', DIAG, M2, N, CONE,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
@@ -551,7 +566,8 @@
 *
                      CALL CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
-                     CALL CGEMM( 'C', 'N', M1, N, M2, -CONE, A( 0 ), M2,
+                     CALL CGEMM( 'C', 'N', M1, N, M2, -CONE, A( 0 ),
+     $                           M2,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N, CONE,
      $                           A( M2*M2 ), M2, B, LDB )
@@ -611,7 +627,8 @@
 *
                      CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
      $                           A( K+1 ), M+1, B, LDB )
-                     CALL CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ), M+1,
+                     CALL CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ),
+     $                           M+1,
      $                           B, LDB, ALPHA, B( K, 0 ), LDB )
                      CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, CONE,
      $                           A( K ), M+1, B( K, 0 ), LDB )
@@ -622,7 +639,8 @@
 *                    and TRANS = 'C'
                      CALL CTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
      $                           A( K ), M+1, B( K, 0 ), LDB )
-                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), M+1,
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ),
+     $                           M+1,
      $                           B( K, 0 ), LDB, ALPHA, B, LDB )
                      CALL CTRSM( 'L', 'L', 'C', DIAG, K, N, CONE,
      $                           A( K+1 ), M+1, B, LDB )
@@ -678,7 +696,8 @@
 *
                      CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, ALPHA,
      $                           A( K*( K+1 ) ), K, B, LDB )
-                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), K, B,
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), K,
+     $                           B,
      $                           LDB, ALPHA, B( K, 0 ), LDB )
                      CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, CONE,
      $                           A( K*K ), K, B( K, 0 ), LDB )
@@ -744,7 +763,8 @@
 *
                      CALL CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
      $                           A( N ), N, B( 0, N1 ), LDB )
-                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1 ),
+                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
@@ -757,7 +777,8 @@
 *
                      CALL CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N, B( 0, 0 ), LDB )
-                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0,
+     $                           0 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
@@ -776,7 +797,8 @@
 *
                      CALL CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
-                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0,
+     $                           0 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
@@ -789,7 +811,8 @@
 *
                      CALL CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
      $                           A( N1 ), N, B( 0, N1 ), LDB )
-                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1 ),
+                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, 0 ), LDB )
                      CALL CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
@@ -813,7 +836,8 @@
 *
                      CALL CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( 1 ), N1, B( 0, N1 ), LDB )
-                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1 ),
+                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,
@@ -826,7 +850,8 @@
 *
                      CALL CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N1, B( 0, 0 ), LDB )
-                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0,
+     $                           0 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
@@ -845,7 +870,8 @@
 *
                      CALL CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
-                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0,
+     $                           0 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, N1 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
@@ -858,7 +884,8 @@
 *
                      CALL CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
-                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1 ),
+                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0,
+     $                           N1 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, 0 ),
      $                           LDB )
                      CALL CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,

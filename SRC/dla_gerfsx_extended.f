@@ -388,7 +388,8 @@
 *> \ingroup la_gerfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE DLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE DLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $                                A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
@@ -451,7 +452,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGETRS, DGEMV, BLAS_DGEMV_X,
+      EXTERNAL           DAXPY, DCOPY, DGETRS, DGEMV,
+     $                   BLAS_DGEMV_X,
      $                   BLAS_DGEMV2_X, DLA_GEAMV, DLA_WWADDW, DLAMCH,
      $                   CHLA_TRANSTYPE, DLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
@@ -501,7 +503,8 @@
 *
             CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL DGEMV( TRANS, N, N, -1.0D+0, A, LDA, Y( 1, J ), 1,
+               CALL DGEMV( TRANS, N, N, -1.0D+0, A, LDA, Y( 1, J ),
+     $                     1,
      $              1.0D+0, RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_DGEMV_X( TRANS_TYPE, N, N, -1.0D+0, A, LDA,

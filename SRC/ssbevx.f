@@ -260,7 +260,8 @@
 *> \ingroup hbevx
 *
 *  =====================================================================
-      SUBROUTINE SSBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ, VL,
+      SUBROUTINE SSBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ,
+     $                   VL,
      $                   VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK, IWORK,
      $                   IFAIL, INFO )
 *
@@ -300,7 +301,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SSBTRD, SSCAL,
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SSBTRD,
+     $                   SSCAL,
      $                   SSTEBZ, SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -408,9 +410,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA

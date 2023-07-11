@@ -228,7 +228,8 @@
       EXTERNAL           LSAME, CLANHP, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPTRD, CSSCAL, CSTEDC, CUPMTR, SSCAL, SSTERF,
+      EXTERNAL           CHPTRD, CSSCAL, CSTEDC, CUPMTR, SSCAL,
+     $                   SSTERF,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -244,7 +245,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR.
+     $         LSAME( UPLO, 'U' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -342,10 +344,12 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL CSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL CSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                LLWRK, RWORK( INDRWK ), LLRWK, IWORK, LIWORK,
      $                INFO )
-         CALL CUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL CUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z,
+     $                LDZ,
      $                WORK( INDWRK ), IINFO )
       END IF
 *

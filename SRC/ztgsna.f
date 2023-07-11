@@ -346,10 +346,12 @@
       LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH, DLAPY2, DZNRM2
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2, ZDOTC
+      EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2,
+     $                   ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMV, ZLACPY, ZTGEXC, ZTGSYL
+      EXTERNAL           XERBLA, ZGEMV, ZLACPY, ZTGEXC,
+     $                   ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -465,7 +467,8 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) ) )
+               DIF( KS ) = DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1,
+     $              1 ) ) )
             ELSE
 *
 *              Estimate the reciprocal condition number of the k-th
@@ -479,7 +482,8 @@
                IFST = K
                ILST = 1
 *
-               CALL ZTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+               CALL ZTGEXC( .FALSE., .FALSE., N, WORK, N,
+     $                      WORK( N*N+1 ),
      $                      N, DUMMY, 1, DUMMY1, 1, IFST, ILST, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -498,7 +502,8 @@
                   N1 = 1
                   N2 = N - N1
                   I = N*N + 1
-                  CALL ZTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL ZTGSYL( 'N', IDIFJB, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ), DUMMY,

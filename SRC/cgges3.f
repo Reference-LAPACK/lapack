@@ -312,7 +312,8 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGSEN, CUNGQR, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
@@ -361,7 +362,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -534,9 +536,11 @@
 *        Undo scaling on eigenvalues before selecting
 *
          IF( ILASCL )
-     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N,
+     $                   IERR )
          IF( ILBSCL )
-     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *
@@ -544,7 +548,8 @@
             BWORK( I ) = SELCTG( ALPHA( I ), BETA( I ) )
    10    CONTINUE
 *
-         CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHA,
+         CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
+     $                ALPHA,
      $                BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL, PVSR,
      $                DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1, IERR )
          IF( IERR.EQ.1 )

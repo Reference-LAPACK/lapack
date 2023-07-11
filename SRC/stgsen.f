@@ -446,7 +446,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
+      SUBROUTINE STGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, M, PL,
      $                   PR, DIF, WORK, LWORK, IWORK, LIWORK, INFO )
 *
@@ -487,7 +488,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLACPY, SLAG2, SLASSQ, STGEXC, STGSYL,
+      EXTERNAL           SLACN2, SLACPY, SLAG2, SLASSQ, STGEXC,
+     $                   STGSYL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -635,7 +637,8 @@
 *
                KK = K
                IF( K.NE.KS )
-     $            CALL STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $            CALL STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, KK, KS, WORK, LWORK, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -669,7 +672,8 @@
          I = N1 + 1
          IJB = 0
          CALL SLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 )
-         CALL SLACPY( 'Full', N1, N2, B( 1, I ), LDB, WORK( N1*N2+1 ),
+         CALL SLACPY( 'Full', N1, N2, B( 1, I ), LDB,
+     $                WORK( N1*N2+1 ),
      $                N1 )
          CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
      $                N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ), N1,
@@ -711,14 +715,16 @@
 *
 *           Frobenius norm-based Difu-estimate.
 *
-            CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
+            CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+     $                   WORK,
      $                   N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ),
      $                   N1, DSCALE, DIF( 1 ), WORK( 2*N1*N2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
 *
 *           Frobenius norm-based Difl-estimate.
 *
-            CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA, WORK,
+            CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+     $                   WORK,
      $                   N2, B( I, I ), LDB, B, LDB, WORK( N1*N2+1 ),
      $                   N2, DSCALE, DIF( 2 ), WORK( 2*N1*N2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
@@ -747,7 +753,8 @@
 *
 *                 Solve generalized Sylvester equation.
 *
-                  CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -756,7 +763,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL STGSYL( 'T', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL STGSYL( 'T', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -776,7 +784,8 @@
 *
 *                 Solve generalized Sylvester equation.
 *
-                  CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -785,7 +794,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL STGSYL( 'T', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL STGSYL( 'T', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -827,7 +837,8 @@
                WORK( 6 ) = B( K+1, K )
                WORK( 7 ) = B( K, K+1 )
                WORK( 8 ) = B( K+1, K+1 )
-               CALL SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA( K ),
+               CALL SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS,
+     $                     BETA( K ),
      $                     BETA( K+1 ), ALPHAR( K ), ALPHAR( K+1 ),
      $                     ALPHAI( K ) )
                ALPHAI( K+1 ) = -ALPHAI( K )

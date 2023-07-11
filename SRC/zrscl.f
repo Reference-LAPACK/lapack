@@ -171,7 +171,8 @@
          ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
             IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
 *              This means that a and b are both Inf. No need for scaling.
-               CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X, INCX )
+               CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X,
+     $                     INCX )
             ELSE
                CALL ZDSCAL( N, SAFMIN, X, INCX )
                IF( (ABS( UR ).GT.OV).OR.(ABS( UI ).GT.OV) ) THEN
