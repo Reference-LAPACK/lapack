@@ -381,7 +381,8 @@
 *
 *           Scale supplied initial vector.
 *
-            NORM = DLAPY2( DNRM2( N, VR, 1 ), DNRM2( N, VI, 1 ) )
+            NORM = DLAPY2( DNRM2( N, VR, 1 ),
+     $                     DNRM2( N, VI, 1 ) )
             REC = ( EPS3*ROOTN ) / MAX( NORM, NRMSML )
             CALL DSCAL( N, REC, VR, 1 )
             CALL DSCAL( N, REC, VI, 1 )

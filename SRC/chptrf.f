@@ -594,7 +594,8 @@
 *                 where L(k) and L(k+1) are the k-th and (k+1)-th
 *                 columns of L
 *
-                  D = SLAPY2( REAL( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ),
+                  D = SLAPY2(
+     $                REAL( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ),
      $                AIMAG( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ) )
                   D11 = REAL( AP( K+1+K*( 2*N-K-1 ) / 2 ) ) / D
                   D22 = REAL( AP( K+( K-1 )*( 2*N-K ) / 2 ) ) / D

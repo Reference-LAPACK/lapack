@@ -381,7 +381,8 @@
 *
 *           Scale supplied initial vector.
 *
-            NORM = SLAPY2( SNRM2( N, VR, 1 ), SNRM2( N, VI, 1 ) )
+            NORM = SLAPY2( SNRM2( N, VR, 1 ),
+     $                     SNRM2( N, VI, 1 ) )
             REC = ( EPS3*ROOTN ) / MAX( NORM, NRMSML )
             CALL SSCAL( N, REC, VR, 1 )
             CALL SSCAL( N, REC, VI, 1 )

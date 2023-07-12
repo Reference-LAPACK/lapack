@@ -521,7 +521,8 @@
      $              LDA, Y( 1, J ), 1, (1.0E+0,0.0E+0),
      $              RES, 1, PREC_TYPE )
             ELSE
-               CALL BLAS_CGEMV2_X( TRANS_TYPE, N, N, (-1.0E+0,0.0E+0),
+               CALL BLAS_CGEMV2_X( TRANS_TYPE, N, N,
+     $              (-1.0E+0,0.0E+0),
      $              A, LDA, Y(1, J), Y_TAIL, 1, (1.0E+0,0.0E+0), RES, 1,
      $              PREC_TYPE)
             END IF

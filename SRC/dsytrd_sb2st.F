@@ -273,7 +273,8 @@
      $                   SIDEV, SIZETAU, LDV, LHMIN, LWMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSB2ST_KERNELS, DLACPY, DLASET, XERBLA
+      EXTERNAL           DSB2ST_KERNELS, DLACPY,
+     $                   DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, REAL
@@ -296,13 +297,16 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB       = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', VECT, N, KD, -1, -1 )
+      IB       = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', VECT, N, KD,
+     $                      -1, -1 )
       IF( N.EQ.0 .OR. KD.LE.1 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
-         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', VECT, N, KD, IB,
+     $                      -1 )
+         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', VECT, N, KD, IB,
+     $                      -1 )
       END IF
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
@@ -494,7 +498,8 @@
 !$OMP$     DEPEND(in:WORK(MYID-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL DSB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL DSB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -504,7 +509,8 @@
 !$OMP TASK DEPEND(in:WORK(MYID+SHIFT-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL DSB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL DSB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -512,7 +518,8 @@
 !$OMP END TASK
                           ENDIF
 #else
-                          CALL DSB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                          CALL DSB2ST_KERNELS(
+     $                         UPLO, WANTQ, TTYPE,
      $                         STIND, EDIND, SWEEPID, N, KD, IB,
      $                         WORK ( INDA ), LDA,
      $                         HOUS( INDV ), HOUS( INDTAU ), LDV,

@@ -276,7 +276,8 @@
       COMPLEX*16         TMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET, XERBLA
+      EXTERNAL           ZHB2ST_KERNELS, ZLACPY,
+     $                   ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, DBLE, REAL
@@ -299,13 +300,16 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB       = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', VECT, N, KD, -1, -1 )
+      IB       = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', VECT, N, KD,
+     $                         -1, -1 )
       IF( N.EQ.0 .OR. KD.LE.1 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
-         LWMIN = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', VECT, N, KD, IB,
+     $                         -1 )
+         LWMIN = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', VECT, N, KD, IB,
+     $                         -1 )
       END IF
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
@@ -526,7 +530,8 @@ C                 END IF
 !$OMP$     DEPEND(in:WORK(MYID-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL ZHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL ZHB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -536,7 +541,8 @@ C                 END IF
 !$OMP TASK DEPEND(in:WORK(MYID+SHIFT-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL ZHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL ZHB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -544,7 +550,8 @@ C                 END IF
 !$OMP END TASK
                           ENDIF
 #else
-                          CALL ZHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                          CALL ZHB2ST_KERNELS(
+     $                         UPLO, WANTQ, TTYPE,
      $                         STIND, EDIND, SWEEPID, N, KD, IB,
      $                         WORK ( INDA ), LDA,
      $                         HOUS( INDV ), HOUS( INDTAU ), LDV,

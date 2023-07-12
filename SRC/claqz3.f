@@ -231,7 +231,8 @@
       COMPLEX :: TEMP, TEMP2, TEMP3, S
 
 *     External Functions
-      EXTERNAL :: XERBLA, CLASET, CLARTG, CROT, CLAQZ1, CGEMM, CLACPY
+      EXTERNAL :: XERBLA, CLASET, CLARTG, CROT,
+     $            CLAQZ1, CGEMM, CLACPY
       REAL, EXTERNAL :: SLAMCH
 
       INFO = 0
@@ -301,10 +302,10 @@
          END IF
 
          CALL CLARTG( TEMP2, TEMP3, C, S, TEMP )
-         CALL CROT( NS, A( ILO, ILO ), LDA, A( ILO+1, ILO ), LDA, C,
-     $              S )
-         CALL CROT( NS, B( ILO, ILO ), LDB, B( ILO+1, ILO ), LDB, C,
-     $              S )
+         CALL CROT( NS, A( ILO, ILO ), LDA, A( ILO+1, ILO ), LDA,
+     $              C, S )
+         CALL CROT( NS, B( ILO, ILO ), LDB, B( ILO+1, ILO ), LDB,
+     $              C, S )
          CALL CROT( NS+1, QC( 1, 1 ), 1, QC( 1, 2 ), 1, C,
      $              CONJG( S ) )
         
