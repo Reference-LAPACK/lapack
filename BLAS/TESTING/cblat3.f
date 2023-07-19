@@ -19,7 +19,7 @@
 *> Test program for the COMPLEX          Level 3 Blas.
 *>
 *> The program must be driven by a short data file. The first 14 records
-*> of the file are read using list-directed input, the last 9 records
+*> of the file are read using list-directed input, the last 10 records
 *> are read using the format ( A6, L2 ). An annotated example of a data
 *> file can be obtained by deleting the first 3 characters from the
 *> following 23 lines:
@@ -46,6 +46,7 @@
 *> CSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
 *> CHER2K T PUT F FOR NO TEST. SAME COLUMNS.
 *> CSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
+*> CGEMMT T PUT F FOR NO TEST. SAME COLUMNS.
 *>
 *> Further Details
 *> ===============
@@ -93,7 +94,7 @@
       INTEGER            NIN
       PARAMETER          ( NIN = 5 )
       INTEGER            NSUBS
-      PARAMETER          ( NSUBS = 9 )
+      PARAMETER          ( NSUBS = 10 )
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0, 0.0 ), ONE = ( 1.0, 0.0 ) )
       REAL               RZERO
@@ -127,6 +128,7 @@
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
       EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHKE, CMMCH
+      EXTERNAL           CCHK6
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -139,7 +141,7 @@
 *     .. Data statements ..
       DATA               SNAMES/'CGEMM ', 'CHEMM ', 'CSYMM ', 'CTRMM ',
      $                   'CTRSM ', 'CHERK ', 'CSYRK ', 'CHER2K',
-     $                   'CSYR2K'/
+     $                   'CSYR2K', 'CGEMMT'/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -317,7 +319,7 @@
             OK = .TRUE.
             FATAL = .FALSE.
             GO TO ( 140, 150, 150, 160, 160, 170, 170,
-     $              180, 180 )ISNUM
+     $              180, 180, 185 )ISNUM
 *           Test CGEMM, 01.
   140       CALL CCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
@@ -346,6 +348,11 @@
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W )
             GO TO 190
+  185       CALL CCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+     $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
+     $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
+     $                  CC, CS, CT, G )
+
 *
   190       IF( FATAL.AND.SFATAL )
      $         GO TO 210
@@ -2031,7 +2038,7 @@
       RBETA = TWO
 *
       GO TO ( 10, 20, 30, 40, 50, 60, 70, 80,
-     $        90 )ISNUM
+     $        90, 100 )ISNUM
    10 INFOT = 1
       CALL CGEMM( '/', 'N', 0, 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2212,7 +2219,7 @@
       INFOT = 13
       CALL CGEMM( 'T', 'T', 2, 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    20 INFOT = 1
       CALL CHEMM( '/', 'U', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2279,7 +2286,7 @@
       INFOT = 12
       CALL CHEMM( 'R', 'L', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    30 INFOT = 1
       CALL CSYMM( '/', 'U', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2346,7 +2353,7 @@
       INFOT = 12
       CALL CSYMM( 'R', 'L', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    40 INFOT = 1
       CALL CTRMM( '/', 'U', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2503,7 +2510,7 @@
       INFOT = 11
       CALL CTRMM( 'R', 'L', 'T', 'N', 2, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    50 INFOT = 1
       CALL CTRSM( '/', 'U', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2660,7 +2667,7 @@
       INFOT = 11
       CALL CTRSM( 'R', 'L', 'T', 'N', 2, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    60 INFOT = 1
       CALL CHERK( '/', 'N', 0, 0, RALPHA, A, 1, RBETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2715,7 +2722,7 @@
       INFOT = 10
       CALL CHERK( 'L', 'C', 2, 0, RALPHA, A, 1, RBETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    70 INFOT = 1
       CALL CSYRK( '/', 'N', 0, 0, ALPHA, A, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2770,7 +2777,7 @@
       INFOT = 10
       CALL CSYRK( 'L', 'T', 2, 0, ALPHA, A, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    80 INFOT = 1
       CALL CHER2K( '/', 'N', 0, 0, ALPHA, A, 1, B, 1, RBETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2837,7 +2844,7 @@
       INFOT = 12
       CALL CHER2K( 'L', 'C', 2, 0, ALPHA, A, 1, B, 1, RBETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 100
+      GO TO 110
    90 INFOT = 1
       CALL CSYR2K( '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2904,8 +2911,186 @@
       INFOT = 12
       CALL CSYR2K( 'L', 'T', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 110
+  100 INFOT = 1
+      CALL CGEMMT( '/', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'N', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'N', 'C', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'T', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'T', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'T', 'C', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'C', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'C', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 1
+      CALL CGEMMT( '/', 'C', 'C', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+
+      INFOT = 2
+      CALL CGEMMT( 'U', '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEMMT( 'U', '/', 'C', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEMMT( 'U', '/', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEMMT( 'L', '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEMMT( 'L', '/', 'C', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEMMT( 'L', '/', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+
+      INFOT = 3
+      CALL CGEMMT( 'U', 'N', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL CGEMMT( 'U', 'C', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL CGEMMT( 'U', 'T', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'N', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'N', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'N', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'C', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'C', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'C', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'T', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'T', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEMMT( 'U', 'T', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'N', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'N', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'N', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'C', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'C', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'C', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'T', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'T', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL CGEMMT( 'U', 'T', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+
+      INFOT = 8
+      CALL CGEMMT( 'U', 'N', 'N', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'N', 'C', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'N', 'T', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'C', 'N', 0, 2, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'C', 'C', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'C', 'T', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'T', 'N', 0, 2, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'T', 'C', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 8
+      CALL CGEMMT( 'U', 'T', 'T', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+
+      INFOT = 10
+      CALL CGEMMT( 'U', 'N', 'N', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL CGEMMT( 'U', 'C', 'N', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL CGEMMT( 'U', 'T', 'N', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'N', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'N', 'C', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'N', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'C', 'N', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'C', 'C', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'C', 'T', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'T', 'N', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'T', 'C', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 13
+      CALL CGEMMT( 'U', 'T', 'T', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 110
+
 *
-  100 IF( OK )THEN
+  110 IF( OK )THEN
          WRITE( NOUT, FMT = 9999 )SRNAMT
       ELSE
          WRITE( NOUT, FMT = 9998 )SRNAMT
@@ -3486,3 +3671,496 @@
 *     End of XERBLA
 *
       END
+
+      SUBROUTINE CCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+     $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
+     $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
+*
+*  Tests CGEMMT.
+*
+*  Auxiliary routine for test program for Level 3 Blas.
+*
+*  -- Written on 8-February-1989.
+*     Jack Dongarra, Argonne National Laboratory.
+*     Iain Duff, AERE Harwell.
+*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
+*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*
+*     .. Parameters ..
+      COMPLEX            ZERO
+      PARAMETER          ( ZERO = ( 0.0, 0.0 ) )
+      REAL               RZERO
+      PARAMETER          ( RZERO = 0.0 )
+*     .. Scalar Arguments ..
+      REAL               EPS, THRESH
+      INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
+      LOGICAL            FATAL, REWI, TRACE
+      CHARACTER*6        SNAME
+*     .. Array Arguments ..
+      COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
+     $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
+     $                   BB( NMAX*NMAX ), BET( NBET ), BS( NMAX*NMAX ),
+     $                   C( NMAX, NMAX ), CC( NMAX*NMAX ),
+     $                   CS( NMAX*NMAX ), CT( NMAX )
+      REAL               G( NMAX )
+      INTEGER            IDIM( NIDIM )
+*     .. Local Scalars ..
+      COMPLEX            ALPHA, ALS, BETA, BLS
+      REAL               ERR, ERRMAX
+      INTEGER            I, IA, IB, ICA, ICB, IK, IN, K, KS, LAA,
+     $                   LBB, LCC, LDA, LDAS, LDB, LDBS, LDC, LDCS, M,
+     $                   MA, MB,  N, NA, NARGS, NB, NC, NS, IS
+      LOGICAL            NULL, RESET, SAME, TRANA, TRANB
+      CHARACTER*1        TRANAS, TRANBS, TRANSA, TRANSB, UPLO, UPLOS
+      CHARACTER*3        ICH
+      CHARACTER*2        ISHAPE
+*     .. Local Arrays ..
+      LOGICAL            ISAME( 13 )
+*     .. External Functions ..
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
+*     .. External Subroutines ..
+      EXTERNAL           CGEMM, CMAKE, CMMCH
+*     .. Intrinsic Functions ..
+      INTRINSIC          MAX
+*     .. Scalars in Common ..
+      INTEGER            INFOT, NOUTC
+      LOGICAL            LERR, OK
+*     .. Common blocks ..
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
+*     .. Data statements ..
+      DATA               ICH/'NTC'/
+      DATA               ISHAPE/'UL'/
+
+*     .. Executable Statements ..
+*
+      NARGS = 13
+      NC = 0
+      RESET = .TRUE.
+      ERRMAX = RZERO
+*
+      DO 100 IN = 1, NIDIM
+         N = IDIM( IN )
+*        Set LDC to 1 more than minimum value if room.
+         LDC = N
+         IF( LDC.LT.NMAX )
+     $      LDC = LDC + 1
+*        Skip tests if not enough room.
+         IF( LDC.GT.NMAX )
+     $      GO TO 100
+         LCC = LDC*N
+         NULL = N.LE.0
+*
+         DO 90 IK = 1, NIDIM
+            K = IDIM( IK )
+*
+            DO 80 ICA = 1, 3
+               TRANSA = ICH( ICA: ICA )
+               TRANA = TRANSA.EQ.'T'.OR.TRANSA.EQ.'C'
+*
+               IF( TRANA )THEN
+                  MA = K
+                  NA = N
+               ELSE
+                  MA = N
+                  NA = K
+               END IF
+*              Set LDA to 1 more than minimum value if room.
+               LDA = MA
+               IF( LDA.LT.NMAX )
+     $            LDA = LDA + 1
+*              Skip tests if not enough room.
+               IF( LDA.GT.NMAX )
+     $            GO TO 80
+               LAA = LDA*NA
+*
+*              Generate the matrix A.
+*
+               CALL CMAKE( 'GE', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
+     $                     RESET, ZERO )
+*
+               DO 70 ICB = 1, 3
+                  TRANSB = ICH( ICB: ICB )
+                  TRANB = TRANSB.EQ.'T'.OR.TRANSB.EQ.'C'
+*
+                  IF( TRANB )THEN
+                     MB = N
+                     NB = K
+                  ELSE
+                     MB = K
+                     NB = N
+                  END IF
+*                 Set LDB to 1 more than minimum value if room.
+                  LDB = MB
+                  IF( LDB.LT.NMAX )
+     $               LDB = LDB + 1
+*                 Skip tests if not enough room.
+                  IF( LDB.GT.NMAX )
+     $               GO TO 70
+                  LBB = LDB*NB
+*
+*                 Generate the matrix B.
+*
+                  CALL CMAKE( 'GE', ' ', ' ', MB, NB, B, NMAX, BB,
+     $                        LDB, RESET, ZERO )
+*
+                  DO 60 IA = 1, NALF
+                     ALPHA = ALF( IA )
+*
+                     DO 50 IB = 1, NBET
+                        BETA = BET( IB )
+                        DO 45 IS = 1, 2
+                           UPLO = ISHAPE( IS: IS )
+
+*
+*                          Generate the matrix C.
+*
+                           CALL CMAKE( 'GE', UPLO, ' ', M, N, C, NMAX,
+     $                                 CC, LDC, RESET, ZERO )
+*
+                           NC = NC + 1
+*
+*                          Save every datum before calling the
+*                          subroutine.
+*
+                           UPLOS = UPLO
+                           TRANAS = TRANSA
+                           TRANBS = TRANSB
+                           NS = N
+                           KS = K
+                           ALS = ALPHA
+                           DO 10 I = 1, LAA
+                              AS( I ) = AA( I )
+   10                      CONTINUE
+                           LDAS = LDA
+                           DO 20 I = 1, LBB
+                              BS( I ) = BB( I )
+   20                      CONTINUE
+                           LDBS = LDB
+                           BLS = BETA
+                           DO 30 I = 1, LCC
+                              CS( I ) = CC( I )
+   30                      CONTINUE
+                           LDCS = LDC
+*
+*                          Call the subroutine.
+*
+                           IF( TRACE )
+     $                        WRITE( NTRA, FMT = 9995 )NC, SNAME, UPLO
+     $                        TRANSA, TRANSB, N, K, ALPHA, LDA, LDB,
+     $                        BETA, LDC
+                           IF( REWI )
+     $                        REWIND NTRA
+                           CALL CGEMMT( UPLO, TRANSA, TRANSB, N, K,
+     $                                 ALPHA, AA, LDA, BB, LDB, BETA,
+     $                                 CC, LDC )
+*
+*                          Check if error-exit was taken incorrectly.
+*
+                           IF( .NOT.OK )THEN
+                              WRITE( NOUT, FMT = 9994 )
+                              FATAL = .TRUE.
+                              GO TO 120
+                           END IF
+*
+*                          See what data changed inside subroutines.
+*
+                           ISAME( 1 ) = UPLOS.EQ.UPLO
+                           ISAME( 2 ) = TRANSA.EQ.TRANAS
+                           ISAME( 3 ) = TRANSB.EQ.TRANBS
+                           ISAME( 4 ) = NS.EQ.N
+                           ISAME( 5 ) = KS.EQ.K
+                           ISAME( 6 ) = ALS.EQ.ALPHA
+                           ISAME( 7 ) = LCE( AS, AA, LAA )
+                           ISAME( 8 ) = LDAS.EQ.LDA
+                           ISAME( 9 ) = LCE( BS, BB, LBB )
+                           ISAME( 10 ) = LDBS.EQ.LDB
+                           ISAME( 11 ) = BLS.EQ.BETA
+                           IF( NULL )THEN
+                              ISAME( 12 ) = LCE( CS, CC, LCC )
+                           ELSE
+                              ISAME( 12 ) = LCERES( 'GE', ' ', M, N, CS,
+     $                                      CC, LDC )
+                           END IF
+                           ISAME( 13 ) = LDCS.EQ.LDC
+*
+*                          If data was incorrectly changed, report
+*                          and return.
+*
+                           SAME = .TRUE.
+                           DO 40 I = 1, NARGS
+                              SAME = SAME.AND.ISAME( I )
+                              IF( .NOT.ISAME( I ) )
+     $                           WRITE( NOUT, FMT = 9998 )I
+   40                      CONTINUE
+                           IF( .NOT.SAME )THEN
+                              FATAL = .TRUE.
+                              GO TO 120
+                           END IF
+*
+                           IF( .NOT.NULL )THEN
+*
+*                             Check the result.
+*
+                              CALL CMMTCH( UPLO, TRANSA, TRANSB, N,
+     $                                    K, ALPHA, A, NMAX, B, NMAX,
+     $                                    BETA, C, NMAX, CT, G, CC, LDC,
+     $                                    EPS, ERR, FATAL, NOUT, .TRUE.)
+                              ERRMAX = MAX( ERRMAX, ERR )
+*                             If got really bad answer, report and
+*                             return.
+                              IF( FATAL )
+     $                           GO TO 120
+                           END IF
+   45                   CONTINUE
+*
+   50                CONTINUE
+*
+   60             CONTINUE
+*
+   70          CONTINUE
+*
+   80       CONTINUE
+*
+   90    CONTINUE
+*
+  100 CONTINUE
+*
+*
+*     Report result.
+*
+      IF( ERRMAX.LT.THRESH )THEN
+         WRITE( NOUT, FMT = 9999 )SNAME, NC
+      ELSE
+         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+      END IF
+      GO TO 130
+*
+  120 CONTINUE
+      WRITE( NOUT, FMT = 9996 )SNAME
+      WRITE( NOUT, FMT = 9995 )NC, SNAME, TRANSA, TRANSB, M, N, K,
+     $   ALPHA, LDA, LDB, BETA, LDC
+*
+  130 CONTINUE
+      RETURN
+*
+ 9999 FORMAT( ' ', A6, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+     $      'S)' )
+ 9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
+     $      'ANGED INCORRECTLY *******' )
+ 9997 FORMAT( ' ', A6, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+     $      ' - SUSPECT *******' )
+ 9996 FORMAT( ' ******* ', A6, ' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A6, '(''',A1, ''',''',A1, ''',''', A1,''',',
+     $      2( I3, ',' ), '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3,
+     $      ',(', F4.1, ',', F4.1, '), C,', I3, ').' )
+ 9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
+     $      '******' )
+*
+*     End of CCHK6
+*
+      END
+
+      SUBROUTINE CMMTCH( UPLO, TRANSA, TRANSB, N, KK, ALPHA, A, LDA,
+     $                  B, LDB, BETA, C, LDC, CT, G, CC, LDCC, EPS, ERR,
+     $                  FATAL, NOUT, MV )
+      IMPLICIT NONE
+*
+*  Checks the results of the computational tests.
+*
+*  Auxiliary routine for test program for Level 3 Blas.
+*
+*  -- Written on 8-February-1989.
+*     Jack Dongarra, Argonne National Laboratory.
+*     Iain Duff, AERE Harwell.
+*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
+*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*
+*     .. Parameters ..
+      COMPLEX            ZERO
+      PARAMETER          ( ZERO = ( 0.0, 0.0 ) )
+      REAL               RZERO, RONE
+      PARAMETER          ( RZERO = 0.0, RONE = 1.0 )
+*     .. Scalar Arguments ..
+      COMPLEX            ALPHA, BETA
+      REAL               EPS, ERR
+      INTEGER            KK, LDA, LDB, LDC, LDCC, N, NOUT
+      LOGICAL            FATAL, MV
+      CHARACTER*1        TRANSA, TRANSB, UPLO
+*     .. Array Arguments ..
+      COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * ),
+     $                   CC( LDCC, * ), CT( * )
+      REAL               G( * )
+*     .. Local Scalars ..
+      COMPLEX            CL
+      REAL               ERRI
+      INTEGER            I, J, K, ISTART, ISTOP
+      LOGICAL            CTRANA, CTRANB, TRANA, TRANB, UPPER
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL, SQRT
+*     .. Statement Functions ..
+      REAL               ABS1
+*     .. Statement Function definitions ..
+      ABS1( CL ) = ABS( REAL( CL ) ) + ABS( AIMAG( CL ) )
+*     .. Executable Statements ..
+      UPPER = UPLO.EQ.'U'
+      TRANA = TRANSA.EQ.'T'.OR.TRANSA.EQ.'C'
+      TRANB = TRANSB.EQ.'T'.OR.TRANSB.EQ.'C'
+      CTRANA = TRANSA.EQ.'C'
+      CTRANB = TRANSB.EQ.'C'
+*
+*     Compute expected result, one column at a time, in CT using data
+*     in A, B and C.
+*     Compute gauges in G.
+*
+      ISTART = 1
+      ISTOP  = 1
+
+      DO 220 J = 1, N
+*
+         IF ( UPPER ) THEN
+             ISTART = 1
+             ISTOP = J
+         ELSE
+             ISTART = J
+             ISTOP = N
+         END IF
+
+         DO 10 I = ISTART, ISTOP
+            CT( I ) = ZERO
+            G( I ) = RZERO
+   10    CONTINUE
+         IF( .NOT.TRANA.AND..NOT.TRANB )THEN
+            DO 30 K = 1, KK
+               DO 20 I = ISTART, ISTOP
+                  CT( I ) = CT( I ) + A( I, K )*B( K, J )
+                  G( I ) = G( I ) + ABS1( A( I, K ) )*ABS1( B( K, J ) )
+   20          CONTINUE
+   30       CONTINUE
+         ELSE IF( TRANA.AND..NOT.TRANB )THEN
+            IF( CTRANA )THEN
+               DO 50 K = 1, KK
+                  DO 40 I = ISTART, ISTOP
+                     CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( K, J )
+                     G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                        ABS1( B( K, J ) )
+   40             CONTINUE
+   50          CONTINUE
+            ELSE
+               DO 70 K = 1, KK
+                  DO 60 I = ISTART, ISTOP
+                     CT( I ) = CT( I ) + A( K, I )*B( K, J )
+                     G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                        ABS1( B( K, J ) )
+   60             CONTINUE
+   70          CONTINUE
+            END IF
+         ELSE IF( .NOT.TRANA.AND.TRANB )THEN
+            IF( CTRANB )THEN
+               DO 90 K = 1, KK
+                  DO 80 I = ISTART, ISTOP
+                     CT( I ) = CT( I ) + A( I, K )*CONJG( B( J, K ) )
+                     G( I ) = G( I ) + ABS1( A( I, K ) )*
+     $                        ABS1( B( J, K ) )
+   80             CONTINUE
+   90          CONTINUE
+            ELSE
+               DO 110 K = 1, KK
+                  DO 100 I = ISTART, ISTOP
+                     CT( I ) = CT( I ) + A( I, K )*B( J, K )
+                     G( I ) = G( I ) + ABS1( A( I, K ) )*
+     $                        ABS1( B( J, K ) )
+  100             CONTINUE
+  110          CONTINUE
+            END IF
+         ELSE IF( TRANA.AND.TRANB )THEN
+            IF( CTRANA )THEN
+               IF( CTRANB )THEN
+                  DO 130 K = 1, KK
+                     DO 120 I = ISTART, ISTOP
+                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*
+     $                            CONJG( B( J, K ) )
+                        G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                           ABS1( B( J, K ) )
+  120                CONTINUE
+  130             CONTINUE
+               ELSE
+                  DO 150 K = 1, KK
+                     DO 140 I = ISTART, ISTOP
+                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( J, K )
+                        G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                           ABS1( B( J, K ) )
+  140                CONTINUE
+  150             CONTINUE
+               END IF
+            ELSE
+               IF( CTRANB )THEN
+                  DO 170 K = 1, KK
+                     DO 160 I = ISTART, ISTOP
+                        CT( I ) = CT( I ) + A( K, I )*CONJG( B( J, K ) )
+                        G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                           ABS1( B( J, K ) )
+  160                CONTINUE
+  170             CONTINUE
+               ELSE
+                  DO 190 K = 1, KK
+                     DO 180 I = ISTART, ISTOP
+                        CT( I ) = CT( I ) + A( K, I )*B( J, K )
+                        G( I ) = G( I ) + ABS1( A( K, I ) )*
+     $                           ABS1( B( J, K ) )
+  180                CONTINUE
+  190             CONTINUE
+               END IF
+            END IF
+         END IF
+         DO 200 I = ISTART, ISTOP
+            CT( I ) = ALPHA*CT( I ) + BETA*C( I, J )
+            G( I ) = ABS1( ALPHA )*G( I ) +
+     $               ABS1( BETA )*ABS1( C( I, J ) )
+  200    CONTINUE
+*
+*        Compute the error ratio for this result.
+*
+         ERR = ZERO
+         DO 210 I = ISTART, ISTOP
+            ERRI = ABS1( CT( I ) - CC( I, J ) )/EPS
+            IF( G( I ).NE.RZERO )
+     $         ERRI = ERRI/G( I )
+            ERR = MAX( ERR, ERRI )
+            IF( ERR*SQRT( EPS ).GE.RONE )
+     $         GO TO 230
+  210    CONTINUE
+*
+  220 CONTINUE
+*
+*     If the loop completes, all results are at least half accurate.
+      GO TO 250
+*
+*     Report fatal error.
+*
+  230 FATAL = .TRUE.
+      WRITE( NOUT, FMT = 9999 )
+      DO 240 I = ISTART, ISTOP
+         IF( MV )THEN
+            WRITE( NOUT, FMT = 9998 )I, CT( I ), CC( I, J )
+         ELSE
+            WRITE( NOUT, FMT = 9998 )I, CC( I, J ), CT( I )
+         END IF
+  240 CONTINUE
+      IF( N.GT.1 )
+     $   WRITE( NOUT, FMT = 9997 )J
+*
+  250 CONTINUE
+      RETURN
+*
+ 9999 FORMAT( ' ******* FATAL ERROR - COMPUTED RESULT IS LESS THAN HAL',
+     $      'F ACCURATE *******', /'                       EXPECTED RE',
+     $      'SULT                    COMPUTED RESULT' )
+ 9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
+ 9997 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
+*
+*     End of CMMTCH
+*
+      END
+
