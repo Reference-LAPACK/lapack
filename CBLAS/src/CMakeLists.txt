@@ -85,21 +85,21 @@ set(ZLEV2 cblas_zgemv.c cblas_zgbmv.c cblas_zhemv.c cblas_zhbmv.c cblas_zhpmv.c
 
 # Files for level 3 single precision real
 set(SLEV3 cblas_sgemm.c cblas_ssymm.c cblas_ssyrk.c cblas_ssyr2k.c cblas_strmm.c
-        cblas_strsm.c)
+        cblas_strsm.c cblas_sgemmt.c)
 
 # Files for level 3 double precision real
 set(DLEV3 cblas_dgemm.c cblas_dsymm.c cblas_dsyrk.c cblas_dsyr2k.c cblas_dtrmm.c
-        cblas_dtrsm.c)
+        cblas_dtrsm.c cblas_cgemmt.c)
 
 # Files for level 3 single precision complex
 set(CLEV3 cblas_cgemm.c cblas_csymm.c cblas_chemm.c cblas_cherk.c
         cblas_cher2k.c cblas_ctrmm.c cblas_ctrsm.c cblas_csyrk.c
-        cblas_csyr2k.c)
+        cblas_csyr2k.c cblas_cgemmt.c)
 
 # Files for level 3 double precision complex
 set(ZLEV3 cblas_zgemm.c cblas_zsymm.c cblas_zhemm.c cblas_zherk.c
         cblas_zher2k.c cblas_ztrmm.c cblas_ztrsm.c cblas_zsyrk.c
-        cblas_zsyr2k.c)
+        cblas_zsyr2k.c cblas_zgemmt.c)
 
 
 set(SOURCES)

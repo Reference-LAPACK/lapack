@@ -137,21 +137,21 @@ zlib2: $(zlev2) $(errhand)
 
 # Files for level 3 single precision real
 slev3 = cblas_sgemm.o cblas_ssymm.o cblas_ssyrk.o cblas_ssyr2k.o cblas_strmm.o \
-        cblas_strsm.o
+        cblas_strsm.o cblas_sgemmt.o
 
 # Files for level 3 double precision real
 dlev3 = cblas_dgemm.o cblas_dsymm.o cblas_dsyrk.o cblas_dsyr2k.o cblas_dtrmm.o \
-        cblas_dtrsm.o
+        cblas_dtrsm.o cblas_dgemmt.o
 
 # Files for level 3 single precision complex
 clev3 = cblas_cgemm.o cblas_csymm.o cblas_chemm.o cblas_cherk.o \
         cblas_cher2k.o cblas_ctrmm.o cblas_ctrsm.o cblas_csyrk.o \
-        cblas_csyr2k.o
+        cblas_csyr2k.o cblas_cgemmt.o
 
 # Files for level 3 double precision complex
 zlev3 = cblas_zgemm.o cblas_zsymm.o cblas_zhemm.o cblas_zherk.o \
         cblas_zher2k.o cblas_ztrmm.o cblas_ztrsm.o cblas_zsyrk.o \
-        cblas_zsyr2k.o
+        cblas_zsyr2k.o cblas_zgemmt.o
 
 .PHONY: slib3 dlib3 clib3 zlib3
 # Single precision real

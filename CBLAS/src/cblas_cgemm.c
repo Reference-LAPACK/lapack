@@ -89,7 +89,7 @@ void API_SUFFIX(cblas_cgemm)(const CBLAS_LAYOUT layout, const CBLAS_TRANSPOSE Tr
       else if ( TransB == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_cgemm", "Illegal TransB setting, %d\n", TransB);
+         API_SUFFIX(cblas_xerbla)(3, "cblas_cgemm", "Illegal TransB setting, %d\n", TransB);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
