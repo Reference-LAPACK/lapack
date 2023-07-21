@@ -9,7 +9,7 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_cgemm_t)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
+void API_SUFFIX(cblas_cgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
                  const CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
                  const CBLAS_INT K, const void *alpha, const void  *A,
                  const CBLAS_INT lda, const void  *B, const CBLAS_INT ldb,
@@ -41,17 +41,18 @@ void API_SUFFIX(cblas_cgemm_t)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    RowMajorStrg = 0;
    CBLAS_CallFromC = 1;
 
-   if ( Uplo == CblasUpper ) UL = 'U';
-   else if (Uplo == CblasLower) UL= 'L';
-   else {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_cgemmt", "Illegal Uplo setting, %d\n", Uplo);
-         CBLAS_CallFromC = 0;
-         RowMajorStrg = 0;
-         return;
-   }
 
    if( layout == CblasColMajor )
    {
+      if ( Uplo == CblasUpper ) UL = 'U';
+      else if (Uplo == CblasLower) UL= 'L';
+      else {
+            API_SUFFIX(cblas_xerbla)(2, "cblas_cgemmt", "Illegal Uplo setting, %d\n", Uplo);
+            CBLAS_CallFromC = 0;
+            RowMajorStrg = 0;
+            return;
+      }
+
       if(TransA == CblasTrans) TA='T';
       else if ( TransA == CblasConjTrans ) TA='C';
       else if ( TransA == CblasNoTrans )   TA='N';
@@ -85,6 +86,16 @@ void API_SUFFIX(cblas_cgemm_t)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    } else if (layout == CblasRowMajor)
    {
       RowMajorStrg = 1;
+
+      if ( Uplo == CblasUpper ) UL = 'L';
+      else if (Uplo == CblasLower) UL= 'U';
+      else {
+            API_SUFFIX(cblas_xerbla)(2, "cblas_cgemmt", "Illegal Uplo setting, %d\n", Uplo);
+            CBLAS_CallFromC = 0;
+            RowMajorStrg = 0;
+            return;
+      }
+
       if(TransA == CblasTrans) TB='T';
       else if ( TransA == CblasConjTrans ) TB='C';
       else if ( TransA == CblasNoTrans )   TB='N';

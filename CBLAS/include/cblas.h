@@ -544,7 +544,7 @@ void cblas_cgemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
                  const void *beta, void *C, const CBLAS_INT ldc);
 void cblas_cgemmt(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
-                 CBLAS_TRANSPOSE TransB, const CBLAS_INT M, const CBLAS_INT N,
+                 CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
                  const CBLAS_INT K, const void *alpha, const void *A,
                  const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
                  const void *beta, void *C, const CBLAS_INT ldc);
