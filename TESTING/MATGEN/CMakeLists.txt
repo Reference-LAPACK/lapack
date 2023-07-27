@@ -47,7 +47,28 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${TMGLIB} ${SOURCES})
+add_library(${TMGLIB}_obj OBJECT ${SOURCES})
+set_target_properties(
+  ${TMGLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  set(SOURCES_64)
+  list(APPEND SOURCES_64 ${SOURCES})
+  add_library(${TMGLIB}_64_obj OBJECT ${SOURCES_64})
+  target_compile_options(${TMGLIB}_64_obj PRIVATE ${FOPT_ILP64} -DMATGEN_64)
+  set_target_properties(
+    ${TMGLIB}_64_obj PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    Fortran_PREPROCESS ON
+  )
+endif()
+
+add_library(${TMGLIB}
+        $<TARGET_OBJECTS:${TMGLIB}_obj>
+        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${TMGLIB}_64_obj>>)
 
 set_target_properties(
   ${TMGLIB} PROPERTIES

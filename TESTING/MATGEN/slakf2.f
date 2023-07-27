@@ -1,3 +1,4 @@
+#include "matgen_64.h"
 *> \brief \b SLAKF2
 *
 *  =========== DOCUMENTATION ===========
