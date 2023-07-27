@@ -221,7 +221,8 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      REAL             FUNCTION SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+      REAL             FUNCTION SLATM3( M, N, I, J, ISUB, JSUB, KL,
+     $                 KU,
      $                 IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                 SPARSE )
 *

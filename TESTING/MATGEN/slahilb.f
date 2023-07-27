@@ -121,7 +121,8 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+     $                    INFO)
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

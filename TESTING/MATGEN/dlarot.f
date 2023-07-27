@@ -222,7 +222,8 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE DLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE DLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA,
+     $                   XLEFT,
      $                   XRIGHT )
 *
 *  -- LAPACK auxiliary routine --

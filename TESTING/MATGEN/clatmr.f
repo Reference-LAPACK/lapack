@@ -531,7 +531,8 @@
       LOGICAL            LSAME
       REAL               CLANGB, CLANGE, CLANSB, CLANSP, CLANSY
       COMPLEX            CLATM2, CLATM3
-      EXTERNAL           LSAME, CLANGB, CLANGE, CLANSB, CLANSP, CLANSY,
+      EXTERNAL           LSAME, CLANGB, CLANGE,
+     $                   CLANSB, CLANSP, CLANSY,
      $                   CLATM2, CLATM3
 *     ..
 *     .. External Subroutines ..
@@ -898,7 +899,8 @@
 *
             DO 170 J = 1, N
                DO 160 I = 1, J
-                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                    IDIST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -917,7 +919,8 @@
 *
             DO 190 J = 1, N
                DO 180 I = 1, J
-                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                    IDIST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -936,7 +939,8 @@
 *
             DO 210 J = 1, N
                DO 200 I = 1, J
-                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                    IDIST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
 *
@@ -964,7 +968,8 @@
 *
             DO 230 J = 1, N
                DO 220 I = 1, J
-                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                    IDIST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
 *
@@ -1017,7 +1022,8 @@
 *
             DO 270 J = 1, N
                DO 260 I = J - KUU, J
-                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = CLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                    IDIST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -1107,7 +1113,8 @@
 *
             DO 390 J = 1, N
                DO 380 I = 1, J
-                  A( I, J ) = CLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
+                  A( I, J ) = CLATM2( M, N, I, J, KL, KU, IDIST,
+     $                        ISEED,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( J, I ) = CZERO
@@ -1143,7 +1150,8 @@
                      ISUB = 1
                      JSUB = JSUB + 1
                   END IF
-                  A( ISUB, JSUB ) = CLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( ISUB, JSUB ) = CLATM2( M, N, I, J, KL, KU,
+     $                              IDIST,
      $                              ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                              IWORK, SPARSE )
   420          CONTINUE
@@ -1201,7 +1209,8 @@
                      A( J-I+1, I+N ) = CZERO
                   ELSE
                      IF( ISYM.EQ.0 ) THEN
-                        A( J-I+1, I ) = CONJG( CLATM2( M, N, I, J, KL,
+                        A( J-I+1, I ) = CONJG( CLATM2( M, N, I, J,
+     $                                  KL,
      $                                  KU, IDIST, ISEED, D, IGRADE, DL,
      $                                  DR, IPVTNG, IWORK, SPARSE ) )
                      ELSE
@@ -1217,7 +1226,8 @@
 *
             DO 510 J = 1, N
                DO 500 I = J - KUU, J
-                  A( I-J+KUU+1, J ) = CLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( I-J+KUU+1, J ) = CLATM2( M, N, I, J, KL, KU,
+     $                                IDIST,
      $                                ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                                IWORK, SPARSE )
   500          CONTINUE
