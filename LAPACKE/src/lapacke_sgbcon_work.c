@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgbcon_work( int matrix_layout, char norm, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sgbcon_work)( int matrix_layout, char norm, lapack_int n,
                                 lapack_int kl, lapack_int ku, const float* ab,
                                 lapack_int ldab, const lapack_int* ipiv,
                                 float anorm, float* rcond, float* work,
@@ -52,7 +52,7 @@ lapack_int LAPACKE_sgbcon_work( int matrix_layout, char norm, lapack_int n,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_sgbcon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgbcon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -62,7 +62,7 @@ lapack_int LAPACKE_sgbcon_work( int matrix_layout, char norm, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_sgb_trans( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
+        API_SUFFIX(LAPACKE_sgb_trans)( matrix_layout, n, n, kl, kl+ku, ab, ldab, ab_t,
                            ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgbcon( &norm, &n, &kl, &ku, ab_t, &ldab_t, ipiv, &anorm, rcond,
@@ -74,11 +74,11 @@ lapack_int LAPACKE_sgbcon_work( int matrix_layout, char norm, lapack_int n,
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_sgbcon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgbcon_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_sgbcon_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgbcon_work", info );
     }
     return info;
 }

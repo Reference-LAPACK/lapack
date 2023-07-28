@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
+lapack_int API_SUFFIX(LAPACKE_cbbcsd)( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, char jobv2t, char trans, lapack_int m,
                            lapack_int p, lapack_int q, float* theta, float* phi,
                            lapack_complex_float* u1, lapack_int ldu1,
@@ -48,10 +48,10 @@ lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
     float rwork_query;
     int lapack_layout;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_cbbcsd", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbbcsd", -1 );
         return -1;
     }
-    if( LAPACKE_lsame( trans, 'n' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+    if( API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) && matrix_layout == LAPACK_COL_MAJOR ) {
         lapack_layout = LAPACK_COL_MAJOR;
     } else {
         lapack_layout = LAPACK_ROW_MAJOR;
@@ -59,36 +59,36 @@ lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( q-1, phi, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( q-1, phi, 1 ) ) {
             return -11;
         }
-        if( LAPACKE_s_nancheck( q, theta, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( q, theta, 1 ) ) {
             return -10;
         }
-        if( LAPACKE_lsame( jobu1, 'y' ) ) {
-            if( LAPACKE_cge_nancheck( lapack_layout, p, p, u1, ldu1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobu1, 'y' ) ) {
+            if( API_SUFFIX(LAPACKE_cge_nancheck)( lapack_layout, p, p, u1, ldu1 ) ) {
                 return -12;
             }
         }
-        if( LAPACKE_lsame( jobu2, 'y' ) ) {
-            if( LAPACKE_cge_nancheck( lapack_layout, m-p, m-p, u2, ldu2 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobu2, 'y' ) ) {
+            if( API_SUFFIX(LAPACKE_cge_nancheck)( lapack_layout, m-p, m-p, u2, ldu2 ) ) {
                 return -14;
             }
         }
-        if( LAPACKE_lsame( jobv1t, 'y' ) ) {
-            if( LAPACKE_cge_nancheck( lapack_layout, q, q, v1t, ldv1t ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv1t, 'y' ) ) {
+            if( API_SUFFIX(LAPACKE_cge_nancheck)( lapack_layout, q, q, v1t, ldv1t ) ) {
                 return -16;
             }
         }
-        if( LAPACKE_lsame( jobv2t, 'y' ) ) {
-            if( LAPACKE_cge_nancheck( lapack_layout, m-q, m-q, v2t, ldv2t ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv2t, 'y' ) ) {
+            if( API_SUFFIX(LAPACKE_cge_nancheck)( lapack_layout, m-q, m-q, v2t, ldv2t ) ) {
                 return -18;
             }
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cbbcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
+    info = API_SUFFIX(LAPACKE_cbbcsd_work)( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
                                 v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
                                 b21d, b21e, b22d, b22e, &rwork_query, lrwork );
@@ -103,7 +103,7 @@ lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cbbcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
+    info = API_SUFFIX(LAPACKE_cbbcsd_work)( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
                                 v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
                                 b21d, b21e, b22d, b22e, rwork, lrwork );
@@ -111,7 +111,7 @@ lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_cbbcsd", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cbbcsd", info );
     }
     return info;
 }

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_slascl_work( int matrix_layout, char type, lapack_int kl,
+lapack_int API_SUFFIX(LAPACKE_slascl_work)( int matrix_layout, char type, lapack_int kl,
                            lapack_int ku, float cfrom, float cto,
                            lapack_int m, lapack_int n, float* a,
                            lapack_int lda )
@@ -45,15 +45,15 @@ lapack_int LAPACKE_slascl_work( int matrix_layout, char type, lapack_int kl,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int nrows_a = LAPACKE_lsame(type, 'b') ? kl + 1 :
-                             LAPACKE_lsame(type, 'q') ? ku + 1 :
-                             LAPACKE_lsame(type, 'z') ? 2 * kl + ku + 1 : m;
+        lapack_int nrows_a = API_SUFFIX(LAPACKE_lsame)(type, 'b') ? kl + 1 :
+                             API_SUFFIX(LAPACKE_lsame)(type, 'q') ? ku + 1 :
+                             API_SUFFIX(LAPACKE_lsame)(type, 'z') ? 2 * kl + ku + 1 : m;
         lapack_int lda_t = MAX(1,nrows_a);
         float* a_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_slascl_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slascl_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -63,23 +63,23 @@ lapack_int LAPACKE_slascl_work( int matrix_layout, char type, lapack_int kl,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, nrows_a, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, nrows_a, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_slascl( &type, &kl, &ku, &cfrom, &cto, &m, &n, a_t, &lda_t, &info);
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, nrows_a, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, nrows_a, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_slascl_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slascl_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_slascl_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slascl_work", info );
     }
     return info;
 }

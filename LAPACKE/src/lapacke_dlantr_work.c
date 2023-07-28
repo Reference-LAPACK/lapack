@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlantr_work( int matrix_layout, char norm, char uplo,
+double API_SUFFIX(LAPACKE_dlantr_work)( int matrix_layout, char norm, char uplo,
                                 char diag, lapack_int m, lapack_int n,
                                 const double* a, lapack_int lda, double* work )
 {
@@ -48,23 +48,23 @@ double LAPACKE_dlantr_work( int matrix_layout, char norm, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_dlantr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlantr_work", info );
             return info;
         }
-        if( LAPACKE_lsame( norm, '1' ) || LAPACKE_lsame( norm, 'o' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( norm, '1' ) || API_SUFFIX(LAPACKE_lsame)( norm, 'o' ) ) {
             norm_lapack = 'i';
-        } else if( LAPACKE_lsame( norm, 'i' ) ) {
+        } else if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
             norm_lapack = '1';
         } else {
             norm_lapack = norm;
         }
-        if( LAPACKE_lsame( uplo, 'u' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) {
             uplo_lapack = 'l';
         } else {
             uplo_lapack = 'u';
         }
         /* Allocate memory for work array(s) */
-        if( LAPACKE_lsame( norm_lapack, 'i' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( norm_lapack, 'i' ) ) {
             work_lapack = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,n) );
             if( work_lapack == NULL ) {
                 info = LAPACK_WORK_MEMORY_ERROR;
@@ -79,11 +79,11 @@ double LAPACKE_dlantr_work( int matrix_layout, char norm, char uplo,
         }
 exit_level_0:
         if( info == LAPACK_WORK_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dlantr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlantr_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dlantr_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlantr_work", info );
     }
     return res;
 }

@@ -32,22 +32,22 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_classq( lapack_int n, lapack_complex_float* x,
+lapack_int API_SUFFIX(LAPACKE_classq)( lapack_int n, lapack_complex_float* x,
                            lapack_int incx, float* scale, float* sumsq )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input vector `x` and in/out scalars `scale` and `sumsq` for NaNs */
-        if( LAPACKE_c_nancheck( n, x, incx ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n, x, incx ) ) {
             return -2;
         }
-        if( LAPACKE_s_nancheck( 1, scale, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, scale, 1 ) ) {
             return -4;
         }
-        if( LAPACKE_s_nancheck( 1, sumsq, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, sumsq, 1 ) ) {
             return -5;
         }
     }
 #endif
-    return LAPACKE_classq_work( n, x, incx, scale, sumsq );
+    return API_SUFFIX(LAPACKE_classq_work)( n, x, incx, scale, sumsq );
 }

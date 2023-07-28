@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dlarnv_work( lapack_int idist, lapack_int* iseed,
+lapack_int API_SUFFIX(LAPACKE_dlarnv_work)( lapack_int idist, lapack_int* iseed,
                                 lapack_int n, double* x )
 {
     lapack_int info = 0;

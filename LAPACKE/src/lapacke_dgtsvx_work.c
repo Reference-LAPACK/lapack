@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgtsvx_work( int matrix_layout, char fact, char trans,
+lapack_int API_SUFFIX(LAPACKE_dgtsvx_work)( int matrix_layout, char fact, char trans,
                                 lapack_int n, lapack_int nrhs, const double* dl,
                                 const double* d, const double* du, double* dlf,
                                 double* df, double* duf, double* du2,
@@ -58,12 +58,12 @@ lapack_int LAPACKE_dgtsvx_work( int matrix_layout, char fact, char trans,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -15;
-            LAPACKE_xerbla( "LAPACKE_dgtsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgtsvx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -17;
-            LAPACKE_xerbla( "LAPACKE_dgtsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgtsvx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -78,7 +78,7 @@ lapack_int LAPACKE_dgtsvx_work( int matrix_layout, char fact, char trans,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgtsvx( &fact, &trans, &n, &nrhs, dl, d, du, dlf, df, duf, du2,
                        ipiv, b_t, &ldb_t, x_t, &ldx_t, rcond, ferr, berr, work,
@@ -87,18 +87,18 @@ lapack_int LAPACKE_dgtsvx_work( int matrix_layout, char fact, char trans,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dgtsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgtsvx_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dgtsvx_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgtsvx_work", info );
     }
     return info;
 }

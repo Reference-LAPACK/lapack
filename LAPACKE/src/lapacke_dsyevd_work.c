@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsyevd_work( int matrix_layout, char jobz, char uplo,
+lapack_int API_SUFFIX(LAPACKE_dsyevd_work)( int matrix_layout, char jobz, char uplo,
                                 lapack_int n, double* a, lapack_int lda,
                                 double* w, double* work, lapack_int lwork,
                                 lapack_int* iwork, lapack_int liwork )
@@ -51,7 +51,7 @@ lapack_int LAPACKE_dsyevd_work( int matrix_layout, char jobz, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_dsyevd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyevd_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -67,7 +67,7 @@ lapack_int LAPACKE_dsyevd_work( int matrix_layout, char jobz, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_dsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsyevd( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, iwork,
                        &liwork, &info );
@@ -76,19 +76,19 @@ lapack_int LAPACKE_dsyevd_work( int matrix_layout, char jobz, char uplo,
         }
         /* Transpose output matrices */
         if ( jobz == 'V' || jobz == 'v' ) {
-            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         } else {
-            LAPACKE_dsy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+            API_SUFFIX(LAPACKE_dsy_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         }
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dsyevd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyevd_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dsyevd_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyevd_work", info );
     }
     return info;
 }

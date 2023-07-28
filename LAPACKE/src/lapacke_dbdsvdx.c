@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dbdsvdx( int matrix_layout, char uplo, char jobz, char range,
+lapack_int API_SUFFIX(LAPACKE_dbdsvdx)( int matrix_layout, char uplo, char jobz, char range,
                            lapack_int n, double* d, double* e,
                            double vl, double vu,
                            lapack_int il, lapack_int iu, lapack_int* ns,
@@ -45,16 +45,16 @@ lapack_int LAPACKE_dbdsvdx( int matrix_layout, char uplo, char jobz, char range,
     lapack_int* iwork = NULL;
     lapack_int i;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dbdsvdx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dbdsvdx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -6;
         }
-        if( LAPACKE_d_nancheck( n - 1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n - 1, e, 1 ) ) {
             return -7;
         }
     }
@@ -71,7 +71,7 @@ lapack_int LAPACKE_dbdsvdx( int matrix_layout, char uplo, char jobz, char range,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dbdsvdx_work( matrix_layout, uplo, jobz,  range,
+    info = API_SUFFIX(LAPACKE_dbdsvdx_work)( matrix_layout, uplo, jobz,  range,
                                  n, d, e, vl, vu, il, iu, ns, s, z,
                                  ldz, work, iwork);
     /* Backup significant data from working array(s) */
@@ -84,7 +84,7 @@ exit_level_1:
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dbdsvdx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dbdsvdx", info );
     }
     return info;
 }

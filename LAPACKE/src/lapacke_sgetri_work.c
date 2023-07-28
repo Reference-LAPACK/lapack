@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgetri_work( int matrix_layout, lapack_int n, float* a,
+lapack_int API_SUFFIX(LAPACKE_sgetri_work)( int matrix_layout, lapack_int n, float* a,
                                 lapack_int lda, const lapack_int* ipiv,
                                 float* work, lapack_int lwork )
 {
@@ -49,7 +49,7 @@ lapack_int LAPACKE_sgetri_work( int matrix_layout, lapack_int n, float* a,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -4;
-            LAPACKE_xerbla( "LAPACKE_sgetri_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgetri_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -64,23 +64,23 @@ lapack_int LAPACKE_sgetri_work( int matrix_layout, lapack_int n, float* a,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgetri( &n, a_t, &lda_t, ipiv, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_sgetri_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgetri_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_sgetri_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgetri_work", info );
     }
     return info;
 }

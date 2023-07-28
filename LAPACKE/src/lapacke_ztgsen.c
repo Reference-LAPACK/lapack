@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztgsen( int matrix_layout, lapack_int ijob,
+lapack_int API_SUFFIX(LAPACKE_ztgsen)( int matrix_layout, lapack_int ijob,
                            lapack_logical wantq, lapack_logical wantz,
                            const lapack_logical* select, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
@@ -51,32 +51,32 @@ lapack_int LAPACKE_ztgsen( int matrix_layout, lapack_int ijob,
     lapack_int iwork_query;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ztgsen", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsen", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, b, ldb ) ) {
             return -9;
         }
         if( wantq ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, n, q, ldq ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, q, ldq ) ) {
                 return -13;
             }
         }
         if( wantz ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, n, z, ldz ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, z, ldz ) ) {
                 return -15;
             }
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_ztgsen_work( matrix_layout, ijob, wantq, wantz, select, n, a,
+    info = API_SUFFIX(LAPACKE_ztgsen_work)( matrix_layout, ijob, wantq, wantz, select, n, a,
                                 lda, b, ldb, alpha, beta, q, ldq, z, ldz, m, pl,
                                 pr, dif, &work_query, lwork, &iwork_query,
                                 liwork );
@@ -98,7 +98,7 @@ lapack_int LAPACKE_ztgsen( int matrix_layout, lapack_int ijob,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ztgsen_work( matrix_layout, ijob, wantq, wantz, select, n, a,
+    info = API_SUFFIX(LAPACKE_ztgsen_work)( matrix_layout, ijob, wantq, wantz, select, n, a,
                                 lda, b, ldb, alpha, beta, q, ldq, z, ldz, m, pl,
                                 pr, dif, work, lwork, iwork, liwork );
     /* Release memory and exit */
@@ -107,7 +107,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_ztgsen", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgsen", info );
     }
     return info;
 }

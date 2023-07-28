@@ -32,28 +32,28 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zpttrs( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zpttrs)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, const double* d,
                            const lapack_complex_double* e,
                            lapack_complex_double* b, lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zpttrs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpttrs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -7;
         }
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_z_nancheck( n-1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_z_nancheck)( n-1, e, 1 ) ) {
             return -6;
         }
     }
 #endif
-    return LAPACKE_zpttrs_work( matrix_layout, uplo, n, nrhs, d, e, b, ldb );
+    return API_SUFFIX(LAPACKE_zpttrs_work)( matrix_layout, uplo, n, nrhs, d, e, b, ldb );
 }

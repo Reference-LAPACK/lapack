@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztrevc( int matrix_layout, char side, char howmny,
+lapack_int API_SUFFIX(LAPACKE_ztrevc)( int matrix_layout, char side, char howmny,
                            const lapack_logical* select, lapack_int n,
                            lapack_complex_double* t, lapack_int ldt,
                            lapack_complex_double* vl, lapack_int ldvl,
@@ -43,22 +43,22 @@ lapack_int LAPACKE_ztrevc( int matrix_layout, char side, char howmny,
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ztrevc", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrevc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, t, ldt ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, t, ldt ) ) {
             return -6;
         }
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, mm, vl, ldvl ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, mm, vl, ldvl ) ) {
                 return -8;
             }
         }
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, mm, vr, ldvr ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, mm, vr, ldvr ) ) {
                 return -10;
             }
         }
@@ -77,7 +77,7 @@ lapack_int LAPACKE_ztrevc( int matrix_layout, char side, char howmny,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ztrevc_work( matrix_layout, side, howmny, select, n, t, ldt,
+    info = API_SUFFIX(LAPACKE_ztrevc_work)( matrix_layout, side, howmny, select, n, t, ldt,
                                 vl, ldvl, vr, ldvr, mm, m, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +85,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_ztrevc", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrevc", info );
     }
     return info;
 }

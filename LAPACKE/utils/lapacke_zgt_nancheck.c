@@ -33,12 +33,12 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_zgt_nancheck( lapack_int n,
+lapack_logical API_SUFFIX(LAPACKE_zgt_nancheck)( lapack_int n,
                                       const lapack_complex_double *dl,
                                       const lapack_complex_double *d,
                                       const lapack_complex_double *du )
 {
-    return LAPACKE_z_nancheck( n-1, dl, 1 )
-        || LAPACKE_z_nancheck( n  , d,  1 )
-        || LAPACKE_z_nancheck( n-1, du, 1 );
+    return API_SUFFIX(LAPACKE_z_nancheck)( n-1, dl, 1 )
+        || API_SUFFIX(LAPACKE_z_nancheck)( n  , d,  1 )
+        || API_SUFFIX(LAPACKE_z_nancheck)( n-1, du, 1 );
 }

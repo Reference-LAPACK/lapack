@@ -33,15 +33,15 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_spb_nancheck( int matrix_layout, char uplo,
+lapack_logical API_SUFFIX(LAPACKE_spb_nancheck)( int matrix_layout, char uplo,
                                       lapack_int n, lapack_int kd,
                                       const float* ab,
                                       lapack_int ldab )
 {
-    if( LAPACKE_lsame( uplo, 'u' ) ) {
-        return LAPACKE_sgb_nancheck( matrix_layout, n, n, 0, kd, ab, ldab );
-    } else if( LAPACKE_lsame( uplo, 'l' ) ) {
-        return LAPACKE_sgb_nancheck( matrix_layout, n, n, kd, 0, ab, ldab );
+    if( API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) {
+        return API_SUFFIX(LAPACKE_sgb_nancheck)( matrix_layout, n, n, 0, kd, ab, ldab );
+    } else if( API_SUFFIX(LAPACKE_lsame)( uplo, 'l' ) ) {
+        return API_SUFFIX(LAPACKE_sgb_nancheck)( matrix_layout, n, n, kd, 0, ab, ldab );
     }
     return (lapack_logical) 0;
 }

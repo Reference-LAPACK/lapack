@@ -36,9 +36,9 @@
  * layout or vice versa.
  */
 
-void LAPACKE_dpf_trans( int matrix_layout, char transr, char uplo,
+void API_SUFFIX(LAPACKE_dpf_trans)( int matrix_layout, char transr, char uplo,
                         lapack_int n, const double *in,
                         double *out )
 {
-    LAPACKE_dtf_trans( matrix_layout, transr, uplo, 'n', n, in, out );
+    API_SUFFIX(LAPACKE_dtf_trans)( matrix_layout, transr, uplo, 'n', n, in, out );
 }

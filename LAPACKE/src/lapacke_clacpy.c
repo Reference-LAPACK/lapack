@@ -32,22 +32,22 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clacpy( int matrix_layout, char uplo, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_clacpy)( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, const lapack_complex_float* a,
                            lapack_int lda, lapack_complex_float* b,
                            lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_clacpy", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
-    return LAPACKE_clacpy_work( matrix_layout, uplo, m, n, a, lda, b, ldb );
+    return API_SUFFIX(LAPACKE_clacpy_work)( matrix_layout, uplo, m, n, a, lda, b, ldb );
 }

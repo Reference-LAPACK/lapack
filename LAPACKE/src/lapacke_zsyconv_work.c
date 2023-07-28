@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zsyconv_work( int matrix_layout, char uplo, char way,
+lapack_int API_SUFFIX(LAPACKE_zsyconv_work)( int matrix_layout, char uplo, char way,
                                  lapack_int n, lapack_complex_double* a,
                                  lapack_int lda, const lapack_int* ipiv,
                                  lapack_complex_double* e )
@@ -50,7 +50,7 @@ lapack_int LAPACKE_zsyconv_work( int matrix_layout, char uplo, char way,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zsyconv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsyconv_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,23 +61,23 @@ lapack_int LAPACKE_zsyconv_work( int matrix_layout, char uplo, char way,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, lda, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, lda, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zsyconv( &uplo, &way, &n, a_t, &lda_t, ipiv, e, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, lda, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, lda, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zsyconv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsyconv_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zsyconv_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zsyconv_work", info );
     }
     return info;
 }

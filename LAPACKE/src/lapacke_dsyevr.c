@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsyevr( int matrix_layout, char jobz, char range, char uplo,
+lapack_int API_SUFFIX(LAPACKE_dsyevr)( int matrix_layout, char jobz, char range, char uplo,
                            lapack_int n, double* a, lapack_int lda, double vl,
                            double vu, lapack_int il, lapack_int iu,
                            double abstol, lapack_int* m, double* w, double* z,
@@ -46,32 +46,32 @@ lapack_int LAPACKE_dsyevr( int matrix_layout, char jobz, char range, char uplo,
     lapack_int iwork_query;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dsyevr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyevr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -6;
         }
-        if( LAPACKE_d_nancheck( 1, &abstol, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &abstol, 1 ) ) {
             return -12;
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_d_nancheck( 1, &vl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vl, 1 ) ) {
                 return -8;
             }
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_d_nancheck( 1, &vu, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vu, 1 ) ) {
                 return -9;
             }
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dsyevr_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
+    info = API_SUFFIX(LAPACKE_dsyevr_work)( matrix_layout, jobz, range, uplo, n, a, lda, vl,
                                 vu, il, iu, abstol, m, w, z, ldz, isuppz,
                                 &work_query, lwork, &iwork_query, liwork );
     if( info != 0 ) {
@@ -91,7 +91,7 @@ lapack_int LAPACKE_dsyevr( int matrix_layout, char jobz, char range, char uplo,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsyevr_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
+    info = API_SUFFIX(LAPACKE_dsyevr_work)( matrix_layout, jobz, range, uplo, n, a, lda, vl,
                                 vu, il, iu, abstol, m, w, z, ldz, isuppz, work,
                                 lwork, iwork, liwork );
     /* Release memory and exit */
@@ -100,7 +100,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dsyevr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsyevr", info );
     }
     return info;
 }

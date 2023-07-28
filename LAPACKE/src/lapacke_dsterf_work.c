@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsterf_work( lapack_int n, double* d, double* e )
+lapack_int API_SUFFIX(LAPACKE_dsterf_work)( lapack_int n, double* d, double* e )
 {
     lapack_int info = 0;
     /* Call LAPACK function and adjust info */

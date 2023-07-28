@@ -32,27 +32,27 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlansy( int matrix_layout, char norm, char uplo, lapack_int n,
+double API_SUFFIX(LAPACKE_dlansy)( int matrix_layout, char norm, char uplo, lapack_int n,
                            const double* a, lapack_int lda )
 {
     lapack_int info = 0;
     double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dlansy", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlansy", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( norm, 'i' ) || LAPACKE_lsame( norm, '1' ) ||
-        LAPACKE_lsame( norm, 'O' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) || API_SUFFIX(LAPACKE_lsame)( norm, '1' ) ||
+        API_SUFFIX(LAPACKE_lsame)( norm, 'O' ) ) {
         work = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,n) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -60,15 +60,15 @@ double LAPACKE_dlansy( int matrix_layout, char norm, char uplo, lapack_int n,
         }
     }
     /* Call middle-level interface */
-    res = LAPACKE_dlansy_work( matrix_layout, norm, uplo, n, a, lda, work );
+    res = API_SUFFIX(LAPACKE_dlansy_work)( matrix_layout, norm, uplo, n, a, lda, work );
     /* Release memory and exit */
-    if( LAPACKE_lsame( norm, 'i' ) || LAPACKE_lsame( norm, '1' ) ||
-        LAPACKE_lsame( norm, 'O' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) || API_SUFFIX(LAPACKE_lsame)( norm, '1' ) ||
+        API_SUFFIX(LAPACKE_lsame)( norm, 'O' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dlansy", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlansy", info );
     }
     return res;
 }

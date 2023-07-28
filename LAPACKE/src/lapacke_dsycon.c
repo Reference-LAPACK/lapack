@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsycon( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dsycon)( int matrix_layout, char uplo, lapack_int n,
                            const double* a, lapack_int lda,
                            const lapack_int* ipiv, double anorm, double* rcond )
 {
@@ -40,16 +40,16 @@ lapack_int LAPACKE_dsycon( int matrix_layout, char uplo, lapack_int n,
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dsycon", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsycon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -4;
         }
-        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
             return -7;
         }
     }
@@ -66,7 +66,7 @@ lapack_int LAPACKE_dsycon( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsycon_work( matrix_layout, uplo, n, a, lda, ipiv, anorm,
+    info = API_SUFFIX(LAPACKE_dsycon_work)( matrix_layout, uplo, n, a, lda, ipiv, anorm,
                                 rcond, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -74,7 +74,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dsycon", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsycon", info );
     }
     return info;
 }

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chpgst_work( int matrix_layout, lapack_int itype, char uplo,
+lapack_int API_SUFFIX(LAPACKE_chpgst_work)( int matrix_layout, lapack_int itype, char uplo,
                                 lapack_int n, lapack_complex_float* ap,
                                 const lapack_complex_float* bp )
 {
@@ -62,26 +62,26 @@ lapack_int LAPACKE_chpgst_work( int matrix_layout, lapack_int itype, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_chp_trans( matrix_layout, uplo, n, ap, ap_t );
-        LAPACKE_chp_trans( matrix_layout, uplo, n, bp, bp_t );
+        API_SUFFIX(LAPACKE_chp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        API_SUFFIX(LAPACKE_chp_trans)( matrix_layout, uplo, n, bp, bp_t );
         /* Call LAPACK function and adjust info */
         LAPACK_chpgst( &itype, &uplo, &n, ap_t, bp_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_chp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        API_SUFFIX(LAPACKE_chp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         /* Release memory and exit */
         LAPACKE_free( bp_t );
 exit_level_1:
         LAPACKE_free( ap_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_chpgst_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chpgst_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_chpgst_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chpgst_work", info );
     }
     return info;
 }

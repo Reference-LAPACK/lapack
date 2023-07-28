@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sptsvx_work( int matrix_layout, char fact, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sptsvx_work)( int matrix_layout, char fact, lapack_int n,
                                 lapack_int nrhs, const float* d, const float* e,
                                 float* df, float* ef, const float* b,
                                 lapack_int ldb, float* x, lapack_int ldx,
@@ -55,12 +55,12 @@ lapack_int LAPACKE_sptsvx_work( int matrix_layout, char fact, lapack_int n,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_sptsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sptsvx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_sptsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sptsvx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -75,7 +75,7 @@ lapack_int LAPACKE_sptsvx_work( int matrix_layout, char fact, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sptsvx( &fact, &n, &nrhs, d, e, df, ef, b_t, &ldb_t, x_t, &ldx_t,
                        rcond, ferr, berr, work, &info );
@@ -83,18 +83,18 @@ lapack_int LAPACKE_sptsvx_work( int matrix_layout, char fact, lapack_int n,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_sptsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sptsvx_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_sptsvx_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sptsvx_work", info );
     }
     return info;
 }

@@ -37,9 +37,9 @@
  * matrix_layout.
  */
 
-lapack_logical LAPACKE_dpf_nancheck( lapack_int n,
+lapack_logical API_SUFFIX(LAPACKE_dpf_nancheck)( lapack_int n,
                                       const double *a )
 {
     lapack_int len = n*(n+1)/2;
-    return LAPACKE_d_nancheck( len, a, 1 );
+    return API_SUFFIX(LAPACKE_d_nancheck)( len, a, 1 );
 }

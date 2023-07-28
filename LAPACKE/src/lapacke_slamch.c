@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-float LAPACKE_slamch( char cmach )
+float API_SUFFIX(LAPACKE_slamch)( char cmach )
 {
-    return LAPACKE_slamch_work( cmach );
+    return API_SUFFIX(LAPACKE_slamch_work)( cmach );
 }

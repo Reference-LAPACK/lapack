@@ -36,10 +36,10 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void LAPACKE_ssp_trans( int matrix_layout, char uplo, lapack_int n,
+void API_SUFFIX(LAPACKE_ssp_trans)( int matrix_layout, char uplo, lapack_int n,
                         const float *in,
                         float *out )
 {
-    LAPACKE_stp_trans( matrix_layout, uplo, 'n', n, in, out );
+    API_SUFFIX(LAPACKE_stp_trans)( matrix_layout, uplo, 'n', n, in, out );
 }
 

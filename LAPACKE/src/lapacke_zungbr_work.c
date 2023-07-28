@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zungbr_work( int matrix_layout, char vect, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_zungbr_work)( int matrix_layout, char vect, lapack_int m,
                                 lapack_int n, lapack_int k,
                                 lapack_complex_double* a, lapack_int lda,
                                 const lapack_complex_double* tau,
@@ -51,7 +51,7 @@ lapack_int LAPACKE_zungbr_work( int matrix_layout, char vect, lapack_int m,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_zungbr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zungbr_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -68,7 +68,7 @@ lapack_int LAPACKE_zungbr_work( int matrix_layout, char vect, lapack_int m,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zungbr( &vect, &m, &n, &k, a_t, &lda_t, tau, work, &lwork,
                        &info );
@@ -76,16 +76,16 @@ lapack_int LAPACKE_zungbr_work( int matrix_layout, char vect, lapack_int m,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zungbr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zungbr_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zungbr_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zungbr_work", info );
     }
     return info;
 }

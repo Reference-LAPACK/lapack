@@ -36,7 +36,7 @@
  * layout or vice versa.
  */
 
-void LAPACKE_chs_trans( int matrix_layout, lapack_int n,
+void API_SUFFIX(LAPACKE_chs_trans)( int matrix_layout, lapack_int n,
                         const lapack_complex_float *in, lapack_int ldin,
                         lapack_complex_float *out, lapack_int ldout )
 {
@@ -44,15 +44,15 @@ void LAPACKE_chs_trans( int matrix_layout, lapack_int n,
 
     /* Convert subdiagonal first */
     if( matrix_layout == LAPACK_COL_MAJOR ) {
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, 1, n-1, &in[1], ldin+1,
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, 1, n-1, &in[1], ldin+1,
                            &out[ldout], ldout+1 );
     } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
-        LAPACKE_cge_trans( LAPACK_ROW_MAJOR, n-1, 1, &in[ldin], ldin+1,
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_ROW_MAJOR, n-1, 1, &in[ldin], ldin+1,
                            &out[1], ldout+1 );
     } else {
         return;
     }
 
     /* Convert upper triangular. */
-    LAPACKE_ctr_trans( matrix_layout, 'u', 'n', n, in, ldin, out, ldout);
+    API_SUFFIX(LAPACKE_ctr_trans)( matrix_layout, 'u', 'n', n, in, ldin, out, ldout);
 }

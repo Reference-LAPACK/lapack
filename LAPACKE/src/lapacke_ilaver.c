@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-void LAPACKE_ilaver( lapack_int* vers_major,
+void API_SUFFIX(LAPACKE_ilaver)( lapack_int* vers_major,
                      lapack_int* vers_minor,
                      lapack_int* vers_patch )
 {

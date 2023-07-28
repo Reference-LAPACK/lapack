@@ -32,23 +32,23 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dppcon( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dppcon)( int matrix_layout, char uplo, lapack_int n,
                            const double* ap, double anorm, double* rcond )
 {
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dppcon", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_dpp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_dpp_nancheck)( n, ap ) ) {
             return -4;
         }
     }
@@ -65,7 +65,7 @@ lapack_int LAPACKE_dppcon( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dppcon_work( matrix_layout, uplo, n, ap, anorm, rcond, work,
+    info = API_SUFFIX(LAPACKE_dppcon_work)( matrix_layout, uplo, n, ap, anorm, rcond, work,
                                 iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -73,7 +73,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dppcon", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppcon", info );
     }
     return info;
 }

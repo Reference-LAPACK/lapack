@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgesdd( int matrix_layout, char jobz, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_zgesdd)( int matrix_layout, char jobz, lapack_int m,
                            lapack_int n, lapack_complex_double* a,
                            lapack_int lda, double* s, lapack_complex_double* u,
                            lapack_int ldu, lapack_complex_double* vt,
@@ -47,19 +47,19 @@ lapack_int LAPACKE_zgesdd( int matrix_layout, char jobz, lapack_int m,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zgesdd", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgesdd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Additional scalars initializations for work arrays */
-    if( LAPACKE_lsame( jobz, 'n' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( jobz, 'n' ) ) {
         lrwork = MAX(1,7*MIN(m,n));
     } else {
         lrwork = (size_t)MAX(1,MIN(m,n)*MAX(5*MIN(m,n)+7,2*MAX(m,n)+2*MIN(m,n)+1));
@@ -77,7 +77,7 @@ lapack_int LAPACKE_zgesdd( int matrix_layout, char jobz, lapack_int m,
         goto exit_level_1;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zgesdd_work( matrix_layout, jobz, m, n, a, lda, s, u, ldu, vt,
+    info = API_SUFFIX(LAPACKE_zgesdd_work)( matrix_layout, jobz, m, n, a, lda, s, u, ldu, vt,
                                 ldvt, &work_query, lwork, rwork, iwork );
     if( info != 0 ) {
         goto exit_level_2;
@@ -91,7 +91,7 @@ lapack_int LAPACKE_zgesdd( int matrix_layout, char jobz, lapack_int m,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zgesdd_work( matrix_layout, jobz, m, n, a, lda, s, u, ldu, vt,
+    info = API_SUFFIX(LAPACKE_zgesdd_work)( matrix_layout, jobz, m, n, a, lda, s, u, ldu, vt,
                                 ldvt, work, lwork, rwork, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -101,7 +101,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zgesdd", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgesdd", info );
     }
     return info;
 }

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sspsvx( int matrix_layout, char fact, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sspsvx)( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, const float* ap, float* afp,
                            lapack_int* ipiv, const float* b, lapack_int ldb,
                            float* x, lapack_int ldx, float* rcond, float* ferr,
@@ -42,21 +42,21 @@ lapack_int LAPACKE_sspsvx( int matrix_layout, char fact, char uplo, lapack_int n
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sspsvx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sspsvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_lsame( fact, 'f' ) ) {
-            if( LAPACKE_ssp_nancheck( n, afp ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
+            if( API_SUFFIX(LAPACKE_ssp_nancheck)( n, afp ) ) {
                 return -7;
             }
         }
-        if( LAPACKE_ssp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_ssp_nancheck)( n, ap ) ) {
             return -6;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
     }
@@ -73,7 +73,7 @@ lapack_int LAPACKE_sspsvx( int matrix_layout, char fact, char uplo, lapack_int n
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sspsvx_work( matrix_layout, fact, uplo, n, nrhs, ap, afp,
+    info = API_SUFFIX(LAPACKE_sspsvx_work)( matrix_layout, fact, uplo, n, nrhs, ap, afp,
                                 ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
                                 iwork );
     /* Release memory and exit */
@@ -82,7 +82,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sspsvx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sspsvx", info );
     }
     return info;
 }

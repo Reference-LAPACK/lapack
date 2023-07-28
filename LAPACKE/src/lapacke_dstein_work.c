@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dstein_work( int matrix_layout, lapack_int n, const double* d,
+lapack_int API_SUFFIX(LAPACKE_dstein_work)( int matrix_layout, lapack_int n, const double* d,
                                 const double* e, lapack_int m, const double* w,
                                 const lapack_int* iblock,
                                 const lapack_int* isplit, double* z,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_dstein_work( int matrix_layout, lapack_int n, const double* d
         /* Check leading dimension(s) */
         if( ldz < m ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_dstein_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstein_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -69,16 +69,16 @@ lapack_int LAPACKE_dstein_work( int matrix_layout, lapack_int n, const double* d
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, m, z_t, ldz_t, z, ldz );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, m, z_t, ldz_t, z, ldz );
         /* Release memory and exit */
         LAPACKE_free( z_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dstein_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstein_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dstein_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstein_work", info );
     }
     return info;
 }

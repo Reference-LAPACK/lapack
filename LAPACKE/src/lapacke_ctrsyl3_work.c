@@ -1,6 +1,6 @@
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctrsyl3_work( int matrix_layout, char trana, char tranb,
+lapack_int API_SUFFIX(LAPACKE_ctrsyl3_work)( int matrix_layout, char trana, char tranb,
                                  lapack_int isgn, lapack_int m, lapack_int n,
                                  const lapack_complex_float* a, lapack_int lda,
                                  const lapack_complex_float* b, lapack_int ldb,
@@ -26,17 +26,17 @@ lapack_int LAPACKE_ctrsyl3_work( int matrix_layout, char trana, char tranb,
         /* Check leading dimension(s) */
         if( lda < m ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_ctrsyl3_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsyl3_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_ctrsyl3_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsyl3_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_ctrsyl3_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsyl3_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -59,9 +59,9 @@ lapack_int LAPACKE_ctrsyl3_work( int matrix_layout, char trana, char tranb,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_layout, m, m, a, lda, a_t, lda_t );
-        LAPACKE_cge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
-        LAPACKE_cge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, m, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ctrsyl3( &trana, &tranb, &isgn, &m, &n, a_t, &lda_t, b_t, &ldb_t,
                         c_t, &ldc_t, scale, swork, &ldswork, &info );
@@ -69,7 +69,7 @@ lapack_int LAPACKE_ctrsyl3_work( int matrix_layout, char trana, char tranb,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_2:
@@ -78,11 +78,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ctrsyl3_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsyl3_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ctrsyl3_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctrsyl3_work", info );
     }
     return info;
 }

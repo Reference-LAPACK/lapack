@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chfrk_work( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_chfrk_work)( int matrix_layout, char transr, char uplo,
                                char trans, lapack_int n, lapack_int k,
                                float alpha, const lapack_complex_float* a,
                                lapack_int lda, float beta,
@@ -49,13 +49,13 @@ lapack_int LAPACKE_chfrk_work( int matrix_layout, char transr, char uplo,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        na = LAPACKE_lsame( trans, 'n' ) ? n : k;
-        ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
+        na = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? n : k;
+        ka = API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) ? k : n;
         lda_t = MAX(1,na);
         /* Check leading dimension(s) */
         if( lda < ka ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_chfrk_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chfrk_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -73,25 +73,25 @@ lapack_int LAPACKE_chfrk_work( int matrix_layout, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_layout, na, ka, a, lda, a_t, lda_t );
-        LAPACKE_cpf_trans( matrix_layout, transr, uplo, n, c, c_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, na, ka, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_cpf_trans)( matrix_layout, transr, uplo, n, c, c_t );
         /* Call LAPACK function and adjust info */
         LAPACK_chfrk( &transr, &uplo, &trans, &n, &k, &alpha, a_t, &lda_t,
                       &beta, c_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        LAPACKE_cpf_trans( LAPACK_COL_MAJOR, transr, uplo, n, c_t, c );
+        API_SUFFIX(LAPACKE_cpf_trans)( LAPACK_COL_MAJOR, transr, uplo, n, c_t, c );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_chfrk_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chfrk_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_chfrk_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chfrk_work", info );
     }
     return info;
 }
