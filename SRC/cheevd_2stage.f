@@ -339,8 +339,8 @@
                LIWMIN = 1
             END IF
          END IF
-         WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = CMPLX( LWMIN )
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -438,8 +438,8 @@
          CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
-      WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = CMPLX( LWMIN )
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

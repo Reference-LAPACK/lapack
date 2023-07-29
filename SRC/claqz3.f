@@ -241,7 +241,7 @@
       END IF
       IF ( LWORK .EQ.-1 ) THEN
 *        workspace query, quick return
-         WORK( 1 ) = N*NBLOCK_DESIRED
+         WORK( 1 ) = CMPLX( N*NBLOCK_DESIRED )
          RETURN
       ELSE IF ( LWORK .LT. N*NBLOCK_DESIRED ) THEN
          INFO = -25

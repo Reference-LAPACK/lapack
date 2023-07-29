@@ -310,7 +310,7 @@
          MINWRK = 1
          MAXWRK = 1
          BDSPAC = 0
-         MNTHR  = INT( MINMN*11.0E0 / 6.0E0 )
+         MNTHR  = INT( REAL( MINMN )*11.0E0 / 6.0E0 )
          IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
 *           Compute space needed for SBDSDC

@@ -467,8 +467,8 @@
  5    CONTINUE
 *     Compute global Gerschgorin bounds and spectral diameter
       TNORM = MAX( ABS( GL ), ABS( GU ) )
-      GL = GL - FUDGE*TNORM*EPS*N - FUDGE*TWO*PIVMIN
-      GU = GU + FUDGE*TNORM*EPS*N + FUDGE*TWO*PIVMIN
+      GL = GL - FUDGE*TNORM*EPS*REAL( N ) - FUDGE*TWO*PIVMIN
+      GU = GU + FUDGE*TNORM*EPS*REAL( N ) + FUDGE*TWO*PIVMIN
 *     [JAN/28/2009] remove the line below since SPDIAM variable not use
 *     SPDIAM = GU - GL
 *     Input arguments for SLAEBZ:
@@ -641,8 +641,8 @@
 *           SPDIAM = GU - GL
 *           GL = GL - FUDGE*SPDIAM*EPS*IN - FUDGE*PIVMIN
 *           GU = GU + FUDGE*SPDIAM*EPS*IN + FUDGE*PIVMIN
-            GL = GL - FUDGE*TNORM*EPS*IN - FUDGE*PIVMIN
-            GU = GU + FUDGE*TNORM*EPS*IN + FUDGE*PIVMIN
+            GL = GL - FUDGE*TNORM*EPS*REAL( IN ) - FUDGE*PIVMIN
+            GU = GU + FUDGE*TNORM*EPS*REAL( IN ) + FUDGE*PIVMIN
 *
             IF( IRANGE.GT.1 ) THEN
                IF( GU.LT.WL ) THEN

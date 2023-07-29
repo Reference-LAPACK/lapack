@@ -293,8 +293,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         HOUS2( 1 ) = LHMIN
-         WORK( 1 )  = LWMIN
+         HOUS2( 1 ) = REAL( LHMIN )
+         WORK( 1 )  = REAL( LWMIN )
       END IF
 *
       IF( INFO.NE.0 ) THEN

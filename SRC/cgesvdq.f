@@ -735,9 +735,9 @@
 *     Return optimal workspace
 *
           IWORK(1) = IMINWRK
-          CWORK(1) = OPTWRK
-          CWORK(2) = MINWRK
-          RWORK(1) = RMINWRK
+          CWORK(1) = CMPLX( OPTWRK )
+          CWORK(2) = CMPLX( MINWRK )
+          RWORK(1) = REAL( RMINWRK )
           RETURN
       END IF
 *
@@ -1416,7 +1416,7 @@
       IF ( ASCALED )
      $   CALL SLASCL( 'G',0,0, ONE,SQRT(REAL(M)), NR,1, S, N, IERR )
       IF ( CONDA ) RWORK(1) = SCONDA
-      RWORK(2) = p - NR
+      RWORK(2) = REAL( p - NR )
 *     .. p-NR is the number of singular values that are computed as
 *     exact zeros in CGESVD() applied to the (possibly truncated)
 *     full row rank triangular (trapezoidal) factor of A.

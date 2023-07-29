@@ -375,7 +375,7 @@
          MINWRK = MIN( MINWRK, MAXWRK )
          WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
          IWORK( 1 ) = LIWORK
-         RWORK( 1 ) = LRWORK
+         RWORK( 1 ) = REAL( LRWORK )
 *
          IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN
             INFO = -12
@@ -667,7 +667,7 @@
    10 CONTINUE
       WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
       IWORK( 1 ) = LIWORK
-      RWORK( 1 ) = LRWORK
+      RWORK( 1 ) = REAL( LRWORK )
       RETURN
 *
 *     End of CGELSD

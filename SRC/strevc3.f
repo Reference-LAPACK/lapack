@@ -301,7 +301,7 @@
       INFO = 0
       NB = ILAENV( 1, 'STREVC', SIDE // HOWMNY, N, -1, -1, -1 )
       MAXWRK = MAX( 1, N + 2*N*NB )
-      WORK(1) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
@@ -384,7 +384,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
 *     Compute 1-norm of each column of strictly upper triangular

@@ -298,7 +298,7 @@
          LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
      $                         -1 )
          LWMIN = 2*N + LHTRD + LWTRD
-         WORK( 1 )  = LWMIN
+         WORK( 1 )  = REAL( LWMIN )
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11

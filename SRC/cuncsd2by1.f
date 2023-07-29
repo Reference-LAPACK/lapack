@@ -512,7 +512,7 @@
          END IF
          LRWORKMIN = IBBCSD+LBBCSD-1
          LRWORKOPT = LRWORKMIN
-         RWORK(1) = LRWORKOPT
+         RWORK(1) = REAL( LRWORKOPT )
          LWORKMIN = MAX( IORBDB+LORBDB-1,
      $                   IORGQR+LORGQRMIN-1,
      $                   IORGLQ+LORGLQMIN-1 )

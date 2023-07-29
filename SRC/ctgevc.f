@@ -369,9 +369,9 @@
       SAFMIN = SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
-      SMALL = SAFMIN*N / ULP
+      SMALL = SAFMIN*REAL( N ) / ULP
       BIG = ONE / SMALL
-      BIGNUM = ONE / ( SAFMIN*N )
+      BIGNUM = ONE / ( SAFMIN*REAL( N ) )
 *
 *     Compute the 1-norm of each column of the strictly upper triangular
 *     part of A and B to check for possible overflow in the triangular

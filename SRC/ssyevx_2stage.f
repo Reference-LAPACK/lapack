@@ -402,7 +402,7 @@
             LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = MAX( 8*N, 3*N + LHTRD + LWTRD )
-            WORK( 1 )  = LWMIN
+            WORK( 1 )  = REAL( LWMIN )
          END IF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )

@@ -411,12 +411,13 @@
    40    CONTINUE
    50    CONTINUE
          SMINOA = SMINOA / SQRT( REAL( N ) )
-         THRESH = MAX( TOL*SMINOA, MAXITR*(N*(N*UNFL)) )
+         THRESH = MAX( TOL*SMINOA, MAXITR*(REAL( N )*(REAL( N )*UNFL)) )
       ELSE
 *
 *        Absolute accuracy desired
 *
-         THRESH = MAX( ABS( TOL )*SMAX, MAXITR*(N*(N*UNFL)) )
+         THRESH = MAX( ABS( TOL )*SMAX, MAXITR*(REAL( N )*
+     $           (REAL( N )*UNFL)) )
       END IF
 *
 *     Prepare for main iteration loop for the singular values
@@ -590,7 +591,7 @@
 *     Compute shift.  First, test if shifting would ruin relative
 *     accuracy, and if so set the shift to zero.
 *
-      IF( TOL.GE.ZERO .AND. N*TOL*( SMIN / SMAX ).LE.
+      IF( TOL.GE.ZERO .AND. REAL( N )*TOL*( SMIN / SMAX ).LE.
      $    MAX( EPS, HNDRTH*TOL ) ) THEN
 *
 *        Use a zero shift to avoid loss of relative accuracy

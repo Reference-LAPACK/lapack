@@ -414,7 +414,8 @@
       NSR = MAX( 2, NSR-MOD( NSR, 2 ) )
 
       RCOST = ILAENV( 17, 'CLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
-      ITEMP1 = INT( NSR/SQRT( 1+2*NSR/( REAL( RCOST )/100*N ) ) )
+      ITEMP1 = INT( REAL( NSR )/SQRT( 1+2*REAL( NSR )/
+     $         ( REAL( RCOST )/100*REAL( N ) ) ) )
       ITEMP1 = ( ( ITEMP1-1 )/4 )*4+4
       NBR = NSR+ITEMP1
 

@@ -219,8 +219,8 @@
       LQUERY = ( LDSWORK.EQ.-1 )
       IF( LQUERY ) THEN
          LDSWORK = 2
-         SWORK(1,1) = MAX( NBA, NBB )
-         SWORK(2,1) = 2 * NBB + NBA
+         SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+         SWORK(2,1) = REAL( 2 * NBB + NBA )
       END IF
 *
 *     Test the input arguments
@@ -1072,8 +1072,8 @@
 *        form (1/SCALE)*X if SCALE is REAL. Set SCALE to
 *        zero and give up.
 *
-         SWORK(1,1) = MAX( NBA, NBB )
-         SWORK(2,1) = 2 * NBB + NBA
+         SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+         SWORK(2,1) = REAL( 2 * NBB + NBA )
          RETURN
       END IF
 *
@@ -1136,8 +1136,8 @@
 *
 *     Restore workspace dimensions
 *
-      SWORK(1,1) = MAX( NBA, NBB )
-      SWORK(2,1) = 2 * NBB + NBA
+      SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+      SWORK(2,1) = REAL( 2 * NBB + NBA )
 *
       RETURN
 *

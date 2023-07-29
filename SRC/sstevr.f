@@ -500,7 +500,7 @@
             CALL SSTERF( N, W, WORK, INFO )
          ELSE
             CALL SCOPY( N, D, 1, WORK( N+1 ), 1 )
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.

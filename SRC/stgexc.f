@@ -280,7 +280,7 @@
          ELSE
             LWMIN = 4*N + 16
          END IF
-         WORK(1) = LWMIN
+         WORK(1) = REAL( LWMIN )
 *
          IF (LWORK.LT.LWMIN .AND. .NOT.LQUERY) THEN
             INFO = -15

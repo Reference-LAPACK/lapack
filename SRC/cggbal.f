@@ -349,7 +349,7 @@
 *     Permute rows M and I
 *
   160 CONTINUE
-      LSCALE( M ) = I
+      LSCALE( M ) = REAL( I )
       IF( I.EQ.M )
      $   GO TO 170
       CALL CSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
@@ -358,7 +358,7 @@
 *     Permute columns M and J
 *
   170 CONTINUE
-      RSCALE( M ) = J
+      RSCALE( M ) = REAL( J )
       IF( J.EQ.M )
      $   GO TO 180
       CALL CSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )

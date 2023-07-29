@@ -460,7 +460,7 @@
             NZCMIN = 0
          ENDIF
          IF( ZQUERY .AND. INFO.EQ.0 ) THEN
-            Z( 1,1 ) = NZCMIN
+            Z( 1,1 ) = REAL( NZCMIN )
          ELSE IF( NZC.LT.NZCMIN .AND. .NOT.ZQUERY ) THEN
             INFO = -14
          END IF

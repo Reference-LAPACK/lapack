@@ -321,7 +321,7 @@
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = MIN( M, N )
+               SUM = REAL( MIN( M, N ) )
                DO 290 J = 2, N
                   CALL CLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE,
      $                         SUM )
@@ -337,7 +337,7 @@
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = MIN( M, N )
+               SUM = REAL( MIN( M, N ) )
                DO 310 J = 1, N
                   CALL CLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
      $                         SUM )

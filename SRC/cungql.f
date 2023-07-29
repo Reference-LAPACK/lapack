@@ -288,7 +288,7 @@
    50    CONTINUE
       END IF
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = CMPLX( IWS )
       RETURN
 *
 *     End of CUNGQL

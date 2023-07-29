@@ -289,8 +289,8 @@
 *
       INFO   = 0
       MINMN  = MIN( M, N )
-      MNTHR1 = INT( MINMN*17.0E0 / 9.0E0 )
-      MNTHR2 = INT( MINMN*5.0E0 / 3.0E0 )
+      MNTHR1 = INT( REAL( MINMN )*17.0E0 / 9.0E0 )
+      MNTHR2 = INT( REAL( MINMN )*5.0E0 / 3.0E0 )
       WNTQA  = LSAME( JOBZ, 'A' )
       WNTQS  = LSAME( JOBZ, 'S' )
       WNTQAS = WNTQA .OR. WNTQS

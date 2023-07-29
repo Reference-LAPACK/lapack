@@ -286,7 +286,7 @@
       NZ = MIN( N+1, 2*KD+2 )
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -398,10 +398,11 @@
 *
          DO 90 I = 1, N
             IF( RWORK( I ).GT.SAFE2 ) THEN
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I )
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I )
             ELSE
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I ) +
-     $                      SAFE1
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I ) + SAFE1
             END IF
    90    CONTINUE
 *

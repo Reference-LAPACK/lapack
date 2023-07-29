@@ -355,7 +355,8 @@
          ELSE
             LWKMIN = 2*N
             NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1,
+     $                           -1, -1 ) )
             LWKOPT = ( NB + 1 )*N
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )

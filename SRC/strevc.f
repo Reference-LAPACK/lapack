@@ -344,7 +344,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
 *     Compute 1-norm of each column of strictly upper triangular

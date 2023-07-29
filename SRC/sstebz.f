@@ -456,8 +456,8 @@
          GU = MAX( GU, D( N )+TMP1 )
          GL = MIN( GL, D( N )-TMP1 )
          TNORM = MAX( ABS( GL ), ABS( GU ) )
-         GL = GL - FUDGE*TNORM*ULP*N - FUDGE*TWO*PIVMIN
-         GU = GU + FUDGE*TNORM*ULP*N + FUDGE*PIVMIN
+         GL = GL - FUDGE*TNORM*ULP*REAL( N ) - FUDGE*TWO*PIVMIN
+         GU = GU + FUDGE*TNORM*ULP*REAL( N ) + FUDGE*PIVMIN
 *
 *        Compute Iteration parameters
 *
@@ -585,8 +585,8 @@
             GU = MAX( GU, D( IEND )+TMP1 )
             GL = MIN( GL, D( IEND )-TMP1 )
             BNORM = MAX( ABS( GL ), ABS( GU ) )
-            GL = GL - FUDGE*BNORM*ULP*IN - FUDGE*PIVMIN
-            GU = GU + FUDGE*BNORM*ULP*IN + FUDGE*PIVMIN
+            GL = GL - FUDGE*BNORM*ULP*REAL( IN ) - FUDGE*PIVMIN
+            GU = GU + FUDGE*BNORM*ULP*REAL( IN ) + FUDGE*PIVMIN
 *
 *           Compute ATOLI for the current submatrix
 *

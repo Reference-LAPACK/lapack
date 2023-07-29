@@ -285,7 +285,7 @@
       NZ = KD + 2
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -433,9 +433,10 @@
 *
          DO 200 I = 1, N
             IF( WORK( I ).GT.SAFE2 ) THEN
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I )
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
             ELSE
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I ) + SAFE1
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
+     $                     + SAFE1
             END IF
   200    CONTINUE
 *

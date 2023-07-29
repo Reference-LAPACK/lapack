@@ -452,8 +452,8 @@
 *
       ULP = SLAMCH( 'Precision' )
       UNFL = SLAMCH( 'Safe Minimum' )
-      TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
-      TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
+      TOLA = REAL( MAX( M, N ) )*MAX( ANORM, UNFL )*ULP
+      TOLB = REAL( MAX( P, N ) )*MAX( BNORM, UNFL )*ULP
 *
 *     Preprocessing
 *

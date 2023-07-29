@@ -185,7 +185,7 @@
          CALL XERBLA( 'CSYTRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK(1)=MINSIZE
+         WORK(1)=CMPLX( MINSIZE )
          RETURN
       END IF
       IF( N.EQ.0 )

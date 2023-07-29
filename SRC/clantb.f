@@ -320,7 +320,7 @@
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                IF( K.GT.0 ) THEN
                   DO 280 J = 2, N
                      CALL CLASSQ( MIN( J-1, K ),
@@ -340,7 +340,7 @@
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                IF( K.GT.0 ) THEN
                   DO 300 J = 1, N - 1
                      CALL CLASSQ( MIN( N-J, K ), AB( 2, J ), 1,

@@ -641,7 +641,7 @@
             CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
             CALL SCOPY( N, WORK( INDD ), 1, WORK( INDDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.

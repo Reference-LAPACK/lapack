@@ -236,7 +236,7 @@
          S( J ) = 1.0E0 / S( J )
       END DO
 
-      TOL = ONE / SQRT( 2.0E0 * N )
+      TOL = ONE / SQRT( 2.0E0 * REAL( N ) )
 
       DO ITER = 1, MAX_ITER
          SCALE = 0.0E0
@@ -268,23 +268,23 @@
          DO I = 1, N
             AVG = AVG + REAL( S( I )*WORK( I ) )
          END DO
-         AVG = AVG / N
+         AVG = AVG / REAL( N )
 
          STD = 0.0E0
          DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
          CALL CLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )
-         STD = SCALE * SQRT( SUMSQ / N )
+         STD = SCALE * SQRT( SUMSQ / REAL( N ) )
 
          IF ( STD .LT. TOL * AVG ) GOTO 999
 
          DO I = 1, N
             T = CABS1( A( I, I ) )
             SI = S( I )
-            C2 = ( N-1 ) * T
-            C1 = REAL( ( N-2 ) * ( WORK( I ) - T*SI ) )
-            C0 = REAL( -(T*SI)*SI + 2*WORK( I )*SI - N*AVG )
+            C2 = REAL( N-1 ) * T
+            C1 = REAL( N-2 ) * ( REAL( WORK( I ) ) - T*SI )
+            C0 = REAL( -(T*SI)*SI + 2*WORK( I )*SI - REAL( N )*AVG )
             D = C1*C1 - 4*C0*C2
 
             IF ( D .LE. 0 ) THEN
@@ -319,7 +319,7 @@
                END DO
             END IF
 
-            AVG = AVG + REAL( ( U + WORK( I ) ) * D / N )
+            AVG = AVG + ( U + REAL( WORK( I ) ) ) * D / REAL( N )
             S( I ) = SI
          END DO
       END DO

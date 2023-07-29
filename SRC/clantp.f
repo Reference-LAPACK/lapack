@@ -316,7 +316,7 @@
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                K = 2
                DO 280 J = 2, N
                   CALL CLASSQ( J-1, AP( K ), 1, SCALE, SUM )
@@ -334,7 +334,7 @@
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                K = 2
                DO 300 J = 1, N - 1
                   CALL CLASSQ( N-J, AP( K ), 1, SCALE, SUM )

@@ -420,7 +420,7 @@
 *
       IF( INFO .EQ. 0 .AND. Q .EQ. 0 ) THEN
          LRWORKMIN = 1
-         RWORK(1) = LRWORKMIN
+         RWORK(1) = REAL( LRWORKMIN )
          RETURN
       END IF
 *
@@ -437,7 +437,7 @@
          IV2TSN = IV2TCS + Q
          LRWORKOPT = IV2TSN + Q - 1
          LRWORKMIN = LRWORKOPT
-         RWORK(1) = LRWORKOPT
+         RWORK(1) = REAL( LRWORKOPT )
          IF( LRWORK .LT. LRWORKMIN .AND. .NOT. LQUERY ) THEN
             INFO = -28
          END IF
@@ -456,7 +456,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       TOLMUL = MAX( TEN, MIN( HUNDRED, EPS**MEIGHTH ) )
       TOL = TOLMUL*EPS
-      THRESH = MAX( TOL, MAXITR*Q*Q*UNFL )
+      THRESH = MAX( TOL, REAL( MAXITR*Q*Q )*UNFL )
 *
 *     Test for negligible sines or cosines
 *

@@ -267,7 +267,7 @@
          LORBDB5 = Q-2
          LWORKOPT = MAX( ILARF+LLARF-1, IORBDB5+LORBDB5-1 )
          LWORKMIN = LWORKOPT
-         WORK(1) = LWORKOPT
+         WORK(1) = REAL( LWORKOPT )
          IF( LWORK .LT. LWORKMIN .AND. .NOT.LQUERY ) THEN
            INFO = -14
          END IF

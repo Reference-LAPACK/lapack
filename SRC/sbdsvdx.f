@@ -448,7 +448,7 @@
      $                VLTGK, VLTGK, ILTGK, ILTGK, ABSTOL, NS, S,
      $                Z, LDZ, WORK( ITEMP ), IWORK( IIWORK ),
      $                IWORK( IIFAIL ), INFO )
-         VLTGK = S( 1 ) - FUDGE*SMAX*ULP*N
+         VLTGK = S( 1 ) - FUDGE*SMAX*ULP*REAL( N )
          WORK( IDTGK:IDTGK+2*N-1 ) = ZERO
          CALL SCOPY( N, D, 1, WORK( IETGK ), 2 )
          CALL SCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
@@ -456,7 +456,7 @@
      $                VUTGK, VUTGK, IUTGK, IUTGK, ABSTOL, NS, S,
      $                Z, LDZ, WORK( ITEMP ), IWORK( IIWORK ),
      $                IWORK( IIFAIL ), INFO )
-         VUTGK = S( 1 ) + FUDGE*SMAX*ULP*N
+         VUTGK = S( 1 ) + FUDGE*SMAX*ULP*REAL( N )
          VUTGK = MIN( VUTGK, ZERO )
 *
 *        If VLTGK=VUTGK, SSTEVX returns an error message,

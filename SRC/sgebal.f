@@ -263,7 +263,7 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( L ) = I
+                  SCALE( L ) = REAL( I )
                   IF( I.NE.L ) THEN
                      CALL SSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
                      CALL SSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
@@ -299,7 +299,7 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( K ) = J
+                  SCALE( K ) = REAL( J )
                   IF( J.NE.K ) THEN
                      CALL SSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
                      CALL SSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
