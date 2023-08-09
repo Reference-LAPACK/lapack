@@ -321,7 +321,7 @@ DLASRC = \
    dgebrd.o dgecon.o dgeequ.o dgees.o  dgeesx.o dgeev.o  dgeevx.o \
    dgehd2.o dgehrd.o dgelq2.o dgelqf.o \
    dgels.o  dgelst.o dgelsd.o dgelss.o dgelsy.o dgeql2.o dgeqlf.o \
-   dgeqp3.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
+   dgeqp3.o dgeqp3rk.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
    dgerq2.o dgerqf.o dgesc2.o dgesdd.o dgesv.o  dgesvd.o dgesvdx.o dgesvx.o \
    dgetc2.o dgetf2.o dgetrf.o dgetri.o \
    dgetrs.o dggbak.o dggbal.o dgges.o  dgges3.o dggesx.o \
@@ -336,7 +336,7 @@ DLASRC = \
    dlangb.o dlange.o dlangt.o dlanhs.o dlansb.o dlansp.o \
    dlansy.o dlantb.o dlantp.o dlantr.o dlanv2.o \
    dlapll.o dlapmt.o \
-   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqsb.o dlaqsp.o dlaqsy.o \
+   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqp2rk.o dlaqp3rk.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
    dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
