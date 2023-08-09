@@ -129,7 +129,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CPOTF2, CHERK, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL CPOTF2( UPLO, N, A, LDA, INFO )
+         CALL CPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -189,7 +189,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL CPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
@@ -216,7 +216,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL CPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
