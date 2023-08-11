@@ -129,7 +129,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZPOTF2, ZHERK, ZTRSM, XERBLA
+      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL ZPOTF2( UPLO, N, A, LDA, INFO )
+         CALL ZPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +180,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL ZPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL ZPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -209,7 +209,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL ZPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL ZPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
