@@ -19,9 +19,11 @@
 *  ===========
 *
 *      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL, RELTOL,
-*     $                     KP0, MAXC2NRM, A, LDA, KB, DONE,
-*     $                     KF, MAXC2NRMK, RELMAXC2NRMK,
-*     $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
+*      LOGICAL            DONE
+*      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, MAXK, N,
+*     $                   NB, NRHS
+*      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
+*     $                   RELTOL
 *
 *     .. Scalar Arguments ..
 *      LOGICAL            DONE
@@ -313,7 +315,8 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            DONE
-      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, N, NB, NRHS
+      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, MAXK, N,
+     $                   NB, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -330,7 +333,7 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            ITEMP, J, K, MINMNFACT, MINMNNRHSFACT,
+      INTEGER            ITEMP, J, K, MINMNFACT, MINMNUPDT,
      $                   LSTICC, KP, I
       DOUBLE PRECISION   AIK, TEMP, TEMP2, TOL3Z
 *     ..
