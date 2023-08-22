@@ -3722,7 +3722,7 @@
       COMPLEX*16            ALPHA, ALS, BETA, BLS
       DOUBLE PRECISION   ERR, ERRMAX
       INTEGER            I, IA, IB, ICA, ICB, IK, IN, K, KS, LAA,
-     $                   LBB, LCC, LDA, LDAS, LDB, LDBS, LDC, LDCS, M,
+     $                   LBB, LCC, LDA, LDAS, LDB, LDBS, LDC, LDCS,
      $                   MA, MB,  N, NA, NARGS, NB, NC, NS, IS
       LOGICAL            NULL, RESET, SAME, TRANA, TRANB
       CHARACTER*1        TRANAS, TRANBS, TRANSA, TRANSB, UPLO, UPLOS
@@ -3829,7 +3829,7 @@
 *
 *                          Generate the matrix C.
 *
-                           CALL ZMAKE( 'GE', UPLO, ' ', M, N, C, NMAX,
+                           CALL ZMAKE( 'GE', UPLO, ' ', N, N, C, NMAX,
      $                                 CC, LDC, RESET, ZERO )
 *
                            NC = NC + 1
