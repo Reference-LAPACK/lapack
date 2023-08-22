@@ -6,7 +6,7 @@
 [![Appveyor](https://ci.appveyor.com/api/projects/status/bh38iin398msrbtr?svg=true)](https://ci.appveyor.com/project/langou/lapack/)
 [![codecov](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg)](https://codecov.io/gh/Reference-LAPACK/lapack)
 [![Packaging status](https://repology.org/badge/tiny-repos/lapack.svg)](https://repology.org/metapackage/lapack/versions)
-
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Reference-LAPACK/lapack/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Reference-LAPACK/lapack)
 
 * VERSION 1.0   :  February 29, 1992
 * VERSION 1.0a  :  June 30, 1992
