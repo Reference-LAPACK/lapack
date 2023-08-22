@@ -37,8 +37,8 @@
 *> alpha and beta are scalars, and A, B and C are matrices, with op( A )
 *> an n by k matrix,  op( B )  a  k by n matrix and  C an n by n matrix.
 *> Thereby, the routine only accesses and updates the upper or lower
-*> triangular part of the result matrix C. This behaviour can be used,
-*> the resulting matrix C is known to be symmetric.
+*> triangular part of the result matrix C. This behaviour can be used if
+*> the resulting matrix C is known to be Hermitian or symmetric.
 *> \endverbatim
 *
 *  Arguments:
