@@ -3893,7 +3893,7 @@
                            IF( NULL )THEN
                               ISAME( 12 ) = LZE( CS, CC, LCC )
                            ELSE
-                              ISAME( 12 ) = LZERES( 'GE', ' ', M, N, CS,
+                              ISAME( 12 ) = LZERES( 'GE', ' ', N, N, CS,
      $                                      CC, LDC )
                            END IF
                            ISAME( 13 ) = LDCS.EQ.LDC
