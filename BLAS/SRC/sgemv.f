@@ -117,6 +117,8 @@
 *>           Before entry with BETA non-zero, the incremented array Y
 *>           must contain the vector y. On exit, Y is overwritten by the
 *>           updated vector y.
+*>           If either m or n is zero, then Y not referenced and the function
+*>           performs a quick return.
 *> \endverbatim
 *>
 *> \param[in] INCY
