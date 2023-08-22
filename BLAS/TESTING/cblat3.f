@@ -3846,7 +3846,7 @@
 *                          Call the subroutine.
 *
                            IF( TRACE )
-     $                        WRITE( NTRA, FMT = 9995 )NC, SNAME, UPLO
+     $                        WRITE( NTRA, FMT = 9995 )NC, SNAME, UPLO,
      $                        TRANSA, TRANSB, N, K, ALPHA, LDA, LDB,
      $                        BETA, LDC
                            IF( REWI )
