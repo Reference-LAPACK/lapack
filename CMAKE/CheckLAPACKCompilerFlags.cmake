@@ -16,7 +16,7 @@ set( FPE_EXIT FALSE )
 
 # FORTRAN ILP default
 set(FOPT_ILP64)
-if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+if( CMAKE_Fortran_COMPILER_ID MATCHES "Intel" )
     if ( WIN32 )
         set(FOPT_ILP64 /integer-size:64)
     else ()
@@ -52,7 +52,7 @@ if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
   endif()
 
 # Intel Fortran
-elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+elseif( CMAKE_Fortran_COMPILER_ID MATCHES "Intel" )
   if( "${CMAKE_Fortran_FLAGS}" MATCHES "[-/]fpe(-all=|)0" )
     set( FPE_EXIT TRUE )
   endif()
