@@ -141,6 +141,8 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
   check_fortran_compiler_flag("-qrecur" _qrecurFlag)
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL NAG)
   check_fortran_compiler_flag("-recursive" _recursiveFlag)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL NVHPC)
+  check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
 else()
   message(WARNING "Fortran local arrays should be allocated on the stack."
     " Please use a compiler which guarantees that feature."
