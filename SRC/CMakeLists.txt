@@ -477,17 +477,17 @@ set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
 if(BUILD_DEPRECATED)
-  list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
-    DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
+  list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f DEPRECATED/sgelqs.f
+    DEPRECATED/sgelsx.f DEPRECATED/sgeqpf.f DEPRECATED/sgeqrs.f DEPRECATED/sggsvd.f
     DEPRECATED/sggsvp.f DEPRECATED/slahrd.f DEPRECATED/slatzm.f DEPRECATED/stzrqf.f)
-  list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
-    DEPRECATED/dgeqpf.f DEPRECATED/dgelsx.f DEPRECATED/dggsvd.f
+  list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f DEPRECATED/dgelqs.f
+    DEPRECATED/dgelsx.f DEPRECATED/dgeqpf.f DEPRECATED/dgeqrs.f DEPRECATED/dggsvd.f
     DEPRECATED/dggsvp.f DEPRECATED/dlahrd.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f)
-  list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
-    DEPRECATED/cgeqpf.f DEPRECATED/cgelsx.f DEPRECATED/cggsvd.f
+  list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f DEPRECATED/cgelqs.f
+    DEPRECATED/cgelsx.f DEPRECATED/cgeqpf.f DEPRECATED/cgeqrs.f DEPRECATED/cggsvd.f
     DEPRECATED/cggsvp.f DEPRECATED/clahrd.f DEPRECATED/clatzm.f DEPRECATED/ctzrqf.f)
-  list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
-    DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
+  list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f DEPRECATED/zgelqs.f
+    DEPRECATED/zgelsx.f DEPRECATED/zgeqpf.f DEPRECATED/zgeqrs.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
 endif()
 
