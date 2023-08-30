@@ -16,7 +16,7 @@ set( FPE_EXIT FALSE )
 
 # FORTRAN ILP default
 set(FOPT_ILP64)
-if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+if( CMAKE_Fortran_COMPILER_ID MATCHES "Intel" )
     if ( WIN32 )
         set(FOPT_ILP64 /integer-size:64)
     else ()
@@ -26,6 +26,12 @@ elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
         (CMAKE_Fortran_COMPILER_ID STREQUAL "XL" ) )          # CMake 2.8
     set(FOPT_ILP64 -qintsize=8)
 elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
+    if ( WIN32 )
+        set(FOPT_ILP64 /i8)
+    else ()
+        set(FOPT_ILP64 -i8)
+    endif()
+elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC" )
     if ( WIN32 )
         set(FOPT_ILP64 /i8)
     else ()
@@ -52,7 +58,7 @@ if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
   endif()
 
 # Intel Fortran
-elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+elseif( CMAKE_Fortran_COMPILER_ID MATCHES "Intel" )
   if( "${CMAKE_Fortran_FLAGS}" MATCHES "[-/]fpe(-all=|)0" )
     set( FPE_EXIT TRUE )
   endif()
@@ -136,6 +142,17 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
   check_fortran_compiler_flag("-quiet" _quiet)
   if( _quiet AND NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]quiet") )
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -quiet")
+  endif()
+
+# NVIDIA HPC SDK
+elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC" )
+  if( ("${CMAKE_Fortran_FLAGS}" MATCHES "-Ktrap=") AND
+      NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-Ktrap=none") )
+    set( FPE_EXIT TRUE )
+  endif()
+
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]Kieee") )
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Kieee")
   endif()
 
 else()
