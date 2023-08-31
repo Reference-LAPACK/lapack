@@ -238,3 +238,91 @@ jobs:
           done
           exit 0
         fi
+
+  test-blaspp-flag:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sharedlib: [ ON, OFF ]
+        lapackpp: [ ON, OFF ]
+    
+    steps:
+    
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+    
+    - name: Install the Basics
+      # Adding some noise to the system: libopenblas-dev liblapack-dev should not
+      # be linked to BLAS++ or LAPACK++.
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gfortran
+        # sudo apt purge libopenblas-dev liblapack-dev
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=OFF
+        -D LAPACKE:BOOL=OFF
+        -D BUILD_TESTING:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.sharedlib }}
+        -D BLAS++:BOOL=ON
+        -D LAPACK++:BOOL=${{ matrix.lapackpp }}
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Check dependencies of BLAS++
+      working-directory: ${{github.workspace}}/build
+      run: |
+        if [[ ${{ matrix.sharedlib }} == 'ON' ]]; then
+          blaspp_blas=$(ldd lib/libblaspp.so | grep libblas.so | { grep -v grep || true; })
+          if [[ -z $blaspp_blas || "$blaspp_blas" != *"${{github.workspace}}/build"* ]]; then
+            echo "BLAS++ dependency to BLAS is not correct!"
+            echo "ldd lib/libblaspp.so:"
+            ldd lib/libblaspp.so
+            exit 1
+          fi
+        else
+          blaspp_blas=$(cat lib/blaspp/blasppConfig.cmake | grep -lblas | { grep -v grep || true; })
+          if [[ -z $blaspp_blas ]]; then
+            echo "BLAS++ dependency to BLAS is not correct!"
+            echo "We could not find -lblas in lib/blaspp/blasppConfig.cmake"
+            exit 1
+          fi
+        fi
+
+    - name: Check dependencies when LAPACK++ is ON
+      if: ${{ matrix.lapackpp == 'ON' }}
+      working-directory: ${{github.workspace}}/build
+      run: |
+        if [[ ${{ matrix.sharedlib }} == 'ON' ]]; then
+          lapackpp_lapack=$(ldd lib/liblapackpp.so | grep liblapack.so | { grep -v grep || true; })
+          if [[ -z $lapackpp_lapack || $lapackpp_lapack != *"${{github.workspace}}/build"* ]]; then
+            echo "LAPACK++ dependency to LAPACK is not correct!"
+            echo "ldd lib/liblapackpp.so:"
+            ldd lib/liblapackpp.so
+            exit 1
+          fi
+        else
+          lapackpp_lapack=$(cat lib/lapackpp/lapackppConfig.cmake | grep -llapack | { grep -v grep || true; })
+          if [[ -z $lapackpp_lapack ]]; then
+            echo "LAPACK++ dependency to LAPACK is not correct!"
+            echo "We could not find -llapack in lib/lapackpp/lapackppConfig.cmake"
+            exit 1
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
