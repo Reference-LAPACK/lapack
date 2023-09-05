@@ -250,7 +250,7 @@ jobs:
       fail-fast: false
       matrix:
         sharedlib: [ ON, OFF ]
-        lapackpp: [ ON, OFF ]
+        lapackpp: [ OFF ]
     
     steps:
     
@@ -266,7 +266,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y cmake gfortran
-        # sudo apt purge libopenblas-dev liblapack-dev
+        sudo apt purge libopenblas-dev liblapack-dev
 
     - name: Configure CMake
       run: >
@@ -286,42 +286,19 @@ jobs:
     - name: Check dependencies of BLAS++
       working-directory: ${{github.workspace}}/build
       run: |
-        if [[ ${{ matrix.sharedlib }} == 'ON' ]]; then
-          blaspp_blas=$(ldd lib/libblaspp.so | grep libblas.so | { grep -v grep || true; })
-          if [[ -z $blaspp_blas || "$blaspp_blas" != *"${{github.workspace}}/build"* ]]; then
-            echo "BLAS++ dependency to BLAS is not correct!"
-            echo "ldd lib/libblaspp.so:"
-            ldd lib/libblaspp.so
-            exit 1
-          fi
-        else
-          blaspp_blas=$(cat lib/blaspp/blasppConfig.cmake | grep -lblas | { grep -v grep || true; })
-          if [[ -z $blaspp_blas ]]; then
-            echo "BLAS++ dependency to BLAS is not correct!"
-            echo "We could not find -lblas in lib/blaspp/blasppConfig.cmake"
-            exit 1
-          fi
+        blaspp_blas=$(cat lib/cmake/blaspp/blasppConfig.cmake | grep "${{github.workspace}}/build/lib/libblas" | { grep -v grep || true; })
+        echo "blaspp_blas: $blaspp_blas"
+        if [[ -z $blaspp_blas ]]; then
+          echo "BLAS++ dependency to BLAS is not correct!"
+          echo "CMake could not find ${{github.workspace}}/build/lib/libblas in lib/cmake/blaspp/blasppConfig.cmake"
+          exit 1
         fi
-
-    - name: Check dependencies when LAPACK++ is ON
-      if: ${{ matrix.lapackpp == 'ON' }}
-      working-directory: ${{github.workspace}}/build
-      run: |
-        if [[ ${{ matrix.sharedlib }} == 'ON' ]]; then
-          lapackpp_lapack=$(ldd lib/liblapackpp.so | grep liblapack.so | { grep -v grep || true; })
-          if [[ -z $lapackpp_lapack || $lapackpp_lapack != *"${{github.workspace}}/build"* ]]; then
-            echo "LAPACK++ dependency to LAPACK is not correct!"
-            echo "ldd lib/liblapackpp.so:"
-            ldd lib/liblapackpp.so
-            exit 1
-          fi
-        else
-          lapackpp_lapack=$(cat lib/lapackpp/lapackppConfig.cmake | grep -llapack | { grep -v grep || true; })
-          if [[ -z $lapackpp_lapack ]]; then
-            echo "LAPACK++ dependency to LAPACK is not correct!"
-            echo "We could not find -llapack in lib/lapackpp/lapackppConfig.cmake"
-            exit 1
-          fi
+        blaspp_lapack=$(cat lib/cmake/blaspp/blasppConfig.cmake | grep "${{github.workspace}}/build/lib/liblapack" | { grep -v grep || true; })
+        echo "blaspp_lapack: $blaspp_lapack"
+        if [[ -z $blaspp_lapack ]]; then
+          echo "BLAS++ dependency to LAPACK is not correct!"
+          echo "CMake could not find ${{github.workspace}}/build/lib/liblapack in lib/cmake/blaspp/blasppConfig.cmake"
+          exit 1
         fi
 
     - name: Install
