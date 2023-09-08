@@ -231,3 +231,41 @@ jobs:
 
     - name: Install
       run: cmake --build build --target install -j2
+
+  run-testBLAS:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+    
+    steps:
+    
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+    
+    - name: Install the Basics
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=OFF
+        -D LAPACKE:BOOL=OFF
+        -D BUILD_TESTING:BOOL=OFF
+        -D BLAS++:BOOL=ON
+        -D RUN_testBLAS:BOOL=ON
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Run testBLAS
+      working-directory: ${{github.workspace}}/build
+      run: cmake --build . --target run-testBLAS

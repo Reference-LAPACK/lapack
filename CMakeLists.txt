@@ -23,6 +23,11 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/icl-utk-edu/lapackpp
   GIT_TAG        62680a16a9aba2a426e3d089dd13e18bfd140c74 # v2023.08.25
 )
+FetchContent_Declare(
+  testBLAS
+  GIT_REPOSITORY https://github.com/tlapack/testBLAS
+  GIT_TAG        3693e5feb8cba5b31bc67ab67ef2fd68029331fb # v2023.08.30
+)
 
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -487,7 +492,7 @@ function(_display_cpp_implementation_msg name)
   message(STATUS "----------------")
 endfunction()
 
-if (BLAS++ OR LAPACK++)
+if (BLAS++ OR LAPACK++ OR RUN_testBLAS)
   
   if (BLAS++)
     _display_cpp_implementation_msg("BLAS")
@@ -557,6 +562,7 @@ if (BLAS++ OR LAPACK++)
     -D blas_libraries_cached=""
     -D lapack_libraries_cached=""
     -D build_tests=OFF
+    -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
     COMMAND ${CMAKE_COMMAND}
       --build "${blaspp_BINARY_DIR}"
@@ -609,6 +615,7 @@ if (LAPACK++)
     -D CMAKE_INSTALL_LIBDIR="${PROJECT_BINARY_DIR}/lib"
     -D lapack_libraries_cached=""
     -D build_tests=OFF
+    -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
     COMMAND ${CMAKE_COMMAND}
       --build "${lapackpp_BINARY_DIR}"
@@ -852,4 +859,33 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
     endif()
 
     endif()
+endif()
+
+# --------------------------------------------------
+# Run testBLAS tests
+
+option( RUN_testBLAS "Run testBLAS to test Inf/NaN propagation and corner cases in the BLAS, as proposed in https://arxiv.org/abs/2207.09281" OFF )
+
+if(RUN_testBLAS)
+  # Check if population has already been performed
+  FetchContent_GetProperties(testBLAS)
+  if(NOT testBLAS_POPULATED)
+    # Fetch the content using previously declared details
+    FetchContent_Populate(testBLAS)
+  endif()
+
+  # Create custom target run-testBLAS
+  add_custom_target( run-testBLAS DEPENDS testBLAS-cmd )
+  add_custom_command( OUTPUT testBLAS-cmd
+    COMMAND ${CMAKE_COMMAND}
+      -S "${testblas_SOURCE_DIR}"
+      -B "${testblas_BINARY_DIR}"
+      -D blaspp_DIR="${blaspp_BINARY_DIR}"
+      -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    COMMAND ${CMAKE_COMMAND}
+      --build "${testblas_BINARY_DIR}"
+      --target testBLAS
+    COMMAND "${testblas_BINARY_DIR}/testBLAS"
+    WORKING_DIRECTORY "${testblas_BINARY_DIR}" )
+  add_dependencies(run-testBLAS blaspp)
 endif()
