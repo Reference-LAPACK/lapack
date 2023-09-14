@@ -44,19 +44,6 @@
 !> scale and sumsq must be supplied in SCALE and SUMSQ and
 !> scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively.
 !>
-!> If scale * sqrt( sumsq ) > tbig then
-!>    we require:   scale >= sqrt( TINY*EPS ) / sbig   on entry,
-!> and if 0 < scale * sqrt( sumsq ) < tsml then
-!>    we require:   scale <= sqrt( HUGE ) / ssml       on entry,
-!> where
-!>    tbig -- upper threshold for values whose square is representable;
-!>    sbig -- scaling constant for big numbers; \see la_constants.f90
-!>    tsml -- lower threshold for values whose square is representable;
-!>    ssml -- scaling constant for small numbers; \see la_constants.f90
-!> and
-!>    TINY*EPS -- tiniest representable number;
-!>    HUGE     -- biggest representable number.
-!>
 !> \endverbatim
 !
 !  Arguments:
@@ -135,7 +122,7 @@
 !  =====================================================================
 subroutine CLASSQ( n, x, incx, scale, sumsq )
    use LA_CONSTANTS, &
-      only: wp=>sp, zero=>szero, one=>sone, &
+      only: wp=>sp, zero=>szero, one=>sone, safmin=>ssafmin, &
             sbig=>ssbig, ssml=>sssml, tbig=>stbig, tsml=>stsml
    use LA_XISNAN
 !
@@ -153,7 +140,11 @@ subroutine CLASSQ( n, x, incx, scale, sumsq )
 !  .. Local Scalars ..
    integer :: i, ix
    logical :: notbig
-   real(wp) :: abig, amed, asml, ax, ymax, ymin
+   real(wp) :: abig, amed, asml, ax, ymax, ymin, sqrtmin, sqrtmax
+!  ..
+!  .. Set constants ..
+   sqrtmin = sqrt(safmin)
+   sqrtmax = one / sqrtmin
 !  ..
 !
 !  Quick return if possible
@@ -209,13 +200,43 @@ subroutine CLASSQ( n, x, incx, scale, sumsq )
    if( sumsq > zero ) then
       ax = scale*sqrt( sumsq )
       if (ax > tbig) then
-!        We assume scale >= sqrt( TINY*EPS ) / sbig
-         abig = abig + (scale*sbig)**2 * sumsq
+         if (scale > one) then
+            scale = scale * sbig  ! sbig < scale <= sbig * max
+            if (scale > sqrtmin) then
+               ! sqrtmin < scale < sqrtmax, so it is safe to square scale
+               abig = abig + (scale * scale) * sumsq
+            else
+               ! Do not square scale, as it may underflow
+               abig = abig + scale * (scale * sumsq)
+            end if
+         else
+            ! sumsq > tbig^2 => (sbig * (sbig * sumsq)) is representable
+            abig = abig + scale * (scale * (sbig * (sbig * sumsq)))
+         end if
       else if (ax < tsml) then
-!        We assume scale <= sqrt( HUGE ) / ssml
-         if (notbig) asml = asml + (scale*ssml)**2 * sumsq
+         if (notbig) then
+            if (scale < one) then
+               scale = scale * ssml  ! ssml * min <= scale < ssml
+               if (scale < sqrtmax) then
+                  ! sqrtmin < scale < sqrtmax, so it is safe to square scale
+                  asml = asml + (scale * scale) * sumsq
+               else
+                  ! Do not square scale, as it may overflow
+                  asml = asml + scale * (scale * sumsq)
+               end if
+            else
+               ! sumsq < tsml^2 => (ssml * (ssml * sumsq)) is representable
+               asml = asml + scale * (scale * (ssml * (ssml * sumsq)))
+            end if
+         end if
       else
-         amed = amed + scale**2 * sumsq
+         if (scale > sqrtmin .and. scale < sqrtmax) then
+            ! sqrtmin < scale < sqrtmax, so it is safe to square scale
+            amed = amed + (scale * scale) * sumsq
+         else
+            ! Do not square scale, as it may overflow
+            amed = amed + scale * (scale * sumsq)
+         end if
       end if
    end if
 !
