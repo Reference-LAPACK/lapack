@@ -16,17 +16,17 @@ include(FetchContent)
 FetchContent_Declare(
   blaspp
   GIT_REPOSITORY https://github.com/icl-utk-edu/blaspp
-  GIT_TAG        f8f983d5b45a8f366aae41fbe9888b14cbae20f8 # v2023.08.25
+  GIT_TAG        91dd418fa910498cc03dee397826099914cc3185 # v2023.10.09
 )
 FetchContent_Declare(
   lapackpp
   GIT_REPOSITORY https://github.com/icl-utk-edu/lapackpp
-  GIT_TAG        62680a16a9aba2a426e3d089dd13e18bfd140c74 # v2023.08.25
+  GIT_TAG        88088c33cd9467475e8f139f42d158620f11e64d # v2023.10.09
 )
 FetchContent_Declare(
   testBLAS
   GIT_REPOSITORY https://github.com/tlapack/testBLAS
-  GIT_TAG        3693e5feb8cba5b31bc67ab67ef2fd68029331fb # v2023.08.30
+  GIT_TAG        504ea500b40108b80c6f9134bf6a72cde8795455 # v2023.10.10
 )
 
 # Allow setting a prefix for the library names
@@ -885,7 +885,7 @@ if(RUN_testBLAS)
     COMMAND ${CMAKE_COMMAND}
       --build "${testblas_BINARY_DIR}"
       --target testBLAS
-    COMMAND "${testblas_BINARY_DIR}/testBLAS"
+    COMMAND "${testblas_BINARY_DIR}/testBLAS" --reporter Automake
     WORKING_DIRECTORY "${testblas_BINARY_DIR}" )
   add_dependencies(run-testBLAS blaspp)
 endif()
