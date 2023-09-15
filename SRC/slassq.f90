@@ -122,7 +122,7 @@
 !  =====================================================================
 subroutine SLASSQ( n, x, incx, scale, sumsq )
    use LA_CONSTANTS, &
-      only: wp=>sp, zero=>szero, one=>sone, safmin=>ssafmin, &
+      only: wp=>sp, zero=>szero, one=>sone, &
             sbig=>ssbig, ssml=>sssml, tbig=>stbig, tsml=>stsml
    use LA_XISNAN
 !
@@ -140,11 +140,7 @@ subroutine SLASSQ( n, x, incx, scale, sumsq )
 !  .. Local Scalars ..
    integer :: i, ix
    logical :: notbig
-   real(wp) :: abig, amed, asml, ax, ymax, ymin, sqrtmin, sqrtmax
-!  ..
-!  .. Set constants ..
-   sqrtmin = sqrt(safmin)
-   sqrtmax = one / sqrtmin
+   real(wp) :: abig, amed, asml, ax, ymax, ymin
 !  ..
 !
 !  Quick return if possible
@@ -192,14 +188,8 @@ subroutine SLASSQ( n, x, incx, scale, sumsq )
       ax = scale*sqrt( sumsq )
       if (ax > tbig) then
          if (scale > one) then
-            scale = scale * sbig  ! sbig < scale <= sbig * max
-            if (scale > sqrtmin) then
-               ! sqrtmin < scale < sqrtmax, so it is safe to square scale
-               abig = abig + (scale * scale) * sumsq
-            else
-               ! Do not square scale, as it may underflow
-               abig = abig + scale * (scale * sumsq)
-            end if
+            scale = scale * sbig
+            abig = abig + scale * (scale * sumsq)
          else
             ! sumsq > tbig^2 => (sbig * (sbig * sumsq)) is representable
             abig = abig + scale * (scale * (sbig * (sbig * sumsq)))
@@ -207,27 +197,15 @@ subroutine SLASSQ( n, x, incx, scale, sumsq )
       else if (ax < tsml) then
          if (notbig) then
             if (scale < one) then
-               scale = scale * ssml  ! ssml * min <= scale < ssml
-               if (scale < sqrtmax) then
-                  ! sqrtmin < scale < sqrtmax, so it is safe to square scale
-                  asml = asml + (scale * scale) * sumsq
-               else
-                  ! Do not square scale, as it may overflow
-                  asml = asml + scale * (scale * sumsq)
-               end if
+               scale = scale * ssml
+               asml = asml + scale * (scale * sumsq)
             else
                ! sumsq < tsml^2 => (ssml * (ssml * sumsq)) is representable
                asml = asml + scale * (scale * (ssml * (ssml * sumsq)))
             end if
          end if
       else
-         if (scale > sqrtmin .and. scale < sqrtmax) then
-            ! sqrtmin < scale < sqrtmax, so it is safe to square scale
-            amed = amed + (scale * scale) * sumsq
-         else
-            ! Do not square scale, as it may overflow
-            amed = amed + scale * (scale * sumsq)
-         end if
+         amed = amed + scale * (scale * sumsq)
       end if
    end if
 !
