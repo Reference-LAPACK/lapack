@@ -187,7 +187,8 @@
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL    CGEQRT, CTPQRT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..
@@ -217,7 +218,7 @@
         INFO = -10
       END IF
       IF( INFO.EQ.0)  THEN
-        WORK(1) = NB*N
+        WORK(1) = SROUNDUP_LWORK(NB*N)
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLATSQR', -INFO )
@@ -264,7 +265,7 @@
      $                  WORK, INFO )
        END IF
 *
-      work( 1 ) = N*NB
+      WORK( 1 ) = SROUNDUP_LWORK(N*NB)
       RETURN
 *
 *     End of CLATSQR

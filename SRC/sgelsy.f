@@ -234,8 +234,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           ILAENV, SLAMCH, SLANGE
+      REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEQP3, SLAIC1, SLASCL, SLASET,
@@ -282,7 +282,7 @@
             LWKOPT = MAX( LWKMIN,
      $                    MN + 2*N + NB*( N + 1 ), 2*MN + NB*NRHS )
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
             INFO = -12
@@ -468,7 +468,7 @@
       END IF
 *
    70 CONTINUE
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
       RETURN
 *

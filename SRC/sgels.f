@@ -210,15 +210,15 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE
+      REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGELQF, SGEQRF, SLASCL, SLASET, SORMLQ,
      $                   SORMQR, STRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN, REAL
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -273,7 +273,7 @@
          END IF
 *
          WSIZE = MAX( 1, MN + MAX( MN, NRHS )*NB )
-         WORK( 1 ) = REAL( WSIZE )
+         WORK( 1 ) = SROUNDUP_LWORK( WSIZE )
 *
       END IF
 *
@@ -491,7 +491,7 @@
       END IF
 *
    50 CONTINUE
-      WORK( 1 ) = REAL( WSIZE )
+      WORK( 1 ) = SROUNDUP_LWORK( WSIZE )
 *
       RETURN
 *

@@ -259,7 +259,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CHEGST, CPOTRF, CTRMM, CTRSM,
@@ -297,7 +298,7 @@
          LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWMIN = N + LHTRD + LWTRD
-         WORK( 1 )  = LWMIN
+         WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11
@@ -367,7 +368,7 @@
          END IF
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
       RETURN
 *

@@ -234,8 +234,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE, ILAENV
+      REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           SLAMCH, SLANGE, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, REAL
@@ -348,7 +348,7 @@
             END IF
          END IF
          MINWRK = MIN( MINWRK, MAXWRK )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
          IWORK( 1 ) = LIWORK
 *
          IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN
@@ -614,7 +614,7 @@
       END IF
 *
    10 CONTINUE
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
       IWORK( 1 ) = LIWORK
       RETURN
 *

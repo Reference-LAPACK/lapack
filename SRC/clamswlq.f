@@ -217,7 +217,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     .. External Subroutines ..
       EXTERNAL    CTPMLQT, CGEMLQT, XERBLA
 *     ..
@@ -261,10 +262,10 @@
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLAMSWLQ', -INFO )
-        WORK(1) = LW
+        WORK(1) = SROUNDUP_LWORK(LW)
         RETURN
       ELSE IF (LQUERY) THEN
-        WORK(1) = LW
+        WORK(1) = SROUNDUP_LWORK(LW)
         RETURN
       END IF
 *
@@ -403,7 +404,7 @@
 *
       END IF
 *
-      WORK(1) = LW
+      WORK(1) = SROUNDUP_LWORK(LW)
       RETURN
 *
 *     End of CLAMSWLQ

@@ -252,7 +252,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SPOTRF, SSYGST, STRMM, STRSM, XERBLA,
@@ -359,7 +360,7 @@
          END IF
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       RETURN
 *
 *     End of SSYGV_2STAGE

@@ -191,15 +191,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, SLAMCH, CLANGE
+      REAL               SLAMCH, CLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, CLANGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEQR, CGEMQR, CLASCL, CLASET,
      $                   CTRTRS, XERBLA, CGELQ, CGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX, MIN, INT
+      INTRINSIC          MAX, MIN, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -265,7 +265,7 @@
           INFO = -10
        END IF
 *
-       WORK( 1 ) = REAL( WSIZEO )
+       WORK( 1 ) = SROUNDUP_LWORK( WSIZEO )
 *
       END IF
 *
@@ -274,7 +274,7 @@
         RETURN
       END IF
       IF( LQUERY ) THEN
-        IF( LWORK.EQ.-2 ) WORK( 1 ) = REAL( WSIZEM )
+        IF( LWORK.EQ.-2 ) WORK( 1 ) = SROUNDUP_LWORK( WSIZEM )
         RETURN
       END IF
       IF( LWORK.LT.WSIZEO ) THEN
@@ -484,7 +484,7 @@
       END IF
 *
    50 CONTINUE
-      WORK( 1 ) = REAL( TSZO + LWO )
+      WORK( 1 ) = SROUNDUP_LWORK( TSZO + LWO )
       RETURN
 *
 *     End of CGETSLS

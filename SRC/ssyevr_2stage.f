@@ -416,8 +416,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV, ILAENV2STAGE
+      REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANSY, SROUNDUP_LWORK, ILAENV,
+     $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
@@ -484,7 +485,7 @@
 *         NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
 *         NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1, -1 ) )
 *         LWKOPT = MAX( ( NB+1 )*N, LWMIN )
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
          IWORK( 1 ) = LIWMIN
       END IF
 *
@@ -732,7 +733,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       RETURN

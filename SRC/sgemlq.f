@@ -193,6 +193,10 @@
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
+*     .. External Functions ..
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAMSWLQ, SGEMLQT, XERBLA
 *     ..
@@ -251,7 +255,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-        WORK( 1 ) = REAL( LW )
+        WORK( 1 ) = SROUNDUP_LWORK( LW )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -276,7 +280,7 @@
      $                 MB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = REAL( LW )
+      WORK( 1 ) = SROUNDUP_LWORK( LW )
 *
       RETURN
 *
