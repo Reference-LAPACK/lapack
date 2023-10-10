@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.11)
+# VERSION 3.11: FetchContent
 
 project(LAPACK Fortran C)
 
@@ -9,6 +10,24 @@ set(
   LAPACK_VERSION
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
+
+# Dependencies on other projects
+include(FetchContent)
+FetchContent_Declare(
+  blaspp
+  GIT_REPOSITORY https://github.com/icl-utk-edu/blaspp
+  GIT_TAG        91dd418fa910498cc03dee397826099914cc3185 # v2023.10.09
+)
+FetchContent_Declare(
+  lapackpp
+  GIT_REPOSITORY https://github.com/icl-utk-edu/lapackpp
+  GIT_TAG        88088c33cd9467475e8f139f42d158620f11e64d # v2023.10.09
+)
+FetchContent_Declare(
+  testBLAS
+  GIT_REPOSITORY https://github.com/tlapack/testBLAS
+  GIT_TAG        504ea500b40108b80c6f9134bf6a72cde8795455 # v2023.10.10
+)
 
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -472,38 +491,139 @@ function(_display_cpp_implementation_msg name)
   message(STATUS "For support ${name}++ related question, please email: slate-user@icl.utk.edu")
   message(STATUS "----------------")
 endfunction()
-if (BLAS++)
-  _display_cpp_implementation_msg("BLAS")
-  include(ExternalProject)
-  ExternalProject_Add(blaspp
-	  URL https://bitbucket.org/icl/blaspp/downloads/blaspp-2020.10.02.tar.gz
-	  CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} ${PROJECT_BINARY_DIR}/blaspp-prefix/src/blaspp
-	  BUILD_COMMAND ${CMAKE_COMMAND} -E env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" ${CMAKE_COMMAND} --build .
-	  INSTALL_COMMAND ${CMAKE_COMMAND} -E env PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" ${CMAKE_COMMAND} --install .
-	  )
-  ExternalProject_Add_StepDependencies(blaspp build ${BLAS_LIBRARIES})
-endif()
-if (LAPACK++)
-	message (STATUS "linking lapack++ against ${LAPACK_LIBRARIES}")
-  _display_cpp_implementation_msg("LAPACK")
-  include(ExternalProject)
-  if (BUILD_SHARED_LIBS)
-  ExternalProject_Add(lapackpp
-	  URL https://bitbucket.org/icl/lapackpp/downloads/lapackpp-2020.10.02.tar.gz
-	  CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DLAPACK_LIBRARIES=${LAPACK_LIBRARIES} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}  ${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp
-	  BUILD_COMMAND ${CMAKE_COMMAND} -E env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" ${CMAKE_COMMAND} --build .
-	  INSTALL_COMMAND ${CMAKE_COMMAND} -E env PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" ${CMAKE_COMMAND} --install .
-	  )
-  else ()
-# FIXME this does not really work as the libraries list gets converted to a semicolon-separated list somewhere in the lapack++ build files
-  ExternalProject_Add(lapackpp
-	  URL https://bitbucket.org/icl/lapackpp/downloads/lapackpp-2020.10.02.tar.gz
-	  CONFIGURE_COMMAND env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DLAPACK_LIBRARIES="${PROJECT_BINARY_DIR}/lib/liblapack.a -lgfortran"  -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}  ${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp
-	  BUILD_COMMAND env LIBRARY_PATH=$ENV{LIBRARY_PATH}:${PROJECT_BINARY_DIR}/lib LIB_SUFFIX="" ${CMAKE_COMMAND} --build .
-	  INSTALL_COMMAND ${CMAKE_COMMAND} -E env PREFIX=${PROJECT_BINARY_DIR} LIB_SUFFIX="" ${CMAKE_COMMAND} --install .
-  )
+
+if (BLAS++ OR LAPACK++ OR RUN_testBLAS)
+  
+  if (BLAS++)
+    _display_cpp_implementation_msg("BLAS")
   endif()
-  ExternalProject_Add_StepDependencies(lapackpp build blaspp ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+
+  # Check if population has already been performed
+  FetchContent_GetProperties(blaspp)
+  if(NOT blaspp_POPULATED)
+    # Fetch the content using previously declared details
+    FetchContent_Populate(blaspp)
+  endif()
+
+  # For static builds, we may need to link against a Fortran library
+  set(BLAS_Fortran_LIB "")
+  if (NOT BLAS_FOUND AND NOT BUILD_SHARED_LIBS)
+    if (CMAKE_Fortran_COMPILER_ID MATCHES GNU)
+      set(BLAS_Fortran_LIB ";-lgfortran")
+    else()
+      # TODO: This is incomplete. Fill in the other cases.
+      set(BLAS_Fortran_LIB "")
+    endif()
+  endif()
+
+  # Adds target blaspp
+  add_custom_target( blaspp ALL DEPENDS blaspp-cmd )
+  add_custom_command( OUTPUT blaspp-cmd
+    WORKING_DIRECTORY "${blaspp_SOURCE_DIR}"
+    COMMENT "Building BLAS++" )
+
+  # Set up information about the BLAS and LAPACK libraries
+  if(NOT BLAS_FOUND)
+    if(NOT LATESTLAPACK_FOUND)
+      add_custom_command( OUTPUT blaspp-cmd APPEND
+        COMMAND ${CMAKE_COMMAND}
+        -B "${blaspp_BINARY_DIR}"
+        -D BLAS_LIBRARIES="$<TARGET_FILE:${BLASLIB}>${BLAS_Fortran_LIB}"
+        -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>" )
+    else()
+      add_custom_command( OUTPUT blaspp-cmd APPEND
+        COMMAND ${CMAKE_COMMAND}
+        -B "${blaspp_BINARY_DIR}"
+        -D BLAS_LIBRARIES="$<TARGET_FILE:${BLASLIB}>${BLAS_Fortran_LIB}"
+        -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
+    endif()
+  else()
+    if(NOT LATESTLAPACK_FOUND)
+      add_custom_command( OUTPUT blaspp-cmd APPEND
+        COMMAND ${CMAKE_COMMAND}
+        -B "${blaspp_BINARY_DIR}"
+        -D BLAS_LIBRARIES="${BLAS_LIBRARIES}"
+        -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>${BLAS_Fortran_LIB}" )
+    else()
+      add_custom_command( OUTPUT blaspp-cmd APPEND
+        COMMAND ${CMAKE_COMMAND}
+        -B "${blaspp_BINARY_DIR}"
+        -D BLAS_LIBRARIES="${BLAS_LIBRARIES}"
+        -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
+    endif()
+  endif()
+
+  # Setup remaining configuration options and installation
+  add_custom_command( OUTPUT blaspp-cmd APPEND
+    COMMAND ${CMAKE_COMMAND}
+    -B "${blaspp_BINARY_DIR}"
+    -D CMAKE_INSTALL_PREFIX="${blaspp_BINARY_DIR}"
+    -D CMAKE_INSTALL_LIBDIR="${PROJECT_BINARY_DIR}/lib"
+    -D blas_libraries_cached=""
+    -D lapack_libraries_cached=""
+    -D build_tests=OFF
+    -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+    COMMAND ${CMAKE_COMMAND}
+      --build "${blaspp_BINARY_DIR}"
+      --target install
+  )
+
+  # Set up dependencies
+  if(NOT BLAS_FOUND)
+    add_dependencies(blaspp ${BLASLIB})
+  endif()
+  if(NOT LATESTLAPACK_FOUND)
+    add_dependencies(blaspp ${LAPACKLIB})
+  endif()
+endif()
+
+if (LAPACK++)
+  _display_cpp_implementation_msg("LAPACK")
+
+  # Check if population has already been performed
+  FetchContent_GetProperties(lapackpp)
+  if(NOT lapackpp_POPULATED)
+    # Fetch the content using previously declared details
+    FetchContent_Populate(lapackpp)
+  endif()
+
+  # Adds target lapackpp
+  add_custom_target( lapackpp ALL DEPENDS lapackpp-cmd )
+  add_custom_command( OUTPUT lapackpp-cmd
+    WORKING_DIRECTORY "${lapackpp_SOURCE_DIR}"
+    COMMENT "Building LAPACK++" )
+
+  # Set up information about the LAPACK library
+  if(NOT LATESTLAPACK_FOUND)
+    add_custom_command( OUTPUT lapackpp-cmd APPEND
+      COMMAND ${CMAKE_COMMAND}
+      -B "${lapackpp_BINARY_DIR}"
+      -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>${BLAS_Fortran_LIB}" )
+  else()
+    add_custom_command( OUTPUT lapackpp-cmd APPEND
+      COMMAND ${CMAKE_COMMAND}
+      -B "${lapackpp_BINARY_DIR}"
+      -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
+  endif()
+
+  # Setup remaining configuration options and installation
+  add_custom_command( OUTPUT lapackpp-cmd APPEND
+    COMMAND ${CMAKE_COMMAND}
+    -B "${lapackpp_BINARY_DIR}"
+    -D CMAKE_INSTALL_PREFIX="${lapackpp_BINARY_DIR}"
+    -D CMAKE_INSTALL_LIBDIR="${PROJECT_BINARY_DIR}/lib"
+    -D lapack_libraries_cached=""
+    -D build_tests=OFF
+    -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+    COMMAND ${CMAKE_COMMAND}
+      --build "${lapackpp_BINARY_DIR}"
+      --target install
+  )
+
+  # Set up dependencies
+  add_dependencies(lapackpp blaspp)
 endif()
 
 # --------------------------------------------------
@@ -613,45 +733,35 @@ install(FILES
   )
 if (LAPACK++)
   install(
-  DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  FILES_MATCHING REGEX "liblapackpp.(a|so)$"
+    DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILES_MATCHING REGEX "liblapackpp.(a|so)$"
   )
   install(
-    DIRECTORY "${PROJECT_BINARY_DIR}/lapackpp-prefix/src/lapackpp/include/"
+    DIRECTORY "${lapackpp_BINARY_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
-  write_basic_package_version_file(
-    "lapackppConfigVersion.cmake"
-    VERSION 2020.10.02
-    COMPATIBILITY AnyNewerVersion
-  )
   install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/lapackpp/lapackppConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/lib/lapackpp/lapackppConfigVersion.cmake"
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/lapackpp/lapackppConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/lapackpp/lapackppConfigVersion.cmake"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
   )
 
 endif()
 if (BLAS++)
-  write_basic_package_version_file(
-    "blasppConfigVersion.cmake"
-    VERSION 2020.10.02
-    COMPATIBILITY AnyNewerVersion
-  )
   install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/blaspp/blasppConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/lib/blaspp/blasppConfigVersion.cmake"
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/blaspp/blasppConfig.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/blaspp/blasppConfigVersion.cmake"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
   )
   install(
-  DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  FILES_MATCHING REGEX "libblaspp.(a|so)$"
+    DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILES_MATCHING REGEX "libblaspp.(a|so)$"
   )
   install(
-    DIRECTORY "${PROJECT_BINARY_DIR}/blaspp-prefix/src/blaspp/include/"
+    DIRECTORY "${blaspp_BINARY_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
@@ -749,4 +859,33 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
     endif()
 
     endif()
+endif()
+
+# --------------------------------------------------
+# Run testBLAS tests
+
+option( RUN_testBLAS "Run testBLAS to test Inf/NaN propagation and corner cases in the BLAS, as proposed in https://arxiv.org/abs/2207.09281" OFF )
+
+if(RUN_testBLAS)
+  # Check if population has already been performed
+  FetchContent_GetProperties(testBLAS)
+  if(NOT testBLAS_POPULATED)
+    # Fetch the content using previously declared details
+    FetchContent_Populate(testBLAS)
+  endif()
+
+  # Create custom target run-testBLAS
+  add_custom_target( run-testBLAS DEPENDS testBLAS-cmd )
+  add_custom_command( OUTPUT testBLAS-cmd
+    COMMAND ${CMAKE_COMMAND}
+      -S "${testblas_SOURCE_DIR}"
+      -B "${testblas_BINARY_DIR}"
+      -D blaspp_DIR="${blaspp_BINARY_DIR}"
+      -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    COMMAND ${CMAKE_COMMAND}
+      --build "${testblas_BINARY_DIR}"
+      --target testBLAS
+    COMMAND "${testblas_BINARY_DIR}/testBLAS" --reporter Automake
+    WORKING_DIRECTORY "${testblas_BINARY_DIR}" )
+  add_dependencies(run-testBLAS blaspp)
 endif()
