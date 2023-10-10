@@ -15,12 +15,12 @@ include(FetchContent)
 FetchContent_Declare(
   blaspp
   GIT_REPOSITORY https://github.com/icl-utk-edu/blaspp
-  GIT_TAG        f8f983d5b45a8f366aae41fbe9888b14cbae20f8 # v2023.08.25
+  GIT_TAG        91dd418fa910498cc03dee397826099914cc3185 # v2023.08.25 +
 )
 FetchContent_Declare(
   lapackpp
   GIT_REPOSITORY https://github.com/icl-utk-edu/lapackpp
-  GIT_TAG        62680a16a9aba2a426e3d089dd13e18bfd140c74 # v2023.08.25
+  GIT_TAG        88088c33cd9467475e8f139f42d158620f11e64d # v2023.08.25 +
 )
 
 # Allow setting a prefix for the library names
@@ -402,22 +402,8 @@ endif()
 option(BLAS++ "Build BLAS++" OFF)
 option(LAPACK++ "Build LAPACK++" OFF)
 
-
-function(_display_cpp_implementation_msg name)
-  string(TOLOWER ${name} name_lc)
-  message(STATUS "${name}++ enable")
-  message(STATUS "----------------")
-  message(STATUS "Thank you for your interest in ${name}++, a newly developed C++ API for ${name} library")
-  message(STATUS "The objective of ${name}++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc.")
-  message(STATUS "For support ${name}++ related question, please email: slate-user@icl.utk.edu")
-  message(STATUS "----------------")
-endfunction()
-
 if (BLAS++ OR LAPACK++)
-  
-  if (BLAS++)
-    _display_cpp_implementation_msg("BLAS")
-  endif()
+  message( STATUS "BLAS++ enabled; for support, email slate-user@icl.utk.edu" )
 
   # Check if population has already been performed
   FetchContent_GetProperties(blaspp)
@@ -426,16 +412,35 @@ if (BLAS++ OR LAPACK++)
     FetchContent_Populate(blaspp)
   endif()
 
-  # For static builds, we may need to link against a Fortran library
-  set(BLAS_Fortran_LIB "")
-  if (NOT BLAS_FOUND AND NOT BUILD_SHARED_LIBS)
+  # Determine Fortran runtime library.
+  # todo: CMake ought to know this already -- how to access?
+  set( Fortran_LIB "" )
+  if (NOT BUILD_SHARED_LIBS)
     if (CMAKE_Fortran_COMPILER_ID MATCHES GNU)
-      set(BLAS_Fortran_LIB ";-lgfortran")
+      set( Fortran_LIB ";-lgfortran" )
     else()
       # TODO: This is incomplete. Fill in the other cases.
-      set(BLAS_Fortran_LIB "")
     endif()
   endif()
+  message( DEBUG "Fortran_LIB '${Fortran_LIB}'" )
+
+  if (NOT BLAS_FOUND)
+    # Link with Reference BLAS.
+    set( BLAS_LIBS "$<TARGET_FILE:${BLASLIB}>${Fortran_LIB}" )
+  else()
+    # Link with optimized BLAS.
+    set( BLAS_LIBS "${BLAS_LIBRARIES}" )
+  endif()
+  message( DEBUG "BLAS_LIBS '${BLAS_LIBS}'" )
+
+  if (NOT LATESTLAPACK_FOUND)
+    # Link with Reference LAPACK.
+    set( LAPACK_LIBS "$<TARGET_FILE:${LAPACKLIB}>${Fortran_LIB}" )
+  else()
+    # Link with optimized BLAS.
+    set( LAPACK_LIBS "${LAPACK_LIBRARIES}" )
+  endif()
+  message( DEBUG "LAPACK_LIBS '${LAPACK_LIBS}'" )
 
   # Adds target blaspp
   add_custom_target( blaspp ALL DEPENDS blaspp-cmd )
@@ -444,48 +449,19 @@ if (BLAS++ OR LAPACK++)
     COMMENT "Building BLAS++" )
 
   # Set up information about the BLAS and LAPACK libraries
-  if(NOT BLAS_FOUND)
-    if(NOT LATESTLAPACK_FOUND)
-      add_custom_command( OUTPUT blaspp-cmd APPEND
-        COMMAND ${CMAKE_COMMAND}
-        -B "${blaspp_BINARY_DIR}"
-        -D BLAS_LIBRARIES="$<TARGET_FILE:${BLASLIB}>${BLAS_Fortran_LIB}"
-        -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>" )
-    else()
-      add_custom_command( OUTPUT blaspp-cmd APPEND
-        COMMAND ${CMAKE_COMMAND}
-        -B "${blaspp_BINARY_DIR}"
-        -D BLAS_LIBRARIES="$<TARGET_FILE:${BLASLIB}>${BLAS_Fortran_LIB}"
-        -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
-    endif()
-  else()
-    if(NOT LATESTLAPACK_FOUND)
-      add_custom_command( OUTPUT blaspp-cmd APPEND
-        COMMAND ${CMAKE_COMMAND}
-        -B "${blaspp_BINARY_DIR}"
-        -D BLAS_LIBRARIES="${BLAS_LIBRARIES}"
-        -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>${BLAS_Fortran_LIB}" )
-    else()
-      add_custom_command( OUTPUT blaspp-cmd APPEND
-        COMMAND ${CMAKE_COMMAND}
-        -B "${blaspp_BINARY_DIR}"
-        -D BLAS_LIBRARIES="${BLAS_LIBRARIES}"
-        -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
-    endif()
-  endif()
-
-  # Setup remaining configuration options and installation
   add_custom_command( OUTPUT blaspp-cmd APPEND
     COMMAND ${CMAKE_COMMAND}
-    -B "${blaspp_BINARY_DIR}"
-    -D CMAKE_INSTALL_PREFIX="${blaspp_BINARY_DIR}"
-    -D CMAKE_INSTALL_LIBDIR="${PROJECT_BINARY_DIR}/lib"
-    -D blas_libraries_cached=""
-    -D lapack_libraries_cached=""
-    -D build_tests=OFF
-    -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+      -B "${blaspp_BINARY_DIR}"
+      -D CMAKE_INSTALL_PREFIX="${LAPACK_BINARY_DIR}"
+      -D BLAS_LIBRARIES="${BLAS_LIBS}"
+      -D LAPACK_LIBRARIES="${LAPACK_LIBS}"
+      -D build_tests=OFF
+      -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+      -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+
     COMMAND ${CMAKE_COMMAND}
       --build "${blaspp_BINARY_DIR}"
+      --config ${CMAKE_BUILD_TYPE}
       --target install
   )
 
@@ -499,7 +475,7 @@ if (BLAS++ OR LAPACK++)
 endif()
 
 if (LAPACK++)
-  _display_cpp_implementation_msg("LAPACK")
+  message( STATUS "LAPACK++ enabled; for support, email slate-user@icl.utk.edu" )
 
   # Check if population has already been performed
   FetchContent_GetProperties(lapackpp)
@@ -514,30 +490,20 @@ if (LAPACK++)
     WORKING_DIRECTORY "${lapackpp_SOURCE_DIR}"
     COMMENT "Building LAPACK++" )
 
-  # Set up information about the LAPACK library
-  if(NOT LATESTLAPACK_FOUND)
-    add_custom_command( OUTPUT lapackpp-cmd APPEND
-      COMMAND ${CMAKE_COMMAND}
-      -B "${lapackpp_BINARY_DIR}"
-      -D LAPACK_LIBRARIES="$<TARGET_FILE:${LAPACKLIB}>${BLAS_Fortran_LIB}" )
-  else()
-    add_custom_command( OUTPUT lapackpp-cmd APPEND
-      COMMAND ${CMAKE_COMMAND}
-      -B "${lapackpp_BINARY_DIR}"
-      -D LAPACK_LIBRARIES="${LAPACK_LIBRARIES}" )
-  endif()
-
   # Setup remaining configuration options and installation
   add_custom_command( OUTPUT lapackpp-cmd APPEND
     COMMAND ${CMAKE_COMMAND}
-    -B "${lapackpp_BINARY_DIR}"
-    -D CMAKE_INSTALL_PREFIX="${lapackpp_BINARY_DIR}"
-    -D CMAKE_INSTALL_LIBDIR="${PROJECT_BINARY_DIR}/lib"
-    -D lapack_libraries_cached=""
-    -D build_tests=OFF
-    -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+      -B "${lapackpp_BINARY_DIR}"
+      -D CMAKE_INSTALL_PREFIX="${LAPACK_BINARY_DIR}"
+      -D blaspp_DIR="${PROJECT_BINARY_DIR}/lib/cmake/blaspp"
+      -D LAPACK_LIBRARIES="${LAPACK_LIBS}"
+      -D build_tests=OFF
+      -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+      -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+
     COMMAND ${CMAKE_COMMAND}
       --build "${lapackpp_BINARY_DIR}"
+      --config ${CMAKE_BUILD_TYPE}
       --target install
   )
 
@@ -650,37 +616,26 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
+
 if (LAPACK++)
   install(
     DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}"
-    FILES_MATCHING REGEX "liblapackpp.(a|so)$"
+    FILES_MATCHING REGEX "lapackpp"
   )
-  install(
-    DIRECTORY "${lapackpp_BINARY_DIR}/include/"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-    FILES_MATCHING REGEX "\\.(h|hh)$"
-  )
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/lapackpp/lapackppConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/lapackpp/lapackppConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
-  )
-
 endif()
+
 if (BLAS++)
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/blaspp/blasppConfig.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/blaspp/blasppConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/"
-  )
   install(
     DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FILES_MATCHING REGEX "libblaspp.(a|so)$"
+    FILES_MATCHING REGEX "blaspp"
   )
+endif()
+
+if (BLAS++ OR LAPACK++)
   install(
-    DIRECTORY "${blaspp_BINARY_DIR}/include/"
+    DIRECTORY "${LAPACK_BINARY_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
