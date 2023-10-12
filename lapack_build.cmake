@@ -4,7 +4,7 @@
 ## HINTS: ctest -Ddashboard_model=Nightly      -S $(pwd)/lapack/lapack_build.cmake
 ##
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.6)
 ###################################################################
 # The values in this section must always be provided
 ###################################################################
@@ -249,5 +249,3 @@ ctest_test(BUILD "${CTEST_BINARY_DIRECTORY}" RETURN_VALUE res)
 message("  Submit")
 ctest_submit(RETURN_VALUE res)
 message("  All done")
-
-
