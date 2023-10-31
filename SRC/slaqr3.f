@@ -302,9 +302,9 @@
       LOGICAL            BULGE, SORTED
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               SLAMCH, SROUNDUP_LWORK
       INTEGER            ILAENV
-      EXTERNAL           SLAMCH, ILAENV
+      EXTERNAL           SLAMCH, SROUNDUP_LWORK, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEHRD, SGEMM, SLACPY, SLAHQR, SLANV2,
@@ -347,7 +347,7 @@
 *     ==== Quick return in case of workspace query. ====
 *
       IF( LWORK.EQ.-1 ) THEN
-         WORK( 1 ) = REAL( LWKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
          RETURN
       END IF
 *
@@ -683,7 +683,7 @@
 *
 *      ==== Return optimal workspace. ====
 *
-      WORK( 1 ) = REAL( LWKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
 *     ==== End of SLAQR3 ====
 *

@@ -159,7 +159,8 @@
 *     .. External Functions ..
       LOGICAL      LSAME
       INTEGER      ILAENV
-      EXTERNAL     LSAME, ILAENV
+      REAL         SROUNDUP_LWORK
+      EXTERNAL     LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL     CLAHEF_AA, CGEMM, CCOPY, CSWAP, CSCAL, XERBLA
@@ -190,7 +191,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKOPT = (NB+1)*N
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -459,7 +460,7 @@
       END IF
 *
    20 CONTINUE
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       RETURN
 *
 *     End of CHETRF_AA

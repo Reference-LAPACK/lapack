@@ -192,7 +192,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGELQT, SLASWLQ, XERBLA
@@ -294,9 +295,9 @@
         T( 2 ) = MB
         T( 3 ) = NB
         IF( MINW ) THEN
-          WORK( 1 ) = LWMIN
+          WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
         ELSE
-          WORK( 1 ) = LWREQ
+          WORK( 1 ) = SROUNDUP_LWORK(LWREQ)
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
@@ -321,7 +322,7 @@
      $                LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = LWREQ
+      WORK( 1 ) = SROUNDUP_LWORK(LWREQ)
       RETURN
 *
 *     End of SGELQ

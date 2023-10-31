@@ -278,7 +278,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -318,7 +319,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          HOUS( 1 ) = LHMIN
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -575,7 +576,7 @@ C                 END IF
       ENDIF
 *
       HOUS( 1 ) = LHMIN
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       RETURN
 *
 *     End of CHETRD_HB2ST

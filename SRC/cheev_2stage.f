@@ -220,8 +220,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      REAL               SLAMCH, CLANHE
-      EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE
+      REAL               SLAMCH, CLANHE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSTERF, XERBLA, CLASCL, CSTEQR,
@@ -255,7 +256,7 @@
          LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWMIN = N + LHTRD + LWTRD
-         WORK( 1 )  = LWMIN
+         WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )
      $      INFO = -8
@@ -343,7 +344,7 @@
 *
 *     Set WORK(1) to optimal complex workspace size.
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
       RETURN
 *

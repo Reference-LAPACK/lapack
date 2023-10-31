@@ -241,6 +241,10 @@
       LOGICAL            LQUERY
       INTEGER            HERE, LWMIN, NBF, NBL, NBNEXT
 *     ..
+*     .. External Functions ..
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           STGEX2, XERBLA
 *     ..
@@ -533,7 +537,7 @@
      $      GO TO 20
       END IF
       ILST = HERE
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       RETURN
 *
 *     End of STGEXC

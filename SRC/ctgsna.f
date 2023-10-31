@@ -343,9 +343,10 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SCNRM2, SLAMCH, SLAPY2
+      REAL               SCNRM2, SLAMCH, SLAPY2, SROUNDUP_LWORK
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, SCNRM2, SLAMCH, SLAPY2, CDOTC
+      EXTERNAL           LSAME, SCNRM2, SLAMCH, SLAPY2, SROUNDUP_LWORK,
+     $                   CDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL, XERBLA
@@ -402,7 +403,7 @@
          ELSE
             LWMIN = N
          END IF
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
          IF( MM.LT.M ) THEN
             INFO = -15
@@ -507,7 +508,7 @@
          END IF
 *
    20 CONTINUE
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       RETURN
 *
 *     End of CTGSNA

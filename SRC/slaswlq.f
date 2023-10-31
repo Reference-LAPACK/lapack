@@ -185,7 +185,8 @@
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           SGELQT, SGEQRT, STPLQT, STPQRT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..
@@ -264,7 +265,7 @@
      $                  WORK, INFO )
        END IF
 *
-      WORK( 1 ) = M * MB
+      WORK( 1 ) = SROUNDUP_LWORK(M * MB)
       RETURN
 *
 *     End of SLASWLQ

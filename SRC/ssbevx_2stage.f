@@ -357,8 +357,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      REAL               SLAMCH, SLANSB
-      EXTERNAL           LSAME, SLAMCH, SLANSB, ILAENV2STAGE
+      REAL               SLAMCH, SLANSB, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANSB, ILAENV2STAGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SSCAL,
@@ -414,7 +415,7 @@
       IF( INFO.EQ.0 ) THEN
          IF( N.LE.1 ) THEN
             LWMIN = 1
-            WORK( 1 ) = LWMIN
+            WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
          ELSE
             IB    = ILAENV2STAGE( 2, 'SSYTRD_SB2ST', JOBZ,
      $                            N, KD, -1, -1 )
@@ -423,7 +424,7 @@
             LWTRD = ILAENV2STAGE( 4, 'SSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = 2*N + LHTRD + LWTRD
-            WORK( 1 )  = LWMIN
+            WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
          ENDIF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )
@@ -624,7 +625,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
       RETURN
 *

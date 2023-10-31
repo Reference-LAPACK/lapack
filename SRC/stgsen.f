@@ -490,8 +490,8 @@
      $                   XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -571,7 +571,7 @@
          LIWMIN = 1
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -852,7 +852,7 @@
          END IF
    70 CONTINUE
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       RETURN

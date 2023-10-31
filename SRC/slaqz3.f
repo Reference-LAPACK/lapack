@@ -260,7 +260,7 @@
 *     External Functions
       EXTERNAL :: XERBLA, STGEXC, SLAQZ0, SLACPY, SLASET,
      $            SLAQZ2, SROT, SLARTG, SLAG2, SGEMM
-      REAL, EXTERNAL :: SLAMCH
+      REAL, EXTERNAL :: SLAMCH, SROUNDUP_LWORK
 
       INFO = 0
 
@@ -286,7 +286,7 @@
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2+N )
       IF ( LWORK .EQ.-1 ) THEN
 *        workspace query, quick return
-         WORK( 1 ) = LWORKREQ
+         WORK( 1 ) = SROUNDUP_LWORK(LWORKREQ)
          RETURN
       ELSE IF ( LWORK .LT. LWORKREQ ) THEN
          INFO = -26

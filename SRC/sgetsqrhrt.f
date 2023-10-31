@@ -200,6 +200,10 @@
       INTEGER            I, IINFO, J, LW1, LW2, LWT, LDWT, LWORKOPT,
      $                   NB1LOCAL, NB2LOCAL, NUM_ALL_ROW_BLOCKS
 *     ..
+*     .. External Functions ..
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLATSQR, SORGTSQR_ROW, SORHR_COL,
      $                   XERBLA
@@ -277,14 +281,14 @@
          CALL XERBLA( 'SGETSQRHRT', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = REAL( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = REAL( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
@@ -341,7 +345,7 @@
          END IF
       END DO
 *
-      WORK( 1 ) = REAL( LWORKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
       RETURN
 *
 *     End of SGETSQRHRT
