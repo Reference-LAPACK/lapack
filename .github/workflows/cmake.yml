@@ -189,7 +189,7 @@ jobs:
   memory-check:
     runs-on: ubuntu-latest
     env:
-      BUILD_TYPE: Release
+      BUILD_TYPE: Debug
 
     steps:
 
@@ -219,4 +219,6 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure
+      run: |
+        ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 -T memcheck
+        cat valgrind-out.txt
