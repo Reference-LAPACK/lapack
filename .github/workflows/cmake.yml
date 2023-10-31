@@ -151,3 +151,34 @@ jobs:
         echo "Coverage"
         cmake --build build --target coverage
         bash <(curl -s https://codecov.io/bash) -X gcov
+
+  test-install-cblas-lapacke-without-fortran-compiler:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
+    - name: Install basics
+      run: |
+        sudo apt update
+        sudo apt install -y cmake liblapack-dev libblas-dev
+        sudo apt purge gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D USE_OPTIMIZED_LAPACK:BOOL=ON
+        -D BUILD_TESTING:BOOL=OFF
+        -D LAPACKE_WITH_TMG:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: Install
+      run: cmake --build build --target install -j2
