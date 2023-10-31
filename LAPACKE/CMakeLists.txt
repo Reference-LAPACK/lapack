@@ -1,24 +1,3 @@
-# Create a header file lapacke_mangling.h for the routines called in my C programs
-include(FortranCInterface)
-## Ensure that the fortran compiler and c compiler specified are compatible
-FortranCInterface_VERIFY()
-FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/lapacke_mangling.h
-  MACRO_NAMESPACE "LAPACK_"
-  SYMBOL_NAMESPACE "LAPACK_")
-if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
-  message(WARNING "Reverting to pre-defined include/lapacke_mangling.h")
-  configure_file(include/lapacke_mangling_with_flags.h.in
-                 ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
-endif()
-
-add_subdirectory(include)
-
-
-if(NOT LAPACKE)
-    return()
-endif()
-
-
 message(STATUS "LAPACKE enabled")
 enable_language(C)
 
