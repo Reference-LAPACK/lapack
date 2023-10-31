@@ -44,19 +44,6 @@
 !> scale and sumsq must be supplied in SCALE and SUMSQ and
 !> scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively.
 !>
-!> If scale * sqrt( sumsq ) > tbig then
-!>    we require:   scale >= sqrt( TINY*EPS ) / sbig   on entry,
-!> and if 0 < scale * sqrt( sumsq ) < tsml then
-!>    we require:   scale <= sqrt( HUGE ) / ssml       on entry,
-!> where
-!>    tbig -- upper threshold for values whose square is representable;
-!>    sbig -- scaling constant for big numbers; \see la_constants.f90
-!>    tsml -- lower threshold for values whose square is representable;
-!>    ssml -- scaling constant for small numbers; \see la_constants.f90
-!> and
-!>    TINY*EPS -- tiniest representable number;
-!>    HUGE     -- biggest representable number.
-!>
 !> \endverbatim
 !
 !  Arguments:
@@ -209,13 +196,25 @@ subroutine CLASSQ( n, x, incx, scale, sumsq )
    if( sumsq > zero ) then
       ax = scale*sqrt( sumsq )
       if (ax > tbig) then
-!        We assume scale >= sqrt( TINY*EPS ) / sbig
-         abig = abig + (scale*sbig)**2 * sumsq
+         if (scale > one) then
+            scale = scale * sbig
+            abig = abig + scale * (scale * sumsq)
+         else
+            ! sumsq > tbig^2 => (sbig * (sbig * sumsq)) is representable
+            abig = abig + scale * (scale * (sbig * (sbig * sumsq)))
+         end if
       else if (ax < tsml) then
-!        We assume scale <= sqrt( HUGE ) / ssml
-         if (notbig) asml = asml + (scale*ssml)**2 * sumsq
+         if (notbig) then
+            if (scale < one) then
+               scale = scale * ssml
+               asml = asml + scale * (scale * sumsq)
+            else
+               ! sumsq < tsml^2 => (ssml * (ssml * sumsq)) is representable
+               asml = asml + scale * (scale * (ssml * (ssml * sumsq)))
+            end if
+         end if
       else
-         amed = amed + scale**2 * sumsq
+         amed = amed + scale * (scale * sumsq)
       end if
    end if
 !
