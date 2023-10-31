@@ -213,6 +213,7 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
+        -D LAPACK_TESTING_USE_PYTHON:BOOL=OFF
 
     - name: Build
       run: cmake --build build --config ${{env.BUILD_TYPE}}
@@ -220,5 +221,11 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: |
-        ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 -T memcheck
-        cat valgrind-out.txt
+        ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 -T memcheck > memcheck.out
+        if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
+          cat memcheck.out
+          exit 0
+        else
+          cat memcheck.out
+          exit 1
+        fi
