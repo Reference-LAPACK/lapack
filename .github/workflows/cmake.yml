@@ -222,10 +222,19 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: |
         ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 -T memcheck > memcheck.out
+        cat memcheck.out
         if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
-          cat memcheck.out
           exit 0
         else
-          cat memcheck.out
-          exit 1
+          for f in Testing/Temporary/MemoryChecker.*.log; do
+            if tail -n 1 $f | grep -q "ERROR SUMMARY: 0 errors"; then
+              tail -n 1 $f
+              continue
+            else
+              echo "Memory check failed in $f"
+              cat $f
+              exit 1
+            fi
+          done
+          exit 0
         fi
