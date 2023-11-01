@@ -20,7 +20,7 @@ if( CMAKE_Fortran_COMPILER_ID MATCHES "Intel" )
     if ( WIN32 )
         set(FOPT_ILP64 /integer-size:64)
     else ()
-        set(FOPT_ILP64 -integer-size 64)
+        set(FOPT_ILP64 "-integer-size 64")
     endif()
 elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
         (CMAKE_Fortran_COMPILER_ID STREQUAL "XL" ) )          # CMake 2.8
