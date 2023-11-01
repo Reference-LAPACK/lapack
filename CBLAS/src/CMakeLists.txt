@@ -139,7 +139,8 @@ if(BUILD_INDEX64_EXT_API)
   add_library(${CBLASLIB}_64_fobj OBJECT ${SOURCES_64_F})
   set_target_properties(${CBLASLIB}_64_cobj ${CBLASLIB}_64_fobj PROPERTIES
           POSITION_INDEPENDENT_CODE ON
-          Fortran_PREPROCESS ON)
+          Fortran_PREPROCESS ON
+          LINKER_LANGUAGE C)
   target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64)
   target_compile_options(${CBLASLIB}_64_fobj PRIVATE ${FOPT_ILP64})
   #Add suffix to all Fortran functions via macros
