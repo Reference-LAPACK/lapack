@@ -125,7 +125,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>          > 0: if INFO = i, the i-th diagonal element of A is zero,
+*>          > 0:  if INFO = i, the i-th diagonal element of A is exactly zero,
 *>               indicating that the matrix is singular and the solutions
 *>               X have not been computed.
 *> \endverbatim
