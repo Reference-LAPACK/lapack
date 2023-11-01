@@ -100,6 +100,12 @@ int main(int argc, char **argv) {
         print_matrix_rowmajor( "Details of LU factorization", n, n, A, lda );
         /* Print pivot indices */
         print_vector( "Pivot indices", n, ipiv );
+
+        /* Free matrices and vectors */
+        free(A);
+        free(b);
+        free(ipiv);
+        
         exit( 0 );
 } /* End of LAPACKE_dgesv Example */
 
