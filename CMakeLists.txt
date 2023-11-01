@@ -45,6 +45,14 @@ if(_is_coverage_build)
   find_package(codecov)
 endif()
 
+# Use valgrind if it is found
+option( LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON )
+find_program( MEMORYCHECK_COMMAND valgrind )
+if( MEMORYCHECK_COMMAND )
+  message( STATUS "Found valgrind: ${MEMORYCHECK_COMMAND}" )
+  set( MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=all --track-origins=yes" )
+endif()
+
 # By default test Fortran compiler complex abs and complex division
 option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex division" OFF)
 if( TEST_FORTRAN_COMPILER )
