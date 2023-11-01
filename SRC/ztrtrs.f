@@ -39,8 +39,14 @@
 *>
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *>
-*> where A is a triangular matrix of order N, and B is an N-by-NRHS
-*> matrix.  A check is made to verify that A is nonsingular.
+*> where A is a triangular matrix of order N, and B is an N-by-NRHS matrix.
+*>
+*> This subroutine verifies that A is nonsingular, but callers should note that only exact
+*> singularity is detected. It is conceivable for one or more diagonal elements of A to be
+*> subnormally tiny numbers without this subroutine signalling an error.
+*>
+*> If a possible loss of numerical precision due to near-singular matrices is a concern, the
+*> caller should verify that A is nonsingular within some tolerance before calling this subroutine.
 *> \endverbatim
 *
 *  Arguments:
