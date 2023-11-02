@@ -106,7 +106,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          =-5:  if ANORM is NAN or negative.
+*>          = 1:  RCOND = NaN.
 *> \endverbatim
 *
 *  Authors:
@@ -183,7 +183,7 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF( ANORM.LT.ZERO .OR. DISNAN( ANORM ) ) THEN
+      ELSE IF( ANORM.LT.ZERO ) THEN
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
@@ -198,6 +198,10 @@
          RCOND = ONE
          RETURN
       ELSE IF( ANORM.EQ.ZERO ) THEN
+         RETURN
+      ELSE IF( DISNAN( ANORM ) ) THEN
+         RCOND = ANORM
+         INFO = 1
          RETURN
       END IF
 *
@@ -258,6 +262,11 @@
 *
       IF( AINVNM.NE.ZERO )
      $   RCOND = ( ONE / AINVNM ) / ANORM
+*
+*     Check for NaNs
+*
+      IF( DISNAN( RCOND ) )
+     $   INFO = 1
 *
    20 CONTINUE
       RETURN
