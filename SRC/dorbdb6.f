@@ -174,7 +174,7 @@
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ALPHA, REALONE, REALZERO
-      PARAMETER          ( ALPHA = 0.01D0, REALONE = 1.0D0,
+      PARAMETER          ( ALPHA = 0.1D0, REALONE = 1.0D0,
      $                     REALZERO = 0.0D0 )
       DOUBLE PRECISION   NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = -1.0D0, ONE = 1.0D0, ZERO = 0.0D0 )
