@@ -21,6 +21,7 @@ install:
 #  - conda config --set auto_update_conda false
   - conda info --envs
   - conda env list
+  - conda list
   - conda install -c conda-forge --yes --quiet flang jom cmake
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
