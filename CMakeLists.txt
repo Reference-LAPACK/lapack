@@ -15,12 +15,12 @@ include(FetchContent)
 FetchContent_Declare(
   blaspp
   GIT_REPOSITORY https://github.com/icl-utk-edu/blaspp
-  GIT_TAG        91dd418fa910498cc03dee397826099914cc3185 # v2023.08.25 +
+  GIT_TAG        3c47832f5162b5215b2164c21c4132544c65563d # v2023.11.05
 )
 FetchContent_Declare(
   lapackpp
   GIT_REPOSITORY https://github.com/icl-utk-edu/lapackpp
-  GIT_TAG        88088c33cd9467475e8f139f42d158620f11e64d # v2023.08.25 +
+  GIT_TAG        e3aa0156b873d1e1349d083d7e5b66cfbdf9fb08 # v2023.11.05
 )
 
 # Allow setting a prefix for the library names
