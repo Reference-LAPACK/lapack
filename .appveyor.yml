@@ -22,7 +22,7 @@ install:
   - conda info --envs
   - conda env list
   - conda list
-  - conda install -c conda-forge --yes --quiet flang jom cmake
+  - conda install -c conda-forge --yes --quiet flang=11.0.1 jom cmake
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
   - set "CPATH=%CONDA_INSTALL_LOCN%\Library\include;%CPATH%"
@@ -30,7 +30,7 @@ install:
 before_build:
   - ps: if (-Not (Test-Path .\build)) { mkdir build }
   - cd build
-  - cmake -G "NMake Makefiles JOM" -DCMAKE_Fortran_COMPILER=flang-new -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
+  - cmake -G "NMake Makefiles JOM" -DCMAKE_Fortran_COMPILER=flang -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
 
 build_script:
   - cmake --build .
