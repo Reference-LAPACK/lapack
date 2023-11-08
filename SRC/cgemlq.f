@@ -110,7 +110,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          workspace
 *> \endverbatim
 *>
 *> \param[in] LWORK

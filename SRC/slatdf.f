@@ -82,7 +82,7 @@
 *>
 *> \param[in,out] RHS
 *> \verbatim
-*>          RHS is REAL array, dimension N.
+*>          RHS is REAL array, dimension (N)
 *>          On entry, RHS contains contributions from other subsystems.
 *>          On exit, RHS contains the solution of the subsystem with
 *>          entries according to the value of IJOB (see above).

@@ -82,11 +82,18 @@
 *> \endverbatim
 *>
 *> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*>          The dimension of Q12. N1 >= 0.
+*>          The following requirement must be satisfied:
+*>          N1 + N2 = M if SIDE = 'L' and N1 + N2 = N if SIDE = 'R'.
+*> \endverbatim
+*>
 *> \param[in] N2
 *> \verbatim
 *>          N1 is INTEGER
 *>          N2 is INTEGER
-*>          The dimension of Q12 and Q21, respectively. N1, N2 >= 0.
+*>          The dimension of Q21. N2 >= 0.
 *>          The following requirement must be satisfied:
 *>          N1 + N2 = M if SIDE = 'L' and N1 + N2 = N if SIDE = 'R'.
 *> \endverbatim

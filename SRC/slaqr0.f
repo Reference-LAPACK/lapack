@@ -166,7 +166,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension LWORK
+*>          WORK is REAL array, dimension (LWORK)
 *>           On exit, if LWORK = -1, WORK(1) returns an estimate of
 *>           the optimal value for LWORK.
 *> \endverbatim

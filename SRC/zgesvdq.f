@@ -51,8 +51,8 @@
 *> left and the right singular vectors of A, respectively.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBA
 *> \verbatim
@@ -148,13 +148,13 @@
 *>
 *> \param[in] LDA
 *> \verbatim
-*>          LDA is INTEGER.
+*>          LDA is INTEGER
 *>          The leading dimension of the array A.  LDA >= max(1,M).
 *> \endverbatim
 *>
 *> \param[out] S
 *> \verbatim
-*>          S is DOUBLE PRECISION array of dimension N.
+*>          S is DOUBLE PRECISION array of dimension (N)
 *>          The singular values of A, ordered so that S(i) >= S(i+1).
 *> \endverbatim
 *>
@@ -173,7 +173,7 @@
 *>
 *> \param[in] LDU
 *> \verbatim
-*>          LDU is INTEGER.
+*>          LDU is INTEGER
 *>          The leading dimension of the array U.
 *>          If JOBU = 'A', 'S', 'U', 'R',  LDU >= max(1,M).
 *>          If JOBU = 'F',                 LDU >= max(1,N).
@@ -238,7 +238,7 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*>          CWORK is COMPLEX*12 array, dimension (max(2, LCWORK)), used as a workspace.
+*>          CWORK is COMPLEX*16 array, dimension (max(2, LCWORK)), used as a workspace.
 *>          On exit, if, on entry, LCWORK.NE.-1, CWORK(1:N) contains parameters
 *>          needed to recover the Q factor from the QR factorization computed by
 *>          ZGEQP3.
@@ -325,7 +325,7 @@
 *>
 *> \param[in] LRWORK
 *> \verbatim
-*>          LRWORK is INTEGER.
+*>          LRWORK is INTEGER
 *>          The dimension of the array RWORK.
 *>          If JOBP ='P', then LRWORK >= MAX(2, M, 5*N);
 *>          Otherwise, LRWORK >= MAX(2, 5*N).

@@ -128,8 +128,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) REAL array, dimension (MAX(1,LWORK))
-*>
+*>         WORK is REAL array, dimension (MAX(1,LWORK))
+*>         workspace
 *> \endverbatim
 *> \param[in] LWORK
 *> \verbatim
