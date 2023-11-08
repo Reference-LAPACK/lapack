@@ -105,8 +105,15 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          = 1:  RCOND = NaN.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                NaNs are illegal values for ANORM, and they propagate to
+*>                the output parameter RCOND.
+*>                Infinity is illegal for ANORM, and it propagates to the output
+*>                parameter RCOND as 0.
+*>          = 1:  if RCOND = NaN, or
+*>                   RCOND = Inf, or
+*>                   the computed norm of the inverse of A is 0.
+*>                In the latter, RCOND = 0 is returned.
 *> \endverbatim
 *
 *  Authors:
@@ -147,7 +154,7 @@
       LOGICAL            ONENRM
       CHARACTER          NORMIN
       INTEGER            IX, KASE, KASE1
-      DOUBLE PRECISION   AINVNM, SCALE, SL, SMLNUM, SU
+      DOUBLE PRECISION   AINVNM, SCALE, SL, SMLNUM, SU, HUGEVAL
       COMPLEX*16         ZDUM
 *     ..
 *     .. Local Arrays ..
@@ -172,6 +179,8 @@
       CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
+*
+      HUGEVAL = DLAMCH( 'Overflow' )
 *
 *     Test the input parameters.
 *
@@ -201,7 +210,10 @@
          RETURN
       ELSE IF( DISNAN( ANORM ) ) THEN
          RCOND = ANORM
-         INFO = 1
+         INFO = -5
+         RETURN
+      ELSE IF( ANORM.GT.HUGEVAL ) THEN
+         INFO = -5
          RETURN
       END IF
 *
@@ -260,12 +272,16 @@
 *
 *     Compute the estimate of the reciprocal condition number.
 *
-      IF( AINVNM.NE.ZERO )
-     $   RCOND = ( ONE / AINVNM ) / ANORM
+      IF( AINVNM.NE.ZERO ) THEN
+         RCOND = ( ONE / AINVNM ) / ANORM
+      ELSE
+         INFO = 1
+         RETURN
+      END IF
 *
-*     Check for NaNs
+*     Check for NaNs and Infs
 *
-      IF( DISNAN( RCOND ) )
+      IF( DISNAN( RCOND ) .OR. RCOND.GT.HUGEVAL )
      $   INFO = 1
 *
    20 CONTINUE
