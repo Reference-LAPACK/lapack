@@ -173,7 +173,7 @@
 *
 *     .. Parameters ..
       REAL               ALPHA, REALONE, REALZERO
-      PARAMETER          ( ALPHA = 0.1E0, REALONE = 1.0E0,
+      PARAMETER          ( ALPHA = 0.83E0, REALONE = 1.0E0,
      $                     REALZERO = 0.0E0 )
       REAL               NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0, ZERO = 0.0E0 )
