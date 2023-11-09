@@ -169,6 +169,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      DOUBLE PRECISION   REALZERO
+      PARAMETER          ( REALZERO = 0.0D0 )
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D0,0.0D0), ZERO = (0.0D0,0.0D0) )
 *     ..
@@ -220,8 +222,8 @@
 *
 *     If the projection is nonzero, then return
 *
-      IF( DZNRM2(M1,X1,INCX1) .NE. ZERO
-     $    .OR. DZNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+      IF( DZNRM2(M1,X1,INCX1) .NE. REALZERO
+     $    .OR. DZNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
          RETURN
       END IF
 *
@@ -238,8 +240,8 @@
          END DO
          CALL ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( DZNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. DZNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( DZNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. DZNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO
@@ -257,8 +259,8 @@
          X2(I) = ONE
          CALL ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( DZNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. DZNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( DZNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. DZNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO

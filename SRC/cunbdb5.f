@@ -169,6 +169,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      REAL               REALZERO
+      PARAMETER          ( REALZERO = 0.0E0 )
       COMPLEX            ONE, ZERO
       PARAMETER          ( ONE = (1.0E0,0.0E0), ZERO = (0.0E0,0.0E0) )
 *     ..
@@ -220,8 +222,8 @@
 *
 *     If the projection is nonzero, then return
 *
-      IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $    .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+      IF( SCNRM2(M1,X1,INCX1) .NE. REALZERO
+     $    .OR. SCNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
          RETURN
       END IF
 *
@@ -238,8 +240,8 @@
          END DO
          CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SCNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. SCNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO
@@ -257,8 +259,8 @@
          X2(I) = ONE
          CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SCNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. SCNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO

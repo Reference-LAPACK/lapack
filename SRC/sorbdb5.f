@@ -169,6 +169,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      REAL               REALZERO
+      PARAMETER          ( REALZERO = 0.0E0 )
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E0, ZERO = 0.0E0 )
 *     ..
@@ -220,8 +222,8 @@
 *
 *     If the projection is nonzero, then return
 *
-      IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $    .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+      IF( SNRM2(M1,X1,INCX1) .NE. REALZERO
+     $    .OR. SNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
          RETURN
       END IF
 *
@@ -238,8 +240,8 @@
          END DO
          CALL SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. SNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO
@@ -257,8 +259,8 @@
          X2(I) = ONE
          CALL SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. SNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
             RETURN
          END IF
       END DO
