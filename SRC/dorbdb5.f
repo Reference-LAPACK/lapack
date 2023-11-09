@@ -176,13 +176,14 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            CHILDINFO, I, J
+      DOUBLE PRECISION   EPS, NORM, SCL, SSQ
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORBDB6, XERBLA
+      EXTERNAL           DLASSQ, DORBDB6, XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DNRM2
-      EXTERNAL           DNRM2
+      DOUBLE PRECISION   DLAMCH, DNRM2
+      EXTERNAL           DLAMCH, DNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -215,16 +216,26 @@
          RETURN
       END IF
 *
-*     Project X onto the orthogonal complement of Q
+      EPS = DLAMCH( 'Precision' )
 *
-      CALL DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2, LDQ2,
-     $              WORK, LWORK, CHILDINFO )
+*     Project X onto the orthogonal complement of Q if X is nonzero
 *
-*     If the projection is nonzero, then return
+      SCL = REALZERO
+      SSQ = REALZERO
+      CALL DLASSQ( M1, X1, INCX1, SCL, SSQ )
+      CALL DLASSQ( M2, X2, INCX2, SCL, SSQ )
+      NORM = SCL * SQRT( SSQ )
 *
-      IF( DNRM2(M1,X1,INCX1) .NE. REALZERO
-     $    .OR. DNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
-         RETURN
+      IF( NORM .GT. N * EPS ) THEN
+         CALL DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+     $              LDQ2, WORK, LWORK, CHILDINFO )
+*
+*        If the projection is nonzero, then return
+*
+         IF( DNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. DNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
+            RETURN
+         END IF
       END IF
 *
 *     Project each standard basis vector e_1,...,e_M1 in turn, stopping

@@ -176,13 +176,14 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            CHILDINFO, I, J
+      REAL               EPS, NORM, SCL, SSQ
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CUNBDB6, XERBLA
+      EXTERNAL           CLASSQ, CUNBDB6, XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SCNRM2
-      EXTERNAL           SCNRM2
+      REAL               SLAMCH, SCNRM2
+      EXTERNAL           SLAMCH, SCNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -215,16 +216,26 @@
          RETURN
       END IF
 *
-*     Project X onto the orthogonal complement of Q
+      EPS = SLAMCH( 'Precision' )
 *
-      CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2, LDQ2,
-     $              WORK, LWORK, CHILDINFO )
+*     Project X onto the orthogonal complement of Q if X is nonzero
 *
-*     If the projection is nonzero, then return
+      SCL = REALZERO
+      SSQ = REALZERO
+      CALL CLASSQ( M1, X1, INCX1, SCL, SSQ )
+      CALL CLASSQ( M2, X2, INCX2, SCL, SSQ )
+      NORM = SCL * SQRT( SSQ )
 *
-      IF( SCNRM2(M1,X1,INCX1) .NE. REALZERO
-     $    .OR. SCNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
-         RETURN
+      IF( NORM .GT. N * EPS ) THEN
+         CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+     $              LDQ2, WORK, LWORK, CHILDINFO )
+*
+*        If the projection is nonzero, then return
+*
+         IF( SCNRM2(M1,X1,INCX1) .NE. REALZERO
+     $       .OR. SCNRM2(M2,X2,INCX2) .NE. REALZERO ) THEN
+            RETURN
+         END IF
       END IF
 *
 *     Project each standard basis vector e_1,...,e_M1 in turn, stopping
