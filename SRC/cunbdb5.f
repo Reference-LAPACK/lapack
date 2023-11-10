@@ -179,7 +179,7 @@
       REAL               EPS, NORM, SCL, SSQ
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ, CUNBDB6, XERBLA
+      EXTERNAL           CLASSQ, CUNBDB6, CSCAL, XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH, SCNRM2
@@ -227,6 +227,13 @@
       NORM = SCL * SQRT( SSQ )
 *
       IF( NORM .GT. N * EPS ) THEN
+*        Scale vector to unit norm to avoid problems in the caller code.
+*        Computing the reciprocal is undesirable but
+*         * xLASCL cannot be used because of the vector increments and
+*         * the round-off error has a negligible impact on
+*           orthogonalization.
+         CALL CSCAL( M1, ONE / NORM, X1, INCX1 )
+         CALL CSCAL( M2, ONE / NORM, X2, INCX2 )
          CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $              LDQ2, WORK, LWORK, CHILDINFO )
 *
