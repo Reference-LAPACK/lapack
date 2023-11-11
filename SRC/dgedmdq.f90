@@ -573,7 +573,13 @@ SUBROUTINE DGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
                     LDY,   NRNK,  TOL,   K,  REIG, IMEIG,  &
                     Z, LDZ, RES,  B,     LDB,   V, LDV,    & 
                     S, LDS, WORK, LWORK, IWORK, LIWORK, INFO )
-! March 2023
+!
+!  -- LAPACK driver routine                                           --
+!
+!  -- LAPACK is a software package provided by University of          --
+!  -- Tennessee, University of California Berkeley, University of     --
+!  -- Colorado Denver and NAG Ltd..                                   --
+!
 !.....
       USE                   iso_fortran_env
       IMPLICIT NONE

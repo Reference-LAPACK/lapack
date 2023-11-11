@@ -495,7 +495,13 @@
                          K, EIGS, Z, LDZ, RES, B,    LDB,   &
                          W, LDW,  S, LDS, ZWORK,  LZWORK,   &
                          RWORK, LRWORK, IWORK, LIWORK, INFO )
-! March 2023
+!
+!  -- LAPACK driver routine                                           --
+!
+!  -- LAPACK is a software package provided by University of          --
+!  -- Tennessee, University of California Berkeley, University of     --
+!  -- Colorado Denver and NAG Ltd..                                   --
+!
 !.....
       USE                   iso_fortran_env
       IMPLICIT NONE
