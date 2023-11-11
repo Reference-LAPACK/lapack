@@ -476,10 +476,7 @@
             @defgroup ggesx         ggesx:          Schur form, expert
         @}
 
-        @defgroup geev_driver_grp   DMD driver, Dynamic Mode Decomposition
-        @{
-            @defgroup gedmd         gedmd:          dmd
-        @}
+        @defgroup gedmd             DMD driver, Dynamic Mode Decomposition
 
         @defgroup geev_comp_grp     Eig computational routines
         @{
