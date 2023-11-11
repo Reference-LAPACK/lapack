@@ -476,6 +476,8 @@
             @defgroup ggesx         ggesx:          Schur form, expert
         @}
 
+        @defgroup gedmd             DMD driver, Dynamic Mode Decomposition
+
         @defgroup geev_comp_grp     Eig computational routines
         @{
             @defgroup gebal         gebal:          balance matrix
