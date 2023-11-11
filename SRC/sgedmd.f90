@@ -1,4 +1,4 @@
-!> \brief \b SGEDMD
+!> \brief \b SGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot matrices.
 !
 !  =========== DOCUMENTATION ===========
 !
@@ -33,64 +33,64 @@
 !
 !............................................................
 !>    \par Purpose:
-!>    =============
+!     =============
 !>    \verbatim
-!     SGEDMD computes the Dynamic Mode Decomposition (DMD) for
-!     a pair of data snapshot matrices. For the input matrices
-!     X and Y such that Y = A*X with an unaccessible matrix
-!     A, SGEDMD computes a certain number of Ritz pairs of A using
-!     the standard Rayleigh-Ritz extraction from a subspace of
-!     range(X) that is determined using the leading left singular
-!     vectors of X. Optionally, SGEDMD returns the residuals
-!     of the computed Ritz pairs, the information needed for
-!     a refinement of the Ritz vectors, or the eigenvectors of
-!     the Exact DMD.
-!     For further details see the references listed
-!     below. For more details of the implementation see [3].
+!>    SGEDMD computes the Dynamic Mode Decomposition (DMD) for
+!>    a pair of data snapshot matrices. For the input matrices
+!>    X and Y such that Y = A*X with an unaccessible matrix
+!>    A, SGEDMD computes a certain number of Ritz pairs of A using
+!>    the standard Rayleigh-Ritz extraction from a subspace of
+!>    range(X) that is determined using the leading left singular
+!>    vectors of X. Optionally, SGEDMD returns the residuals
+!>    of the computed Ritz pairs, the information needed for
+!>    a refinement of the Ritz vectors, or the eigenvectors of
+!>    the Exact DMD.
+!>    For further details see the references listed
+!>    below. For more details of the implementation see [3].
 !>    \endverbatim
 !............................................................
 !>    \par References:
-!>    ================
+!     ================
 !>    \verbatim
-!     [1] P. Schmid: Dynamic mode decomposition of numerical
-!         and experimental data,
-!         Journal of Fluid Mechanics 656, 5-28, 2010.
-!     [2] Z. Drmac, I. Mezic, R. Mohr: Data driven modal
-!         decompositions: analysis and enhancements,
-!         SIAM J. on Sci. Comp. 40 (4), A2253-A2285, 2018.
-!     [3] Z. Drmac: A LAPACK implementation of the Dynamic
-!         Mode Decomposition I. Technical report. AIMDyn Inc.
-!         and LAPACK Working Note 298.
-!     [4] J. Tu, C. W. Rowley, D. M. Luchtenburg, S. L.
-!         Brunton, N. Kutz: On Dynamic Mode Decomposition:
-!         Theory and Applications, Journal of Computational
-!         Dynamics 1(2), 391 -421, 2014.
+!>    [1] P. Schmid: Dynamic mode decomposition of numerical
+!>        and experimental data,
+!>        Journal of Fluid Mechanics 656, 5-28, 2010.
+!>    [2] Z. Drmac, I. Mezic, R. Mohr: Data driven modal
+!>        decompositions: analysis and enhancements,
+!>        SIAM J. on Sci. Comp. 40 (4), A2253-A2285, 2018.
+!>    [3] Z. Drmac: A LAPACK implementation of the Dynamic
+!>        Mode Decomposition I. Technical report. AIMDyn Inc.
+!>        and LAPACK Working Note 298.
+!>    [4] J. Tu, C. W. Rowley, D. M. Luchtenburg, S. L.
+!>        Brunton, N. Kutz: On Dynamic Mode Decomposition:
+!>        Theory and Applications, Journal of Computational
+!>        Dynamics 1(2), 391 -421, 2014.
 !>    \endverbatim
 !......................................................................
 !>    \par Developed and supported by:
-!>    ================================
+!     ================================
 !>    \verbatim
-!     Developed and coded by Zlatko Drmac, Faculty of Science,
-!     University of Zagreb;  drmac@math.hr
-!     In cooperation with
-!     AIMdyn Inc., Santa Barbara, CA.
-!     and supported by
-!     - DARPA SBIR project "Koopman Operator-Based Forecasting
-!     for Nonstationary Processes from Near-Term, Limited
-!     Observational Data" Contract No: W31P4Q-21-C-0007
-!     - DARPA PAI project "Physics-Informed Machine Learning
-!     Methodologies" Contract No: HR0011-18-9-0033
-!     - DARPA MoDyL project "A Data-Driven, Operator-Theoretic
-!     Framework for Space-Time Analysis of Process Dynamics"
-!     Contract No: HR0011-16-C-0116
-!     Any opinions, findings and conclusions or recommendations
-!     expressed in this material are those of the author and
-!     do not necessarily reflect the views of the DARPA SBIR
-!     Program Office
+!>    Developed and coded by Zlatko Drmac, Faculty of Science,
+!>    University of Zagreb;  drmac@math.hr
+!>    In cooperation with
+!>    AIMdyn Inc., Santa Barbara, CA.
+!>    and supported by
+!>    - DARPA SBIR project "Koopman Operator-Based Forecasting
+!>    for Nonstationary Processes from Near-Term, Limited
+!>    Observational Data" Contract No: W31P4Q-21-C-0007
+!>    - DARPA PAI project "Physics-Informed Machine Learning
+!>    Methodologies" Contract No: HR0011-18-9-0033
+!>    - DARPA MoDyL project "A Data-Driven, Operator-Theoretic
+!>    Framework for Space-Time Analysis of Process Dynamics"
+!>    Contract No: HR0011-16-C-0116
+!>    Any opinions, findings and conclusions or recommendations
+!>    expressed in this material are those of the author and
+!>    do not necessarily reflect the views of the DARPA SBIR
+!>    Program Office
 !>    \endverbatim
 !......................................................................
 !>    \par Distribution Statement A:
-!>    ==============================
+!     ==============================
 !>    \verbatim
 !>    Distribution Statement A:
 !>    Approved for Public Release, Distribution Unlimited.
@@ -523,7 +523,7 @@
 !
 !> \author Zlatko Drmac
 !
-!> \ingroup dmd
+!> \ingroup gedmd
 !
 !.............................................................
 !.............................................................

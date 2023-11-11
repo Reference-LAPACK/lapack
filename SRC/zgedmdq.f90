@@ -1,4 +1,4 @@
-!> \brief \b ZGEDMDQ
+!> \brief \b ZGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot matrices.
 !
 !  =========== DOCUMENTATION ===========
 !
@@ -36,7 +36,7 @@
 !     INTEGER,       INTENT(OUT)   :: IWORK(*)
 !............................................................
 !>    \par Purpose:
-!>    =============
+!     =============
 !>    \verbatim
 !>    ZGEDMDQ computes the Dynamic Mode Decomposition (DMD) for
 !>    a pair of data snapshot matrices, using a QR factorization
@@ -54,7 +54,7 @@
 !>    \endverbatim
 !............................................................
 !>    \par References:
-!>    ================
+!     ================
 !>    \verbatim
 !>    [1] P. Schmid: Dynamic mode decomposition of numerical
 !>        and experimental data,
@@ -72,7 +72,7 @@
 !>    \endverbatim
 !......................................................................
 !>    \par Developed and supported by:
-!>    ================================
+!     ================================
 !>    \verbatim
 !>    Developed and coded by Zlatko Drmac, Faculty of Science,
 !>    University of Zagreb;  drmac@math.hr
@@ -94,14 +94,13 @@
 !>    \endverbatim
 !......................................................................
 !>    \par Developed and supported by:
-!>    ================================
+!     ================================
 !>    \verbatim
 !>    Distribution Statement A: 
 !>    Approved for Public Release, Distribution Unlimited.
 !>    Cleared by DARPA on September 29, 2022
 !>    \endverbatim
 !============================================================      
-!......................................................................      
 !     Arguments
 !     =========
 !
@@ -544,7 +543,7 @@
 !
 !> \author Zlatko Drmac
 !
-!> \ingroup dmd
+!> \ingroup gedmd
 !
 !.............................................................
 !.............................................................
