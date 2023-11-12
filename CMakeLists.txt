@@ -625,15 +625,13 @@ if (LAPACK++)
   )
 endif()
 
-if (BLAS++)
+if (BLAS++ OR LAPACK++)
   install(
-    DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
+    DIRECTORY "${LAPACK_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
     FILES_MATCHING REGEX "blaspp"
   )
-endif()
 
-if (BLAS++ OR LAPACK++)
   install(
     DIRECTORY "${LAPACK_BINARY_DIR}/include/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
