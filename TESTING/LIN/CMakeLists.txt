@@ -110,7 +110,7 @@ endif()
 set(DLINTST dchkaa.F
    dchkeq.f dchkgb.f dchkge.f dchkgt.f
    dchklq.f dchkpb.f dchkpo.f dchkps.f dchkpp.f
-   dchkpt.f dchkq3.f dchkql.f dchkqr.f dchkrq.f
+   dchkpt.f dchkq3.f dchkqp3rk.f dchkql.f dchkqr.f dchkrq.f
    dchksp.f dchksy.f dchksy_rook.f dchksy_rk.f 
    dchksy_aa.f dchksy_aa_2stage.f
    dchktb.f dchktp.f dchktr.f

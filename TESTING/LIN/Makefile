@@ -137,7 +137,7 @@ endif
 DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
-   dchkpt.o dchkq3.o dchkql.o dchkqr.o dchkrq.o \
+   dchkpt.o dchkq3.o dchkqp3rk.o dchkql.o dchkqr.o dchkrq.o \
    dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
    dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
