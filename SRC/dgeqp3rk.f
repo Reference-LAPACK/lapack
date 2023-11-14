@@ -631,27 +631,6 @@
 *
 *     ==================================================================
 *
-      EPS = DLAMCH('Epsilon')
-*
-      USETOL = .FALSE.
-*
-*     Adjust ABSTOL
-*
-      IF( ABSTOL.GE.ZERO ) THEN
-         SAFMIN = DLAMCH('Safe minimum')
-         ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
-         USETOL = .TRUE.
-      END IF
-*
-*     Adjust RELTOL
-*
-      IF( RELTOL.GE.ZERO ) THEN
-         RELTOL = MAX( RELTOL, EPS )
-         USETOL = .TRUE.
-      END IF
-*
-*     ==================================================================
-*
 *     Initialize storage for partial and exact column 2-norms.
 *     a) The elements WORK(1:N) are used to store partial column
 *        2-norms of the matrix A, and may decrease at each computation
@@ -673,12 +652,52 @@
       KP1 = IDAMAX( N, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP1 )
 *
+*     Quick return, if MAXK = 0.
+*
+      IF( MAXK.EQ.0 ) THEN
+         K = 0
+         MAXC2NRMK = MAXC2NRM
+         RELMAXC2NRMK = ONE
+         DO J = 1, MINMN
+            TAU( J ) = ZERO
+         END DO
+         WORK( 1 ) = DBLE( LWKOPT )
+         RETURN
+      END IF
+*
+*     ==================================================================
+*
+      EPS = DLAMCH('Epsilon')
+*
+      USETOL = .FALSE.
+*
+*     Adjust ABSTOL
+*
+      IF( ABSTOL.GE.ZERO ) THEN
+         SAFMIN = DLAMCH('Safe minimum')
+         ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
+         USETOL = .TRUE.
+      END IF
+*
+*     Adjust RELTOL
+*
+      IF( RELTOL.GE.ZERO ) THEN
+         RELTOL = MAX( RELTOL, EPS )
+         USETOL = .TRUE.
+      END IF
+*
+*     ===================================================================
+*
+*
+*
+*     ===================================================================
+*
 *     JMAX is the maximum index of the column to be factorized,
 *     which is also limited by the first stopping criterion MAXK.
 *
       JMAX = MIN( MAXK, MINMN )
 *
-*     Quick return if A is a zero matrix.
+*     Quick return, if A is a zero matrix.
 *
       IF( MAXC2NRM.EQ.ZERO ) THEN
 *
