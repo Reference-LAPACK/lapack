@@ -133,7 +133,7 @@
 *
 *     .. Parameters ..
       DOUBLE PRECISION   SHRINK, TENTH
-      PARAMETER          ( SHRINK = 0.25D0, TENTH = 0.1D+0 )
+      PARAMETER          ( SHRINK = 0.25D+0, TENTH = 0.1D+0 )
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D+0 )
       DOUBLE PRECISION   TWO
@@ -224,6 +224,139 @@
          ELSE
             ANORM = ONE
          END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QK' ) ) THEN
+*
+*        xQK: Set parameters to generate a general
+*             M x N matrix.
+*
+*        Set TYPE, the type of matrix to be generated.  'N' is nonsymmetric.
+*
+         TYPE = 'N'
+*
+*        Set DIST, the type of distribution for the random
+*        number generator. 'S' is
+*
+         DIST = 'S'
+*
+*        Set the lower and upper bandwidths.
+*
+         IF( IMAT.EQ.2 ) THEN
+*
+*           2. Random, Diagonal, CNDNUM = 2
+*
+            KL = 0
+            KU = 0
+            CNDNUM = TWO
+            ANORM = ONE
+            MODE = 3
+         ELSE IF( IMAT.EQ.3 ) THEN
+*
+*           3. Random, Upper triangular,  CNDNUM = 2
+*
+            KL = 0
+            KU = MAX( N-1, 0 )
+            CNDNUM = TWO
+            ANORM = ONE
+            MODE = 3
+         ELSE IF( IMAT.EQ.4 ) THEN
+*
+*          4. Random, Lower triangular,  CNDNUM = 2
+*
+            KL = MAX( M-1, 0 )
+            KU = 0
+            CNDNUM = TWO
+            ANORM = ONE
+            MODE = 3
+         ELSE
+*
+*           5.-19. Rectangular matrix
+*
+            KL = MAX( M-1, 0 )
+            KU = MAX( N-1, 0 )
+*
+            IF( IMAT.GE.5 .AND. IMAT.LE.14 ) THEN
+*
+*              5.-14. Random, CNDNUM = 2.
+*
+               CNDNUM = TWO
+               ANORM = ONE
+               MODE = 3
+*
+            ELSE IF( IMAT.EQ.15 ) THEN
+*
+*              15. Random, CNDNUM = sqrt(0.1/EPS)
+*
+               CNDNUM = BADC1
+               ANORM = ONE
+               MODE = 3
+*
+            ELSE IF( IMAT.EQ.16 ) THEN
+*
+*              16. Random, CNDNUM = 0.1/EPS
+*
+               CNDNUM = BADC2
+               ANORM = ONE
+               MODE = 3
+*
+            ELSE IF( IMAT.EQ.17 ) THEN
+*
+*              17. Random, CNDNUM = 0.1/EPS,
+*                  one small singular value S(N)=1/CNDNUM
+*
+               CNDNUM = BADC2
+               ANORM = ONE
+               MODE = 2
+*
+            ELSE IF( IMAT.EQ.18 ) THEN
+*
+*              18. Random, scaled near underflow
+*
+               CNDNUM = TWO
+               ANORM = SMALL
+               MODE = 3
+*
+            ELSE IF( IMAT.EQ.19 ) THEN
+*
+*              19. Random, scaled near overflow
+*
+               CNDNUM = TWO
+               ANORM = LARGE
+               MODE = 3
+*
+            END IF
+*
+         END IF
+*
+*        Set the condition number.
+*
+*         IF ( IMAT.EQ.6 ) THEN
+*            CNDNUM = BADC1
+*         ELSE IF ( IMAT.EQ.7 ) THEN
+*            CNDNUM = BADC2
+*         ELSE IF ( IMAT.EQ.8 ) THEN
+*            CNDNUM = BADC2
+*         ELSE
+*            CNDNUM = TWO
+*         END IF
+*
+*        Set norm
+*
+*         IF( IMAT.EQ.9 ) THEN
+*            ANORM = SMALL8
+*         ELSE IF( IMAT.EQ.10 ) THEN
+*            ANORM = LARGE
+*         ELSE
+*            ANORM = ONE
+*         END IF
+*
+*        Set MODE
+*
+*        IF( IMAT.EQ.8 ) THEN
+*            MODE = 2
+*         ELSE
+*            MODE = 3
+*         END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
 *
