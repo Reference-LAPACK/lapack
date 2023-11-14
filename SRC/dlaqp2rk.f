@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
+*      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, MAXK, ABSTOL, RELTOL,
 *     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
 *     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
 *      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+*      INTEGER            IOFFSET, KP1, KF, MAXK, LDA, M, N, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
 *     ..
@@ -268,7 +268,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
+      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, MAXK, ABSTOL, RELTOL,
      $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
      $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
       IMPLICIT NONE
@@ -278,7 +278,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+      INTEGER            IOFFSET, KP1, KF, MAXK, LDA, M, N, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -317,12 +317,12 @@
 *
       MINMNFACT = MIN( M-IOFFSET, N )
       MINMNUPDT = MIN( M-IOFFSET, N+NRHS )
-      KMAX = MIN( KMAX, MINMNFACT )
+      MAXK = MIN( MAXK, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
 *
 *     Compute factorization.
 *
-      DO K = 1, KMAX
+      DO K = 1, MAXK
 *
          I = IOFFSET + K
 *
@@ -468,9 +468,9 @@
 *
       KF = K - 1
 *
-      IF( KF.EQ.KMAX ) THEN
+      IF( KF.EQ.MAXK ) THEN
 *
-*        All KMAX columns were factorized, no ABSTOL or RELTOL triggered,
+*        All MAXK columns were factorized, no ABSTOL or RELTOL triggered,
 *        we need to set MAXC2NRMK and RELMAXC2NRMK before we return.
 *
          IF( KF.LT.MINMNFACT ) THEN
@@ -492,7 +492,7 @@
       END IF
 *
 *     Before we return because either we reached the end of the
-*     loop KMAX, or ABSTOL or RELTOL was triggered, we need to:
+*     loop MAXK, or ABSTOL or RELTOL was triggered, we need to:
 *     set TAUs corresponding to the columns that were not factorized
 *     to ZERO, i.e. TAU(KF+1:MINMN) set to ZERO.
 *

@@ -24,7 +24,7 @@
 *      IMPLICIT NONE
 *
 *      .. Scalar Arguments ..
-*       INTEGER            INFO, K, KMAX, LDA, LWORK, M, N, NRHS
+*       INTEGER            INFO, K, MAXK, LDA, LWORK, M, N, NRHS
 *       DOUBLE PRECISION   ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
 *      ..
 *      .. Array Arguments ..
@@ -503,7 +503,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
+      SUBROUTINE DGEQP3RK( M, N, NRHS, MAXK, ABSTOL, RELTOL,
      $                     A, LDA, K, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, WORK, LWORK, IWORK, INFO )
       IMPLICIT NONE
@@ -513,7 +513,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            INFO, K, KF, KMAX, LDA, LWORK, M, N, NRHS
+      INTEGER            INFO, K, KF, MAXK, LDA, LWORK, M, N, NRHS
       DOUBLE PRECISION   ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
 *     ..
 *     .. Array Arguments ..
@@ -561,7 +561,7 @@
          INFO = -2
       ELSE IF( NRHS.LT.0 ) THEN
          INFO = -3
-      ELSE IF( KMAX.LT.0 ) THEN
+      ELSE IF( MAXK.LT.0 ) THEN
          INFO = -4
       ELSE IF( DISNAN( ABSTOL ) ) THEN
          INFO = -5
@@ -571,7 +571,7 @@
          INFO = -8
       END IF
 *
-*     If the input parameters M, N, NRHS, KMAX, LDA are valid:
+*     If the input parameters M, N, NRHS, MAXK, LDA are valid:
 *       a) Test the input workspace size LWORK for the minimum
 *          size requirement IWS.
 *       b) Determine the optimal block size NB and optimal
@@ -602,7 +602,7 @@
       END IF
 *
 *      NOTE: The optimal workspace size is returned in WORK(1), if
-*            the input parameters M, N, NRHS, KMAX, LDA are valid.
+*            the input parameters M, N, NRHS, MAXK, LDA are valid.
 *
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DGEQP3RK', -INFO )
@@ -674,9 +674,9 @@
       MAXC2NRM = WORK( KP1 )
 *
 *     JMAX is the maximum index of the column to be factorized,
-*     which is also limited by the first stopping criterion KMAX.
+*     which is also limited by the first stopping criterion MAXK.
 *
-      JMAX = MIN( KMAX, MINMN )
+      JMAX = MIN( MAXK, MINMN )
 *
 *     Quick return if A is a zero matrix.
 *
@@ -745,9 +745,9 @@
 *
 *     JMAXB is the maximum column index of the block, when the
 *     blocked code is used, is also limited by the first stopping
-*     criterion KMAX.
+*     criterion MAXK.
 *
-      JMAXB = MIN( KMAX, MINMN - NX )
+      JMAXB = MIN( MAXK, MINMN - NX )
 *
       IF( NB.GE.NBMIN .AND. NB.LT.JMAX .AND. JMAXB.GT.0 ) THEN
 *
@@ -765,7 +765,7 @@
 *
 *           Factorize JB columns among the columns A(J:N).
 *
-            CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
+            CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, MAXK, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, JBF,
      $                     DONE, KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
