@@ -1,4 +1,4 @@
-*> \brief \b DLAQP3RK computes a step of truncated QR factorization with column pivoting of a real m-by-n matrix A using Level 3 BLAS and overwrites m-by-nrhs matrix B with Q**T * B.
+*> \brief \b DLAQP3RK computes a step of truncated QR factorization with column pivoting of a real m-by-n matrix A using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B.
 *
 *  =========== DOCUMENTATION ===========
 *

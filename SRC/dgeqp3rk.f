@@ -1,4 +1,4 @@
-*> \brief \b DGEQP3RK computes a truncated Householder QR factorization with column pivoting of a real m-by-n matrix A by using Level 3 BLAS and overwrites m-by-nrhs matrix B with Q**T * B.
+*> \brief \b DGEQP3RK computes a truncated Householder QR factorization with column pivoting of a real m-by-n matrix A by using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B.
 *
 *  =========== DOCUMENTATION ===========
 *
