@@ -720,10 +720,11 @@
                         DTEMP = (( ABS( A( (J-1)*M+J ) ) -
      $                          ABS( A( (J)*M+J+1 ) ) ) /
      $                          ABS( A(1) ) )
-
+*
                         IF( DTEMP.LT.ZERO ) THEN
                            RESULT( 4 ) = BIGNUM
                         END IF
+*
                      END DO
 *
 *                    Print information about the tests that did not
