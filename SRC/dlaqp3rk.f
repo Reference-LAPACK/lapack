@@ -328,13 +328,13 @@
 *>
 *>             On exit:
 *>             KB                  is set to the number of
-*>                                 factorized columns without
-*>                                 exception.
+*>                                    factorized columns without
+*>                                    exception.
 *>             MAXC2NRMK           is set to NaN.
 *>             RELMAXC2NRMK        is set to NaN.
-*>             TAU(KB+1:min(M,N))  is not set and contains undefined
-*>                                 elements. If j_1=KB+1, TAU(KB+1) may
-*>                                 contain NaN.
+*>             TAU(KB+1:min(M,N))     is not set and contains undefined
+*>                                    elements. If j_1=KB+1, TAU(KB+1)
+*>                                    may contain NaN.
 *>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
 *>             no NaN element was detected, but +Inf (or -Inf)
 *>             was detected and the routine continues
