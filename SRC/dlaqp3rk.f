@@ -444,6 +444,12 @@
       NB = MIN( NB, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
+
+          WRITE(*,*) "$$$$_$$$$ Enter DLAQP3RK "
+          WRITE(*,*) " (M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM)",
+     $               M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM
+
+
 *
 *     Compute factorization in a while loop over NB columns,
 *     K is the column index in the block A(1:M,1:N).

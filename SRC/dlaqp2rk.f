@@ -389,6 +389,10 @@
       KMAX = MIN( KMAX, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
+
+          WRITE(*,*) "####_#### Enter DLAQP2RK "
+          WRITE(*,*) " (M, N, NRHS, IOFFSET, KMAX, KP1, MAXC2NRM)",
+     $               M, N, NRHS, IOFFSET, KMAX,  KP1, MAXC2NRM
 *
 *     Compute the factorization, KK is the lomn loop index.
 *
@@ -567,14 +571,14 @@
 *        the elementary reflector would be an identity matrix,
 *        and TAU(KK) = ZERO.
 *
-         IF( KK.LT.M ) THEN
+         IF( I.LT.M ) THEN
             CALL DLARFG( M-I+1, A( I, KK ), A( I+1, KK ), 1,
      $                   TAU( KK ) )
          ELSE
             TAU( KK ) = ZERO
          END IF
 
-        WRITE(*,*) "## DLAQP2RK (K, TAU(Kk) )=", KK, TAU(KK)
+        WRITE(*,*) "## DLAQP2RK (KK, TAU(Kk) )=", KK, TAU(KK)
 *
 *        Check if TAU(KK) contains NaN, set INFO parameter
 *        to the column number where NaN is found and return from
