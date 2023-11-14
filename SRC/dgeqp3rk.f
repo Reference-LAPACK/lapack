@@ -426,9 +426,18 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= 3*N+1.
-*>          For optimal performance LWORK >= 2*N+( N+1 )*NB, where NB
-*>          is the optimal block size for DGEQP3RK returned by ILAENV.
+*>          The dimension of the array WORK.
+*.          LWORK >= (2*N + (N+NRHS) - 1).
+*>          For optimal performance LWORK >= (2*N + NB*( N+NRHS+1 )),
+*>          where NB is the optimal block size for DGEQP3RK returned
+*>          by ILAENV. Minimal block size MINNB=2.
+*>
+*>          NOTE: The decision, whether to use unblocked BLAS 2
+*>          or blocked BLAS 3 code is based not only on the dimension
+*>          LWORK of the availbale workspace WORK, but also also on the
+*>          matrix A dimension N via crossover point NX returned
+*>          by ILAENV. (For N less than NX, unblocked code should be
+*>          used.)
 *>
 *>          If LWORK = -1, then a workspace query is assumed;
 *>          the routine only calculates the optimal size of the WORK
@@ -645,12 +654,38 @@
             IWS = 1
             LWKOPT = 1
          ELSE
-            IWS = 3*N
+*
+*           Minimal workspace size in case of using only unblocked
+*           BLAS 2 code in DLAQP2RK.
+*           1) DGEQP3RK and DLAQP2RK: 2*N to store full and partial
+*              column 2-norms.
+*           2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used
+*              in DLARF subroutine inside DLAQP2RK to apply an
+*              elementary reflector from the left.
+*           TOTAL_WORK_SIZE = 3*N + NRHS - 1
+*
+            IWS = 3*N + NRHS - 1
 *
 *           Assign to NB optimal block size.
 *
             NB = ILAENV( INB, 'DGEQRF', ' ', M, N, -1, -1 )
-            LWKOPT = 2*N + NB*( 1+N+NRHS )
+*
+*           A formula for the optimal workspace size in case of using
+*           both unblocked BLAS 2 in DLAQP2RK and blocked BLAS 3 code
+*           in DLAQP3RK.
+*           1) DGEQP3RK, DLAQP2RK, DLAQP3RK: 2*N to store full and
+*              partial column 2-norms.
+*           2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used
+*              in DLARF subroutine to apply an elementary reflector
+*              from the left.
+*           3) DLAQP3RK: NB*(N+NRHS) to use in the work array F that
+*              is used to apply a block reflector from
+*              the left.
+*           4) DLAQP3RK: NB to use in the auxilixary array AUX.
+*           Sizes (2) and ((3) + (4)) should intersect, therefore
+*           TOTAL_WORK_SIZE = 2*N + NB*( N+NRHS+1 ), given NBMIN=2.
+*
+            LWKOPT = 2*N + NB*( N+NRHS+1 )
          END IF
          WORK( 1 ) = DBLE( LWKOPT )
 *

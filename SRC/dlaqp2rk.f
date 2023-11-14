@@ -251,9 +251,9 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (N)
+*>          WORK is DOUBLE PRECISION array, dimension (N-1)
 *>          Used in DLARF subroutine to apply an elementary
-*>          reflector.
+*>          reflector from the left.
 *> \endverbatim
 *>
 *> \param[out] INFO

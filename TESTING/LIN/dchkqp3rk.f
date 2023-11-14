@@ -755,7 +755,7 @@
 *
 *                 Compute the QR factorization with pivoting of A
 *
-                  LW = MAX( 1, 2*N+NB*( N+1 ) )
+                  LW = MAX( 1, MAX( 2*N+NB*( N+1 ) , 3*N+NRHS-1 ) )
 *
 *                 Compute DGEQP3RK factorization of A.
 *
