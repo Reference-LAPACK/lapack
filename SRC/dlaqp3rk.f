@@ -405,86 +405,90 @@
 *           TODO: optimize RELMAXC2NRMK
             RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
 *
-         END IF
+*           ============================================================
 *
-*     ==================================================================
+*           Quick return, if the submatrix A(I:M,K:N) is
+*           a zero matrix. We need to check it only if the column index
+*           (same as row index) is larger than 2, since the condition
+*           for the whole original matrix is checked in the main
+*           routine.
 *
-*        Quick return, if the submatrix A(I:M,K:N) is
-*        a zero matrix. We need to check it only if the column index
-*        (same as row index) is larger than 2, since the condition for
-*        the whole original matrix is checked in the main routine.
-*
-         IF( I.NE.1 .AND. MAXC2NRMK.EQ.ZERO ) THEN
+            IF( MAXC2NRMK.EQ.ZERO ) THEN
 
 
-         WRITE(*,*) "$$$$$$ DLAQP3RK zero submatrix, IOFFSET, K= ",
-     $                     IOFFSET, K
+            WRITE(*,*) "$$$$$$ DLAQP3RK zero submatrix, IOFFSET, K= ",
+     $                        IOFFSET, K
 *
-            DONE = .TRUE.
+               DONE = .TRUE.
 *
-*           Set KB, the number of factorized columns in the block;
-*           Set IF, the number of processed rows in the block, which is
-*           the same as the number of rows in the original whole
-*           matrix A;
-*           Set KF, the number of factorized columns in the original
-*           whole matrix A.
-*           TODO: fix USETOL
-            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+*              Set KB, the number of factorized columns in the block;
+*              Set IF, the number of processed rows in the block, which
+*              is the same as the number of rows in the original whole
+*              matrix A;
+*              Set KF, the number of factorized columns in the original
+*              whole matrix A.
+*              TODO: fix USETOL
+               IF( MAXC2NRMK.LE.ABSTOL
+     $             .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 
 
-               WRITE(*,*)
-     $         "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
-     $         ABSTOL,  K
+                  WRITE(*,*)
+     $            "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
+     $            ABSTOL,  K
 *
-               KB = K - 1
-               IF = I - 1
-               KF = IOFFSET + KB
+                  KB = K - 1
+                  IF = I - 1
+                  KF = IOFFSET + KB
 *
-            ELSE
+               ELSE
 *
-               KB = K - 1
-               IF = I - 1
-               KF = KMAX
+                  KB = K - 1
+                  IF = I - 1
+                  KF = KMAX
+*
+               END IF
+*
+*              There is no need to apply the block reflector to the
+*              residual of the matrix A stored in A(KB+1:M,KB+1:N),
+*              since the submatrix is zero and we stop the computation.
+*              But, we need to apply the block reflector to the residual
+*              right hand sides stored in A(KB+1:M,N+1:N+NRHS), if the
+*              residual right hand sides exist.  This occurs
+*              when ( NRHS != 0 AND KB <= (M-IOFFSET) ):
+*
+*              A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) -
+*                               A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
+*
+               IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
+
+
+               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK block reflector ",
+     $                 "(M-IF, NRHS, KB)", M-IF, NRHS, KB
+
+*
+                  CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
+     $                         KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
+     $                         LDF, ONE, A( IF+1, N+1 ), LDA )
+               END IF
+*
+*              There is no need to recompute the 2-norm of the
+*              difficult columns, since we stop the factorization.
+*
+*              Set TAUs corresponding to the columns that were not
+*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
+*              which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
+*
+               DO J = K, MINMNFACT
+                  TAU( J ) = ZERO
+               END DO
+*
+*              Return from the routine.
+*
+               RETURN
 *
             END IF
 *
-*           There is no need to apply the block reflector to the
-*           residual of the matrix A stored in A(KB+1:M,KB+1:N), since
-*           the submatrix is zero and we stop the computation.  But,
-*           we need to apply the block reflector to the residual right
-*           hand sides stored in A(KB+1:M,N+1:N+NRHS), if the residual
-*           right hand sides exist.  This happens
-*           when ( NRHS != 0 AND KB <= (M-IOFFSET) ):
-*
-*           A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) -
-*                            A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
-*
-            IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-
-
-            WRITE(*,*) "$$$$$$$$$$ DLAQP3RK block reflector ",
-     $              "(M-IF, NRHS, KB)", M-IF, NRHS, KB
-
-*
-               CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
-     $                      KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
-     $                      LDF, ONE, A( IF+1, N+1 ), LDA )
-            END IF
-*
-*           There is no need to recompute the 2-norm of the
-*           difficult columns, since we stop the factorization.
-*
-*           Set TAUs corresponding to the columns that were not
-*           factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
-*           which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
-*
-            DO J = K, MINMNFACT
-               TAU( J ) = ZERO
-            END DO
-*
-*           Return from the routine.
-*
-            RETURN
+*           ============================================================
 *
          END IF
 *
