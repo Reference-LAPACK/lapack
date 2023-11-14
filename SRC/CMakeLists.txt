@@ -287,7 +287,7 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
    dgels.f  dgelst.f dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f
-   dgeqp3.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
+   dgeqp3.f dgeqp3rk.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
@@ -302,7 +302,7 @@ set(DLASRC
    dlangb.f dlange.f dlangt.f dlanhs.f dlansb.f dlansp.f
    dlansy.f dlantb.f dlantp.f dlantr.f dlanv2.f
    dlapll.f dlapmt.f
-   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqsb.f dlaqsp.f dlaqsy.f
+   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqp2rk.f dlaqp3rk.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
