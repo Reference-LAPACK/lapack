@@ -605,7 +605,7 @@
 *
 *        Apply H(KK)**T to A(I:M,KK+1:N+NRHS) from the left.
 *        ( If M >= N, then at KK = N there is no residual matrix,
-*         i.e. no columns of A to update, only columns of B )
+*         i.e. no columns of A to update, only columns of B.
 *         If M < N, then at KK = M-IOFFSET, I = M and we have a
 *         one-row residual matrix in A and the elementary
 *         reflector is a unit matrix, TAU(KK) = ZERO, i.e. no update
