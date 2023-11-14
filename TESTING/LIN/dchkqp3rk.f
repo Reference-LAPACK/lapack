@@ -216,11 +216,11 @@
       INTEGER            I, IHIGH, ILOW, IM, IMAT, IN, INC_ZERO,
      $                   INB, IND_OFFSET_GEN,
      $                   IND_IN, IND_OUT, INS, INFO,
-     $                   ISTEP, J, J_INC, J_FIRST_NZ, JB_ZERO, K,
+     $                   ISTEP, J, J_INC, J_FIRST_NZ, JB_ZERO,
      $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK,
      $                   LWORK_DORMQR, M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NB_ZERO, NERRS, NFAIL, NB_GEN, NRHS,
-     $                   NRUN, NX, SHIFT, T
+     $                   NRUN, NX, T
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
      $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK,
      $                   TEST1, TEST2
@@ -681,7 +681,6 @@
 *
                DO INB = 1, NNB
 *
-*
 *                 Do for each pair of values (NB,NX) in NBVAL and NXVAL.
 *
                   NB = NBVAL( INB )
@@ -694,10 +693,10 @@
 
 *
 *                 We do MIN(M,N)+1 because we need a test for KMAX > N,
-*                 when KMAX is larger than min(M,N), KMAX should be
-*                 KMAX = min(M,N)
+*                 when KMAX is larger than MIN(M,N), KMAX should be
+*                 KMAX = MIN(M,N)
 *
-                  DO KMAX = 0, min(M,N)+1
+                  DO KMAX = 0, MIN(M,N)+1
 
 
 
@@ -707,7 +706,7 @@
 *                 Get a working copy of COPYA into A( 1:M,1:N ).
 *                 Get a working copy of COPYB into A( 1:M, (N+1):NRHS ).
 *                 Get a working copy of COPYB into into B( 1:M, 1:NRHS ).
-*                 Get a working copy of IWORK(1:N) into
+*                 Get a working copy of IWORK(1:N) awith zeroes into
 *                 which is going to be used as pivot array IWORK( N+1:2N ).
 *                 NOTE: IWORK(2N+1:3N) is going to be used as a WORK array
 *                 for the routine.
@@ -734,7 +733,7 @@
                   CALL DLACPY( 'All', M, NRHS, COPYB, LDA,
      $                         B,  LDA )
                   CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
-
+*
                   ABSTOL = -1.0
                   RELTOL = -1.0
 
@@ -892,17 +891,17 @@
                   WRITE(*,*)
      $               TAU(1), TAU(2), TAU(3), TAU(4),
      $               TAU(5), TAU(6), TAU(7), TAU(8)
-                  WRITE(*,*) " "
+                  WRITE(*,*)
 
                   WRITE(*,*) "JPIV after DGEQP3RK"
                   WRITE(*,*)
      $               IWORK(N+1), IWORK(N+2), IWORK(N+3), IWORK(N+4),
      $               IWORK(N+5), IWORK(N+6), IWORK(N+7), IWORK(N+8)
-                  WRITE(*,*) " "
+                  WRITE(*,*)
 
                   WRITE(*,*) "INFO after DGEQP3RK"
                   WRITE(*,*) INFO
-                  WRITE(*,*) " "
+                  WRITE(*,*)
 *
 *                 Check error code from DGEQP3RK.
 *
@@ -944,6 +943,9 @@
                         END IF
                      END DO
                      NRUN = NRUN + 1
+*
+*                   End test 1
+*
                   END IF
 *
 *
@@ -1044,7 +1046,7 @@
 *
 *                 (1) Compute B:=Q**T * B in the matrix B.
 *
-                  IF( MIN(M,N).GT.0 ) THEN
+                  IF( MINMN.GT.0 ) THEN
 *
 
                   WRITE(*,*)
@@ -1059,11 +1061,10 @@
 *     $               ,B((11-1)*LDA+I), B((12-1)*LDA+I)
                   END DO
 *
-                  LWORK_DORMQR = MAX(1, NRHS)
-                  CALL DORMQR( 'Left', 'Transpose', M, NRHS, KFACT,
-     $                         A, LDA, TAU, B, LDA, WORK,
-     $                         LWORK_DORMQR, INFO )
-*
+                     LWORK_DORMQR = MAX(1, NRHS)
+                     CALL DORMQR( 'Left', 'Transpose',
+     $                         M, NRHS, KFACT, A, LDA, TAU, B, LDA,
+     $                         WORK, LWORK_DORMQR, INFO )
 *
                  WRITE(*,*)
                  WRITE(*,*) "TEST 5: B after computing Q**T * B"
@@ -1081,12 +1082,10 @@
 
                      DO I = 1, NRHS
 *
-*                    Compare N+J-th column of A and J-column of B.
+*                       Compare N+J-th column of A and J-column of B.
 *
-                     CALL DAXPY( M, -ONE, A( ( N+I-1 )*LDA+1 ), 1,
-     $                                    B( ( I-1 )*LDA+1 ), 1 )
-
-
+                        CALL DAXPY( M, -ONE, A( ( N+I-1 )*LDA+1 ), 1,
+     $                                 B( ( I-1 )*LDA+1 ), 1 )
                      END DO
 *
                   WRITE(*,*)
@@ -1104,7 +1103,7 @@
 *
                    RESULT( 5 ) =
      $               ABS(
-     $               DLANGE( 'One-norm', M, NRHS, B, M, RDUMMY ) /
+     $               DLANGE( 'One-norm', M, NRHS, B, LDA, RDUMMY ) /
      $               ( DBLE( M )*DLAMCH( 'Epsilon' ) )
      $               )
 
@@ -1132,7 +1131,7 @@
 *
                   END IF
 *
-*                 END DO KMAX = 1, MAX(M,N)
+*                 END DO KMAX = 1, MIN(M,N)+1
 *
                   END DO
 *
