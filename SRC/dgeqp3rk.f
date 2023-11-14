@@ -693,6 +693,8 @@
 *     which is also limited by the first stopping criterion MAXK.
 *
       JMAX = MIN( MAXK, MINMN )
+
+*     ===================================================================
 *
 *     Quick return, if A is a zero matrix.
 *

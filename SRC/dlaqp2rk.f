@@ -171,7 +171,6 @@
 *>             the left by Q**T.
 *> \endverbatim
 *>
-*>
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
@@ -315,12 +314,17 @@
 *     MINMNFACT in the smallest dimension of the submatrix
 *     A(IOFFSET+1:M,1:N) to be factorized.
 *
+*     MINMNUPDT is the smallest dimension
+*     of the subarray A(IOFFSET+1:M,1:N+NRHS) to be udated, which contains
+*     the submatrices A(IOFFSET+1:M,1:N) and B(IOFFSET+1:M,1:NRHS) as column
+*     blocks.
+*
       MINMNFACT = MIN( M-IOFFSET, N )
       MINMNUPDT = MIN( M-IOFFSET, N+NRHS )
       MAXK = MIN( MAXK, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
 *
-*     Compute factorization.
+*     Compute the factorization.
 *
       DO K = 1, MAXK
 *
@@ -358,12 +362,22 @@
 *        to test for RELTOL >= ZERO, since RELMAXC2NRMK is
 *        non-negative.
 *
-
          IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*           Exit the loop.
+*           Set the number of factorized columns.
 *
-            EXIT
+            KF = K - 1
+*
+*           Set TAUs corresponding to the columns that were not factorized
+*           to ZERO, i.e. TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) set to ZERO.
+*
+            DO J = K, MINMNFACT
+               TAU( J ) = ZERO
+            END DO
+*
+*           Return from the routine.
+*
+            RETURN
          END IF
 *
 *     ==================================================================
@@ -466,35 +480,31 @@
 *
 *     Set the number of factorized columns
 *
-      KF = K - 1
+      KF = MAXK
 *
-      IF( KF.EQ.MAXK ) THEN
+*     We reached the end of the loop, i.e. all MAXK columns were
+*     factorized, we need to set MAXC2NRMK and RELMAXC2NRMK before
+*     we return.
 *
-*        All MAXK columns were factorized, no ABSTOL or RELTOL triggered,
-*        we need to set MAXC2NRMK and RELMAXC2NRMK before we return.
+      IF( KF.LT.MINMNFACT ) THEN
 *
-         IF( KF.LT.MINMNFACT ) THEN
+         JMAXC2NRM = KF + IDAMAX( N-KF, VN1( KF+1 ), 1 )
+         MAXC2NRMK = VN1( JMAXC2NRM )
 *
-            JMAXC2NRM = KF + IDAMAX( N-KF, VN1( KF+1 ), 1 )
-            MAXC2NRMK = VN1( JMAXC2NRM )
-*
-            IF( KF.EQ.0 ) THEN
-               RELMAXC2NRMK = ONE
-            ELSE
-               RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
-            END IF
-*
+         IF( KF.EQ.0 ) THEN
+            RELMAXC2NRMK = ONE
          ELSE
-            MAXC2NRMK = ZERO
-            RELMAXC2NRMK = ZERO
+            RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
          END IF
 *
+      ELSE
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
       END IF
 *
-*     Before we return because either we reached the end of the
-*     loop MAXK, or ABSTOL or RELTOL was triggered, we need to:
-*     set TAUs corresponding to the columns that were not factorized
-*     to ZERO, i.e. TAU(KF+1:MINMN) set to ZERO.
+*     We reached the end of the loop, i.e. all MAXK columns were
+*     factorized, set TAUs corresponding to the columns that were
+*     not factorized to ZERO, i.e. TAU(KF+1:MINMNFACT) set to ZERO.
 *
       DO J = KF + 1, MINMNFACT
          TAU( J ) = ZERO
