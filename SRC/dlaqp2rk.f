@@ -261,8 +261,8 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          1) INFO = 0: successful exit.
-*>          2) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
-*>             was detected and the routine stops the computation.
+*>          2) If INFO = j_1, where 1 <= j_1 <= N, then NaN was
+*>             detected and the routine stops the computation.
 *>             The j_1-th column of the matrix A or the j_1-th
 *>             element of array TAU contains the first occurrence
 *>             of NaN in the factorization step K+1 ( when K columns
@@ -277,14 +277,12 @@
 *>             TAU(K+1:min(M,N))  is not set and contains undefined
 *>                                   elements. If j_1=K+1, TAU(K+1)
 *>                                   may contain NaN.
-*>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
-*>             no NaN element was detected, but +Inf (or -Inf)
-*>             was detected and the routine continues
-*>             the computation until completion.
-*>             The (j_2-N)-th column of the matrix A contains the
-*>             first occurrence of +Inf (or -Inf) in the
-*>             factorization step K+1 ( when K columns have been
-*>             factorized ).
+*>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then no NaN
+*>             was detected, but +Inf (or -Inf) was detected and
+*>             the routine continues the computation until completion.
+*>             The (j_2-N)-th column of the matrix A contains the first
+*>             occurrence of +Inf (or -Inf) in the factorization
+*>             step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *
 *  Authors:
