@@ -611,7 +611,7 @@
          RETURN
       END IF
 *
-*     Quick return if possible for M, N.
+*     Quick return if possible for M=0 or N=0.
 *
       IF( MINMN.EQ.0 ) THEN
          K = 0
@@ -652,7 +652,8 @@
       KP1 = IDAMAX( N, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP1 )
 *
-*     Quick return, if MAXK = 0.
+*     Quick return if possible for the case when the first
+*     stopping criterion is satisfied, i.e. MAXK = 0.
 *
       IF( MAXK.EQ.0 ) THEN
          K = 0
@@ -688,10 +689,6 @@
 *
 *     ===================================================================
 *
-*
-*
-*     ===================================================================
-*
 *     JMAX is the maximum index of the column to be factorized,
 *     which is also limited by the first stopping criterion MAXK.
 *
@@ -714,6 +711,23 @@
             TAU( J ) = ZERO
          END DO
 *
+         WORK( 1 ) = DBLE( LWKOPT )
+         RETURN
+      END IF
+*
+*     ===================================================================
+*
+*     Quick return if possible for the case when the second or third
+*     stopping criterion is satified, i.e. MAXC2NRMK <= ABSTOL OR
+*     RELMAXC2NRMK <= RELTOL.
+*
+      IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+         K = 0
+         MAXC2NRMK = MAXC2NRM
+         RELMAXC2NRMK = ONE
+         DO J = 1, MINMN
+            TAU( J ) = ZERO
+         END DO
          WORK( 1 ) = DBLE( LWKOPT )
          RETURN
       END IF
