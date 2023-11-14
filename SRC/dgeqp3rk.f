@@ -868,28 +868,26 @@
 *     the MAXC2NORM and RELMAXC2NORM to return after we processed
 *     the blocks.
 *
-      IF( .NOT.DONE ) THEN
+      IF( J.LE.JMAX ) THEN
 *
-         IF( J.LE.JMAX ) THEN
+         CALL DLAQP2RK( M, N-J+1, NRHS, J-1, JMAX-J+1, ABSTOL,
+     $                  RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, KF,
+     $                  MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
+     $                  TAU( J ), WORK( J ), WORK( N+J ),
+     $                  WORK( 2*N+1 ) )
 *
-            CALL DLAQP2RK( M, N-J+1, NRHS, J-1, JMAX-J+1, ABSTOL,
-     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, KF,
-     $                     MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
-     $                     TAU( J ), WORK( J ), WORK( N+J ),
-     $                     WORK( 2*N+1 ) )
+*        ABSTOL or RELTOL criterion is satisfied when the number of
+*        the factorized columns KF is smaller then the  number
+*        of columns JMAX-J+1 supplied to be factorized by the
+*        unblocked routine, we can return from
+*        the routine. Perform the following before returning:
+*           a) Set the number of factorized columns K,
+*           b) MAXC2NRMK and RELMAXC2NRMK are returned by the
+*              unblocked factorization routine above.
 *
-*           ABSTOL or RELTOL criterion is satisfied when the number of
-*           the factorized columns KF is smaller then the  number
-*           of columns JMAX-J+1 supplied to be factorized by the
-*           unblocked routine, we can return from
-*           the routine. Perform the following before returning:
-*              a) Set the number of factorized columns K,
-*              b) MAXC2NRMK and RELMAXC2NRMK are returned by the
-*                 unblocked factorization routine above.
+            K = J - 1 + KF
 *
-               K = J - 1 + KF
-*
-         ELSE
+      ELSE
 *
 *        Compute the return values for blocked code.
 *
@@ -903,18 +901,18 @@
 *              residual matrix, otherwise set them to ZERO;
 *           2) Set TAU(K+1:MINMN) to ZERO.
 *
-            IF( K.LT.MINMN ) THEN
-               JMAXC2NRM = K + IDAMAX( N-K, WORK( K+1 ), 1 )
-               MAXC2NRMK = WORK( JMAXC2NRM )
-               IF( K.EQ.0 ) THEN
-                  RELMAXC2NRMK = ONE
-               ELSE
-                  RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
-               END IF
+         IF( K.LT.MINMN ) THEN
+            JMAXC2NRM = K + IDAMAX( N-K, WORK( K+1 ), 1 )
+            MAXC2NRMK = WORK( JMAXC2NRM )
+            IF( K.EQ.0 ) THEN
+               RELMAXC2NRMK = ONE
+            ELSE
+               RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
+            END IF
 *
-               DO J = K + 1, MINMN
-                  TAU( J ) = ZERO
-               END DO
+            DO J = K + 1, MINMN
+               TAU( J ) = ZERO
+            END DO
 
 
            WRITE(*,*)
@@ -922,22 +920,18 @@
      $                "(MAXC2NRMK, RELMAXC2NRMK)=",
      $                MAXC2NRMK, RELMAXC2NRMK
 
-            ELSE
-               MAXC2NRMK = ZERO
-               RELMAXC2NRMK = ZERO
+         ELSE
+            MAXC2NRMK = ZERO
+            RELMAXC2NRMK = ZERO
 
            WRITE(*,*)
            WRITE(*,*) "===== END DGEQP3RK compute full rank ",
      $                "(MAXC2NRMK, RELMAXC2NRMK)=",
      $                MAXC2NRMK, RELMAXC2NRMK
 
-            END IF
-*
-*     END IF( J.LE.JMAX ) THEN
-*
          END IF
 *
-*     END IF( .NOT.DONE ) THEN
+*     END IF( J.LE.JMAX ) THEN
 *
       END IF
 *
