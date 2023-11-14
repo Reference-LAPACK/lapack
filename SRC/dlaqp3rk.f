@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, MAXK, ABSTOL,
+*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
 *     $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
 *     $                     KF, MAXC2NRMK, RELMAXC2NRMK,
 *     $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
 *      IMPLICIT NONE
 *      LOGICAL            DONE
-*      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, MAXK, N,
+*      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, KMAX, N,
 *     $                   NB, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
@@ -315,7 +315,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, MAXK, ABSTOL,
+      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
      $                     KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
@@ -327,7 +327,7 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            DONE
-      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, MAXK, N,
+      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, KMAX, N,
      $                   NB, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
