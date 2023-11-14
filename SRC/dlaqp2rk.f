@@ -21,6 +21,7 @@
 *      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
 *     $                     KP0, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
 *     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
+*      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
 *      INTEGER            IOFFSET, KP0, KF, KMAX, LDA, M, N, NRHS
@@ -270,6 +271,7 @@
       SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
      $                     KP0, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
      $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

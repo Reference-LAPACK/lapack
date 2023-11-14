@@ -18,7 +18,11 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL, RELTOL,
+*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, MAXK, ABSTOL,
+*     $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
+*     $                     KF, MAXC2NRMK, RELMAXC2NRMK,
+*     $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
+*      IMPLICIT NONE
 *      LOGICAL            DONE
 *      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, MAXK, N,
 *     $                   NB, NRHS
@@ -308,6 +312,7 @@
      $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
      $                     KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
