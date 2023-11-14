@@ -464,8 +464,9 @@
                IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
 
 
-               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK block reflector ",
-     $                 "(M-IF, NRHS, KB)", M-IF, NRHS, KB
+               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK zero submatrix",
+     $                 " block reflector (M-IF, NRHS, KB)",
+     $                 M-IF, NRHS, KB
 
                   CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
      $                         KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
@@ -501,18 +502,59 @@
 *
                DONE = .TRUE.
 *
-*              Set the number of factorized columns in the block.
+*              Set KB, the number of factorized columns in the block;
+*              Set IF, the number of processed rows in the block, which
+*                      is the same as the number of processed rows in
+*                      the original whole matrix A;
+*              Set KF, the number of factorized columns in the original
+*                      whole matrix A, KF = IOFFSET+KB = IF.
 *
-               K = K - 1
+                  KB = K - 1
+                  IF = I - 1
+                  KF = IF
+
+               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK condition for",
+     $                 " ABSTOL or RELTOL (ABSTOL, RELTOL),",
+     $                 " (MAXC2NRMK, RELMAXC2NRMK)",
+     $                 ABSTOL, RELTOL, MAXC2NRMK, RELMAXC2NRMK
+
+
+*              Apply the block reflector to the residual of the
+*              matrix A and the residual of the right hand sides B, if
+*              the residual matrix and and/or the residual of the right
+*              hand sides exist,  i.e. if the submatrix
+*              A(I+1:M,KB+1:N+NRHS) exists.  This occurs when
+*                 KB < MINMNUPDT = min( M-IOFFSET, N+NRHS ):
 *
-*              Exit the loop.
-*              After the loop, there is a code:
-*                 1) to apply the block reflector via GEMM to the residual
-*                    of the matrix A and the residual of the right hand
-*                    sides B.
-*                 2) to zero out the remaining TAUs.
+*              A(IF+1:M,K+1:N+NRHS) := A(IF+1:M,KB+1:N+NRHS) -
+*                             A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T.
 *
-               EXIT
+               IF( KB.LT.MINMNUPDT ) THEN
+
+               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK ABSTOL or RELTOL",
+     $                 " block reflector (M-IF, N+NRHS-KB, KB)",
+     $                 M-IF, N+NRHS-KB, KB
+
+                  CALL DGEMM( 'No transpose', 'Transpose', M-IF,
+     $                     N+NRHS-KB, KB,-ONE, A( IF+1, 1 ), LDA,
+     $                     F( KB+1, 1 ), LDF, ONE,
+     $                     A( IF+1, KB+1 ), LDA )
+               END IF
+*
+*              There is no need to recompute the 2-norm of the
+*              difficult columns, since we stop the factorization.
+*
+*              Set TAUs corresponding to the columns that were not
+*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
+*              which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
+*
+               DO J = K, MINMNFACT
+                  TAU( J ) = ZERO
+               END DO
+*
+*              Return from the routine.
+*
+               RETURN
 *
             END IF
 *
@@ -655,12 +697,12 @@
 *        Set KB, the number of factorized columns in the block;
 *        Set IF, the number of processed rows in the block, which
 *                is the same as the number of processed rows in
-*                the original whole matrix A;
+*                the original whole matrix A, IF = IOFFSET + KB;
 *        Set KF, the number of factorized columns in the original
 *                whole matrix A, KF = IOFFSET+KB = IF.
 *
       KB = K
-      IF = IOFFSET + KB
+      IF = I
       KF = IF
 *
 *     Apply the block reflector to the residual of the matrix A
@@ -673,52 +715,39 @@
 *                         A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T.
 *
       IF( KB.LT.MINMNUPDT ) THEN
-*
          CALL DGEMM( 'No transpose', 'Transpose', M-IF, N+NRHS-KB, KB,
      $               -ONE, A( IF+1, 1 ), LDA, F( KB+1, 1 ), LDF, ONE,
      $               A( IF+1, KB+1 ), LDA )
       END IF
 *
-      IF( DONE ) THEN
+*     Recompute the 2-norm of the difficult columns.
+*     Loop over the index of the difficult columns from the largest
+*     to the smallest index.
 *
-*        If DONE, set TAU(KB+1:MINMNFACT) to ZERO.
+      DO WHILE( LSTICC.GT.0 )
 *
-         DO J = KB + 1, MINMNFACT
-            TAU( J ) = ZERO
-         END DO
+*        LSTICC is the index of the last difficult column is greater
+*        than 1.
+*        ITEMP is the index of the previous difficult column.
 *
-      ELSE
+         ITEMP = IWORK( LSTICC-1 )
 *
-*        Recompute the 2-norm of the difficult columns.
-*        Loop over the index of the difficult columns from the largest
-*        to the smallest index.
+*        Compute the 2-norm explicilty for the last difficult column and
+*        save it in the partial and exact 2-norm vectors VN1 and VN2.
 *
-         DO WHILE( LSTICC.GT.0 )
+*        NOTE: The computation of VN1( LSTICC ) relies on the fact that
+*        DNRM2 does not fail on vectors with norm below the value of
+*        SQRT(DLAMCH('S'))
 *
-*           LSTICC is the index of the last difficult column is greater
-*           than 1.
-*           ITEMP is the index of the previous difficult column.
+         VN1( LSTICC ) = DNRM2( M-IF, A( IF+1, LSTICC ), 1 )
+         VN2( LSTICC ) = VN1( LSTICC )
 *
-            ITEMP = IWORK( LSTICC-1 )
+*        Downdate the index of the last difficult column to
+*        the index of the previous difficult column.
 *
-*           Compute the 2-norm explicilty for the last difficult column
-*           and save it in the partial and exact 2-norm vectors VN1
-*           and VN2.
+         LSTICC = ITEMP
 *
-*           NOTE: The computation of VN1( LSTICC ) relies on the fact
-*           that DNRM2 does not fail on vectors with norm below the
-*           value of SQRT(DLAMCH('S'))
-*
-            VN1( LSTICC ) = DNRM2( M-IF, A( IF+1, LSTICC ), 1 )
-            VN2( LSTICC ) = VN1( LSTICC )
-*
-*           Downdate the index of the last difficult column to
-*           the index of the previous difficult column.
-*
-            LSTICC = ITEMP
-         END DO
-*
-      END IF
+      END DO
 *
       RETURN
 *
