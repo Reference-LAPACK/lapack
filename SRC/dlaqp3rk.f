@@ -433,7 +433,7 @@
       EXTERNAL           DGEMM, DGEMV, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, f, MIN, SQRT
+      INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN
