@@ -501,6 +501,11 @@
 *> \htmlonly
 *> <a href="http://www.netlib.org/lapack/lawnspdf/lawn176.pdf">http://www.netlib.org/lapack/lawnspdf/lawn176.pdf</a>
 *> \endhtmlonly
+*> and in
+*> ACM Trans. Math. Softw. 35, 2, Article 12 (July 2008), 28 pages.
+*> \htmlonly
+*> <a href="https://doi.org/10.1145/1377612.1377616">https://doi.org/10.1145/1377612.1377616</a>
+*> \endhtmlonly
 *
 *  =====================================================================
       SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
