@@ -353,15 +353,15 @@
 *     ==================================================================
 *
 *        Test for the second and third stopping criteria.
-*        NOTE: There is no need to test for ABSTOL.GE.ZERO, since
+*        NOTE: There is no need to test for ABSTOL >= ZERO, since
 *        MAXC2NRMK is non-negative. Similarly, there is no need
-*        to test for RELTOL.GE.ZERO, since RELMAXC2NRMK is
+*        to test for RELTOL >= ZERO, since RELMAXC2NRMK is
 *        non-negative.
 *
 
          IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*           Exit the loop
+*           Exit the loop.
 *
             EXIT
          END IF
@@ -470,10 +470,11 @@
 *
       IF( KF.EQ.KMAX ) THEN
 *
-*        All KMAX columns were factorized, no ABSTOL or RELTOL triggered.
+*        All KMAX columns were factorized, no ABSTOL or RELTOL triggered,
+*        we need to set MAXC2NRMK and RELMAXC2NRMK before we return.
 *
-
          IF( KF.LT.MINMNFACT ) THEN
+*
             JMAXC2NRM = KF + IDAMAX( N-KF, VN1( KF+1 ), 1 )
             MAXC2NRMK = VN1( JMAXC2NRM )
 *
@@ -488,11 +489,12 @@
             RELMAXC2NRMK = ZERO
          END IF
 *
-
-*
       END IF
 *
-*     Set TAU(KF+1:MINMN) to ZERO.
+*     Before we return because either we reached the end of the
+*     loop KMAX, or ABSTOL or RELTOL was triggered, we need to:
+*     set TAUs corresponding to the columns that were not factorized
+*     to ZERO, i.e. TAU(KF+1:MINMN) set to ZERO.
 *
       DO J = KF + 1, MINMNFACT
          TAU( J ) = ZERO

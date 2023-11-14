@@ -623,6 +623,14 @@
 *
 *     ==================================================================
 *
+*     Initialize column pivot array JPIV.
+*
+      DO J = 1, N
+         JPIV( J ) = J
+      END DO
+*
+*     ==================================================================
+*
       EPS = DLAMCH('Epsilon')
 *
       USETOL = .FALSE.
@@ -635,53 +643,13 @@
          USETOL = .TRUE.
       END IF
 *
-*     Ajust RELTOL
+*     Adjust RELTOL
 *
       IF( RELTOL.GE.ZERO ) THEN
          RELTOL = MAX( RELTOL, EPS )
          USETOL = .TRUE.
       END IF
 *
-*     ==================================================================
-*     Factorize columns
-*     ==================================================================
-*
-*     Determine the block size.
-*
-      NBMIN = 2
-      NX = 0
-*
-      IF( ( NB.GT.1 ) .AND. ( NB.LT.MINMN ) ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*        (for N less than NX, unblocked code should be used).
-*
-         NX = MAX( 0, ILAENV( IXOVER, 'DGEQRF', ' ', M, N, -1, -1 ) )
-*
-         IF( NX.LT.MINMN ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            IF( LWORK.LT.LWKOPT ) THEN
-*
-*              Not enough workspace to use optimal block size that
-*              is currently stored in NB.
-*              Reduce NB and determine the minimum value of NB.
-*
-               NB = ( LWORK-2*N ) / ( N+1 )
-               NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQRF', ' ', M, N,
-     $                 -1, -1 ) )
-*
-            END IF
-         END IF
-      END IF
-*     ==================================================================
-*
-*     Initialize column pivot array JPIV.
-*
-      DO J = 1, N
-         JPIV( J ) = J
-      END DO
 *     ==================================================================
 *
 *     Initialize storage for partial and exact column 2-norms.
@@ -729,6 +697,40 @@
 *
          WORK( 1 ) = DBLE( LWKOPT )
          RETURN
+      END IF
+*
+*     ==================================================================
+*     Factorize columns
+*     ==================================================================
+*
+*     Determine the block size.
+*
+      NBMIN = 2
+      NX = 0
+*
+      IF( ( NB.GT.1 ) .AND. ( NB.LT.MINMN ) ) THEN
+*
+*        Determine when to cross over from blocked to unblocked code.
+*        (for N less than NX, unblocked code should be used).
+*
+         NX = MAX( 0, ILAENV( IXOVER, 'DGEQRF', ' ', M, N, -1, -1 ) )
+*
+         IF( NX.LT.MINMN ) THEN
+*
+*           Determine if workspace is large enough for blocked code.
+*
+            IF( LWORK.LT.LWKOPT ) THEN
+*
+*              Not enough workspace to use optimal block size that
+*              is currently stored in NB.
+*              Reduce NB and determine the minimum value of NB.
+*
+               NB = ( LWORK-2*N ) / ( N+1 )
+               NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQRF', ' ', M, N,
+     $                 -1, -1 ) )
+*
+            END IF
+         END IF
       END IF
 *
 *     ==================================================================
