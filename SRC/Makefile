@@ -412,7 +412,8 @@ ZLASRC = \
    zgbtf2.o zgbtrf.o zgbtrs.o zgebak.o zgebal.o zgebd2.o zgebrd.o \
    zgecon.o zgeequ.o zgees.o  zgeesx.o zgeev.o  zgeevx.o \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
-   zgels.o  zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o zgeqp3.o \
+   zgels.o zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o \
+   zgeqp3.o zgeqp3rk.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
    zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o \
    zgesvj.o zgejsv.o zgsvj0.o zgsvj1.o \
@@ -449,7 +450,7 @@ ZLASRC = \
    zlanhe.o \
    zlanhp.o zlanhs.o zlanht.o zlansb.o zlansp.o zlansy.o zlantb.o \
    zlantp.o zlantr.o zlapll.o zlapmt.o zlaqgb.o zlaqge.o \
-   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqsb.o \
+   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqp2rk.o zlaqp3rk.o zlaqsb.o \
    zlaqr0.o zlaqr1.o zlaqr2.o zlaqr3.o zlaqr4.o zlaqr5.o \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
    zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o \

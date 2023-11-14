@@ -375,7 +375,8 @@ set(ZLASRC
    zgbtf2.f zgbtrf.f zgbtrs.f zgebak.f zgebal.f zgebd2.f zgebrd.f
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f
-   zgels.f  zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f
+   zgels.f zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f
+   zgeqp3.f zgeqp3rk.f
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
    zgesvj.f zgejsv.f zgsvj0.f zgsvj1.f
@@ -412,7 +413,7 @@ set(ZLASRC
    zlanhe.f
    zlanhp.f zlanhs.f zlanht.f zlansb.f zlansp.f zlansy.f zlantb.f
    zlantp.f zlantr.f zlapll.f zlapmt.f zlaqgb.f zlaqge.f
-   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqsb.f
+   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqp2rk.f zlaqp3rk.f zlaqsb.f
    zlaqr0.f zlaqr1.f zlaqr2.f zlaqr3.f zlaqr4.f zlaqr5.f
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
    zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f
