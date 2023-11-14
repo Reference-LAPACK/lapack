@@ -374,7 +374,7 @@
 *              Set KF, the number of factorized columns.
 *              TODO: fix USETOL
                IF( MAXC2NRMK.LE.ABSTOL
-     $               .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+     $             .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
                   KF = K - 1
                ELSE
