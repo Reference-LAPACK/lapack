@@ -339,6 +339,7 @@
 *           main routine.
 *
             KP = KP1
+*           TODO: optimize MAXC2NRMK and RELMAXC2NRMK
             MAXC2NRMK = MAXC2NRM
             RELMAXC2NRMK = ONE
 *
@@ -396,36 +397,38 @@
 *
 *           ============================================================
 *
+*           Test for the second and third stopping criteria.
+*           NOTE: There is no need to test for ABSTOL >= ZERO, since
+*           MAXC2NRMK is non-negative. Similarly, there is no need
+*           to test for RELTOL >= ZERO, since RELMAXC2NRMK is
+*           non-negative.
+*
+            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+*
+*              Set KF, the number of factorized columns.
+*
+               KF = K - 1
+*
+*              Set TAUs corresponding to the columns that were not
+*              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
+*
+               DO J = K, MINMNFACT
+                  TAU( J ) = ZERO
+               END DO
+*
+*              Return from the routine.
+*
+               RETURN
+*
+            END IF
+*
+*           ============================================================
+*
+*           End ELSE of IF(I.EQ.1)
+*
          END IF
 *
-*     ==================================================================
-*
-*        Test for the second and third stopping criteria.
-*        NOTE: There is no need to test for ABSTOL >= ZERO, since
-*        MAXC2NRMK is non-negative. Similarly, there is no need
-*        to test for RELTOL >= ZERO, since RELMAXC2NRMK is
-*        non-negative.
-*
-         IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
-*
-*           Set KF, the number of factorized columns.
-*
-            KF = K - 1
-*
-*           Set TAUs corresponding to the columns that were not
-*           factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
-*
-            DO J = K, MINMNFACT
-               TAU( J ) = ZERO
-            END DO
-*
-*           Return from the routine.
-*
-            RETURN
-*
-         END IF
-*
-*     ==================================================================
+*        ===============================================================
 *
 *        If the pivot column is not the first column of the
 *        subblock A(1:M,K:N):
@@ -459,8 +462,8 @@
             TAU( K ) = ZERO
          END IF
 *
-*       Apply H(K)**T to A(I:M,K+1:N+NRHS) from the left.
-*       ( If M >= N, then at K = N there is no residual matrix,
+*        Apply H(K)**T to A(I:M,K+1:N+NRHS) from the left.
+*        ( If M >= N, then at K = N there is no residual matrix,
 *         i.e. no columns of A to update, only columns of B )
 *         If M < N, then at K = M-IOFFSET, I = M and we have a
 *         one-row residual matrix in A and the elementary
