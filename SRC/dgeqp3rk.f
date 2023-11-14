@@ -99,6 +99,10 @@
 *>      the maximum column 2-norm of A is less than or equal to RELTOL.
 *>      If RELTOL < 0.0, the criterion is not used.
 *>
+*>   4) In case both stopping criteria ABSTOL or RELTOL are not used,
+*>      and when the residual matrix R22(K) is a zero matrix in some
+*>      factorization step K. ( This stopping criterion is implicit. )
+*>
 *>  The algorithm stops when any of these conditions is first
 *>  satisfied, otherwise the whole matrix A is factorized.
 *>
@@ -404,7 +408,7 @@
 *>
 *>          If 0 < K <= min(M,N), only the elements TAU(1:K) of
 *>          the array TAU are modified by the factorization.
-*>          After the factorization complted, if no NaN was found
+*>          After the factorization computed, if no NaN was found
 *>          during the factorization, the remaining elements
 *>          TAU(K+1:min(M,N)) are set to zero, otherwise the
 *>          elements TAU(K+1:min(M,N)) are not set and therefore

@@ -54,7 +54,7 @@
 *>   A * P(KB) = Q(KB) * R(KB).
 *>
 *> The routine tries to factorize NB columns from A starting from
-*> the row IOFFSET+1, and updates the residual matrix with BLAS 3
+*> the row IOFFSET+1 and updates the residual matrix with BLAS 3
 *> xGEMM. The number of actually factorized columns is returned
 *> is smaller than NB.
 *>
@@ -68,7 +68,7 @@
 *> (1) In some cases, due to catastrophic cancellations, it cannot
 *> factorize all NB columns and need to update the panel. Hence, the
 *> actual number of factorized columns returned in KB is smaller
-*> than NB.
+*> than NB. The logical DONE is returned as FALSE.
 *>
 *> (2) Whenever the stopping criterion ABSTOL or RELTOL is satisfied,
 *> the factorization is stopped, the logical DONE is returned
