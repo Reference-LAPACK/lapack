@@ -452,8 +452,8 @@
 *>                                  contain NaN.
 *>            3b) If INFO = j2, where N+1 <= j2 <= 2N, then
 *>                no NaN element was detected, but +Inf (or -Inf)
-*>                was detected and routine continued the computation
-*>                until completion.
+*>                was detected and the routine continues
+*>                the computation until completion.
 *>                The j2-th column of the matrix A contains the first
 *>                occurence of +Inf (or -Inf) at K+1 factorization
 *>                step K+1 ( when K columns have been factorized ).
