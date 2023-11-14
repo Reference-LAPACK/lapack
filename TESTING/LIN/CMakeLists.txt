@@ -9,7 +9,7 @@ set(DZLNTST dlaord.f)
 set(SLINTST schkaa.F
    schkeq.f schkgb.f schkge.f schkgt.f
    schklq.f schkpb.f schkpo.f schkps.f schkpp.f
-   schkpt.f schkq3.f schkql.f schkqr.f schkrq.f
+   schkpt.f schkq3.f schkqp3rk.f schkql.f schkqr.f schkrq.f
    schksp.f schksy.f schksy_rook.f schksy_rk.f 
    schksy_aa.f schksy_aa_2stage.f 
    schktb.f schktp.f schktr.f

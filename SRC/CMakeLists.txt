@@ -87,7 +87,7 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f
    sgels.f  sgelst.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
-   sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
+   sgeqp3.f sgeqp3rk.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
    sgetri.f
    sggbak.f sggbal.f
@@ -102,7 +102,7 @@ set(SLASRC
    slangb.f slange.f slangt.f slanhs.f slansb.f slansp.f
    slansy.f slantb.f slantp.f slantr.f slanv2.f
    slapll.f slapmt.f
-   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
+   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqp2rk.f slaqp3rk.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f

@@ -45,7 +45,7 @@ DZLNTST = dlaord.o
 SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
-   schkpt.o schkq3.o schkql.o schkqr.o schkrq.o \
+   schkpt.o schkq3.o schkqp3rk.o schkql.o schkqr.o schkrq.o \
    schksp.o schksy.o schksy_rook.o schksy_rk.o  \
    schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
    schktz.o \

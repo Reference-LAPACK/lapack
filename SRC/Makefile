@@ -119,7 +119,7 @@ SLASRC = \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \
    sgehd2.o sgehrd.o sgelq2.o sgelqf.o \
    sgels.o  sgelst.o sgelsd.o sgelss.o sgelsy.o sgeql2.o sgeqlf.o \
-   sgeqp3.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
+   sgeqp3.o sgeqp3rk.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
    sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvdx.o sgesvx.o \
    sgetc2.o sgetf2.o sgetri.o \
    sggbak.o sggbal.o sgges.o  sgges3.o sggesx.o \
@@ -134,7 +134,7 @@ SLASRC = \
    slangb.o slange.o slangt.o slanhs.o slansb.o slansp.o \
    slansy.o slantb.o slantp.o slantr.o slanv2.o \
    slapll.o slapmt.o \
-   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqsb.o slaqsp.o slaqsy.o \
+   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqp2rk.o slaqp3rk.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
    slarf.o  slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
