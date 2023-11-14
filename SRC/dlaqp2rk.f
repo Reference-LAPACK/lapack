@@ -19,13 +19,13 @@
 *  ===========
 *
 *      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
-*     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
+*     $                     KP1, MAXC2NRM, A, LDA, K, MAXC2NRMK,
 *     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK,
 *     $                     INFO )
 *      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*      INTEGER            INFO, IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+*      INTEGER            INFO, IOFFSET, KP1, K, KMAX, LDA, M, N, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
 *     ..
@@ -41,16 +41,16 @@
 *>
 *> \verbatim
 *>
-*> DLAQP2RK computes a truncated (rank KF) or full rank Householder QR
+*> DLAQP2RK computes a truncated (rank K) or full rank Householder QR
 *> factorization with column pivoting of the block A(IOFFSET+1:M,1:N)
 *>
-*>   A * P(KF) = Q(KF) * R(KF).
+*>   A * P(K) = Q(K) * R(K).
 *>
 *> The routine uses Level 2 BLAS. The block A(1:IOFFSET,1:N)
 *> is accordingly pivoted, but not factorized.
 *>
 *> The routine also overwrites the right-hand-sides matrix block B
-*> stored in A(IOFFSET+1:M,N+1:N+NRHS) with Q(KF)**T * B.
+*> stored in A(IOFFSET+1:M,N+1:N+NRHS) with Q(K)**T * B.
 *> \endverbatim
 *
 *  Arguments:
@@ -174,21 +174,21 @@
 *>              array_A   =   M  [ mat_A, mat_B ]
 *>
 *>          On exit:
-*>          1. The elements in block A(IOFFSET+1:M,1:KF) below
+*>          1. The elements in block A(IOFFSET+1:M,1:K) below
 *>             the diagonal together with the array TAU represent
-*>             the orthogonal matrix Q(KF) as a product of elementary
+*>             the orthogonal matrix Q(K) as a product of elementary
 *>             reflectors.
 *>          2. The upper triangular block of the matrix A stored
-*>             in A(IOFFSET+1:M,1:KF) is the triangular factor obtained.
+*>             in A(IOFFSET+1:M,1:K) is the triangular factor obtained.
 *>          3. The block of the matrix A stored in A(1:IOFFSET,1:N)
 *>             has been accordingly pivoted, but not factorized.
-*>          4. The rest of the array A, block A(IOFFSET+1:M,KF+1:N+NRHS).
-*>             The left part A(IOFFSET+1:M,KF+1:N) of this block
+*>          4. The rest of the array A, block A(IOFFSET+1:M,K+1:N+NRHS).
+*>             The left part A(IOFFSET+1:M,K+1:N) of this block
 *>             contains the residual of the matrix A, and,
 *>             if NRHS > 0, the right part of the block
 *>             A(IOFFSET+1:M,N+1:N+NRHS) contains the block of
 *>             the right-hand-side matrix B. Both these blocks have been
-*>             updated by multiplication from the left by Q(KF)**T.
+*>             updated by multiplication from the left by Q(K)**T.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -197,14 +197,14 @@
 *>          The leading dimension of the array A. LDA >= max(1,M).
 *> \endverbatim
 *>
-*> \param[out] KF
+*> \param[out] K
 *> \verbatim
-*>          KF is INTEGER
+*>          K is INTEGER
 *>          Factorization rank of the matrix A, i.e. the rank of
 *>          the factor R, which is the same as the number of non-zero
-*>          rows of the factor R. 0 <= KF <= min(M-IOFFSET,KMAX,N).
+*>          rows of the factor R. 0 <= K <= min(M-IOFFSET,KMAX,N).
 *>
-*>          KF also represents the number of non-zero Householder
+*>          K also represents the number of non-zero Householder
 *>          vectors.
 *> \endverbatim
 *>
@@ -212,7 +212,7 @@
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
 *>          The maximum column 2-norm of the residual matrix,
-*>          when the factorization stopped at rank KF. MAXC2NRMK >= 0.
+*>          when the factorization stopped at rank K. MAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
@@ -220,7 +220,7 @@
 *>          RELMAXC2NRMK is DOUBLE PRECISION
 *>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
 *>          2-norm of the residual matrix (when the factorization
-*>          stopped at rank KF) to the maximum column 2-norm of the
+*>          stopped at rank K) to the maximum column 2-norm of the
 *>          whole original matrix A. RELMAXC2NRMK >= 0.
 *> \endverbatim
 *>
@@ -264,25 +264,25 @@
 *>             was detected and the routine stops the computation.
 *>             The j_1-th column of the matrix A or the j_1-th
 *>             element of array TAU contains the first occurrence
-*>             of NaN in the factorization step KF+1 ( when KF columns
+*>             of NaN in the factorization step K+1 ( when K columns
 *>             have been factorized ).
 *>
 *>             On exit:
-*>             KF                  is set to the number of
-*>                                  factorized columns without
-*>                                  exception.
+*>             K                  is set to the number of
+*>                                   factorized columns without
+*>                                   exception.
 *>             MAXC2NRMK          is set to NaN.
 *>             RELMAXC2NRMK       is set to NaN.
-*>             TAU(KF+1:min(M,N))  is not set and contains undefined
-*>                                elements. If j_1=KF+1, TAU(KF+1) may
-*>                                contain NaN.
+*>             TAU(K+1:min(M,N))  is not set and contains undefined
+*>                                   elements. If j_1=K+1, TAU(K+1)
+*>                                   may contain NaN.
 *>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
 *>             no NaN element was detected, but +Inf (or -Inf)
 *>             was detected and the routine continues
 *>             the computation until completion.
 *>             The (j_2-N)-th column of the matrix A contains the
 *>             first occurrence of +Inf (or -Inf) in the
-*>             factorization step KF+1 ( when KF columns have been
+*>             factorization step K+1 ( when K columns have been
 *>             factorized ).
 *> \endverbatim
 *
@@ -328,7 +328,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
-     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
+     $                     KP1, MAXC2NRM, A, LDA, K, MAXC2NRMK,
      $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK,
      $                     INFO )
       IMPLICIT NONE
@@ -338,7 +338,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            INFO, IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+      INTEGER            INFO, IOFFSET, KP1, K, KMAX, LDA, M, N, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -355,9 +355,9 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, ITEMP, J, JMAXC2NRM, K, KP, MINMNFACT,
+      INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
-      DOUBLE PRECISION   AIK, HUGEVAL, TEMP, TEMP2, TOL3Z
+      DOUBLE PRECISION   AIKK, HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLARF, DLARFG, DSWAP
@@ -391,11 +391,11 @@
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
 *
-*     Compute the factorization.
+*     Compute the factorization, KK is the lomn loop index.
 *
-      DO K = 1, KMAX
+      DO KK = 1, KMAX
 *
-         I = IOFFSET + K
+         I = IOFFSET + KK
 *
          IF( I.EQ.1 ) THEN
 *
@@ -416,14 +416,14 @@
 *
 *           ============================================================
 *
-*           Determine the pivot column in K-th step, i.e. the index
+*           Determine the pivot column in KK-th step, i.e. the index
 *           of the column with the maximum 2-norm in the
 *           submatrix A(I:M,K:N).
 *
-            KP = ( K-1 ) + IDAMAX( N-K+1, VN1( K ), 1 )
+            KP = ( KK-1 ) + IDAMAX( N-KK+1, VN1( KK ), 1 )
 *
 *           Determine the maximum column 2-norm and the relative maximum
-*           column 2-norm of the submatrix A(I:M,K:N) in step K.
+*           column 2-norm of the submatrix A(I:M,KK:N) in step KK.
 *           RELMAXC2NRMK  will be computed later, after somecondition
 *           checks on MAXC2NRMK.
 *
@@ -431,7 +431,7 @@
 *
 *           ============================================================
 *
-*           Check if the submatrix A(I:M,K:N) contains NaN, and set
+*           Check if the submatrix A(I:M,KK:N) contains NaN, and set
 *           INFO parameter to the column number, where the first NaN
 *           is found and return from the routine.
 *           We need to check the condition only if the
@@ -441,17 +441,17 @@
 *
             IF( DISNAN( MAXC2NRMK ) ) THEN
 *
-*              Set KF, the number of factorized columns.
+*              Set K, the number of factorized columns.
 *              that are not zero.
 *
-                KF = K - 1
-                INFO = KF + KP
+                K = KK - 1
+                INFO = K + KP
 *
 *               Set RELMAXC2NRMK to NaN.
 *
                 RELMAXC2NRMK = MAXC2NRMK
 *
-*               Array TAU(KF+1:MINMNFACT) is not set and contains
+*               Array TAU(K+1:MINMNFACT) is not set and contains
 *               undefined elements.
 *
                RETURN
@@ -459,7 +459,7 @@
 *
 *           ============================================================
 *
-*           Quick return, if the submatrix A(I:M,K:N) is
+*           Quick return, if the submatrix A(I:M,KK:N) is
 *           a zero matrix.
 *           We need to check the condition only if the
 *           column index (same as row index) of the original whole
@@ -468,16 +468,16 @@
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
 *
-*              Set KF, the number of factorized columns.
+*              Set K, the number of factorized columns.
 *              that are not zero.
 *
-               KF = K - 1
+               K = KK - 1
                RELMAXC2NRMK = ZERO
 *
 *              Set TAUs corresponding to the columns that were not
-*              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
+*              factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to ZERO.
 *
-               DO J = K, MINMNFACT
+               DO J = KK, MINMNFACT
                   TAU( J ) = ZERO
                END DO
 *
@@ -489,7 +489,7 @@
 *
 *           ============================================================
 *
-*           Check if the submatrix A(I:M,K:N) contains Inf,
+*           Check if the submatrix A(I:M,KK:N) contains Inf,
 *           set INFO parameter to the column number, where
 *           the first Inf is found plus N, and continue
 *           the computation.
@@ -499,7 +499,7 @@
 *           original matrix is checked in the main routine.
 *
             IF( INFO.EQ.0 .AND. MAXC2NRMK.GT.HUGEVAL ) THEN
-               INFO = N + K - 1 + KP
+               INFO = N + KK - 1 + KP
             END IF
 *
 *           ============================================================
@@ -518,14 +518,14 @@
 *
             IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*              Set KF, the number of factorized columns.
+*              Set K, the number of factorized columns.
 *
-               KF = K - 1
+               K = KK - 1
 *
 *              Set TAUs corresponding to the columns that were not
-*              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
+*              factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to ZERO.
 *
-               DO J = K, MINMNFACT
+               DO J = KK, MINMNFACT
                   TAU( J ) = ZERO
                END DO
 *
@@ -544,92 +544,92 @@
 *        ===============================================================
 *
 *        If the pivot column is not the first column of the
-*        subblock A(1:M,K:N):
-*        1) swap the K-th column and the KP-th pivot column
+*        subblock A(1:M,KK:N):
+*        1) swap the KK-th column and the KP-th pivot column
 *           in A(1:M,1:N);
-*        2) copy the K-th element into the KP-th element of the partial
+*        2) copy the KK-th element into the KP-th element of the partial
 *           and exact 2-norm vectors VN1 and VN2. ( Swap is not needed
 *           for VN1 and VN2 since we use the element with the index
-*           larger than K in the next loop step.)
+*           larger than KK in the next loop step.)
 *        3) Save the pivot interchange with the indices relative to the
 *           the original matrix A, not the block A(1:M,1:N).
 *
-         IF( KP.NE.K ) THEN
-            CALL DSWAP( M, A( 1, KP ), 1, A( 1, K ), 1 )
-            VN1( KP ) = VN1( K )
-            VN2( KP ) = VN2( K )
+         IF( KP.NE.KK ) THEN
+            CALL DSWAP( M, A( 1, KP ), 1, A( 1, KK ), 1 )
+            VN1( KP ) = VN1( KK )
+            VN2( KP ) = VN2( KK )
             ITEMP = JPIV( KP )
-            JPIV( KP ) = JPIV( K )
-            JPIV( K ) = ITEMP
+            JPIV( KP ) = JPIV( KK )
+            JPIV( KK ) = ITEMP
          END IF
 *
-*        Generate elementary reflector H(K) using the column A(I:M,K),
+*        Generate elementary reflector H(KK) using the column A(I:M,KK),
 *        if the column has more than one element, otherwise
 *        the elementary reflector would be an identity matrix,
-*        and TAU(K) = ZERO.
+*        and TAU(KK) = ZERO.
 *
-         IF( K.LT.M ) THEN
-            CALL DLARFG( M-I+1, A( I, K ), A( I+1, K ), 1,
-     $                   TAU( K ) )
+         IF( KK.LT.M ) THEN
+            CALL DLARFG( M-I+1, A( I, KK ), A( I+1, KK ), 1,
+     $                   TAU( KK ) )
          ELSE
-            TAU( K ) = ZERO
+            TAU( KK ) = ZERO
          END IF
 
-        WRITE(*,*) "## DLAQP2RK (K, TAU(K) )=", K, TAU(K)
+        WRITE(*,*) "## DLAQP2RK (K, TAU(Kk) )=", KK, TAU(KK)
 *
-*        Check if TAU(K) is NaN, set INFO parameter
+*        Check if TAU(KK) is NaN, set INFO parameter
 *        to the column number where NaN is found and return from
 *        the routine.
-*        NOTE: There is no need to check TAU(K) for Inf,
-*        since *LARFG cannot produce TAU(K) or Householder vector
+*        NOTE: There is no need to check TAU(KK) for Inf,
+*        since *LARFG cannot produce TAU(KK) or Householder vector
 *        below the diagonal containing Inf. Only BETA on the diagonal,
 *        returned by *LARFG can contain Inf, which requires
-*        TAU(K) to be NaN. Therefore, this case of generating Inf by
-*        *DLARFG is covered by checking TAU(K) for NaN.
+*        TAU(KK) to be NaN. Therefore, this case of generating Inf by
+*        *DLARFG is covered by checking TAU(KK) for NaN.
 *
-         IF( DISNAN( TAU(K) ) ) THEN
-            KF = K - 1
-            INFO = K
-         WRITE(*,*) "## ## DLAQP2RK ((TAU is NaN)) (K, INFO)", K, INFO
+         IF( DISNAN( TAU(KK) ) ) THEN
+            K = KK - 1
+            INFO = KK
+         WRITE(*,*) "## ## DLAQP2RK ((TAU is NaN)) (KK, INFO)", KK, INFO
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *
-            MAXC2NRMK = TAU( K )
-            RELMAXC2NRMK = TAU( K )
+            MAXC2NRMK = TAU( KK )
+            RELMAXC2NRMK = TAU( KK )
 *
-*           Array TAU(K:MINMNFACT) is not set and contains
-*           undefined elements, except the first element TAU(K) = NaN.
+*           Array TAU(KK:MINMNFACT) is not set and contains
+*           undefined elements, except the first element TAU(KK) = NaN.
 *
             RETURN
          END IF
 *
-*        Apply H(K)**T to A(I:M,K+1:N+NRHS) from the left.
-*        ( If M >= N, then at K = N there is no residual matrix,
+*        Apply H(KK)**T to A(I:M,KK+1:N+NRHS) from the left.
+*        ( If M >= N, then at KK = N there is no residual matrix,
 *         i.e. no columns of A to update, only columns of B )
-*         If M < N, then at K = M-IOFFSET, I = M and we have a
+*         If M < N, then at KK = M-IOFFSET, I = M and we have a
 *         one-row residual matrix in A and the elementary
-*         reflector is a unit matrix, TAU(K) = ZERO, i.e. no update
+*         reflector is a unit matrix, TAU(KK) = ZERO, i.e. no update
 *         is needed for the residual matrix in A and the
 *         right-hand-side-matrix in B.
 *         Therefore, we update only if
-*         K < MINMNUPDT = min(M-IOFFSET, N+NRHS)
-*         condition is satisfied, not only K < N+NRHS )
+*         KK < MINMNUPDT = min(M-IOFFSET, N+NRHS)
+*         condition is satisfied, not only KK < N+NRHS )
 *
-         IF( K.LT.MINMNUPDT ) THEN
-            AIK = A( I, K )
-            A( I, K ) = ONE
-            CALL DLARF( 'Left', M-I+1, N+NRHS-K, A( I, K ), 1,
-     $                  TAU( K ), A( I, K+1 ), LDA, WORK( 1 ) )
-            A( I, K ) = AIK
+         IF( KK.LT.MINMNUPDT ) THEN
+            AIKK = A( I, KK )
+            A( I, KK ) = ONE
+            CALL DLARF( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
+     $                  TAU( KK ), A( I, KK+1 ), LDA, WORK( 1 ) )
+            A( I, KK ) = AIKK
          END IF
 *
-         IF( K.LT.MINMNFACT ) THEN
+         IF( KK.LT.MINMNFACT ) THEN
 *
 *           Update the partial column 2-norms for the residual matrix,
-*           only if the residual matrix A(I+1:M,K+1:N) exists, i.e.
-*           when K < min(M-IOFFSET, N).
+*           only if the residual matrix A(I+1:M,KK+1:N) exists, i.e.
+*           when KK < min(M-IOFFSET, N).
 *
-            DO J = K + 1, N
+            DO J = KK + 1, N
                IF( VN1( J ).NE.ZERO ) THEN
 *
 *                 NOTE: The following lines follow from the analysis in
@@ -671,18 +671,18 @@
 *     i.e. no condition was triggered to exit the routine.
 *     Set the number of factorized columns.
 *
-      KF = KMAX
+      K = KMAX
 *
 *     We reached the end of the loop, i.e. all KMAX columns were
 *     factorized, we need to set MAXC2NRMK and RELMAXC2NRMK before
 *     we return.
 *
-      IF( KF.LT.MINMNFACT ) THEN
+      IF( K.LT.MINMNFACT ) THEN
 *
-         JMAXC2NRM = KF + IDAMAX( N-KF, VN1( KF+1 ), 1 )
+         JMAXC2NRM = K + IDAMAX( N-K, VN1( K+1 ), 1 )
          MAXC2NRMK = VN1( JMAXC2NRM )
 *
-         IF( KF.EQ.0 ) THEN
+         IF( K.EQ.0 ) THEN
             RELMAXC2NRMK = ONE
          ELSE
             RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
@@ -695,9 +695,9 @@
 *
 *     We reached the end of the loop, i.e. all KMAX columns were
 *     factorized, set TAUs corresponding to the columns that were
-*     not factorized to ZERO, i.e. TAU(KF+1:MINMNFACT) set to ZERO.
+*     not factorized to ZERO, i.e. TAU(K+1:MINMNFACT) set to ZERO.
 *
-      DO J = KF + 1, MINMNFACT
+      DO J = K + 1, MINMNFACT
          TAU( J ) = ZERO
       END DO
 *
