@@ -355,7 +355,7 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, ITEMP, J, JMAXC2NRM, K, KP, MINMNFACT,
+      INTEGER            I, ITEMP, J1, JMAXC2NRM, K, KP, MINMNFACT,
      $                   MINMNUPDT
       DOUBLE PRECISION   AIK, HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
@@ -481,8 +481,8 @@
 *              Set TAUs corresponding to the columns that were not
 *              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
 *
-               DO J = K, MINMNFACT
-                  TAU( J ) = ZERO
+               DO J1 = K, MINMNFACT
+                  TAU( J1 ) = ZERO
                END DO
 *
 *              Return from the routine.
@@ -529,8 +529,8 @@
 *              Set TAUs corresponding to the columns that were not
 *              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
 *
-               DO J = K, MINMNFACT
-                  TAU( J ) = ZERO
+               DO J1 = K, MINMNFACT
+                  TAU( J1 ) = ZERO
                END DO
 *
 *              Return from the routine.
@@ -633,33 +633,33 @@
 *           only if the residual matrix A(I+1:M,K+1:N) exists, i.e.
 *           when K < min(M-IOFFSET, N).
 *
-            DO J = K + 1, N
-               IF( VN1( J ).NE.ZERO ) THEN
+            DO J1 = K + 1, N
+               IF( VN1( J1 ).NE.ZERO ) THEN
 *
 *                 NOTE: The following lines follow from the analysis in
 *                 Lapack Working Note 176.
 *
-                  TEMP = ONE - ( ABS( A( I, J ) ) / VN1( J ) )**2
+                  TEMP = ONE - ( ABS( A( I, J1 ) ) / VN1( J1 ) )**2
                   TEMP = MAX( TEMP, ZERO )
-                  TEMP2 = TEMP*( VN1( J ) / VN2( J ) )**2
+                  TEMP2 = TEMP*( VN1( J1 ) / VN2( J1 ) )**2
                   IF( TEMP2 .LE. TOL3Z ) THEN
 *
 *                    Compute the column 2-norm for the partial
-*                    column A(I+1:M,J) by explicitly computing it,
+*                    column A(I+1:M,J1) by explicitly computing it,
 *                    and store it in both partial 2-norm vector VN1
 *                    and exact column 2-norm vector VN2.
 *
-                     VN1( J ) = DNRM2( M-I, A( I+1, J ), 1 )
-                     VN2( J ) = VN1( J )
+                     VN1( J1 ) = DNRM2( M-I, A( I+1, J1 ), 1 )
+                     VN2( J1 ) = VN1( J1 )
 *
                   ELSE
 *
 *                    Update the column 2-norm for the partial
-*                    column A(I+1:M,J) by removing one
-*                    element A(I,J) and store it in partial
+*                    column A(I+1:M,J1) by removing one
+*                    element A(I,J1) and store it in partial
 *                    2-norm vector VN1.
 *
-                     VN1( J ) = VN1( J )*SQRT( TEMP )
+                     VN1( J1 ) = VN1( J1 )*SQRT( TEMP )
 *
                   END IF
                END IF
@@ -701,8 +701,8 @@
 *     factorized, set TAUs corresponding to the columns that were
 *     not factorized to ZERO, i.e. TAU(KF+1:MINMNFACT) set to ZERO.
 *
-      DO J = KF + 1, MINMNFACT
-         TAU( J ) = ZERO
+      DO J1 = KF + 1, MINMNFACT
+         TAU( J1 ) = ZERO
       END DO
 *
       RETURN
