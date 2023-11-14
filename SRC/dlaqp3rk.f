@@ -844,7 +844,8 @@
 *        ===============================================================
 *
 *        Update the current I-th row of A:
-*        A(I,K+1:N) := A(I,K+1:N) - A(I,1:K)*F(K+1:N,1:K)**T.
+*        A(I,K+1:N+NRHS) := A(I,K+1:N+NRHS)
+*                         - A(I,1:K)*F(K+1:N+NRHS,1:K)**T.
 *
          IF( K.LT.N+NRHS ) THEN
             CALL DGEMV( 'No transpose', N+NRHS-K, K, -ONE,
