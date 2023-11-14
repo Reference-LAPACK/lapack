@@ -377,6 +377,17 @@
 *> <a href="https://doi.org/10.1145/1377612.1377616">https://doi.org/10.1145/1377612.1377616</a>
 *> \endhtmlonly
 *
+*> \par Contributors:
+*  ==================
+*>
+*> \verbatim
+*>
+*>  November  2023, Igor Kozachenko, James Demmel,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
+*>
+*> \endverbatim
+*
 *  =====================================================================
       SUBROUTINE ZLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB,
