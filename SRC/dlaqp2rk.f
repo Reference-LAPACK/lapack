@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, MAXK, ABSTOL, RELTOL,
+*      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
 *     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
 *     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
 *      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*      INTEGER            IOFFSET, KP1, KF, MAXK, LDA, M, N, NRHS
+*      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
 *     ..
@@ -80,20 +80,20 @@
 *>          IOFFSET >= 0.
 *> \endverbatim
 *>
-*> \param[in] MAXK
+*> \param[in] KMAX
 *> \verbatim
-*>          MAXK is INTEGER
+*>          KMAX is INTEGER
 *>
 *>          The first factorization stopping criterion.
 *>
 *>          The maximum number of columns of the matrix A to factorize,
-*>          i.e. the maximum factorization rank. MAXK >= 0.
+*>          i.e. the maximum factorization rank. KMAX >= 0.
 *>
-*>          a) If MAXK >= min(M-IOFFSET,N), then this stopping
+*>          a) If KMAX >= min(M-IOFFSET,N), then this stopping
 *>                criterion is not used, factorize columns
 *>                depending on ABSTOL and RELTOL.
 *>
-*>          b) If MAXK = 0, then this stopping criterion is
+*>          b) If KMAX = 0, then this stopping criterion is
 *>                satisfied on input and the routine exits immediately.
 *>                This means that the factorization is not performed,
 *>                the matrices A and B are not modified, and
@@ -267,7 +267,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, MAXK, ABSTOL, RELTOL,
+      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
      $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
      $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
       IMPLICIT NONE
@@ -277,7 +277,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            IOFFSET, KP1, KF, MAXK, LDA, M, N, NRHS
+      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -321,12 +321,12 @@
 *
       MINMNFACT = MIN( M-IOFFSET, N )
       MINMNUPDT = MIN( M-IOFFSET, N+NRHS )
-      MAXK = MIN( MAXK, MINMNFACT )
+      KMAX = MIN( KMAX, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
 *
 *     Compute the factorization.
 *
-      DO K = 1, MAXK
+      DO K = 1, KMAX
 *
          I = IOFFSET + K
 *
@@ -356,6 +356,35 @@
 *
 *     ==================================================================
 *
+*        Quick return, if the submatrix A(IOFFSET+K:M,K:N) is
+*        a zero matrix.
+*
+         IF( MAXC2NRMK.EQ.ZERO ) THEN
+*
+*           Set the number of factorized columns.
+*           TODO: fix USETOL
+            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+               KF = K - 1
+            ELSE
+               KF = KMAX
+            END IF
+*
+*           Set TAUs corresponding to ZERO columns in the submatrix
+*           A(IOFFSET+K:M,K:N) to ZERO, i.e. TAU(K:MINMNFACT)
+*           set to ZERO.
+*
+            DO J = K, MINMNFACT
+               TAU( J ) = ZERO
+            END DO
+*
+*           Return from the routine.
+*
+            RETURN
+*
+         END IF
+*
+*     ==================================================================
+*
 *        Test for the second and third stopping criteria.
 *        NOTE: There is no need to test for ABSTOL >= ZERO, since
 *        MAXC2NRMK is non-negative. Similarly, there is no need
@@ -378,6 +407,7 @@
 *           Return from the routine.
 *
             RETURN
+*
          END IF
 *
 *     ==================================================================
@@ -480,9 +510,9 @@
 *
 *     Set the number of factorized columns
 *
-      KF = MAXK
+      KF = KMAX
 *
-*     We reached the end of the loop, i.e. all MAXK columns were
+*     We reached the end of the loop, i.e. all KMAX columns were
 *     factorized, we need to set MAXC2NRMK and RELMAXC2NRMK before
 *     we return.
 *
@@ -502,7 +532,7 @@
          RELMAXC2NRMK = ZERO
       END IF
 *
-*     We reached the end of the loop, i.e. all MAXK columns were
+*     We reached the end of the loop, i.e. all KMAX columns were
 *     factorized, set TAUs corresponding to the columns that were
 *     not factorized to ZERO, i.e. TAU(KF+1:MINMNFACT) set to ZERO.
 *
