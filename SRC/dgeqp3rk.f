@@ -18,14 +18,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
-*      $                     A, LDA, K, MAXC2NRMK, RELMAXC2NRMK,
-*      $                     JPIV, TAU, WORK, LWORK, IWORK, INFO )
+*       SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL, A, LDA,
+*      $                     K, MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU,
+*      $                     WORK, LWORK, IWORK, INFO )
 *      IMPLICIT NONE
 *
 *      .. Scalar Arguments ..
 *       INTEGER            INFO, K, KMAX, LDA, LWORK, M, N, NRHS
-*       DOUBLE PRECISION   ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
+*       DOUBLE PRECISION   ABSTOL, MAXC2NRMK, RELMAXC2NRMK, RELTOL
 *      ..
 *      .. Array Arguments ..
 *       INTEGER            IWORK( * ), JPIV( * )
@@ -570,9 +570,9 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
-     $                     A, LDA, K, MAXC2NRMK, RELMAXC2NRMK,
-     $                     JPIV, TAU, WORK, LWORK, IWORK, INFO )
+      SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL, A, LDA,
+     $                     K, MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU,
+     $                     WORK, LWORK, IWORK, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
