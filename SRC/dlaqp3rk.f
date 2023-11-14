@@ -20,11 +20,11 @@
 *
 *      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
 *     $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
-*     $                     KF, MAXC2NRMK, RELMAXC2NRMK,
+*     $                     MAXC2NRMK, RELMAXC2NRMK,
 *     $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
 *      IMPLICIT NONE
 *      LOGICAL            DONE
-*      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, KMAX, N,
+*      INTEGER            IOFFSET, KB, KP1, LDA, LDF, M, KMAX, N,
 *     $                   NB, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
@@ -206,15 +206,6 @@
 *>          non-zero at each step. 0 <= KB <= min(M-IOFFSET,N).
 *> \endverbatim
 *>
-*> \param[out] KF
-*> \verbatim
-*>          KF is INTEGER
-*>          Factorization rank of the original whole matrix A_orig,
-*>          i.e. the rank of the factor R_orig, i.e.
-*>          the number of actually factorized partial columns that are
-*>          non-zero at each step. 0 <= KF <= min(M,N+IOFFSET).
-*> \endverbatim
-*
 *> \param[out] MAXC2NRMK
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
@@ -333,7 +324,7 @@
 *  =====================================================================
       SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB,
-     $                     KF, MAXC2NRMK, RELMAXC2NRMK,
+     $                     MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
       IMPLICIT NONE
 *
@@ -343,7 +334,7 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            DONE
-      INTEGER            IOFFSET, KB, KF, KP1, LDA, LDF, M, KMAX, N,
+      INTEGER            IOFFSET, KB, KP1, LDA, LDF, M, KMAX, N,
      $                   NB, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
@@ -444,11 +435,7 @@
 *                      i.e. the rank of the factor R.
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
-*                      the original whole matrix A_orig;
-*              Set KF, the number of factorized partial columns that
-*                      are non zero at each step in the whole original
-*                      whole matrix A_orig, i.e. the rank of the
-*                      factor R_orig. KF = IOFFSET+KB = IF.
+*                      the original whole matrix A_orig.
 *
                   WRITE(*,*)
      $            "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
@@ -456,7 +443,6 @@
 *
                KB = K - 1
                IF = I - 1
-               KF = IF
 *
 *              There is no need to apply the block reflector to the
 *              residual of the matrix A stored in A(KB+1:M,KB+1:N),
@@ -516,14 +502,9 @@
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
 *                      the original whole matrix A_orig;
-*              Set KF, the number of factorized partial columns that
-*                      are non zero at each step in the whole original
-*                      whole matrix A_orig, i.e. the rank of the
-*                      factor R_orig. KF = IOFFSET+KB = IF.
 *
                   KB = K - 1
                   IF = I - 1
-                  KF = IF
 
                WRITE(*,*) "$$$$$$$$$$ DLAQP3RK condition for",
      $                 " ABSTOL or RELTOL (ABSTOL, RELTOL),",
@@ -709,13 +690,10 @@
 *        Set KB, the number of factorized columns in the block;
 *        Set IF, the number of processed rows in the block, which
 *                is the same as the number of processed rows in
-*                the original whole matrix A_orig, IF = IOFFSET + KB;
-*        Set KF, the number of factorized columns in the original
-*                whole matrix A_orig, KF = IOFFSET+KB = IF.
+*                the original whole matrix A_orig, IF = IOFFSET + KB.
 *
       KB = K
       IF = I
-      KF = IF
 *
 *     Apply the block reflector to the residual of the matrix A
 *     and the residual of the right hand sides B, if the residual

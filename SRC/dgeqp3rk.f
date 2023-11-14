@@ -824,7 +824,7 @@
 
             CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
-     $                     DONE, JBF, KF, MAXC2NRMK, RELMAXC2NRMK,
+     $                     DONE, JBF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
      $                     WORK( J ), WORK( N+J ),
      $                     WORK( 2*N+1 ), WORK( 2*N+JB+1 ),
@@ -843,12 +843,14 @@
 *              return from the routine. Perform the following before
 *              returning:
 *                a) Set the number of factorized columns K,
+*                   K = OFFSET + JBF from the last call of blocked
+*                   routine.
 *                NOTE: 1) MAXC2NRMK and RELMAXC2NRMK are returned
 *                         by the block factorization routine;
 *                      2) The remaining TAUs are set to ZERO by the
 *                         block factorization routine.
 *
-               K = KF
+               K = J - 1
 *
 *              Return from the routine.
 *
