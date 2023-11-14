@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQP3RK( M, N, NRHS, MAXK, ABSTOL, RELTOL,
+*       SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
 *      $                     A, LDA, K, MAXC2NRMK, RELMAXC2NRMK,
 *      $                     JPIV, TAU, WORK, LWORK, IWORK, INFO )
 *      IMPLICIT NONE
 *
 *      .. Scalar Arguments ..
-*       INTEGER            INFO, K, MAXK, LDA, LWORK, M, N, NRHS
+*       INTEGER            INFO, K, KMAX, LDA, LWORK, M, N, NRHS
 *       DOUBLE PRECISION   ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
 *      ..
 *      .. Array Arguments ..
@@ -81,9 +81,9 @@
 *> The truncation criteria (i.e. when to stop the factorization)
 *> can be any of the following:
 *>
-*>   1) The input parameter MAXK, the maximum number of columns
-*>      MAXK to factorize, i.e. the factorization rank is limited
-*>      to MAXK. If MAXK >= min(M,N), the criterion is not used.
+*>   1) The input parameter KMAX, the maximum number of columns
+*>      KMAX to factorize, i.e. the factorization rank is limited
+*>      to KMAX. If KMAX >= min(M,N), the criterion is not used.
 *>
 *>   2) The input parameter ABSTOL, the absolute tolerance for
 *>      the maximum column 2-norm of the residual matrix R22(K). This
@@ -101,7 +101,7 @@
 *>  The algorithm stops when any of these conditions is first
 *>  satisfied, otherwise the whole matrix A is factorized.
 *>
-*>  For full rank factorization use the values MAXK >= min(M,N),
+*>  For full rank factorization use the values KMAX >= min(M,N),
 *>  ABSTOL < 0.0 and RELTOL < 0.0.
 *>
 *>  The routine returns:
@@ -168,20 +168,20 @@
 *>          columns of the matrix B. NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in] MAXK
+*> \param[in] KMAX
 *> \verbatim
-*>          MAXK is INTEGER
+*>          KMAX is INTEGER
 *>
 *>          The first factorization stopping criterion.
 *>
 *>          The maximum number of columns of the matrix A to factorize,
-*>          i.e. the maximum factorization rank. MAXK >= 0.
+*>          i.e. the maximum factorization rank. KMAX >= 0.
 *>
-*>          a) If MAXK >= min(M,N), then this stopping criterion
+*>          a) If KMAX >= min(M,N), then this stopping criterion
 *>                is not used, factorize columns depending
 *>                on ABSTOL and RELTOL.
 *>
-*>          b) If MAXK = 0, then this stopping criterion is
+*>          b) If KMAX = 0, then this stopping criterion is
 *>                satisfied on input and the routine exits immediately.
 *>                This means that the factorization is not performed,
 *>                the matrices A and B are not modified, and
@@ -205,7 +205,7 @@
 *>                by XERBLA.
 *>
 *>          b) If ABSTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on MAXK and RELTOL.
+*>                used, factorize columns depending on KMAX and RELTOL.
 *>                This includes the case ABSTOL = -Inf.
 *>
 *>          c) If 0.0 <= ABSTOL < 2*SAFMIN, then ABSTOL = 2*SAFMIN
@@ -244,7 +244,7 @@
 *>                by XERBLA.
 *>
 *>          b) If RELTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on MAXK and ABSTOL.
+*>                used, factorize columns depending on KMAX and ABSTOL.
 *>                This includes the case RELTOL = -Inf.
 *>
 *>          c) If 0.0 <= RELTOL < EPS, then RELTOL = EPS is used.
@@ -322,7 +322,7 @@
 *>          K is INTEGER
 *>          The number of columns that were factorized.
 *>          K is the factorization rank.
-*>          0 <= K <= min( M, min(MAXK,N) ).
+*>          0 <= K <= min( M, min(KMAX,N) ).
 *>
 *>          If K = 0, the arrays A, TAU, JPIV were not modified.
 *> \endverbatim
@@ -503,7 +503,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DGEQP3RK( M, N, NRHS, MAXK, ABSTOL, RELTOL,
+      SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
      $                     A, LDA, K, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, WORK, LWORK, IWORK, INFO )
       IMPLICIT NONE
@@ -513,7 +513,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            INFO, K, KF, MAXK, LDA, LWORK, M, N, NRHS
+      INTEGER            INFO, K, KF, KMAX, LDA, LWORK, M, N, NRHS
       DOUBLE PRECISION   ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
 *     ..
 *     .. Array Arguments ..
@@ -561,7 +561,7 @@
          INFO = -2
       ELSE IF( NRHS.LT.0 ) THEN
          INFO = -3
-      ELSE IF( MAXK.LT.0 ) THEN
+      ELSE IF( KMAX.LT.0 ) THEN
          INFO = -4
       ELSE IF( DISNAN( ABSTOL ) ) THEN
          INFO = -5
@@ -571,7 +571,7 @@
          INFO = -8
       END IF
 *
-*     If the input parameters M, N, NRHS, MAXK, LDA are valid:
+*     If the input parameters M, N, NRHS, KMAX, LDA are valid:
 *       a) Test the input workspace size LWORK for the minimum
 *          size requirement IWS.
 *       b) Determine the optimal block size NB and optimal
@@ -602,7 +602,7 @@
       END IF
 *
 *      NOTE: The optimal workspace size is returned in WORK(1), if
-*            the input parameters M, N, NRHS, MAXK, LDA are valid.
+*            the input parameters M, N, NRHS, KMAX, LDA are valid.
 *
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DGEQP3RK', -INFO )
@@ -653,9 +653,9 @@
       MAXC2NRM = WORK( KP1 )
 *
 *     Quick return if possible for the case when the first
-*     stopping criterion is satisfied, i.e. MAXK = 0.
+*     stopping criterion is satisfied, i.e. KMAX = 0.
 *
-      IF( MAXK.EQ.0 ) THEN
+      IF( KMAX.EQ.0 ) THEN
          K = 0
          MAXC2NRMK = MAXC2NRM
          RELMAXC2NRMK = ONE
@@ -690,9 +690,9 @@
 *     ===================================================================
 *
 *     JMAX is the maximum index of the column to be factorized,
-*     which is also limited by the first stopping criterion MAXK.
+*     which is also limited by the first stopping criterion KMAX.
 *
-      JMAX = MIN( MAXK, MINMN )
+      JMAX = MIN( KMAX, MINMN )
 
 *     ===================================================================
 *
@@ -784,9 +784,9 @@
 *
 *     JMAXB is the maximum column index of the block, when the
 *     blocked code is used, is also limited by the first stopping
-*     criterion MAXK.
+*     criterion KMAX.
 *
-      JMAXB = MIN( MAXK, MINMN - NX )
+      JMAXB = MIN( KMAX, MINMN - NX )
 *
       IF( NB.GE.NBMIN .AND. NB.LT.JMAX .AND. JMAXB.GT.0 ) THEN
 *
@@ -804,7 +804,7 @@
 *
 *           Factorize JB columns among the columns A(J:N).
 *
-            CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, MAXK, ABSTOL,
+            CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, JBF,
      $                     DONE, KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
