@@ -208,7 +208,7 @@
       PARAMETER          ( NTESTS = 5 )
       DOUBLE PRECISION   ONE, ZERO, BIGNUM
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0,
-     $                     BIGNUM = 1.0D+100 )
+     $                     BIGNUM = 1.0D+38 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER          DIST, TYPE
@@ -218,7 +218,7 @@
      $                   IND_IN, IND_OUT, INS, INFO,
      $                   ISTEP, J, J_INC, J_FIRST_NZ, JB_ZERO,
      $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK,
-     $                   LWORK_DORMQR, M, MINMN, MINMNB_GEN, MODE, N,
+     $                   LWORK_MQR, M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NB_ZERO, NERRS, NFAIL, NB_GEN, NRHS,
      $                   NRUN, NX, T
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
@@ -756,10 +756,10 @@
 *
                   IF( MINMN.GT.0 ) THEN
 *
-                     LWORK_DORMQR = MAX(1, NRHS)
+                     LWORK_MQR = MAX(1, NRHS)
                      CALL DORMQR( 'Left', 'Transpose',
      $                         M, NRHS, KFACT, A, LDA, TAU, B, LDA,
-     $                         WORK, LWORK_DORMQR, INFO )
+     $                         WORK, LWORK_MQR, INFO )
 *
                      DO I = 1, NRHS
 *
