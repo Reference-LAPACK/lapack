@@ -228,6 +228,13 @@
 *>          original matrix A. RELMAXC2NRMK >= 0.
 *> \endverbatim
 *>
+*> \param[out] JPIV
+*> \verbatim
+*>          JPIV is INTEGER array, dimension (N)
+*>          Column pivot indices, for 1 <= j <= N, column j
+*>          of the matrix A was interchanged with column JPIV(j).
+*> \endverbatim
+*>
 *> \param[out] TAU
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (NB)

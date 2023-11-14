@@ -203,7 +203,7 @@
 *> \param[out] JPIV
 *> \verbatim
 *>          JPIV is INTEGER array, dimension (N)
-*>          Column pivot indices, for 1 <= j <= K, column j
+*>          Column pivot indices, for 1 <= j <= N, column j
 *>          of the matrix A was interchanged with column JPIV(j).
 *> \endverbatim
 *>

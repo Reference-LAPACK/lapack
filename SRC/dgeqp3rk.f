@@ -122,7 +122,7 @@
 *>        transformation Q(K)**T applied on the left.
 *>
 *> The N-by-N permutation matrix P(K) is stored in a compact form in
-*> the integer array JPIV. For 1 <= j <= K, column j
+*> the integer array JPIV. For 1 <= j <= N, column j
 *> of the matrix A was interchanged with column JPIV(j).
 *>
 *> The M-by-M orthogonal matrix Q is represented as a product
@@ -375,7 +375,7 @@
 *> \param[out] JPIV
 *> \verbatim
 *>          JPIV is INTEGER array, dimension (N)
-*>          Column pivot indices, for 1 <= j <= K, column j
+*>          Column pivot indices. For 1 <= j <= N, column j
 *>          of the matrix A was interchanged with column JPIV(j).
 *> \endverbatim
 *>
