@@ -452,7 +452,6 @@
 *
       K = 0
       LSTICC = 0
-*     TODO: describe DONE in main or in a subroutine
       DONE = .FALSE.
 *
       DO WHILE ( K.LT.NB .AND. LSTICC.EQ.0 )
@@ -466,9 +465,6 @@
 *           main routine.
 *
             KP = KP1
-*           TODO: optimize MAXC2NRMK and RELMAXC2NRMK
-            MAXC2NRMK = MAXC2NRM
-            RELMAXC2NRMK = ONE
 *
          ELSE
 *
