@@ -238,7 +238,7 @@
      $                   SORMQR, SSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, MOD
+      INTRINSIC          ABS, MAX, MIN, MOD, REAL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -771,7 +771,7 @@
                    RESULT( 5 ) =
      $               ABS(
      $               SLANGE( 'One-norm', M, NRHS, B, LDA, RDUMMY ) /
-     $               ( DBLE( M )*SLAMCH( 'Epsilon' ) )
+     $               ( REAL( M )*SLAMCH( 'Epsilon' ) )
      $               )
 *
 *                    Print information about the tests that did not pass

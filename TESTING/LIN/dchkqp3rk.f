@@ -239,7 +239,7 @@
      $                   DORMQR, DSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, MOD
+      INTRINSIC          ABS, DBLE, MAX, MIN, MOD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
