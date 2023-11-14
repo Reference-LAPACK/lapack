@@ -1155,7 +1155,7 @@
  8061 FORMAT( 3X, I2, ': 1-norm( A*P - Q*R ) / ( max(M,N) * 1-norm(A)',
      $                ' * EPS )')
  8062 FORMAT( 3X, I2, ': 1-norm( I - Q''*Q ) / ( M * EPS )' )
- 8063 FORMAT( 3X, I2, ': Returns 1.0D+100 if abs(R(K+1,K+1))',
+ 8063 FORMAT( 3X, I2, ': Returns 1.0D+100, if abs(R(K+1,K+1))',
      $                 ' > abs(R(K,K)), where K=1:KFACT-1' )
  8064 FORMAT( 3X, I2, ': 1-norm(Q**T * B - Q**T * B ) / ( M * EPS )')
 
