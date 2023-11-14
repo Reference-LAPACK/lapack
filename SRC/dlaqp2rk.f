@@ -330,7 +330,9 @@
 *
          I = IOFFSET + K
 *
-         IF( I.QE.1 ) THEN
+         IF( I.EQ.1 ) THEN
+*
+*           ============================================================
 *
 *           We are at the first column of the original whole matrix A,
 *           therefore we use the computed KP1 and MAXC2NRM from the
@@ -340,7 +342,11 @@
             MAXC2NRMK = MAXC2NRM
             RELMAXC2NRMK = ONE
 *
+*           ============================================================
+*
          ELSE
+*
+*           ============================================================
 *
 *           Determine the pivot column at K-th step, i.e. the index
 *           of the column with the maximum 2-norm in the
@@ -354,36 +360,40 @@
             MAXC2NRMK = VN1( KP )
             RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
 *
-         END IF
+*           ============================================================
 *
-*     ==================================================================
+*           Quick return, if the submatrix A(I:M,K:N) is
+*           a zero matrix. We need to check the condition only if the
+*           column index (same as row index) of the original whole
+*           matrix is larger than 2, since the condition for whole
+*           original matrix is checked in the main routine.
 *
-*        Quick return, if the submatrix A(I:M,K:N) is
-*        a zero matrix. We need to check it only if the column index
-*        (same as row index) is larger than 2, since the condition for
-*        whole original matris is checked in the main routine.
+            IF( MAXC2NRMK.EQ.ZERO ) THEN
 *
-         IF( I.NE.1 .AND. MAXC2NRMK.EQ.ZERO ) THEN
+*              Set KF, the number of factorized columns.
+*              TODO: fix USETOL
+               IF( MAXC2NRMK.LE.ABSTOL
+     $               .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*           Set the number of factorized columns.
-*           TODO: fix USETOL
-            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
-               KF = K - 1
-            ELSE
-               KF = KMAX
+                  KF = K - 1
+               ELSE
+                  KF = KMAX
+               END IF
+*
+*              Set TAUs corresponding to the columns that were not
+*              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
+*
+               DO J = K, MINMNFACT
+                  TAU( J ) = ZERO
+               END DO
+*
+*              Return from the routine.
+*
+               RETURN
+*
             END IF
 *
-*           Set TAUs corresponding to ZERO columns in the submatrix
-*           A(IOFFSET+K:M,K:N) to ZERO, i.e. TAU(K:MINMNFACT)
-*           set to ZERO.
-*
-            DO J = K, MINMNFACT
-               TAU( J ) = ZERO
-            END DO
-*
-*           Return from the routine.
-*
-            RETURN
+*           ============================================================
 *
          END IF
 *
@@ -397,13 +407,12 @@
 *
          IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*           Set the number of factorized columns.
+*           Set KF, the number of factorized columns.
 *
             KF = K - 1
 *
 *           Set TAUs corresponding to the columns that were not
-*           factorized to ZERO, (note that: KF = K - 1), i.e.
-*           Set TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) to ZERO.
+*           factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
 *
             DO J = K, MINMNFACT
                TAU( J ) = ZERO
