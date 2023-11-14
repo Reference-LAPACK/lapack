@@ -739,15 +739,15 @@
             TAU( K ) = ZERO
          END IF
 *
-*        Check if TAU(K) is NaN, set INFO parameter
+*        Check if TAU(K) contains NaN, set INFO parameter
 *        to the column number where NaN is found and return from
 *        the routine.
 *        NOTE: There is no need to check TAU(K) for Inf,
 *        since DLARFG cannot produce TAU(K) or Householder vector
 *        below the diagonal containing Inf. Only BETA on the diagonal,
 *        returned by DLARFG can contain Inf, which requires
-*        TAU(K) to be NaN. Therefore, this case of generating Inf by
-*        DLARFG is covered by checking TAU(K) for NaN.
+*        TAU(K) to contain NaN. Therefore, this case of generating Inf
+*        by DLARFG is covered by checking TAU(K) for NaN.
 *
          IF( DISNAN( TAU(K) ) ) THEN
 *

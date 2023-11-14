@@ -578,15 +578,15 @@
 
         WRITE(*,*) "## DLAQP2RK (K, TAU(Kk) )=", KK, TAU(KK)
 *
-*        Check if TAU(KK) is NaN, set INFO parameter
+*        Check if TAU(KK) contains NaN, set INFO parameter
 *        to the column number where NaN is found and return from
 *        the routine.
 *        NOTE: There is no need to check TAU(KK) for Inf,
 *        since DLARFG cannot produce TAU(KK) or Householder vector
 *        below the diagonal containing Inf. Only BETA on the diagonal,
 *        returned by DLARFG can contain Inf, which requires
-*        TAU(KK) to be NaN. Therefore, this case of generating Inf by
-*        DLARFG is covered by checking TAU(KK) for NaN.
+*        TAU(KK) to contain NaN. Therefore, this case of generating Inf
+*        by DLARFG is covered by checking TAU(KK) for NaN.
 *
          IF( DISNAN( TAU(KK) ) ) THEN
             K = KK - 1
