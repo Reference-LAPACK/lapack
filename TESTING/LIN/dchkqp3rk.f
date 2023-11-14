@@ -8,22 +8,26 @@
 *  Definition:
 *  ===========
 *
-*  =====================================================================
-*       SUBROUTINE DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL,
-*      $                      NXVAL, THRESH, A, COPYA, S, TAU, WORK,
-*      $                      IWORK, NOUT )
-*       IMPLICIT NONE
-*       .. Scalar Arguments ..
-*       INTEGER            NM, NN, NNB, NOUT
-*       DOUBLE PRECISION   THRESH
-*       ..
-*       .. Array Arguments ..
-*       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NVAL( * ),
-*      $                   NXVAL( * )
-*       DOUBLE PRECISION   A( * ), COPYA( * ), S( * ),
-*      $                   TAU( * ), WORK( * )
-*       ..
+*      SUBROUTINE DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
+*     $                      NNB, NBVAL, NXVAL, THRESH, A, COPYA,
+*     $                      B, COPYB, S, TAU, WORK, IWORK, NOUT )
+*      IMPLICIT NONE
+*
+*  -- LAPACK test routine --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*
+*     .. Scalar Arguments ..
+*      INTEGER            NM, NN, NNS, NNB, NOUT
+*      DOUBLE PRECISION   THRESH
+*     ..
+*     .. Array Arguments ..
+*      LOGICAL            DOTYPE( * )
+*      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*     $                   NVAL( * ), NXVAL( * )
+*      DOUBLE PRECISION   A( * ), COPYA( * ), B( * ), COPYB( * ),
+*     $                   S( * ), TAU( * ), WORK( * )
+*     ..
 *
 *
 *> \par Purpose:
