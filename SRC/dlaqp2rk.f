@@ -42,7 +42,8 @@
 *> \verbatim
 *>
 *> DLAQP2RK computes a truncated (rank K) or full rank Householder QR
-*> factorization with column pivoting of the block A(IOFFSET+1:M,1:N)
+*> factorization with column pivoting of a real matrix
+*> block A(IOFFSET+1:M,1:N) as
 *>
 *>   A * P(K) = Q(K) * R(K).
 *>
