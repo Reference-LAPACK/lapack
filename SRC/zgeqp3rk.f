@@ -273,7 +273,7 @@
 *>          modified, and the matrix A is itself the residual.
 *>
 *>          NOTE: We recommend that RELTOL satisfy
-*>                min(max(M,N)*EPS, sqrt(EPS)) <= RELTOL
+*>                min( 10*max(M,N)*EPS, sqrt(EPS) ) <= RELTOL
 *> \endverbatim
 *>
 *> \param[in,out] A
