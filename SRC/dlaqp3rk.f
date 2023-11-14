@@ -521,9 +521,9 @@
 *                               A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
 
                IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-                  CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
-     $                        KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
-     $                        LDF, ONE, A( IF+1, N+1 ), LDA )
+                  CALL DGEMM( 'No transpose', 'Transpose',
+     $                  M-IF, NRHS, KB, -ONE, A( IF+1, 1 ), LDA,
+     $                  F( N+1, 1 ), LDF, ONE, A( IF+1, N+1 ), LDA )
                END IF
 *
 *              There is no need to recompute the 2-norm of the
@@ -584,9 +584,9 @@
      $                 " block reflector (M-IF, NRHS, KB)",
      $                 M-IF, NRHS, KB
 
-                  CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
-     $                        KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
-     $                        LDF, ONE, A( IF+1, N+1 ), LDA )
+                  CALL DGEMM( 'No transpose', 'Transpose',
+     $                  M-IF, NRHS, KB, -ONE, A( IF+1, 1 ), LDA,
+     $                  F( N+1, 1 ), LDF, ONE, A( IF+1, N+1 ), LDA )
                END IF
 *
 *              There is no need to recompute the 2-norm of the
@@ -671,10 +671,9 @@
      $                 " block reflector (M-IF, N+NRHS-KB, KB)",
      $                 M-IF, N+NRHS-KB, KB
 
-                  CALL DGEMM( 'No transpose', 'Transpose', M-IF,
-     $                     N+NRHS-KB, KB,-ONE, A( IF+1, 1 ), LDA,
-     $                     F( KB+1, 1 ), LDF, ONE,
-     $                     A( IF+1, KB+1 ), LDA )
+                  CALL DGEMM( 'No transpose', 'Transpose',
+     $                  M-IF, N+NRHS-KB, KB,-ONE, A( IF+1, 1 ), LDA,
+     $                  F( KB+1, 1 ), LDF, ONE, A( IF+1, KB+1 ), LDA )
                END IF
 *
 *              There is no need to recompute the 2-norm of the
@@ -785,9 +784,9 @@
 *                            A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
 *
             IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-               CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
-     $                     KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
-     $                     LDF, ONE, A( IF+1, N+1 ), LDA )
+               CALL DGEMM( 'No transpose', 'Transpose',
+     $               M-IF, NRHS, KB, -ONE, A( IF+1, 1 ), LDA,
+     $               F( N+1, 1 ), LDF, ONE, A( IF+1, N+1 ), LDA )
             END IF
 *
 *           There is no need to recompute the 2-norm of the
@@ -812,9 +811,9 @@
 *          1) F(K+1:N,K) := tau(K) * A(I:M,K+1:N)**T * A(I:M,K).
 *
          IF( K.LT.N+NRHS ) THEN
-            CALL DGEMV( 'Transpose', M-I+1, N+NRHS-K, TAU( K ),
-     $                  A( I, K+1 ), LDA, A( I, K ), 1, ZERO,
-     $                  F( K+1, K ), 1 )
+            CALL DGEMV( 'Transpose', M-I+1, N+NRHS-K,
+     $                  TAU( K ), A( I, K+1 ), LDA, A( I, K ), 1,
+     $                  ZERO, F( K+1, K ), 1 )
          END IF
 *
 *           2) Zero out elements above and on the diagonal of the
@@ -829,8 +828,9 @@
 *                    * A(I:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL DGEMV( 'Transpose', M-I+1, K-1, -TAU( K ), A( I, 1 ),
-     $                  LDA, A( I, K ), 1, ZERO, AUXV( 1 ), 1 )
+            CALL DGEMV( 'Transpose', M-I+1, K-1, -TAU( K ),
+     $                  A( I, 1 ), LDA, A( I, K ), 1, ZERO,
+     $                  AUXV( 1 ), 1 )
 *
             CALL DGEMV( 'No transpose', N+NRHS, K-1, ONE,
      $                  F( 1, 1 ), LDF, AUXV( 1 ), 1, ONE,
@@ -911,9 +911,9 @@
 *                         A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T.
 *
       IF( KB.LT.MINMNUPDT ) THEN
-         CALL DGEMM( 'No transpose', 'Transpose', M-IF, N+NRHS-KB, KB,
-     $               -ONE, A( IF+1, 1 ), LDA, F( KB+1, 1 ), LDF, ONE,
-     $               A( IF+1, KB+1 ), LDA )
+         CALL DGEMM( 'No transpose', 'Transpose',
+     $         M-IF, N+NRHS-KB, KB, -ONE, A( IF+1, 1 ), LDA,
+     $         F( KB+1, 1 ), LDF, ONE, A( IF+1, KB+1 ), LDA )
       END IF
 *
 *     Recompute the 2-norm of the difficult columns.
