@@ -12,7 +12,7 @@
 *       SUBROUTINE DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL,
 *      $                      NXVAL, THRESH, A, COPYA, S, TAU, WORK,
 *      $                      IWORK, NOUT )
-*
+*       IMPLICIT NONE
 *       .. Scalar Arguments ..
 *       INTEGER            NM, NN, NNB, NOUT
 *       DOUBLE PRECISION   THRESH
