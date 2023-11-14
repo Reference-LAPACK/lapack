@@ -41,13 +41,16 @@
 *>
 *> \verbatim
 *>
-*> DLAQP2RK computes a truncated (rank K) or full rank Householder QR
-*> factorization with column pivoting of the block A(IOFFSET+1:M,1:N).
-*> The routine is calling Level 2 BLAS. The block A(1:IOFFSET,1:N)
+*> DLAQP2RK computes a truncated (rank KF) or full rank Householder QR
+*> factorization with column pivoting of the block A(IOFFSET+1:M,1:N)
+*>
+*>   A * P(KF) = Q(KF) * R(KF).
+*>
+*> The routine uses Level 2 BLAS. The block A(1:IOFFSET,1:N)
 *> is accordingly pivoted, but not factorized.
 *>
-*> The routine also overwrites the matrix B block stored
-*> in A(IOFFSET+1:M,N+1:N+NRHS) with Q(K)**T * B.
+*> The routine also overwrites the right-hand-sides matrix block B
+*> stored in A(IOFFSET+1:M,N+1:N+NRHS) with Q(KF)**T * B.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,9 +79,11 @@
 *> \verbatim
 *>          IOFFSET is INTEGER
 *>          The number of rows of the matrix A that must be pivoted
-*>          but not factorized. IOFFSET also represents the number of
-*>          columns of the original matrix that have been factorized
-*>          in the previous steps. IOFFSET >= 0.
+*>          but not factorized. IOFFSET >= 0.
+*>
+*>          IOFFSET also represents the number of columns of the whole
+*>          original matrix A_orig that have been factorized
+*>          in the previous steps.
 *> \endverbatim
 *>
 *> \param[in] KMAX
@@ -128,11 +133,10 @@
 *>
 *>          The third factorization stopping criterion.
 *>
-*>          The tolerance (stopping threshold) for the ratio
-*>          abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of
-*>          the residual matrix R22(K) to the maximum column 2-norm of
-*>          the original matrix A_orig. The algorithm converges (stops
-*>          the factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is
+*>          The tolerance (stopping threshold) for the ratio of the
+*>          maximum column 2-norm of the residual matrix to the maximum
+*>          column 2-norm of the original matrix A_orig. The algorithm
+*>          converges (stops the factorization), when this ratio is
 *>          less than or equal to RELTOL.
 *>
 *>          a) If RELTOL < 0.0, then this stopping criterion is not
@@ -147,16 +151,17 @@
 *> \param[in] KP1
 *> \verbatim
 *>          KP1 is INTEGER
-*>          The index of the column with the maximum column 2-norm in
-*>          the whole original matrix A_orig in original matrix A_orig
-*>          indexing scheme. 0 < KP1 <= N_orig_mat.
+*>          The index of the column with the maximum 2-norm in
+*>          the whole original matrix A_orig determined in the
+*>          main routine DGEQP3RK. 1 <= KP1 <= N_orig_mat.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
 *> \verbatim
 *>          MAXC2NRM is DOUBLE PRECISION
 *>          The maximum column 2-norm of the whole original
-*>          matrix A_orig. MAXC2NRM >= 0.
+*>          matrix A_orig computed in the main routine DGEQP3RK.
+*>          MAXC2NRM >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -170,20 +175,20 @@
 *>
 *>          On exit:
 *>          1. The elements in block A(IOFFSET+1:M,1:KF) below
-*>             the diagonal together with the array TAU, represent
-*>             the orthogonal matrix Q(K) as a product of elementary
+*>             the diagonal together with the array TAU represent
+*>             the orthogonal matrix Q(KF) as a product of elementary
 *>             reflectors.
-*>          2. The block of the matrix A stored in A(IOFFSET+1:M,1:KF)
-*>             is the triangular factor obtained.
+*>          2. The upper triangular block of the matrix A stored
+*>             in A(IOFFSET+1:M,1:KF) is the triangular factor obtained.
 *>          3. The block of the matrix A stored in A(1:IOFFSET,1:N)
-*>             has been accordingly pivoted, but no factorized.
+*>             has been accordingly pivoted, but not factorized.
 *>          4. The rest of the array A, block A(IOFFSET+1:M,KF+1:N+NRHS).
-*>             The left part A(IOFFSET+1:M,KF+1:N) of
-*>             this block contains the residual of the matrix A, and,
+*>             The left part A(IOFFSET+1:M,KF+1:N) of this block
+*>             contains the residual of the matrix A, and,
 *>             if NRHS > 0, the right part of the block
 *>             A(IOFFSET+1:M,N+1:N+NRHS) contains the block of
 *>             the right-hand-side matrix B. Both these blocks have been
-*>             updated by multiplication from the left by Q**T.
+*>             updated by multiplication from the left by Q(KF)**T.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -197,7 +202,7 @@
 *>          KF is INTEGER
 *>          Factorization rank of the matrix A, i.e. the rank of
 *>          the factor R, which is the same as the number of non-zero
-*>          rows of the factor R.  0 <= KF <= min(M-IOFFSET,KMAX,N).
+*>          rows of the factor R. 0 <= KF <= min(M-IOFFSET,KMAX,N).
 *>
 *>          KF also represents the number of non-zero Householder
 *>          vectors.
@@ -207,8 +212,7 @@
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
 *>          The maximum column 2-norm of the residual matrix,
-*>          when the factorization stopped at rank K. MAXC2NRMK >= 0.
-*>          ( Rank K is with respect to the original matrix A_orig. )
+*>          when the factorization stopped at rank KF. MAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
@@ -216,9 +220,8 @@
 *>          RELMAXC2NRMK is DOUBLE PRECISION
 *>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
 *>          2-norm of the residual matrix (when the factorization
-*>          stopped at rank K) to the maximum column 2-norm of the
+*>          stopped at rank KF) to the maximum column 2-norm of the
 *>          whole original matrix A. RELMAXC2NRMK >= 0.
-*>          ( Rank K is with respect to the original matrix A_orig. )
 *> \endverbatim
 *>
 *> \param[out] JPIV
@@ -257,34 +260,30 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          1) INFO = 0: successful exit.
-*>          2) INFO > 0: NaN, +Inf (or -Inf) element was detected
-*>                       in the matrix A, either on input or during
-*>                       the computation, or NaN element was detected
-*>                       in the array TAU during the computation.
+*>          2) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
+*>             was detected and the routine stops the computation.
+*>             The j_1-th column of the matrix A or the j_1-th
+*>             element of array TAU contains the first occurrence
+*>             of NaN in the factorization step KF+1 ( when KF columns
+*>             have been factorized ).
 *>
-*>           2a) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
-*>               was detected and the routine stops the computation.
-*>               The j_1-th column of the matrix A or the j_1-th
-*>               element of array TAU contains the first occurrence
-*>               of NaN in the factorization step K+1 ( when K columns
-*>               have been factorized ).
-*>
-*>               On exit:
-*>               K                  is set to the number of
+*>             On exit:
+*>             KF                  is set to the number of
 *>                                  factorized columns without
 *>                                  exception.
-*>               MAXC2NRMK          is set to NaN.
-*>               RELMAXC2NRMK       is set to NaN.
-*>               TAU(K+1:min(M,N)) is not set and contains undefined
-*>                                  elements. If j_1=K+1, TAU(K+1) may
-*>                                  contain NaN.
-*>            2b) If INFO = j_2, where N+1 <= j_2 <= 2N, then
-*>                no NaN element was detected, but +Inf (or -Inf)
-*>                was detected and the routine continues
-*>                the computation until completion.
-*>                The j_2-th column of the matrix A contains the first
-*>                occurrence of +Inf (or -Inf) in the factorization
-*>                step K+1 ( when K columns have been factorized ).
+*>             MAXC2NRMK          is set to NaN.
+*>             RELMAXC2NRMK       is set to NaN.
+*>             TAU(KF+1:min(M,N))  is not set and contains undefined
+*>                                elements. If j_1=KF+1, TAU(KF+1) may
+*>                                contain NaN.
+*>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
+*>             no NaN element was detected, but +Inf (or -Inf)
+*>             was detected and the routine continues
+*>             the computation until completion.
+*>             The (j_2-N)-th column of the matrix A contains the
+*>             first occurrence of +Inf (or -Inf) in the
+*>             factorization step KF+1 ( when KF columns have been
+*>             factorized ).
 *> \endverbatim
 *
 *  Authors:

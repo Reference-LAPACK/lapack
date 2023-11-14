@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
+*      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL,
 *     $                     RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB,
 *     $                     MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU,
 *     $                     VN1, VN2, AUXV, F, LDF, IWORK, INFO )
 *      IMPLICIT NONE
 *      LOGICAL            DONE
-*      INTEGER            INFO, IOFFSET, KB, KP1, LDA, LDF, M, KMAX, N,
+*      INTEGER            INFO, IOFFSET, KB, KP1, LDA, LDF, M, N,
 *     $                   NB, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
@@ -48,21 +48,27 @@
 *> \verbatim
 *>
 *> DLAQP3RK computes a step of truncated QR factorization with column
-*> pivoting of a real M-by-N matrix A by using Level 3 BLAS. The routine
-*> tries to factorize NB columns from A starting from the row IOFFSET+1,
-*> and updates the residual matrix with BLAS 3 xGEMM, the number
-*> of actually factorized columns is returned in KB, KB <= NB.
+*> pivoting of a real M-by-N matrix A block A(IOFFSET+1:M,1:N)
+*> by using Level 3 BLAS as
+*>
+*>   A * P(KB) = Q(KB) * R(KB).
+*>
+*> The routine tries to factorize NB columns from A starting from
+*> the row IOFFSET+1, and updates the residual matrix with BLAS 3
+*> xGEMM. The number of actually factorized columns is returned
+*> is smaller than NB.
 *>
 *> Block A(1:IOFFSET,1:N) is accordingly pivoted, but not factorized.
 *>
-*> The routine also overwrites the right-hand-sides B block stored
-*> in A(IOFFSET+1:M,1:N+1:N+NRHS) with Q(K)**T * B.
+*> The routine also overwrites the right-hand-sides B matrix stored
+*> in A(IOFFSET+1:M,1:N+1:N+NRHS) with Q(KB)**T * B.
 *>
 *> Cases when the number of factorized columns KB < NB:
 *>
 *> (1) In some cases, due to catastrophic cancellations, it cannot
-*> factorize NB columns. Hence, the actual number of factorized
-*> columns is returned in KB.
+*> factorize all NB columns and need to update the panel. Hence, the
+*> actual number of factorized columns returned in KB is smaller
+*> than NB.
 *>
 *> (2) Whenever the stopping criterion ABSTOL or RELTOL is satisfied,
 *> the factorization is stopped, the logical DONE is returned
@@ -109,7 +115,7 @@
 *> \verbatim
 *>          IOFFSET is INTEGER
 *>          The number of rows of the matrix A that must be pivoted
-*>          but no factorized. IOFFSET >= 0.
+*>          but not factorized. IOFFSET >= 0.
 *>
 *>          IOFFSET also represents the number of columns of the whole
 *>          original matrix A_orig that have been factorized
@@ -132,8 +138,6 @@
 *> \verbatim
 *>          ABSTOL is DOUBLE PRECISION, cannot be NaN.
 *>
-*>          The second factorization stopping criterion.
-*>
 *>          The absolute tolerance (stopping threshold) for
 *>          maximum column 2-norm of the residual matrix.
 *>          The algorithm converges (stops the factorization) when
@@ -142,7 +146,7 @@
 *>
 *>          a) If ABSTOL < 0.0, then this stopping criterion is not
 *>                used, the routine factorizes columns depending
-*>                on KMAX and RELTOL.
+*>                on NB and RELTOL.
 *>                This includes the case ABSTOL = -Inf.
 *>
 *>          b) If 0.0 <= ABSTOL then the input value
@@ -153,18 +157,15 @@
 *> \verbatim
 *>          RELTOL is DOUBLE PRECISION, cannot be NaN.
 *>
-*>          The third factorization stopping criterion.
-*>
-*>          The tolerance (stopping threshold) for the ratio
-*>          abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of
-*>          the residual matrix R22(K) to the maximum column 2-norm of
-*>          the original matrix A_orig. The algorithm converges (stops
-*>          the factorization), when abs(R(K+1,K+1))/abs(R(1,1)) is
+*>          The tolerance (stopping threshold) for the ratio of the
+*>          maximum column 2-norm of the residual matrix to the maximum
+*>          column 2-norm of the original matrix A_orig. The algorithm
+*>          converges (stops the factorization), when this ratio is
 *>          less than or equal to RELTOL.
 *>
 *>          a) If RELTOL < 0.0, then this stopping criterion is not
 *>                used, the routine factorizes columns depending
-*>                on KMAX and ABSTOL.
+*>                on NB and ABSTOL.
 *>                This includes the case RELTOL = -Inf.
 *>
 *>          d) If 0.0 <= RELTOL then the input value of RELTOL
@@ -174,16 +175,17 @@
 *> \param[in] KP1
 *> \verbatim
 *>          KP1 is INTEGER
-*>          The index of the column with the maximum column 2-norm in
-*>          the whole original matrix A_orig in original matrix A_orig
-*>          indexing scheme. 0 < KP1 <= N_orig_mat.
+*>          The index of the column with the maximum 2-norm in
+*>          the whole original matrix A_orig determined in the
+*>          main routine DGEQP3RK. 1 <= KP1 <= N_orig_mat.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
 *> \verbatim
 *>          MAXC2NRM is DOUBLE PRECISION
 *>          The maximum column 2-norm of the whole original
-*>          matrix A_orig. MAXC2NRMK >= 0.
+*>          matrix A_orig computed in the main routine DGEQP3RK.
+*>          MAXC2NRM >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -197,20 +199,20 @@
 *>
 *>          On exit:
 *>          1. The elements in block A(IOFFSET+1:M,1:KB) below
-*>             the diagonal together with the array TAU, represent
-*>             the orthogonal matrix Q(K) as a product of elementary
+*>             the diagonal together with the array TAU represent
+*>             the orthogonal matrix Q(KB) as a product of elementary
 *>             reflectors.
-*>          2. The block of the matrix A stored in A(IOFFSET+1:M,1:KB)
-*>             is the triangular factor obtained.
+*>          2. The upper triangular block of the matrix A stored
+*>             in A(IOFFSET+1:M,1:KB) is the triangular factor obtained.
 *>          3. The block of the matrix A stored in A(1:IOFFSET,1:N)
-*>             has been accordingly pivoted, but no factorized.
+*>             has been accordingly pivoted, but not factorized.
 *>          4. The rest of the array A, block A(IOFFSET+1:M,KB+1:N+NRHS).
-*>             The left part A(IOFFSET+1:M,KB+1:N) of
-*>             this block contains the residual of the matrix A, and,
+*>             The left part A(IOFFSET+1:M,KB+1:N) of this block
+*>             contains the residual of the matrix A, and,
 *>             if NRHS > 0, the right part of the block
 *>             A(IOFFSET+1:M,N+1:N+NRHS) contains the block of
 *>             the right-hand-side matrix B. Both these blocks have been
-*>             updated by multiplication from the left by Q**T.
+*>             updated by multiplication from the left by Q(KB)**T.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -223,9 +225,12 @@
 *> \verbatim
 *>          DONE is LOGICAL
 *>          TRUE: a) if the factorization completed before processing
-*>                   all min(M-IOFFSET,N) columns due to ABSTOL
+*>                   all min(M-IOFFSET,NB,N) columns due to ABSTOL
 *>                   or RELTOL criterion,
-*>                b) when NaN was detected in the matrix A
+*>                b) if the factorization completed before processing
+*>                   all min(M-IOFFSET,NB,N) columns due to the
+*>                   residual matrix being a ZERO matrix.
+*>                c) when NaN was detected in the matrix A
 *>                   or in the array TAU.
 *>          FALSE: otherwise.
 *> \endverbatim
@@ -235,7 +240,7 @@
 *>          KB is INTEGER
 *>          Factorization rank of the matrix A, i.e. the rank of
 *>          the factor R, which is the same as the number of non-zero
-*>          rows of the factor R.  0 <= KB <= min(M-IOFFSET,KB,N).
+*>          rows of the factor R.  0 <= KB <= min(M-IOFFSET,NB,N).
 *>
 *>          KB also represents the number of non-zero Householder
 *>          vectors.
@@ -245,8 +250,7 @@
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
 *>          The maximum column 2-norm of the residual matrix,
-*>          when the factorization stopped at rank K. MAXC2NRMK >= 0.
-*>          ( Rank K is with respect to the original matrix A_orig. )
+*>          when the factorization stopped at rank KB. MAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
@@ -254,9 +258,8 @@
 *>          RELMAXC2NRMK is DOUBLE PRECISION
 *>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
 *>          2-norm of the residual matrix (when the factorization
-*>          stopped at rank K) to the maximum column 2-norm of the
+*>          stopped at rank KB) to the maximum column 2-norm of the
 *>          original matrix A_orig. RELMAXC2NRMK >= 0.
-*>          ( Rank K is with respect to the original matrix A_orig. )
 *> \endverbatim
 *>
 *> \param[out] JPIV
@@ -314,34 +317,30 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          1) INFO = 0: successful exit.
-*>          2) INFO > 0: NaN, +Inf (or -Inf) element was detected
-*>                       in the matrix A, either on input or during
-*>                       the computation, or NaN element was detected
-*>                       in the array TAU during the computation.
+*>          2) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
+*>             was detected and the routine stops the computation.
+*>             The j_1-th column of the matrix A or the j_1-th
+*>             element of array TAU contains the first occurrence
+*>             of NaN in the factorization step KB+1 ( when KB columns
+*>             have been factorized ).
 *>
-*>           2a) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
-*>               was detected and the routine stops the computation.
-*>               The j_1-th column of the matrix A or the j_1-th
-*>               element of array TAU contains the first occurrence
-*>               of NaN in the factorization step K+1 ( when K columns
-*>               have been factorized ).
-*>
-*>               On exit:
-*>               K                  is set to the number of
-*>                                  factorized columns without
-*>                                  exception.
-*>               MAXC2NRMK          is set to NaN.
-*>               RELMAXC2NRMK       is set to NaN.
-*>               TAU(K+1:min(M,N)) is not set and contains undefined
-*>                                  elements. If j_1=K+1, TAU(K+1) may
-*>                                  contain NaN.
-*>            2b) If INFO = j_2, where N+1 <= j_2 <= 2N, then
-*>                no NaN element was detected, but +Inf (or -Inf)
-*>                was detected and the routine continues
-*>                the computation until completion.
-*>                The j_2-th column of the matrix A contains the first
-*>                occurrence of +Inf (or -Inf) in the factorization
-*>                step K+1 ( when K columns have been factorized ).
+*>             On exit:
+*>             KB                  is set to the number of
+*>                                 factorized columns without
+*>                                 exception.
+*>             MAXC2NRMK           is set to NaN.
+*>             RELMAXC2NRMK        is set to NaN.
+*>             TAU(KB+1:min(M,N))  is not set and contains undefined
+*>                                 elements. If j_1=KB+1, TAU(KB+1) may
+*>                                 contain NaN.
+*>          3) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
+*>             no NaN element was detected, but +Inf (or -Inf)
+*>             was detected and the routine continues
+*>             the computation until completion.
+*>             The (j_2-N)-th column of the matrix A contains the
+*>             first occurrence of +Inf (or -Inf) in the
+*>             factorization step KB+1 ( when KB columns have been
+*>             factorized ).
 *> \endverbatim
 *
 *  Authors:
@@ -385,7 +384,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
+      SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB,
      $                     MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU,
      $                     VN1, VN2, AUXV, F, LDF, IWORK, INFO )
@@ -397,7 +396,7 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            DONE
-      INTEGER            INFO, IOFFSET, KB, KP1, LDA, LDF, M, KMAX, N,
+      INTEGER            INFO, IOFFSET, KB, KP1, LDA, LDF, M, N,
      $                   NB, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL

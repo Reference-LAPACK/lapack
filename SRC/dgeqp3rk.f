@@ -267,7 +267,7 @@
 *>          factorization is not performed, the matrices A and B are not
 *>          modified, and the matrix A is itself the residual.
 *>
-*>          NOTE: We recommend that RELTOL to satisfy
+*>          NOTE: We recommend that RELTOL satisfy
 *>                min(max(M,N)*EPS, sqrt(EPS)) <= RELTOL
 *> \endverbatim
 *>
@@ -335,7 +335,7 @@
 *>                          b) the array TAU(1:min(M,N)) is set to ZERO,
 *>                             if the matrix A does not contain NaN,
 *>                             otherwise the elements TAU(1:min(M,N))
-*>                             are undefimed;
+*>                             are undefined;
 *>                          c) the elements of the array JPIV are set
 *>                             as follows: for j = 1:N, JPIV(j) = j.
 *> \endverbatim
@@ -364,7 +364,7 @@
 *> \param[out] RELMAXC2NRMK
 *> \verbatim
 *>          RELMAXC2NRMK is DOUBLE PRECISION
-*>          The ratio MAXC2NRMK / MAXC2NRM_WHOLE of the maximum column
+*>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
 *>          2-norm of the residual matrix R22(K) (when the factorization
 *>          stopped at rank K) to the maximum column 2-norm of the
 *>          whole original matrix A. RELMAXC2NRMK >= 0.
@@ -404,12 +404,13 @@
 *>
 *>          If 0 < K <= min(M,N), only the elements TAU(1:K) of
 *>          the array TAU are modified by the factorization.
-*>          If no NaN was found during the factorization,
-*>          the remainig elements TAU(K+1:min(M,N)) are set to zero,
-*>          otherwise the elements TAU(K+1:min(M,N)) are not set
-*>          and therefore undefined.
+*>          After the factorization complted, if no NaN was found
+*>          during the factorization, the remaining elements
+*>          TAU(K+1:min(M,N)) are set to zero, otherwise the
+*>          elements TAU(K+1:min(M,N)) are not set and therefore
+*>          undefined.
 *>          ( If K = 0, all elements of TAU are set to zero, if
-*>          the matrix A does not cointain NaN. )
+*>          the matrix A does not contain NaN. )
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -446,34 +447,30 @@
 *>          1) INFO = 0: successful exit.
 *>          2) INFO < 0: if INFO = -i, the i-th argument had an
 *>                       illegal value.
-*>          3) INFO > 0: NaN, +Inf (or -Inf) element was detected
-*>                       in the matrix A, either on input or during
-*>                       the computation, or NaN element was detected
-*>                       in the array TAU during the computation.
+*>          3) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
+*>             was detected and the routine stops the computation.
+*>             The j_1-th column of the matrix A or the j_1-th
+*>             element of array TAU contains the first occurrence
+*>             of NaN in the factorization step K+1 ( when K columns
+*>             have been factorized ).
 *>
-*>           3a) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
-*>               was detected and the routine stops the computation.
-*>               The j_1-th column of the matrix A or the j_1-th
-*>               element of array TAU contains the first occurrence
-*>               of NaN in the factorization step K+1 ( when K columns
-*>               have been factorized ).
-*>
-*>               On exit:
-*>               K                  is set to the number of
+*>             On exit:
+*>             K                  is set to the number of
 *>                                  factorized columns without
 *>                                  exception.
-*>               MAXC2NRMK          is set to NaN.
-*>               RELMAXC2NRMK       is set to NaN.
-*>               TAU(K+1:min(M,N)) is not set and contains undefined
-*>                                  elements. If j_1=K+1, TAU(K+1) may
-*>                                  contain NaN.
-*>            3b) If INFO = j_2, where N+1 <= j_2 <= 2N, then
-*>                no NaN element was detected, but +Inf (or -Inf)
-*>                was detected and the routine continues
-*>                the computation until completion.
-*>                The j_2-th column of the matrix A contains the first
-*>                occurrence of +Inf (or -Inf) in the factorization
-*>                step K+1 ( when K columns have been factorized ).
+*>             MAXC2NRMK          is set to NaN.
+*>             RELMAXC2NRMK       is set to NaN.
+*>             TAU(K+1:min(M,N))  is not set and contains undefined
+*>                                elements. If j_1=K+1, TAU(K+1) may
+*>                                contain NaN.
+*>          4) If INFO = j_2, where N+1 <= j_2 <= 2*N, then
+*>             no NaN element was detected, but +Inf (or -Inf)
+*>             was detected and the routine continues
+*>             the computation until completion.
+*>             The (j_2-N)-th column of the matrix A contains the
+*>             first occurrence of +Inf (or -Inf) in the
+*>             factorization step K+1 ( when K columns have been
+*>             factorized ).
 *> \endverbatim
 *
 *  Authors:
@@ -917,7 +914,7 @@
            WRITE(*,*) "===== DGEQP3RK loop before block(IOFFSET, JB)=",
      $      J-1, JB
 
-            CALL DLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB, KMAX, ABSTOL,
+            CALL DLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
      $                     DONE, JBF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
