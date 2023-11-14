@@ -643,6 +643,13 @@
          WORK( J ) = DNRM2( M, A( 1, J ), 1 )
          WORK( N+J ) = WORK( J )
       END DO
+
+       WRITE(*,*)
+       WRITE(*,*) "===== DGEQP3RK 2NORM ="
+                     WRITE(*,*)
+     $               WORK( 1 ), WORK( 2 ), WORK( 3 ), WORK( 4 ),
+     $               WORK( 5 ), WORK( 6 ), WORK( 7 ), WORK( 8 )
+       WRITE(*,*)
 *
 *     ==================================================================
 *
@@ -700,6 +707,9 @@
 *
       IF( MAXC2NRM.EQ.ZERO ) THEN
 *
+
+      WRITE(*,*) "=======  DGEQP3RK ((( ZERO MATRIX ))) ===="
+
          IF( USETOL ) THEN
             K = 0
          ELSE
@@ -774,6 +784,10 @@
 *
 *     ==================================================================
 *
+*     DONE is the boolean flag to rerpresent the case when the
+*     factorization completed in the block factorization routine,
+*     before the end of the block.
+*
       DONE = .FALSE.
 *
 *     J is the column index.
@@ -804,30 +818,43 @@
 *
 *           Factorize JB columns among the columns A(J:N).
 *
+           WRITE(*,*)
+           WRITE(*,*) "===== DGEQP3RK loop before block(IOFFSET, JB)=",
+     $      J-1, JB
+
             CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
-     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, JBF,
-     $                     DONE, KF, MAXC2NRMK, RELMAXC2NRMK,
+     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
+     $                     DONE, JBF, KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
      $                     WORK( J ), WORK( N+J ),
      $                     WORK( 2*N+1 ), WORK( 2*N+JB+1 ),
      $                     N+NRHS-J+1, IWORK )
 *
             J = J + JBF
+
+            WRITE(*,*) "======= DGEQP3RK loop after block (JBF)=",
+     $      JBF
 *
             IF( DONE ) THEN
 *
-*              ABSTOL or RELTOL criterion is satisfied before the
-*              end of the column block, we can return from
-*              the routine. Perform the following before returning:
+*              Either the submatrix is zero before the end of the
+*              column block, or ABSTOL or RELTOL criterion is
+*              satisfied before the end of the column block, we can
+*              return from the routine. Perform the following before
+*              returning:
 *                a) Set the number of factorized columns K,
-*                b) MAXC2NRMK and RELMAXC2NRMK are returned by the
-*                   block factorization routine.
+*                NOTE: 1) MAXC2NRMK and RELMAXC2NRMK are returned
+*                         by the block factorization routine;
+*                      2) The remaining TAUs are set to ZERO by the
+*                         block factorization routine.
 *
-               K = J - 1
+               K = KF
 *
-*              Exit loop
+*              Return from the routine.
 *
-               EXIT
+               WORK( 1 ) = DBLE( LWKOPT )
+*
+               RETURN
 *
             END IF
 *
@@ -836,9 +863,10 @@
       END IF
 *
 *     Use unblocked code to factor the last or only block.
-*     J = JMAX+1 means we factorized the maximum possible number of columns,
-*     That is in ELSE clause we nned to compute the MAXC2NORM and
-*     RELMAXC2NORM to return after we processed the blocks.
+*     J = JMAX+1 means we factorized the maximum possible number of
+*     columns, that is in ELSE clause we need to compute
+*     the MAXC2NORM and RELMAXC2NORM to return after we processed
+*     the blocks.
 *
       IF( .NOT.DONE ) THEN
 *
@@ -887,9 +915,22 @@
                DO J = K + 1, MINMN
                   TAU( J ) = ZERO
                END DO
+
+
+           WRITE(*,*)
+           WRITE(*,*) "===== END DGEQP3RK compute low rank ",
+     $                "(MAXC2NRMK, RELMAXC2NRMK)=",
+     $                MAXC2NRMK, RELMAXC2NRMK
+
             ELSE
                MAXC2NRMK = ZERO
                RELMAXC2NRMK = ZERO
+
+           WRITE(*,*)
+           WRITE(*,*) "===== END DGEQP3RK compute full rank ",
+     $                "(MAXC2NRMK, RELMAXC2NRMK)=",
+     $                MAXC2NRMK, RELMAXC2NRMK
+
             END IF
 *
 *     END IF( J.LE.JMAX ) THEN

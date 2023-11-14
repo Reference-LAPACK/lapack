@@ -183,18 +183,18 @@
 *>          The leading dimension of the array A. LDA >= max(1,M).
 *> \endverbatim
 *>
-*> \param[out] KB
-*> \verbatim
-*>          KB is INTEGER
-*>          The number of columns actually factorized.
-*> \endverbatim
-*>
 *> \param[out]
 *>
 *> \verbatim
 *>          DONE is LOGICAL
 *>          TRUE, if the factorization completed,
 *>          FALSE, otherwise.
+*> \endverbatim
+*
+*> \param[out] KB
+*> \verbatim
+*>          KB is INTEGER
+*>          The number of columns actually factorized.
 *> \endverbatim
 *>
 *> \param[out] KF
@@ -316,7 +316,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, KMAX, ABSTOL,
-     $                     RELTOL, KP1, MAXC2NRM, A, LDA, KB, DONE,
+     $                     RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB,
      $                     KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV, TAU, VN1, VN2, AUXV, F, LDF, IWORK )
       IMPLICIT NONE
@@ -346,7 +346,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            ITEMP, J, K, MINMNFACT, MINMNUPDT,
-     $                   LSTICC, KP, I
+     $                   LSTICC, KP, I, IF
       DOUBLE PRECISION   AIK, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
@@ -380,9 +380,11 @@
          K = K + 1
          I = IOFFSET + K
 *
-         IF( IOFFSET.EQ.0 .AND. K.EQ.1 ) THEN
+         IF( I.EQ.1 ) THEN
 *
-*           If we are at the first column of the original whole matrix A.
+*           We are at the first column of the original whole matrix A,
+*           therefore we use the computed KP1 and MAXC2NRM from the
+*           main routine.
 *
             KP = KP1
             MAXC2NRMK = MAXC2NRM
@@ -400,7 +402,89 @@
 *           column 2-norm of the submatrix A(I:M,K:N) at step K.
 *
             MAXC2NRMK = VN1( KP )
+*           TODO: optimize RELMAXC2NRMK
             RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
+*
+         END IF
+*
+*     ==================================================================
+*
+*        Quick return, if the submatrix A(I:M,K:N) is
+*        a zero matrix. We need to check it only if the column index
+*        (same as row index) is larger than 2, since the condition for
+*        the whole original matrix is checked in the main routine.
+*
+         IF( I.NE.1 .AND. MAXC2NRMK.EQ.ZERO ) THEN
+
+
+         WRITE(*,*) "$$$$$$ DLAQP3RK zero submatrix, IOFFSET, K= ",
+     $                     IOFFSET, K
+*
+            DONE = .TRUE.
+*
+*           Set KB, the number of factorized columns in the block;
+*           Set IF, the number of processed rows in the block, which is
+*           the same as the number of rows in the original whole
+*           matrix A;
+*           Set KF, the number of factorized columns in the original
+*           whole matrix A.
+*           TODO: fix USETOL
+            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+
+
+               WRITE(*,*)
+     $         "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
+     $         ABSTOL,  K
+*
+               KB = K - 1
+               IF = I - 1
+               KF = IOFFSET + KB
+*
+            ELSE
+*
+               KB = K - 1
+               IF = I - 1
+               KF = KMAX
+*
+            END IF
+*
+*           There is no need to apply the block reflector to the
+*           residual of the matrix A stored in A(KB+1:M,KB+1:N), since
+*           the submatrix is zero and we stop the computation.  But,
+*           we need to apply the block reflector to the residual right
+*           hand sides stored in A(KB+1:M,N+1:N+NRHS), if the residual
+*           right hand sides exist.  This happens
+*           when ( NRHS != 0 AND KB <= (M-IOFFSET) ):
+*
+*           A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) -
+*                            A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
+*
+            IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
+
+
+            WRITE(*,*) "$$$$$$$$$$ DLAQP3RK block reflector ",
+     $              "(M-IF, NRHS, KB)", M-IF, NRHS, KB
+
+*
+               CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
+     $                      KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
+     $                      LDF, ONE, A( IF+1, N+1 ), LDA )
+            END IF
+*
+*           There is no need to recompute the 2-norm of the
+*           difficult columns, since we stop the factorization.
+*
+*           Set TAUs corresponding to the columns that were not
+*           factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
+*           which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
+*
+            DO J = K, MINMNFACT
+               TAU( J ) = ZERO
+            END DO
+*
+*           Return from the routine.
+*
+            RETURN
 *
          END IF
 *
@@ -414,12 +498,19 @@
 *
          IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-            K = K - 1
-*
             DONE = .TRUE.
 *
-*           Exit the loop
+*           Set the number of factorized columns in the block.
 *
+            K = K - 1
+*
+*           Exit the loop.
+*           After the loop, there is a code:
+*              1) to apply the block reflector via GEMM to the residual
+*                 of the matrix A and to the right hand sides B;
+*              2) to recompute the 2-norm of the difficult columns;
+*              3) to zero out the remaining TAUs.
+*           TODO: change exit??
             EXIT
 *
          END IF
@@ -525,7 +616,7 @@
                   TEMP = ABS( A( I, J ) ) / VN1( J )
                   TEMP = MAX( ZERO, ( ONE+TEMP )*( ONE-TEMP ) )
                   TEMP2 = TEMP*( VN1( J ) / VN2( J ) )**2
-                  IF( TEMP2 .LE. TOL3Z ) THEN
+                  IF( TEMP2.LE.TOL3Z ) THEN
 *
 *                    At J-index, we have a difficult column for the
 *                    update of the 2-norm. Save the index of the previous
@@ -552,18 +643,26 @@
 *
       END DO
 *
-*     Now, afler the loop, KB=K is the number of factorized columns,
-*     I is the number or processed rows.
+*     Now, afler the loop:
+*        KB is the number of factorized columns in the block,
+*        KF is the number or factorized columns in the original
+*           whole matrix A,
+*        I  is the number of processed rows in the block which is
+*           the same as the the numerb of processed rows in
+*           the original whole matrix A.
 *
       KB = K
-      I = IOFFSET + KB
       KF = IOFFSET + KB
+      I = IOFFSET + KB
+
+*     Apply the block reflector to the residual of the matrix A
+*     and right hand sides B, if the residual matrix and
+*     and/or the residual right hand sides exist, i.e.
+*     if the submatrix A(I+1:M,KB+1:N+NRHS) exists. This happens
+*     when KB < MINMNUPDT = min( M-IOFFSET, N+NRHS ):
 *
-*     Apply the block reflector to the rest of the matrix,
-*     if the residual matrix A(I+1:M,KB+1:N+NRHS) exists,
-*     i.e. when KB < MINMNUPDT = min( M-IOFFSET, N+NRHS ):
 *     A(I+1:M,K+1:N+NRHS) := A(I+1:M,KB+1:N+NRHS) -
-*                         A(I+1:M,1:KB) * F(KB+1:N,1:KB)**T.
+*                         A(I+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T.
 *
       IF( KB.LT.MINMNUPDT ) THEN
 *
