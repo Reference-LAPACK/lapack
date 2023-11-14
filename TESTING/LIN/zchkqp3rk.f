@@ -319,14 +319,6 @@
 *
                IF( .NOT.DOTYPE( IMAT ) )
      $            CYCLE
-
-                  WRITE(*,*) "(4) ____ ____ ____ ____ Loop for "
-                  WRITE(*,*) "IMAT, DOTYPE(IMAT), M, N, NRHS = ",
-     $                       IMAT, DOTYPE(IMAT), M, N, NRHS
-
-
-
-
 *
 *              The type of distribution used to generate the random
 *              eigen-/singular values:
@@ -363,8 +355,6 @@
                   DO I = 1, MINMN
                      S( I ) = ZERO
                   END DO
-
-                  WRITE(*,*)  "GENERATED CZERO MATRIX"
 *
                ELSE IF( (IMAT.GE.2 .AND. IMAT.LE.4 )
      $                  .OR. (IMAT.GE.14 .AND. IMAT.LE.19 ) ) THEN
@@ -490,9 +480,6 @@
 *
 *                 1) Set the first NB_ZERO columns in COPYA(1:M,1:N)
 *                    to zero.
-
-                     WRITE(*,*) "( M,NB_ZERO, LDA before ZLASET",
-     $                            M, NB_ZERO, LDA
 *
                   CALL ZLASET( 'Full', M, NB_ZERO, CZERO, CZERO,
      $                         COPYA, LDA )
@@ -505,21 +492,13 @@
      $                         ANORM, MODE, CNDNUM, DIST )
 *
                   SRNAMT = 'ZLATMS'
-
-                     WRITE(*,*) "Generate DLAMTS matrix (M,NB_GEN)=",
-     $                           M, NB_GEN
-
+*
                   IND_OFFSET_GEN = NB_ZERO * LDA
 *
                   CALL ZLATMS( M, NB_GEN, DIST, ISEED, TYPE, S, MODE,
      $                        CNDNUM, ANORM, KL, KU, 'No packing',
      $                        COPYA( IND_OFFSET_GEN + 1 ), LDA,
      $                        WORK, INFO )
-
-                     WRITE(*,*) "Singular val after mat generation S="
-                     WRITE(*,*)
-     $               S(1), S(2), S(3), S(4),
-     $               S(5), S(6), S(7), S(8)
 *
 *                 Check error code from ZLATMS.
 *
@@ -529,18 +508,6 @@
      $                            NERRS, NOUT )
                      CYCLE
                   END IF
-
-                  WRITE(*,*) "Matrix  COPYA after",
-     $                       " generation N_ZERO and N_GEN"
-                  DO I = 1, M
-                     WRITE(*,*)
-     $                COPYA((1-1)*LDA+I), COPYA((2-1)*LDA+I),
-     $                COPYA((3-1)*LDA+I), COPYA((4-1)*LDA+I),
-     $                COPYA((5-1)*LDA+I), COPYA((6-1)*LDA+I),
-     $                COPYA((7-1)*LDA+I), COPYA((8-1)*LDA+I)
-                  END DO
-
-
 *
 *                 3) Swap the gererated colums from the right side
 *                 NB_GEN-size block in COPYA into correct column
@@ -592,39 +559,12 @@
 *                    The total number of singular values is MINMN.
 *
                   MINMNB_GEN = MIN( M, NB_GEN )
-
-                  WRITE(*,*) "Singular values MINB_GEN=", MINMNB_GEN
-                  WRITE(*,*) "Singular values before ordering  S="
-                     WRITE(*,*)
-     $               S(1), S(2), S(3), S(4),
-     $               S(5), S(6), S(7), S(8)
 *
                   CALL DLAORD( 'Decreasing', MINMNB_GEN, S, 1 )
 
-                   WRITE(*,*) "Singular values after ordering  S="
-                     WRITE(*,*)
-     $               S(1), S(2), S(3), S(4),
-     $               S(5), S(6), S(7), S(8)
-
                   DO I = MINMNB_GEN+1, MINMN
-                     WRITE(*,*) "Singular values to ZERO out I=", I
                      S( I ) = ZERO
                   END DO
-
-                  WRITE(*,*) "Matrix with ZERO columnms COPYA"
-                  DO I = 1, M
-                     WRITE(*,*)
-     $               COPYA((1-1)*LDA+I), COPYA((2-1)*LDA+I),
-     $                COPYA((3-1)*LDA+I), COPYA((4-1)*LDA+I),
-     $                COPYA((5-1)*LDA+I), COPYA((6-1)*LDA+I),
-     $                COPYA((7-1)*LDA+I), COPYA((8-1)*LDA+I)
-                  END DO
-
-
-                  WRITE(*,*) "Matrix with ZERO columns ordering of S="
-                     WRITE(*,*)
-     $               S(1), S(2), S(3), S(4),
-     $               S(5), S(6), S(7), S(8)
 *
                ELSE
 *
@@ -632,21 +572,6 @@
 *
                      CYCLE
                END IF
-*
-                  WRITE(*,*) "AFTER GENERATING COPYA"
-                  DO I = 1, M
-                     WRITE(*,*)
-     $               COPYA((1-1)*LDA+I), COPYA((2-1)*LDA+I),
-     $                COPYA((3-1)*LDA+I), COPYA((4-1)*LDA+I),
-     $                COPYA((5-1)*LDA+I), COPYA((6-1)*LDA+I)
-**     $                C,OPYA((7-1)*LDA+I), COPYA((8-1)*LDA+I)
-                  END DO
-                  WRITE(*,*) "AFTER GENERATING COPYA, S="
-                     WRITE(*,*)
-     $               S(1), S(2), S(3), S(4),
-     $               S(5), S(6)
-**     $              , S(7), S(8)
-
 *
 *              Initialize a copy array for a pivot array for DGEQP3RK.
 *
@@ -663,21 +588,11 @@
                   NX = NXVAL( INB )
                   CALL XLAENV( 3, NX )
 *
-
-            WRITE(*,*) "(5) ____ ____ ____ ____ ____ Loop for NB,NX=",
-     $                  NB, NX
-
-
-*
 *                 We do MIN(M,N)+1 because we need a test for KMAX > N,
 *                 when KMAX is larger than MIN(M,N), KMAX should be
 *                 KMAX = MIN(M,N)
 *
                   DO KMAX = 0, MIN(M,N)+1
-
-
-            WRITE(*,*) "(6) ____ ____ ____ ____ ____" ,
-     $             " ____ Loop for KMAX=", KMAX
 *
 *                 Get a working copy of COPYA into A( 1:M,1:N ).
 *                 Get a working copy of COPYB into A( 1:M, (N+1):NRHS ).
@@ -696,29 +611,6 @@
 *
                   ABSTOL = -1.0
                   RELTOl = -1.0
-
-
-                  WRITE(*,*) "(BEGIN) B VALUE OF B after COPYB into B"
-
-                  DO I = 1, LDA
-                     WRITE(*,*)
-     $               B((1-1)*LDA+I), B((2-1)*LDA+I),
-     $               B((3-1)*LDA+I), B((4-1)*LDA+I),
-     $               B((5-1)*LDA+I), B((6-1)*LDA+I)
-*     $               ,B((7-1)*LDA+I), B((8-1)*LDA+I)
-*     $               ,B((9-1)*LDA+I), B((10-1)*LDA+I)
-*    $               ,B((11-1)*LDA+I), B((12-1)*LDA+I)
-                  END DO
-
-                  WRITE(*,*)
-                  WRITE(*,*) "(BEGIN) A after COPYA and COPYB into A"
-                  DO I = 1, LDA
-                     WRITE(*,*)
-     $               A((1-1)*LDA+I), A((2-1)*LDA+I),
-     $               A((3-1)*LDA+I), A((4-1)*LDA+I),
-     $               A((5-1)*LDA+I), A((6-1)*LDA+I)
-                  END DO
-                  WRITE(*,*)
 *
 *                 Compute the QR factorization with pivoting of A
 *
@@ -733,31 +625,6 @@
      $                           RELMAXC2NRMK, IWORK( N+1 ), TAU,
      $                           WORK, LW, RWORK, IWORK( 2*N+1 ),
      $                           INFO )
-
-                  WRITE(*,*)
-                  WRITE(*,*) "(END) A after ZGEQP3RK"
-                  DO I = 1, LDA
-                     WRITE(*,*)
-     $               A((1-1)*LDA+I), A((2-1)*LDA+I),
-     $               A((3-1)*LDA+I), A((4-1)*LDA+I),
-     $               A((5-1)*LDA+I), A((6-1)*LDA+I)
-                  END DO
-                  WRITE(*,*)
-
-                  WRITE(*,*) "TAU after ZGEQP3RK"
-                  WRITE(*,*)
-     $               TAU(1), TAU(2), TAU(3), TAU(4),
-     $               TAU(5), TAU(6)
-                  WRITE(*,*)
-
-                  WRITE(*,*) "JPIV after ZGEQP3RK",
-     $               IWORK(N+1), IWORK(N+2), IWORK(N+3), IWORK(N+4),
-     $               IWORK(N+5), IWORK(N+6)
-                  WRITE(*,*)
-*
-                  WRITE(*,*) "INFO after ZGEQP3RK"
-                  WRITE(*,*) INFO
-                  WRITE(*,*)
 *
 *                 Check error code from ZGEQP3RK.
 *
@@ -766,12 +633,6 @@
      $                            M, N, NX, -1, NB, IMAT,
      $                            NFAIL, NERRS, NOUT )
 *
-
-
-                  WRITE(*,*) "After ZGEQP3RK, KFACT, MAX2N, REL2N",
-     $             KFACT, MAXC2NRMK, RELMAXC2NRMK
-
-
                   IF( KFACT.EQ.MINMN ) THEN
 *
 *                 Compute test 1:
