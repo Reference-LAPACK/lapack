@@ -340,14 +340,14 @@
                   END DO
 
 *
-            DO IMAT = 1, NTYPES
+               DO IMAT = 1, NTYPES
 *
 *              Do the tests only if DOTYPE( IMAT ) is true.
 *
                IF( .NOT.DOTYPE( IMAT ) )
      $            CYCLE
 
-           WRITE(*,*) "(4) ____ ____ ____ ____ Loop for ",
+                  WRITE(*,*) "(4) ____ ____ ____ ____ Loop for ",
      $                 "IMAT, DOTYPE(IMAT)= ", IMAT, DOTYPE(IMAT)
 
      $
@@ -419,11 +419,11 @@
 *
                   CALL DLAORD( 'Decreasing', MINMN, S, 1 )
 *
-               ELSE IF( IMAT.GE.5 .AND. IMAT.LE.13 ) THEN
+               ELSE IF( MINMN.GE.2
+     $                  .AND. IMAT.GE.5 .AND. IMAT.LE.13 ) THEN
 *
-*                 Rectangular matrices 5-13 that contain zero columns.
-*
-                  IF( MINMN.GE.2 ) THEN
+*                 Rectangular matrices 5-13 that contain zero columns,
+*                 only for matrices MINMN >=2.
 *
 *                       JB_ZERO is the column index of ZERO block.
 *                       NB_ZERO is the column block size of ZERO block.
@@ -434,9 +434,9 @@
 *                       J_FIRS_NZ is the index of the first non-zero
 *                       column.
 *
-                     IF( IMAT.EQ.5 ) THEN
+                  IF( IMAT.EQ.5 ) THEN
 *
-*                       First column is zero.
+*                    First column is zero.
 *
                         JB_ZERO = 1
                         NB_ZERO = 1
@@ -517,7 +517,7 @@
 *                    1) Set the first NB_ZERO columns in COPYA(1:M,1:N)
 *                       to zero.
 
-                    WRITE(*,*) "( M,NB_ZERO, LDA before DLASET",
+                     WRITE(*,*) "( M,NB_ZERO, LDA before DLASET",
      $                            M, NB_ZERO, LDA
 *
                      CALL DLASET( 'Full', M, NB_ZERO, ZERO, ZERO,
@@ -542,7 +542,7 @@
      $                            COPYA( IND_OFFSET_GEN + 1 ), LDA,
      $                            WORK, INFO )
 
-                 WRITE(*,*) "Singular values after mat generation S="
+                     WRITE(*,*) "Singular val after mat generation S="
                      WRITE(*,*)
      $               S(1), S(2), S(3), S(4),
      $               S(5), S(6), S(7), S(8)
@@ -588,22 +588,6 @@
      $                           COPYA( ( NB_ZERO+J-1)*LDA+1), 1,
      $                           COPYA( (J-1)*LDA + 1 ), 1 )
                         END DO
-
-                        IF(.FALSE.) THEN
-*
-*                       (Part 2)
-*                       Swap the generated columns from the right
-*                       NB_GEN-size block from
-*                       (NB_ZERO+JB_ZERO:NB_ZERO+NB_GEN)
-*                       into columns (1:JB_ZERO-1).
-*
-                        DO J = JB_ZERO, NB_GEN, 1
-                           CALL DSWAP( M,
-     $                           COPYA( (NB_ZERO+J-1)*LDA + 1 ), 1,
-     $                           COPYA( (JB_ZERO+J-1)*LDA + 1 ), 1 )
-                        END DO
-
-                        END IF
 *
                      ELSE IF( IMAT.EQ.12 .OR. IMAT.EQ.13 ) THEN
 *
@@ -668,17 +652,13 @@
      $               S(1), S(2), S(3), S(4),
      $               S(5), S(6), S(7), S(8)
 *
-                  ELSE
+               ELSE
 *
 *                    IF(MINMN.LT.2) skip this size for this matrix type.
 *
                      CYCLE
-                  END IF
-*
                END IF
 *
-
-
                   WRITE(*,*) "AFTER GENERATING COPYA"
                   DO I = 1, M
                      WRITE(*,*)
@@ -713,17 +693,11 @@
      $                  NB, NX
 
 *
-*                 We do MAX(M,N) because we need a test for KMAX > N,
+*                 We do MIN(M,N)+1 because we need a test for KMAX > N,
 *                 when KMAX is larger than min(M,N), KMAX should be
 *                 KMAX = min(M,N)
 *
-**                  DO KMAX = 1, (MIN(M,N) + 1
-*
-**                  DO KMAX = 1, MIN(M,N)
-**                    DO KMAX = 4, 4
-**                    DO KMAX = 3, 3
-
-                  DO KMAX = 0, min(M,N)
+                  DO KMAX = 0, min(M,N)+1
 
 
 
