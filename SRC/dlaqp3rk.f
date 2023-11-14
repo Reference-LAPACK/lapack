@@ -66,26 +66,28 @@
 *> Cases when the number of factorized columns KB < NB:
 *>
 *> (1) In some cases, due to catastrophic cancellations, it cannot
-*> factorize all NB columns and need to update the panel. Hence, the
-*> actual number of factorized columns returned in KB is smaller
-*> than NB. The logical DONE is returned as FALSE.
+*> factorize all NB columns and need to update the residual matrix.
+*> Hence, the actual number of factorized columns in the block returned
+*> in KB is smaller than NB. The logical DONE is returned as FALSE.
+*> The factorization of the whole original matrix A_orig must proceed
+*> with the next block.
 *>
 *> (2) Whenever the stopping criterion ABSTOL or RELTOL is satisfied,
-*> the factorization is stopped, the logical DONE is returned
-*> as TRUE. The number of factorized columns which is smaller than NB
-*> is returned in KB.
+*> the factorization of the whole original matrix A_orig is stopped,
+*> the logical DONE is returned as TRUE. The number of factorized
+*> columns which is smaller than NB is returned in KB.
 *>
 *> (3) In case both stopping criteria ABSTOL or RELTOL are not used,
 *> and when the residual matrix is a zero matrix in some factorization
-*> step KB, the factorization is stopped, the logical DONE is returned
-*> as TRUE. The number of factorized columns which is smaller than NB
-*> is returned in KB.
+*> step KB, the factorization of the whole original matrix A_orig is
+*> stopped, the logical DONE is returned as TRUE. The number of
+*> factorized columns which is smaller than NB is returned in KB.
 *>
 *> (4) Whenever NaN is detected in the matrix A or in the array TAU,
-*> the factorization is stopped, the logical DONE is returned
-*> as TRUE. The number of factorized columns which is smaller than NB
-*> is returned in KB. The INFO parameter is set to the column index
-*> of the first NaN occurrence.
+*> the factorization of the whole original matrix A_orig is stopped,
+*> the logical DONE is returned as TRUE. The number of factorized
+*> columns which is smaller than NB is returned in KB. The INFO
+*> parameter is set to the column index of the first NaN occurrence.
 *>
 *> \endverbatim
 *
@@ -177,7 +179,7 @@
 *>          KP1 is INTEGER
 *>          The index of the column with the maximum 2-norm in
 *>          the whole original matrix A_orig determined in the
-*>          main routine DGEQP3RK. 1 <= KP1 <= N_orig_mat.
+*>          main routine DGEQP3RK. 1 <= KP1 <= N_orig.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
