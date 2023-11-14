@@ -307,9 +307,11 @@
 *
 *                 Set up parameters with DLATB4 and generate
 *                 M-by-NRHS B matrix with DLATMS.
-*                 IMAT=6: Random, geometric distribution, CNDNUM = 2
+*                 IMAT = 14:
+*                 Random matrix, CNDNUM = 2, NORM = ONE,
+*                 MODE = 3 (geometric distribution of singular values).
 *
-                  CALL DLATB4( PATH, 6, M, NRHS, TYPE, KL, KU, ANORM,
+                  CALL DLATB4( PATH, 14, M, NRHS, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
                   SRNAMT = 'DLATMS'
@@ -339,15 +341,17 @@
 
 *
             DO IMAT = 1, NTYPES
-           WRITE(*,*) "(4) ____ ____ ____ ____ Loop for ",
-     $                 "IMAT, DOTYPE(IMAT)= ", IMAT, DOTYPE(IMAT)
-
-     $
 *
 *              Do the tests only if DOTYPE( IMAT ) is true.
 *
                IF( .NOT.DOTYPE( IMAT ) )
      $            CYCLE
+
+           WRITE(*,*) "(4) ____ ____ ____ ____ Loop for ",
+     $                 "IMAT, DOTYPE(IMAT)= ", IMAT, DOTYPE(IMAT)
+
+     $
+
 
 *
 *              The type of distribution used to generate the random
