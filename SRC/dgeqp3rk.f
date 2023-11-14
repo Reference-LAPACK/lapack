@@ -485,7 +485,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup heqp3rk
+*> \ingroup geqp3rk
 *
 *> \par Further Details:
 *  =====================
