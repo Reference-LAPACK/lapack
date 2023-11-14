@@ -572,7 +572,6 @@
 *                               A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**H.
 *
                IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-*
                   CALL ZGEMM( 'No transpose', 'Conjugate transpose',
      $                  M-IF, NRHS, KB, -CONE, A( IF+1, 1 ), LDA,
      $                  F( N+1, 1 ), LDF, CONE, A( IF+1, N+1 ), LDA )
@@ -649,7 +648,6 @@
 *                             A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**H.
 *
                IF( KB.LT.MINMNUPDT ) THEN
-*
                   CALL ZGEMM( 'No transpose', 'Conjugate transpose',
      $                  M-IF, N+NRHS-KB, KB,-CONE, A( IF+1, 1 ), LDA,
      $                  F( KB+1, 1 ), LDF, CONE, A( IF+1, KB+1 ), LDA )
