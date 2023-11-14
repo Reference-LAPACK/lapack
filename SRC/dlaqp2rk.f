@@ -311,13 +311,13 @@
 *     ..
 *     .. Executable Statements ..
 *
-*     MINMNFACT in the smallest dimension of the submatrix
+*     MINMN_FACT in the smallest dimension of the submatrix
 *     A(IOFFSET+1:M,1:N) to be factorized.
 *
 *     MINMNUPDT is the smallest dimension
-*     of the subarray A(IOFFSET+1:M,1:N+NRHS) to be udated, which contains
-*     the submatrices A(IOFFSET+1:M,1:N) and B(IOFFSET+1:M,1:NRHS) as column
-*     blocks.
+*     of the subarray A(IOFFSET+1:M,1:N+NRHS) to be udated, which
+*     contains the submatrices A(IOFFSET+1:M,1:N) and
+*     B(IOFFSET+1:M,1:NRHS) as column blocks.
 *
       MINMNFACT = MIN( M-IOFFSET, N )
       MINMNUPDT = MIN( M-IOFFSET, N+NRHS )
@@ -332,7 +332,7 @@
 *
          IF( IOFFSET.EQ.0 .AND. K.EQ.1 ) THEN
 *
-*           If we are at the first column of the original whole matrix A.
+*           We are at the first column of the original whole matrix A.
 *
             KP = KP1
             MAXC2NRMK = MAXC2NRM
@@ -397,8 +397,9 @@
 *
             KF = K - 1
 *
-*           Set TAUs corresponding to the columns that were not factorized
-*           to ZERO, i.e. TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) set to ZERO.
+*           Set TAUs corresponding to the columns that were not
+*           factorized to ZERO,
+*           TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) set to ZERO.
 *
             DO J = K, MINMNFACT
                TAU( J ) = ZERO
