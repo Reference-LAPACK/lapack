@@ -158,7 +158,7 @@ set(ZLINTST zchkaa.F
    zchkhe.f zchkhe_rook.f zchkhe_rk.f 
    zchkhe_aa.f zchkhe_aa_2stage.f
    zchkhp.f zchklq.f zchkpb.f
-   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f
+   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkq3rk.f zchkql.f
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f
    zchksy_aa.f  zchksy_aa_2stage.f
    zchktb.f

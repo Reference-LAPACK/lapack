@@ -182,7 +182,7 @@ ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
    zchkhe.o zchkhe_rook.o zchkhe_rk.o zchkhe_aa.o zchkhe_aa_2stage.o \
    zchkhp.o zchklq.o zchkpb.o \
-   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o \
+   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkqp3rk.o zchkql.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchksy_rk.o \
    zchksy_aa.o zchksy_aa_2stage.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
