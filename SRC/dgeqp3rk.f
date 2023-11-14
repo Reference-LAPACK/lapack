@@ -424,8 +424,39 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0: successful exit.
-*>          < 0: if INFO = -i, the i-th argument had an illegal value.
+*>          1) INFO = 0: successful exit.
+*>          2) INFO < 0: if INFO = -i, the i-th argument had an
+*>                      illegal value.
+*>          3) INFO > 0: exception occured, i.e.
+*>
+*>             NaN, +Inf (or -Inf) element was detected in the
+*>             matrix A, either on input or during the computation.
+*>             or NaN element was detected in the array TAU
+*>             during the computation.
+*>
+*>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
+*>               detected and routine stops the computation.
+*>               The j1-th column of the matrix A or in the j1-th
+*>               element of array TAU contains the first occurence
+*>               of NaN at K+1 factorization step ( when K columns
+*>               have been factorized ).
+*>
+*>               On exit:
+*>               K                  is set to the number of
+*>                                  factorized columns without
+*>                                  exception.
+*>               MAXC2NRM           is set to NaN.
+*>               RELMAXC2NRM        is set to NaN.
+*>               TAU(K+1:MINMNFACT) is not set and contains undefined
+*>                                  elements. If j=K+1, TAU(K+1) may
+*>                                  contain NaN.
+*>            3b) If INFO = j2, where N+1 <= j2 <= 2N, then
+*>                no NaN element was detected, but +Inf (or -Inf)
+*>                was detected and routine continued the computation
+*>                until completion.
+*>                The j2-th column of the matrix A contains the first
+*>                occurence of +Inf (or -Inf) at K+1 factorization
+*>                step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *
 *  Authors:
@@ -539,10 +570,10 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, DONE
-      INTEGER            IWS, J, JB, JBF, JMAXB, JMAX,
-     $                   JMAXC2NRM, KP1, LWKOPT, MINMN, NA, NB, NBMIN,
-     $                   NX
-      DOUBLE PRECISION   EPS, MAXC2NRM, SAFMIN
+      INTEGER            IINFO, IOFFSET, IWS, J, JB, JBF, JMAXB, JMAX,
+     $                   JMAXC2NRM, KP1, LWKOPT, MINMN, N_SUB, NB,
+     $                   NBMIN, NX
+      DOUBLE PRECISION   EPS, HUGEVAL, MAXC2NRM, SAFMIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLAQP2RK, DLAQP3RK, XERBLA
@@ -667,6 +698,66 @@
       KP1 = IDAMAX( N, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP1 )
 *
+*     ==================================================================.
+*
+      IF( DISNAN( MAXC2NRM ) ) THEN
+*
+*        Check if the matrix A contains NaN, set INFO parameter
+*        to the column number where the first NaN is found and return
+*        from the routine.
+*
+         K = 0
+         INFO = KP1
+*
+*        Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
+*
+         MAXC2NRMK = MAXC2NRM
+         RELMAXC2NRMK = MAXC2NRM
+*
+*        Array TAU is not set and contains undefined elements.
+*
+         WORK( 1 ) = DBLE( LWKOPT )
+         RETURN
+      END IF
+*
+*     ===================================================================
+*
+      IF( MAXC2NRM.EQ.ZERO ) THEN
+*
+*        Check is the matrix A is a zero matrix, set array TAU and
+*        return from the routine.
+*
+      WRITE(*,*) "=======  DGEQP3RK ((( ZERO MATRIX ))) ===="
+
+         K = 0
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
+*
+         DO J = 1, MINMN
+            TAU( J ) = ZERO
+         END DO
+*
+         WORK( 1 ) = DBLE( LWKOPT )
+         RETURN
+*
+      END IF
+*
+*     ===================================================================
+*
+      HUGEVAL = DLAMCH( 'Overflow' )
+*
+      IF( MAXC2NRM.GT.HUGEVAL ) THEN
+*
+*        Check if the matrix A contains +Inf or -Inf, set INFO parameter
+*        to the column number, where the first +/-Inf  is found plus N,
+*        and continue the computation.
+*
+         INFO = N + KP1
+*
+      END IF
+*
+*     ==================================================================
+*
 *     Quick return if possible for the case when the first
 *     stopping criterion is satisfied, i.e. KMAX = 0.
 *
@@ -704,28 +795,6 @@
 *     which is also limited by the first stopping criterion KMAX.
 *
       JMAX = MIN( KMAX, MINMN )
-
-*     ===================================================================
-*
-*     Quick return, if A is a zero matrix.
-*
-      IF( MAXC2NRM.EQ.ZERO ) THEN
-*
-
-      WRITE(*,*) "=======  DGEQP3RK ((( ZERO MATRIX ))) ===="
-
-         K = 0
-*
-         MAXC2NRMK = ZERO
-         RELMAXC2NRMK = ZERO
-*
-         DO J = 1, MINMN
-            TAU( J ) = ZERO
-         END DO
-*
-         WORK( 1 ) = DBLE( LWKOPT )
-         RETURN
-      END IF
 *
 *     ===================================================================
 *
@@ -810,11 +879,15 @@
 *            routine in a loop step;
 *        JBF is the number of columns that were actually factorized
 *            that was returned by the block factorization routine
-*            in a loop step, JBF <= JB.
+*            in a loop step, JBF <= JB;
+*        N_SUB is the number of columns in the submatrix;
+*        IOFFSET is the number of rows that should not be factorized.
 *
          DO WHILE( J.LE.JMAXB )
 *
             JB = MIN( NB, JMAXB-J+1 )
+            N_SUB = N-J+1
+            IOFFSET = J-1
 *
 *           Factorize JB columns among the columns A(J:N).
 *
@@ -822,18 +895,27 @@
            WRITE(*,*) "===== DGEQP3RK loop before block(IOFFSET, JB)=",
      $      J-1, JB
 
-            CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
+            CALL DLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB, KMAX, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
      $                     DONE, JBF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
      $                     WORK( J ), WORK( N+J ),
      $                     WORK( 2*N+1 ), WORK( 2*N+JB+1 ),
-     $                     N+NRHS-J+1, IWORK )
+     $                     N+NRHS-J+1, IWORK, IINFO )
 *
-            J = J + JBF
 
             WRITE(*,*) "======= DGEQP3RK loop after block (JBF)=",
      $      JBF
+*
+*           Set INFO on the first exception occurence.
+*
+            IF( INFO.EQ.0 ) THEN
+               IF( IINFO.GT.N_SUB ) THEN
+                  INFO = 2*IOFFSET + IINFO
+               ELSE IF( IINFO.GT.0 ) THEN
+                  INFO = IOFFSET + IINFO
+               END IF
+            END IF
 *
             IF( DONE ) THEN
 *
@@ -843,14 +925,14 @@
 *              return from the routine. Perform the following before
 *              returning:
 *                a) Set the number of factorized columns K,
-*                   K = OFFSET + JBF from the last call of blocked
+*                   K = IOFFSET + JBF from the last call of blocked
 *                   routine.
 *                NOTE: 1) MAXC2NRMK and RELMAXC2NRMK are returned
 *                         by the block factorization routine;
 *                      2) The remaining TAUs are set to ZERO by the
 *                         block factorization routine.
 *
-               K = J - 1
+               K = IOFFSET + JBF
 *
 *              Return from the routine.
 *
@@ -859,6 +941,8 @@
                RETURN
 *
             END IF
+*
+            J = J + JBF
 *
          END DO
 *
@@ -872,11 +956,18 @@
 *
       IF( J.LE.JMAX ) THEN
 *
-         CALL DLAQP2RK( M, N-J+1, NRHS, J-1, JMAX-J+1, ABSTOL,
-     $                  RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, KF,
-     $                  MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
+*        N_SUB is the number of columns in the submatrix;
+*        IOFFSET is the number of rows that should not be factorized.
+*
+         N_SUB = N-J+1
+         IOFFSET = J-1
+*
+*
+         CALL DLAQP2RK( M, N_SUB, NRHS, IOFFSET, JMAX-J+1,
+     $                  ABSTOL, RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
+     $                  KF, MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
      $                  TAU( J ), WORK( J ), WORK( N+J ),
-     $                  WORK( 2*N+1 ) )
+     $                  WORK( 2*N+1 ), IINFO )
 *
 *        ABSTOL or RELTOL criterion is satisfied when the number of
 *        the factorized columns KF is smaller then the  number
@@ -887,7 +978,17 @@
 *           b) MAXC2NRMK and RELMAXC2NRMK are returned by the
 *              unblocked factorization routine above.
 *
-            K = J - 1 + KF
+         K = J - 1 + KF
+*
+*        Set INFO on the first exception occurence.
+*
+         IF( INFO.EQ.0 ) THEN
+            IF( IINFO.GT.N_SUB ) THEN
+               INFO = 2*IOFFSET + IINFO
+            ELSE IF( IINFO.GT.0 ) THEN
+               INFO = IOFFSET + IINFO
+            END IF
+         END IF
 *
       ELSE
 *

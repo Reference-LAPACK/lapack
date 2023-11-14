@@ -20,11 +20,12 @@
 *
 *      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
 *     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
-*     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
+*     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK,
+*     $                     INFO )
 *      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+*      INTEGER            INFO, IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
 *     ..
@@ -235,6 +236,44 @@
 *>          Used in DLARF subroutine to apply elementary
 *>          reflector.
 *> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          1) INFO = 0: successful exit.
+*>          2) INFO < 0: if INFO = -i, the i-th argument had an
+*>                      illegal value.
+*>          3) INFO > 0: exception occured, i.e.
+*>
+*>             NaN, +Inf (or -Inf) element was detected in the
+*>             matrix A, either on input or during the computation.
+*>             or NaN element was detected in the array TAU
+*>             during the computation.
+*>
+*>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
+*>               detected and routine stops the computation.
+*>               The j1-th column of the matrix A or in the j1-th
+*>               element of array TAU contains the first occurence
+*>               of NaN at K+1 factorization step ( when K columns
+*>               have been factorized ).
+*>
+*>               On exit:
+*>               KF                 is set to the number of
+*>                                  factorized columns without
+*>                                  exception.
+*>               MAXC2NRM           is set to NaN.
+*>               RELMAXC2NRM        is set to NaN.
+*>               TAU(K+1:MINMNFACT) is not set and contains undefined
+*>                                  elements. If j=K+1, TAU(K+1) may
+*>                                  contain NaN.
+*>            3b) If INFO = j2, where N+1 <= j2 <= 2N, then
+*>                no NaN element was detected, but +Inf (or -Inf)
+*>                was detected and routine continued the computation
+*>                until completion.
+*>                The j2-th column of the matrix A contains the first
+*>                occurence of +Inf (or -Inf) at K+1 factorization
+*>                step K+1 ( when K columns have been factorized ).
+*> \endverbatim
 *
 *  Authors:
 *  ========
@@ -279,7 +318,8 @@
 *  =====================================================================
       SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
      $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
-     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
+     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK,
+     $                     INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -287,7 +327,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
+      INTEGER            INFO, IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -306,7 +346,7 @@
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, JMAXC2NRM, K, KP, MINMNFACT,
      $                   MINMNUPDT
-      DOUBLE PRECISION   AIK, TEMP, TEMP2, TOL3Z
+      DOUBLE PRECISION   AIK, HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLARF, DLARFG, DSWAP
@@ -315,11 +355,16 @@
       INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
+      LOGICAL            DISNAN
       INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH, DNRM2
-      EXTERNAL           IDAMAX, DLAMCH, DNRM2
+      EXTERNAL           DISNAN, DLAMCH, IDAMAX, DNRM2
 *     ..
 *     .. Executable Statements ..
+*
+*     Initialize INFO
+*
+      INFO = 0
 *
 *     MINMNFACT in the smallest dimension of the submatrix
 *     A(IOFFSET+1:M,1:N) to be factorized.
@@ -333,6 +378,7 @@
       MINMNUPDT = MIN( M-IOFFSET, N+NRHS )
       KMAX = MIN( KMAX, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
+      HUGEVAL = DLAMCH( 'Overflow' )
 *
 *     Compute the factorization.
 *
@@ -367,26 +413,55 @@
 *
 *           Determine the maximum column 2-norm and the relative maximum
 *           column 2-norm of the submatrix A(I:M,K:N) at step K.
+*           RELMAXC2NRMK  will be computed later, after somecondition
+*           checks on MAXC2NRMK.
 *
             MAXC2NRMK = VN1( KP )
-*           TODO: optimize RELMAXC2NRMK
-            RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
+*
+*           ============================================================
+*
+*           Check if the submatrix A(I:M,K:N) contains NaN, and set
+*           INFO parameter to the column number, where the first NaN
+*           is found and return from the routine.
+*           We need to check the condition only if the
+*           column index (same as row index) of the original whole
+*           matrix is larger than 1, since the condition for whole
+*           original matrix is checked in the main routine.
+*
+            IF( DISNAN( MAXC2NRMK ) ) THEN
+*
+*              Set KF, the number of factorized columns.
+*              that are not zero.
+*
+                KF = K - 1
+                INFO = KF + KP
+*
+*               Set RELMAXC2NRMK to NaN.
+*
+                RELMAXC2NRMK = MAXC2NRMK
+*
+*               Array TAU(KF+1:MINMNFACT) is not set and contains
+*               undefined elements.
+*
+               RETURN
+            END IF
 *
 *           ============================================================
 *
 *           Quick return, if the submatrix A(I:M,K:N) is
-*           a zero matrix. We need to check the condition only if the
+*           a zero matrix.
+*           We need to check the condition only if the
 *           column index (same as row index) of the original whole
-*           matrix is larger than 2, since the condition for whole
+*           matrix is larger than 1, since the condition for whole
 *           original matrix is checked in the main routine.
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
 *
-*              Set KF, the number of factorized columns
-*              that are not zero relative to the original
-*              whole matrix A, i.e. the rank of the factor R.
+*              Set KF, the number of factorized columns.
+*              that are not zero.
 *
                KF = K - 1
+               RELMAXC2NRMK = ZERO
 *
 *              Set TAUs corresponding to the columns that were not
 *              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.
@@ -403,11 +478,32 @@
 *
 *           ============================================================
 *
+*           Check if the submatrix A(I:M,K:N) contains Inf,
+*           set INFO parameter to the column number, where
+*           the first Inf is found plus N, and continue
+*           the computation.
+*           We need to check the condition only if the
+*           column index (same as row index) of the original whole
+*           matrix is larger than 1, since the condition for whole
+*           original matrix is checked in the main routine.
+*
+            IF( INFO.EQ.0 .AND. MAXC2NRMK.GT.HUGEVAL ) THEN
+               INFO = N + K - 1 + KP
+            END IF
+*
+*           ============================================================
+*
 *           Test for the second and third stopping criteria.
 *           NOTE: There is no need to test for ABSTOL >= ZERO, since
 *           MAXC2NRMK is non-negative. Similarly, there is no need
 *           to test for RELTOL >= ZERO, since RELMAXC2NRMK is
 *           non-negative.
+*           We need to check the condition only if the
+*           column index (same as row index) of the original whole
+*           matrix is larger than 1, since the condition for whole
+*           original matrix is checked in the main routine.
+
+            RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
 *
             IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
@@ -466,6 +562,31 @@
      $                   TAU( K ) )
          ELSE
             TAU( K ) = ZERO
+         END IF
+*
+*        Check if TAU(K) is NaN, set INFO parameter
+*        to the column number where NaN is found and return from
+*        the routine.
+*        NOTE: There is no need to check TAU(K) for Inf,
+*        since *LARFG cannot produce TAU(K) or Householder vector
+*        below the diagonal containing Inf. Only BETA on the diagonal,
+*        returned by *LARFG can contain Inf, which requires
+*        TAU(K) to be NaN. Therefore, this case of generating Inf by
+*        *DLARFG is covered by checking TAU(K) for NaN.
+*
+         IF( DISNAN( TAU(K) ) ) THEN
+            KF = K - 1
+            INFO = K
+*
+*           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
+*
+            MAXC2NRMK = TAU( K )
+            RELMAXC2NRMK = TAU( K )
+*
+*           Array TAU(K:MINMNFACT) is not set and contains
+*           undefined elements, except the first element TAU(K) = NaN.
+*
+            RETURN
          END IF
 *
 *        Apply H(K)**T to A(I:M,K+1:N+NRHS) from the left.
@@ -532,7 +653,9 @@
 *
       END DO
 *
-*     Set the number of factorized columns
+*     If we reached this point, all colunms have been factorized,
+*     i.e. no condition was triggered to exit the routine.
+*     Set the number of factorized columns.
 *
       KF = KMAX
 *
