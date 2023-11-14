@@ -409,10 +409,6 @@
             KP = KP1
 
             WRITE(*,*) "## ## DLAQP2RK IOFFSET=0, first column KP=",KP
-
-*           TODO: optimize MAXC2NRMK and RELMAXC2NRMK
-            MAXC2NRMK = MAXC2NRM
-            RELMAXC2NRMK = ONE
 *
 *           ============================================================
 *
