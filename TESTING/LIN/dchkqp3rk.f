@@ -425,136 +425,136 @@
 *                 Rectangular matrices 5-13 that contain zero columns,
 *                 only for matrices MINMN >=2.
 *
-*                       JB_ZERO is the column index of ZERO block.
-*                       NB_ZERO is the column block size of ZERO block.
-*                       NB_GEN is the column blcok size of the
-*                       generated block.
-*                       J_INC in the non_zero column index increment
-*                       for matrix 12 and 13.
-*                       J_FIRS_NZ is the index of the first non-zero
-*                       column.
+*                 JB_ZERO is the column index of ZERO block.
+*                 NB_ZERO is the column block size of ZERO block.
+*                 NB_GEN is the column blcok size of the
+*                 generated block.
+*                 J_INC in the non_zero column index increment
+*                 for matrix 12 and 13.
+*                 J_FIRS_NZ is the index of the first non-zero
+*                 column.
 *
                   IF( IMAT.EQ.5 ) THEN
 *
 *                    First column is zero.
 *
-                        JB_ZERO = 1
-                        NB_ZERO = 1
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = 1
+                     NB_ZERO = 1
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.6 ) THEN
+                  ELSE IF( IMAT.EQ.6 ) THEN
 *
-*                       Last column MINMN is zero.
+*                    Last column MINMN is zero.
 *
-                        JB_ZERO = MINMN
-                        NB_ZERO = 1
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = MINMN
+                     NB_ZERO = 1
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.7 ) THEN
+                  ELSE IF( IMAT.EQ.7 ) THEN
 *
-*                       Last column N is zero.
+*                    Last column N is zero.
 *
-                        JB_ZERO = N
-                        NB_ZERO = 1
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = N
+                     NB_ZERO = 1
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.8 ) THEN
+                  ELSE IF( IMAT.EQ.8 ) THEN
 *
-*                       Middle column in MINMN is zero.
+*                    Middle column in MINMN is zero.
 *
-                        JB_ZERO = MINMN / 2 + 1
-                        NB_ZERO = 1
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = MINMN / 2 + 1
+                     NB_ZERO = 1
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.9 ) THEN
+                  ELSE IF( IMAT.EQ.9 ) THEN
 *
-*                       First half of MINMN columns is zero.
+*                    First half of MINMN columns is zero.
 *
-                        JB_ZERO = 1
-                        NB_ZERO = MINMN / 2
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = 1
+                     NB_ZERO = MINMN / 2
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.10 ) THEN
+                  ELSE IF( IMAT.EQ.10 ) THEN
 *
-*                       Last columns are zero columns,
-*                       starting from (MINMN / 2 + 1) column.
+*                    Last columns are zero columns,
+*                    starting from (MINMN / 2 + 1) column.
 *
-                        JB_ZERO = MINMN / 2 + 1
-                        NB_ZERO = N - JB_ZERO + 1
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = MINMN / 2 + 1
+                     NB_ZERO = N - JB_ZERO + 1
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.11 ) THEN
+                  ELSE IF( IMAT.EQ.11 ) THEN
 *
-*                       Half of the columns in the middle of MINMN
-*                       columns is zero, starting from
-*                       MINMN/2 - (MINMN/2)/2 + 1 column.
+*                    Half of the columns in the middle of MINMN
+*                    columns is zero, starting from
+*                    MINMN/2 - (MINMN/2)/2 + 1 column.
 *
-                        JB_ZERO = MINMN / 2 - (MINMN / 2) / 2 + 1
-                        NB_ZERO = MINMN / 2
-                        NB_GEN = N - NB_ZERO
+                     JB_ZERO = MINMN / 2 - (MINMN / 2) / 2 + 1
+                     NB_ZERO = MINMN / 2
+                     NB_GEN = N - NB_ZERO
 *
-                     ELSE IF( IMAT.EQ.12 ) THEN
+                  ELSE IF( IMAT.EQ.12 ) THEN
 *
-*                       Odd-numbered columns are zero,
+*                    Odd-numbered columns are zero,
 *
-                        NB_GEN = N / 2
-                        NB_ZERO = N - NB_GEN
-                        J_INC = 2
-                        J_FIRST_NZ = 2
+                     NB_GEN = N / 2
+                     NB_ZERO = N - NB_GEN
+                     J_INC = 2
+                     J_FIRST_NZ = 2
 *
-                     ELSE IF( IMAT.EQ.13 ) THEN
+                  ELSE IF( IMAT.EQ.13 ) THEN
 *
-*                       Even-numbered columns are zero.
+*                    Even-numbered columns are zero.
 *
-                        NB_ZERO = N / 2
-                        NB_GEN = N - NB_ZERO
-                        J_INC = 2
-                        J_FIRST_NZ = 1
+                     NB_ZERO = N / 2
+                     NB_GEN = N - NB_ZERO
+                     J_INC = 2
+                     J_FIRST_NZ = 1
 *
-                     END IF
+                  END IF
 *
 *
-*                    1) Set the first NB_ZERO columns in COPYA(1:M,1:N)
-*                       to zero.
+*                 1) Set the first NB_ZERO columns in COPYA(1:M,1:N)
+*                    to zero.
 
                      WRITE(*,*) "( M,NB_ZERO, LDA before DLASET",
      $                            M, NB_ZERO, LDA
 *
-                     CALL DLASET( 'Full', M, NB_ZERO, ZERO, ZERO,
-     $                            COPYA, LDA )
+                  CALL DLASET( 'Full', M, NB_ZERO, ZERO, ZERO,
+     $                         COPYA, LDA )
 *
 *                    2) Generate an M-by-(N-NB_ZERO) matrix with the
 *                       chosen singular value distribution
 *                       in COPYA(1:M,NB_ZERO+1:N).
 *
-                     CALL DLATB4( PATH, IMAT, M, NB_GEN, TYPE, KL, KU,
-     $                            ANORM, MODE, CNDNUM, DIST )
+                  CALL DLATB4( PATH, IMAT, M, NB_GEN, TYPE, KL, KU,
+     $                         ANORM, MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'DLATMS'
+                  SRNAMT = 'DLATMS'
 
                      WRITE(*,*) "Generate DLAMTS matrix (M,NB_GEN)=",
      $                           M, NB_GEN
 
-                     IND_OFFSET_GEN = NB_ZERO * LDA
+                  IND_OFFSET_GEN = NB_ZERO * LDA
 *
-                     CALL DLATMS( M, NB_GEN, DIST, ISEED, TYPE, S, MODE,
-     $                            CNDNUM, ANORM, KL, KU, 'No packing',
-     $                            COPYA( IND_OFFSET_GEN + 1 ), LDA,
-     $                            WORK, INFO )
+                  CALL DLATMS( M, NB_GEN, DIST, ISEED, TYPE, S, MODE,
+     $                        CNDNUM, ANORM, KL, KU, 'No packing',
+     $                        COPYA( IND_OFFSET_GEN + 1 ), LDA,
+     $                        WORK, INFO )
 
                      WRITE(*,*) "Singular val after mat generation S="
                      WRITE(*,*)
      $               S(1), S(2), S(3), S(4),
      $               S(5), S(6), S(7), S(8)
 *
-*                    Check error code from DLATMS.
+*                 Check error code from DLATMS.
 *
-                     IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', M,
-     $                               NB_GEN, -1, -1, -1, IMAT, NFAIL,
-     $                               NERRS, NOUT )
-                        CYCLE
-                     END IF
+                  IF( INFO.NE.0 ) THEN
+                     CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', M,
+     $                            NB_GEN, -1, -1, -1, IMAT, NFAIL,
+     $                            NERRS, NOUT )
+                     CYCLE
+                  END IF
 
                   WRITE(*,*) "Matrix  COPYA after",
      $                       " generation N_ZERO and N_GEN"
@@ -568,56 +568,56 @@
 
 
 *
-*                    3) Swap the gererated colums from the right side
-*                    NB_GEN-size block in COPYA into correct column
-*                    positions.
+*                 3) Swap the gererated colums from the right side
+*                 NB_GEN-size block in COPYA into correct column
+*                 positions.
 *
-                     IF( IMAT.EQ.6
+                  IF( IMAT.EQ.6
      $                    .OR. IMAT.EQ.7
      $                    .OR. IMAT.EQ.8
      $                    .OR. IMAT.EQ.10
      $                    .OR. IMAT.EQ.11 ) THEN
 *
-*                       Move by swapping the generated columns
-*                       from the right NB_GEN-size block from
-*                       (NB_ZERO+1:NB_ZERO+JB_ZERO)
-*                       into columns (1:JB_ZERO-1).
+*                    Move by swapping the generated columns
+*                    from the right NB_GEN-size block from
+*                    (NB_ZERO+1:NB_ZERO+JB_ZERO)
+*                    into columns (1:JB_ZERO-1).
 *
-                        DO J = 1, JB_ZERO-1, 1
-                           CALL DSWAP( M,
-     $                           COPYA( ( NB_ZERO+J-1)*LDA+1), 1,
-     $                           COPYA( (J-1)*LDA + 1 ), 1 )
-                        END DO
+                     DO J = 1, JB_ZERO-1, 1
+                        CALL DSWAP( M,
+     $                        COPYA( ( NB_ZERO+J-1)*LDA+1), 1,
+     $                        COPYA( (J-1)*LDA + 1 ), 1 )
+                     END DO
 *
-                     ELSE IF( IMAT.EQ.12 .OR. IMAT.EQ.13 ) THEN
+                  ELSE IF( IMAT.EQ.12 .OR. IMAT.EQ.13 ) THEN
 *
-*                       ( IMAT = 12, Odd-numbered ZERO columns. )
-*                       Swap the generated columns from the right
-*                       NB_GEN-size block into the even zero colums in the
-*                       left NB_ZERO-size block.
+*                    ( IMAT = 12, Odd-numbered ZERO columns. )
+*                    Swap the generated columns from the right
+*                    NB_GEN-size block into the even zero colums in the
+*                    left NB_ZERO-size block.
 *
-*                       ( IMAT = 13, Even-numbered ZERO columns. )
-*                       Swap the generated columns from the right
-*                       NB_GEN-size block into the odd zero colums in the
-*                       left NB_ZERO-size block.
+*                    ( IMAT = 13, Even-numbered ZERO columns. )
+*                    Swap the generated columns from the right
+*                    NB_GEN-size block into the odd zero colums in the
+*                    left NB_ZERO-size block.
 *
-                        DO J = 1, NB_GEN, 1
-                           IND_OUT = ( NB_ZERO+J-1 )*LDA + 1
-                           IND_IN = ( J_INC*(J-1)+(J_FIRST_NZ-1) )*LDA
+                     DO J = 1, NB_GEN, 1
+                        IND_OUT = ( NB_ZERO+J-1 )*LDA + 1
+                        IND_IN = ( J_INC*(J-1)+(J_FIRST_NZ-1) )*LDA
      $                            + 1
-                           CALL DSWAP( M,
-     $                                 COPYA( IND_OUT ), 1,
-     $                                 COPYA( IND_IN), 1 )
+                        CALL DSWAP( M,
+     $                              COPYA( IND_OUT ), 1,
+     $                              COPYA( IND_IN), 1 )
                         END DO
 *
-                     END IF
+                  END IF
 *
-*                    5) Order the singular values generated by
-*                       DLAMTS in decreasing order and add trailing zeros
-*                       that correspond to zero columns.
-*                       The total number of singular values is MINMN.
+*                 5) Order the singular values generated by
+*                    DLAMTS in decreasing order and add trailing zeros
+*                    that correspond to zero columns.
+*                    The total number of singular values is MINMN.
 *
-                     MINMNB_GEN = MIN( M, NB_GEN )
+                  MINMNB_GEN = MIN( M, NB_GEN )
 
                   WRITE(*,*) "Singular values MINB_GEN=", MINMNB_GEN
                   WRITE(*,*) "Singular values before ordering  S="
@@ -625,17 +625,17 @@
      $               S(1), S(2), S(3), S(4),
      $               S(5), S(6), S(7), S(8)
 *
-                     CALL DLAORD( 'Decreasing', MINMNB_GEN, S, 1 )
+                  CALL DLAORD( 'Decreasing', MINMNB_GEN, S, 1 )
 
                    WRITE(*,*) "Singular values after ordering  S="
                      WRITE(*,*)
      $               S(1), S(2), S(3), S(4),
      $               S(5), S(6), S(7), S(8)
 
-                     DO I = MINMNB_GEN+1, MINMN
+                  DO I = MINMNB_GEN+1, MINMN
                      WRITE(*,*) "Singular values to ZERO out I=", I
-                        S( I ) = ZERO
-                     END DO
+                     S( I ) = ZERO
+                  END DO
 
                   WRITE(*,*) "Matrix with ZERO columnms COPYA"
                   DO I = 1, M
@@ -701,8 +701,8 @@
 
 
 
-          WRITE(*,*) "(6) ____ ____ ____ ____ ____ ____ Loop for KMAX=",
-     $              KMAX
+            WRITE(*,*) "(6) ____ ____ ____ ____ ____" ,
+     $             " ____ Loop for KMAX=", KMAX
 *
 *                 Get a working copy of COPYA into A( 1:M,1:N ).
 *                 Get a working copy of COPYB into A( 1:M, (N+1):NRHS ).
@@ -714,7 +714,7 @@
 *
                   CALL DLACPY( 'All', M, N, COPYA, LDA, A, LDA )
 
-          WRITE(*,*) "    ____ ____ ____ ____ ____ ____ set NaN",
+            WRITE(*,*) "    ____ ____ ____ ____ ____ ____ set NaN",
      $               " in mat A after copy"
 
 
