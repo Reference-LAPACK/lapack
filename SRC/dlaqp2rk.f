@@ -582,11 +582,11 @@
 *        to the column number where NaN is found and return from
 *        the routine.
 *        NOTE: There is no need to check TAU(KK) for Inf,
-*        since *LARFG cannot produce TAU(KK) or Householder vector
+*        since DLARFG cannot produce TAU(KK) or Householder vector
 *        below the diagonal containing Inf. Only BETA on the diagonal,
-*        returned by *LARFG can contain Inf, which requires
+*        returned by DLARFG can contain Inf, which requires
 *        TAU(KK) to be NaN. Therefore, this case of generating Inf by
-*        *DLARFG is covered by checking TAU(KK) for NaN.
+*        DLARFG is covered by checking TAU(KK) for NaN.
 *
          IF( DISNAN( TAU(KK) ) ) THEN
             K = KK - 1

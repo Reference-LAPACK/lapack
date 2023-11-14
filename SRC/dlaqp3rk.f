@@ -593,8 +593,8 @@
 *              difficult columns, since we stop the factorization.
 *
 *              Set TAUs corresponding to the columns that were not
-*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
-*              which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
+*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = ZERO,
+*              which is equivalent to seting TAU(K:MINMNFACT) = ZERO.
 *
                DO J = K, MINMNFACT
                   TAU( J ) = ZERO
@@ -681,8 +681,8 @@
 *              difficult columns, since we stop the factorization.
 *
 *              Set TAUs corresponding to the columns that were not
-*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) to ZERO,
-*              which is equivalent to seting TAU(K:MINMNFACT) to ZERO.
+*              factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = ZERO,
+*              which is equivalent to seting TAU(K:MINMNFACT) = ZERO.
 *
                DO J = K, MINMNFACT
                   TAU( J ) = ZERO
@@ -744,11 +744,11 @@
 *        to the column number where NaN is found and return from
 *        the routine.
 *        NOTE: There is no need to check TAU(K) for Inf,
-*        since *LARFG cannot produce TAU(K) or Householder vector
+*        since DLARFG cannot produce TAU(K) or Householder vector
 *        below the diagonal containing Inf. Only BETA on the diagonal,
-*        returned by *LARFG can contain Inf, which requires
+*        returned by DLARFG can contain Inf, which requires
 *        TAU(K) to be NaN. Therefore, this case of generating Inf by
-*        *DLARFG is covered by checking TAU(K) for NaN.
+*        DLARFG is covered by checking TAU(K) for NaN.
 *
          IF( DISNAN( TAU(K) ) ) THEN
 *
