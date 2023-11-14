@@ -85,20 +85,20 @@
 *> \verbatim
 *>          KMAX is INTEGER
 *>
-*>          The first factorization stopping criterion.
+*>          The first factorization stopping criterion. KMAX >= 0.
 *>
 *>          The maximum number of columns of the matrix A to factorize,
 *>          i.e. the maximum factorization rank.
-*>          0 <= KMAX <= min(M-IOFFSET,N).
 *>
 *>          a) If KMAX >= min(M-IOFFSET,N), then this stopping
 *>                criterion is not used, factorize columns
 *>                depending on ABSTOL and RELTOL.
 *>
 *>          b) If KMAX = 0, then this stopping criterion is
-*>                satisfied on input and the routine exits immediately.
-*>                This means that the factorization is not performed,
-*>                the matrices A and B are not modified.
+*>             satisfied on input and the routine exits immediately.
+*>             This means that the factorization is not performed,
+*>             the matrices A and B and the arrays TAU, IPIV
+*>             are not modified.
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
@@ -108,9 +108,9 @@
 *>          The second factorization stopping criterion.
 *>
 *>          The absolute tolerance (stopping threshold) for
-*>          maximum column 2-norm of the residual matrix R22(K).
+*>          maximum column 2-norm of the residual matrix.
 *>          The algorithm converges (stops the factorization) when
-*>          the maximum column 2-norm of the residual matrix R22(K)
+*>          the maximum column 2-norm of the residual matrix
 *>          is less than or equal to ABSTOL.
 *>
 *>          a) If ABSTOL < 0.0, then this stopping criterion is not
@@ -130,10 +130,18 @@
 *>
 *>          The tolerance (stopping threshold) for the ratio
 *>          abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of
-*>          the residual matrix R22(K) and the maximum column 2-norm of
-*>          the original matrix A. The algorithm converges (stops the
-*>          factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is less
-*>          than or equal to RELTOL.
+*>          the residual matrix R22(K) to the maximum column 2-norm of
+*>          the original matrix A_orig. The algorithm converges (stops
+*>          the factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is
+*>          less than or equal to RELTOL.
+*>
+*>          a) If RELTOL < 0.0, then this stopping criterion is not
+*>                used, the routine factorizes columns depending
+*>                on KMAX and ABSTOL.
+*>                This includes the case RELTOL = -Inf.
+*>
+*>          d) If 0.0 <= RELTOL then the input value of RELTOL
+*>                is used.
 *> \endverbatim
 *>
 *> \param[in] KP1
@@ -148,8 +156,7 @@
 *> \verbatim
 *>          MAXC2NRM is DOUBLE PRECISION
 *>          The maximum column 2-norm of the whole original
-*>          matrix A_orig.
-*>          MAXC2NRM >= 0.
+*>          matrix A_orig. MAXC2NRM >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -172,11 +179,11 @@
 *>             has been accordingly pivoted, but no factorized.
 *>          4. The rest of the array A, block A(IOFFSET+1:M,KF+1:N+NRHS).
 *>             The left part A(IOFFSET+1:M,KF+1:N) of
-*>             this block contains the residual of the matrix A, and
-*>             the right part of the block A(IOFFSET+1:M,N+1:N+NRHS)
-*>             contains the block of the right-hand-side matrix B. Both
-*>             these blocks have been updated by multiplication from
-*>             the left by Q**T.
+*>             this block contains the residual of the matrix A, and,
+*>             if NRHS > 0, the right part of the block
+*>             A(IOFFSET+1:M,N+1:N+NRHS) contains the block of
+*>             the right-hand-side matrix B. Both these blocks have been
+*>             updated by multiplication from the left by Q**T.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -188,26 +195,30 @@
 *> \param[out] KF
 *> \verbatim
 *>          KF is INTEGER
-*>          Factorization rank of the matrix A,
-*>          i.e. the rank of the factor R, i.e.
-*>          the number of factorized partial columns that are non-zero
-*>          at each step. 0 <= KF <= min(M-IOFFSET,N).
+*>          Factorization rank of the matrix A, i.e. the rank of
+*>          the factor R, which is the same as the number of non-zero
+*>          rows of the factor R.  0 <= KF <= min(M-IOFFSET,KMAX,N).
+*>
+*>          KF also represents the number of non-zero Householder
+*>          vectors.
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
-*>          The maximum column 2-norm of the residual matrix R22(K),
-*>          when factorization stopped at rank K. MAXC2NRMK >= 0.
+*>          The maximum column 2-norm of the residual matrix,
+*>          when the factorization stopped at rank K. MAXC2NRMK >= 0.
+*>          ( Rank K is with respect to the original matrix A_orig. )
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
 *> \verbatim
 *>          RELMAXC2NRMK is DOUBLE PRECISION
-*>          The ratio MAXC2NRMK / MAXC2NRM_WHOLE of the maximum column
-*>          2-norm of the residual matrix R22(K) (when factorization
-*>          stopped at rank K) and maximum column 2-norm of the
+*>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
+*>          2-norm of the residual matrix (when the factorization
+*>          stopped at rank K) to the maximum column 2-norm of the
 *>          whole original matrix A. RELMAXC2NRMK >= 0.
+*>          ( Rank K is with respect to the original matrix A_orig. )
 *> \endverbatim
 *>
 *> \param[out] JPIV
@@ -246,37 +257,33 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          1) INFO = 0: successful exit.
-*>          2) INFO < 0: if INFO = -i, the i-th argument had an
-*>                      illegal value.
-*>          3) INFO > 0: exception occurred, i.e.
+*>          2) INFO > 0: NaN, +Inf (or -Inf) element was detected
+*>                       in the matrix A, either on input or during
+*>                       the computation, or NaN element was detected
+*>                       in the array TAU during the computation.
 *>
-*>             NaN, +Inf (or -Inf) element was detected in the
-*>             matrix A, either on input or during the computation.
-*>             or NaN element was detected in the array TAU
-*>             during the computation.
-*>
-*>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
-*>               detected and the routine stops the computation.
-*>               The j1-th column of the matrix A or in the j1-th
+*>           2a) If INFO = j_1, where 1 <= j_1 <= N, then NaN element
+*>               was detected and the routine stops the computation.
+*>               The j_1-th column of the matrix A or the j_1-th
 *>               element of array TAU contains the first occurrence
-*>               of NaN at K+1 factorization step ( when K columns
+*>               of NaN in the factorization step K+1 ( when K columns
 *>               have been factorized ).
 *>
 *>               On exit:
-*>               KF                 is set to the number of
+*>               K                  is set to the number of
 *>                                  factorized columns without
 *>                                  exception.
-*>               MAXC2NRM           is set to NaN.
-*>               RELMAXC2NRM        is set to NaN.
-*>               TAU(K+1:MINMNFACT) is not set and contains undefined
-*>                                  elements. If j=K+1, TAU(K+1) may
+*>               MAXC2NRMK          is set to NaN.
+*>               RELMAXC2NRMK       is set to NaN.
+*>               TAU(K+1:min(M,N)) is not set and contains undefined
+*>                                  elements. If j_1=K+1, TAU(K+1) may
 *>                                  contain NaN.
-*>            3b) If INFO = j2, where N+1 <= j2 <= 2N, then
+*>            2b) If INFO = j_2, where N+1 <= j_2 <= 2N, then
 *>                no NaN element was detected, but +Inf (or -Inf)
 *>                was detected and the routine continues
 *>                the computation until completion.
-*>                The j2-th column of the matrix A contains the first
-*>                occurrence of +Inf (or -Inf) at K+1 factorization
+*>                The j_2-th column of the matrix A contains the first
+*>                occurrence of +Inf (or -Inf) in the factorization
 *>                step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *
@@ -410,14 +417,14 @@
 *
 *           ============================================================
 *
-*           Determine the pivot column at K-th step, i.e. the index
+*           Determine the pivot column in K-th step, i.e. the index
 *           of the column with the maximum 2-norm in the
 *           submatrix A(I:M,K:N).
 *
             KP = ( K-1 ) + IDAMAX( N-K+1, VN1( K ), 1 )
 *
 *           Determine the maximum column 2-norm and the relative maximum
-*           column 2-norm of the submatrix A(I:M,K:N) at step K.
+*           column 2-norm of the submatrix A(I:M,K:N) in step K.
 *           RELMAXC2NRMK  will be computed later, after somecondition
 *           checks on MAXC2NRMK.
 *
