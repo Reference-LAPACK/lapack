@@ -311,7 +311,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-*     MINMN_FACT in the smallest dimension of the submatrix
+*     MINMNFACT in the smallest dimension of the submatrix
 *     A(IOFFSET+1:M,1:N) to be factorized.
 *
 *     MINMNUPDT is the smallest dimension
@@ -330,9 +330,11 @@
 *
          I = IOFFSET + K
 *
-         IF( IOFFSET.EQ.0 .AND. K.EQ.1 ) THEN
+         IF( I.QE.1 ) THEN
 *
-*           We are at the first column of the original whole matrix A.
+*           We are at the first column of the original whole matrix A,
+*           therefore we use the computed KP1 and MAXC2NRM from the
+*           main routine.
 *
             KP = KP1
             MAXC2NRMK = MAXC2NRM
@@ -356,10 +358,12 @@
 *
 *     ==================================================================
 *
-*        Quick return, if the submatrix A(IOFFSET+K:M,K:N) is
-*        a zero matrix.
+*        Quick return, if the submatrix A(I:M,K:N) is
+*        a zero matrix. We need to check it only if the column index
+*        (same as row index) is larger than 2, since the condition for
+*        whole original matris is checked in the main routine.
 *
-         IF( MAXC2NRMK.EQ.ZERO ) THEN
+         IF( I.NE.1 .AND. MAXC2NRMK.EQ.ZERO ) THEN
 *
 *           Set the number of factorized columns.
 *           TODO: fix USETOL
@@ -398,8 +402,8 @@
             KF = K - 1
 *
 *           Set TAUs corresponding to the columns that were not
-*           factorized to ZERO,
-*           TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) set to ZERO.
+*           factorized to ZERO, (note that: KF = K - 1), i.e.
+*           Set TAU(KF+1:MINMNFACT)=TAU(K:MINMNFACT) to ZERO.
 *
             DO J = K, MINMNFACT
                TAU( J ) = ZERO
