@@ -358,6 +358,7 @@
 *           column 2-norm of the submatrix A(I:M,K:N) at step K.
 *
             MAXC2NRMK = VN1( KP )
+*           TODO: optimize RELMAXC2NRMK
             RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
 *
 *           ============================================================
