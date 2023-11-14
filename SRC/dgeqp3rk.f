@@ -1023,7 +1023,6 @@
          N_SUB = N-J+1
          IOFFSET = J-1
 *
-*
          CALL DLAQP2RK( M, N_SUB, NRHS, IOFFSET, JMAX-J+1,
      $                  ABSTOL, RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
      $                  KF, MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
