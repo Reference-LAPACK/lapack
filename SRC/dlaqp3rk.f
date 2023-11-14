@@ -374,6 +374,7 @@
 *
       K = 0
       LSTICC = 0
+*     TODO: describe DONE in main or in a subroutine
       DONE = .FALSE.
 *
       DO WHILE ( K.LT.NB .AND. LSTICC.EQ.0 )
@@ -387,6 +388,7 @@
 *           main routine.
 *
             KP = KP1
+*           TODO: optimize MAXC2NRMK and RELMAXC2NRMK
             MAXC2NRMK = MAXC2NRM
             RELMAXC2NRMK = ONE
 *
@@ -465,7 +467,6 @@
                WRITE(*,*) "$$$$$$$$$$ DLAQP3RK block reflector ",
      $                 "(M-IF, NRHS, KB)", M-IF, NRHS, KB
 
-*
                   CALL DGEMM( 'No transpose', 'Transpose', M-IF, NRHS,
      $                         KB, -ONE, A( IF+1, 1 ), LDA, F( N+1, 1 ),
      $                         LDF, ONE, A( IF+1, N+1 ), LDA )
@@ -490,34 +491,34 @@
 *
 *           ============================================================
 *
-*           End ELSE for IF(I.EQ.1)
+*           Test for the second and third tolerance stopping criteria.
+*           NOTE: There is no need to test for ABSTOL.GE.ZERO, since
+*           MAXC2NRMK is non-negative. Similarly, there is no need
+*           to test for RELTOL.GE.ZERO, since RELMAXC2NRMK is
+*           non-negative.
 *
-         END IF
+            IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
 *
-*     ==================================================================
+               DONE = .TRUE.
 *
-*        Test for the second and third tolerance stopping criteria.
-*        NOTE: There is no need to test for ABSTOL.GE.ZERO, since
-*        MAXC2NRMK is non-negative. Similarly, there is no need
-*        to test for RELTOL.GE.ZERO, since RELMAXC2NRMK is
-*        non-negative.
+*              Set the number of factorized columns in the block.
 *
-         IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+               K = K - 1
 *
-            DONE = .TRUE.
+*              Exit the loop.
+*              After the loop, there is a code:
+*                 1) to apply the block reflector via GEMM to the residual
+*                    of the matrix A and the residual of the right hand
+*                    sides B.
+*                 2) to zero out the remaining TAUs.
 *
-*           Set the number of factorized columns in the block.
+               EXIT
 *
-            K = K - 1
+            END IF
 *
-*           Exit the loop.
-*           After the loop, there is a code:
-*              1) to apply the block reflector via GEMM to the residual
-*                 of the matrix A and the residual of the right hand
-*                 sides B.
-*              2) to zero out the remaining TAUs.
+*           ============================================================
 *
-            EXIT
+*           End ELSE of IF(I.EQ.1)
 *
          END IF
 *
