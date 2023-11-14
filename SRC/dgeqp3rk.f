@@ -720,16 +720,20 @@
 *     ===================================================================
 *
 *     Quick return if possible for the case when the second or third
-*     stopping criterion is satified, i.e. MAXC2NRMK <= ABSTOL OR
-*     RELMAXC2NRMK <= RELTOL.
+*     stopping criterion for the whole original matrix is satified,
+*     i.e. MAXC2NRM <= ABSTOL or RELMAXC2NRM <= RELTOL
+*     (which is ONE <= RELTOL).
 *
-      IF( MAXC2NRMK.LE.ABSTOL .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+      IF( MAXC2NRM.LE.ABSTOL .OR. ONE.LE.RELTOL ) THEN
+*
          K = 0
          MAXC2NRMK = MAXC2NRM
          RELMAXC2NRMK = ONE
+*
          DO J = 1, MINMN
             TAU( J ) = ZERO
          END DO
+*
          WORK( 1 ) = DBLE( LWKOPT )
          RETURN
       END IF
