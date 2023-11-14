@@ -28,12 +28,6 @@
 *     $                   NB, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
-*
-*     .. Scalar Arguments ..
-*      LOGICAL            DONE
-*      INTEGER            KB, LDA, LDF, M, N, NB, NRHS, IOFFSET
-*      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
-*     $                   RELTOL
 *     ..
 *     .. Array Arguments ..
 *      INTEGER            IWORK( * ), JPIV( * )
@@ -192,7 +186,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N+NRHS)
+*>          A is COMPLEX*16 array, dimension (LDA,N+NRHS)
 *>          On entry:
 *>              the M-by-N matrix A and M-by-NRHS matrix B, as in
 *>
@@ -273,7 +267,7 @@
 *>
 *> \param[out] TAU
 *> \verbatim
-*>          TAU is DOUBLE PRECISION array, dimension (min(M-IOFFSET,N))
+*>          TAU is COMPLEX*16 array, dimension (min(M-IOFFSET,N))
 *>          The scalar factors of the elementary reflectors.
 *> \endverbatim
 *>
@@ -291,13 +285,13 @@
 *>
 *> \param[out] AUXV
 *> \verbatim
-*>          AUXV is DOUBLE PRECISION array, dimension (NB)
+*>          AUXV is COMPLEX*16 array, dimension (NB)
 *>          Auxiliary vector.
 *> \endverbatim
 *>
 *> \param[out] F
 *> \verbatim
-*>          F is DOUBLE PRECISION array, dimension (LDF,NB)
+*>          F is COMPLEX*16 array, dimension (LDF,NB)
 *>          Matrix F**H = L*(Y**H)*A.
 *> \endverbatim
 *>

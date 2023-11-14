@@ -253,7 +253,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (N-1)
+*>          WORK is COMPLEX*16 array, dimension (N-1)
 *>          Used in ZLARF subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
