@@ -328,36 +328,6 @@
 *
          END IF
 *
-*        Set the condition number.
-*
-*         IF ( IMAT.EQ.6 ) THEN
-*            CNDNUM = BADC1
-*         ELSE IF ( IMAT.EQ.7 ) THEN
-*            CNDNUM = BADC2
-*         ELSE IF ( IMAT.EQ.8 ) THEN
-*            CNDNUM = BADC2
-*         ELSE
-*            CNDNUM = TWO
-*         END IF
-*
-*        Set norm
-*
-*         IF( IMAT.EQ.9 ) THEN
-*            ANORM = SMALL8
-*         ELSE IF( IMAT.EQ.10 ) THEN
-*            ANORM = LARGE
-*         ELSE
-*            ANORM = ONE
-*         END IF
-*
-*        Set MODE
-*
-*        IF( IMAT.EQ.8 ) THEN
-*            MODE = 2
-*         ELSE
-*            MODE = 3
-*         END IF
-*
       ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
 *
 *        xGE:  Set parameters to generate a general M x N matrix.
