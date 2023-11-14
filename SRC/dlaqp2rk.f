@@ -87,9 +87,10 @@
 *>          The first factorization stopping criterion.
 *>
 *>          The maximum number of columns of the matrix A to factorize,
-*>          i.e. the maximum factorization rank. KMAX >= 0.
+*>          i.e. the maximum factorization rank.
+*>          0 <= KMAX <= min(M-IOFFSET,N).
 *>
-*>          a) If KMAX >= min(M-IOFFSET,N), then this stopping
+*>          a) If KMAX = min(M-IOFFSET,N), then this stopping
 *>                criterion is not used, factorize columns
 *>                depending on ABSTOL and RELTOL.
 *>
@@ -134,7 +135,8 @@
 *> \verbatim
 *>          KP1 is INTEGER
 *>          The index of the column with the maximum column 2-norm in
-*>          the whole original matrix A. KP1 > 0.
+*>          the whole original matrix A_orig in original matrix A_orig
+*>          indexing scheme. 0 < KP1 <= N_orig_mat.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
@@ -180,7 +182,10 @@
 *> \param[out] KF
 *> \verbatim
 *>          KF is INTEGER
-*>          The number of columns actually factorized.
+*>          Factorization rank of the matrix A,
+*>          i.e. the rank of the factor R, i.e.
+*>          the number of factorized partial columns that are non-zero
+*>          at each step. 0 <= KF <= min(M-IOFFSET,N).
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
@@ -377,15 +382,11 @@
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
 *
-*              Set KF, the number of factorized columns.
-*              TODO: fix USETOL
-               IF( MAXC2NRMK.LE.ABSTOL
-     $             .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+*              Set KF, the number of factorized columns
+*              that are not zero relative to the original
+*              whole matrix A, i.e. the rank of the factor R.
 *
-                  KF = K - 1
-               ELSE
-                  KF = KMAX
-               END IF
+               KF = K - 1
 *
 *              Set TAUs corresponding to the columns that were not
 *              factorized to ZERO, i.e. set TAU(K:MINMNFACT) to ZERO.

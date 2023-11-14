@@ -320,11 +320,14 @@
 *> \param[out] K
 *> \verbatim
 *>          K is INTEGER
-*>          The number of columns that were factorized.
-*>          K is the factorization rank.
+*>          The rank of the factor R, which is the same as
+*>          the number of factorized columns that were non-zero.
 *>          0 <= K <= min( M, min(KMAX,N) ).
 *>
-*>          If K = 0, the arrays A, TAU, JPIV were not modified.
+*>          NOTE: If K = 0, the arrays A and B are not modified;
+*>                          the array TAU(1:min(M,N)) is set to ZERO;
+*>                          the elements of the array JPIV are set as
+*>                          follows: for j = 1:N, JPIV(j) = j.
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
@@ -384,7 +387,7 @@
 *>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors.
 *>
-*>          If 0 < K <= MIN(M,N), only elements TAU(1:K) of
+*>          If 0 < K <= min(M,N), only the elements TAU(1:K) of
 *>          the array TAU may be modified. The elements
 *>          TAU(K+1:min(M,N)) are set to zero.
 *>          If K = 0, all elements of TAU are set to zero.
@@ -535,7 +538,7 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            LQUERY, DONE, USETOL
+      LOGICAL            LQUERY, DONE
       INTEGER            IWS, J, JB, JBF, JMAXB, JMAX,
      $                   JMAXC2NRM, KP1, LWKOPT, MINMN, NA, NB, NBMIN,
      $                   NX
@@ -682,21 +685,17 @@
 *
       EPS = DLAMCH('Epsilon')
 *
-      USETOL = .FALSE.
-*
 *     Adjust ABSTOL
 *
       IF( ABSTOL.GE.ZERO ) THEN
          SAFMIN = DLAMCH('Safe minimum')
          ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
-         USETOL = .TRUE.
       END IF
 *
 *     Adjust RELTOL
 *
       IF( RELTOL.GE.ZERO ) THEN
          RELTOL = MAX( RELTOL, EPS )
-         USETOL = .TRUE.
       END IF
 *
 *     ===================================================================
@@ -715,11 +714,7 @@
 
       WRITE(*,*) "=======  DGEQP3RK ((( ZERO MATRIX ))) ===="
 
-         IF( USETOL ) THEN
-            K = 0
-         ELSE
-            K = JMAX
-         END IF
+         K = 0
 *
          MAXC2NRMK = ZERO
          RELMAXC2NRMK = ZERO

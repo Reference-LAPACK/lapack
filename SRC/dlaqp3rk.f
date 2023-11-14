@@ -103,7 +103,11 @@
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The number of columns to factorize.
+*>          Factorization block size, i.e the number of columns
+*>          to factorize in the matrix A. 0 <= NB <= min(M-IOFFSET,N).
+*>
+*>          If NB = 0, then the routine exits immediately.
+*>          This means that the factorization is not performed.
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
@@ -128,25 +132,27 @@
 *>          The tolerance (stopping threshold) for the ratio
 *>          abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of
 *>          the residual matrix R22(K) and the maximum column 2-norm of
-*>          the original matrix A. The algorithm converges (stops the
-*>          factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is less
-*>          than or equal to RELTOL.
+*>          the original matrix A_orig. The algorithm converges (stops
+*>          the factorization), when abs(R(K+1,K+1))/abs(R(1,1)) is
+*>          less than or equal to RELTOL.
 *>
 *>          Here, abs(R(1,1)) is the maximum column 2-norm of the
-*>          original matrix A; EPS = DLAMCH('E').
+*>          original matrix A_orig; EPS = DLAMCH('E').
 *> \endverbatim
 *>
 *> \param[in] KP1
 *> \verbatim
 *>          KP1 is INTEGER
 *>          The index of the column with the maximum column 2-norm in
-*>          the whole original matrix A. KP1 > 0.
+*>          the whole original matrix A_orig in original matrix A_orig
+*>          indexing scheme. 0 < KP1 <= N_orig_mat.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
 *> \verbatim
 *>          MAXC2NRM is DOUBLE PRECISION
-*>          The maximum column 2-norm of the whole original matrix.
+*>          The maximum column 2-norm of the whole original
+*>          matrix A_orig.
 *>          MAXC2NRMK >= 0.
 *> \endverbatim
 *>
@@ -194,14 +200,19 @@
 *> \param[out] KB
 *> \verbatim
 *>          KB is INTEGER
-*>          The number of columns actually factorized.
+*>          Factorization rank of the matrix A,
+*>          i.e. the rank of the factor R, i.e.
+*>          the number of actually factorized partial columns that are
+*>          non-zero at each step. 0 <= KB <= min(M-IOFFSET,N).
 *> \endverbatim
 *>
 *> \param[out] KF
 *> \verbatim
 *>          KF is INTEGER
-*>          The number of columns of the original whole matrix A
-*>          factorized.
+*>          Factorization rank of the original whole matrix A_orig,
+*>          i.e. the rank of the factor R_orig, i.e.
+*>          the number of actually factorized partial columns that are
+*>          non-zero at each step. 0 <= KF <= min(M,N+IOFFSET).
 *> \endverbatim
 *
 *> \param[out] MAXC2NRMK
@@ -209,7 +220,7 @@
 *>          MAXC2NRMK is DOUBLE PRECISION
 *>          The maximum column 2-norm of the residual matrix A22(K),
 *>          when factorization stopped at rank K. MAXC2NRMK >= 0.
-*>          ( Rank K is with respect to the original matrix A )
+*>          ( Rank K is with respect to the original matrix A_orig )
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
@@ -225,7 +236,7 @@
 *>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
 *>          2-norm of the residual matrix A22 ( when factorization
 *>          stopped) and the maximum column 2-norm of the
-*>          original matrix A. RELMAXC2NRMK >= 0.
+*>          original matrix A_orig. RELMAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] JPIV
@@ -388,7 +399,7 @@
 *
          IF( I.EQ.1 ) THEN
 *
-*           We are at the first column of the original whole matrix A,
+*           We are at the first column of the original whole matrix A_orig,
 *           therefore we use the computed KP1 and MAXC2NRM from the
 *           main routine.
 *
@@ -417,7 +428,7 @@
 *           Quick return, if the submatrix A(I:M,K:N) is
 *           a zero matrix. We need to check it only if the column index
 *           (same as row index) is larger than 2, since the condition
-*           for the whole original matrix is checked in the main
+*           for the whole original matrix A_orig is checked in the main
 *           routine.
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
@@ -428,32 +439,24 @@
 *
                DONE = .TRUE.
 *
-*              Set KB, the number of factorized columns in the block;
+*              Set KB, the number of factorized partial columns
+*                      that are non-zero at each step in the block,
+*                      i.e. the rank of the factor R.
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
-*                      the original whole matrix A;
-*              Set KF, the number of factorized columns in the original
-*                      whole matrix A.
-*              TODO: fix USETOL
-               IF( MAXC2NRMK.LE.ABSTOL
-     $             .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
-
-
+*                      the original whole matrix A_orig;
+*              Set KF, the number of factorized partial columns that
+*                      are non zero at each step in the whole original
+*                      whole matrix A_orig, i.e. the rank of the
+*                      factor R_orig. KF = IOFFSET+KB = IF.
+*
                   WRITE(*,*)
      $            "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
      $            ABSTOL,  K
 *
-                  KB = K - 1
-                  IF = I - 1
-                  KF = IOFFSET + KB
-*
-               ELSE
-*
-                  KB = K - 1
-                  IF = I - 1
-                  KF = KMAX
-*
-               END IF
+               KB = K - 1
+               IF = I - 1
+               KF = IF
 *
 *              There is no need to apply the block reflector to the
 *              residual of the matrix A stored in A(KB+1:M,KB+1:N),
@@ -507,12 +510,16 @@
 *
                DONE = .TRUE.
 *
-*              Set KB, the number of factorized columns in the block;
+*              Set KB, the number of factorized partial columns
+*                      that are non-zero at each step in the block,
+*                      i.e. the rank of the factor R.
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
-*                      the original whole matrix A;
-*              Set KF, the number of factorized columns in the original
-*                      whole matrix A, KF = IOFFSET+KB = IF.
+*                      the original whole matrix A_orig;
+*              Set KF, the number of factorized partial columns that
+*                      are non zero at each step in the whole original
+*                      whole matrix A_orig, i.e. the rank of the
+*                      factor R_orig. KF = IOFFSET+KB = IF.
 *
                   KB = K - 1
                   IF = I - 1
@@ -581,7 +588,7 @@
 *           for VN1 and VN2 since we use the element with the index
 *           larger than K in the next loop step.)
 *        4) Save the pivot interchange with the indices relative to the
-*           the original matrix A, not the block A(1:M,1:N).
+*           the original matrix A_orig, not the block A(1:M,1:N).
 *
          IF( KP.NE.K ) THEN
             CALL DSWAP( M, A( 1, KP ), 1, A( 1, K ), 1 )
@@ -702,9 +709,9 @@
 *        Set KB, the number of factorized columns in the block;
 *        Set IF, the number of processed rows in the block, which
 *                is the same as the number of processed rows in
-*                the original whole matrix A, IF = IOFFSET + KB;
+*                the original whole matrix A_orig, IF = IOFFSET + KB;
 *        Set KF, the number of factorized columns in the original
-*                whole matrix A, KF = IOFFSET+KB = IF.
+*                whole matrix A_orig, KF = IOFFSET+KB = IF.
 *
       KB = K
       IF = I
