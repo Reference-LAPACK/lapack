@@ -177,7 +177,8 @@ set(CLASRC
    cgbtf2.f cgbtrf.f cgbtrs.f cgebak.f cgebal.f cgebd2.f cgebrd.f
    cgecon.f cgeequ.f cgees.f  cgeesx.f cgeev.f  cgeevx.f
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f
-   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f
+   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f
+   cgeqp3.f cgeqp3rk.f
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
    cgesvj.f cgejsv.f cgsvj0.f cgsvj1.f
@@ -213,7 +214,7 @@ set(CLASRC
    clanhb.f clanhe.f
    clanhp.f clanhs.f clanht.f clansb.f clansp.f clansy.f clantb.f
    clantp.f clantr.f clapll.f clapmt.f clarcm.f claqgb.f claqge.f
-   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqsb.f
+   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqp2rk.f claqp3rk.f claqsb.f
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f

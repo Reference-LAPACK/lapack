@@ -89,7 +89,7 @@ CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
    cchkhe.o cchkhe_rook.o cchkhe_rk.o  \
    cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o \
-   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o \
+   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkqp3rk.o cchkql.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o \
    cchksy_aa.o cchksy_aa_2stage.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \

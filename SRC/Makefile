@@ -211,8 +211,8 @@ CLASRC = \
    cgbtf2.o cgbtrf.o cgbtrs.o cgebak.o cgebal.o cgebd2.o cgebrd.o \
    cgecon.o cgeequ.o cgees.o  cgeesx.o cgeev.o  cgeevx.o \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
-   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
-   cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
+   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o \
+   cgeqp3.o cgeqp3rk.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o \
    cgesvj.o cgejsv.o cgsvj0.o cgsvj1.o \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
@@ -246,7 +246,7 @@ CLASRC = \
    clanhb.o clanhe.o \
    clanhp.o clanhs.o clanht.o clansb.o clansp.o clansy.o clantb.o \
    clantp.o clantr.o clapll.o clapmt.o clarcm.o claqgb.o claqge.o \
-   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqsb.o \
+   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqp2rk.o claqp3rk.o claqsb.o \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
    clarf.o  clarfb.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
