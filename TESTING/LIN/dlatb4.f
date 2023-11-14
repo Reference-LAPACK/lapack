@@ -227,7 +227,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'QK' ) ) THEN
 *
-*        xQK: Set parameters to generate a general
+*        xQK: truncated QR with pivoting.
+*             Set parameters to generate a general
 *             M x N matrix.
 *
 *        Set TYPE, the type of matrix to be generated.  'N' is nonsymmetric.

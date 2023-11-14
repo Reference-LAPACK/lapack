@@ -10,7 +10,8 @@
 *
 *      SUBROUTINE DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
 *     $                      NNB, NBVAL, NXVAL, THRESH, A, COPYA,
-*     $                      B, COPYB, S, TAU, WORK, IWORK, NOUT )
+*     $                      B, COPYB, S, TAU,
+*     $                      WORK, IWORK, NOUT )
 *      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
@@ -178,7 +179,8 @@
 *  =====================================================================
       SUBROUTINE DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
      $                      NNB, NBVAL, NXVAL, THRESH, A, COPYA,
-     $                      B, COPYB, S, TAU, WORK, IWORK, NOUT )
+     $                      B, COPYB, S, TAU,
+     $                      WORK, IWORK, NOUT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine --
@@ -186,13 +188,13 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            NM, NN, NNS, NNB, NOUT
+      INTEGER            NM, NN, NNB, NNS, NOUT
       DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
-     $                   NVAL( * ), NXVAL( * )
+      INTEGER            IWORK( * ), NBVAL( * ), MVAL( * ), NVAL( * ),
+     $                   NSVAL( * ), NXVAL( * )
       DOUBLE PRECISION   A( * ), COPYA( * ), B( * ), COPYB( * ),
      $                   S( * ), TAU( * ), WORK( * )
 *     ..
@@ -215,12 +217,12 @@
      $                   INB, IND_OFFSET_GEN,
      $                   IND_IN, IND_OUT, INS, INFO,
      $                   ISTEP, J, J_INC, J_FIRST_NZ, JB_ZERO, K,
-     $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK, M,
-     $                   MINMN, MINMNB_GEN, MODE, N, NB, NB_ZERO,
-     $                   NERRS, NFAIL, NB_GEN, NRHS, NRUN, NX, SHIFT,
-     $                   T
+     $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK,
+     $                   LWORK_DORMQR, M, MINMN, MINMNB_GEN, MODE, N,
+     $                   NB, NB_ZERO, NERRS, NFAIL, NB_GEN, NRHS,
+     $                   NRUN, NX, SHIFT, T
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
-     $                   MAXC2NRMK, RELMAXC2NRMK, DTEMP,
+     $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK,
      $                   TEST1, TEST2
 *     ..
 *     .. Local Arrays ..
@@ -233,10 +235,9 @@
       EXTERNAL           DLAMCH, DQPT01, DQRT11, DQRT12, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DGEQP3RK, DLACPY,
-     $                   DAXPY, DSWAP,
-     $                   DORMQR, DLAORD, DLASET, DLATB4, DLATMS,
-     $                   ICOPY, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DAXPY, DGEQP3RK,
+     $                   DLACPY, DLAORD, DLASET, DLATB4, DLATMS,
+     $                   DORMQR, DSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, MOD
@@ -244,7 +245,7 @@
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
       CHARACTER*32       SRNAMT
-      INTEGER            INFOT, IOUNIT, DORMQR_LWORK
+      INTEGER            INFOT, IOUNIT
 *     ..
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, IOUNIT, OK, LERR
@@ -755,14 +756,6 @@
                   CALL DLACPY( 'All', M, NRHS, COPYB, LDA,
      $                         B,  LDA )
                   CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
-*
-*
-*                 Compute the QR factorization with pivoting of A
-*
-                  LW = MAX( 1, MAX( 2*N+NB*( N+1 ) , 3*N+NRHS-1 ) )
-*
-*                 Compute DGEQP3RK factorization of A.
-*
 
                   ABSTOL = -1.0
                   RELTOL = -1.0
@@ -888,14 +881,24 @@
      $               IWORK(5), IWORK(6), IWORK(7), IWORK(8)
                   WRITE(*,*) " "
 
+
+
+
+*
+*
+*                 Compute the QR factorization with pivoting of A
+*
+                  LW = MAX( 1, MAX( 2*N + NB*( N+NRHS+1 ),
+     $                              3*N + NRHS - 1 ) )
+*
+*                 Compute DGEQP3RK factorization of A.
+*
                   SRNAMT = 'DGEQP3RK'
                   CALL DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL,
      $                           A, LDA, KFACT, MAXC2NRMK,
      $                           RELMAXC2NRMK, IWORK( N+1 ), TAU,
      $                           WORK, LW, IWORK( 2*N+1 ), INFO )
-
-
-     *
+*
 *
                   WRITE(*,*) "A after DGEQP3RK"
                   DO I = 1, LDA
@@ -1078,10 +1081,10 @@
 *     $               ,B((11-1)*LDA+I), B((12-1)*LDA+I)
                   END DO
 *
-                  DORMQR_LWORK = MAX(1, NRHS)
+                  LWORK_DORMQR = MAX(1, NRHS)
                   CALL DORMQR( 'Left', 'Transpose', M, NRHS, KFACT,
      $                         A, LDA, TAU, B, LDA, WORK,
-     $                         DORMQR_LWORK, INFO )
+     $                         LWORK_DORMQR, INFO )
 *
 *
                  WRITE(*,*)
@@ -1180,8 +1183,8 @@
       CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ' M =', I5, ', N =', I5, ', NRHS =', I5,
-     $        ', KMAX =', I5, ', ABSTOL =', G12.5, ', RELTOL =', G12.5,
-     $        ', NB =', I4, ', NX =', I4,
+     $        ', KMAX =', I5, ', ABSTOL =', G12.5,
+     $        ', RELTOL =', G12.5, ', NB =', I4, ', NX =', I4,
      $        ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
 *
 *     End of DCHKQP3RK
