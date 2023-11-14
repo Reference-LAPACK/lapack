@@ -532,7 +532,7 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, DONE, USETOL
       INTEGER            IWS, J, JB, JBF, JMAXB, JMAX,
-     $                   JMAXC2NRM, KP0, LWKOPT, MINMN, NA, NB, NBMIN,
+     $                   JMAXC2NRM, KP1, LWKOPT, MINMN, NA, NB, NBMIN,
      $                   NX
       DOUBLE PRECISION   EPS, MAXC2NRM, SAFMIN
 *     ..
@@ -700,10 +700,10 @@
 *     ==================================================================
 *
 *     Compute the pivot column index and the maximum column 2-norm
-*     for the whole matrix A(1:M,1:N).
+*     for the whole original matrix stored in A(1:M,1:N).
 *
-      KP0 =  IDAMAX( N, WORK( 1 ), 1 )
-      MAXC2NRM = WORK( KP0 )
+      KP1 = IDAMAX( N, WORK( 1 ), 1 )
+      MAXC2NRM = WORK( KP1 )
 *
 *     JMAX is the maximum index of the column to be factorized,
 *     which is also limited by the first stopping criterion KMAX.
@@ -764,7 +764,7 @@
 *           Factorize JB columns among the columns A(J:N).
 *
             CALL DLAQP3RK( M, N-J+1, NRHS, J-1, JB, KMAX, ABSTOL,
-     $                     RELTOL, KP0, MAXC2NRM, A( 1, J ), LDA, JBF,
+     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, JBF,
      $                     DONE, KF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
      $                     WORK( J ), WORK( N+J ),
@@ -804,7 +804,7 @@
          IF( J.LE.JMAX ) THEN
 *
             CALL DLAQP2RK( M, N-J+1, NRHS, J-1, JMAX-J+1, ABSTOL,
-     $                     RELTOL, KP0, MAXC2NRM, A( 1, J ), LDA, KF,
+     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA, KF,
      $                     MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
      $                     TAU( J ), WORK( J ), WORK( N+J ),
      $                     WORK( 2*N+1 ) )

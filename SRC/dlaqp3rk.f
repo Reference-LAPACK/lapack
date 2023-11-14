@@ -136,11 +136,11 @@
 *>          original matrix A; EPS = DLAMCH('E').
 *> \endverbatim
 *>
-*> \param[in] KP0
+*> \param[in] KP1
 *> \verbatim
-*>          KP0 is INTEGER
-*>          The index of column with the maximum column 2-norm for
-*>          the whole original matrix A. KP0 > 0.
+*>          KP1 is INTEGER
+*>          The index of the column with the maximum column 2-norm in
+*>          the whole original matrix A. KP1 > 0.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM

@@ -19,12 +19,12 @@
 *  ===========
 *
 *      SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
-*     $                     KP0, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
+*     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
 *     $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
 *      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*      INTEGER            IOFFSET, KP0, KF, KMAX, LDA, M, N, NRHS
+*      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
 *      DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
 *     $                   RELTOL
 *     ..
@@ -130,11 +130,11 @@
 *>          original matrix A; EPS = DLAMCH('E').
 *> \endverbatim
 *>
-*> \param[in] KP0
+*> \param[in] KP1
 *> \verbatim
-*>          KP0 is INTEGER
-*>          The index of column with the maximum column 2-norm for
-*>          the whole original matrix A. KP0 > 0.
+*>          KP1 is INTEGER
+*>          The index of the column with the maximum column 2-norm in
+*>          the whole original matrix A. KP1 > 0.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
@@ -269,7 +269,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL,
-     $                     KP0, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
+     $                     KP1, MAXC2NRM, A, LDA, KF, MAXC2NRMK,
      $                     RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK )
       IMPLICIT NONE
 *
@@ -278,7 +278,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      INTEGER            IOFFSET, KP0, KF, KMAX, LDA, M, N, NRHS
+      INTEGER            IOFFSET, KP1, KF, KMAX, LDA, M, N, NRHS
       DOUBLE PRECISION   ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK,
      $                   RELTOL
 *     ..
@@ -330,7 +330,7 @@
 *
 *           If we are at the first column of the original whole matrix A.
 *
-            KP = KP0
+            KP = KP1
             MAXC2NRMK = MAXC2NRM
             RELMAXC2NRMK = ONE
 *
