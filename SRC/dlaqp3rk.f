@@ -48,9 +48,9 @@
 *> \verbatim
 *>
 *> DLAQP3RK computes a step of truncated QR factorization with column
-*> pivoting of a real M-by-N matrix A by using Level 3 BLAS.  The routine
+*> pivoting of a real M-by-N matrix A by using Level 3 BLAS. The routine
 *> tries to factorize NB columns from A starting from the row IOFFSET+1,
-*> and updates all of the matrix with BLAS 3 xGEMM, the number of accually
+*> and updates all of the matrix with BLAS 3 xGEMM, the number of actually
 *> factorized columns is returned in KB, KB <= NB.
 *>
 *> Cases when the number of factorized columns KB < NB:
@@ -61,8 +61,14 @@
 *>
 *> (2) Whenever the stopping criterion ABSTOL or RELTOL is satisfied,
 *> the factorization is stopped, the logical DONE is returned
-*> as TRUE.  The number of factorized columns which is smaller than NB
-*> returned in KB.
+*> as TRUE. The number of factorized columns which is smaller than NB
+*> is returned in KB.
+*>
+*> (3) Whenever NaN is detected in the matrix A or in the array TAU,
+*> the factorization is stopped, the logical DONE is returned
+*> as TRUE. The number of factorized columns which is smaller than NB
+*> is returned in KB. The INFO parameter is set to the column index
+*> of the first NaN occurrence.
 *>
 *> Block A(1:IOFFSET,1:N) is accordingly pivoted, but not factorized.
 *>
@@ -97,7 +103,9 @@
 *> \verbatim
 *>          IOFFSET is INTEGER
 *>          The number of rows of the matrix A that must be pivoted
-*>          but no factorized. IOFFSET >= 0.
+*>          but no factorized. IOFFSET also represents the number of
+*>          columns of the original matrix that have been factorized
+*>          in the previous steps. IOFFSET >= 0.
 *> \endverbatim
 *>
 *> \param[in] NB
@@ -107,7 +115,8 @@
 *>          to factorize in the matrix A. 0 <= NB <= min(M-IOFFSET,N).
 *>
 *>          If NB = 0, then the routine exits immediately.
-*>          This means that the factorization is not performed.
+*>             This means that the factorization is not performed,
+*>             the matrices A and B are not modified.
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
@@ -121,6 +130,14 @@
 *>          The algorithm converges (stops the factorization) when
 *>          the maximum column 2-norm of the residual matrix R22(K)
 *>          is less than or equal to ABSTOL.
+*>
+*>          a) If ABSTOL < 0.0, then this stopping criterion is not
+*>                used, the routine factorizes columns depending
+*>                on KMAX and RELTOL.
+*>                This includes the case ABSTOL = -Inf.
+*>
+*>          b) If 0.0 <= ABSTOL then the input value
+*>                of ABSTOL is used.
 *> \endverbatim
 *>
 *> \param[in] RELTOL
@@ -135,9 +152,6 @@
 *>          the original matrix A_orig. The algorithm converges (stops
 *>          the factorization), when abs(R(K+1,K+1))/abs(R(1,1)) is
 *>          less than or equal to RELTOL.
-*>
-*>          Here, abs(R(1,1)) is the maximum column 2-norm of the
-*>          original matrix A_orig; EPS = DLAMCH('E').
 *> \endverbatim
 *>
 *> \param[in] KP1
@@ -167,12 +181,12 @@
 *>
 *>          On exit:
 *>          1. The elements in block A(IOFFSET+1:M,1:KB) below
-*>             the diagonal,together with the array TAU, represent
+*>             the diagonal together with the array TAU, represent
 *>             the orthogonal matrix Q(K) as a product of elementary
 *>             reflectors.
 *>          2. The block of the matrix A stored in A(IOFFSET+1:M,1:KB)
 *>             is the triangular factor obtained.
-*>          3. The block of the the matrix A stored in A(1:IOFFSET,1:N)
+*>          3. The block of the matrix A stored in A(1:IOFFSET,1:N)
 *>             has been accordingly pivoted, but no factorized.
 *>          4. The rest of the array A, block A(IOFFSET+1:M,KB+1:N+NRHS).
 *>             The left part A(IOFFSET+1:M,KB+1:N) of
@@ -190,13 +204,15 @@
 *> \endverbatim
 *>
 *> \param[out]
-*>
 *> \verbatim
 *>          DONE is LOGICAL
-*>          TRUE, if the factorization completed,
+*>          TRUE, if the factorization completed before processing
+*>                all min(M-IOFFSET,N) columns due to ABSTOL or RELTOL
+*>                criterion, or when NaN was detected in the matrix A
+*>                or in the array TAU.
 *>          FALSE, otherwise.
 *> \endverbatim
-*
+*>
 *> \param[out] KB
 *> \verbatim
 *>          KB is INTEGER
@@ -212,13 +228,6 @@
 *>          The maximum column 2-norm of the residual matrix A22(K),
 *>          when factorization stopped at rank K. MAXC2NRMK >= 0.
 *>          ( Rank K is with respect to the original matrix A_orig )
-*> \endverbatim
-*>
-*> \param[out] MAXC2NRMK
-*> \verbatim
-*>          MAXC2NRMK is DOUBLE PRECISION
-*>          The maximum column 2-norm of the residual matrix A22,
-*>          when factorization stopped. MAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
@@ -239,7 +248,7 @@
 *>
 *> \param[out] TAU
 *> \verbatim
-*>          TAU is DOUBLE PRECISION array, dimension (NB)
+*>          TAU is DOUBLE PRECISION array, dimension (min(M-IOFFSET,N))
 *>          The scalar factors of the elementary reflectors.
 *> \endverbatim
 *>
@@ -287,7 +296,7 @@
 *>          1) INFO = 0: successful exit.
 *>          2) INFO < 0: if INFO = -i, the i-th argument had an
 *>                      illegal value.
-*>          3) INFO > 0: exception occured, i.e.
+*>          3) INFO > 0: exception occurred, i.e.
 *>
 *>             NaN, +Inf (or -Inf) element was detected in the
 *>             matrix A, either on input or during the computation.
@@ -295,9 +304,9 @@
 *>             during the computation.
 *>
 *>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
-*>               detected and routine stops the computation.
+*>               detected and the routine stops the computation.
 *>               The j1-th column of the matrix A or in the j1-th
-*>               element of array TAU contains the first occurence
+*>               element of array TAU contains the first occurrence
 *>               of NaN at K+1 factorization step ( when K columns
 *>               have been factorized ).
 *>
@@ -315,7 +324,7 @@
 *>                was detected and the routine continues
 *>                the computation until completion.
 *>                The j2-th column of the matrix A contains the first
-*>                occurence of +Inf (or -Inf) at K+1 factorization
+*>                occurrence of +Inf (or -Inf) at K+1 factorization
 *>                step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *

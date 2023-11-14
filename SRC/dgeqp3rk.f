@@ -43,7 +43,8 @@
 *> Task 1: The routine computes a truncated (rank K) or full rank
 *> Householder QR factorization with column pivoting of a real
 *> M-by-N matrix A using Level 3 BLAS. K is the number of columns
-*> that were factorized, i.e. factorization rank, K <= min(M,N).
+*> that were factorized, i.e. factorization rank of the
+*> factor R, K <= min(M,N).
 *>
 *>  A * P(K) = Q(K) * R(K)  =
 *>
@@ -101,8 +102,8 @@
 *>  The algorithm stops when any of these conditions is first
 *>  satisfied, otherwise the whole matrix A is factorized.
 *>
-*>  For full rank factorization use the values KMAX >= min(M,N),
-*>  ABSTOL < 0.0 and RELTOL < 0.0.
+*>  To factorize the whole matrix A, use the values
+*>  KMAX >= min(M,N), ABSTOL < 0.0 and RELTOL < 0.0.
 *>
 *>  The routine returns:
 *>     a) Q(K), R(K)_approx = ( R11(K), R12(K) ),
@@ -137,7 +138,7 @@
 *>     H(j) = I - tau * v * v**T,
 *>
 *> where 1 <= j <= K and
-*>   I    is an M-by_M identity matrix,
+*>   I    is an M-by-M identity matrix,
 *>   tau  is a real scalar,
 *>   v    is a real vector with v(1:j-1) = 0 and v(j) = 1.
 *>
@@ -164,7 +165,7 @@
 *> \param[in] NRHS
 *> \verbatim
 *>          NRHS is INTEGER
-*>          The number of right hand sides, i.e., the number of
+*>          The number of right hand sides, i.e. the number of
 *>          columns of the matrix B. NRHS >= 0.
 *> \endverbatim
 *>
@@ -178,8 +179,8 @@
 *>          i.e. the maximum factorization rank. KMAX >= 0.
 *>
 *>          a) If KMAX >= min(M,N), then this stopping criterion
-*>                is not used, factorize columns depending
-*>                on ABSTOL and RELTOL.
+*>                is not used, the routine factorizes columns
+*>                depending on ABSTOL and RELTOL.
 *>
 *>          b) If KMAX = 0, then this stopping criterion is
 *>                satisfied on input and the routine exits immediately.
@@ -198,14 +199,15 @@
 *>          maximum column 2-norm of the residual matrix R22(K).
 *>          The algorithm converges (stops the factorization) when
 *>          the maximum column 2-norm of the residual matrix R22(K)
-*>          is less than or equal to ABSTOL.
+*>          is less than or equal to ABSTOL. Let SAFMIN = DLAMCH('S').
 *>
 *>          a) If ABSTOL is NaN, then no computation is performed
 *>                and an error message ( INFO = -5 ) is issued
 *>                by XERBLA.
 *>
 *>          b) If ABSTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on KMAX and RELTOL.
+*>                used, the routine factorizes columns depending
+*>                on KMAX and RELTOL.
 *>                This includes the case ABSTOL = -Inf.
 *>
 *>          c) If 0.0 <= ABSTOL < 2*SAFMIN, then ABSTOL = 2*SAFMIN
@@ -214,16 +216,16 @@
 *>          d) If 2*SAFMIN <= ABSTOL then the input value
 *>                of ABSTOL is used.
 *>
-*>          If ABSTOL chosen above is >= abs(R(1,1)), then this stopping
-*>          criterion is satisfied on input and routine exits
-*>          immediately after R(1,1) is computed to return it in
-*>          MAXC2NORMK, also RELMAXC2NORMK is returned as 1.0.
+*>          Let MAXC2NRM_WHOLE be the maximum column 2-norm of the
+*>          whole original matrix A.
+*>          If ABSTOL chosen above is >= MAXC2NRM_WHOLE, then this
+*>          stopping criterion is satisfied on input and routine exits
+*>          immediately after MAXC2NRM_WHOLE is computed. The routine
+*>          returns MAXC2NRM_WHOLE in MAXC2NORMK,
+*>          and 1.0 in RELMAXC2NORMK.
 *>          This includes the case ABSTOL = +Inf. This means that the
 *>          factorization is not performed, the matrices A and B are not
 *>          modified, and the matrix A is itself the residual.
-*>
-*>          Here, abs(R(1,1)) is the maximum column 2-norm of the
-*>          original matrix A; SAFMIN = DLAMCH('S').
 *> \endverbatim
 *>
 *> \param[in] RELTOL
@@ -237,14 +239,15 @@
 *>          the residual matrix R22(K) and the maximum column 2-norm of
 *>          the original matrix A. The algorithm converges (stops the
 *>          factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is less
-*>          than or equal to RELTOL.
+*>          than or equal to RELTOL. Let EPS = DLAMCH('E').
 *>
 *>          a) If RELTOL is NaN, then no computation is performed
 *>                and an error message ( INFO = -6 ) is issued
 *>                by XERBLA.
 *>
 *>          b) If RELTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on KMAX and ABSTOL.
+*>                used, the routine factorizes columns depending
+*>                on KMAX and ABSTOL.
 *>                This includes the case RELTOL = -Inf.
 *>
 *>          c) If 0.0 <= RELTOL < EPS, then RELTOL = EPS is used.
@@ -253,18 +256,19 @@
 *>          d) If EPS <= RELTOL then the input value of RELTOL
 *>                is used.
 *>
+*>          Let MAXC2NRM_WHOLE be the maximum column 2-norm of the
+*>          whole original matrix A.
 *>          If RELTOL chosen above is >= 1.0, then this stopping
 *>          criterion is satisfied on input and routine exits
-*>          immediately after R(1,1) is computed to return it in
-*>          MAXC2NORMK, also RELMAXC2NORMK is returned as 1.0.
+*>          immediately after MAXC2NRM_WHOLE is computed.
+*>          The routine returns MAXC2NRM_WHOLE in MAXC2NORMK,
+*>          and 1.0 in RELMAXC2NORMK.
 *>          This includes the case RELTOL = +Inf. This means that the
 *>          factorization is not performed, the matrices A and B are not
 *>          modified, and the matrix A is itself the residual.
 *>
 *>          NOTE: We recommend RELTOL to satisfy
 *>                min(max(M,N)*EPS, sqrt(EPS)) <= RELTOL
-*>
-*>          Here, EPS = DLAMCH('E').
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -286,7 +290,7 @@
 *>             of the matrix A:
 *>
 *>            1) If K = 0, A(1:M,1:N) contains the original matrix A.
-*>            2) If K > 0, A(1:M,1:N) contains parts of
+*>            2) If K > 0, A(1:M,1:N) contains parts of the
 *>            factors:
 *>
 *>              1. The elements below the diagonal of the subarray
@@ -321,8 +325,15 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The rank of the factor R, which is the same as
-*>          the number of factorized columns that were non-zero.
+*>          the number of non-zero rows of the factor R.
 *>          0 <= K <= min( M, min(KMAX,N) ).
+*>
+*>          K can also be described as the number of factorized
+*>          partial columns at each factorization step that are
+*>          non-zero.
+*>
+*>          K also represents the number of non-zero Householder
+*>          vectors.
 *>
 *>          NOTE: If K = 0, the arrays A and B are not modified;
 *>                          the array TAU(1:min(M,N)) is set to ZERO;
@@ -333,7 +344,7 @@
 *> \param[out] MAXC2NRMK
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
-*>          The maximum column 2-norm of the residual matrix A22(K),
+*>          The maximum column 2-norm of the residual matrix R22(K),
 *>          when factorization stopped at rank K. MAXC2NRMK >= 0.
 *>
 *>          a) If K = 0, i.e. the factorization was not performed,
@@ -354,10 +365,10 @@
 *> \param[out] RELMAXC2NRMK
 *> \verbatim
 *>          RELMAXC2NRMK is DOUBLE PRECISION
-*>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
-*>          2-norm of the residual matrix A22(K) (when factorization
+*>          The ratio MAXC2NRMK / MAXC2NRM_WHOLE of the maximum column
+*>          2-norm of the residual matrix R22(K) (when factorization
 *>          stopped at rank K) and maximum column 2-norm of the
-*>          original matrix A. RELMAXC2NRMK >= 0.
+*>          whole original matrix A. RELMAXC2NRMK >= 0.
 *>
 *>          a) If K = 0, i.e. the factorization was not performed,
 *>             the matrix A was not modified and is itself a residual
@@ -427,7 +438,7 @@
 *>          1) INFO = 0: successful exit.
 *>          2) INFO < 0: if INFO = -i, the i-th argument had an
 *>                      illegal value.
-*>          3) INFO > 0: exception occured, i.e.
+*>          3) INFO > 0: exception occurred, i.e.
 *>
 *>             NaN, +Inf (or -Inf) element was detected in the
 *>             matrix A, either on input or during the computation.
@@ -435,9 +446,9 @@
 *>             during the computation.
 *>
 *>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
-*>               detected and routine stops the computation.
+*>               detected and the routine stops the computation.
 *>               The j1-th column of the matrix A or in the j1-th
-*>               element of array TAU contains the first occurence
+*>               element of array TAU contains the first occurrence
 *>               of NaN at K+1 factorization step ( when K columns
 *>               have been factorized ).
 *>
@@ -455,7 +466,7 @@
 *>                was detected and the routine continues
 *>                the computation until completion.
 *>                The j2-th column of the matrix A contains the first
-*>                occurence of +Inf (or -Inf) at K+1 factorization
+*>                occurrence of +Inf (or -Inf) at K+1 factorization
 *>                step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *
@@ -474,8 +485,9 @@
 *
 *> \verbatim
 *> DGEQP3RK is based on the same BLAS3 Householder QR factorization
-*> algorithm with column pivoting as in DGEQP3 routine which uses DGEQRF
-*> to perform Householder QR factorization.
+*> algorithm with column pivoting as in DGEQP3 routine which uses
+*> DLARFG routine to generate Householder reflector
+*> for QR factorization.
 *>
 *> We can also write:
 *>

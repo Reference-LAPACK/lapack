@@ -43,10 +43,11 @@
 *>
 *> DLAQP2RK computes a truncated (rank K) or full rank Householder QR
 *> factorization with column pivoting of the block A(IOFFSET+1:M,1:N).
-*> The routine is calling Level 2 BLAS.  The block A(1:IOFFSET,1:N)
-*> is accordingly pivoted, but not factorized.  The routine also
-*> overwrites the matrix B block stored in A(IOFFSET+1:M,N+1:N+NRHS)
-*> with Q(K)**T * B.
+*> The routine is calling Level 2 BLAS. The block A(1:IOFFSET,1:N)
+*> is accordingly pivoted, but not factorized.
+*>
+*> The routine also overwrites the matrix B block stored
+*> in A(IOFFSET+1:M,N+1:N+NRHS) with Q(K)**T * B.
 *> \endverbatim
 *
 *  Arguments:
@@ -77,8 +78,7 @@
 *>          The number of rows of the matrix A that must be pivoted
 *>          but not factorized. IOFFSET also represents the number of
 *>          columns of the original matrix that have been factorized
-*>          in the previous steps.
-*>          IOFFSET >= 0.
+*>          in the previous steps. IOFFSET >= 0.
 *> \endverbatim
 *>
 *> \param[in] KMAX
@@ -91,15 +91,14 @@
 *>          i.e. the maximum factorization rank.
 *>          0 <= KMAX <= min(M-IOFFSET,N).
 *>
-*>          a) If KMAX = min(M-IOFFSET,N), then this stopping
+*>          a) If KMAX >= min(M-IOFFSET,N), then this stopping
 *>                criterion is not used, factorize columns
 *>                depending on ABSTOL and RELTOL.
 *>
 *>          b) If KMAX = 0, then this stopping criterion is
 *>                satisfied on input and the routine exits immediately.
 *>                This means that the factorization is not performed,
-*>                the matrices A and B are not modified, and
-*>                the matrix A is itself the residual.
+*>                the matrices A and B are not modified.
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
@@ -113,6 +112,14 @@
 *>          The algorithm converges (stops the factorization) when
 *>          the maximum column 2-norm of the residual matrix R22(K)
 *>          is less than or equal to ABSTOL.
+*>
+*>          a) If ABSTOL < 0.0, then this stopping criterion is not
+*>                used, the routine factorizes columns depending
+*>                on KMAX and RELTOL.
+*>                This includes the case ABSTOL = -Inf.
+*>
+*>          b) If 0.0 <= ABSTOL then the input value
+*>                of ABSTOL is used.
 *> \endverbatim
 *>
 *> \param[in] RELTOL
@@ -127,9 +134,6 @@
 *>          the original matrix A. The algorithm converges (stops the
 *>          factorization), when abs(R(K+1,K+1))/abs(R(1,1)) A is less
 *>          than or equal to RELTOL.
-*>
-*>          Here, abs(R(1,1)) is the maximum column 2-norm of the
-*>          original matrix A; EPS = DLAMCH('E').
 *> \endverbatim
 *>
 *> \param[in] KP1
@@ -143,8 +147,9 @@
 *> \param[in] MAXC2NRM
 *> \verbatim
 *>          MAXC2NRM is DOUBLE PRECISION
-*>          The maximum column 2-norm of the whole original matrix.
-*>          MAXC2NRMK >= 0.
+*>          The maximum column 2-norm of the whole original
+*>          matrix A_orig.
+*>          MAXC2NRM >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -158,12 +163,12 @@
 *>
 *>          On exit:
 *>          1. The elements in block A(IOFFSET+1:M,1:KF) below
-*>             the diagonal,together with the array TAU, represent
+*>             the diagonal together with the array TAU, represent
 *>             the orthogonal matrix Q(K) as a product of elementary
 *>             reflectors.
 *>          2. The block of the matrix A stored in A(IOFFSET+1:M,1:KF)
 *>             is the triangular factor obtained.
-*>          3. The block of the the matrix A stored in A(1:IOFFSET,1:N)
+*>          3. The block of the matrix A stored in A(1:IOFFSET,1:N)
 *>             has been accordingly pivoted, but no factorized.
 *>          4. The rest of the array A, block A(IOFFSET+1:M,KF+1:N+NRHS).
 *>             The left part A(IOFFSET+1:M,KF+1:N) of
@@ -192,17 +197,17 @@
 *> \param[out] MAXC2NRMK
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
-*>          The maximum column 2-norm of the residual matrix A22,
-*>          when factorization stopped. MAXC2NRMK >= 0.
+*>          The maximum column 2-norm of the residual matrix R22(K),
+*>          when factorization stopped at rank K. MAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] RELMAXC2NRMK
 *> \verbatim
 *>          RELMAXC2NRMK is DOUBLE PRECISION
-*>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
-*>          2-norm of the residual matrix A22 ( when factorization
-*>          stopped) and the maximum column 2-norm of the
-*>          original matrix A. RELMAXC2NRMK >= 0.
+*>          The ratio MAXC2NRMK / MAXC2NRM_WHOLE of the maximum column
+*>          2-norm of the residual matrix R22(K) (when factorization
+*>          stopped at rank K) and maximum column 2-norm of the
+*>          whole original matrix A. RELMAXC2NRMK >= 0.
 *> \endverbatim
 *>
 *> \param[out] JPIV
@@ -214,7 +219,7 @@
 *>
 *> \param[out] TAU
 *> \verbatim
-*>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
+*>          TAU is DOUBLE PRECISION array, dimension (min(M-IOFFSET,N))
 *>          The scalar factors of the elementary reflectors.
 *> \endverbatim
 *>
@@ -233,7 +238,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (N)
-*>          Used in DLARF subroutine to apply elementary
+*>          Used in DLARF subroutine to apply an elementary
 *>          reflector.
 *> \endverbatim
 *>
@@ -243,7 +248,7 @@
 *>          1) INFO = 0: successful exit.
 *>          2) INFO < 0: if INFO = -i, the i-th argument had an
 *>                      illegal value.
-*>          3) INFO > 0: exception occured, i.e.
+*>          3) INFO > 0: exception occurred, i.e.
 *>
 *>             NaN, +Inf (or -Inf) element was detected in the
 *>             matrix A, either on input or during the computation.
@@ -251,9 +256,9 @@
 *>             during the computation.
 *>
 *>           3a) If INFO = j1, where 1 <= j1 <= N, then NaN was
-*>               detected and routine stops the computation.
+*>               detected and the routine stops the computation.
 *>               The j1-th column of the matrix A or in the j1-th
-*>               element of array TAU contains the first occurence
+*>               element of array TAU contains the first occurrence
 *>               of NaN at K+1 factorization step ( when K columns
 *>               have been factorized ).
 *>
@@ -271,7 +276,7 @@
 *>                was detected and the routine continues
 *>                the computation until completion.
 *>                The j2-th column of the matrix A contains the first
-*>                occurence of +Inf (or -Inf) at K+1 factorization
+*>                occurrence of +Inf (or -Inf) at K+1 factorization
 *>                step K+1 ( when K columns have been factorized ).
 *> \endverbatim
 *
