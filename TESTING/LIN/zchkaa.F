@@ -154,11 +154,11 @@
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
-      COMPLEX*16         E( NMAX )
-*
-*    .. Allocatable Arrays ..
+*     ..
+*     .. Allocatable Arrays ..
       INTEGER AllocateStatus
-      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE::   RWORK, S
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE::  RWORK, S
+      COMPLEX*16, DIMENSION(:), ALLOCATABLE :: E
       COMPLEX*16, DIMENSION(:,:), ALLOCATABLE::  A, B, WORK
 *     ..
 *     .. External Functions ..
@@ -170,15 +170,16 @@
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
      $                   ZCHKLQ, ZCHKUNHR_COL, ZCHKPB, ZCHKPO, ZCHKPS,
-     $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQP3RK, ZCHKQL, ZCHKQR,
-     $                   ZCHKRQ, ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKSY_RK,
-     $                   ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ,
-     $                   ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE, ZDRVHE_ROOK,
-     $                   ZDRVHE_RK, ZDRVHE_AA, ZDRVHE_AA_2STAGE, ZDRVHP,
-     $                   ZDRVLS, ZDRVPB,  ZDRVPO, ZDRVPP, ZDRVPT,
-     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ZDRVSY_RK,
-     $                   ZDRVSY_AA, ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT,
-     $                   ZCHKQRTP, ZCHKLQT, ZCHKLQTP, ZCHKTSQR
+     $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQP3RK, ZCHKQL,
+     $                   ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY, ZCHKSY_ROOK,
+     $                   ZCHKSY_RK, ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR,
+     $                   ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE,
+     $                   ZDRVHE_ROOK, ZDRVHE_RK, ZDRVHE_AA,
+     $                   ZDRVHE_AA_2STAGE, ZDRVHP, ZDRVLS, ZDRVPB,
+     $                   ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
+     $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
+     $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
+     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -197,15 +198,18 @@
       DATA               THREQ / 2.0D0 / , INTSTR / '0123456789' /
 *
 *     .. Allocate memory dynamically ..
-      ALLOCATE (A ((KDMAX+1) * NMAX, 7), STAT = AllocateStatus)
+*
+      ALLOCATE ( A ( (KDMAX+1) * NMAX, 7 ), STAT = AllocateStatus)
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE (B (NMAX * MAXRHS, 4), STAT = AllocateStatus)
+      ALLOCATE ( B ( NMAX * MAXRHS, 4 ), STAT = AllocateStatus)
+      IF (AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      ALLOCATE ( WORK ( NMAX, NMAX+MAXRHS+10 ), STAT = AllocateStatus)
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE (WORK (NMAX, NMAX+MAXRHS+10), STAT = AllocateStatus)
+      ALLOCATE ( E( NMAX ), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE (S( 2*NMAX ), STAT = AllocateStatus)
+      ALLOCATE ( S( 2*NMAX ), STAT = AllocateStatus)
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
-      ALLOCATE (RWORK( 150*NMAX+2*MAXRHS ), STAT = AllocateStatus)
+      ALLOCATE ( RWORK( 150*NMAX+2*MAXRHS ), STAT = AllocateStatus)
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
 *     ..
 *     .. Executable Statements ..
