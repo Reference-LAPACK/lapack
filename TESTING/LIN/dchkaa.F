@@ -63,6 +63,7 @@
 *> DLQ    8               List types on next line if 0 < NTYPES <  8
 *> DQL    8               List types on next line if 0 < NTYPES <  8
 *> DQP    6               List types on next line if 0 < NTYPES <  6
+*> DQK    19              List types on next line if 0 < NTYPES <  19
 *> DTZ    3               List types on next line if 0 < NTYPES <  3
 *> DLS    6               List types on next line if 0 < NTYPES <  6
 *> DEQ
@@ -164,8 +165,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKORHR_COL, DCHKPB, DCHKPO, DCHKPS, DCHKPP,
-     $                   DCHKPT, DCHKQ3, DCHKQL, DCHKQR, DCHKRQ, DCHKSP,
-     $                   DCHKSY, DCHKSY_ROOK, DCHKSY_RK, DCHKSY_AA,
+     $                   DCHKPT, DCHKQ3, DCHKQP3RK, DCHKQL, DCHKQR, DCHKRQ,
+     $                   DCHKSP, DCHKSY, DCHKSY_ROOK, DCHKSY_RK, DCHKSY_AA,
      $                   DCHKTB, DCHKTP, DCHKTR, DCHKTZ, DDRVGB, DDRVGE,
      $                   DDRVGT, DDRVLS, DDRVPB, DDRVPO, DDRVPP, DDRVPT,
      $                   DDRVSP, DDRVSY, DDRVSY_ROOK, DDRVSY_RK,
@@ -919,9 +920,26 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
-     $                   THRESH, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
-     $                   B( 1, 3 ), WORK, IWORK, NOUT )
+            CALL DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL,
+     $                   NXVAL, THRESH, A( 1, 1 ), A( 1, 2 ),
+     $                   B( 1, 1 ), B( 1, 3 ), WORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QK' ) ) THEN
+*
+*        QK: truncated QR factorization with pivoting
+*
+         NTYPES = 19
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
+     $                      NNB, NBVAL, NXVAL, THRESH, A( 1, 1 ),
+     $                      A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), B( 1, 4 ),
+     $                      WORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
