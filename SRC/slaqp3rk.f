@@ -179,14 +179,14 @@
 *>          KP1 is INTEGER
 *>          The index of the column with the maximum 2-norm in
 *>          the whole original matrix A_orig determined in the
-*>          main routine DGEQP3RK. 1 <= KP1 <= N_orig.
+*>          main routine SGEQP3RK. 1 <= KP1 <= N_orig.
 *> \endverbatim
 *>
 *> \param[in] MAXC2NRM
 *> \verbatim
 *>          MAXC2NRM is REAL
 *>          The maximum column 2-norm of the whole original
-*>          matrix A_orig computed in the main routine DGEQP3RK.
+*>          matrix A_orig computed in the main routine SGEQP3RK.
 *>          MAXC2NRM >= 0.
 *> \endverbatim
 *>
