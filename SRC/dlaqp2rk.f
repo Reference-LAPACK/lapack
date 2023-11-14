@@ -389,10 +389,6 @@
       KMAX = MIN( KMAX, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
-
-          WRITE(*,*) "####_#### Enter DLAQP2RK "
-          WRITE(*,*) " (M, N, NRHS, IOFFSET, KMAX, KP1, MAXC2NRM)",
-     $               M, N, NRHS, IOFFSET, KMAX,  KP1, MAXC2NRM
 *
 *     Compute the factorization, KK is the lomn loop index.
 *
@@ -410,8 +406,6 @@
 *
 
             KP = KP1
-
-            WRITE(*,*) "## ## DLAQP2RK IOFFSET=0, first column KP=",KP
 *
 *           ============================================================
 *
@@ -577,8 +571,6 @@
          ELSE
             TAU( KK ) = ZERO
          END IF
-
-        WRITE(*,*) "## DLAQP2RK (KK, TAU(Kk) )=", KK, TAU(KK)
 *
 *        Check if TAU(KK) contains NaN, set INFO parameter
 *        to the column number where NaN is found and return from
@@ -593,7 +585,6 @@
          IF( DISNAN( TAU(KK) ) ) THEN
             K = KK - 1
             INFO = KK
-         WRITE(*,*) "## ## DLAQP2RK ((TAU is NaN)) (KK, INFO)", KK, INFO
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *

@@ -444,12 +444,6 @@
       NB = MIN( NB, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
-
-          WRITE(*,*) "$$$$_$$$$ Enter DLAQP3RK "
-          WRITE(*,*) " (M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM)",
-     $               M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM
-
-
 *
 *     Compute factorization in a while loop over NB columns,
 *     K is the column index in the block A(1:M,1:N).
@@ -548,10 +542,6 @@
 *           routine.
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
-
-
-            WRITE(*,*) "$$$$$$ DLAQP3RK zero submatrix, IOFFSET, K= ",
-     $                        IOFFSET, K
 *
                DONE = .TRUE.
 *
@@ -561,10 +551,6 @@
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
 *                      the original whole matrix A_orig.
-*
-                  WRITE(*,*)
-     $            "$$$$$$$$ DLAQP3RK zero submatrix (ABSTOL, K)= ",
-     $            ABSTOL,  K
 *
                KB = K - 1
                IF = I - 1
@@ -582,12 +568,6 @@
 *                               A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T.
 *
                IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-
-
-               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK zero submatrix",
-     $                 " block reflector (M-IF, NRHS, KB)",
-     $                 M-IF, NRHS, KB
-
                   CALL DGEMM( 'No transpose', 'Transpose',
      $                  M-IF, NRHS, KB, -ONE, A( IF+1, 1 ), LDA,
      $                  F( N+1, 1 ), LDF, ONE, A( IF+1, N+1 ), LDA )
@@ -652,13 +632,7 @@
 *
                   KB = K - 1
                   IF = I - 1
-
-               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK condition for",
-     $                 " ABSTOL or RELTOL (ABSTOL, RELTOL),",
-     $                 " (MAXC2NRMK, RELMAXC2NRMK)",
-     $                 ABSTOL, RELTOL, MAXC2NRMK, RELMAXC2NRMK
-
-
+*
 *              Apply the block reflector to the residual of the
 *              matrix A and the residual of the right hand sides B, if
 *              the residual matrix and and/or the residual of the right
@@ -670,11 +644,6 @@
 *                             A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T.
 *
                IF( KB.LT.MINMNUPDT ) THEN
-
-               WRITE(*,*) "$$$$$$$$$$ DLAQP3RK ABSTOL or RELTOL",
-     $                 " block reflector (M-IF, N+NRHS-KB, KB)",
-     $                 M-IF, N+NRHS-KB, KB
-
                   CALL DGEMM( 'No transpose', 'Transpose',
      $                  M-IF, N+NRHS-KB, KB,-ONE, A( IF+1, 1 ), LDA,
      $                  F( KB+1, 1 ), LDF, ONE, A( IF+1, KB+1 ), LDA )
@@ -767,8 +736,6 @@
             KB = K - 1
             IF = I - 1
             INFO = K
-
-         WRITE(*,*) "$$ $$ DLAQP3RK ((TAU is NaN)) (K, INFO)", K, INFO
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *
