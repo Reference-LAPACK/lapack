@@ -448,12 +448,6 @@
       NB = MIN( NB, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
-
-          WRITE(*,*) "$$$$_$$$$ Enter ZLAQP3RK "
-          WRITE(*,*) " (M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM)",
-     $               M, N, NRHS, IOFFSET, NB, KP1, MAXC2NRM
-
-
 *
 *     Compute factorization in a while loop over NB columns,
 *     K is the column index in the block A(1:M,1:N).
@@ -552,10 +546,6 @@
 *           routine.
 *
             IF( MAXC2NRMK.EQ.ZERO ) THEN
-
-
-            WRITE(*,*) "$$$$$$ ZLAQP3RK zero submatrix, IOFFSET, K= ",
-     $                        IOFFSET, K
 *
                DONE = .TRUE.
 *
@@ -565,10 +555,6 @@
 *              Set IF, the number of processed rows in the block, which
 *                      is the same as the number of processed rows in
 *                      the original whole matrix A_orig.
-*
-                  WRITE(*,*)
-     $            "$$$$$$$$ ZLAQP3RK zero submatrix (ABSTOL, K)= ",
-     $            ABSTOL,  K
 *
                KB = K - 1
                IF = I - 1
@@ -586,12 +572,7 @@
 *                               A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**H.
 *
                IF( NRHS.GT.0 .AND. KB.LT.(M-IOFFSET) ) THEN
-
-
-               WRITE(*,*) "$$$$$$$$$$ ZLAQP3RK zero submatrix",
-     $                 " block reflector (M-IF, NRHS, KB)",
-     $                 M-IF, NRHS, KB
-
+*
                   CALL ZGEMM( 'No transpose', 'Conjugate transpose',
      $                  M-IF, NRHS, KB, -CONE, A( IF+1, 1 ), LDA,
      $                  F( N+1, 1 ), LDF, CONE, A( IF+1, N+1 ), LDA )
@@ -656,13 +637,7 @@
 *
                   KB = K - 1
                   IF = I - 1
-
-               WRITE(*,*) "$$$$$$$$$$ ZLAQP3RK condition for",
-     $                 " ABSTOL or RELTOL (ABSTOL, RELTOL),",
-     $                 " (MAXC2NRMK, RELMAXC2NRMK)",
-     $                 ABSTOL, RELTOL, MAXC2NRMK, RELMAXC2NRMK
-
-
+*
 *              Apply the block reflector to the residual of the
 *              matrix A and the residual of the right hand sides B, if
 *              the residual matrix and and/or the residual of the right
@@ -674,11 +649,7 @@
 *                             A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**H.
 *
                IF( KB.LT.MINMNUPDT ) THEN
-
-               WRITE(*,*) "$$$$$$$$$$ ZLAQP3RK ABSTOL or RELTOL",
-     $                 " block reflector (M-IF, N+NRHS-KB, KB)",
-     $                 M-IF, N+NRHS-KB, KB
-
+*
                   CALL ZGEMM( 'No transpose', 'Conjugate transpose',
      $                  M-IF, N+NRHS-KB, KB,-CONE, A( IF+1, 1 ), LDA,
      $                  F( KB+1, 1 ), LDF, CONE, A( IF+1, KB+1 ), LDA )
@@ -785,9 +756,6 @@
             KB = K - 1
             IF = I - 1
             INFO = K
-
-         WRITE(*,*) "##  ZLAQP2RK ((TAU is NaN)) (K, INFO),TAU",
-     $      K, INFO, TAU(K)
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *
@@ -934,11 +902,6 @@
 *     A(IF+1:M,K+1:N+NRHS) := A(IF+1:M,KB+1:N+NRHS) -
 *                         A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**H.
 *
-      WRITE(*,*) "    _$$$$ ZLAQP3RK A before ZGEMM"
-      WRITE(*,*) "          ( KB, IF,  MINMNUPDT, NRHS )",
-     $                KB, IF,  MINMNUPDT, NRHS
-
-
       IF( KB.LT.MINMNUPDT ) THEN
          CALL ZGEMM( 'No transpose', 'Conjugate transpose',
      $         M-IF, N+NRHS-KB, KB, -CONE, A( IF+1, 1 ), LDA,
@@ -949,20 +912,7 @@
 *     Loop over the index of the difficult columns from the largest
 *     to the smallest index.
 *
-
-                  WRITE(*,*) "    _$$$$ ZLAQP3RK A after ZGEMM"
-                  DO J = 1, M
-                     WRITE(*,*)
-     $               A(J,1), A(J,2),
-     $               A(J,3), A(J,4),
-     $               A(J, 5), A(J,6)
-                  END DO
-                  WRITE(*,*)
-
-
       DO WHILE( LSTICC.GT.0 )
-
-       WRITE(*,*) "    _$$$$ ZLAQP3RK inside bad norm updating"
 *
 *        LSTICC is the index of the last difficult column is greater
 *        than 1.
@@ -986,20 +936,6 @@
          LSTICC = ITEMP
 *
       END DO
-
-            DO J = 1 , MINMNFACT
-               WRITE(*,*) "    _$$$$ END ZLAQP3RK before return",
-     $                    " (J,TAU(J))",
-     $                    J, TAU( J )
-            END DO
-
-
-          WRITE(*,*)
-          WRITE(*,*) "    _$$$$  Exit ZLAQP2RK "
-          WRITE(*,*) "           (KB, MAXC2NRMK, RELMAXC2NRMK)",
-     $               KB, MAXC2NRMK, RELMAXC2NRMK
-          WRITE(*,*)
-
 *
       RETURN
 *

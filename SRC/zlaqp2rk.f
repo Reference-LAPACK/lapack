@@ -394,14 +394,6 @@
       KMAX = MIN( KMAX, MINMNFACT )
       TOL3Z = SQRT( DLAMCH( 'Epsilon' ) )
       HUGEVAL = DLAMCH( 'Overflow' )
-
-          WRITE(*,*)
-          WRITE(*,*) "####_#### Enter ZLAQP2RK "
-          WRITE(*,*) "          (M, N, NRHS, IOFFSET, KMAX, KP1,",
-     $               " MAXC2NRM)",
-     $               M, N, NRHS, IOFFSET, KMAX,  KP1, MAXC2NRM
-          WRITE(*,*)
-
 *
 *     Compute the factorization, KK is the lomn loop index.
 *
@@ -417,11 +409,7 @@
 *           therefore we use the computed KP1 and MAXC2NRM from the
 *           main routine.
 *
-
             KP = KP1
-
-            WRITE(*,*) "    _#### ZLAQP2RK IOFFSET=0,
-     $                  first column KP=",KP
 *
 *           ============================================================
 *
@@ -587,8 +575,6 @@
          ELSE
             TAU( KK ) = CZERO
          END IF
-
-        WRITE(*,*) "    _#### ZLAQP2RK (K, TAU(Kk) )=", KK, TAU(KK)
 *
 *        Check if TAU(KK) contains NaN, set INFO parameter
 *        to the column number where NaN is found and return from
@@ -611,9 +597,6 @@
          IF( DISNAN( TAUNAN ) ) THEN
             K = KK - 1
             INFO = KK
-         WRITE(*,*) "    _####  ZLAQP2RK ((TAU is NaN))",
-     $                " (KK, INFO),TAU",
-     $      KK, INFO, TAU(KK)
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *
@@ -701,10 +684,6 @@
 *     factorized, we need to set MAXC2NRMK and RELMAXC2NRMK before
 *     we return.
 *
-
-      WRITE(*,*) "     _#### ZLAQP2RK after loop (K,MINMNFACT)", K,
-     $           MINMNFACT
-
       IF( K.LT.MINMNFACT ) THEN
 *
          JMAXC2NRM = K + IDAMAX( N-K, VN1( K+1 ), 1 )
@@ -728,20 +707,6 @@
       DO J = K + 1, MINMNFACT
          TAU( J ) = CZERO
       END DO
-
-            DO J = 1 , MINMNFACT
-               WRITE(*,*) "    _#### END ZLAQP2RK before return",
-     $                    " (J,TAU(J))",
-     $                    J, TAU( J )
-            END DO
-
-
-          WRITE(*,*)
-          WRITE(*,*) "     _####  Exit ZLAQP2RK "
-          WRITE(*,*) "            (K, MAXC2NRMK, RELMAXC2NRMK)",
-     $               K, MAXC2NRMK, RELMAXC2NRMK
-          WRITE(*,*)
-
 *
       RETURN
 *

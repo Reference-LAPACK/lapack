@@ -741,13 +741,6 @@
          RWORK( J ) = DZNRM2( M, A( 1, J ), 1 )
          RWORK( N+J ) = RWORK( J )
       END DO
-
-       WRITE(*,*)
-       WRITE(*,*) "===== ZGEQP3RK 2NORM ="
-                     WRITE(*,*)
-     $               RWORK( 1 ), RWORK( 2 ), RWORK( 3 ), RWORK( 4 ),
-     $               RWORK( 5 ), RWORK( 6 ), RWORK( 7 ), RWORK( 8 )
-       WRITE(*,*)
 *
 *     ==================================================================
 *
@@ -755,9 +748,6 @@
 *     for the whole original matrix stored in A(1:M,1:N).
 *
       KP1 = IDAMAX( N, RWORK( 1 ), 1 )
-      MAXC2NRM = RWORK( KP1 )
-      WRITE(*,*) "=======  ZGEQP3RK ((( before NaN in MATRIX ))) KP1=",
-     $               KP1
 *
 *     ==================================================================.
 *
@@ -767,8 +757,6 @@
 *        to the column number where the first NaN is found and return
 *        from the routine.
 *
-         WRITE(*,*) "=======  ZGEQP3RK ((( NaN in MATRIX ))) ===="
-
          K = 0
          INFO = KP1
 *
@@ -790,8 +778,6 @@
 *        Check is the matrix A is a zero matrix, set array TAU and
 *        return from the routine.
 *
-      WRITE(*,*) "=======  ZGEQP3RK ((( ZERO MATRIX ))) ===="
-
          K = 0
          MAXC2NRMK = ZERO
          RELMAXC2NRMK = ZERO
@@ -954,10 +940,6 @@
 *
 *           Factorize JB columns among the columns A(J:N).
 *
-           WRITE(*,*)
-           WRITE(*,*) "===== ZGEQP3RK loop before block(IOFFSET, JB)=",
-     $      J-1, JB
-
             CALL ZLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB, ABSTOL,
      $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
      $                     DONE, JBF, MAXC2NRMK, RELMAXC2NRMK,
@@ -965,10 +947,6 @@
      $                     RWORK( J ), RWORK( N+J ),
      $                     WORK( 1 ), WORK( JB+1 ),
      $                     N+NRHS-J+1, IWORK, IINFO )
-*
-
-            WRITE(*,*) "======= ZGEQP3RK loop after block (JBF)=",
-     $      JBF
 *
 *           Set INFO on the first occurence of Inf.
 *
@@ -1047,9 +1025,6 @@
 *
 *        Set INFO on the first exception occurence.
 *
-         WRITE(*,*) "======= ZGEQP3RK after call to ZLAQP2RK INFO=",
-     $              INFO
-*
 *        Set INFO on the first exception occurence of Inf or NaN,
 *        (NaN takes precedence over Inf).
 *
@@ -1085,39 +1060,16 @@
             DO J = K + 1, MINMN
                TAU( J ) = CZERO
             END DO
-
-
-           WRITE(*,*)
-           WRITE(*,*) "===== END ZGEQP3RK compute low rank ",
-     $                "(MAXC2NRMK, RELMAXC2NRMK)=",
-     $                MAXC2NRMK, RELMAXC2NRMK
-
+*
          ELSE
             MAXC2NRMK = ZERO
             RELMAXC2NRMK = ZERO
-
-           WRITE(*,*)
-           WRITE(*,*) "===== END ZGEQP3RK compute full rank ",
-     $                "(MAXC2NRMK, RELMAXC2NRMK)=",
-     $                MAXC2NRMK, RELMAXC2NRMK
-
+*
          END IF
 *
 *     END IF( J.LE.JMAX ) THEN
 *
       END IF
-
-
-            DO J = 1 , MINMN
-               WRITE(*,*) "===== END ZGEQP3RK before return (J,TAU(J))",
-     $                    J, TAU( J )
-            END DO
-
-           WRITE(*,*)
-           WRITE(*,*) "===== END ZGEQP3RK before return ",
-     $                "(K, MAXC2NRMK, RELMAXC2NRMK)=",
-     $                K, MAXC2NRMK, RELMAXC2NRMK
-
 *
       WORK( 1 ) = DCMPLX( LWKOPT )
 *
