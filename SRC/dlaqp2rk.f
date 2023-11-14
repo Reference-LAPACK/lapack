@@ -406,7 +406,11 @@
 *           therefore we use the computed KP1 and MAXC2NRM from the
 *           main routine.
 *
+
             KP = KP1
+
+            WRITE(*,*) "## ## DLAQP2RK IOFFSET=0, first column KP=",KP
+
 *           TODO: optimize MAXC2NRMK and RELMAXC2NRMK
             MAXC2NRMK = MAXC2NRM
             RELMAXC2NRMK = ONE
@@ -575,6 +579,8 @@
          ELSE
             TAU( K ) = ZERO
          END IF
+
+        WRITE(*,*) "## DLAQP2RK (K, TAU(K) )=", K, TAU(K)
 *
 *        Check if TAU(K) is NaN, set INFO parameter
 *        to the column number where NaN is found and return from
@@ -589,6 +595,7 @@
          IF( DISNAN( TAU(K) ) ) THEN
             KF = K - 1
             INFO = K
+         WRITE(*,*) "## ## DLAQP2RK ((TAU is NaN)) (K, INFO)", K, INFO
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *

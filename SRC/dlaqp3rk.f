@@ -767,6 +767,8 @@
             KB = K - 1
             IF = I - 1
             INFO = K
+
+         WRITE(*,*) "$$ $$ DLAQP3RK ((TAU is NaN)) (K, INFO)", K, INFO
 *
 *           Set MAXC2NRMK and  RELMAXC2NRMK to NaN.
 *

@@ -337,7 +337,7 @@
 *>                             otherwise the elements TAU(1:min(M,N))
 *>                             are undefimed;
 *>                          c) the elements of the array JPIV are set
-*>                          as follows: for j = 1:N, JPIV(j) = j.
+*>                             as follows: for j = 1:N, JPIV(j) = j.
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
@@ -390,6 +390,11 @@
 *>          JPIV is INTEGER array, dimension (N)
 *>          Column pivot indices. For 1 <= j <= N, column j
 *>          of the matrix A was interchanged with column JPIV(j).
+*>
+*>          The elements of the array JPIV(1:N) are always set
+*>          by the routine, for example, even  when no columns
+*>          were factorized, i.e. when K = 0, the elements are
+*>          set as JPIV(j) = j for j = 1:N.
 *> \endverbatim
 *>
 *> \param[out] TAU
@@ -710,6 +715,8 @@
 *
       KP1 = IDAMAX( N, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP1 )
+      WRITE(*,*) "=======  DGEQP3RK ((( before NaN in MATRIX ))) KP1=",
+     $               KP1
 *
 *     ==================================================================.
 *
@@ -719,6 +726,8 @@
 *        to the column number where the first NaN is found and return
 *        from the routine.
 *
+         WRITE(*,*) "=======  DGEQP3RK ((( NaN in MATRIX ))) ===="
+
          K = 0
          INFO = KP1
 *
@@ -920,14 +929,10 @@
             WRITE(*,*) "======= DGEQP3RK loop after block (JBF)=",
      $      JBF
 *
-*           Set INFO on the first exception occurence.
+*           Set INFO on the first occurence of Inf.
 *
-            IF( INFO.EQ.0 ) THEN
-               IF( IINFO.GT.N_SUB ) THEN
-                  INFO = 2*IOFFSET + IINFO
-               ELSE IF( IINFO.GT.0 ) THEN
-                  INFO = IOFFSET + IINFO
-               END IF
+            IF( IINFO.GT.N_SUB .AND. INFO.EQ.0 ) THEN
+               INFO = 2*IOFFSET + IINFO
             END IF
 *
             IF( DONE ) THEN
@@ -946,6 +951,13 @@
 *                         block factorization routine.
 *
                K = IOFFSET + JBF
+*
+*              Set INFO on the first occurrence of NaN, NaN takes
+*              prcedence over Inf.
+*
+               IF( IINFO.LE.N_SUB .AND. IINFO.GT.0 ) THEN
+                  INFO = IOFFSET + IINFO
+               END IF
 *
 *              Return from the routine.
 *
@@ -995,12 +1007,16 @@
 *
 *        Set INFO on the first exception occurence.
 *
-         IF( INFO.EQ.0 ) THEN
-            IF( IINFO.GT.N_SUB ) THEN
-               INFO = 2*IOFFSET + IINFO
-            ELSE IF( IINFO.GT.0 ) THEN
-               INFO = IOFFSET + IINFO
-            END IF
+         WRITE(*,*) "======= DGEQP3RK after call to DLAQP2RK INFO=",
+     $              INFO
+*
+*        Set INFO on the first exception occurence of Inf or NaN,
+*        (NaN takes precedence over Inf).
+*
+         IF( IINFO.GT.N_SUB .AND. INFO.EQ.0 ) THEN
+            INFO = 2*IOFFSET + IINFO
+         ELSE IF( IINFO.LE.N_SUB .AND. IINFO.GT.0 ) THEN
+            INFO = IOFFSET + IINFO
          END IF
 *
       ELSE
