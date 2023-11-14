@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKQP3RK tests ZGEQP3.
+*> ZCHKQP3RK tests ZGEQP3RK.
 *> \endverbatim
 *
 *  Arguments:

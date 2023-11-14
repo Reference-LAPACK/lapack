@@ -174,7 +174,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_lin
+*> \ingroup single_lin
 *
 *  =====================================================================
       SUBROUTINE SCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
