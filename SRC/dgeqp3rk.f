@@ -539,9 +539,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN
-      INTEGER            ILAENV
+      INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DNRM2
-      EXTERNAL           DISNAN, DLAMCH, DNRM2, ILAENV
+      EXTERNAL           DISNAN, DLAMCH, DNRM2, IDAMAX, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
