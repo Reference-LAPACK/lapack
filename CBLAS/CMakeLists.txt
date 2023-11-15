@@ -22,7 +22,7 @@ if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
 endif()
 
 include(CheckCSourceCompiles)
-check_c_source_compiles("void __attribute__((weak)) main() {};"
+check_c_source_compiles("int __attribute__((weak)) main() {};"
                         HAS_ATTRIBUTE_WEAK_SUPPORT)
 
 include_directories(include ${LAPACK_BINARY_DIR}/include)
