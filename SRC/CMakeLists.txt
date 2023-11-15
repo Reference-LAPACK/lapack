@@ -87,7 +87,7 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f
    sgels.f  sgelst.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
-   sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
+   sgeqp3.f sgeqp3rk.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
    sgetri.f
    sggbak.f sggbal.f
@@ -102,7 +102,7 @@ set(SLASRC
    slangb.f slange.f slangt.f slanhs.f slansb.f slansp.f
    slansy.f slantb.f slantp.f slantr.f slanv2.f
    slapll.f slapmt.f
-   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
+   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqp2rk.f slaqp3rk.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f
@@ -177,7 +177,8 @@ set(CLASRC
    cgbtf2.f cgbtrf.f cgbtrs.f cgebak.f cgebal.f cgebd2.f cgebrd.f
    cgecon.f cgeequ.f cgees.f  cgeesx.f cgeev.f  cgeevx.f
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f
-   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f
+   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f
+   cgeqp3.f cgeqp3rk.f
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
    cgesvj.f cgejsv.f cgsvj0.f cgsvj1.f
@@ -213,7 +214,7 @@ set(CLASRC
    clanhb.f clanhe.f
    clanhp.f clanhs.f clanht.f clansb.f clansp.f clansy.f clantb.f
    clantp.f clantr.f clapll.f clapmt.f clarcm.f claqgb.f claqge.f
-   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqsb.f
+   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqp2rk.f claqp3rk.f claqsb.f
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f
@@ -287,7 +288,7 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
    dgels.f  dgelst.f dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f
-   dgeqp3.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
+   dgeqp3.f dgeqp3rk.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
@@ -302,7 +303,7 @@ set(DLASRC
    dlangb.f dlange.f dlangt.f dlanhs.f dlansb.f dlansp.f
    dlansy.f dlantb.f dlantp.f dlantr.f dlanv2.f
    dlapll.f dlapmt.f
-   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqsb.f dlaqsp.f dlaqsy.f
+   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqp2rk.f dlaqp3rk.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
@@ -375,7 +376,8 @@ set(ZLASRC
    zgbtf2.f zgbtrf.f zgbtrs.f zgebak.f zgebal.f zgebd2.f zgebrd.f
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f
-   zgels.f  zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f
+   zgels.f zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f
+   zgeqp3.f zgeqp3rk.f
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
    zgesvj.f zgejsv.f zgsvj0.f zgsvj1.f
@@ -412,7 +414,7 @@ set(ZLASRC
    zlanhe.f
    zlanhp.f zlanhs.f zlanht.f zlansb.f zlansp.f zlansy.f zlantb.f
    zlantp.f zlantr.f zlapll.f zlapmt.f zlaqgb.f zlaqge.f
-   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqsb.f
+   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqp2rk.f zlaqp3rk.f zlaqsb.f
    zlaqr0.f zlaqr1.f zlaqr2.f zlaqr3.f zlaqr4.f zlaqr5.f
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
    zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f

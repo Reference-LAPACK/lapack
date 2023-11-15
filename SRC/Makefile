@@ -119,7 +119,7 @@ SLASRC = \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \
    sgehd2.o sgehrd.o sgelq2.o sgelqf.o \
    sgels.o  sgelst.o sgelsd.o sgelss.o sgelsy.o sgeql2.o sgeqlf.o \
-   sgeqp3.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
+   sgeqp3.o sgeqp3rk.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
    sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvdx.o sgesvx.o \
    sgetc2.o sgetf2.o sgetri.o \
    sggbak.o sggbal.o sgges.o  sgges3.o sggesx.o \
@@ -134,7 +134,7 @@ SLASRC = \
    slangb.o slange.o slangt.o slanhs.o slansb.o slansp.o \
    slansy.o slantb.o slantp.o slantr.o slanv2.o \
    slapll.o slapmt.o \
-   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqsb.o slaqsp.o slaqsy.o \
+   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqp2rk.o slaqp3rk.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
    slarf.o  slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
@@ -211,8 +211,8 @@ CLASRC = \
    cgbtf2.o cgbtrf.o cgbtrs.o cgebak.o cgebal.o cgebd2.o cgebrd.o \
    cgecon.o cgeequ.o cgees.o  cgeesx.o cgeev.o  cgeevx.o \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
-   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
-   cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
+   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o \
+   cgeqp3.o cgeqp3rk.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o \
    cgesvj.o cgejsv.o cgsvj0.o cgsvj1.o \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
@@ -246,7 +246,7 @@ CLASRC = \
    clanhb.o clanhe.o \
    clanhp.o clanhs.o clanht.o clansb.o clansp.o clansy.o clantb.o \
    clantp.o clantr.o clapll.o clapmt.o clarcm.o claqgb.o claqge.o \
-   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqsb.o \
+   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqp2rk.o claqp3rk.o claqsb.o \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
    clarf.o  clarfb.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
@@ -321,7 +321,7 @@ DLASRC = \
    dgebrd.o dgecon.o dgeequ.o dgees.o  dgeesx.o dgeev.o  dgeevx.o \
    dgehd2.o dgehrd.o dgelq2.o dgelqf.o \
    dgels.o  dgelst.o dgelsd.o dgelss.o dgelsy.o dgeql2.o dgeqlf.o \
-   dgeqp3.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
+   dgeqp3.o dgeqp3rk.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
    dgerq2.o dgerqf.o dgesc2.o dgesdd.o dgesv.o  dgesvd.o dgesvdx.o dgesvx.o \
    dgetc2.o dgetf2.o dgetrf.o dgetri.o \
    dgetrs.o dggbak.o dggbal.o dgges.o  dgges3.o dggesx.o \
@@ -336,7 +336,7 @@ DLASRC = \
    dlangb.o dlange.o dlangt.o dlanhs.o dlansb.o dlansp.o \
    dlansy.o dlantb.o dlantp.o dlantr.o dlanv2.o \
    dlapll.o dlapmt.o \
-   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqsb.o dlaqsp.o dlaqsy.o \
+   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqp2rk.o dlaqp3rk.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
    dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
@@ -412,7 +412,8 @@ ZLASRC = \
    zgbtf2.o zgbtrf.o zgbtrs.o zgebak.o zgebal.o zgebd2.o zgebrd.o \
    zgecon.o zgeequ.o zgees.o  zgeesx.o zgeev.o  zgeevx.o \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
-   zgels.o  zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o zgeqp3.o \
+   zgels.o zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o \
+   zgeqp3.o zgeqp3rk.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
    zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o \
    zgesvj.o zgejsv.o zgsvj0.o zgsvj1.o \
@@ -449,7 +450,7 @@ ZLASRC = \
    zlanhe.o \
    zlanhp.o zlanhs.o zlanht.o zlansb.o zlansp.o zlansy.o zlantb.o \
    zlantp.o zlantr.o zlapll.o zlapmt.o zlaqgb.o zlaqge.o \
-   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqsb.o \
+   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqp2rk.o zlaqp3rk.o zlaqsb.o \
    zlaqr0.o zlaqr1.o zlaqr2.o zlaqr3.o zlaqr4.o zlaqr5.o \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
    zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o \
