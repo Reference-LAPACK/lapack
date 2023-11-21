@@ -151,8 +151,9 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DGETRI', ' ', N, -1, -1, -1 )
-      LWKOPT = N*NB
+      LWKOPT = MAX( 1, N*NB )
       WORK( 1 ) = LWKOPT
+*
       LQUERY = ( LWORK.EQ.-1 )
       IF( N.LT.0 ) THEN
          INFO = -1

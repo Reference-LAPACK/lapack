@@ -190,7 +190,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         LWKOPT = (NB+1)*N
+         LWKOPT = MAX( 1, (NB+1)*N )
          WORK( 1 ) = LWKOPT
       END IF
 *

@@ -276,7 +276,7 @@
      $       LOG( TWO ) ) + 1, 0 )
 *
       IF( INFO.EQ.0 ) THEN
-         MAXWRK = 0
+         MAXWRK = 1
          LIWORK = 3*MINMN*NLVL + 11*MINMN
          MM = M
          IF( M.GE.N .AND. M.GE.MNTHR ) THEN

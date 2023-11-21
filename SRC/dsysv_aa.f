@@ -206,7 +206,7 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX(2*N, 3*N-2) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.MAX( 1, 2*N, 3*N-2 ) .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
 *
@@ -216,7 +216,7 @@
          CALL DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
          LWKOPT_SYTRS = INT( WORK(1) )
-         LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
+         LWKOPT = MAX( 1, LWKOPT_SYTRF, LWKOPT_SYTRS )
          WORK( 1 ) = LWKOPT
       END IF
 *

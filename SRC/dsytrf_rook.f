@@ -118,7 +118,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >=1.  For best performance
+*>          The length of WORK.  LWORK >= 1.  For best performance
 *>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine

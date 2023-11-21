@@ -132,15 +132,17 @@
 *>
 *> \param[out] HOUS
 *> \verbatim
-*>          HOUS is DOUBLE PRECISION array, dimension LHOUS, that
-*>          store the Householder representation.
+*>          HOUS is DOUBLE PRECISION array, dimension (MAX(1,LHOUS))
+*>          Stores the Householder representation.
 *> \endverbatim
 *>
 *> \param[in] LHOUS
 *> \verbatim
 *>          LHOUS is INTEGER
-*>          The dimension of the array HOUS. LHOUS = MAX(1, dimension)
-*>          If LWORK = -1, or LHOUS=-1,
+*>          The dimension of the array HOUS.
+*>          If N = 0, LHOUS >= 1, else LHOUS = MAX(1, dimension).
+*>
+*>          If LWORK = -1, or LHOUS = -1,
 *>          then a query is assumed; the routine
 *>          only calculates the optimal size of the HOUS array, returns
 *>          this value as the first entry of the HOUS array, and no error
@@ -152,14 +154,17 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension LWORK.
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK = MAX(1, dimension)
-*>          If LWORK = -1, or LHOUS=-1,
+*>          The dimension of the array WORK.
+*>          If N = 0 or KD <= 1, LWORK >= 1, else LWORK = MAX(1, dimension).
+*>
+*>          If LWORK = -1, or LHOUS = -1,
 *>          then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -292,8 +297,13 @@
 *     Determine the block size, the workspace size and the hous size.
 *
       IB     = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+      IF( N.EQ.0 .OR. KD.LE.1 ) THEN
+         LHMIN = 1
+         LWMIN = 1
+      ELSE
+         LHMIN = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+      END IF
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -543,7 +553,6 @@
   170     CONTINUE
       ENDIF
 *
-      HOUS( 1 ) = LHMIN
       WORK( 1 ) = LWMIN
       RETURN
 *

@@ -89,7 +89,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -225,8 +225,13 @@
 *
 *        Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI, -1 ) )
-         LWKOPT = N*NB + TSIZE
+         IF( N.EQ.0 ) THEN
+            LWKOPT = 1
+         ELSE
+            NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
+     $                              -1 ) )
+            LWKOPT = N*NB + TSIZE
+         ENDIF
          WORK( 1 ) = LWKOPT
       END IF
 *
@@ -344,6 +349,7 @@
 *     Use unblocked code to reduce the rest of the matrix
 *
       CALL DGEHD2( N, I, IHI, A, LDA, TAU, WORK, IINFO )
+*
       WORK( 1 ) = LWKOPT
 *
       RETURN

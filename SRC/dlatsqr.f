@@ -101,15 +101,18 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= NB*N.
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, LWORK >= NB*N, otherwise.
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
+*>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
@@ -165,25 +168,25 @@
 *>
 *  =====================================================================
       SUBROUTINE DLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
-     $                    LWORK, INFO)
+     $                    LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, MB, NB, LDT, LWORK
+      INTEGER            INFO, LDA, M, N, MB, NB, LDT, LWORK
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A( LDA, * ), WORK( * ), T(LDT, *)
+      DOUBLE PRECISION   A( LDA, * ), WORK( * ), T( LDT, * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY
-      INTEGER    I, II, KK, CTR
+      LOGICAL            LQUERY
+      INTEGER            I, II, KK, CTR, MINMN, LWMIN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
@@ -201,34 +204,42 @@
 *
       LQUERY = ( LWORK.EQ.-1 )
 *
+      MINMN = MIN( M, N )
+      IF( MINMN.EQ.0 ) THEN
+        LWMIN = 1
+      ELSE
+        LWMIN = N*NB
+      END IF
+*
       IF( M.LT.0 ) THEN
         INFO = -1
       ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
         INFO = -2
       ELSE IF( MB.LT.1 ) THEN
         INFO = -3
-      ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 )) THEN
+      ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 ) ) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
         INFO = -6
       ELSE IF( LDT.LT.NB ) THEN
         INFO = -8
-      ELSE IF( LWORK.LT.(N*NB) .AND. (.NOT.LQUERY) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. (.NOT.LQUERY) ) THEN
         INFO = -10
       END IF
-      IF( INFO.EQ.0)  THEN
-        WORK(1) = NB*N
+*
+      IF( INFO.EQ.0 ) THEN
+        WORK( 1 ) = LWMIN
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'DLATSQR', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
-       RETURN
+      ELSE IF( LQUERY ) THEN
+        RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N).EQ.0 ) THEN
+      IF( MINMN.EQ.0 ) THEN
           RETURN
       END IF
 *
@@ -265,7 +276,7 @@
      $                  WORK, INFO )
        END IF
 *
-      WORK( 1 ) = N*NB
+      WORK( 1 ) = LWMIN
       RETURN
 *
 *     End of DLATSQR
