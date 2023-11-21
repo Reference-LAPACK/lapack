@@ -178,7 +178,7 @@
 *>          On exit:
 *>          1. The elements in block A(IOFFSET+1:M,1:K) below
 *>             the diagonal together with the array TAU represent
-*>             the orthogonal matrix Q(K) as a product of elementary
+*>             the unitary matrix Q(K) as a product of elementary
 *>             reflectors.
 *>          2. The upper triangular block of the matrix A stored
 *>             in A(IOFFSET+1:M,1:K) is the triangular factor obtained.
