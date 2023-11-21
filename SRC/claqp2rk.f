@@ -332,7 +332,7 @@
 *> \verbatim
 *>
 *>  November  2023, Igor Kozachenko, James Demmel,
-*>                  Computer Science Division, EECS Department,
+*>                  EECS Department,
 *>                  University of California, Berkeley, USA.
 *>
 *> \endverbatim
