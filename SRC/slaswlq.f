@@ -96,22 +96,24 @@
 *>          The leading dimension of the array T.  LDT >= MB.
 *> \endverbatim
 *>
-*>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) REAL array, dimension (MAX(1,LWORK))
-*>
+*>          (workspace) REAL array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *> \endverbatim
+*>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= MB * M.
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= MB*M, otherwise.
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
+*>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
-*>
 *> \endverbatim
+
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -163,32 +165,35 @@
 *>
 *  =====================================================================
       SUBROUTINE SLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
-     $                  INFO)
+     $                    INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, MB, NB, LWORK, LDT
+      INTEGER            INFO, LDA, M, N, MB, NB, LWORK, LDT
 *     ..
 *     .. Array Arguments ..
-      REAL              A( LDA, * ), WORK( * ), T( LDT, *)
+      REAL               A( LDA, * ), WORK( * ), T( LDT, * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY
-      INTEGER    I, II, KK, CTR
+      LOGICAL            LQUERY
+      INTEGER            I, II, KK, CTR, MINMN, LWMIN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
+      EXTERNAL           LSAME
       REAL               SROUNDUP_LWORK
-      EXTERNAL           LSAME, SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           SGELQT, SGEQRT, STPLQT, STPQRT, XERBLA
+*     ..
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -200,11 +205,18 @@
 *
       LQUERY = ( LWORK.EQ.-1 )
 *
+      MINMN = MIN( M, N )
+      IF( MINMN.EQ.0 ) THEN
+        LWMIN = 1
+      ELSE
+        LWMIN = M*MB
+      END IF
+*
       IF( M.LT.0 ) THEN
         INFO = -1
       ELSE IF( N.LT.0 .OR. N.LT.M ) THEN
         INFO = -2
-      ELSE IF( MB.LT.1 .OR. ( MB.GT.M .AND. M.GT.0 )) THEN
+      ELSE IF( MB.LT.1 .OR. ( MB.GT.M .AND. M.GT.0 ) ) THEN
         INFO = -3
       ELSE IF( NB.LE.0 ) THEN
         INFO = -4
@@ -212,24 +224,24 @@
         INFO = -6
       ELSE IF( LDT.LT.MB ) THEN
         INFO = -8
-      ELSE IF( ( LWORK.LT.M*MB) .AND. (.NOT.LQUERY) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. (.NOT.LQUERY) ) THEN
         INFO = -10
       END IF
-      IF( INFO.EQ.0)  THEN
-      WORK(1) = MB*M
+      IF( INFO.EQ.0 ) THEN
+        WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'SLASWLQ', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
-       RETURN
+      ELSE IF( LQUERY ) THEN
+        RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N).EQ.0 ) THEN
-          RETURN
+      IF( MINMN.EQ.0 ) THEN
+        RETURN
       END IF
 *
 *     The LQ Decomposition
@@ -265,7 +277,7 @@
      $                  WORK, INFO )
        END IF
 *
-      WORK( 1 ) = SROUNDUP_LWORK(M * MB)
+      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       RETURN
 *
 *     End of SLASWLQ

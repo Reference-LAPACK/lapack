@@ -89,7 +89,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (LWORK)
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -173,7 +173,7 @@
       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL              A( LDA, * ), TAU( * ), WORK( * )
+      REAL               A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -182,7 +182,7 @@
       INTEGER            NBMAX, LDT, TSIZE
       PARAMETER          ( NBMAX = 64, LDT = NBMAX+1,
      $                     TSIZE = LDT*NBMAX )
-      REAL              ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0,
      $                     ONE = 1.0E+0 )
 *     ..
@@ -190,7 +190,7 @@
       LOGICAL            LQUERY
       INTEGER            I, IB, IINFO, IWT, J, LDWORK, LWKOPT, NB,
      $                   NBMIN, NH, NX
-      REAL              EI
+      REAL               EI
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SGEHD2, SGEMM, SLAHR2, SLARFB, STRMM,
@@ -226,9 +226,14 @@
 *
 *       Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'SGEHRD', ' ', N, ILO, IHI, -1 ) )
-         LWKOPT = N*NB + TSIZE
-         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+         IF( N.EQ.0 ) THEN
+            LWKOPT = 1
+         ELSE
+            NB = MIN( NBMAX, ILAENV( 1, 'SGEHRD', ' ', N, ILO, IHI,
+     $                              -1 ) )
+            LWKOPT = N*NB + TSIZE
+         ENDIF
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -345,7 +350,8 @@
 *     Use unblocked code to reduce the rest of the matrix
 *
       CALL SGEHD2( N, I, IHI, A, LDA, TAU, WORK, IINFO )
-      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *
