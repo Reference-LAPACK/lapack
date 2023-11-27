@@ -223,6 +223,7 @@ option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library inste
 
 # Check the usage of the user provided BLAS libraries
 if(BLAS_LIBRARIES)
+  enable_language(Fortran)
   include(CheckFortranFunctionExists)
   set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
   CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
