@@ -180,14 +180,14 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (LWORK)
+*>          WORK is COMPLEX array, dimension (MAX(1, LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
 *> \param[in]  LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of the array WORK.  LWORK >= 1.
+*>          The length of the array WORK. LWORK >= 1.
 *>          For optimum performance LWORK >= 6*N*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -280,7 +280,12 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'CGGHD3', ' ', N, ILO, IHI, -1 )
-      LWKOPT = MAX( 6*N*NB, 1 )
+      NH = IHI - ILO + 1
+      IF( N.EQ.0 .OR. NH.LE.1 ) THEN
+         LWKOPT = 1
+      ELSE
+         LWKOPT = 6*N*NB
+      END IF
       WORK( 1 ) = CMPLX( LWKOPT )
       INITQ = LSAME( COMPQ, 'I' )
       WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
@@ -330,7 +335,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = CONE
          RETURN

@@ -216,7 +216,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER.
-*>          Length of CWORK, LWORK >= M+N.
+*>          Length of CWORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= MAX(1,M+N), otherwise.
 *> \endverbatim
 *>
 *> \param[in,out] RWORK
@@ -374,16 +375,17 @@
       PARAMETER  ( NSWEEP = 30 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX AAPQ, OMPQ
-      REAL    AAPP, AAPP0, AAPQ1, AAQQ, APOAQ, AQOAP, BIG,
-     $        BIGTHETA, CS, CTOL, EPSLN, MXAAPQ,
-     $        MXSINJ, ROOTBIG, ROOTEPS, ROOTSFMIN, ROOTTOL,
-     $        SKL, SFMIN, SMALL, SN, T, TEMP1, THETA, THSIGN, TOL
-      INTEGER BLSKIP, EMPTSW, i, ibr, IERR, igl, IJBLSK, ir1,
-     $        ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
-     $        N4, NBL, NOTROT, p, PSKIPPED, q, ROWSKIP, SWBAND
-      LOGICAL APPLV, GOSCALE, LOWER, LQUERY, LSVEC, NOSCALE, ROTOK,
-     $        RSVEC, UCTOL, UPPER
+      COMPLEX    AAPQ, OMPQ
+      REAL       AAPP, AAPP0, AAPQ1, AAQQ, APOAQ, AQOAP, BIG,
+     $           BIGTHETA, CS, CTOL, EPSLN, MXAAPQ,
+     $           MXSINJ, ROOTBIG, ROOTEPS, ROOTSFMIN, ROOTTOL,
+     $           SKL, SFMIN, SMALL, SN, T, TEMP1, THETA, THSIGN, TOL
+      INTEGER    BLSKIP, EMPTSW, i, ibr, IERR, igl, IJBLSK, ir1,
+     $           ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
+     $           N4, NBL, NOTROT, p, PSKIPPED, q, ROWSKIP, SWBAND,
+     $           MINMN, LWMIN, LRWMIN
+      LOGICAL    APPLV, GOSCALE, LOWER, LQUERY, LSVEC, NOSCALE, ROTOK,
+     $           RSVEC, UCTOL, UPPER
 *     ..
 *     ..
 *     .. Intrinsic Functions ..
@@ -421,6 +423,17 @@
       APPLV = LSAME( JOBV, 'A' )
       UPPER = LSAME( JOBA, 'U' )
       LOWER = LSAME( JOBA, 'L' )
+
+      MINMN = MIN( M, N )
+      IF( MINMN.EQ.0 ) THEN
+         LWMIN = 1
+         LRWMIN = 6
+      ELSE
+         LWMIN = M + N
+         LRWMIN = MAX( 6, N )
+      END IF
+      CWORK(1) = LWMIN
+      RWORK(1) = LRWMIN
 *
       LQUERY = ( LWORK .EQ. -1 ) .OR. ( LRWORK .EQ. -1 )
       IF( .NOT.( UPPER .OR. LOWER .OR. LSAME( JOBA, 'G' ) ) ) THEN
@@ -442,9 +455,9 @@
          INFO = -11
       ELSE IF( UCTOL .AND. ( RWORK( 1 ).LE.ONE ) ) THEN
          INFO = -12
-      ELSE IF( LWORK.LT.( M+N ) .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
-      ELSE IF( LRWORK.LT.MAX( N, 6 ) .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( LRWORK.LT.LRWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -15
       ELSE
          INFO = 0
@@ -455,14 +468,12 @@
          CALL XERBLA( 'CGESVJ', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         CWORK(1) = M + N
-         RWORK(1) = MAX( N, 6 )
          RETURN
       END IF
 *
 * #:) Quick return for void matrix
 *
-      IF( ( M.EQ.0 ) .OR. ( N.EQ.0 ) )RETURN
+      IF( MINMN.EQ.0 ) RETURN
 *
 *     Set numerical parameters
 *     The stopping criterion for Jacobi rotations is

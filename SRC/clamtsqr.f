@@ -129,6 +129,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>         On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *>
 *> \endverbatim
 *> \param[in] LWORK
@@ -136,8 +137,9 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>
-*>          If SIDE = 'L', LWORK >= max(1,N)*NB;
-*>          if SIDE = 'R', LWORK >= max(1,MB)*NB.
+*>          If MIN(M,N,K) = 0, LWORK >= 1.
+*>          If SIDE = 'L', LWORK >= max(1,N*NB);
+*>          if SIDE = 'R', LWORK >= max(1,MB*NB).
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -215,7 +217,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL    LEFT, RIGHT, TRAN, NOTRAN, LQUERY
-      INTEGER    I, II, KK, LW, CTR, Q
+      INTEGER    I, II, KK, LW, CTR, Q, LWMIN, MINMNK
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -228,12 +230,13 @@
 *
 *     Test the input arguments
 *
-      LQUERY  = LWORK.LT.0
+      INFO = 0
+      LQUERY  = ( LWORK.LT.-1 )
       NOTRAN  = LSAME( TRANS, 'N' )
       TRAN    = LSAME( TRANS, 'C' )
       LEFT    = LSAME( SIDE, 'L' )
       RIGHT   = LSAME( SIDE, 'R' )
-      IF (LEFT) THEN
+      IF ( LEFT ) THEN
         LW = N * NB
         Q = M
       ELSE
@@ -241,7 +244,13 @@
         Q = N
       END IF
 *
-      INFO = 0
+      MINMNK = MIN( M, N, K )
+      IF( MINMNK.EQ.0 ) THEN
+         LWMIN = 1
+      ELSE
+         LWMIN = MAX( 1, LW )
+      END IF
+*
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
          INFO = -1
       ELSE IF( .NOT.TRAN .AND. .NOT.NOTRAN ) THEN
@@ -260,26 +269,26 @@
         INFO = -11
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
          INFO = -13
-      ELSE IF(( LWORK.LT.MAX(1,LW)).AND.(.NOT.LQUERY)) THEN
+      ELSE IF( LWORK.LT.MINMNK .AND. (.NOT.LQUERY) ) THEN
         INFO = -15
       END IF
 *
 *     Determine the block size if it is tall skinny or short and wide
 *
-      IF( INFO.EQ.0)  THEN
-          WORK(1) = SROUNDUP_LWORK(LW)
+      IF( INFO.EQ.0 )  THEN
+          WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLAMTSQR', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
+      ELSE IF ( LQUERY ) THEN
        RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N,K).EQ.0 ) THEN
+      IF( MINMNK.EQ.0 ) THEN
         RETURN
       END IF
 *
@@ -412,7 +421,7 @@
 *
       END IF
 *
-      WORK(1) = SROUNDUP_LWORK(LW)
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       RETURN
 *
 *     End of CLAMTSQR

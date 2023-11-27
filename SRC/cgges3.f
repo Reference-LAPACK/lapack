@@ -216,6 +216,8 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>          If N = 0, LWORK >= 1, else LWORK >= 2*N.
+*>          For good performance, LWORK must generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -300,7 +302,8 @@
       LOGICAL            CURSL, ILASCL, ILBSCL, ILVSL, ILVSR, LASTSL,
      $                   LQUERY, WANTST
       INTEGER            I, ICOLS, IERR, IHI, IJOBVL, IJOBVR, ILEFT,
-     $                   ILO, IRIGHT, IROWS, IRWRK, ITAU, IWRK, LWKOPT
+     $                   ILO, IRIGHT, IROWS, IRWRK, ITAU, IWRK, LWKOPT,
+     $                   LWKMIN
       REAL               ANRM, ANRMTO, BIGNUM, BNRM, BNRMTO, EPS, PVSL,
      $                   PVSR, SMLNUM
 *     ..
@@ -352,6 +355,12 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
+      IF( N.EQ.0 ) THEN
+         LWKMIN = 1
+      ELSE
+         LWKMIN = 2*N
+      END IF
+*
       IF( IJOBVL.LE.0 ) THEN
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
@@ -368,7 +377,7 @@
          INFO = -14
       ELSE IF( LDVSR.LT.1 .OR. ( ILVSR .AND. LDVSR.LT.N ) ) THEN
          INFO = -16
-      ELSE IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -18
       END IF
 *

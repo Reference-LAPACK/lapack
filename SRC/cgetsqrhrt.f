@@ -131,13 +131,13 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          The dimension of the array WORK.
-*>          LWORK >= MAX( LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
+*>          LWORK >= MAX( 1, LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
 *>          where
 *>             NUM_ALL_ROW_BLOCKS = CEIL((M-N)/(MB1-N)),
 *>             NB1LOCAL = MIN(NB1,N).
 *>             LWT = NUM_ALL_ROW_BLOCKS * N * NB1LOCAL,
 *>             LW1 = NB1LOCAL * N,
-*>             LW2 = NB1LOCAL * MAX( NB1LOCAL, ( N - NB1LOCAL ) ),
+*>             LW2 = NB1LOCAL * MAX( NB1LOCAL, ( N - NB1LOCAL ) ).
 *>          If LWORK = -1, then a workspace query is assumed.
 *>          The routine only calculates the optimal size of the WORK
 *>          array, returns this value as the first entry of the WORK
@@ -212,7 +212,7 @@
 *     Test the input arguments
 *
       INFO = 0
-      LQUERY  = LWORK.EQ.-1
+      LQUERY  = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
       ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
@@ -263,8 +263,9 @@
             LW2 = NB1LOCAL * MAX( NB1LOCAL, ( N - NB1LOCAL ) )
 *
             LWORKOPT = MAX( LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) )
+            LWORKOPT = MAX( 1, LWORKOPT )
 *
-            IF( ( LWORK.LT.MAX( 1, LWORKOPT ) ).AND.(.NOT.LQUERY) ) THEN
+            IF( LWORK.LT.LWORKOPT .AND. .NOT.LQUERY ) THEN
                INFO = -11
             END IF
 *

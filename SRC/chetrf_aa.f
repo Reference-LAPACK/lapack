@@ -190,8 +190,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         LWKOPT = (NB+1)*N
-         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+         LWKOPT = MAX( 1, (NB+1)*N )
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -460,7 +460,7 @@
       END IF
 *
    20 CONTINUE
-      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       RETURN
 *
 *     End of CHETRF_AA

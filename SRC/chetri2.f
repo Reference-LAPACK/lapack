@@ -88,14 +88,14 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (N+NB+1)*(NB+3)
+*>          WORK is COMPLEX array, dimension (MAX(1, LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          WORK is size >= (N+NB+1)*(NB+3)
+*>          If N = 0, LWORK >= 1, else LWORK >= (N+NB+1)*(NB+3).
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>           calculates:
 *>              - the optimal size of the WORK array, returns
@@ -147,7 +147,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHETRI2X, CHETRI, XERBLA
@@ -161,7 +162,9 @@
       LQUERY = ( LWORK.EQ.-1 )
 *     Get blocksize
       NBMAX = ILAENV( 1, 'CHETRF', UPLO, N, -1, -1, -1 )
-      IF ( NBMAX .GE. N ) THEN
+      IF( N.EQ.0 ) THEN
+         MINSIZE = 1
+      ELSE IF ( NBMAX .GE. N ) THEN
          MINSIZE = N
       ELSE
          MINSIZE = (N+NBMAX+1)*(NBMAX+3)
@@ -173,7 +176,7 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF (LWORK .LT. MINSIZE .AND. .NOT.LQUERY ) THEN
+      ELSE IF ( LWORK.LT.MINSIZE .AND. .NOT.LQUERY ) THEN
          INFO = -7
       END IF
 *
@@ -184,7 +187,7 @@
          CALL XERBLA( 'CHETRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK(1)=MINSIZE
+         WORK( 1 ) = SROUNDUP_LWORK( MINSIZE )
          RETURN
       END IF
       IF( N.EQ.0 )

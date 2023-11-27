@@ -443,8 +443,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
-      REAL               SLAMCH, CLANSY
-      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV, ILAENV2STAGE
+      REAL               SLAMCH, CLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV, ILAENV2STAGE,
+     $                   SROUNDUP_LWORK 
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
@@ -506,7 +507,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 )  = LWMIN
+         WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
          RWORK( 1 ) = LRWMIN
          IWORK( 1 ) = LIWMIN
 *
@@ -666,7 +667,7 @@
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF ( ABSTOL .LE. TWO*N*EPS ) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -765,7 +766,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 )  = LWMIN
+      WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
       RWORK( 1 ) = LRWMIN
       IWORK( 1 ) = LIWMIN
 *

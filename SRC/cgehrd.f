@@ -89,7 +89,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (LWORK)
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -226,9 +226,15 @@
 *
 *        Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'CGEHRD', ' ', N, ILO, IHI, -1 ) )
-         LWKOPT = N*NB + TSIZE
-         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+
+         IF( N.EQ.0 ) THEN
+            LWKOPT = 1
+         ELSE
+            NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
+     $                              -1 ) )
+            LWKOPT = N*NB + TSIZE
+         END IF
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -345,7 +351,8 @@
 *     Use unblocked code to reduce the rest of the matrix
 *
       CALL CGEHD2( N, I, IHI, A, LDA, TAU, WORK, IINFO )
-      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *
