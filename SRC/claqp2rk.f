@@ -378,7 +378,7 @@
       EXTERNAL           CLARF, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, REAL, CONJG, IMAG, MAX, MIN, SQRT
+      INTRINSIC          ABS, REAL, CONJG, AIMAG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
       LOGICAL            SISNAN
@@ -599,8 +599,8 @@
 *
          IF( SISNAN( REAL( TAU(KK) ) ) ) THEN
             TAUNAN = REAL( TAU(KK) )
-         ELSE IF( SISNAN( IMAG( TAU(KK) ) ) ) THEN
-            TAUNAN = IMAG( TAU(KK) )
+         ELSE IF( SISNAN( AIMAG( TAU(KK) ) ) ) THEN
+            TAUNAN = AIMAG( TAU(KK) )
          ELSE
             TAUNAN = ZERO
          END IF
