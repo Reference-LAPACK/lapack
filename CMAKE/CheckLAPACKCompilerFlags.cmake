@@ -177,6 +177,7 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
   endif()
 
   # Suppress compiler banner and summary
+  include(CheckFortranCompilerFlag)
   check_fortran_compiler_flag("-quiet" _quiet)
   if( _quiet AND NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]quiet") )
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -quiet")

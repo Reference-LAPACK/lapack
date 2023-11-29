@@ -14,6 +14,10 @@ if(CMAKE_Fortran_COMPILER)
   FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/cblas_mangling.h
                           MACRO_NAMESPACE "F77_"
                           SYMBOL_NAMESPACE "F77_")
+
+  # Check for any necessary platform specific compiler flags
+  include(CheckLAPACKCompilerFlags)
+  CheckLAPACKCompilerFlags()
 endif()
 if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
   message(WARNING "Reverting to pre-defined include/cblas_mangling.h")
