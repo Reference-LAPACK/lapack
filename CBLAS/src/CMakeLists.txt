@@ -119,6 +119,9 @@ list(REMOVE_DUPLICATES SOURCES)
 
 add_library(${CBLASLIB}_obj OBJECT ${SOURCES})
 set_target_properties(${CBLASLIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
+if(HAS_ATTRIBUTE_WEAK_SUPPORT)
+  target_compile_definitions(${CBLASLIB}_obj PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
+endif()
 
 if(BUILD_INDEX64_EXT_API)
   # 64bit Integer Interface
@@ -143,6 +146,9 @@ if(BUILD_INDEX64_EXT_API)
           LINKER_LANGUAGE C)
   target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64)
   target_compile_options(${CBLASLIB}_64_fobj PRIVATE ${FOPT_ILP64})
+  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
+    target_compile_definitions(${CBLASLIB}_64_cobj PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
+  endif()
   #Add suffix to all Fortran functions via macros
   foreach(F IN LISTS SOURCES_64_F)
       set(COPT_64_F)
@@ -169,11 +175,8 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   POSITION_INDEPENDENT_CODE ON
   )
-if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-  target_compile_definitions(${CBLASLIB} PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-endif()
+
 target_include_directories(${CBLASLIB} PUBLIC
-  $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(${CBLASLIB} PUBLIC ${BLAS_LIBRARIES})
