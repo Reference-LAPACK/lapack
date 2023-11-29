@@ -954,7 +954,7 @@
      $        4X, '10. Random, Last columns are zero starting from',
      $                 ' MINMN/2+1, CNDNUM = 2', /
      $        4X, '11. Random, Half MINMN columns in the middle are',
-     $                 ' zero starting from MINMN/2-(MINMN/2)/2+1,'
+     $                 ' zero starting from MINMN/2-(MINMN/2)/2+1,',
      $                 ' CNDNUM = 2', /
      $        4X, '12. Random, Odd columns are ZERO, CNDNUM = 2', /
      $        4X, '13. Random, Even columns are ZERO, CNDNUM = 2', /
