@@ -101,8 +101,10 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK. LWORK >= MAX(1,2*N). For optimum performance
-*>          LWORK >= N*(1+NB), where NB is the optimal blocksize.
+*>          The length of WORK. 
+*>          LWORK >= 1, if N >= 1, and LWORK >= 2*N, otherwise.
+*>          For optimum performance LWORK >= N*(1+NB), where NB is 
+*>          the optimal blocksize, returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -128,7 +130,7 @@
 *> \ingroup hetrf_aa
 *
 *  =====================================================================
-      SUBROUTINE ZHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
+      SUBROUTINE ZHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -189,7 +191,11 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         LWKOPT = (NB+1)*N
+         IF( N.LE.1 ) THEN
+            LWKOPT = 1
+         ELSE
+            LWKOPT = (NB+1)*N
+         END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
@@ -202,11 +208,11 @@
 *
 *     Quick return
 *
-      IF ( N.EQ.0 ) THEN
+      IF( N.EQ.0 ) THEN
           RETURN
       ENDIF
       IPIV( 1 ) = 1
-      IF ( N.EQ.1 ) THEN
+      IF( N.EQ.1 ) THEN
          A( 1, 1 ) = DBLE( A( 1, 1 ) )
          RETURN
       END IF
