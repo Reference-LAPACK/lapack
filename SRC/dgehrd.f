@@ -173,7 +173,7 @@
       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A( LDA, * ), TAU( * ), WORK( * )
+      DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -182,7 +182,7 @@
       INTEGER            NBMAX, LDT, TSIZE
       PARAMETER          ( NBMAX = 64, LDT = NBMAX+1,
      $                     TSIZE = LDT*NBMAX )
-      DOUBLE PRECISION  ZERO, ONE
+      DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0,
      $                     ONE = 1.0D+0 )
 *     ..
@@ -190,7 +190,7 @@
       LOGICAL            LQUERY
       INTEGER            I, IB, IINFO, IWT, J, LDWORK, LWKOPT, NB,
      $                   NBMIN, NH, NX
-      DOUBLE PRECISION  EI
+      DOUBLE PRECISION   EI
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DGEHD2, DGEMM, DLAHR2, DLARFB, DTRMM,
@@ -221,11 +221,12 @@
          INFO = -8
       END IF
 *
+      NH = IHI - ILO + 1
       IF( INFO.EQ.0 ) THEN
 *
 *        Compute the workspace requirements
 *
-         IF( N.EQ.0 ) THEN
+         IF( NH.LE.1 ) THEN
             LWKOPT = 1
          ELSE
             NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
@@ -253,7 +254,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = 1
          RETURN

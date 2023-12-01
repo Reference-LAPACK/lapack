@@ -240,7 +240,11 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK.
-*>          LWORK >= 1, if MIN(M,N) = 0, LWORK >= MAX(6,M+N), otherwise.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= MAX(6,M+N), otherwise.
+*>
+*>          If on entry LWORK = -1, then a workspace query is assumed and
+*>          no computation is done; WORK(1) is set to the minial (and optimal)
+*>          length of WORK.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -367,8 +371,8 @@
      $                   ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
      $                   N4, NBL, NOTROT, p, PSKIPPED, q, ROWSKIP,
      $                   SWBAND, MINMN, LWMIN
-      LOGICAL            APPLV, GOSCALE, LOWER, LSVEC, NOSCALE, ROTOK,
-     $                   RSVEC, UCTOL, UPPER
+      LOGICAL            APPLV, GOSCALE, LOWER, LQUERY, LSVEC, NOSCALE,
+     $                   ROTOK, RSVEC, UCTOL, UPPER
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   FASTR( 5 )
@@ -416,6 +420,7 @@
          LWMIN = MAX( 6, M+N )
       END IF
 *
+      LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.( UPPER .OR. LOWER .OR. LSAME( JOBA, 'G' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( LSVEC .OR. UCTOL .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -435,7 +440,7 @@
          INFO = -11
       ELSE IF( UCTOL .AND. ( WORK( 1 ).LE.ONE ) ) THEN
          INFO = -12
-      ELSE IF( LWORK.LT.LWMIN ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
       ELSE
          INFO = 0
@@ -444,6 +449,9 @@
 *     #:(
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DGESVJ', -INFO )
+         RETURN
+      ELSE IF( LQUERY ) THEN
+         WORK( 1 ) = LWMIN
          RETURN
       END IF
 *

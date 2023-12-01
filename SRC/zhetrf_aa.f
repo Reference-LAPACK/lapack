@@ -101,9 +101,9 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK. 
+*>          The length of WORK.
 *>          LWORK >= 1, if N >= 1, and LWORK >= 2*N, otherwise.
-*>          For optimum performance LWORK >= N*(1+NB), where NB is 
+*>          For optimum performance LWORK >= N*(1+NB), where NB is
 *>          the optimal blocksize, returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -154,7 +154,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL      LQUERY, UPPER
-      INTEGER      J, LWKOPT
+      INTEGER      J, LWKMIN, LWKOPT
       INTEGER      NB, MJ, NJ, K1, K2, J1, J2, J3, JB
       COMPLEX*16   ALPHA
 *     ..
@@ -180,22 +180,25 @@
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
+      IF( N.LE.1 ) THEN
+         LWKMIN = 1
+         LWKOPT = 1
+      ELSE
+         LWKMIN = 2*N
+         LWKOPT = (NB+1)*N
+      END IF
+*
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -7
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( N.LE.1 ) THEN
-            LWKOPT = 1
-         ELSE
-            LWKOPT = (NB+1)*N
-         END IF
          WORK( 1 ) = LWKOPT
       END IF
 *

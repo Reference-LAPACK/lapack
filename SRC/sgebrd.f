@@ -290,7 +290,7 @@
 *        Determine when to switch from blocked to unblocked code.
 *
          IF( NX.LT.MINMN ) THEN
-            WS = ( M+N )*NB
+            WS = LWKOPT
             IF( LWORK.LT.WS ) THEN
 *
 *              Not enough work space for the optimal NB, consider using

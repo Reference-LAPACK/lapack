@@ -183,7 +183,7 @@
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
-*> \param[in]  LWORK
+*> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK. LWORK >= 1.
@@ -277,7 +277,7 @@
       INFO = 0
       NB = ILAENV( 1, 'SGGHD3', ' ', N, ILO, IHI, -1 )
       NH = IHI - ILO + 1
-      IF( N.EQ.0 .OR. NH.LE.1 ) THEN
+      IF( NH.LE.1 ) THEN
          LWKOPT = 1
       ELSE
          LWKOPT = 6*N*NB

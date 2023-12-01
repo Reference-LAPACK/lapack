@@ -214,7 +214,7 @@
 *> \verbatim
 *>          LWORK is INTEGER.
 *>          Length of CWORK.
-*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= MAX(1,M+N), otherwise.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M+N, otherwise.
 *>
 *>          If on entry LWORK = -1, then a workspace query is assumed and
 *>          no computation is done; CWORK(1) is set to the minial (and optimal)
@@ -430,14 +430,12 @@
 *
       MINMN = MIN( M, N )
       IF( MINMN.EQ.0 ) THEN
-         LWMIN = 1
+         LWMIN  = 1
          LRWMIN = 1
       ELSE
-         LWMIN = M+N
+         LWMIN  = M+N
          LRWMIN = MAX( 6, N )
       END IF
-      CWORK(1) = LWMIN
-      RWORK(1) = LRWMIN
 *
       LQUERY = ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 )
       IF( .NOT.( UPPER .OR. LOWER .OR. LSAME( JOBA, 'G' ) ) ) THEN
@@ -459,9 +457,9 @@
          INFO = -11
       ELSE IF( UCTOL .AND. ( RWORK( 1 ).LE.ONE ) ) THEN
          INFO = -12
-      ELSE IF( ( LWORK.LT.LWMIN ) .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
-      ELSE IF( ( LRWORK.LT.LRWMIN ) .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( LRWORK.LT.LRWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -15
       ELSE
          INFO = 0
@@ -472,6 +470,8 @@
          CALL XERBLA( 'ZGESVJ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
+         CWORK( 1 ) = LWMIN
+         RWORK( 1 ) = LRWMIN
          RETURN
       END IF
 *

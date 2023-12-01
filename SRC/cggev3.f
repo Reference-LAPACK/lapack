@@ -258,8 +258,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANGE, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
@@ -324,7 +324,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          CALL CGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
-         LWKOPT = MAX( N,  N+INT( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKMIN, N+INT( WORK( 1 ) ) )
          CALL CUNMQR( 'L', 'C', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
          LWKOPT = MAX( LWKOPT, N+INT( WORK( 1 ) ) )
@@ -352,7 +352,7 @@
          IF( N.EQ.0 ) THEN
             WORK( 1 ) = 1
          ELSE
-            WORK( 1 ) = CMPLX( LWKOPT )
+            WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
          END IF
       END IF
 *
@@ -553,7 +553,7 @@
       IF( ILBSCL )
      $   CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
 *
-      WORK( 1 ) = CMPLX( LWKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       RETURN
 *
 *     End of CGGEV3

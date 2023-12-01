@@ -206,7 +206,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            LWKOPT
+      INTEGER            LWKMIN, LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -227,6 +227,7 @@
       UPPER = LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
+      LWKMIN = MAX( 1, N )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -239,14 +240,15 @@
          INFO = -7
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -11
-      ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.WQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.WQUERY ) THEN
          INFO = -13
       END IF
 *
       IF( INFO.EQ.0 ) THEN
          CALL DSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
-         LWKOPT = INT( WORK(1) )
+         LWKOPT = MAX( LWKMIN, INT( WORK( 1 ) ) )
+         WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -255,7 +257,6 @@
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
       END IF
-*
 *
 *     Compute the factorization A = U**T*T*U or A = L*T*L**T.
 *

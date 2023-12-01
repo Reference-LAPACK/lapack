@@ -182,7 +182,7 @@
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
       INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LWKOPT, LDTB, NB, KB, JB, NT, IINFO
+      INTEGER            LDTB, NB, KB, JB, NT, IINFO
       COMPLEX            PIV
 *     ..
 *     .. External Functions ..
@@ -214,9 +214,9 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF ( LTB .LT. MAX( 1, 4*N ) .AND. .NOT.TQUERY ) THEN
+      ELSE IF( LTB.LT.MAX( 1, 4*N ) .AND. .NOT.TQUERY ) THEN
          INFO = -6
-      ELSE IF ( LWORK .LT. MAX( 1, N ) .AND. .NOT.WQUERY ) THEN
+      ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.WQUERY ) THEN
          INFO = -10
       END IF
 *
@@ -230,11 +230,10 @@
       NB = ILAENV( 1, 'CHETRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
       IF( INFO.EQ.0 ) THEN
          IF( TQUERY ) THEN
-            TB( 1 ) = MAX( 1, (3*NB+1)*N )
+            TB( 1 ) = SROUNDUP_LWORK( MAX( 1, (3*NB+1)*N ) )
          END IF
          IF( WQUERY ) THEN
-            LWKOPT = MAX( 1, N*NB )
-            WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
+            WORK( 1 ) = SROUNDUP_LWORK( MAX( 1, N*NB ) )
          END IF
       END IF
       IF( TQUERY .OR. WQUERY ) THEN
@@ -243,7 +242,7 @@
 *
 *     Quick return
 *
-      IF ( N.EQ.0 ) THEN
+      IF( N.EQ.0 ) THEN
          RETURN
       ENDIF
 *

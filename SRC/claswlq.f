@@ -98,9 +98,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
-*>         On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
-*>
+*>          (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -113,7 +112,6 @@
 *>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
-*>
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -167,33 +165,35 @@
 *>
 *  =====================================================================
       SUBROUTINE CLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
-     $                  INFO)
+     $                    INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, MB, NB, LWORK, LDT
+      INTEGER            INFO, LDA, M, N, MB, NB, LWORK, LDT
 *     ..
 *     .. Array Arguments ..
-      COMPLEX           A( LDA, * ), WORK( * ), T( LDT, *)
+      COMPLEX            A( LDA, * ), WORK( * ), T( LDT, * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY
-      INTEGER    I, II, KK, CTR, MINMN, LWMIN
+      LOGICAL            LQUERY
+      INTEGER            I, II, KK, CTR, MINMN, LWMIN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SROUNDUP_LWORK
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
+*     ..
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           CGELQT, CTPLQT, XERBLA
+*     ..
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -224,17 +224,18 @@
         INFO = -6
       ELSE IF( LDT.LT.MB ) THEN
         INFO = -8
-      ELSE IF( ( LWORK.LT.LWMIN ) .AND. (.NOT.LQUERY) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. (.NOT.LQUERY) ) THEN
         INFO = -10
       END IF
-      IF( INFO.EQ.0 )  THEN
+*
+      IF( INFO.EQ.0 ) THEN
         WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLASWLQ', -INFO )
         RETURN
-      ELSE IF ( LQUERY ) THEN
+      ELSE IF( LQUERY ) THEN
         RETURN
       END IF
 *
@@ -254,14 +255,14 @@
       KK = MOD((N-M),(NB-M))
       II = N-KK+1
 *
-*      Compute the LQ factorization of the first block A(1:M,1:NB)
+*     Compute the LQ factorization of the first block A(1:M,1:NB)
 *
       CALL CGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
       CTR = 1
 *
       DO I = NB+1, II-NB+M , (NB-M)
 *
-*      Compute the QR factorization of the current block A(1:M,I:I+NB-M)
+*       Compute the QR factorization of the current block A(1:M,I:I+NB-M)
 *
         CALL CTPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
      $                  LDA, T(1,CTR*M+1),
@@ -271,7 +272,7 @@
 *
 *     Compute the QR factorization of the last block A(1:M,II:N)
 *
-      IF ( II.LE.N ) THEN
+      IF( II.LE.N ) THEN
         CALL CTPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
      $                  LDA, T(1,CTR*M+1), LDT,
      $                  WORK, INFO )

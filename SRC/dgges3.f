@@ -394,29 +394,33 @@
 *
       IF( INFO.EQ.0 ) THEN
          CALL DGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
-         LWKOPT = MAX( LWKMIN, 3*N+INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( LWKMIN, 3*N+INT( WORK( 1 ) ) )
          CALL DORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
-         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          IF( ILVSL ) THEN
             CALL DORGQR( N, N, N, VSL, LDVSL, WORK, WORK, -1, IERR )
-            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          END IF
          CALL DGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
-         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          CALL DLAQZ0( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
      $                ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
      $                WORK, -1, 0, IERR )
-         LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, 2*N+INT( WORK( 1 ) ) )
          IF( WANTST ) THEN
             CALL DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
      $                   SDIM, PVSL, PVSR, DIF, WORK, -1, IDUM, 1,
      $                   IERR )
-            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK( 1 ) ) )
          END IF
-         WORK( 1 ) = LWKOPT
+         IF( N.EQ.0 ) THEN
+            WORK( 1 ) = 1
+         ELSE
+            WORK( 1 ) = LWKOPT
+         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN

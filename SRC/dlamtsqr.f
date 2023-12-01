@@ -136,16 +136,16 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>
 *>          If MIN(M,N,K) = 0, LWORK >= 1.
 *>          If SIDE = 'L', LWORK >= max(1,N*NB).
 *>          If SIDE = 'R', LWORK >= max(1,MB*NB).
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
+*>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
-*>
 *> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -272,8 +272,6 @@
         INFO = -15
       END IF
 *
-*     Determine the block size if it is tall skinny or short and wide
-*
       IF( INFO.EQ.0 ) THEN
         WORK( 1 ) = LWMIN
       END IF
@@ -291,9 +289,11 @@
         RETURN
       END IF
 *
+*     Determine the block size if it is tall skinny or short and wide
+*
       IF((MB.LE.K).OR.(MB.GE.MAX(M,N,K))) THEN
         CALL DGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
-     $        T, LDT, C, LDC, WORK, INFO)
+     $        T, LDT, C, LDC, WORK, INFO )
         RETURN
       END IF
 *

@@ -101,8 +101,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
-*>         On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
+*>          (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -112,7 +112,7 @@
 *>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= NB*N, otherwise.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
+*>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
@@ -168,32 +168,34 @@
 *>
 *  =====================================================================
       SUBROUTINE CLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
-     $                    LWORK, INFO)
+     $                    LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, MB, NB, LDT, LWORK
+      INTEGER            INFO, LDA, M, N, MB, NB, LDT, LWORK
 *     ..
 *     .. Array Arguments ..
-      COMPLEX           A( LDA, * ), WORK( * ), T(LDT, *)
+      COMPLEX            A( LDA, * ), WORK( * ), T( LDT, * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY
-      INTEGER    I, II, KK, CTR, LWMIN, MINMN
+      LOGICAL            LQUERY
+      INTEGER            I, II, KK, CTR, LWMIN, MINMN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
       LOGICAL            LSAME
       REAL               SROUNDUP_LWORK
       EXTERNAL           LSAME, SROUNDUP_LWORK
+*     ..
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL    CGEQRT, CTPQRT, XERBLA
+      EXTERNAL           CGEQRT, CTPQRT, XERBLA
+*     ..
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -218,7 +220,7 @@
         INFO = -2
       ELSE IF( MB.LT.1 ) THEN
         INFO = -3
-      ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 )) THEN
+      ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 ) ) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
         INFO = -6
@@ -228,13 +230,13 @@
         INFO = -10
       END IF
 *
-      IF( INFO.EQ.0)  THEN
-        WORK(1) = SROUNDUP_LWORK( LWMIN )
+      IF( INFO.EQ.0 ) THEN
+        WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLATSQR', -INFO )
         RETURN
-      ELSE IF ( LQUERY ) THEN
+      ELSE IF( LQUERY ) THEN
         RETURN
       END IF
 *
@@ -247,33 +249,33 @@
 *     The QR Decomposition
 *
       IF ( (MB.LE.N) .OR. (MB.GE.M) ) THEN
-        CALL CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
+        CALL CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
         RETURN
       END IF
       KK = MOD((M-N),(MB-N))
       II = M-KK+1
 *
-*      Compute the QR factorization of the first block A(1:MB,1:N)
+*     Compute the QR factorization of the first block A(1:MB,1:N)
 *
       CALL CGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
       CTR = 1
 *
-      DO I = MB+1, II-MB+N ,  (MB-N)
+      DO I = MB+1, II-MB+N, (MB-N)
 *
-*      Compute the QR factorization of the current block A(I:I+MB-N,1:N)
+*       Compute the QR factorization of the current block A(I:I+MB-N,1:N)
 *
         CALL CTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
      $                 T(1,CTR * N + 1),
-     $                  LDT, WORK, INFO )
+     $                 LDT, WORK, INFO )
         CTR = CTR + 1
       END DO
 *
-*      Compute the QR factorization of the last block A(II:M,1:N)
+*     Compute the QR factorization of the last block A(II:M,1:N)
 *
-      IF (II.LE.M) THEN
+      IF( II.LE.M ) THEN
         CALL CTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
      $                 T(1, CTR * N + 1), LDT,
-     $                  WORK, INFO )
+     $                 WORK, INFO )
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK( LWMIN )

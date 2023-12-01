@@ -180,7 +180,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (MAX(1, LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -265,7 +265,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT, CGEMM,
@@ -281,12 +282,12 @@
       INFO = 0
       NB = ILAENV( 1, 'CGGHD3', ' ', N, ILO, IHI, -1 )
       NH = IHI - ILO + 1
-      IF( N.EQ.0 .OR. NH.LE.1 ) THEN
+      IF( NH.LE.1 ) THEN
          LWKOPT = 1
       ELSE
          LWKOPT = 6*N*NB
       END IF
-      WORK( 1 ) = CMPLX( LWKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       INITQ = LSAME( COMPQ, 'I' )
       WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
       INITZ = LSAME( COMPZ, 'I' )

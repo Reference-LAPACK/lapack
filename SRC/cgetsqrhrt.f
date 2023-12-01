@@ -131,6 +131,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          The dimension of the array WORK.
+*>          If MIN(M,N) = 0, LWORK >= 1, else
 *>          LWORK >= MAX( 1, LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
 *>          where
 *>             NUM_ALL_ROW_BLOCKS = CEIL((M-N)/(MB1-N)),
@@ -138,6 +139,7 @@
 *>             LWT = NUM_ALL_ROW_BLOCKS * N * NB1LOCAL,
 *>             LW1 = NB1LOCAL * N,
 *>             LW2 = NB1LOCAL * MAX( NB1LOCAL, ( N - NB1LOCAL ) ).
+*>
 *>          If LWORK = -1, then a workspace query is assumed.
 *>          The routine only calculates the optimal size of the WORK
 *>          array, returns this value as the first entry of the WORK
@@ -200,6 +202,10 @@
       INTEGER            I, IINFO, J, LW1, LW2, LWT, LDWT, LWORKOPT,
      $                   NB1LOCAL, NB2LOCAL, NUM_ALL_ROW_BLOCKS
 *     ..
+*     .. External Functions ..
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLATSQR, CUNGTSQR_ROW, CUNHR_COL,
      $                   XERBLA
@@ -212,7 +218,7 @@
 *     Test the input arguments
 *
       INFO = 0
-      LQUERY  = ( LWORK.EQ.-1 )
+      LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
       ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
@@ -225,7 +231,7 @@
          INFO = -5
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -7
-      ELSE IF( LDT.LT.MAX( 1,  MIN( NB2, N ) ) ) THEN
+      ELSE IF( LDT.LT.MAX( 1, MIN( NB2, N ) ) ) THEN
          INFO = -9
       ELSE
 *
@@ -278,14 +284,14 @@
          CALL XERBLA( 'CGETSQRHRT', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = CMPLX( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = CMPLX( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
@@ -342,7 +348,7 @@
          END IF
       END DO
 *
-      WORK( 1 ) = CMPLX( LWORKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
       RETURN
 *
 *     End of CGETSQRHRT

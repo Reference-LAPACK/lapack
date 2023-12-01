@@ -132,6 +132,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>          If MIN(M,N) = 0, LWORK >= 1, else
 *>          LWORK >= MAX( 1, LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
 *>          where
 *>             NUM_ALL_ROW_BLOCKS = CEIL((M-N)/(MB1-N)),
@@ -231,7 +232,7 @@
          INFO = -5
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -7
-      ELSE IF( LDT.LT.MAX( 1,  MIN( NB2, N ) ) ) THEN
+      ELSE IF( LDT.LT.MAX( 1, MIN( NB2, N ) ) ) THEN
          INFO = -9
       ELSE
 *

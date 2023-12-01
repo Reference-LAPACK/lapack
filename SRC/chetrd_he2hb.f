@@ -124,7 +124,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
-*>          On exit, if INFO = 0, or if LWORK = -1, 
+*>          On exit, if INFO = 0, or if LWORK = -1,
 *>          WORK(1) returns the size of LWORK.
 *> \endverbatim
 *>
@@ -296,12 +296,12 @@
       INFO   = 0
       UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF(N.LE.KD+1) THEN
+      IF( N.LE.KD+1 ) THEN
          LWMIN = 1
       ELSE
-         LWMIN  = ILAENV2STAGE( 4, 'CHETRD_HE2HB', '', N, KD, -1, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'CHETRD_HE2HB', '', N, KD, -1, -1 )
       END IF
-      
+*
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN

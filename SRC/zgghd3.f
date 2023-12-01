@@ -276,7 +276,7 @@
       INFO = 0
       NB = ILAENV( 1, 'ZGGHD3', ' ', N, ILO, IHI, -1 )
       NH = IHI - ILO + 1
-      IF( N.LE.1 ) THEN
+      IF( NH.LE.1 ) THEN
          LWKOPT = 1
       ELSE
          LWKOPT = 6*N*NB

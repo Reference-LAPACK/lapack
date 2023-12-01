@@ -88,7 +88,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK).
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)).
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -159,11 +159,13 @@
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
+*
 *     Get blocksize
+*
       NBMAX = ILAENV( 1, 'ZHETRF', UPLO, N, -1, -1, -1 )
       IF( N.EQ.0 ) THEN
          MINSIZE = 1
-      ELSE IF( NBMAX .GE. N ) THEN
+      ELSE IF( NBMAX.GE.N ) THEN
          MINSIZE = N
       ELSE
          MINSIZE = (N+NBMAX+1)*(NBMAX+3)
@@ -192,7 +194,7 @@
       IF( N.EQ.0 )
      $   RETURN
 
-      IF( NBMAX .GE. N ) THEN
+      IF( NBMAX.GE.N ) THEN
          CALL ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
       ELSE
          CALL ZHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )

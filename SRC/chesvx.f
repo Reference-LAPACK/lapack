@@ -355,7 +355,7 @@
          LWKOPT = LWKMIN
          IF( NOFACT ) THEN
             NB = ILAENV( 1, 'CHETRF', UPLO, N, -1, -1, -1 )
-            LWKOPT = MAX( LWKMIN, N*NB )
+            LWKOPT = MAX( LWKOPT, N*NB )
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF

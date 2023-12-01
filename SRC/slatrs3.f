@@ -156,6 +156,7 @@
 *> \endverbatim
 *>
 *> \param[in] LWORK
+*> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>
@@ -167,6 +168,7 @@
 *>          only calculates the optimal dimensions of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim

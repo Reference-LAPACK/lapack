@@ -140,7 +140,7 @@
 *> \verbatim
 *>          LHOUS is INTEGER
 *>          The dimension of the array HOUS.
-*>          If N = 0, LHOUS >= 1, else LHOUS = MAX(1, dimension).
+*>          If N = 0 or KD <= 1, LHOUS >= 1, else LHOUS = MAX(1, dimension).
 *>
 *>          If LWORK = -1, or LHOUS = -1,
 *>          then a query is assumed; the routine
@@ -266,7 +266,7 @@
       INTEGER            I, M, K, IB, SWEEPID, MYID, SHIFT, STT, ST,
      $                   ED, STIND, EDIND, BLKLASTIND, COLPT, THED,
      $                   STEPERCOL, GRSIZ, THGRSIZ, THGRNB, THGRID,
-     $                   NBTILES, TTYPE, TID, NTHREADS, DEBUG,
+     $                   NBTILES, TTYPE, TID, NTHREADS,
      $                   ABDPOS, ABOFDPOS, DPOS, OFDPOS, AWPOS,
      $                   INDA, INDW, APOS, SIZEA, LDA, INDV, INDTAU,
      $                   SIDEV, SIZETAU, LDV, LHMIN, LWMIN
@@ -287,7 +287,6 @@
 *     Determine the minimal workspace size required.
 *     Test the input parameters
 *
-      DEBUG   = 0
       INFO    = 0
       AFTERS1 = LSAME( STAGE1, 'Y' )
       WANTQ   = LSAME( VECT, 'V' )
@@ -296,7 +295,7 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', VECT, N, KD, -1, -1 )
+      IB       = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', VECT, N, KD, -1, -1 )
       IF( N.EQ.0 .OR. KD.LE.1 ) THEN
          LHMIN = 1
          LWMIN = 1

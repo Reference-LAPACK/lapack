@@ -140,7 +140,7 @@
 *> \verbatim
 *>          LHOUS is INTEGER
 *>          The dimension of the array HOUS.
-*>          If N = 0, LHOUS >= 1, else LHOUS = MAX(1, dimension).
+*>          If N = 0 or KD <= 1, LHOUS >= 1, else LHOUS = MAX(1, dimension).
 *>
 *>          If LWORK = -1, or LHOUS = -1,
 *>          then a query is assumed; the routine
@@ -267,7 +267,7 @@
       INTEGER            I, M, K, IB, SWEEPID, MYID, SHIFT, STT, ST,
      $                   ED, STIND, EDIND, BLKLASTIND, COLPT, THED,
      $                   STEPERCOL, GRSIZ, THGRSIZ, THGRNB, THGRID,
-     $                   NBTILES, TTYPE, TID, NTHREADS, DEBUG,
+     $                   NBTILES, TTYPE, TID, NTHREADS,
      $                   ABDPOS, ABOFDPOS, DPOS, OFDPOS, AWPOS,
      $                   INDA, INDW, APOS, SIZEA, LDA, INDV, INDTAU,
      $                   SICEV, SIZETAU, LDV, LHMIN, LWMIN
@@ -291,7 +291,6 @@
 *     Determine the minimal workspace size required.
 *     Test the input parameters
 *
-      DEBUG   = 0
       INFO    = 0
       AFTERS1 = LSAME( STAGE1, 'Y' )
       WANTQ   = LSAME( VECT, 'V' )
@@ -300,13 +299,13 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV2STAGE( 2, 'CHETRD_HB2ST', VECT, N, KD, -1, -1 )
-      IF( N.EQ.0 ) THEN
+      IB       = ILAENV2STAGE( 2, 'CHETRD_HB2ST', VECT, N, KD, -1, -1 )
+      IF( N.EQ.0 .OR. KD.LE.1 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN  = ILAENV2STAGE( 3, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
-         LWMIN  = ILAENV2STAGE( 4, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
       END IF
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
@@ -328,8 +327,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         HOUS( 1 ) = LHMIN
-         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
+         HOUS( 1 ) = SROUNDUP_LWORK( LHMIN )
+         WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -585,7 +584,7 @@ C                 END IF
   170     CONTINUE
       ENDIF
 *
-      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
+      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       RETURN
 *
 *     End of CHETRD_HB2ST

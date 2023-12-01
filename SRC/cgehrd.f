@@ -222,12 +222,12 @@
          INFO = -8
       END IF
 *
+      NH = IHI - ILO + 1
       IF( INFO.EQ.0 ) THEN
 *
 *        Compute the workspace requirements
 *
-
-         IF( N.EQ.0 ) THEN
+         IF( NH.LE.1 ) THEN
             LWKOPT = 1
          ELSE
             NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
@@ -255,7 +255,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = 1
          RETURN

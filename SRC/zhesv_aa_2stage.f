@@ -142,12 +142,12 @@
 *> \param[in] LDB
 *> \verbatim
 *>          LDB is INTEGER
-*>          The leading dimension of the array B.  LDB >= MAX(1,N).
+*>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 workspace of size MAX(1,LWORK).
+*>          WORK is COMPLEX*16 workspace of size (MAX(1,LWORK)).
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -250,7 +250,7 @@
       IF( INFO.EQ.0 ) THEN
          CALL ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
-         LWKOPT = MAX( LWKMIN, INT( WORK(1) ) )
+         LWKOPT = MAX( LWKMIN, INT( WORK( 1 ) ) )
          WORK( 1 ) = LWKOPT
       END IF
 *

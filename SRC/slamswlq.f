@@ -248,7 +248,6 @@
       ELSE
         LWMIN = MAX( 1, LW )
       END IF
-      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
 *
       INFO = 0
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
@@ -273,6 +272,9 @@
         INFO = -15
       END IF
 *
+      IF( INFO.EQ.0 ) THEN
+        WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
+      END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'SLAMSWLQ', -INFO )
         RETURN

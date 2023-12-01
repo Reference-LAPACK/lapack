@@ -294,7 +294,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         HOUS2( 1 ) = LHMIN
+         HOUS2( 1 ) = SROUNDUP_LWORK( LHMIN )
          WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
       END IF
 *

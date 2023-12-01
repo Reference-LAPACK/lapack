@@ -287,6 +287,7 @@
 *     RQ factorization of N-by-P matrix B: B = T*Z.
 *
       CALL DGERQF( N, P, B, LDB, TAUB, WORK, LWORK, INFO )
+*
       WORK( 1 ) = MAX( LOPT, INT( WORK( 1 ) ) )
 *
       RETURN

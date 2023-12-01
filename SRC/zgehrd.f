@@ -173,7 +173,7 @@
       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16        A( LDA, * ), TAU( * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -182,7 +182,7 @@
       INTEGER            NBMAX, LDT, TSIZE
       PARAMETER          ( NBMAX = 64, LDT = NBMAX+1,
      $                     TSIZE = LDT*NBMAX )
-      COMPLEX*16        ZERO, ONE
+      COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
      $                     ONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
@@ -190,7 +190,7 @@
       LOGICAL            LQUERY
       INTEGER            I, IB, IINFO, IWT, J, LDWORK, LWKOPT, NB,
      $                   NBMIN, NH, NX
-      COMPLEX*16        EI
+      COMPLEX*16         EI
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZGEHD2, ZGEMM, ZLAHR2, ZLARFB, ZTRMM,
@@ -221,11 +221,12 @@
          INFO = -8
       END IF
 *
+      NH = IHI - ILO + 1
       IF( INFO.EQ.0 ) THEN
 *
 *        Compute the workspace requirements
 *
-         IF( N.EQ.0 ) THEN
+         IF( NH.LE.1 ) THEN
             LWKOPT = 1
          ELSE
             NB = MIN( NBMAX, ILAENV( 1, 'ZGEHRD', ' ', N, ILO, IHI,
@@ -253,7 +254,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = 1
          RETURN

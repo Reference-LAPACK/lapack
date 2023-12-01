@@ -93,8 +93,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
+*>          The dimension of the array WORK.
 *>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M, otherwise.
-*>          The dimension of the array WORK.  LWORK >= max(1,M).
 *>          For optimum performance LWORK >= M*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -186,7 +186,7 @@
          INFO = -4
       ELSE IF( .NOT.LQUERY ) THEN
          IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
-     $    INFO = -7
+     $      INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZGELQF', -INFO )

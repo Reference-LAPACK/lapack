@@ -246,36 +246,36 @@
 *
 *     The LQ Decomposition
 *
-       IF((M.GE.N).OR.(NB.LE.M).OR.(NB.GE.N)) THEN
-        CALL SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
+      IF( (M.GE.N) .OR. (NB.LE.M) .OR. (NB.GE.N) ) THEN
+        CALL SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
         RETURN
-       END IF
+      END IF
 *
-       KK = MOD((N-M),(NB-M))
-       II=N-KK+1
+      KK = MOD((N-M),(NB-M))
+      II = N-KK+1
 *
-*      Compute the LQ factorization of the first block A(1:M,1:NB)
+*     Compute the LQ factorization of the first block A(1:M,1:NB)
 *
-       CALL SGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
-       CTR = 1
+      CALL SGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO )
+      CTR = 1
 *
-       DO I = NB+1, II-NB+M , (NB-M)
+      DO I = NB+1, II-NB+M, (NB-M)
 *
-*      Compute the QR factorization of the current block A(1:M,I:I+NB-M)
+*       Compute the QR factorization of the current block A(1:M,I:I+NB-M)
 *
-         CALL STPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
-     $                  LDA, T(1, CTR * M + 1),
-     $                  LDT, WORK, INFO )
-         CTR = CTR + 1
-       END DO
+        CALL STPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
+     $                 LDA, T(1, CTR * M + 1),
+     $                 LDT, WORK, INFO )
+        CTR = CTR + 1
+      END DO
 *
 *     Compute the QR factorization of the last block A(1:M,II:N)
 *
-       IF (II.LE.N) THEN
+      IF( II.LE.N ) THEN
         CALL STPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
-     $                  LDA, T(1, CTR * M + 1), LDT,
-     $                  WORK, INFO )
-       END IF
+     $                 LDA, T(1, CTR * M + 1), LDT,
+     $                 WORK, INFO )
+      END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       RETURN

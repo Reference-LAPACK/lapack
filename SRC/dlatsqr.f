@@ -109,7 +109,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          LWORK >= 1, if MIN(M,N) = 0, LWORK >= NB*N, otherwise.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= NB*N, otherwise.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the minimal size of the WORK array, returns
@@ -230,6 +230,7 @@
       IF( INFO.EQ.0 ) THEN
         WORK( 1 ) = LWMIN
       END IF
+*
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'DLATSQR', -INFO )
         RETURN
@@ -240,41 +241,41 @@
 *     Quick return if possible
 *
       IF( MINMN.EQ.0 ) THEN
-          RETURN
+        RETURN
       END IF
 *
 *     The QR Decomposition
 *
-       IF ((MB.LE.N).OR.(MB.GE.M)) THEN
-         CALL DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
-         RETURN
-       END IF
+      IF( (MB.LE.N) .OR. (MB.GE.M) ) THEN
+        CALL DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+        RETURN
+      END IF
 *
-       KK = MOD((M-N),(MB-N))
-       II=M-KK+1
+      KK = MOD((M-N),(MB-N))
+      II = M-KK+1
 *
-*      Compute the QR factorization of the first block A(1:MB,1:N)
+*     Compute the QR factorization of the first block A(1:MB,1:N)
 *
-       CALL DGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
+      CALL DGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
 *
-       CTR = 1
-       DO I = MB+1, II-MB+N ,  (MB-N)
+      CTR = 1
+      DO I = MB+1, II-MB+N, (MB-N)
 *
-*      Compute the QR factorization of the current block A(I:I+MB-N,1:N)
+*       Compute the QR factorization of the current block A(I:I+MB-N,1:N)
 *
-         CALL DTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
-     $                 T(1, CTR * N + 1),
-     $                  LDT, WORK, INFO )
-         CTR = CTR + 1
-       END DO
+        CALL DTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
+     $                T(1, CTR * N + 1),
+     $                LDT, WORK, INFO )
+        CTR = CTR + 1
+      END DO
 *
-*      Compute the QR factorization of the last block A(II:M,1:N)
+*     Compute the QR factorization of the last block A(II:M,1:N)
 *
-       IF (II.LE.M) THEN
-         CALL DTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
-     $                 T(1, CTR * N + 1), LDT,
-     $                  WORK, INFO )
-       END IF
+      IF( II.LE.M ) THEN
+        CALL DTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
+     $                T(1, CTR * N + 1), LDT,
+     $                WORK, INFO )
+      END IF
 *
       WORK( 1 ) = LWMIN
       RETURN

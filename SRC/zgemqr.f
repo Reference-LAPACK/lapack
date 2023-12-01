@@ -261,7 +261,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-        WORK( 1 ) = LW
+        WORK( 1 ) = LWMIN
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -286,7 +286,7 @@
      $                 NB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = LW
+      WORK( 1 ) = LWMIN
 *
       RETURN
 *

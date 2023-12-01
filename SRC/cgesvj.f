@@ -208,16 +208,17 @@
 *> \verbatim
 *>          CWORK is COMPLEX array, dimension (max(1,LWORK))
 *>          Used as workspace.
-*>          If on entry LWORK = -1, then a workspace query is assumed and
-*>          no computation is done; CWORK(1) is set to the minial (and optimal)
-*>          length of CWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER.
 *>          Length of CWORK.
-*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= MAX(1,M+N), otherwise.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M+N, otherwise.
+*>
+*>          If on entry LWORK = -1, then a workspace query is assumed and
+*>          no computation is done; CWORK(1) is set to the minial (and optimal)
+*>          length of CWORK.
 *> \endverbatim
 *>
 *> \param[in,out] RWORK
@@ -248,15 +249,17 @@
 *>          RWORK(6) = the largest absolute value over all sines of the
 *>                    Jacobi rotation angles in the last sweep. It can be
 *>                    useful for a post festum analysis.
-*>         If on entry LRWORK = -1, then a workspace query is assumed and
-*>         no computation is done; RWORK(1) is set to the minial (and optimal)
-*>         length of RWORK.
 *> \endverbatim
 *>
 *> \param[in] LRWORK
 *> \verbatim
 *>         LRWORK is INTEGER
-*>         Length of RWORK, LRWORK >= MAX(6,N).
+*>         Length of RWORK.
+*>         LRWORK >= 1, if MIN(M,N) = 0, and LRWORK >= MAX(6,N), otherwise
+*>
+*>         If on entry LRWORK = -1, then a workspace query is assumed and
+*>         no computation is done; RWORK(1) is set to the minial (and optimal)
+*>         length of RWORK.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -400,8 +403,8 @@
       INTEGER            ISAMAX
       EXTERNAL           ISAMAX
 *     from LAPACK
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           SLAMCH, SROUNDUP_LWORK
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
@@ -423,19 +426,17 @@
       APPLV = LSAME( JOBV, 'A' )
       UPPER = LSAME( JOBA, 'U' )
       LOWER = LSAME( JOBA, 'L' )
-
+*
       MINMN = MIN( M, N )
       IF( MINMN.EQ.0 ) THEN
-         LWMIN = 1
-         LRWMIN = 6
+         LWMIN  = 1
+         LRWMIN = 1
       ELSE
-         LWMIN = M + N
+         LWMIN  = M + N
          LRWMIN = MAX( 6, N )
       END IF
-      CWORK(1) = LWMIN
-      RWORK(1) = LRWMIN
 *
-      LQUERY = ( LWORK .EQ. -1 ) .OR. ( LRWORK .EQ. -1 )
+      LQUERY = ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 )
       IF( .NOT.( UPPER .OR. LOWER .OR. LSAME( JOBA, 'G' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( LSVEC .OR. UCTOL .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -467,7 +468,9 @@
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CGESVJ', -INFO )
          RETURN
-      ELSE IF ( LQUERY ) THEN
+      ELSE IF( LQUERY ) THEN
+         CWORK( 1 ) = SROUNDUP_LWORK( LWMIN )
+         RWORK( 1 ) = SROUNDUP_LWORK( LRWMIN )
          RETURN
       END IF
 *

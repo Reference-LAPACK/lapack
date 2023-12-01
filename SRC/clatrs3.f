@@ -158,8 +158,10 @@
 *> \endverbatim
 *>
 *> \param[in] LWORK
+*> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>
 *>          If MIN(N,NRHS) = 0, LWORK >= 1, else
 *>          LWORK >= MAX(1, 2*NBA * MAX(NBA, MIN(NRHS, 32)), where
 *>          NBA = (N + NB - 1)/NB and NB is the optimal block size.
@@ -168,6 +170,7 @@
 *>          only calculates the optimal dimensions of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -311,12 +314,12 @@
       LANRM = NBA * NBA
       AWRK = LSCALE
 *
-      IF(MIN( N, NRHS ).EQ.0 ) THEN
+      IF( MIN( N, NRHS ).EQ.0 ) THEN
          LWMIN = 1
       ELSE
          LWMIN = LSCALE + LANRM
       END IF
-      WORK( 1 ) = SROUNDUP_LWORK ( LWMIN )
+      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
 *
 *     Test the input parameters.
 *

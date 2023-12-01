@@ -110,8 +110,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
-*>         On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
+*>          (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the minimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -227,7 +227,7 @@
       ELSE
          LWMIN = MAX( 1, LW )
       END IF
-
+*
       IF( ( NB.GT.K ) .AND. ( MN.GT.K ) ) THEN
         IF( MOD( MN - K, NB - K ) .EQ. 0 ) THEN
           NBLCKS = ( MN - K ) / ( NB - K )

@@ -184,12 +184,12 @@
       INFO = 0
       NB = ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
       K = MIN( M, N )
-      IF ( K.EQ.0 ) THEN
-          LWKMIN = 1
-          LWKOPT = 1
+      IF( K.EQ.0 ) THEN
+         LWKMIN = 1
+         LWKOPT = 1
       ELSE
-          LWKMIN = N
-          LWKOPT = N*NB
+         LWKMIN = N
+         LWKOPT = N*NB
       END IF
       WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *

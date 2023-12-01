@@ -97,7 +97,7 @@
 *>          The dimension of the array WORK.
 *>          If N = 0, LWORK >= 1, else LWORK >= (N+NB+1)*(NB+3).
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>           calculates:
+*>          calculates:
 *>              - the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array,
 *>              - and no error message related to LWORK is issued by XERBLA.
@@ -181,9 +181,6 @@
          INFO = -7
       END IF
 *
-*     Quick return if possible
-*
-*
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DSYTRI2', -INFO )
          RETURN
@@ -191,6 +188,9 @@
          WORK( 1 ) = MINSIZE
          RETURN
       END IF
+*
+*     Quick return if possible
+*
       IF( N.EQ.0 )
      $   RETURN
 

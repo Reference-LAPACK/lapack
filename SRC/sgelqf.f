@@ -186,7 +186,7 @@
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -4
       ELSE IF( .NOT.LQUERY ) THEN
-         IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY )
+         IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
      $      INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN

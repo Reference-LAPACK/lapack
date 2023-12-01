@@ -192,7 +192,7 @@
 *
          IF( .NOT.LQUERY ) THEN
             IF( LWORK.LE.0 .OR. ( M.GT.0 .AND. LWORK.LT.MAX( 1, N ) ) )
-     $          INFO = -7
+     $         INFO = -7
          END IF
       END IF
 *

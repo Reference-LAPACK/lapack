@@ -214,7 +214,7 @@
          INFO = -4
       ELSE IF( LTB.LT.MAX( 1, 4*N ) .AND. .NOT.TQUERY ) THEN
          INFO = -6
-      ELSE IF( LWORK.LT. MAX( 1, N ) .AND. .NOT.WQUERY ) THEN
+      ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.WQUERY ) THEN
          INFO = -10
       END IF
 *

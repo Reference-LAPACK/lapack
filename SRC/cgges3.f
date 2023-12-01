@@ -215,8 +215,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
-*>          If N = 0, LWORK >= 1, else LWORK >= 2*N.
+*>          The dimension of the array WORK. LWORK >= MAX(1,2*N).
 *>          For good performance, LWORK must generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -317,8 +316,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANGE, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -355,11 +354,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( N.EQ.0 ) THEN
-         LWKMIN = 1
-      ELSE
-         LWKMIN = 2*N
-      END IF
+      LWKMIN = MAX( 1, 2*N )
 *
       IF( IJOBVL.LE.0 ) THEN
          INFO = -1
@@ -385,29 +380,33 @@
 *
       IF( INFO.EQ.0 ) THEN
          CALL CGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
-         LWKOPT = MAX( 1,  N + INT ( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKMIN, N + INT( WORK( 1 ) ) )
          CALL CUNMQR( 'L', 'C', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
-         LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, N + INT( WORK( 1 ) ) )
          IF( ILVSL ) THEN
             CALL CUNGQR( N, N, N, VSL, LDVSL, WORK, WORK, -1,
      $                   IERR )
-            LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, N + INT( WORK( 1 ) ) )
          END IF
          CALL CGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
-         LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, N + INT( WORK( 1 ) ) )
          CALL CLAQZ0( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
      $                ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK, -1,
      $                RWORK, 0, IERR )
-         LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          IF( WANTST ) THEN
             CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, SDIM,
      $                   PVSL, PVSR, DIF, WORK, -1, IDUM, 1, IERR )
-            LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          END IF
-         WORK( 1 ) = CMPLX( LWKOPT )
+         IF( N.EQ.0 ) THEN
+            WORK( 1 ) = 1
+         ELSE
+            WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
+         END IF
       END IF
 
 *
@@ -592,7 +591,7 @@
 *
    30 CONTINUE
 *
-      WORK( 1 ) = CMPLX( LWKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *
