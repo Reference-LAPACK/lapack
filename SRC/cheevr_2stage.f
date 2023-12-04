@@ -280,6 +280,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>          If N <= 1,               LWORK must be at least 1.
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 26*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + N
@@ -310,7 +311,8 @@
 *> \param[in] LRWORK
 *> \verbatim
 *>          LRWORK is INTEGER
-*>          The length of the array RWORK.  LRWORK >= max(1,24*N).
+*>          The length of the array RWORK.
+*>          If N <= 1, LRWORK >= 1, else LRWORK >= 24*N.
 *>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -329,7 +331,8 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
+*>          The dimension of the array IWORK.
+*>          If N <= 1, LIWORK >= 1, else LIWORK >= 10*N.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -443,8 +446,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
-      REAL               SLAMCH, CLANSY
-      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV, ILAENV2STAGE
+      REAL               SLAMCH, CLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV, ILAENV2STAGE,
+     $                   SROUNDUP_LWORK 
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
@@ -472,9 +476,16 @@
       IB     = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
       LHTRD  = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
       LWTRD  = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWMIN  = N + LHTRD + LWTRD
-      LRWMIN = MAX( 1, 24*N )
-      LIWMIN = MAX( 1, 10*N )
+*
+      IF( N.LE.1 ) THEN
+         LWMIN  = 1
+         LRWMIN = 1
+         LIWMIN = 1
+      ELSE
+         LWMIN  = N + LHTRD + LWTRD
+         LRWMIN = 24*N
+         LIWMIN = 10*N
+      END IF
 *
       INFO = 0
       IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
@@ -506,8 +517,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
+         RWORK( 1 ) = SROUNDUP_LWORK( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -535,7 +546,7 @@
       END IF
 *
       IF( N.EQ.1 ) THEN
-         WORK( 1 ) = 2
+         WORK( 1 ) = 1
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
             W( 1 ) = REAL( A( 1, 1 ) )
@@ -666,7 +677,7 @@
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF ( ABSTOL .LE. TWO*N*EPS ) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -765,8 +776,8 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
+      RWORK( 1 ) = SROUNDUP_LWORK( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

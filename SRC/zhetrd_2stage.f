@@ -123,7 +123,7 @@
 *>
 *> \param[out] HOUS2
 *> \verbatim
-*>          HOUS2 is COMPLEX*16 array, dimension (LHOUS2)
+*>          HOUS2 is COMPLEX*16 array, dimension (MAX(1,LHOUS2))
 *>          Stores the Householder representation of the stage2
 *>          band to tridiagonal.
 *> \endverbatim
@@ -132,6 +132,8 @@
 *> \verbatim
 *>          LHOUS2 is INTEGER
 *>          The dimension of the array HOUS2.
+*>          LHOUS2 >= 1.
+*>
 *>          If LWORK = -1, or LHOUS2 = -1,
 *>          then a query is assumed; the routine
 *>          only calculates the optimal size of the HOUS2 array, returns
@@ -143,14 +145,17 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK = MAX(1, dimension)
-*>          If LWORK = -1, or LHOUS2=-1,
+*>          The dimension of the array WORK.
+*>          If N = 0, LWORK >= 1, else LWORK = MAX(1, dimension).
+*>
+*>          If LWORK = -1, or LHOUS2 = -1,
 *>          then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -265,10 +270,13 @@
 *
       KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', VECT, N, -1, -1, -1 )
       IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
-*      WRITE(*,*),'ZHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
-*     $            LHMIN, LWMIN
+      IF( N.EQ.0 ) THEN
+         LHMIN = 1
+         LWMIN = 1
+      ELSE
+         LHMIN = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
+      END IF
 *
       IF( .NOT.LSAME( VECT, 'N' ) ) THEN
          INFO = -1
@@ -324,7 +332,6 @@
       END IF
 *
 *
-      HOUS2( 1 ) = LHMIN
       WORK( 1 )  = LWMIN
       RETURN
 *

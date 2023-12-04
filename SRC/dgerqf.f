@@ -189,7 +189,7 @@
          END IF
          WORK( 1 ) = LWKOPT
 *
-         IF ( .NOT.LQUERY ) THEN
+         IF( .NOT.LQUERY ) THEN
             IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
      $         INFO = -7
          END IF
