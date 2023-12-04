@@ -280,6 +280,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>          If N <= 1,               LWORK must be at least 1.
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 26*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + N
@@ -310,7 +311,8 @@
 *> \param[in] LRWORK
 *> \verbatim
 *>          LRWORK is INTEGER
-*>          The length of the array RWORK.  LRWORK >= max(1,24*N).
+*>          The length of the array RWORK.
+*>          If N <= 1, LRWORK >= 1, else LRWORK >= 24*N.
 *>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -329,7 +331,8 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
+*>          The dimension of the array IWORK.
+*>          If N <= 1, LIWORK >= 1, else LIWORK >= 10*N.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -472,9 +475,16 @@
       IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
       LHTRD  = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
       LWTRD  = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWMIN  = N + LHTRD + LWTRD
-      LRWMIN = MAX( 1, 24*N )
-      LIWMIN = MAX( 1, 10*N )
+*
+      IF( N.LE.1 ) THEN
+         LWMIN  = 1
+         LRWMIN = 1
+         LIWMIN = 1
+      ELSE
+         LWMIN  = N + LHTRD + LWTRD
+         LRWMIN = 24*N
+         LIWMIN = 10*N
+      END IF
 *
       INFO = 0
       IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
@@ -535,7 +545,7 @@
       END IF
 *
       IF( N.EQ.1 ) THEN
-         WORK( 1 ) = 2
+         WORK( 1 ) = 1
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
             W( 1 ) = DBLE( A( 1, 1 ) )
