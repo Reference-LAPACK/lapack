@@ -824,7 +824,7 @@
          DO J = 1, MINMN
             TAU( J ) = ZERO
          END DO
-         WORK( 1 ) = REAL( LWKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
          RETURN
       END IF
 *

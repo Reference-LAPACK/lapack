@@ -199,6 +199,7 @@
       ELSE
          CALL ZHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
       END IF
+*
       RETURN
 *
 *     End of ZHETRI2

@@ -204,7 +204,7 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 .OR. NRHS.EQ.0 )
+      IF( MIN( N, NRHS ).EQ.0 )
      $   RETURN
 *
       IF( UPPER ) THEN

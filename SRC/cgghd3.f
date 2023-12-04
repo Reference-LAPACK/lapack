@@ -893,7 +893,8 @@
       IF ( JCOL.LT.IHI )
      $   CALL CGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
      $                LDQ, Z, LDZ, IERR )
-      WORK( 1 ) = CMPLX( LWKOPT )
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

@@ -200,6 +200,7 @@
       ELSE
          CALL SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
       END IF
+*
       RETURN
 *
 *     End of SSYTRI2

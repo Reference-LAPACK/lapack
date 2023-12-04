@@ -273,7 +273,7 @@
 *
 *           Determine if workspace is large enough for blocked code
 *
-            IF( LWORK.LT.N*NB+TSIZE ) THEN
+            IF( LWORK.LT.LWKOPT ) THEN
 *
 *              Not enough workspace to use optimal NB:  determine the
 *              minimum value of NB, and reduce NB or force use of

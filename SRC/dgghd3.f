@@ -889,6 +889,7 @@
       IF ( JCOL.LT.IHI )
      $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
      $                LDQ, Z, LDZ, IERR )
+*
       WORK( 1 ) = DBLE( LWKOPT )
 *
       RETURN

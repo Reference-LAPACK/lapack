@@ -352,6 +352,7 @@
       END IF
 *
    40 CONTINUE
+*
       WORK( 1 ) = LWKOPT
       RETURN
 *

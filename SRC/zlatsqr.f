@@ -112,7 +112,7 @@
 *>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= NB*N, otherwise.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
+*>          only calculates the minimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
@@ -252,7 +252,7 @@
         RETURN
       END IF
       KK = MOD((M-N),(MB-N))
-      II=M-KK+1
+      II = M-KK+1
 *
 *     Compute the QR factorization of the first block A(1:MB,1:N)
 *

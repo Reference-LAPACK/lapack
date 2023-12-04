@@ -272,7 +272,7 @@
       ELSE IF( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 )
      $   .AND. ( .NOT.LQUERY ) .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -6
-      ELSE IF( ( LWORK.LT.MAX( 1, N*NB ) ) .AND. ( .NOT.LQUERY )
+      ELSE IF( ( LWORK.LT.LWREQ ) .AND. ( .NOT.LQUERY )
      $   .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -8
       END IF

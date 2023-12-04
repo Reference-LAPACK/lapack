@@ -178,7 +178,7 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF ( LWORK.LT.MINSIZE .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.MINSIZE .AND. .NOT.LQUERY ) THEN
          INFO = -7
       END IF
 *
@@ -195,11 +195,12 @@
       IF( N.EQ.0 )
      $   RETURN
 
-      IF( NBMAX .GE. N ) THEN
+      IF( NBMAX.GE.N ) THEN
          CALL CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
       ELSE
          CALL CHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
       END IF
+*
       RETURN
 *
 *     End of CHETRI2
