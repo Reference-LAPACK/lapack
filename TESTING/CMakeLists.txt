@@ -53,9 +53,7 @@ add_lapack_test(stest.out stest.in xlintsts)
 # ======== SINGLE RFP LIN TESTS ========================
 add_lapack_test(stest_rfp.out stest_rfp.in xlintstrfs)
 #
-#
 # ======== SINGLE EIG TESTS ===========================
-#
 add_lapack_test(snep.out nep.in xeigtsts)
 add_lapack_test(ssep.out sep.in xeigtsts)
 add_lapack_test(sse2.out se2.in xeigtsts)
@@ -76,6 +74,9 @@ add_lapack_test(sgqr.out gqr.in xeigtsts)
 add_lapack_test(sgsv.out gsv.in xeigtsts)
 add_lapack_test(scsd.out csd.in xeigtsts)
 add_lapack_test(slse.out lse.in xeigtsts)
+#
+# ======== SINGLE DMD EIG TESTS ===========================
+add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
 endif()
 
 if(BUILD_DOUBLE)
@@ -107,6 +108,9 @@ add_lapack_test(dgqr.out gqr.in xeigtstd)
 add_lapack_test(dgsv.out gsv.in xeigtstd)
 add_lapack_test(dcsd.out csd.in xeigtstd)
 add_lapack_test(dlse.out lse.in xeigtstd)
+#
+# ======== DOUBLE DMD EIG TESTS ===========================
+add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
 endif()
 
 if(BUILD_COMPLEX)
@@ -136,6 +140,9 @@ add_lapack_test(cgqr.out gqr.in xeigtstc)
 add_lapack_test(cgsv.out gsv.in xeigtstc)
 add_lapack_test(ccsd.out csd.in xeigtstc)
 add_lapack_test(clse.out lse.in xeigtstc)
+#
+# ======== COMPLEX DMD EIG TESTS ===========================
+add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
 endif()
 
 if(BUILD_COMPLEX16)
@@ -167,6 +174,9 @@ add_lapack_test(zgqr.out gqr.in xeigtstz)
 add_lapack_test(zgsv.out gsv.in xeigtstz)
 add_lapack_test(zcsd.out csd.in xeigtstz)
 add_lapack_test(zlse.out lse.in xeigtstz)
+#
+# ======== COMPLEX16 DMD EIG TESTS ===========================
+add_lapack_test(zdmd.out zdmd.in xdmdeigtstz)
 endif()
 
 
