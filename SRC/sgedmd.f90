@@ -782,7 +782,8 @@
           K = 0
           DO i = 1, N
             !WORK(i) = DNRM2( M, X(1,i), 1 )
-            SCALE  = ZERO
+            SSUM  = ONE
+            SCALE = ZERO
             CALL SLASSQ( M, X(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
                 K    =  0
@@ -855,7 +856,8 @@
           ! carefully computed using SLASSQ.
           DO i = 1, N
             !WORK(i) = DNRM2( M, Y(1,i), 1 )
-            SCALE  = ZERO
+            SSUM  = ONE
+            SCALE = ZERO
             CALL SLASSQ( M, Y(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
                 K    =  0

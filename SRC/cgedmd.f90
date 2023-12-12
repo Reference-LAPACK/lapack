@@ -761,7 +761,8 @@
           K = 0
           DO i = 1, N
             !WORK(i) = SCNRM2( M, X(1,i), 1 )
-            SCALE  = ZERO
+            SSUM  = ONE
+            SCALE = ZERO
             CALL CLASSQ( M, X(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
                 K    =  0
@@ -834,7 +835,8 @@
           ! carefully computed using CLASSQ.
           DO i = 1, N
             !RWORK(i) = SCNRM2( M, Y(1,i), 1 )
-            SCALE  = ZERO
+            SSUM  = ONE
+            SCALE = ZERO
             CALL CLASSQ( M, Y(1,i), 1, SCALE, SSUM )
             IF ( SISNAN(SCALE) .OR. SISNAN(SSUM) ) THEN
                 K    =  0
