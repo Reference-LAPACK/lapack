@@ -587,6 +587,9 @@
                   CALL XLAENV( 1, NB )
                   NX = NXVAL( INB )
                   CALL XLAENV( 3, NX )
+                  DO I = 1, NTESTS
+                    RESULT( I ) = ZERO
+                  END DO
 *
 *                 We do MIN(M,N)+1 because we need a test for KMAX > N,
 *                 when KMAX is larger than MIN(M,N), KMAX should be
