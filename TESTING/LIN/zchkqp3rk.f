@@ -720,8 +720,8 @@
 *
                      DO J = 1, KFACT-1, 1
 *
-                        DTEMP = (( ABS( A( (J-1)*M+J ) ) -
-     $                          ABS( A( (J)*M+J+1 ) ) ) /
+                        DTEMP = (( ABS( A( (J-1)*LDA+J ) ) -
+     $                          ABS( A( (J)*LDA+J+1 ) ) ) /
      $                          ABS( A(1) ) )
 *
                         IF( DTEMP.LT.ZERO ) THEN
