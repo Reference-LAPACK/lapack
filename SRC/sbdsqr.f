@@ -166,7 +166,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (4*N)
+*>          WORK is REAL array, dimension (4*(N-1))
 *> \endverbatim
 *>
 *> \param[out] INFO

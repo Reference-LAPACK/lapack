@@ -166,7 +166,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (4*N)
+*>          RWORK is REAL array, dimension (4*(N-1))
 *> \endverbatim
 *>
 *> \param[out] INFO
