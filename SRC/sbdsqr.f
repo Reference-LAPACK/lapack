@@ -817,7 +817,14 @@
 *
   160 CONTINUE
       DO 170 I = 1, N
+         IF( D( I ).EQ.ZERO ) THEN
+*
+*           Avoid -ZERO
+*
+            D( I ) = ZERO
+         END IF
          IF( D( I ).LT.ZERO ) THEN
+
             D( I ) = -D( I )
 *
 *           Change sign of singular vectors, if desired
