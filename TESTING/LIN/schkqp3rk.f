@@ -583,9 +583,6 @@
                   CALL XLAENV( 1, NB )
                   NX = NXVAL( INB )
                   CALL XLAENV( 3, NX )
-                  DO I = 1, NTESTS
-                    RESULT( I ) = ZERO
-                  END DO
 *
 *                 We do MIN(M,N)+1 because we need a test for KMAX > N,
 *                 when KMAX is larger than MIN(M,N), KMAX should be
@@ -607,6 +604,9 @@
                   CALL SLACPY( 'All', M, NRHS, COPYB, LDA,
      $                         B,  LDA )
                   CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+                  DO I = 1, NTESTS
+                    RESULT( I ) = ZERO
+                  END DO
 *
                   ABSTOL = -1.0
                   RELTOL = -1.0
@@ -650,16 +650,6 @@
                      RESULT( 1 ) = SQRT12( M, N, A, LDA, S, WORK,
      $                                     LWORK )
 *
-                     DO T = 1, 1
-                        IF( RESULT( T ).GE.THRESH ) THEN
-                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 ) 'SGEQP3RK', M, N,
-     $                        NRHS, KMAX, ABSTOL, RELTOL, NB, NX,
-     $                        IMAT, T, RESULT( T )
-                           NFAIL = NFAIL + 1
-                        END IF
-                     END DO
                      NRUN = NRUN + 1
 *
 *                   End test 1
@@ -673,7 +663,7 @@
 *                 1-norm( A*P - Q*R ) / ( max(M,N) * 1-norm(A) * EPS )
 *
                   RESULT( 2 ) = SQPT01( M, N, KFACT, COPYA, A, LDA, TAU,
-     $                          IWORK( N+1 ), WORK, LWORK )
+     $                                  IWORK( N+1 ), WORK, LWORK )
 *
 *                 Compute test 3:
 *
@@ -682,21 +672,8 @@
 *                 1-norm( Q**T * Q - I ) / ( M * EPS )
 *
                   RESULT( 3 ) = SQRT11( M, KFACT, A, LDA, TAU, WORK,
-     $                          LWORK )
+     $                                  LWORK )
 *
-*                 Print information about the tests that did not pass
-*                 the threshold.
-*
-                  DO T = 2, 3
-                     IF( RESULT( T ).GE.THRESH ) THEN
-                        IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 ) 'SGEQP3RK', M, N,
-     $                      NRHS, KMAX, ABSTOL, RELTOL,
-     $                      NB, NX, IMAT, T, RESULT( T )
-                        NFAIL = NFAIL + 1
-                     END IF
-                  END DO
                   NRUN = NRUN + 2
 *
 *                 Compute test 4:
@@ -725,20 +702,6 @@
 *
                      END DO
 *
-*                    Print information about the tests that did not
-*                    pass the threshold.
-*
-                     DO T = 4, 4
-                        IF( RESULT( T ).GE.THRESH ) THEN
-                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 ) 'SGEQP3RK',
-     $                        M, N, NRHS, KMAX, ABSTOL, RELTOL,
-     $                        NB, NX, IMAT, T,
-     $                        RESULT( T )
-                           NFAIL = NFAIL + 1
-                        END IF
-                     END DO
                      NRUN = NRUN + 1
 *
 *                    End test 4.
@@ -760,41 +723,40 @@
 *
                      LWORK_MQR = MAX(1, NRHS)
                      CALL SORMQR( 'Left', 'Transpose',
-     $                         M, NRHS, KFACT, A, LDA, TAU, B, LDA,
-     $                         WORK, LWORK_MQR, INFO )
+     $                            M, NRHS, KFACT, A, LDA, TAU, B, LDA,
+     $                            WORK, LWORK_MQR, INFO )
 *
                      DO I = 1, NRHS
 *
 *                       Compare N+J-th column of A and J-column of B.
 *
                         CALL SAXPY( M, -ONE, A( ( N+I-1 )*LDA+1 ), 1,
-     $                                 B( ( I-1 )*LDA+1 ), 1 )
+     $                              B( ( I-1 )*LDA+1 ), 1 )
                      END DO
 *
-                   RESULT( 5 ) =
-     $               ABS(
-     $               SLANGE( 'One-norm', M, NRHS, B, LDA, RDUMMY ) /
-     $               ( REAL( M )*SLAMCH( 'Epsilon' ) )
-     $               )
+                     RESULT( 5 ) = ABS(
+     $                  SLANGE( 'One-norm', M, NRHS, B, LDA, RDUMMY ) /
+     $                  ( REAL( M )*SLAMCH( 'Epsilon' ) ) )
 *
-*                    Print information about the tests that did not pass
-*                    the threshold.
-*
-                     DO T = 5, 5
-                        IF( RESULT( T ).GE.THRESH ) THEN
-                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 ) 'SGEQP3RK', M, N,
-     $                        NRHS, KMAX, ABSTOL, RELTOL,
-     $                        NB, NX, IMAT, T, RESULT( T )
-                           NFAIL = NFAIL + 1
-                        END IF
-                     END DO
                      NRUN = NRUN + 1
 *
 *                    End compute test 5.
 *
                   END IF
+*
+*                 Print information about the tests that did not pass
+*                 the threshold.
+*
+                  DO T = 1, NTESTS
+                     IF( RESULT( T ).GE.THRESH ) THEN
+                        IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 ) 'SGEQP3RK', M, N,
+     $                      NRHS, KMAX, ABSTOL, RELTOL,
+     $                      NB, NX, IMAT, T, RESULT( T )
+                        NFAIL = NFAIL + 1
+                     END IF
+                  END DO
 *
 *                 END DO KMAX = 1, MIN(M,N)+1
 *
