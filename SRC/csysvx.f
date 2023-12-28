@@ -316,7 +316,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANSY, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, CLANSY, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, CLANSY, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLACPY, CSYCON, CSYRFS, CSYTRF, CSYTRS,

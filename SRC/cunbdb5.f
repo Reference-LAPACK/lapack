@@ -228,7 +228,7 @@
       CALL CLASSQ( M2, X2, INCX2, SCL, SSQ )
       NORM = SCL * SQRT( SSQ )
 *
-      IF( NORM .GT. N * EPS ) THEN
+      IF( NORM .GT. REAL( N ) * EPS ) THEN
 *        Scale vector to unit norm to avoid problems in the caller code.
 *        Computing the reciprocal is undesirable but
 *         * xLASCL cannot be used because of the vector increments and

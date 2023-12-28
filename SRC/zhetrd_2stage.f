@@ -269,14 +269,18 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', VECT, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', VECT, N, KD, -1, -1 )
+      KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', VECT, N, -1, -1,
+     $                       -1 )
+      IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', VECT, N, KD, -1,
+     $                       -1 )
       IF( N.EQ.0 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
-         LWMIN = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', VECT, N, KD, IB,
+     $                         -1 )
+         LWMIN = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', VECT, N, KD, IB,
+     $                         -1 )
       END IF
 *
       IF( .NOT.LSAME( VECT, 'N' ) ) THEN

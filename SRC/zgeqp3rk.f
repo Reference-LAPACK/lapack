@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZGEQP3RK computes a truncated Householder QR factorization with column pivoting of a complex m-by-n matrix A by using Level 3 BLAS and overwrites m-by-nrhs matrix B with Q**H * B.
 *
 *  =========== DOCUMENTATION ===========
@@ -892,7 +893,8 @@
 *        Determine when to cross over from blocked to unblocked code.
 *        (for N less than NX, unblocked code should be used).
 *
-         NX = MAX( 0, ILAENV( IXOVER, 'ZGEQP3RK', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, ILAENV( IXOVER, 'ZGEQP3RK', ' ', M, N, -1,
+     $                        -1 ) )
 *
          IF( NX.LT.MINMN ) THEN
 *

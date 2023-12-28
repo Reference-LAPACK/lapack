@@ -325,16 +325,19 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, XERBLA, CSSCAL, CGEBAK,
-     $                   CGEBAL,
-     $                   CGEHRD, CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3,
-     $                   CTRSNA, CUNGHR
+      EXTERNAL           SLASCL, XERBLA, CSSCAL,
+     $                   CGEBAK, CGEBAL, CGEHRD,
+     $                   CHSEQR, CLACPY, CLASCL,
+     $                   CSCAL, CTREVC3, CTRSNA,
+     $                   CUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX, ILAENV
-      REAL               SLAMCH, SCNRM2, CLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SCNRM2, CLANGE,
+      REAL               SLAMCH, SCNRM2, CLANGE,
+     $                   SROUNDUP_LWORK
+      EXTERNAL           LSAME, ISAMAX, ILAENV,
+     $                   SLAMCH, SCNRM2, CLANGE,
      $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..

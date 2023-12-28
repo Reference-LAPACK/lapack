@@ -300,7 +300,8 @@
       IF( N.LE.KD+1 ) THEN
          LWMIN = 1
       ELSE
-         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SY2SB', ' ', N, KD, -1, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SY2SB', ' ', N, KD, -1,
+     $                        -1 )
       END IF
 *
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN

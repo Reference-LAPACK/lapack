@@ -227,7 +227,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, CLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGELQT, CGEQRT, CGEMLQT, CGEMQRT,
@@ -287,7 +288,8 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO,
+     $                 B, LDB )
          WORK( 1 ) = SROUNDUP_LWORK( LWOPT )
          RETURN
       END IF
@@ -335,7 +337,8 @@
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO,
+     $                B, LDB )
          WORK( 1 ) = SROUNDUP_LWORK( LWOPT )
          RETURN
       END IF

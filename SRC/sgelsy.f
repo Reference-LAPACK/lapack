@@ -237,7 +237,8 @@
 *     .. External Functions ..
       INTEGER            ILAENV
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEQP3, SLAIC1, SLASCL,

@@ -270,9 +270,10 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, CLANGE, SLARMM, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, SLAMCH, CLANGE, SLARMM,
+      REAL               SLAMCH, CLANGE, SLARMM,
      $                   SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SLAMCH,
+     $                   CLANGE, SLARMM, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLATRS, CSSCAL, XERBLA

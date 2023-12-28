@@ -260,14 +260,16 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHD3, SLAQZ0,
-     $                   SLACPY,
-     $                   SLASCL, SLASET, SORGQR, SORMQR, STGEVC
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL,
+     $                   SGGHD3, SLAQZ0, SLACPY,
+     $                   SLASCL, SLASET, SORGQR,
+     $                   SORMQR, STGEVC
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -330,7 +332,8 @@
          CALL SORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
          LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
-         CALL SGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB, VL, LDVL,
+         CALL SGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA,
+     $                B, LDB, VL, LDVL,
      $                VR, LDVR, WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          IF( ILVL ) THEN
@@ -433,7 +436,8 @@
       IF( ILVL ) THEN
          CALL SLASET( 'Full', N, N, ZERO, ONE, VL, LDVL )
          IF( IROWS.GT.1 ) THEN
-            CALL SLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+            CALL SLACPY( 'L', IROWS-1, IROWS-1,
+     $                   B( ILO+1, ILO ), LDB,
      $                   VL( ILO+1, ILO ), LDVL )
          END IF
          CALL SORGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
@@ -451,11 +455,16 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL SGGHD3( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
-     $                LDVL, VR, LDVR, WORK( IWRK ), LWORK+1-IWRK, IERR )
+         CALL SGGHD3( JOBVL, JOBVR, N, ILO, IHI,
+     $                A, LDA,
+     $                B, LDB, VL,
+     $                LDVL, VR, LDVR,
+     $                WORK( IWRK ), LWORK+1-IWRK, IERR )
       ELSE
-         CALL SGGHD3( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
-     $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR,
+         CALL SGGHD3( 'N', 'N', IROWS, 1, IROWS,
+     $                A( ILO, ILO ), LDA,
+     $                B( ILO, ILO ), LDB, VL,
+     $                LDVL, VR, LDVR,
      $                WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *

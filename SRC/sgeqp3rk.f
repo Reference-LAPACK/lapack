@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b SGEQP3RK computes a truncated Householder QR factorization with column pivoting of a real m-by-n matrix A by using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B.
 *
 *  =========== DOCUMENTATION ===========
@@ -887,7 +888,8 @@
 *        Determine when to cross over from blocked to unblocked code.
 *        (for N less than NX, unblocked code should be used).
 *
-         NX = MAX( 0, ILAENV( IXOVER, 'SGEQP3RK', ' ', M, N, -1, -1 ))
+         NX = MAX( 0, ILAENV( IXOVER, 'SGEQP3RK', ' ', M, N, -1,
+     $                        -1 ))
 *
          IF( NX.LT.MINMN ) THEN
 *

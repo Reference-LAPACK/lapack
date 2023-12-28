@@ -378,7 +378,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, SLANST, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANST,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLARRV, CSWAP, SCOPY, SLAE2, SLAEV2,

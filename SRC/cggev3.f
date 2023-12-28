@@ -262,7 +262,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT

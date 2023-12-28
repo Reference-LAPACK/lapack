@@ -477,7 +477,7 @@
          RETURN
       ELSE IF( LQUERY ) THEN
          CWORK( 1 ) = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          RETURN
       END IF
 *

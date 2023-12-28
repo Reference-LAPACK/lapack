@@ -351,8 +351,10 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX, ILAENV
-      REAL               SLAMCH, SLANGE, SLAPY2, SNRM2, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SLANGE, SLAPY2,
+      REAL               SLAMCH, SLANGE, SLAPY2,
+     $                   SNRM2, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ISAMAX, ILAENV,
+     $                   SLAMCH, SLANGE, SLAPY2,
      $                   SNRM2, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..

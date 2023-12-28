@@ -320,7 +320,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 ) = LOPT
-         RWORK( 1 ) = LROPT
+         RWORK( 1 ) = REAL( LROPT )
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -397,7 +397,7 @@
       END IF
 *
       WORK( 1 ) = LOPT
-      RWORK( 1 ) = LROPT
+      RWORK( 1 ) = REAL( LROPT )
       IWORK( 1 ) = LIOPT
 *
       RETURN

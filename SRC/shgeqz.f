@@ -348,9 +348,10 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANHS, SLAPY2, SLAPY3, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANHS, SLAPY2, SLAPY3,
-     $                   SROUNDUP_LWORK
+      REAL               SLAMCH, SLANHS, SLAPY2,
+     $                   SLAPY3, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANHS,
+     $                   SLAPY2, SLAPY3, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAG2, SLARFG, SLARTG, SLASET, SLASV2,

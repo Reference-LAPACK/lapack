@@ -1,3 +1,4 @@
+#include "lapack_64.h"
 *> \brief \b ZLAQP3RK computes a step of truncated QR factorization with column pivoting of a complex m-by-n matrix A using Level 3 BLAS and overwrites a complex m-by-nrhs matrix B with Q**H * B.
 *
 *  =========== DOCUMENTATION ===========

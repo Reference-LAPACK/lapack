@@ -417,13 +417,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLAPY2, SNRM2, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLAPY2, SNRM2,
+      REAL               SDOT, SLAMCH, SLAPY2,
+     $                   SNRM2, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SDOT, SLAMCH,
+     $                   SLAPY2, SNRM2,
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLACPY, SLAG2, STGEXC, STGSYL,
-     $                   XERBLA
+      EXTERNAL           SGEMV, SLACPY, SLAG2,
+     $                   STGEXC, STGSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT

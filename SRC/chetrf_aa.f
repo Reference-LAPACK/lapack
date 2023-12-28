@@ -131,7 +131,8 @@
 *> \ingroup hetrf_aa
 *
 *  =====================================================================
-      SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV,
+     $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
