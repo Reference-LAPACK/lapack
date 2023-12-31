@@ -64,7 +64,7 @@ SEIGTST = schkee.o \
    sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
    sstt22.o ssyl01.o ssyt21.o ssyt22.o
 
-SDMDEIGTST = schkdmd.o
+SDMDEIGTST = schkdmd.o schksydmd.o
 
 CEIGTST = cchkee.o \
    cbdt01.o cbdt02.o cbdt03.o cbdt05.o \
@@ -83,7 +83,7 @@ CEIGTST = cchkee.o \
    csgt01.o cslect.o csyl01.o\
    cstt21.o cstt22.o cunt01.o cunt03.o
 
-CDMDEIGTST = cchkdmd.o
+CDMDEIGTST = cchkdmd.o cchkhedmd.o
 
 DZIGTST = dlafts.o dlahd2.o dlasum.o dlatb9.o dstech.o dstect.o \
    dsvdch.o dsvdct.o dsxt1.o
@@ -105,7 +105,7 @@ DEIGTST = dchkee.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
    dstt22.o dsyl01.o dsyt21.o dsyt22.o
 
-DDMDEIGTST = dchkdmd.o
+DDMDEIGTST = dchkdmd.o dchksydmd.o
 
 ZEIGTST = zchkee.o \
    zbdt01.o zbdt02.o zbdt03.o zbdt05.o \
@@ -124,7 +124,7 @@ ZEIGTST = zchkee.o \
    zsgt01.o zslect.o zsyl01.o\
    zstt21.o zstt22.o zunt01.o zunt03.o
 
-ZDMDEIGTST = zchkdmd.o
+ZDMDEIGTST = zchkdmd.o zchkhedmd.o
 
 .PHONY: all
 all: single complex double complex16
@@ -191,9 +191,17 @@ zchkee.o: zchkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 schkdmd.o: schkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+schksydmd.o: schksydmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 cchkdmd.o: cchkdmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+cchkhedmd.o: cchkhedmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+dchksydmd.o: dchksydmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkdmd.o: zchkdmd.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+zchkhedmd.o: zchkhedmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
