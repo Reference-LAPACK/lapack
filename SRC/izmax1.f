@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b IZMAX1 finds the index of the first vector element of maximum absolute value.
 *
 *  =========== DOCUMENTATION ===========

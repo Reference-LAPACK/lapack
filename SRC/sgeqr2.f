@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SGEQR2 computes the QR factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

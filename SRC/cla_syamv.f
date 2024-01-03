@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========

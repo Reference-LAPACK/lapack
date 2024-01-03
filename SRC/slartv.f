@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARTV applies a vector of plane rotations with real cosines and real sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========

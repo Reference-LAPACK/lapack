@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASWP performs a series of row interchanges on a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

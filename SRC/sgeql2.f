@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

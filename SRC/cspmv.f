@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CSPMV computes a matrix-vector product for complex vectors using a complex symmetric packed matrix
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAGTF computes an LU factorization of a matrix T-λI, where T is a general tridiagonal matrix, and λ a scalar, using partial pivoting with row interchanges.
 *
 *  =========== DOCUMENTATION ===========

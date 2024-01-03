@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASYF computes a partial factorization of a real symmetric matrix using the Bunch-Kaufman diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLA_GERFSX_EXTENDED
 *
 *  =========== DOCUMENTATION ===========

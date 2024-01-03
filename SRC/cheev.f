@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CHEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLAQHP scales a Hermitian matrix stored in packed form.
 *
 *  =========== DOCUMENTATION ===========

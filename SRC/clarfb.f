@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLARFB applies a block reflector or its conjugate-transpose to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

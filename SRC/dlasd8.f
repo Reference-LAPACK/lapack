@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASD8 finds the square roots of the roots of the secular equation, and stores, for each element in D, the distance to its two nearest poles. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

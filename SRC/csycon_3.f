@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CSYCON_3
 *
 *  =========== DOCUMENTATION ===========

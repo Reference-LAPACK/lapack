@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLASCL2 performs diagonal scaling on a matrix.
 *
 *  =========== DOCUMENTATION ===========

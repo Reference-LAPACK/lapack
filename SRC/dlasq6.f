@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASQ6 computes one dqd transform in ping-pong form. Used by sbdsqr and sstegr.
 *
 *  =========== DOCUMENTATION ===========

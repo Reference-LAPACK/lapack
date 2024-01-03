@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========

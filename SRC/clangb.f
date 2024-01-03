@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of general band matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SGGSVP3
 *
 *  =========== DOCUMENTATION ===========

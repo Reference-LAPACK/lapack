@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLA_HEAMV computes a matrix-vector product using a Hermitian indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========

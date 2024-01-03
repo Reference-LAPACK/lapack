@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHB2ST_KERNELS
 *
 *  @precisions fortran z -> s d c

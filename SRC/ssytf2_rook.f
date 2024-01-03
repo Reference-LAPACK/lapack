@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SSYTF2_ROOK computes the factorization of a real symmetric indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

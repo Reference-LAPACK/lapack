@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

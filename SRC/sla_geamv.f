@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLA_GEAMV computes a matrix-vector product using a general matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========

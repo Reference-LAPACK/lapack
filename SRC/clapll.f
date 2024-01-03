@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========

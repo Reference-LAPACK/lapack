@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

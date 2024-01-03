@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CGELS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

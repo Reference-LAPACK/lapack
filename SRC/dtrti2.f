@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DTRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

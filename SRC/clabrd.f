@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLA_SYRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for symmetric indefinite matrices.
 *
 *  =========== DOCUMENTATION ===========

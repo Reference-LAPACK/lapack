@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAED7 used by DSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

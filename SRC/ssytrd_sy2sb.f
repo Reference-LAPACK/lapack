@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SSYTRD_SY2SB
 *
 *  @generated from zhetrd_he2hb.f, fortran z -> s, Wed Dec  7 08:22:40 2016

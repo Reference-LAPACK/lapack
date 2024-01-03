@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 !> \brief \b ZLASSQ updates a sum of squares represented in scaled form.
 !
 !  =========== DOCUMENTATION ===========

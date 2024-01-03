@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLARFT forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========

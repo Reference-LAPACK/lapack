@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> ZCGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (mixed precision with iterative refinement)
 *
 *  =========== DOCUMENTATION ===========

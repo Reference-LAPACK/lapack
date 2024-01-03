@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

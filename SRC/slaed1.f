@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAED1 used by SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========

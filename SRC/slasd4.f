@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

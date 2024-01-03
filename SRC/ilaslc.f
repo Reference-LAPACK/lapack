@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ILASLC scans a matrix for its last non-zero column.
 *
 *  =========== DOCUMENTATION ===========

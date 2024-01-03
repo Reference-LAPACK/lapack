@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DTPRFB applies a real "triangular-pentagonal" block reflector to a real matrix, which is composed of two blocks.
 *
 *  =========== DOCUMENTATION ===========

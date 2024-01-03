@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> DGESVXX computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

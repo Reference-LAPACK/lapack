@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLA_LIN_BERR computes a component-wise relative backward error.
 *
 *  =========== DOCUMENTATION ===========

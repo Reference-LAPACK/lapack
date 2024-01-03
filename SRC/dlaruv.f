@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========

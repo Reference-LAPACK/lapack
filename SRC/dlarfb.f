@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARFB applies a block reflector or its transpose to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASDT creates a tree of subproblems for bidiagonal divide and conquer. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

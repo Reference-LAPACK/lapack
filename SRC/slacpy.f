@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLACPY copies all or part of one two-dimensional array to another.
 *
 *  =========== DOCUMENTATION ===========

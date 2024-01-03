@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========

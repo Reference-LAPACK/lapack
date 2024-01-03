@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> DSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 * @generated from SRC/chesv_aa_2stage.f, fortran c -> d, Tue Oct 31 11:22:31 2017

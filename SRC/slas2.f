@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAS2 computes singular values of a 2-by-2 triangular matrix.
 *
 *  =========== DOCUMENTATION ===========

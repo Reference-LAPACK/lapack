@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form.
 *
 *  =========== DOCUMENTATION ===========

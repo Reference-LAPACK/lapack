@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SSB2ST_KERNELS
 *
 *  @generated from zhb2st_kernels.f, fortran z -> s, Wed Dec  7 08:22:40 2016

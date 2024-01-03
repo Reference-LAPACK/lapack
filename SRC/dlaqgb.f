@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ.
 *
 *  =========== DOCUMENTATION ===========

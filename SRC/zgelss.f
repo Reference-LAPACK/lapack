@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> ZGELSS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

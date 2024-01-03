@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLALSD uses the singular value decomposition of A to solve the least squares problem.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARRF finds a new relatively robust representation such that at least one of the eigenvalues is relatively isolated.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "../SRC/lapack_64.h"
 *> \brief \b SROUNDUP_LWORK
 *
 *  =========== DOCUMENTATION ===========

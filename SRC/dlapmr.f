@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAPMR rearranges rows of a matrix as specified by a permutation vector.
 *
 *  =========== DOCUMENTATION ===========

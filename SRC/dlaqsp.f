@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
 *
 *  =========== DOCUMENTATION ===========

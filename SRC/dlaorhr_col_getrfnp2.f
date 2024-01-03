@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAORHR_COL_GETRFNP2
 *
 *  =========== DOCUMENTATION ===========

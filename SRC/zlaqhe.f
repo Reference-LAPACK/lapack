@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLAQHE scales a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLACRT performs a linear transformation of a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========

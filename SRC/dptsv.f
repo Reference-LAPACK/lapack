@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> DPTSV computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========

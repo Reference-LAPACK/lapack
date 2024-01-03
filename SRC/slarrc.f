@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========

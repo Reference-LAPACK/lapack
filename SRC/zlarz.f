@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix.
 *
 *  =========== DOCUMENTATION ===========

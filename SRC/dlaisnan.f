@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAISNAN tests input for NaN by comparing two arguments for inequality.
 *
 *  =========== DOCUMENTATION ===========

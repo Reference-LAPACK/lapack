@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========

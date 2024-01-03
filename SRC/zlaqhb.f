@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLAQHB scales a Hermitian band matrix, using scaling factors computed by cpbequ.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DGGHD3
 *
 *  =========== DOCUMENTATION ===========

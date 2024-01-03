@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLASYF_ROOK computes a partial factorization of a complex symmetric matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

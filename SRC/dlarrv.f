@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenvalues of L D LT.
 *
 *  =========== DOCUMENTATION ===========

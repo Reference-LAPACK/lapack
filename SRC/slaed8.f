@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAED8 used by SSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

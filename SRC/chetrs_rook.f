@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b  CHETRS_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges)
 *
 *  =========== DOCUMENTATION ===========

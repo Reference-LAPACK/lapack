@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLASCL2 performs diagonal scaling on a matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLA_GBRCOND estimates the Skeel condition number for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========

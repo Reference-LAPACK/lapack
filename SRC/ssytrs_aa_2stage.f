@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SSYTRS_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========

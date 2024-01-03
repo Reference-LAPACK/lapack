@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLA_WWADDW adds a vector into a doubled-single vector.
 *
 *  =========== DOCUMENTATION ===========

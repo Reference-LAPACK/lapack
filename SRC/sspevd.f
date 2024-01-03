@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> SSPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CGESVDQ computes the singular value decomposition (SVD) with a QR-Preconditioned QR SVD Method for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHEGV_2STAGE
 *
 *  @precisions fortran z -> c

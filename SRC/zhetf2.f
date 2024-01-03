@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm, calling Level 2 BLAS).
 *
 *  =========== DOCUMENTATION ===========

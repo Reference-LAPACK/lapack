@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========

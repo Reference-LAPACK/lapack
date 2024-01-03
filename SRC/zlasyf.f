@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLASYF computes a partial factorization of a complex symmetric matrix using the Bunch-Kaufman diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

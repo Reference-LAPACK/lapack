@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLATPS solves a triangular system of equations with the matrix held in packed storage.
 *
 *  =========== DOCUMENTATION ===========

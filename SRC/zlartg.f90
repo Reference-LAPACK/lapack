@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 !> \brief \b ZLARTG generates a plane rotation with real cosine and complex sine.
 !
 !  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
 *
 *  =========== DOCUMENTATION ===========

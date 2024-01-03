@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========

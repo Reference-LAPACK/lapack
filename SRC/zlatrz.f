@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========

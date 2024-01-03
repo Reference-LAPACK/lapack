@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZSYTRI_3
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLA_PORCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian positive-definite matrices.
 *
 *  =========== DOCUMENTATION ===========

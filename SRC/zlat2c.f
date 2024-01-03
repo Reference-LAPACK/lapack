@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLAT2C converts a double complex triangular matrix to a complex triangular matrix.
 *
 *  =========== DOCUMENTATION ===========

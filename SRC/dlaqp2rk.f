@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAQP2RK computes truncated QR factorization with column pivoting of a real matrix block using Level 2 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHESV_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using the bounded Bunch-Kaufman ("rook") diagonal pivoting method
 *
 *  =========== DOCUMENTATION ===========

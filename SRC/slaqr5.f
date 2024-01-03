@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAEDA used by SSTEDC. Computes the Z vector determining the rank-one modification of the diagonal matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========

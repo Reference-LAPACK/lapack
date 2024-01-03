@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARGV generates a vector of plane rotations with real cosines and real sines.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========

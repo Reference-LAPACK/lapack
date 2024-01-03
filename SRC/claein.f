@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========

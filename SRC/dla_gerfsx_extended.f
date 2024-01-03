@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLA_GERFSX_EXTENDED improves the computed solution to a system of linear equations for general matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
 *
 *  =========== DOCUMENTATION ===========

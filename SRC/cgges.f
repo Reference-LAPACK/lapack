@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CGGES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

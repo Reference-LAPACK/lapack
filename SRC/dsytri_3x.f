@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DSYTRI_3X
 *
 *  =========== DOCUMENTATION ===========

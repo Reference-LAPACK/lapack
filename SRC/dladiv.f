@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========

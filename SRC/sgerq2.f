@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========

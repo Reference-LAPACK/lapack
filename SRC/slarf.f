@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========

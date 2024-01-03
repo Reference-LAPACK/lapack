@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b STPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
 *
 *  =========== DOCUMENTATION ===========

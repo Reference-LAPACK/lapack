@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASD7 merges the two sets of singular values together into a single sorted set. Then it tries to deflate the size of the problem. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========

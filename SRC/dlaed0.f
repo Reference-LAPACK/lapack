@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLAED0 used by DSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========

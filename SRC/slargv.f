@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARGV generates a vector of plane rotations with real cosines and real sines.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by cgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

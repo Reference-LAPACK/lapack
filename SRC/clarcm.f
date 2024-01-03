@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLARCM copies all or part of a real two-dimensional array to a complex array.
 *
 *  =========== DOCUMENTATION ===========

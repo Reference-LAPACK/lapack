@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b STFTTR copies a triangular matrix from the rectangular full packed format (TF) to the standard full format (TR).
 *
 *  =========== DOCUMENTATION ===========

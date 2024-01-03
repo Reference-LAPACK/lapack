@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========

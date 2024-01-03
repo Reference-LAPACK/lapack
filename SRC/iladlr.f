@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ILADLR scans a matrix for its last non-zero row.
 *
 *  =========== DOCUMENTATION ===========

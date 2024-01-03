@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLA_HERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for Hermitian indefinite matrices.
 *
 *  =========== DOCUMENTATION ===========

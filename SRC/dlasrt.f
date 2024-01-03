@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLASRT sorts numbers in increasing or decreasing order.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> CHBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  @generated from zhbevx_2stage.f, fortran z -> c, Sat Nov  5 23:18:22 2016

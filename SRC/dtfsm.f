@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========

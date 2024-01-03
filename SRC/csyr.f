@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CSYR performs the symmetric rank-1 update of a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========

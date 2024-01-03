@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ.
 *
 *  =========== DOCUMENTATION ===========

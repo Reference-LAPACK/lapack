@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZLAG2C converts a complex double precision matrix to a complex single precision matrix.
 *
 *  =========== DOCUMENTATION ===========

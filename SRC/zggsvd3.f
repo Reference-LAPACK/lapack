@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> ZGGSVD3 computes the singular value decomposition (SVD) for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========

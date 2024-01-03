@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DORM22 multiplies a general matrix by a banded orthogonal matrix.
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========

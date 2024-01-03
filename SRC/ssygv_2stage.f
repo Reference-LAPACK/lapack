@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SSYGV_2STAGE
 *
 *  @generated from dsygv_2stage.f, fortran d -> s, Sun Nov  6 12:54:29 2016

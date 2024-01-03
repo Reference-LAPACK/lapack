@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CHEGV_2STAGE
 *
 *  @generated from zhegv_2stage.f, fortran z -> c, Sun Nov  6 13:09:52 2016

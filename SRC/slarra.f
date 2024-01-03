@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========

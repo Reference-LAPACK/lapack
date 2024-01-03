@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> ZGBSVXX computes the solution to system of linear equations A * X = B for GB matrices</b>
 *
 *  =========== DOCUMENTATION ===========

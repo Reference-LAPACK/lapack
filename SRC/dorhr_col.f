@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DORHR_COL
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLACRM multiplies a complex matrix by a square real matrix.
 *
 *  =========== DOCUMENTATION ===========

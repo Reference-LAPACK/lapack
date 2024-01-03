@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> SGESVD computes the singular value decomposition (SVD) for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

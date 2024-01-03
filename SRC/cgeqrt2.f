@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CGEQRT2 computes a QR factorization of a general real or complex matrix using the compact WY representation of Q.
 *
 *  =========== DOCUMENTATION ===========

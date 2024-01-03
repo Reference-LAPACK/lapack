@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \addtogroup gesv
 *>
 *> \brief <b> CGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>

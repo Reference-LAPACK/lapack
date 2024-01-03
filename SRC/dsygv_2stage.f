@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b DSYGV_2STAGE
 *
 *  @precisions fortran d -> s

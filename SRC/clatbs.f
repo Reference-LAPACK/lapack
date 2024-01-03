@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b CLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========

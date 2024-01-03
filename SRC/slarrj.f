@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b SLARRJ performs refinement of the initial estimates of the eigenvalues of the matrix T.
 *
 *  =========== DOCUMENTATION ===========

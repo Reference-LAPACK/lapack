@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief <b> ZHESV computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHETRF_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========

@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZUNM22 multiplies a general matrix by a banded unitary matrix.
 *
 *  =========== DOCUMENTATION ===========
