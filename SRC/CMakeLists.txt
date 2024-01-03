@@ -535,26 +535,33 @@ set_target_properties(
   )
 
 if(BUILD_INDEX64_EXT_API)
-  set(SOURCES_64)
-  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-  file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-  file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
-  list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
-  foreach(F IN LISTS SOURCES_64)
-    set(FFILE "")
-    file(READ ${F} FFILE)
-    file(WRITE ${F} "#include \"lapack_64.h\"\n")
-    file(APPEND ${F} "${FFILE}")
-  endforeach()
-  file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-  add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-  target_link_libraries(${LAPACKLIB}_64_obj mod_files)
-  target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
-  set_target_properties(
-    ${LAPACKLIB}_64_obj PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
-    Fortran_PREPROCESS ON
-  )
+  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
+    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
+    set(BUILD_INDEX64_EXT_API OFF)
+    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
+  else()
+    set(SOURCES_64)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
+    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
+    foreach(F IN LISTS SOURCES_64)
+      set(FFILE "")
+      file(READ ${F} FFILE)
+      file(WRITE ${F} "#include \"lapack_64.h\"\n")
+      file(APPEND ${F} "${FFILE}")
+    endforeach()
+    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
+    set_target_properties(
+      ${LAPACKLIB}_64_obj PROPERTIES
+      POSITION_INDEPENDENT_CODE ON
+      Fortran_PREPROCESS ON
+    )
+  endif()
 endif()
 
 add_library(${LAPACKLIB}

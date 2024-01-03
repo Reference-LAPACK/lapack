@@ -1,4 +1,3 @@
-#include "lapack_64.h"
 *> \brief \b ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========

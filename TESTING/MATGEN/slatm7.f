@@ -1,4 +1,3 @@
-#include "matgen_64.h"
 *> \brief \b SLATM7
 *
 *  =========== DOCUMENTATION ===========
