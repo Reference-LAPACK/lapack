@@ -66,9 +66,9 @@ int main(int argc, char **argv) {
 		A = (double *)malloc(n*n*sizeof(double)) ;
 		if (A==NULL){ printf("error of memory allocation\n"); exit(0); }
 		b = (double *)malloc(n*nrhs*sizeof(double)) ;
-		if (b==NULL){ printf("error of memory allocation\n"); exit(0); }
+		if (b==NULL){ printf("error of memory allocation\n"); free(A); exit(0); }
 		ipiv = (int64_t *)malloc(n*sizeof(int64_t)) ;
-		if (ipiv==NULL){ printf("error of memory allocation\n"); exit(0); }
+		if (ipiv==NULL){ printf("error of memory allocation\n"); free(A); free(b); exit(0); }
 
         for( i = 0; i < n; i++ ) {
                 for( j = 0; j < n; j++ ) A[i+j*lda] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
@@ -94,15 +94,26 @@ int main(int argc, char **argv) {
                 printf( "The diagonal element of the triangular factor of A,\n" );
                 printf( "U(%" LAPACK_IFMT ",%" LAPACK_IFMT ") is zero, so that A is singular;\n", info, info );
                 printf( "the solution could not be computed.\n" );
+                free(A);
+                free(b);
+                free(ipiv);
                 exit( 1 );
         }
-        if (info <0) exit( 1 );
+        if (info <0) {
+            free(A);
+            free(b);
+            free(ipiv);
+            exit( 1 );
+        }
         /* Print solution */
         print_matrix_colmajor_64( "Solution", n, nrhs, b, ldb );
         /* Print details of LU factorization */
         print_matrix_colmajor_64( "Details of LU factorization", n, n, A, lda );
         /* Print pivot indices */
         print_vector_64( "Pivot indices", n, ipiv );
+        free(A);
+        free(b);
+        free(ipiv);
         exit( 0 );
 } /* End of LAPACKE_dgesv Example */
 
