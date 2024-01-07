@@ -705,7 +705,6 @@ set(CLASRC
    cgesvx.f
    cgetc2.f
    cgetf2.f
-   cgetrf2.f
    cgetri.f
    cggbak.f
    cggbal.f
@@ -888,7 +887,6 @@ set(CLASRC
    claset.f
    clasr.f
    classq.f90
-   claswp.f
    clasyf.f
    clasyf_rook.f
    clasyf_rk.f
@@ -917,7 +915,6 @@ set(CLASRC
    cposv.f
    cposvx.f
    cpotf2.f
-   cpotrf2.f
    cpotri.f
    cpstrf.f
    cpstf2.f
@@ -1169,14 +1166,10 @@ set(ZCLASRC
    cpotrf.f
    cpotrf2.f
    cpotrs.f
-   cgetrs.f
-   cpotrf.f
-   cgetrf.f
    sisnan.f
    slaisnan.f)
 
 set(DLASRC
-   dbdsvdx.f
    dgbbrd.f
    dgbcon.f
    dgbequ.f
