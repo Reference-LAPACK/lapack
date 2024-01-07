@@ -228,7 +228,6 @@ set(CLINTST
    cdrvhe_rk.f
    cdrvhe_aa.f
    cdrvhe_aa_2stage.f
-   cdrvsy_aa_2stage.f
    cdrvhp.f
    cdrvls.f
    cdrvpb.f
@@ -238,6 +237,7 @@ set(CLINTST
    cdrvsy_rook.f
    cdrvsy_rk.f
    cdrvsy_aa.f
+   cdrvsy_aa_2stage.f
    cerrgt.f
    cerrlq.f
    cerrls.f

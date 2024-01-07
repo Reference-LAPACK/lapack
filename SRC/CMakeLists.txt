@@ -1,7 +1,7 @@
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
-
+#
 #       ALLAUX  -- Auxiliary routines called from all precisions
 #       SCLAUX  -- Auxiliary routines called from single precision
 #       DZLAUX  -- Auxiliary routines called from double precision
@@ -51,16 +51,16 @@ set(ALLAUX
    la_xisnan.F90
    sisnan.f
    slaisnan.f
-   ../INSTALL/ilaver.f
-   ../INSTALL/lsame.f
    xerbla.f
    xerbla_array.f
+   ../INSTALL/ilaver.f
+   ../INSTALL/lsame.f
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   sbdsvdx.f
    sbdsdc.f
    sbdsqr.f
+   sbdsvdx.f
    sdisna.f
    slabad.f
    slacpy.f
@@ -137,10 +137,9 @@ set(SCLAUX
 
 set(DZLAUX
    dbdsdc.f
-   dbdsvdx.f
    dbdsqr.f
+   dbdsvdx.f
    ddisna.f
-   disnan.f
    dlabad.f
    dlacpy.f
    dladiv.f
@@ -202,7 +201,6 @@ set(DZLAUX
    dlasrt.f
    dlassq.f90
    dlasv2.f
-   dlaisnan.f
    dpttrf.f
    dstebz.f
    dstedc.f
@@ -210,6 +208,8 @@ set(DZLAUX
    dsteqr.f
    dsterf.f
    dstevx.f
+   dlaisnan.f
+   disnan.f
    dlartgp.f
    dlartgs.f
    ../INSTALL/droundup_lwork.f
@@ -259,9 +259,13 @@ set(SLASRC
    sgesc2.f
    sgesdd.f
    sgesv.f
+   sgesvx.f
    sgesvd.f
    sgesvdx.f
-   sgesvx.f
+   sgesvj.f
+   sgejsv.f
+   sgsvj0.f
+   sgsvj1.f
    sgetc2.f
    sgetf2.f
    sgetri.f
@@ -317,6 +321,7 @@ set(SLASRC
    slangt.f
    slanhs.f
    slansb.f
+   slansf.f
    slansp.f
    slansy.f
    slantb.f
@@ -461,6 +466,7 @@ set(SLASRC
    ssptri.f
    ssptrs.f
    sstegr.f
+   sstemr.f
    sstev.f
    sstevd.f
    sstevr.f
@@ -537,8 +543,6 @@ set(SLASRC
    strtri.f
    strtrs.f
    stzrzf.f
-   sstemr.f
-   slansf.f
    spftrf.f
    spftri.f
    spftrs.f
@@ -551,14 +555,10 @@ set(SLASRC
    stpttr.f
    strttf.f
    strttp.f
-   sgejsv.f
-   sgesvj.f
-   sgsvj0.f
-   sgsvj1.f
    sgeequb.f
+   sgbequb.f
    ssyequb.f
    spoequb.f
-   sgbequb.f
    sbbcsd.f
    slapmr.f
    sorbdb.f
@@ -695,13 +695,13 @@ set(CLASRC
    cgesc2.f
    cgesdd.f
    cgesv.f
+   cgesvx.f
    cgesvd.f
    cgesvdx.f
    cgesvj.f
    cgejsv.f
    cgsvj0.f
    cgsvj1.f
-   cgesvx.f
    cgetc2.f
    cgetf2.f
    cgetri.f
@@ -832,6 +832,7 @@ set(CLASRC
    clangt.f
    clanhb.f
    clanhe.f
+   clanhf.f
    clanhp.f
    clanhs.f
    clanht.f
@@ -843,7 +844,6 @@ set(CLASRC
    clantr.f
    clapll.f
    clapmt.f
-   clarcm.f
    claqgb.f
    claqge.f
    claqhb.f
@@ -854,18 +854,19 @@ set(CLASRC
    claqp2rk.f
    claqp3rk.f
    claqsb.f
+   claqsp.f
+   claqsy.f
    claqr0.f
    claqr1.f
    claqr2.f
    claqr3.f
    claqr4.f
    claqr5.f
-   claqsp.f
-   claqsy.f
    clar1v.f
    clar2v.f
    ilaclr.f
    ilaclc.f
+   clarcm.f
    clarf.f
    clarfb.f
    clarfb_gett.f
@@ -934,6 +935,8 @@ set(CLASRC
    cpttrs.f
    cptts2.f
    crot.f
+   csrscl.f
+   crscl.f
    cspcon.f
    cspmv.f
    cspr.f
@@ -943,11 +946,10 @@ set(CLASRC
    csptrf.f
    csptri.f
    csptrs.f
-   csrscl.f
-   crscl.f
    cstedc.f
    cstegr.f
    cstein.f
+   cstemr.f
    csteqr.f
    csycon.f
    csymv.f
@@ -974,14 +976,14 @@ set(CLASRC
    csysv_rook.f
    csytf2_rk.f
    csytrf_rk.f
-   csytrf_aa.f
    csytrs_3.f
-   csytrs_aa.f
    csytri_3.f
    csytri_3x.f
    csycon_3.f
    csysv_rk.f
    csysv_aa.f
+   csytrf_aa.f
+   csytrs_aa.f
    csysv_aa_2stage.f
    csytrf_aa_2stage.f
    csytrs_aa_2stage.f
@@ -1044,15 +1046,13 @@ set(CLASRC
    cupmtr.f
    icmax1.f
    scsum1.f
-   cstemr.f
    chfrk.f
-   ctfttp.f
-   clanhf.f
    cpftrf.f
    cpftri.f
    cpftrs.f
    ctfsm.f
    ctftri.f
+   ctfttp.f
    ctfttr.f
    ctpttf.f
    ctpttr.f
@@ -1209,9 +1209,13 @@ set(DLASRC
    dgesc2.f
    dgesdd.f
    dgesv.f
+   dgesvx.f
    dgesvd.f
    dgesvdx.f
-   dgesvx.f
+   dgesvj.f
+   dgejsv.f
+   dgsvj0.f
+   dgsvj1.f
    dgetc2.f
    dgetf2.f
    dgetrf.f
@@ -1270,6 +1274,7 @@ set(DLASRC
    dlangt.f
    dlanhs.f
    dlansb.f
+   dlansf.f
    dlansp.f
    dlansy.f
    dlantb.f
@@ -1418,6 +1423,7 @@ set(DLASRC
    dsptri.f
    dsptrs.f
    dstegr.f
+   dstemr.f
    dstev.f
    dstevd.f
    dstevr.f
@@ -1439,11 +1445,11 @@ set(DLASRC
    dsytrd.f
    dsytrf.f
    dsytri.f
-   dsytrs.f
-   dsytrs2.f
    dsytri2.f
    dsytri2x.f
    dsyswapr.f
+   dsytrs.f
+   dsytrs2.f
    dsyconv.f
    dsyconvf.f
    dsyconvf_rook.f
@@ -1494,13 +1500,11 @@ set(DLASRC
    dtrtri.f
    dtrtrs.f
    dtzrzf.f
-   dstemr.f
    dsgesv.f
    dsposv.f
    dlag2s.f
    slag2d.f
    dlat2s.f
-   dlansf.f
    dpftrf.f
    dpftri.f
    dpftrs.f
@@ -1513,14 +1517,10 @@ set(DLASRC
    dtpttr.f
    dtrttf.f
    dtrttp.f
-   dgejsv.f
-   dgesvj.f
-   dgsvj0.f
-   dgsvj1.f
    dgeequb.f
+   dgbequb.f
    dsyequb.f
    dpoequb.f
-   dgbequb.f
    dbbcsd.f
    dlapmr.f
    dorbdb.f
@@ -1648,9 +1648,9 @@ set(ZLASRC
    zgesc2.f
    zgesdd.f
    zgesv.f
+   zgesvx.f
    zgesvd.f
    zgesvdx.f
-   zgesvx.f
    zgesvj.f
    zgejsv.f
    zgsvj0.f
@@ -1788,6 +1788,7 @@ set(ZLASRC
    zlangt.f
    zlanhb.f
    zlanhe.f
+   zlanhf.f
    zlanhp.f
    zlanhs.f
    zlanht.f
@@ -1809,14 +1810,14 @@ set(ZLASRC
    zlaqp2rk.f
    zlaqp3rk.f
    zlaqsb.f
+   zlaqsp.f
+   zlaqsy.f
    zlaqr0.f
    zlaqr1.f
    zlaqr2.f
    zlaqr3.f
    zlaqr4.f
    zlaqr5.f
-   zlaqsp.f
-   zlaqsy.f
    zlar1v.f
    zlar2v.f
    ilazlr.f
@@ -1894,6 +1895,8 @@ set(ZLASRC
    zpttrs.f
    zptts2.f
    zrot.f
+   zdrscl.f
+   zrscl.f
    zspcon.f
    zspmv.f
    zspr.f
@@ -1903,11 +1906,10 @@ set(ZLASRC
    zsptrf.f
    zsptri.f
    zsptrs.f
-   zdrscl.f
-   zrscl.f
    zstedc.f
    zstegr.f
    zstein.f
+   zstemr.f
    zsteqr.f
    zsycon.f
    zsymv.f
@@ -1929,22 +1931,22 @@ set(ZLASRC
    zsytf2_rook.f
    zsytrf_rook.f
    zsytrs_rook.f
-   zsytrs_aa.f
    zsytri_rook.f
    zsycon_rook.f
    zsysv_rook.f
    zsytf2_rk.f
    zsytrf_rk.f
-   zsytrf_aa.f
    zsytrs_3.f
-   zsysv_aa_2stage.f
-   zsytrf_aa_2stage.f
-   zsytrs_aa_2stage.f
    zsytri_3.f
    zsytri_3x.f
    zsycon_3.f
    zsysv_rk.f
    zsysv_aa.f
+   zsytrf_aa.f
+   zsytrs_aa.f
+   zsysv_aa_2stage.f
+   zsytrf_aa_2stage.f
+   zsytrs_aa_2stage.f
    ztbcon.f
    ztbrfs.f
    ztbtrs.f
@@ -2004,20 +2006,18 @@ set(ZLASRC
    zupmtr.f
    izmax1.f
    dzsum1.f
-   zstemr.f
    zcgesv.f
    zcposv.f
    zlag2c.f
    clag2z.f
    zlat2c.f
    zhfrk.f
-   ztfttp.f
-   zlanhf.f
    zpftrf.f
    zpftri.f
    zpftrs.f
    ztfsm.f
    ztftri.f
+   ztfttp.f
    ztfttr.f
    ztpttf.f
    ztpttr.f
@@ -2047,9 +2047,6 @@ set(ZLASRC
    ztpqrt2.f
    ztpmqrt.f
    ztprfb.f
-   ztplqt.f
-   ztplqt2.f
-   ztpmlqt.f
    zgelqt.f
    zgelqt3.f
    zgemlqt.f
@@ -2063,6 +2060,9 @@ set(ZLASRC
    zlaswlq.f
    zlamswlq.f
    zgemlq.f
+   ztplqt.f
+   ztplqt2.f
+   ztpmlqt.f
    zunhr_col.f
    zlaunhr_col_getrfnp.f
    zlaunhr_col_getrfnp2.f

@@ -263,8 +263,8 @@ CLINTST = \
    cdrvhe_rook.o \
    cdrvhe_rk.o \
    cdrvhe_aa.o \
-   cdrvhp.o \
    cdrvhe_aa_2stage.o \
+   cdrvhp.o \
    cdrvls.o \
    cdrvpb.o \
    cdrvpp.o \

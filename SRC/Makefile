@@ -74,8 +74,6 @@ ALLAUX = \
    ilaenv2stage.o \
    ieeeck.o \
    lsamen.o \
-   xerbla.o \
-   xerbla_array.o \
    iparmq.o \
    iparam2stage.o \
    ilaprec.o \
@@ -87,6 +85,8 @@ ALLAUX = \
    la_xisnan.o \
    sisnan.o \
    slaisnan.o \
+   xerbla.o \
+   xerbla_array.o \
    ../INSTALL/ilaver.o \
    ../INSTALL/lsame.o \
    ../INSTALL/slamch.o
@@ -293,9 +293,13 @@ SLASRC = \
    sgesc2.o \
    sgesdd.o \
    sgesv.o \
+   sgesvx.o \
    sgesvd.o \
    sgesvdx.o \
-   sgesvx.o \
+   sgesvj.o \
+   sgejsv.o \
+   sgsvj0.o \
+   sgsvj1.o \
    sgetc2.o \
    sgetf2.o \
    sgetri.o \
@@ -351,6 +355,7 @@ SLASRC = \
    slangt.o \
    slanhs.o \
    slansb.o \
+   slansf.o \
    slansp.o \
    slansy.o \
    slantb.o \
@@ -398,6 +403,7 @@ SLASRC = \
    slasyf.o \
    slasyf_rook.o \
    slasyf_rk.o \
+   slasyf_aa.o \
    slatbs.o \
    slatdf.o \
    slatps.o \
@@ -494,6 +500,7 @@ SLASRC = \
    ssptri.o \
    ssptrs.o \
    sstegr.o \
+   sstemr.o \
    sstev.o \
    sstevd.o \
    sstevr.o \
@@ -536,7 +543,6 @@ SLASRC = \
    ssytri_3x.o \
    ssycon_3.o \
    ssysv_rk.o \
-   slasyf_aa.o \
    ssysv_aa.o \
    ssytrf_aa.o \
    ssytrs_aa.o \
@@ -571,8 +577,6 @@ SLASRC = \
    strtri.o \
    strtrs.o \
    stzrzf.o \
-   sstemr.o \
-   slansf.o \
    spftrf.o \
    spftri.o \
    spftrs.o \
@@ -585,14 +589,10 @@ SLASRC = \
    stpttr.o \
    strttf.o \
    strttp.o \
-   sgejsv.o \
-   sgesvj.o \
-   sgsvj0.o \
-   sgsvj1.o \
    sgeequb.o \
+   sgbequb.o \
    ssyequb.o \
    spoequb.o \
-   sgbequb.o \
    sbbcsd.o \
    slapmr.o \
    sorbdb.o \
@@ -731,13 +731,13 @@ CLASRC = \
    cgesc2.o \
    cgesdd.o \
    cgesv.o \
+   cgesvx.o \
    cgesvd.o \
    cgesvdx.o \
    cgesvj.o \
    cgejsv.o \
    cgsvj0.o \
    cgsvj1.o \
-   cgesvx.o \
    cgetc2.o \
    cgetf2.o \
    cgetri.o \
@@ -811,7 +811,6 @@ CLASRC = \
    chesv_aa.o \
    chetrf_aa.o \
    chetrs_aa.o \
-   clahef_aa.o \
    chesv_aa_2stage.o \
    chetrf_aa_2stage.o \
    chetrs_aa_2stage.o \
@@ -857,6 +856,7 @@ CLASRC = \
    clahef.o \
    clahef_rook.o \
    clahef_rk.o \
+   clahef_aa.o \
    clahqr.o \
    clahr2.o \
    claic1.o \
@@ -868,6 +868,7 @@ CLASRC = \
    clangt.o \
    clanhb.o \
    clanhe.o \
+   clanhf.o \
    clanhp.o \
    clanhs.o \
    clanht.o \
@@ -879,7 +880,6 @@ CLASRC = \
    clantr.o \
    clapll.o \
    clapmt.o \
-   clarcm.o \
    claqgb.o \
    claqge.o \
    claqhb.o \
@@ -890,24 +890,25 @@ CLASRC = \
    claqp2rk.o \
    claqp3rk.o \
    claqsb.o \
+   claqsp.o \
+   claqsy.o \
    claqr0.o \
    claqr1.o \
    claqr2.o \
    claqr3.o \
    claqr4.o \
    claqr5.o \
-   claqsp.o \
-   claqsy.o \
    clar1v.o \
    clar2v.o \
    ilaclr.o \
    ilaclc.o \
+   clarcm.o \
    clarf.o \
    clarfb.o \
    clarfb_gett.o \
    clarfg.o \
-   clarft.o \
    clarfgp.o \
+   clarft.o \
    clarfx.o \
    clarfy.o \
    clargv.o \
@@ -970,6 +971,8 @@ CLASRC = \
    cpttrs.o \
    cptts2.o \
    crot.o \
+   csrscl.o \
+   crscl.o \
    cspcon.o \
    cspmv.o \
    cspr.o \
@@ -979,11 +982,10 @@ CLASRC = \
    csptrf.o \
    csptri.o \
    csptrs.o \
-   csrscl.o \
-   crscl.o \
    cstedc.o \
    cstegr.o \
    cstein.o \
+   cstemr.o \
    csteqr.o \
    csycon.o \
    csymv.o \
@@ -1010,14 +1012,14 @@ CLASRC = \
    csysv_rook.o \
    csytf2_rk.o \
    csytrf_rk.o \
-   csytrf_aa.o \
    csytrs_3.o \
-   csytrs_aa.o \
    csytri_3.o \
    csytri_3x.o \
    csycon_3.o \
    csysv_rk.o \
    csysv_aa.o \
+   csytrf_aa.o \
+   csytrs_aa.o \
    csysv_aa_2stage.o \
    csytrf_aa_2stage.o \
    csytrs_aa_2stage.o \
@@ -1080,15 +1082,13 @@ CLASRC = \
    cupmtr.o \
    icmax1.o \
    scsum1.o \
-   cstemr.o \
    chfrk.o \
-   ctfttp.o \
-   clanhf.o \
    cpftrf.o \
    cpftri.o \
    cpftrs.o \
    ctfsm.o \
    ctftri.o \
+   ctfttp.o \
    ctfttr.o \
    ctpttf.o \
    ctpttr.o \
@@ -1205,8 +1205,6 @@ ZCLASRC = \
    cpotrs.o
 
 DLASRC = \
-   dpotrf2.o \
-   dgetrf2.o \
    dgbbrd.o \
    dgbcon.o \
    dgbequ.o \
@@ -1249,12 +1247,17 @@ DLASRC = \
    dgesc2.o \
    dgesdd.o \
    dgesv.o \
+   dgesvx.o \
    dgesvd.o \
    dgesvdx.o \
-   dgesvx.o \
+   dgesvj.o \
+   dgejsv.o \
+   dgsvj0.o \
+   dgsvj1.o \
    dgetc2.o \
    dgetf2.o \
    dgetrf.o \
+   dgetrf2.o \
    dgetri.o \
    dgetrs.o \
    dggbak.o \
@@ -1309,6 +1312,7 @@ DLASRC = \
    dlangt.o \
    dlanhs.o \
    dlansb.o \
+   dlansf.o \
    dlansp.o \
    dlansy.o \
    dlantb.o \
@@ -1357,6 +1361,7 @@ DLASRC = \
    dlasyf.o \
    dlasyf_rook.o \
    dlasyf_rk.o \
+   dlasyf_aa.o \
    dlatbs.o \
    dlatdf.o \
    dlatps.o \
@@ -1411,6 +1416,7 @@ DLASRC = \
    dposvx.o \
    dpotf2.o \
    dpotrf.o \
+   dpotrf2.o \
    dpotri.o \
    dpotrs.o \
    dpstrf.o \
@@ -1455,6 +1461,7 @@ DLASRC = \
    dsptri.o \
    dsptrs.o \
    dstegr.o \
+   dstemr.o \
    dstev.o \
    dstevd.o \
    dstevr.o \
@@ -1497,7 +1504,6 @@ DLASRC = \
    dsytri_3x.o \
    dsycon_3.o \
    dsysv_rk.o \
-   dlasyf_aa.o \
    dsysv_aa.o \
    dsytrf_aa.o \
    dsytrs_aa.o \
@@ -1532,13 +1538,11 @@ DLASRC = \
    dtrtri.o \
    dtrtrs.o \
    dtzrzf.o \
-   dstemr.o \
    dsgesv.o \
    dsposv.o \
    dlag2s.o \
    slag2d.o \
    dlat2s.o \
-   dlansf.o \
    dpftrf.o \
    dpftri.o \
    dpftrs.o \
@@ -1551,14 +1555,10 @@ DLASRC = \
    dtpttr.o \
    dtrttf.o \
    dtrttp.o \
-   dgejsv.o \
-   dgesvj.o \
-   dgsvj0.o \
-   dgsvj1.o \
    dgeequb.o \
+   dgbequb.o \
    dsyequb.o \
    dpoequb.o \
-   dgbequb.o \
    dbbcsd.o \
    dlapmr.o \
    dorbdb.o \
@@ -1645,8 +1645,6 @@ DXLASRC = \
 endif
 
 ZLASRC = \
-   zpotrf2.o \
-   zgetrf2.o \
    zbdsqr.o \
    zgbbrd.o \
    zgbcon.o \
@@ -1690,16 +1688,17 @@ ZLASRC = \
    zgesc2.o \
    zgesdd.o \
    zgesv.o \
+   zgesvx.o \
    zgesvd.o \
    zgesvdx.o \
    zgesvj.o \
    zgejsv.o \
    zgsvj0.o \
    zgsvj1.o \
-   zgesvx.o \
    zgetc2.o \
    zgetf2.o \
    zgetrf.o \
+   zgetrf2.o \
    zgetri.o \
    zgetrs.o \
    zggbak.o \
@@ -1772,7 +1771,6 @@ ZLASRC = \
    zhesv_aa.o \
    zhetrf_aa.o \
    zhetrs_aa.o \
-   zlahef_aa.o \
    zhesv_aa_2stage.o \
    zhetrf_aa_2stage.o \
    zhetrs_aa_2stage.o \
@@ -1818,6 +1816,7 @@ ZLASRC = \
    zlahef.o \
    zlahef_rook.o \
    zlahef_rk.o \
+   zlahef_aa.o \
    zlahqr.o \
    zlahr2.o \
    zlaic1.o \
@@ -1829,6 +1828,7 @@ ZLASRC = \
    zlangt.o \
    zlanhb.o \
    zlanhe.o \
+   zlanhf.o \
    zlanhp.o \
    zlanhs.o \
    zlanht.o \
@@ -1850,14 +1850,14 @@ ZLASRC = \
    zlaqp2rk.o \
    zlaqp3rk.o \
    zlaqsb.o \
+   zlaqsp.o \
+   zlaqsy.o \
    zlaqr0.o \
    zlaqr1.o \
    zlaqr2.o \
    zlaqr3.o \
    zlaqr4.o \
    zlaqr5.o \
-   zlaqsp.o \
-   zlaqsy.o \
    zlar1v.o \
    zlar2v.o \
    ilazlr.o \
@@ -1867,8 +1867,8 @@ ZLASRC = \
    zlarfb.o \
    zlarfb_gett.o \
    zlarfg.o \
-   zlarft.o \
    zlarfgp.o \
+   zlarft.o \
    zlarfx.o \
    zlarfy.o \
    zlargv.o \
@@ -1913,6 +1913,7 @@ ZLASRC = \
    zposvx.o \
    zpotf2.o \
    zpotrf.o \
+   zpotrf2.o \
    zpotri.o \
    zpotrs.o \
    zpstrf.o \
@@ -1934,6 +1935,8 @@ ZLASRC = \
    zpttrs.o \
    zptts2.o \
    zrot.o \
+   zdrscl.o \
+   zrscl.o \
    zspcon.o \
    zspmv.o \
    zspr.o \
@@ -1943,11 +1946,10 @@ ZLASRC = \
    zsptrf.o \
    zsptri.o \
    zsptrs.o \
-   zdrscl.o \
-   zrscl.o \
    zstedc.o \
    zstegr.o \
    zstein.o \
+   zstemr.o \
    zsteqr.o \
    zsycon.o \
    zsymv.o \
@@ -1969,22 +1971,22 @@ ZLASRC = \
    zsytf2_rook.o \
    zsytrf_rook.o \
    zsytrs_rook.o \
-   zsytrs_aa.o \
    zsytri_rook.o \
    zsycon_rook.o \
    zsysv_rook.o \
-   zsysv_aa_2stage.o \
-   zsytrf_aa_2stage.o \
-   zsytrs_aa_2stage.o \
    zsytf2_rk.o \
    zsytrf_rk.o \
-   zsytrf_aa.o \
    zsytrs_3.o \
    zsytri_3.o \
    zsytri_3x.o \
    zsycon_3.o \
    zsysv_rk.o \
    zsysv_aa.o \
+   zsytrf_aa.o \
+   zsytrs_aa.o \
+   zsysv_aa_2stage.o \
+   zsytrf_aa_2stage.o \
+   zsytrs_aa_2stage.o \
    ztbcon.o \
    ztbrfs.o \
    ztbtrs.o \
@@ -2044,20 +2046,18 @@ ZLASRC = \
    zupmtr.o \
    izmax1.o \
    dzsum1.o \
-   zstemr.o \
    zcgesv.o \
    zcposv.o \
    zlag2c.o \
    clag2z.o \
    zlat2c.o \
    zhfrk.o \
-   ztfttp.o \
-   zlanhf.o \
    zpftrf.o \
    zpftri.o \
    zpftrs.o \
    ztfsm.o \
    ztftri.o \
+   ztfttp.o \
    ztfttr.o \
    ztpttf.o \
    ztpttr.o \
@@ -2087,9 +2087,6 @@ ZLASRC = \
    ztpqrt2.o \
    ztpmqrt.o \
    ztprfb.o \
-   ztplqt.o \
-   ztplqt2.o \
-   ztpmlqt.o \
    zgelqt.o \
    zgelqt3.o \
    zgemlqt.o \
@@ -2103,6 +2100,9 @@ ZLASRC = \
    zlaswlq.o \
    zlamswlq.o \
    zgemlq.o \
+   ztplqt.o \
+   ztplqt2.o \
+   ztpmlqt.o \
    zunhr_col.o \
    zlaunhr_col_getrfnp.o \
    zlaunhr_col_getrfnp2.o \
