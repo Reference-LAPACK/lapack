@@ -47,7 +47,10 @@ set(ALLAUX
    ilauplo.f
    iladiag.f
    chla_transtype.f
+   la_constants.f90
    la_xisnan.F90
+   sisnan.f
+   slaisnan.f
    ../INSTALL/ilaver.f
    ../INSTALL/lsame.f
    xerbla.f
@@ -55,7 +58,6 @@ set(ALLAUX
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   la_constants.f90
    sbdsvdx.f
    sbdsdc.f
    sbdsqr.f
@@ -134,7 +136,6 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
-   la_constants.f90
    dbdsdc.f
    dbdsvdx.f
    dbdsqr.f
@@ -616,8 +617,6 @@ set(DSLASRC
    sgetrf.f
    sgetrf2.f
    sgetrs.f
-   sisnan.f
-   slaisnan.f
    slaswp.f
    spotrf.f
    spotrf2.f
@@ -1165,9 +1164,7 @@ set(ZCLASRC
    claswp.f
    cpotrf.f
    cpotrf2.f
-   cpotrs.f
-   sisnan.f
-   slaisnan.f)
+   cpotrs.f)
 
 set(DLASRC
    dgbbrd.f
