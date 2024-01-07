@@ -78,20 +78,23 @@ ALLAUX = \
    xerbla_array.o \
    iparmq.o \
    iparam2stage.o \
-   la_xisnan.o \
    ilaprec.o \
    ilatrans.o \
    ilauplo.o \
    iladiag.o \
    chla_transtype.o \
+   la_constants.o \
+   la_xisnan.o \
+   sisnan.o \
+   slaisnan.o \
    ../INSTALL/ilaver.o \
    ../INSTALL/lsame.o \
    ../INSTALL/slamch.o
 
 SCLAUX = \
-   la_constants.o \
    sbdsdc.o \
    sbdsqr.o \
+   sbdsvdx.o \
    sdisna.o \
    slabad.o \
    slacpy.o \
@@ -157,19 +160,19 @@ SCLAUX = \
    spttrf.o \
    sstebz.o \
    sstedc.o \
+   sstein.o \
    ssteqr.o \
    ssterf.o \
-   slaisnan.o \
-   sisnan.o \
+   sstevx.o \
    slartgp.o \
    slartgs.o \
    ../INSTALL/sroundup_lwork.o \
    ../INSTALL/second_$(TIMER).o
 
 DZLAUX = \
-   la_constants.o \
    dbdsdc.o \
    dbdsqr.o \
+   dbdsvdx.o \
    ddisna.o \
    dlabad.o \
    dlacpy.o \
@@ -235,8 +238,10 @@ DZLAUX = \
    dpttrf.o \
    dstebz.o \
    dstedc.o \
+   dstein.o \
    dsteqr.o \
    dsterf.o \
+   dstevx.o \
    dlaisnan.o \
    disnan.o \
    dlartgp.o \
@@ -246,9 +251,6 @@ DZLAUX = \
    ../INSTALL/dsecnd_$(TIMER).o
 
 SLASRC = \
-   sbdsvdx.o \
-   spotrf2.o \
-   sgetrf2.o \
    sgbbrd.o \
    sgbcon.o \
    sgbequ.o \
@@ -392,7 +394,6 @@ SLASRC = \
    slarz.o \
    slarzb.o \
    slarzt.o \
-   slaswp.o \
    slasy2.o \
    slasyf.o \
    slasyf_rook.o \
@@ -493,11 +494,9 @@ SLASRC = \
    ssptri.o \
    ssptrs.o \
    sstegr.o \
-   sstein.o \
    sstev.o \
    sstevd.o \
    sstevr.o \
-   sstevx.o \
    ssycon.o \
    ssyev.o \
    ssyevd.o \
@@ -649,10 +648,13 @@ SLASRC = \
    sgedmdq.o
 
 DSLASRC = \
-   spotrs.o \
+   sgetrf.o \
+   sgetrf2.o \
    sgetrs.o \
+   slaswp.o \
    spotrf.o \
-   sgetrf.o
+   spotrf2.o \
+   spotrs.o
 
 ifdef USEXBLAS
 SXLASRC = \
@@ -686,8 +688,6 @@ SXLASRC = \
 endif
 
 CLASRC = \
-   cpotrf2.o \
-   cgetrf2.o \
    cbdsqr.o \
    cgbbrd.o \
    cgbcon.o \
@@ -922,7 +922,6 @@ CLASRC = \
    claset.o \
    clasr.o \
    classq.o \
-   claswp.o \
    clasyf.o \
    clasyf_rook.o \
    clasyf_rk.o \
@@ -1197,15 +1196,17 @@ CXLASRC = \
 endif
 
 ZCLASRC = \
-   cpotrs.o \
+   cgetrf.o \
+   cgetrf2.o \
    cgetrs.o \
+   claswp.o \
    cpotrf.o \
-   cgetrf.o
+   cpotrf2.o \
+   cpotrs.o
 
 DLASRC = \
    dpotrf2.o \
    dgetrf2.o \
-   dbdsvdx.o \
    dgbbrd.o \
    dgbcon.o \
    dgbequ.o \
@@ -1454,11 +1455,9 @@ DLASRC = \
    dsptri.o \
    dsptrs.o \
    dstegr.o \
-   dstein.o \
    dstev.o \
    dstevd.o \
    dstevr.o \
-   dstevx.o \
    dsycon.o \
    dsyev.o \
    dsyevd.o \
