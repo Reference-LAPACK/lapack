@@ -245,8 +245,12 @@ endif()
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
+  set(LAPACK_INSTALL_EXPORT_NAME_CACHE ${LAPACK_INSTALL_EXPORT_NAME})
+  set(LAPACK_INSTALL_EXPORT_NAME ${BLASLIB}-targets)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
+  set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
+  unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 else()
   set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
