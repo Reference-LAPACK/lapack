@@ -278,6 +278,10 @@ endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
+option(LAPACK "Whether to build or use LAPACK (to enable a BLAS-only build)")
+
+if(LAPACK)
+
 # --------------------------------------------------
 # LAPACK
 # User did not provide a LAPACK Library but specified to search for one
@@ -347,6 +351,8 @@ else()
   set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
+endif()
+
 endif()
 
 if(BUILD_TESTING)
@@ -483,10 +489,14 @@ if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
+if(LAPACK)
 if(NOT LATESTLAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
+  set(BUILD_LAPACK ON)
+endif()
 endif()
 
+if(LAPACK)
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
@@ -499,6 +509,7 @@ if(ALL_TARGETS)
   # Choose one of the lapack targets to use as a guard for
   # lapack-config.cmake to load targets from the install tree.
   list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
+endif()
 endif()
 
 # Include cblas in targets exported from the build tree.
@@ -514,6 +525,8 @@ endif()
 if(NOT LAPACK_WITH_TMGLIB_FOUND AND LAPACKE_WITH_TMG)
   set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
+
+if(BUILD_LAPACK)
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
@@ -552,6 +565,9 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
+
+endif() # BUILD_LAPACK
+
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
