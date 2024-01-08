@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 
-project(LAPACK)
+project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 12)
@@ -424,6 +424,7 @@ function(_display_cpp_implementation_msg name)
   message(STATUS "----------------")
 endfunction()
 if (BLAS++)
+  enable_language(CXX)
   _display_cpp_implementation_msg("BLAS")
   include(ExternalProject)
   ExternalProject_Add(blaspp
@@ -435,6 +436,7 @@ if (BLAS++)
   ExternalProject_Add_StepDependencies(blaspp build ${BLAS_LIBRARIES})
 endif()
 if (LAPACK++)
+  enable_language(CXX)
 	message (STATUS "linking lapack++ against ${LAPACK_LIBRARIES}")
   _display_cpp_implementation_msg("LAPACK")
   include(ExternalProject)
@@ -583,6 +585,7 @@ if (LAPACK++)
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
+  include(CMakePackageConfigHelpers)
   write_basic_package_version_file(
     "lapackppConfigVersion.cmake"
     VERSION 2020.10.02
@@ -596,6 +599,7 @@ if (LAPACK++)
 
 endif()
 if (BLAS++)
+  include(CMakePackageConfigHelpers)
   write_basic_package_version_file(
     "blasppConfigVersion.cmake"
     VERSION 2020.10.02
