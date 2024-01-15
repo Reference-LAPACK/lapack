@@ -656,13 +656,13 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
             html
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/README.md
             ${PROJECT_SOURCE_DIR}/BLAS
             ${PROJECT_SOURCE_DIR}/CBLAS
             ${PROJECT_SOURCE_DIR}/SRC
             ${PROJECT_SOURCE_DIR}/INSTALL
             ${PROJECT_SOURCE_DIR}/TESTING
             ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            ${PROJECT_SOURCE_DIR}/README.md
 
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
