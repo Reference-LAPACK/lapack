@@ -630,8 +630,6 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
     set(DOXYGEN_INTERACTIVE_SVG YES)
     set(DOXYGEN_WARN_NO_PARAMDOC YES)
     set(DOXYGEN_WARN_LOGFILE doxygen_error)
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_MAN NO)
     set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
     # Exclude functions that are duplicated, creating conflicts.
@@ -646,12 +644,13 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     if (BUILD_HTML_DOCUMENTATION)
         set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_HTML_OUTPUT explore-html)
-        set(DOXYGEN_HTML_TIMESTAMP YES)
+        set(DOXYGEN_GENERATE_MAN NO)
         set(DOXYGEN_INLINE_SOURCES YES)
         set(DOXYGEN_CALL_GRAPH YES)
         set(DOXYGEN_CALLER_GRAPH YES)
 
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_HTML_TIMESTAMP YES)
         doxygen_add_docs(
             html
 
@@ -666,14 +665,17 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
+        unset(DOXYGEN_HTML_OUTPUT)
+        unset(DOXYGEN_HTML_TIMESTAMP)
     endif()
     if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML NO)
         set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_MAN_LINKS YES)
         set(DOXYGEN_INLINE_SOURCES NO)
         set(DOXYGEN_CALL_GRAPH NO)
         set(DOXYGEN_CALLER_GRAPH NO)
 
+        set(DOXYGEN_MAN_LINKS YES)
         doxygen_add_docs(
             man
 
@@ -687,6 +689,7 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
             COMMENT "Generating man LAPACK documentation"
         )
+        unset(DOXYGEN_MAN_LINKS)
     endif()
 
     endif()
