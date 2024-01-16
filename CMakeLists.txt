@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.9)
 
 project(LAPACK)
 
@@ -615,8 +615,8 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
     set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
-    set(DOXYGEN_PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OUTPUT_DIRECTORY DOCS)
+    set(DOXYGEN_PROJECT_LOGO DOCS/lapack.png)
     set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
     set(DOXYGEN_SOURCE_BROWSER YES)
     set(DOXYGEN_CREATE_SUBDIRS YES)
@@ -656,13 +656,13 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
             html
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
-            ${PROJECT_SOURCE_DIR}/README.md
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
+            README.md
 
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
@@ -678,12 +678,12 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
             man
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
 
             COMMENT "Generating man LAPACK documentation"
         )
