@@ -433,7 +433,7 @@
 !>    The leading dimension of the array S.
 !>    \endverbatim
 !.....
-!>    \param[out] LZWORK
+!>    \param[out] ZWORK
 !>    \verbatim
 !>    ZWORK (workspace/output) COMPLEX(KIND=WP) LWORK-by-1 array
 !>    On exit,
