@@ -196,6 +196,7 @@
 !>    \endverbatim
 !.....
 !>    \param[in] WHTSVD
+!>    \verbatim
 !>    WHTSVD (input) INTEGER, WHSTVD in { 1, 2, 3, 4 }
 !>    Allows for a selection of the SVD algorithm from the
 !>    LAPACK library.
