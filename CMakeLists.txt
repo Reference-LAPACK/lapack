@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.9)
 
 project(LAPACK)
 
@@ -615,24 +615,21 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
     set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
-    set(DOXYGEN_PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OUTPUT_DIRECTORY DOCS)
+    set(DOXYGEN_PROJECT_LOGO DOCS/lapack.png)
     set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
     set(DOXYGEN_SOURCE_BROWSER YES)
     set(DOXYGEN_CREATE_SUBDIRS YES)
     set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
+    set(DOXYGEN_TAB_SIZE 8)
     set(DOXYGEN_EXTRACT_ALL YES)
     set(DOXYGEN_FILE_PATTERNS *.f *.f90 *.c *.h )
     set(DOXYGEN_RECURSIVE YES)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
     set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
-    set(DOXYGEN_QUIET NO)
-    set(DOXYGEN_WARNINGS YES)
     set(DOXYGEN_WARN_NO_PARAMDOC YES)
     set(DOXYGEN_WARN_LOGFILE doxygen_error)
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_MAN NO)
     set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
     # Exclude functions that are duplicated, creating conflicts.
@@ -647,46 +644,52 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     if (BUILD_HTML_DOCUMENTATION)
         set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_GENERATE_MAN NO)
         set(DOXYGEN_INLINE_SOURCES YES)
         set(DOXYGEN_CALL_GRAPH YES)
         set(DOXYGEN_CALLER_GRAPH YES)
 
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_HTML_TIMESTAMP YES)
         doxygen_add_docs(
             html
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/README.md
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
+            README.md
 
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
+        unset(DOXYGEN_HTML_OUTPUT)
+        unset(DOXYGEN_HTML_TIMESTAMP)
     endif()
     if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML NO)
         set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_MAN_LINKS YES)
         set(DOXYGEN_INLINE_SOURCES NO)
         set(DOXYGEN_CALL_GRAPH NO)
         set(DOXYGEN_CALLER_GRAPH NO)
 
+        set(DOXYGEN_MAN_LINKS YES)
         doxygen_add_docs(
             man
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
 
             COMMENT "Generating man LAPACK documentation"
         )
+        unset(DOXYGEN_MAN_LINKS)
     endif()
 
     endif()
