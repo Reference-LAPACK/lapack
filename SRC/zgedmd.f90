@@ -14,7 +14,7 @@
 !      USE                   iso_fortran_env
 !      IMPLICIT NONE
 !      INTEGER, PARAMETER :: WP = real64
-! 
+!
 !......
 !      Scalar arguments
 !      CHARACTER, INTENT(IN)   :: JOBS,   JOBZ,  JOBR,  JOBF
@@ -199,7 +199,7 @@
 !>    (the number of columns of X and Y).
 !>    \endverbatim
 !.....
-!>    \param[in] LDX
+!>    \param[in,out] X
 !>    \verbatim
 !>    X (input/output) COMPLEX(KIND=WP) M-by-N array
 !>    > On entry, X contains the data snapshot matrix X. It is
@@ -210,7 +210,10 @@
 !>    data matrix X, U(:,1:K). All N columns of X contain all
 !>    left singular vectors of the input matrix X.
 !>    See the descriptions of K, Z and W.
+!>    \endverbatim
 !.....
+!>    \param[in] LDX
+!>    \verbatim
 !>    LDX (input) INTEGER, LDX >= M
 !>    The leading dimension of the array X.
 !>    \endverbatim
@@ -1145,4 +1148,3 @@
       RETURN
 !     ......
       END SUBROUTINE ZGEDMD
-

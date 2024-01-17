@@ -217,7 +217,7 @@
 *>          The leading dimension of the array A. LDA >= max(1,M).
 *> \endverbatim
 *>
-*> \param[out]
+*> \param[out] DONE
 *> \verbatim
 *>          DONE is LOGICAL
 *>          TRUE: a) if the factorization completed before processing
