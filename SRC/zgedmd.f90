@@ -14,7 +14,7 @@
 !      USE                   iso_fortran_env
 !      IMPLICIT NONE
 !      INTEGER, PARAMETER :: WP = real64
-! 
+!
 !......
 !      Scalar arguments
 !      CHARACTER, INTENT(IN)   :: JOBS,   JOBZ,  JOBR,  JOBF
@@ -1145,4 +1145,3 @@
       RETURN
 !     ......
       END SUBROUTINE ZGEDMD
-
