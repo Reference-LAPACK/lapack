@@ -762,10 +762,10 @@ SUBROUTINE CGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
       ELSE IF ( LQUERY ) THEN
 !     Return minimal and optimal workspace sizes
           IWORK(1) = IMINWR
-          ZWORK(1) = MLWORK
-          ZWORK(2) = OLWORK
-          WORK(1)  = MLRWRK
-          WORK(2)  = MLRWRK
+          ZWORK(1) = CMPLX(MLWORK)
+          ZWORK(2) = CMPLX(OLWORK)
+          WORK(1)  = REAL(MLRWRK)
+          WORK(2)  = REAL(MLRWRK)
           RETURN
       END IF
 !.....
