@@ -2,6 +2,7 @@
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
 
+#       ALLMOD  -- Part of ALLAUX
 #       ALLAUX  -- Auxiliary routines called from all precisions
 #       SCLAUX  -- Auxiliary routines called from single precision
 #       DZLAUX  -- Auxiliary routines called from double precision
@@ -35,13 +36,14 @@
 #
 #######################################################################
 
+set(ALLMOD la_xisnan.F90 la_constants.f90)
+
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
-   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f la_xisnan.F90
+   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   la_constants.f90
    sbdsvdx.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -60,7 +62,6 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
-   la_constants.f90
    dbdsdc.f dbdsvdx.f
    dbdsqr.f ddisna.f
    disnan.f
@@ -516,7 +517,57 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${LAPACKLIB} ${SOURCES})
+# Use special target for MOD files to guarantee they are built before
+# any other files that depend on them
+add_library(mod_files OBJECT ${ALLMOD})
+set_target_properties(
+  mod_files PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
+target_link_libraries(${LAPACKLIB}_obj mod_files)
+set_target_properties(
+  ${LAPACKLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
+    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
+    set(BUILD_INDEX64_EXT_API OFF)
+    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
+  else()
+    set(SOURCES_64)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
+    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
+    foreach(F IN LISTS SOURCES_64)
+      set(FFILE "")
+      file(READ ${F} FFILE)
+      file(WRITE ${F} "#include \"lapack_64.h\"\n")
+      file(APPEND ${F} "${FFILE}")
+    endforeach()
+    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
+    set_target_properties(
+      ${LAPACKLIB}_64_obj PROPERTIES
+      POSITION_INDEPENDENT_CODE ON
+      Fortran_PREPROCESS ON
+    )
+  endif()
+endif()
+
+add_library(${LAPACKLIB}
+  $<TARGET_OBJECTS:mod_files>
+  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
@@ -534,7 +585,7 @@ target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
 if(_is_coverage_build)
   target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB})
+  add_coverage(${LAPACKLIB}_obj)
 endif()
 
 lapack_install_library(${LAPACKLIB})

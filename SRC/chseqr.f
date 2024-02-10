@@ -347,7 +347,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLAHQR, CLAQR0, CLASET, XERBLA
+      EXTERNAL           CCOPY, CLACPY, CLAHQR, CLAQR0, CLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -398,7 +399,8 @@
 *
 *        ==== Quick return in case of a workspace query ====
 *
-         CALL CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI, Z,
+         CALL CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+     $                Z,
      $                LDZ, WORK, LWORK, INFO )
 *        ==== Ensure reported workspace size is backward-compatible with
 *        .    previous LAPACK versions. ====
@@ -413,7 +415,8 @@
          IF( ILO.GT.1 )
      $      CALL CCOPY( ILO-1, H, LDH+1, W, 1 )
          IF( IHI.LT.N )
-     $      CALL CCOPY( N-IHI, H( IHI+1, IHI+1 ), LDH+1, W( IHI+1 ), 1 )
+     $      CALL CCOPY( N-IHI, H( IHI+1, IHI+1 ), LDH+1, W( IHI+1 ),
+     $                  1 )
 *
 *        ==== Initialize Z, if requested ====
 *
@@ -436,13 +439,15 @@
 *        ==== CLAQR0 for big matrices; CLAHQR for small ones ====
 *
          IF( N.GT.NMIN ) THEN
-            CALL CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+            CALL CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO,
+     $                   IHI,
      $                   Z, LDZ, WORK, LWORK, INFO )
          ELSE
 *
 *           ==== Small matrix ====
 *
-            CALL CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO, IHI,
+            CALL CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILO,
+     $                   IHI,
      $                   Z, LDZ, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -469,9 +474,11 @@
 *
                   CALL CLACPY( 'A', N, N, H, LDH, HL, NL )
                   HL( N+1, N ) = ZERO
-                  CALL CLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1, N+1 ),
+                  CALL CLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1,
+     $                         N+1 ),
      $                         NL )
-                  CALL CLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL, W,
+                  CALL CLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL,
+     $                         W,
      $                         ILO, IHI, Z, LDZ, WORKL, NL, INFO )
                   IF( WANTT .OR. INFO.NE.0 )
      $               CALL CLACPY( 'A', N, N, HL, NL, H, LDH )

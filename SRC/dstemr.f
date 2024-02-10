@@ -363,7 +363,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAE2, DLAEV2, DLARRC, DLARRE, DLARRJ,
+      EXTERNAL           DCOPY, DLAE2, DLAEV2, DLARRC, DLARRE,
+     $                   DLARRJ,
      $                   DLARRR, DLARRV, DLASRT, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

@@ -172,7 +172,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DLASYF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
+      SUBROUTINE DLASYF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -243,7 +244,8 @@
 *
          CALL DCOPY( K, A( 1, K ), 1, W( 1, KW ), 1 )
          IF( K.LT.N )
-     $      CALL DGEMV( 'No transpose', K, N-K, -ONE, A( 1, K+1 ), LDA,
+     $      CALL DGEMV( 'No transpose', K, N-K, -ONE, A( 1, K+1 ),
+     $                  LDA,
      $                  W( K, KW+1 ), LDW, ONE, W( 1, KW ), 1 )
 *
          KSTEP = 1
@@ -285,7 +287,8 @@
                CALL DCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                     W( IMAX+1, KW-1 ), 1 )
                IF( K.LT.N )
-     $            CALL DGEMV( 'No transpose', K, N-K, -ONE, A( 1, K+1 ),
+     $            CALL DGEMV( 'No transpose', K, N-K, -ONE, A( 1,
+     $                        K+1 ),
      $                        LDA, W( IMAX, KW+1 ), LDW, ONE,
      $                        W( 1, KW-1 ), 1 )
 *
@@ -486,7 +489,8 @@
 *
 *           Update the rectangular superdiagonal block
 *
-            CALL DGEMM( 'No transpose', 'Transpose', J-1, JB, N-K, -ONE,
+            CALL DGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
+     $                  -ONE,
      $                  A( 1, K+1 ), LDA, W( J, KW+1 ), LDW, ONE,
      $                  A( 1, J ), LDA )
    50    CONTINUE
@@ -539,7 +543,8 @@
 *        Copy column K of A to column K of W and update it
 *
          CALL DCOPY( N-K+1, A( K, K ), 1, W( K, K ), 1 )
-         CALL DGEMV( 'No transpose', N-K+1, K-1, -ONE, A( K, 1 ), LDA,
+         CALL DGEMV( 'No transpose', N-K+1, K-1, -ONE, A( K, 1 ),
+     $               LDA,
      $               W( K, 1 ), LDW, ONE, W( K, K ), 1 )
 *
          KSTEP = 1
@@ -577,10 +582,13 @@
 *
 *              Copy column IMAX to column K+1 of W and update it
 *
-               CALL DCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1 )
-               CALL DCOPY( N-IMAX+1, A( IMAX, IMAX ), 1, W( IMAX, K+1 ),
+               CALL DCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
      $                     1 )
-               CALL DGEMV( 'No transpose', N-K+1, K-1, -ONE, A( K, 1 ),
+               CALL DCOPY( N-IMAX+1, A( IMAX, IMAX ), 1, W( IMAX,
+     $                     K+1 ),
+     $                     1 )
+               CALL DGEMV( 'No transpose', N-K+1, K-1, -ONE, A( K,
+     $                     1 ),
      $                     LDA, W( IMAX, 1 ), LDW, ONE, W( K, K+1 ), 1 )
 *
 *              JMAX is the column-index of the largest off-diagonal
@@ -638,7 +646,8 @@
                CALL DCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
                IF( KP.LT.N )
-     $            CALL DCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL DCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
 *              (columns K (or K and K+1 for 2-by-2 pivot) of A will be

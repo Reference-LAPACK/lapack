@@ -163,7 +163,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE ZGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +194,8 @@
       COMPLEX*16         EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZGEHD2, ZGEMM, ZLAHR2, ZLARFB, ZTRMM,
+      EXTERNAL           ZAXPY, ZGEHD2, ZGEMM, ZLAHR2, ZLARFB,
+     $                   ZTRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

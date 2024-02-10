@@ -175,7 +175,8 @@
 *> \ingroup geev
 *
 *  =====================================================================
-      SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
+      SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR,
+     $                  LDVR,
      $                  WORK, LWORK, RWORK, INFO )
       implicit none
 *
@@ -212,14 +213,18 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CSSCAL, CGEBAK, CGEBAL, CGEHRD,
-     $                   CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3, CUNGHR
+      EXTERNAL           XERBLA, CSSCAL, CGEBAK,
+     $                   CGEBAL, CGEHRD, CHSEQR,
+     $                   CLACPY, CLASCL, CSCAL,
+     $                   CTREVC3, CUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX, ILAENV
-      REAL               SLAMCH, SCNRM2, CLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SCNRM2, CLANGE,
+      REAL               SLAMCH, SCNRM2, CLANGE,
+     $                   SROUNDUP_LWORK
+      EXTERNAL           LSAME, ISAMAX, ILAENV,
+     $                   SLAMCH, SCNRM2, CLANGE,
      $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
@@ -235,7 +240,8 @@
       WANTVR = LSAME( JOBVR, 'V' )
       IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND.
+     $         ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -266,7 +272,8 @@
             MAXWRK = N + N*ILAENV( 1, 'CGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 2*N
             IF( WANTVL ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                CALL CTREVC3( 'L', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
@@ -276,7 +283,8 @@
                CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VL, LDVL,
      $                      WORK, -1, INFO )
             ELSE IF( WANTVR ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                CALL CTREVC3( 'R', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
@@ -361,7 +369,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
+         CALL CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
@@ -393,7 +402,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
+         CALL CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
@@ -427,7 +437,8 @@
 *        (RWorkspace: need 2*N)
 *
          IRWORK = IBAL + N
-         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
+     $                 LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1,
      $                 RWORK( IRWORK ), N, IERR )
       END IF
@@ -438,7 +449,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL, LDVL,
+         CALL CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL,
+     $                LDVL,
      $                IERR )
 *
 *        Normalize left eigenvectors and make largest component real
@@ -463,7 +475,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR, LDVR,
+         CALL CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR,
+     $                LDVR,
      $                IERR )
 *
 *        Normalize right eigenvectors and make largest component real
@@ -486,10 +499,12 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, W( INFO+1 ),
+         CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
+     $                W( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.GT.0 ) THEN
-            CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N, IERR )
+            CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N,
+     $                   IERR )
          END IF
       END IF
 *

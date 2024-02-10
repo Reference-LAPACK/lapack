@@ -257,7 +257,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
+      SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR,
+     $                   WI,
      $                   VL, LDVL, VR, LDVR, MM, M, WORK, IFAILL,
      $                   IFAILR, INFO )
 *
@@ -457,7 +458,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ),
+     $                      LDH,
      $                      WKR, WKI, VL( KL, KSR ), VL( KL, KSI ),
      $                      WORK, LDWORK, WORK( N*N+N+1 ), EPS3, SMLNUM,
      $                      BIGNUM, IINFO )

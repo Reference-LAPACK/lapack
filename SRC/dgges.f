@@ -278,7 +278,8 @@
 *> \ingroup gges
 *
 *  =====================================================================
-      SUBROUTINE DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
+      SUBROUTINE DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
+     $                  LDB,
      $                  SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR,
      $                  LDVSR, WORK, LWORK, BWORK, INFO )
 *
@@ -321,7 +322,8 @@
       DOUBLE PRECISION   DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ, DLACPY,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ,
+     $                   DLACPY,
      $                   DLASCL, DLASET, DORGQR, DORMQR, DTGSEN, XERBLA
 *     ..
 *     .. External Functions ..
@@ -369,7 +371,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -399,7 +402,8 @@
      $                    N*ILAENV( 1, 'DORMQR', ' ', N, 1, N, -1 ) )
             IF( ILVSL ) THEN
                MAXWRK = MAX( MAXWRK, MINWRK - N +
-     $                       N*ILAENV( 1, 'DORGQR', ' ', N, 1, N, -1 ) )
+     $                       N*ILAENV( 1, 'DORGQR', ' ', N, 1, N,
+     $                                 -1 ) )
             END IF
          ELSE
             MINWRK = 1
@@ -544,15 +548,18 @@
      $                   IERR )
          END IF
          IF( ILBSCL )
-     $      CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+     $      CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *
          DO 10 I = 1, N
-            BWORK( I ) = SELCTG( ALPHAR( I ), ALPHAI( I ), BETA( I ) )
+            BWORK( I ) = SELCTG( ALPHAR( I ), ALPHAI( I ),
+     $             BETA( I ) )
    10    CONTINUE
 *
-         CALL DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHAR,
+         CALL DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
+     $                ALPHAR,
      $                ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL,
      $                PVSR, DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1,
      $                IERR )
@@ -616,8 +623,10 @@
 *
       IF( ILASCL ) THEN
          CALL DLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

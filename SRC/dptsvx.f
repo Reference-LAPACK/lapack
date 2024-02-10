@@ -257,7 +257,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DPTCON, DPTRFS, DPTTRF, DPTTRS,
+      EXTERNAL           DCOPY, DLACPY, DPTCON, DPTRFS, DPTTRF,
+     $                   DPTTRS,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

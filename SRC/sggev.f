@@ -221,7 +221,8 @@
 *> \ingroup ggev
 *
 *  =====================================================================
-      SUBROUTINE SGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
+      SUBROUTINE SGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR,
+     $                  ALPHAI,
      $                  BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -257,14 +258,16 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ,
+     $                   SLACPY,
      $                   SLASCL, SLASET, SORGQR, SORMQR, STGEVC, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   SLANGE, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -487,7 +490,8 @@
          ELSE
             CHTEMP = 'R'
          END IF
-         CALL STGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL STGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), IERR )
          IF( IERR.NE.0 ) THEN
             INFO = N + 2
@@ -571,8 +575,10 @@
   110 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

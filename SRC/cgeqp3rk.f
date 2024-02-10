@@ -893,7 +893,8 @@
 *        Determine when to cross over from blocked to unblocked code.
 *        (for N less than NX, unblocked code should be used).
 *
-         NX = MAX( 0, ILAENV( IXOVER, 'CGEQP3RK', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, ILAENV( IXOVER, 'CGEQP3RK', ' ', M, N, -1,
+     $                        -1 ) )
 *
          IF( NX.LT.MINMN ) THEN
 *

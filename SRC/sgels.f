@@ -178,7 +178,8 @@
 *> \ingroup gels
 *
 *  =====================================================================
-      SUBROUTINE SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+      SUBROUTINE SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK,
+     $                  LWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine --
@@ -211,10 +212,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGELQF, SGEQRF, SLASCL, SLASET, SORMLQ,
+      EXTERNAL           SGELQF, SGEQRF, SLASCL, SLASET,
+     $                   SORMLQ,
      $                   SORMQR, STRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -227,7 +230,8 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'T' ) ) ) THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
+     $    LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -345,7 +349,8 @@
 *
 *        compute QR factorization of A
 *
-         CALL SGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL SGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ),
+     $                LWORK-MN,
      $                INFO )
 *
 *        workspace at least N, optimally N*NB
@@ -364,7 +369,8 @@
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL STRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
+            CALL STRTRS( 'Upper', 'No transpose', 'Non-unit', N,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -410,7 +416,8 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL SGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL SGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ),
+     $                LWORK-MN,
      $                INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -421,7 +428,8 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL STRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
+            CALL STRTRS( 'Lower', 'No transpose', 'Non-unit', M,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsytrf_rook_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dsytrf_rook_work)( int matrix_layout, char uplo, lapack_int n,
                                 double* a, lapack_int lda, lapack_int* ipiv,
                                 double* work, lapack_int lwork )
 {
@@ -49,7 +49,7 @@ lapack_int LAPACKE_dsytrf_rook_work( int matrix_layout, char uplo, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            LAPACKE_xerbla( "LAPACKE_dsytrf_rook_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrf_rook_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -64,23 +64,23 @@ lapack_int LAPACKE_dsytrf_rook_work( int matrix_layout, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_dsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsytrf_rook( &uplo, &n, a_t, &lda_t, ipiv, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dsy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_dsy_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dsytrf_rook_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrf_rook_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dsytrf_rook_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrf_rook_work", info );
     }
     return info;
 }

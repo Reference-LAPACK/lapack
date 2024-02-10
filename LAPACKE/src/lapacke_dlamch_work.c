@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlamch_work( char cmach )
+double API_SUFFIX(LAPACKE_dlamch_work)( char cmach )
 {
     double res;
     /* Call LAPACK function and adjust info */

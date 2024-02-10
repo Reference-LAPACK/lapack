@@ -137,7 +137,8 @@
 *> \ingroup pstf2
 *
 *  =====================================================================
-      SUBROUTINE SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,7 +224,7 @@
 *     Compute stopping value if not supplied
 *
       IF( TOL.LT.ZERO ) THEN
-         SSTOP = N * SLAMCH( 'Epsilon' ) * AJJ
+         SSTOP = REAL( N ) * SLAMCH( 'Epsilon' ) * AJJ
       ELSE
          SSTOP = TOL
       END IF
@@ -272,7 +273,8 @@
                IF( PVT.LT.N )
      $            CALL SSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                        A( PVT, PVT+1 ), LDA )
-               CALL SSWAP( PVT-J-1, A( J, J+1 ), LDA, A( J+1, PVT ), 1 )
+               CALL SSWAP( PVT-J-1, A( J, J+1 ), LDA, A( J+1, PVT ),
+     $                     1 )
 *
 *              Swap dot products and PIV
 *
@@ -333,9 +335,11 @@
                A( PVT, PVT ) = A( J, J )
                CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                IF( PVT.LT.N )
-     $            CALL SSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT ),
+     $            CALL SSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1,
+     $                        PVT ),
      $                        1 )
-               CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ), LDA )
+               CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ),
+     $                     LDA )
 *
 *              Swap dot products and PIV
 *
@@ -353,7 +357,8 @@
 *           Compute elements J+1:N of column J
 *
             IF( J.LT.N ) THEN
-               CALL SGEMV( 'No Trans', N-J, J-1, -ONE, A( J+1, 1 ), LDA,
+               CALL SGEMV( 'No Trans', N-J, J-1, -ONE, A( J+1, 1 ),
+     $                     LDA,
      $                     A( J, 1 ), LDA, ONE, A( J+1, J ), 1 )
                CALL SSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF

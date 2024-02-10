@@ -165,7 +165,8 @@
 *
          IF( (ABS( UR ).LT.SAFMIN).OR.(ABS( UI ).LT.SAFMIN) ) THEN
 *           This means that both alphaR and alphaI are very small.
-            CALL CSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI ), X, INCX )
+            CALL CSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI ), X,
+     $                  INCX )
             CALL CSSCAL( N, SAFMAX, X, INCX )
          ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
             IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
@@ -184,7 +185,8 @@
                      UR = (SAFMIN * AR) + AI * ( (SAFMIN * AI) / AR )
                      UI = (SAFMIN * AI) + SAFMIN * (AR * ( AR / AI ))
                   END IF
-                  CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X, INCX )
+                  CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X,
+     $                        INCX )
                ELSE
                   CALL CSCAL( N, CMPLX( SAFMAX / UR, -SAFMAX / UI ),
      $                        X, INCX )

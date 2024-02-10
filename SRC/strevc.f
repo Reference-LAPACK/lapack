@@ -217,7 +217,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE STREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, MM, M, WORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -254,7 +255,8 @@
       EXTERNAL           LSAME, ISAMAX, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -341,7 +343,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
 *     Compute 1-norm of each column of strictly upper triangular
@@ -431,7 +433,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
@@ -562,7 +565,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR, WI,
      $                            X, 2, SCALE, XNORM, IERR )
 *
@@ -672,7 +676,8 @@
      $                           WORK( 1+N2 ), 1, WORK( KI+N2 ),
      $                           VR( 1, KI ), 1 )
                   ELSE
-                     CALL SSCAL( N, WORK( KI-1+N ), VR( 1, KI-1 ), 1 )
+                     CALL SSCAL( N, WORK( KI-1+N ), VR( 1, KI-1 ),
+     $                           1 )
                      CALL SSCAL( N, WORK( KI+N2 ), VR( 1, KI ), 1 )
                   END IF
 *
@@ -781,7 +786,8 @@
 *
 *                    Solve (T(J,J)-WR)**T*X = WORK
 *
-                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
@@ -841,7 +847,8 @@
 *              Copy the vector x or Q*x to VL and normalize.
 *
                IF( .NOT.OVER ) THEN
-                  CALL SCOPY( N-KI+1, WORK( KI+N ), 1, VL( KI, IS ), 1 )
+                  CALL SCOPY( N-KI+1, WORK( KI+N ), 1, VL( KI, IS ),
+     $                        1 )
 *
                   II = ISAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                   REMAX = ONE / ABS( VL( II, IS ) )
@@ -854,7 +861,8 @@
                ELSE
 *
                   IF( KI.LT.N )
-     $               CALL SGEMV( 'N', N, N-KI, ONE, VL( 1, KI+1 ), LDVL,
+     $               CALL SGEMV( 'N', N, N-KI, ONE, VL( 1, KI+1 ),
+     $                           LDVL,
      $                           WORK( KI+1+N ), 1, WORK( KI+N ),
      $                           VL( 1, KI ), 1 )
 *
@@ -933,7 +941,8 @@
 *
 *                    Solve (T(J,J)-(WR-i*WI))*(X11+i*X12)= WK+I*WK2
 *
-                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
@@ -978,7 +987,8 @@
      $                               WORK( KI+2+N ), 1 )
 *
                      WORK( J+1+N2 ) = WORK( J+1+N2 ) -
-     $                                SDOT( J-KI-2, T( KI+2, J+1 ), 1,
+     $                                SDOT( J-KI-2, T( KI+2, J+1 ),
+     $                                      1,
      $                                WORK( KI+2+N2 ), 1 )
 *
 *                    Solve 2-by-2 complex linear equation
@@ -1009,8 +1019,10 @@
 *              Copy the vector x or Q*x to VL and normalize.
 *
                IF( .NOT.OVER ) THEN
-                  CALL SCOPY( N-KI+1, WORK( KI+N ), 1, VL( KI, IS ), 1 )
-                  CALL SCOPY( N-KI+1, WORK( KI+N2 ), 1, VL( KI, IS+1 ),
+                  CALL SCOPY( N-KI+1, WORK( KI+N ), 1, VL( KI, IS ),
+     $                        1 )
+                  CALL SCOPY( N-KI+1, WORK( KI+N2 ), 1, VL( KI,
+     $                        IS+1 ),
      $                        1 )
 *
                   EMAX = ZERO
@@ -1036,7 +1048,8 @@
      $                           WORK( KI+1+N2 ), VL( 1, KI+1 ), 1 )
                   ELSE
                      CALL SSCAL( N, WORK( KI+N ), VL( 1, KI ), 1 )
-                     CALL SSCAL( N, WORK( KI+1+N2 ), VL( 1, KI+1 ), 1 )
+                     CALL SSCAL( N, WORK( KI+1+N2 ), VL( 1, KI+1 ),
+     $                           1 )
                   END IF
 *
                   EMAX = ZERO

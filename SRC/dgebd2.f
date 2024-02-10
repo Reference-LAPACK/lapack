@@ -247,7 +247,8 @@
 *           Apply H(i) to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
-     $         CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAUQ( I ),
+     $         CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $                     TAUQ( I ),
      $                     A( I, I+1 ), LDA, WORK )
             A( I, I ) = D( I )
 *
@@ -278,7 +279,8 @@
 *
 *           Generate elementary reflector G(i) to annihilate A(i,i+1:n)
 *
-            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA,
+            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ),
+     $                   LDA,
      $                   TAUP( I ) )
             D( I ) = A( I, I )
             A( I, I ) = ONE
@@ -295,14 +297,16 @@
 *              Generate elementary reflector H(i) to annihilate
 *              A(i+2:m,i)
 *
-               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 1,
+               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ),
+     $                      1,
      $                      TAUQ( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
 *
 *              Apply H(i) to A(i+1:m,i+1:n) from the left
 *
-               CALL DLARF( 'Left', M-I, N-I, A( I+1, I ), 1, TAUQ( I ),
+               CALL DLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
+     $                     TAUQ( I ),
      $                     A( I+1, I+1 ), LDA, WORK )
                A( I+1, I ) = E( I )
             ELSE

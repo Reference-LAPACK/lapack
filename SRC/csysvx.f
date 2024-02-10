@@ -279,7 +279,8 @@
 *> \ingroup hesvx
 *
 *  =====================================================================
-      SUBROUTINE CSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE CSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $                   B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   RWORK, INFO )
 *
@@ -314,10 +315,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANSY, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, CLANSY, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, CLANSY, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CSYCON, CSYRFS, CSYTRF, CSYTRS, XERBLA
+      EXTERNAL           CLACPY, CSYCON, CSYRFS, CSYTRF, CSYTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -331,7 +334,8 @@
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -387,7 +391,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL CSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL CSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+     $             INFO )
 *
 *     Compute the solution vectors X.
 *

@@ -263,7 +263,8 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+      SUBROUTINE CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
@@ -301,7 +302,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR, CLARF,
+      EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR,
+     $                   CLARF,
      $                   CLARFG, CLASET, CTREXC, CUNMHR
 *     ..
 *     .. Intrinsic Functions ..
@@ -329,7 +331,8 @@
 *
 *        ==== Workspace query call to CUNMHR ====
 *
-         CALL CUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+         CALL CUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V,
+     $                LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
@@ -398,7 +401,8 @@
 *     .    here and there to keep track.) ====
 *
       CALL CLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL CCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
+      CALL CCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ),
+     $            LDT+1 )
 *
       CALL CLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
       CALL CLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
@@ -450,7 +454,8 @@
    20       CONTINUE
             ILST = I
             IF( IFST.NE.ILST )
-     $         CALL CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
+     $         CALL CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      INFO )
    30    CONTINUE
       END IF
 *
@@ -474,7 +479,8 @@
             CALL CLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL CLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
+            CALL CLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
+     $                   LDT )
 *
             CALL CLARF( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
      $                  WORK( JW+1 ) )
@@ -499,7 +505,8 @@
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL CUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $      CALL CUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V,
+     $                   LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -513,7 +520,8 @@
             KLN = MIN( NV, KWTOP-KROW )
             CALL CGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL CLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
+            CALL CLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ),
+     $                   LDH )
    60    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -533,7 +541,8 @@
          IF( WANTZ ) THEN
             DO 80 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL CGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
+               CALL CGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW,
+     $                     KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
                CALL CLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )

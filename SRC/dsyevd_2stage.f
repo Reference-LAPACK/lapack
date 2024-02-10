@@ -216,7 +216,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE DSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                          IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -256,7 +257,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC, DSTERF,
+      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC,
+     $                   DSTERF,
      $                   DSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

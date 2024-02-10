@@ -199,7 +199,8 @@
 *
 *           Update trailing submatrix.
 *
-            CALL SGER( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ), LDA,
+            CALL SGER( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ),
+     $                 LDA,
      $                 A( J+1, J+1 ), LDA )
          END IF
    10 CONTINUE

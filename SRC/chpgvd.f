@@ -220,7 +220,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ,
+     $                   WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -250,7 +251,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPEVD, CHPGST, CPPTRF, CTPMV, CTPSV, XERBLA
+      EXTERNAL           CHPEVD, CHPGST, CPPTRF, CTPMV, CTPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -294,7 +296,7 @@
          END IF
 *
          WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11
@@ -376,7 +378,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

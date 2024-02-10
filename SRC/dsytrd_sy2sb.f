@@ -276,7 +276,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM, DCOPY,
+      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM,
+     $                   DCOPY,
      $                   DLARFT, DGELQF, DGEQRF, DLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -298,7 +299,8 @@
       IF( N.LE.KD+1 ) THEN
          LWMIN = 1
       ELSE
-         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SY2SB', ' ', N, KD, -1, -1 )
+         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_SY2SB', ' ', N, KD, -1,
+     $                        -1 )
       END IF
 *
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
@@ -384,7 +386,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL DCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL DCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL DLASET( 'Lower', PK, PK, ZERO, ONE, 

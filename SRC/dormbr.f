@@ -324,7 +324,8 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+            CALL DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA,
+     $                   TAU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE

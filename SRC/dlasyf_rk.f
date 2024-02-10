@@ -405,7 +405,8 @@
 *
 *                 Copy column IMAX to column KW-1 of W and update it
 *
-                  CALL DCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ), 1 )
+                  CALL DCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ),
+     $                        1 )
                   CALL DCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
 *
@@ -504,7 +505,8 @@
 *              and last N-K+2 columns of W
 *
                CALL DSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
-               CALL DSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW )
+               CALL DSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
+     $                     LDW )
             END IF
 *
 *           Updated column KP is already stored in column KKW of W
@@ -521,7 +523,8 @@
 *              Interchange rows KK and KP in last N-KK+1 columns
 *              of A and W
 *
-               CALL DSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA )
+               CALL DSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ),
+     $                     LDA )
                CALL DSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
             END IF
@@ -728,7 +731,8 @@
 *
 *                 Copy column IMAX to column K+1 of W and update it
 *
-                  CALL DCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
+                  CALL DCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $                        1)
                   CALL DCOPY( N-IMAX+1, A( IMAX, IMAX ), 1,
      $                        W( IMAX, K+1 ), 1 )
                   IF( K.GT.1 )
@@ -748,7 +752,8 @@
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + IDAMAX( N-IMAX, W( IMAX+1, K+1 ), 1)
+                     ITEMP = IMAX + IDAMAX( N-IMAX, W( IMAX+1, K+1 ),
+     $                                      1)
                      DTEMP = ABS( W( ITEMP, K+1 ) )
                      IF( DTEMP.GT.ROWMAX ) THEN
                         ROWMAX = DTEMP
@@ -770,7 +775,8 @@
 *
 *                    copy column K+1 of W to column K of W
 *
-                     CALL DCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL DCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                      DONE = .TRUE.
 *
@@ -796,7 +802,8 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL DCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL DCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                   END IF
 *
@@ -831,7 +838,8 @@
 *              Copy non-updated column KK to column KP
 *
                A( KP, K ) = A( KK, K )
-               CALL DCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ), LDA )
+               CALL DCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ),
+     $                     LDA )
                CALL DCOPY( N-KP+1, A( KP, KK ), 1, A( KP, KP ), 1 )
 *
 *              Interchange rows KK and KP in first KK columns of A and W

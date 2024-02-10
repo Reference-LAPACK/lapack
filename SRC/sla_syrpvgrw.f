@@ -117,7 +117,8 @@
 *> \ingroup la_herpvgrw
 *
 *  =====================================================================
-      REAL FUNCTION SLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
+      REAL FUNCTION SLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $                            IPIV,
      $                            WORK )
 *
 *  -- LAPACK computational routine --

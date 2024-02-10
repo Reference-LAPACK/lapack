@@ -117,7 +117,8 @@
 *> \ingroup la_herpvgrw
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION DLA_SYRPVGRW( UPLO, N, INFO, A, LDA,
+     $                                        AF,
      $                                        LDAF, IPIV, WORK )
 *
 *  -- LAPACK computational routine --

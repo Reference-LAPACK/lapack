@@ -156,7 +156,8 @@
 *> \ingroup gbequb
 *
 *  =====================================================================
-      SUBROUTINE ZGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+      SUBROUTINE ZGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND,
+     $                    COLCND,
      $                    AMAX, INFO )
 *
 *  -- LAPACK computational routine --

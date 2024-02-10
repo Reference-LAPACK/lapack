@@ -236,12 +236,14 @@
 *
 *           Multiply by inv(L).
 *
-            CALL CLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
+            CALL CLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SL, RWORK, INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SU, RWORK( N+1 ), INFO )
          ELSE
 *
@@ -253,7 +255,8 @@
 *
 *           Multiply by inv(L**H).
 *
-            CALL CLATRS( 'Lower', 'Conjugate transpose', 'Unit', NORMIN,
+            CALL CLATRS( 'Lower', 'Conjugate transpose', 'Unit',
+     $                   NORMIN,
      $                   N, A, LDA, WORK, SL, RWORK, INFO )
          END IF
 *

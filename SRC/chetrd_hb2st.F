@@ -275,7 +275,8 @@
       COMPLEX            TMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHB2ST_KERNELS, CLACPY, CLASET, XERBLA
+      EXTERNAL           CHB2ST_KERNELS, CLACPY,
+     $                   CLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, REAL
@@ -299,13 +300,16 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB       = ILAENV2STAGE( 2, 'CHETRD_HB2ST', VECT, N, KD, -1, -1 )
+      IB       = ILAENV2STAGE( 2, 'CHETRD_HB2ST', VECT, N, KD,
+     $                         -1, -1 )
       IF( N.EQ.0 .OR. KD.LE.1 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN = ILAENV2STAGE( 3, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
-         LWMIN = ILAENV2STAGE( 4, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'CHETRD_HB2ST', VECT, N, KD, IB,
+     $                         -1 )
+         LWMIN = ILAENV2STAGE( 4, 'CHETRD_HB2ST', VECT, N, KD, IB,
+     $                         -1 )
       END IF
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
@@ -525,7 +529,8 @@ C                 END IF
 !$OMP$     DEPEND(in:WORK(MYID-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL CHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL CHB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -535,7 +540,8 @@ C                 END IF
 !$OMP TASK DEPEND(in:WORK(MYID+SHIFT-1))
 !$OMP$     DEPEND(out:WORK(MYID))
                               TID      = OMP_GET_THREAD_NUM()
-                              CALL CHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                              CALL CHB2ST_KERNELS(
+     $                             UPLO, WANTQ, TTYPE,
      $                             STIND, EDIND, SWEEPID, N, KD, IB,
      $                             WORK ( INDA ), LDA,
      $                             HOUS( INDV ), HOUS( INDTAU ), LDV,
@@ -543,7 +549,8 @@ C                 END IF
 !$OMP END TASK
                           ENDIF
 #else
-                          CALL CHB2ST_KERNELS( UPLO, WANTQ, TTYPE,
+                          CALL CHB2ST_KERNELS(
+     $                         UPLO, WANTQ, TTYPE,
      $                         STIND, EDIND, SWEEPID, N, KD, IB,
      $                         WORK ( INDA ), LDA,
      $                         HOUS( INDV ), HOUS( INDTAU ), LDV,

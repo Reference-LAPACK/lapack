@@ -223,7 +223,8 @@
                CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
             END IF
             KSTEP = 1
          ELSE
@@ -248,15 +249,18 @@
                CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            CDOTC( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            CDOTC( K-1, AP( KC ), 1,
+     $                                   AP( KCNEXT ),
      $                            1 )
                CALL CCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          REAL( CDOTC( K-1, WORK, 1, AP( KCNEXT ),
+     $                          REAL( CDOTC( K-1, WORK, 1,
+     $                                AP( KCNEXT ),
      $                          1 ) )
             END IF
             KSTEP = 2
@@ -349,7 +353,8 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KC+1 ), 1 )
                AP( KC ) = AP( KC ) - REAL( CDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
@@ -357,10 +362,12 @@
      $                          CDOTC( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL CCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        REAL( CDOTC( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                        REAL( CDOTC( N-K, WORK, 1,
+     $                              AP( KCNEXT+2 ),
      $                        1 ) )
             END IF
             KSTEP = 2

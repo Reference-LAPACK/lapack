@@ -173,7 +173,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C,
+     $                   LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine --

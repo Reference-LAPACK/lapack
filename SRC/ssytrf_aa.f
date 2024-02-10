@@ -130,7 +130,8 @@
 *> \ingroup hetrf_aa
 *
 *  =====================================================================
-      SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV,
+     $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,7 +166,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP, SGEMM,
+      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP,
+     $                   SGEMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

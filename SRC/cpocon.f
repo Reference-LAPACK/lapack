@@ -216,13 +216,15 @@
 *
 *           Multiply by inv(U).
 *
-            CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL CLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *

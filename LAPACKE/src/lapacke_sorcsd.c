@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
+lapack_int API_SUFFIX(LAPACKE_sorcsd)( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, char jobv2t, char trans, char signs,
                            lapack_int m, lapack_int p, lapack_int q, float* x11,
                            lapack_int ldx11, float* x12, lapack_int ldx12,
@@ -49,10 +49,10 @@ lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
     float work_query;
     int lapack_layout;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sorcsd", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sorcsd", -1 );
         return -1;
     }
-    if( LAPACKE_lsame( trans, 'n' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+    if( API_SUFFIX(LAPACKE_lsame)( trans, 'n' ) && matrix_layout == LAPACK_COL_MAJOR ) {
         lapack_layout = LAPACK_COL_MAJOR;
     } else {
         lapack_layout = LAPACK_ROW_MAJOR;
@@ -60,16 +60,16 @@ lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_sge_nancheck( lapack_layout, p, q, x11, ldx11 ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( lapack_layout, p, q, x11, ldx11 ) ) {
             return -11;
         }
-        if( LAPACKE_sge_nancheck( lapack_layout, p, m-q, x12, ldx12 ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( lapack_layout, p, m-q, x12, ldx12 ) ) {
             return -13;
         }
-        if( LAPACKE_sge_nancheck( lapack_layout, m-p, q, x21, ldx21 ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( lapack_layout, m-p, q, x21, ldx21 ) ) {
             return -15;
         }
-        if( LAPACKE_sge_nancheck( lapack_layout, m-p, m-q, x22, ldx22 ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( lapack_layout, m-p, m-q, x22, ldx22 ) ) {
             return -17;
         }
     }
@@ -81,7 +81,7 @@ lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_sorcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
+    info = API_SUFFIX(LAPACKE_sorcsd_work)( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, signs, m, p, q, x11, ldx11, x12, ldx12,
                                 x21, ldx21, x22, ldx22, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, v2t, ldv2t, &work_query,
@@ -97,7 +97,7 @@ lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sorcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
+    info = API_SUFFIX(LAPACKE_sorcsd_work)( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, signs, m, p, q, x11, ldx11, x12, ldx12,
                                 x21, ldx21, x22, ldx22, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork,
@@ -108,7 +108,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sorcsd", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sorcsd", info );
     }
     return info;
 }

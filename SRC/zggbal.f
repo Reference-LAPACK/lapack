@@ -230,8 +230,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -514,8 +516,10 @@
       IF( CMAX.LT.HALF )
      $   GO TO 350
 *
-      CALL DAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 )
-      CALL DAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 )
+      CALL DAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ),
+     $            1 )
+      CALL DAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ),
+     $            1 )
 *
       PGAMMA = GAMMA
       IT = IT + 1

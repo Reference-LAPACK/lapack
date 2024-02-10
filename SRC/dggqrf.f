@@ -280,7 +280,8 @@
 *
 *     Update B := Q**T*B.
 *
-      CALL DORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA, TAUA,
+      CALL DORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA,
+     $             TAUA,
      $             B, LDB, WORK, LWORK, INFO )
       LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
 *

@@ -181,7 +181,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHBTRD, ZLASCL, ZSTEQR
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHBTRD, ZLASCL,
+     $                   ZSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -251,9 +252,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *

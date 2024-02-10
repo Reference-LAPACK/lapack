@@ -120,7 +120,8 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+     $                    INFO)
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -195,7 +196,7 @@
 *     Generate the scaled Hilbert matrix in A
       DO J = 1, N
          DO I = 1, N
-            A(I, J) = REAL(M) / (I + J - 1)
+            A(I, J) = REAL(M) / REAL(I + J - 1)
          END DO
       END DO
 *
@@ -206,15 +207,15 @@
 *     Generate the true solutions in X.  Because B = the first NRHS
 *     columns of M*I, the true solutions are just the first NRHS columns
 *     of the inverse Hilbert matrix.
-      WORK(1) = N
+      WORK(1) = REAL(N)
       DO J = 2, N
-         WORK(J) = (  ( (WORK(J-1)/(J-1)) * (J-1 - N) ) /(J-1)  )
-     $        * (N +J -1)
+         WORK(J) = (  ( (WORK(J-1)/REAL(J-1)) * REAL(J-1 - N) )
+     $        /REAL(J-1) ) * REAL(N +J -1)
       END DO
 *
       DO J = 1, NRHS
          DO I = 1, N
-            X(I, J) = (WORK(I)*WORK(J)) / (I + J - 1)
+            X(I, J) = (WORK(I)*WORK(J)) / REAL(I + J - 1)
          END DO
       END DO
 *

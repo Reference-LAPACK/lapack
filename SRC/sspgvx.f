@@ -297,7 +297,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPPTRF, SSPEVX, SSPGST, STPMV, STPSV, XERBLA
+      EXTERNAL           SPPTRF, SSPEVX, SSPGST, STPMV, STPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -364,7 +365,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
+      CALL SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL,
+     $             M,
      $             W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN

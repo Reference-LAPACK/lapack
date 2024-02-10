@@ -259,7 +259,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
+      SUBROUTINE ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M,
+     $                   S,
      $                   SEP, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -297,7 +298,8 @@
       EXTERNAL           LSAME, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACN2, ZLACPY, ZTREXC, ZTRSYL
+      EXTERNAL           XERBLA, ZLACN2, ZLACPY, ZTREXC,
+     $                   ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

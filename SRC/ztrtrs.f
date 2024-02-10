@@ -176,10 +176,12 @@
 *
       INFO = 0
       NOUNIT = LSAME( DIAG, 'N' )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+     $         LSAME( TRANS, 'T' ) .AND.
+     $                .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3

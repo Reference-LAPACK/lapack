@@ -170,10 +170,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANHE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, CLANHE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, CLANHE,
+     $                   SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CLASCL, CSTEQR, CUNGTR, SSCAL, SSTERF,
+      EXTERNAL           CHETRD, CLASCL, CSTEQR, CUNGTR, SSCAL,
+     $                   SSTERF,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -266,7 +268,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL CUNGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL CUNGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ),
      $                LLWORK, IINFO )
          INDWRK = INDE + N
          CALL CSTEQR( JOBZ, N, W, RWORK( INDE ), A, LDA,

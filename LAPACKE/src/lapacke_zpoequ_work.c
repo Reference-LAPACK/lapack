@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zpoequ_work( int matrix_layout, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zpoequ_work)( int matrix_layout, lapack_int n,
                                 const lapack_complex_double* a, lapack_int lda,
                                 double* s, double* scond, double* amax )
 {
@@ -49,7 +49,7 @@ lapack_int LAPACKE_zpoequ_work( int matrix_layout, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -4;
-            LAPACKE_xerbla( "LAPACKE_zpoequ_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpoequ_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -60,7 +60,7 @@ lapack_int LAPACKE_zpoequ_work( int matrix_layout, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zpoequ( &n, a_t, &lda_t, s, scond, amax, &info );
         if( info < 0 ) {
@@ -70,11 +70,11 @@ lapack_int LAPACKE_zpoequ_work( int matrix_layout, lapack_int n,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zpoequ_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpoequ_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zpoequ_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpoequ_work", info );
     }
     return info;
 }

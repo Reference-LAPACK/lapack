@@ -32,8 +32,8 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_slarnv( lapack_int idist, lapack_int* iseed, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_slarnv)( lapack_int idist, lapack_int* iseed, lapack_int n,
                            float* x )
 {
-    return LAPACKE_slarnv_work( idist, iseed, n, x );
+    return API_SUFFIX(LAPACKE_slarnv_work)( idist, iseed, n, x );
 }

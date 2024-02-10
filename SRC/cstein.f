@@ -222,7 +222,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, REAL, SQRT
@@ -317,7 +318,7 @@
    50    CONTINUE
          ORTOL = ODM3*ONENRM
 *
-         STPCRT = SQRT( ODM1 / BLKSIZ )
+         STPCRT = SQRT( ODM1 / REAL( BLKSIZ ) )
 *
 *        Loop through eigenvalues of block nblk.
 *
@@ -365,7 +366,8 @@
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
+            CALL SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ,
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -379,14 +381,15 @@
 *           Normalize and scale the righthand side vector Pb.
 *
             JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
-            SCL = BLKSIZ*ONENRM*MAX( EPS,
+            SCL = REAL( BLKSIZ )*ONENRM*MAX( EPS,
      $            ABS( WORK( INDRV4+BLKSIZ ) ) ) /
      $            ABS( WORK( INDRV1+JMAX ) )
             CALL SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
 *
 *           Solve the system LU = Pb.
 *
-            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
+            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ),
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *

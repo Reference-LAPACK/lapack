@@ -242,7 +242,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -287,7 +288,8 @@
       EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY, CLASCL,
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY,
+     $                   CLASCL,
      $                   CSTEDC, CUNMTR, CHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -336,8 +338,8 @@
                LIWMIN = 1
             END IF
          END IF
-         WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = CMPLX( LWMIN )
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -435,8 +437,8 @@
          CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
-      WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = CMPLX( LWMIN )
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

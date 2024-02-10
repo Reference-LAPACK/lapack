@@ -328,7 +328,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYEVX, SSYGST, STRMM, STRSM, XERBLA
+      EXTERNAL           SPOTRF, SSYEVX, SSYGST, STRMM, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -413,7 +414,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+     $             ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -433,7 +435,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE,
+     $                  B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -447,7 +450,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE,
+     $                  B,
      $                  LDB, Z, LDZ )
          END IF
       END IF

@@ -151,7 +151,8 @@
 *> \ingroup unbdb5
 *
 *  =====================================================================
-      SUBROUTINE CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1,
+     $                    Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -226,7 +227,7 @@
       CALL CLASSQ( M2, X2, INCX2, SCL, SSQ )
       NORM = SCL * SQRT( SSQ )
 *
-      IF( NORM .GT. N * EPS ) THEN
+      IF( NORM .GT. REAL( N ) * EPS ) THEN
 *        Scale vector to unit norm to avoid problems in the caller code.
 *        Computing the reciprocal is undesirable but
 *         * xLASCL cannot be used because of the vector increments and

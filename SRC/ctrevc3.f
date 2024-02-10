@@ -239,7 +239,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                    VR,
      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
       IMPLICIT NONE
 *
@@ -283,7 +284,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
+      EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM,
+     $                   CGEMV,
      $                   CLATRS, CLACPY
 *     ..
 *     .. Intrinsic Functions ..
@@ -324,7 +326,7 @@
       NB = ILAENV( 1, 'CTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
       MAXWRK = MAX( 1, N + 2*N*NB )
       WORK(1) = SROUNDUP_LWORK(MAXWRK)
-      RWORK(1) = MAX( 1, N )
+      RWORK(1) = REAL( MAX( 1, N ) )
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 )
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
@@ -373,7 +375,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
 *
 *     Store the diagonal elements of T in working array WORK.
 *
@@ -543,7 +545,8 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+               CALL CLATRS( 'Upper', 'Conjugate transpose',
+     $                      'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 + IV*N ), SCALE, RWORK, INFO )
                WORK( KI + IV*N ) = SCALE
@@ -554,7 +557,8 @@
             IF( .NOT.OVER ) THEN
 *              ------------------------------
 *              no back-transform: copy x to VL and normalize.
-               CALL CCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS), 1 )
+               CALL CCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS),
+     $                     1 )
 *
                II = ICAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                REMAX = ONE / CABS1( VL( II, IS ) )
@@ -568,7 +572,8 @@
 *              ------------------------------
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.LT.N )
-     $            CALL CGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ), LDVL,
+     $            CALL CGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ),
+     $                        LDVL,
      $                        WORK( KI+1 + IV*N ), 1, CMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *

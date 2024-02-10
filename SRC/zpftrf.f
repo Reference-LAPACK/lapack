@@ -304,7 +304,8 @@
                CALL ZPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ), N,
+               CALL ZTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ),
+     $                     N,
      $                     A( N1 ), N )
                CALL ZHERK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
      $                     A( N ), N )
@@ -321,7 +322,8 @@
                CALL ZPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ), N,
+               CALL ZTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL ZHERK( 'U', 'C', N2, N1, -ONE, A( 0 ), N, ONE,
      $                     A( N1 ), N )
@@ -344,9 +346,11 @@
                CALL ZPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ), N1,
+               CALL ZTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
-               CALL ZHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
+               CALL ZHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 1 ), N1 )
                CALL ZPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
@@ -361,7 +365,8 @@
                CALL ZPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE, A( N2*N2 ),
+               CALL ZTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE,
+     $                     A( N2*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL ZHERK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
      $                     A( N1*N2 ), N2 )
@@ -390,7 +395,8 @@
                CALL ZPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ), N+1,
+               CALL ZTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL ZHERK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
      $                     A( 0 ), N+1 )
@@ -430,9 +436,11 @@
                CALL ZPOTRF( 'U', K, A( 0+K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL ZTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ), N1,
+               CALL ZTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ),
+     $                     N1,
      $                     A( K*( K+1 ) ), K )
-               CALL ZHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
+               CALL ZHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( 0 ), K )
                CALL ZPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )

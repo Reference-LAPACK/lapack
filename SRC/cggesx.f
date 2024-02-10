@@ -323,7 +323,8 @@
 *> \ingroup ggesx
 *
 *  =====================================================================
-      SUBROUTINE CGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A, LDA,
+      SUBROUTINE CGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A,
+     $                   LDA,
      $                   B, LDB, SDIM, ALPHA, BETA, VSL, LDVSL, VSR,
      $                   LDVSR, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                   IWORK, LIWORK, BWORK, INFO )
@@ -372,14 +373,16 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGSEN, CUNGQR, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -433,7 +436,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .OR.
      $         ( .NOT.WANTST .AND. .NOT.WANTSN ) ) THEN
@@ -465,7 +469,8 @@
      $                    ILAENV( 1, 'CUNMQR', ' ', N, 1, N, -1 ) ) )
             IF( ILVSL ) THEN
                MAXWRK = MAX( MAXWRK, N*( 1 +
-     $                       ILAENV( 1, 'CUNGQR', ' ', N, 1, N, -1 ) ) )
+     $                       ILAENV( 1, 'CUNGQR', ' ', N, 1, N,
+     $                               -1 ) ) )
             END IF
             LWRK = MAXWRK
             IF( IJOB.GE.1 )
@@ -619,9 +624,11 @@
 *        Undo scaling on eigenvalues before SELCTGing
 *
          IF( ILASCL )
-     $      CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N,
+     $                   IERR )
          IF( ILBSCL )
-     $      CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *

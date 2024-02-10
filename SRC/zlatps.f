@@ -262,7 +262,8 @@
       INTEGER            IDAMAX, IZAMAX
       DOUBLE PRECISION   DLAMCH, DZASUM
       COMPLEX*16         ZDOTC, ZDOTU, ZLADIV
-      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM, ZDOTC,
+      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM,
+     $                   ZDOTC,
      $                   ZDOTU, ZLADIV
 *     ..
 *     .. External Subroutines ..
@@ -659,7 +660,8 @@
 *                    Compute the update
 *                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j)
 *
-                     CALL ZAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1, X,
+                     CALL ZAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1,
+     $                           X,
      $                           1 )
                      I = IZAMAX( J-1, X, 1 )
                      XMAX = CABS1( X( I ) )

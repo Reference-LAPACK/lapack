@@ -451,7 +451,8 @@
      $                   SROUNDUP_LWORK 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA,
+     $                   CSSCAL,
      $                   CHETRD_2STAGE, CSTEMR, CSTEIN, CSWAP, CUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -472,10 +473,14 @@
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 ) .OR.
      $         ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      KD     = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1,
+     $                       -1 )
+      IB     = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1,
+     $                       -1 )
+      LHTRD  = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
+      LWTRD  = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
 *
       IF( N.LE.1 ) THEN
          LWMIN  = 1
@@ -677,7 +682,7 @@
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
-            IF ( ABSTOL .LE. TWO*N*EPS ) THEN
+            IF ( ABSTOL .LE. TWO*REAL( N )*EPS ) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -733,7 +738,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -234,13 +234,15 @@
 *
 *              Multiply by inv(A).
 *
-               CALL ZLATPS( UPLO, 'No transpose', DIAG, NORMIN, N, AP,
+               CALL ZLATPS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      AP,
      $                      WORK, SCALE, RWORK, INFO )
             ELSE
 *
 *              Multiply by inv(A**H).
 *
-               CALL ZLATPS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
+               CALL ZLATPS( UPLO, 'Conjugate transpose', DIAG,
+     $                      NORMIN,
      $                      N, AP, WORK, SCALE, RWORK, INFO )
             END IF
             NORMIN = 'Y'

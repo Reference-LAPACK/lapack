@@ -243,7 +243,8 @@
 *
 *        Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N, K,
+         NB = MIN( NBMAX, ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N,
+     $             K,
      $        -1 ) )
          LWKOPT = NW*NB + TSIZE
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
@@ -268,7 +269,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.LWKOPT ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'CUNMQR', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'CUNMQR', SIDE // TRANS, M, N,
+     $                   K,
      $              -1 ) )
          END IF
       END IF
@@ -277,7 +279,8 @@
 *
 *        Use unblocked code
 *
-         CALL CUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK,
+         CALL CUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+     $                WORK,
      $                IINFO )
       ELSE
 *
@@ -309,7 +312,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL CLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I, I ),
+            CALL CLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I,
+     $                   I ),
      $                   LDA, TAU( I ), WORK( IWT ), LDT )
             IF( LEFT ) THEN
 *
@@ -327,7 +331,8 @@
 *
 *           Apply H or H**H
 *
-            CALL CLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI, NI,
+            CALL CLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI,
+     $                   NI,
      $                   IB, A( I, I ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE

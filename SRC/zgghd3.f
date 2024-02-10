@@ -222,7 +222,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE ZGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -263,7 +264,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGGHRD, ZLARTG, ZLASET, ZUNM22, ZROT, ZGEMM,
+      EXTERNAL           ZGGHRD, ZLARTG, ZLASET, ZUNM22, ZROT,
+     $                   ZGEMM,
      $                   ZGEMV, ZTRMV, ZLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -387,7 +389,8 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL ZLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK, NBLST )
+            CALL ZLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK,
+     $                   NBLST )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
                CALL ZLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
@@ -580,10 +583,12 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL ZTRMV( 'Upper', 'Conjugate', 'Non-unit', LEN,
+                     CALL ZTRMV( 'Upper', 'Conjugate', 'Non-unit',
+     $                           LEN,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL ZTRMV( 'Lower', 'Conjugate', 'Non-unit', NNB,
+                     CALL ZTRMV( 'Lower', 'Conjugate', 'Non-unit',
+     $                           NNB,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
                      CALL ZGEMV( 'Conjugate', NNB, LEN, CONE,
@@ -752,9 +757,11 @@
                END DO
             ELSE
 *
-               CALL ZLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL ZLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO,
+     $                      CZERO,
      $                      A( JCOL + 2, JCOL ), LDA )
-               CALL ZLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL ZLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO,
+     $                      CZERO,
      $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
@@ -774,7 +781,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL ZUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL ZUNM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -805,7 +813,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL ZUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL ZUNM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -885,7 +894,8 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL ZGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL ZGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB,
+     $                Q,
      $                LDQ, Z, LDZ, IERR )
 *
       WORK( 1 ) = DCMPLX( LWKOPT )

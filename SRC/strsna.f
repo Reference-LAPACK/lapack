@@ -259,7 +259,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE STRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, IWORK,
      $                   INFO )
 *
@@ -300,7 +301,8 @@
       EXTERNAL           LSAME, SDOT, SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLACPY, SLAQTR, STREXC, XERBLA
+      EXTERNAL           SLACN2, SLACPY, SLAQTR, STREXC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -440,10 +442,12 @@
 *              Complex eigenvalue.
 *
                PROD1 = SDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-               PROD1 = PROD1 + SDOT( N, VR( 1, KS+1 ), 1, VL( 1, KS+1 ),
+               PROD1 = PROD1 + SDOT( N, VR( 1, KS+1 ), 1, VL( 1,
+     $                               KS+1 ),
      $                 1 )
                PROD2 = SDOT( N, VL( 1, KS ), 1, VR( 1, KS+1 ), 1 )
-               PROD2 = PROD2 - SDOT( N, VL( 1, KS+1 ), 1, VR( 1, KS ),
+               PROD2 = PROD2 - SDOT( N, VL( 1, KS+1 ), 1, VR( 1,
+     $                               KS ),
      $                 1 )
                RNRM = SLAPY2( SNRM2( N, VR( 1, KS ), 1 ),
      $                SNRM2( N, VR( 1, KS+1 ), 1 ) )
@@ -466,7 +470,8 @@
             CALL SLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
             IFST = K
             ILST = 1
-            CALL STREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST, ILST,
+            CALL STREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST,
+     $                   ILST,
      $                   WORK( 1, N+1 ), IERR )
 *
             IF( IERR.EQ.1 .OR. IERR.EQ.2 ) THEN
@@ -534,7 +539,8 @@
                EST = ZERO
                KASE = 0
    50          CONTINUE
-               CALL SLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ), IWORK,
+               CALL SLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ),
+     $                      IWORK,
      $                      EST, KASE, ISAVE )
                IF( KASE.NE.0 ) THEN
                   IF( KASE.EQ.1 ) THEN
@@ -542,7 +548,8 @@
 *
 *                       Real eigenvalue: solve C**T*x = scale*c.
 *
-                        CALL SLAQTR( .TRUE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL SLAQTR( .TRUE., .TRUE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -551,7 +558,8 @@
 *                       Complex eigenvalue: solve
 *                       C**T*(p+iq) = scale*(c+id) in real arithmetic.
 *
-                        CALL SLAQTR( .TRUE., .FALSE., N-1, WORK( 2, 2 ),
+                        CALL SLAQTR( .TRUE., .FALSE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, WORK( 1, N+1 ), MU, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -561,7 +569,8 @@
 *
 *                       Real eigenvalue: solve C*x = scale*c.
 *
-                        CALL SLAQTR( .FALSE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL SLAQTR( .FALSE., .TRUE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )

@@ -386,7 +386,8 @@
 *> \ingroup la_herfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -456,7 +457,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SSYTRS, SSYMV, BLAS_SSYMV_X,
+      EXTERNAL           SAXPY, SCOPY, SSYTRS, SSYMV,
+     $                   BLAS_SSYMV_X,
      $                   BLAS_SSYMV2_X, SLA_SYAMV, SLA_WWADDW,
      $                   SLA_LIN_BERR
       REAL               SLAMCH

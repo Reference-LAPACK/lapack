@@ -141,7 +141,8 @@
 *> \ingroup gbcon
 *
 *  =====================================================================
-      SUBROUTINE DGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
+      SUBROUTINE DGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM,
+     $                   RCOND,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -180,7 +181,8 @@
       EXTERNAL           LSAME, IDAMAX, DDOT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLACN2, DLATBS, DRSCL, XERBLA
+      EXTERNAL           DAXPY, DLACN2, DLATBS, DRSCL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN
@@ -249,13 +251,15 @@
                      WORK( JP ) = WORK( J )
                      WORK( J ) = T
                   END IF
-                  CALL DAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ), 1 )
+                  CALL DAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ),
+     $                        1 )
    20          CONTINUE
             END IF
 *
 *           Multiply by inv(U).
 *
-            CALL DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KL+KU, AB, LDAB, WORK, SCALE, WORK( 2*N+1 ),
      $                   INFO )
          ELSE

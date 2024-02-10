@@ -114,7 +114,8 @@
 *> \ingroup ppcon
 *
 *  =====================================================================
-      SUBROUTINE SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
+      SUBROUTINE SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -204,13 +205,15 @@
 *
 *           Multiply by inv(U).
 *
-            CALL SLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL SLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL SLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL SLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *

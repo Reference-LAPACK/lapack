@@ -407,7 +407,8 @@
 *> \ingroup gerfsx
 *
 *  =====================================================================
-      SUBROUTINE ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -473,7 +474,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILATRANS, ILAPREC
-      EXTERNAL           DLAMCH, ZLANGE, ZLA_GERCOND_X, ZLA_GERCOND_C
+      EXTERNAL           DLAMCH, ZLANGE, ZLA_GERCOND_X,
+     $                   ZLA_GERCOND_C
       DOUBLE PRECISION   DLAMCH, ZLANGE, ZLA_GERCOND_X, ZLA_GERCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
@@ -606,7 +608,8 @@
          NORM = '1'
       END IF
       ANORM = ZLANGE( NORM, N, N, A, LDA, RWORK )
-      CALL ZGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
+      CALL ZGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK,
+     $             INFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -633,19 +636,23 @@
          END IF
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0,
+     $                SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           C, .TRUE., INFO, WORK, RWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           R, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           C, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS

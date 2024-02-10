@@ -204,7 +204,8 @@
 *> \ingroup gtrfs
 *
 *  =====================================================================
-      SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+      SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+     $                   DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -247,7 +248,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGTTRS, CLACN2, CLAGTM, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGTTRS, CLACN2, CLAGTM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, MAX, REAL
@@ -309,7 +311,7 @@
       NZ = 4
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -326,7 +328,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
+         CALL CLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX,
+     $                ONE,
      $                WORK, N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -401,7 +404,8 @@
 *
 *           Update solution and try again.
 *
-            CALL CGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, N,
+            CALL CGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL CAXPY( N, CMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
@@ -433,10 +437,11 @@
 *
          DO 60 I = 1, N
             IF( RWORK( I ).GT.SAFE2 ) THEN
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I )
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I )
             ELSE
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I ) +
-     $                      SAFE1
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I ) + SAFE1
             END IF
    60    CONTINUE
 *
@@ -448,7 +453,8 @@
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL CGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL CGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
+     $                      WORK,
      $                      N, INFO )
                DO 80 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -460,7 +466,8 @@
                DO 90 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
    90          CONTINUE
-               CALL CGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL CGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
+     $                      WORK,
      $                      N, INFO )
             END IF
             GO TO 70

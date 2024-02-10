@@ -276,7 +276,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHER2K, ZHEMM, ZGEMM, ZCOPY,
+      EXTERNAL           XERBLA, ZHER2K, ZHEMM, ZGEMM,
+     $                   ZCOPY,
      $                   ZLARFT, ZGELQF, ZGEQRF, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -384,7 +385,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL ZCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL ZCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL ZLASET( 'Lower', PK, PK, ZERO, ONE, 

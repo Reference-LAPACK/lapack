@@ -356,7 +356,8 @@
 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLARNV, DLARRA, DLARRB, DLARRC, DLARRD,
+      EXTERNAL           DCOPY, DLARNV, DLARRA, DLARRB, DLARRC,
+     $                   DLARRD,
      $                   DLASQ2, DLARRK
 *     ..
 *     .. Intrinsic Functions ..

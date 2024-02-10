@@ -559,13 +559,15 @@ c               END IF
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL ZGEMM( 'NoTranspose',
+     $                           'Conjugate transpose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL ZGEMM( 'NoTranspose',
+     $                           'Conjugate transpose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,

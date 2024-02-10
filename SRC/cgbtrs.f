@@ -133,7 +133,8 @@
 *> \ingroup gbtrs
 *
 *  =====================================================================
-      SUBROUTINE CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+      SUBROUTINE CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B,
+     $                   LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -164,7 +165,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CLACGV, CSWAP, CTBSV, XERBLA
+      EXTERNAL           CGEMV, CGERU, CLACGV, CSWAP, CTBSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -221,7 +223,8 @@
                L = IPIV( J )
                IF( L.NE.J )
      $            CALL CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL CGERU( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
+               CALL CGERU( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J,
+     $                     1 ),
      $                     LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -230,7 +233,8 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
+            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N,
+     $                  KL+KU,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
@@ -242,7 +246,8 @@
 *
 *           Solve U**T * X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
+            CALL CTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU,
+     $                  AB,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *
@@ -267,7 +272,8 @@
 *
 *           Solve U**H * X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  KL+KU, AB, LDAB, B( 1, I ), 1 )
    50    CONTINUE
 *

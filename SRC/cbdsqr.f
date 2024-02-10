@@ -279,7 +279,8 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASR, CSROT, CSSCAL, CSWAP, SLARTG, SLAS2,
+      EXTERNAL           CLASR, CSROT, CSSCAL, CSWAP, SLARTG,
+     $                   SLAS2,
      $                   SLASQ1, SLASV2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,10 +361,12 @@
 *        Update singular vectors if desired
 *
          IF( NRU.GT.0 )
-     $      CALL CLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ), RWORK( N ),
+     $      CALL CLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  U, LDU )
          IF( NCC.GT.0 )
-     $      CALL CLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ), RWORK( N ),
+     $      CALL CLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  C, LDC )
       END IF
 *
@@ -400,12 +403,14 @@
    40    CONTINUE
    50    CONTINUE
          SMINOA = SMINOA / SQRT( REAL( N ) )
-         THRESH = MAX( TOL*SMINOA, MAXITR*(N*(N*UNFL)) )
+         THRESH = MAX( TOL*SMINOA,
+     $                 REAL(MAXITR)*(REAL(N)*(REAL(N)*UNFL)) )
       ELSE
 *
 *        Absolute accuracy desired
 *
-         THRESH = MAX( ABS( TOL )*SMAX, MAXITR*(N*(N*UNFL)) )
+         THRESH = MAX( ABS( TOL )*SMAX,
+     $                 REAL(MAXITR)*(REAL(N)*(REAL(N)*UNFL)) )
       END IF
 *
 *     Prepare for main iteration loop for the singular values
@@ -487,7 +492,8 @@
      $      CALL CSROT( NCVT, VT( M-1, 1 ), LDVT, VT( M, 1 ), LDVT,
      $                  COSR, SINR )
          IF( NRU.GT.0 )
-     $      CALL CSROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL, SINL )
+     $      CALL CSROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL,
+     $                  SINL )
          IF( NCC.GT.0 )
      $      CALL CSROT( NCC, C( M-1, 1 ), LDC, C( M, 1 ), LDC, COSL,
      $                  SINL )
@@ -576,7 +582,7 @@
 *     Compute shift.  First, test if shifting would ruin relative
 *     accuracy, and if so set the shift to zero.
 *
-      IF( TOL.GE.ZERO .AND. N*TOL*( SMIN / SMAX ).LE.
+      IF( TOL.GE.ZERO .AND. REAL( N )*TOL*( SMIN / SMAX ).LE.
      $    MAX( EPS, HNDRTH*TOL ) ) THEN
 *
 *        Use a zero shift to avoid loss of relative accuracy
@@ -620,7 +626,8 @@
                CALL SLARTG( D( I )*CS, E( I ), CS, SN, R )
                IF( I.GT.LL )
      $            E( I-1 ) = OLDSN*R
-               CALL SLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL SLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL+1 ) = CS
                RWORK( I-LL+1+NM1 ) = SN
                RWORK( I-LL+1+NM12 ) = OLDCS
@@ -636,10 +643,12 @@
      $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -658,7 +667,8 @@
                CALL SLARTG( D( I )*CS, E( I-1 ), CS, SN, R )
                IF( I.LT.M )
      $            E( I ) = OLDSN*R
-               CALL SLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL SLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL ) = CS
                RWORK( I-LL+NM1 ) = -SN
                RWORK( I-LL+NM12 ) = OLDCS
@@ -671,7 +681,8 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL CLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -726,10 +737,12 @@
      $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -776,7 +789,8 @@
 *           Update singular vectors if desired
 *
             IF( NCVT.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL CLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -832,7 +846,8 @@
             IF( NRU.GT.0 )
      $         CALL CSWAP( NRU, U( 1, ISUB ), 1, U( 1, N+1-I ), 1 )
             IF( NCC.GT.0 )
-     $         CALL CSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ), LDC )
+     $         CALL CSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ),
+     $                     LDC )
          END IF
   190 CONTINUE
       GO TO 220

@@ -262,7 +262,8 @@
          INFO = -1
       ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND.
+     $         .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -318,14 +319,16 @@
                CALL CTRTRI( 'L', DIAG, N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'N', DIAG, N2, N1, -CONE, A( 0 ),
+               CALL CTRMM( 'R', 'L', 'N', DIAG, N2, N1, -CONE,
+     $                     A( 0 ),
      $                     N, A( N1 ), N )
                CALL CTRTRI( 'U', DIAG, N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'C', DIAG, N2, N1, CONE, A( N ), N,
+               CALL CTRMM( 'L', 'U', 'C', DIAG, N2, N1, CONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
 *
             ELSE
@@ -337,14 +340,16 @@
                CALL CTRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'C', DIAG, N1, N2, -CONE, A( N2 ),
+               CALL CTRMM( 'L', 'L', 'C', DIAG, N1, N2, -CONE,
+     $                     A( N2 ),
      $                     N, A( 0 ), N )
                CALL CTRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'N', DIAG, N1, N2, CONE, A( N1 ),
+               CALL CTRMM( 'R', 'U', 'N', DIAG, N1, N2, CONE,
+     $                     A( N1 ),
      $                     N, A( 0 ), N )
 *
             END IF
@@ -361,7 +366,8 @@
                CALL CTRTRI( 'U', DIAG, N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'N', DIAG, N1, N2, -CONE, A( 0 ),
+               CALL CTRMM( 'L', 'U', 'N', DIAG, N1, N2, -CONE,
+     $                     A( 0 ),
      $                     N1, A( N1*N1 ), N1 )
                CALL CTRTRI( 'L', DIAG, N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
@@ -416,7 +422,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'C', DIAG, K, K, CONE, A( 0 ), N+1,
+               CALL CTRMM( 'L', 'U', 'C', DIAG, K, K, CONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
 *
             ELSE
@@ -428,14 +435,16 @@
                CALL CTRTRI( 'L', DIAG, K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'C', DIAG, K, K, -CONE, A( K+1 ),
+               CALL CTRMM( 'L', 'L', 'C', DIAG, K, K, -CONE,
+     $                     A( K+1 ),
      $                     N+1, A( 0 ), N+1 )
                CALL CTRTRI( 'U', DIAG, K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'N', DIAG, K, K, CONE, A( K ), N+1,
+               CALL CTRMM( 'R', 'U', 'N', DIAG, K, K, CONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
             END IF
          ELSE
@@ -451,14 +460,16 @@
                CALL CTRTRI( 'U', DIAG, K, A( K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'N', DIAG, K, K, -CONE, A( K ), K,
+               CALL CTRMM( 'L', 'U', 'N', DIAG, K, K, -CONE, A( K ),
+     $                     K,
      $                     A( K*( K+1 ) ), K )
                CALL CTRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'C', DIAG, K, K, CONE, A( 0 ), K,
+               CALL CTRMM( 'R', 'L', 'C', DIAG, K, K, CONE, A( 0 ),
+     $                     K,
      $                     A( K*( K+1 ) ), K )
             ELSE
 *
@@ -476,7 +487,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'N', DIAG, K, K, CONE, A( K*K ), K,
+               CALL CTRMM( 'L', 'L', 'N', DIAG, K, K, CONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
             END IF
          END IF

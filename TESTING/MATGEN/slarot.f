@@ -221,7 +221,8 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE SLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA,
+     $                   XLEFT,
      $                   XRIGHT )
 *
 *  -- LAPACK auxiliary routine --

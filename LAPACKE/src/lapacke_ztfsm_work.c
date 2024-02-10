@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztfsm_work( int matrix_layout, char transr, char side,
+lapack_int API_SUFFIX(LAPACKE_ztfsm_work)( int matrix_layout, char transr, char side,
                                char uplo, char trans, char diag, lapack_int m,
                                lapack_int n, lapack_complex_double alpha,
                                const lapack_complex_double* a,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_ztfsm_work( int matrix_layout, char transr, char side,
         /* Check leading dimension(s) */
         if( ldb < n ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_ztfsm_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfsm_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -74,17 +74,17 @@ lapack_int LAPACKE_ztfsm_work( int matrix_layout, char transr, char side,
         }
         /* Transpose input matrices */
         if( IS_Z_NONZERO(alpha) ) {
-            LAPACKE_zge_trans( matrix_layout, m, n, b, ldb, b_t, ldb_t );
+            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, b, ldb, b_t, ldb_t );
         }
         if( IS_Z_NONZERO(alpha) ) {
-            LAPACKE_ztf_trans( matrix_layout, transr, uplo, diag, n, a, a_t );
+            API_SUFFIX(LAPACKE_ztf_trans)( matrix_layout, transr, uplo, diag, n, a, a_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ztfsm( &transr, &side, &uplo, &trans, &diag, &m, &n, &alpha, a_t,
                       b_t, &ldb_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         if( IS_Z_NONZERO(alpha) ) {
             LAPACKE_free( a_t );
@@ -93,11 +93,11 @@ exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ztfsm_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfsm_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ztfsm_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztfsm_work", info );
     }
     return info;
 }

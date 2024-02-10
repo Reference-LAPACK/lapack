@@ -264,7 +264,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, XERBLA, ZCOPY, ZLACPY, ZPTCON, ZPTRFS,
+      EXTERNAL           DCOPY, XERBLA, ZCOPY, ZLACPY, ZPTCON,
+     $                   ZPTRFS,
      $                   ZPTTRF, ZPTTRS
 *     ..
 *     .. Intrinsic Functions ..
@@ -325,7 +326,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL ZPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
+      CALL ZPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+     $             FERR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

@@ -211,7 +211,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
+      SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU,
+     $                   U2,
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
 *
@@ -246,7 +247,8 @@
       EXTERNAL           DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLASCL, DLASD4, XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLASCL, DLASD4,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -364,16 +366,19 @@
 *     Update the left singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO, U,
+         CALL DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO,
+     $               U,
      $               LDU )
          GO TO 100
       END IF
       IF( CTOT( 1 ).GT.0 ) THEN
-         CALL DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ), LDU2,
+         CALL DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ),
+     $               LDU2,
      $               Q( 2, 1 ), LDQ, ZERO, U( 1, 1 ), LDU )
          IF( CTOT( 3 ).GT.0 ) THEN
             KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
-            CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
+            CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1,
+     $                  KTEMP ),
      $                  LDU2, Q( KTEMP, 1 ), LDQ, ONE, U( 1, 1 ), LDU )
          END IF
       ELSE IF( CTOT( 3 ).GT.0 ) THEN
@@ -386,7 +391,8 @@
       CALL DCOPY( K, Q( 1, 1 ), LDQ, U( NLP1, 1 ), LDU )
       KTEMP = 2 + CTOT( 1 )
       CTEMP = CTOT( 2 ) + CTOT( 3 )
-      CALL DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ), LDU2,
+      CALL DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ),
+     $            LDU2,
      $            Q( KTEMP, 1 ), LDQ, ZERO, U( NLP2, 1 ), LDU )
 *
 *     Generate the right singular vectors.
@@ -404,7 +410,8 @@
 *     Update the right singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2, ZERO,
+         CALL DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2,
+     $               ZERO,
      $               VT, LDVT )
          RETURN
       END IF
@@ -413,7 +420,8 @@
      $            VT2( 1, 1 ), LDVT2, ZERO, VT( 1, 1 ), LDVT )
       KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
       IF( KTEMP.LE.LDVT2 )
-     $   CALL DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1, KTEMP ),
+     $   CALL DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1,
+     $               KTEMP ),
      $               LDQ, VT2( KTEMP, 1 ), LDVT2, ONE, VT( 1, 1 ),
      $               LDVT )
 *

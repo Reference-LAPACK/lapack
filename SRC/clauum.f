@@ -202,7 +202,8 @@
      $                     A( I, 1 ), LDA )
                CALL CLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL CGEMM( 'Conjugate transpose', 'No transpose', IB,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose',
+     $                        IB,
      $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
      $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
                   CALL CHERK( 'Lower', 'Conjugate transpose', IB,

@@ -256,7 +256,8 @@
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
-         CALL STRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
+         CALL STRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**T
@@ -271,7 +272,8 @@
 *                            V( 1:k, 1:l )**T * W( 1:n, 1:k )**T
 *
          IF( L.GT.0 )
-     $      CALL SGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
+     $      CALL SGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V,
+     $                  LDV,
      $                  WORK, LDWORK, ONE, C( M-L+1, 1 ), LDC )
 *
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
@@ -293,7 +295,8 @@
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) * T  or  W( 1:m, 1:k ) * T**T
 *
-         CALL STRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
+         CALL STRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k )
@@ -308,7 +311,8 @@
 *                            W( 1:m, 1:k ) * V( 1:k, 1:l )
 *
          IF( L.GT.0 )
-     $      CALL SGEMM( 'No transpose', 'No transpose', M, L, K, -ONE,
+     $      CALL SGEMM( 'No transpose', 'No transpose', M, L, K,
+     $                  -ONE,
      $                  WORK, LDWORK, V, LDV, ONE, C( 1, N-L+1 ), LDC )
 *
       END IF

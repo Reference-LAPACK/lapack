@@ -199,7 +199,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
+      SUBROUTINE DLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT,
+     $                   LDVT,
      $                   IDXQ, IWORK, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -228,7 +229,8 @@
       DOUBLE PRECISION   ORGNRM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAMRG, DLASCL, DLASD2, DLASD3, XERBLA
+      EXTERNAL           DLAMRG, DLASCL, DLASD2, DLASD3,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -287,7 +289,8 @@
 *
 *     Deflate singular values.
 *
-      CALL DLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U, LDU,
+      CALL DLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U,
+     $             LDU,
      $             VT, LDVT, WORK( ISIGMA ), WORK( IU2 ), LDU2,
      $             WORK( IVT2 ), LDVT2, IWORK( IDXP ), IWORK( IDX ),
      $             IWORK( IDXC ), IDXQ, IWORK( COLTYP ), INFO )
@@ -295,7 +298,8 @@
 *     Solve Secular Equation and update singular vectors.
 *
       LDQ = K
-      CALL DLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ, WORK( ISIGMA ),
+      CALL DLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ,
+     $             WORK( ISIGMA ),
      $             U, LDU, WORK( IU2 ), LDU2, VT, LDVT, WORK( IVT2 ),
      $             LDVT2, IWORK( IDXC ), IWORK( COLTYP ), WORK( IZ ),
      $             INFO )

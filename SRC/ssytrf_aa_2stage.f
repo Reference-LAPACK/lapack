@@ -268,7 +268,7 @@
 *
 *     Save NB
 *
-      TB( 1 ) = NB
+      TB( 1 ) = REAL( NB )
 *
       IF( UPPER ) THEN
 *

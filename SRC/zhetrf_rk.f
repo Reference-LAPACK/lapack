@@ -425,7 +425,8 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL ZLAHEF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E( K ),
+            CALL ZLAHEF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+     $                      E( K ),
      $                        IPIV( K ), WORK, LDWORK, IINFO )
 
 

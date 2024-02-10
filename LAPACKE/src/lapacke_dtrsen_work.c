@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
+lapack_int API_SUFFIX(LAPACKE_dtrsen_work)( int matrix_layout, char job, char compq,
                                 const lapack_logical* select, lapack_int n,
                                 double* t, lapack_int ldt, double* q,
                                 lapack_int ldq, double* wr, double* wi,
@@ -56,12 +56,12 @@ lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
         /* Check leading dimension(s) */
         if( ldq < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
             return info;
         }
         if( ldt < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
             return info;
         }
         /* Allocate memory for temporary array T */
@@ -71,7 +71,7 @@ lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
             goto exit_level_0;
         }
         /* Transpose input matrix T */
-        LAPACKE_dge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, t, ldt, t_t, ldt_t );
         /* Query optimal working array(s) size if requested */
         if( liwork == -1 || lwork == -1 ) {
             LAPACK_dtrsen( &job, &compq, select, &n, t_t, &ldt_t, q, &ldq_t, wr,
@@ -80,7 +80,7 @@ lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        if( LAPACKE_lsame( compq, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
             q_t = (double*)LAPACKE_malloc( sizeof(double) * ldq_t * MAX(1,n) );
             if( q_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -88,8 +88,8 @@ lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
             }
         }
         /* Transpose input matrices */
-        if( LAPACKE_lsame( compq, 'v' ) ) {
-            LAPACKE_dge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+            API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtrsen( &job, &compq, select, &n, t_t, &ldt_t, q_t, &ldq_t, wr,
@@ -98,23 +98,23 @@ lapack_int LAPACKE_dtrsen_work( int matrix_layout, char job, char compq,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
-        if( LAPACKE_lsame( compq, 'v' ) ) {
-            LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, t_t, ldt_t, t, ldt );
+        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
+            API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         /* Release memory and exit */
-        if( LAPACKE_lsame( compq, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( compq, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( t_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dtrsen_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen_work", info );
     }
     return info;
 }

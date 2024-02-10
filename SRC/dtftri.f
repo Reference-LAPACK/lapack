@@ -242,7 +242,8 @@
          INFO = -1
       ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND.
+     $         .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -305,7 +306,8 @@
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'L', 'U', 'T', DIAG, N2, N1, ONE, A( N ), N,
+               CALL DTRMM( 'L', 'U', 'T', DIAG, N2, N1, ONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
 *
             ELSE
@@ -317,7 +319,8 @@
                CALL DTRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'L', 'L', 'T', DIAG, N1, N2, -ONE, A( N2 ),
+               CALL DTRMM( 'L', 'L', 'T', DIAG, N1, N2, -ONE,
+     $                     A( N2 ),
      $                     N, A( 0 ), N )
                CALL DTRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
@@ -396,7 +399,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'L', 'U', 'T', DIAG, K, K, ONE, A( 0 ), N+1,
+               CALL DTRMM( 'L', 'U', 'T', DIAG, K, K, ONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
 *
             ELSE
@@ -415,7 +419,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'R', 'U', 'N', DIAG, K, K, ONE, A( K ), N+1,
+               CALL DTRMM( 'R', 'U', 'N', DIAG, K, K, ONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
             END IF
          ELSE
@@ -431,7 +436,8 @@
                CALL DTRTRI( 'U', DIAG, K, A( K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'L', 'U', 'N', DIAG, K, K, -ONE, A( K ), K,
+               CALL DTRMM( 'L', 'U', 'N', DIAG, K, K, -ONE, A( K ),
+     $                     K,
      $                     A( K*( K+1 ) ), K )
                CALL DTRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
@@ -456,7 +462,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL DTRMM( 'L', 'L', 'N', DIAG, K, K, ONE, A( K*K ), K,
+               CALL DTRMM( 'L', 'L', 'N', DIAG, K, K, ONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
             END IF
          END IF

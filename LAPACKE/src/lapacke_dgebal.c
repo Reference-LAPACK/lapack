@@ -32,24 +32,24 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgebal( int matrix_layout, char job, lapack_int n, double* a,
+lapack_int API_SUFFIX(LAPACKE_dgebal)( int matrix_layout, char job, lapack_int n, double* a,
                            lapack_int lda, lapack_int* ilo, lapack_int* ihi,
                            double* scale )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dgebal", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgebal", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'p' ) ||
-            LAPACKE_lsame( job, 's' ) ) {
-            if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'p' ) ||
+            API_SUFFIX(LAPACKE_lsame)( job, 's' ) ) {
+            if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, n, a, lda ) ) {
                 return -4;
             }
         }
     }
 #endif
-    return LAPACKE_dgebal_work( matrix_layout, job, n, a, lda, ilo, ihi, scale );
+    return API_SUFFIX(LAPACKE_dgebal_work)( matrix_layout, job, n, a, lda, ilo, ihi, scale );
 }

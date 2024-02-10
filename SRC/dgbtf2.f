@@ -249,7 +249,8 @@
 *
 *              Compute multipliers.
 *
-               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 )
+               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
+     $                     1 )
 *
 *              Update trailing submatrix within the band.
 *

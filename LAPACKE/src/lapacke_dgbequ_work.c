@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgbequ_work( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dgbequ_work)( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku, const double* ab,
                                 lapack_int ldab, double* r, double* c,
                                 double* rowcnd, double* colcnd, double* amax )
@@ -51,7 +51,7 @@ lapack_int LAPACKE_dgbequ_work( int matrix_layout, lapack_int m, lapack_int n,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_dgbequ_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbequ_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +61,7 @@ lapack_int LAPACKE_dgbequ_work( int matrix_layout, lapack_int m, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dgb_trans( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        API_SUFFIX(LAPACKE_dgb_trans)( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgbequ( &m, &n, &kl, &ku, ab_t, &ldab_t, r, c, rowcnd, colcnd,
                        amax, &info );
@@ -72,11 +72,11 @@ lapack_int LAPACKE_dgbequ_work( int matrix_layout, lapack_int m, lapack_int n,
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dgbequ_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbequ_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dgbequ_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgbequ_work", info );
     }
     return info;
 }

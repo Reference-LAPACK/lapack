@@ -180,7 +180,8 @@
 *> \ingroup ggglm
 *
 *  =====================================================================
-      SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+      SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK,
+     $                   LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine --
@@ -207,7 +208,8 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SGGQRF, SORMQR, SORMRQ, STRTRS,
+      EXTERNAL           SCOPY, SGEMV, SGGQRF, SORMQR, SORMRQ,
+     $                   STRTRS,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -326,7 +328,8 @@
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
+         CALL STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A,
+     $                LDA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -344,7 +347,7 @@
       CALL SORMRQ( 'Left', 'Transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
-      WORK( 1 ) = M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) )
+      WORK( 1 ) = REAL( M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) ) )
 *
       RETURN
 *

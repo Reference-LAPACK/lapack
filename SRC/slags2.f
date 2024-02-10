@@ -147,7 +147,8 @@
 *> \ingroup lags2
 *
 *  =====================================================================
-      SUBROUTINE SLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+      SUBROUTINE SLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
+     $                   CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine --

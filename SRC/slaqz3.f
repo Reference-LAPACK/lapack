@@ -231,7 +231,8 @@
 *> \ingroup laqz3
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE SLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW,
+      RECURSIVE SUBROUTINE SLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI,
+     $                             NW,
      $                             A, LDA, B, LDB, Q, LDQ, Z, LDZ, NS,
      $                             ND, ALPHAR, ALPHAI, BETA, QC, LDQC,
      $                             ZC, LDZC, WORK, LWORK, REC, INFO )
@@ -323,7 +324,8 @@
 
 *     Store window in case of convergence failure
       CALL SLACPY( 'ALL', JW, JW, A( KWTOP, KWTOP ), LDA, WORK, JW )
-      CALL SLACPY( 'ALL', JW, JW, B( KWTOP, KWTOP ), LDB, WORK( JW**2+
+      CALL SLACPY( 'ALL', JW, JW, B( KWTOP, KWTOP ), LDB,
+     $             WORK( JW**2+
      $             1 ), JW )
 
 *     Transform window to real schur form
@@ -338,7 +340,8 @@
 *        Convergence failure, restore the window and exit
          ND = 0
          NS = JW-QZ_SMALL_INFO
-         CALL SLACPY( 'ALL', JW, JW, WORK, JW, A( KWTOP, KWTOP ), LDA )
+         CALL SLACPY( 'ALL', JW, JW, WORK, JW, A( KWTOP, KWTOP ),
+     $                LDA )
          CALL SLACPY( 'ALL', JW, JW, WORK( JW**2+1 ), JW, B( KWTOP,
      $                KWTOP ), LDB )
          RETURN
@@ -445,11 +448,14 @@
             A( K, KWTOP-1 ) = TEMP
             A( K+1, KWTOP-1 ) = ZERO
             K2 = MAX( KWTOP, K-1 )
-            CALL SROT( IHI-K2+1, A( K, K2 ), LDA, A( K+1, K2 ), LDA, C1,
+            CALL SROT( IHI-K2+1, A( K, K2 ), LDA, A( K+1, K2 ), LDA,
+     $                 C1,
      $                 S1 )
-            CALL SROT( IHI-( K-1 )+1, B( K, K-1 ), LDB, B( K+1, K-1 ),
+            CALL SROT( IHI-( K-1 )+1, B( K, K-1 ), LDB, B( K+1,
+     $                 K-1 ),
      $                 LDB, C1, S1 )
-            CALL SROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1, K+1-KWTOP+1 ),
+            CALL SROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1,
+     $                 K+1-KWTOP+1 ),
      $                 1, C1, S1 )
          END DO
 
@@ -474,7 +480,8 @@
                DO K2 = K, KWBOT-2
 
 *                 Move shift down
-                  CALL SLARTG( B( K2+1, K2+1 ), B( K2+1, K2 ), C1, S1,
+                  CALL SLARTG( B( K2+1, K2+1 ), B( K2+1, K2 ), C1,
+     $                         S1,
      $                         TEMP )
                   B( K2+1, K2+1 ) = TEMP
                   B( K2+1, K2 ) = ZERO
@@ -489,9 +496,11 @@
      $                         TEMP )
                   A( K2+1, K2 ) = TEMP
                   A( K2+2, K2 ) = ZERO
-                  CALL SROT( ISTOPM-K2, A( K2+1, K2+1 ), LDA, A( K2+2,
+                  CALL SROT( ISTOPM-K2, A( K2+1, K2+1 ), LDA,
+     $                       A( K2+2,
      $                       K2+1 ), LDA, C1, S1 )
-                  CALL SROT( ISTOPM-K2, B( K2+1, K2+1 ), LDB, B( K2+2,
+                  CALL SROT( ISTOPM-K2, B( K2+1, K2+1 ), LDB,
+     $                       B( K2+2,
      $                       K2+1 ), LDB, C1, S1 )
                   CALL SROT( JW, QC( 1, K2+1-KWTOP+1 ), 1, QC( 1,
      $                       K2+2-KWTOP+1 ), 1, C1, S1 )
@@ -499,7 +508,8 @@
                END DO
 
 *              Remove the shift
-               CALL SLARTG( B( KWBOT, KWBOT ), B( KWBOT, KWBOT-1 ), C1,
+               CALL SLARTG( B( KWBOT, KWBOT ), B( KWBOT, KWBOT-1 ),
+     $                      C1,
      $                      S1, TEMP )
                B( KWBOT, KWBOT ) = TEMP
                B( KWBOT, KWBOT-1 ) = ZERO
@@ -536,25 +546,29 @@
      $                IHI+1 ), LDB )
       END IF
       IF ( ILQ ) THEN
-         CALL SGEMM( 'N', 'N', N, JW, JW, ONE, Q( 1, KWTOP ), LDQ, QC,
+         CALL SGEMM( 'N', 'N', N, JW, JW, ONE, Q( 1, KWTOP ), LDQ,
+     $               QC,
      $               LDQC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, JW, WORK, N, Q( 1, KWTOP ), LDQ )
       END IF
 
       IF ( KWTOP-1-ISTARTM+1 > 0 ) THEN
-         CALL SGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, A( ISTARTM,
+         CALL SGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE,
+     $               A( ISTARTM,
      $               KWTOP ), LDA, ZC, LDZC, ZERO, WORK,
      $               KWTOP-ISTARTM )
          CALL SLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
      $                A( ISTARTM, KWTOP ), LDA )
-         CALL SGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE, B( ISTARTM,
+         CALL SGEMM( 'N', 'N', KWTOP-ISTARTM, JW, JW, ONE,
+     $               B( ISTARTM,
      $               KWTOP ), LDB, ZC, LDZC, ZERO, WORK,
      $               KWTOP-ISTARTM )
          CALL SLACPY( 'ALL', KWTOP-ISTARTM, JW, WORK, KWTOP-ISTARTM,
      $                B( ISTARTM, KWTOP ), LDB )
       END IF
       IF ( ILZ ) THEN
-         CALL SGEMM( 'N', 'N', N, JW, JW, ONE, Z( 1, KWTOP ), LDZ, ZC,
+         CALL SGEMM( 'N', 'N', N, JW, JW, ONE, Z( 1, KWTOP ), LDZ,
+     $               ZC,
      $               LDZC, ZERO, WORK, N )
          CALL SLACPY( 'ALL', N, JW, WORK, N, Z( 1, KWTOP ), LDZ )
       END IF

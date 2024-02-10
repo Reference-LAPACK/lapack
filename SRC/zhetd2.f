@@ -255,7 +255,8 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL ZHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
+               CALL ZHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1,
+     $                     ZERO,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
@@ -304,14 +305,16 @@
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*ZDOTC( N-I, TAU( I ), 1, A( I+1, I ),
+               ALPHA = -HALF*TAUI*ZDOTC( N-I, TAU( I ), 1, A( I+1,
+     $                                   I ),
      $                 1 )
                CALL ZAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL ZHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
+               CALL ZHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ),
+     $                     1,
      $                     A( I+1, I+1 ), LDA )
 *
             ELSE

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dstebz_work( char range, char order, lapack_int n, double vl,
+lapack_int API_SUFFIX(LAPACKE_dstebz_work)( char range, char order, lapack_int n, double vl,
                                 double vu, lapack_int il, lapack_int iu,
                                 double abstol, const double* d, const double* e,
                                 lapack_int* m, lapack_int* nsplit, double* w,

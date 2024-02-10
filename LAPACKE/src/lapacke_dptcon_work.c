@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dptcon_work( lapack_int n, const double* d, const double* e,
+lapack_int API_SUFFIX(LAPACKE_dptcon_work)( lapack_int n, const double* d, const double* e,
                                 double anorm, double* rcond, double* work )
 {
     lapack_int info = 0;

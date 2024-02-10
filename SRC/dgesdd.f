@@ -254,7 +254,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSDC, DGEBRD, DGELQF, DGEMM, DGEQRF, DLACPY,
+      EXTERNAL           DBDSDC, DGEBRD, DGELQF, DGEMM, DGEQRF,
+     $                   DLACPY,
      $                   DLASCL, DLASET, DORGBR, DORGLQ, DORGQR, DORMBR,
      $                   XERBLA
 *     ..
@@ -337,10 +338,12 @@
      $                   IERR )
             LWORK_DORGBR_Q_NN = INT( DUM(1) )
 *
-            CALL DORGQR( M, M, N, DUM(1), M, DUM(1), DUM(1), -1, IERR )
+            CALL DORGQR( M, M, N, DUM(1), M, DUM(1), DUM(1), -1,
+     $                   IERR )
             LWORK_DORGQR_MM = INT( DUM(1) )
 *
-            CALL DORGQR( M, N, N, DUM(1), M, DUM(1), DUM(1), -1, IERR )
+            CALL DORGQR( M, N, N, DUM(1), M, DUM(1), DUM(1), -1,
+     $                   IERR )
             LWORK_DORGQR_MN = INT( DUM(1) )
 *
             CALL DORMBR( 'P', 'R', 'T', N, N, N, DUM(1), N,
@@ -459,13 +462,15 @@
             CALL DGELQF( M, N, A, M, DUM(1), DUM(1), -1, IERR )
             LWORK_DGELQF_MN = INT( DUM(1) )
 *
-            CALL DORGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR )
+            CALL DORGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1,
+     $                   IERR )
             LWORK_DORGLQ_NN = INT( DUM(1) )
 *
             CALL DORGLQ( M, N, M, A, M, DUM(1), DUM(1), -1, IERR )
             LWORK_DORGLQ_MN = INT( DUM(1) )
 *
-            CALL DORGBR( 'P', M, M, M, A, N, DUM(1), DUM(1), -1, IERR )
+            CALL DORGBR( 'P', M, M, M, A, N, DUM(1), DUM(1), -1,
+     $                   IERR )
             LWORK_DORGBR_P_MM = INT( DUM(1) )
 *
             CALL DORMBR( 'P', 'R', 'T', M, M, M, DUM(1), M,
@@ -625,12 +630,14 @@
 *              Workspace: need   N [tau] + N    [work]
 *              Workspace: prefer N [tau] + N*NB [work]
 *
-               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Zero out below R
 *
-               CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+               CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
+     $                      LDA )
                IE = 1
                ITAUQ = IE + N
                ITAUP = ITAUQ + N
@@ -640,7 +647,8 @@
 *              Workspace: need   3*N [e, tauq, taup] + N      [work]
 *              Workspace: prefer 3*N [e, tauq, taup] + 2*N*NB [work]
 *
-               CALL DGEBRD( N, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL DGEBRD( N, N, A, LDA, S, WORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NWORK = IE + N
@@ -648,7 +656,8 @@
 *              Perform bidiagonal SVD, computing singular values only
 *              Workspace: need   N [e] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'N', N, S, WORK( IE ), DUM, 1, DUM, 1,
+               CALL DBDSDC( 'U', 'N', N, S, WORK( IE ), DUM, 1, DUM,
+     $                      1,
      $                      DUM, IDUM, WORK( NWORK ), IWORK, INFO )
 *
             ELSE IF( WNTQO ) THEN
@@ -673,13 +682,15 @@
 *              Workspace: need   N*N [R] + N [tau] + N    [work]
 *              Workspace: prefer N*N [R] + N [tau] + N*NB [work]
 *
-               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Copy R to WORK(IR), zeroing out below it
 *
                CALL DLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL DLASET( 'L', N - 1, N - 1, ZERO, ZERO, WORK(IR+1),
+               CALL DLASET( 'L', N - 1, N - 1, ZERO, ZERO,
+     $                      WORK(IR+1),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -711,7 +722,8 @@
 *              singular vectors of bidiagonal matrix in VT
 *              Workspace: need   N*N [R] + 3*N [e, tauq, taup] + N*N [U] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'I', N, S, WORK( IE ), WORK( IU ), N,
+               CALL DBDSDC( 'U', 'I', N, S, WORK( IE ), WORK( IU ),
+     $                      N,
      $                      VT, LDVT, DUM, IDUM, WORK( NWORK ), IWORK,
      $                      INFO )
 *
@@ -720,10 +732,12 @@
 *              Workspace: need   N*N [R] + 3*N [e, tauq, taup] + N*N [U] + N    [work]
 *              Workspace: prefer N*N [R] + 3*N [e, tauq, taup] + N*N [U] + N*NB [work]
 *
-               CALL DORMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
+               CALL DORMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUQ ), WORK( IU ), N, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
-               CALL DORMBR( 'P', 'R', 'T', N, N, N, WORK( IR ), LDWRKR,
+               CALL DORMBR( 'P', 'R', 'T', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
@@ -759,13 +773,15 @@
 *              Workspace: need   N*N [R] + N [tau] + N    [work]
 *              Workspace: prefer N*N [R] + N [tau] + N*NB [work]
 *
-               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Copy R to WORK(IR), zeroing out below it
 *
                CALL DLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL DLASET( 'L', N - 1, N - 1, ZERO, ZERO, WORK(IR+1),
+               CALL DLASET( 'L', N - 1, N - 1, ZERO, ZERO,
+     $                      WORK(IR+1),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -801,11 +817,13 @@
 *              Workspace: need   N*N [R] + 3*N [e, tauq, taup] + N    [work]
 *              Workspace: prefer N*N [R] + 3*N [e, tauq, taup] + N*NB [work]
 *
-               CALL DORMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
+               CALL DORMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
-               CALL DORMBR( 'P', 'R', 'T', N, N, N, WORK( IR ), LDWRKR,
+               CALL DORMBR( 'P', 'R', 'T', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
@@ -814,7 +832,8 @@
 *              Workspace: need   N*N [R]
 *
                CALL DLACPY( 'F', N, N, U, LDU, WORK( IR ), LDWRKR )
-               CALL DGEMM( 'N', 'N', M, N, N, ONE, A, LDA, WORK( IR ),
+               CALL DGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
+     $                     WORK( IR ),
      $                     LDWRKR, ZERO, U, LDU )
 *
             ELSE IF( WNTQA ) THEN
@@ -835,7 +854,8 @@
 *              Workspace: need   N*N [U] + N [tau] + N    [work]
 *              Workspace: prefer N*N [U] + N [tau] + N*NB [work]
 *
-               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
                CALL DLACPY( 'L', M, N, A, LDA, U, LDU )
 *
@@ -847,7 +867,8 @@
 *
 *              Produce R in A, zeroing out other entries
 *
-               CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+               CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
+     $                      LDA )
                IE = ITAU
                ITAUQ = IE + N
                ITAUP = ITAUQ + N
@@ -857,7 +878,8 @@
 *              Workspace: need   N*N [U] + 3*N [e, tauq, taup] + N      [work]
 *              Workspace: prefer N*N [U] + 3*N [e, tauq, taup] + 2*N*NB [work]
 *
-               CALL DGEBRD( N, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL DGEBRD( N, N, A, LDA, S, WORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
 *
@@ -866,7 +888,8 @@
 *              singular vectors of bidiagonal matrix in VT
 *              Workspace: need   N*N [U] + 3*N [e, tauq, taup] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'I', N, S, WORK( IE ), WORK( IU ), N,
+               CALL DBDSDC( 'U', 'I', N, S, WORK( IE ), WORK( IU ),
+     $                      N,
      $                      VT, LDVT, DUM, IDUM, WORK( NWORK ), IWORK,
      $                      INFO )
 *
@@ -886,7 +909,8 @@
 *              WORK(IU), storing result in A
 *              Workspace: need   N*N [U]
 *
-               CALL DGEMM( 'N', 'N', M, N, N, ONE, U, LDU, WORK( IU ),
+               CALL DGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
+     $                     WORK( IU ),
      $                     LDWRKU, ZERO, A, LDA )
 *
 *              Copy left singular vectors of A from A to U
@@ -920,7 +944,8 @@
 *              Perform bidiagonal SVD, only computing singular values
 *              Workspace: need   3*N [e, tauq, taup] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'N', N, S, WORK( IE ), DUM, 1, DUM, 1,
+               CALL DBDSDC( 'U', 'N', N, S, WORK( IE ), DUM, 1, DUM,
+     $                      1,
      $                      DUM, IDUM, WORK( NWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
 *              Path 5o (M >= N, JOBZ='O')
@@ -979,7 +1004,8 @@
 *
 *                 Copy left singular vectors of A from WORK(IU) to A
 *
-                  CALL DLACPY( 'F', M, N, WORK( IU ), LDWRKU, A, LDA )
+                  CALL DLACPY( 'F', M, N, WORK( IU ), LDWRKU, A,
+     $                         LDA )
                ELSE
 *
 *                 Path 5o-slow
@@ -998,7 +1024,8 @@
 *
                   DO 20 I = 1, M, LDWRKR
                      CHUNK = MIN( M - I + 1, LDWRKR )
-                     CALL DGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I, 1 ),
+                     CALL DGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I,
+     $                           1 ),
      $                           LDA, WORK( IU ), LDWRKU, ZERO,
      $                           WORK( IR ), LDWRKR )
                      CALL DLACPY( 'F', CHUNK, N, WORK( IR ), LDWRKR,
@@ -1046,7 +1073,8 @@
 *              Set the right corner of U to identity matrix
 *
                IF( M.GT.N ) THEN
-                  CALL DLASET( 'F', M - N, M - N, ZERO, ONE, U(N+1,N+1),
+                  CALL DLASET( 'F', M - N, M - N, ZERO, ONE, U(N+1,
+     $                         N+1),
      $                         LDU )
                END IF
 *
@@ -1085,12 +1113,14 @@
 *              Workspace: need   M [tau] + M [work]
 *              Workspace: prefer M [tau] + M*NB [work]
 *
-               CALL DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Zero out above L
 *
-               CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ), LDA )
+               CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+     $                      LDA )
                IE = 1
                ITAUQ = IE + M
                ITAUP = ITAUQ + M
@@ -1100,7 +1130,8 @@
 *              Workspace: need   3*M [e, tauq, taup] + M      [work]
 *              Workspace: prefer 3*M [e, tauq, taup] + 2*M*NB [work]
 *
-               CALL DGEBRD( M, M, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL DGEBRD( M, M, A, LDA, S, WORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NWORK = IE + M
@@ -1108,7 +1139,8 @@
 *              Perform bidiagonal SVD, computing singular values only
 *              Workspace: need   M [e] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'N', M, S, WORK( IE ), DUM, 1, DUM, 1,
+               CALL DBDSDC( 'U', 'N', M, S, WORK( IE ), DUM, 1, DUM,
+     $                      1,
      $                      DUM, IDUM, WORK( NWORK ), IWORK, INFO )
 *
             ELSE IF( WNTQO ) THEN
@@ -1137,7 +1169,8 @@
 *              Workspace: need   M*M [VT] + M*M [L] + M [tau] + M    [work]
 *              Workspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work]
 *
-               CALL DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Copy L to WORK(IL), zeroing about above it
@@ -1179,10 +1212,12 @@
 *              Workspace: need   M*M [VT] + M*M [L] + 3*M [e, tauq, taup] + M    [work]
 *              Workspace: prefer M*M [VT] + M*M [L] + 3*M [e, tauq, taup] + M*NB [work]
 *
-               CALL DORMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
+               CALL DORMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
-               CALL DORMBR( 'P', 'R', 'T', M, M, M, WORK( IL ), LDWRKL,
+               CALL DORMBR( 'P', 'R', 'T', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUP ), WORK( IVT ), M,
      $                      WORK( NWORK ), LWORK - NWORK + 1, IERR )
 *
@@ -1194,7 +1229,8 @@
 *
                DO 30 I = 1, N, CHUNK
                   BLK = MIN( N - I + 1, CHUNK )
-                  CALL DGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IVT ), M,
+                  CALL DGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IVT ),
+     $                        M,
      $                        A( 1, I ), LDA, ZERO, WORK( IL ), LDWRKL )
                   CALL DLACPY( 'F', M, BLK, WORK( IL ), LDWRKL,
      $                         A( 1, I ), LDA )
@@ -1218,7 +1254,8 @@
 *              Workspace: need   M*M [L] + M [tau] + M    [work]
 *              Workspace: prefer M*M [L] + M [tau] + M*NB [work]
 *
-               CALL DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
 *              Copy L to WORK(IL), zeroing out above it
@@ -1260,10 +1297,12 @@
 *              Workspace: need   M*M [L] + 3*M [e, tauq, taup] + M    [work]
 *              Workspace: prefer M*M [L] + 3*M [e, tauq, taup] + M*NB [work]
 *
-               CALL DORMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
+               CALL DORMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
-               CALL DORMBR( 'P', 'R', 'T', M, M, M, WORK( IL ), LDWRKL,
+               CALL DORMBR( 'P', 'R', 'T', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
 *
@@ -1272,7 +1311,8 @@
 *              Workspace: need   M*M [L]
 *
                CALL DLACPY( 'F', M, M, VT, LDVT, WORK( IL ), LDWRKL )
-               CALL DGEMM( 'N', 'N', M, N, M, ONE, WORK( IL ), LDWRKL,
+               CALL DGEMM( 'N', 'N', M, N, M, ONE, WORK( IL ),
+     $                     LDWRKL,
      $                     A, LDA, ZERO, VT, LDVT )
 *
             ELSE IF( WNTQA ) THEN
@@ -1293,7 +1333,8 @@
 *              Workspace: need   M*M [VT] + M [tau] + M    [work]
 *              Workspace: prefer M*M [VT] + M [tau] + M*NB [work]
 *
-               CALL DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL DGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK - NWORK + 1, IERR )
                CALL DLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
@@ -1306,7 +1347,8 @@
 *
 *              Produce L in A, zeroing out other entries
 *
-               CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ), LDA )
+               CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+     $                      LDA )
                IE = ITAU
                ITAUQ = IE + M
                ITAUP = ITAUQ + M
@@ -1316,7 +1358,8 @@
 *              Workspace: need   M*M [VT] + 3*M [e, tauq, taup] + M      [work]
 *              Workspace: prefer M*M [VT] + 3*M [e, tauq, taup] + 2*M*NB [work]
 *
-               CALL DGEBRD( M, M, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL DGEBRD( M, M, A, LDA, S, WORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
 *
@@ -1345,7 +1388,8 @@
 *              Q in VT, storing result in A
 *              Workspace: need   M*M [VT]
 *
-               CALL DGEMM( 'N', 'N', M, N, M, ONE, WORK( IVT ), LDWKVT,
+               CALL DGEMM( 'N', 'N', M, N, M, ONE, WORK( IVT ),
+     $                     LDWKVT,
      $                     VT, LDVT, ZERO, A, LDA )
 *
 *              Copy right singular vectors of A from A to VT
@@ -1379,7 +1423,8 @@
 *              Perform bidiagonal SVD, only computing singular values
 *              Workspace: need   3*M [e, tauq, taup] + BDSPAC
 *
-               CALL DBDSDC( 'L', 'N', M, S, WORK( IE ), DUM, 1, DUM, 1,
+               CALL DBDSDC( 'L', 'N', M, S, WORK( IE ), DUM, 1, DUM,
+     $                      1,
      $                      DUM, IDUM, WORK( NWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
 *              Path 5to (N > M, JOBZ='O')
@@ -1436,7 +1481,8 @@
 *
 *                 Copy right singular vectors of A from WORK(IVT) to A
 *
-                  CALL DLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A, LDA )
+                  CALL DLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A,
+     $                         LDA )
                ELSE
 *
 *                 Path 5to-slow
@@ -1455,10 +1501,12 @@
 *
                   DO 40 I = 1, N, CHUNK
                      BLK = MIN( N - I + 1, CHUNK )
-                     CALL DGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IVT ),
+                     CALL DGEMM( 'N', 'N', M, BLK, M, ONE,
+     $                           WORK( IVT ),
      $                           LDWKVT, A( 1, I ), LDA, ZERO,
      $                           WORK( IL ), M )
-                     CALL DLACPY( 'F', M, BLK, WORK( IL ), M, A( 1, I ),
+                     CALL DLACPY( 'F', M, BLK, WORK( IL ), M, A( 1,
+     $                            I ),
      $                            LDA )
    40             CONTINUE
                END IF

@@ -199,7 +199,8 @@
       REAL               WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGECON, SGESC2, SLASSQ, SLASWP,
+      EXTERNAL           SAXPY, SCOPY, SGECON, SGESC2, SLASSQ,
+     $                   SLASWP,
      $                   SSCAL
 *     ..
 *     .. External Functions ..
@@ -229,7 +230,8 @@
 *           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and
 *           SMIN computed more efficiently than in BSOLVE [1].
 *
-            SPLUS = SPLUS + SDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 )
+            SPLUS = SPLUS + SDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ),
+     $                            1 )
             SMINU = SDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
             SPLUS = SPLUS*RHS( J )
             IF( SPLUS.GT.SMINU ) THEN

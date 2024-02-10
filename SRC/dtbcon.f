@@ -138,7 +138,8 @@
 *> \ingroup tbcon
 *
 *  =====================================================================
-      SUBROUTINE DTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE DTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND,
+     $                   WORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -238,19 +239,22 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL DLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL DLATBS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      KD,
      $                      AB, LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
 *              Multiply by inv(A**T).
 *
-               CALL DLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, AB,
+               CALL DLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD,
+     $                      AB,
      $                      LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             END IF
             NORMIN = 'Y'

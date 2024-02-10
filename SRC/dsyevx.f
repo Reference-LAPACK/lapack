@@ -247,7 +247,8 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, IWORK,
      $                   IFAIL, INFO )
 *
@@ -289,7 +290,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL, DSTEBZ,
+      EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL,
+     $                   DSTEBZ,
      $                   DSTEIN, DSTEQR, DSTERF, DSWAP, DSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -342,7 +344,8 @@
          ELSE
             LWKMIN = 8*N
             NB = ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'DORMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'DORMTR', UPLO, N, -1, -1,
+     $                -1 ) )
             LWKOPT = MAX( LWKMIN, ( NB + 3 )*N )
          END IF
          WORK( 1 ) = LWKOPT
@@ -494,7 +497,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

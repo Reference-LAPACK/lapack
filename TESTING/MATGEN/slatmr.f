@@ -503,9 +503,11 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLANGB, SLANGE, SLANSB, SLANSP, SLANSY, SLATM2,
+      REAL               SLANGB, SLANGE, SLANSB,
+     $                   SLANSP, SLANSY, SLATM2,
      $                   SLATM3
-      EXTERNAL           LSAME, SLANGB, SLANGE, SLANSB, SLANSP, SLANSY,
+      EXTERNAL           LSAME, SLANGB, SLANGE,
+     $                   SLANSB, SLANSP, SLANSY,
      $                   SLATM2, SLATM3
 *     ..
 *     .. External Subroutines ..
@@ -846,7 +848,8 @@
 *
             DO 140 J = 1, N
                DO 130 I = 1, J
-                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                   IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -861,7 +864,8 @@
 *
             DO 160 J = 1, N
                DO 150 I = 1, J
-                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                   IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -876,7 +880,8 @@
 *
             DO 180 J = 1, N
                DO 170 I = 1, J
-                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                   IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
 *
@@ -900,7 +905,8 @@
 *
             DO 200 J = 1, N
                DO 190 I = 1, J
-                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                   IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
 *
@@ -945,7 +951,8 @@
 *
             DO 240 J = 1, N
                DO 230 I = J - KUU, J
-                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+     $                   IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -1012,7 +1019,8 @@
 *
             DO 340 J = 1, N
                DO 330 I = 1, J
-                  A( I, J ) = SLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
+                  A( I, J ) = SLATM2( M, N, I, J, KL, KU, IDIST,
+     $                        ISEED,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( J, I ) = ZERO
@@ -1023,7 +1031,8 @@
 *
             DO 360 J = 1, N
                DO 350 I = 1, J
-                  A( J, I ) = SLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
+                  A( J, I ) = SLATM2( M, N, I, J, KL, KU, IDIST,
+     $                        ISEED,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( I, J ) = ZERO
@@ -1041,7 +1050,8 @@
                      ISUB = 1
                      JSUB = JSUB + 1
                   END IF
-                  A( ISUB, JSUB ) = SLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( ISUB, JSUB ) = SLATM2( M, N, I, J, KL, KU,
+     $                              IDIST,
      $                              ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                              IWORK, SPARSE )
   370          CONTINUE
@@ -1096,7 +1106,8 @@
                   IF( I.LT.1 ) THEN
                      A( J-I+1, I+N ) = ZERO
                   ELSE
-                     A( J-I+1, I ) = SLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( J-I+1, I ) = SLATM2( M, N, I, J, KL, KU,
+     $                               IDIST,
      $                               ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                               IWORK, SPARSE )
                   END IF
@@ -1107,7 +1118,8 @@
 *
             DO 460 J = 1, N
                DO 450 I = J - KUU, J
-                  A( I-J+KUU+1, J ) = SLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( I-J+KUU+1, J ) = SLATM2( M, N, I, J, KL, KU,
+     $                                IDIST,
      $                                ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                                IWORK, SPARSE )
   450          CONTINUE

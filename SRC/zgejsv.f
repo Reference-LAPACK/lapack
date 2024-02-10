@@ -623,10 +623,10 @@
       EXTERNAL  IDAMAX, IZAMAX, LSAME, DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  DLASSQ, ZCOPY,  ZGELQF, ZGEQP3, ZGEQRF, ZLACPY, ZLAPMR,
-     $          ZLASCL, DLASCL, ZLASET, ZLASSQ, ZLASWP, ZUNGQR, ZUNMLQ,
-     $          ZUNMQR, ZPOCON, DSCAL,  ZDSCAL, ZSWAP,  ZTRSM,  ZLACGV,
-     $          XERBLA
+      EXTERNAL  DLASSQ, ZCOPY,  ZGELQF, ZGEQP3, ZGEQRF, ZLACPY,
+     $          ZLAPMR, ZLASCL, DLASCL, ZLASET, ZLASSQ, ZLASWP,
+     $          ZUNGQR, ZUNMLQ, ZUNMQR, ZPOCON, DSCAL,  ZDSCAL,
+     $          ZSWAP,  ZTRSM,  ZLACGV, XERBLA
 *
       EXTERNAL  ZGESVJ
 *     ..
@@ -658,7 +658,8 @@
          INFO = - 3
       ELSE IF ( .NOT. ( L2KILL .OR. DEFR ) )    THEN
          INFO = - 4
-      ELSE IF ( .NOT. ( LSAME(JOBT,'T') .OR. LSAME(JOBT,'N') ) ) THEN
+      ELSE IF ( .NOT. ( LSAME(JOBT,'T') .OR.
+     $          LSAME(JOBT,'N') ) ) THEN
          INFO = - 5
       ELSE IF ( .NOT. ( L2PERT .OR. LSAME( JOBP, 'N' ) ) ) THEN
          INFO = - 6
@@ -725,7 +726,8 @@
                   MINWRK = MAX( N+LWQP3, N+LWQRF, LWSVDJ )
               END IF
               IF ( LQUERY ) THEN 
-                  CALL ZGESVJ( 'L', 'N', 'N', N, N, A, LDA, SVA, N, V, 
+                  CALL ZGESVJ( 'L', 'N', 'N', N, N, A, LDA, SVA, N,
+     $                         V,
      $                 LDV, CDUMMY, -1, RDUMMY, -1, IERR )
                   LWRK_ZGESVJ = INT( CDUMMY(1) )
                   IF ( ERREST ) THEN 
@@ -869,7 +871,8 @@
      $                LDU, CDUMMY, -1, IERR )
                  LWRK_ZUNMQR = INT( CDUMMY(1) )
                  IF ( .NOT. JRACC ) THEN
-                     CALL ZGEQP3( N,N, A, LDA, IWORK, CDUMMY,CDUMMY, -1,
+                     CALL ZGEQP3( N,N, A, LDA, IWORK, CDUMMY,CDUMMY,
+     $                            -1,
      $                    RDUMMY, IERR )
                      LWRK_ZGEQP3N = INT( CDUMMY(1) )
                      CALL ZGESVJ( 'L', 'U', 'N', N, N, U, LDU, SVA,
@@ -913,10 +916,12 @@
                      CALL ZGESVJ( 'L', 'U', 'V', N, N, U, LDU, SVA,
      $                    N, V, LDV, CDUMMY, -1, RDUMMY, -1, IERR )
                      LWRK_ZGESVJV = INT( CDUMMY(1) )
-                     CALL ZUNMQR( 'L', 'N', N, N, N, CDUMMY, N, CDUMMY,
+                     CALL ZUNMQR( 'L', 'N', N, N, N, CDUMMY, N,
+     $                            CDUMMY,
      $                    V, LDV, CDUMMY, -1, IERR )
                      LWRK_ZUNMQR = INT( CDUMMY(1) )
-                     CALL ZUNMQR( 'L', 'N', M, N, N, A, LDA, CDUMMY, U,
+                     CALL ZUNMQR( 'L', 'N', M, N, N, A, LDA, CDUMMY,
+     $                            U,
      $                    LDU, CDUMMY, -1, IERR )
                      LWRK_ZUNMQRM = INT( CDUMMY(1) )
                      IF ( ERREST ) THEN 
@@ -1064,8 +1069,10 @@
             CALL ZLACPY( 'A', M, 1, A, LDA, U, LDU )
 *           computing all M left singular vectors of the M x 1 matrix
             IF ( N1 .NE. N  ) THEN
-              CALL ZGEQRF( M, N, U,LDU, CWORK, CWORK(N+1),LWORK-N,IERR )
-              CALL ZUNGQR( M,N1,1, U,LDU,CWORK,CWORK(N+1),LWORK-N,IERR )
+              CALL ZGEQRF( M, N, U,LDU, CWORK, CWORK(N+1),LWORK-N,
+     $                     IERR )
+              CALL ZUNGQR( M,N1,1, U,LDU,CWORK,CWORK(N+1),LWORK-N,
+     $                     IERR )
               CALL ZCOPY( M, A(1,1), 1, U(1,1), 1 )
             END IF
          END IF
@@ -1495,7 +1502,8 @@
 *
 *            .. second preconditioning using the QR factorization
 *
-            CALL ZGEQRF( N,NR, A,LDA, CWORK, CWORK(N+1),LWORK-N, IERR )
+            CALL ZGEQRF( N,NR, A,LDA, CWORK, CWORK(N+1),LWORK-N,
+     $                   IERR )
 *
 *           .. and transpose upper to lower triangular
             DO 1948 p = 1, NR - 1
@@ -1522,7 +1530,8 @@
  1949             CONTINUE
  1947          CONTINUE
             ELSE
-               CALL ZLASET( 'U', NR-1, NR-1, CZERO, CZERO, A(1,2), LDA )
+               CALL ZLASET( 'U', NR-1, NR-1, CZERO, CZERO, A(1,2),
+     $                      LDA )
             END IF
 *
 *           .. and one-sided Jacobi rotations are started on a lower
@@ -1562,7 +1571,8 @@
 *        accumulated product of Jacobi rotations, three are perfect )
 *
             CALL ZLASET( 'L', NR-1,NR-1, CZERO, CZERO, A(2,1), LDA )
-            CALL ZGELQF( NR,N, A, LDA, CWORK, CWORK(N+1), LWORK-N, IERR)
+            CALL ZGELQF( NR,N, A, LDA, CWORK, CWORK(N+1), LWORK-N,
+     $                   IERR)
             CALL ZLACPY( 'L', NR, NR, A, LDA, V, LDV )
             CALL ZLASET( 'U', NR-1,NR-1, CZERO, CZERO, V(1,2), LDV )
             CALL ZGEQRF( NR, NR, V, LDV, CWORK(N+1), CWORK(2*N+1),
@@ -1578,9 +1588,12 @@
             SCALEM  = RWORK(1)
             NUMRANK = NINT(RWORK(2))
             IF ( NR .LT. N ) THEN
-               CALL ZLASET( 'A',N-NR, NR, CZERO,CZERO, V(NR+1,1),  LDV )
-               CALL ZLASET( 'A',NR, N-NR, CZERO,CZERO, V(1,NR+1),  LDV )
-               CALL ZLASET( 'A',N-NR,N-NR,CZERO,CONE, V(NR+1,NR+1),LDV )
+               CALL ZLASET( 'A',N-NR, NR, CZERO,CZERO, V(NR+1,1),
+     $                      LDV )
+               CALL ZLASET( 'A',NR, N-NR, CZERO,CZERO, V(1,NR+1),
+     $                      LDV )
+               CALL ZLASET( 'A',N-NR,N-NR,CZERO,CONE, V(NR+1,NR+1),
+     $                      LDV )
             END IF
 *
          CALL ZUNMLQ( 'L', 'C', N, N, NR, A, LDA, CWORK,
@@ -1635,10 +1648,13 @@
          NUMRANK = NINT(RWORK(2))
 *
          IF ( NR .LT. M ) THEN
-            CALL ZLASET( 'A',  M-NR, NR,CZERO, CZERO, U(NR+1,1), LDU )
+            CALL ZLASET( 'A',  M-NR, NR,CZERO, CZERO, U(NR+1,1),
+     $                   LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL ZLASET( 'A',NR, N1-NR, CZERO, CZERO, U(1,NR+1),LDU )
-               CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,U(NR+1,NR+1),LDU )
+               CALL ZLASET( 'A',NR, N1-NR, CZERO, CZERO, U(1,NR+1),
+     $                      LDU )
+               CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,U(NR+1,NR+1),
+     $                      LDU )
             END IF
          END IF
 *
@@ -1702,7 +1718,8 @@
  2968             CONTINUE
  2969          CONTINUE
             ELSE
-               CALL ZLASET( 'U', NR-1, NR-1, CZERO, CZERO, V(1,2), LDV )
+               CALL ZLASET( 'U', NR-1, NR-1, CZERO, CZERO, V(1,2),
+     $                      LDV )
             END IF
 *
 *           Estimate the row scaled condition number of R1
@@ -1811,7 +1828,8 @@
                CALL ZLACPY( 'L',NR,NR,V,LDV,CWORK(2*N+N*NR+NR+1),NR )
                DO 4950 p = 1, NR
                   TEMP1 = DZNRM2( p, CWORK(2*N+N*NR+NR+p), NR )
-                  CALL ZDSCAL( p, ONE/TEMP1, CWORK(2*N+N*NR+NR+p), NR )
+                  CALL ZDSCAL( p, ONE/TEMP1, CWORK(2*N+N*NR+NR+p),
+     $                         NR )
  4950          CONTINUE
                CALL ZPOCON( 'L',NR,CWORK(2*N+N*NR+NR+1),NR,ONE,TEMP1,
      $              CWORK(2*N+N*NR+NR+NR*NR+1),RWORK,IERR )
@@ -1840,7 +1858,8 @@
  4969             CONTINUE
  4968          CONTINUE
             ELSE
-               CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2), LDV )
+               CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2),
+     $                      LDV )
             END IF
 *
 *        Second preconditioning finished; continue with Jacobi SVD
@@ -1868,7 +1887,8 @@
 *                 equation is Q2*V2 = the product of the Jacobi rotations
 *                 used in ZGESVJ, premultiplied with the orthogonal matrix
 *                 from the second QR factorization.
-                  CALL ZTRSM('L','U','N','N', NR,NR,CONE, A,LDA, V,LDV)
+                  CALL ZTRSM('L','U','N','N', NR,NR,CONE, A,LDA, V,
+     $                        LDV)
                ELSE
 *                 .. R1 is well conditioned, but non-square. Adjoint of R2
 *                 is inverted to get the product of the Jacobi rotations
@@ -1879,9 +1899,11 @@
                   IF ( NR .LT. N ) THEN
                   CALL ZLASET('A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV)
                   CALL ZLASET('A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
-                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                   END IF
-                  CALL ZUNMQR('L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
+                  CALL ZUNMQR('L','N',N,N,NR,CWORK(2*N+1),N,
+     $                         CWORK(N+1),
      $                V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR)
                END IF
 *
@@ -1891,7 +1913,8 @@
 *              is Q3^* * V3 = the product of the Jacobi rotations (applied to
 *              the lower triangular L3 from the LQ factorization of
 *              R2=L3*Q3), pre-multiplied with the transposed Q3.
-               CALL ZGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR, U,
+               CALL ZGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $              RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
@@ -1912,9 +1935,12 @@
  874              CONTINUE
  873           CONTINUE
                IF ( NR .LT. N ) THEN
-                  CALL ZLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV )
-                  CALL ZLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV )
-                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL ZLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),
+     $                         LDV )
+                  CALL ZLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),
+     $                         LDV )
+                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                END IF
                CALL ZUNMQR( 'L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
      $              V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1930,15 +1956,19 @@
 *              defense ensures that ZGEJSV completes the task.
 *              Compute the full SVD of L3 using ZGESVJ with explicit
 *              accumulation of Jacobi rotations.
-               CALL ZGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR, U,
+               CALL ZGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR,
+     $                      U,
      $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $                         RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
                NUMRANK = NINT(RWORK(2))
                IF ( NR .LT. N ) THEN
-                  CALL ZLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV )
-                  CALL ZLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV )
-                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL ZLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),
+     $                         LDV )
+                  CALL ZLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),
+     $                         LDV )
+                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                END IF
                CALL ZUNMQR( 'L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
      $              V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR )
@@ -1976,7 +2006,8 @@
 *           At this moment, V contains the right singular vectors of A.
 *           Next, assemble the left singular vector matrix U (M x N).
             IF ( NR .LT. M ) THEN
-               CALL ZLASET('A', M-NR, NR, CZERO, CZERO, U(NR+1,1), LDU)
+               CALL ZLASET('A', M-NR, NR, CZERO, CZERO, U(NR+1,1),
+     $                      LDU)
                IF ( NR .LT. N1 ) THEN
                   CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
                   CALL ZLASET('A',M-NR,N1-NR,CZERO,CONE,
@@ -2050,10 +2081,13 @@
 *           Assemble the left singular vector matrix U (M x N).
 *
             IF ( N .LT. M ) THEN
-               CALL ZLASET( 'A',  M-N, N, CZERO, CZERO, U(N+1,1), LDU )
+               CALL ZLASET( 'A',  M-N, N, CZERO, CZERO, U(N+1,1),
+     $                      LDU )
                IF ( N .LT. N1 ) THEN
-                  CALL ZLASET('A',N,  N1-N, CZERO, CZERO,  U(1,N+1),LDU)
-                  CALL ZLASET( 'A',M-N,N1-N, CZERO, CONE,U(N+1,N+1),LDU)
+                  CALL ZLASET('A',N,  N1-N, CZERO, CZERO,  U(1,N+1),
+     $                         LDU)
+                  CALL ZLASET( 'A',M-N,N1-N, CZERO, CONE,U(N+1,N+1),
+     $                         LDU)
                END IF
             END IF
             CALL ZUNMQR( 'L', 'N', M, N1, N, A, LDA, CWORK, U,
@@ -2165,10 +2199,13 @@
 *           Next, assemble the left singular vector matrix U (M x N).
 *
          IF ( NR .LT. M ) THEN
-            CALL ZLASET( 'A',  M-NR, NR, CZERO, CZERO, U(NR+1,1), LDU )
+            CALL ZLASET( 'A',  M-NR, NR, CZERO, CZERO, U(NR+1,1),
+     $                   LDU )
             IF ( NR .LT. N1 ) THEN
-               CALL ZLASET('A',NR,  N1-NR, CZERO, CZERO,  U(1,NR+1),LDU)
-               CALL ZLASET('A',M-NR,N1-NR, CZERO, CONE,U(NR+1,NR+1),LDU)
+               CALL ZLASET('A',NR,  N1-NR, CZERO, CZERO,  U(1,NR+1),
+     $                      LDU)
+               CALL ZLASET('A',M-NR,N1-NR, CZERO, CONE,U(NR+1,NR+1),
+     $                      LDU)
             END IF
          END IF
 *
@@ -2193,7 +2230,8 @@
 *     Undo scaling, if necessary (and possible)
 *
       IF ( USCAL2 .LE. (BIG/SVA(1))*USCAL1 ) THEN
-         CALL DLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N, IERR )
+         CALL DLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N,
+     $                IERR )
          USCAL1 = ONE
          USCAL2 = ONE
       END IF

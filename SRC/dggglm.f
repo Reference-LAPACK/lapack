@@ -180,7 +180,8 @@
 *> \ingroup ggglm
 *
 *  =====================================================================
-      SUBROUTINE DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+      SUBROUTINE DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK,
+     $                   LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine --
@@ -207,7 +208,8 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DGGQRF, DORMQR, DORMRQ, DTRTRS,
+      EXTERNAL           DCOPY, DGEMV, DGGQRF, DORMQR, DORMRQ,
+     $                   DTRTRS,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -325,7 +327,8 @@
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL DTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
+         CALL DTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A,
+     $                LDA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN

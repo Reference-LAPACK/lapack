@@ -223,7 +223,8 @@
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
             END IF
             KSTEP = 1
          ELSE
@@ -248,15 +249,18 @@
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            ZDOTC( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            ZDOTC( K-1, AP( KC ), 1,
+     $                                   AP( KCNEXT ),
      $                            1 )
                CALL ZCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          DBLE( ZDOTC( K-1, WORK, 1, AP( KCNEXT ),
+     $                          DBLE( ZDOTC( K-1, WORK, 1,
+     $                                AP( KCNEXT ),
      $                          1 ) )
             END IF
             KSTEP = 2
@@ -349,7 +353,8 @@
 *
             IF( K.LT.N ) THEN
                CALL ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KC+1 ), 1 )
                AP( KC ) = AP( KC ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
@@ -357,10 +362,12 @@
      $                          ZDOTC( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL ZCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        DBLE( ZDOTC( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                        DBLE( ZDOTC( N-K, WORK, 1,
+     $                              AP( KCNEXT+2 ),
      $                        1 ) )
             END IF
             KSTEP = 2

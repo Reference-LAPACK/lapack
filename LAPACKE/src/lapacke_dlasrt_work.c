@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dlasrt_work( char id, lapack_int n, double* d )
+lapack_int API_SUFFIX(LAPACKE_dlasrt_work)( char id, lapack_int n, double* d )
 {
     lapack_int info = 0;
     /* Call LAPACK function and adjust info */

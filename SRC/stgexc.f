@@ -279,7 +279,7 @@
          ELSE
             LWMIN = 4*N + 16
          END IF
-         WORK(1) = LWMIN
+         WORK(1) = REAL( LWMIN )
 *
          IF (LWORK.LT.LWMIN .AND. .NOT.LQUERY) THEN
             INFO = -15
@@ -385,7 +385,8 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+               CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $                      Z,
      $                      LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -403,7 +404,8 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, NBNEXT, WORK, LWORK,
      $                         INFO )
                   IF( INFO.NE.0 ) THEN
@@ -415,14 +417,16 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE + 1
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -488,7 +492,8 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+               CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $                      Z,
      $                      LDZ, HERE, NBNEXT, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -505,7 +510,8 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE-1, 2, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -516,14 +522,16 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE - 1
-                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL STGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE

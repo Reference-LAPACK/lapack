@@ -267,7 +267,8 @@
 *> \ingroup stebz
 *
 *  =====================================================================
-      SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
+      SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D,
+     $                   E,
      $                   M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
      $                   INFO )
 *
@@ -454,8 +455,8 @@
          GU = MAX( GU, D( N )+TMP1 )
          GL = MIN( GL, D( N )-TMP1 )
          TNORM = MAX( ABS( GL ), ABS( GU ) )
-         GL = GL - FUDGE*TNORM*ULP*N - FUDGE*TWO*PIVMIN
-         GU = GU + FUDGE*TNORM*ULP*N + FUDGE*PIVMIN
+         GL = GL - FUDGE*TNORM*ULP*REAL( N ) - FUDGE*TWO*PIVMIN
+         GU = GU + FUDGE*TNORM*ULP*REAL( N ) + FUDGE*PIVMIN
 *
 *        Compute Iteration parameters
 *
@@ -480,7 +481,8 @@
          IWORK( 5 ) = IL - 1
          IWORK( 6 ) = IU
 *
-         CALL SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D, E,
+         CALL SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D,
+     $                E,
      $                WORK, IWORK( 5 ), WORK( N+1 ), WORK( N+5 ), IOUT,
      $                IWORK, W, IBLOCK, IINFO )
 *
@@ -582,8 +584,8 @@
             GU = MAX( GU, D( IEND )+TMP1 )
             GL = MIN( GL, D( IEND )-TMP1 )
             BNORM = MAX( ABS( GL ), ABS( GU ) )
-            GL = GL - FUDGE*BNORM*ULP*IN - FUDGE*PIVMIN
-            GU = GU + FUDGE*BNORM*ULP*IN + FUDGE*PIVMIN
+            GL = GL - FUDGE*BNORM*ULP*REAL( IN ) - FUDGE*PIVMIN
+            GU = GU + FUDGE*BNORM*ULP*REAL( IN ) + FUDGE*PIVMIN
 *
 *           Compute ATOLI for the current submatrix
 *
@@ -622,7 +624,8 @@
 *
             ITMAX = INT( ( LOG( GU-GL+PIVMIN )-LOG( PIVMIN ) ) /
      $              LOG( TWO ) ) + 2
-            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
+            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI,
+     $                   PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), WORK( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IOUT,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )

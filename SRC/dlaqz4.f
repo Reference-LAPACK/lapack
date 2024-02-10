@@ -315,18 +315,21 @@
 
       DO I = 1, NS, 2
 *        Introduce the shift
-         CALL DLAQZ1( A( ILO, ILO ), LDA, B( ILO, ILO ), LDB, SR( I ),
+         CALL DLAQZ1( A( ILO, ILO ), LDA, B( ILO, ILO ), LDB,
+     $                SR( I ),
      $                SR( I+1 ), SI( I ), SS( I ), SS( I+1 ), V )
 
          TEMP = V( 2 )
          CALL DLARTG( TEMP, V( 3 ), C1, S1, V( 2 ) )
          CALL DLARTG( V( 1 ), V( 2 ), C2, S2, TEMP )
 
-         CALL DROT( NS, A( ILO+1, ILO ), LDA, A( ILO+2, ILO ), LDA, C1,
+         CALL DROT( NS, A( ILO+1, ILO ), LDA, A( ILO+2, ILO ), LDA,
+     $              C1,
      $              S1 )
          CALL DROT( NS, A( ILO, ILO ), LDA, A( ILO+1, ILO ), LDA, C2,
      $              S2 )
-         CALL DROT( NS, B( ILO+1, ILO ), LDB, B( ILO+2, ILO ), LDB, C1,
+         CALL DROT( NS, B( ILO+1, ILO ), LDB, B( ILO+2, ILO ), LDB,
+     $              C1,
      $              S1 )
          CALL DROT( NS, B( ILO, ILO ), LDB, B( ILO+1, ILO ), LDB, C2,
      $              S2 )
@@ -351,11 +354,13 @@
       SHEIGHT = NS+1
       SWIDTH = ISTOPM-( ILO+NS )+1
       IF ( SWIDTH > 0 ) THEN
-         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $               LDQC,
      $               A( ILO, ILO+NS ), LDA, ZERO, WORK, SHEIGHT )
          CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ILO,
      $                ILO+NS ), LDA )
-         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $               LDQC,
      $               B( ILO, ILO+NS ), LDB, ZERO, WORK, SHEIGHT )
          CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ILO,
      $                ILO+NS ), LDB )
@@ -371,17 +376,22 @@
       SHEIGHT = ILO-1-ISTARTM+1
       SWIDTH = NS
       IF ( SHEIGHT > 0 ) THEN
-         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
+         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $               A( ISTARTM,
      $               ILO ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
-         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                A( ISTARTM,
      $                ILO ), LDA )
-         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
+         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $               B( ISTARTM,
      $               ILO ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
-         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                B( ISTARTM,
      $                ILO ), LDB )
       END IF
       IF ( ILZ ) THEN
-         CALL DGEMM( 'N', 'N', N, SWIDTH, SWIDTH, ONE, Z( 1, ILO ), LDZ,
+         CALL DGEMM( 'N', 'N', N, SWIDTH, SWIDTH, ONE, Z( 1, ILO ),
+     $               LDZ,
      $               ZC, LDZC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, SWIDTH, WORK, N, Z( 1, ILO ), LDZ )
       END IF
@@ -426,18 +436,22 @@
             CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
      $                  LDQC, A( K+1, K+NS+NP ), LDA, ZERO, WORK,
      $                  SHEIGHT )
-            CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( K+1,
+            CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                   A( K+1,
      $                   K+NS+NP ), LDA )
             CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
      $                  LDQC, B( K+1, K+NS+NP ), LDB, ZERO, WORK,
      $                  SHEIGHT )
-            CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( K+1,
+            CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                   B( K+1,
      $                   K+NS+NP ), LDB )
          END IF
          IF ( ILQ ) THEN
-            CALL DGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1, K+1 ),
+            CALL DGEMM( 'N', 'N', N, NBLOCK, NBLOCK, ONE, Q( 1,
+     $                  K+1 ),
      $                  LDQ, QC, LDQC, ZERO, WORK, N )
-            CALL DLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ), LDQ )
+            CALL DLACPY( 'ALL', N, NBLOCK, WORK, N, Q( 1, K+1 ),
+     $                   LDQ )
          END IF
 
 *        Update A(istartm:k,k:k+ns+npos-1) and B(istartm:k,k:k+ns+npos-1)
@@ -480,7 +494,8 @@
       DO I = 1, NS, 2
 *        Chase the shift down to the bottom right corner
          DO ISHIFT = IHI-I-1, IHI-2
-            CALL DLAQZ2( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB, IHI,
+            CALL DLAQZ2( .TRUE., .TRUE., ISHIFT, ISTARTB, ISTOPB,
+     $                   IHI,
      $                   A, LDA, B, LDB, NS, IHI-NS+1, QC, LDQC, NS+1,
      $                   IHI-NS, ZC, LDZC )
          END DO
@@ -494,11 +509,13 @@
       SHEIGHT = NS
       SWIDTH = ISTOPM-( IHI+1 )+1
       IF ( SWIDTH > 0 ) THEN
-         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $               LDQC,
      $               A( IHI-NS+1, IHI+1 ), LDA, ZERO, WORK, SHEIGHT )
          CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
      $                A( IHI-NS+1, IHI+1 ), LDA )
-         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC, LDQC,
+         CALL DGEMM( 'T', 'N', SHEIGHT, SWIDTH, SHEIGHT, ONE, QC,
+     $               LDQC,
      $               B( IHI-NS+1, IHI+1 ), LDB, ZERO, WORK, SHEIGHT )
          CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
      $                B( IHI-NS+1, IHI+1 ), LDB )
@@ -514,17 +531,22 @@
       SHEIGHT = IHI-NS-ISTARTM+1
       SWIDTH = NS+1
       IF ( SHEIGHT > 0 ) THEN
-         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, A( ISTARTM,
+         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $               A( ISTARTM,
      $               IHI-NS ), LDA, ZC, LDZC, ZERO, WORK, SHEIGHT )
-         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, A( ISTARTM,
+         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                A( ISTARTM,
      $                IHI-NS ), LDA )
-         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE, B( ISTARTM,
+         CALL DGEMM( 'N', 'N', SHEIGHT, SWIDTH, SWIDTH, ONE,
+     $               B( ISTARTM,
      $               IHI-NS ), LDB, ZC, LDZC, ZERO, WORK, SHEIGHT )
-         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT, B( ISTARTM,
+         CALL DLACPY( 'ALL', SHEIGHT, SWIDTH, WORK, SHEIGHT,
+     $                B( ISTARTM,
      $                IHI-NS ), LDB )
       END IF
       IF ( ILZ ) THEN
-         CALL DGEMM( 'N', 'N', N, NS+1, NS+1, ONE, Z( 1, IHI-NS ), LDZ,
+         CALL DGEMM( 'N', 'N', N, NS+1, NS+1, ONE, Z( 1, IHI-NS ),
+     $               LDZ,
      $               ZC, LDZC, ZERO, WORK, N )
          CALL DLACPY( 'ALL', N, NS+1, WORK, N, Z( 1, IHI-NS ), LDZ )
       END IF

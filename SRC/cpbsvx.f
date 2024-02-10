@@ -336,7 +336,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE CPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, RWORK, INFO )
 *
@@ -372,7 +373,8 @@
       EXTERNAL           LSAME, CLANHB, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLAQHB, CPBCON, CPBEQU, CPBRFS,
+      EXTERNAL           CCOPY, CLACPY, CLAQHB, CPBCON, CPBEQU,
+     $                   CPBRFS,
      $                   CPBTRF, CPBTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -395,7 +397,9 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
       ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
@@ -452,7 +456,8 @@
 *
 *           Equilibrate the matrix.
 *
-            CALL CLAQHB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
+            CALL CLAQHB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX,
+     $                   EQUED )
             RCEQU = LSAME( EQUED, 'Y' )
          END IF
       END IF
@@ -500,7 +505,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL CPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK, RWORK,
+      CALL CPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK,
+     $             RWORK,
      $             INFO )
 *
 *     Compute the solution matrix X.
@@ -511,7 +517,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB, X,
+      CALL CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB,
+     $             X,
      $             LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original

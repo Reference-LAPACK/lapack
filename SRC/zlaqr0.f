@@ -301,7 +301,8 @@
       COMPLEX*16         ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACPY, ZLAHQR, ZLAQR3, ZLAQR4, ZLAQR5
+      EXTERNAL           ZLACPY, ZLAHQR, ZLAQR3, ZLAQR4,
+     $                   ZLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, INT, MAX, MIN, MOD,
@@ -511,7 +512,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, LS, LD, W, H( KV, 1 ), LDH, NHO,
      $                   H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH, WORK,
      $                   LWORK )

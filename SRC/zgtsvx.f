@@ -288,7 +288,8 @@
 *> \ingroup gtsvx
 *
 *  =====================================================================
-      SUBROUTINE ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+      SUBROUTINE ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF,
+     $                   DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, RWORK, INFO )
 *
@@ -326,7 +327,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGTCON, ZGTRFS, ZGTTRF, ZGTTRS,
+      EXTERNAL           XERBLA, ZCOPY, ZGTCON, ZGTRFS, ZGTTRF,
+     $                   ZGTTRS,
      $                   ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
@@ -386,7 +388,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
+      CALL ZGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND,
+     $             WORK,
      $             INFO )
 *
 *     Compute the solution vectors X.
@@ -398,7 +401,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
+      CALL ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+     $             IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

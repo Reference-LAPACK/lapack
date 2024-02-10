@@ -339,7 +339,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL, SSTEBZ,
+      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL,
+     $                   SSTEBZ,
      $                   SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA,
      $                   SSYTRD_2STAGE
 *     ..
@@ -400,7 +401,7 @@
             LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = MAX( 8*N, 3*N + LHTRD + LWTRD )
-            WORK( 1 )  = LWMIN
+            WORK( 1 )  = REAL( LWMIN )
          END IF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )
@@ -553,7 +554,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

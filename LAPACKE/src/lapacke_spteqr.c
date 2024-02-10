@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_spteqr( int matrix_layout, char compz, lapack_int n, float* d,
+lapack_int API_SUFFIX(LAPACKE_spteqr)( int matrix_layout, char compz, lapack_int n, float* d,
                            float* e, float* z, lapack_int ldz )
 {
     lapack_int info = 0;
@@ -40,27 +40,27 @@ lapack_int LAPACKE_spteqr( int matrix_layout, char compz, lapack_int n, float* d
     lapack_int lwork;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_spteqr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spteqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
             return -4;
         }
-        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_lsame( compz, 'v' ) ) {
-            if( LAPACKE_sge_nancheck( matrix_layout, n, n, z, ldz ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, n, z, ldz ) ) {
                 return -6;
             }
         }
     }
 #endif
     /* Additional scalars initializations for work arrays */
-    if( LAPACKE_lsame( compz, 'n' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( compz, 'n' ) ) {
         lwork = 1;
     } else {
         lwork = MAX(1,4*n-4);
@@ -72,12 +72,12 @@ lapack_int LAPACKE_spteqr( int matrix_layout, char compz, lapack_int n, float* d
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_spteqr_work( matrix_layout, compz, n, d, e, z, ldz, work );
+    info = API_SUFFIX(LAPACKE_spteqr_work)( matrix_layout, compz, n, d, e, z, ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_spteqr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spteqr", info );
     }
     return info;
 }

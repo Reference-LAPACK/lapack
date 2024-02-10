@@ -248,7 +248,8 @@
                A( K, K ) = A( K, K ) - DDOT( K-1, WORK, 1, A( 1, K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       DDOT( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       DDOT( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                             1 )
                CALL DCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL DSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
@@ -307,9 +308,11 @@
 *
             IF( K.LT.N ) THEN
                CALL DCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -332,15 +335,19 @@
 *
             IF( K.LT.N ) THEN
                CALL DCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       DDOT( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       DDOT( N-K, A( K+1, K ), 1, A( K+1,
+     $                             K-1 ),
      $                       1 )
                CALL DCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
      $                         DDOT( N-K, WORK, 1, A( K+1, K-1 ), 1 )

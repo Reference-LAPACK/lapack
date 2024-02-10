@@ -237,7 +237,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DLASET, DSTEDC, DSTEQR, DSTERF, XERBLA,
+      EXTERNAL           DLASCL, DLASET, DSTEDC, DSTEQR, DSTERF,
+     $                   XERBLA,
      $                   ZLACPY, ZLACRM, ZLAED0, ZSTEQR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -296,7 +297,7 @@
             LIWMIN = 3 + 5*N
          END IF
          WORK( 1 ) = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -408,12 +409,15 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
-               CALL ZLAED0( N, M, D( START ), E( START ), Z( 1, START ),
+               CALL ZLAED0( N, M, D( START ), E( START ), Z( 1,
+     $                      START ),
      $                      LDZ, WORK, N, RWORK, IWORK, INFO )
                IF( INFO.GT.0 ) THEN
                   INFO = ( INFO / ( M+1 )+START-1 )*( N+1 ) +
@@ -423,13 +427,15 @@
 *
 *              Scale back.
 *
-               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
                CALL DSTEQR( 'I', M, D( START ), E( START ), RWORK, M,
      $                      RWORK( M*M+1 ), INFO )
-               CALL ZLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK, N,
+               CALL ZLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK,
+     $                      N,
      $                      RWORK( M*M+1 ) )
                CALL ZLACPY( 'A', N, M, WORK, N, Z( 1, START ), LDZ )
                IF( INFO.GT.0 ) THEN
@@ -467,7 +473,7 @@
 *
    70 CONTINUE
       WORK( 1 ) = LWMIN
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

@@ -325,7 +325,8 @@
 *> \ingroup bbcsd
 *
 *  =====================================================================
-      SUBROUTINE ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+      SUBROUTINE ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P,
+     $                   Q,
      $                   THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
      $                   V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
      $                   B22D, B22E, RWORK, LRWORK, INFO )
@@ -371,7 +372,8 @@
      $                   TEMP, THETAMAX, THETAMIN, THRESH, TOL, TOLMUL,
      $                   UNFL, X1, X2, Y1, Y2
 *
-      EXTERNAL           DLARTGP, DLARTGS, DLAS2, XERBLA, ZLASR, ZSCAL,
+      EXTERNAL           DLARTGP, DLARTGS, DLAS2, XERBLA, ZLASR,
+     $                   ZSCAL,
      $                   ZSWAP
 *     ..
 *     .. External Functions ..
@@ -558,9 +560,11 @@
 *
 *           Compute shifts for B11 and B21 and use the lesser
 *
-            CALL DLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX), SIGMA11,
+            CALL DLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX),
+     $                  SIGMA11,
      $                  DUMMY )
-            CALL DLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX), SIGMA21,
+            CALL DLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX),
+     $                  SIGMA21,
      $                  DUMMY )
 *
             IF( SIGMA11 .LE. SIGMA21 ) THEN
@@ -717,10 +721,12 @@
                CALL DLARTGP( Y2, Y1, RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( .NOT. RESTART12 .AND. RESTART22 ) THEN
-               CALL DLARTGP( B12BULGE, B12D(I-1), RWORK(IV2TSN+I-1-1),
+               CALL DLARTGP( B12BULGE, B12D(I-1),
+     $                       RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( RESTART12 .AND. .NOT. RESTART22 ) THEN
-               CALL DLARTGP( B22BULGE, B22D(I-1), RWORK(IV2TSN+I-1-1),
+               CALL DLARTGP( B22BULGE, B22D(I-1),
+     $                       RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( NU .LT. MU ) THEN
                CALL DLARTGS( B12E(I-1), B12D(I), NU,
@@ -779,7 +785,8 @@
 *           chasing by applying the original shift again.
 *
             IF( .NOT. RESTART11 .AND. .NOT. RESTART12 ) THEN
-               CALL DLARTGP( X2, X1, RWORK(IU1SN+I-1), RWORK(IU1CS+I-1),
+               CALL DLARTGP( X2, X1, RWORK(IU1SN+I-1),
+     $                       RWORK(IU1CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART11 .AND. RESTART12 ) THEN
                CALL DLARTGP( B11BULGE, B11D(I), RWORK(IU1SN+I-1),
@@ -788,14 +795,16 @@
                CALL DLARTGP( B12BULGE, B12E(I-1), RWORK(IU1SN+I-1),
      $                       RWORK(IU1CS+I-1), R )
             ELSE IF( MU .LE. NU ) THEN
-               CALL DLARTGS( B11E(I), B11D(I+1), MU, RWORK(IU1CS+I-1),
+               CALL DLARTGS( B11E(I), B11D(I+1), MU,
+     $                       RWORK(IU1CS+I-1),
      $                       RWORK(IU1SN+I-1) )
             ELSE
                CALL DLARTGS( B12D(I), B12E(I), NU, RWORK(IU1CS+I-1),
      $                       RWORK(IU1SN+I-1) )
             END IF
             IF( .NOT. RESTART21 .AND. .NOT. RESTART22 ) THEN
-               CALL DLARTGP( Y2, Y1, RWORK(IU2SN+I-1), RWORK(IU2CS+I-1),
+               CALL DLARTGP( Y2, Y1, RWORK(IU2SN+I-1),
+     $                       RWORK(IU2CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART21 .AND. RESTART22 ) THEN
                CALL DLARTGP( B21BULGE, B21D(I), RWORK(IU2SN+I-1),
@@ -804,7 +813,8 @@
                CALL DLARTGP( B22BULGE, B22E(I-1), RWORK(IU2SN+I-1),
      $                       RWORK(IU2CS+I-1), R )
             ELSE IF( NU .LT. MU ) THEN
-               CALL DLARTGS( B21E(I), B21E(I+1), NU, RWORK(IU2CS+I-1),
+               CALL DLARTGS( B21E(I), B21E(I+1), NU,
+     $                       RWORK(IU2CS+I-1),
      $                       RWORK(IU2SN+I-1) )
             ELSE
                CALL DLARTGS( B22D(I), B22E(I), MU, RWORK(IU2CS+I-1),
@@ -990,7 +1000,8 @@
          IF( B12D(IMAX)+B22D(IMAX) .LT. 0 ) THEN
             IF( WANTV2T ) THEN
                IF( COLMAJOR ) THEN
-                  CALL ZSCAL( M-Q, NEGONECOMPLEX, V2T(IMAX,1), LDV2T )
+                  CALL ZSCAL( M-Q, NEGONECOMPLEX, V2T(IMAX,1),
+     $                        LDV2T )
                ELSE
                   CALL ZSCAL( M-Q, NEGONECOMPLEX, V2T(1,IMAX), 1 )
                END IF
@@ -1057,7 +1068,8 @@
                IF( WANTU2 )
      $            CALL ZSWAP( M-P, U2(1,I), 1, U2(1,MINI), 1 )
                IF( WANTV1T )
-     $            CALL ZSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1), LDV1T )
+     $            CALL ZSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1),
+     $                        LDV1T )
                IF( WANTV2T )
      $            CALL ZSWAP( M-Q, V2T(I,1), LDV2T, V2T(MINI,1),
      $               LDV2T )

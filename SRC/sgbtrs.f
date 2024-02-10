@@ -133,7 +133,8 @@
 *> \ingroup gbtrs
 *
 *  =====================================================================
-      SUBROUTINE SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+      SUBROUTINE SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B,
+     $                   LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -221,7 +222,8 @@
                L = IPIV( J )
                IF( L.NE.J )
      $            CALL SSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL SGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
+               CALL SGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J,
+     $                    1 ),
      $                    LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -230,7 +232,8 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL STBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
+            CALL STBSV( 'Upper', 'No transpose', 'Non-unit', N,
+     $                  KL+KU,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
@@ -242,7 +245,8 @@
 *
 *           Solve U**T*X = B, overwriting B with X.
 *
-            CALL STBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
+            CALL STBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU,
+     $                  AB,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *

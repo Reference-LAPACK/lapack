@@ -280,12 +280,12 @@
 *
       IF( INFO.EQ.0 ) THEN
         IF( MINT ) THEN
-          T( 1 ) = MINTSZ
+          T( 1 ) = CMPLX( MINTSZ )
         ELSE
-          T( 1 ) = NB*N*NBLCKS + 5
+          T( 1 ) = CMPLX( NB*N*NBLCKS + 5 )
         END IF
-        T( 2 ) = MB
-        T( 3 ) = NB
+        T( 2 ) = CMPLX( MB )
+        T( 3 ) = CMPLX( NB )
         IF( MINW ) THEN
           WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
         ELSE

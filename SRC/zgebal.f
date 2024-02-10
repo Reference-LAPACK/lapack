@@ -196,7 +196,8 @@
       LOGICAL            DISNAN, LSAME
       INTEGER            IZAMAX
       DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           DISNAN, LSAME, IZAMAX, DLAMCH, DZNRM2
+      EXTERNAL           DISNAN, LSAME, IZAMAX, DLAMCH,
+     $                   DZNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZDSCAL, ZSWAP
@@ -207,8 +208,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -266,7 +269,8 @@
                   SCALE( L ) = I
                   IF( I.NE.L ) THEN
                      CALL ZSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
-                     CALL ZSWAP( N-K+1, A( I, K ), LDA, A( L, K ), LDA )
+                     CALL ZSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *
@@ -302,7 +306,8 @@
                   SCALE( K ) = J
                   IF( J.NE.K ) THEN
                      CALL ZSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
-                     CALL ZSWAP( N-K+1, A( J, K ), LDA, A( K, K ), LDA )
+                     CALL ZSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *

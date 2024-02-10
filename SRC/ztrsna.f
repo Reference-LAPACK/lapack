@@ -243,7 +243,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
 *
@@ -285,10 +286,12 @@
       INTEGER            IZAMAX
       DOUBLE PRECISION   DLAMCH, DZNRM2
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, IZAMAX, DLAMCH, DZNRM2, ZDOTC
+      EXTERNAL           LSAME, IZAMAX, DLAMCH, DZNRM2,
+     $                   ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLACPY, ZLATRS, ZTREXC
+      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLACPY, ZLATRS,
+     $                   ZTREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -397,7 +400,8 @@
 *           diagonal element to the (1,1) position.
 *
             CALL ZLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
-            CALL ZTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IERR )
+            CALL ZTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1,
+     $                   IERR )
 *
 *           Form  C = T22 - lambda*I in WORK(2:N,2:N).
 *
@@ -413,7 +417,8 @@
             KASE = 0
             NORMIN = 'N'
    30       CONTINUE
-            CALL ZLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE )
+            CALL ZLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE,
+     $                   ISAVE )
 *
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN

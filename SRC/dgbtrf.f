@@ -176,7 +176,8 @@
       EXTERNAL           IDAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGBTF2, DGEMM, DGER, DLASWP, DSCAL,
+      EXTERNAL           DCOPY, DGBTF2, DGEMM, DGER, DLASWP,
+     $                   DSCAL,
      $                   DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -324,7 +325,8 @@
 *
 *                 Compute multipliers
 *
-                  CALL DSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2, JJ ),
+                  CALL DSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2,
+     $                        JJ ),
      $                        1 )
 *
 *                 Update trailing submatrix within the band and within
@@ -393,7 +395,8 @@
 *
 *                 Update A12
 *
-                  CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL DTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J2, ONE, AB( KV+1, J ), LDAB-1,
      $                        AB( KV+1-JB, J+JB ), LDAB-1 )
 *
@@ -401,7 +404,8 @@
 *
 *                    Update A22
 *
-                     CALL DGEMM( 'No transpose', 'No transpose', I2, J2,
+                     CALL DGEMM( 'No transpose', 'No transpose', I2,
+     $                           J2,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+1, J+JB ), LDAB-1 )
@@ -411,7 +415,8 @@
 *
 *                    Update A32
 *
-                     CALL DGEMM( 'No transpose', 'No transpose', I3, J2,
+                     CALL DGEMM( 'No transpose', 'No transpose', I3,
+     $                           J2,
      $                           JB, -ONE, WORK31, LDWORK,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+KL+1-JB, J+JB ), LDAB-1 )
@@ -431,7 +436,8 @@
 *
 *                 Update A13 in the work array
 *
-                  CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL DTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J3, ONE, AB( KV+1, J ), LDAB-1,
      $                        WORK13, LDWORK )
 *
@@ -439,7 +445,8 @@
 *
 *                    Update A23
 *
-                     CALL DGEMM( 'No transpose', 'No transpose', I2, J3,
+                     CALL DGEMM( 'No transpose', 'No transpose', I2,
+     $                           J3,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           WORK13, LDWORK, ONE, AB( 1+JB, J+KV ),
      $                           LDAB-1 )
@@ -449,7 +456,8 @@
 *
 *                    Update A33
 *
-                     CALL DGEMM( 'No transpose', 'No transpose', I3, J3,
+                     CALL DGEMM( 'No transpose', 'No transpose', I3,
+     $                           J3,
      $                           JB, -ONE, WORK31, LDWORK, WORK13,
      $                           LDWORK, ONE, AB( 1+KL, J+KV ), LDAB-1 )
                   END IF

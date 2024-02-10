@@ -217,7 +217,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF_AA_2STAGE, ZHETRS_AA_2STAGE
+      EXTERNAL           XERBLA, ZHETRF_AA_2STAGE,
+     $                   ZHETRS_AA_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

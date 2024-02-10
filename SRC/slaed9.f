@@ -151,7 +151,8 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMBDA,
+      SUBROUTINE SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO,
+     $                   DLAMBDA,
      $                   W, S, LDS, INFO )
 *
 *  -- LAPACK computational routine --
@@ -214,7 +215,8 @@
      $   RETURN
 *
       DO 20 J = KSTART, KSTOP
-         CALL SLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL SLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ),
+     $                INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *

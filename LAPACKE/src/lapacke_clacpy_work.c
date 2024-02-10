@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clacpy_work( int matrix_layout, char uplo, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_clacpy_work)( int matrix_layout, char uplo, lapack_int m,
                                 lapack_int n, const lapack_complex_float* a,
                                 lapack_int lda, lapack_complex_float* b,
                                 lapack_int ldb )
@@ -49,12 +49,12 @@ lapack_int LAPACKE_clacpy_work( int matrix_layout, char uplo, lapack_int m,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_clacpy_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_clacpy_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -71,23 +71,23 @@ lapack_int LAPACKE_clacpy_work( int matrix_layout, char uplo, lapack_int m,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_clacpy( &uplo, &m, &n, a_t, &lda_t, b_t, &ldb_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_clacpy_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_clacpy_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy_work", info );
     }
     return info;
 }

@@ -172,7 +172,8 @@
       REAL               TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACRM, CLAED7, SCOPY, SSTEQR, XERBLA
+      EXTERNAL           CCOPY, CLACRM, CLAED7, SCOPY, SSTEQR,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV

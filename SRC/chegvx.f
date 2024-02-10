@@ -339,7 +339,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHEEVX, CHEGST, CPOTRF, CTRMM, CTRSM, XERBLA
+      EXTERNAL           CHEEVX, CHEGST, CPOTRF, CTRMM, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -423,7 +424,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+     $             ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, RWORK, IWORK, IFAIL,
      $             INFO )
 *
@@ -444,7 +446,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -458,7 +461,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
          END IF
       END IF

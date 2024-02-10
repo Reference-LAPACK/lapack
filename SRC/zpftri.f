@@ -237,7 +237,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZTFTRI, ZLAUUM, ZTRMM, ZHERK
+      EXTERNAL           XERBLA, ZTFTRI, ZLAUUM, ZTRMM,
+     $                   ZHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -312,7 +313,8 @@
                CALL ZLAUUM( 'L', N1, A( 0 ), N, INFO )
                CALL ZHERK( 'L', 'C', N1, N2, ONE, A( N1 ), N, ONE,
      $                     A( 0 ), N )
-               CALL ZTRMM( 'L', 'U', 'N', 'N', N2, N1, CONE, A( N ), N,
+               CALL ZTRMM( 'L', 'U', 'N', 'N', N2, N1, CONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
                CALL ZLAUUM( 'U', N2, A( N ), N, INFO )
 *
@@ -325,7 +327,8 @@
                CALL ZLAUUM( 'L', N1, A( N2 ), N, INFO )
                CALL ZHERK( 'L', 'N', N1, N2, ONE, A( 0 ), N, ONE,
      $                     A( N2 ), N )
-               CALL ZTRMM( 'R', 'U', 'C', 'N', N1, N2, CONE, A( N1 ), N,
+               CALL ZTRMM( 'R', 'U', 'C', 'N', N1, N2, CONE, A( N1 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL ZLAUUM( 'U', N2, A( N1 ), N, INFO )
 *
@@ -341,9 +344,11 @@
 *              T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1)
 *
                CALL ZLAUUM( 'U', N1, A( 0 ), N1, INFO )
-               CALL ZHERK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1, ONE,
+               CALL ZHERK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 0 ), N1 )
-               CALL ZTRMM( 'R', 'L', 'N', 'N', N1, N2, CONE, A( 1 ), N1,
+               CALL ZTRMM( 'R', 'L', 'N', 'N', N1, N2, CONE, A( 1 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
                CALL ZLAUUM( 'L', N2, A( 1 ), N1, INFO )
 *
@@ -355,7 +360,8 @@
                CALL ZLAUUM( 'U', N1, A( N2*N2 ), N2, INFO )
                CALL ZHERK( 'U', 'C', N1, N2, ONE, A( 0 ), N2, ONE,
      $                     A( N2*N2 ), N2 )
-               CALL ZTRMM( 'L', 'L', 'C', 'N', N2, N1, CONE, A( N1*N2 ),
+               CALL ZTRMM( 'L', 'L', 'C', 'N', N2, N1, CONE,
+     $                     A( N1*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL ZLAUUM( 'L', N2, A( N1*N2 ), N2, INFO )
 *
@@ -380,7 +386,8 @@
                CALL ZLAUUM( 'L', K, A( 1 ), N+1, INFO )
                CALL ZHERK( 'L', 'C', K, K, ONE, A( K+1 ), N+1, ONE,
      $                     A( 1 ), N+1 )
-               CALL ZTRMM( 'L', 'U', 'N', 'N', K, K, CONE, A( 0 ), N+1,
+               CALL ZTRMM( 'L', 'U', 'N', 'N', K, K, CONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL ZLAUUM( 'U', K, A( 0 ), N+1, INFO )
 *
@@ -393,7 +400,8 @@
                CALL ZLAUUM( 'L', K, A( K+1 ), N+1, INFO )
                CALL ZHERK( 'L', 'N', K, K, ONE, A( 0 ), N+1, ONE,
      $                     A( K+1 ), N+1 )
-               CALL ZTRMM( 'R', 'U', 'C', 'N', K, K, CONE, A( K ), N+1,
+               CALL ZTRMM( 'R', 'U', 'C', 'N', K, K, CONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
                CALL ZLAUUM( 'U', K, A( K ), N+1, INFO )
 *
@@ -410,7 +418,8 @@
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
                CALL ZLAUUM( 'U', K, A( K ), K, INFO )
-               CALL ZHERK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K, ONE,
+               CALL ZHERK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( K ), K )
                CALL ZTRMM( 'R', 'L', 'N', 'N', K, K, CONE, A( 0 ), K,
      $                     A( K*( K+1 ) ), K )
@@ -425,7 +434,8 @@
                CALL ZLAUUM( 'U', K, A( K*( K+1 ) ), K, INFO )
                CALL ZHERK( 'U', 'C', K, K, ONE, A( 0 ), K, ONE,
      $                     A( K*( K+1 ) ), K )
-               CALL ZTRMM( 'L', 'L', 'C', 'N', K, K, CONE, A( K*K ), K,
+               CALL ZTRMM( 'L', 'L', 'C', 'N', K, K, CONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
                CALL ZLAUUM( 'L', K, A( K*K ), K, INFO )
 *

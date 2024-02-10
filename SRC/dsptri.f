@@ -217,7 +217,8 @@
 *
             IF( K.GT.1 ) THEN
                CALL DCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        DDOT( K-1, WORK, 1, AP( KC ), 1 )
@@ -242,12 +243,14 @@
 *
             IF( K.GT.1 ) THEN
                CALL DCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        DDOT( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            DDOT( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            DDOT( K-1, AP( KC ), 1,
+     $                                  AP( KCNEXT ),
      $                            1 )
                CALL DCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
@@ -321,7 +324,8 @@
                CALL DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
                CALL DSPMV( UPLO, N-K, -ONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
             END IF
             KSTEP = 1
          ELSE
@@ -343,14 +347,17 @@
 *
             IF( K.LT.N ) THEN
                CALL DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
      $                          DDOT( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL DCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
      $                        DDOT( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )

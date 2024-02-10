@@ -419,10 +419,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
       DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV, ILAENV2STAGE
+      EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV,
+     $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DORMTR, DSCAL, DSTEBZ, DSTEMR, DSTEIN,
+      EXTERNAL           DCOPY, DORMTR, DSCAL, DSTEBZ, DSTEMR,
+     $                   DSTEIN,
      $                   DSTERF, DSWAP, DSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -442,10 +444,14 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      KD     = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                       -1 )
+      IB     = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                       -1 )
+      LHTRD  = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
+      LWTRD  = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
 *
       IF( N.LE.1 ) THEN
          LWMIN  = 1
@@ -692,7 +698,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

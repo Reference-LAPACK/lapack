@@ -101,7 +101,8 @@
 *> \ingroup la_porpvgrw
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION DLA_PORPVGRW( UPLO, NCOLS, A, LDA,
+     $                                        AF,
      $                                        LDAF, WORK )
 *
 *  -- LAPACK computational routine --

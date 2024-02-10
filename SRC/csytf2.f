@@ -481,7 +481,8 @@
                JMAX = K - 1 + ICAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + ICAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 )
+                  JMAX = IMAX + ICAMAX( N-IMAX, A( IMAX+1, IMAX ),
+     $                                  1 )
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -513,7 +514,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
                CALL CSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
                T = A( KK, KK )

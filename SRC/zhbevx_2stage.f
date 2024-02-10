@@ -371,7 +371,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZCOPY,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZCOPY,
      $                   ZGEMV, ZLACPY, ZLASCL, ZSTEIN, ZSTEQR,
      $                   ZSWAP, ZHETRD_HB2ST
 *     ..
@@ -503,9 +504,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA

@@ -32,20 +32,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlacn2( lapack_int n, lapack_complex_double* v,
+lapack_int API_SUFFIX(LAPACKE_zlacn2)( lapack_int n, lapack_complex_double* v,
                            lapack_complex_double* x,
                            double* est, lapack_int* kase, lapack_int* isave )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( 1, est, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, est, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_z_nancheck( n, x, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_z_nancheck)( n, x, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return LAPACKE_zlacn2_work( n, v, x, est, kase, isave );
+    return API_SUFFIX(LAPACKE_zlacn2_work)( n, v, x, est, kase, isave );
 }

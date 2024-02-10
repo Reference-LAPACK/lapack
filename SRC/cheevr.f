@@ -354,7 +354,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
@@ -396,10 +397,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANSY, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP, CUNMTR,
+      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP,
+     $                   CUNMTR,
      $                   SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -620,7 +623,7 @@
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -676,7 +679,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

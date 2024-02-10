@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtbcon( int matrix_layout, char norm, char uplo, char diag,
+lapack_int API_SUFFIX(LAPACKE_dtbcon)( int matrix_layout, char norm, char uplo, char diag,
                            lapack_int n, lapack_int kd, const double* ab,
                            lapack_int ldab, double* rcond )
 {
@@ -40,13 +40,13 @@ lapack_int LAPACKE_dtbcon( int matrix_layout, char norm, char uplo, char diag,
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dtbcon", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dtb_nancheck( matrix_layout, uplo, diag, n, kd, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_dtb_nancheck)( matrix_layout, uplo, diag, n, kd, ab, ldab ) ) {
             return -7;
         }
     }
@@ -63,7 +63,7 @@ lapack_int LAPACKE_dtbcon( int matrix_layout, char norm, char uplo, char diag,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dtbcon_work( matrix_layout, norm, uplo, diag, n, kd, ab, ldab,
+    info = API_SUFFIX(LAPACKE_dtbcon_work)( matrix_layout, norm, uplo, diag, n, kd, ab, ldab,
                                 rcond, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -71,7 +71,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dtbcon", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtbcon", info );
     }
     return info;
 }

@@ -284,7 +284,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_RK, SSYTF2_RK, SSWAP,  XERBLA
+      EXTERNAL           SLASYF_RK, SSYTF2_RK, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -426,7 +427,8 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL SLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E( K ),
+            CALL SLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+     $                      E( K ),
      $                        IPIV( K ), WORK, LDWORK, IINFO )
 
 

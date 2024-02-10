@@ -122,7 +122,8 @@
 *> \ingroup unghr
 *
 *  =====================================================================
-      SUBROUTINE DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -253,7 +253,8 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
@@ -295,10 +296,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, CLANHE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANHE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   CLANHE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA,
+     $                   CSSCAL,
      $                   CHETRD, CLACPY, CSTEIN, CSTEQR, CSWAP, CUNGTR,
      $                   CUNMTR
 *     ..
@@ -352,7 +355,8 @@
          ELSE
             LWKMIN = 2*N
             NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1,
+     $                           -1, -1 ) )
             LWKOPT = ( NB + 1 )*N
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
@@ -504,7 +508,8 @@
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by CSTEIN.
 *
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

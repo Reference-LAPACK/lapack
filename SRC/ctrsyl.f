@@ -188,7 +188,8 @@
       LOGICAL            LSAME
       REAL               CLANGE, SLAMCH
       COMPLEX            CDOTC, CDOTU, CLADIV
-      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU, CLADIV
+      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU,
+     $                   CLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL, XERBLA
@@ -241,7 +242,7 @@
       BIGNUM = ONE / SMLNUM
       SMIN = MAX( SMLNUM, EPS*CLANGE( 'M', M, M, A, LDA, DUM ),
      $       EPS*CLANGE( 'M', N, N, B, LDB, DUM ) )
-      SGN = ISGN
+      SGN = REAL( ISGN )
 *
       IF( NOTRNA .AND. NOTRNB ) THEN
 *

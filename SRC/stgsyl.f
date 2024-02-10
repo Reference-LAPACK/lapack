@@ -293,7 +293,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -335,7 +336,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASET, SSCAL, STGSY2, XERBLA
+      EXTERNAL           SGEMM, SLACPY, SLASET, SSCAL, STGSY2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -438,7 +440,8 @@
             DSCALE = ZERO
             DSUM = ONE
             PQ = 0
-            CALL STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
+            CALL STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
      $                   IWORK, PQ, INFO )
             IF( DSCALE.NE.ZERO ) THEN
@@ -532,7 +535,8 @@
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
                   PPQQ = 0
-                  CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ),
+     $                         LDA,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
      $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
@@ -651,10 +655,12 @@
 *              Substitute R(I, J) and L(I, J) into remaining equation.
 *
                IF( J.GT.P+2 ) THEN
-                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS ),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS,
+     $                        JS ),
      $                        LDC, B( 1, JS ), LDB, ONE, F( IS, 1 ),
      $                        LDF )
-                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS ),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS,
+     $                        JS ),
      $                        LDF, E( 1, JS ), LDE, ONE, F( IS, 1 ),
      $                        LDF )
                END IF

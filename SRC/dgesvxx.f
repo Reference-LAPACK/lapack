@@ -532,7 +532,8 @@
 *> \ingroup gesvxx
 *
 *  =====================================================================
-      SUBROUTINE DGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE DGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK,
@@ -583,7 +584,8 @@
       DOUBLE PRECISION   DLAMCH, DLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEEQUB, DGETRF, DGETRS, DLACPY, DLAQGE,
+      EXTERNAL           DGEEQUB, DGETRF, DGETRS, DLACPY,
+     $                   DLAQGE,
      $                   XERBLA, DLASCL2, DGERFSX
 *     ..
 *     .. Intrinsic Functions ..

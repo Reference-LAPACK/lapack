@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cpteqr_work( int matrix_layout, char compz, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_cpteqr_work)( int matrix_layout, char compz, lapack_int n,
                                 float* d, float* e, lapack_complex_float* z,
                                 lapack_int ldz, float* work )
 {
@@ -49,7 +49,7 @@ lapack_int LAPACKE_cpteqr_work( int matrix_layout, char compz, lapack_int n,
         /* Check leading dimension(s) */
         if( ldz < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_cpteqr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpteqr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -60,8 +60,8 @@ lapack_int LAPACKE_cpteqr_work( int matrix_layout, char compz, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        if( LAPACKE_lsame( compz, 'v' ) ) {
-            LAPACKE_cge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
+        if( API_SUFFIX(LAPACKE_lsame)( compz, 'v' ) ) {
+            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_cpteqr( &compz, &n, d, e, z_t, &ldz_t, work, &info );
@@ -69,16 +69,16 @@ lapack_int LAPACKE_cpteqr_work( int matrix_layout, char compz, lapack_int n,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         /* Release memory and exit */
         LAPACKE_free( z_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_cpteqr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpteqr_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cpteqr_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpteqr_work", info );
     }
     return info;
 }

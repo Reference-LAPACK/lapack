@@ -463,7 +463,8 @@
 *
 *           While submatrix unfinished take a good dqds step.
 *
-            CALL DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
+            CALL DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX,
+     $                   NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *

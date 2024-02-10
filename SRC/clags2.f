@@ -153,7 +153,8 @@
 *> \ingroup lags2
 *
 *  =====================================================================
-      SUBROUTINE CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+      SUBROUTINE CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
+     $                   CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine --
@@ -273,14 +274,18 @@
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA21 )+ABS1( UA22 ) ).EQ.ZERO ) THEN
-               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, R )
+               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ,
+     $                      R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
-               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, R )
+               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ,
+     $                      R )
             ELSE IF( AUA22 / ( ABS1( UA21 )+ABS1( UA22 ) ).LE.AVB22 /
      $               ( ABS1( VB21 )+ABS1( VB22 ) ) ) THEN
-               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, R )
+               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ,
+     $                      R )
             ELSE
-               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, R )
+               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ,
+     $                      R )
             END IF
 *
             CSU = SNL

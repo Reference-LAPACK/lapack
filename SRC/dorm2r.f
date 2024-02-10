@@ -268,7 +268,8 @@
 *
          AII = A( I, I )
          A( I, I ) = ONE
-         CALL DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC, JC ),
+         CALL DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
+     $               JC ),
      $               LDC, WORK )
          A( I, I ) = AII
    10 CONTINUE

@@ -128,7 +128,8 @@
 *>  Tech report version: http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679
 *>
 *  =====================================================================
-      SUBROUTINE ZHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
+      SUBROUTINE ZHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                    INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -181,7 +182,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ( .NOT. ( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      IF ( .NOT. ( LSAME( UPLO, 'U' ) .OR.
+     $     LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -1
       ELSE IF ( N .LT. 0 ) THEN
          INFO = -2

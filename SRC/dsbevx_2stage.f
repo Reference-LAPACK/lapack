@@ -316,7 +316,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q,
+      SUBROUTINE DSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
+     $                          Q,
      $                          LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                          LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
@@ -361,7 +362,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DLACPY, DLASCL, DSCAL,
+      EXTERNAL           DCOPY, DGEMV, DLACPY, DLASCL,
+     $                   DSCAL,
      $                   DSTEBZ, DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA,
      $                   DSYTRD_SB2ST
 *     ..
@@ -492,9 +494,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA
@@ -512,7 +516,8 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL DSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, WORK( INDD ),
+      CALL DSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB,
+     $                   WORK( INDD ),
      $                    WORK( INDE ), WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *

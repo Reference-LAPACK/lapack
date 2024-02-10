@@ -145,7 +145,8 @@
 *> \ingroup upmtr
 *
 *  =====================================================================
-      SUBROUTINE DOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
+      SUBROUTINE DOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC,
+     $                   WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine --
@@ -262,7 +263,8 @@
 *
             AII = AP( II )
             AP( II ) = ONE
-            CALL DLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C, LDC,
+            CALL DLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
+     $                  LDC,
      $                  WORK )
             AP( II ) = AII
 *

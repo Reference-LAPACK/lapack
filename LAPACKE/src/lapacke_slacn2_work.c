@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_slacn2_work( lapack_int n, float* v, float* x,
+lapack_int API_SUFFIX(LAPACKE_slacn2_work)( lapack_int n, float* v, float* x,
                                 lapack_int* isgn, float* est, lapack_int* kase,
                                 lapack_int* isave )
 {

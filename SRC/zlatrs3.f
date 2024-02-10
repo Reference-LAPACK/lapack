@@ -270,7 +270,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, ZLANGE, DLARMM
-      EXTERNAL           ILAENV, LSAME, DLAMCH, ZLANGE, DLARMM
+      EXTERNAL           ILAENV, LSAME, DLAMCH, ZLANGE,
+     $                   DLARMM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLATRS, ZDSCAL, XERBLA
@@ -372,7 +373,8 @@
          CALL ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X( 1, 1),
      $                SCALE( 1 ), CNORM, INFO )
          DO K = 2, NRHS
-            CALL ZLATRS( UPLO, TRANS, DIAG, 'Y', N, A, LDA, X( 1, K ),
+            CALL ZLATRS( UPLO, TRANS, DIAG, 'Y', N, A, LDA, X( 1,
+     $                   K ),
      $                   SCALE( K ), CNORM, INFO )
          END DO
          RETURN
@@ -399,10 +401,12 @@
 *           Compute upper bound of A( I1:I2-1, J1:J2-1 ).
 *
             IF( NOTRAN ) THEN
-               ANRM = ZLANGE( 'I', I2-I1, J2-J1, A( I1, J1 ), LDA, W )
+               ANRM = ZLANGE( 'I', I2-I1, J2-J1, A( I1, J1 ), LDA,
+     $                        W )
                WORK( AWRK + I+(J-1)*NBA ) = ANRM
             ELSE
-               ANRM = ZLANGE( '1', I2-I1, J2-J1, A( I1, J1 ), LDA, W )
+               ANRM = ZLANGE( '1', I2-I1, J2-J1, A( I1, J1 ), LDA,
+     $                        W )
                WORK( AWRK + J+(I-1) * NBA ) = ANRM
             END IF
             TMAX = MAX( TMAX, ANRM )
@@ -419,7 +423,8 @@
 *        in the computation of the column norms CNORM.
 *
          DO K = 1, NRHS
-            CALL ZLATRS( UPLO, TRANS, DIAG, 'N', N, A, LDA, X( 1, K ),
+            CALL ZLATRS( UPLO, TRANS, DIAG, 'N', N, A, LDA, X( 1,
+     $                   K ),
      $                   SCALE( K ), CNORM, INFO )
          END DO
          RETURN
@@ -602,7 +607,8 @@
 *                 Compute scaling factor to survive the linear update
 *                 simulating consistent scaling.
 *
-                  BNRM = ZLANGE( 'I', I2-I1, 1, X( I1, RHS ), LDX, W )
+                  BNRM = ZLANGE( 'I', I2-I1, 1, X( I1, RHS ), LDX,
+     $                           W )
                   BNRM = BNRM*( SCAMIN / WORK( I+KK*LDS ) )
                   XNRM( KK ) = XNRM( KK )*( SCAMIN / WORK( J+KK*LDS) )
                   ANRM = WORK( AWRK + I+(J-1)*NBA )

@@ -225,7 +225,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CHBMV, CLACN2, CPBTRS, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHBMV, CLACN2, CPBTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -284,7 +285,7 @@
       NZ = MIN( N+1, 2*KD+2 )
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -396,10 +397,11 @@
 *
          DO 90 I = 1, N
             IF( RWORK( I ).GT.SAFE2 ) THEN
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I )
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I )
             ELSE
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I ) +
-     $                      SAFE1
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I ) + SAFE1
             END IF
    90    CONTINUE
 *
@@ -411,7 +413,8 @@
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N,
+     $                      INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -422,7 +425,8 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N,
+     $                      INFO )
             END IF
             GO TO 100
          END IF

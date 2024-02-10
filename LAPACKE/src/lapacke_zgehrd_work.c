@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgehrd_work( int matrix_layout, lapack_int n, lapack_int ilo,
+lapack_int API_SUFFIX(LAPACKE_zgehrd_work)( int matrix_layout, lapack_int n, lapack_int ilo,
                                 lapack_int ihi, lapack_complex_double* a,
                                 lapack_int lda, lapack_complex_double* tau,
                                 lapack_complex_double* work, lapack_int lwork )
@@ -50,7 +50,7 @@ lapack_int LAPACKE_zgehrd_work( int matrix_layout, lapack_int n, lapack_int ilo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zgehrd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgehrd_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -67,23 +67,23 @@ lapack_int LAPACKE_zgehrd_work( int matrix_layout, lapack_int n, lapack_int ilo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgehrd( &n, &ilo, &ihi, a_t, &lda_t, tau, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zgehrd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgehrd_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zgehrd_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgehrd_work", info );
     }
     return info;
 }

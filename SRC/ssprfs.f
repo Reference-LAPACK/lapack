@@ -174,7 +174,8 @@
 *> \ingroup hprfs
 *
 *  =====================================================================
-      SUBROUTINE SSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+      SUBROUTINE SSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+     $                   LDX,
      $                   FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -214,7 +215,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, SSPMV, SSPTRS, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLACN2, SSPMV, SSPTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -261,7 +263,7 @@
       NZ = N + 1
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -277,7 +279,8 @@
 *        Compute residual R = B - A * X
 *
          CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL SSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE, WORK( N+1 ),
+         CALL SSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE,
+     $               WORK( N+1 ),
      $               1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -346,7 +349,8 @@
 *
 *           Update solution and try again.
 *
-            CALL SSPTRS( UPLO, N, 1, AFP, IPIV, WORK( N+1 ), N, INFO )
+            CALL SSPTRS( UPLO, N, 1, AFP, IPIV, WORK( N+1 ), N,
+     $                   INFO )
             CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
@@ -377,15 +381,17 @@
 *
          DO 90 I = 1, N
             IF( WORK( I ).GT.SAFE2 ) THEN
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I )
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
             ELSE
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I ) + SAFE1
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
+     $                     + SAFE1
             END IF
    90    CONTINUE
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

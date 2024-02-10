@@ -196,7 +196,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE SORBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE SORBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -225,7 +226,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFGP, SORBDB5, SROT, SSCAL, XERBLA
+      EXTERNAL           SLARF, SLARFGP, SORBDB5, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SNRM2
@@ -262,7 +264,7 @@
          LORBDB5 = Q-1
          LWORKOPT = MAX( ILARF+LLARF-1, IORBDB5+LORBDB5-1 )
          LWORKMIN = LWORKOPT
-         WORK(1) = LWORKOPT
+         WORK(1) = REAL( LWORKOPT )
          IF( LWORK .LT. LWORKMIN .AND. .NOT.LQUERY ) THEN
            INFO = -14
          END IF
@@ -279,7 +281,8 @@
       DO I = 1, P
 *
          IF( I .GT. 1 ) THEN
-            CALL SROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21, C, S )
+            CALL SROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21, C,
+     $                 S )
          END IF
          CALL SLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
          C = X11(I,I)

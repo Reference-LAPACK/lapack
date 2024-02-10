@@ -177,7 +177,8 @@
 *> \ingroup gels
 *
 *  =====================================================================
-      SUBROUTINE CGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+      SUBROUTINE CGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK,
+     $                  LWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine --
@@ -215,7 +216,8 @@
       EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGELQF, CGEQRF, CLASCL, CLASET, CTRTRS, CUNMLQ,
+      EXTERNAL           CGELQF, CGEQRF, CLASCL, CLASET, CTRTRS,
+     $                   CUNMLQ,
      $                   CUNMQR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -228,7 +230,8 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'C' ) ) ) THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
+     $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -288,7 +291,8 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL CLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B,
+     $                LDB )
          RETURN
       END IF
 *
@@ -346,7 +350,8 @@
 *
 *        compute QR factorization of A
 *
-         CALL CGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL CGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ),
+     $                LWORK-MN,
      $                INFO )
 *
 *        workspace at least N, optimally N*NB
@@ -357,7 +362,8 @@
 *
 *           B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
-            CALL CUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A,
+            CALL CUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N,
+     $                   A,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -365,7 +371,8 @@
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
+            CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', N,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -411,7 +418,8 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL CGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL CGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ),
+     $                LWORK-MN,
      $                INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -422,7 +430,8 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL CTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
+            CALL CTRTRS( 'Lower', 'No transpose', 'Non-unit', M,
+     $                   NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -439,7 +448,8 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**H * B(1:M,1:NRHS)
 *
-            CALL CUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A,
+            CALL CUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M,
+     $                   A,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *

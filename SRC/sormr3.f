@@ -173,7 +173,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE SORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C,
+     $                   LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine --

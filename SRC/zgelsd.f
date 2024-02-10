@@ -247,7 +247,8 @@
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DLASET, XERBLA, ZGEBRD, ZGELQF, ZGEQRF,
+      EXTERNAL           DLASCL, DLASET, XERBLA, ZGEBRD, ZGELQF,
+     $                   ZGEQRF,
      $                   ZLACPY, ZLALSD, ZLASCL, ZLASET, ZUNMBR, ZUNMLQ,
      $                   ZUNMQR
 *     ..
@@ -304,9 +305,11 @@
 *                        columns.
 *
                MM = N
-               MAXWRK = MAX( MAXWRK, N*ILAENV( 1, 'ZGEQRF', ' ', M, N,
+               MAXWRK = MAX( MAXWRK, N*ILAENV( 1, 'ZGEQRF', ' ', M,
+     $                       N,
      $                       -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, NRHS*ILAENV( 1, 'ZUNMQR', 'LC', M,
+               MAXWRK = MAX( MAXWRK, NRHS*ILAENV( 1, 'ZUNMQR', 'LC',
+     $                       M,
      $                       NRHS, N, -1 ) )
             END IF
             IF( M.GE.N ) THEN
@@ -338,7 +341,8 @@
      $                          'ZGEBRD', ' ', M, M, -1, -1 ) )
                   MAXWRK = MAX( MAXWRK, M*M + 4*M + NRHS*ILAENV( 1,
      $                          'ZUNMBR', 'QLC', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + ( M - 1 )*ILAENV( 1,
+                  MAXWRK = MAX( MAXWRK,
+     $                          M*M + 4*M + ( M - 1 )*ILAENV( 1,
      $                          'ZUNMLQ', 'LC', N, NRHS, M, -1 ) )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
@@ -354,9 +358,11 @@
 *
 *                 Path 2 - underdetermined.
 *
-                  MAXWRK = 2*M + ( N + M )*ILAENV( 1, 'ZGEBRD', ' ', M,
+                  MAXWRK = 2*M + ( N + M )*ILAENV( 1, 'ZGEBRD', ' ',
+     $                             M,
      $                     N, -1, -1 )
-                  MAXWRK = MAX( MAXWRK, 2*M + NRHS*ILAENV( 1, 'ZUNMBR',
+                  MAXWRK = MAX( MAXWRK, 2*M + NRHS*ILAENV( 1,
+     $                          'ZUNMBR',
      $                          'QLC', M, NRHS, M, -1 ) )
                   MAXWRK = MAX( MAXWRK, 2*M + M*ILAENV( 1, 'ZUNMBR',
      $                          'PLN', N, NRHS, M, -1 ) )
@@ -430,20 +436,23 @@
 *
 *        Scale matrix norm up to SMLNUM.
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM.
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
 *     If M < N make sure B(M+1:N,:) = 0
 *
       IF( M.LT.N )
-     $   CALL ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB )
+     $   CALL ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ),
+     $                LDB )
 *
 *     Overdetermined case.
 *
@@ -471,7 +480,8 @@
 *           (RWorkspace: need N)
 *           (CWorkspace: need NRHS, prefer NRHS*NB)
 *
-            CALL ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ), B,
+            CALL ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ),
+     $                   B,
      $                   LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *           Zero out below R.
@@ -499,7 +509,8 @@
 *        Multiply B by transpose of left bidiagonalizing vectors of R.
 *        (CWorkspace: need 2*N+NRHS, prefer 2*N+NRHS*NB)
 *
-         CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA,
+     $                WORK( ITAUQ ),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *        Solve the bidiagonal least squares problem.
@@ -513,7 +524,8 @@
 *
 *        Multiply B by right bidiagonalizing vectors of R.
 *
-         CALL ZUNMBR( 'P', 'L', 'N', N, NRHS, N, A, LDA, WORK( ITAUP ),
+         CALL ZUNMBR( 'P', 'L', 'N', N, NRHS, N, A, LDA,
+     $                WORK( ITAUP ),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       ELSE IF( N.GE.MNTHR .AND. LWORK.GE.4*M+M*M+
@@ -578,7 +590,8 @@
 *
 *        Zero out below first M rows of B.
 *
-         CALL ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB )
+         CALL ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ),
+     $                LDB )
          NWORK = ITAU + M
 *
 *        Multiply transpose(Q) by B.
@@ -608,7 +621,8 @@
 *        Multiply B by transpose of left bidiagonalizing vectors.
 *        (CWorkspace: need 2*M+NRHS, prefer 2*M+NRHS*NB)
 *
-         CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA,
+     $                WORK( ITAUQ ),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *        Solve the bidiagonal least squares problem.
@@ -622,7 +636,8 @@
 *
 *        Multiply B by right bidiagonalizing vectors of A.
 *
-         CALL ZUNMBR( 'P', 'L', 'N', N, NRHS, M, A, LDA, WORK( ITAUP ),
+         CALL ZUNMBR( 'P', 'L', 'N', N, NRHS, M, A, LDA,
+     $                WORK( ITAUP ),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       END IF
@@ -630,18 +645,22 @@
 *     Undo scaling.
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       END IF
 *
    10 CONTINUE

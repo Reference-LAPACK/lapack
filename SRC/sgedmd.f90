@@ -763,8 +763,8 @@
       ELSE IF ( LQUERY ) THEN
 !     Return minimal and optimal workspace sizes
           IWORK(1) = IMINWR
-          WORK(1)  = MLWORK
-          WORK(2)  = OLWORK
+          WORK(1)  = REAL(MLWORK)
+          WORK(2)  = REAL(OLWORK)
           RETURN
       END IF
 !............................................................

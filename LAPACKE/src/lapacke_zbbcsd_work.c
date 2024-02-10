@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zbbcsd_work( int matrix_layout, char jobu1, char jobu2,
+lapack_int API_SUFFIX(LAPACKE_zbbcsd_work)( int matrix_layout, char jobu1, char jobu2,
                                 char jobv1t, char jobv2t, char trans,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 double* theta, double* phi,
@@ -63,7 +63,7 @@ lapack_int LAPACKE_zbbcsd_work( int matrix_layout, char jobu1, char jobu2,
     if( matrix_layout == LAPACK_COL_MAJOR ||
         matrix_layout == LAPACK_ROW_MAJOR ) {
         char ltrans;
-        if( !LAPACKE_lsame( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+        if( !API_SUFFIX(LAPACKE_lsame)( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
             ltrans = 'n';
         } else {
             ltrans = 't';
@@ -78,7 +78,7 @@ lapack_int LAPACKE_zbbcsd_work( int matrix_layout, char jobu1, char jobu2,
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zbbcsd_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zbbcsd_work", info );
     }
     return info;
 }

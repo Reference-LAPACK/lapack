@@ -152,7 +152,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE SLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL, SNL,
+      SUBROUTINE SLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL,
+     $                   SNL,
      $                   CSR, SNR )
 *
 *  -- LAPACK auxiliary routine --
@@ -253,7 +254,8 @@
 *
 *        B is nonsingular, first compute the eigenvalues of (A,B)
 *
-         CALL SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1, WR2,
+         CALL SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
+     $               WR2,
      $               WI )
 *
          IF( WI.EQ.ZERO ) THEN

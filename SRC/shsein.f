@@ -257,7 +257,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
+      SUBROUTINE SHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR,
+     $                   WI,
      $                   VL, LDVL, VR, LDVR, MM, M, WORK, IFAILL,
      $                   IFAILR, INFO )
 *
@@ -366,7 +367,7 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
       LDWORK = N + 1
@@ -457,7 +458,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL SLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL SLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ),
+     $                      LDH,
      $                      WKR, WKI, VL( KL, KSR ), VL( KL, KSI ),
      $                      WORK, LDWORK, WORK( N*N+N+1 ), EPS3, SMLNUM,
      $                      BIGNUM, IINFO )

@@ -266,7 +266,8 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGEQR2, DGERQ2, DLACPY, DLAGV2, DLARTG,
+      EXTERNAL           DGEMM, DGEQR2, DGERQ2, DLACPY, DLAGV2,
+     $                   DLARTG,
      $                   DLASET, DLASSQ, DORG2R, DORGR2, DORM2R, DORMR2,
      $                   DROT, DSCAL, DTGSY2
 *     ..
@@ -345,10 +346,12 @@
          CALL DROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, IR( 1, 1 ),
      $              IR( 2, 1 ) )
          IF( SA.GE.SB ) THEN
-            CALL DLARTG( S( 1, 1 ), S( 2, 1 ), LI( 1, 1 ), LI( 2, 1 ),
+            CALL DLARTG( S( 1, 1 ), S( 2, 1 ), LI( 1, 1 ), LI( 2,
+     $                   1 ),
      $                   DDUM )
          ELSE
-            CALL DLARTG( T( 1, 1 ), T( 2, 1 ), LI( 1, 1 ), LI( 2, 1 ),
+            CALL DLARTG( T( 1, 1 ), T( 2, 1 ), LI( 1, 1 ), LI( 2,
+     $                   1 ),
      $                   DDUM )
          END IF
          CALL DROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, LI( 1, 1 ),
@@ -373,22 +376,28 @@
 *               and
 *               F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B)))
 *
-            CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
+            CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA,
+     $                   WORK( M*M+1 ),
      $                   M )
-            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, S, LDST, ZERO,
+            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, S, LDST,
+     $                  ZERO,
      $                  WORK, M )
-            CALL DGEMM( 'N', 'T', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
+            CALL DGEMM( 'N', 'T', M, M, M, -ONE, WORK, M, IR, LDST,
+     $                  ONE,
      $                  WORK( M*M+1 ), M )
             DSCALE = ZERO
             DSUM = ONE
             CALL DLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
             SA = DSCALE*SQRT( DSUM )
 *
-            CALL DLACPY( 'Full', M, M, B( J1, J1 ), LDB, WORK( M*M+1 ),
+            CALL DLACPY( 'Full', M, M, B( J1, J1 ), LDB,
+     $                   WORK( M*M+1 ),
      $                   M )
-            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, T, LDST, ZERO,
+            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, T, LDST,
+     $                  ZERO,
      $                  WORK, M )
-            CALL DGEMM( 'N', 'T', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
+            CALL DGEMM( 'N', 'T', M, M, M, -ONE, WORK, M, IR, LDST,
+     $                  ONE,
      $                  WORK( M*M+1 ), M )
             DSCALE = ZERO
             DSUM = ONE
@@ -488,11 +497,13 @@
 *
          CALL DGEMM( 'T', 'N', M, M, M, ONE, LI, LDST, S, LDST, ZERO,
      $               WORK, M )
-         CALL DGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO, S,
+         CALL DGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO,
+     $               S,
      $               LDST )
          CALL DGEMM( 'T', 'N', M, M, M, ONE, LI, LDST, T, LDST, ZERO,
      $               WORK, M )
-         CALL DGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO, T,
+         CALL DGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO,
+     $               T,
      $               LDST )
          CALL DLACPY( 'F', M, M, S, LDST, SCPY, LDST )
          CALL DLACPY( 'F', M, M, T, LDST, TCPY, LDST )
@@ -505,11 +516,13 @@
          CALL DGERQ2( M, M, T, LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
      $      GO TO 70
-         CALL DORMR2( 'R', 'T', M, M, M, T, LDST, TAUR, S, LDST, WORK,
+         CALL DORMR2( 'R', 'T', M, M, M, T, LDST, TAUR, S, LDST,
+     $                WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
      $      GO TO 70
-         CALL DORMR2( 'L', 'N', M, M, M, T, LDST, TAUR, IR, LDST, WORK,
+         CALL DORMR2( 'L', 'N', M, M, M, T, LDST, TAUR, IR, LDST,
+     $                WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
      $      GO TO 70
@@ -529,9 +542,11 @@
          CALL DGEQR2( M, M, TCPY, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
      $      GO TO 70
-         CALL DORM2R( 'L', 'T', M, M, M, TCPY, LDST, TAUL, SCPY, LDST,
+         CALL DORM2R( 'L', 'T', M, M, M, TCPY, LDST, TAUL, SCPY,
+     $                LDST,
      $                WORK, INFO )
-         CALL DORM2R( 'R', 'N', M, M, M, TCPY, LDST, TAUL, LICOP, LDST,
+         CALL DORM2R( 'R', 'N', M, M, M, TCPY, LDST, TAUL, LICOP,
+     $                LDST,
      $                WORK, INFO )
          IF( LINFO.NE.0 )
      $      GO TO 70
@@ -569,22 +584,28 @@
 *               and
 *               F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B)))
 *
-            CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
+            CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA,
+     $                   WORK( M*M+1 ),
      $                   M )
-            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, S, LDST, ZERO,
+            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, S, LDST,
+     $                  ZERO,
      $                  WORK, M )
-            CALL DGEMM( 'N', 'N', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
+            CALL DGEMM( 'N', 'N', M, M, M, -ONE, WORK, M, IR, LDST,
+     $                  ONE,
      $                  WORK( M*M+1 ), M )
             DSCALE = ZERO
             DSUM = ONE
             CALL DLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
             SA = DSCALE*SQRT( DSUM )
 *
-            CALL DLACPY( 'Full', M, M, B( J1, J1 ), LDB, WORK( M*M+1 ),
+            CALL DLACPY( 'Full', M, M, B( J1, J1 ), LDB,
+     $                   WORK( M*M+1 ),
      $                   M )
-            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, T, LDST, ZERO,
+            CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, T, LDST,
+     $                  ZERO,
      $                  WORK, M )
-            CALL DGEMM( 'N', 'N', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
+            CALL DGEMM( 'N', 'N', M, M, M, -ONE, WORK, M, IR, LDST,
+     $                  ONE,
      $                  WORK( M*M+1 ), M )
             DSCALE = ZERO
             DSUM = ONE
@@ -614,7 +635,8 @@
          T( 1, 1 ) = ONE
          IDUM = LWORK - M*M - 2
          IF( N2.GT.1 ) THEN
-            CALL DLAGV2( A( J1, J1 ), LDA, B( J1, J1 ), LDB, AR, AI, BE,
+            CALL DLAGV2( A( J1, J1 ), LDA, B( J1, J1 ), LDB, AR, AI,
+     $                   BE,
      $                   WORK( 1 ), WORK( 2 ), T( 1, 1 ), T( 2, 1 ) )
             WORK( M+1 ) = -WORK( 2 )
             WORK( M+2 ) = WORK( 1 )
@@ -625,7 +647,8 @@
          T( M, M ) = ONE
 *
          IF( N1.GT.1 ) THEN
-            CALL DLAGV2( A( J1+N2, J1+N2 ), LDA, B( J1+N2, J1+N2 ), LDB,
+            CALL DLAGV2( A( J1+N2, J1+N2 ), LDA, B( J1+N2, J1+N2 ),
+     $                   LDB,
      $                   TAUR, TAUL, WORK( M*M+1 ), WORK( N2*M+N2+1 ),
      $                   WORK( N2*M+N2+2 ), T( N2+1, N2+1 ),
      $                   T( M, M-1 ) )
@@ -634,13 +657,17 @@
             T( M, M ) = T( N2+1, N2+1 )
             T( M-1, M ) = -T( M, M-1 )
          END IF
-         CALL DGEMM( 'T', 'N', N2, N1, N2, ONE, WORK, M, A( J1, J1+N2 ),
+         CALL DGEMM( 'T', 'N', N2, N1, N2, ONE, WORK, M, A( J1,
+     $               J1+N2 ),
      $               LDA, ZERO, WORK( M*M+1 ), N2 )
-         CALL DLACPY( 'Full', N2, N1, WORK( M*M+1 ), N2, A( J1, J1+N2 ),
+         CALL DLACPY( 'Full', N2, N1, WORK( M*M+1 ), N2, A( J1,
+     $                J1+N2 ),
      $                LDA )
-         CALL DGEMM( 'T', 'N', N2, N1, N2, ONE, WORK, M, B( J1, J1+N2 ),
+         CALL DGEMM( 'T', 'N', N2, N1, N2, ONE, WORK, M, B( J1,
+     $               J1+N2 ),
      $               LDB, ZERO, WORK( M*M+1 ), N2 )
-         CALL DLACPY( 'Full', N2, N1, WORK( M*M+1 ), N2, B( J1, J1+N2 ),
+         CALL DLACPY( 'Full', N2, N1, WORK( M*M+1 ), N2, B( J1,
+     $                J1+N2 ),
      $                LDB )
          CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, WORK, M, ZERO,
      $               WORK( M*M+1 ), M )

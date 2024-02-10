@@ -535,7 +535,8 @@
 *> \ingroup gesvxx
 *
 *  =====================================================================
-      SUBROUTINE SGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE SGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK,
@@ -586,7 +587,8 @@
       REAL               SLAMCH, SLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEEQUB, SGETRF, SGETRS, SLACPY, SLAQGE,
+      EXTERNAL           SGEEQUB, SGETRF, SGETRS, SLACPY,
+     $                   SLAQGE,
      $                   XERBLA, SLASCL2, SGERFSX
 *     ..
 *     .. Intrinsic Functions ..

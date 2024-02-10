@@ -164,10 +164,12 @@
          DO 10 I = 1, N
             AII = DBLE( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I, I+1 ), LDA,
+               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I, I+1 ),
+     $            LDA,
      $                     A( I, I+1 ), LDA ) )
                CALL ZLACGV( N-I, A( I, I+1 ), LDA )
-               CALL ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               CALL ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1,
+     $                     I+1 ),
      $                     LDA, A( I, I+1 ), LDA, DCMPLX( AII ),
      $                     A( 1, I ), 1 )
                CALL ZLACGV( N-I, A( I, I+1 ), LDA )
@@ -183,7 +185,8 @@
          DO 20 I = 1, N
             AII = DBLE( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I+1, I ), 1,
+               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I+1, I ),
+     $            1,
      $                     A( I+1, I ), 1 ) )
                CALL ZLACGV( I-1, A( I, 1 ), LDA )
                CALL ZGEMV( 'Conjugate transpose', N-I, I-1, ONE,

@@ -301,7 +301,8 @@
 *> \ingroup posvx
 *
 *  =====================================================================
-      SUBROUTINE SPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE SPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                   EQUED,
      $                   S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
      $                   IWORK, INFO )
 *
@@ -338,7 +339,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLAQSY, SPOCON, SPOEQU, SPORFS, SPOTRF,
+      EXTERNAL           SLACPY, SLAQSY, SPOCON, SPOEQU, SPORFS,
+     $                   SPOTRF,
      $                   SPOTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,10 +362,13 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -452,7 +457,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Compute the solution matrix X.
 *

@@ -161,7 +161,8 @@
                IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
    20       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *

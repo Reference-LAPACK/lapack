@@ -206,7 +206,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                         LDZ,
      $                         WORK, LWORK, RWORK, INFO )
 *
       IMPLICIT NONE
@@ -245,7 +246,8 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTERF, XERBLA, CLASCL, CSTEQR,
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CLASCL,
+     $                   CSTEQR,
      $                   CHETRD_2STAGE, CHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -338,9 +340,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *

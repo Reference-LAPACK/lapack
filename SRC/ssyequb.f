@@ -127,7 +127,8 @@
 *>  Tech report version: http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679
 *>
 *  =====================================================================
-      SUBROUTINE SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
+      SUBROUTINE SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                    INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +173,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ( .NOT. ( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      IF ( .NOT. ( LSAME( UPLO, 'U' ) .OR.
+     $     LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -1
       ELSE IF ( N .LT. 0 ) THEN
          INFO = -2
@@ -224,7 +226,7 @@
          S( J ) = 1.0E0 / S( J )
       END DO
 
-      TOL = ONE / SQRT( 2.0E0 * N )
+      TOL = ONE / SQRT( 2.0E0 * REAL( N ) )
 
       DO ITER = 1, MAX_ITER
          SCALE = 0.0E0
@@ -256,23 +258,23 @@
          DO I = 1, N
             AVG = AVG + S( I )*WORK( I )
          END DO
-         AVG = AVG / N
+         AVG = AVG / REAL( N )
 
          STD = 0.0E0
          DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
          CALL SLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )
-         STD = SCALE * SQRT( SUMSQ / N )
+         STD = SCALE * SQRT( SUMSQ / REAL( N ) )
 
          IF ( STD .LT. TOL * AVG ) GOTO 999
 
          DO I = 1, N
             T = ABS( A( I, I ) )
             SI = S( I )
-            C2 = ( N-1 ) * T
-            C1 = ( N-2 ) * ( WORK( I ) - T*SI )
-            C0 = -(T*SI)*SI + 2*WORK( I )*SI - N*AVG
+            C2 = REAL( N-1 ) * T
+            C1 = REAL( N-2 ) * ( WORK( I ) - T*SI )
+            C0 = -(T*SI)*SI + 2*WORK( I )*SI - REAL( N )*AVG
             D = C1*C1 - 4*C0*C2
 
             IF ( D .LE. 0 ) THEN
@@ -307,7 +309,7 @@
                END DO
             END IF
 
-            AVG = AVG + ( U + WORK( I ) ) * D / N
+            AVG = AVG + ( U + WORK( I ) ) * D / REAL( N )
             S( I ) = SI
          END DO
       END DO

@@ -177,7 +177,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT, WORK,
+      SUBROUTINE SGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT,
+     $                       WORK,
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
@@ -208,7 +209,8 @@
       EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLATSQR, SORGTSQR_ROW, SORHR_COL,
+      EXTERNAL           SCOPY, SLATSQR, SORGTSQR_ROW,
+     $                   SORHR_COL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -345,7 +347,8 @@
                A( I, J ) = -ONE * WORK( LWT+N*(J-1)+I )
             END DO
          ELSE
-            CALL SCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ), LDA )
+            CALL SCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ),
+     $                  LDA )
          END IF
       END DO
 *

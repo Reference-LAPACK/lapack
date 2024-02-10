@@ -201,7 +201,8 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( REAL( A( J, J ) ) - CDOTC( J-1, A( J, 1 ), LDA,
+            AJJ = REAL( REAL( A( J, J ) ) - CDOTC( J-1, A( J, 1 ),
+     $                  LDA,
      $            A( J, 1 ), LDA ) )
             IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
@@ -214,7 +215,8 @@
 *
             IF( J.LT.N ) THEN
                CALL CLACGV( J-1, A( J, 1 ), LDA )
-               CALL CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1 ),
+               CALL CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1,
+     $                     1 ),
      $                     LDA, A( J, 1 ), LDA, CONE, A( J+1, J ), 1 )
                CALL CLACGV( J-1, A( J, 1 ), LDA )
                CALL CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )

@@ -221,7 +221,8 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -246,10 +247,12 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
@@ -308,9 +311,11 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -333,18 +338,23 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 )
+     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ),
+     $                                1 )
             END IF
             KSTEP = 2
          END IF

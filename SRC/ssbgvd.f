@@ -216,7 +216,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+      SUBROUTINE SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB,
+     $                   W,
      $                   Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -251,7 +252,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SPBSTF, SSBGST, SSBTRD, SSTEDC,
+      EXTERNAL           SGEMM, SLACPY, SPBSTF, SSBGST, SSBTRD,
+     $                   SSTEDC,
      $                   SSTERF, XERBLA
 *     ..
 *     .. Executable Statements ..
@@ -339,7 +341,8 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z,
+     $             LDZ,
      $             WORK( INDWRK ), IINFO )
 *
 *     For eigenvalues only, call SSTERF. For eigenvectors, call SSTEDC.
@@ -349,7 +352,8 @@
       ELSE
          CALL SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
+         CALL SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ),
+     $               N,
      $               ZERO, WORK( INDWK2 ), N )
          CALL SLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF

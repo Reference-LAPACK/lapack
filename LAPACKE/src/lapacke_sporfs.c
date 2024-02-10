@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sporfs( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sporfs)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, const float* a, lapack_int lda,
                            const float* af, lapack_int ldaf, const float* b,
                            lapack_int ldb, float* x, lapack_int ldx,
@@ -42,22 +42,22 @@ lapack_int LAPACKE_sporfs( int matrix_layout, char uplo, lapack_int n,
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sporfs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sporfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_spo_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_spo_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_spo_nancheck( matrix_layout, uplo, n, af, ldaf ) ) {
+        if( API_SUFFIX(LAPACKE_spo_nancheck)( matrix_layout, uplo, n, af, ldaf ) ) {
             return -7;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
             return -11;
         }
     }
@@ -74,7 +74,7 @@ lapack_int LAPACKE_sporfs( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sporfs_work( matrix_layout, uplo, n, nrhs, a, lda, af, ldaf,
+    info = API_SUFFIX(LAPACKE_sporfs_work)( matrix_layout, uplo, n, nrhs, a, lda, af, ldaf,
                                 b, ldb, x, ldx, ferr, berr, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -82,7 +82,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sporfs", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sporfs", info );
     }
     return info;
 }

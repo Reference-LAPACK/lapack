@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_slartgs_work( float x, float y, float sigma, float* cs,
+lapack_int API_SUFFIX(LAPACKE_slartgs_work)( float x, float y, float sigma, float* cs,
                                  float* sn )
 {
     lapack_int info = 0;

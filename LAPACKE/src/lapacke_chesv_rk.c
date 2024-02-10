@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chesv_rk( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_chesv_rk)( int matrix_layout, char uplo, lapack_int n,
                           lapack_int nrhs, lapack_complex_float* a,
                           lapack_int lda, lapack_complex_float* e,
                           lapack_int* ipiv,
@@ -43,22 +43,22 @@ lapack_int LAPACKE_chesv_rk( int matrix_layout, char uplo, lapack_int n,
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_chesv_rk", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chesv_rk", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_che_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_che_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_chesv_rk_work( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
+    info = API_SUFFIX(LAPACKE_chesv_rk_work)( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
                                ldb, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -72,13 +72,13 @@ lapack_int LAPACKE_chesv_rk( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_chesv_rk_work( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
+    info = API_SUFFIX(LAPACKE_chesv_rk_work)( matrix_layout, uplo, n, nrhs, a, lda, e, ipiv, b,
                                ldb, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_chesv_rk", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chesv_rk", info );
     }
     return info;
 }

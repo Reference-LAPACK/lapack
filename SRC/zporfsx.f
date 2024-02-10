@@ -386,7 +386,8 @@
 *> \ingroup porfsx
 *
 *  =====================================================================
-      SUBROUTINE ZPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+      SUBROUTINE ZPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S,
+     $                    B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -451,7 +452,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
+      EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X,
+     $                   ZLA_PORCOND_C
       DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
@@ -508,7 +510,8 @@
 *
 *     Test input parameters.
 *
-      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
@@ -594,7 +597,8 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0,
+     $                SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).

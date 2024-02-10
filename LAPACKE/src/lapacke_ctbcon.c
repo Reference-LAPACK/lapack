@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctbcon( int matrix_layout, char norm, char uplo, char diag,
+lapack_int API_SUFFIX(LAPACKE_ctbcon)( int matrix_layout, char norm, char uplo, char diag,
                            lapack_int n, lapack_int kd,
                            const lapack_complex_float* ab, lapack_int ldab,
                            float* rcond )
@@ -41,13 +41,13 @@ lapack_int LAPACKE_ctbcon( int matrix_layout, char norm, char uplo, char diag,
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ctbcon", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_ctb_nancheck( matrix_layout, uplo, diag, n, kd, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_ctb_nancheck)( matrix_layout, uplo, diag, n, kd, ab, ldab ) ) {
             return -7;
         }
     }
@@ -65,7 +65,7 @@ lapack_int LAPACKE_ctbcon( int matrix_layout, char norm, char uplo, char diag,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ctbcon_work( matrix_layout, norm, uplo, diag, n, kd, ab, ldab,
+    info = API_SUFFIX(LAPACKE_ctbcon_work)( matrix_layout, norm, uplo, diag, n, kd, ab, ldab,
                                 rcond, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -73,7 +73,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_ctbcon", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctbcon", info );
     }
     return info;
 }

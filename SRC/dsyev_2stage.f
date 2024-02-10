@@ -215,7 +215,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DORGTR, DSCAL, DSTEQR, DSTERF,
+      EXTERNAL           DLASCL, DORGTR, DSCAL, DSTEQR,
+     $                   DSTERF,
      $                   XERBLA, DSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -241,10 +242,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                         -1 )
+         IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -317,9 +322,11 @@
 *        Not available in this release, and argument checking should not
 *        let it getting here
          RETURN
-         CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ),
      $                LLWORK, IINFO )
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA,
+     $                WORK( INDTAU ),
      $                INFO )
       END IF
 *

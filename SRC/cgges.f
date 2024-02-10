@@ -264,7 +264,8 @@
 *> \ingroup gges
 *
 *  =====================================================================
-      SUBROUTINE CGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
+      SUBROUTINE CGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
+     $                  LDB,
      $                  SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
      $                  LWORK, RWORK, BWORK, INFO )
 *
@@ -311,14 +312,16 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGSEN, CUNGQR, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -359,7 +362,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -382,7 +386,8 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
-         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N, 0 ) )
+         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N,
+     $                 0 ) )
          LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N, -1 ) )
          IF( ILVSL ) THEN
@@ -526,9 +531,11 @@
 *        Undo scaling on eigenvalues before selecting
 *
          IF( ILASCL )
-     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N,
+     $                   IERR )
          IF( ILBSCL )
-     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N, IERR )
+     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N,
+     $                   IERR )
 *
 *        Select eigenvalues
 *
@@ -536,7 +543,8 @@
             BWORK( I ) = SELCTG( ALPHA( I ), BETA( I ) )
    10    CONTINUE
 *
-         CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHA,
+         CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
+     $                ALPHA,
      $                BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL, PVSR,
      $                DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1, IERR )
          IF( IERR.EQ.1 )

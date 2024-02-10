@@ -201,7 +201,8 @@
             TEMP = WORK( I )
             IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
    80    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
@@ -210,7 +211,8 @@
          DO 90 J = 1, N
             L = MAX( 1, J-KU )
             K = KU + 1 - J + L
-            CALL CLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SUM )
+            CALL CLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE,
+     $                   SUM )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF

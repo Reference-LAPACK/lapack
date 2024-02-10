@@ -330,7 +330,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE DSYEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE DSYEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
@@ -372,7 +373,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DORMTR, DSCAL, DSTEBZ, DSTEMR, DSTEIN,
+      EXTERNAL           DCOPY, DORMTR, DSCAL, DSTEBZ, DSTEMR,
+     $                   DSTEIN,
      $                   DSTERF, DSWAP, DSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -632,7 +634,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

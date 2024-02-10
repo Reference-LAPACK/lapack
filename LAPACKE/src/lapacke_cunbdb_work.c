@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cunbdb_work( int matrix_layout, char trans, char signs,
+lapack_int API_SUFFIX(LAPACKE_cunbdb_work)( int matrix_layout, char trans, char signs,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 lapack_complex_float* x11, lapack_int ldx11,
                                 lapack_complex_float* x12, lapack_int ldx12,
@@ -63,7 +63,7 @@ lapack_int LAPACKE_cunbdb_work( int matrix_layout, char trans, char signs,
     if( matrix_layout == LAPACK_COL_MAJOR ||
         matrix_layout == LAPACK_ROW_MAJOR ) {
         char ltrans;
-        if( !LAPACKE_lsame( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+        if( !API_SUFFIX(LAPACKE_lsame)( trans, 't' ) && matrix_layout == LAPACK_COL_MAJOR ) {
             ltrans = 'n';
         } else {
             ltrans = 't';
@@ -77,7 +77,7 @@ lapack_int LAPACKE_cunbdb_work( int matrix_layout, char trans, char signs,
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cunbdb_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunbdb_work", info );
     }
     return info;
 }

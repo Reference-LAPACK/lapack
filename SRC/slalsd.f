@@ -204,7 +204,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLACPY, SLALSA, SLARTG, SLASCL,
+      EXTERNAL           SCOPY, SGEMM, SLACPY, SLALSA, SLARTG,
+     $                   SLASCL,
      $                   SLASDA, SLASDQ, SLASET, SLASRT, SROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -249,7 +250,8 @@
             CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL SLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL SLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
+     $                   INFO )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -275,7 +277,8 @@
                DO 20 J = 1, N - 1
                   CS = WORK( J*2-1 )
                   SN = WORK( J*2 )
-                  CALL SROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL SROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS,
+     $                       SN )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -299,7 +302,8 @@
       IF( N.LE.SMLSIZ ) THEN
          NWORK = 1 + N*N
          CALL SLASET( 'A', N, N, ZERO, ONE, WORK, N )
-         CALL SLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, B,
+         CALL SLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N,
+     $                B,
      $                LDB, WORK( NWORK ), INFO )
          IF( INFO.NE.0 ) THEN
             RETURN
@@ -307,14 +311,17 @@
          TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
          DO 40 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ),
+     $                      LDB )
             ELSE
-               CALL SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I,
+     $                      1 ),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
    40    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
+         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB,
+     $               ZERO,
      $               WORK( NWORK ), N )
          CALL SLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
 *
@@ -462,7 +469,8 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N )
+            CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ),
+     $                   N )
          ELSE
             RANK = RANK + 1
             CALL SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
@@ -486,7 +494,8 @@
      $                  WORK( VT+ST1 ), N, WORK( BXST ), N, ZERO,
      $                  B( ST, 1 ), LDB )
          ELSE
-            CALL SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ),
+     $                   N,
      $                   B( ST, 1 ), LDB, WORK( U+ST1 ), N,
      $                   WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),

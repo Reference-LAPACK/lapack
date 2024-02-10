@@ -443,7 +443,8 @@
       DOUBLE PRECISION RDUMMY(1)
 *     ..
 *     .. External Subroutines (BLAS, LAPACK)
-      EXTERNAL    DGELQF, DGEQP3, DGEQRF, DGESVD, DLACPY, DLAPMT,
+      EXTERNAL    DGELQF, DGEQP3, DGEQRF, DGESVD, DLACPY,
+     $                   DLAPMT,
      $            DLASCL, DLASET, DLASWP, DSCAL,  DPOCON, DORMLQ,
      $            DORMQR, XERBLA
 *     ..
@@ -675,10 +676,12 @@
                    IF ( WNTVA ) THEN
                        CALL DGEQRF(N,N/2,U,LDU,RDUMMY,RDUMMY,-1,IERR)
                        LWRK_DGEQRF = INT( RDUMMY(1) )
-                       CALL DGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,LDU,
+                       CALL DGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,
+     $                              LDU,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_DGESVD2 = INT( RDUMMY(1) )
-                       CALL DORMQR( 'R', 'C', N, N, N/2, U, LDU, RDUMMY,
+                       CALL DORMQR( 'R', 'C', N, N, N/2, U, LDU,
+     $                              RDUMMY,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_DORMQR2 = INT( RDUMMY(1) )
                        OPTWRK2 = MAX( LWRK_DGEQP3, N/2+LWRK_DGEQRF,
@@ -697,10 +700,12 @@
                    IF ( WNTVA ) THEN
                       CALL DGELQF(N/2,N,U,LDU,RDUMMY,RDUMMY,-1,IERR)
                       LWRK_DGELQF = INT( RDUMMY(1) )
-                      CALL DGESVD( 'S','O', N/2,N/2, V, LDV, S, U, LDU,
+                      CALL DGESVD( 'S','O', N/2,N/2, V, LDV, S, U,
+     $                             LDU,
      $                     V, LDV, RDUMMY, -1, IERR )
                       LWRK_DGESVD2 = INT( RDUMMY(1) )
-                      CALL DORMLQ( 'R', 'N', N, N, N/2, U, LDU, RDUMMY,
+                      CALL DORMLQ( 'R', 'N', N, N, N/2, U, LDU,
+     $                             RDUMMY,
      $                     V, LDV, RDUMMY,-1,IERR )
                       LWRK_DORMLQ = INT( RDUMMY(1) )
                       OPTWRK2 = MAX( LWRK_DGEQP3, N/2+LWRK_DGELQF,
@@ -800,7 +805,8 @@
             IF ( RWORK(1) .GT. BIG / SQRT(DBLE(M)) ) THEN
 *               .. to prevent overflow in the QR factorization, scale the
 *               matrix by 1/sqrt(M) if too large entry detected
-                CALL DLASCL('G',0,0,SQRT(DBLE(M)),ONE, M,N, A,LDA, IERR)
+                CALL DLASCL('G',0,0,SQRT(DBLE(M)),ONE, M,N, A,LDA,
+     $                       IERR)
                 ASCALED = .TRUE.
             END IF
             CALL DLASWP( N, A, LDA, 1, M-1, IWORK(N+1), 1 )
@@ -822,7 +828,8 @@
           IF ( RTMP .GT. BIG / SQRT(DBLE(M)) ) THEN
 *             .. to prevent overflow in the QR factorization, scale the
 *             matrix by 1/sqrt(M) if too large entry detected
-              CALL DLASCL('G',0,0, SQRT(DBLE(M)),ONE, M,N, A,LDA, IERR)
+              CALL DLASCL('G',0,0, SQRT(DBLE(M)),ONE, M,N, A,LDA,
+     $                     IERR)
               ASCALED = .TRUE.
           END IF
       END IF
@@ -990,7 +997,8 @@
 *            .. copy R into [U] and overwrite [U] with the left singular vectors
              CALL DLACPY( 'U', NR, N, A, LDA, U, LDU )
              IF ( NR .GT. 1 )
-     $         CALL DLASET( 'L', NR-1, NR-1, ZERO, ZERO, U(2,1), LDU )
+     $         CALL DLASET( 'L', NR-1, NR-1, ZERO, ZERO, U(2,1),
+     $                      LDU )
 *            .. the right singular vectors not computed, the NR left singular
 *            vectors overwrite [U](1:NR,1:NR)
                 CALL DGESVD( 'O', 'N', NR, N, U, LDU, S, U, LDU,
@@ -1081,7 +1089,8 @@
 *            .. copy R into V and overwrite V with the right singular vectors
              CALL DLACPY( 'U', NR, N, A, LDA, V, LDV )
              IF ( NR .GT. 1 )
-     $         CALL DLASET( 'L', NR-1, NR-1, ZERO, ZERO, V(2,1), LDV )
+     $         CALL DLASET( 'L', NR-1, NR-1, ZERO, ZERO, V(2,1),
+     $                      LDV )
 *            .. the right singular vectors overwrite V, the NR left singular
 *            vectors stored in U(1:NR,1:NR)
              IF ( WNTVR .OR. ( NR .EQ. N ) ) THEN
@@ -1153,9 +1162,11 @@
  1117           CONTINUE
 *
                 IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL DLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1), LDU)
+                  CALL DLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL DLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1206,7 +1217,8 @@
                    IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL DLASET('A',M-N,N,ZERO,ZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL DLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),LDU)
+                        CALL DLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),
+     $                               LDU)
                         CALL DLASET('A',M-N,N1-N,ZERO,ONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1233,7 +1245,8 @@
      $                 V,LDV, WORK(N+NR+1),LWORK-N-NR, INFO )
                   CALL DLASET('A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV)
                   CALL DLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
-                  CALL DLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV)
+                  CALL DLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV)
                   CALL DORMQR('R','C', N, N, NR, U(1,NR+1), LDU,
      $                 WORK(N+1),V,LDV,WORK(N+NR+1),LWORK-N-NR,IERR)
                   CALL DLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1242,7 +1255,8 @@
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
                      CALL DLASET('A',M-NR,NR,ZERO,ZERO,U(NR+1,1),LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL DLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1),LDU)
                      END IF
@@ -1268,9 +1282,11 @@
 *               .. assemble the left singular vector matrix U of dimensions
 *              (M x NR) or (M x N) or (M x M).
                IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL DLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1), LDU)
+                  CALL DLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL DLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1304,7 +1320,8 @@
                   IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL DLASET('A',M-N,N,ZERO,ZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL DLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),LDU)
+                        CALL DLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),
+     $                               LDU)
                         CALL DLASET( 'A',M-N,N1-N,ZERO,ONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1322,7 +1339,8 @@
      $                 V, LDV, WORK(N+NR+1), LWORK-N-NR, INFO )
                   CALL DLASET('A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV)
                   CALL DLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
-                  CALL DLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV)
+                  CALL DLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV)
                   CALL DORMLQ('R','N',N,N,NR,U(NR+1,1),LDU,WORK(N+1),
      $                 V, LDV, WORK(N+NR+1),LWORK-N-NR,IERR)
                   CALL DLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1331,7 +1349,8 @@
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
                      CALL DLASET('A',M-NR,NR,ZERO,ZERO,U(NR+1,1),LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL DLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL DLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                      END IF
@@ -1364,7 +1383,8 @@
 *
 *     .. if numerical rank deficiency is detected, the truncated
 *     singular values are set to zero.
-      IF ( NR .LT. N ) CALL DLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1), N )
+      IF ( NR .LT. N ) CALL DLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1),
+     $     N )
 *     .. undo scaling; this may cause overflow in the largest singular
 *     values.
       IF ( ASCALED )

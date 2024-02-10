@@ -176,7 +176,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT, WORK,
+      SUBROUTINE CGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT,
+     $                       WORK,
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
@@ -207,7 +208,8 @@
       EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLATSQR, CUNGTSQR_ROW, CUNHR_COL,
+      EXTERNAL           CCOPY, CLATSQR, CUNGTSQR_ROW,
+     $                   CUNHR_COL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -344,7 +346,8 @@
                A( I, J ) = -CONE * WORK( LWT+N*(J-1)+I )
             END DO
          ELSE
-            CALL CCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ), LDA )
+            CALL CCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ),
+     $                  LDA )
          END IF
       END DO
 *

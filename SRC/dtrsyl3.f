@@ -175,7 +175,8 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE DTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+      SUBROUTINE DTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C,
      $                    LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
      $                    INFO )
       IMPLICIT NONE
@@ -209,10 +210,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLANGE, DLAMCH, DLARMM
-      EXTERNAL           DLANGE, DLAMCH, DLARMM, ILAENV, LSAME
+      EXTERNAL           DLANGE, DLAMCH, DLARMM, ILAENV,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLASCL, DSCAL, DTRSYL, XERBLA
+      EXTERNAL           DGEMM, DLASCL, DSCAL, DTRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXPONENT, MAX, MIN
@@ -1220,7 +1223,8 @@
 *
          SCALOC = MIN( BIGNUM / SCAL, ONE / BUF )
          BUF = BUF * SCALOC
-         CALL DLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC, IWORK(1) )
+         CALL DLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC,
+     $               IWORK(1) )
       END IF
 *
 *     Combine with buffer scaling factor. SCALE will be flushed if

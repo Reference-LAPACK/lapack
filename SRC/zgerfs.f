@@ -181,7 +181,8 @@
 *> \ingroup gerfs
 *
 *  =====================================================================
-      SUBROUTINE ZGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE ZGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -229,7 +230,8 @@
       EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGETRS, ZLACN2
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGETRS,
+     $                   ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -307,7 +309,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK,
+         CALL ZGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
+     $               WORK,
      $               1 )
 *
 *        Compute componentwise relative backward error from formula

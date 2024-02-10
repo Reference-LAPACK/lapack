@@ -177,7 +177,8 @@
 *> \ingroup trrfs
 *
 *  =====================================================================
-      SUBROUTINE DTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB, X,
+      SUBROUTINE DTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB,
+     $                   X,
      $                   LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -212,7 +213,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DTRMV, DTRSV, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DTRMV, DTRSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -426,14 +428,16 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL DTRSV( UPLO, TRANST, DIAG, N, A, LDA, WORK( N+1 ),
+               CALL DTRSV( UPLO, TRANST, DIAG, N, A, LDA,
+     $                     WORK( N+1 ),
      $                     1 )
                DO 220 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )

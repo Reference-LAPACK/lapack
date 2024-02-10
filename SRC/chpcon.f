@@ -114,7 +114,8 @@
 *> \ingroup hpcon
 *
 *  =====================================================================
-      SUBROUTINE CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
+      SUBROUTINE CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

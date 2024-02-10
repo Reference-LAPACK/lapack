@@ -343,13 +343,16 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SCNRM2, SLAMCH, SLAPY2, SROUNDUP_LWORK
+      REAL               SCNRM2, SLAMCH, SLAPY2,
+     $                   SROUNDUP_LWORK
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, SCNRM2, SLAMCH, SLAPY2, SROUNDUP_LWORK,
+      EXTERNAL           LSAME, SCNRM2, SLAMCH,
+     $                   SLAPY2, SROUNDUP_LWORK,
      $                   CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL, XERBLA
+      EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX
@@ -465,7 +468,8 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = SLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) ) )
+               DIF( KS ) = SLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1,
+     $              1 ) ) )
             ELSE
 *
 *              Estimate the reciprocal condition number of the k-th
@@ -479,7 +483,8 @@
                IFST = K
                ILST = 1
 *
-               CALL CTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+               CALL CTGEXC( .FALSE., .FALSE., N, WORK, N,
+     $                      WORK( N*N+1 ),
      $                      N, DUMMY, 1, DUMMY1, 1, IFST, ILST, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -498,7 +503,8 @@
                   N1 = 1
                   N2 = N - N1
                   I = N*N + 1
-                  CALL CTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL CTGSYL( 'N', IDIFJB, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ), DUMMY,

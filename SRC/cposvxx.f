@@ -489,7 +489,8 @@
 *> \ingroup posvxx
 *
 *  =====================================================================
-      SUBROUTINE CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )

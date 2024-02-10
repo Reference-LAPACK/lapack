@@ -138,7 +138,8 @@
 *> \ingroup pstrf
 *
 *  =====================================================================
-      SUBROUTINE CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,7 +177,8 @@
       EXTERNAL           SLAMCH, ILAENV, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CHERK, CLACGV, CPSTF2, CSSCAL, CSWAP,
+      EXTERNAL           CGEMV, CHERK, CLACGV, CPSTF2, CSSCAL,
+     $                   CSWAP,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -240,7 +242,7 @@
 *     Compute stopping value if not supplied
 *
          IF( TOL.LT.ZERO ) THEN
-            SSTOP = N * SLAMCH( 'Epsilon' ) * AJJ
+            SSTOP = REAL( N ) * SLAMCH( 'Epsilon' ) * AJJ
          ELSE
             SSTOP = TOL
          END IF
@@ -323,7 +325,8 @@
 *
                   IF( J.LT.N ) THEN
                      CALL CLACGV( J-1, A( 1, J ), 1 )
-                     CALL CGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 ),
+                     CALL CGEMV( 'Trans', J-K, N-J, -CONE, A( K,
+     $                           J+1 ),
      $                           LDA, A( K, J ), 1, CONE, A( J, J+1 ),
      $                           LDA )
                      CALL CLACGV( J-1, A( 1, J ), 1 )
@@ -390,7 +393,8 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL CSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL CSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ),
+     $                           LDA )
                      IF( PVT.LT.N )
      $                  CALL CSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )

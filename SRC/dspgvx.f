@@ -297,7 +297,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DPPTRF, DSPEVX, DSPGST, DTPMV, DTPSV, XERBLA
+      EXTERNAL           DPPTRF, DSPEVX, DSPGST, DTPMV, DTPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -364,7 +365,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL DSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
+      CALL DSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL,
+     $             M,
      $             W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN

@@ -280,7 +280,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAORHR_COL_GETRFNP, DSCAL, DTRSM,
+      EXTERNAL           DCOPY, DLAORHR_COL_GETRFNP, DSCAL,
+     $                   DTRSM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

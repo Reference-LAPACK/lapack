@@ -326,7 +326,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLACPY, SPBSTF, SSBGST, SSBTRD,
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SPBSTF, SSBGST,
+     $                   SSBTRD,
      $                   SSTEBZ, SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

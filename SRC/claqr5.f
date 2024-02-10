@@ -251,7 +251,8 @@
 *>       ACM Trans. Math. Softw. 40, 2, Article 12 (February 2014).
 *>
 *  =====================================================================
-      SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
+      SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
+     $                   S,
      $                   H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
      $                   WV, LDWV, NH, WH, LDWH )
       IMPLICIT NONE
@@ -300,7 +301,8 @@
       COMPLEX            VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET, CTRMM
+      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET,
+     $                   CTRMM
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1

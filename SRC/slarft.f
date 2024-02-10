@@ -245,7 +245,8 @@
 *
 *              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
 *
-               CALL STRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T,
+               CALL STRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
+     $                     T,
      $                     LDT, T( 1, I ), 1 )
                T( I, I ) = TAU( I )
                IF( I.GT.1 ) THEN
@@ -282,7 +283,8 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
 *
-                     CALL SGEMV( 'Transpose', N-K+I-J, K-I, -TAU( I ),
+                     CALL SGEMV( 'Transpose', N-K+I-J, K-I,
+     $                           -TAU( I ),
      $                           V( J, I+1 ), LDV, V( J, I ), 1, ONE,
      $                           T( I+1, I ), 1 )
                   ELSE
@@ -304,7 +306,8 @@
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-                  CALL STRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+                  CALL STRMV( 'Lower', 'No transpose', 'Non-unit',
+     $                        K-I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
                   IF( I.GT.1 ) THEN
                      PREVLASTV = MIN( PREVLASTV, LASTV )

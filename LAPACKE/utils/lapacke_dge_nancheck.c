@@ -33,7 +33,7 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_dge_nancheck( int matrix_layout, lapack_int m,
+lapack_logical API_SUFFIX(LAPACKE_dge_nancheck)( int matrix_layout, lapack_int m,
                                       lapack_int n,
                                       const double *a,
                                       lapack_int lda )

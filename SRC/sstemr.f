@@ -363,7 +363,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAE2, SLAEV2, SLARRC, SLARRE, SLARRJ,
+      EXTERNAL           SCOPY, SLAE2, SLAEV2, SLARRC, SLARRE,
+     $                   SLARRJ,
      $                   SLARRR, SLARRV, SLASRT, SSCAL, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -458,7 +459,7 @@
             NZCMIN = 0
          ENDIF
          IF( ZQUERY .AND. INFO.EQ.0 ) THEN
-            Z( 1,1 ) = NZCMIN
+            Z( 1,1 ) = REAL( NZCMIN )
          ELSE IF( NZC.LT.NZCMIN .AND. .NOT.ZQUERY ) THEN
             INFO = -14
          END IF

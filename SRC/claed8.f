@@ -222,7 +222,8 @@
 *> \ingroup laed8
 *
 *  =====================================================================
-      SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMBDA,
+      SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z,
+     $                   DLAMBDA,
      $                   Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INFO )
 *
@@ -259,7 +260,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CSROT, SCOPY, SLAMRG, SSCAL,
+      EXTERNAL           CCOPY, CLACPY, CSROT, SCOPY, SLAMRG,
+     $                   SSCAL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -350,7 +352,8 @@
             PERM( J ) = INDXQ( INDX( J ) )
             CALL CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
    50    CONTINUE
-         CALL CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ), LDQ )
+         CALL CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
+     $                LDQ )
          RETURN
       END IF
 *
@@ -472,7 +475,8 @@
 *
       IF( K.LT.N ) THEN
          CALL SCOPY( N-K, DLAMBDA( K+1 ), 1, D( K+1 ), 1 )
-         CALL CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1, K+1 ),
+         CALL CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1,
+     $                K+1 ),
      $                LDQ )
       END IF
 *

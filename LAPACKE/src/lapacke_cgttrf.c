@@ -32,23 +32,23 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgttrf( lapack_int n, lapack_complex_float* dl,
+lapack_int API_SUFFIX(LAPACKE_cgttrf)( lapack_int n, lapack_complex_float* dl,
                            lapack_complex_float* d, lapack_complex_float* du,
                            lapack_complex_float* du2, lapack_int* ipiv )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_c_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n, d, 1 ) ) {
             return -3;
         }
-        if( LAPACKE_c_nancheck( n-1, dl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, dl, 1 ) ) {
             return -2;
         }
-        if( LAPACKE_c_nancheck( n-1, du, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, du, 1 ) ) {
             return -4;
         }
     }
 #endif
-    return LAPACKE_cgttrf_work( n, dl, d, du, du2, ipiv );
+    return API_SUFFIX(LAPACKE_cgttrf_work)( n, dl, d, du, du2, ipiv );
 }

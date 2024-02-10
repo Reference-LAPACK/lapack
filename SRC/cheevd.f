@@ -193,7 +193,8 @@
 *> at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+      SUBROUTINE CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -230,10 +231,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANHE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, CLANHE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, CLANHE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CLACPY, CLASCL, CSTEDC, CUNMTR, SSCAL,
+      EXTERNAL           CHETRD, CLACPY, CLASCL, CSTEDC, CUNMTR,
+     $                   SSCAL,
      $                   SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -277,7 +280,8 @@
                LIWMIN = 1
             END IF
             LOPT = MAX( LWMIN, N +
-     $                  N*ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 ) )
+     $                  N*ILAENV( 1, 'CHETRD', UPLO, N, -1, -1,
+     $                            -1 ) )
             LROPT = LRWMIN
             LIOPT = LIWMIN
          END IF

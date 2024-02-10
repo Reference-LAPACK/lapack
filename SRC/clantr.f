@@ -137,7 +137,8 @@
 *> \ingroup lantr
 *
 *  =====================================================================
-      REAL             FUNCTION CLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
+      REAL             FUNCTION CLANTR( NORM, UPLO, DIAG, M, N, A,
+     $                                  LDA,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine --
@@ -188,14 +189,16 @@
                DO 20 J = 1, N
                   DO 10 I = 1, MIN( M, J-1 )
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    10             CONTINUE
    20          CONTINUE
             ELSE
                DO 40 J = 1, N
                   DO 30 I = J + 1, M
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    30             CONTINUE
    40          CONTINUE
             END IF
@@ -205,14 +208,16 @@
                DO 60 J = 1, N
                   DO 50 I = 1, MIN( M, J )
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    50             CONTINUE
    60          CONTINUE
             ELSE
                DO 80 J = 1, N
                   DO 70 I = J, M
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    70             CONTINUE
    80          CONTINUE
             END IF
@@ -307,28 +312,31 @@
             SUM = WORK( I )
             IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
   280    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = MIN( M, N )
+               SUM = REAL( MIN( M, N ) )
                DO 290 J = 2, N
-                  CALL CLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE, SUM )
+                  CALL CLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE,
+     $                         SUM )
   290          CONTINUE
             ELSE
                SCALE = ZERO
                SUM = ONE
                DO 300 J = 1, N
-                  CALL CLASSQ( MIN( M, J ), A( 1, J ), 1, SCALE, SUM )
+                  CALL CLASSQ( MIN( M, J ), A( 1, J ), 1, SCALE,
+     $                         SUM )
   300          CONTINUE
             END IF
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = MIN( M, N )
+               SUM = REAL( MIN( M, N ) )
                DO 310 J = 1, N
                   CALL CLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
      $                         SUM )

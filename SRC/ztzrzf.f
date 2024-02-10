@@ -280,7 +280,8 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL ZLARZT( 'Backward', 'Rowwise', N-M, IB, A( I, M1 ),
+               CALL ZLARZT( 'Backward', 'Rowwise', N-M, IB, A( I,
+     $                      M1 ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:i-1,i:n) from the right

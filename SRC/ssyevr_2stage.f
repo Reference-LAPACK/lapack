@@ -419,11 +419,13 @@
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
       REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANSY, SROUNDUP_LWORK, ILAENV,
+      EXTERNAL           LSAME, SLAMCH, SLANSY,
+     $                   SROUNDUP_LWORK, ILAENV,
      $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
+      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR,
+     $                   SSTEIN,
      $                   SSTERF, SSWAP, SSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -443,10 +445,14 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                      -1 )
+      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                      -1 )
+      LHTRD  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                      -1 )
+      LWTRD  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                      -1 )
 *
       IF( N.LE.1 ) THEN
          LWMIN  = 1
@@ -639,7 +645,7 @@
             CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
             CALL SCOPY( N, WORK( INDD ), 1, WORK( INDDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -698,7 +704,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -243,7 +243,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
 *
@@ -285,10 +286,12 @@
       INTEGER            ICAMAX
       REAL               SCNRM2, SLAMCH
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, ICAMAX, SCNRM2, SLAMCH, CDOTC
+      EXTERNAL           LSAME, ICAMAX, SCNRM2, SLAMCH,
+     $                   CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CLACPY, CLATRS, CSRSCL, CTREXC, XERBLA
+      EXTERNAL           CLACN2, CLACPY, CLATRS, CSRSCL, CTREXC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -397,7 +400,8 @@
 *           diagonal element to the (1,1) position.
 *
             CALL CLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
-            CALL CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IERR )
+            CALL CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1,
+     $                   IERR )
 *
 *           Form  C = T22 - lambda*I in WORK(2:N,2:N).
 *
@@ -413,7 +417,8 @@
             KASE = 0
             NORMIN = 'N'
    30       CONTINUE
-            CALL CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE )
+            CALL CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE,
+     $                   ISAVE )
 *
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN

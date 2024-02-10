@@ -47,7 +47,44 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${TMGLIB} ${SOURCES})
+add_library(${TMGLIB}_obj OBJECT ${SOURCES})
+set_target_properties(
+  ${TMGLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
+    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    # Disable extended API for MATGEN and LAPACK.
+    set(BUILD_INDEX64_EXT_API OFF)
+    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
+  else()
+    set(SOURCES_64)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
+    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
+    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj/*.*)
+    foreach(F IN LISTS SOURCES_64)
+      set(FFILE "")
+      file(READ ${F} FFILE)
+      file(WRITE ${F} "#include \"matgen_64.h\"\n")
+      file(APPEND ${F} "${FFILE}")
+    endforeach()
+    file(COPY matgen_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
+    add_library(${TMGLIB}_64_obj OBJECT ${SOURCES_64})
+    target_compile_options(${TMGLIB}_64_obj PRIVATE ${FOPT_ILP64} -DMATGEN_64)
+    set_target_properties(
+    ${TMGLIB}_64_obj PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    Fortran_PREPROCESS ON
+  )
+  endif()
+endif()
+
+add_library(${TMGLIB}
+        $<TARGET_OBJECTS:${TMGLIB}_obj>
+        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${TMGLIB}_64_obj>>)
 
 set_target_properties(
   ${TMGLIB} PROPERTIES

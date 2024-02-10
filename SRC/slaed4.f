@@ -832,7 +832,8 @@
                      ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
                   END IF
                END IF
-               CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
+               CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W,
+     $                      ETA,
      $                      INFO )
                IF( INFO.NE.0 )
      $            GO TO 250

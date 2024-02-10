@@ -358,7 +358,8 @@
       EXTERNAL           LSAME, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGGE, SLAGSY, SLAROT, SLARTG, SLATM1,
+      EXTERNAL           SCOPY, SLAGGE, SLAGSY,
+     $                   SLAROT, SLARTG, SLATM1,
      $                   SLASET, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -513,7 +514,8 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, IINFO )
+      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN,
+     $             IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -620,7 +622,8 @@
                      ICOL = MAX( 1, JR-JKL )
                      IF( JR.LT.M ) THEN
                         IL = MIN( N, JR+JKU ) + 1 - ICOL
-                        CALL SLAROT( .TRUE., JR.GT.JKL, .FALSE., IL, C,
+                        CALL SLAROT( .TRUE., JR.GT.JKL, .FALSE., IL,
+     $                               C,
      $                               S, A( JR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -638,7 +641,8 @@
                         IL = IR + 2 - IROW
                         TEMP = ZERO
                         ILTEMP = JCH.GT.JKU
-                        CALL SLAROT( .FALSE., ILTEMP, .TRUE., IL, C, -S,
+                        CALL SLAROT( .FALSE., ILTEMP, .TRUE., IL, C,
+     $                               -S,
      $                               A( IROW-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, TEMP, EXTRA )
                         IF( ILTEMP ) THEN
@@ -647,7 +651,8 @@
                            ICOL = MAX( 1, JCH-JKU-JKL )
                            IL = IC + 2 - ICOL
                            EXTRA = ZERO
-                           CALL SLAROT( .TRUE., JCH.GT.JKU+JKL, .TRUE.,
+                           CALL SLAROT( .TRUE., JCH.GT.JKU+JKL,
+     $                                  .TRUE.,
      $                                  IL, C, -S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  TEMP )
@@ -671,7 +676,8 @@
                      IROW = MAX( 1, JC-JKU )
                      IF( JC.LT.N ) THEN
                         IL = MIN( M, JC+JKL ) + 1 - IROW
-                        CALL SLAROT( .FALSE., JC.GT.JKU, .FALSE., IL, C,
+                        CALL SLAROT( .FALSE., JC.GT.JKU, .FALSE., IL,
+     $                               C,
      $                               S, A( IROW-ISKEW*JC+IOFFST, JC ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -689,7 +695,8 @@
                         IL = IC + 2 - ICOL
                         TEMP = ZERO
                         ILTEMP = JCH.GT.JKL
-                        CALL SLAROT( .TRUE., ILTEMP, .TRUE., IL, C, -S,
+                        CALL SLAROT( .TRUE., ILTEMP, .TRUE., IL, C,
+     $                               -S,
      $                               A( IR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, TEMP, EXTRA )
                         IF( ILTEMP ) THEN
@@ -698,7 +705,8 @@
                            IROW = MAX( 1, JCH-JKL-JKU )
                            IL = IR + 2 - IROW
                            EXTRA = ZERO
-                           CALL SLAROT( .FALSE., JCH.GT.JKL+JKU, .TRUE.,
+                           CALL SLAROT( .FALSE., JCH.GT.JKL+JKU,
+     $                                  .TRUE.,
      $                                  IL, C, -S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  TEMP )
@@ -730,7 +738,8 @@
                      IROW = MAX( 1, JC-JKU+1 )
                      IF( JC.GT.0 ) THEN
                         IL = MIN( M, JC+JKL+1 ) + 1 - IROW
-                        CALL SLAROT( .FALSE., .FALSE., JC+JKL.LT.M, IL,
+                        CALL SLAROT( .FALSE., .FALSE., JC+JKL.LT.M,
+     $                               IL,
      $                               C, S, A( IROW-ISKEW*JC+IOFFST,
      $                               JC ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -748,7 +757,8 @@
                         ICOL = MIN( N-1, JCH+JKU )
                         ILTEMP = JCH + JKU.LT.N
                         TEMP = ZERO
-                        CALL SLAROT( .TRUE., ILEXTR, ILTEMP, ICOL+2-IC,
+                        CALL SLAROT( .TRUE., ILEXTR, ILTEMP,
+     $                               ICOL+2-IC,
      $                               C, S, A( JCH-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, EXTRA, TEMP )
                         IF( ILTEMP ) THEN
@@ -783,7 +793,8 @@
                      ICOL = MAX( 1, JR-JKL+1 )
                      IF( JR.GT.0 ) THEN
                         IL = MIN( N, JR+JKU+1 ) + 1 - ICOL
-                        CALL SLAROT( .TRUE., .FALSE., JR+JKU.LT.N, IL,
+                        CALL SLAROT( .TRUE., .FALSE., JR+JKU.LT.N,
+     $                               IL,
      $                               C, S, A( JR-ISKEW*ICOL+IOFFST,
      $                               ICOL ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -801,7 +812,8 @@
                         IROW = MIN( M-1, JCH+JKL )
                         ILTEMP = JCH + JKL.LT.M
                         TEMP = ZERO
-                        CALL SLAROT( .FALSE., ILEXTR, ILTEMP, IROW+2-IR,
+                        CALL SLAROT( .FALSE., ILEXTR, ILTEMP,
+     $                               IROW+2-IR,
      $                               C, S, A( IR-ISKEW*JCH+IOFFST,
      $                               JCH ), ILDA, EXTRA, TEMP )
                         IF( ILTEMP ) THEN
@@ -863,13 +875,15 @@
                         CALL SLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
      $                               ICOL+1 ), EXTRA, C, S, DUMMY )
                         TEMP = A( JCH-ISKEW*( JCH+1 )+IOFFG, JCH+1 )
-                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, -S,
+                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C,
+     $                               -S,
      $                               A( ( 1-ISKEW )*JCH+IOFFG, JCH ),
      $                               ILDA, TEMP, EXTRA )
                         IROW = MAX( 1, JCH-K )
                         IL = MIN( JCH+1, K+2 )
                         EXTRA = ZERO
-                        CALL SLAROT( .FALSE., JCH.GT.K, .TRUE., IL, C,
+                        CALL SLAROT( .FALSE., JCH.GT.K, .TRUE., IL,
+     $                               C,
      $                               -S, A( IROW-ISKEW*JCH+IOFFG, JCH ),
      $                               ILDA, EXTRA, TEMP )
                         ICOL = JCH
@@ -921,11 +935,13 @@
                      ANGLE = TWOPI*SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = -SIN( ANGLE )
-                     CALL SLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, C, S,
+                     CALL SLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, C,
+     $                            S,
      $                            A( ( 1-ISKEW )*JC+IOFFG, JC ), ILDA,
      $                            TEMP, EXTRA )
                      ICOL = MAX( 1, JC-K+1 )
-                     CALL SLAROT( .TRUE., .FALSE., .TRUE., JC+2-ICOL, C,
+                     CALL SLAROT( .TRUE., .FALSE., .TRUE., JC+2-ICOL,
+     $                            C,
      $                            S, A( JC-ISKEW*ICOL+IOFFG, ICOL ),
      $                            ILDA, DUMMY, TEMP )
 *
@@ -936,12 +952,14 @@
                         CALL SLARTG( A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               EXTRA, C, S, DUMMY )
                         TEMP = A( 1+( 1-ISKEW )*JCH+IOFFG, JCH )
-                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, S,
+                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C,
+     $                               S,
      $                               A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               ILDA, EXTRA, TEMP )
                         IL = MIN( N+1-JCH, K+2 )
                         EXTRA = ZERO
-                        CALL SLAROT( .FALSE., .TRUE., N-JCH.GT.K, IL, C,
+                        CALL SLAROT( .FALSE., .TRUE., N-JCH.GT.K, IL,
+     $                               C,
      $                               S, A( ( 1-ISKEW )*JCH+IOFFG, JCH ),
      $                               ILDA, TEMP, EXTRA )
                         ICOL = JCH

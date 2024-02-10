@@ -373,7 +373,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGGSVP3, STGSJA, XERBLA
@@ -423,7 +424,8 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+         CALL SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+     $                 TOLA,
      $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, WORK,
      $                 WORK, -1, INFO )
          LWKOPT = N + INT( WORK( 1 ) )
@@ -450,8 +452,8 @@
 *
       ULP = SLAMCH( 'Precision' )
       UNFL = SLAMCH( 'Safe Minimum' )
-      TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
-      TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
+      TOLA = REAL( MAX( M, N ) )*MAX( ANORM, UNFL )*ULP
+      TOLB = REAL( MAX( P, N ) )*MAX( BNORM, UNFL )*ULP
 *
 *     Preprocessing
 *

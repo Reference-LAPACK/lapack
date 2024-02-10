@@ -137,7 +137,8 @@
 *> \ingroup la_gercond
 *
 *  =====================================================================
-      REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV, C,
+      REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+     $                             C,
      $                             CAPPLY, INFO, WORK, RWORK )
 *
 *  -- LAPACK computational routine --
@@ -266,7 +267,8 @@
                CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -288,7 +290,8 @@
             END IF
 *
             IF ( NOTRANS ) THEN
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ELSE
                CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,

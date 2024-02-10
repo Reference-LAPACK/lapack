@@ -222,7 +222,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CUNGQL', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'CUNGQL', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -286,7 +287,7 @@
    50    CONTINUE
       END IF
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = CMPLX( IWS )
       RETURN
 *
 *     End of CUNGQL

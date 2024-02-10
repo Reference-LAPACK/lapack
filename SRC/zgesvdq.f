@@ -447,7 +447,8 @@
       DOUBLE PRECISION   RDUMMY(1)
 *     ..
 *     .. External Subroutines (BLAS, LAPACK)
-      EXTERNAL    ZGELQF, ZGEQP3, ZGEQRF, ZGESVD, ZLACPY, ZLAPMT,
+      EXTERNAL    ZGELQF, ZGEQP3, ZGEQRF, ZGESVD, ZLACPY,
+     $                   ZLAPMT,
      $            ZLASCL, ZLASET, ZLASWP, ZDSCAL, DLASET, DLASCL,
      $            ZPOCON, ZUNMLQ, ZUNMQR, XERBLA
 *     ..
@@ -672,10 +673,12 @@
                    IF ( WNTVA ) THEN
                        CALL ZGEQRF(N,N/2,U,LDU,CDUMMY,CDUMMY,-1,IERR)
                        LWRK_ZGEQRF = INT( CDUMMY(1) )
-                       CALL ZGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,LDU,
+                       CALL ZGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,
+     $                              LDU,
      $                      V, LDV, CDUMMY, -1, RDUMMY, IERR )
                        LWRK_ZGESVD2 = INT( CDUMMY(1) )
-                       CALL ZUNMQR( 'R', 'C', N, N, N/2, U, LDU, CDUMMY,
+                       CALL ZUNMQR( 'R', 'C', N, N, N/2, U, LDU,
+     $                              CDUMMY,
      $                      V, LDV, CDUMMY, -1, IERR )
                        LWRK_ZUNMQR2 = INT( CDUMMY(1) )
                        OPTWRK2 = MAX( LWRK_ZGEQP3, N/2+LWRK_ZGEQRF,
@@ -694,10 +697,12 @@
                    IF ( WNTVA ) THEN
                       CALL ZGELQF(N/2,N,U,LDU,CDUMMY,CDUMMY,-1,IERR)
                       LWRK_ZGELQF = INT( CDUMMY(1) )
-                      CALL ZGESVD( 'S','O', N/2,N/2, V, LDV, S, U, LDU,
+                      CALL ZGESVD( 'S','O', N/2,N/2, V, LDV, S, U,
+     $                             LDU,
      $                     V, LDV, CDUMMY, -1, RDUMMY, IERR )
                       LWRK_ZGESVD2 = INT( CDUMMY(1) )
-                      CALL ZUNMLQ( 'R', 'N', N, N, N/2, U, LDU, CDUMMY,
+                      CALL ZUNMLQ( 'R', 'N', N, N, N/2, U, LDU,
+     $                             CDUMMY,
      $                     V, LDV, CDUMMY,-1,IERR )
                       LWRK_ZUNMLQ = INT( CDUMMY(1) )
                       OPTWRK2 = MAX( LWRK_ZGEQP3, N/2+LWRK_ZGELQF,
@@ -772,9 +777,12 @@
 *              Quick return: A is the M x N zero matrix.
                NUMRANK = 0
                CALL DLASET( 'G', N, 1, ZERO, ZERO, S, N )
-               IF ( WNTUS ) CALL ZLASET('G', M, N, CZERO, CONE, U, LDU)
-               IF ( WNTUA ) CALL ZLASET('G', M, M, CZERO, CONE, U, LDU)
-               IF ( WNTVA ) CALL ZLASET('G', N, N, CZERO, CONE, V, LDV)
+               IF ( WNTUS ) CALL ZLASET('G', M, N, CZERO, CONE, U,
+     $              LDU)
+               IF ( WNTUA ) CALL ZLASET('G', M, M, CZERO, CONE, U,
+     $              LDU)
+               IF ( WNTVA ) CALL ZLASET('G', N, N, CZERO, CONE, V,
+     $              LDV)
                IF ( WNTUF ) THEN
                    CALL ZLASET( 'G', N, 1, CZERO, CZERO, CWORK, N )
                    CALL ZLASET( 'G', M, N, CZERO, CONE, U, LDU )
@@ -795,7 +803,8 @@
             IF ( RWORK(1) .GT. BIG / SQRT(DBLE(M)) ) THEN
 *               .. to prevent overflow in the QR factorization, scale the
 *               matrix by 1/sqrt(M) if too large entry detected
-                CALL ZLASCL('G',0,0,SQRT(DBLE(M)),ONE, M,N, A,LDA, IERR)
+                CALL ZLASCL('G',0,0,SQRT(DBLE(M)),ONE, M,N, A,LDA,
+     $                       IERR)
                 ASCALED = .TRUE.
             END IF
             CALL ZLASWP( N, A, LDA, 1, M-1, IWORK(N+1), 1 )
@@ -817,7 +826,8 @@
           IF ( RTMP .GT. BIG / SQRT(DBLE(M)) ) THEN
 *             .. to prevent overflow in the QR factorization, scale the
 *             matrix by 1/sqrt(M) if too large entry detected
-              CALL ZLASCL('G',0,0, SQRT(DBLE(M)),ONE, M,N, A,LDA, IERR)
+              CALL ZLASCL('G',0,0, SQRT(DBLE(M)),ONE, M,N, A,LDA,
+     $                     IERR)
               ASCALED = .TRUE.
           END IF
       END IF
@@ -946,7 +956,8 @@
 *           .. compute the singular values of R = [A](1:NR,1:N)
 *
             IF ( NR .GT. 1 )
-     $          CALL ZLASET( 'L', NR-1,NR-1, CZERO,CZERO, A(2,1), LDA )
+     $          CALL ZLASET( 'L', NR-1,NR-1, CZERO,CZERO, A(2,1),
+     $                       LDA )
             CALL ZGESVD( 'N', 'N', NR, N, A, LDA, S, U, LDU,
      $           V, LDV, CWORK, LCWORK, RWORK, INFO )
 *
@@ -966,7 +977,8 @@
  1193          CONTINUE
  1192       CONTINUE
             IF ( NR .GT. 1 )
-     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, U(1,2), LDU )
+     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, U(1,2),
+     $                       LDU )
 *           .. the left singular vectors not computed, the NR right singular
 *           vectors overwrite [U](1:NR,1:NR) as conjugate transposed. These
 *           will be pre-multiplied by Q to build the left singular vectors of A.
@@ -987,7 +999,8 @@
 *            .. copy R into [U] and overwrite [U] with the left singular vectors
              CALL ZLACPY( 'U', NR, N, A, LDA, U, LDU )
              IF ( NR .GT. 1 )
-     $         CALL ZLASET( 'L', NR-1, NR-1, CZERO, CZERO, U(2,1), LDU )
+     $         CALL ZLASET( 'L', NR-1, NR-1, CZERO, CZERO, U(2,1),
+     $                      LDU )
 *            .. the right singular vectors not computed, the NR left singular
 *            vectors overwrite [U](1:NR,1:NR)
                 CALL ZGESVD( 'O', 'N', NR, N, U, LDU, S, U, LDU,
@@ -1002,7 +1015,8 @@
          IF ( ( NR .LT. M ) .AND. ( .NOT.WNTUF ) ) THEN
              CALL ZLASET('A', M-NR, NR, CZERO, CZERO, U(NR+1,1), LDU)
              IF ( NR .LT. N1 ) THEN
-                CALL ZLASET( 'A',NR,N1-NR,CZERO,CZERO,U(1,NR+1), LDU )
+                CALL ZLASET( 'A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),
+     $                       LDU )
                 CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,
      $               U(NR+1,NR+1), LDU )
              END IF
@@ -1030,7 +1044,8 @@
  1166          CONTINUE
  1165       CONTINUE
             IF ( NR .GT. 1 )
-     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2), LDV )
+     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2),
+     $                       LDV )
 *           .. the left singular vectors of R**H overwrite V, the right singular
 *           vectors not computed
             IF ( WNTVR .OR. ( NR .EQ. N ) ) THEN
@@ -1060,7 +1075,8 @@
 *               by padding a zero block. In the case NR << N, a more efficient
 *               way is to first use the QR factorization. For more details
 *               how to implement this, see the " FULL SVD " branch.
-                CALL ZLASET('G', N, N-NR, CZERO, CZERO, V(1,NR+1), LDV)
+                CALL ZLASET('G', N, N-NR, CZERO, CZERO, V(1,NR+1),
+     $                       LDV)
                 CALL ZGESVD( 'O', 'N', N, N, V, LDV, S, U, LDU,
      $               U, LDU, CWORK(N+1), LCWORK-N, RWORK, INFO )
 *
@@ -1080,7 +1096,8 @@
 *            .. copy R into V and overwrite V with the right singular vectors
              CALL ZLACPY( 'U', NR, N, A, LDA, V, LDV )
              IF ( NR .GT. 1 )
-     $         CALL ZLASET( 'L', NR-1, NR-1, CZERO, CZERO, V(2,1), LDV )
+     $         CALL ZLASET( 'L', NR-1, NR-1, CZERO, CZERO, V(2,1),
+     $                      LDV )
 *            .. the right singular vectors overwrite V, the NR left singular
 *            vectors stored in U(1:NR,1:NR)
              IF ( WNTVR .OR. ( NR .EQ. N ) ) THEN
@@ -1094,7 +1111,8 @@
 *               by padding a zero block. In the case NR << N, a more efficient
 *               way is to first use the LQ factorization. For more details
 *               how to implement this, see the " FULL SVD " branch.
-                 CALL ZLASET('G', N-NR, N, CZERO,CZERO, V(NR+1,1), LDV)
+                 CALL ZLASET('G', N-NR, N, CZERO,CZERO, V(NR+1,1),
+     $                        LDV)
                  CALL ZGESVD( 'N', 'O', N, N, V, LDV, S, U, LDU,
      $                V, LDV, CWORK(N+1), LCWORK-N, RWORK, INFO )
                  CALL ZLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1120,7 +1138,8 @@
  1169          CONTINUE
  1168       CONTINUE
             IF ( NR .GT. 1 )
-     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2), LDV )
+     $          CALL ZLASET( 'U', NR-1,NR-1, CZERO,CZERO, V(1,2),
+     $                       LDV )
 *
 *           .. the left singular vectors of R**H overwrite [V], the NR right
 *           singular vectors of R**H stored in [U](1:NR,1:NR) as conjugate
@@ -1155,9 +1174,11 @@
  1117           CONTINUE
 *
                 IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL ZLASET('A', M-NR,NR, CZERO,CZERO, U(NR+1,1), LDU)
+                  CALL ZLASET('A', M-NR,NR, CZERO,CZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
+                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),
+     $                            LDU)
                      CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1180,7 +1201,8 @@
  1199                 CONTINUE
  1198              CONTINUE
                    IF ( NR .GT. 1 )
-     $             CALL ZLASET('U',NR-1,NR-1, CZERO,CZERO, V(1,2),LDV)
+     $             CALL ZLASET('U',NR-1,NR-1, CZERO,CZERO, V(1,2),
+     $                          LDV)
 *
                    CALL ZLASET('A',N,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
                    CALL ZGESVD( 'O', 'A', N, N, V, LDV, S, V, LDV,
@@ -1210,7 +1232,8 @@
                    IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL ZLASET('A',M-N,N,CZERO,CZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL ZLASET('A',N,N1-N,CZERO,CZERO,U(1,N+1),LDU)
+                        CALL ZLASET('A',N,N1-N,CZERO,CZERO,U(1,N+1),
+     $                               LDU)
                         CALL ZLASET('A',M-N,N1-N,CZERO,CONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1224,7 +1247,8 @@
  1197                 CONTINUE
  1196              CONTINUE
                    IF ( NR .GT. 1 )
-     $             CALL ZLASET('U',NR-1,NR-1,CZERO,CZERO,U(1,NR+2),LDU)
+     $             CALL ZLASET('U',NR-1,NR-1,CZERO,CZERO,U(1,NR+2),
+     $                          LDU)
                    CALL ZGEQRF( N, NR, U(1,NR+1), LDU, CWORK(N+1),
      $                  CWORK(N+NR+1), LCWORK-N-NR, IERR )
                    DO 1143 p = 1, NR
@@ -1237,16 +1261,19 @@
      $                 V,LDV, CWORK(N+NR+1),LCWORK-N-NR,RWORK, INFO )
                   CALL ZLASET('A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV)
                   CALL ZLASET('A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
-                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
                   CALL ZUNMQR('R','C', N, N, NR, U(1,NR+1), LDU,
      $                 CWORK(N+1),V,LDV,CWORK(N+NR+1),LCWORK-N-NR,IERR)
                   CALL ZLAPMT( .FALSE., N, N, V, LDV, IWORK )
 *                 .. assemble the left singular vector matrix U of dimensions
 *                 (M x NR) or (M x N) or (M x M).
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                     CALL ZLASET('A',M-NR,NR,CZERO,CZERO,U(NR+1,1),LDU)
+                     CALL ZLASET('A',M-NR,NR,CZERO,CZERO,U(NR+1,1),
+     $                            LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
+                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),
+     $                            LDU)
                      CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,
      $                    U(NR+1,NR+1),LDU)
                      END IF
@@ -1262,7 +1289,8 @@
 *                .. copy R into [V] and overwrite V with the right singular vectors
                  CALL ZLACPY( 'U', NR, N, A, LDA, V, LDV )
                 IF ( NR .GT. 1 )
-     $          CALL ZLASET( 'L', NR-1,NR-1, CZERO,CZERO, V(2,1), LDV )
+     $          CALL ZLASET( 'L', NR-1,NR-1, CZERO,CZERO, V(2,1),
+     $                       LDV )
 *               .. the right singular vectors of R overwrite [V], the NR left
 *               singular vectors of R stored in [U](1:NR,1:NR)
                 CALL ZGESVD( 'S', 'O', NR, N, V, LDV, S, U, LDU,
@@ -1272,9 +1300,11 @@
 *               .. assemble the left singular vector matrix U of dimensions
 *              (M x NR) or (M x N) or (M x M).
                IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL ZLASET('A', M-NR,NR, CZERO,CZERO, U(NR+1,1), LDU)
+                  CALL ZLASET('A', M-NR,NR, CZERO,CZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
+                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),
+     $                            LDU)
                      CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1293,10 +1323,12 @@
                IF ( OPTRATIO * NR .GT. N ) THEN
                   CALL ZLACPY( 'U', NR, N, A, LDA, V, LDV )
                   IF ( NR .GT. 1 )
-     $            CALL ZLASET('L', NR-1,NR-1, CZERO,CZERO, V(2,1),LDV)
+     $            CALL ZLASET('L', NR-1,NR-1, CZERO,CZERO, V(2,1),
+     $                         LDV)
 *              .. the right singular vectors of R overwrite [V], the NR left
 *                 singular vectors of R stored in [U](1:NR,1:NR)
-                  CALL ZLASET('A', N-NR,N, CZERO,CZERO, V(NR+1,1),LDV)
+                  CALL ZLASET('A', N-NR,N, CZERO,CZERO, V(NR+1,1),
+     $                         LDV)
                   CALL ZGESVD( 'S', 'O', N, N, V, LDV, S, U, LDU,
      $                 V, LDV, CWORK(N+1), LCWORK-N, RWORK, INFO )
                   CALL ZLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1308,7 +1340,8 @@
                   IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL ZLASET('A',M-N,N,CZERO,CZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL ZLASET('A',N,N1-N,CZERO,CZERO,U(1,N+1),LDU)
+                        CALL ZLASET('A',N,N1-N,CZERO,CZERO,U(1,N+1),
+     $                               LDU)
                         CALL ZLASET( 'A',M-N,N1-N,CZERO,CONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1316,7 +1349,8 @@
                ELSE
                   CALL ZLACPY( 'U', NR, N, A, LDA, U(NR+1,1), LDU )
                   IF ( NR .GT. 1 )
-     $            CALL ZLASET('L',NR-1,NR-1,CZERO,CZERO,U(NR+2,1),LDU)
+     $            CALL ZLASET('L',NR-1,NR-1,CZERO,CZERO,U(NR+2,1),
+     $                         LDU)
                   CALL ZGELQF( NR, N, U(NR+1,1), LDU, CWORK(N+1),
      $                 CWORK(N+NR+1), LCWORK-N-NR, IERR )
                   CALL ZLACPY('L',NR,NR,U(NR+1,1),LDU,V,LDV)
@@ -1326,16 +1360,20 @@
      $                 V, LDV, CWORK(N+NR+1), LCWORK-N-NR, RWORK, INFO )
                   CALL ZLASET('A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV)
                   CALL ZLASET('A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
-                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
-                  CALL ZUNMLQ('R','N',N,N,NR,U(NR+1,1),LDU,CWORK(N+1),
+                  CALL ZLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),
+     $                         LDV)
+                  CALL ZUNMLQ('R','N',N,N,NR,U(NR+1,1),LDU,
+     $                         CWORK(N+1),
      $                 V, LDV, CWORK(N+NR+1),LCWORK-N-NR,IERR)
                   CALL ZLAPMT( .FALSE., N, N, V, LDV, IWORK )
 *               .. assemble the left singular vector matrix U of dimensions
 *              (M x NR) or (M x N) or (M x M).
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                     CALL ZLASET('A',M-NR,NR,CZERO,CZERO,U(NR+1,1),LDU)
+                     CALL ZLASET('A',M-NR,NR,CZERO,CZERO,U(NR+1,1),
+     $                            LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),LDU)
+                     CALL ZLASET('A',NR,N1-NR,CZERO,CZERO,U(1,NR+1),
+     $                            LDU)
                      CALL ZLASET( 'A',M-NR,N1-NR,CZERO,CONE,
      $                    U(NR+1,NR+1), LDU )
                      END IF
@@ -1368,7 +1406,8 @@
 *
 *     .. if numerical rank deficiency is detected, the truncated
 *     singular values are set to zero.
-      IF ( NR .LT. N ) CALL DLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1), N )
+      IF ( NR .LT. N ) CALL DLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1),
+     $     N )
 *     .. undo scaling; this may cause overflow in the largest singular
 *     values.
       IF ( ASCALED )

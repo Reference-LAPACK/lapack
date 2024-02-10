@@ -32,27 +32,27 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgbtrs( int matrix_layout, char trans, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_cgbtrs)( int matrix_layout, char trans, lapack_int n,
                            lapack_int kl, lapack_int ku, lapack_int nrhs,
                            const lapack_complex_float* ab, lapack_int ldab,
                            const lapack_int* ipiv, lapack_complex_float* b,
                            lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_cgbtrs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgbtrs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_cgb_nancheck)( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
             return -7;
         }
-        if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
     }
 #endif
-    return LAPACKE_cgbtrs_work( matrix_layout, trans, n, kl, ku, nrhs, ab, ldab,
+    return API_SUFFIX(LAPACKE_cgbtrs_work)( matrix_layout, trans, n, kl, ku, nrhs, ab, ldab,
                                 ipiv, b, ldb );
 }

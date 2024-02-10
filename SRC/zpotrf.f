@@ -134,7 +134,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2, ZTRSM
+      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -193,7 +194,8 @@
 *
 *                 Compute the current block row.
 *
-                  CALL ZGEMM( 'Conjugate transpose', 'No transpose', JB,
+                  CALL ZGEMM( 'Conjugate transpose', 'No transpose',
+     $                        JB,
      $                        N-J-JB+1, J-1, -CONE, A( 1, J ), LDA,
      $                        A( 1, J+JB ), LDA, CONE, A( J, J+JB ),
      $                        LDA )
@@ -226,7 +228,8 @@
      $                        N-J-JB+1, JB, J-1, -CONE, A( J+JB, 1 ),
      $                        LDA, A( J, 1 ), LDA, CONE, A( J+JB, J ),
      $                        LDA )
-                  CALL ZTRSM( 'Right', 'Lower', 'Conjugate transpose',
+                  CALL ZTRSM( 'Right', 'Lower',
+     $                        'Conjugate transpose',
      $                        'Non-unit', N-J-JB+1, JB, CONE, A( J, J ),
      $                        LDA, A( J+JB, J ), LDA )
                END IF

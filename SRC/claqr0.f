@@ -299,7 +299,8 @@
       COMPLEX            ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLAHQR, CLAQR3, CLAQR4, CLAQR5
+      EXTERNAL           CLACPY, CLAHQR, CLAQR3, CLAQR4,
+     $                   CLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, INT, MAX, MIN, MOD, REAL,
@@ -509,7 +510,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL CLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL CLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, LS, LD, W, H( KV, 1 ), LDH, NHO,
      $                   H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH, WORK,
      $                   LWORK )

@@ -420,7 +420,8 @@
       EXTERNAL           LSAME, DDOT, DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLACPY, DLAG2, DTGEXC, DTGSYL, XERBLA
+      EXTERNAL           DGEMV, DLACPY, DLAG2, DTGEXC, DTGSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -558,7 +559,8 @@
      $                DNRM2( N, VR( 1, KS+1 ), 1 ) )
                LNRM = DLAPY2( DNRM2( N, VL( 1, KS ), 1 ),
      $                DNRM2( N, VL( 1, KS+1 ), 1 ) )
-               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -568,7 +570,8 @@
                TMPIR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHAV = TMPRR + TMPII
                UHAVI = TMPIR - TMPRI
-               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -590,10 +593,12 @@
 *
                RNRM = DNRM2( N, VR( 1, KS ), 1 )
                LNRM = DNRM2( N, VL( 1, KS ), 1 )
-               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHAV = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHBV = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                COND = DLAPY2( UHAV, UHBV )
@@ -645,7 +650,8 @@
             IFST = K
             ILST = 1
 *
-            CALL DTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ), N,
+            CALL DTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+     $                   N,
      $                   DUMMY, 1, DUMMY1, 1, IFST, ILST,
      $                   WORK( N*N*2+1 ), LWORK-2*N*N, IERR )
 *
@@ -671,7 +677,8 @@
                ELSE
                   I = N*N + 1
                   IZ = 2*N*N + 1
-                  CALL DTGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL DTGSYL( 'N', DIFDRI, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ),

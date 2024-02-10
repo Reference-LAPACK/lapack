@@ -238,7 +238,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
-      SUBROUTINE CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                   WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -272,7 +273,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHEEVD, CHEGST, CPOTRF, CTRMM, CTRSM, XERBLA
+      EXTERNAL           CHEEVD, CHEGST, CPOTRF, CTRMM, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -318,7 +320,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 ) = SROUNDUP_LWORK(LOPT)
-         RWORK( 1 ) = LROPT
+         RWORK( 1 ) = REAL( LROPT )
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -353,7 +355,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, LRWORK,
+      CALL CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+     $             LRWORK,
      $             IWORK, LIWORK, INFO )
       LOPT = INT( MAX( REAL( LOPT ), REAL( WORK( 1 ) ) ) )
       LROPT = INT( MAX( REAL( LROPT ), REAL( RWORK( 1 ) ) ) )
@@ -394,7 +397,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LOPT)
-      RWORK( 1 ) = LROPT
+      RWORK( 1 ) = REAL( LROPT )
       IWORK( 1 ) = LIOPT
 *
       RETURN

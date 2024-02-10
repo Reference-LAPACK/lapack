@@ -163,7 +163,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE DGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +194,8 @@
       DOUBLE PRECISION   EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DGEHD2, DGEMM, DLAHR2, DLARFB, DTRMM,
+      EXTERNAL           DAXPY, DGEHD2, DGEMM, DLAHR2, DLARFB,
+     $                   DTRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

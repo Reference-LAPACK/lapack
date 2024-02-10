@@ -163,7 +163,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE ZLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
+      RECURSIVE SUBROUTINE ZLAUNHR_COL_GETRFNP2( M, N, A, LDA, D,
+     $                                           INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
@@ -295,7 +296,8 @@
 *        Update B22, i.e. compute the Schur complement
 *        B22 := B22 - B21*B12
 *
-         CALL ZGEMM( 'N', 'N', M-N1, N2, N1, -CONE, A( N1+1, 1 ), LDA,
+         CALL ZGEMM( 'N', 'N', M-N1, N2, N1, -CONE, A( N1+1, 1 ),
+     $               LDA,
      $               A( 1, N1+1 ), LDA, CONE, A( N1+1, N1+1 ), LDA )
 *
 *        Factor B22, recursive call

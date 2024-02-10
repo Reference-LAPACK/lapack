@@ -280,7 +280,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAORHR_COL_GETRFNP, SSCAL, STRSM,
+      EXTERNAL           SCOPY, SLAORHR_COL_GETRFNP, SSCAL,
+     $                   STRSM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

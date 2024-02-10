@@ -276,7 +276,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM, CCOPY,
+      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM,
+     $                   CCOPY,
      $                   CLARFT, CGELQF, CGEQRF, CLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -385,7 +386,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL CLASET( 'Lower', PK, PK, ZERO, ONE, 

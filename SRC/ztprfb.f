@@ -432,7 +432,8 @@
 *
          CALL ZGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL ZGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL ZGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ),
+     $               LDWORK,
      $               V( NP, KP ), LDV, ONE, B( 1, NP ), LDB )
          CALL ZTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
@@ -673,7 +674,8 @@
 *
          CALL ZGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL ZGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL ZGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ),
+     $               LDWORK,
      $               V( KP, NP ), LDV, ONE, B( 1, NP ), LDB )
          CALL ZTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )

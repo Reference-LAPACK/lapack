@@ -200,7 +200,8 @@
 *> \ingroup gbrfs
 *
 *  =====================================================================
-      SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -244,7 +245,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGBMV, ZGBTRS, ZLACN2
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGBMV, ZGBTRS,
+     $                   ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -331,7 +333,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ), 1,
+         CALL ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ),
+     $               1,
      $               CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -389,7 +392,8 @@
 *
 *           Update solution and try again.
 *
-            CALL ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK, N,
+            CALL ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL ZAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )

@@ -36,9 +36,9 @@
  * layout or vice versa.
  */
 
-void LAPACKE_zhe_trans( int matrix_layout, char uplo, lapack_int n,
+void API_SUFFIX(LAPACKE_zhe_trans)( int matrix_layout, char uplo, lapack_int n,
                         const lapack_complex_double *in, lapack_int ldin,
                         lapack_complex_double *out, lapack_int ldout )
 {
-    LAPACKE_ztr_trans( matrix_layout, uplo, 'n', n, in, ldin, out, ldout );
+    API_SUFFIX(LAPACKE_ztr_trans)( matrix_layout, uplo, 'n', n, in, ldin, out, ldout );
 }

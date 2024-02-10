@@ -253,7 +253,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD, ZHGEQZ,
+      EXTERNAL           XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD,
+     $                   ZHGEQZ,
      $                   ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZUNGQR, ZUNMQR
 *     ..
 *     .. External Functions ..
@@ -328,7 +329,8 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
-         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) )
+         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N,
+     $                 0 ) )
          LWKOPT = MAX( LWKOPT, N +
      $                 N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N, 0 ) )
          IF( ILVL ) THEN
@@ -490,7 +492,8 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), RWORK( IRWRK ),
      $                IERR )
          IF( IERR.NE.0 ) THEN

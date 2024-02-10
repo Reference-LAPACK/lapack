@@ -196,7 +196,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -225,7 +226,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV, XERBLA
+      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2
@@ -301,7 +303,8 @@
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
          CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
+            CALL ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1,
+     $                    TAUP2(I) )
             PHI(I) = ATAN2( DBLE( X21(I+1,I) ), DBLE( X11(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )

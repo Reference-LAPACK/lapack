@@ -469,7 +469,8 @@
 *              the interchanges in columns k+1:N.
 *
                IF( K.LT.N )
-     $            CALL ZSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ), LDA )
+     $            CALL ZSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
+     $                        LDA )
 *
             END IF
 *
@@ -484,7 +485,8 @@
                IF( KP.GT.1 )
      $            CALL ZSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
                IF( ( KK.GT.1 ) .AND. ( KP.LT.(KK-1) ) )
-     $            CALL ZSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 ),
+     $            CALL ZSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP,
+     $                        KP+1 ),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )
@@ -526,7 +528,8 @@
 *                       = A - W(k)*1/D(k)*W(k)**T
 *
                      D11 = CONE / A( K, K )
-                     CALL ZSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL ZSYR( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
 *
 *                    Store U(k) in column k
 *
@@ -545,7 +548,8 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *                       = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T
 *
-                     CALL ZSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL ZSYR( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
                   END IF
 *
 *                 Store the superdiagonal element of D in array E
@@ -703,14 +707,16 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
+                     JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ),
+     $                                      LDA )
                      ROWMAX = CABS1( A( IMAX, JMAX ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ),
+                     ITEMP = IMAX + IZAMAX( N-IMAX, A( IMAX+1,
+     $                                      IMAX ),
      $                                     1 )
                      DTEMP = CABS1( A( ITEMP, IMAX ) )
                      IF( DTEMP.GT.ROWMAX ) THEN
@@ -769,7 +775,8 @@
                IF( P.LT.N )
      $            CALL ZSWAP( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
                IF( P.GT.(K+1) )
-     $            CALL ZSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
+     $            CALL ZSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ),
+     $                        LDA )
                T = A( K, K )
                A( K, K ) = A( P, P )
                A( P, P ) = T
@@ -791,9 +798,11 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
                IF( ( KK.LT.N ) .AND. ( KP.GT.(KK+1) ) )
-     $            CALL ZSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
+     $            CALL ZSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP,
+     $                        KK+1 ),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )

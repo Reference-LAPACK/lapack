@@ -144,7 +144,8 @@
 *> \ingroup laein
 *
 *  =====================================================================
-      SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
+      SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB,
+     $                   RWORK,
      $                   EPS3, SMLNUM, INFO )
 *
 *  -- LAPACK auxiliary routine --
@@ -227,7 +228,8 @@
 *        Scale supplied initial vector.
 *
          VNORM = DZNRM2( N, V, 1 )
-         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V, 1 )
+         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V,
+     $                1 )
       END IF
 *
       IF( RIGHTV ) THEN
@@ -313,7 +315,8 @@
 *          or U**H *x = scale*v for a left eigenvector,
 *        overwriting x on v.
 *
-         CALL ZLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V,
+         CALL ZLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB,
+     $                V,
      $                SCALE, RWORK, IERR )
          NORMIN = 'Y'
 *

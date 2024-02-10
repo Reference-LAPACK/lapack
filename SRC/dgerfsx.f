@@ -407,7 +407,8 @@
 *> \ingroup gerfsx
 *
 *  =====================================================================
-      SUBROUTINE DGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE DGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -606,7 +607,8 @@
          NORM = '1'
       END IF
       ANORM = DLANGE( NORM, N, N, A, LDA, WORK )
-      CALL DGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL DGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -631,19 +633,23 @@
          END IF
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0,
+     $                SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           -1, C, INFO, WORK, IWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           -1, R, INFO, WORK, IWORK )
          ELSE
-            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = DLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           0, R, INFO, WORK, IWORK )
          END IF
          DO J = 1, NRHS

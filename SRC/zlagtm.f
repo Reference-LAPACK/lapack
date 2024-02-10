@@ -140,7 +140,8 @@
 *> \ingroup lagtm
 *
 *  =====================================================================
-      SUBROUTINE ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+      SUBROUTINE ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX,
+     $                   BETA,
      $                   B, LDB )
 *
 *  -- LAPACK auxiliary routine --

@@ -182,7 +182,8 @@
 *> \ingroup hbevd
 *
 *  =====================================================================
-      SUBROUTINE DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+      SUBROUTINE DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+     $                   WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -217,7 +218,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLASCL, DSBTRD, DSCAL, DSTEDC,
+      EXTERNAL           DGEMM, DLACPY, DLASCL, DSBTRD, DSCAL,
+     $                   DSTEDC,
      $                   DSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -310,9 +312,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -322,7 +326,8 @@
       INDWRK = INDE + N
       INDWK2 = INDWRK + N*N
       LLWRK2 = LWORK - INDWK2 + 1
-      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z,
+     $             LDZ,
      $             WORK( INDWRK ), IINFO )
 *
 *     For eigenvalues only, call DSTERF.  For eigenvectors, call SSTEDC.
@@ -332,7 +337,8 @@
       ELSE
          CALL DSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
+         CALL DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ),
+     $               N,
      $               ZERO, WORK( INDWK2 ), N )
          CALL DLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF

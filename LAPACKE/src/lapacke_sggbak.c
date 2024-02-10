@@ -32,29 +32,29 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sggbak( int matrix_layout, char job, char side, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sggbak)( int matrix_layout, char job, char side, lapack_int n,
                            lapack_int ilo, lapack_int ihi, const float* lscale,
                            const float* rscale, lapack_int m, float* v,
                            lapack_int ldv )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sggbak", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sggbak", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( n, lscale, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n, lscale, 1 ) ) {
             return -7;
         }
-        if( LAPACKE_s_nancheck( n, rscale, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n, rscale, 1 ) ) {
             return -8;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, m, v, ldv ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, m, v, ldv ) ) {
             return -10;
         }
     }
 #endif
-    return LAPACKE_sggbak_work( matrix_layout, job, side, n, ilo, ihi, lscale,
+    return API_SUFFIX(LAPACKE_sggbak_work)( matrix_layout, job, side, n, ilo, ihi, lscale,
                                 rscale, m, v, ldv );
 }

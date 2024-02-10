@@ -297,7 +297,8 @@
 *> \ingroup laqz0
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE SLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A,
+      RECURSIVE SUBROUTINE SLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI,
+     $                             A,
      $                             LDA, B, LDB, ALPHAR, ALPHAI, BETA,
      $                             Q, LDQ, Z, LDZ, WORK, LWORK, REC,
      $                             INFO )
@@ -431,12 +432,14 @@
       NSR = MAX( 2, NSR-MOD( NSR, 2 ) )
 
       RCOST = ILAENV( 17, 'SLAQZ0', JBCMPZ, N, ILO, IHI, LWORK )
-      ITEMP1 = INT( NSR/SQRT( 1+2*NSR/( REAL( RCOST )/100*N ) ) )
+      ITEMP1 = INT( REAL( NSR )/SQRT( 1+2*REAL( NSR )/
+     $         ( REAL( RCOST )/100*REAL( N ) ) ) )
       ITEMP1 = ( ( ITEMP1-1 )/4 )*4+4
       NBR = NSR+ITEMP1
 
       IF( N .LT. NMIN .OR. REC .GE. 2 ) THEN
-         CALL SHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+         CALL SHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $                LDB,
      $                ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                LWORK, INFO )
          RETURN
@@ -448,7 +451,8 @@
 
 *     Workspace query to slaqz3
       NW = MAX( NWR, NMIN )
-      CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
+      CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B,
+     $             LDB,
      $             Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHAR,
      $             ALPHAI, BETA, WORK, NW, WORK, NW, WORK, -1, REC,
      $             AED_INFO )
@@ -473,8 +477,10 @@
 *
 *     Initialize Q and Z
 *
-      IF( IWANTQ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Q, LDQ )
-      IF( IWANTZ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Z, LDZ )
+      IF( IWANTQ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Q,
+     $    LDQ )
+      IF( IWANTZ.EQ.3 ) CALL SLASET( 'FULL', N, N, ZERO, ONE, Z,
+     $    LDZ )
 
 *     Get machine constants
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
@@ -567,17 +573,20 @@
 *              to the top and deflate it
                
                DO K2 = K, ISTART2+1, -1
-                  CALL SLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1, S1,
+                  CALL SLARTG( B( K2-1, K2 ), B( K2-1, K2-1 ), C1,
+     $                         S1,
      $                         TEMP )
                   B( K2-1, K2 ) = TEMP
                   B( K2-1, K2-1 ) = ZERO
 
                   CALL SROT( K2-2-ISTARTM+1, B( ISTARTM, K2 ), 1,
      $                       B( ISTARTM, K2-1 ), 1, C1, S1 )
-                  CALL SROT( MIN( K2+1, ISTOP )-ISTARTM+1, A( ISTARTM,
+                  CALL SROT( MIN( K2+1, ISTOP )-ISTARTM+1,
+     $                       A( ISTARTM,
      $                       K2 ), 1, A( ISTARTM, K2-1 ), 1, C1, S1 )
                   IF ( ILZ ) THEN
-                     CALL SROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1, C1,
+                     CALL SROT( N, Z( 1, K2 ), 1, Z( 1, K2-1 ), 1,
+     $                          C1,
      $                          S1 )
                   END IF
 
@@ -587,9 +596,11 @@
                      A( K2, K2-1 ) = TEMP
                      A( K2+1, K2-1 ) = ZERO
 
-                     CALL SROT( ISTOPM-K2+1, A( K2, K2 ), LDA, A( K2+1,
+                     CALL SROT( ISTOPM-K2+1, A( K2, K2 ), LDA,
+     $                          A( K2+1,
      $                          K2 ), LDA, C1, S1 )
-                     CALL SROT( ISTOPM-K2+1, B( K2, K2 ), LDB, B( K2+1,
+                     CALL SROT( ISTOPM-K2+1, B( K2, K2 ), LDB,
+     $                          B( K2+1,
      $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL SROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
@@ -651,7 +662,8 @@
 *
 *        Time for AED
 *
-         CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
+         CALL SLAQZ3( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A,
+     $                LDA,
      $                B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED,
      $                ALPHAR, ALPHAI, BETA, WORK, NW, WORK( NW**2+1 ),
      $                NW, WORK( 2*NW**2+1 ), LWORK-2*NW**2, REC,
@@ -721,7 +733,8 @@
 *
 *        Time for a QZ sweep
 *
-         CALL SLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS, NBLOCK,
+         CALL SLAQZ4( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NS,
+     $                NBLOCK,
      $                ALPHAR( SHIFTPOS ), ALPHAI( SHIFTPOS ),
      $                BETA( SHIFTPOS ), A, LDA, B, LDB, Q, LDQ, Z, LDZ,
      $                WORK, NBLOCK, WORK( NBLOCK**2+1 ), NBLOCK,

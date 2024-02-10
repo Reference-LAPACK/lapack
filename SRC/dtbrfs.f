@@ -218,7 +218,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DTBMV, DTBSV, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DTBMV, DTBSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -439,7 +440,8 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

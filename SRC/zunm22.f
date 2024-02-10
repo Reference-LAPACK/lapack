@@ -215,7 +215,8 @@
       IF( N1.EQ.0 .OR. N2.EQ.0 ) NW = 1
       IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'C' ) )
+      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND.
+     $         .NOT.LSAME( TRANS, 'C' ) )
      $          THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
@@ -281,13 +282,15 @@
 *
                CALL ZLACPY( 'All', N1, LEN, C( N2+1, I ), LDC, WORK,
      $                      LDWORK )
-               CALL ZTRMM( 'Left', 'Lower', 'No Transpose', 'Non-Unit',
+               CALL ZTRMM( 'Left', 'Lower', 'No Transpose',
+     $                     'Non-Unit',
      $                     N1, LEN, ONE, Q( 1, N2+1 ), LDQ, WORK,
      $                     LDWORK )
 *
 *              Multiply top part of C by Q11.
 *
-               CALL ZGEMM( 'No Transpose', 'No Transpose', N1, LEN, N2,
+               CALL ZGEMM( 'No Transpose', 'No Transpose', N1, LEN,
+     $                     N2,
      $                     ONE, Q, LDQ, C( 1, I ), LDC, ONE, WORK,
      $                     LDWORK )
 *
@@ -295,13 +298,15 @@
 *
                CALL ZLACPY( 'All', N2, LEN, C( 1, I ), LDC,
      $                      WORK( N1+1 ), LDWORK )
-               CALL ZTRMM( 'Left', 'Upper', 'No Transpose', 'Non-Unit',
+               CALL ZTRMM( 'Left', 'Upper', 'No Transpose',
+     $                     'Non-Unit',
      $                     N2, LEN, ONE, Q( N1+1, 1 ), LDQ,
      $                     WORK( N1+1 ), LDWORK )
 *
 *              Multiply bottom part of C by Q22.
 *
-               CALL ZGEMM( 'No Transpose', 'No Transpose', N2, LEN, N1,
+               CALL ZGEMM( 'No Transpose', 'No Transpose', N2, LEN,
+     $                     N1,
      $                     ONE, Q( N1+1, N2+1 ), LDQ, C( N2+1, I ), LDC,
      $                     ONE, WORK( N1+1 ), LDWORK )
 *
@@ -359,13 +364,15 @@
 *
                CALL ZLACPY( 'All', LEN, N2, C( I, N1+1 ), LDC, WORK,
      $                      LDWORK )
-               CALL ZTRMM( 'Right', 'Upper', 'No Transpose', 'Non-Unit',
+               CALL ZTRMM( 'Right', 'Upper', 'No Transpose',
+     $                     'Non-Unit',
      $                     LEN, N2, ONE, Q( N1+1, 1 ), LDQ, WORK,
      $                     LDWORK )
 *
 *              Multiply left part of C by Q11.
 *
-               CALL ZGEMM( 'No Transpose', 'No Transpose', LEN, N2, N1,
+               CALL ZGEMM( 'No Transpose', 'No Transpose', LEN, N2,
+     $                     N1,
      $                     ONE, C( I, 1 ), LDC, Q, LDQ, ONE, WORK,
      $                     LDWORK )
 *
@@ -373,13 +380,15 @@
 *
                CALL ZLACPY( 'All', LEN, N1, C( I, 1 ), LDC,
      $                      WORK( 1 + N2*LDWORK ), LDWORK )
-               CALL ZTRMM( 'Right', 'Lower', 'No Transpose', 'Non-Unit',
+               CALL ZTRMM( 'Right', 'Lower', 'No Transpose',
+     $                     'Non-Unit',
      $                     LEN, N1, ONE, Q( 1, N2+1 ), LDQ,
      $                     WORK( 1 + N2*LDWORK ), LDWORK )
 *
 *              Multiply right part of C by Q22.
 *
-               CALL ZGEMM( 'No Transpose', 'No Transpose', LEN, N1, N2,
+               CALL ZGEMM( 'No Transpose', 'No Transpose', LEN, N1,
+     $                     N2,
      $                     ONE, C( I, N1+1 ), LDC, Q( N1+1, N2+1 ), LDQ,
      $                     ONE, WORK( 1 + N2*LDWORK ), LDWORK )
 *

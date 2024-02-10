@@ -160,7 +160,8 @@
 *> \ingroup hbgst
 *
 *  =====================================================================
-      SUBROUTINE ZHBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+      SUBROUTINE ZHBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB,
+     $                   X,
      $                   LDX, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -197,7 +198,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGERC, ZGERU, ZLACGV, ZLAR2V,
+      EXTERNAL           XERBLA, ZDSCAL, ZGERC, ZGERU, ZLACGV,
+     $                   ZLAR2V,
      $                   ZLARGV, ZLARTG, ZLARTV, ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
@@ -441,7 +443,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL ZLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ), KA1,
+     $         CALL ZLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ),
+     $                      KA1,
      $                      RWORK( J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -670,7 +673,8 @@
 *
 *                 generate rotation to annihilate a(i-k+ka+1,i)
 *
-                  CALL ZLARTG( AB( KA1-K, I ), RA1, RWORK( I-K+KA-M ),
+                  CALL ZLARTG( AB( KA1-K, I ), RA1,
+     $                         RWORK( I-K+KA-M ),
      $                         WORK( I-K+KA-M ), RA )
 *
 *                 create nonzero element a(i-k+ka+1,i-k) outside the
@@ -707,7 +711,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL ZLARGV( NRT, AB( KA1, J2T-KA ), INCA, WORK( J2T-M ),
+     $         CALL ZLARGV( NRT, AB( KA1, J2T-KA ), INCA,
+     $                      WORK( J2T-M ),
      $                      KA1, RWORK( J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -722,7 +727,8 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL ZLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL ZLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, RWORK( J2-M ), WORK( J2-M ), KA1 )
 *
                CALL ZLACGV( NR, WORK( J2-M ), KA1 )
@@ -804,7 +810,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL ZLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ), KA1,
+               CALL ZLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ),
+     $                      KA1,
      $                      RWORK( J2 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -818,7 +825,8 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL ZLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL ZLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, RWORK( J2 ), WORK( J2 ), KA1 )
 *
                CALL ZLACGV( NR, WORK( J2 ), KA1 )
@@ -1022,7 +1030,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL ZLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ), KA1,
+     $         CALL ZLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      RWORK( J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -1123,7 +1132,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL ZLARGV( NR, AB( 1, J1+KA ), INCA, WORK( M-KB+J1 ),
+               CALL ZLARGV( NR, AB( 1, J1+KA ), INCA,
+     $                      WORK( M-KB+J1 ),
      $                      KA1, RWORK( M-KB+J1 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -1233,7 +1243,8 @@
 *
                CALL ZDSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL ZGERC( NX, KBT, -CONE, X( 1, I ), 1, BB( 2, I ),
+     $            CALL ZGERC( NX, KBT, -CONE, X( 1, I ), 1, BB( 2,
+     $                        I ),
      $                        1, X( 1, I+1 ), LDX )
             END IF
 *
@@ -1292,14 +1303,16 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL ZLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ), KA1,
+     $         CALL ZLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      RWORK( J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the right
 *
                DO 810 L = 1, KA - 1
-                  CALL ZLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL ZLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, RWORK( J1 ), WORK( J1 ), KA1 )
   810          CONTINUE
 *
@@ -1398,7 +1411,8 @@
 *              apply rotations in 2nd set from the right
 *
                DO 890 L = 1, KA - 1
-                  CALL ZLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL ZLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, RWORK( M-KB+J1 ), WORK( M-KB+J1 ),
      $                         KA1 )
   890          CONTINUE

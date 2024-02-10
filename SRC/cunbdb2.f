@@ -197,7 +197,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -227,7 +228,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL, CLACGV,
+      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL,
+     $                   CLACGV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -309,7 +311,8 @@
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X11(I+1,I) = ONE
-            CALL CLARF( 'L', P-I, Q-I, X11(I+1,I), 1, CONJG(TAUP1(I)),
+            CALL CLARF( 'L', P-I, Q-I, X11(I+1,I), 1,
+     $                  CONJG(TAUP1(I)),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
          END IF
          X21(I,I) = ONE

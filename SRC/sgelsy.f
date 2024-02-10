@@ -201,7 +201,8 @@
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
-      SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+      SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND,
+     $                   RANK,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -235,10 +236,12 @@
 *     .. External Functions ..
       INTEGER            ILAENV
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEQP3, SLAIC1, SLASCL, SLASET,
+      EXTERNAL           SCOPY, SGEQP3, SLAIC1, SLASCL,
+     $                   SLASET,
      $                   SORMQR, SORMRZ, STRSM, STZRZF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -339,13 +342,15 @@
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
@@ -354,7 +359,7 @@
 *
       CALL SGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
      $             LWORK-MN, INFO )
-      WSIZE = MN + WORK( MN+1 )
+      WSIZE = REAL( MN ) + WORK( MN+1 )
 *
 *     workspace: MN+2*N+NB*(N+1).
 *     Details of Householder rotations stored in WORK(1:MN).
@@ -412,9 +417,10 @@
 *
 *     B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-      CALL SORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 ),
+      CALL SORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA,
+     $             WORK( 1 ),
      $             B, LDB, WORK( 2*MN+1 ), LWORK-2*MN, INFO )
-      WSIZE = MAX( WSIZE, 2*MN+WORK( 2*MN+1 ) )
+      WSIZE = MAX( WSIZE, REAL( 2*MN )+WORK( 2*MN+1 ) )
 *
 *     workspace: 2*MN+NB*NRHS.
 *
@@ -453,18 +459,22 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL SLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL SLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       END IF
 *
    70 CONTINUE

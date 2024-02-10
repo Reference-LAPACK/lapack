@@ -186,7 +186,8 @@
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+     $         LSAME( TRANS, 'T' ) .AND.
+     $                .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
@@ -231,7 +232,8 @@
 *     Solve A * X = B,  A**T * X = B,  or  A**H * X = B.
 *
       DO 30 J = 1, NRHS
-         CALL CTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, B( 1, J ), 1 )
+         CALL CTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, B( 1, J ),
+     $               1 )
    30 CONTINUE
 *
       RETURN

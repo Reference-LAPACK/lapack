@@ -306,7 +306,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
+      SUBROUTINE SPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B,
+     $                   LDB,
      $                   X, LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -341,7 +342,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAQSP, SPPCON, SPPEQU, SPPRFS,
+      EXTERNAL           SCOPY, SLACPY, SLAQSP, SPPCON, SPPEQU,
+     $                   SPPRFS,
      $                   SPPTRF, SPPTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -363,10 +365,13 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -461,7 +466,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL SPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR, BERR,
+      CALL SPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
+     $             BERR,
      $             WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original

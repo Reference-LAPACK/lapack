@@ -224,7 +224,8 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA,
+     $                   XLEFT,
      $                   XRIGHT )
 *
 *  -- LAPACK auxiliary routine --

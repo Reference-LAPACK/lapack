@@ -217,7 +217,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLARTG, DLASCL, DLASDA, DLASDQ, DLASET,
+      EXTERNAL           DGEMM, DLARTG, DLASCL, DLASDA, DLASDQ,
+     $                   DLASET,
      $                   DLASRT, XERBLA, ZCOPY, ZDROT, ZLACPY, ZLALSA,
      $                   ZLASCL, ZLASET
 *     ..
@@ -263,7 +264,8 @@
             CALL ZLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL ZLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL ZLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
+     $                   INFO )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -289,7 +291,8 @@
                DO 20 J = 1, N - 1
                   CS = RWORK( J*2-1 )
                   SN = RWORK( J*2 )
-                  CALL ZDROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL ZDROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS,
+     $                        SN )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -362,9 +365,11 @@
          TOL = RCND*ABS( D( IDAMAX( N, D, 1 ) ) )
          DO 100 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL ZLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL ZLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ),
+     $                      LDB )
             ELSE
-               CALL ZLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL ZLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I,
+     $                      1 ),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
@@ -593,7 +598,8 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL ZLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ), N )
+            CALL ZLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ),
+     $                   N )
          ELSE
             RANK = RANK + 1
             CALL ZLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
@@ -656,7 +662,8 @@
   300          CONTINUE
   310       CONTINUE
          ELSE
-            CALL ZLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL ZLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ),
+     $                   N,
      $                   B( ST, 1 ), LDB, RWORK( U+ST1 ), N,
      $                   RWORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   RWORK( DIFL+ST1 ), RWORK( DIFR+ST1 ),

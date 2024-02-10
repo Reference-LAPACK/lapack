@@ -367,7 +367,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
+      SUBROUTINE CGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHA, BETA, VL, LDVL, VR, LDVR, ILO, IHI,
      $                   LSCALE, RSCALE, ABNRM, BBNRM, RCONDE, RCONDV,
      $                   WORK, LWORK, RWORK, IWORK, BWORK, INFO )
@@ -414,7 +415,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CTGSNA, CUNGQR, CUNMQR,
      $                   SLASCL, XERBLA
 *     ..
@@ -422,7 +424,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
@@ -513,12 +516,15 @@
             END IF
             MAXWRK = MINWRK
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N,
+     $                                  0 ) )
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N,
+     $                                  0 ) )
             IF( ILVL ) THEN
                MAXWRK = MAX( MAXWRK, N +
-     $                       N*ILAENV( 1, 'CUNGQR', ' ', N, 1, N, 0 ) )
+     $                       N*ILAENV( 1, 'CUNGQR', ' ', N, 1, N,
+     $                                 0 ) )
             END IF
          END IF
          WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
@@ -579,7 +585,8 @@
 *     Permute and/or balance the matrix pair (A,B)
 *     (Real Workspace: need 6*N if BALANC = 'S' or 'B', 1 otherwise)
 *
-      CALL CGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL CGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+     $             RSCALE,
      $             RWORK, IERR )
 *
 *     Compute ABNRM and BBNRM
@@ -748,7 +755,8 @@
 *     (Workspace: none needed)
 *
       IF( ILVL ) THEN
-         CALL CGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N, VL,
+         CALL CGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VL,
      $                LDVL, IERR )
 *
          DO 50 JC = 1, N
@@ -766,7 +774,8 @@
       END IF
 *
       IF( ILVR ) THEN
-         CALL CGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N, VR,
+         CALL CGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VR,
      $                LDVR, IERR )
          DO 80 JC = 1, N
             TEMP = ZERO

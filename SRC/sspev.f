@@ -158,7 +158,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SOPGTR, SSCAL, SSPTRD, SSTEQR, SSTERF, XERBLA
+      EXTERNAL           SOPGTR, SSCAL, SSPTRD, SSTEQR, SSTERF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -172,7 +173,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR.
+     $         LSAME( UPLO, 'L' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -226,7 +228,8 @@
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
+      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ),
+     $             IINFO )
 *
 *     For eigenvalues only, call SSTERF.  For eigenvectors, first call
 *     SOPGTR to generate the orthogonal matrix, then call SSTEQR.
@@ -237,7 +240,8 @@
          INDWRK = INDTAU + N
          CALL SOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                WORK( INDWRK ), IINFO )
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU ),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDTAU ),
      $                INFO )
       END IF
 *

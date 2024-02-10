@@ -354,7 +354,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE ZHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE ZHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
@@ -399,7 +400,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZHETRD, ZSTEMR, ZSTEIN, ZSWAP, ZUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -464,7 +466,7 @@
          NB = MAX( NB, ILAENV( 1, 'ZUNMTR', UPLO, N, -1, -1, -1 ) )
          LWKOPT = MAX( ( NB+1 )*N, LWMIN )
          WORK( 1 )  = LWKOPT
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -676,7 +678,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -720,7 +723,7 @@
 *     Set WORK(1) to optimal workspace size.
 *
       WORK( 1 )  = LWKOPT
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

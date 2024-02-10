@@ -385,7 +385,8 @@
 *> \ingroup la_herfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -457,7 +458,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CHETRS, CHEMV, BLAS_CHEMV_X,
+      EXTERNAL           CAXPY, CCOPY, CHETRS, CHEMV,
+     $                   BLAS_CHEMV_X,
      $                   BLAS_CHEMV2_X, CLA_HEAMV, CLA_WWADDW,
      $                   CLA_LIN_BERR
       REAL               SLAMCH
@@ -537,7 +539,8 @@
 *
             CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL CHEMV( UPLO, N, CMPLX(-1.0), A, LDA, Y( 1, J ), 1,
+               CALL CHEMV( UPLO, N, CMPLX(-1.0), A, LDA, Y( 1, J ),
+     $                     1,
      $              CMPLX(1.0), RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_CHEMV_X( UPLO2, N, CMPLX(-1.0), A, LDA,

@@ -289,7 +289,8 @@
             COLMAX = ZERO
          END IF
 *
-         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR.
+     $       DISNAN(ABSAKK) ) THEN
 *
 *           Column K is zero or underflow, or contains a NaN:
 *           set INFO and continue
@@ -484,7 +485,8 @@
             COLMAX = ZERO
          END IF
 *
-         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR.
+     $       DISNAN(ABSAKK) ) THEN
 *
 *           Column K is zero or underflow, or contains a NaN:
 *           set INFO and continue
@@ -513,7 +515,8 @@
                JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 )
+                  JMAX = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ),
+     $                                  1 )
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -550,7 +553,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
                DO 60 J = KK + 1, KP - 1
                   T = DCONJG( A( J, KK ) )
                   A( J, KK ) = DCONJG( A( KP, J ) )

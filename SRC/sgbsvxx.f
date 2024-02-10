@@ -555,7 +555,8 @@
 *> \ingroup gbsvxx
 *
 *  =====================================================================
-      SUBROUTINE SGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE SGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB,
+     $                    AFB,
      $                    LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
      $                    RCOND, RPVGRW, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
@@ -606,7 +607,8 @@
       REAL               SLAMCH, SLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGBEQUB, SGBTRF, SGBTRS, SLACPY, SLAQGB,
+      EXTERNAL           SGBEQUB, SGBTRF, SGBTRS, SLACPY,
+     $                   SLAQGB,
      $                   XERBLA, SLASCL2, SGBRFSX
 *     ..
 *     .. Intrinsic Functions ..
@@ -713,7 +715,8 @@
 *
 *     Equilibrate the matrix.
 *
-            CALL SLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+            CALL SLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND,
+     $                   COLCND,
      $           AMAX, EQUED )
             ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
             COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
@@ -779,7 +782,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL SGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      CALL SGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $              LDAFB,
      $     IPIV, R, C, B, LDB, X, LDX, RCOND, BERR,
      $     N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $     WORK, IWORK, INFO )

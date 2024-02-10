@@ -166,7 +166,8 @@
 *> \ingroup pprfs
 *
 *  =====================================================================
-      SUBROUTINE ZPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
+      SUBROUTINE ZPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX,
+     $                   FERR,
      $                   BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -207,7 +208,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHPMV, ZLACN2, ZPPTRS
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHPMV, ZLACN2,
+     $                   ZPPTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -276,7 +278,8 @@
 *        Compute residual R = B - A * X
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZHPMV( UPLO, N, -CONE, AP, X( 1, J ), 1, CONE, WORK, 1 )
+         CALL ZHPMV( UPLO, N, -CONE, AP, X( 1, J ), 1, CONE, WORK,
+     $               1 )
 *
 *        Compute componentwise relative backward error from formula
 *

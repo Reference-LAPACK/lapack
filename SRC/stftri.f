@@ -242,7 +242,8 @@
          INFO = -1
       ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND.
+     $         .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -305,7 +306,8 @@
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'L', 'U', 'T', DIAG, N2, N1, ONE, A( N ), N,
+               CALL STRMM( 'L', 'U', 'T', DIAG, N2, N1, ONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
 *
             ELSE
@@ -317,7 +319,8 @@
                CALL STRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'L', 'L', 'T', DIAG, N1, N2, -ONE, A( N2 ),
+               CALL STRMM( 'L', 'L', 'T', DIAG, N1, N2, -ONE,
+     $                     A( N2 ),
      $                     N, A( 0 ), N )
                CALL STRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
@@ -396,7 +399,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'L', 'U', 'T', DIAG, K, K, ONE, A( 0 ), N+1,
+               CALL STRMM( 'L', 'U', 'T', DIAG, K, K, ONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
 *
             ELSE
@@ -415,7 +419,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'R', 'U', 'N', DIAG, K, K, ONE, A( K ), N+1,
+               CALL STRMM( 'R', 'U', 'N', DIAG, K, K, ONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
             END IF
          ELSE
@@ -431,7 +436,8 @@
                CALL STRTRI( 'U', DIAG, K, A( K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'L', 'U', 'N', DIAG, K, K, -ONE, A( K ), K,
+               CALL STRMM( 'L', 'U', 'N', DIAG, K, K, -ONE, A( K ),
+     $                     K,
      $                     A( K*( K+1 ) ), K )
                CALL STRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
@@ -456,7 +462,8 @@
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL STRMM( 'L', 'L', 'N', DIAG, K, K, ONE, A( K*K ), K,
+               CALL STRMM( 'L', 'L', 'N', DIAG, K, K, ONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
             END IF
          END IF

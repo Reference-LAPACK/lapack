@@ -268,7 +268,8 @@
       COMPLEX*16         CDUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSDC, DLASCL, XERBLA, ZGEBRD, ZGELQF, ZGEMM,
+      EXTERNAL           DBDSDC, DLASCL, XERBLA, ZGEBRD, ZGELQF,
+     $                   ZGEMM,
      $                   ZGEQRF, ZLACP2, ZLACPY, ZLACRM, ZLARCM, ZLASCL,
      $                   ZLASET, ZUNGBR, ZUNGLQ, ZUNGQR, ZUNMBR
 *     ..
@@ -343,7 +344,8 @@
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_NN = INT( CDUM(1) )
 *
-            CALL ZGEQRF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, IERR )
+            CALL ZGEQRF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1,
+     $                   IERR )
             LWORK_ZGEQRF_MN = INT( CDUM(1) )
 *
             CALL ZUNGBR( 'P', N, N, N, CDUM(1), N, CDUM(1), CDUM(1),
@@ -484,7 +486,8 @@
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_MM = INT( CDUM(1) )
 *
-            CALL ZGELQF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, IERR )
+            CALL ZGELQF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1,
+     $                   IERR )
             LWORK_ZGELQF_MN = INT( CDUM(1) )
 *
             CALL ZUNGBR( 'P', M, N, M, CDUM(1), M, CDUM(1), CDUM(1),
@@ -674,7 +677,8 @@
 *              CWorkspace: prefer N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Zero out below R
@@ -691,7 +695,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL ZGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL ZGEBRD( N, N, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NRWORK = IE + N
@@ -731,13 +736,15 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy R to WORK( IR ), zeroing out below it
 *
                CALL ZLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 ),
+               CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                      WORK( IR+1 ),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -770,7 +777,8 @@
                IRU = IE + N
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -782,7 +790,8 @@
 *
                CALL ZLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
      $                      LDWRKU )
-               CALL ZUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
+               CALL ZUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUQ ), WORK( IU ), LDWRKU,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -793,7 +802,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL ZUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRKR,
+               CALL ZUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -831,13 +841,15 @@
 *              CWorkspace: prefer N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy R to WORK(IR), zeroing out below it
 *
                CALL ZLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 ),
+               CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                      WORK( IR+1 ),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -870,7 +882,8 @@
                IRU = IE + N
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -881,7 +894,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
-               CALL ZUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
+               CALL ZUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -892,7 +906,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL ZUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRKR,
+               CALL ZUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ),
+     $                      LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -902,7 +917,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACPY( 'F', N, N, U, LDU, WORK( IR ), LDWRKR )
-               CALL ZGEMM( 'N', 'N', M, N, N, CONE, A, LDA, WORK( IR ),
+               CALL ZGEMM( 'N', 'N', M, N, N, CONE, A, LDA,
+     $                     WORK( IR ),
      $                     LDWRKR, CZERO, U, LDU )
 *
             ELSE IF( WNTQA ) THEN
@@ -924,7 +940,8 @@
 *              CWorkspace: prefer N*N [U] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
                CALL ZLACPY( 'L', M, N, A, LDA, U, LDU )
 *
@@ -950,7 +967,8 @@
 *              CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL ZGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL ZGEBRD( N, N, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                IRU = IE + N
@@ -963,7 +981,8 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -995,7 +1014,8 @@
 *              CWorkspace: need   N*N [U]
 *              RWorkspace: need   0
 *
-               CALL ZGEMM( 'N', 'N', M, N, N, CONE, U, LDU, WORK( IU ),
+               CALL ZGEMM( 'N', 'N', M, N, N, CONE, U, LDU,
+     $                     WORK( IU ),
      $                     LDWRKU, CZERO, A, LDA )
 *
 *              Copy left singular vectors of A from A to U
@@ -1033,7 +1053,8 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM, 1,DUM,1,
+               CALL DBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM, 1,DUM,
+     $                      1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
                IU = NWORK
@@ -1078,7 +1099,8 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1101,7 +1123,8 @@
                NRWORK = IRVT
                DO 20 I = 1, M, LDWRKU
                   CHUNK = MIN( M-I+1, LDWRKU )
-                  CALL ZLACRM( CHUNK, N, A( I, 1 ), LDA, RWORK( IRU ),
+                  CALL ZLACRM( CHUNK, N, A( I, 1 ), LDA,
+     $                         RWORK( IRU ),
      $                         N, WORK( IU ), LDWRKU, RWORK( NRWORK ) )
                   CALL ZLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
      $                         A( I, 1 ), LDA )
@@ -1137,7 +1160,8 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1189,7 +1213,8 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1269,7 +1294,8 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1296,12 +1322,14 @@
 *
                   CALL ZLASET( 'F', M, N, CZERO, CZERO, WORK( IU ),
      $                         LDWRKU )
-                  CALL ZLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
+                  CALL ZLACP2( 'F', N, N, RWORK( IRU ), N,
+     $                         WORK( IU ),
      $                         LDWRKU )
                   CALL ZUNMBR( 'Q', 'L', 'N', M, N, N, A, LDA,
      $                         WORK( ITAUQ ), WORK( IU ), LDWRKU,
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
-                  CALL ZLACPY( 'F', M, N, WORK( IU ), LDWRKU, A, LDA )
+                  CALL ZLACPY( 'F', M, N, WORK( IU ), LDWRKU, A,
+     $                         LDA )
                ELSE
 *
 *                 Path 6o-slow
@@ -1343,7 +1371,8 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1381,7 +1410,8 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', N, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1439,7 +1469,8 @@
 *              CWorkspace: prefer M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Zero out above L
@@ -1456,7 +1487,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL ZGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL ZGEBRD( M, M, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NRWORK = IE + M
@@ -1501,7 +1533,8 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy L to WORK(IL), zeroing about above it
@@ -1540,7 +1573,8 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1551,7 +1585,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL ZUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
+               CALL ZUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1563,7 +1598,8 @@
 *
                CALL ZLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
      $                      LDWKVT )
-               CALL ZUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRKL,
+               CALL ZUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUP ), WORK( IVT ), LDWKVT,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -1575,7 +1611,8 @@
 *
                DO 40 I = 1, N, CHUNK
                   BLK = MIN( N-I+1, CHUNK )
-                  CALL ZGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IVT ), M,
+                  CALL ZGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IVT ),
+     $                        M,
      $                        A( 1, I ), LDA, CZERO, WORK( IL ),
      $                        LDWRKL )
                   CALL ZLACPY( 'F', M, BLK, WORK( IL ), LDWRKL,
@@ -1601,7 +1638,8 @@
 *              CWorkspace: prefer M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy L to WORK(IL), zeroing out above it
@@ -1640,7 +1678,8 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1651,7 +1690,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL ZUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
+               CALL ZUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1662,7 +1702,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
-               CALL ZUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRKL,
+               CALL ZUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ),
+     $                      LDWRKL,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1672,7 +1713,8 @@
 *              RWorkspace: need   0
 *
                CALL ZLACPY( 'F', M, M, VT, LDVT, WORK( IL ), LDWRKL )
-               CALL ZGEMM( 'N', 'N', M, N, M, CONE, WORK( IL ), LDWRKL,
+               CALL ZGEMM( 'N', 'N', M, N, M, CONE, WORK( IL ),
+     $                     LDWRKL,
      $                     A, LDA, CZERO, VT, LDVT )
 *
             ELSE IF( WNTQA ) THEN
@@ -1694,7 +1736,8 @@
 *              CWorkspace: prefer M*M [VT] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+               CALL ZGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
                CALL ZLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
@@ -1720,7 +1763,8 @@
 *              CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL ZGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL ZGEBRD( M, M, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
 *
@@ -1733,7 +1777,8 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'U', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1765,7 +1810,8 @@
 *              CWorkspace: need   M*M [VT]
 *              RWorkspace: need   0
 *
-               CALL ZGEMM( 'N', 'N', M, N, M, CONE, WORK( IVT ), LDWKVT,
+               CALL ZGEMM( 'N', 'N', M, N, M, CONE, WORK( IVT ),
+     $                     LDWKVT,
      $                     VT, LDVT, CZERO, A, LDA )
 *
 *              Copy right singular vectors of A from A to VT
@@ -1851,7 +1897,8 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + BDSPAC
 *
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1860,7 +1907,8 @@
 *              CWorkspace: need   2*M [tauq, taup] + M*M [VT]
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork]
 *
-               CALL ZLACRM( M, M, U, LDU, RWORK( IRU ), M, WORK( IVT ),
+               CALL ZLACRM( M, M, U, LDU, RWORK( IRU ), M,
+     $                      WORK( IVT ),
      $                      LDWKVT, RWORK( NRWORK ) )
                CALL ZLACPY( 'F', M, M, WORK( IVT ), LDWKVT, U, LDU )
 *
@@ -1874,7 +1922,8 @@
                NRWORK = IRU
                DO 50 I = 1, N, CHUNK
                   BLK = MIN( N-I+1, CHUNK )
-                  CALL ZLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ), LDA,
+                  CALL ZLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ),
+     $                         LDA,
      $                         WORK( IVT ), LDWKVT, RWORK( NRWORK ) )
                   CALL ZLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
      $                         A( 1, I ), LDA )
@@ -1909,7 +1958,8 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1961,7 +2011,8 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2044,7 +2095,8 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2069,12 +2121,14 @@
 *                 CWorkspace: prefer 2*M [tauq, taup] + M*N [VT] + M*NB [work]
 *                 RWorkspace: need   M [e] + M*M [RVT]
 *
-                  CALL ZLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
+                  CALL ZLACP2( 'F', M, M, RWORK( IRVT ), M,
+     $                         WORK( IVT ),
      $                         LDWKVT )
                   CALL ZUNMBR( 'P', 'R', 'C', M, N, M, A, LDA,
      $                         WORK( ITAUP ), WORK( IVT ), LDWKVT,
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
-                  CALL ZLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A, LDA )
+                  CALL ZLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A,
+     $                         LDA )
                ELSE
 *
 *                 Path 6to-slow
@@ -2096,7 +2150,8 @@
                   NRWORK = IRU
                   DO 60 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL ZLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ),
+                     CALL ZLARCM( M, BLK, RWORK( IRVT ), M, A( 1,
+     $                            I ),
      $                            LDA, WORK( IVT ), LDWKVT,
      $                            RWORK( NRWORK ) )
                      CALL ZLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
@@ -2115,7 +2170,8 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2154,7 +2210,8 @@
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
 *
-               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
+               CALL DBDSDC( 'L', 'I', M, S, RWORK( IE ),
+     $                      RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *

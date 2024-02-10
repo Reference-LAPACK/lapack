@@ -173,7 +173,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
+      SUBROUTINE CLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -210,7 +211,8 @@
       EXTERNAL           LSAME, ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMM, CGEMV, CLACGV, CSSCAL, CSWAP
+      EXTERNAL           CCOPY, CGEMM, CGEMV, CLACGV, CSSCAL,
+     $                   CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, MIN, REAL, SQRT
@@ -256,7 +258,8 @@
          CALL CCOPY( K-1, A( 1, K ), 1, W( 1, KW ), 1 )
          W( K, KW ) = REAL( A( K, K ) )
          IF( K.LT.N ) THEN
-            CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), LDA,
+            CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
+     $                  LDA,
      $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
             W( K, KW ) = REAL( W( K, KW ) )
          END IF
@@ -624,7 +627,8 @@
          W( K, K ) = REAL( A( K, K ) )
          IF( K.LT.N )
      $      CALL CCOPY( N-K, A( K+1, K ), 1, W( K+1, K ), 1 )
-         CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ), LDA,
+         CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+     $               LDA,
      $               W( K, 1 ), LDW, CONE, W( K, K ), 1 )
          W( K, K ) = REAL( W( K, K ) )
 *
@@ -671,13 +675,15 @@
 *
 *              Copy column IMAX to column K+1 of W and update it
 *
-               CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1 )
+               CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $                     1 )
                CALL CLACGV( IMAX-K, W( K, K+1 ), 1 )
                W( IMAX, K+1 ) = REAL( A( IMAX, IMAX ) )
                IF( IMAX.LT.N )
      $            CALL CCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
      $                        W( IMAX+1, K+1 ), 1 )
-               CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+               CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K,
+     $                     1 ),
      $                     LDA, W( IMAX, 1 ), LDW, CONE, W( K, K+1 ),
      $                     1 )
                W( IMAX, K+1 ) = REAL( W( IMAX, K+1 ) )
@@ -751,7 +757,8 @@
      $                     LDA )
                CALL CLACGV( KP-KK-1, A( KP, KK+1 ), LDA )
                IF( KP.LT.N )
-     $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
 *              (columns K (or K and K+1 for 2-by-2 pivot) of A will be

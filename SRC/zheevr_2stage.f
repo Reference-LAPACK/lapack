@@ -447,10 +447,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
       DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSY, ILAENV, ILAENV2STAGE
+      EXTERNAL           LSAME, DLAMCH, ZLANSY, ILAENV,
+     $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZHETRD_2STAGE, ZSTEMR, ZSTEIN, ZSWAP, ZUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -471,10 +473,14 @@
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 ) .OR.
      $         ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ, N, -1, -1,
+     $                       -1 )
+      IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1,
+     $                       -1 )
+      LHTRD  = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
+      LWTRD  = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                       -1 )
 *
       IF( N.LE.1 ) THEN
          LWMIN  = 1
@@ -517,7 +523,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -732,7 +738,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -776,7 +783,7 @@
 *     Set WORK(1) to optimal workspace size.
 *
       WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

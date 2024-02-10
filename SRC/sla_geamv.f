@@ -171,7 +171,8 @@
 *> \ingroup la_geamv
 *
 *  =====================================================================
-      SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+      SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX,
+     $                      BETA,
      $                      Y, INCY )
 *
 *  -- LAPACK computational routine --

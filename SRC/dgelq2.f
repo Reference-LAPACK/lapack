@@ -185,7 +185,8 @@
 *
             AII = A( I, I )
             A( I, I ) = ONE
-            CALL DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA, TAU( I ),
+            CALL DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $                  TAU( I ),
      $                  A( I+1, I ), LDA, WORK )
             A( I, I ) = AII
          END IF

@@ -301,7 +301,8 @@
 *> \ingroup posvx
 *
 *  =====================================================================
-      SUBROUTINE DPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE DPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                   EQUED,
      $                   S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
      $                   IWORK, INFO )
 *
@@ -338,7 +339,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLAQSY, DPOCON, DPOEQU, DPORFS, DPOTRF,
+      EXTERNAL           DLACPY, DLAQSY, DPOCON, DPOEQU, DPORFS,
+     $                   DPOTRF,
      $                   DPOTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,10 +362,13 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -452,7 +457,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL DPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Compute the solution matrix X.
 *

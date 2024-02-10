@@ -387,7 +387,8 @@
 *> \ingroup la_gerfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $                                A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
@@ -453,7 +454,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGETRS, ZGEMV, BLAS_ZGEMV_X,
+      EXTERNAL           ZAXPY, ZCOPY, ZGETRS, ZGEMV,
+     $                   BLAS_ZGEMV_X,
      $                   BLAS_ZGEMV2_X, ZLA_GEAMV, ZLA_WWADDW, DLAMCH,
      $                   CHLA_TRANSTYPE, ZLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
@@ -512,11 +514,13 @@
                CALL ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA,
      $              Y( 1, J ), 1, (1.0D+0,0.0D+0), RES, 1)
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
-               CALL BLAS_ZGEMV_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0), A,
+               CALL BLAS_ZGEMV_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0),
+     $                            A,
      $              LDA, Y( 1, J ), 1, (1.0D+0,0.0D+0),
      $              RES, 1, PREC_TYPE )
             ELSE
-               CALL BLAS_ZGEMV2_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0),
+               CALL BLAS_ZGEMV2_X( TRANS_TYPE, N, N,
+     $              (-1.0D+0,0.0D+0),
      $              A, LDA, Y(1, J), Y_TAIL, 1, (1.0D+0,0.0D+0), RES, 1,
      $              PREC_TYPE)
             END IF
@@ -672,7 +676,8 @@
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA, Y(1,J), 1,
+         CALL ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA, Y(1,J),
+     $               1,
      $        (1.0D+0,0.0D+0), RES, 1 )
 
          DO I = 1, N

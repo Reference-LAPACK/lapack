@@ -268,7 +268,8 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
      $                   IWORK, PQ, INFO )
 *
@@ -313,7 +314,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMM, SGEMV, SGER, SGESC2,
+      EXTERNAL           SAXPY, SCOPY, SGEMM, SGEMV, SGER,
+     $                   SGESC2,
      $                   SGETC2, SSCAL, SLASET, SLATDF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -466,9 +468,11 @@
 *
                   IF( I.GT.1 ) THEN
                      ALPHA = -RHS( 1 )
-                     CALL SAXPY( IS-1, ALPHA, A( 1, IS ), 1, C( 1, JS ),
+                     CALL SAXPY( IS-1, ALPHA, A( 1, IS ), 1, C( 1,
+     $                           JS ),
      $                           1 )
-                     CALL SAXPY( IS-1, ALPHA, D( 1, IS ), 1, F( 1, JS ),
+                     CALL SAXPY( IS-1, ALPHA, D( 1, IS ), 1, F( 1,
+     $                           JS ),
      $                           1 )
                   END IF
                   IF( J.LT.Q ) THEN
@@ -541,9 +545,11 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL SGER( IS-1, NB, -ONE, A( 1, IS ), 1, RHS( 1 ),
+                     CALL SGER( IS-1, NB, -ONE, A( 1, IS ), 1,
+     $                          RHS( 1 ),
      $                          1, C( 1, JS ), LDC )
-                     CALL SGER( IS-1, NB, -ONE, D( 1, IS ), 1, RHS( 1 ),
+                     CALL SGER( IS-1, NB, -ONE, D( 1, IS ), 1,
+     $                          RHS( 1 ),
      $                          1, F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
@@ -551,9 +557,11 @@
      $                           C( IS, JE+1 ), LDC )
                      CALL SAXPY( N-JE, RHS( 3 ), E( JS, JE+1 ), LDE,
      $                           F( IS, JE+1 ), LDF )
-                     CALL SAXPY( N-JE, RHS( 4 ), B( JSP1, JE+1 ), LDB,
+                     CALL SAXPY( N-JE, RHS( 4 ), B( JSP1, JE+1 ),
+     $                           LDB,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SAXPY( N-JE, RHS( 4 ), E( JSP1, JE+1 ), LDE,
+                     CALL SAXPY( N-JE, RHS( 4 ), E( JSP1, JE+1 ),
+     $                           LDE,
      $                           F( IS, JE+1 ), LDF )
                   END IF
 *
@@ -619,9 +627,11 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL SGEMV( 'N', IS-1, MB, -ONE, A( 1, IS ), LDA,
+                     CALL SGEMV( 'N', IS-1, MB, -ONE, A( 1, IS ),
+     $                           LDA,
      $                           RHS( 1 ), 1, ONE, C( 1, JS ), 1 )
-                     CALL SGEMV( 'N', IS-1, MB, -ONE, D( 1, IS ), LDD,
+                     CALL SGEMV( 'N', IS-1, MB, -ONE, D( 1, IS ),
+     $                           LDD,
      $                           RHS( 1 ), 1, ONE, F( 1, JS ), 1 )
                   END IF
                   IF( J.LT.Q ) THEN
@@ -679,7 +689,8 @@
                   II = MB*NB + 1
                   DO 80 JJ = 0, NB - 1
                      CALL SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
-                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 )
+                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ),
+     $                           1 )
                      K = K + MB
                      II = II + MB
    80             CONTINUE
@@ -710,7 +721,8 @@
                   II = MB*NB + 1
                   DO 100 JJ = 0, NB - 1
                      CALL SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
-                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 )
+                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ),
+     $                           1 )
                      K = K + MB
                      II = II + MB
   100             CONTINUE
@@ -728,10 +740,12 @@
                   END IF
                   IF( J.LT.Q ) THEN
                      K = MB*NB + 1
-                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K ),
+                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+     $                           RHS( K ),
      $                           MB, B( JS, JE+1 ), LDB, ONE,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K ),
+                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+     $                           RHS( K ),
      $                           MB, E( JS, JE+1 ), LDE, ONE,
      $                           F( IS, JE+1 ), LDF )
                   END IF
@@ -782,7 +796,8 @@
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+     $                         SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 130 K = 1, N
                         CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
@@ -801,10 +816,12 @@
 *
                   IF( J.GT.P+2 ) THEN
                      ALPHA = RHS( 1 )
-                     CALL SAXPY( JS-1, ALPHA, B( 1, JS ), 1, F( IS, 1 ),
+                     CALL SAXPY( JS-1, ALPHA, B( 1, JS ), 1, F( IS,
+     $                           1 ),
      $                           LDF )
                      ALPHA = RHS( 2 )
-                     CALL SAXPY( JS-1, ALPHA, E( 1, JS ), 1, F( IS, 1 ),
+                     CALL SAXPY( JS-1, ALPHA, E( 1, JS ), 1, F( IS,
+     $                           1 ),
      $                           LDF )
                   END IF
                   IF( I.LT.P ) THEN
@@ -852,7 +869,8 @@
                   CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+     $                         SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 140 K = 1, N
                         CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
@@ -925,7 +943,8 @@
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+     $                         SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 150 K = 1, N
                         CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
@@ -945,9 +964,11 @@
 *                 equation.
 *
                   IF( J.GT.P+2 ) THEN
-                     CALL SGER( MB, JS-1, ONE, RHS( 1 ), 1, B( 1, JS ),
+                     CALL SGER( MB, JS-1, ONE, RHS( 1 ), 1, B( 1,
+     $                          JS ),
      $                          1, F( IS, 1 ), LDF )
-                     CALL SGER( MB, JS-1, ONE, RHS( 3 ), 1, E( 1, JS ),
+                     CALL SGER( MB, JS-1, ONE, RHS( 3 ), 1, E( 1,
+     $                          JS ),
      $                          1, F( IS, 1 ), LDF )
                   END IF
                   IF( I.LT.P ) THEN
@@ -1007,7 +1028,8 @@
                   II = MB*NB + 1
                   DO 160 JJ = 0, NB - 1
                      CALL SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
-                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 )
+                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ),
+     $                           1 )
                      K = K + MB
                      II = II + MB
   160             CONTINUE
@@ -1019,7 +1041,8 @@
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+     $                         SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 170 K = 1, N
                         CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
@@ -1034,7 +1057,8 @@
                   II = MB*NB + 1
                   DO 180 JJ = 0, NB - 1
                      CALL SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
-                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 )
+                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ),
+     $                           1 )
                      K = K + MB
                      II = II + MB
   180             CONTINUE

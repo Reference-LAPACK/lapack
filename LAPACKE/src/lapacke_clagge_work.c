@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clagge_work( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_clagge_work)( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku, const float* d,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* iseed, lapack_complex_float* work )
@@ -50,7 +50,7 @@ lapack_int LAPACKE_clagge_work( int matrix_layout, lapack_int m, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_clagge_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clagge_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -66,16 +66,16 @@ lapack_int LAPACKE_clagge_work( int matrix_layout, lapack_int m, lapack_int n,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_clagge_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clagge_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_clagge_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clagge_work", info );
     }
     return info;
 }

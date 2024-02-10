@@ -163,7 +163,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASYF_AA, CGEMM, CGEMV, CSCAL, CSWAP, CCOPY,
+      EXTERNAL           CLASYF_AA, CGEMM, CGEMV, CSCAL, CSWAP,
+     $                   CCOPY,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

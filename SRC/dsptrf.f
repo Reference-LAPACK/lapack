@@ -500,7 +500,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL DSWAP( N-KP, AP( KNC+KP-KK+1 ), 1, AP( KPC+1 ),
+     $            CALL DSWAP( N-KP, AP( KNC+KP-KK+1 ), 1,
+     $                        AP( KPC+1 ),
      $                        1 )
                KX = KNC + KP - KK
                DO 80 J = KK + 1, KP - 1

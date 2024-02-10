@@ -177,7 +177,8 @@
       EXTERNAL           ILAENV, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGBTF2, ZGEMM, ZGERU, ZLASWP,
+      EXTERNAL           XERBLA, ZCOPY, ZGBTF2, ZGEMM, ZGERU,
+     $                   ZLASWP,
      $                   ZSCAL, ZSWAP, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
@@ -325,7 +326,8 @@
 *
 *                 Compute multipliers
 *
-                  CALL ZSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2, JJ ),
+                  CALL ZSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2,
+     $                        JJ ),
      $                        1 )
 *
 *                 Update trailing submatrix within the band and within
@@ -394,7 +396,8 @@
 *
 *                 Update A12
 *
-                  CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL ZTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J2, ONE, AB( KV+1, J ), LDAB-1,
      $                        AB( KV+1-JB, J+JB ), LDAB-1 )
 *
@@ -402,7 +405,8 @@
 *
 *                    Update A22
 *
-                     CALL ZGEMM( 'No transpose', 'No transpose', I2, J2,
+                     CALL ZGEMM( 'No transpose', 'No transpose', I2,
+     $                           J2,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+1, J+JB ), LDAB-1 )
@@ -412,7 +416,8 @@
 *
 *                    Update A32
 *
-                     CALL ZGEMM( 'No transpose', 'No transpose', I3, J2,
+                     CALL ZGEMM( 'No transpose', 'No transpose', I3,
+     $                           J2,
      $                           JB, -ONE, WORK31, LDWORK,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+KL+1-JB, J+JB ), LDAB-1 )
@@ -432,7 +437,8 @@
 *
 *                 Update A13 in the work array
 *
-                  CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL ZTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J3, ONE, AB( KV+1, J ), LDAB-1,
      $                        WORK13, LDWORK )
 *
@@ -440,7 +446,8 @@
 *
 *                    Update A23
 *
-                     CALL ZGEMM( 'No transpose', 'No transpose', I2, J3,
+                     CALL ZGEMM( 'No transpose', 'No transpose', I2,
+     $                           J3,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           WORK13, LDWORK, ONE, AB( 1+JB, J+KV ),
      $                           LDAB-1 )
@@ -450,7 +457,8 @@
 *
 *                    Update A33
 *
-                     CALL ZGEMM( 'No transpose', 'No transpose', I3, J3,
+                     CALL ZGEMM( 'No transpose', 'No transpose', I3,
+     $                           J3,
      $                           JB, -ONE, WORK31, LDWORK, WORK13,
      $                           LDWORK, ONE, AB( 1+KL, J+KV ), LDAB-1 )
                   END IF

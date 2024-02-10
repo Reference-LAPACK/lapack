@@ -212,7 +212,8 @@
 *> \ingroup ggev3
 *
 *  =====================================================================
-      SUBROUTINE CGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+      SUBROUTINE CGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA,
+     $                   BETA,
      $                   VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -253,13 +254,15 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CUNGQR, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
@@ -499,7 +502,8 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL CTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL CTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), RWORK( IRWRK ),
      $                IERR )
          IF( IERR.NE.0 ) THEN

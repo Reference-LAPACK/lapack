@@ -199,7 +199,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ,
+     $                   WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -229,7 +230,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPPTRF, SSPEVD, SSPGST, STPMV, STPSV, XERBLA
+      EXTERNAL           SPPTRF, SSPEVD, SSPGST, STPMV, STPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL

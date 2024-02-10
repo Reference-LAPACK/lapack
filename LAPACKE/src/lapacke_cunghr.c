@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cunghr( int matrix_layout, lapack_int n, lapack_int ilo,
+lapack_int API_SUFFIX(LAPACKE_cunghr)( int matrix_layout, lapack_int n, lapack_int ilo,
                            lapack_int ihi, lapack_complex_float* a,
                            lapack_int lda, const lapack_complex_float* tau )
 {
@@ -41,22 +41,22 @@ lapack_int LAPACKE_cunghr( int matrix_layout, lapack_int n, lapack_int ilo,
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_cunghr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunghr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_c_nancheck( n-1, tau, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, tau, 1 ) ) {
             return -7;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cunghr_work( matrix_layout, n, ilo, ihi, a, lda, tau,
+    info = API_SUFFIX(LAPACKE_cunghr_work)( matrix_layout, n, ilo, ihi, a, lda, tau,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -70,13 +70,13 @@ lapack_int LAPACKE_cunghr( int matrix_layout, lapack_int n, lapack_int ilo,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cunghr_work( matrix_layout, n, ilo, ihi, a, lda, tau, work,
+    info = API_SUFFIX(LAPACKE_cunghr_work)( matrix_layout, n, ilo, ihi, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_cunghr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cunghr", info );
     }
     return info;
 }

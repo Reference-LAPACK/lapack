@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztbtrs_work( int matrix_layout, char uplo, char trans,
+lapack_int API_SUFFIX(LAPACKE_ztbtrs_work)( int matrix_layout, char uplo, char trans,
                                 char diag, lapack_int n, lapack_int kd,
                                 lapack_int nrhs,
                                 const lapack_complex_double* ab,
@@ -55,12 +55,12 @@ lapack_int LAPACKE_ztbtrs_work( int matrix_layout, char uplo, char trans,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_ztbtrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztbtrs_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_ztbtrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztbtrs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -78,9 +78,9 @@ lapack_int LAPACKE_ztbtrs_work( int matrix_layout, char uplo, char trans,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_ztb_trans( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
+        API_SUFFIX(LAPACKE_ztb_trans)( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
                            ldab_t );
-        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztbtrs( &uplo, &trans, &diag, &n, &kd, &nrhs, ab_t, &ldab_t, b_t,
                        &ldb_t, &info );
@@ -88,18 +88,18 @@ lapack_int LAPACKE_ztbtrs_work( int matrix_layout, char uplo, char trans,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ztbtrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztbtrs_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ztbtrs_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztbtrs_work", info );
     }
     return info;
 }

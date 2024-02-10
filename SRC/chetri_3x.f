@@ -155,7 +155,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      SUBROUTINE CHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
+     $                      INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -191,7 +192,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHESWAPR, CTRTRI, CTRMM, XERBLA
+      EXTERNAL           CGEMM, CHESWAPR, CTRTRI, CTRMM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL
@@ -436,8 +438,10 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *
@@ -632,8 +636,10 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *

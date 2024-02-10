@@ -226,7 +226,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
+      INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI,
+     $                         LWORK )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

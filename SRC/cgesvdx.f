@@ -305,7 +305,8 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEBRD, CGELQF, CGEQRF, CLASCL, CLASET,
+      EXTERNAL           CGEBRD, CGELQF, CGEQRF, CLASCL,
+     $                   CLASET,
      $                   CUNMBR, CUNMQR, CUNMLQ, CLACPY, 
      $                   SBDSVDX, SLASCL, XERBLA
 *     ..
@@ -313,7 +314,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, CLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   CLANGE, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -395,7 +397,8 @@
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
@@ -403,24 +406,28 @@
                   MINWRK = N*(N+5)
                   MAXWRK = N + N*ILAENV(1,'CGEQRF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     N*N+2*N+2*N*ILAENV(1,'CGEBRD',' ',N,N,-1,-1))
+     $                     N*N+2*N+2*N*ILAENV(1,'CGEBRD',' ',N,N,-1,
+     $                                         -1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       N*N+2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
+     $                       N*N+2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,
+     $                                         -1))
                   END IF
                ELSE
 *
 *                 Path 2 (M at least N, but not much larger)
 *
                   MINWRK = 3*N + M
-                  MAXWRK = 2*N + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*N + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,
+     $                             -1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
      $                        2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
                   END IF
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
@@ -428,10 +435,12 @@
                   MINWRK = M*(M+5)
                   MAXWRK = M + M*ILAENV(1,'CGELQF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     M*M+2*M+2*M*ILAENV(1,'CGEBRD',' ',M,M,-1,-1))
+     $                     M*M+2*M+2*M*ILAENV(1,'CGEBRD',' ',M,M,-1,
+     $                                         -1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       M*M+2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
+     $                       M*M+2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,
+     $                                         -1))
                   END IF
                ELSE
 *
@@ -439,7 +448,8 @@
 *
 *
                   MINWRK = 3*M + N
-                  MAXWRK = 2*M + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*M + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,
+     $                             -1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
      $                        2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
@@ -560,7 +570,8 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ),
+     $                      LDU)
 *
 *              Call CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -636,7 +647,8 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ),
+     $                      LDU)
 *
 *              Call CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)

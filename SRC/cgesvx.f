@@ -344,7 +344,8 @@
 *> \ingroup gesvx
 *
 *  =====================================================================
-      SUBROUTINE CGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE CGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                   IPIV,
      $                   EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, RWORK, INFO )
 *
@@ -384,7 +385,8 @@
       EXTERNAL           LSAME, CLANGE, CLANTR, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGECON, CGEEQU, CGERFS, CGETRF, CGETRS, CLACPY,
+      EXTERNAL           CGECON, CGEEQU, CGERFS, CGETRF, CGETRS,
+     $                   CLACPY,
      $                   CLAQGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -409,7 +411,9 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
       ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
@@ -475,7 +479,8 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL CGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQU )
+         CALL CGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+     $                INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
@@ -551,7 +556,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL CGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
+      CALL CGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK,
+     $             INFO )
 *
 *     Compute the solution matrix X.
 *

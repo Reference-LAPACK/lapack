@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-float LAPACKE_slange_work( int matrix_layout, char norm, lapack_int m,
+float API_SUFFIX(LAPACKE_slange_work)( int matrix_layout, char norm, lapack_int m,
                                 lapack_int n, const float* a, lapack_int lda,
                                 float* work )
 {
@@ -47,18 +47,18 @@ float LAPACKE_slange_work( int matrix_layout, char norm, lapack_int m,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_slange_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slange_work", info );
             return info;
         }
-        if( LAPACKE_lsame( norm, '1' ) || LAPACKE_lsame( norm, 'o' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( norm, '1' ) || API_SUFFIX(LAPACKE_lsame)( norm, 'o' ) ) {
             norm_lapack = 'i';
-        } else if( LAPACKE_lsame( norm, 'i' ) ) {
+        } else if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
             norm_lapack = '1';
         } else {
             norm_lapack = norm;
         }
         /* Allocate memory for work array(s) */
-        if( LAPACKE_lsame( norm_lapack, 'i' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( norm_lapack, 'i' ) ) {
             work_lapack = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,n) );
             if( work_lapack == NULL ) {
                 info = LAPACK_WORK_MEMORY_ERROR;
@@ -73,11 +73,11 @@ float LAPACKE_slange_work( int matrix_layout, char norm, lapack_int m,
         }
 exit_level_0:
         if( info == LAPACK_WORK_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_slange_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slange_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_slange_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slange_work", info );
     }
     return res;
 }

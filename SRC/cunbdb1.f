@@ -197,7 +197,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE CUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE CUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -226,7 +227,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, XERBLA
+      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT,
+     $                   XERBLA
       EXTERNAL           CLACGV
 *     ..
 *     .. External Functions ..
@@ -296,7 +298,8 @@
             CALL CSROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C,
      $                  S )
             CALL CLACGV( Q-I, X21(I,I+1), LDX21 )
-            CALL CLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, TAUQ1(I) )
+            CALL CLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21,
+     $                    TAUQ1(I) )
             S = REAL( X21(I,I+1) )
             X21(I,I+1) = ONE
             CALL CLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),

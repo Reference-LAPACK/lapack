@@ -138,7 +138,8 @@
 *> \ingroup tbcon
 *
 *  =====================================================================
-      SUBROUTINE CTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE CTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND,
+     $                   WORK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -251,13 +252,15 @@
 *
 *              Multiply by inv(A).
 *
-               CALL CLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL CLATBS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      KD,
      $                      AB, LDAB, WORK, SCALE, RWORK, INFO )
             ELSE
 *
 *              Multiply by inv(A**H).
 *
-               CALL CLATBS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
+               CALL CLATBS( UPLO, 'Conjugate transpose', DIAG,
+     $                      NORMIN,
      $                      N, KD, AB, LDAB, WORK, SCALE, RWORK, INFO )
             END IF
             NORMIN = 'Y'

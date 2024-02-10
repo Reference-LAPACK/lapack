@@ -204,7 +204,8 @@
 *> \ingroup hbevd
 *
 *  =====================================================================
-      SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+      SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+     $                   WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -240,10 +241,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               CLANHB, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, CLANHB, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANHB, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHBTRD, CLACPY, CLASCL, CSTEDC, SSCAL,
+      EXTERNAL           CGEMM, CHBTRD, CLACPY, CLASCL, CSTEDC,
+     $                   SSCAL,
      $                   SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -289,7 +292,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -342,9 +345,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -363,7 +368,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2 ),
+         CALL CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N,
+     $                WORK( INDWK2 ),
      $                LLWK2, RWORK( INDWRK ), LLRWK, IWORK, LIWORK,
      $                INFO )
          CALL CGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
@@ -383,7 +389,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

@@ -527,7 +527,8 @@
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL ZGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL,
+                  CALL ZGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ),
+     $                        LDVL,
      $                        WORK( JE ), 1, CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IBEG = 1

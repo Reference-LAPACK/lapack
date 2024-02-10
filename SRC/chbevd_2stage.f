@@ -248,7 +248,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+      SUBROUTINE CHBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z,
+     $                          LDZ,
      $                          WORK, LWORK, RWORK, LRWORK, IWORK,
      $                          LIWORK, INFO )
 *
@@ -292,7 +293,8 @@
       EXTERNAL           LSAME, SLAMCH, CLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTERF, XERBLA, CGEMM, CLACPY,
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CGEMM,
+     $                   CLACPY,
      $                   CLASCL, CSTEDC, CHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
@@ -312,9 +314,12 @@
          LRWMIN = 1
          LIWMIN = 1
       ELSE
-         IB    = ILAENV2STAGE( 2, 'CHETRD_HB2ST', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'CHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'CHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
+         IB    = ILAENV2STAGE( 2, 'CHETRD_HB2ST', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'CHETRD_HB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'CHETRD_HB2ST', JOBZ, N, KD, IB,
+     $                         -1 )
          IF( WANTZ ) THEN
             LWMIN = 2*N**2
             LRWMIN = 1 + 5*N + 2*N**2
@@ -340,8 +345,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = CMPLX( LWMIN )
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -394,9 +399,11 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          ELSE
-            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB,
+     $                   INFO )
          END IF
       END IF
 *
@@ -420,7 +427,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2 ),
+         CALL CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N,
+     $                WORK( INDWK2 ),
      $                LLWK2, RWORK( INDRWK ), LLRWK, IWORK, LIWORK,
      $                INFO )
          CALL CGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
@@ -439,8 +447,8 @@
          CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
-      WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = CMPLX( LWMIN )
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

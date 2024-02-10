@@ -163,7 +163,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE SLAORHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
+      RECURSIVE SUBROUTINE SLAORHR_COL_GETRFNP2( M, N, A, LDA, D,
+     $                                           INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine --

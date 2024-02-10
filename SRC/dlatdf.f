@@ -199,7 +199,8 @@
       DOUBLE PRECISION   WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGECON, DGESC2, DLASSQ, DLASWP,
+      EXTERNAL           DAXPY, DCOPY, DGECON, DGESC2, DLASSQ,
+     $                   DLASWP,
      $                   DSCAL
 *     ..
 *     .. External Functions ..
@@ -229,7 +230,8 @@
 *           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and
 *           SMIN computed more efficiently than in BSOLVE [1].
 *
-            SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 )
+            SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ),
+     $                            1 )
             SMINU = DDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
             SPLUS = SPLUS*RHS( J )
             IF( SPLUS.GT.SMINU ) THEN

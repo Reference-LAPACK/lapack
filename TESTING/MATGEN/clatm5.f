@@ -262,7 +262,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
+      SUBROUTINE CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D,
+     $                   LDD,
      $                   E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
      $                   QBLCKB )
 *

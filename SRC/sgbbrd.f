@@ -211,7 +211,8 @@
       REAL               RA, RB, RC, RS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARGV, SLARTG, SLARTV, SLASET, SROT, XERBLA
+      EXTERNAL           SLARGV, SLARTG, SLARTV, SLASET, SROT,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -230,7 +231,8 @@
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
+      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND.
+     $ .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -327,7 +329,8 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL SLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
+     $               CALL SLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ),
+     $                            INCA,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            WORK( MN+J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -367,7 +370,8 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL SROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
+                     CALL SROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ),
+     $                          LDC,
      $                          WORK( MN+J ), WORK( J ) )
    30             CONTINUE
                END IF

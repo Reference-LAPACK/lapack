@@ -337,7 +337,8 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLACPY, SLAG2, SLALN2, XERBLA
+      EXTERNAL           SGEMV, SLACPY, SLAG2, SLALN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -464,9 +465,9 @@
       SAFMIN = SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
-      SMALL = SAFMIN*N / ULP
+      SMALL = SAFMIN*REAL( N ) / ULP
       BIG = ONE / SMALL
-      BIGNUM = ONE / ( SAFMIN*N )
+      BIGNUM = ONE / ( SAFMIN*REAL( N ) )
 *
 *     Compute the 1-norm of each column of the strictly upper triangular
 *     part (i.e., excluding all elements belonging to the diagonal
@@ -764,7 +765,8 @@
 *              Solve  ( a A - b B )  y = SUM(,)
 *              with scaling and perturbation of the denominator
 *
-               CALL SLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), LDS,
+               CALL SLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ),
+     $                      LDS,
      $                      BDIAG( 1 ), BDIAG( 2 ), SUM, 2, BCOEFR,
      $                      BCOEFI, WORK( 2*N+J ), N, SCALE, TEMP,
      $                      IINFO )
@@ -790,11 +792,13 @@
      $                        WORK( ( JW+2 )*N+JE ), 1, ZERO,
      $                        WORK( ( JW+4 )*N+1 ), 1 )
   170          CONTINUE
-               CALL SLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE ),
+               CALL SLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1,
+     $                      JE ),
      $                      LDVL )
                IBEG = 1
             ELSE
-               CALL SLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG ),
+               CALL SLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1,
+     $                      IEIG ),
      $                      LDVL )
                IBEG = JE
             END IF
@@ -953,7 +957,8 @@
 *
 *              Complex eigenvalue
 *
-               CALL SLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP,
+               CALL SLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ),
+     $                     LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                IF( BCOEFI.EQ.ZERO ) THEN

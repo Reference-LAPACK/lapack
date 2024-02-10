@@ -128,7 +128,8 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGETRF2, SLASWP, STRSM, XERBLA
+      EXTERNAL           SGEMM, SGETRF2, SLASWP, STRSM,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -177,7 +178,8 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL SGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL SGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ),
+     $                    IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -200,14 +202,16 @@
 *
 *              Compute block row of U.
 *
-               CALL STRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
+               CALL STRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+     $                     JB,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL SGEMM( 'No transpose', 'No transpose', M-J-JB+1,
+                  CALL SGEMM( 'No transpose', 'No transpose',
+     $                        M-J-JB+1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )

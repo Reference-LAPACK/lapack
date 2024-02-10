@@ -172,7 +172,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SPBTF2, SPOTF2, SSYRK, STRSM, XERBLA
+      EXTERNAL           SGEMM, SPBTF2, SPOTF2, SSYRK, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -299,7 +300,8 @@
 *                    Update A23
 *
                      IF( I2.GT.0 )
-     $                  CALL SGEMM( 'Transpose', 'No Transpose', I2, I3,
+     $                  CALL SGEMM( 'Transpose', 'No Transpose', I2,
+     $                              I3,
      $                              IB, -ONE, AB( KD+1-IB, I+IB ),
      $                              LDAB-1, WORK, LDWORK, ONE,
      $                              AB( 1+IB, I+KD ), LDAB-1 )
@@ -375,7 +377,8 @@
 *
 *                    Update A22
 *
-                     CALL SSYRK( 'Lower', 'No Transpose', I2, IB, -ONE,
+                     CALL SSYRK( 'Lower', 'No Transpose', I2, IB,
+     $                           -ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -399,14 +402,16 @@
 *                    Update A32
 *
                      IF( I2.GT.0 )
-     $                  CALL SGEMM( 'No transpose', 'Transpose', I3, I2,
+     $                  CALL SGEMM( 'No transpose', 'Transpose', I3,
+     $                              I2,
      $                              IB, -ONE, WORK, LDWORK,
      $                              AB( 1+IB, I ), LDAB-1, ONE,
      $                              AB( 1+KD-IB, I+IB ), LDAB-1 )
 *
 *                    Update A33
 *
-                     CALL SSYRK( 'Lower', 'No Transpose', I3, IB, -ONE,
+                     CALL SSYRK( 'Lower', 'No Transpose', I3, IB,
+     $                           -ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *

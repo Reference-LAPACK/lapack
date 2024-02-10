@@ -311,7 +311,8 @@
 *> \ingroup uncsd
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE ZUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+      RECURSIVE SUBROUTINE ZUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T,
+     $                             TRANS,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -360,7 +361,8 @@
       LOGICAL            LRQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZBBCSD, ZLACPY, ZLAPMR, ZLAPMT,
+      EXTERNAL           XERBLA, ZBBCSD, ZLACPY, ZLAPMR,
+     $                   ZLAPMT,
      $                   ZUNBDB, ZUNGLQ, ZUNGQR
 *     ..
 *     .. External Functions ..
@@ -428,7 +430,8 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL ZUNCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M,
+         CALL ZUNCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST,
+     $                M,
      $                Q, P, X11, LDX11, X21, LDX21, X12, LDX12, X22,
      $                LDX22, THETA, V1T, LDV1T, V2T, LDV2T, U1, LDU1,
      $                U2, LDU2, WORK, LWORK, RWORK, LRWORK, IWORK,
@@ -531,7 +534,8 @@
 *
 *     Transform to bidiagonal block form
 *
-      CALL ZUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21,
+      CALL ZUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+     $             X21,
      $             LDX21, X22, LDX22, THETA, RWORK(IPHI), WORK(ITAUP1),
      $             WORK(ITAUP2), WORK(ITAUQ1), WORK(ITAUQ2),
      $             WORK(IORBDB), LORBDBWORK, CHILDINFO )
@@ -541,7 +545,8 @@
       IF( COLMAJOR ) THEN
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL ZLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGQR),
      $                   LORGQRWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -557,7 +562,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL ZUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL ZUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -574,7 +580,8 @@
       ELSE
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL ZLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
-            CALL ZUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ),
+            CALL ZUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGLQ),
      $                   LORGLQWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -590,7 +597,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL ZUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL ZUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -608,7 +616,8 @@
 *
 *     Compute the CSD of the matrix in bidiagonal-block form
 *
-      CALL ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THETA,
+      CALL ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+     $             THETA,
      $             RWORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $             LDV2T, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $             RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),

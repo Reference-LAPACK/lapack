@@ -432,7 +432,8 @@
 *> \ingroup gbrfsx
 *
 *  =====================================================================
-      SUBROUTINE SGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE SGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB,
+     $                    AFB,
      $                    LDAFB, IPIV, R, C, B, LDB, X, LDX, RCOND,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK,
@@ -647,14 +648,16 @@
          PREC_TYPE = ILAPREC( 'D' )
 
          IF ( NOTRAN ) THEN
-            CALL SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL,
+     $                                KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ),
      $           WORK( 1 ), RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH,
      $           IGNORE_CWISE, INFO )
          ELSE
-            CALL SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL,
+     $                                KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ),
@@ -721,7 +724,8 @@
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+               RCOND_TMP = SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
+     $                                  AFB,
      $              LDAFB, IPIV, 1, X( 1, J ), INFO, WORK, IWORK )
             ELSE
                RCOND_TMP = 0.0

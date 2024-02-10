@@ -281,7 +281,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZLAUNHR_COL_GETRFNP, ZSCAL, ZTRSM,
+      EXTERNAL           ZCOPY, ZLAUNHR_COL_GETRFNP, ZSCAL,
+     $                   ZTRSM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

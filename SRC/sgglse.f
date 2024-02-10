@@ -175,7 +175,8 @@
 *> \ingroup gglse
 *
 *  =====================================================================
-      SUBROUTINE SGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+      SUBROUTINE SGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK,
+     $                   LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine --
@@ -202,7 +203,8 @@
      $                   NB4, NR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMV, SGGRQF, SORMQR, SORMRQ,
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SGGRQF, SORMQR,
+     $                   SORMRQ,
      $                   STRMV, STRTRS, XERBLA
 *     ..
 *     .. External Functions ..
@@ -282,7 +284,8 @@
 *     Update c = Z**T *c = ( c1 ) N-P
 *                          ( c2 ) M+P-N
 *
-      CALL SORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA, WORK( P+1 ),
+      CALL SORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA,
+     $             WORK( P+1 ),
      $             C, MAX( 1, M ), WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
@@ -303,7 +306,8 @@
 *
 *        Update c1
 *
-         CALL SGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ), LDA,
+         CALL SGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ),
+     $               LDA,
      $               D, 1, ONE, C, 1 )
       END IF
 *
@@ -328,7 +332,8 @@
       IF( M.LT.N ) THEN
          NR = M + P - N
          IF( NR.GT.0 )
-     $      CALL SGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1, M+1 ),
+     $      CALL SGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1,
+     $                  M+1 ),
      $                  LDA, D( NR+1 ), 1, ONE, C( N-P+1 ), 1 )
       ELSE
          NR = P
@@ -341,9 +346,10 @@
 *
 *     Backward transformation x = Q**T*x
 *
-      CALL SORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ), X,
+      CALL SORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ),
+     $             X,
      $             N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
-      WORK( 1 ) = P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) )
+      WORK( 1 ) = REAL( P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) ) )
 *
       RETURN
 *

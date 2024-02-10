@@ -257,7 +257,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SPTCON, SPTRFS, SPTTRF, SPTTRS,
+      EXTERNAL           SCOPY, SLACPY, SPTCON, SPTRFS, SPTTRF,
+     $                   SPTTRS,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

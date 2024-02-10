@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgelsy( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sgelsy)( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_int nrhs, float* a, lapack_int lda, float* b,
                            lapack_int ldb, lapack_int* jpvt, float rcond,
                            lapack_int* rank )
@@ -42,25 +42,25 @@ lapack_int LAPACKE_sgelsy( int matrix_layout, lapack_int m, lapack_int n,
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sgelsy", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgelsy", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
             return -7;
         }
-        if( LAPACKE_s_nancheck( 1, &rcond, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &rcond, 1 ) ) {
             return -10;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_sgelsy_work( matrix_layout, m, n, nrhs, a, lda, b, ldb, jpvt,
+    info = API_SUFFIX(LAPACKE_sgelsy_work)( matrix_layout, m, n, nrhs, a, lda, b, ldb, jpvt,
                                 rcond, rank, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -73,13 +73,13 @@ lapack_int LAPACKE_sgelsy( int matrix_layout, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sgelsy_work( matrix_layout, m, n, nrhs, a, lda, b, ldb, jpvt,
+    info = API_SUFFIX(LAPACKE_sgelsy_work)( matrix_layout, m, n, nrhs, a, lda, b, ldb, jpvt,
                                 rcond, rank, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sgelsy", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgelsy", info );
     }
     return info;
 }

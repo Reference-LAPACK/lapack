@@ -184,12 +184,14 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL ZTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTBSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL ZTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL ZTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
    10    CONTINUE
       ELSE
@@ -200,12 +202,14 @@
 *
 *           Solve L*X = B, overwriting B with X.
 *
-            CALL ZTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL ZTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve L**H *X = B, overwriting B with X.
 *
-            CALL ZTBSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTBSV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
    20    CONTINUE
       END IF

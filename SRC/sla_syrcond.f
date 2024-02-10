@@ -141,7 +141,8 @@
 *> \ingroup la_hercond
 *
 *  =====================================================================
-      REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
+      REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV,
+     $                           CMODE,
      $                           C, INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine --
@@ -280,9 +281,11 @@
             END DO
 
             IF ( UP ) THEN
-               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ELSE
-               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -311,9 +314,11 @@
             END IF
 
             IF ( UP ) THEN
-               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ELSE
-               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ENDIF
 *
 *           Multiply by R.

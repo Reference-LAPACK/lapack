@@ -167,7 +167,8 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  AP, B( 1, I ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
@@ -188,7 +189,8 @@
 *
 *           Solve L**H *X = Y, overwriting B with X.
 *
-            CALL ZTPSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTPSV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  AP, B( 1, I ), 1 )
    20    CONTINUE
       END IF

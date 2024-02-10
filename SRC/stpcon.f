@@ -221,13 +221,15 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL SLATPS( UPLO, 'No transpose', DIAG, NORMIN, N, AP,
+               CALL SLATPS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      AP,
      $                      WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *

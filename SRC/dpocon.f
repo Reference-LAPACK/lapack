@@ -203,25 +203,29 @@
 *
 *           Multiply by inv(U**T).
 *
-            CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL DLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**T).
 *
-            CALL DLATRS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL DLATRS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          END IF
 *

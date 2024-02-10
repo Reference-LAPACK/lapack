@@ -260,7 +260,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+      SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX,
+     $                   U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
      $                   IWORK, INFO )
@@ -295,7 +296,8 @@
      $                   NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLALS0, SLASDT, XERBLA
+      EXTERNAL           SCOPY, SGEMM, SLALS0, SLASDT,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -402,7 +404,8 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
+            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ),
+     $                   LDBX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -447,7 +450,8 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
+            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ),
+     $                   LDB,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -475,9 +479,11 @@
          END IF
          NLF = IC - NL
          NRF = IC + 1
-         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ),
+     $               LDU,
      $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
-         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ),
+     $               LDU,
      $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
    80 CONTINUE
 *

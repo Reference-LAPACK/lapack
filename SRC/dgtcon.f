@@ -234,7 +234,8 @@
 *
 *           Multiply by inv(L**T)*inv(U**T).
 *
-            CALL DGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV, WORK,
+            CALL DGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV,
+     $                   WORK,
      $                   N, INFO )
          END IF
          GO TO 20

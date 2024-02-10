@@ -161,7 +161,8 @@
 *> \ingroup hfrk
 *
 *  =====================================================================
-      SUBROUTINE SSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+      SUBROUTINE SSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA,
+     $                  BETA,
      $                  C )
 *
 *  -- LAPACK computational routine --
@@ -281,9 +282,11 @@
 *
                   CALL SSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL SSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL SSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL SGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL SGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                ELSE
@@ -292,9 +295,11 @@
 *
                   CALL SSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL SSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL SSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL SGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL SGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1,
+     $                        N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                END IF
@@ -309,7 +314,8 @@
 *
                   CALL SSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL SSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA,
+                  CALL SSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ),
+     $                        LDA,
      $                        BETA, C( N1+1 ), N )
                   CALL SGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N2, 1 ), LDA, BETA, C( 1 ), N )
@@ -320,7 +326,8 @@
 *
                   CALL SSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL SSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ), LDA,
+                  CALL SSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ),
+     $                        LDA,
      $                        BETA, C( N1+1 ), N )
                   CALL SGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N2 ), LDA, BETA, C( 1 ), N )
@@ -343,7 +350,8 @@
 *
                   CALL SSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL SSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL SSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 2 ), N1 )
                   CALL SGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N1+1, 1 ), LDA, BETA,
@@ -355,7 +363,8 @@
 *
                   CALL SSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL SSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL SSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( 2 ), N1 )
                   CALL SGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N1+1 ), LDA, BETA,
@@ -373,9 +382,11 @@
 *
                   CALL SSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL SSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL SSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL SGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL SGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                ELSE
@@ -384,9 +395,11 @@
 *
                   CALL SSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL SSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL SSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL SGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL SGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1,
+     $                        N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                END IF
@@ -413,9 +426,11 @@
 *
                   CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -425,9 +440,11 @@
 *
                   CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1,
+     $                        NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -443,7 +460,8 @@
 *
                   CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( NK+1 ), N+1 )
                   CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA, C( 1 ),
@@ -455,7 +473,8 @@
 *
                   CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( NK+1 ), N+1 )
                   CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA, C( 1 ),
@@ -479,7 +498,8 @@
 *
                   CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), NK )
                   CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA,
@@ -491,7 +511,8 @@
 *
                   CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), NK )
                   CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA,
@@ -509,9 +530,11 @@
 *
                   CALL SSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL SSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL SGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                ELSE
@@ -520,9 +543,11 @@
 *
                   CALL SSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL SSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL SGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1,
+     $                        NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                END IF

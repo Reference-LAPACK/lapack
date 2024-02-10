@@ -209,7 +209,8 @@
 *> \ingroup gesvd
 *
 *  =====================================================================
-      SUBROUTINE CGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
+      SUBROUTINE CGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT,
+     $                   LDVT,
      $                   WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
@@ -252,7 +253,8 @@
       COMPLEX            CDUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CBDSQR, CGEBRD, CGELQF, CGEMM, CGEQRF, CLACPY,
+      EXTERNAL           CBDSQR, CGEBRD, CGELQF, CGEMM, CGEQRF,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CUNGBR, CUNGLQ, CUNGQR, CUNMBR,
      $                   SLASCL, XERBLA
 *     ..
@@ -260,7 +262,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -321,9 +324,11 @@
             CALL CGEQRF( M, N, A, LDA, CDUM(1), CDUM(1), -1, IERR )
             LWORK_CGEQRF = INT( CDUM(1) )
 *           Compute space needed for CUNGQR
-            CALL CUNGQR( M, N, N, A, LDA, CDUM(1), CDUM(1), -1, IERR )
+            CALL CUNGQR( M, N, N, A, LDA, CDUM(1), CDUM(1), -1,
+     $                   IERR )
             LWORK_CUNGQR_N = INT( CDUM(1) )
-            CALL CUNGQR( M, M, N, A, LDA, CDUM(1), CDUM(1), -1, IERR )
+            CALL CUNGQR( M, M, N, A, LDA, CDUM(1), CDUM(1), -1,
+     $                   IERR )
             LWORK_CUNGQR_M = INT( CDUM(1) )
 *           Compute space needed for CGEBRD
             CALL CGEBRD( N, N, A, LDA, S, DUM(1), CDUM(1),
@@ -474,7 +479,8 @@
             CALL CUNGLQ( N, N, M, CDUM(1), N, CDUM(1), CDUM(1), -1,
      $                   IERR )
             LWORK_CUNGLQ_N = INT( CDUM(1) )
-            CALL CUNGLQ( M, N, M, A, LDA, CDUM(1), CDUM(1), -1, IERR )
+            CALL CUNGLQ( M, N, M, A, LDA, CDUM(1), CDUM(1), -1,
+     $                   IERR )
             LWORK_CUNGLQ_M = INT( CDUM(1) )
 *           Compute space needed for CGEBRD
             CALL CGEBRD( M, M, A, LDA, S, DUM(1), CDUM(1),
@@ -673,13 +679,15 @@
 *              (CWorkspace: need 2*N, prefer N+N*NB)
 *              (RWorkspace: need 0)
 *
-               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( IWORK ),
      $                      LWORK-IWORK+1, IERR )
 *
 *              Zero out below R
 *
                IF( N .GT. 1 ) THEN
-                  CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+                  CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2,
+     $                         1 ),
      $                         LDA )
                END IF
                IE = 1
@@ -691,7 +699,8 @@
 *              (CWorkspace: need 3*N, prefer 2*N+2*N*NB)
 *              (RWorkspace: need N)
 *
-               CALL CGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL CGEBRD( N, N, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                      IERR )
                NCVT = 0
@@ -712,7 +721,8 @@
 *              (CWorkspace: 0)
 *              (RWorkspace: need BDSPAC)
 *
-               CALL CBDSQR( 'U', N, NCVT, 0, 0, S, RWORK( IE ), A, LDA,
+               CALL CBDSQR( 'U', N, NCVT, 0, 0, S, RWORK( IE ), A,
+     $                      LDA,
      $                      CDUM, 1, CDUM, 1, RWORK( IRWORK ), INFO )
 *
 *              If right singular vectors desired in VT, copy them there
@@ -762,7 +772,8 @@
 *
 *                 Copy R to WORK(IR) and zero out below it
 *
-                  CALL CLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
+                  CALL CLACPY( 'U', N, N, A, LDA, WORK( IR ),
+     $                         LDWRKR )
                   CALL CLASET( 'L', N-1, N-1, CZERO, CZERO,
      $                         WORK( IR+1 ), LDWRKR )
 *
@@ -781,7 +792,8 @@
 *                 (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB)
 *                 (RWorkspace: need N)
 *
-                  CALL CGEBRD( N, N, WORK( IR ), LDWRKR, S, RWORK( IE ),
+                  CALL CGEBRD( N, N, WORK( IR ), LDWRKR, S,
+     $                         RWORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -799,7 +811,8 @@
 *                 (CWorkspace: need N*N)
 *                 (RWorkspace: need BDSPAC)
 *
-                  CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ), CDUM, 1,
+                  CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ), CDUM,
+     $                         1,
      $                         WORK( IR ), LDWRKR, CDUM, 1,
      $                         RWORK( IRWORK ), INFO )
                   IU = ITAUQ
@@ -811,7 +824,8 @@
 *
                   DO 10 I = 1, M, LDWRKU
                      CHUNK = MIN( M-I+1, LDWRKU )
-                     CALL CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I, 1 ),
+                     CALL CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I,
+     $                           1 ),
      $                           LDA, WORK( IR ), LDWRKR, CZERO,
      $                           WORK( IU ), LDWRKU )
                      CALL CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
@@ -848,7 +862,8 @@
 *                 (CWorkspace: need 0)
 *                 (RWorkspace: need BDSPAC)
 *
-                  CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ), CDUM, 1,
+                  CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ), CDUM,
+     $                         1,
      $                         A, LDA, CDUM, 1, RWORK( IRWORK ), INFO )
 *
                END IF
@@ -918,7 +933,8 @@
                   CALL CGEBRD( N, N, VT, LDVT, S, RWORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
-                  CALL CLACPY( 'L', N, N, VT, LDVT, WORK( IR ), LDWRKR )
+                  CALL CLACPY( 'L', N, N, VT, LDVT, WORK( IR ),
+     $                         LDWRKR )
 *
 *                 Generate left vectors bidiagonalizing R in WORK(IR)
 *                 (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB)
@@ -954,7 +970,8 @@
 *
                   DO 20 I = 1, M, LDWRKU
                      CHUNK = MIN( M-I+1, LDWRKU )
-                     CALL CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I, 1 ),
+                     CALL CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I,
+     $                           1 ),
      $                           LDA, WORK( IR ), LDWRKR, CZERO,
      $                           WORK( IU ), LDWRKU )
                      CALL CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
@@ -1104,7 +1121,8 @@
 *                    (CWorkspace: need N*N)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ), CDUM,
+                     CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ),
+     $                            CDUM,
      $                            1, WORK( IR ), LDWRKR, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -1171,7 +1189,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ), CDUM,
+                     CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ),
+     $                            CDUM,
      $                            1, U, LDU, CDUM, 1, RWORK( IRWORK ),
      $                            INFO )
 *
@@ -1348,7 +1367,8 @@
 *                    (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, A, LDA,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -1439,7 +1459,8 @@
 *                                 prefer N*N+2*N+(N-1)*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, VT, LDVT,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -1449,7 +1470,8 @@
 *                    (CWorkspace: need N*N)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, N, N, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', N, N, N, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, WORK( IU ), LDWRKU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -1515,7 +1537,8 @@
 *                    (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, VT, LDVT,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -1525,7 +1548,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', N, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, U, LDU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -1609,7 +1633,8 @@
 *                    (CWorkspace: need N*N)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ), CDUM,
+                     CALL CBDSQR( 'U', N, 0, N, 0, S, RWORK( IE ),
+     $                            CDUM,
      $                            1, WORK( IR ), LDWRKR, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -1681,7 +1706,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ), CDUM,
+                     CALL CBDSQR( 'U', N, 0, M, 0, S, RWORK( IE ),
+     $                            CDUM,
      $                            1, U, LDU, CDUM, 1, RWORK( IRWORK ),
      $                            INFO )
 *
@@ -1862,7 +1888,8 @@
 *                    (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, A, LDA,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -1954,7 +1981,8 @@
 *                                 prefer N*N+2*N+(N-1)*NB)
 *                    (RWorkspace: need   0)
 *
-                     CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, VT, LDVT,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -1964,7 +1992,8 @@
 *                    (CWorkspace: need N*N)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, N, N, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', N, N, N, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, WORK( IU ), LDWRKU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -2034,7 +2063,8 @@
 *                    (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL CUNGBR( 'P', N, N, N, VT, LDVT,
+     $                            WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + N
 *
@@ -2044,7 +2074,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', N, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', N, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, U, LDU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -2185,7 +2216,8 @@
 *              (CWorkspace: need 2*M, prefer M+M*NB)
 *              (RWorkspace: 0)
 *
-               CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+               CALL CGELQF( M, N, A, LDA, WORK( ITAU ),
+     $                      WORK( IWORK ),
      $                      LWORK-IWORK+1, IERR )
 *
 *              Zero out above L
@@ -2201,7 +2233,8 @@
 *              (CWorkspace: need 3*M, prefer 2*M+2*M*NB)
 *              (RWorkspace: need M)
 *
-               CALL CGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+               CALL CGEBRD( M, M, A, LDA, S, RWORK( IE ),
+     $                      WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                      IERR )
                IF( WNTUO .OR. WNTUAS ) THEN
@@ -2223,7 +2256,8 @@
 *              (CWorkspace: 0)
 *              (RWorkspace: need BDSPAC)
 *
-               CALL CBDSQR( 'U', M, 0, NRU, 0, S, RWORK( IE ), CDUM, 1,
+               CALL CBDSQR( 'U', M, 0, NRU, 0, S, RWORK( IE ), CDUM,
+     $                      1,
      $                      A, LDA, CDUM, 1, RWORK( IRWORK ), INFO )
 *
 *              If left singular vectors desired in U, copy them there
@@ -2276,7 +2310,8 @@
 *
 *                 Copy L to WORK(IR) and zero out above it
 *
-                  CALL CLACPY( 'L', M, M, A, LDA, WORK( IR ), LDWRKR )
+                  CALL CLACPY( 'L', M, M, A, LDA, WORK( IR ),
+     $                         LDWRKR )
                   CALL CLASET( 'U', M-1, M-1, CZERO, CZERO,
      $                         WORK( IR+LDWRKR ), LDWRKR )
 *
@@ -2295,7 +2330,8 @@
 *                 (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB)
 *                 (RWorkspace: need M)
 *
-                  CALL CGEBRD( M, M, WORK( IR ), LDWRKR, S, RWORK( IE ),
+                  CALL CGEBRD( M, M, WORK( IR ), LDWRKR, S,
+     $                         RWORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -2325,7 +2361,8 @@
 *
                   DO 30 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL CGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IR ),
+                     CALL CGEMM( 'N', 'N', M, BLK, M, CONE,
+     $                           WORK( IR ),
      $                           LDWRKR, A( 1, I ), LDA, CZERO,
      $                           WORK( IU ), LDWRKU )
                      CALL CLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
@@ -2362,7 +2399,8 @@
 *                 (CWorkspace: 0)
 *                 (RWorkspace: need BDSPAC)
 *
-                  CALL CBDSQR( 'L', M, N, 0, 0, S, RWORK( IE ), A, LDA,
+                  CALL CBDSQR( 'L', M, N, 0, 0, S, RWORK( IE ), A,
+     $                         LDA,
      $                         CDUM, 1, CDUM, 1, RWORK( IRWORK ), INFO )
 *
                END IF
@@ -2413,7 +2451,8 @@
 *                 Copy L to U, zeroing about above it
 *
                   CALL CLACPY( 'L', M, M, A, LDA, U, LDU )
-                  CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, U( 1, 2 ),
+                  CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, U( 1,
+     $                         2 ),
      $                         LDU )
 *
 *                 Generate Q in A
@@ -2434,7 +2473,8 @@
                   CALL CGEBRD( M, M, U, LDU, S, RWORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
-                  CALL CLACPY( 'U', M, M, U, LDU, WORK( IR ), LDWRKR )
+                  CALL CLACPY( 'U', M, M, U, LDU, WORK( IR ),
+     $                         LDWRKR )
 *
 *                 Generate right vectors bidiagonalizing L in WORK(IR)
 *                 (CWorkspace: need M*M+3*M-1, prefer M*M+2*M+(M-1)*NB)
@@ -2470,7 +2510,8 @@
 *
                   DO 40 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL CGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IR ),
+                     CALL CGEMM( 'N', 'N', M, BLK, M, CONE,
+     $                           WORK( IR ),
      $                           LDWRKR, A( 1, I ), LDA, CZERO,
      $                           WORK( IU ), LDWRKU )
                      CALL CLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
@@ -2494,7 +2535,8 @@
 *                 Copy L to U, zeroing out above it
 *
                   CALL CLACPY( 'L', M, M, A, LDA, U, LDU )
-                  CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, U( 1, 2 ),
+                  CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, U( 1,
+     $                         2 ),
      $                         LDU )
 *
 *                 Generate Q in A
@@ -2538,7 +2580,8 @@
 *                 (CWorkspace: 0)
 *                 (RWorkspace: need BDSPAC)
 *
-                  CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), A, LDA,
+                  CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), A,
+     $                         LDA,
      $                         U, LDU, CDUM, 1, RWORK( IRWORK ), INFO )
 *
                END IF
@@ -2687,7 +2730,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, 0, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, 0, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, CDUM, 1, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -2862,7 +2906,8 @@
 *                    (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, A, LDA,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -2872,7 +2917,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, A, LDA, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -2953,7 +2999,8 @@
 *                    (CWorkspace: need M*M+3*M, prefer M*M+2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, U, LDU,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -3028,7 +3075,8 @@
 *                    (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, U, LDU,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -3038,7 +3086,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, U, LDU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -3193,7 +3242,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, 0, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, 0, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, CDUM, 1, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -3372,7 +3422,8 @@
 *                    (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, A, LDA,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -3382,7 +3433,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, A, LDA, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *
@@ -3463,7 +3515,8 @@
 *                    (CWorkspace: need M*M+3*M, prefer M*M+2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, U, LDU,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -3542,7 +3595,8 @@
 *                    (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *                    (RWorkspace: 0)
 *
-                     CALL CUNGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL CUNGBR( 'Q', M, M, M, U, LDU,
+     $                            WORK( ITAUQ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IRWORK = IE + M
 *
@@ -3552,7 +3606,8 @@
 *                    (CWorkspace: 0)
 *                    (RWorkspace: need BDSPAC)
 *
-                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ), VT,
+                     CALL CBDSQR( 'U', M, N, M, 0, S, RWORK( IE ),
+     $                            VT,
      $                            LDVT, U, LDU, CDUM, 1,
      $                            RWORK( IRWORK ), INFO )
 *

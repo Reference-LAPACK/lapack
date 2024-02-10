@@ -377,7 +377,8 @@
 *> \ingroup la_porfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE ZLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE ZLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, COLEQU, C, B, LDB, Y,
      $                                LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -448,7 +449,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZPOTRS, ZHEMV, BLAS_ZHEMV_X,
+      EXTERNAL           ZAXPY, ZCOPY, ZPOTRS, ZHEMV,
+     $                   BLAS_ZHEMV_X,
      $                   BLAS_ZHEMV2_X, ZLA_HEAMV, ZLA_WWADDW,
      $                   ZLA_LIN_BERR, DLAMCH
       DOUBLE PRECISION   DLAMCH
@@ -508,7 +510,8 @@
 *
             CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
             IF (Y_PREC_STATE .EQ. BASE_RESIDUAL) THEN
-               CALL ZHEMV(UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y(1,J), 1,
+               CALL ZHEMV(UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y(1,J),
+     $                     1,
      $              DCMPLX(1.0D+0), RES, 1)
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
                CALL BLAS_ZHEMV_X(UPLO2, N, DCMPLX(-1.0D+0), A, LDA,

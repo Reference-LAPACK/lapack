@@ -186,7 +186,8 @@
 *> \ingroup herfs
 *
 *  =====================================================================
-      SUBROUTINE DSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE DSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -226,7 +227,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DSYMV, DSYTRS, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DSYMV, DSYTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -395,14 +397,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL DSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
+               CALL DSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+     $                      N,
      $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -414,7 +418,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL DSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
+               CALL DSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+     $                      N,
      $                      INFO )
             END IF
             GO TO 100

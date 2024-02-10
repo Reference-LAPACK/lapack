@@ -217,7 +217,8 @@
 *
             IF( K.GT.1 ) THEN
                CALL SCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        SDOT( K-1, WORK, 1, AP( KC ), 1 )
@@ -242,12 +243,14 @@
 *
             IF( K.GT.1 ) THEN
                CALL SCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        SDOT( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            SDOT( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            SDOT( K-1, AP( KC ), 1,
+     $                                  AP( KCNEXT ),
      $                            1 )
                CALL SCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
@@ -321,7 +324,8 @@
                CALL SCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
                CALL SSPMV( UPLO, N-K, -ONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
             END IF
             KSTEP = 1
          ELSE
@@ -343,14 +347,17 @@
 *
             IF( K.LT.N ) THEN
                CALL SCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
      $                          SDOT( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL SCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
      $                        SDOT( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )

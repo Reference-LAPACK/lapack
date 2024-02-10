@@ -211,7 +211,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'DORGLQ', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'DORGLQ', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -252,12 +253,14 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
+     $                      I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(i+ib:m,i:n) from the right
 *
-               CALL DLARFB( 'Right', 'Transpose', 'Forward', 'Rowwise',
+               CALL DLARFB( 'Right', 'Transpose', 'Forward',
+     $                      'Rowwise',
      $                      M-I-IB+1, N-I+1, IB, A( I, I ), LDA, WORK,
      $                      LDWORK, A( I+IB, I ), LDA, WORK( IB+1 ),
      $                      LDWORK )
@@ -265,7 +268,8 @@
 *
 *           Apply H**T to columns i:n of current block
 *
-            CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
+            CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
+     $                   WORK,
      $                   IINFO )
 *
 *           Set columns 1:i-1 of current block to zero

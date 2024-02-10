@@ -107,8 +107,10 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-# By default build standard API and extended _64 API
+# By default build extended _64 API for supported compilers only
+set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
 option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
+message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 include(GNUInstallDirs)
 

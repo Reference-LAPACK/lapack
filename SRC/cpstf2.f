@@ -138,7 +138,8 @@
 *> \ingroup pstf2
 *
 *  =====================================================================
-      SUBROUTINE CPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE CPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -175,7 +176,8 @@
       EXTERNAL           SLAMCH, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACGV, CSSCAL, CSWAP, XERBLA
+      EXTERNAL           CGEMV, CLACGV, CSSCAL, CSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, REAL, SQRT
@@ -225,7 +227,7 @@
 *     Compute stopping value if not supplied
 *
       IF( TOL.LT.ZERO ) THEN
-         SSTOP = N * SLAMCH( 'Epsilon' ) * AJJ
+         SSTOP = REAL( N ) * SLAMCH( 'Epsilon' ) * AJJ
       ELSE
          SSTOP = TOL
       END IF
@@ -300,7 +302,8 @@
 *
             IF( J.LT.N ) THEN
                CALL CLACGV( J-1, A( 1, J ), 1 )
-               CALL CGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ), LDA,
+               CALL CGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ),
+     $                     LDA,
      $                     A( 1, J ), 1, CONE, A( J, J+1 ), LDA )
                CALL CLACGV( J-1, A( 1, J ), 1 )
                CALL CSSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
@@ -346,7 +349,8 @@
                A( PVT, PVT ) = A( J, J )
                CALL CSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                IF( PVT.LT.N )
-     $            CALL CSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT ),
+     $            CALL CSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1,
+     $                        PVT ),
      $                        1 )
                DO 170 I = J + 1, PVT - 1
                   CTEMP = CONJG( A( I, J ) )

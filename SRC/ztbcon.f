@@ -138,7 +138,8 @@
 *> \ingroup tbcon
 *
 *  =====================================================================
-      SUBROUTINE ZTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE ZTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND,
+     $                   WORK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -251,13 +252,15 @@
 *
 *              Multiply by inv(A).
 *
-               CALL ZLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL ZLATBS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      KD,
      $                      AB, LDAB, WORK, SCALE, RWORK, INFO )
             ELSE
 *
 *              Multiply by inv(A**H).
 *
-               CALL ZLATBS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
+               CALL ZLATBS( UPLO, 'Conjugate transpose', DIAG,
+     $                      NORMIN,
      $                      N, KD, AB, LDAB, WORK, SCALE, RWORK, INFO )
             END IF
             NORMIN = 'Y'

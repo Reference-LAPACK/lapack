@@ -400,7 +400,8 @@
 *> \ingroup la_gbrfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL, KU,
+      SUBROUTINE SLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL,
+     $                                KU,
      $                                NRHS, AB, LDAB, AFB, LDAFB, IPIV,
      $                                COLEQU, C, B, LDB, Y, LDY,
      $                                BERR_OUT, N_NORMS, ERR_BNDS_NORM,
@@ -465,7 +466,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGBTRS, SGBMV, BLAS_SGBMV_X,
+      EXTERNAL           SAXPY, SCOPY, SGBTRS, SGBMV,
+     $                   BLAS_SGBMV_X,
      $                   BLAS_SGBMV2_X, SLA_GBAMV, SLA_WWADDW, SLAMCH,
      $                   CHLA_TRANSTYPE, SLA_LIN_BERR
       REAL               SLAMCH
@@ -530,7 +532,8 @@
 
 !        XXX: RES is no longer needed.
             CALL SCOPY( N, RES, 1, DY, 1 )
-            CALL SGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, DY, N,
+            CALL SGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, DY,
+     $                   N,
      $           INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.

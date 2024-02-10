@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cheevd_work( int matrix_layout, char jobz, char uplo,
+lapack_int API_SUFFIX(LAPACKE_cheevd_work)( int matrix_layout, char jobz, char uplo,
                                 lapack_int n, lapack_complex_float* a,
                                 lapack_int lda, float* w,
                                 lapack_complex_float* work, lapack_int lwork,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_cheevd_work( int matrix_layout, char jobz, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_cheevd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cheevd_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -70,7 +70,7 @@ lapack_int LAPACKE_cheevd_work( int matrix_layout, char jobz, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_che_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_che_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cheevd( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, rwork,
                        &lrwork, iwork, &liwork, &info );
@@ -79,19 +79,19 @@ lapack_int LAPACKE_cheevd_work( int matrix_layout, char jobz, char uplo,
         }
         /* Transpose output matrices */
         if ( jobz == 'V' || jobz == 'v' ) {
-            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         } else { 
-            LAPACKE_che_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+            API_SUFFIX(LAPACKE_che_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         }
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_cheevd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cheevd_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cheevd_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cheevd_work", info );
     }
     return info;
 }

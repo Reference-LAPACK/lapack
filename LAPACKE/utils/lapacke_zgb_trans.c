@@ -36,7 +36,7 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void LAPACKE_zgb_trans( int matrix_layout, lapack_int m, lapack_int n,
+void API_SUFFIX(LAPACKE_zgb_trans)( int matrix_layout, lapack_int m, lapack_int n,
                         lapack_int kl, lapack_int ku,
                         const lapack_complex_double *in, lapack_int ldin,
                         lapack_complex_double *out, lapack_int ldout )

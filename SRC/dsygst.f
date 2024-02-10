@@ -148,7 +148,8 @@
       INTEGER            K, KB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYGS2, DSYMM, DSYR2K, DTRMM, DTRSM, XERBLA
+      EXTERNAL           DSYGS2, DSYMM, DSYR2K, DTRMM, DTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -211,13 +212,15 @@
                   CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL DTRSM( 'Left', UPLO, 'Transpose', 'Non-unit',
+                     CALL DTRSM( 'Left', UPLO, 'Transpose',
+     $                           'Non-unit',
      $                           KB, N-K-KB+1, ONE, B( K, K ), LDB,
      $                           A( K, K+KB ), LDA )
                      CALL DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB, ONE,
      $                           A( K, K+KB ), LDA )
-                     CALL DSYR2K( UPLO, 'Transpose', N-K-KB+1, KB, -ONE,
+                     CALL DSYR2K( UPLO, 'Transpose', N-K-KB+1, KB,
+     $                            -ONE,
      $                            A( K, K+KB ), LDA, B( K, K+KB ), LDB,
      $                            ONE, A( K+KB, K+KB ), LDA )
                      CALL DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
@@ -241,7 +244,8 @@
                   CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL DTRSM( 'Right', UPLO, 'Transpose', 'Non-unit',
+                     CALL DTRSM( 'Right', UPLO, 'Transpose',
+     $                           'Non-unit',
      $                           N-K-KB+1, KB, ONE, B( K, K ), LDB,
      $                           A( K+KB, K ), LDA )
                      CALL DSYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
@@ -270,14 +274,17 @@
 *
 *                 Update the upper triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL DTRMM( 'Left', UPLO, 'No transpose', 'Non-unit',
+                  CALL DTRMM( 'Left', UPLO, 'No transpose',
+     $                        'Non-unit',
      $                        K-1, KB, ONE, B, LDB, A( 1, K ), LDA )
-                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K,
+     $                        K ),
      $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
                   CALL DSYR2K( UPLO, 'No transpose', K-1, KB, ONE,
      $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE, A,
      $                         LDA )
-                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K,
+     $                        K ),
      $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
                   CALL DTRMM( 'Right', UPLO, 'Transpose', 'Non-unit',
      $                        K-1, KB, ONE, B( K, K ), LDB, A( 1, K ),
@@ -294,7 +301,8 @@
 *
 *                 Update the lower triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL DTRMM( 'Right', UPLO, 'No transpose', 'Non-unit',
+                  CALL DTRMM( 'Right', UPLO, 'No transpose',
+     $                        'Non-unit',
      $                        KB, K-1, ONE, B, LDB, A( K, 1 ), LDA )
                   CALL DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
@@ -303,7 +311,8 @@
      $                         LDA )
                   CALL DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
-                  CALL DTRMM( 'Left', UPLO, 'Transpose', 'Non-unit', KB,
+                  CALL DTRMM( 'Left', UPLO, 'Transpose', 'Non-unit',
+     $                        KB,
      $                        K-1, ONE, B( K, K ), LDB, A( K, 1 ), LDA )
                   CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )

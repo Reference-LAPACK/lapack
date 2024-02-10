@@ -220,7 +220,8 @@
       EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CSSCAL, CGEMM, CGEMV, CLACGV, CSWAP
+      EXTERNAL           CCOPY, CSSCAL, CGEMM, CGEMV, CLACGV,
+     $                   CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, AIMAG, MAX, MIN, REAL, SQRT
@@ -272,7 +273,8 @@
      $      CALL CCOPY( K-1, A( 1, K ), 1, W( 1, KW ), 1 )
          W( K, KW ) = REAL( A( K, K ) )
          IF( K.LT.N ) THEN
-            CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), LDA,
+            CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
+     $                  LDA,
      $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
             W( K, KW ) = REAL( W( K, KW ) )
          END IF
@@ -332,7 +334,8 @@
 *                 Copy column IMAX to column KW-1 of W and update it
 *
                   IF( IMAX.GT.1 )
-     $               CALL CCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1, KW-1 ),
+     $               CALL CCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1,
+     $                           KW-1 ),
      $                           1 )
                   W( IMAX, KW-1 ) = REAL( A( IMAX, IMAX ) )
 *
@@ -796,7 +799,8 @@
 *
 *                 Copy column IMAX to column k+1 of W and update it
 *
-                  CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
+                  CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $                        1)
                   CALL CLACGV( IMAX-K, W( K, K+1 ), 1 )
                   W( IMAX, K+1 ) = REAL( A( IMAX, IMAX ) )
 *
@@ -823,7 +827,8 @@
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + ICAMAX( N-IMAX, W( IMAX+1, K+1 ), 1)
+                     ITEMP = IMAX + ICAMAX( N-IMAX, W( IMAX+1, K+1 ),
+     $                                      1)
                      STEMP = CABS1( W( ITEMP, K+1 ) )
                      IF( STEMP.GT.ROWMAX ) THEN
                         ROWMAX = STEMP
@@ -846,7 +851,8 @@
 *
 *                    copy column K+1 of W to column K of W
 *
-                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                      DONE = .TRUE.
 *
@@ -875,7 +881,8 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                   END IF
 *
@@ -935,7 +942,8 @@
      $                     LDA )
                CALL CLACGV( KP-KK-1, A( KP, KK+1 ), LDA )
                IF( KP.LT.N )
-     $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
 *              (column K (or K and K+1 for 2-by-2 pivot) of A will be

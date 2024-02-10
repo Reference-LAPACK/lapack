@@ -278,7 +278,8 @@
 *> \ingroup hesvx
 *
 *  =====================================================================
-      SUBROUTINE DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $                   B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -315,7 +316,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DSYCON, DSYRFS, DSYTRF, DSYTRS, XERBLA
+      EXTERNAL           DLACPY, DSYCON, DSYRFS, DSYTRF, DSYTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -330,7 +332,8 @@
       LWKMIN = MAX( 1, 3*N )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -386,7 +389,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, IWORK,
+      CALL DSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+     $             IWORK,
      $             INFO )
 *
 *     Compute the solution vectors X.

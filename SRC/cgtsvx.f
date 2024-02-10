@@ -288,7 +288,8 @@
 *> \ingroup gtsvx
 *
 *  =====================================================================
-      SUBROUTINE CGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+      SUBROUTINE CGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF,
+     $                   DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, RWORK, INFO )
 *
@@ -326,7 +327,8 @@
       EXTERNAL           LSAME, CLANGT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGTCON, CGTRFS, CGTTRF, CGTTRS, CLACPY,
+      EXTERNAL           CCOPY, CGTCON, CGTRFS, CGTTRF, CGTTRS,
+     $                   CLACPY,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -386,7 +388,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL CGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
+      CALL CGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND,
+     $             WORK,
      $             INFO )
 *
 *     Compute the solution vectors X.
@@ -398,7 +401,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
+      CALL CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+     $             IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

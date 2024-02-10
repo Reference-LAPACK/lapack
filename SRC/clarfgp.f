@@ -128,7 +128,8 @@
 *     .. External Functions ..
       REAL               SCNRM2, SLAMCH, SLAPY3, SLAPY2
       COMPLEX            CLADIV
-      EXTERNAL           SCNRM2, SLAMCH, SLAPY3, SLAPY2, CLADIV
+      EXTERNAL           SCNRM2, SLAMCH, SLAPY3, SLAPY2,
+     $                   CLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN

@@ -261,7 +261,8 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+      SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
@@ -301,7 +302,8 @@
       EXTERNAL           DLAMCH, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR, ZLAQR4,
+      EXTERNAL           ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR,
+     $                   ZLAQR4,
      $                   ZLARF, ZLARFG, ZLASET, ZTREXC, ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
@@ -329,13 +331,15 @@
 *
 *        ==== Workspace query call to ZUNMHR ====
 *
-         CALL ZUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+         CALL ZUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V,
+     $                LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
 *        ==== Workspace query call to ZLAQR4 ====
 *
-         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH, 1, JW, V,
+         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH, 1, JW,
+     $                V,
      $                LDV, WORK, -1, INFQR )
          LWK3 = INT( WORK( 1 ) )
 *
@@ -404,15 +408,18 @@
 *     .    here and there to keep track.) ====
 *
       CALL ZLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL ZCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
+      CALL ZCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ),
+     $            LDT+1 )
 *
       CALL ZLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
       NMIN = ILAENV( 12, 'ZLAQR3', 'SV', JW, 1, JW, LWORK )
       IF( JW.GT.NMIN ) THEN
-         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
+         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ),
+     $                1,
      $                JW, V, LDV, WORK, LWORK, INFQR )
       ELSE
-         CALL ZLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
+         CALL ZLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ),
+     $                1,
      $                JW, V, LDV, INFQR )
       END IF
 *
@@ -462,7 +469,8 @@
    20       CONTINUE
             ILST = I
             IF( IFST.NE.ILST )
-     $         CALL ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
+     $         CALL ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      INFO )
    30    CONTINUE
       END IF
 *
@@ -486,7 +494,8 @@
             CALL ZLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL ZLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
+            CALL ZLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
+     $                   LDT )
 *
             CALL ZLARF( 'L', NS, JW, WORK, 1, DCONJG( TAU ), T, LDT,
      $                  WORK( JW+1 ) )
@@ -511,7 +520,8 @@
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL ZUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $      CALL ZUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V,
+     $                   LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -525,7 +535,8 @@
             KLN = MIN( NV, KWTOP-KROW )
             CALL ZGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL ZLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
+            CALL ZLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ),
+     $                   LDH )
    60    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -545,7 +556,8 @@
          IF( WANTZ ) THEN
             DO 80 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL ZGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
+               CALL ZGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW,
+     $                     KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
                CALL ZLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )

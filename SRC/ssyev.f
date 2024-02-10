@@ -159,10 +159,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, SORGTR, SSCAL, SSTEQR, SSTERF, SSYTRD,
+      EXTERNAL           SLASCL, SORGTR, SSCAL, SSTEQR, SSTERF,
+     $                   SSYTRD,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -255,9 +257,11 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ),
      $                LLWORK, IINFO )
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA,
+     $                WORK( INDTAU ),
      $                INFO )
       END IF
 *

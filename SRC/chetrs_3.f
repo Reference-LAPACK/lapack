@@ -247,7 +247,8 @@
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL CTRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
@@ -274,7 +275,8 @@
 *
 *        Compute (U**H \ B) -> B   [ U**H \ (D \ (U \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'U', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL CTRSM( 'L', 'U', 'C', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (U**H \ (D \ (U \P**T * B) )) ]
 *
@@ -315,7 +317,8 @@
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL CTRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
@@ -342,7 +345,8 @@
 *
 *        Compute (L**H \ B) -> B   [ L**H \ (D \ (L \P**T * B) ) ]
 *
-         CALL CTRSM('L', 'L', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL CTRSM('L', 'L', 'C', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (L**H \ (D \ (L \P**T * B) )) ]
 *

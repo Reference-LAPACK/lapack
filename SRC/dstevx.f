@@ -222,7 +222,8 @@
 *> \ingroup stevx
 *
 *  =====================================================================
-      SUBROUTINE DSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+      SUBROUTINE DSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+     $                   ABSTOL,
      $                   M, W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
 *
 *  -- LAPACK driver routine --
@@ -259,7 +260,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTEIN, DSTEQR, DSTERF,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTEIN, DSTEQR,
+     $                   DSTERF,
      $                   DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -377,7 +379,8 @@
          IF( .NOT.WANTZ ) THEN
             CALL DSTERF( N, W, WORK, INFO )
          ELSE
-            CALL DSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ), INFO )
+            CALL DSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ),
+     $                   INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
                   IFAIL( I ) = 0
@@ -401,7 +404,8 @@
       INDWRK = 1
       INDISP = 1 + N
       INDIWO = INDISP + N
-      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
+      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
+     $             M,
      $             NSPLIT, W, IWORK( 1 ), IWORK( INDISP ),
      $             WORK( INDWRK ), IWORK( INDIWO ), INFO )
 *
