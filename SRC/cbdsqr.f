@@ -166,7 +166,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (4*N)
+*>          RWORK is REAL array, dimension (4*(N-1))
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -809,6 +809,12 @@
 *
   160 CONTINUE
       DO 170 I = 1, N
+         IF( D( I ).EQ.ZERO ) THEN
+*
+*           Avoid -ZERO
+*
+            D( I ) = ZERO
+         END IF
          IF( D( I ).LT.ZERO ) THEN
             D( I ) = -D( I )
 *
