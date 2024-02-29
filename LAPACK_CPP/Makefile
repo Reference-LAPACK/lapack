@@ -14,11 +14,19 @@ HEADERS = $(wildcard lapack_c/include/*.h) \
 		  $(wildcard lapack_cpp/include/*/*.hpp) \
 		  $(wildcard lapack_cpp/include/*/*/*.hpp)
 
-OBJFILES = src/lapack_c/rot_c.o \
+OBJFILES = src/lapack_cpp/rot_cpp.o \
+		   src/lapack_cpp/lartg_cpp.o \
+		   src/lapack_c/rot_c.o \
 		   src/lapack_c/lartg_c.o \
 		   src/lapack_c/lasr3_c.o \
-		   src/lapack_cpp/rot_cpp.o \
-		   src/lapack_cpp/lartg_cpp.o \
+		   src/lapack_fortran/slasr3.o \
+		   src/lapack_fortran/dlasr3.o \
+		   src/lapack_fortran/clasr3.o \
+		   src/lapack_fortran/zlasr3.o \
+
+# Fortran files
+src/lapack_fortran/%.o: src/lapack_fortran/%.f90
+	$(FC) $(FFLAGS) -cpp -c -o $@ $<
 
 # C files
 
