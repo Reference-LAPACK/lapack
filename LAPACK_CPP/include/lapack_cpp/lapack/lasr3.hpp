@@ -33,7 +33,7 @@ namespace lapack_cpp {
  *
  * @tparam T     The type of the elements of the matrix A.
  *
- * @tparam TC    The type of the elements of the matrix C.
+ * @tparam real_t<T>    The type of the elements of the matrix C.
  *
  * @tparam TS    The type of the elements of the matrix S.
  *
@@ -41,14 +41,14 @@ namespace lapack_cpp {
  *
  * @tparam idx_t  The type of the indices.
  *
- * @note if either TC or TS is a complex type, then T must also be a complex
+ * @note if either real_t<T> or TS is a complex type, then T must also be a complex
  * type.
  *
  */
-template <typename T, typename TC, typename TS, Layout layout, typename idx_t>
+template <typename T, typename TS, Layout layout, typename idx_t>
 void lasr3(Side side,
            Direction direct,
-           ConstMatrix<TC, layout, idx_t> C,
+           ConstMatrix<real_t<T>, layout, idx_t> C,
            ConstMatrix<TS, layout, idx_t> S,
            Matrix<T, layout, idx_t> A,
            MemoryBlock<T, idx_t, true> work);
@@ -56,10 +56,10 @@ void lasr3(Side side,
 /**
  * Workspace query for lasr3.
  */
-template <typename T, typename TC, typename TS, Layout layout, typename idx_t>
+template <typename T, typename TS, Layout layout, typename idx_t>
 idx_t lasr3_workquery(Side side,
                       Direction direct,
-                      ConstMatrix<TC, layout, idx_t> C,
+                      ConstMatrix<real_t<T>, layout, idx_t> C,
                       ConstMatrix<TS, layout, idx_t> S,
                       Matrix<T, layout, idx_t> A)
 {
@@ -89,10 +89,10 @@ idx_t lasr3_workquery(Side side,
 /**
  * @copydoc lasr3
  */
-template <typename T, typename TC, typename TS, Layout layout, typename idx_t>
+template <typename T, typename TS, Layout layout, typename idx_t>
 void lasr3(Side side,
            Direction direct,
-           ConstMatrix<TC, layout, idx_t> C,
+           ConstMatrix<real_t<T>, layout, idx_t> C,
            ConstMatrix<TS, layout, idx_t> S,
            Matrix<T, layout, idx_t> A)
 {
@@ -117,13 +117,13 @@ namespace internal {
      * @param c2  The cosine of the second rotation.
      * @param s2  The sine of the second rotation.
      */
-    template <typename T, typename TC, typename TS, typename idx_t>
+    template <typename T, typename TS, typename idx_t>
     void rot_fuse2x1(Vector<T, idx_t> x1,
                      Vector<T, idx_t> x2,
                      Vector<T, idx_t> x3,
-                     TC c1,
+                     real_t<T> c1,
                      TS s1,
-                     TC c2,
+                     real_t<T> c2,
                      TS s2)
     {
         assert(x1.size() == x2.size() && x2.size() == x3.size());
@@ -150,13 +150,13 @@ namespace internal {
      * @param c2  The cosine of the second rotation.
      * @param s2  The sine of the second rotation.
      */
-    template <typename T, typename TC, typename TS, typename idx_t>
+    template <typename T, typename TS, typename idx_t>
     void rot_fuse1x2(Vector<T, idx_t> x1,
                      Vector<T, idx_t> x2,
                      Vector<T, idx_t> x3,
-                     TC c1,
+                     real_t<T> c1,
                      TS s1,
-                     TC c2,
+                     real_t<T> c2,
                      TS s2)
     {
         assert(x1.size() == x2.size() && x2.size() == x3.size());
@@ -192,18 +192,18 @@ namespace internal {
      * @param c4  The cosine of the fourth rotation.
      * @param s4  The sine of the fourth rotation.
      */
-    template <typename T, typename TC, typename TS, typename idx_t>
+    template <typename T, typename TS, typename idx_t>
     void rot_fuse2x2(Vector<T, idx_t> x1,
                      Vector<T, idx_t> x2,
                      Vector<T, idx_t> x3,
                      Vector<T, idx_t> x4,
-                     TC c1,
+                     real_t<T> c1,
                      TS s1,
-                     TC c2,
+                     real_t<T> c2,
                      TS s2,
-                     TC c3,
+                     real_t<T> c3,
                      TS s3,
-                     TC c4,
+                     real_t<T> c4,
                      TS s4)
     {
         assert(x1.size() == x2.size() && x1.size() == x3.size() &&
@@ -223,11 +223,10 @@ namespace internal {
 
     // Kernel for lasr3, forward left variant
     template <typename T,
-              typename TC,
               typename TS,
               Layout layout,
               typename idx_t>
-    void lasr3_kernel_forward_left(ConstMatrix<TC, layout, idx_t> C,
+    void lasr3_kernel_forward_left(ConstMatrix<real_t<T>, layout, idx_t> C,
                                    ConstMatrix<TS, layout, idx_t> S,
                                    Matrix<T, layout, idx_t> A,
                                    MemoryBlock<T, idx_t, true> work)
@@ -338,11 +337,10 @@ namespace internal {
 
     // Kernel for lasr3, backward left variant
     template <typename T,
-              typename TC,
               typename TS,
               Layout layout,
               typename idx_t>
-    void lasr3_kernel_backward_left(ConstMatrix<TC, layout, idx_t> C,
+    void lasr3_kernel_backward_left(ConstMatrix<real_t<T>, layout, idx_t> C,
                                     ConstMatrix<TS, layout, idx_t> S,
                                     Matrix<T, layout, idx_t> A,
                                     MemoryBlock<T, idx_t, true> work)
@@ -457,11 +455,10 @@ namespace internal {
 
     // Kernel for lasr3, forward right variant
     template <typename T,
-              typename TC,
               typename TS,
               Layout layout,
               typename idx_t>
-    void lasr3_kernel_forward_right(ConstMatrix<TC, layout, idx_t> C,
+    void lasr3_kernel_forward_right(ConstMatrix<real_t<T>, layout, idx_t> C,
                                     ConstMatrix<TS, layout, idx_t> S,
                                     Matrix<T, layout, idx_t> A,
                                     MemoryBlock<T, idx_t, true> work)
@@ -573,11 +570,10 @@ namespace internal {
 
     // Kernel for lasr3, backward right variant
     template <typename T,
-              typename TC,
               typename TS,
               Layout layout,
               typename idx_t>
-    void lasr3_kernel_backward_right(ConstMatrix<TC, layout, idx_t> C,
+    void lasr3_kernel_backward_right(ConstMatrix<real_t<T>, layout, idx_t> C,
                                      ConstMatrix<TS, layout, idx_t> S,
                                      Matrix<T, layout, idx_t> A,
                                      MemoryBlock<T, idx_t, true> work)
@@ -696,10 +692,10 @@ namespace internal {
 /**
  * @copydoc lasr3
  */
-template <typename T, typename TC, typename TS, Layout layout, typename idx_t>
+template <typename T, typename TS, Layout layout, typename idx_t>
 void lasr3(Side side,
            Direction direct,
-           ConstMatrix<TC, layout, idx_t> C,
+           ConstMatrix<real_t<T>, layout, idx_t> C,
            ConstMatrix<TS, layout, idx_t> S,
            Matrix<T, layout, idx_t> A,
            MemoryBlock<T, idx_t, true> work)

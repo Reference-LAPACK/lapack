@@ -1,5 +1,5 @@
 
-#include <chrono>  // for high_resolution_clock
+#include <chrono> // for high_resolution_clock
 #include <complex>
 #include <iostream>
 
@@ -28,8 +28,10 @@ void profile_lasr3(idx_t m, idx_t n, idx_t k, Side side, Direction direction)
     // Generate random, but valid rotations
     randomize(C);
     randomize(S);
-    for (idx_t i = 0; i < n_rot; ++i) {
-        for (idx_t j = 0; j < k; ++j) {
+    for (idx_t i = 0; i < n_rot; ++i)
+    {
+        for (idx_t j = 0; j < k; ++j)
+        {
             T f = C(i, j);
             T g = S(i, j);
             T r;
@@ -49,7 +51,8 @@ void profile_lasr3(idx_t m, idx_t n, idx_t k, Side side, Direction direction)
     const idx_t n_warmup = 20;
     std::vector<float> timings(n_timings);
 
-    for (idx_t i = 0; i < n_timings; ++i) {
+    for (idx_t i = 0; i < n_timings; ++i)
+    {
         A = A_copy;
         auto start = std::chrono::high_resolution_clock::now();
         lasr3(side, direction, C.as_const(), S.as_const(), A, work);
@@ -62,6 +65,11 @@ void profile_lasr3(idx_t m, idx_t n, idx_t k, Side side, Direction direction)
         mean += timings[i];
     mean /= n_timings - n_warmup;
 
+    float std_dev = 0;
+    for (idx_t i = n_warmup; i < n_timings; ++i)
+        std_dev += (timings[i] - mean) * (timings[i] - mean);
+    std_dev = std::sqrt(std_dev / (n_timings - n_warmup - 1));
+
     long nflops =
         side == Side::Left ? 6. * (m - 1) * n * k : 6. * (n - 1) * m * k;
 
@@ -69,6 +77,7 @@ void profile_lasr3(idx_t m, idx_t n, idx_t k, Side side, Direction direction)
               << ", side = " << (char)side
               << ", direction = " << (char)direction << ", mean time = " << mean
               << " s"
+              << ", std dev = " << std_dev / mean * 100 << " %"
               << ", flop rate = " << nflops / mean * 1.0e-9 << " GFlops"
               << std::endl;
 }
@@ -81,12 +90,15 @@ int main()
     const idx_t nb = 1000;
     const idx_t k = 64;
 
-    for (int s = 0; s < 2; ++s) {
+    for (int s = 0; s < 2; ++s)
+    {
         Side side = s == 0 ? Side::Left : Side::Right;
-        for (int d = 0; d < 2; ++d) {
+        for (int d = 0; d < 2; ++d)
+        {
             Direction direction =
                 d == 0 ? Direction::Forward : Direction::Backward;
-            for (idx_t n_rot = 99; n_rot <= 1600; n_rot += 100) {
+            for (idx_t n_rot = 99; n_rot <= 1600; n_rot += 100)
+            {
                 idx_t m = side == Side::Left ? n_rot + 1 : nb;
                 idx_t n = side == Side::Left ? nb : n_rot + 1;
 

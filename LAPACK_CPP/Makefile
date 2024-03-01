@@ -7,12 +7,12 @@ FFLAGS=-Wall -Wextra -pedantic -g
 
 all: ./example/test_lasr3 ./example/profile_lasr3
 
-HEADERS = $(wildcard lapack_c/include/*.h) \
-		  $(wildcard lapack_c/include/*/*.h) \
-		  $(wildcard lapack_c/include/*/*/*.h) \
-		  $(wildcard lapack_cpp/include/*.hpp) \
-		  $(wildcard lapack_cpp/include/*/*.hpp) \
-		  $(wildcard lapack_cpp/include/*/*/*.hpp)
+HEADERS = $(wildcard include/lapack_c/*.h) \
+		  $(wildcard include/lapack_c/*/*.h) \
+		  $(wildcard include/lapack_c/*/*/*.h) \
+		  $(wildcard include/lapack_cpp/*.hpp) \
+		  $(wildcard include/lapack_cpp/*/*.hpp) \
+		  $(wildcard include/lapack_cpp/*/*/*.hpp)
 
 OBJFILES = src/lapack_cpp/rot_cpp.o \
 		   src/lapack_cpp/lartg_cpp.o \
@@ -30,7 +30,7 @@ src/lapack_fortran/%.o: src/lapack_fortran/%.f90
 
 # C files
 
-src/lapack_c/%.o: src/lapack_c/%.cpp
+src/lapack_c/%.o: src/lapack_c/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -I./include -c -o $@ $<
 
 src/lapack_c/%.o: src/lapack_c/%.f90
