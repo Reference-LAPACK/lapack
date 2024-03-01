@@ -11,7 +11,7 @@
 !                         W, LDW,  S, LDS, ZWORK,  LZWORK,   &
 !                         RWORK, LRWORK, IWORK, LIWORK, INFO )
 !......
-!      USE                   iso_fortran_env
+!      USE, INTRINSIC :: iso_fortran_env, only: real64
 !      IMPLICIT NONE
 !      INTEGER, PARAMETER :: WP = real64
 !
@@ -506,7 +506,7 @@
 !  -- Colorado Denver and NAG Ltd..                                   --
 !
 !.....
-      USE                   iso_fortran_env
+      USE, INTRINSIC :: iso_fortran_env, only: real64
       IMPLICIT NONE
       INTEGER, PARAMETER :: WP = real64
 !

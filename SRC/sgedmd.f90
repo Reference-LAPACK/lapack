@@ -11,7 +11,7 @@
 !                        B, LDB, W,  LDW,   S, LDS,        &
 !                        WORK, LWORK, IWORK, LIWORK, INFO )
 !.....
-!     USE                   iso_fortran_env
+!     USE, INTRINSIC :: iso_fortran_env, only: real32
 !     IMPLICIT NONE
 !     INTEGER, PARAMETER :: WP = real32
 !.....
@@ -540,7 +540,7 @@
 !  -- Colorado Denver and NAG Ltd..                                   --
 !
 !.....
-      USE                   iso_fortran_env
+      USE, INTRINSIC :: iso_fortran_env, only: real32
       IMPLICIT NONE
       INTEGER, PARAMETER :: WP = real32
 !
