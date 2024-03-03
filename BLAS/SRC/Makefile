@@ -96,7 +96,7 @@ $(ZB1AUX): $(FRC)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-ALLBLAS = lsame.o xerbla.o xerbla_array.o
+ALLBLAS = lsame.o xerbla.o xerbla_array.o xerblai.o xerblai_array.o
 $(ALLBLAS): $(FRC)
 
 #---------------------------------------------------------
@@ -127,18 +127,20 @@ $(ZBLAS2): $(FRC)
 #  Comment out the next 4 definitions if you already have
 #  the Level 3 BLAS.
 #---------------------------------------------------------
-SBLAS3 = sgemm.o ssymm.o ssyrk.o ssyr2k.o strmm.o strsm.o
+SBLAS3 = sgemm.o ssymm.o ssyrk.o ssyr2k.o strmm.o strsm.o \
+	sgemm_batch.o
 $(SBLAS3): $(FRC)
 
 CBLAS3 = cgemm.o csymm.o csyrk.o csyr2k.o ctrmm.o ctrsm.o \
-	chemm.o cherk.o cher2k.o
+	chemm.o cherk.o cher2k.o cgemm_batch.o
 $(CBLAS3): $(FRC)
 
-DBLAS3 = dgemm.o dsymm.o dsyrk.o dsyr2k.o dtrmm.o dtrsm.o
+DBLAS3 = dgemm.o dsymm.o dsyrk.o dsyr2k.o dtrmm.o dtrsm.o \
+	dgemm_batch.o
 $(DBLAS3): $(FRC)
 
 ZBLAS3 = zgemm.o zsymm.o zsyrk.o zsyr2k.o ztrmm.o ztrsm.o \
-	zhemm.o zherk.o zher2k.o
+	zhemm.o zherk.o zher2k.o zgemm_batch.o
 $(ZBLAS3): $(FRC)
 
 ALLOBJ = $(SBLAS1) $(SBLAS2) $(SBLAS3) $(DBLAS1) $(DBLAS2) $(DBLAS3) \

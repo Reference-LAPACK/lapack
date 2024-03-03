@@ -58,7 +58,7 @@ set(ZB1AUX
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
 #---------------------------------------------------------------------
-set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
+set(ALLBLAS lsame.f xerbla.f xerbla_array.f xerblai.f xerblai_array.f)
 
 #---------------------------------------------------------
 #  Level 2 BLAS
@@ -82,15 +82,17 @@ set(ZBLAS2 zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f
 #---------------------------------------------------------
 #  Level 3 BLAS
 #---------------------------------------------------------
-set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f)
+set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f
+	sgemm_batch.f90)
 
 set(CBLAS3 cgemm.f csymm.f csyrk.f csyr2k.f ctrmm.f ctrsm.f
-	chemm.f cherk.f cher2k.f)
+	chemm.f cherk.f cher2k.f cgemm_batch.f90)
 
-set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f)
+set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f
+	dgemm_batch.f90)
 
 set(ZBLAS3 zgemm.f zsymm.f zsyrk.f zsyr2k.f ztrmm.f ztrsm.f
-	zhemm.f zherk.f zher2k.f)
+	zhemm.f zherk.f zher2k.f zgemm_batch.f90)
 
 
 set(SOURCES)
