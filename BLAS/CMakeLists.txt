@@ -14,3 +14,8 @@ install(FILES
   DESTINATION ${PKG_CONFIG_DIR}
   COMPONENT Development
   )
+
+install(EXPORT ${BLASLIB}-targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
+  )
