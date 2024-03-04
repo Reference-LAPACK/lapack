@@ -20,6 +20,7 @@ inline constexpr Op char2op(char t)
             return Op::ConjTrans;
         default:
             assert(false);
+            return Op::NoTrans;
     }
 }
 
@@ -34,6 +35,7 @@ inline constexpr Side char2side(char t)
             return Side::Right;
         default:
             assert(false);
+            return Side::Left;
     }
 }
 
@@ -48,6 +50,7 @@ inline constexpr Uplo char2uplo(char t)
             return Uplo::Lower;
         default:
             assert(false);
+            return Uplo::Upper;
     }
 }
 
@@ -62,6 +65,7 @@ inline constexpr Diag char2diag(char t)
             return Diag::NonUnit;
         default:
             assert(false);
+            return Diag::NonUnit;
     }
 }
 
@@ -76,6 +80,7 @@ inline constexpr Direction char2direct(char t)
             return Direction::Backward;
         default:
             assert(false);
+            return Direction::Forward;
     }
 }
 

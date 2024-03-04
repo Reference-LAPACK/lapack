@@ -14,11 +14,11 @@ HEADERS = $(wildcard include/lapack_c/*.h) \
 		  $(wildcard include/lapack_cpp/*/*.hpp) \
 		  $(wildcard include/lapack_cpp/*/*/*.hpp)
 
-OBJFILES = src/lapack_cpp/rot_cpp.o \
-		   src/lapack_cpp/lartg_cpp.o \
-		   src/lapack_c/rot_c.o \
-		   src/lapack_c/lartg_c.o \
-		   src/lapack_c/lasr3_c.o \
+OBJFILES = src/lapack_cpp/rot.o \
+		   src/lapack_cpp/lartg.o \
+		   src/lapack_c/rot.o \
+		   src/lapack_c/lartg.o \
+		   src/lapack_c/lasr3.o \
 		   src/lapack_fortran/slasr3.o \
 		   src/lapack_fortran/dlasr3.o \
 		   src/lapack_fortran/clasr3.o \
