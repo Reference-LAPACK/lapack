@@ -127,6 +127,8 @@ namespace internal {
                      TS s2)
     {
         assert(x1.size() == x2.size() && x2.size() == x3.size());
+        if( c1 == real_t<T>{1.} && s1 == TS{0.} && c2 == real_t<T>{1.} && s2 == TS{0} )
+            return;
         const idx_t n = x1.size();
         for (idx_t i = 0; i < n; ++i) {
             T x2_g1 = -conj(s1) * x1[i] + c1 * x2[i];
@@ -160,6 +162,8 @@ namespace internal {
                      TS s2)
     {
         assert(x1.size() == x2.size() && x2.size() == x3.size());
+        if( c1 == real_t<T>{1.} && s1 == TS{0.} && c2 == real_t<T>{1.} && s2 == TS{0} )
+            return;
         const idx_t n = x1.size();
         for (idx_t i = 0; i < n; ++i) {
             T x2_g1 = c1 * x2[i] + s1 * x3[i];
@@ -208,6 +212,9 @@ namespace internal {
     {
         assert(x1.size() == x2.size() && x1.size() == x3.size() &&
                x1.size() == x4.size());
+        if( c1 == real_t<T>{1.} && s1 == TS{0.} && c2 == real_t<T>{1.} && s2 == TS{0} &&
+            c3 == real_t<T>{1.} && s3 == TS{0.} && c4 == real_t<T>{1.} && s4 == TS{0} )
+            return;
         const idx_t n = x1.size();
         for (idx_t i = 0; i < n; ++i) {
             T x2_g1 = c1 * x2[i] + s1 * x3[i];

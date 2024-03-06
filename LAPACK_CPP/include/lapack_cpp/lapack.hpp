@@ -6,6 +6,7 @@
 #include "lapack_cpp/lapack/lartg.hpp"
 #include "lapack_cpp/lapack/lasr3.hpp"
 #include "lapack_cpp/lapack/lasrt.hpp"
+#include "lapack_cpp/lapack/steqr.hpp"
 #include "lapack_cpp/lapack/steqr3.hpp"
 
 #endif // LAPACK_CPP_LAPACK_HPP
