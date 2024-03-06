@@ -6,9 +6,54 @@
 #include "lapack_cpp/lapack/lartg.hpp"
 #include "lapack_cpp/lapack/lasrt.hpp"
 #include "lapack_cpp/lapack/laev2.hpp"
+#include "lapack_cpp/lapack/lae2.hpp"
+#include "lapack_cpp/lapack/lapy2.hpp"
+
 
 namespace lapack_cpp
 {
+    template <typename T,
+              Layout layout,
+              typename idx_t>
+    idx_t steqr3_workquery(bool want_z,
+                           Vector<real_t<T>, idx_t> d,
+                           Vector<real_t<T>, idx_t> e,
+                           Matrix<T, layout, idx_t> Z)
+    {
+        const auto nb = idx_t{32};
+        const idx_t n = d.size();
+
+        assert(n == e.size() + 1);
+        assert(n == Z.num_columns());
+        assert(n == Z.num_rows());
+
+        // Create empty wrappers for C and S to do workspace query
+        ConstMatrix<real_t<T>, layout, idx_t> C(n - 1, nb, nullptr);
+        ConstMatrix<real_t<T>, layout, idx_t> S(n - 1, nb, nullptr);
+
+        return lasr3_workquery(Side::Right, Direction::Forward, C, S, Z);
+    }
+
+    template <typename T,
+              Layout layout,
+              typename idx_t>
+    idx_t steqr3_rworkquery(bool want_z,
+                            Vector<real_t<T>, idx_t> d,
+                            Vector<real_t<T>, idx_t> e,
+                            Matrix<T, layout, idx_t> Z)
+    {
+        const auto nb = idx_t{32};
+        const idx_t n = d.size();
+
+        assert(n == e.size() + 1);
+        assert(n == Z.num_columns());
+        assert(n == Z.num_rows());
+
+        if (layout == Layout::ColMajor)
+            return 2 * calc_ld<real_t<T>, idx_t>(n - 1) * nb;
+        else
+            return 2 * (n - 1) * calc_ld<real_t<T>, idx_t>(nb);
+    }
 
     /**
      * STEQR3 computes all eigenvalues and, optionally, eigenvectors of a
@@ -58,7 +103,13 @@ namespace lapack_cpp
         const T_real two(2);
         const T_real one(1);
         const T_real zero(0);
-        const idx_t n = size(d);
+        const idx_t n = d.size();
+
+        assert(n == e.size() + 1);
+        assert(n == Z.num_columns());
+        assert(n == Z.num_rows());
+        assert( rwork.size() >= steqr3_rworkquery(want_z, d, e, Z) );
+        assert( work.size() >= steqr3_workquery(want_z, d, e, Z) );
 
         // Amount of rotation sequences to generate before applying it.
         const auto nb = idx_t{32};
@@ -118,7 +169,7 @@ namespace lapack_cpp
             // If we have saved up enough rotations, apply them
             if (want_z and (i_block >= nb or iter == itmax or istop <= 1))
             {
-                idx_t i_block2 = min<idx_t>(i_block + 1, nb);
+                idx_t i_block2 = std::min<idx_t>(i_block + 1, nb);
 
                 // Find smallest index where rotation is not identity
                 idx_t i_start_block = n - 1;
@@ -150,9 +201,9 @@ namespace lapack_cpp
                 if (i_start_block < i_stop_block + 1)
                 {
                     auto C2 = C.submatrix(i_start_block, i_stop_block + 1, 0, i_block2);
-                    auto S2 = C.submatrix(i_start_block, i_stop_block + 1, 0, i_block2);
+                    auto S2 = S.submatrix(i_start_block, i_stop_block + 1, 0, i_block2);
                     auto Z2 = Z.submatrix(0, n, i_start_block, i_stop_block + 2);
-                    lasr3(Side::Right, direction, C2, S2, Z2, work);
+                    lasr3(Side::Right, direction, C2.as_const(), S2.as_const(), Z2, work);
                 }
                 // Reset block
                 i_block = 0;
@@ -249,7 +300,7 @@ namespace lapack_cpp
                 {
                     // We don't want different directions in our saved rotation matrices
                     // So we apply all the current rotations and reset the block
-                    idx_t i_block2 = min<idx_t>(i_block + 1, nb);
+                    idx_t i_block2 = std::min<idx_t>(i_block + 1, nb);
 
                     // Find smallest index where rotation is not identity
                     idx_t i_start_block = n - 1;
@@ -284,7 +335,7 @@ namespace lapack_cpp
                         auto S2 = S.submatrix(i_start_block, i_stop_block + 1, 0, i_block2);
                         auto Z2 = Z.submatrix(0, n, i_start_block, i_stop_block + 2);
 
-                        lasr3(Side::Right, direction, C2, S2, Z2, work);
+                        lasr3(Side::Right, direction, C2.as_const(), S2.as_const(), Z2, work);
                     }
                     // Reset block
                     i_block = 0;
@@ -408,8 +459,8 @@ namespace lapack_cpp
                 {
                     d[k] = d[i];
                     d[i] = p;
-                    auto z1 = col(Z, i);
-                    auto z2 = col(Z, k);
+                    auto z1 = Z.column(i);
+                    auto z2 = Z.column(k);
                     for (idx_t j = 0; j < n; ++j)
                     {
                         auto temp = z1[j];

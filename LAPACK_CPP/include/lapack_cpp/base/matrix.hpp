@@ -66,6 +66,11 @@ class Matrix {
         assert(ldim >= (layout == Layout::ColMajor ? m : n));
     }
 
+    // Constructor for a matrix of size m x n
+    Matrix(const idx_t m, const idx_t n, T* ptr)
+        : m_(m), n_(n), ldim_(layout == Layout::ColMajor ? m : n), data_(ptr)
+    {}
+
     // Copy constructor
     Matrix(const Matrix& m)
         : m_(m.num_rows()), n_(m.num_columns()), ldim_(m.ldim()), data_(m.ptr())
@@ -221,6 +226,11 @@ class ConstMatrix {
     {
         assert(ldim >= (layout == Layout::ColMajor ? m : n));
     }
+
+    // Constructor for a matrix of size m x n
+    ConstMatrix(const idx_t m, const idx_t n, const T* ptr)
+        : m_(m), n_(n), ldim_(layout == Layout::ColMajor ? m : n), data_(ptr)
+    {}
 
     // Copy constructor
     ConstMatrix(const ConstMatrix& m)

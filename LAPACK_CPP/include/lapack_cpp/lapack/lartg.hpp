@@ -13,4 +13,4 @@ void lartg(T f, T g, real_t<T>& c, T& s, T& r);
 
 }  // namespace lapack_cpp
 
-#endif  // LAPACK_CPP_GEMV_HPP
+#endif  // LAPACK_CPP_LARTG_HPP

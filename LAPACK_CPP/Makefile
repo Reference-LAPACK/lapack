@@ -1,11 +1,11 @@
 CXX=g++
-# CXXFLAGS=-std=c++17 -Wall -Wextra -pedantic -g -Og
+# CXXFLAGS=-std=c++17 -Wall -Wextra -pedantic -g
 CXXFLAGS=-std=c++17 -O3 -march=native -ffast-math -g -DNDEBUG
 
 FC=gfortran
 FFLAGS=-Wall -Wextra -pedantic -g
 
-all: ./example/test_lasr3 ./example/profile_lasr3
+all: ./example/test_lasr3 ./example/profile_lasr3 ./example/profile_steqr3 $(OBJFILES)
 
 HEADERS = $(wildcard include/lapack_c/*.h) \
 		  $(wildcard include/lapack_c/*/*.h) \
@@ -38,10 +38,7 @@ src/lapack_cpp/%_cpp.o: src/lapack_cpp/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -I./include -c -o $@ $<
 
 # Test files
-example/test_lasr3: example/test_lasr3.cpp $(OBJFILES) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJFILES) -I./include -lstdc++ -lgfortran -lblas -llapack
-
-example/profile_lasr3: example/profile_lasr3.cpp $(OBJFILES) $(HEADERS)
+example/%: example/%.cpp $(OBJFILES) $(HEADERS)
 	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJFILES) -I./include -lstdc++ -lgfortran -lblas -llapack
 
 clean:
