@@ -99,6 +99,23 @@ inline constexpr IncDec char2incdec(char t)
     }
 }
 
+enum class CompQ : char { No = 'N', Update = 'V', Initialize = 'I' };
+
+inline constexpr CompQ char2compq(char t)
+{
+    switch (t) {
+        case 'N':
+            return CompQ::No;
+        case 'V':
+            return CompQ::Update;
+        case 'I':
+            return CompQ::Initialize;
+        default:
+            assert(false);
+            return CompQ::No;
+    }
+}
+
 }  // namespace lapack_cpp
 
 #endif  // LAPACK_CPP_ENUMP_HPP

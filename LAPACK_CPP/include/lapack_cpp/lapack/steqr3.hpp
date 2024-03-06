@@ -15,11 +15,13 @@ namespace lapack_cpp
     template <typename T,
               Layout layout,
               typename idx_t>
-    idx_t steqr3_workquery(bool want_z,
+    idx_t steqr3_workquery(CompQ compz,
                            Vector<real_t<T>, idx_t> d,
                            Vector<real_t<T>, idx_t> e,
                            Matrix<T, layout, idx_t> Z)
     {
+        if( compz == CompQ::No )
+            return 0;
         const auto nb = idx_t{32};
         const idx_t n = d.size();
 
@@ -37,7 +39,7 @@ namespace lapack_cpp
     template <typename T,
               Layout layout,
               typename idx_t>
-    idx_t steqr3_rworkquery(bool want_z,
+    idx_t steqr3_rworkquery(CompQ compz,
                             Vector<real_t<T>, idx_t> d,
                             Vector<real_t<T>, idx_t> e,
                             Matrix<T, layout, idx_t> Z)
@@ -82,6 +84,12 @@ namespace lapack_cpp
      *      to tridiagonal form.
      *      On exit, if info = 0, and want_z=true then Z contains the
      *      orthonormal eigenvectors of the original Hermitian matrix.
+     * 
+     * @param[out] work Workspace array whose size is returned by
+     *    steqr3_workquery.
+     * 
+     * @param[out] rwork Real workspace array whose size is returned by
+     *     steqr3_rworkquery.
      *
      * @ingroup computational
      */
@@ -90,12 +98,12 @@ namespace lapack_cpp
               typename idx_t,
               bool aligned>
     int steqr3(
-        bool want_z,
+        CompQ compz,
         Vector<real_t<T>, idx_t> d,
         Vector<real_t<T>, idx_t> e,
         Matrix<T, layout, idx_t> Z,
-        MemoryBlock<real_t<T>, idx_t, aligned> &rwork,
-        MemoryBlock<T, idx_t, aligned> &work)
+        MemoryBlock<T, idx_t, aligned> &work,
+        MemoryBlock<real_t<T>, idx_t, aligned> &rwork)
     {
         using T_real = real_t<T>;
 
@@ -119,9 +127,23 @@ namespace lapack_cpp
             return 0;
         if (n == 1)
         {
-            if (want_z)
+            if (compz == CompQ::Initialize)
                 Z(0, 0) = one;
             return 0;
+        }
+
+        bool want_z = compz != CompQ::No;
+
+        if( compz == CompQ::Initialize )
+        {
+            for (idx_t j = 0; j < n; ++j)
+            {
+                for (idx_t i = 0; i < n; ++i)
+                {
+                    Z(i, j) = zero;
+                }
+                Z(j, j) = one;
+            }
         }
 
         // Determine the unit roundoff and over/underflow thresholds.

@@ -12,5 +12,6 @@
 #include "lapack_c/lae2.h"
 #include "lapack_c/laev2.h"
 #include "lapack_c/lasrt.h"
+#include "lapack_c/steqr3.h"
 
 #endif

@@ -33,10 +33,10 @@ void profile_steqr3(idx_t n)
     d_copy = d;
     e_copy = e;
 
-    bool want_z = true;
+    CompQ compz = CompQ::Initialize;
 
-    MemoryBlock<T, idx_t> work(steqr3_workquery(want_z, d, e, Z));
-    MemoryBlock<real_t<T>, idx_t> rwork(steqr3_rworkquery(want_z, d, e, Z));
+    MemoryBlock<T, idx_t> work(steqr3_workquery(compz, d, e, Z));
+    MemoryBlock<real_t<T>, idx_t> rwork(steqr3_rworkquery(compz, d, e, Z));
 
     const idx_t n_timings = 100;
     const idx_t n_warmup = 50;
@@ -47,7 +47,7 @@ void profile_steqr3(idx_t n)
         d = d_copy;
         e = e_copy;
         auto start = std::chrono::high_resolution_clock::now();
-        steqr3(want_z, d, e, Z, rwork, work);
+        steqr3(compz, d, e, Z, work, rwork);
         auto end = std::chrono::high_resolution_clock::now();
         timings[i] = std::chrono::duration<float>(end - start).count();
         std::cout<<i << " " << timings[i] << '\r' << std::flush;
