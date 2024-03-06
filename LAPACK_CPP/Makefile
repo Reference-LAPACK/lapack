@@ -14,30 +14,27 @@ HEADERS = $(wildcard include/lapack_c/*.h) \
 		  $(wildcard include/lapack_cpp/*/*.hpp) \
 		  $(wildcard include/lapack_cpp/*/*/*.hpp)
 
-OBJFILES = src/lapack_cpp/rot.o \
-		   src/lapack_cpp/lartg.o \
-		   src/lapack_c/rot.o \
-		   src/lapack_c/lartg.o \
-		   src/lapack_c/lasr3.o \
-		   src/lapack_fortran/slasr3.o \
-		   src/lapack_fortran/dlasr3.o \
-		   src/lapack_fortran/clasr3.o \
-		   src/lapack_fortran/zlasr3.o \
+SRCFILES = $(wildcard src/lapack_c/*.cpp) \
+		   $(wildcard src/lapack_c/*.f90) \
+		   $(wildcard src/lapack_cpp/*.cpp) \
+		   $(wildcard src/lapack_fortran/*.f90)
+
+OBJFILES = $(patsubst %.f90, %_f90.o ,$(patsubst %.cpp,%_cpp.o,$(SRCFILES)))
 
 # Fortran files
-src/lapack_fortran/%.o: src/lapack_fortran/%.f90
+src/lapack_fortran/%_f90.o: src/lapack_fortran/%.f90
 	$(FC) $(FFLAGS) -cpp -c -o $@ $<
 
 # C files
 
-src/lapack_c/%.o: src/lapack_c/%.cpp $(HEADERS)
+src/lapack_c/%_cpp.o: src/lapack_c/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -I./include -c -o $@ $<
 
-src/lapack_c/%.o: src/lapack_c/%.f90
-	$(FC) $(FFLAGS) -c -o $@ $<
+src/lapack_c/%_f90.o: src/lapack_c/%.f90
+	$(FC) $(FFLAGS) -cpp -c -o $@ $<
 
 # C++ files
-src/lapack_cpp/%.o: src/lapack_cpp/%.cpp $(HEADERS)
+src/lapack_cpp/%_cpp.o: src/lapack_cpp/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -I./include -c -o $@ $<
 
 # Test files

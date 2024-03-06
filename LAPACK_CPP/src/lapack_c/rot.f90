@@ -1,3 +1,4 @@
+#ifdef USE_FORTRAN_BLAS
 subroutine lapack_c_drot(n, dx ,incx, dy, incy, c, s) bind(c, name='lapack_c_drot')
     use iso_c_binding
     implicit none
@@ -55,3 +56,4 @@ subroutine lapack_c_zrot(n, dx ,incx, dy, incy, c, s) bind(c, name='lapack_c_zro
     call zrot( n, dx ,incx, dy, incy, c, s )
 
 end subroutine lapack_c_zrot
+#endif
