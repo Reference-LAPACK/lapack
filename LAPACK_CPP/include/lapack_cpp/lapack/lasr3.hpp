@@ -51,7 +51,7 @@ void lasr3(Side side,
            ConstMatrix<real_t<T>, layout, idx_t> C,
            ConstMatrix<TS, layout, idx_t> S,
            Matrix<T, layout, idx_t> A,
-           MemoryBlock<T, idx_t, true> work);
+           MemoryBlock<T, idx_t, true>& work);
 
 /**
  * Workspace query for lasr3.
@@ -698,7 +698,7 @@ void lasr3(Side side,
            ConstMatrix<real_t<T>, layout, idx_t> C,
            ConstMatrix<TS, layout, idx_t> S,
            Matrix<T, layout, idx_t> A,
-           MemoryBlock<T, idx_t, true> work)
+           MemoryBlock<T, idx_t, true>& work)
 {
     const idx_t m = A.num_rows();
     const idx_t n = A.num_columns();

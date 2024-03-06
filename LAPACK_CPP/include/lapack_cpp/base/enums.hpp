@@ -84,6 +84,21 @@ inline constexpr Direction char2direct(char t)
     }
 }
 
+enum class IncDec : char { Increasing = 'I', Decreasing = 'D' };
+
+inline constexpr IncDec char2incdec(char t)
+{
+    switch (t) {
+        case 'I':
+            return IncDec::Increasing;
+        case 'D':
+            return IncDec::Decreasing;
+        default:
+            assert(false);
+            return IncDec::Increasing;
+    }
+}
+
 }  // namespace lapack_cpp
 
 #endif  // LAPACK_CPP_ENUMP_HPP

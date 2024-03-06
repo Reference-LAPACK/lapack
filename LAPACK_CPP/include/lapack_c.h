@@ -8,6 +8,8 @@
 
 // LAPACK
 #include "lapack_c/lartg.h"
-
+#include "lapack_c/lasrt.h"
+#include "lapack_c/laev2.h"
+#include "lapack_c/lasrt.h"
 
 #endif
