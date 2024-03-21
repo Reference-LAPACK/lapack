@@ -39,9 +39,16 @@
 *> \verbatim
 *>
 *> SSYEVR computes selected eigenvalues and, optionally, eigenvectors
-*> of a real symmetric matrix A.  Eigenvalues and eigenvectors can be
-*> selected by specifying either a range of values or a range of
-*> indices for the desired eigenvalues.
+*> of a real symmetric matrix A. Eigenvalues and eigenvectors can be
+*> selected by specifying either a range of values or a range of indices
+*> for the desired eigenvalues. Invocations with different choices for
+*> these parameters may result in the computation of slightly different
+*> eigenvalues and/or eigenvectors for the same matrix. The reason for
+*> this behavior is that there exists a variety of algorithms (each
+*> performing best for a particular set of options) with SSYEVR
+*> attempting to select the best based on the various parameters. In all
+*> cases, the computed values are accurate within the limits of finite
+*> precision arithmetic.
 *>
 *> SSYEVR first reduces the matrix A to tridiagonal form T with a call
 *> to SSYTRD.  Then, whenever possible, SSYEVR calls SSTEMR to compute
@@ -105,6 +112,9 @@
 *>          JOBZ is CHARACTER*1
 *>          = 'N':  Compute eigenvalues only;
 *>          = 'V':  Compute eigenvalues and eigenvectors.
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] RANGE
@@ -116,6 +126,9 @@
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
 *>          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
 *>          SSTEIN are called
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] UPLO
