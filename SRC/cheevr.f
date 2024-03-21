@@ -242,6 +242,7 @@
 *>          Note: the user must ensure that at least max(1,M) columns are
 *>          supplied in the array Z; if RANGE = 'V', the exact value of M
 *>          is not known in advance and an upper bound must be used.
+*>          Supplying N columns is always safe.
 *> \endverbatim
 *>
 *> \param[in] LDZ
