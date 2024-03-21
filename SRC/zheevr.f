@@ -41,7 +41,7 @@
 *> \verbatim
 *>
 *> ZHEEVR computes selected eigenvalues and, optionally, eigenvectors
-*> of a real symmetric matrix A. Eigenvalues and eigenvectors can be
+*> of a complex Hermitian matrix A. Eigenvalues and eigenvectors can be
 *> selected by specifying either a range of values or a range of indices
 *> for the desired eigenvalues. Invocations with different choices for
 *> these parameters may result in the computation of slightly different
