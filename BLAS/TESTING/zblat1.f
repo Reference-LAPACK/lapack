@@ -994,13 +994,17 @@
 *     .. Scalar Arguments ..
       DOUBLE PRECISION  XX
       INTEGER           K
+*     .. Parameters ..
+      DOUBLE PRECISION  ZERO
+      PARAMETER         (ZERO=0.0D+0)
 *     .. Local Scalars ..
-      DOUBLE PRECISION  X, Y, YY, Z
+      DOUBLE PRECISION  X, Y, Z
 *     .. Intrinsic Functions ..
       INTRINSIC         HUGE
 *     .. Executable Statements ..
+      X = ZERO
       Y = HUGE(XX)
-      Z = YY
+      Z = Y*Y
       IF (K.EQ.1) THEN
          X = -Z
       ELSE IF (K.EQ.2) THEN

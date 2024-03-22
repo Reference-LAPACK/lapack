@@ -994,13 +994,17 @@
 *     .. Scalar Arguments ..
       REAL              XX
       INTEGER           K
+*     .. Parameters ..
+      REAL              ZERO
+      PARAMETER         (ZERO=0.0E+0)
 *     .. Local Scalars ..
-      REAL              X, Y, YY, Z
+      REAL              X, Y, Z
 *     .. Intrinsic Functions ..
       INTRINSIC         HUGE
 *     .. Executable Statements ..
+      X = ZERO
       Y = HUGE(XX)
-      Z = YY
+      Z = Y*Y
       IF (K.EQ.1) THEN
          X = -Z
       ELSE IF (K.EQ.2) THEN
