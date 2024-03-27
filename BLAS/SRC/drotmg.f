@@ -201,12 +201,12 @@
                   DFLAG = -ONE
                END IF
                IF (DD1.LE.RGAMSQ) THEN
-                  DD1 = DD1*GAM**2
+                  DD1 = DD1*GAMSQ
                   DX1 = DX1/GAM
                   DH11 = DH11/GAM
                   DH12 = DH12/GAM
                ELSE
-                  DD1 = DD1/GAM**2
+                  DD1 = DD1/GAMSQ
                   DX1 = DX1*GAM
                   DH11 = DH11*GAM
                   DH12 = DH12*GAM
@@ -226,11 +226,11 @@
                   DFLAG = -ONE
                END IF
                IF (DABS(DD2).LE.RGAMSQ) THEN
-                  DD2 = DD2*GAM**2
+                  DD2 = DD2*GAMSQ
                   DH21 = DH21/GAM
                   DH22 = DH22/GAM
                ELSE
-                  DD2 = DD2/GAM**2
+                  DD2 = DD2/GAMSQ
                   DH21 = DH21*GAM
                   DH22 = DH22*GAM
                END IF
