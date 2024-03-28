@@ -119,13 +119,20 @@ include(GNUInstallDirs)
 # the OSX RPATH settings have been updated per recommendations found
 # in the CMake Wiki:
 #  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-set(CMAKE_MACOSX_RPATH ON)
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+option(CMAKE_MACOSX_RPATH "Enable macOS RPATH" ON)
+message(STATUS "Enable macOS RPATH: ${CMAKE_MACOSX_RPATH}")
+option(CMAKE_SKIP_BUILD_RPATH "Skip build-time RPATH" OFF)
+message(STATUS "Skip build-time RPATH: ${CMAKE_SKIP_BUILD_RPATH}")
+option(CMAKE_BUILD_WITH_INSTALL_RPATH "Build with install RPATH" OFF)
+message(STATUS "Build with install RPATH: ${CMAKE_BUILD_WITH_INSTALL_RPATH}")
+
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES ${CMAKE_INSTALL_FULL_LIBDIR} isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+if ("${isSystemDir}" STREQUAL "-1")
+  option(CMAKE_INSTALL_RPATH "Install RPATH" ${CMAKE_INSTALL_FULL_LIBDIR})
+  message(STATUS "Install RPATH: ${CMAKE_INSTALL_RPATH}")
+  option(CMAKE_INSTALL_RPATH_USE_LINK_PATH "Use link path for RPATH" ON)
+  message(STATUS "Install RPATH use link path: ${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
 endif()
 
 
