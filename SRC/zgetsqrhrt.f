@@ -130,6 +130,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
+*>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          If MIN(M,N) = 0, LWORK >= 1, else
 *>          LWORK >= MAX( 1, LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
