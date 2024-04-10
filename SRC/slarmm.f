@@ -1,7 +1,7 @@
 *> \brief \b SLARMM
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
 *
 *      REAL FUNCTION SLARMM( ANORM, BNORM, CNORM )
 *

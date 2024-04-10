@@ -1,10 +1,26 @@
 *> \brief \b STRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C, LDC, SCALE, IWORK, LIWORK, SWORK,
+*                           LDSWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, M, N,
+*                          LIWORK, LDSWORK
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
+*                          SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -27,8 +43,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -176,9 +192,8 @@
 *
 *  =====================================================================
       SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
-     $                    C,
-     $                    LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
-     $                    INFO )
+     $                    C, LDC, SCALE, IWORK, LIWORK, SWORK,
+     $                    LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
