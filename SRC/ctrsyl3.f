@@ -1,10 +1,23 @@
 *> \brief \b CTRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE CTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C, LDC, SCALE, SWORK, LDSWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, LDSWORK, M, N
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * )
+*       REAL               SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -22,8 +35,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -152,8 +165,7 @@
 *
 *  =====================================================================
       SUBROUTINE CTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
-     $                    C,
-     $                    LDC, SCALE, SWORK, LDSWORK, INFO )
+     $                    C, LDC, SCALE, SWORK, LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..

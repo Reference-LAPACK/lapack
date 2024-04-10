@@ -1,10 +1,23 @@
 *> \brief \b ZTRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE ZTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C, LDC, SCALE, SWORK, LDSWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, LDSWORK, M, N
+*       DOUBLE PRECISION   SCALE
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), C( LDC, * )
+*       DOUBLE PRECISION   SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -22,8 +35,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -153,8 +166,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
-     $                    C,
-     $                    LDC, SCALE, SWORK, LDSWORK, INFO )
+     $                    C, LDC, SCALE, SWORK, LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
