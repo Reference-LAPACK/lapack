@@ -79,7 +79,7 @@ CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
    ```sh
    mkdir build
    cd build
-   cmake -DCMAKE_INSTALL_LIBDIR=$HOME/.local/lapack ..
+   cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local/lapack ..
    cmake --build . -j --target install
    ```
  - LAPACK can be built and installed using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
