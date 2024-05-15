@@ -1,0 +1,368 @@
+make -C INSTALL run
+make -C SRC
+make -C TESTING/MATGEN
+make -C BLAS
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/INSTALL'
+gfortran -O2 -frecursive  -o testlsame lsame.o lsametst.o
+gfortran -O2 -frecursive  -o testslamch slamch.o lsame.o slamchtst.o
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS'
+make -C SRC
+gfortran -O2 -frecursive  -o testdlamch dlamch.o lsame.o dlamchtst.o
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/MATGEN'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/MATGEN'
+[INFO] : TIMER value: INT_ETIME (given by make.inc)
+[INFO] : TIMER value: INT_ETIME (given by make.inc)
+gfortran -O2 -frecursive  -o testsecond second_INT_ETIME.o secondtst.o
+gfortran -O2 -frecursive  -o testdsecnd dsecnd_INT_ETIME.o dsecndtst.o
+gfortran -O2 -frecursive  -o testieee tstiee.o ../SRC/ieeeck.o ../SRC/ilaenv.o ../SRC/iparmq.o
+gfortran -O2 -frecursive  -o testversion ilaver.o LAPACK_version.o
+gfortran -O2 -frecursive  -o test_zcomplexabs test_zcomplexabs.o
+gfortran -O2 -frecursive  -o test_zcomplexdiv test_zcomplexdiv.o
+gfortran -O2 -frecursive  -o test_zcomplexmult test_zcomplexmult.o
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/SRC'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/SRC'
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS'
+make -C BLAS blas_testing
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS'
+make -C SRC
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/SRC'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/SRC'
+make -C TESTING run
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/SRC'
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/TESTING'
+./xblat1s > sblat1.out
+./xblat1d > dblat1.out
+./xblat1c > cblat1.out
+./xblat1z > zblat1.out
+./xblat2s < sblat2.in
+./xblat2d < dblat2.in
+gfortran -O2 -frecursive  -o test_zminMax test_zminMax.o
+./xblat2c < cblat2.in
+./xblat2z < zblat2.in
+./xblat3s < sblat3.in
+./testlsame
+  ASCII character set
+  Tests completed
+./testslamch
+  Epsilon                      =    5.96046448E-08
+  Safe minimum                 =    1.17549435E-38
+  Base                         =    2.00000000    
+  Precision                    =    1.19209290E-07
+  Number of digits in mantissa =    24.0000000    
+  Rounding mode                =    1.00000000    
+  Minimum exponent             =   -125.000000    
+  Underflow threshold          =    1.17549435E-38
+  Largest exponent             =    128.000000    
+  Overflow threshold           =    3.40282347E+38
+  Reciprocal of safe minimum   =    8.50705917E+37
+./testdlamch
+./xblat3d < dblat3.in
+  Epsilon                      =    1.1102230246251565E-016
+  Safe minimum                 =    2.2250738585072014E-308
+  Base                         =    2.0000000000000000     
+  Precision                    =    2.2204460492503131E-016
+  Number of digits in mantissa =    53.000000000000000     
+  Rounding mode                =    1.0000000000000000     
+  Minimum exponent             =   -1021.0000000000000     
+  Underflow threshold          =    2.2250738585072014E-308
+  Largest exponent             =    1024.0000000000000     
+  Overflow threshold           =    1.7976931348623157E+308
+  Reciprocal of safe minimum   =    4.4942328371557898E+307
+./testsecond
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/SRC'
+make -C TESTING/LIN cleanexe
+./xblat3c < cblat3.in
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+rm -f xlintst*
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+make -C TESTING
+make[1]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING'
+make -C LIN xlintsts
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintsts aladhd.o alaerh.o alaesm.o alahd.o alareq.o alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o schkaa.o schkeq.o schkgb.o schkge.o schkgt.o schklq.o schkpb.o schkpo.o schkps.o schkpp.o schkpt.o schkq3.o schkqp3rk.o schkql.o schkqr.o schkrq.o schksp.o schksy.o schksy_rook.o schksy_rk.o schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o schktz.o sdrvgt.o sdrvls.o sdrvpb.o sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o sdrvsy_aa.o sdrvsy_aa_2stage.o serrgt.o serrlq.o serrls.o serrps.o serrql.o serrqp.o serrqr.o serrrq.o serrtr.o serrtz.o sgbt01.o sgbt02.o sgbt05.o sgeqls.o sgerqs.o sget01.o sget02.o sget03.o sget04.o sget06.o sget07.o sgtt01.o sgtt02.o sgtt05.o slaptm.o slarhs.o slatb4.o slatb5.o slattb.o slattp.o slattr.o slavsp.o slavsy.o slavsy_rook.o slqt01.o slqt02.o slqt03.o spbt01.o spbt02.o spbt05.o spot01.o spot02.o spot03.o spot05.o spst01.o sppt01.o sppt02.o sppt03.o sppt05.o sptt01.o sptt02.o sptt05.o sqlt01.o sqlt02.o sqlt03.o sqpt01.o sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o sqrt13.o sqrt14.o sqrt15.o sqrt16.o sqrt17.o srqt01.o srqt02.o srqt03.o srzt01.o srzt02.o sspt01.o ssyt01.o ssyt01_rook.o ssyt01_3.o ssyt01_aa.o stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o stpt02.o stpt03.o stpt05.o stpt06.o strt01.o strt02.o strt03.o strt05.o strt06.o sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o schklqt.o schklqtp.o schktsqr.o serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o sdrvgb.o sdrvge.o sdrvsy.o sdrvpo.o serrvx.o serrge.o serrsy.o serrpo.o slaord.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+ Time for  0.100E+09 SAXPY ops =   0.00     seconds
+ *** Warning:  Time for operations was less or equal than zero => timing in TESTING might be dubious
+ Including SECOND, time        =  0.333E-02 seconds
+ Average time for SECOND       =  0.665E-04 milliseconds
+./testdsecnd
+./xblat3z < zblat3.in
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS/TESTING'
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/BLAS'
+ Time for  0.100E+09 DAXPY ops =  0.100E-05 seconds
+ DAXPY performance rate        =  0.100E+09 mflops 
+ Including DSECND, time        =  0.295E-02 seconds
+ Average time for DSECND       =  0.590E-04 milliseconds
+ Equivalent floating point ops =  0.590E+07 ops
+./testieee
+ We are about to check whether infinity arithmetic
+ can be trusted.  If this test hangs, set
+ ILAENV = 0 for ISPEC = 11 in LAPACK/SRC/ilaenv.f
+
+ Infinity arithmetic performed as per the ieee spec.
+ However, this is not an exhaustive test and does not
+ guarantee that infinity arithmetic meets the ieee spec.
+
+ We are about to check whether NaN arithmetic
+ can be trusted.  If this test hangs, set
+ ILAENV = 0 for ISPEC = 10 in LAPACK/SRC/ilaenv.f
+
+ NaN arithmetic performed as per the ieee spec.
+ However, this is not an exhaustive test and does not
+ guarantee that NaN arithmetic meets the ieee spec.
+
+./testversion
+ LAPACK            3 .          12 .           0
+./test_zcomplexabs 2> test_zcomplexabs.err
+ # All tests pass for ABS(a+b*I)
+./test_zcomplexdiv 2> test_zcomplexdiv.err
+ !! Some (x+x*I)/(x+x*I) differ from 1
+ !! Some (x+x*I)/(x-x*I) differ from I
+ #        12602  tests out of        12606  pass for complex division,           4  fail.
+ # Please check the failed divisions in [stderr]
+./test_zcomplexmult 2> test_zcomplexmult.err
+ # All tests pass for complex multiplication.
+./test_zminMax 2> test_zminMax.err
+[i8] MIN(  NaN,   0.) =    0.
+[i8] MAX(  NaN,   0.) =    0.
+ #           14  tests out of           16  pass for intrinsic MIN and MAX,           2  fail.
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/INSTALL'
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing REAL LAPACK linear equation routines
+./LIN/xlintsts < stest.in > stest.out 2>&1
+make -C LIN xlintstc
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstc aladhd.o alaerh.o alaesm.o alahd.o alareq.o alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o cchkaa.o cchkeq.o cchkgb.o cchkge.o cchkgt.o cchkhe.o cchkhe_rook.o cchkhe_rk.o cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkqp3rk.o cchkql.o cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o cchksy_aa.o cchksy_aa_2stage.o cchktb.o cchktp.o cchktr.o cchktz.o cdrvgt.o cdrvhe_rook.o cdrvhe_rk.o cdrvhe_aa.o cdrvhp.o cdrvhe_aa_2stage.o cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o cdrvsp.o cdrvsy_rook.o cdrvsy_rk.o cdrvsy_aa.o cdrvsy_aa_2stage.o cerrgt.o cerrlq.o cerrls.o cerrps.o cerrql.o cerrqp.o cerrqr.o cerrrq.o cerrtr.o cerrtz.o cgbt01.o cgbt02.o cgbt05.o cgeqls.o cgerqs.o cget01.o cget02.o cget03.o cget04.o cget07.o cgtt01.o cgtt02.o cgtt05.o chet01.o chet01_rook.o chet01_3.o chet01_aa.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o clatsp.o clatsy.o clattb.o clattp.o clattr.o clavhe.o clavhe_rook.o clavhp.o clavsp.o clavsy.o clavsy_rook.o clqt01.o clqt02.o clqt03.o cpbt01.o cpbt02.o cpbt05.o cpot01.o cpot02.o cpot03.o cpot05.o cpst01.o cppt01.o cppt02.o cppt03.o cppt05.o cptt01.o cptt02.o cptt05.o cqlt01.o cqlt02.o cqlt03.o cqpt01.o cqrt01.o cqrt01p.o cqrt02.o cqrt03.o cqrt11.o cqrt12.o cqrt13.o cqrt14.o cqrt15.o cqrt16.o cqrt17.o crqt01.o crqt02.o crqt03.o crzt01.o crzt02.o csbmv.o cspt01.o cspt02.o cspt03.o csyt01.o csyt01_rook.o csyt01_3.o csyt01_aa.o csyt02.o csyt03.o ctbt02.o ctbt03.o ctbt05.o ctbt06.o ctpt01.o ctpt02.o ctpt03.o ctpt05.o ctpt06.o ctrt01.o ctrt02.o ctrt03.o ctrt05.o ctrt06.o sget06.o cgennd.o cqrt04.o cqrt05.o cchkqrt.o cerrqrt.o cchkqrtp.o cerrqrtp.o cchklqt.o cchklqtp.o cchktsqr.o cerrlqt.o cerrlqtp.o cerrtsqr.o ctsqr01.o clqt04.o clqt05.o cchkunhr_col.o cerrunhr_col.o cunhr_col01.o cunhr_col02.o cdrvgb.o cdrvge.o cdrvhe.o cdrvsy.o cdrvpo.o cerrvx.o cerrge.o cerrhe.o cerrsy.o cerrpo.o slaord.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing COMPLEX LAPACK linear equation routines
+./LIN/xlintstc < ctest.in > ctest.out 2>&1
+make -C LIN xlintstd
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstd aladhd.o alaerh.o alaesm.o alahd.o alareq.o alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o dchkaa.o dchkeq.o dchkgb.o dchkge.o dchkgt.o dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o dchkpt.o dchkq3.o dchkqp3rk.o dchkql.o dchkqr.o dchkrq.o dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o dchktz.o ddrvgt.o ddrvls.o ddrvpb.o ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_rk.o ddrvsy_aa.o ddrvsy_aa_2stage.o derrgt.o derrlq.o derrls.o derrps.o derrql.o derrqp.o derrqr.o derrrq.o derrtr.o derrtz.o dgbt01.o dgbt02.o dgbt05.o dgeqls.o dgerqs.o dget01.o dget02.o dget03.o dget04.o dget06.o dget07.o dgtt01.o dgtt02.o dgtt05.o dlaptm.o dlarhs.o dlatb4.o dlatb5.o dlattb.o dlattp.o dlattr.o dlavsp.o dlavsy.o dlavsy_rook.o dlqt01.o dlqt02.o dlqt03.o dpbt01.o dpbt02.o dpbt05.o dpot01.o dpot02.o dpot03.o dpot05.o dpst01.o dppt01.o dppt02.o dppt03.o dppt05.o dptt01.o dptt02.o dptt05.o dqlt01.o dqlt02.o dqlt03.o dqpt01.o dqrt01.o dqrt01p.o dqrt02.o dqrt03.o dqrt11.o dqrt12.o dqrt13.o dqrt14.o dqrt15.o dqrt16.o dqrt17.o drqt01.o drqt02.o drqt03.o drzt01.o drzt02.o dspt01.o dsyt01.o dsyt01_rook.o dsyt01_3.o dsyt01_aa.o dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o dtrt02.o dtrt03.o dtrt05.o dtrt06.o dgennd.o dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o dchklqt.o dchklqtp.o dchktsqr.o derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o ddrvgb.o ddrvge.o ddrvsy.o ddrvpo.o derrvx.o derrge.o derrsy.o derrpo.o dlaord.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing DOUBLE PRECISION LAPACK linear equation routines
+./LIN/xlintstd < dtest.in > dtest.out 2>&1
+make -C LIN xlintstz
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstz aladhd.o alaerh.o alaesm.o alahd.o alareq.o alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o zchkaa.o zchkeq.o zchkgb.o zchkge.o zchkgt.o zchkhe.o zchkhe_rook.o zchkhe_rk.o zchkhe_aa.o zchkhe_aa_2stage.o zchkhp.o zchklq.o zchkpb.o zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkqp3rk.o zchkql.o zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchksy_rk.o zchksy_aa.o zchksy_aa_2stage.o zchktb.o zchktp.o zchktr.o zchktz.o zdrvgt.o zdrvhe_rook.o zdrvhe_rk.o zdrvhe_aa.o zdrvhe_aa_2stage.o zdrvhp.o zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o zdrvsp.o zdrvsy_rook.o zdrvsy_rk.o zdrvsy_aa.o zdrvsy_aa_2stage.o zerrgt.o zerrlq.o zerrls.o zerrps.o zerrql.o zerrqp.o zerrqr.o zerrrq.o zerrtr.o zerrtz.o zgbt01.o zgbt02.o zgbt05.o zgeqls.o zgerqs.o zget01.o zget02.o zget03.o zget04.o zget07.o zgtt01.o zgtt02.o zgtt05.o zhet01.o zhet01_rook.o zhet01_3.o zhet01_aa.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o zlatsp.o zlatsy.o zlattb.o zlattp.o zlattr.o zlavhe.o zlavhe_rook.o zlavhp.o zlavsp.o zlavsy.o zlavsy_rook.o zlqt01.o zlqt02.o zlqt03.o zpbt01.o zpbt02.o zpbt05.o zpot01.o zpot02.o zpot03.o zpot05.o zpst01.o zppt01.o zppt02.o zppt03.o zppt05.o zptt01.o zptt02.o zptt05.o zqlt01.o zqlt02.o zqlt03.o zqpt01.o zqrt01.o zqrt01p.o zqrt02.o zqrt03.o zqrt11.o zqrt12.o zqrt13.o zqrt14.o zqrt15.o zqrt16.o zqrt17.o zrqt01.o zrqt02.o zrqt03.o zrzt01.o zrzt02.o zsbmv.o zspt01.o zspt02.o zspt03.o zsyt01.o zsyt01_rook.o zsyt01_3.o zsyt01_aa.o zsyt02.o zsyt03.o ztbt02.o ztbt03.o ztbt05.o ztbt06.o ztpt01.o ztpt02.o ztpt03.o ztpt05.o ztpt06.o ztrt01.o ztrt02.o ztrt03.o ztrt05.o ztrt06.o dget06.o zgennd.o zqrt04.o zqrt05.o zchkqrt.o zerrqrt.o zchkqrtp.o zerrqrtp.o zchklqt.o zchklqtp.o zchktsqr.o zerrlqt.o zerrlqtp.o zerrtsqr.o ztsqr01.o zlqt04.o zlqt05.o zchkunhr_col.o zerrunhr_col.o zunhr_col01.o zunhr_col02.o zdrvgb.o zdrvge.o zdrvhe.o zdrvsy.o zdrvpo.o zerrvx.o zerrge.o zerrhe.o zerrsy.o zerrpo.o dlaord.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing COMPLEX16 LAPACK linear equation routines
+./LIN/xlintstz < ztest.in > ztest.out 2>&1
+make -C LIN xlintstrfs
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstrfs schkrfp.o sdrvrfp.o sdrvrf1.o sdrvrf2.o sdrvrf3.o sdrvrf4.o serrrfp.o slatb4.o slarhs.o sget04.o spot01.o spot03.o spot02.o chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing REAL LAPACK RFP prototype linear equation routines
+./LIN/xlintstrfs < stest_rfp.in > stest_rfp.out 2>&1
+make -C LIN xlintstds
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstds dchkab.o ddrvab.o ddrvac.o derrab.o derrac.o dget08.o alaerh.o alahd.o aladhd.o alareq.o chkxer.o dlarhs.o dlatb4.o xerbla.o dget02.o dpot06.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing SINGLE-DOUBLE PRECISION LAPACK prototype linear equation routines
+./LIN/xlintstds < dstest.in > dstest.out 2>&1
+make -C LIN xlintstrfd
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstrfd dchkrfp.o ddrvrfp.o ddrvrf1.o ddrvrf2.o ddrvrf3.o ddrvrf4.o derrrfp.o dlatb4.o dlarhs.o dget04.o dpot01.o dpot03.o dpot02.o chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing DOUBLE PRECISION LAPACK RFP prototype linear equation routines
+./LIN/xlintstrfd < dtest_rfp.in > dtest_rfp.out 2>&1
+make -C LIN xlintstrfc
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstrfc cchkrfp.o cdrvrfp.o cdrvrf1.o cdrvrf2.o cdrvrf3.o cdrvrf4.o cerrrfp.o claipd.o clatb4.o clarhs.o csbmv.o cget04.o cpot01.o cpot03.o cpot02.o chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing COMPLEX LAPACK RFP prototype linear equation routines
+./LIN/xlintstrfc < ctest_rfp.in > ctest_rfp.out 2>&1
+make -C LIN xlintstzc
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstzc zchkab.o zdrvab.o zdrvac.o zerrab.o zerrac.o zget08.o alaerh.o alahd.o aladhd.o alareq.o chkxer.o zget02.o zlarhs.o zlatb4.o zsbmv.o xerbla.o zpot06.o zlaipd.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing COMPLEX-COMPLEX16 LAPACK prototype linear equation routines
+./LIN/xlintstzc < zctest.in > zctest.out 2>&1
+make -C LIN xlintstrfz
+make[2]: Entering directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+gfortran -O2 -frecursive  -o xlintstrfz zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp.o zlatb4.o zlaipd.o zlarhs.o zsbmv.o zget04.o zpot01.o zpot03.o zpot02.o chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o ../../libtmglib.a ../../liblapack.a ../../librefblas.a
+make[2]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING/LIN'
+Testing COMPLEX16 LAPACK RFP prototype linear equation routines
+./LIN/xlintstrfz < ztest_rfp.in > ztest_rfp.out 2>&1
+make[1]: Leaving directory '/home/lidesia/Documents/CUDenver/RAShip/gitRepos/lapack/TESTING'
+./lapack_testing.py
+ 
+---------------- Testing LAPACK Routines ----------------
+ 
+-- Detailed results are stored in testing_results.txt
+ 
+------------------------- REAL              ------------------------
+ 
+Testing REAL              Nonsymmetric-Eigenvalue-Problem-snep.out passed: 10080
+
+Testing REAL              Symmetric-Eigenvalue-Problem-ssep.out passed: 89520
+
+Testing REAL              Symmetric-Eigenvalue-Problem-2-stage-sse2.out passed: 89520
+
+Testing REAL              Singular-Value-Decomposition-ssvd.out passed: 125400
+
+Testing REAL              Eigen-Condition-sec.out passed: 501251
+
+Testing REAL              Nonsymmetric-Eigenvalue-sed.out passed: 14704
+
+Testing REAL              Nonsymmetric-Generalized-Eigenvalue-Problem-sgg.out passed: 8736
+
+Testing REAL              Nonsymmetric-Generalized-Eigenvalue-Problem-driver-sgd.out passed: 10482
+
+Testing REAL              Symmetric-Eigenvalue-Problem-ssb.out passed: 810
+
+Testing REAL              Symmetric-Eigenvalue-Generalized-Problem-ssg.out passed: 33516
+
+Testing REAL              Banded-Singular-Value-Decomposition-routines-sbb.out passed: 6000
+
+Testing REAL              Generalized-Linear-Regression-Model-routines-sglm.out passed: 48
+
+Testing REAL              Generalized-QR-and-RQ-factorization-routines-sgqr.out passed: 1728
+
+Testing REAL              Generalized-Singular-Value-Decomposition-routines-sgsv.out passed: 384
+
+Testing REAL              CS-Decomposition-routines-scsd.out passed: 600
+
+Testing REAL              Constrained-Linear-Least-Squares-routines-slse.out passed: 96
+
+Testing REAL              Linear-Equation-routines-stest.out passed: 663645
+
+Testing REAL              RFP-linear-equation-routines-stest_rfp.out passed: 13128
+
+ 
+------------------------- DOUBLE PRECISION ------------------------
+ 
+Testing DOUBLE PRECISION Nonsymmetric-Eigenvalue-Problem-dnep.out passed: 10080
+
+Testing DOUBLE PRECISION Symmetric-Eigenvalue-Problem-dsep.out passed: 89520
+
+Testing DOUBLE PRECISION Symmetric-Eigenvalue-Problem-2-stage-dse2.out passed: 89520
+
+Testing DOUBLE PRECISION Singular-Value-Decomposition-dsvd.out passed: 125400
+
+Testing DOUBLE PRECISION Eigen-Condition-dec.out passed: 501261
+
+Testing DOUBLE PRECISION Nonsymmetric-Eigenvalue-ded.out passed: 14704
+
+Testing DOUBLE PRECISION Nonsymmetric-Generalized-Eigenvalue-Problem-dgg.out passed: 8736
+
+Testing DOUBLE PRECISION Nonsymmetric-Generalized-Eigenvalue-Problem-driver-dgd.out passed: 10482
+
+Testing DOUBLE PRECISION Symmetric-Eigenvalue-Problem-dsb.out passed: 810
+
+Testing DOUBLE PRECISION Symmetric-Eigenvalue-Generalized-Problem-dsg.out passed: 33516
+
+Testing DOUBLE PRECISION Banded-Singular-Value-Decomposition-routines-dbb.out passed: 6000
+
+Testing DOUBLE PRECISION Generalized-Linear-Regression-Model-routines-dglm.out passed: 48
+
+Testing DOUBLE PRECISION Generalized-QR-and-RQ-factorization-routines-dgqr.out passed: 1728
+
+Testing DOUBLE PRECISION Generalized-Singular-Value-Decomposition-routines-dgsv.out passed: 384
+
+Testing DOUBLE PRECISION CS-Decomposition-routines-dcsd.out passed: 600
+
+Testing DOUBLE PRECISION Constrained-Linear-Least-Squares-routines-dlse.out passed: 96
+
+Testing DOUBLE PRECISION Linear-Equation-routines-dtest.out  DQK:  36885 out of 241365 tests failed to pass the threshold
+ passed: 422280
+failing to pass the threshold: 36885
+
+Testing DOUBLE PRECISION Mixed-Precision-linear-equation-routines-dstest.out passed: 812
+
+Testing DOUBLE PRECISION RFP-linear-equation-routines-dtest_rfp.out passed: 13128
+
+ 
+------------------------- COMPLEX           ------------------------
+ 
+Testing COMPLEX           Nonsymmetric-Eigenvalue-Problem-cnep.out passed: 10080
+
+Testing COMPLEX           Symmetric-Eigenvalue-Problem-csep.out passed: 77280
+
+Testing COMPLEX           Symmetric-Eigenvalue-Problem-2-stage-cse2.out passed: 77280
+
+Testing COMPLEX           Singular-Value-Decomposition-csvd.out passed: 92125
+
+Testing COMPLEX           Eigen-Condition-cec.out passed: 5966
+
+Testing COMPLEX           Nonsymmetric-Eigenvalue-ced.out passed: 14080
+
+Testing COMPLEX           Nonsymmetric-Generalized-Eigenvalue-Problem-cgg.out passed: 8736
+
+Testing COMPLEX           Nonsymmetric-Generalized-Eigenvalue-Problem-driver-cgd.out passed: 10482
+
+Testing COMPLEX           Symmetric-Eigenvalue-Problem-csb.out passed: 810
+
+Testing COMPLEX           Symmetric-Eigenvalue-Generalized-Problem-csg.out passed: 33516
+
+Testing COMPLEX           Banded-Singular-Value-Decomposition-routines-cbb.out passed: 6000
+
+Testing COMPLEX           Generalized-Linear-Regression-Model-routines-cglm.out passed: 48
+
+Testing COMPLEX           Generalized-QR-and-RQ-factorization-routines-cgqr.out passed: 1728
+
+Testing COMPLEX           Generalized-Singular-Value-Decomposition-routines-cgsv.out passed: 385
+
+Testing COMPLEX           CS-Decomposition-routines-ccsd.out passed: 600
+
+Testing COMPLEX           Constrained-Linear-Least-Squares-routines-clse.out passed: 96
+
+Testing COMPLEX           Linear-Equation-routines-ctest.out passed: 677390
+
+Testing COMPLEX           RFP-linear-equation-routines-ctest_rfp.out passed: 13128
+
+ 
+------------------------- COMPLEX16          ------------------------
+ 
+Testing COMPLEX16          Nonsymmetric-Eigenvalue-Problem-znep.out passed: 10080
+
+Testing COMPLEX16          Symmetric-Eigenvalue-Problem-zsep.out passed: 77280
+
+Testing COMPLEX16          Symmetric-Eigenvalue-Problem-2-stage-zse2.out passed: 77280
+
+Testing COMPLEX16          Singular-Value-Decomposition-zsvd.out passed: 92125
+
+Testing COMPLEX16          Eigen-Condition-zec.out passed: 6222
+
+Testing COMPLEX16          Nonsymmetric-Eigenvalue-zed.out passed: 14080
+
+Testing COMPLEX16          Nonsymmetric-Generalized-Eigenvalue-Problem-zgg.out passed: 8736
+
+Testing COMPLEX16          Nonsymmetric-Generalized-Eigenvalue-Problem-driver-zgd.out passed: 10482
+
+Testing COMPLEX16          Symmetric-Eigenvalue-Problem-zsb.out passed: 810
+
+Testing COMPLEX16          Symmetric-Eigenvalue-Generalized-Problem-zsg.out passed: 33516
+
+Testing COMPLEX16          Banded-Singular-Value-Decomposition-routines-zbb.out passed: 6000
+
+Testing COMPLEX16          Generalized-Linear-Regression-Model-routines-zglm.out passed: 48
+
+Testing COMPLEX16          Generalized-QR-and-RQ-factorization-routines-zgqr.out passed: 1728
+
+Testing COMPLEX16          Generalized-Singular-Value-Decomposition-routines-zgsv.out passed: 384
+
+Testing COMPLEX16          CS-Decomposition-routines-zcsd.out passed: 600
+
+Testing COMPLEX16          Constrained-Linear-Least-Squares-routines-zlse.out passed: 96
+
+Testing COMPLEX16          Linear-Equation-routines-ztest.out passed: 677390
+
+Testing COMPLEX16          Mixed-Precision-linear-equation-routines-zctest.out passed: 812
+
+Testing COMPLEX16          RFP-linear-equation-routines-ztest_rfp.out passed: 13128
+
+
+			-->   LAPACK TESTING SUMMARY  <--
+		Processing LAPACK Testing output found in the TESTING directory
+SUMMARY             	nb test run 	numerical error   	other error  
+================   	===========	=================	================  
+REAL             	1569648		0	(0.000%)	0	(0.000%)	
+DOUBLE PRECISION	1329105		36885	(2.775%)	0	(0.000%)	
+COMPLEX          	1029730		0	(0.000%)	0	(0.000%)	
+COMPLEX16         	1030797		0	(0.000%)	0	(0.000%)	
+
+--> ALL PRECISIONS	4959280		36885	(0.744%)	0	(0.000%)	
+
