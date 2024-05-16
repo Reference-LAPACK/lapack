@@ -120,7 +120,7 @@
 *> \ingroup larf
 *
 *  =====================================================================
-      SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE DLARF1( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,7 +145,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
-      INTEGER            I, LASTV, LASTC
+      INTEGER            I, LASTV, LASTC, J
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DGER
@@ -192,16 +192,28 @@
 *
 *        Form  H * C
 *
-         IF( LASTV.GT.0 ) THEN
+         IF( LASTV.GT.0 .AND. LASTC.GT.0) THEN
 *
 *           w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
 *
-            CALL DGEMV( 'Transpose', LASTV, LASTC, ONE, C(2,1), LDC, 
-     $                  V(INCV), INCV, ZERO, WORK, 1 )
+!            CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(1+1,1), LDC, 
+!     $                  V(1+INCV), INCV, ZERO, WORK, 1 )
+!            DO I = 1, LASTC
+!               WORK(I) = ZERO
+!               DO J = 2, LASTV
+!                  WORK(I) = WORK(I) + V(1 + (J-1)*INCV) * C(J,I)
+!               END DO
+!            END DO
+            CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(2,1), LDC,
+     $                  v(1+INCV), INCV, ZERO, WORK, 1)
 *
 *           w(1:lastc,1) := w(1:lastc,1) + C(1,1:lastc)**T * v(1,1) 
 *                         = w(1:lastc,1) + C(1,1:lastc)**T
 *
+            ! Now, do w(1:lastc,1) += C(1,1:lastc)**T
+!            DO I = 1, LASTC
+!               WORK(I) = WORK(I) + C(1,I)
+!            END DO
             CALL DAXPY(LASTC, ONE, C, LDC, WORK, 1)
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T

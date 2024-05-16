@@ -185,7 +185,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, XERBLA
+      EXTERNAL           DLARF, XERBLA, DLARF1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -268,7 +268,7 @@
 *
          AII = A( I, I )
          A( I, I ) = ONE
-         CALL DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
+         CALL DLARF1( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
      $               JC ),
      $               LDC, WORK )
          A( I, I ) = AII
