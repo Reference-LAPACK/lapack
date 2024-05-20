@@ -170,9 +170,8 @@
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
 *>  the H(i) is best illustrated by the following example with n = 5 and
-*>  k = 3. The elements equal to 1 are not stored; the corresponding
-*>  array elements are modified but restored on exit. The rest of the
-*>  array is not used.
+*>  k = 3. The triangular part of V (including its diagonal) is not
+*>  referenced.
 *>
 *>  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
 *>
