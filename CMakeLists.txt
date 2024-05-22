@@ -133,7 +133,7 @@ if ("${isSystemDir}" STREQUAL "-1")
     set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
   endif()
   message(STATUS "Install RPATH: ${CMAKE_INSTALL_RPATH}")
-  option(CMAKE_INSTALL_RPATH_USE_LINK_PATH "Use link path for RPATH" ON)
+  option(CMAKE_INSTALL_RPATH_USE_LINK_PATH "Use link path for RPATH" TRUE)
   message(STATUS "Install RPATH use link path: ${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
 endif()
 
