@@ -1,4 +1,5 @@
-*> \brief \b DLARF applies an elementary reflector to a general rectangular matrix.
+*> \brief \b DLARF1F applies an elementary reflector to a general rectangular
+*              matrix assuming v(1) = 1.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -18,7 +19,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -120,7 +121,7 @@
 *> \ingroup larf
 *
 *  =====================================================================
-      SUBROUTINE DLARF1( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,48 +193,59 @@
 *
 *        Form  H * C
 *
-         IF( LASTV.GT.0 .AND. LASTC.GT.0) THEN
+         IF( LASTV.GT.0 ) THEN
+            ! Check if m = 1. This means v = 1, So we just need to compute
+            ! C := HC = (1-\tau)C.
+            IF( M.EQ.1 ) THEN
+               CALL DSCAL(LASTC, ONE - TAU, C, LDC)
+            ELSE
 *
-*           w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
+*              w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-!            CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(1+1,1), LDC, 
-!     $                  V(1+INCV), INCV, ZERO, WORK, 1 )
-!            DO I = 1, LASTC
-!               WORK(I) = ZERO
-!               DO J = 2, LASTV
-!                  WORK(I) = WORK(I) + V(1 + (J-1)*INCV) * C(J,I)
-!               END DO
-!            END DO
-            CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(2,1), LDC,
-     $                  v(1+INCV), INCV, ZERO, WORK, 1)
+               ! w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
+               CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(1+1,1),
+     $                     LDC, V(1+INCV), INCV, ZERO, WORK, 1)
+               ! w(1:lastc,1) += C(1,1:lastc)**T * v(1,1) = C(1,1:lastc)**T
+               CALL DAXPY(LASTC, ONE, C, LDC, WORK, 1)
 *
-*           w(1:lastc,1) := w(1:lastc,1) + C(1,1:lastc)**T * v(1,1) 
-*                         = w(1:lastc,1) + C(1,1:lastc)**T
+*           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**T
 *
-            ! Now, do w(1:lastc,1) += C(1,1:lastc)**T
-!            DO I = 1, LASTC
-!               WORK(I) = WORK(I) + C(1,I)
-!            END DO
-            CALL DAXPY(LASTC, ONE, C, LDC, WORK, 1)
-*
-*           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T
-*
-            CALL DGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
+            ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**T
+            !                  = C(...) - tau * w(1:lastc,1)**T
+               CALL DAXPY(LASTC, -TAU, WORK, 1, C, LDC)
+               ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
+               CALL DGER(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK, 1,
+     $                     C(1+1,1), LDC)
+            END IF
          END IF
       ELSE
 *
 *        Form  C * H
 *
          IF( LASTV.GT.0 ) THEN
+            ! Check if n = 1. This means v = 1, so we just need to compute
+            ! C := CH = C(1-\tau).
+            IF( N.EQ.1 ) THEN
+               CALL DSCAL(LASTC, ONE - TAU, C, 1)
+            ELSE
 *
-*           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
+*              w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-            CALL DGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
-     $           V, INCV, ZERO, WORK, 1 )
+               ! w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
+               CALL DGEMV( 'No transpose', LASTC, LASTV-1, ONE, 
+     $            C(1,1+1), LDC, V(1+INCV), INCV, ZERO, WORK, 1 )
+               ! w(1:lastc,1) += C(1:lastc,1) v(1,1) = C(1:lastc,1)
+               CALL DAXPY(LASTC, ONE, C, 1, WORK, 1)
 *
-*           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T
+*              C(1:lastc,1:lastv) := C(...) - tau * w(1:lastc,1) * v(1:lastv,1)**T
 *
-            CALL DGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
+               ! C(1:lastc,1)     := C(...) - tau * w(1:lastc,1) * v(1,1)**T
+               !                   = C(...) - tau * w(1:lastc,1)
+               CALL DAXPY(LASTC, -TAU, WORK, 1, C, 1)
+               ! C(1:lastc,2:lastv) := C(...) - tau * w(1:lastc,1) * v(2:lastv)**T
+               CALL DGER( LASTC, LASTV-1, -TAU, WORK, 1, V(1+INCV),
+     $                     INCV, C(1,1+1), LDC )
+            END IF
          END IF
       END IF
       RETURN
