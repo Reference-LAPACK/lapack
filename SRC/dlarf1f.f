@@ -141,8 +141,6 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-      INTEGER            IONE
-      PARAMETER          ( IONE = 1 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
