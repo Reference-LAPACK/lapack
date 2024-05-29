@@ -159,6 +159,9 @@
       APPLYLEFT = LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
+      IF( TAU.EQ.ZERO ) THEN
+         RETURN
+      END IF
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
 !     of V.
