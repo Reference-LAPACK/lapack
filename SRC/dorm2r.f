@@ -178,14 +178,13 @@
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, IC, JC, MI, NI, NQ
-      DOUBLE PRECISION   AII
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, XERBLA
+      EXTERNAL           DLARF1F, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -266,12 +265,9 @@
 *
 *        Apply H(i)
 *
-         AII = A( I, I )
-         A( I, I ) = ONE
-         CALL DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
+         CALL DLARF1F( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
      $               JC ),
      $               LDC, WORK )
-         A( I, I ) = AII
    10 CONTINUE
       RETURN
 *
