@@ -35,13 +35,12 @@
 *>
 *> \verbatim
 *>
-*> DLARF1F applies a real elementary reflector H to a real m by n matrix
+*> DLARF applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
 *>
 *> where tau is a real scalar and v is a real vector.
-*> It is assumed that v(1) = 1. v(1) is not referenced.
 *>
 *> If tau = 0, then H is taken to be the unit matrix.
 *> \endverbatim
@@ -118,26 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup larf1f
-*
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*>  The algorithm update matrix C by blocks.
-*>  C is presected in the form of 4 blocks:
-*>  C11 - 1-by-1, C12 - 1-by-n, C21 - m-by-1 and C22 - (m-1)-by-(n-1)
-*>  
-*>      C = ( C11 |        C12        )
-*>          (_____|___________________)
-*>          (     |                   )
-*>          (     |                   )
-*>          ( C21 |        C22        )
-*>          (     |                   )
-*>          (     |                   )
-*>
-*> \endverbatim
+*> \ingroup larf
 *
 *  =====================================================================
       SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
@@ -167,7 +147,7 @@
       DOUBLE PRECISION   C11, DOT1, DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DDOT, DAXPY, DCOPY
+      EXTERNAL           DGEMV, DGER, DDOT, DAXPY, DCOPY, DSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -206,7 +186,7 @@
          END IF
       END IF
 
-      IF( LASTC.EQ.0 ) THEN
+      IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
          RETURN
       END IF
 
@@ -214,7 +194,9 @@
 *
 *        Form  H * C
 *
-         IF( LASTV.GT.0 ) THEN
+         IF( LASTV.EQ.1 ) THEN
+            CALL DSCAL(LASTC, ONE - TAU, C, LDC)
+         ELSE
             DOT1 = - TAU * DDOT( LASTV - 1, V( 1 + INCV ), INCV,
      $            C( 2, 1 ), 1 )
 
@@ -249,7 +231,9 @@
 *
 *        Form  C * H
 *
-         IF( LASTV.GT.0 ) THEN
+         IF( LASTV.EQ.1 ) THEN
+            CALL DSCAL(LASTC, ONE - TAU, C, 1)
+         ELSE
             DOT1 = - TAU * DDOT( LASTV - 1, V( 1 + INCV ), INCV,
      $            C( 1, 2 ), LDC )
 
