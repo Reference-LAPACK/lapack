@@ -159,9 +159,6 @@
       APPLYLEFT = LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
-      IF( TAU.EQ.ZERO ) THEN
-         RETURN
-      END IF
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
 !     of V.
@@ -188,8 +185,9 @@
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
       END IF
-!     Note that lastc.eq.0 renders the BLAS operations null; no special
-!     case is needed at this level.
+      IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
+         RETURN
+      END IF
       IF( APPLYLEFT ) THEN
 *
 *        Form  H * C
@@ -197,7 +195,7 @@
          IF( LASTV.GT.0 ) THEN
             ! Check if m = 1. This means v = 1, So we just need to compute
             ! C := HC = (1-\tau)C.
-            IF( M.EQ.1 ) THEN
+            IF(LASTV.EQ.1) THEN
                CALL DSCAL(LASTC, ONE - TAU, C, LDC)
             ELSE
 *
@@ -226,7 +224,7 @@
          IF( LASTV.GT.0 ) THEN
             ! Check if n = 1. This means v = 1, so we just need to compute
             ! C := CH = C(1-\tau).
-            IF( N.EQ.1 ) THEN
+            IF(LASTV.EQ.1) THEN
                CALL DSCAL(LASTC, ONE - TAU, C, 1)
             ELSE
 *
