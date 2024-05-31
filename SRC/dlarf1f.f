@@ -1,4 +1,5 @@
-*> \brief \b DLARF1F applies an elementary reflector to a general rectangular matrix.
+*> \brief \b DLARF1F applies an elementary reflector to a general rectangular
+*              matrix assuming v(1) = 1.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -35,12 +36,12 @@
 *>
 *> \verbatim
 *>
-*> DLARF applies a real elementary reflector H to a real m by n matrix
+*> DLARF1F applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
 *>
-*> where tau is a real scalar and v is a real vector.
+*> where tau is a real scalar and v is a real vector assuming v(1) = 1.
 *>
 *> If tau = 0, then H is taken to be the unit matrix.
 *> \endverbatim
@@ -117,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup larf
+*> \ingroup larf1f
 *
 *  =====================================================================
       SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
@@ -144,10 +145,9 @@
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
       INTEGER            I, LASTV, LASTC
-      DOUBLE PRECISION   C11, DOT1, DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DDOT, DAXPY, DCOPY, DSCAL
+      EXTERNAL           DGEMV, DGER, DAXPY
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -185,84 +185,66 @@
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
       END IF
-
       IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
          RETURN
       END IF
-
       IF( APPLYLEFT ) THEN
 *
 *        Form  H * C
 *
          IF( LASTV.EQ.1 ) THEN
-            CALL DSCAL(LASTC, ONE - TAU, C, LDC)
+*
+*           C(1,1:lastc) := ( 1 - tau ) * C(1,1:lastc)
+*
+            CALL DSCAL( LASTC, ONE - TAU, C, LDC )
          ELSE
-            DOT1 = - TAU * DDOT( LASTV - 1, V( 1 + INCV ), INCV,
-     $            C( 2, 1 ), 1 )
-
-            C11 = (ONE - TAU) * C( 1, 1 ) + DOT1
 *
-*           Prepare WORK
+*        w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
 *
-            CALL DCOPY( LASTC - 1, C( 1, 2 ), LDC, WORK, 1 )
-
-            CALL DGEMV( 'Transpose', LASTV - 1, LASTC - 1, -TAU,
-     $            C( 2, 2 ), LDC, V( 1 + INCV ), INCV, -TAU, WORK, 1 )
+         CALL DGEMV( 'Transpose', LASTV - 1, LASTC, ONE, C( 2, 1 ),
+     $      LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
 *
-*           Update C12
+*        w(1:lastc,1) += C(1,1:lastc)**T * v(1,1)
 *
-            CALL DAXPY( LASTC - 1, ONE, WORK, 1, C( 1, 2 ), LDC )
+         CALL DAXPY( LASTC, ONE, C, LDC, WORK, 1 )
 *
-*           Update C21
+*        C(1, 1:lastc) := C(...) - tau * w(1:lastc,1)**T
 *
-            CALL DAXPY( LASTV - 1, -TAU * C( 1, 1 ) + DOT1,
-     $            V( 1 + INCV ), INCV, C( 2, 1 ), 1 )
+         CALL DAXPY( LASTC, -TAU, WORK, 1, C, LDC )
 *
-*           Update C11
+*        C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
 *
-            C( 1, 1 ) = C11
-*
-*           Update C22
-*
-            CALL DGER( LASTV - 1, LASTC - 1, ONE, V( 1 + INCV ),
-     $            INCV, WORK, 1, C( 2, 2 ), LDC )
-         END IF
+         CALL DGER( LASTV - 1, LASTC, -TAU, V( 1 + INCV ), INCV, WORK,
+     $      1, C( 2, 1 ), LDC )
+            END IF
       ELSE
 *
 *        Form  C * H
 *
          IF( LASTV.EQ.1 ) THEN
-            CALL DSCAL(LASTC, ONE - TAU, C, 1)
+*
+*           C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1)
+*
+            CALL DSCAL( LASTC, ONE - TAU, C, 1 )
          ELSE
-            DOT1 = - TAU * DDOT( LASTV - 1, V( 1 + INCV ), INCV,
-     $            C( 1, 2 ), LDC )
-
-            C11 = (ONE - TAU) * C( 1, 1 ) + DOT1
 *
-*           Prepare WORK
+*           w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
 *
-            CALL DCOPY( LASTC - 1, C( 2, 1 ), 1, WORK, 1 )
-
-            CALL DGEMV( 'No transpose', LASTC - 1, LASTV - 1, -TAU,
-     $            C( 2, 2 ), LDC, V( 1 + INCV ), INCV, -TAU, WORK, 1 )
+            CALL DGEMV( 'No transpose', LASTC, LASTV - 1, ONE, 
+     $         C( 1, 2 ), LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
 *
-*           Update C12
+*           w(1:lastc,1) += C(1:lastc,1) * v(1,1)
 *
-            CALL DAXPY( LASTV - 1, -TAU * C( 1, 1 ) + DOT1,
-     $            V( 1 + INCV ), INCV, C( 1, 2 ), LDC )
+            CALL DAXPY( LASTC, ONE, C, 1, WORK, 1 )
 *
-*           Update C11
+*           C(1:lastc,1) := C(1:lastc,1) - tau * w(1:lastc,1)
 *
-            C( 1, 1 ) = C11
+            CALL DAXPY( LASTC, -TAU, WORK, 1, C, 1 )
 *
-*           Update C21
+*           C(1:lastc,2:lastv) := C(1:lastc,2:lastv) - tau * w(1:lastc,1) * v(2:lastv)**T
 *
-            CALL DAXPY( LASTC - 1, ONE, WORK, 1, C( 2, 1 ), 1 )
-*
-*           Update C22
-*
-            CALL DGER( LASTC - 1, LASTV - 1, ONE, WORK, 1,
-     $            V( 1 + INCV ), INCV, C( 2, 2 ), LDC )
+            CALL DGER( LASTC, LASTV - 1, -TAU, WORK, 1, V( 1 + INCV ),
+     $         INCV, C( 1, 2 ), LDC )
          END IF
       END IF
       RETURN
