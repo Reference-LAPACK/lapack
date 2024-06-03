@@ -98,7 +98,6 @@
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
 *>          DGEQLF in the last k columns of its array argument A.
-*>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -178,14 +177,13 @@
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
-      DOUBLE PRECISION   AII
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, XERBLA
+      EXTERNAL           DLARF1L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -262,11 +260,8 @@
 *
 *        Apply H(i)
 *
-         !AII = A( NQ-K+I, I )
-         !A( NQ-K+I, I ) = ONE
          CALL DLARF1L( SIDE, MI, NI, A( 1, I ), 1, TAU( I ), C, LDC,
      $               WORK )
-         !A( NQ-K+I, I ) = AII
    10 CONTINUE
       RETURN
 *

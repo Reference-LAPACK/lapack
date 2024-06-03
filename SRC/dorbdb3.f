@@ -226,7 +226,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT,
+      EXTERNAL           DLARF1F, DLARFGP, DORBDB5, DROT,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -287,10 +287,9 @@
 *
          CALL DLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = X21(I,I)
-         X21(I,I) = ONE
-         CALL DLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF1F( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X11(I,I), LDX11, WORK(ILARF) )
-         CALL DLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X21(I+1,I), LDX21, WORK(ILARF) )
          C = SQRT( DNRM2( P-I+1, X11(I,I), 1 )**2
      $           + DNRM2( M-P-I, X21(I+1,I), 1 )**2 )
@@ -306,12 +305,10 @@
             PHI(I) = ATAN2( X21(I+1,I), X11(I,I) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X21(I+1,I) = ONE
-            CALL DLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1, TAUP2(I),
+            CALL DLARF1F( 'L', M-P-I, Q-I, X21(I+1,I), 1, TAUP2(I),
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
-         X11(I,I) = ONE
-         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
+         CALL DLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
      $               I+1),
      $               LDX11, WORK(ILARF) )
 *
@@ -321,8 +318,7 @@
 *
       DO I = M-P + 1, Q
          CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
-         X11(I,I) = ONE
-         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
+         CALL DLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
      $               I+1),
      $               LDX11, WORK(ILARF) )
       END DO

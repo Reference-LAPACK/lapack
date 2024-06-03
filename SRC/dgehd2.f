@@ -166,10 +166,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
-      DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           DLARF1F, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -199,20 +198,17 @@
 *
          CALL DLARFG( IHI-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
      $                TAU( I ) )
-         AII = A( I+1, I )
-         A( I+1, I ) = ONE
 *
 *        Apply H(i) to A(1:ihi,i+1:ihi) from the right
 *
-         CALL DLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
+         CALL DLARF1F( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
      $               A( 1, I+1 ), LDA, WORK )
 *
 *        Apply H(i) to A(i+1:ihi,i+1:n) from the left
 *
-         CALL DLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1, TAU( I ),
+         CALL DLARF1F( 'Left', IHI-I, N-I, A( I+1, I ), 1, TAU( I ),
      $               A( I+1, I+1 ), LDA, WORK )
 *
-         A( I+1, I ) = AII
    10 CONTINUE
 *
       RETURN

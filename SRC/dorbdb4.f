@@ -307,12 +307,10 @@
             THETA(I) = ATAN2( PHANTOM(1), PHANTOM(P+1) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            PHANTOM(1) = ONE
-            PHANTOM(P+1) = ONE
-            CALL DLARF( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
+            CALL DLARF1F( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
      $                  LDX11,
      $                  WORK(ILARF) )
-            CALL DLARF( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1), X21,
+            CALL DLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1), X21,
      $                  LDX21, WORK(ILARF) )
          ELSE
             CALL DORBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
@@ -326,21 +324,18 @@
             THETA(I) = ATAN2( X11(I,I-1), X21(I,I-1) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            X11(I,I-1) = ONE
-            X21(I,I-1) = ONE
-            CALL DLARF( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
+            CALL DLARF1F( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
      $                  X11(I,I), LDX11, WORK(ILARF) )
-            CALL DLARF( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1, TAUP2(I),
+            CALL DLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1, TAUP2(I),
      $                  X21(I,I), LDX21, WORK(ILARF) )
          END IF
 *
          CALL DROT( Q-I+1, X11(I,I), LDX11, X21(I,I), LDX21, S, -C )
          CALL DLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          C = X21(I,I)
-         X21(I,I) = ONE
-         CALL DLARF( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF1F( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL DLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X21(I+1,I), LDX21, WORK(ILARF) )
          IF( I .LT. M-Q ) THEN
             S = SQRT( DNRM2( P-I, X11(I+1,I), 1 )**2
@@ -354,10 +349,9 @@
 *
       DO I = M - Q + 1, P
          CALL DLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
-         X11(I,I) = ONE
-         CALL DLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+         CALL DLARF1F( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL DLARF( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+         CALL DLARF1F( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(M-Q+1,I), LDX21, WORK(ILARF) )
       END DO
 *
@@ -367,8 +361,7 @@
          CALL DLARFGP( Q-I+1, X21(M-Q+I-P,I), X21(M-Q+I-P,I+1),
      $                 LDX21,
      $                 TAUQ1(I) )
-         X21(M-Q+I-P,I) = ONE
-         CALL DLARF( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
+         CALL DLARF1F( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
      $               TAUQ1(I),
      $               X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
       END DO
