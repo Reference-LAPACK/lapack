@@ -1,4 +1,4 @@
-*> \brief \b DLARF1F applies an elementary reflector to a general rectangular
+*> \brief \b SLARF1F applies an elementary reflector to a general rectangular
 *              matrix assuming v(1) = 1.
 *
 *  =========== DOCUMENTATION ===========
@@ -7,27 +7,27 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf.f">
+*> Download SLARF1F + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE SLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
 *       INTEGER            INCV, LDC, M, N
-*       DOUBLE PRECISION   TAU
+*       REAL               TAU
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION   C( LDC, * ), V( * ), WORK( * )
+*       REAL               C( LDC, * ), V( * ), WORK( * )
 *       ..
 *
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLARF1F applies a real elementary reflector H to a real m by n matrix
+*> SLARF1F applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
@@ -70,7 +70,7 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is DOUBLE PRECISION array, dimension
+*>          V is REAL array, dimension
 *>                     (1 + (M-1)*abs(INCV)) if SIDE = 'L'
 *>                  or (1 + (N-1)*abs(INCV)) if SIDE = 'R'
 *>          The vector v in the representation of H. V is not used if
@@ -85,13 +85,13 @@
 *>
 *> \param[in] TAU
 *> \verbatim
-*>          TAU is DOUBLE PRECISION
+*>          TAU is REAL
 *>          The value tau in the representation of H.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension (LDC,N)
+*>          C is REAL array, dimension (LDC,N)
 *>          On entry, the m by n matrix C.
 *>          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
 *>          or C * H if SIDE = 'R'.
@@ -105,7 +105,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension
+*>          WORK is REAL array, dimension
 *>                         (N) if SIDE = 'L'
 *>                      or (M) if SIDE = 'R'
 *> \endverbatim
@@ -121,7 +121,7 @@
 *> \ingroup larf1f
 *
 *  =====================================================================
-      SUBROUTINE DLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE SLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,29 +130,29 @@
 *     .. Scalar Arguments ..
       CHARACTER          SIDE
       INTEGER            INCV, LDC, M, N
-      DOUBLE PRECISION   TAU
+      REAL               TAU
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION   C( LDC, * ), V( * ), WORK( * )
+      REAL               C( LDC, * ), V( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      REAL               ONE, ZERO
+      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DAXPY
+      EXTERNAL           SGEMV, SGER, SAXPY, SSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILADLR, ILADLC
-      EXTERNAL           LSAME, ILADLR, ILADLC
+      INTEGER            ILASLR, ILASLC
+      EXTERNAL           LSAME, ILASLR, ILASLC
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,10 +179,10 @@
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = ILADLC(LASTV, N, C, LDC)
+            LASTC = ILASLC(LASTV, N, C, LDC)
          ELSE
 !     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = ILADLR(M, LASTV, C, LDC)
+            LASTC = ILASLR(M, LASTV, C, LDC)
          END IF
       END IF
       IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
@@ -196,26 +196,26 @@
 *
 *           C(1,1:lastc) := ( 1 - tau ) * C(1,1:lastc)
 *
-            CALL DSCAL( LASTC, ONE - TAU, C, LDC )
+            CALL SSCAL( LASTC, ONE - TAU, C, LDC )
          ELSE
 *
 *        w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
 *
-         CALL DGEMV( 'Transpose', LASTV - 1, LASTC, ONE, C( 2, 1 ),
-     $      LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
+         CALL SGEMV( 'Transpose', LASTV - 1, LASTC, ONE, C( 2, 1 ),
+     $        LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
 *
-*        w(1:lastc,1) += C(1,1:lastc)**T * v(1,1)
+*        w(1:lastc,1) += v(1,1) * C(1,1:lastc)**T
 *
-         CALL DAXPY( LASTC, ONE, C, LDC, WORK, 1 )
+         CALL SAXPY( LASTC, ONE, C, LDC, WORK, 1 )
 *
-*        C(1, 1:lastc) := C(...) - tau * w(1:lastc,1)**T
+*        C(1, 1:lastc) += - tau * v(1,1) * w(1:lastc,1)**T
 *
-         CALL DAXPY( LASTC, -TAU, WORK, 1, C, LDC )
+         CALL SAXPY( LASTC, -TAU, WORK, 1, C, LDC )
 *
-*        C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
+*        C(2:lastv,1:lastc) += - tau * v(2:lastv,1) * w(1:lastc,1)**T
 *
-         CALL DGER( LASTV - 1, LASTC, -TAU, V( 1 + INCV ), INCV, WORK,
-     $      1, C( 2, 1 ), LDC )
+         CALL SGER( LASTV - 1, LASTC, -TAU, V( 1 + INCV ), INCV, WORK,
+     $        1, C( 2, 1 ), LDC )
             END IF
       ELSE
 *
@@ -225,30 +225,30 @@
 *
 *           C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1)
 *
-            CALL DSCAL( LASTC, ONE - TAU, C, 1 )
+            CALL SSCAL( LASTC, ONE - TAU, C, 1 )
          ELSE
 *
 *           w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
 *
-            CALL DGEMV( 'No transpose', LASTC, LASTV - 1, ONE, 
-     $         C( 1, 2 ), LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
+            CALL SGEMV( 'No transpose', LASTC, LASTV - 1, ONE, 
+     $           C( 1, 2 ), LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
 *
-*           w(1:lastc,1) += C(1:lastc,1) * v(1,1)
+*           w(1:lastc,1) += v(1,1) * C(1:lastc,1)
 *
-            CALL DAXPY( LASTC, ONE, C, 1, WORK, 1 )
+            CALL SAXPY( LASTC, ONE, C, 1, WORK, 1 )
 *
-*           C(1:lastc,1) := C(1:lastc,1) - tau * w(1:lastc,1)
+*           C(1:lastc,1) += - tau * v(1,1) * w(1:lastc,1)
 *
-            CALL DAXPY( LASTC, -TAU, WORK, 1, C, 1 )
+            CALL SAXPY( LASTC, -TAU, WORK, 1, C, 1 )
 *
-*           C(1:lastc,2:lastv) := C(1:lastc,2:lastv) - tau * w(1:lastc,1) * v(2:lastv)**T
+*           C(1:lastc,2:lastv) += - tau * w(1:lastc,1) * v(2:lastv)**T
 *
-            CALL DGER( LASTC, LASTV - 1, -TAU, WORK, 1, V( 1 + INCV ),
-     $         INCV, C( 1, 2 ), LDC )
+            CALL SGER( LASTC, LASTV - 1, -TAU, WORK, 1,
+     $           V( 1 + INCV ), INCV, C( 1, 2 ), LDC )
          END IF
       END IF
       RETURN
 *
-*     End of DLARF1F
+*     End of SLARF1F
 *
       END

@@ -178,14 +178,13 @@
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
-      REAL               AII
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, XERBLA
+      EXTERNAL           SLARF1L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -262,11 +261,8 @@
 *
 *        Apply H(i)
 *
-         AII = A( NQ-K+I, I )
-         A( NQ-K+I, I ) = ONE
-         CALL SLARF( SIDE, MI, NI, A( 1, I ), 1, TAU( I ), C, LDC,
+         CALL SLARF1L( SIDE, MI, NI, A( 1, I ), 1, TAU( I ), C, LDC,
      $               WORK )
-         A( NQ-K+I, I ) = AII
    10 CONTINUE
       RETURN
 *
