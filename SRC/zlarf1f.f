@@ -209,18 +209,20 @@
                ! First compute w**H = v**H c -> w = C**H v
                ! C = [ C_1 C_2 ]**T, v = [1 v_2]**T
                ! w = C_1**H + C_2**Hv_2
-               ! w = C_1**H
-               DO I = 1, LASTC
-                  WORK(I) = DCONJG(C(1,I))
-               END DO
-               ! w += C_2**Hv_2
+               ! w = C_2**Hv_2
                CALL ZGEMV( 'Conj', LASTV-1, LASTC, ONE, C(1+1,1), LDC,
-     $                     V(1+INCV), INCV, ONE, WORK, 1)
+     $                     V(1+INCV), INCV, ZERO, WORK, 1)
+               ! w += C_1**H
+               ! This is essentially a zaxpyc
+               DO I = 1, LASTC
+                  WORK(I) = WORK(I) + DCONJG(C(1,I))
+               END DO
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
 *
             ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**H
             !                  = C(...) - tau * Conj(w(1:lastc,1))
+            ! This is essentially a zaxpyc
                DO I = 1, LASTC
                   C(1,I) = C(1,I) - TAU * DCONJG(WORK(I))
                END DO
