@@ -219,7 +219,7 @@
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
 *
-            ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**T
+            ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**H
             !                  = C(...) - tau * Conj(w(1:lastc,1))
                DO I = 1, LASTC
                   C(1,I) = C(1,I) - TAU * DCONJG(WORK(I))
