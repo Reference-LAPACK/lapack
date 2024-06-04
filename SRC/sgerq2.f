@@ -140,10 +140,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      REAL               AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFG, XERBLA
+      EXTERNAL           SLARF1L, SLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,11 +176,8 @@
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
-         AII = A( M-K+I, N-K+I )
-         A( M-K+I, N-K+I ) = ONE
-         CALL SLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
-     $               TAU( I ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = AII
+         CALL SLARF1L( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+     $                 TAU( I ), A, LDA, WORK )
    10 CONTINUE
       RETURN
 *

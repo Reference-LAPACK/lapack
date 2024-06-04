@@ -133,7 +133,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SSCAL, XERBLA
+      EXTERNAL           SLARF1L, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -181,9 +181,9 @@
 *        Apply H(i) to A(1:m-k+i,1:n-k+i) from the right
 *
          A( II, N-M+II ) = ONE
-         CALL SLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
-     $               TAU( I ),
-     $               A, LDA, WORK )
+         CALL SLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
+     $                 TAU( I ),
+     $                 A, LDA, WORK )
          CALL SSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE - TAU( I )
 *
