@@ -39,7 +39,7 @@
 *> ZLARF1F applies a complex elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
-*>       H = I - tau * v * v**T
+*>       H = I - tau * v * v**H
 *>
 *> where tau is a complex scalar and v is a complex vector.
 *>
@@ -56,8 +56,6 @@
 *> \verbatim
 *>          SIDE is CHARACTER*1
 *>          = 'L': form  H * C
-*>          = 'R': form  C * H
-*> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
@@ -160,9 +158,6 @@
       INTEGER            ILADLR, ILADLC
       EXTERNAL           LSAME, ILADLR, ILADLC
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
-*     ..
 *     .. Executable Statements ..
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
@@ -210,20 +205,26 @@
 *
 *              w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1)
 *
-               ! w(1:lastc,1) := C(2:lastv,1:lastc)**H * v(2:lastv,1)
-               CALL ZGEMV( 'Conj', LASTV-1, LASTC, ONE, C(1+1,1), LDC,
-     $                     V(1+INCV), INCV, ZERO, WORK, 1)
-               ! w(1:lastc,1) += C(1,1:lastc) * v(1,1) = C(1,1:lastc)
-               DO I = 1, LASTC 
-                  WORK(I) = WORK(I) + DCONJG(C(1,I))
+               ! (I - tvv**H)C = C - tvv**H C
+               ! First compute w**H = v**H c -> w = C**H v
+               ! C = [ C_1 C_2 ]**T, v = [1 v_2]**T
+               ! w = C_1**H + C_2**Hv_2
+               ! w = C_1**H
+               DO I = 1, LASTC
+                  WORK(I) = DCONJG(C(1,I))
                END DO
+               ! w += C_2**Hv_2
+               CALL ZGEMV( 'Conj', LASTV-1, LASTC, ONE, C(1+1,1), LDC,
+     $                     V(1+INCV), INCV, ONE, WORK, 1)
 *
-*           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**T
+*           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
 *
             ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**T
-            !                  = C(...) - tau * w(1:lastc,1)
-               CALL ZAXPY(LASTC, -TAU, WORK, 1, C, LDC)
-               ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
+            !                  = C(...) - tau * Conj(w(1:lastc,1))
+               DO I = 1, LASTC
+                  C(1,I) = C(1,I) - TAU * DCONJG(WORK(I))
+               END DO
+               ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**H
                CALL ZGERC(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK,
      $                     1, C(1+1,1), LDC)
             END IF
