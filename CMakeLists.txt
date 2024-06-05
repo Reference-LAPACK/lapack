@@ -265,15 +265,7 @@ if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${BLAS_LINKER_FLAGS})
 endif()
 
 
@@ -355,15 +347,7 @@ if(NOT LATESTLAPACK_FOUND)
 
   add_subdirectory(SRC)
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
 if(BUILD_TESTING)
