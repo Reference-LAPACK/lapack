@@ -107,9 +107,18 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-# By default build extended _64 API for supported compilers only
+
+# By default build extended _64 API for supported compilers only. This needs
+# CMake >= 3.18! Let's disable it by default for CMake < 3.18.
+if(CMAKE_VERSION VERSION_LESS "3.18")
+  set(INDEX64_EXT_API_DEFAULT OFF)
+else()
+  set(INDEX64_EXT_API_DEFAULT ON)
+endif()
 set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)" ON)
+option(BUILD_INDEX64_EXT_API
+  "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)"
+  ${INDEX64_EXT_API_DEFAULT})
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 include(GNUInstallDirs)
