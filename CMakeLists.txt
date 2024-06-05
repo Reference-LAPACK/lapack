@@ -109,7 +109,7 @@ else()
 endif()
 # By default build extended _64 API for supported compilers only
 set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
+option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)" ON)
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 include(GNUInstallDirs)
