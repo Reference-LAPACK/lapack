@@ -157,11 +157,11 @@
 *     .. Executable Statements ..
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
-      LASTV = 0
+      LASTV = 1
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
-!     of V.
+!     of V up to V(1).
          IF( APPLYLEFT ) THEN
             LASTV = M
          ELSE
@@ -173,7 +173,7 @@
             I = 1
          END IF
 !     Look for the last non-zero row in V.
-         DO WHILE( LASTV.GT.0 .AND. V( I ).EQ.ZERO )
+         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
@@ -185,7 +185,7 @@
             LASTC = ILASLR(M, LASTV, C, LDC)
          END IF
       END IF
-      IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
+      IF( LASTC.EQ.0 ) THEN
          RETURN
       END IF
       IF( APPLYLEFT ) THEN
