@@ -74,7 +74,7 @@
 *>                     (1 + (M-1)*abs(INCV)) if SIDE = 'L'
 *>                  or (1 + (N-1)*abs(INCV)) if SIDE = 'R'
 *>          The vector v in the representation of H. V is not used if
-*>          TAU = 0.
+*>          TAU = 0. V(1) is not referenced or modified.
 *> \endverbatim
 *>
 *> \param[in] INCV
@@ -109,6 +109,40 @@
 *>                         (N) if SIDE = 'L'
 *>                      or (M) if SIDE = 'R'
 *> \endverbatim
+*
+*  To take advantage of the fact that v(1) = 1, we do the following
+*     v = [ 1 v_2 ]**T
+*     If SIDE='L'
+*           |-----|
+*           | C_1 |
+*        C =| C_2 |
+*           |-----|
+*        C_1\in\mathbb{R}^{1\times n}, C_2\in\mathbb{R}^{m-1\times n}
+*        So we compute:
+*        C = HC   = (I - \tau vv**T)C
+*                 = C - \tau vv**T C
+*        w = C**T v  = [ C_1**T C_2**T ] [ 1 v_2 ]**T
+*                    = C_1**T + C_2**T v ( DGEMM then DAXPY )
+*        C  = C - \tau vv**T C
+*           = C - \tau vw**T
+*        Giving us   C_1 = C_1 - \tau w**T ( DAXPY )
+*                 and
+*                    C_2 = C_2 - \tau v_2w**T ( DGER )
+*     If SIDE='R'
+*
+*        C = [ C_1 C_2 ]
+*        C_1\in\mathbb{R}^{m\times 1}, C_2\in\mathbb{R}^{m\times n-1}
+*        So we compute: 
+*        C = CH   = C(I - \tau vv**T)
+*                 = C - \tau Cvv**T
+*
+*        w = Cv   = [ C_1 C_2 ] [ 1 v_2 ]**T
+*                 = C_1 + C_2v_2 ( DGEMM then DAXPY )
+*        C  = C - \tau Cvv**T
+*           = C - \tau wv**T
+*        Giving us   C_1 = C_1 - \tau w ( DAXPY )
+*                 and
+*                    C_2 = C_2 - \tau wv_2**T ( DGER )
 *
 *  Authors:
 *  ========
@@ -175,7 +209,9 @@
             I = 1
          END IF
 !     Look for the last non-zero row in V.
-         DO WHILE( LASTV.GT.0 .AND. V( I ).EQ.ZERO )
+!        Since we are assuming that V(1) = 1, and it is not stored, so we
+!        shouldn't access it.
+         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
@@ -186,67 +222,63 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
-      END IF
-      IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
+      ELSE
+!        TAU is 0, so H = I. Meaning HC = C = CH.
          RETURN
       END IF
       IF( APPLYLEFT ) THEN
 *
 *        Form  H * C
 *
-         IF( LASTV.GT.0 ) THEN
-            ! Check if m = 1. This means v = 1, So we just need to compute
-            ! C := HC = (1-\tau)C.
-            IF( M.EQ.1 .OR. LASTV.EQ.1) THEN
-               CALL DSCAL(LASTC, ONE - TAU, C, LDC)
-            ELSE
+         ! Check if lastv = 1. This means v = 1, So we just need to compute
+         ! C := HC = (1-\tau)C.
+         IF( LASTV.EQ.1 ) THEN
+            CALL DSCAL(LASTC, ONE - TAU, C, LDC)
+         ELSE
 *
-*              w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
+*           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-               ! w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
-               CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(1+1,1),
-     $                     LDC, V(1+INCV), INCV, ZERO, WORK, 1)
-               ! w(1:lastc,1) += C(1,1:lastc)**T * v(1,1) = C(1,1:lastc)**T
-               CALL DAXPY(LASTC, ONE, C, LDC, WORK, 1)
+            ! w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
+            CALL DGEMV( 'Transpose', LASTV-1, LASTC, ONE, C(1+1,1),
+     $                  LDC, V(1+INCV), INCV, ZERO, WORK, 1)
+            ! w(1:lastc,1) += C(1,1:lastc)**T * v(1,1) = C(1,1:lastc)**T
+            CALL DAXPY(LASTC, ONE, C, LDC, WORK, 1)
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**T
 *
             ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**T
             !                  = C(...) - tau * w(1:lastc,1)**T
-               CALL DAXPY(LASTC, -TAU, WORK, 1, C, LDC)
-               ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
-               CALL DGER(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK, 1,
-     $                     C(1+1,1), LDC)
-            END IF
+            CALL DAXPY(LASTC, -TAU, WORK, 1, C, LDC)
+            ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**T
+            CALL DGER(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK, 1,
+     $                  C(1+1,1), LDC)
          END IF
       ELSE
 *
 *        Form  C * H
 *
-         IF( LASTV.GT.0 ) THEN
-            ! Check if n = 1. This means v = 1, so we just need to compute
-            ! C := CH = C(1-\tau).
-            IF( N.EQ.1 .OR. LASTV.EQ.1) THEN
-               CALL DSCAL(LASTC, ONE - TAU, C, 1)
-            ELSE
+         ! Check if n = 1. This means v = 1, so we just need to compute
+         ! C := CH = C(1-\tau).
+         IF( LASTV.EQ.1 ) THEN
+            CALL DSCAL(LASTC, ONE - TAU, C, 1)
+         ELSE
 *
-*              w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
+*           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-               ! w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
-               CALL DGEMV( 'No transpose', LASTC, LASTV-1, ONE, 
-     $            C(1,1+1), LDC, V(1+INCV), INCV, ZERO, WORK, 1 )
-               ! w(1:lastc,1) += C(1:lastc,1) v(1,1) = C(1:lastc,1)
-               CALL DAXPY(LASTC, ONE, C, 1, WORK, 1)
+            ! w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
+            CALL DGEMV( 'No transpose', LASTC, LASTV-1, ONE, 
+     $         C(1,1+1), LDC, V(1+INCV), INCV, ZERO, WORK, 1 )
+            ! w(1:lastc,1) += C(1:lastc,1) v(1,1) = C(1:lastc,1)
+            CALL DAXPY(LASTC, ONE, C, 1, WORK, 1)
 *
-*              C(1:lastc,1:lastv) := C(...) - tau * w(1:lastc,1) * v(1:lastv,1)**T
+*           C(1:lastc,1:lastv) := C(...) - tau * w(1:lastc,1) * v(1:lastv,1)**T
 *
-               ! C(1:lastc,1)     := C(...) - tau * w(1:lastc,1) * v(1,1)**T
-               !                   = C(...) - tau * w(1:lastc,1)
-               CALL DAXPY(LASTC, -TAU, WORK, 1, C, 1)
-               ! C(1:lastc,2:lastv) := C(...) - tau * w(1:lastc,1) * v(2:lastv)**T
-               CALL DGER( LASTC, LASTV-1, -TAU, WORK, 1, V(1+INCV),
-     $                     INCV, C(1,1+1), LDC )
-            END IF
+            ! C(1:lastc,1)     := C(...) - tau * w(1:lastc,1) * v(1,1)**T
+            !                   = C(...) - tau * w(1:lastc,1)
+            CALL DAXPY(LASTC, -TAU, WORK, 1, C, 1)
+            ! C(1:lastc,2:lastv) := C(...) - tau * w(1:lastc,1) * v(2:lastv)**T
+            CALL DGER( LASTC, LASTV-1, -TAU, WORK, 1, V(1+INCV),
+     $                  INCV, C(1,1+1), LDC )
          END IF
       END IF
       RETURN

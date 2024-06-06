@@ -75,7 +75,7 @@
 *>                     (1 + (M-1)*abs(INCV)) if SIDE = 'L'
 *>                  or (1 + (N-1)*abs(INCV)) if SIDE = 'R'
 *>          The vector v in the representation of H. V is not used if
-*>          TAU = 0.
+*>          TAU = 0. V(1) is not referenced or modified.
 *> \endverbatim
 *>
 *> \param[in] INCV
@@ -110,6 +110,39 @@
 *>                         (N) if SIDE = 'L'
 *>                      or (M) if SIDE = 'R'
 *> \endverbatim
+*  To take advantage of the fact that v(1) = 1, we do the following
+*     v = [ 1 v_2 ]**T
+*     If SIDE='L'
+*           |-----|
+*           | C_1 |
+*        C =| C_2 |
+*           |-----|
+*        C_1\in\mathbb{C}^{1\times n}, C_2\in\mathbb{C}^{m-1\times n}
+*        So we compute:
+*        C = HC   = (I - \tau vv**T)C
+*                 = C - \tau vv**T C
+*        w = C**T v  = [ C_1**T C_2**T ] [ 1 v_2 ]**T
+*                    = C_1**T + C_2**T v ( ZGEMM then ZAXPYC-like )
+*        C  = C - \tau vv**T C
+*           = C - \tau vw**T
+*        Giving us   C_1 = C_1 - \tau w**T ( ZAXPYC-like )
+*                 and
+*                    C_2 = C_2 - \tau v_2w**T ( ZGERC )
+*     If SIDE='R'
+*
+*        C = [ C_1 C_2 ]
+*        C_1\in\mathbb{C}^{m\times 1}, C_2\in\mathbb{C}^{m\times n-1}
+*        So we compute: 
+*        C = CH   = C(I - \tau vv**T)
+*                 = C - \tau Cvv**T
+*
+*        w = Cv   = [ C_1 C_2 ] [ 1 v_2 ]**T
+*                 = C_1 + C_2v_2 ( ZGEMM then ZAXPYC-like )
+*        C  = C - \tau Cvv**T
+*           = C - \tau wv**T
+*        Giving us   C_1 = C_1 - \tau w ( ZAXPYC-like )
+*                 and
+*                    C_2 = C_2 - \tau wv_2**T ( ZGERC )
 *
 *  Authors:
 *  ========
@@ -177,7 +210,9 @@
             I = 1
          END IF
 !     Look for the last non-zero row in V.
-         DO WHILE( LASTV.GT.0 .AND. V( I ).EQ.ZERO )
+!        Since we are assuming that V(1) = 1, and it is not stored, so we
+!        shouldn't access it.
+         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
@@ -196,10 +231,9 @@
 *
 *        Form  H * C
 *
-         IF( LASTV.GT.0 ) THEN
             ! Check if m = 1. This means v = 1, So we just need to compute
             ! C := HC = (1-\tau)C.
-            IF( M.EQ.1 .OR. LASTV.EQ.1) THEN
+            IF( LASTV.EQ.1 ) THEN
                CALL ZSCAL(LASTC, ONE - TAU, C, LDC)
             ELSE
 *
@@ -230,15 +264,13 @@
                CALL ZGERC(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK,
      $                     1, C(1+1,1), LDC)
             END IF
-         END IF
       ELSE
 *
 *        Form  C * H
 *
-         IF( LASTV.GT.0 ) THEN
             ! Check if n = 1. This means v = 1, so we just need to compute
             ! C := CH = C(1-\tau).
-            IF( N.EQ.1 .OR. LASTV.EQ.1) THEN
+            IF( LASTV.EQ.1 ) THEN
                CALL ZSCAL(LASTC, ONE - TAU, C, 1)
             ELSE
 *
@@ -259,7 +291,6 @@
                CALL ZGERC( LASTC, LASTV-1, -TAU, WORK, 1, V(1+INCV),
      $                     INCV, C(1,1+1), LDC )
             END IF
-         END IF
       END IF
       RETURN
 *
