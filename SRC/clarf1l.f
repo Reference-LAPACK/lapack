@@ -244,7 +244,7 @@
 *           w(1:lastc,1) := C(1:lastc,1:lastv-1) * v(1:lastv-1,1)
 *
             CALL CGEMV( 'No transpose', LASTC, LASTV - 1, ONE, C,
-     $                   LDC, V, INCV, ZERO, WORK, 1 )
+     $                  LDC, V, INCV, ZERO, WORK, 1 )
 *
 *           w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1)
 *

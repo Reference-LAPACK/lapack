@@ -202,7 +202,7 @@
 *        w(1:lastc,1) := C(2:lastv,1:lastc)**T * v(2:lastv,1)
 *
          CALL SGEMV( 'Transpose', LASTV - 1, LASTC, ONE, C( 2, 1 ),
-     $        LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
+     $               LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
 *
 *        w(1:lastc,1) += v(1,1) * C(1,1:lastc)**T
 *
@@ -214,8 +214,8 @@
 *
 *        C(2:lastv,1:lastc) += - tau * v(2:lastv,1) * w(1:lastc,1)**T
 *
-         CALL SGER( LASTV - 1, LASTC, -TAU, V( 1 + INCV ), INCV, WORK,
-     $        1, C( 2, 1 ), LDC )
+         CALL SGER( LASTV - 1, LASTC, -TAU, V( 1 + INCV ), INCV,
+     $              WORK, 1, C( 2, 1 ), LDC )
             END IF
       ELSE
 *
@@ -230,8 +230,9 @@
 *
 *           w(1:lastc,1) := C(1:lastc,2:lastv) * v(2:lastv,1)
 *
-            CALL SGEMV( 'No transpose', LASTC, LASTV - 1, ONE, 
-     $           C( 1, 2 ), LDC, V( 1 + INCV ), INCV, ZERO, WORK, 1 )
+            CALL SGEMV( 'No transpose', LASTC, LASTV - 1, ONE,
+     $                  C( 1, 2 ), LDC, V( 1 + INCV ), INCV, ZERO,
+     $                  WORK, 1 )
 *
 *           w(1:lastc,1) += v(1,1) * C(1:lastc,1)
 *
@@ -244,7 +245,7 @@
 *           C(1:lastc,2:lastv) += - tau * w(1:lastc,1) * v(2:lastv)**T
 *
             CALL SGER( LASTC, LASTV - 1, -TAU, WORK, 1,
-     $           V( 1 + INCV ), INCV, C( 1, 2 ), LDC )
+     $                 V( 1 + INCV ), INCV, C( 1, 2 ), LDC )
          END IF
       END IF
       RETURN
