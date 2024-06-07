@@ -678,7 +678,7 @@
 *           Minimal workspace size in case of using only unblocked
 *           BLAS 2 code in CLAQP2RK.
 *           1) CLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in CLARF subroutine inside CLAQP2RK to apply an
+*              in CLARF1F subroutine inside CLAQP2RK to apply an
 *              elementary reflector from the left.
 *           TOTAL_WORK_SIZE = 3*N + NRHS - 1
 *
@@ -694,7 +694,7 @@
 *           1) CGEQP3RK, CLAQP2RK, CLAQP3RK: 2*N to store full and
 *              partial column 2-norms.
 *           2) CLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in CLARF subroutine to apply an elementary reflector
+*              in CLARF1F subroutine to apply an elementary reflector
 *              from the left.
 *           3) CLAQP3RK: NB*(N+NRHS) to use in the work array F that
 *              is used to apply a block reflector from

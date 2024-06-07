@@ -164,17 +164,14 @@
 *
 *     .. Parameters ..
       REAL               ZERO, ONE
-      COMPLEX            CONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0,
-     $                   CONE = ( 1.0E+0, 0.0E+0 ) )
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, MN, OFFPI, PVT
       REAL               TEMP, TEMP2, TOL3Z
-      COMPLEX            AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFG, CSWAP
+      EXTERNAL           CLARF1F, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, SQRT
@@ -222,12 +219,9 @@
 *
 *           Apply H(i)**H to A(offset+i:m,i+1:n) from the left.
 *
-            AII = A( OFFPI, I )
-            A( OFFPI, I ) = CONE
-            CALL CLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
-     $                  CONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
-     $                  WORK( 1 ) )
-            A( OFFPI, I ) = AII
+            CALL CLARF1F( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+     $                    CONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
+     $                    WORK( 1 ) )
          END IF
 *
 *        Update partial column norms.

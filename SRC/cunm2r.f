@@ -171,10 +171,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX            ONE
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, IC, JC, MI, NI, NQ
@@ -270,7 +266,6 @@
          ELSE
             TAUI = CONJG( TAU( I ) )
          END IF
-         A( I, I ) = ONE
          CALL CLARF1F( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ),
      $                 LDC,
      $                 WORK )

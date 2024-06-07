@@ -228,8 +228,8 @@
 *  ====================================================================
 *
 *     .. Parameters ..
-      COMPLEX            NEGONE, ONE, ZERO
-      PARAMETER          ( NEGONE = (-1.0E0,0.0E0), ONE = (1.0E0,0.0E0),
+      COMPLEX            NEGONE, ZERO
+      PARAMETER          ( NEGONE = (-1.0E0,0.0E0),
      $                     ZERO = (0.0E0,0.0E0) )
 *     ..
 *     .. Local Scalars ..
@@ -239,7 +239,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL,
+      EXTERNAL           CLARF1F, CLARFGP, CUNBDB5, CSROT, CSCAL,
      $                   CLACGV,
      $                   XERBLA
 *     ..
@@ -309,14 +309,12 @@
             THETA(I) = ATAN2( REAL( PHANTOM(1) ), REAL( PHANTOM(P+1) ) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            PHANTOM(1) = ONE
-            PHANTOM(P+1) = ONE
-            CALL CLARF( 'L', P, Q, PHANTOM(1), 1, CONJG(TAUP1(1)),
-     $                  X11,
-     $                  LDX11, WORK(ILARF) )
-            CALL CLARF( 'L', M-P, Q, PHANTOM(P+1), 1,
-     $                  CONJG(TAUP2(1)),
-     $                  X21, LDX21, WORK(ILARF) )
+            CALL CLARF1F( 'L', P, Q, PHANTOM(1), 1, CONJG(TAUP1(1)),
+     $                    X11,
+     $                    LDX11, WORK(ILARF) )
+            CALL CLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1,
+     $                    CONJG(TAUP2(1)),
+     $                    X21, LDX21, WORK(ILARF) )
          ELSE
             CALL CUNBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
@@ -329,23 +327,22 @@
             THETA(I) = ATAN2( REAL( X11(I,I-1) ), REAL( X21(I,I-1) ) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            X11(I,I-1) = ONE
-            X21(I,I-1) = ONE
-            CALL CLARF( 'L', P-I+1, Q-I+1, X11(I,I-1), 1,
-     $                  CONJG(TAUP1(I)), X11(I,I), LDX11, WORK(ILARF) )
-            CALL CLARF( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1,
-     $                  CONJG(TAUP2(I)), X21(I,I), LDX21, WORK(ILARF) )
+            CALL CLARF1F( 'L', P-I+1, Q-I+1, X11(I,I-1), 1,
+     $                    CONJG(TAUP1(I)), X11(I,I), LDX11,
+     $                    WORK(ILARF) )
+            CALL CLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1,
+     $                    CONJG(TAUP2(I)), X21(I,I), LDX21,
+     $                    WORK(ILARF) )
          END IF
 *
          CALL CSROT( Q-I+1, X11(I,I), LDX11, X21(I,I), LDX21, S, -C )
          CALL CLACGV( Q-I+1, X21(I,I), LDX21 )
          CALL CLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          C = REAL( X21(I,I) )
-         X21(I,I) = ONE
-         CALL CLARF( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL CLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X21(I+1,I), LDX21, WORK(ILARF) )
+         CALL CLARF1F( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X11(I+1,I), LDX11, WORK(ILARF) )
+         CALL CLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X21(I+1,I), LDX21, WORK(ILARF) )
          CALL CLACGV( Q-I+1, X21(I,I), LDX21 )
          IF( I .LT. M-Q ) THEN
             S = SQRT( SCNRM2( P-I, X11(I+1,I), 1 )**2
@@ -360,11 +357,10 @@
       DO I = M - Q + 1, P
          CALL CLACGV( Q-I+1, X11(I,I), LDX11 )
          CALL CLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
-         X11(I,I) = ONE
-         CALL CLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL CLARF( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X21(M-Q+1,I), LDX21, WORK(ILARF) )
+         CALL CLARF1F( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+     $                 X11(I+1,I), LDX11, WORK(ILARF) )
+         CALL CLARF1F( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+     $                 X21(M-Q+1,I), LDX21, WORK(ILARF) )
          CALL CLACGV( Q-I+1, X11(I,I), LDX11 )
       END DO
 *
@@ -375,10 +371,9 @@
          CALL CLARFGP( Q-I+1, X21(M-Q+I-P,I), X21(M-Q+I-P,I+1),
      $                 LDX21,
      $                 TAUQ1(I) )
-         X21(M-Q+I-P,I) = ONE
-         CALL CLARF( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
-     $               TAUQ1(I),
-     $               X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
+         CALL CLARF1F( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
+     $                 TAUQ1(I),
+     $                 X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
          CALL CLACGV( Q-I+1, X21(M-Q+I-P,I), LDX21 )
       END DO
 *

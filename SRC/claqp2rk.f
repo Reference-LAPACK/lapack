@@ -254,7 +254,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (N-1)
-*>          Used in CLARF subroutine to apply an elementary
+*>          Used in CLARF1F subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
 *>
@@ -364,18 +364,16 @@
 *     .. Parameters ..
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
-      COMPLEX            CZERO, CONE
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
-     $                   CONE = ( 1.0E+0, 0.0E+0 ) )
+      COMPLEX            CZERO
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
       REAL               HUGEVAL, TAUNAN, TEMP, TEMP2, TOL3Z
-      COMPLEX            AIKK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFG, CSWAP
+      EXTERNAL           CLARF1F, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CONJG, AIMAG, MAX, MIN, SQRT
@@ -633,12 +631,9 @@
 *         condition is satisfied, not only KK < N+NRHS )
 *
          IF( KK.LT.MINMNUPDT ) THEN
-            AIKK = A( I, KK )
-            A( I, KK ) = CONE
-            CALL CLARF( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
-     $                  CONJG( TAU( KK ) ), A( I, KK+1 ), LDA,
-     $                  WORK( 1 ) )
-            A( I, KK ) = AIKK
+            CALL CLARF1F( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
+     $                    CONJG( TAU( KK ) ), A( I, KK+1 ), LDA,
+     $                    WORK( 1 ) )
          END IF
 *
          IF( KK.LT.MINMNFACT ) THEN

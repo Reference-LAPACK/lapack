@@ -141,16 +141,11 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX            ONE
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
-*     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFG, XERBLA
+      EXTERNAL           CLARF1F, CLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN
@@ -184,11 +179,8 @@
 *
 *           Apply H(i)**H to A(i:m,i+1:n) from the left
 *
-            ALPHA = A( I, I )
-            A( I, I ) = ONE
-            CALL CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
-     $                  CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
-            A( I, I ) = ALPHA
+            CALL CLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $                    CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
          END IF
    10 CONTINUE
       RETURN
