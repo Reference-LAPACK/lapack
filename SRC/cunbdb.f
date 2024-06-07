@@ -544,8 +544,9 @@
             CALL CLACGV( M-P-Q-I+1, X22(Q+I,P+I), LDX22 )
             CALL CLARFGP( M-P-Q-I+1, X22(Q+I,P+I), X22(Q+I,P+I+1),
      $                    LDX22, TAUQ2(P+I) )
-            CALL CLARF1F( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I), LDX22,
-     $                    TAUQ2(P+I), X22(Q+I+1,P+I), LDX22, WORK )
+            CALL CLARF1F( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I),
+     $                    LDX22, TAUQ2(P+I), X22(Q+I+1,P+I), LDX22,
+     $                    WORK )
 *
             CALL CLACGV( M-P-Q-I+1, X22(Q+I,P+I), LDX22 )
 *

@@ -639,8 +639,8 @@
             IF( I .LT. Q ) THEN
                CALL SLARF1F( 'L', Q-I, P-I, X11(I+1,I), 1, TAUQ1(I),
      $                       X11(I+1,I+1), LDX11, WORK )
-               CALL SLARF1F( 'L', Q-I, M-P-I, X11(I+1,I), 1, TAUQ1(I),
-     $                       X21(I+1,I+1), LDX21, WORK )
+               CALL SLARF1F( 'L', Q-I, M-P-I, X11(I+1,I), 1,
+     $                       TAUQ1(I), X21(I+1,I+1), LDX21, WORK )
             END IF
             CALL SLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
      $                    X12(I,I+1), LDX12, WORK )
