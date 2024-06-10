@@ -170,16 +170,7 @@
          ELSE
             LASTV = N
          END IF
-         IF( INCV.GT.0 ) THEN
-            I = 1 + (LASTV-1) * INCV
-         ELSE
-            I = 1
-         END IF
 !     Look for the last non-zero row in V.
-         DO WHILE( LASTV.GT.0 .AND. V( I ).EQ.ZERO )
-            LASTV = LASTV - 1
-            I = I - INCV
-         END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
             LASTC = ILADLC(LASTV, N, C, LDC)
@@ -187,6 +178,8 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
+      ELSE
+         RETURN
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
 !     case is needed at this level.

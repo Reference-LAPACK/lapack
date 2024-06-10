@@ -211,7 +211,7 @@
 !     Look for the last non-zero row in V.
 !        Since we are assuming that V(1) = 1, and it is not stored, so we
 !        shouldn't access it.
-         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
+         DO WHILE( LASTV.GE.2 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
@@ -232,7 +232,7 @@
 *
          ! Check if lastv = 1. This means v = 1, So we just need to compute
          ! C := HC = (1-\tau)C.
-         IF( LASTV.EQ.1 ) THEN
+         IF( LASTV.LE.1 ) THEN
             CALL DSCAL(LASTC, ONE - TAU, C, LDC)
          ELSE
 *
