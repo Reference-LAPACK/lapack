@@ -18,7 +18,7 @@ macro(CheckLAPACKCompilerFlags)
     if(WIN32)
       set(FOPT_ILP64 /integer-size:64)
     else()
-      set(FOPT_ILP64 "-integer-size 64")
+      set(FOPT_ILP64 "SHELL:-integer-size 64")
     endif()
   elseif((CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge") OR  # CMake 2.6
          (CMAKE_Fortran_COMPILER_ID STREQUAL "XL"))           # CMake 2.8
@@ -61,7 +61,7 @@ macro(CheckLAPACKCompilerFlags)
 
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
     if(UNIX)
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fp-model strict>")
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:SHELL:-fp-model strict>")
     endif()
 
   # SunPro F95
