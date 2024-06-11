@@ -84,7 +84,7 @@
 *> \param[in] INCV
 *> \verbatim
 *>          INCV is INTEGER
-*>          The increment between elements of v. INCV <> 0.
+*>          The increment between elements of v. INCV > 0.
 *> \endverbatim
 *>
 *> \param[in] TAU
@@ -149,7 +149,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
-      INTEGER            I, LASTV, LASTC
+      INTEGER            I, J, LASTV, LASTC, FIRSTV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMV, CGERC, CSCAL
@@ -165,7 +165,7 @@
 *     .. Executable Statements ..
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
-      LASTV = 1
+      FIRSTV = 1
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
@@ -175,15 +175,11 @@
          ELSE
             LASTV = N
          END IF
-         IF( INCV.GT.0 ) THEN
-            I = 1 + (LASTV-1) * INCV
-         ELSE
-            I = 1
-         END IF
+         I = 1
 !     Look for the last non-zero row in V.
-         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
-            LASTV = LASTV - 1
-            I = I - INCV
+         DO WHILE( LASTV.GT.FIRSTV .AND. V( I ).EQ.ZERO )
+            FIRSTV = FIRSTV + 1
+            I = I + INCV
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
@@ -200,51 +196,53 @@
 *
 *        Form  H * C
 *
-         IF( LASTV.EQ.1 ) THEN        
+         IF( LASTV.EQ.FIRSTV ) THEN        
 *
-*           C(1,1:lastc) := ( 1 - tau ) * C(1,1:lastc)
+*           C(lastv,1:lastc) := ( 1 - tau ) * C(lastv,1:lastc)
 *
-            CALL CSCAL( LASTC, ONE - TAU, C, LDC )
+            CALL CSCAL( LASTC, ONE - TAU, C( LASTV, 1 ), LDC )
          ELSE
 *
-*           w(1:lastc,1) := C(1:lastv-1,1:lastc)**T * v(1:lastv-1,1)
+*           w(1:lastc,1) := C(firstv:lastv-1,1:lastc)**T * v(firstv:lastv-1,1)
 *
-            CALL CGEMV( 'Conjugate transpose', LASTV - 1, LASTC,
-     $                  ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
+            CALL CGEMV( 'Conjugate transpose', LASTV - FIRSTV, LASTC,
+     $                  ONE, C( FIRSTV, 1 ), LDC, V( I ), INCV, ZERO,
+     $                  WORK, 1 )
 *
 *           w(1:lastc,1) += C(lastv,1:lastc)**H * v(lastv,1)
 *
-            DO I = 1, LASTC
-               WORK( I ) = WORK( I ) + CONJG( C( LASTV, I ) )
+            DO J = 1, LASTC
+               WORK( J ) = WORK( J ) + CONJG( C( LASTV, J ) )
             END DO
 *
 *           C(lastv,1:lastc) += - tau * v(lastv,1) * w(1:lastc,1)**H
 *
-            DO I = 1, LASTC
-               C( LASTV, I ) = C( LASTV, I )
-     $                         - TAU * CONJG( WORK( I ) )
+            DO J = 1, LASTC
+               C( LASTV, J ) = C( LASTV, J )
+     $                         - TAU * CONJG( WORK( J ) )
             END DO
 *
-*           C(1:lastv-1,1:lastc) += - tau * v(1:lastv-1,1) * w(1:lastc,1)**H
+*           C(firstv:lastv-1,1:lastc) += - tau * v(firstv:lastv-1,1) * w(1:lastc,1)**H
 *
-            CALL CGERC( LASTV - 1, LASTC, -TAU, V, INCV, WORK, 1, C,
-     $                  LDC)
+            CALL CGERC( LASTV - FIRSTV, LASTC, -TAU, V( I ), INCV,
+     $                  WORK, 1, C( FIRSTV, 1 ), LDC)
          END IF
       ELSE
 *
 *        Form  C * H
 *
-         IF( LASTV.EQ.1 ) THEN
+         IF( LASTV.EQ.FIRSTV ) THEN
 *
-*           C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1)
+*           C(1:lastc,lastv) := ( 1 - tau ) * C(1:lastc,lastv)
 *
-            CALL CSCAL( LASTC, ONE - TAU, C, 1 )
+            CALL CSCAL( LASTC, ONE - TAU, C( 1, LASTV ), 1 )
          ELSE
 *
-*           w(1:lastc,1) := C(1:lastc,1:lastv-1) * v(1:lastv-1,1)
+*           w(1:lastc,1) := C(1:lastc,firstv:lastv-1) * v(firstv:lastv-1,1)
 *
-            CALL CGEMV( 'No transpose', LASTC, LASTV - 1, ONE, C,
-     $                  LDC, V, INCV, ZERO, WORK, 1 )
+            CALL CGEMV( 'No transpose', LASTC, LASTV - FIRSTV, ONE,
+     $                  C( 1, FIRSTV ), LDC, V( I ), INCV, ZERO,
+     $                  WORK, 1 )
 *
 *           w(1:lastc,1) += C(1:lastc,lastv) * v(lastv,1)
 *
@@ -254,10 +252,10 @@
 *
             CALL CAXPY( LASTC, -TAU, WORK, 1, C( 1, LASTV ), 1 )
 *
-*           C(1:lastc,1:lastv-1) += - tau * w(1:lastc,1) * v(1:lastv-1)**H
+*           C(1:lastc,firstv:lastv-1) += - tau * w(1:lastc,1) * v(firstv:lastv-1)**H
 *
-            CALL CGERC( LASTC, LASTV - 1, -TAU, WORK, 1, V,
-     $                  INCV, C, LDC )
+            CALL CGERC( LASTC, LASTV - FIRSTV, -TAU, WORK, 1, V( I ),
+     $                  INCV, C( 1, FIRSTV ), LDC )
          END IF
       END IF
       RETURN
