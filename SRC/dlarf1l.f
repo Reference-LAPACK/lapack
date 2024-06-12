@@ -147,7 +147,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
-      INTEGER            I, LASTV, LASTC, J, FIRSTV
+      INTEGER            I, J, FIRSTV, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DGER
