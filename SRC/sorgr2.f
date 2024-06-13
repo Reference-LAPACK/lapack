@@ -182,8 +182,7 @@
 *
          A( II, N-M+II ) = ONE
          CALL SLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
-     $                 TAU( I ),
-     $                 A, LDA, WORK )
+     $                 TAU( I ), A, LDA, WORK )
          CALL SSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE - TAU( I )
 *

@@ -216,8 +216,8 @@
 *  ====================================================================
 *
 *     .. Parameters ..
-      REAL               NEGONE, ONE
-      PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0 )
+      REAL               NEGONE
+      PARAMETER          ( NEGONE = -1.0E0 )
 *     ..
 *     .. Local Scalars ..
       REAL               C, S
@@ -289,8 +289,7 @@
          CALL SLARF1F( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $                 X11(I+1,I), LDX11, WORK(ILARF) )
          CALL SLARF1F( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11,
-     $                 TAUQ1(I),
-     $                 X21(I,I), LDX21, WORK(ILARF) )
+     $                 TAUQ1(I), X21(I,I), LDX21, WORK(ILARF) )
          S = SQRT( SNRM2( P-I, X11(I+1,I), 1 )**2
      $           + SNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )

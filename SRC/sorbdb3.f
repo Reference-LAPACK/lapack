@@ -216,10 +216,6 @@
 *
 *  ====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E0 )
-*     ..
 *     .. Local Scalars ..
       REAL               C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
@@ -310,8 +306,7 @@
      $                    X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
          CALL SLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
-     $                 I+1),
-     $                 LDX11, WORK(ILARF) )
+     $                 I+1), LDX11, WORK(ILARF) )
 *
       END DO
 *
@@ -320,8 +315,7 @@
       DO I = M-P + 1, Q
          CALL SLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          CALL SLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
-     $                 I+1),
-     $                 LDX11, WORK(ILARF) )
+     $                 I+1), LDX11, WORK(ILARF) )
       END DO
 *
       RETURN

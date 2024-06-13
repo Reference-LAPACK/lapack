@@ -307,8 +307,6 @@
 *     .. Parameters ..
       REAL               REALONE
       PARAMETER          ( REALONE = 1.0E0 )
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY
@@ -436,18 +434,15 @@
             END IF
             IF ( M-Q+1 .GT. I ) THEN
                CALL SLARF1F( 'L', P-I+1, M-Q-I+1, X11(I,I), 1,
-     $                       TAUP1(I),
-     $                       X12(I,I), LDX12, WORK )
+     $                       TAUP1(I), X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
                CALL SLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1,
-     $                       TAUP2(I),
-     $                       X21(I,I+1), LDX21, WORK )
+     $                       TAUP2(I), X21(I,I+1), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
                CALL SLARF1F( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1,
-     $                       TAUP2(I),
-     $                       X22(I,I), LDX22, WORK )
+     $                       TAUP2(I), X22(I,I), LDX22, WORK )
             END IF
 *
             IF( I .LT. Q ) THEN
@@ -488,16 +483,13 @@
 *
             IF( I .LT. Q ) THEN
                CALL SLARF1F( 'R', P-I, Q-I, X11(I,I+1), LDX11,
-     $                       TAUQ1(I),
-     $                       X11(I+1,I+1), LDX11, WORK )
+     $                       TAUQ1(I), X11(I+1,I+1), LDX11, WORK )
                CALL SLARF1F( 'R', M-P-I, Q-I, X11(I,I+1), LDX11,
-     $                       TAUQ1(I),
-     $                       X21(I+1,I+1), LDX21, WORK )
+     $                       TAUQ1(I), X21(I+1,I+1), LDX21, WORK )
             END IF
             IF ( P .GT. I ) THEN
                CALL SLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
-     $                       TAUQ2(I),
-     $                       X12(I+1,I), LDX12, WORK )
+     $                       TAUQ2(I), X12(I+1,I), LDX12, WORK )
             END IF
             IF ( M-P .GT. I ) THEN
                CALL SLARF1F( 'R', M-P-I, M-Q-I+1, X12(I,I), LDX12,
@@ -521,8 +513,7 @@
 *
             IF ( P .GT. I ) THEN
                CALL SLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
-     $                       TAUQ2(I),
-     $                       X12(I+1,I), LDX12, WORK )
+     $                       TAUQ2(I), X12(I+1,I), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
      $         CALL SLARF1F( 'R', M-P-Q, M-Q-I+1, X12(I,I), LDX12,
@@ -589,8 +580,7 @@
 *
             IF ( Q .GT. I ) THEN
                CALL SLARF1F( 'R', Q-I, P-I+1, X11(I,I), LDX11,
-     $                       TAUP1(I),
-     $                       X11(I+1,I), LDX11, WORK )
+     $                       TAUP1(I), X11(I+1,I), LDX11, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
                CALL SLARF1F( 'R', M-Q-I+1, P-I+1, X11(I,I), LDX11,
@@ -598,8 +588,7 @@
             END IF
             IF ( Q .GT. I ) THEN
                CALL SLARF1F( 'R', Q-I, M-P-I+1, X21(I,I), LDX21,
-     $                       TAUP2(I),
-     $                       X21(I+1,I), LDX21, WORK )
+     $                       TAUP2(I), X21(I+1,I), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
                CALL SLARF1F( 'R', M-Q-I+1, M-P-I+1, X21(I,I), LDX21,
@@ -646,8 +635,7 @@
      $                    X12(I,I+1), LDX12, WORK )
             IF ( M-P-I .GT. 0 ) THEN
                CALL SLARF1F( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,
-     $                       TAUQ2(I),
-     $                       X22(I,I+1), LDX22, WORK )
+     $                       TAUQ2(I), X22(I,I+1), LDX22, WORK )
             END IF
 *
          END DO
@@ -662,13 +650,11 @@
 *
             IF ( P .GT. I ) THEN
                CALL SLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1,
-     $                       TAUQ2(I),
-     $                       X12(I,I+1), LDX12, WORK )
+     $                       TAUQ2(I), X12(I,I+1), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
      $         CALL SLARF1F( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1,
-     $                       TAUQ2(I),
-     $                       X22(I,Q+1), LDX22, WORK )
+     $                       TAUQ2(I), X22(I,Q+1), LDX22, WORK )
 *
          END DO
 *
@@ -686,8 +672,8 @@
      $                       1,
      $                       TAUQ2(P+I) )
                CALL SLARF1F( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I),
-     $                       1, TAUQ2(P+I), X22(P+I,Q+I+1),
-     $                       LDX22, WORK )
+     $                       1, TAUQ2(P+I), X22(P+I,Q+I+1), LDX22,
+     $                       WORK )
             END IF
 *
 *

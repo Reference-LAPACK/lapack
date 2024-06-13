@@ -485,16 +485,13 @@
 *
             IF( I .LT. Q ) THEN
                CALL CLARF1F( 'R', P-I, Q-I, X11(I,I+1), LDX11,
-     $                       TAUQ1(I),
-     $                       X11(I+1,I+1), LDX11, WORK )
+     $                       TAUQ1(I), X11(I+1,I+1), LDX11, WORK )
                CALL CLARF1F( 'R', M-P-I, Q-I, X11(I,I+1), LDX11,
-     $                       TAUQ1(I),
-     $                       X21(I+1,I+1), LDX21, WORK )
+     $                       TAUQ1(I), X21(I+1,I+1), LDX21, WORK )
             END IF
             IF ( P .GT. I ) THEN
                CALL CLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
-     $                       TAUQ2(I),
-     $                       X12(I+1,I), LDX12, WORK )
+     $                       TAUQ2(I), X12(I+1,I), LDX12, WORK )
             END IF
             IF ( M-P .GT. I ) THEN
                CALL CLARF1F( 'R', M-P-I, M-Q-I+1, X12(I,I), LDX12,
@@ -524,8 +521,7 @@
 *
             IF ( P .GT. I ) THEN
                CALL CLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
-     $                       TAUQ2(I),
-     $                       X12(I+1,I), LDX12, WORK )
+     $                       TAUQ2(I), X12(I+1,I), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
      $         CALL CLARF1F( 'R', M-P-Q, M-Q-I+1, X12(I,I), LDX12,
@@ -596,8 +592,7 @@
             CALL CLARF1F( 'R', Q-I, P-I+1, X11(I,I), LDX11, TAUP1(I),
      $                    X11(I+1,I), LDX11, WORK )
             CALL CLARF1F( 'R', M-Q-I+1, P-I+1, X11(I,I), LDX11,
-     $                    TAUP1(I),
-     $                    X12(I,I), LDX12, WORK )
+     $                    TAUP1(I), X12(I,I), LDX12, WORK )
             CALL CLARF1F( 'R', Q-I, M-P-I+1, X21(I,I), LDX21,
      $                    TAUP2(I), X21(I+1,I), LDX21, WORK )
             CALL CLARF1F( 'R', M-Q-I+1, M-P-I+1, X21(I,I), LDX21,
@@ -638,8 +633,7 @@
      $                       WORK )
             END IF
             CALL CLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1,
-     $                    CONJG(TAUQ2(I)),
-     $                    X12(I,I+1), LDX12, WORK )
+     $                    CONJG(TAUQ2(I)), X12(I,I+1), LDX12, WORK )
 
             IF ( M-P .GT. I ) THEN
                CALL CLARF1F( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,

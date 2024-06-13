@@ -217,10 +217,6 @@
 *
 *  ====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E0 )
-*     ..
 *     .. Local Scalars ..
       REAL               C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
@@ -288,10 +284,9 @@
          C = COS( THETA(I) )
          S = SIN( THETA(I) )
          CALL SLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
-     $                 I+1),
-     $                 LDX11, WORK(ILARF) )
+     $                 I+1), LDX11, WORK(ILARF) )
          CALL SLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+     $                 X21(I,I+1), LDX21, WORK(ILARF) )
 *
          IF( I .LT. Q ) THEN
             CALL SROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C,
@@ -302,8 +297,8 @@
             CALL SLARF1F( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                    X11(I+1,I+1), LDX11, WORK(ILARF) )
             CALL SLARF1F( 'R', M-P-I, Q-I, X21(I,I+1), LDX21,
-     $                    TAUQ1(I),
-     $                    X21(I+1,I+1), LDX21, WORK(ILARF) )
+     $                    TAUQ1(I), X21(I+1,I+1), LDX21,
+     $                    WORK(ILARF) )
             C = SQRT( SNRM2( P-I, X11(I+1,I+1), 1 )**2
      $              + SNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )

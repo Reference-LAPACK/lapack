@@ -163,10 +163,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            FORWRD, LEFT, NOTRAN, UPPER
       INTEGER            I, I1, I2, I3, IC, II, JC, MI, NI, NQ
@@ -261,8 +257,7 @@
 *           Apply H(i)
 *
             CALL SLARF1L( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
-     $                    LDC,
-     $                    WORK )
+     $                    LDC, WORK )
 *
             IF( FORWRD ) THEN
                II = II + I + 2

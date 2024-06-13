@@ -171,10 +171,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
@@ -262,8 +258,7 @@
 *        Apply H(i)
 *
          CALL SLARF1L( SIDE, MI, NI, A( I, 1 ), LDA, TAU( I ), C,
-     $                 LDC,
-     $                 WORK )
+     $                 LDC, WORK )
    10 CONTINUE
       RETURN
 *

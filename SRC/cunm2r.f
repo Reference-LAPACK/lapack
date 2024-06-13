@@ -267,8 +267,7 @@
             TAUI = CONJG( TAU( I ) )
          END IF
          CALL CLARF1F( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ),
-     $                 LDC,
-     $                 WORK )
+     $                 LDC, WORK )
    10 CONTINUE
       RETURN
 *

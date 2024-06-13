@@ -229,8 +229,8 @@
 *  ====================================================================
 *
 *     .. Parameters ..
-      REAL               NEGONE, ONE, ZERO
-      PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0, ZERO = 0.0E0 )
+      REAL               NEGONE, ZERO
+      PARAMETER          ( NEGONE = -1.0E0, ZERO = 0.0E0 )
 *     ..
 *     .. Local Scalars ..
       REAL               C, S
@@ -309,11 +309,9 @@
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
             CALL SLARF1F( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
-     $                    LDX11,
-     $                    WORK(ILARF) )
+     $                    LDX11, WORK(ILARF) )
             CALL SLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1),
-     $                    X21,
-     $                    LDX21, WORK(ILARF) )
+     $                    X21, LDX21, WORK(ILARF) )
          ELSE
             CALL SORBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
@@ -329,8 +327,7 @@
             CALL SLARF1F( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
      $                    X11(I,I), LDX11, WORK(ILARF) )
             CALL SLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1,
-     $                    TAUP2(I),
-     $                    X21(I,I), LDX21, WORK(ILARF) )
+     $                    TAUP2(I), X21(I,I), LDX21, WORK(ILARF) )
          END IF
 *
          CALL SROT( Q-I+1, X11(I,I), LDX11, X21(I,I), LDX21, S, -C )
@@ -365,8 +362,8 @@
      $                 LDX21,
      $                 TAUQ1(I) )
          CALL SLARF1F( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
-     $                 TAUQ1(I),
-     $                 X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
+     $                 TAUQ1(I), X21(M-Q+I-P+1,I), LDX21,
+     $                 WORK(ILARF) )
       END DO
 *
       RETURN

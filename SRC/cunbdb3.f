@@ -305,8 +305,8 @@
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             CALL CLARF1F( 'L', M-P-I, Q-I, X21(I+1,I), 1,
-     $                    CONJG(TAUP2(I)),
-     $                    X21(I+1,I+1), LDX21, WORK(ILARF) )
+     $                    CONJG(TAUP2(I)), X21(I+1,I+1), LDX21,
+     $                    WORK(ILARF) )
          END IF
          CALL CLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, CONJG(TAUP1(I)),
      $                 X11(I,I+1), LDX11, WORK(ILARF) )

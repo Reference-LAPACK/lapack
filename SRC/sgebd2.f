@@ -247,8 +247,7 @@
 *
             IF( I.LT.N )
      $         CALL SLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1,
-     $                       TAUQ( I ),
-     $                       A( I, I+1 ), LDA, WORK )
+     $                       TAUQ( I ), A( I, I+1 ), LDA, WORK )
 *
             IF( I.LT.N ) THEN
 *
@@ -299,8 +298,7 @@
 *              Apply H(i) to A(i+1:m,i+1:n) from the left
 *
                CALL SLARF1F( 'Left', M-I, N-I, A( I+1, I ), 1,
-     $                       TAUQ( I ),
-     $                       A( I+1, I+1 ), LDA, WORK )
+     $                       TAUQ( I ), A( I+1, I+1 ), LDA, WORK )
             ELSE
                TAUQ( I ) = ZERO
             END IF

@@ -140,10 +140,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       INTEGER            I, K
 *     ..
@@ -183,8 +179,7 @@
 *           Apply H(i) to A(i+1:m,i:n) from the right
 *
             CALL SLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                    TAU( I ),
-     $                    A( I+1, I ), LDA, WORK )
+     $                    TAU( I ), A( I+1, I ), LDA, WORK )
          END IF
    10 CONTINUE
       RETURN

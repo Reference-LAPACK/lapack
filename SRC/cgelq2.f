@@ -180,8 +180,7 @@
 *           Apply H(i) to A(i+1:m,i:n) from the right
 *
             CALL CLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                    TAU( I ),
-     $                    A( I+1, I ), LDA, WORK )
+     $                    TAU( I ), A( I+1, I ), LDA, WORK )
          END IF
          CALL CLACGV( N-I+1, A( I, I ), LDA )
    10 CONTINUE

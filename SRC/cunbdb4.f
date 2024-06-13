@@ -310,11 +310,9 @@
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
             CALL CLARF1F( 'L', P, Q, PHANTOM(1), 1, CONJG(TAUP1(1)),
-     $                    X11,
-     $                    LDX11, WORK(ILARF) )
+     $                    X11, LDX11, WORK(ILARF) )
             CALL CLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1,
-     $                    CONJG(TAUP2(1)),
-     $                    X21, LDX21, WORK(ILARF) )
+     $                    CONJG(TAUP2(1)), X21, LDX21, WORK(ILARF) )
          ELSE
             CALL CUNBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
@@ -372,8 +370,8 @@
      $                 LDX21,
      $                 TAUQ1(I) )
          CALL CLARF1F( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
-     $                 TAUQ1(I),
-     $                 X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
+     $                 TAUQ1(I), X21(M-Q+I-P+1,I), LDX21,
+     $                 WORK(ILARF) )
          CALL CLACGV( Q-I+1, X21(M-Q+I-P,I), LDX21 )
       END DO
 *
