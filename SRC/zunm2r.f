@@ -185,7 +185,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF
+      EXTERNAL           XERBLA, ZLARF1F
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -270,12 +270,9 @@
          ELSE
             TAUI = DCONJG( TAU( I ) )
          END IF
-         AII = A( I, I )
-         A( I, I ) = ONE
-         CALL ZLARF( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ),
+         CALL ZLARF1F( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ),
      $               LDC,
      $               WORK )
-         A( I, I ) = AII
    10 CONTINUE
       RETURN
 *

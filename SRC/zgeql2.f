@@ -172,15 +172,13 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(1:m-k+i-1,n-k+i)
 *
-         ALPHA = A( M-K+I, N-K+I )
-         CALL ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
+         CALL ZLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
+     $                TAU( I ) )
 *
 *        Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left
 *
-         A( M-K+I, N-K+I ) = ONE
-         CALL ZLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
-     $               DCONJG( TAU( I ) ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = ALPHA
+         CALL ZLARF1L( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
+     $                 CONJG( TAU( I ) ), A, LDA, WORK )
    10 CONTINUE
       RETURN
 *

@@ -174,7 +174,7 @@
       COMPLEX*16         AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFG, ZSWAP
+      EXTERNAL           ZLARF1F, ZLARFG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MIN, SQRT
@@ -222,12 +222,9 @@
 *
 *           Apply H(i)**H to A(offset+i:m,i+1:n) from the left.
 *
-            AII = A( OFFPI, I )
-            A( OFFPI, I ) = CONE
-            CALL ZLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
-     $                  DCONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
-     $                  WORK( 1 ) )
-            A( OFFPI, I ) = AII
+            CALL ZLARF1F( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+     $                    CONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
+     $                    WORK( 1 ) )
          END IF
 *
 *        Update partial column norms.

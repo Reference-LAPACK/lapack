@@ -1,0 +1,18 @@
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+zgeql2.f:186:72:
+
+  186 |    10 CONTINUE
+      |                                                                        1
+Error: End of nonblock DO statement at (1) is within another block
+zgeql2.f:191:9:
+
+  191 |       END
+      |         1
+Error: END IF statement expected at (1)
+f951: Error: Unexpected end of file in ‘zgeql2.f’
+make[1]: *** [<builtin>: zgeql2.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:25: lapacklib] Error 2

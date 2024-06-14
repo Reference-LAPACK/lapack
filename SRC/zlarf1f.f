@@ -184,17 +184,17 @@
       INTEGER            I, LASTV, LASTC, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZGERC
+      EXTERNAL           ZGEMV, ZGERC, ZSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILADLR, ILADLC
-      EXTERNAL           LSAME, ILADLR, ILADLC
+      INTEGER            ILAZLR, ILAZLC
+      EXTERNAL           LSAME, ILAZLR, ILAZLC
 *     ..
 *     .. Executable Statements ..
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
-      LASTV = 0
+      LASTV = 1
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
@@ -218,13 +218,13 @@
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = ILADLC(LASTV, N, C, LDC)
+            LASTC = ILAZLC(LASTV, N, C, LDC)
          ELSE
 !     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = ILADLR(M, LASTV, C, LDC)
+            LASTC = ILAZLR(M, LASTV, C, LDC)
          END IF
-      END IF
-      IF( LASTC.EQ.0 .OR. LASTV.EQ.0 ) THEN
+      ELSE
+!        TAU is 0, so H = I. Meaning HC = C = CH.
          RETURN
       END IF
       IF( APPLYLEFT ) THEN
@@ -249,7 +249,7 @@
                ! w += C_1**H
                ! This is essentially a zaxpyc
                DO I = 1, LASTC
-                  WORK(I) = WORK(I) + DCONJG(C(1,I))
+                  WORK(I) = WORK(I) + CONJG(C(1,I))
                END DO
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
@@ -258,7 +258,7 @@
             !                  = C(...) - tau * Conj(w(1:lastc,1))
             ! This is essentially a zaxpyc
                DO I = 1, LASTC
-                  C(1,I) = C(1,I) - TAU * DCONJG(WORK(I))
+                  C(1,I) = C(1,I) - TAU * CONJG(WORK(I))
                END DO
                ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**H
                CALL ZGERC(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK,
