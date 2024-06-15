@@ -8,7 +8,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARF + dependencies
+*> Download DLARF1L + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf1l.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf1l.f">
@@ -147,7 +147,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
-      INTEGER            I, J, FIRSTV, LASTV, LASTC
+      INTEGER            I, FIRSTV, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DGER
@@ -183,8 +183,6 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
-      ELSE
-         RETURN
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
 !     case is needed at this level.

@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLARF applies a real elementary reflector H to a real m by n matrix
+*> DLARF1F applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
@@ -193,7 +193,7 @@
 *     .. Executable Statements ..
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
-      LASTV = 0
+      LASTV = 1
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
 !     Set up variables for scanning V.  LASTV begins pointing to the end
@@ -222,9 +222,6 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
-      ELSE
-!        TAU is 0, so H = I. Meaning HC = C = CH.
-         RETURN
       END IF
       IF( APPLYLEFT ) THEN
 *
@@ -232,7 +229,10 @@
 *
          ! Check if lastv = 1. This means v = 1, So we just need to compute
          ! C := HC = (1-\tau)C.
-         IF( LASTV.LE.1 ) THEN
+         IF( LASTV.EQ.1 ) THEN
+*
+*           C(1,1:lastc) := ( 1 - tau ) * C(1,1:lastc)
+*
             CALL DSCAL(LASTC, ONE - TAU, C, LDC)
          ELSE
 *
@@ -260,6 +260,9 @@
          ! Check if n = 1. This means v = 1, so we just need to compute
          ! C := CH = C(1-\tau).
          IF( LASTV.EQ.1 ) THEN
+*
+*           C(1:lastc,1) := ( 1 - tau ) * C(1:lastc,1)
+*
             CALL DSCAL(LASTC, ONE - TAU, C, 1)
          ELSE
 *
