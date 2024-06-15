@@ -158,7 +158,7 @@
       EXTERNAL           ZGEMV, ZGERC, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG
+      INTRINSIC          DCONJG
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

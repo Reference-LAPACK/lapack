@@ -185,6 +185,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV, ZGERC, ZSCAL
+*     .. Intrinsic Functions ..
+      INTRINSIC          DCONJG
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
