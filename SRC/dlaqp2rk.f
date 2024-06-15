@@ -253,7 +253,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (N-1)
-*>          Used in DLARF subroutine to apply an elementary
+*>          Used in DLARF1F subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
 *>
@@ -370,7 +370,7 @@
       DOUBLE PRECISION   HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, DSWAP
+      EXTERNAL           DLARF1F, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT

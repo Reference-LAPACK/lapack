@@ -372,7 +372,6 @@
       INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
       DOUBLE PRECISION   HUGEVAL, TAUNAN, TEMP, TEMP2, TOL3Z
-      COMPLEX*16         AIKK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLARF1F, ZLARFG, ZSWAP

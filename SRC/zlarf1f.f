@@ -7,12 +7,12 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf.f">
+*> Download ZLARF1F + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarf1f.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarf1f.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarf1f.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -248,8 +248,8 @@
      $                     V(1+INCV), INCV, ZERO, WORK, 1)
                ! w += C_1**H
                ! This is essentially a zaxpyc
-               DO I = 1, LASTC
-                  WORK(I) = WORK(I) + CONJG(C(1,I))
+               DO J = 1, LASTC
+                  WORK(J) = WORK(J) + DCONJG(C(1,J))
                END DO
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
@@ -257,8 +257,8 @@
             ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**H
             !                  = C(...) - tau * Conj(w(1:lastc,1))
             ! This is essentially a zaxpyc
-               DO I = 1, LASTC
-                  C(1,I) = C(1,I) - TAU * CONJG(WORK(I))
+               DO J = 1, LASTC
+                  C(1,J) = C(1,J) - TAU * DCONJG(WORK(J))
                END DO
                ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**H
                CALL ZGERC(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK,
@@ -294,6 +294,6 @@
       END IF
       RETURN
 *
-*     End of DLARF
+*     End of ZLARF1F
 *
       END

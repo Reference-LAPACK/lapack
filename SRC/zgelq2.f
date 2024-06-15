@@ -146,7 +146,6 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZLACGV, ZLARF1F, ZLARFG

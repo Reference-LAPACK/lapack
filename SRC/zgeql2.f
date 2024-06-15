@@ -140,10 +140,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFG
+      EXTERNAL           XERBLA, ZLARF1L, ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN

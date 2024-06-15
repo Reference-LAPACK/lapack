@@ -272,68 +272,68 @@
          END IF
       END IF
 *
-*      IF( NB.LT.NBMIN .OR. NB.GE.K ) THEN
+      IF( NB.LT.NBMIN .OR. NB.GE.K ) THEN
 *
 *        Use unblocked code
 *
          CALL DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                WORK,
      $                IINFO )
-*      ELSE
+      ELSE
 *
 *        Use blocked code
 *
-!        IWT = 1 + NW*NB
-!        IF( ( LEFT .AND. .NOT.NOTRAN ) .OR.
-!    $       ( .NOT.LEFT .AND. NOTRAN ) ) THEN
-!           I1 = 1
-!           I2 = K
-!           I3 = NB
-!        ELSE
-!           I1 = ( ( K-1 ) / NB )*NB + 1
-!           I2 = 1
-!           I3 = -NB
-!        END IF
+         IWT = 1 + NW*NB
+         IF( ( LEFT .AND. .NOT.NOTRAN ) .OR.
+     $       ( .NOT.LEFT .AND. NOTRAN ) ) THEN
+            I1 = 1
+            I2 = K
+            I3 = NB
+         ELSE
+            I1 = ( ( K-1 ) / NB )*NB + 1
+            I2 = 1
+            I3 = -NB
+         END IF
 *
-!        IF( LEFT ) THEN
-!           NI = N
-!           JC = 1
-!        ELSE
-!           MI = M
-!           IC = 1
-!        END IF
+         IF( LEFT ) THEN
+            NI = N
+            JC = 1
+         ELSE
+            MI = M
+            IC = 1
+         END IF
 *
-!         DO 10 I = I1, I2, I3
-!            IB = MIN( NB, K-I+1 )
+         DO 10 I = I1, I2, I3
+            IB = MIN( NB, K-I+1 )
 *
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-!            CALL DLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I,
-!     $                   I ),
-!     $                   LDA, TAU( I ), WORK( IWT ), LDT )
-!            IF( LEFT ) THEN
+            CALL DLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I,
+     $                   I ),
+     $                   LDA, TAU( I ), WORK( IWT ), LDT )
+            IF( LEFT ) THEN
 *
 *              H or H**T is applied to C(i:m,1:n)
 *
-!               MI = M - I + 1
-!               IC = I
-!            ELSE
+               MI = M - I + 1
+               IC = I
+            ELSE
 *
 *              H or H**T is applied to C(1:m,i:n)
 *
-!               NI = N - I + 1
-!               JC = I
-!            END IF
+               NI = N - I + 1
+               JC = I
+            END IF
 *
 *           Apply H or H**T
 *
-!           CALL DLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI,
-!    $                   NI,
-!    $                   IB, A( I, I ), LDA, WORK( IWT ), LDT,
-!    $                   C( IC, JC ), LDC, WORK, LDWORK )
-!  10    CONTINUE
-!     END IF
+            CALL DLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI,
+     $                   NI,
+     $                   IB, A( I, I ), LDA, WORK( IWT ), LDT,
+     $                   C( IC, JC ), LDC, WORK, LDWORK )
+   10    CONTINUE
+      END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *

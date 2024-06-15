@@ -171,7 +171,6 @@
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, MN, OFFPI, PVT
       DOUBLE PRECISION   TEMP, TEMP2, TOL3Z
-      COMPLEX*16         AII
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLARF1F, ZLARFG, ZSWAP

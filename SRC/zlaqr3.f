@@ -290,7 +290,7 @@
       PARAMETER          ( RZERO = 0.0d0, RONE = 1.0d0 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX*16         BETA, CDUM, S, TAU
+      COMPLEX*16         CDUM, S, TAU
       DOUBLE PRECISION   FOO, SAFMAX, SAFMIN, SMLNUM, ULP
       INTEGER            I, IFST, ILST, INFO, INFQR, J, JW, KCOL, KLN,
      $                   KNT, KROW, KWTOP, LTOP, LWK1, LWK2, LWK3,
