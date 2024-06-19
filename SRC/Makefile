@@ -137,7 +137,7 @@ SLASRC = \
    slaqgb.o slaqge.o slaqp2.o slaqps.o slaqp2rk.o slaqp3rk.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
-   slarf.o  slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
+   slarf.o  slarf1f.o slarf1l.o slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
    slargv.o slarmm.o slarrv.o slartv.o \
    slarz.o  slarzb.o slarzt.o slaswp.o slasy2.o slasyf.o slasyf_rook.o \
    slasyf_rk.o \
@@ -249,7 +249,7 @@ CLASRC = \
    claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqp2rk.o claqp3rk.o claqsb.o \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
-   clarf.o  clarfb.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
+   clarf.o  clarf1f.o clarf1l.o clarfb.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
    clarfx.o clarfy.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
    claswp.o clasyf.o clasyf_rook.o clasyf_rk.o clasyf_aa.o \

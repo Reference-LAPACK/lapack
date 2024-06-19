@@ -140,16 +140,11 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      REAL               AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFG, XERBLA
+      EXTERNAL           SLARF1F, SLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -183,12 +178,8 @@
 *
 *           Apply H(i) to A(i+1:m,i:n) from the right
 *
-            AII = A( I, I )
-            A( I, I ) = ONE
-            CALL SLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                  TAU( I ),
-     $                  A( I+1, I ), LDA, WORK )
-            A( I, I ) = AII
+            CALL SLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $                    TAU( I ), A( I+1, I ), LDA, WORK )
          END IF
    10 CONTINUE
       RETURN

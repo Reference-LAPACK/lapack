@@ -253,7 +253,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is REAL array, dimension (N-1)
-*>          Used in SLARF subroutine to apply an elementary
+*>          Used in SLARF1F subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
 *>
@@ -367,10 +367,10 @@
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
-      REAL               AIKK, HUGEVAL, TEMP, TEMP2, TOL3Z
+      REAL               HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFG, SSWAP
+      EXTERNAL           SLARF1F, SLARFG, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -621,11 +621,8 @@
 *         condition is satisfied, not only KK < N+NRHS )
 *
          IF( KK.LT.MINMNUPDT ) THEN
-            AIKK = A( I, KK )
-            A( I, KK ) = ONE
-            CALL SLARF( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
-     $                  TAU( KK ), A( I, KK+1 ), LDA, WORK( 1 ) )
-            A( I, KK ) = AIKK
+            CALL SLARF1F( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
+     $                    TAU( KK ), A( I, KK+1 ), LDA, WORK( 1 ) )
          END IF
 *
          IF( KK.LT.MINMNFACT ) THEN

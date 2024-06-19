@@ -168,10 +168,10 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, MN, OFFPI, PVT
-      REAL               AII, TEMP, TEMP2, TOL3Z
+      REAL               TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFG, SSWAP
+      EXTERNAL           SLARF1F, SLARFG, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -219,11 +219,8 @@
 *
 *           Apply H(i)**T to A(offset+i:m,i+1:n) from the left.
 *
-            AII = A( OFFPI, I )
-            A( OFFPI, I ) = ONE
-            CALL SLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
-     $                  TAU( I ), A( OFFPI, I+1 ), LDA, WORK( 1 ) )
-            A( OFFPI, I ) = AII
+            CALL SLARF1F( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+     $                    TAU( I ), A( OFFPI, I+1 ), LDA, WORK( 1 ) )
          END IF
 *
 *        Update partial column norms.

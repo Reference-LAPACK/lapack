@@ -134,7 +134,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CSCAL, XERBLA
+      EXTERNAL           CLARF1F, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -177,9 +177,8 @@
 *        Apply H(i) to A(i:m,i:n) from the left
 *
          IF( I.LT.N ) THEN
-            A( I, I ) = ONE
-            CALL CLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
-     $                  A( I, I+1 ), LDA, WORK )
+            CALL CLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+     $                    A( I, I+1 ), LDA, WORK )
          END IF
          IF( I.LT.M )
      $      CALL CSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )

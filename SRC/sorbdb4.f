@@ -229,8 +229,8 @@
 *  ====================================================================
 *
 *     .. Parameters ..
-      REAL               NEGONE, ONE, ZERO
-      PARAMETER          ( NEGONE = -1.0E0, ONE = 1.0E0, ZERO = 0.0E0 )
+      REAL               NEGONE, ZERO
+      PARAMETER          ( NEGONE = -1.0E0, ZERO = 0.0E0 )
 *     ..
 *     .. Local Scalars ..
       REAL               C, S
@@ -239,7 +239,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFGP, SORBDB5, SROT, SSCAL,
+      EXTERNAL           SLARF1F, SLARFGP, SORBDB5, SROT, SSCAL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -308,13 +308,10 @@
             THETA(I) = ATAN2( PHANTOM(1), PHANTOM(P+1) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            PHANTOM(1) = ONE
-            PHANTOM(P+1) = ONE
-            CALL SLARF( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
-     $                  LDX11,
-     $                  WORK(ILARF) )
-            CALL SLARF( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1), X21,
-     $                  LDX21, WORK(ILARF) )
+            CALL SLARF1F( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
+     $                    LDX11, WORK(ILARF) )
+            CALL SLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1),
+     $                    X21, LDX21, WORK(ILARF) )
          ELSE
             CALL SORBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
@@ -327,22 +324,19 @@
             THETA(I) = ATAN2( X11(I,I-1), X21(I,I-1) )
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
-            X11(I,I-1) = ONE
-            X21(I,I-1) = ONE
-            CALL SLARF( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
-     $                  X11(I,I), LDX11, WORK(ILARF) )
-            CALL SLARF( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1, TAUP2(I),
-     $                  X21(I,I), LDX21, WORK(ILARF) )
+            CALL SLARF1F( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
+     $                    X11(I,I), LDX11, WORK(ILARF) )
+            CALL SLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1,
+     $                    TAUP2(I), X21(I,I), LDX21, WORK(ILARF) )
          END IF
 *
          CALL SROT( Q-I+1, X11(I,I), LDX11, X21(I,I), LDX21, S, -C )
          CALL SLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          C = X21(I,I)
-         X21(I,I) = ONE
-         CALL SLARF( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL SLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X21(I+1,I), LDX21, WORK(ILARF) )
+         CALL SLARF1F( 'R', P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X11(I+1,I), LDX11, WORK(ILARF) )
+         CALL SLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X21(I+1,I), LDX21, WORK(ILARF) )
          IF( I .LT. M-Q ) THEN
             S = SQRT( SNRM2( P-I, X11(I+1,I), 1 )**2
      $              + SNRM2( M-P-I, X21(I+1,I), 1 )**2 )
@@ -355,11 +349,10 @@
 *
       DO I = M - Q + 1, P
          CALL SLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
-         X11(I,I) = ONE
-         CALL SLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL SLARF( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X21(M-Q+1,I), LDX21, WORK(ILARF) )
+         CALL SLARF1F( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+     $                 X11(I+1,I), LDX11, WORK(ILARF) )
+         CALL SLARF1F( 'R', Q-P, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+     $                 X21(M-Q+1,I), LDX21, WORK(ILARF) )
       END DO
 *
 *     Reduce the bottom-right portion of X21 to [ 0 I ]
@@ -368,10 +361,9 @@
          CALL SLARFGP( Q-I+1, X21(M-Q+I-P,I), X21(M-Q+I-P,I+1),
      $                 LDX21,
      $                 TAUQ1(I) )
-         X21(M-Q+I-P,I) = ONE
-         CALL SLARF( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
-     $               TAUQ1(I),
-     $               X21(M-Q+I-P+1,I), LDX21, WORK(ILARF) )
+         CALL SLARF1F( 'R', Q-I, Q-I+1, X21(M-Q+I-P,I), LDX21,
+     $                 TAUQ1(I), X21(M-Q+I-P+1,I), LDX21,
+     $                 WORK(ILARF) )
       END DO
 *
       RETURN

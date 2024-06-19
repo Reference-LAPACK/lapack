@@ -298,7 +298,7 @@
       PARAMETER          ( ZERO = 0.0e0, ONE = 1.0e0 )
 *     ..
 *     .. Local Scalars ..
-      REAL               AA, BB, BETA, CC, CS, DD, EVI, EVK, FOO, S,
+      REAL               AA, BB, CC, CS, DD, EVI, EVK, FOO, S,
      $                   SAFMAX, SAFMIN, SMLNUM, SN, TAU, ULP
       INTEGER            I, IFST, ILST, INFO, INFQR, J, JW, K, KCOL,
      $                   KEND, KLN, KROW, KWTOP, LTOP, LWK1, LWK2,
@@ -312,7 +312,8 @@
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEHRD, SGEMM, SLACPY,
      $                   SLAHQR,
-     $                   SLANV2, SLARF, SLARFG, SLASET, SORMHR, STREXC
+     $                   SLANV2, SLARF1L, SLARFG, SLASET, SORMHR,
+     $                   STREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX, MIN, REAL, SQRT
@@ -595,19 +596,17 @@
 *           ==== Reflect spike back into lower triangle ====
 *
             CALL SCOPY( NS, V, LDV, WORK, 1 )
-            BETA = WORK( 1 )
-            CALL SLARFG( NS, BETA, WORK( 2 ), 1, TAU )
-            WORK( 1 ) = ONE
+            CALL SLARFG( NS, WORK( 1 ), WORK( 2 ), 1, TAU )
 *
             CALL SLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
      $                   LDT )
 *
-            CALL SLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL SLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL SLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
-     $                  WORK( JW+1 ) )
+            CALL SLARF1F( 'L', NS, JW, WORK, 1, TAU, T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL SLARF1F( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL SLARF1F( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+     $                    WORK( JW+1 ) )
 *
             CALL SGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )
