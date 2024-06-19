@@ -46,7 +46,7 @@ void F77_s2chke(char *rout
    if (link_xerbla) /* call these first to link */
    {
       cblas_xerbla(cblas_info,cblas_rout,"");
-      F77_xerbla(cblas_rout,&cblas_info);
+      F77_xerbla(cblas_rout,&cblas_info, 1);
    }
 #endif
 
