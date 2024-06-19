@@ -13,7 +13,11 @@
 
 void F77_dgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CBLAS_INT *n,
               CBLAS_INT *k, double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
-              double *beta, double *c, CBLAS_INT *ldc ) {
+              double *beta, double *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
 
   double *A, *B, *C;
   CBLAS_INT i,j,LDA, LDB, LDC;
@@ -75,7 +79,11 @@ void F77_dgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
 }
 void F77_dsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
               double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
-              double *beta, double *c, CBLAS_INT *ldc ) {
+              double *beta, double *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
 
   double *A, *B, *C;
   CBLAS_INT i,j,LDA, LDB, LDC;
@@ -129,7 +137,11 @@ void F77_dsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
 
 void F77_dsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
               double *alpha, double *a, CBLAS_INT *lda,
-              double *beta, double *c, CBLAS_INT *ldc ) {
+              double *beta, double *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
 
   CBLAS_INT i,j,LDA,LDC;
   double *A, *C;
@@ -177,7 +189,11 @@ void F77_dsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
 
 void F77_dsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
                double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
-               double *beta, double *c, CBLAS_INT *ldc ) {
+               double *beta, double *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB,LDC;
   double *A, *B, *C;
   CBLAS_UPLO uplo;
@@ -232,7 +248,11 @@ void F77_dsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
 }
 void F77_dtrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
               CBLAS_INT *m, CBLAS_INT *n, double *alpha, double *a, CBLAS_INT *lda, double *b,
-              CBLAS_INT *ldb) {
+              CBLAS_INT *ldb
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB;
   double *A, *B;
   CBLAS_SIDE side;
@@ -283,7 +303,11 @@ void F77_dtrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
 
 void F77_dtrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
               CBLAS_INT *m, CBLAS_INT *n, double *alpha, double *a, CBLAS_INT *lda, double *b,
-              CBLAS_INT *ldb) {
+              CBLAS_INT *ldb
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB;
   double *A, *B;
   CBLAS_SIDE side;

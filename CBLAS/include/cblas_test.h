@@ -7,6 +7,15 @@
 #include "cblas.h"
 #include "cblas_mangling.h"
 
+/* It seems all current Fortran compilers put strlen at end.
+*  Some historical compilers put strlen after the str argument
+*  or make the str argument into a struct. */
+#define BLAS_FORTRAN_STRLEN_END
+
+#ifndef FORTRAN_STRLEN
+  #define FORTRAN_STRLEN size_t
+#endif
+
 #define  TRUE           1
 #define  PASSED         1
 #define  TEST_ROW_MJR	1

@@ -10,7 +10,11 @@ char *cblas_rout;
 #ifdef F77_Char
 void F77_xerbla(F77_Char F77_srname, void *vinfo);
 #else
-void F77_xerbla(char *srname, void *vinfo);
+void F77_xerbla(char *srname, void *vinfo
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN
+#endif
+);
 #endif
 
 void chkxer(void) {
@@ -24,7 +28,11 @@ void chkxer(void) {
    cblas_lerr = 1 ;
 }
 
-void F77_s2chke(char *rout) {
+void F77_s2chke(char *rout
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN
+#endif
+) {
    char *sf = ( rout ) ;
    float  A[2] = {0.0,0.0},
           X[2] = {0.0,0.0},
