@@ -55,6 +55,10 @@ macro(CheckLAPACKCompilerFlags)
 
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-frecursive>")
 
+    if(CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "8")
+      add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+    endif()
+
   # Intel Fortran
   elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
     set(FPE_EXIT_FLAG "[-/]fpe(-all=|)0")
@@ -112,6 +116,20 @@ macro(CheckLAPACKCompilerFlags)
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
     add_link_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
+
+    # By default NAG Fortran uses 32bit integers as hidden STRLEN arguments
+    if(UNIX)
+      if(APPLE)
+        add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+      else()
+        # Get all flags added via `add_compile_options(...)`
+        get_directory_property(COMP_OPTIONS COMPILE_OPTIONS)
+
+        if(NOT("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "-abi=64c"))
+          add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:FORTRAN_STRLEN=int>")
+        endif()
+      endif()
+    endif()
 
     # Disable warnings
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-w=obs>")
