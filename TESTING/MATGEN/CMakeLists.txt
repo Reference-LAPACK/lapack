@@ -61,6 +61,7 @@ if(BUILD_INDEX64_EXT_API)
     set(BUILD_INDEX64_EXT_API OFF)
     set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
   else()
+    cmake_minimum_required(VERSION 3.18)
     set(SOURCES_64)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
     file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
@@ -73,7 +74,7 @@ if(BUILD_INDEX64_EXT_API)
     endforeach()
     file(COPY matgen_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${TMGLIB}_64_obj)
     add_library(${TMGLIB}_64_obj OBJECT ${SOURCES_64})
-    target_compile_options(${TMGLIB}_64_obj PRIVATE ${FOPT_ILP64} -DMATGEN_64)
+    target_compile_options(${TMGLIB}_64_obj PRIVATE "${FOPT_ILP64}" -DMATGEN_64)
     set_target_properties(
     ${TMGLIB}_64_obj PROPERTIES
     POSITION_INDEPENDENT_CODE ON
