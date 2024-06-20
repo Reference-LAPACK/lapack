@@ -884,7 +884,7 @@ void F77_chpr_base(FCHAR, FINT, const float *, const void *, FINT, void *
    , FORTRAN_STRLEN
 #endif
 );
-void F77_chpr2_base(FCHAR, FINT, const float *, const void *, FINT, const void *, FINT, void *
+void F77_chpr2_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, void *
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN
 #endif
@@ -964,7 +964,7 @@ void F77_zhpr_base(FCHAR, FINT, const double *, const void *, FINT, void *
    , FORTRAN_STRLEN
 #endif
 );
-void F77_zhpr2_base(FCHAR, FINT, const double *, const void *, FINT, const void *, FINT, void *
+void F77_zhpr2_base(FCHAR, FINT, const void *, const void *, FINT, const void *, FINT, void *
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN
 #endif
@@ -1042,47 +1042,47 @@ void F77_dtrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, cons
 
 /* Single Complex Precision */
 
-void F77_cgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+void F77_cgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_csymm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+void F77_csymm_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_chemm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+void F77_chemm_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_csyrk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
+void F77_csyrk_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_cherk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
+void F77_cherk_base(FCHAR, FCHAR, FINT, FINT, const float *, const void *, FINT, const float *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_csyr2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+void F77_csyr2k_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_cher2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+void F77_cher2k_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const float *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_ctrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
+void F77_ctrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_ctrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, float *, FINT
+void F77_ctrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
@@ -1090,47 +1090,47 @@ void F77_ctrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const
 
 /* Double Complex Precision */
 
-void F77_zgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+void F77_zgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zsymm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+void F77_zsymm_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zhemm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+void F77_zhemm_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zsyrk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
+void F77_zsyrk_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zherk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
+void F77_zherk_base(FCHAR, FCHAR, FINT, FINT, const double *, const void *, FINT, const double *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zsyr2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+void F77_zsyr2k_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const void *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_zher2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+void F77_zher2k_base(FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, const void *, FINT, const double *, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_ztrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
+void F77_ztrmm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
-void F77_ztrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, double *, FINT
+void F77_ztrsm_base(FCHAR, FCHAR, FCHAR, FCHAR, FINT, FINT, const void *, const void *, FINT, void *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif

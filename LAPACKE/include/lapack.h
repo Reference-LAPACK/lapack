@@ -135,8 +135,7 @@ typedef lapack_logical (*LAPACK_Z_SELECT2)
     ( const lapack_complex_double*, const lapack_complex_double* );
 
 #define LAPACK_lsame_base LAPACK_GLOBAL(lsame,LSAME)
-lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb,
-                              lapack_int lca, lapack_int lcb
+lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb
 #ifdef LAPACK_FORTRAN_STRLEN_END
     , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif

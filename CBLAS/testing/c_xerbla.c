@@ -85,10 +85,14 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 }
 
 #ifdef F77_Char
-void F77_xerbla(F77_Char F77_srname, void *vinfo)
+void F77_xerbla(F77_Char F77_srname, void *vinfo
 #else
-void F77_xerbla(char *srname, void *vinfo)
+void F77_xerbla(char *srname, void *vinfo
 #endif
+#ifdef BLAS_FORTRAN_STRLEN_END
+, FORTRAN_STRLEN
+#endif
+)
 {
 #ifdef F77_Char
    char *srname;
