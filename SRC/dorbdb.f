@@ -316,7 +316,7 @@
       DOUBLE PRECISION   Z1, Z2, Z3, Z4
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLARF, DLARFGP, DSCAL,
+      EXTERNAL           DAXPY, DLARF1F, DLARFGP, DSCAL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -422,7 +422,6 @@
             ELSE IF( P .EQ. I ) THEN
                CALL DLARFGP( P-I+1, X11(I,I), X11(I,I), 1, TAUP1(I) )
             END IF
-            X11(I,I) = ONE
             IF ( M-P .GT. I ) THEN
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1,
      $                       TAUP2(I) )
@@ -430,25 +429,23 @@
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I), 1,
      $                       TAUP2(I) )
             END IF
-            X21(I,I) = ONE
 *
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I),
+               CALL DLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I),
      $                     X11(I,I+1), LDX11, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'L', P-I+1, M-Q-I+1, X11(I,I), 1,
+               CALL DLARF1F( 'L', P-I+1, M-Q-I+1, X11(I,I), 1,
      $                     TAUP1(I),
      $                     X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $                     X21(I,I+1), LDX21, WORK )
+               CALL DLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $                       TAUP2(I), X21(I,I+1), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1,
-     $                     TAUP2(I),
-     $                     X22(I,I), LDX22, WORK )
+               CALL DLARF1F( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1,
+     $                       TAUP2(I), X22(I,I), LDX22, WORK )
             END IF
 *
             IF( I .LT. Q ) THEN
@@ -476,7 +473,6 @@
                   CALL DLARFGP( Q-I, X11(I,I+1), X11(I,I+2), LDX11,
      $                          TAUQ1(I) )
                END IF
-               X11(I,I+1) = ONE
             END IF
             IF ( Q+I-1 .LT. M ) THEN
                IF ( M-Q .EQ. I ) THEN
@@ -487,23 +483,22 @@
      $                          TAUQ2(I) )
                END IF
             END IF
-            X12(I,I) = ONE
 *
             IF( I .LT. Q ) THEN
-               CALL DLARF( 'R', P-I, Q-I, X11(I,I+1), LDX11,
+               CALL DLARF1F( 'R', P-I, Q-I, X11(I,I+1), LDX11,
      $                     TAUQ1(I),
      $                     X11(I+1,I+1), LDX11, WORK )
-               CALL DLARF( 'R', M-P-I, Q-I, X11(I,I+1), LDX11,
+               CALL DLARF1F( 'R', M-P-I, Q-I, X11(I,I+1), LDX11,
      $                     TAUQ1(I),
      $                     X21(I+1,I+1), LDX21, WORK )
             END IF
             IF ( P .GT. I ) THEN
-               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
+               CALL DLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
      $                     TAUQ2(I),
      $                     X12(I+1,I), LDX12, WORK )
             END IF
             IF ( M-P .GT. I ) THEN
-               CALL DLARF( 'R', M-P-I, M-Q-I+1, X12(I,I), LDX12,
+               CALL DLARF1F( 'R', M-P-I, M-Q-I+1, X12(I,I), LDX12,
      $                     TAUQ2(I), X22(I+1,I), LDX22, WORK )
             END IF
 *
@@ -521,15 +516,14 @@
                CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I,I+1), LDX12,
      $                       TAUQ2(I) )
             END IF
-            X12(I,I) = ONE
 *
             IF ( P .GT. I ) THEN
-               CALL DLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
+               CALL DLARF1F( 'R', P-I, M-Q-I+1, X12(I,I), LDX12,
      $                     TAUQ2(I),
      $                     X12(I+1,I), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
-     $         CALL DLARF( 'R', M-P-Q, M-Q-I+1, X12(I,I), LDX12,
+     $         CALL DLARF1F( 'R', M-P-Q, M-Q-I+1, X12(I,I), LDX12,
      $                     TAUQ2(I), X22(Q+1,I), LDX22, WORK )
 *
          END DO
@@ -546,9 +540,8 @@
                CALL DLARFGP( M-P-Q-I+1, X22(Q+I,P+I), X22(Q+I,P+I+1),
      $                       LDX22, TAUQ2(P+I) )
             END IF
-            X22(Q+I,P+I) = ONE
             IF ( I .LT. M-P-Q ) THEN
-               CALL DLARF( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I),
+               CALL DLARF1F( 'R', M-P-Q-I, M-P-Q-I+1, X22(Q+I,P+I),
      $                     LDX22,
      $                     TAUQ2(P+I), X22(Q+I+1,P+I), LDX22, WORK )
             END IF
@@ -584,7 +577,6 @@
 *
             CALL DLARFGP( P-I+1, X11(I,I), X11(I,I+1), LDX11,
      $                    TAUP1(I) )
-            X11(I,I) = ONE
             IF ( I .EQ. M-P ) THEN
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I), LDX21,
      $                    TAUP2(I) )
@@ -592,24 +584,23 @@
                CALL DLARFGP( M-P-I+1, X21(I,I), X21(I,I+1), LDX21,
      $                    TAUP2(I) )
             END IF
-            X21(I,I) = ONE
 *
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'R', Q-I, P-I+1, X11(I,I), LDX11,
+               CALL DLARF1F( 'R', Q-I, P-I+1, X11(I,I), LDX11,
      $                     TAUP1(I),
      $                     X11(I+1,I), LDX11, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'R', M-Q-I+1, P-I+1, X11(I,I), LDX11,
+               CALL DLARF1F( 'R', M-Q-I+1, P-I+1, X11(I,I), LDX11,
      $                     TAUP1(I), X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
-               CALL DLARF( 'R', Q-I, M-P-I+1, X21(I,I), LDX21,
+               CALL DLARF1F( 'R', Q-I, M-P-I+1, X21(I,I), LDX21,
      $                     TAUP2(I),
      $                     X21(I+1,I), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
-               CALL DLARF( 'R', M-Q-I+1, M-P-I+1, X21(I,I), LDX21,
+               CALL DLARF1F( 'R', M-Q-I+1, M-P-I+1, X21(I,I), LDX21,
      $                     TAUP2(I), X22(I,I), LDX22, WORK )
             END IF
 *
@@ -634,7 +625,6 @@
                   CALL DLARFGP( Q-I, X11(I+1,I), X11(I+2,I), 1,
      $                          TAUQ1(I) )
                END IF
-               X11(I+1,I) = ONE
             END IF
             IF ( M-Q .GT. I ) THEN
                CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I+1,I), 1,
@@ -643,20 +633,18 @@
                CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I,I), 1,
      $                       TAUQ2(I) )
             END IF
-            X12(I,I) = ONE
 *
             IF( I .LT. Q ) THEN
-               CALL DLARF( 'L', Q-I, P-I, X11(I+1,I), 1, TAUQ1(I),
+               CALL DLARF1F( 'L', Q-I, P-I, X11(I+1,I), 1, TAUQ1(I),
      $                     X11(I+1,I+1), LDX11, WORK )
-               CALL DLARF( 'L', Q-I, M-P-I, X11(I+1,I), 1, TAUQ1(I),
-     $                     X21(I+1,I+1), LDX21, WORK )
+               CALL DLARF1F( 'L', Q-I, M-P-I, X11(I+1,I), 1,
+     $                       TAUQ1(I), X21(I+1,I+1), LDX21, WORK )
             END IF
-            CALL DLARF( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
-     $                  X12(I,I+1), LDX12, WORK )
+            CALL DLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
+     $                    X12(I,I+1), LDX12, WORK )
             IF ( M-P-I .GT. 0 ) THEN
-               CALL DLARF( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,
-     $                     TAUQ2(I),
-     $                     X22(I,I+1), LDX22, WORK )
+               CALL DLARF1F( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,
+     $                       TAUQ2(I), X22(I,I+1), LDX22, WORK )
             END IF
 *
          END DO
@@ -668,16 +656,14 @@
             CALL DSCAL( M-Q-I+1, -Z1*Z4, X12(I,I), 1 )
             CALL DLARFGP( M-Q-I+1, X12(I,I), X12(I+1,I), 1,
      $                    TAUQ2(I) )
-            X12(I,I) = ONE
 *
             IF ( P .GT. I ) THEN
-               CALL DLARF( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
-     $                  X12(I,I+1), LDX12, WORK )
+               CALL DLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1,
+     $                       TAUQ2(I), X12(I,I+1), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
-     $         CALL DLARF( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1,
-     $                     TAUQ2(I),
-     $                     X22(I,Q+1), LDX22, WORK )
+     $         CALL DLARF1F( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1,
+     $                       TAUQ2(I), X22(I,Q+1), LDX22, WORK )
 *
          END DO
 *
@@ -694,10 +680,10 @@
                CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I+1,Q+I),
      $                       1,
      $                       TAUQ2(P+I) )
-               CALL DLARF( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I), 1,
-     $                  TAUQ2(P+I), X22(P+I,Q+I+1), LDX22, WORK )
+               CALL DLARF1F( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I),
+     $                       1, TAUQ2(P+I), X22(P+I,Q+I+1), LDX22,
+     $                       WORK )
             END IF
-            X22(P+I,Q+I) = ONE
 *
          END DO
 *

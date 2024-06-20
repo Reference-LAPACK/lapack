@@ -254,7 +254,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is COMPLEX*16 array, dimension (N-1)
-*>          Used in ZLARF subroutine to apply an elementary
+*>          Used in ZLARF1F subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
 *>
@@ -372,10 +372,9 @@
       INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
       DOUBLE PRECISION   HUGEVAL, TAUNAN, TEMP, TEMP2, TOL3Z
-      COMPLEX*16         AIKK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFG, ZSWAP
+      EXTERNAL           ZLARF1F, ZLARFG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SQRT
@@ -633,12 +632,9 @@
 *         condition is satisfied, not only KK < N+NRHS )
 *
          IF( KK.LT.MINMNUPDT ) THEN
-            AIKK = A( I, KK )
-            A( I, KK ) = CONE
-            CALL ZLARF( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
-     $                  DCONJG( TAU( KK ) ), A( I, KK+1 ), LDA,
-     $                  WORK( 1 ) )
-            A( I, KK ) = AIKK
+            CALL ZLARF1F( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
+     $                    CONJG( TAU( KK ) ), A( I, KK+1 ), LDA,
+     $                    WORK( 1 ) )
          END IF
 *
          IF( KK.LT.MINMNFACT ) THEN

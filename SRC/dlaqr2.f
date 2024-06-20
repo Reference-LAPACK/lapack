@@ -312,7 +312,7 @@
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEHRD, DGEMM, DLACPY,
      $                   DLAHQR,
-     $                   DLANV2, DLARF, DLARFG, DLASET, DORMHR, DTREXC
+     $                   DLANV2, DLARF1F, DLARFG, DLASET, DORMHR, DTREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN, SQRT
@@ -597,16 +597,15 @@
             CALL DCOPY( NS, V, LDV, WORK, 1 )
             BETA = WORK( 1 )
             CALL DLARFG( NS, BETA, WORK( 2 ), 1, TAU )
-            WORK( 1 ) = ONE
 *
             CALL DLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
      $                   LDT )
 *
-            CALL DLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
+            CALL DLARF1F( 'L', NS, JW, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL DLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+            CALL DLARF1F( 'R', NS, NS, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL DLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+            CALL DLARF1F( 'R', JW, NS, WORK, 1, TAU, V, LDV,
      $                  WORK( JW+1 ) )
 *
             CALL DGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),

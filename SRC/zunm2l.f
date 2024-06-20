@@ -178,14 +178,14 @@
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
-      COMPLEX*16         AII, TAUI
+      COMPLEX*16         TAUI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF
+      EXTERNAL           XERBLA, ZLARF1L
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -266,10 +266,8 @@
          ELSE
             TAUI = DCONJG( TAU( I ) )
          END IF
-         AII = A( NQ-K+I, I )
-         A( NQ-K+I, I ) = ONE
-         CALL ZLARF( SIDE, MI, NI, A( 1, I ), 1, TAUI, C, LDC, WORK )
-         A( NQ-K+I, I ) = AII
+         CALL ZLARF1L( SIDE, MI, NI, A( 1, I ), 1, TAUI, C, LDC,
+     $                 WORK )
    10 CONTINUE
       RETURN
 *

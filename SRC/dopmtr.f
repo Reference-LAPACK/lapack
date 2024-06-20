@@ -261,12 +261,9 @@
 *
 *           Apply H(i)
 *
-            AII = AP( II )
-            AP( II ) = ONE
-            CALL DLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
+            CALL DLARF1L( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
      $                  LDC,
      $                  WORK )
-            AP( II ) = AII
 *
             IF( FORWRD ) THEN
                II = II + I + 2

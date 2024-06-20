@@ -151,10 +151,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFGP
+      EXTERNAL           XERBLA, ZLARF1F, ZLARFGP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -188,11 +187,8 @@
 *
 *           Apply H(i)**H to A(i:m,i+1:n) from the left
 *
-            ALPHA = A( I, I )
-            A( I, I ) = ONE
-            CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
-     $                  DCONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
-            A( I, I ) = ALPHA
+            CALL ZLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $                    CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
          END IF
    10 CONTINUE
       RETURN

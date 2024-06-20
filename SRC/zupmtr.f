@@ -170,14 +170,14 @@
 *     .. Local Scalars ..
       LOGICAL            FORWRD, LEFT, NOTRAN, UPPER
       INTEGER            I, I1, I2, I3, IC, II, JC, MI, NI, NQ
-      COMPLEX*16         AII, TAUI
+      COMPLEX*16         TAUI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF
+      EXTERNAL           XERBLA, ZLARF1, ZLARF1F
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -266,11 +266,8 @@
             ELSE
                TAUI = DCONJG( TAU( I ) )
             END IF
-            AII = AP( II )
-            AP( II ) = ONE
-            CALL ZLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAUI, C, LDC,
-     $                  WORK )
-            AP( II ) = AII
+            CALL ZLARF1L( SIDE, MI, NI, AP( II-I+1 ), 1, TAUI, C,
+     $                    LDC, WORK )
 *
             IF( FORWRD ) THEN
                II = II + I + 2
@@ -306,8 +303,6 @@
          END IF
 *
          DO 20 I = I1, I2, I3
-            AII = AP( II )
-            AP( II ) = ONE
             IF( LEFT ) THEN
 *
 *              H(i) or H(i)**H is applied to C(i+1:m,1:n)
@@ -329,9 +324,8 @@
             ELSE
                TAUI = DCONJG( TAU( I ) )
             END IF
-            CALL ZLARF( SIDE, MI, NI, AP( II ), 1, TAUI, C( IC, JC ),
-     $                  LDC, WORK )
-            AP( II ) = AII
+            CALL ZLARF1F( SIDE, MI, NI, AP( II ), 1, TAUI, C( IC,
+     $                    JC ), LDC, WORK )
 *
             IF( FORWRD ) THEN
                II = II + NQ - I + 1

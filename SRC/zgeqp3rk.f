@@ -677,7 +677,7 @@
 *           Minimal workspace size in case of using only unblocked
 *           BLAS 2 code in ZLAQP2RK.
 *           1) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in ZLARF subroutine inside ZLAQP2RK to apply an
+*              in ZLARF1F subroutine inside ZLAQP2RK to apply an
 *              elementary reflector from the left.
 *           TOTAL_WORK_SIZE = 3*N + NRHS - 1
 *
@@ -693,7 +693,7 @@
 *           1) ZGEQP3RK, ZLAQP2RK, ZLAQP3RK: 2*N to store full and
 *              partial column 2-norms.
 *           2) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in ZLARF subroutine to apply an elementary reflector
+*              in ZLARF1F subroutine to apply an elementary reflector
 *              from the left.
 *           3) ZLAQP3RK: NB*(N+NRHS) to use in the work array F that
 *              is used to apply a block reflector from

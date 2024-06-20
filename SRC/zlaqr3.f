@@ -290,7 +290,7 @@
       PARAMETER          ( RZERO = 0.0d0, RONE = 1.0d0 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX*16         BETA, CDUM, S, TAU
+      COMPLEX*16         CDUM, S, TAU
       DOUBLE PRECISION   FOO, SAFMAX, SAFMIN, SMLNUM, ULP
       INTEGER            I, IFST, ILST, INFO, INFQR, J, JW, KCOL, KLN,
      $                   KNT, KROW, KWTOP, LTOP, LWK1, LWK2, LWK3,
@@ -304,7 +304,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR,
      $                   ZLAQR4,
-     $                   ZLARF, ZLARFG, ZLASET, ZTREXC, ZUNMHR
+     $                   ZLARF1F, ZLARFG, ZLASET, ZTREXC, ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, MAX, MIN
@@ -490,19 +490,17 @@
             DO 50 I = 1, NS
                WORK( I ) = DCONJG( WORK( I ) )
    50       CONTINUE
-            BETA = WORK( 1 )
-            CALL ZLARFG( NS, BETA, WORK( 2 ), 1, TAU )
-            WORK( 1 ) = ONE
+            CALL ZLARFG( NS, WORK( 1 ), WORK( 2 ), 1, TAU )
 *
             CALL ZLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
      $                   LDT )
 *
-            CALL ZLARF( 'L', NS, JW, WORK, 1, DCONJG( TAU ), T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL ZLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL ZLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
-     $                  WORK( JW+1 ) )
+            CALL ZLARF1F( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL ZLARF1F( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL ZLARF1F( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+     $                    WORK( JW+1 ) )
 *
             CALL ZGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )

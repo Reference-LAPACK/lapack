@@ -339,7 +339,7 @@ DLASRC = \
    dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqp2rk.o dlaqp3rk.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
-   dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
+   dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o dlarf1f.o dlarf1l.o\
    dlargv.o dlarmm.o dlarrv.o dlartv.o \
    dlarz.o  dlarzb.o dlarzt.o dlaswp.o dlasy2.o \
    dlasyf.o dlasyf_rook.o dlasyf_rk.o \
@@ -453,7 +453,7 @@ ZLASRC = \
    zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqp2rk.o zlaqp3rk.o zlaqsb.o \
    zlaqr0.o zlaqr1.o zlaqr2.o zlaqr3.o zlaqr4.o zlaqr5.o \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
-   zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o \
+   zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o zlarf1f.o zlarf1l.o \
    zlarfg.o zlarft.o zlarfgp.o \
    zlarfx.o zlarfy.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o \

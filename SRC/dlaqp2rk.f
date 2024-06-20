@@ -253,7 +253,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (N-1)
-*>          Used in DLARF subroutine to apply an elementary
+*>          Used in DLARF1F subroutine to apply an elementary
 *>          reflector from the left.
 *> \endverbatim
 *>
@@ -367,10 +367,10 @@
 *     .. Local Scalars ..
       INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, MINMNFACT,
      $                   MINMNUPDT
-      DOUBLE PRECISION   AIKK, HUGEVAL, TEMP, TEMP2, TOL3Z
+      DOUBLE PRECISION   HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, DSWAP
+      EXTERNAL           DLARF1F, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -621,11 +621,8 @@
 *         condition is satisfied, not only KK < N+NRHS )
 *
          IF( KK.LT.MINMNUPDT ) THEN
-            AIKK = A( I, KK )
-            A( I, KK ) = ONE
-            CALL DLARF( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
+            CALL DLARF1F( 'Left', M-I+1, N+NRHS-KK, A( I, KK ), 1,
      $                  TAU( KK ), A( I, KK+1 ), LDA, WORK( 1 ) )
-            A( I, KK ) = AIKK
          END IF
 *
          IF( KK.LT.MINMNFACT ) THEN

@@ -227,7 +227,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZSCAL,
+      EXTERNAL           ZLARF1F, ZLARFGP, ZUNBDB5, ZDROT, ZSCAL,
      $                   ZLACGV,
      $                   XERBLA
 *     ..
@@ -289,11 +289,10 @@
          CALL ZLACGV( Q-I+1, X11(I,I), LDX11 )
          CALL ZLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
          C = DBLE( X11(I,I) )
-         X11(I,I) = ONE
-         CALL ZLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL ZLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
-     $               X21(I,I), LDX21, WORK(ILARF) )
+         CALL ZLARF1F( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+     $                 X11(I+1,I), LDX11, WORK(ILARF) )
+         CALL ZLARF1F( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11,
+     $                 TAUQ1(I), X21(I,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X11(I,I), LDX11 )
          S = SQRT( DZNRM2( P-I, X11(I+1,I), 1 )**2
      $           + DZNRM2( M-P-I+1, X21(I,I), 1 )**2 )
@@ -309,15 +308,13 @@
             PHI(I) = ATAN2( DBLE( X11(I+1,I) ), DBLE( X21(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X11(I+1,I) = ONE
-            CALL ZLARF( 'L', P-I, Q-I, X11(I+1,I), 1,
-     $                  DCONJG(TAUP1(I)),
-     $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
+            CALL ZLARF1F( 'L', P-I, Q-I, X11(I+1,I), 1,
+     $                    CONJG(TAUP1(I)),
+     $                    X11(I+1,I+1), LDX11, WORK(ILARF) )
          END IF
-         X21(I,I) = ONE
-         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1,
-     $               DCONJG(TAUP2(I)),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+         CALL ZLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $                 CONJG(TAUP2(I)), X21(I,I+1), LDX21,
+     $                 WORK(ILARF) )
 *
       END DO
 *
@@ -325,10 +322,9 @@
 *
       DO I = P + 1, Q
          CALL ZLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
-         X21(I,I) = ONE
-         CALL ZLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1,
-     $               DCONJG(TAUP2(I)),
-     $               X21(I,I+1), LDX21, WORK(ILARF) )
+         CALL ZLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $                 CONJG(TAUP2(I)), X21(I,I+1), LDX21,
+     $                 WORK(ILARF) )
       END DO
 *
       RETURN
