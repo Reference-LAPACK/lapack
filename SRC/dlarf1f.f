@@ -175,15 +175,13 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-      INTEGER            IONE
-      PARAMETER          ( IONE = 1 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER
+      EXTERNAL           DGEMV, DGER, DAXPY, DSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -211,7 +209,7 @@
 !     Look for the last non-zero row in V.
 !        Since we are assuming that V(1) = 1, and it is not stored, so we
 !        shouldn't access it.
-         DO WHILE( LASTV.GE.2 .AND. V( I ).EQ.ZERO )
+         DO WHILE( LASTV.GT.1 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
@@ -222,6 +220,9 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
+      END IF
+      IF( LASTC.EQ.0 ) THEN
+         RETURN
       END IF
       IF( APPLYLEFT ) THEN
 *

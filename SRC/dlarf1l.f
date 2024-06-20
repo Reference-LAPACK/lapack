@@ -142,8 +142,6 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-      INTEGER            IONE
-      PARAMETER          ( IONE = 1 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
@@ -184,8 +182,9 @@
             LASTC = ILADLR(M, LASTV, C, LDC)
          END IF
       END IF
-!     Note that lastc.eq.0 renders the BLAS operations null; no special
-!     case is needed at this level.
+      IF( LASTC.EQ.0 ) THEN
+         RETURN
+      END IF
       IF( APPLYLEFT ) THEN
 *
 *        Form  H * C
