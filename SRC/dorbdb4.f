@@ -308,10 +308,9 @@
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
             CALL DLARF1F( 'L', P, Q, PHANTOM(1), 1, TAUP1(1), X11,
-     $                  LDX11,
-     $                  WORK(ILARF) )
-            CALL DLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1), X21,
-     $                  LDX21, WORK(ILARF) )
+     $                    LDX11, WORK(ILARF) )
+            CALL DLARF1F( 'L', M-P, Q, PHANTOM(P+1), 1, TAUP2(1),
+     $                    X21, LDX21, WORK(ILARF) )
          ELSE
             CALL DORBDB5( P-I+1, M-P-I+1, Q-I+1, X11(I,I-1), 1,
      $                    X21(I,I-1), 1, X11(I,I), LDX11, X21(I,I),
@@ -325,9 +324,9 @@
             C = COS( THETA(I) )
             S = SIN( THETA(I) )
             CALL DLARF1F( 'L', P-I+1, Q-I+1, X11(I,I-1), 1, TAUP1(I),
-     $                  X11(I,I), LDX11, WORK(ILARF) )
-            CALL DLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1, TAUP2(I),
-     $                  X21(I,I), LDX21, WORK(ILARF) )
+     $                    X11(I,I), LDX11, WORK(ILARF) )
+            CALL DLARF1F( 'L', M-P-I+1, Q-I+1, X21(I,I-1), 1,
+     $                    TAUP2(I), X21(I,I), LDX21, WORK(ILARF) )
          END IF
 *
          CALL DROT( Q-I+1, X11(I,I), LDX11, X21(I,I), LDX21, S, -C )

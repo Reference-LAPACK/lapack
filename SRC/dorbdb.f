@@ -440,13 +440,12 @@
      $                     X12(I,I), LDX12, WORK )
             END IF
             IF ( Q .GT. I ) THEN
-               CALL DLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
-     $                     X21(I,I+1), LDX21, WORK )
+               CALL DLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1,
+     $                       TAUP2(I), X21(I,I+1), LDX21, WORK )
             END IF
             IF ( M-Q+1 .GT. I ) THEN
                CALL DLARF1F( 'L', M-P-I+1, M-Q-I+1, X21(I,I), 1,
-     $                     TAUP2(I),
-     $                     X22(I,I), LDX22, WORK )
+     $                       TAUP2(I), X22(I,I), LDX22, WORK )
             END IF
 *
             IF( I .LT. Q ) THEN
@@ -638,15 +637,14 @@
             IF( I .LT. Q ) THEN
                CALL DLARF1F( 'L', Q-I, P-I, X11(I+1,I), 1, TAUQ1(I),
      $                     X11(I+1,I+1), LDX11, WORK )
-               CALL DLARF1F( 'L', Q-I, M-P-I, X11(I+1,I), 1, TAUQ1(I),
-     $                     X21(I+1,I+1), LDX21, WORK )
+               CALL DLARF1F( 'L', Q-I, M-P-I, X11(I+1,I), 1,
+     $                       TAUQ1(I), X21(I+1,I+1), LDX21, WORK )
             END IF
             CALL DLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
-     $                  X12(I,I+1), LDX12, WORK )
+     $                    X12(I,I+1), LDX12, WORK )
             IF ( M-P-I .GT. 0 ) THEN
                CALL DLARF1F( 'L', M-Q-I+1, M-P-I, X12(I,I), 1,
-     $                     TAUQ2(I),
-     $                     X22(I,I+1), LDX22, WORK )
+     $                       TAUQ2(I), X22(I,I+1), LDX22, WORK )
             END IF
 *
          END DO
@@ -660,13 +658,12 @@
      $                    TAUQ2(I) )
 *
             IF ( P .GT. I ) THEN
-               CALL DLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1, TAUQ2(I),
-     $                  X12(I,I+1), LDX12, WORK )
+               CALL DLARF1F( 'L', M-Q-I+1, P-I, X12(I,I), 1,
+     $                       TAUQ2(I), X12(I,I+1), LDX12, WORK )
             END IF
             IF( M-P-Q .GE. 1 )
      $         CALL DLARF1F( 'L', M-Q-I+1, M-P-Q, X12(I,I), 1,
-     $                     TAUQ2(I),
-     $                     X22(I,Q+1), LDX22, WORK )
+     $                       TAUQ2(I), X22(I,Q+1), LDX22, WORK )
 *
          END DO
 *
@@ -683,8 +680,9 @@
                CALL DLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I+1,Q+I),
      $                       1,
      $                       TAUQ2(P+I) )
-               CALL DLARF1F( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I), 1,
-     $                  TAUQ2(P+I), X22(P+I,Q+I+1), LDX22, WORK )
+               CALL DLARF1F( 'L', M-P-Q-I+1, M-P-Q-I, X22(P+I,Q+I),
+     $                       1, TAUQ2(P+I), X22(P+I,Q+I+1), LDX22,
+     $                       WORK )
             END IF
 *
          END DO

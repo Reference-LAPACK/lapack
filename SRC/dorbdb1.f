@@ -301,8 +301,9 @@
             S = X21(I,I+1)
             CALL DLARF1F( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
-            CALL DLARF1F( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
-     $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
+            CALL DLARF1F( 'R', M-P-I, Q-I, X21(I,I+1), LDX21,
+     $                    TAUQ1(I), X21(I+1,I+1), LDX21,
+     $                    WORK(ILARF) )
             C = SQRT( DNRM2( P-I, X11(I+1,I+1), 1 )**2
      $          + DNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )

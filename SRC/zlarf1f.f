@@ -176,8 +176,6 @@
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
      $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
-      INTEGER            IONE
-      PARAMETER          ( IONE = 1 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            APPLYLEFT
@@ -225,8 +223,8 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILAZLR(M, LASTV, C, LDC)
          END IF
-      ELSE
-!        TAU is 0, so H = I. Meaning HC = C = CH.
+      END IF
+      IF( LASTC.EQ.0 ) THEN
          RETURN
       END IF
       IF( APPLYLEFT ) THEN
@@ -246,12 +244,14 @@
                ! C = [ C_1 C_2 ]**T, v = [1 v_2]**T
                ! w = C_1**H + C_2**Hv_2
                ! w = C_2**Hv_2
-               CALL ZGEMV( 'Conj', LASTV-1, LASTC, ONE, C(1+1,1), LDC,
-     $                     V(1+INCV), INCV, ZERO, WORK, 1)
-               ! w += C_1**H
-               ! This is essentially a zaxpyc
-               DO J = 1, LASTC
-                  WORK(J) = WORK(J) + DCONJG(C(1,J))
+               CALL ZGEMV( 'Conjugate transpose', LASTV - 1,
+     $               LASTC, ONE, C( 1+1, 1 ), LDC, V( 1 + INCV ),
+     $               INCV, ZERO, WORK, 1 )
+*
+*              w(1:lastc,1) += v(1,1) * C(1,1:lastc)**H
+*
+               DO I = 1, LASTC
+                  WORK( I ) = WORK( I ) + DCONJG( C( 1, I ) )
                END DO
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
@@ -259,12 +259,14 @@
             ! C(1, 1:lastc)   := C(...) - tau * v(1,1) * w(1:lastc,1)**H
             !                  = C(...) - tau * Conj(w(1:lastc,1))
             ! This is essentially a zaxpyc
-               DO J = 1, LASTC
-                  C(1,J) = C(1,J) - TAU * DCONJG(WORK(J))
+               DO I = 1, LASTC
+                  C( 1, I ) = C( 1, I ) - TAU * DCONJG( WORK( I ) )
                END DO
-               ! C(2:lastv,1:lastc) := C(...) - tau * v(2:lastv,1)*w(1:lastc,1)**H
-               CALL ZGERC(LASTV-1, LASTC, -TAU, V(1+INCV), INCV, WORK,
-     $                     1, C(1+1,1), LDC)
+*
+*        C(2:lastv,1:lastc) += - tau * v(2:lastv,1) * w(1:lastc,1)**H
+*
+               CALL ZGERC( LASTV - 1, LASTC, -TAU, V( 1 + INCV ),
+     $               INCV, WORK, 1, C( 1+1, 1 ), LDC )
             END IF
       ELSE
 *
