@@ -126,7 +126,7 @@ macro(CheckLAPACKCompilerFlags)
         get_directory_property(COMP_OPTIONS COMPILE_OPTIONS)
 
         if(NOT("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "-abi=64c"))
-          add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:FORTRAN_STRLEN=int>")
+          add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
         endif()
       endif()
     endif()
