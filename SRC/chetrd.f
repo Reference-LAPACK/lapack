@@ -251,7 +251,7 @@
 *        Determine the block size.
 *
          NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
-         LWKOPT = N*NB
+         LWKOPT = MAX( 1, N*NB )
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       END IF
 *
