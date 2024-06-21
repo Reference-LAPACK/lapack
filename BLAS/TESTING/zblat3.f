@@ -111,7 +111,7 @@
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANSA, TRANSB
-      CHARACTER*6        SNAMET
+      CHARACTER*7        SNAMET
       CHARACTER*32       SNAPS, SUMMRY
 *     .. Local Arrays ..
       COMPLEX*16         AA( NMAX*NMAX ), AB( NMAX, 2*NMAX ),
@@ -123,7 +123,7 @@
       DOUBLE PRECISION   G( NMAX )
       INTEGER            IDIM( NIDMAX )
       LOGICAL            LTEST( NSUBS )
-      CHARACTER*6        SNAMES( NSUBS )
+      CHARACTER*7        SNAMES( NSUBS )
 *     .. External Functions ..
       DOUBLE PRECISION   DDIFF
       LOGICAL            LZE
@@ -136,7 +136,7 @@
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
-      CHARACTER*6        SRNAMT
+      CHARACTER*7        SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
@@ -401,8 +401,8 @@
      $      'ERR = ', F12.3, '.', /' THIS MAY BE DUE TO FAULTS IN THE ',
      $      'ARITHMETIC OR THE COMPILER.', /' ******* TESTS ABANDONED ',
      $      '*******' )
- 9988 FORMAT( A6, L2 )
- 9987 FORMAT( 1X, A6, ' WAS NOT TESTED' )
+ 9988 FORMAT( A7, L2 )
+ 9987 FORMAT( 1X, A7, ' WAS NOT TESTED' )
  9986 FORMAT( /' END OF TESTS' )
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
@@ -433,7 +433,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -718,7 +718,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -998,7 +998,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1308,7 +1308,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1641,7 +1641,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         AA( NMAX*NMAX ), AB( 2*NMAX*NMAX ),
      $                   ALF( NALF ), AS( NMAX*NMAX ), BB( NMAX*NMAX ),
@@ -2012,7 +2012,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            ISNUM, NOUT
-      CHARACTER*6        SRNAMT
+      CHARACTER*7        SRNAMT
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
@@ -2978,58 +2978,76 @@
       CALL ZGEMMTR( 'U', 'T', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'N', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'N', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'N', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'C', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'C', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'C', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'T', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'T', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'C', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMMTR( 'U', 'T', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'N', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'N', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'N', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'N', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'C', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'C', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'C', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'C', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'T', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'T', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'C', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMMTR( 'U', 'T', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL ZGEMMTR( 'U', 'T', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C,
+     $              1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 
       INFOT = 8
@@ -3613,7 +3631,7 @@
 *     .. Scalar Arguments ..
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
-      CHARACTER*6        SRNAMT
+      CHARACTER*7        SRNAMT
 *     .. Executable Statements ..
       IF( .NOT.LERR )THEN
          WRITE( NOUT, FMT = 9999 )INFOT, SRNAMT
@@ -3649,11 +3667,11 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO
-      CHARACTER*6        SRNAME
+      CHARACTER*(*)      SRNAME
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
-      CHARACTER*6        SRNAMT
+      CHARACTER*7        SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
       COMMON             /SRNAMC/SRNAMT
@@ -3709,7 +3727,7 @@
       DOUBLE PRECISION   EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*6        SNAME
+      CHARACTER*7        SNAME
 *     .. Array Arguments ..
       COMPLEX*16         A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
