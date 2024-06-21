@@ -20,15 +20,15 @@
 *  (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
 *  3                 NUMBER OF VALUES OF BETA
 *  (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
-*  cblas_cgemm  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_chemm  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_csymm  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_ctrmm  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_ctrsm  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_cherk  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_csyrk  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_cher2k T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_csyr2k T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgemm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chemm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_csymm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctrmm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctrsm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cherk   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_csyrk   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cher2k  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_csyr2k  T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_cgemmtr T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *  See:
@@ -2852,7 +2852,7 @@
       LOGICAL            LCE, LCERES
       EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CCGEMM, CMAKE, CMMCH
+      EXTERNAL           CCGEMMTR, CMAKE, CMMTCH, CPRCN8
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -3341,7 +3341,7 @@
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
  9997 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
 *
-*     End of CMMCH.
+*     End of CMMTCH.
 *
       END
 
