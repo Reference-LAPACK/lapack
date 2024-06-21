@@ -82,15 +82,15 @@ set(ZBLAS2 zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f
 #---------------------------------------------------------
 #  Level 3 BLAS
 #---------------------------------------------------------
-set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f sgemmt.f)
+set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f sgemmtr.f)
 
 set(CBLAS3 cgemm.f csymm.f csyrk.f csyr2k.f ctrmm.f ctrsm.f
-	chemm.f cherk.f cher2k.f cgemmt.f)
+	chemm.f cherk.f cher2k.f cgemmtr.f)
 
-set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f dgemmt.f)
+set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f dgemmtr.f)
 
 set(ZBLAS3 zgemm.f zsymm.f zsyrk.f zsyr2k.f ztrmm.f ztrsm.f
-	zhemm.f zherk.f zher2k.f zgemmt.f)
+	zhemm.f zherk.f zher2k.f zgemmtr.f)
 
 
 set(SOURCES)

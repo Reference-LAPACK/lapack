@@ -1,4 +1,4 @@
-*> \brief \b DGEMMT
+*> \brief \b ZGEMMTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEMMT(UPLO,TRANSA,TRANSB,N,K,ALPHA,A,LDA,B,LDB,BETA,
+*       SUBROUTINE ZGEMMTR(UPLO,TRANSA,TRANSB,N,K,ALPHA,A,LDA,B,LDB,BETA,
 *                         C,LDC)
 *
 *       .. Scalar Arguments ..
-*       DOUBLE PRECISION ALPHA,BETA
+*       COMPLEX*16 ALPHA,BETA
 *       INTEGER K,LDA,LDB,LDC,N
 *       CHARACTER TRANSA,TRANSB, UPLO
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION A(LDA,*),B(LDB,*),C(LDC,*)
+*       COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *       ..
 *
 *
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMMT  performs one of the matrix-matrix operations
+*> ZGEMMTR  performs one of the matrix-matrix operations
 *>
 *>    C := alpha*op( A )*op( B ) + beta*C,
 *>
@@ -38,7 +38,7 @@
 *> an n by k matrix,  op( B )  a  k by n matrix and  C an n by n matrix.
 *> Thereby, the routine only accesses and updates the upper or lower
 *> triangular part of the result matrix C. This behaviour can be used if
-*> the resulting matrix C is known to be symmetric.
+*> the resulting matrix C is known to be Hermitian or symmetric.
 *> \endverbatim
 *
 *  Arguments:
@@ -65,7 +65,7 @@
 *>
 *>              TRANSA = 'T' or 't',  op( A ) = A**T.
 *>
-*>              TRANSA = 'C' or 'c',  op( A ) = A**T.
+*>              TRANSA = 'C' or 'c',  op( A ) = A**H.
 *> \endverbatim
 *>
 *> \param[in] TRANSB
@@ -78,7 +78,7 @@
 *>
 *>              TRANSB = 'T' or 't',  op( B ) = B**T.
 *>
-*>              TRANSB = 'C' or 'c',  op( B ) = B**T.
+*>              TRANSB = 'C' or 'c',  op( B ) = B**H.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -99,13 +99,13 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is COMPLEX*16.
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, ka ), where ka is
+*>          A is COMPLEX*16 array, dimension ( LDA, ka ), where ka is
 *>           k  when  TRANSA = 'N' or 'n',  and is  n  otherwise.
 *>           Before entry with  TRANSA = 'N' or 'n',  the leading  n by k
 *>           part of the array  A  must contain the matrix  A,  otherwise
@@ -124,7 +124,7 @@
 *>
 *> \param[in] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension ( LDB, kb ), where kb is
+*>          B is COMPLEX*16 array, dimension ( LDB, kb ), where kb is
 *>           n  when  TRANSB = 'N' or 'n',  and is  k  otherwise.
 *>           Before entry with  TRANSB = 'N' or 'n',  the leading  k by n
 *>           part of the array  B  must contain the matrix  B,  otherwise
@@ -143,14 +143,14 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is COMPLEX*16.
 *>           On entry,  BETA  specifies the scalar  beta.  When  BETA  is
 *>           supplied as zero then C need not be set on input.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension ( LDC, N )
+*>          C is COMPLEX*16 array, dimension ( LDC, N )
 *>           Before entry, the leading  n by n  part of the array  C must
 *>           contain the matrix  C,  except when  beta  is zero, in which
 *>           case C need not be set on entry.
@@ -186,7 +186,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEMMT(UPLO,TRANSA,TRANSB,N,K,ALPHA,A,LDA,B,LDB,
+      SUBROUTINE ZGEMMTR(UPLO,TRANSA,TRANSB,N,K,ALPHA,A,LDA,B,LDB,
      +         BETA,C,LDC)
       IMPLICIT NONE
 *
@@ -195,12 +195,12 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION ALPHA,BETA
+      COMPLEX*16 ALPHA,BETA
       INTEGER K,LDA,LDB,LDC,N
       CHARACTER TRANSA,TRANSB,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION A(LDA,*),B(LDB,*),C(LDC,*)
+      COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *     ..
 *
 *  =====================================================================
@@ -213,24 +213,29 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC MAX
+      INTRINSIC CONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE PRECISION TEMP
-      INTEGER I,INFO,J,L,NROWA,NROWB, ISTART, ISTOP
-      LOGICAL NOTA,NOTB, UPPER
+      COMPLEX*16 TEMP
+      INTEGER I,INFO,J,L,NROWA,NROWB,ISTART, ISTOP
+      LOGICAL CONJA,CONJB,NOTA,NOTB,UPPER
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      COMPLEX*16 ONE
+      PARAMETER (ONE= (1.0E+0,0.0E+0))
+      COMPLEX*16 ZERO
+      PARAMETER (ZERO= (0.0E+0,0.0E+0))
 *     ..
 *
 *     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
-*     transposed and set  NROWA and NROWB  as the number of rows of  A
-*     and  B  respectively.
+*     conjugated or transposed, set  CONJA and CONJB  as true if  A  and
+*     B  respectively are to be  transposed but  not conjugated  and set
+*     NROWA and  NROWB  as the number of rows of  A  and  B  respectively.
 *
       NOTA = LSAME(TRANSA,'N')
       NOTB = LSAME(TRANSB,'N')
+      CONJA = LSAME(TRANSA,'C')
+      CONJB = LSAME(TRANSB,'C')
       IF (NOTA) THEN
           NROWA = N
       ELSE
@@ -242,16 +247,17 @@
           NROWB = N
       END IF
       UPPER = LSAME(UPLO, 'U')
+
 *
 *     Test the input parameters.
 *
       INFO = 0
       IF ((.NOT. UPPER) .AND. (.NOT. LSAME(UPLO, 'L'))) THEN
           INFO = 1
-      ELSE IF ((.NOT.NOTA) .AND. (.NOT.LSAME(TRANSA,'C')) .AND.
+      ELSE IF ((.NOT.NOTA) .AND. (.NOT.CONJA) .AND.
      +    (.NOT.LSAME(TRANSA,'T'))) THEN
           INFO = 2
-      ELSE IF ((.NOT.NOTB) .AND. (.NOT.LSAME(TRANSB,'C')) .AND.
+      ELSE IF ((.NOT.NOTB) .AND. (.NOT.CONJB) .AND.
      +         (.NOT.LSAME(TRANSB,'T'))) THEN
           INFO = 3
       ELSE IF (N.LT.0) THEN
@@ -266,7 +272,7 @@
           INFO = 13
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('DGEMMT',INFO)
+          CALL XERBLA('ZGEMMTR',INFO)
           RETURN
       END IF
 *
@@ -275,7 +281,7 @@
       IF ((N.EQ.0) .OR.
      +    (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
 *
-*     And if  alpha.eq.zero.
+*     And when  alpha.eq.zero.
 *
       IF (ALPHA.EQ.ZERO) THEN
           IF (BETA.EQ.ZERO) THEN
@@ -301,7 +307,6 @@
                       ISTART = J
                       ISTOP  = N
                   END IF
-
                   DO 30 I = ISTART, ISTOP
                       C(I,J) = BETA*C(I,J)
    30             CONTINUE
@@ -341,9 +346,9 @@
    70                 CONTINUE
    80             CONTINUE
    90         CONTINUE
-          ELSE
+          ELSE IF (CONJA) THEN
 *
-*           Form  C := alpha*A**T*B + beta*C
+*           Form  C := alpha*A**H*B + beta*C.
 *
               DO 120 J = 1,N
                   IF (UPPER) THEN
@@ -357,7 +362,7 @@
                   DO 110 I = ISTART, ISTOP
                       TEMP = ZERO
                       DO 100 L = 1,K
-                          TEMP = TEMP + A(L,I)*B(L,J)
+                          TEMP = TEMP + CONJG(A(L,I))*B(L,J)
   100                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP
@@ -366,13 +371,11 @@
                       END IF
   110             CONTINUE
   120         CONTINUE
-          END IF
-      ELSE
-          IF (NOTA) THEN
+          ELSE
 *
-*           Form  C := alpha*A*B**T + beta*C
+*           Form  C := alpha*A**T*B + beta*C
 *
-              DO 170 J = 1,N
+              DO 150 J = 1,N
                   IF (UPPER) THEN
                       ISTART = 1
                       ISTOP  = J
@@ -381,25 +384,23 @@
                       ISTOP  = N
                   END IF
 
-                  IF (BETA.EQ.ZERO) THEN
-                      DO 130 I = ISTART,ISTOP
-                          C(I,J) = ZERO
+                  DO 140 I = ISTART, ISTOP
+                      TEMP = ZERO
+                      DO 130 L = 1,K
+                          TEMP = TEMP + A(L,I)*B(L,J)
   130                 CONTINUE
-                  ELSE IF (BETA.NE.ONE) THEN
-                      DO 140 I = ISTART,ISTOP
-                          C(I,J) = BETA*C(I,J)
-  140                 CONTINUE
-                  END IF
-                  DO 160 L = 1,K
-                      TEMP = ALPHA*B(J,L)
-                      DO 150 I = ISTART,ISTOP
-                          C(I,J) = C(I,J) + TEMP*A(I,L)
-  150                 CONTINUE
-  160             CONTINUE
-  170         CONTINUE
-          ELSE
+                      IF (BETA.EQ.ZERO) THEN
+                          C(I,J) = ALPHA*TEMP
+                      ELSE
+                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      END IF
+  140             CONTINUE
+  150         CONTINUE
+          END IF
+      ELSE IF (NOTA) THEN
+          IF (CONJB) THEN
 *
-*           Form  C := alpha*A**T*B**T + beta*C
+*           Form  C := alpha*A*B**H + beta*C.
 *
               DO 200 J = 1,N
                   IF (UPPER) THEN
@@ -410,23 +411,160 @@
                       ISTOP  = N
                   END IF
 
-                  DO 190 I = ISTART, ISTOP
-                      TEMP = ZERO
-                      DO 180 L = 1,K
-                          TEMP = TEMP + A(L,I)*B(J,L)
+                  IF (BETA.EQ.ZERO) THEN
+                      DO 160 I = ISTART,ISTOP
+                          C(I,J) = ZERO
+  160                 CONTINUE
+                  ELSE IF (BETA.NE.ONE) THEN
+                      DO 170 I = ISTART, ISTOP
+                          C(I,J) = BETA*C(I,J)
+  170                 CONTINUE
+                  END IF
+                  DO 190 L = 1,K
+                      TEMP = ALPHA*CONJG(B(J,L))
+                      DO 180 I = ISTART, ISTOP
+                          C(I,J) = C(I,J) + TEMP*A(I,L)
   180                 CONTINUE
+  190             CONTINUE
+  200         CONTINUE
+          ELSE
+*
+*           Form  C := alpha*A*B**T + beta*C
+*
+              DO 250 J = 1,N
+                  IF (UPPER) THEN
+                      ISTART = 1
+                      ISTOP  = J
+                  ELSE
+                      ISTART = J
+                      ISTOP  = N
+                  END IF
+
+                  IF (BETA.EQ.ZERO) THEN
+                      DO 210 I = ISTART, ISTOP
+                          C(I,J) = ZERO
+  210                 CONTINUE
+                  ELSE IF (BETA.NE.ONE) THEN
+                      DO 220 I = ISTART, ISTOP
+                          C(I,J) = BETA*C(I,J)
+  220                 CONTINUE
+                  END IF
+                  DO 240 L = 1,K
+                      TEMP = ALPHA*B(J,L)
+                      DO 230 I = ISTART, ISTOP
+                          C(I,J) = C(I,J) + TEMP*A(I,L)
+  230                 CONTINUE
+  240             CONTINUE
+  250         CONTINUE
+          END IF
+      ELSE IF (CONJA) THEN
+          IF (CONJB) THEN
+*
+*           Form  C := alpha*A**H*B**H + beta*C.
+*
+              DO 280 J = 1,N
+                  IF (UPPER) THEN
+                      ISTART = 1
+                      ISTOP  = J
+                  ELSE
+                      ISTART = J
+                      ISTOP  = N
+                  END IF
+
+                  DO 270 I = ISTART, ISTOP
+                      TEMP = ZERO
+                      DO 260 L = 1,K
+                          TEMP = TEMP + CONJG(A(L,I))*CONJG(B(J,L))
+  260                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP
                       ELSE
                           C(I,J) = ALPHA*TEMP + BETA*C(I,J)
                       END IF
-  190             CONTINUE
-  200         CONTINUE
+  270             CONTINUE
+  280         CONTINUE
+          ELSE
+*
+*           Form  C := alpha*A**H*B**T + beta*C
+*
+              DO 310 J = 1,N
+                  IF (UPPER) THEN
+                      ISTART = 1
+                      ISTOP  = J
+                  ELSE
+                      ISTART = J
+                      ISTOP  = N
+                  END IF
+
+                  DO 300 I = ISTART, ISTOP
+                      TEMP = ZERO
+                      DO 290 L = 1,K
+                          TEMP = TEMP + CONJG(A(L,I))*B(J,L)
+  290                 CONTINUE
+                      IF (BETA.EQ.ZERO) THEN
+                          C(I,J) = ALPHA*TEMP
+                      ELSE
+                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      END IF
+  300             CONTINUE
+  310         CONTINUE
+          END IF
+      ELSE
+          IF (CONJB) THEN
+*
+*           Form  C := alpha*A**T*B**H + beta*C
+*
+              DO 340 J = 1,N
+                  IF (UPPER) THEN
+                      ISTART = 1
+                      ISTOP  = J
+                  ELSE
+                      ISTART = J
+                      ISTOP  = N
+                  END IF
+
+                  DO 330 I = ISTART, ISTOP
+                      TEMP = ZERO
+                      DO 320 L = 1,K
+                          TEMP = TEMP + A(L,I)*CONJG(B(J,L))
+  320                 CONTINUE
+                      IF (BETA.EQ.ZERO) THEN
+                          C(I,J) = ALPHA*TEMP
+                      ELSE
+                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      END IF
+  330             CONTINUE
+  340         CONTINUE
+          ELSE
+*
+*           Form  C := alpha*A**T*B**T + beta*C
+*
+              DO 370 J = 1,N
+                  IF (UPPER) THEN
+                      ISTART = 1
+                      ISTOP  = J
+                  ELSE
+                      ISTART = J
+                      ISTOP  = N
+                  END IF
+
+                  DO 360 I = ISTART, ISTOP
+                      TEMP = ZERO
+                      DO 350 L = 1,K
+                          TEMP = TEMP + A(L,I)*B(J,L)
+  350                 CONTINUE
+                      IF (BETA.EQ.ZERO) THEN
+                          C(I,J) = ALPHA*TEMP
+                      ELSE
+                          C(I,J) = ALPHA*TEMP + BETA*C(I,J)
+                      END IF
+  360             CONTINUE
+  370         CONTINUE
           END IF
       END IF
 *
       RETURN
 *
-*     End of SGEMM
+*     End of ZGEMMTR
 *
       END

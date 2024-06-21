@@ -43,7 +43,7 @@
 *> DTRSM  T PUT F FOR NO TEST. SAME COLUMNS.
 *> DSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
 *> DSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
-*> DGEMMT T PUT F FOR NO TEST. SAME COLUMNS.
+*> DGEMMTR T PUT F FOR NO TEST. SAME COLUMNS.
 *>
 *> Further Details
 *> ===============
@@ -133,7 +133,7 @@
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
       DATA               SNAMES/'DGEMM ', 'DSYMM ', 'DTRMM ', 'DTRSM ',
-     $                   'DSYRK ', 'DSYR2K', 'DGEMMT'/
+     $                   'DSYRK ', 'DSYR2K', 'DGEMMTR'/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -339,7 +339,7 @@
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W )
             GO TO 190
-*           Test DGEMMT, 07.
+*           Test DGEMMTR, 07.
   185       CALL DCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
@@ -2383,73 +2383,73 @@
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 80
    70 INFOT = 1
-      CALL DGEMMT( '/', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( '/', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEMMT( 'U', '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEMMT( 'U', '/', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', '/', 'T', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DGEMMT( 'U', 'N', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DGEMMT( 'U', 'T', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEMMT( 'U', 'N', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEMMT( 'U', 'N', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEMMT( 'U', 'T', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEMMT( 'U', 'T', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMMT( 'U', 'N', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMMT( 'U', 'N', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMMT( 'U', 'T', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMMT( 'U', 'T', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL DGEMMT( 'U', 'N', 'N', 2, 0,  ALPHA, A, 1, B, 2, BETA, C, 2 )
+      CALL DGEMMTR( 'U', 'N', 'N', 2, 0,  ALPHA, A, 1, B, 2, BETA, C, 2 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL DGEMMT( 'U', 'N', 'T', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 2 )
+      CALL DGEMMTR( 'U', 'N', 'T', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 2 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DGEMMT( 'U', 'N', 'N', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'N', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DGEMMT( 'U', 'T', 'N', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'N', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DGEMMT( 'U', 'N', 'T', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'T', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DGEMMT( 'U', 'T', 'T', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'T', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL DGEMMT( 'U', 'N', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL DGEMMT( 'U', 'N', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'N', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL DGEMMT( 'U', 'T', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL DGEMMT( 'U', 'T', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL DGEMMTR( 'U', 'T', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
    80 IF( OK )THEN
@@ -2949,7 +2949,7 @@
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
 *
-*  Tests DGEMMT.
+*  Tests DGEMMTR.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2986,7 +2986,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DGEMMT, DMAKE, DMMTCH
+      EXTERNAL           DGEMMTR, DMAKE, DMMTCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -3117,7 +3117,7 @@
      $                        LDB, BETA, LDC
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL DGEMMT( UPLO, TRANSA, TRANSB, N,
+                           CALL DGEMMTR( UPLO, TRANSA, TRANSB, N,
      $                                  K, ALPHA, AA, LDA, BB, LDB,
      $                                  BETA, CC, LDC )
 *
@@ -3236,7 +3236,7 @@
 *
 *  Checks the results of the computational tests.
 *
-*  Auxiliary routine for test program for Level 3 Blas. (DGEMMT)
+*  Auxiliary routine for test program for Level 3 Blas. (DGEMMTR)
 *
 *  -- Written on 19-July-2023.
 *     Martin Koehler, MPI Magdeburg
