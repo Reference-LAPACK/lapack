@@ -605,9 +605,9 @@
                   CALL DLACPY( 'All', M, NRHS, COPYB, LDA,
      $                         B,  LDA )
                   CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
-                  ! DO I = 1, NTESTS
-                  !   RESULT( I ) = ZERO
-                  ! END DO
+                  DO I = 1, NTESTS
+                    RESULT( I ) = ZERO
+                  END DO
 *
                   ABSTOL = -1.0
                   RELTOL = -1.0
