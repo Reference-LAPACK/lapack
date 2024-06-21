@@ -1,7 +1,7 @@
 /*
  *
- * cblas_dgemm.c
- * This program is a C interface to dgemm.
+ * cblas_zgemm.c
+ * This program is a C interface to zgemm.
  * Written by Keita Teranishi
  * 4/8/1998
  *
@@ -9,15 +9,15 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
+void API_SUFFIX(cblas_zgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
                  const CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
-                 const CBLAS_INT K, const double alpha, const double  *A,
-                 const CBLAS_INT lda, const double  *B, const CBLAS_INT ldb,
-                 const double beta, double  *C, const CBLAS_INT ldc)
+                 const CBLAS_INT K, const void *alpha, const void  *A,
+                 const CBLAS_INT lda, const void  *B, const CBLAS_INT ldb,
+                 const void *beta, void  *C, const CBLAS_INT ldc)
 {
    char TA, TB, UL;
 #ifdef F77_CHAR
-   F77_CHAR F77_TA, F77_TB. F77_UL;
+   F77_CHAR F77_TA, F77_TB, F77_UL;
 #else
    #define F77_TA &TA
    #define F77_TB &TB
@@ -43,7 +43,7 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
    if ( Uplo == CblasUpper ) UL = 'U';
    else if (Uplo == CblasLower) UL= 'L';
    else {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_dgemmt", "Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zgemmtr", "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -57,7 +57,7 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransA == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_dgemmt","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(3, "cblas_zgemmtr","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -68,7 +68,7 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransB == CblasNoTrans )   TB='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_dgemmt","Illegal TransB setting, %d\n", TransB);
+         API_SUFFIX(cblas_xerbla)(4, "cblas_zgemmtr","Illegal TransB setting, %d\n", TransB);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -80,8 +80,8 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
          F77_UL = C2F_CHAR(&UL);
       #endif
 
-      F77_dgemmt(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, A,
-       &F77_lda, B, &F77_ldb, &beta, C, &F77_ldc);
+      F77_zgemmtr(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, alpha, A,
+                     &F77_lda, B, &F77_ldb, beta, C, &F77_ldc);
    } else if (layout == CblasRowMajor)
    {
       RowMajorStrg = 1;
@@ -90,7 +90,7 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransA == CblasNoTrans )   TB='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_dgemmt","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(3, "cblas_zgemmtr","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -100,7 +100,7 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransB == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_dgemmt","Illegal TransB setting, %d\n", TransB);
+         API_SUFFIX(cblas_xerbla)(4, "cblas_zgemmtr","Illegal TransB setting, %d\n", TransB);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -111,10 +111,10 @@ void API_SUFFIX(cblas_dgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
          F77_UL = C2F_CHAR(&UL);
       #endif
 
-      F77_dgemmt( F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, B,
-                  &F77_ldb, A, &F77_lda, &beta, C, &F77_ldc);
+      F77_zgemmtr(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, alpha, B,
+                  &F77_ldb, A, &F77_lda, beta, C, &F77_ldc);
    }
-   else  API_SUFFIX(cblas_xerbla)(1, "cblas_dgemmt", "Illegal layout setting, %d\n", layout);
+   else  API_SUFFIX(cblas_xerbla)(1, "cblas_zgemmtr", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

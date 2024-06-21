@@ -29,7 +29,7 @@
 *  cblas_csyrk  T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_cher2k T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_csyr2k T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_cgemmt T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgemmtr T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *  See:
 *
@@ -98,7 +98,7 @@
       DATA               SNAMES/'cblas_cgemm ', 'cblas_chemm ',
      $                   'cblas_csymm ', 'cblas_ctrmm ', 'cblas_ctrsm ',
      $                   'cblas_cherk ', 'cblas_csyrk ', 'cblas_cher2k',
-     $                   'cblas_csyr2k', 'cblas_cgemmt' /
+     $                   'cblas_csyr2k', 'cblas_cgemmtr' /
 *     .. Executable Statements ..
 *
       NOUTC = NOUT
@@ -367,7 +367,7 @@
      $      1 )
             END IF
             GO TO 190
-*           Test CGEMMT, 10.
+*           Test CGEMMTR, 10.
   185       IF (CORDER) THEN
             CALL CCHK6(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
@@ -2808,7 +2808,7 @@
      $                  IORDER )
       IMPLICIT NONE
 *
-*  Tests CGEMMT.
+*  Tests CGEMMTR.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2981,7 +2981,7 @@
      $                        LDB, BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CCGEMMT(IORDER, UPLO, TRANSA, TRANSB, N,
+                           CALL CCGEMMTR(IORDER, UPLO, TRANSA, TRANSB, N,
      $                                 K, ALPHA, AA, LDA, BB, LDB,
      $                                 BETA, CC, LDC )
 *

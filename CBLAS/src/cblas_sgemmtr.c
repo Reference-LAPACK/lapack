@@ -9,7 +9,7 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
+void API_SUFFIX(cblas_sgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, const CBLAS_TRANSPOSE TransA,
                  const CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
                  const CBLAS_INT K, const float alpha, const float  *A,
                  const CBLAS_INT lda, const float  *B, const CBLAS_INT ldb,
@@ -43,7 +43,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
    if ( Uplo == CblasUpper ) UL = 'U';
    else if (Uplo == CblasLower) UL= 'L';
    else {
-         API_SUFFIX(cblas_xerbla)(2, "cblas_sgemmt", "Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_sgemmtr", "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -57,7 +57,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransA == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_sgemmt",
+         API_SUFFIX(cblas_xerbla)(3, "cblas_sgemmtr",
                        "Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -69,7 +69,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransB == CblasNoTrans )   TB='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_sgemmt",
+         API_SUFFIX(cblas_xerbla)(4, "cblas_sgemmtr",
                        "Illegal TransB setting, %d\n", TransB);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -82,7 +82,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
          F77_UL = C2F_CHAR(&UL);
       #endif
 
-      F77_sgemmt(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, A, &F77_lda, B, &F77_ldb, &beta, C, &F77_ldc);
+      F77_sgemmtr(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, A, &F77_lda, B, &F77_ldb, &beta, C, &F77_ldc);
    } else if (layout == CblasRowMajor)
    {
       RowMajorStrg = 1;
@@ -91,7 +91,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransA == CblasNoTrans )   TB='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_sgemmt",
+         API_SUFFIX(cblas_xerbla)(3, "cblas_sgemmtr",
                        "Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -102,7 +102,7 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
       else if ( TransB == CblasNoTrans )   TA='N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_sgemmt",
+         API_SUFFIX(cblas_xerbla)(4, "cblas_sgemmtr",
                        "Illegal TransB setting, %d\n", TransB);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -114,9 +114,9 @@ void API_SUFFIX(cblas_sgemmt)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo, 
          F77_UL = C2F_CHAR(&UL);
       #endif
 
-      F77_sgemmt(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, B, &F77_ldb, A, &F77_lda, &beta, C, &F77_ldc);
+      F77_sgemmtr(F77_UL, F77_TA, F77_TB, &F77_N, &F77_K, &alpha, B, &F77_ldb, A, &F77_lda, &beta, C, &F77_ldc);
    } else
-     API_SUFFIX(cblas_xerbla)(1, "cblas_sgemmt",
+     API_SUFFIX(cblas_xerbla)(1, "cblas_sgemmtr",
                      "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;

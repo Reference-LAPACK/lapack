@@ -282,8 +282,8 @@ void  F77_c3chke(char *  rout
       cblas_cgemm( CblasRowMajor,  CblasTrans, CblasTrans, 0, 2, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
-   } else if (strncmp( sf,"cblas_cgemmt"   ,12)==0) {
-      cblas_rout = "cblas_cgemmt"   ;
+   } else if (strncmp( sf,"cblas_cgemmtr"   ,12)==0) {
+      cblas_rout = "cblas_cgemmtr"   ;
 
       cblas_info = 1;
       cblas_cgemm( INVALID,  CblasNoTrans, CblasNoTrans, 0, 0, 0,

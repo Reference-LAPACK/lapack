@@ -92,7 +92,7 @@ void F77_cgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
                   b, *ldb, beta, c, *ldc );
 }
 
-void F77_cgemmt(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
+void F77_cgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
      CBLAS_INT *k, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
      CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
      CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
@@ -152,7 +152,7 @@ void F77_cgemmt(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CB
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_cgemmt( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
+     cblas_cgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
                   B, LDB, beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -164,10 +164,10 @@ void F77_cgemmt(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CB
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cgemmt( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
+     cblas_cgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
   else
-     cblas_cgemmt( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
+     cblas_cgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
 }
 
