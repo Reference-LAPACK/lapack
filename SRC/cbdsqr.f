@@ -166,7 +166,9 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (4*(N-1))
+*>          RWORK is REAL array, dimension (LRWORK)
+*>          LRWORK = 4*N, if NCVT = NRU = NCC = 0, and
+*>          LRWORK = 4*(N-1), otherwise
 *> \endverbatim
 *>
 *> \param[out] INFO
