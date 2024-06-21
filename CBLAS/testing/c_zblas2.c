@@ -13,7 +13,7 @@ void F77_zgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n,
           CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, const void *x, CBLAS_INT *incx,
           const void *beta, void *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN transp_len
 #endif
 ) {
 
@@ -47,7 +47,7 @@ void F77_zgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLA
 	      CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx,
 	      CBLAS_TEST_ZOMPLEX *beta, CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN transp_len
 #endif
 ) {
 
@@ -154,7 +154,7 @@ void F77_zhemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_ZOMPLEX 
       CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_ZOMPLEX *x,
       CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *beta, CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ){
 
@@ -189,7 +189,7 @@ void F77_zhbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k,
      CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *beta,
      CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ){
 
@@ -256,7 +256,7 @@ void F77_zhpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_ZOMPLEX 
      CBLAS_TEST_ZOMPLEX *ap, CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx,
      CBLAS_TEST_ZOMPLEX *beta, CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ){
 
@@ -316,7 +316,7 @@ void F77_ztbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
      CBLAS_INT *n, CBLAS_INT *k, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_ZOMPLEX *x,
      CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A;
@@ -383,7 +383,7 @@ void F77_ztbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
       CBLAS_INT *n, CBLAS_INT *k, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_ZOMPLEX *x,
       CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
 
@@ -450,7 +450,7 @@ void F77_ztbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 void F77_ztpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
       CBLAS_INT *n, CBLAS_TEST_ZOMPLEX *ap, CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A, *AP;
@@ -509,7 +509,7 @@ void F77_ztpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 void F77_ztpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
      CBLAS_INT *n, CBLAS_TEST_ZOMPLEX *ap, CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A, *AP;
@@ -569,7 +569,7 @@ void F77_ztrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
      CBLAS_INT *n, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_ZOMPLEX *x,
       CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A;
@@ -602,7 +602,7 @@ void F77_ztrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
        CBLAS_INT *n, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_ZOMPLEX *x,
               CBLAS_INT *incx
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A;
@@ -635,7 +635,7 @@ void F77_ztrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 void F77_zhpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha,
 	     CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *ap
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A, *AP;
@@ -715,7 +715,7 @@ void F77_zhpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_ZOMPLEX 
        CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy,
        CBLAS_TEST_ZOMPLEX *ap
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A, *AP;
@@ -795,7 +795,7 @@ void F77_zhpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_ZOMPLEX 
 void F77_zher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha,
   CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ) {
   CBLAS_TEST_ZOMPLEX *A;
@@ -832,7 +832,7 @@ void F77_zher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_ZOMPLEX 
           CBLAS_TEST_ZOMPLEX *x, CBLAS_INT *incx, CBLAS_TEST_ZOMPLEX *y, CBLAS_INT *incy,
 	  CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len
 #endif
 ) {
 

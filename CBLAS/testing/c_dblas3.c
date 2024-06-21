@@ -15,7 +15,7 @@ void F77_dgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
               CBLAS_INT *k, double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
               double *beta, double *c, CBLAS_INT *ldc
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN transpa_len, FORTRAN_STRLEN transpb_len
 #endif
 ) {
 
@@ -81,7 +81,7 @@ void F77_dsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
               double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
               double *beta, double *c, CBLAS_INT *ldc
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len
 #endif
 ) {
 
@@ -139,7 +139,7 @@ void F77_dsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
               double *alpha, double *a, CBLAS_INT *lda,
               double *beta, double *c, CBLAS_INT *ldc
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
 #endif
 ) {
 
@@ -191,7 +191,7 @@ void F77_dsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
                double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
                double *beta, double *c, CBLAS_INT *ldc
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
 #endif
 ) {
   CBLAS_INT i,j,LDA,LDB,LDC;
@@ -250,7 +250,7 @@ void F77_dtrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
               CBLAS_INT *m, CBLAS_INT *n, double *alpha, double *a, CBLAS_INT *lda, double *b,
               CBLAS_INT *ldb
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diag_len
 #endif
 ) {
   CBLAS_INT i,j,LDA,LDB;
@@ -305,7 +305,7 @@ void F77_dtrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
               CBLAS_INT *m, CBLAS_INT *n, double *alpha, double *a, CBLAS_INT *lda, double *b,
               CBLAS_INT *ldb
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
 #endif
 ) {
   CBLAS_INT i,j,LDA,LDB;

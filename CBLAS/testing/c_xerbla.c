@@ -90,7 +90,7 @@ void F77_xerbla(F77_Char F77_srname, void *vinfo
 void F77_xerbla(char *srname, void *vinfo
 #endif
 #ifdef BLAS_FORTRAN_STRLEN_END
-, FORTRAN_STRLEN
+, FORTRAN_STRLEN srname_len
 #endif
 )
 {

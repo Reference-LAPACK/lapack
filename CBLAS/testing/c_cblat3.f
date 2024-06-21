@@ -4,7 +4,7 @@
 *
 *  The program must be driven by a short data file. The first 13 records
 *  of the file are read using list-directed input, the last 10 records
-*  are read using the format ( A12, L2 ). An annotated example of a data
+*  are read using the format ( A13, L2 ). An annotated example of a data
 *  file can be obtained by deleting the first 3 characters from the
 *  following 23 lines:
 *  'CBLAT3.SNAP'     NAME OF SNAPSHOT OUTPUT FILE
@@ -66,7 +66,7 @@
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR, CORDER, RORDER
       CHARACTER*1        TRANSA, TRANSB
-      CHARACTER*12       SNAMET
+      CHARACTER*13       SNAMET
       CHARACTER*32       SNAPS
 *     .. Local Arrays ..
       COMPLEX            AA( NMAX*NMAX ), AB( NMAX, 2*NMAX ),
@@ -78,7 +78,7 @@
       REAL               G( NMAX )
       INTEGER            IDIM( NIDMAX )
       LOGICAL            LTEST( NSUBS )
-      CHARACTER*12       SNAMES( NSUBS )
+      CHARACTER*13       SNAMES( NSUBS )
 *     .. External Functions ..
       REAL               SDIFF
       LOGICAL            LCE
@@ -90,7 +90,7 @@
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
-      CHARACTER*12       SRNAMT
+      CHARACTER*13       SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
@@ -421,7 +421,7 @@
      $      7( '(', F4.1, ',', F4.1, ')  ', : ) )
  9991 FORMAT( ' AMEND DATA FILE OR INCREASE ARRAY SIZES IN PROGRAM',
      $      /' ******* TESTS ABANDONED *******' )
- 9990 FORMAT(' SUBPROGRAM NAME ', A12,' NOT RECOGNIZED', /' ******* T',
+ 9990 FORMAT(' SUBPROGRAM NAME ', A13,' NOT RECOGNIZED', /' ******* T',
      $      'ESTS ABANDONED *******' )
  9989 FORMAT(' ERROR IN CMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
      $      'ATED WRONGLY.', /' CMMCH WAS CALLED WITH TRANSA = ', A1,
@@ -429,8 +429,8 @@
      $    ' ERR = ', F12.3, '.', /' THIS MAY BE DUE TO FAULTS IN THE ',
      $     'ARITHMETIC OR THE COMPILER.', /' ******* TESTS ABANDONED ',
      $      '*******' )
- 9988 FORMAT( A12,L2 )
- 9987 FORMAT( 1X, A12,' WAS NOT TESTED' )
+ 9988 FORMAT( A13,L2 )
+ 9987 FORMAT( 1X, A13,' WAS NOT TESTED' )
  9986 FORMAT( /' END OF TESTS' )
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
@@ -462,7 +462,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -710,20 +710,20 @@
   130 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT( ' ******* ', A12,' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A12,'(''', A1, ''',''', A1, ''',',
+ 9996 FORMAT( ' ******* ', A13,' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(''', A1, ''',''', A1, ''',',
      $     3( I3, ',' ), '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3,
      $     ',(', F4.1, ',', F4.1, '), C,', I3, ').' )
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -738,7 +738,7 @@
       INTEGER          NOUT, NC, IORDER, M, N, K, LDA, LDB, LDC
       COMPLEX          ALPHA, BETA
       CHARACTER*1      TRANSA, TRANSB
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CTA,CTB
 
       IF (TRANSA.EQ.'N')THEN
@@ -763,7 +763,7 @@
       WRITE(NOUT, FMT = 9995)NC,SNAME,CRC, CTA,CTB
       WRITE(NOUT, FMT = 9994)M, N, K, ALPHA, LDA, LDB, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', A14, ',', A14, ',', A14, ',')
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', A14, ',', A14, ',', A14, ',')
  9994 FORMAT( 10X, 3( I3, ',' ) ,' (', F4.1,',',F4.1,') , A,',
      $ I3, ', B,', I3, ', (', F4.1,',',F4.1,') , C,', I3, ').' )
       END
@@ -792,7 +792,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1036,20 +1036,20 @@
   120 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT( ' ******* ', A12,' FAILED ON CALL NUMBER:' )
- 9995 FORMAT(1X, I6, ': ', A12,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9996 FORMAT( ' ******* ', A13,' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT(1X, I6, ': ', A13,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3, ',(', F4.1,
      $      ',', F4.1, '), C,', I3, ')    .' )
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -1064,7 +1064,7 @@
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB, LDC
       COMPLEX          ALPHA, BETA
       CHARACTER*1      SIDE, UPLO
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CS,CU
 
       IF (SIDE.EQ.'L')THEN
@@ -1085,7 +1085,7 @@
       WRITE(NOUT, FMT = 9995)NC,SNAME,CRC, CS,CU
       WRITE(NOUT, FMT = 9994)M, N, ALPHA, LDA, LDB, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', A14, ',', A14, ',', A14, ',')
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', A14, ',', A14, ',', A14, ',')
  9994 FORMAT( 10X, 2( I3, ',' ),' (',F4.1,',',F4.1, '), A,', I3,
      $ ', B,', I3, ', (',F4.1,',',F4.1, '), ', 'C,', I3, ').' )
       END
@@ -1113,7 +1113,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1388,20 +1388,20 @@
   160 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT(' ******* ', A12,' FAILED ON CALL NUMBER:' )
- 9995 FORMAT(1X, I6, ': ', A12,'(', 4( '''', A1, ''',' ), 2( I3, ',' ),
+ 9996 FORMAT(' ******* ', A13,' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT(1X, I6, ': ', A13,'(', 4( '''', A1, ''',' ), 2( I3, ',' ),
      $     '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3, ')         ',
      $      '      .' )
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -1416,7 +1416,7 @@
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB
       COMPLEX          ALPHA
       CHARACTER*1      SIDE, UPLO, TRANSA, DIAG
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CS, CU, CA, CD
 
       IF (SIDE.EQ.'L')THEN
@@ -1449,7 +1449,7 @@
       WRITE(NOUT, FMT = 9995)NC,SNAME,CRC, CS,CU
       WRITE(NOUT, FMT = 9994)CA, CD, M, N, ALPHA, LDA, LDB
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', A14, ',', A14, ',', A14, ',')
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', A14, ',', A14, ',', A14, ',')
  9994 FORMAT( 10X, 2( A14, ',') , 2( I3, ',' ), ' (', F4.1, ',',
      $    F4.1, '), A,', I3, ', B,', I3, ').' )
       END
@@ -1478,7 +1478,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1770,24 +1770,24 @@
   130 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT( ' ******* ', A12,' FAILED ON CALL NUMBER:' )
+ 9996 FORMAT( ' ******* ', A13,' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT(1X, I6, ': ', A12,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9994 FORMAT(1X, I6, ': ', A13,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $     F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ')               ',
      $      '          .' )
- 9993 FORMAT(1X, I6, ': ', A12,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9993 FORMAT(1X, I6, ': ', A13,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      '(', F4.1, ',', F4.1, ') , A,', I3, ',(', F4.1, ',', F4.1,
      $      '), C,', I3, ')          .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -1802,7 +1802,7 @@
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDC
       COMPLEX          ALPHA, BETA
       CHARACTER*1      UPLO, TRANSA
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CU, CA
 
       IF (UPLO.EQ.'U')THEN
@@ -1825,7 +1825,7 @@
       WRITE(NOUT, FMT = 9995)NC, SNAME, CRC, CU, CA
       WRITE(NOUT, FMT = 9994)N, K, ALPHA, LDA, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', 3( A14, ',') )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', 3( A14, ',') )
  9994 FORMAT( 10X, 2( I3, ',' ), ' (', F4.1, ',', F4.1 ,'), A,',
      $        I3, ', (', F4.1,',', F4.1, '), C,', I3, ').' )
       END
@@ -1836,7 +1836,7 @@
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDC
       REAL             ALPHA, BETA
       CHARACTER*1      UPLO, TRANSA
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CU, CA
 
       IF (UPLO.EQ.'U')THEN
@@ -1859,7 +1859,7 @@
       WRITE(NOUT, FMT = 9995)NC, SNAME, CRC, CU, CA
       WRITE(NOUT, FMT = 9994)N, K, ALPHA, LDA, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', 3( A14, ',') )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', 3( A14, ',') )
  9994 FORMAT( 10X, 2( I3, ',' ),
      $      F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ').' )
       END
@@ -1888,7 +1888,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            AA( NMAX*NMAX ), AB( 2*NMAX*NMAX ),
      $                   ALF( NALF ), AS( NMAX*NMAX ), BB( NMAX*NMAX ),
@@ -2223,24 +2223,24 @@
   160 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT( ' ******* ', A12,' FAILED ON CALL NUMBER:' )
+ 9996 FORMAT( ' ******* ', A13,' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT(1X, I6, ': ', A12,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9994 FORMAT(1X, I6, ': ', A13,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3, ',', F4.1,
      $      ', C,', I3, ')           .' )
- 9993 FORMAT(1X, I6, ': ', A12,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9993 FORMAT(1X, I6, ': ', A13,'(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3, ',(', F4.1,
      $      ',', F4.1, '), C,', I3, ')    .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -2255,7 +2255,7 @@
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDB, LDC
       COMPLEX          ALPHA, BETA
       CHARACTER*1      UPLO, TRANSA
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CU, CA
 
       IF (UPLO.EQ.'U')THEN
@@ -2278,7 +2278,7 @@
       WRITE(NOUT, FMT = 9995)NC, SNAME, CRC, CU, CA
       WRITE(NOUT, FMT = 9994)N, K, ALPHA, LDA, LDB, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', 3( A14, ',') )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', 3( A14, ',') )
  9994 FORMAT( 10X, 2( I3, ',' ), ' (', F4.1, ',', F4.1, '), A,',
      $  I3, ', B', I3, ', (', F4.1, ',', F4.1, '), C,', I3, ').' )
       END
@@ -2290,7 +2290,7 @@
       COMPLEX          ALPHA
       REAL             BETA
       CHARACTER*1      UPLO, TRANSA
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CU, CA
 
       IF (UPLO.EQ.'U')THEN
@@ -2313,7 +2313,7 @@
       WRITE(NOUT, FMT = 9995)NC, SNAME, CRC, CU, CA
       WRITE(NOUT, FMT = 9994)N, K, ALPHA, LDA, LDB, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', 3( A14, ',') )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', 3( A14, ',') )
  9994 FORMAT( 10X, 2( I3, ',' ), ' (', F4.1, ',', F4.1, '), A,',
      $      I3, ', B', I3, ',', F4.1, ', C,', I3, ').' )
       END
@@ -2827,7 +2827,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA, IORDER
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*12       SNAME
+      CHARACTER*13       SNAME
 *     .. Array Arguments ..
       COMPLEX            A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -2981,8 +2981,8 @@
      $                        LDB, BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CCGEMMTR(IORDER, UPLO, TRANSA, TRANSB, N,
-     $                                 K, ALPHA, AA, LDA, BB, LDB,
+                           CALL CCGEMMTR(IORDER, UPLO, TRANSA, TRANSB,
+     $                                 N, K, ALPHA, AA, LDA, BB, LDB,
      $                                 BETA, CC, LDC )
 *
 *                          Check if error-exit was taken incorrectly.
@@ -3077,20 +3077,20 @@
   130 CONTINUE
       RETURN
 *
-10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+10003 FORMAT( ' ', A13,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+10002 FORMAT( ' ', A13,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
      $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
      $ 'RATIO ', F8.2, ' - SUSPECT *******' )
-10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+10001 FORMAT( ' ', A13,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
-10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+10000 FORMAT( ' ', A13,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9996 FORMAT( ' ******* ', A12,' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A12,'(''', A1, ''',''', A1, ''',',
+ 9996 FORMAT( ' ******* ', A13,' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A13,'(''', A1, ''',''', A1, ''',',
      $     3( I3, ',' ), '(', F4.1, ',', F4.1, '), A,', I3, ', B,', I3,
      $     ',(', F4.1, ',', F4.1, '), C,', I3, ').' )
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -3106,7 +3106,7 @@
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDB, LDC
       COMPLEX          ALPHA, BETA
       CHARACTER*1      TRANSA, TRANSB, UPLO
-      CHARACTER*12     SNAME
+      CHARACTER*13     SNAME
       CHARACTER*14     CRC, CTA,CTB,CUPLO
 
       IF (UPLO.EQ.'U') THEN
@@ -3136,7 +3136,7 @@
       WRITE(NOUT, FMT = 9995)NC,SNAME,CRC, CUPLO, CTA,CTB
       WRITE(NOUT, FMT = 9994)N, K, ALPHA, LDA, LDB, BETA, LDC
 
- 9995 FORMAT( 1X, I6, ': ', A12,'(', A14, ',', A14, ',', A14, ',',
+ 9995 FORMAT( 1X, I6, ': ', A13,'(', A14, ',', A14, ',', A14, ',',
      $        A14, ',')
  9994 FORMAT( 10X, 2( I3, ',' ) ,' (', F4.1,',',F4.1,') , A,',
      $ I3, ', B,', I3, ', (', F4.1,',',F4.1,') , C,', I3, ').' )
