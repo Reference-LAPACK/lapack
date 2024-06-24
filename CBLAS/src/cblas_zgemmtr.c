@@ -1,9 +1,9 @@
 /*
  *
- * cblas_zgemm.c
- * This program is a C interface to zgemm.
- * Written by Keita Teranishi
- * 4/8/1998
+ * cblas_zgemmtr.c
+ * This program is a C interface to zgemmtr.
+ * Written by Martin Koehler, MPI Magdeburg
+ * 06/24/2024
  *
  */
 
