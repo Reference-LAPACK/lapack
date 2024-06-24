@@ -89,7 +89,7 @@ set(SLEV3 cblas_sgemm.c cblas_ssymm.c cblas_ssyrk.c cblas_ssyr2k.c cblas_strmm.c
 
 # Files for level 3 double precision real
 set(DLEV3 cblas_dgemm.c cblas_dsymm.c cblas_dsyrk.c cblas_dsyr2k.c cblas_dtrmm.c
-        cblas_dtrsm.c cblas_cgemmtr.c)
+        cblas_dtrsm.c cblas_dgemmtr.c)
 
 # Files for level 3 single precision complex
 set(CLEV3 cblas_cgemm.c cblas_csymm.c cblas_chemm.c cblas_cherk.c
