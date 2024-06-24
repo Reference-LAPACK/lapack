@@ -2812,11 +2812,8 @@
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*  -- Written on 24-June-2024.
+*     Martin Koehler, Max Planck Institute Magdeburg
 *
 *     .. Parameters ..
       COMPLEX            ZERO
@@ -3148,15 +3145,12 @@
      $                  NOUT, MV )
       IMPLICIT NONE
 *
-*  Checks the results of the computational tests.
+*  Checks the results of the computational tests for GEMMTR.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*  -- Written on 24-June-2024.
+*     Martin Koehler, Max Planck Institute, Magdeburg
 *
 *     .. Parameters ..
       COMPLEX            ZERO

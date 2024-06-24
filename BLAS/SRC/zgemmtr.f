@@ -222,9 +222,9 @@
 *     ..
 *     .. Parameters ..
       COMPLEX*16 ONE
-      PARAMETER (ONE= (1.0E+0,0.0E+0))
+      PARAMETER (ONE= (1.0D+0,0.0D+0))
       COMPLEX*16 ZERO
-      PARAMETER (ZERO= (0.0E+0,0.0E+0))
+      PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *
 *     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
@@ -278,8 +278,7 @@
 *
 *     Quick return if possible.
 *
-      IF ((N.EQ.0) .OR.
-     +    (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      IF (N.EQ.0) RETURN
 *
 *     And when  alpha.eq.zero.
 *

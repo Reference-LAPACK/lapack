@@ -2815,11 +2815,8 @@
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*  -- Written on 24-June-2024.
+*     Martin Koehler, Max Planck Institute Magdeburg
 *
 *     .. Parameters ..
       COMPLEX*16         ZERO
@@ -3151,15 +3148,12 @@
      $                  NOUT, MV )
       IMPLICIT NONE
 *
-*  Checks the results of the computational tests.
+*  Checks the results of the computational tests for GEMMTR.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
+*  -- Written on 24-June-2024.
+*     Martin Koehler, Max Planck Institute, Magdeburg
 *
 *     .. Parameters ..
       COMPLEX*16         ZERO
@@ -3182,11 +3176,11 @@
       INTEGER            I, J, K, ISTART, ISTOP
       LOGICAL            CTRANA, CTRANB, TRANA, TRANB, UPPER
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DIMAG, DCONJG, MAX, REAL, DBLE, SQRT
+      INTRINSIC          DABS, DIMAG, DCONJG, MAX, DBLE, DSQRT
 *     .. Statement Functions ..
       DOUBLE PRECISION   ABS1
 *     .. Statement Function definitions ..
-      ABS1( CL ) = ABS( DBLE( CL ) ) + ABS( DIMAG( CL ) )
+      ABS1( CL ) = DABS( DBLE( CL ) ) + DABS( DIMAG( CL ) )
 *     .. Executable Statements ..
 
       UPPER = UPLO.EQ.'U'

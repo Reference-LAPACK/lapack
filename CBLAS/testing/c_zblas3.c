@@ -5,6 +5,7 @@
  *     Modified by T. H. Do, 4/15/98, SGI/CRAY Research.
  */
 #include <stdlib.h>
+#include <stdio.h>
 #include "cblas.h"
 #include "cblas_test.h"
 #define  TEST_COL_MJR	0
@@ -108,68 +109,68 @@ void F77_zgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
   get_uplo_type(uplop, &uplo);
 
   if (*layout == TEST_ROW_MJR) {
-     if (transa == CblasNoTrans) {
-        LDA = *k+1;
-        A=(CBLAS_TEST_ZOMPLEX*)malloc((*n)*LDA*sizeof(CBLAS_TEST_ZOMPLEX));
-        for( i=0; i<*n; i++ )
-           for( j=0; j<*k; j++ ) {
-              A[i*LDA+j].real=a[j*(*lda)+i].real;
-              A[i*LDA+j].imag=a[j*(*lda)+i].imag;
-           }
-     }
-     else {
-        LDA = *n+1;
-        A=(CBLAS_TEST_ZOMPLEX* )malloc(LDA*(*k)*sizeof(CBLAS_TEST_ZOMPLEX));
-        for( i=0; i<*k; i++ )
-           for( j=0; j<*n; j++ ) {
-              A[i*LDA+j].real=a[j*(*lda)+i].real;
-              A[i*LDA+j].imag=a[j*(*lda)+i].imag;
-           }
-     }
+      if (transa == CblasNoTrans) {
+          LDA = *k+1;
+          A=(CBLAS_TEST_ZOMPLEX*)malloc((*n)*LDA*sizeof(CBLAS_TEST_ZOMPLEX));
+          for( i=0; i<*n; i++ )
+              for( j=0; j<*k; j++ ) {
+                  A[i*LDA+j].real=a[j*(*lda)+i].real;
+                  A[i*LDA+j].imag=a[j*(*lda)+i].imag;
+              }
+      }
+      else {
+          LDA = *n+1;
+          A=(CBLAS_TEST_ZOMPLEX* )malloc(LDA*(*k)*sizeof(CBLAS_TEST_ZOMPLEX));
+          for( i=0; i<*k; i++ )
+              for( j=0; j<*n; j++ ) {
+                  A[i*LDA+j].real=a[j*(*lda)+i].real;
+                  A[i*LDA+j].imag=a[j*(*lda)+i].imag;
+              }
+      }
 
-     if (transb == CblasNoTrans) {
-        LDB = *n+1;
-        B=(CBLAS_TEST_ZOMPLEX* )malloc((*k)*LDB*sizeof(CBLAS_TEST_ZOMPLEX) );
-        for( i=0; i<*k; i++ )
-           for( j=0; j<*n; j++ ) {
-              B[i*LDB+j].real=b[j*(*ldb)+i].real;
-              B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
-           }
-     }
-     else {
-        LDB = *k+1;
-        B=(CBLAS_TEST_ZOMPLEX* )malloc(LDB*(*n)*sizeof(CBLAS_TEST_ZOMPLEX));
-        for( i=0; i<*n; i++ )
-           for( j=0; j<*k; j++ ) {
-              B[i*LDB+j].real=b[j*(*ldb)+i].real;
-              B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
-           }
-     }
+      if (transb == CblasNoTrans) {
+          LDB = *n+1;
+          B=(CBLAS_TEST_ZOMPLEX* )malloc((*k)*LDB*sizeof(CBLAS_TEST_ZOMPLEX) );
+          for( i=0; i<*k; i++ )
+              for( j=0; j<*n; j++ ) {
+                  B[i*LDB+j].real=b[j*(*ldb)+i].real;
+                  B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
+              }
+      }
+      else {
+          LDB = *k+1;
+          B=(CBLAS_TEST_ZOMPLEX* )malloc(LDB*(*n)*sizeof(CBLAS_TEST_ZOMPLEX));
+          for( i=0; i<*n; i++ )
+              for( j=0; j<*k; j++ ) {
+                  B[i*LDB+j].real=b[j*(*ldb)+i].real;
+                  B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
+              }
+      }
 
-     LDC = *n+1;
-     C=(CBLAS_TEST_ZOMPLEX* )malloc((*n)*LDC*sizeof(CBLAS_TEST_ZOMPLEX));
-     for( j=0; j<*n; j++ )
-        for( i=0; i<*n; i++ ) {
-           C[i*LDC+j].real=c[j*(*ldc)+i].real;
-           C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
-        }
-     cblas_cgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
-                  B, LDB, beta, C, LDC );
-     for( j=0; j<*n; j++ )
-        for( i=0; i<*n; i++ ) {
-           c[j*(*ldc)+i].real=C[i*LDC+j].real;
-           c[j*(*ldc)+i].imag=C[i*LDC+j].imag;
-        }
-     free(A);
-     free(B);
-     free(C);
+      LDC = *n+1;
+      C=(CBLAS_TEST_ZOMPLEX* )malloc((*n)*LDC*sizeof(CBLAS_TEST_ZOMPLEX));
+      for( j=0; j<*n; j++ )
+          for( i=0; i<*n; i++ ) {
+              C[i*LDC+j].real=c[j*(*ldc)+i].real;
+              C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
+          }
+      cblas_zgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
+              B, LDB, beta, C, LDC );
+      for( j=0; j<*n; j++ )
+          for( i=0; i<*n; i++ ) {
+              c[j*(*ldc)+i].real=C[i*LDC+j].real;
+              c[j*(*ldc)+i].imag=C[i*LDC+j].imag;
+          }
+      free(A);
+      free(B);
+      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
-                  b, *ldb, beta, c, *ldc );
+      cblas_zgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
+              b, *ldb, beta, c, *ldc );
   else
-     cblas_zgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
-                  b, *ldb, beta, c, *ldc );
+      cblas_zgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
+              b, *ldb, beta, c, *ldc );
 }
 
 
