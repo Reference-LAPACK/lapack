@@ -75,7 +75,7 @@ void F77_sgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
                   b, *ldb, *beta, c, *ldc );
 }
 
-void F77_cgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
+void F77_sgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
      CBLAS_INT *k, float *alpha, float *a, CBLAS_INT *lda,
      float *b, CBLAS_INT *ldb, float *beta,
      float *c, CBLAS_INT *ldc ) {

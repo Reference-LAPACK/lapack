@@ -1,9 +1,9 @@
 /*
  *
- * cblas_dgemm.c
- * This program is a C interface to dgemm.
- * Written by Keita Teranishi
- * 4/8/1998
+ * cblas_dgemmtr.c
+ * This program is a C interface to dgemmtr.
+ * Written by Martin Koehler, MPI Magdeburg
+ * 06/24/2024
  *
  */
 

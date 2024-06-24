@@ -272,8 +272,7 @@
 *
 *     Quick return if possible.
 *
-      IF ((N.EQ.0) .OR.
-     +    (((ALPHA.EQ.ZERO).OR. (K.EQ.0)).AND. (BETA.EQ.ONE))) RETURN
+      IF (N.EQ.0) RETURN
 *
 *     And if  alpha.eq.zero.
 *
