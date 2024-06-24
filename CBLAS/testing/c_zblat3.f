@@ -331,13 +331,13 @@
             CALL ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                 AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
-     $		       0 )
+     $             0 )
             END IF
             IF (RORDER) THEN
             CALL ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                 AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
-     $		       1 )
+     $             1 )
             END IF
             GO TO 190
 *           Test ZHERK, 06, ZSYRK, 07.
@@ -359,13 +359,13 @@
             CALL ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
-     $		       0 )
+     $             0 )
             END IF
             IF (RORDER) THEN
             CALL ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
-     $		       1 )
+     $             1 )
             END IF
             GO TO 190
 *           Test ZGEMMTR, 10

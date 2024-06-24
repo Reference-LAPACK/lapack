@@ -74,6 +74,82 @@ void F77_sgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      cblas_sgemm( UNDEFINED, transa, transb, *m, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
 }
+
+void F77_cgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
+     CBLAS_INT *k, float *alpha, float *a, CBLAS_INT *lda,
+     float *b, CBLAS_INT *ldb, float *beta,
+     float *c, CBLAS_INT *ldc ) {
+
+  float *A, *B, *C;
+  CBLAS_INT i,j,LDA, LDB, LDC;
+  CBLAS_TRANSPOSE transa, transb;
+  CBLAS_UPLO uplo;
+
+  get_transpose_type(transpa, &transa);
+  get_transpose_type(transpb, &transb);
+  get_uplo_type(uplop, &uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     if (transa == CblasNoTrans) {
+        LDA = *k+1;
+        A=(float*)malloc((*n)*LDA*sizeof(float));
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*k; j++ ) {
+              A[i*LDA+j]=a[j*(*lda)+i];
+           }
+     }
+     else {
+        LDA = *n+1;
+        A=(float* )malloc(LDA*(*k)*sizeof(float));
+        for( i=0; i<*k; i++ )
+           for( j=0; j<*n; j++ ) {
+              A[i*LDA+j]=a[j*(*lda)+i];
+           }
+     }
+
+     if (transb == CblasNoTrans) {
+        LDB = *n+1;
+        B=(float* )malloc((*k)*LDB*sizeof(float) );
+        for( i=0; i<*k; i++ )
+           for( j=0; j<*n; j++ ) {
+              B[i*LDB+j]=b[j*(*ldb)+i];
+           }
+     }
+     else {
+        LDB = *k+1;
+        B=(float* )malloc(LDB*(*n)*sizeof(float));
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*k; j++ ) {
+              B[i*LDB+j]=b[j*(*ldb)+i];
+           }
+     }
+
+     LDC = *n+1;
+     C=(float* )malloc((*n)*LDC*sizeof(float));
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*n; i++ ) {
+           C[i*LDC+j]=c[j*(*ldc)+i];
+        }
+     cblas_sgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, *alpha, A, LDA,
+                  B, LDB, *beta, C, LDC );
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*n; i++ ) {
+           c[j*(*ldc)+i]=C[i*LDC+j];
+        }
+     free(A);
+     free(B);
+     free(C);
+  }
+  else if (*layout == TEST_COL_MJR)
+     cblas_sgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, *alpha, a, *lda,
+                  b, *ldb, *beta, c, *ldc );
+  else
+     cblas_sgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, *alpha, a, *lda,
+                  b, *ldb, *beta, c, *ldc );
+}
+
+
+
 void F77_ssymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
               float *alpha, float *a, CBLAS_INT *lda, float *b, CBLAS_INT *ldb,
               float *beta, float *c, CBLAS_INT *ldc
