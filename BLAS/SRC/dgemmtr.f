@@ -172,7 +172,7 @@
 *
 *> \author Martin Koehler
 *
-*> \ingroup gemm
+*> \ingroup gemmtr
 *
 *> \par Further Details:
 *  =====================
