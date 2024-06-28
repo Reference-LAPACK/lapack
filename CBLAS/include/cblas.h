@@ -472,6 +472,12 @@ void cblas_sgemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  const CBLAS_INT K, const float alpha, const float *A,
                  const CBLAS_INT lda, const float *B, const CBLAS_INT ldb,
                  const float beta, float *C, const CBLAS_INT ldc);
+void cblas_sgemmtr(CBLAS_LAYOUT layout,CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
+                 const CBLAS_INT K, const float alpha, const float *A,
+                 const CBLAS_INT lda, const float *B, const CBLAS_INT ldb,
+                 const float beta, float *C, const CBLAS_INT ldc);
+
 void cblas_ssymm(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  CBLAS_UPLO Uplo, const CBLAS_INT M, const CBLAS_INT N,
                  const float alpha, const float *A, const CBLAS_INT lda,
@@ -499,6 +505,11 @@ void cblas_strsm(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
 
 void cblas_dgemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  CBLAS_TRANSPOSE TransB, const CBLAS_INT M, const CBLAS_INT N,
+                 const CBLAS_INT K, const double alpha, const double *A,
+                 const CBLAS_INT lda, const double *B, const CBLAS_INT ldb,
+                 const double beta, double *C, const CBLAS_INT ldc);
+void cblas_dgemmtr(CBLAS_LAYOUT layout,CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
                  const CBLAS_INT K, const double alpha, const double *A,
                  const CBLAS_INT lda, const double *B, const CBLAS_INT ldb,
                  const double beta, double *C, const CBLAS_INT ldc);
@@ -532,6 +543,11 @@ void cblas_cgemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  const CBLAS_INT K, const void *alpha, const void *A,
                  const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
                  const void *beta, void *C, const CBLAS_INT ldc);
+void cblas_cgemmtr(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
+                 const CBLAS_INT K, const void *alpha, const void *A,
+                 const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
+                 const void *beta, void *C, const CBLAS_INT ldc);
 void cblas_csymm(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  CBLAS_UPLO Uplo, const CBLAS_INT M, const CBLAS_INT N,
                  const void *alpha, const void *A, const CBLAS_INT lda,
@@ -559,6 +575,11 @@ void cblas_ctrsm(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
 
 void cblas_zgemm(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  CBLAS_TRANSPOSE TransB, const CBLAS_INT M, const CBLAS_INT N,
+                 const CBLAS_INT K, const void *alpha, const void *A,
+                 const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
+                 const void *beta, void *C, const CBLAS_INT ldc);
+void cblas_zgemmtr(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const CBLAS_INT N,
                  const CBLAS_INT K, const void *alpha, const void *A,
                  const CBLAS_INT lda, const void *B, const CBLAS_INT ldb,
                  const void *beta, void *C, const CBLAS_INT ldc);

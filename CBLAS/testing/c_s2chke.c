@@ -30,7 +30,7 @@ void chkxer(void) {
 
 void F77_s2chke(char *rout
 #ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
+  , FORTRAN_STRLEN rout_len
 #endif
 ) {
    char *sf = ( rout ) ;

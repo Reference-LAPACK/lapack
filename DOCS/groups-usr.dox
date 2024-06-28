@@ -961,6 +961,8 @@ https://www.netlib.org/xblas/
         @defgroup blas3_grp         Level 3 BLAS: matrix-matrix ops
         @{
             @defgroup gemm          gemm:           general matrix-matrix multiply
+            @defgroup gemmtr        gemmtr:         general matrix-matrix multiply with triangular output
+
 
             @defgroup hemm          {he,sy}mm:      Hermitian/symmetric matrix-matrix multiply
             @defgroup herk          {he,sy}rk:      Hermitian/symmetric rank-k update

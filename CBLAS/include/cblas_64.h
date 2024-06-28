@@ -423,6 +423,12 @@ void cblas_sgemm_64(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  const int64_t K, const float alpha, const float *A,
                  const int64_t lda, const float *B, const int64_t ldb,
                  const float beta, float *C, const int64_t ldc);
+void cblas_sgemmtr_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const int64_t N,
+                 const int64_t K, const float alpha, const float *A,
+                 const int64_t lda, const float *B, const int64_t ldb,
+                 const float beta, float *C, const int64_t ldc);
+
 void cblas_ssymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  CBLAS_UPLO Uplo, const int64_t M, const int64_t N,
                  const float alpha, const float *A, const int64_t lda,
@@ -450,6 +456,11 @@ void cblas_strsm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
 
 void cblas_dgemm_64(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  CBLAS_TRANSPOSE TransB, const int64_t M, const int64_t N,
+                 const int64_t K, const double alpha, const double *A,
+                 const int64_t lda, const double *B, const int64_t ldb,
+                 const double beta, double *C, const int64_t ldc);
+void cblas_dgemmtr_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const int64_t N,
                  const int64_t K, const double alpha, const double *A,
                  const int64_t lda, const double *B, const int64_t ldb,
                  const double beta, double *C, const int64_t ldc);
@@ -483,6 +494,12 @@ void cblas_cgemm_64(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  const int64_t K, const void *alpha, const void *A,
                  const int64_t lda, const void *B, const int64_t ldb,
                  const void *beta, void *C, const int64_t ldc);
+void cblas_cgemmtr_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const int64_t N,
+                 const int64_t K, const void *alpha, const void *A,
+                 const int64_t lda, const void *B, const int64_t ldb,
+                 const void *beta, void *C, const int64_t ldc);
+
 void cblas_csymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  CBLAS_UPLO Uplo, const int64_t M, const int64_t N,
                  const void *alpha, const void *A, const int64_t lda,
@@ -510,6 +527,11 @@ void cblas_ctrsm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
 
 void cblas_zgemm_64(CBLAS_LAYOUT layout, CBLAS_TRANSPOSE TransA,
                  CBLAS_TRANSPOSE TransB, const int64_t M, const int64_t N,
+                 const int64_t K, const void *alpha, const void *A,
+                 const int64_t lda, const void *B, const int64_t ldb,
+                 const void *beta, void *C, const int64_t ldc);
+void cblas_zgemmtr_64(CBLAS_LAYOUT layout,CBLAS_UPLO Uplo, CBLAS_TRANSPOSE TransA,
+                 CBLAS_TRANSPOSE TransB, const int64_t N,
                  const int64_t K, const void *alpha, const void *A,
                  const int64_t lda, const void *B, const int64_t ldb,
                  const void *beta, void *C, const int64_t ldc);
