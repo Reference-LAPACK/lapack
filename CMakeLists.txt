@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(LAPACK)
+project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 12)
@@ -271,8 +271,12 @@ endif()
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
+  set(LAPACK_INSTALL_EXPORT_NAME_CACHE ${LAPACK_INSTALL_EXPORT_NAME})
+  set(LAPACK_INSTALL_EXPORT_NAME ${BLASLIB}-targets)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
+  set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
+  unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 else()
   add_link_options(${BLAS_LINKER_FLAGS})
 endif()
@@ -295,6 +299,10 @@ if(USE_XBLAS)
 endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
+
+option(LAPACK "Whether to build or use LAPACK (to enable a BLAS-only build)")
+
+if(LAPACK)
 
 # --------------------------------------------------
 # LAPACK
@@ -357,6 +365,8 @@ if(NOT LATESTLAPACK_FOUND)
   add_subdirectory(SRC)
 else()
   add_link_options(${LAPACK_LINKER_FLAGS})
+endif()
+
 endif()
 
 if(BUILD_TESTING)
@@ -424,6 +434,7 @@ function(_display_cpp_implementation_msg name)
   message(STATUS "----------------")
 endfunction()
 if (BLAS++)
+  enable_language(CXX)
   _display_cpp_implementation_msg("BLAS")
   include(ExternalProject)
   ExternalProject_Add(blaspp
@@ -435,6 +446,7 @@ if (BLAS++)
   ExternalProject_Add_StepDependencies(blaspp build ${BLAS_LIBRARIES})
 endif()
 if (LAPACK++)
+  enable_language(CXX)
 	message (STATUS "linking lapack++ against ${LAPACK_LIBRARIES}")
   _display_cpp_implementation_msg("LAPACK")
   include(ExternalProject)
@@ -493,10 +505,14 @@ if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
+if(LAPACK)
 if(NOT LATESTLAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
+  set(BUILD_LAPACK ON)
+endif()
 endif()
 
+if(LAPACK)
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
@@ -509,6 +525,7 @@ if(ALL_TARGETS)
   # Choose one of the lapack targets to use as a guard for
   # lapack-config.cmake to load targets from the install tree.
   list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
+endif()
 endif()
 
 # Include cblas in targets exported from the build tree.
@@ -524,6 +541,8 @@ endif()
 if(NOT LAPACK_WITH_TMGLIB_FOUND AND LAPACKE_WITH_TMG)
   set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
+
+if(BUILD_LAPACK)
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
@@ -562,6 +581,9 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
   COMPONENT Development
   )
+
+endif() # BUILD_LAPACK
+
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
@@ -573,6 +595,7 @@ if (LAPACK++)
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
+  include(CMakePackageConfigHelpers)
   write_basic_package_version_file(
     "lapackppConfigVersion.cmake"
     VERSION 2020.10.02
@@ -586,6 +609,7 @@ if (LAPACK++)
 
 endif()
 if (BLAS++)
+  include(CMakePackageConfigHelpers)
   write_basic_package_version_file(
     "blasppConfigVersion.cmake"
     VERSION 2020.10.02
