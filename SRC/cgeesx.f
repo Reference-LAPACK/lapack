@@ -376,6 +376,8 @@
 *
       IF( N.EQ.0 ) THEN
          SDIM = 0
+         IF (WANTSE .OR. WANTSB) RCONDE = ONE
+         IF (WANTSV .OR. WANTSB) RCONDV = ZERO
          RETURN
       END IF
 *
