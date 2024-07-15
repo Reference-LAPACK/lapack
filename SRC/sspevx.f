@@ -334,8 +334,10 @@
                W( 1 ) = AP( 1 )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = ONE
+         IF( WANTZ ) THEN
+            Z( 1, 1 ) = ONE
+            IFAIL( 1 ) = 0
+         END IF
          RETURN
       END IF
 *
@@ -358,7 +360,7 @@
       ELSE
          VLL = ZERO
          VUU = ZERO
-      ENDIF
+      END IF
       ANRM = SLANSP( 'M', UPLO, N, AP, WORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
