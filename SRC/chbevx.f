@@ -384,8 +384,11 @@
          END IF
          IF( M.EQ.1 ) THEN
             W( 1 ) = REAL( CTMP1 )
-            IF( WANTZ )
-     $         Z( 1, 1 ) = CONE
+            Q( 1, 1 ) = CONE
+            IF( WANTZ ) THEN
+               Z( 1, 1 ) = CONE
+               IFAIL( 1 ) = 0
+            END IF
          END IF
          RETURN
       END IF
@@ -409,7 +412,7 @@
       ELSE
          VLL = ZERO
          VUU = ZERO
-      ENDIF
+      END IF
       ANRM = CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1

@@ -343,8 +343,10 @@
                W( 1 ) = REAL( AP( 1 ) )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = CONE
+         IF( WANTZ ) THEN
+            Z( 1, 1 ) = CONE
+            IFAIL( 1 ) = 0
+         END IF
          RETURN
       END IF
 *
@@ -367,7 +369,7 @@
       ELSE
          VLL = ZERO
          VUU = ZERO
-      ENDIF
+      END IF
       ANRM = CLANHP( 'M', UPLO, N, AP, RWORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1

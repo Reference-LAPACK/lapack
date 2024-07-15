@@ -375,8 +375,11 @@
          END IF
          IF( M.EQ.1 ) THEN
             W( 1 ) = TMP1
-            IF( WANTZ )
-     $         Z( 1, 1 ) = ONE
+            Q( 1, 1 ) = ONE
+            IF( WANTZ ) THEN
+               Z( 1, 1 ) = ONE
+               IFAIL( 1 ) = 0
+            END IF
          END IF
          RETURN
       END IF
@@ -400,7 +403,7 @@
       ELSE
          VLL = ZERO
          VUU = ZERO
-      ENDIF
+      END IF
       ANRM = SLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
