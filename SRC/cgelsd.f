@@ -391,7 +391,7 @@
 *
 *     Quick return if possible.
 *
-      IF( M.EQ.0 .OR. N.EQ.0 ) THEN
+      IF( M.EQ.0 .OR. N.EQ.0 .OR. NRHS.EQ.0 ) THEN
          RANK = 0
          RETURN
       END IF
@@ -530,14 +530,14 @@
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       ELSE IF( N.GE.MNTHR .AND. LWORK.GE.4*M+M*M+
-     $         MAX( M, 2*M-4, NRHS, N-3*M ) ) THEN
+     $         MAX( M, 2*M-4, NRHS, N-3*M, M*NRHS ) ) THEN
 *
 *        Path 2a - underdetermined, with many more columns than rows
 *        and sufficient workspace for an efficient algorithm.
 *
          LDWORK = M
-         IF( LWORK.GE.MAX( 4*M+M*LDA+MAX( M, 2*M-4, NRHS, N-3*M ),
-     $       M*LDA+M+M*NRHS ) )LDWORK = LDA
+         IF( LWORK.GE.MAX( 4*M+M*LDA+MAX( M, 2*M-4, NRHS, N-3*M,
+     $       M*NRHS ), M*LDA+M+M*NRHS ) )LDWORK = LDA
          ITAU = 1
          NWORK = M + 1
 *
