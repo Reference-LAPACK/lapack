@@ -293,7 +293,7 @@
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0, TWO = 2.0E0,
      $                   HALF = 1.0E0 / TWO )
       REAL               FUDGE, RELFAC
-      PARAMETER          ( FUDGE = 2.3E0, RELFAC = 2.0E0 )
+      PARAMETER          ( FUDGE = 2.1E0, RELFAC = 2.0E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            NCNVRG, TOOFEW
@@ -596,7 +596,7 @@
             END IF
 *
             IF( IRANGE.GT.1 ) THEN
-               IF( GU.LE.WL ) THEN
+               IF( GU.LT.WL ) THEN
                   NWL = NWL + IN
                   NWU = NWU + IN
                   GO TO 70
@@ -700,7 +700,7 @@
                         WKILL = W( JE )
                      END IF
    90             CONTINUE
-                  IF( IW .NE. 0) IBLOCK( IW ) = 0
+                  IBLOCK( IW ) = 0
   100          CONTINUE
             END IF
             IF( IDISCU.GT.0 ) THEN
@@ -715,7 +715,7 @@
                         WKILL = W( JE )
                      END IF
   110             CONTINUE
-                  IF( IW .NE. 0) IBLOCK( IW ) = 0
+                  IBLOCK( IW ) = 0
   120          CONTINUE
             END IF
             IM = 0

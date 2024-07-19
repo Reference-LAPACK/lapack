@@ -597,7 +597,7 @@
             END IF
 *
             IF( IRANGE.GT.1 ) THEN
-               IF( GU.LE.WL ) THEN
+               IF( GU.LT.WL ) THEN
                   NWL = NWL + IN
                   NWU = NWU + IN
                   GO TO 70
@@ -701,7 +701,7 @@
                         WKILL = W( JE )
                      END IF
    90             CONTINUE
-                  IF( IW .NE. 0) IBLOCK( IW ) = 0
+                  IBLOCK( IW ) = 0
   100          CONTINUE
             END IF
             IF( IDISCU.GT.0 ) THEN
@@ -716,7 +716,7 @@
                         WKILL = W( JE )
                      END IF
   110             CONTINUE
-                  IF( IW .NE. 0) IBLOCK( IW ) = 0
+                  IBLOCK( IW ) = 0
   120          CONTINUE
             END IF
             IM = 0
