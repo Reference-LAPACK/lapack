@@ -43,3 +43,6 @@ build*
 DOCS/man
 DOCS/explore-html
 output_err
+
+# Editor config files
+.vscode/
