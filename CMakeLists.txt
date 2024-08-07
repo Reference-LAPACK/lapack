@@ -123,30 +123,6 @@ message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDE
 
 include(GNUInstallDirs)
 
-# Updated OSX RPATH settings
-# In response to CMake 3.0 generating warnings regarding policy CMP0042,
-# the OSX RPATH settings have been updated per recommendations found
-# in the CMake Wiki:
-#  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-option(CMAKE_MACOSX_RPATH "Enable macOS RPATH" ON)
-message(STATUS "Enable macOS RPATH: ${CMAKE_MACOSX_RPATH}")
-option(CMAKE_SKIP_BUILD_RPATH "Skip build-time RPATH" OFF)
-message(STATUS "Skip build-time RPATH: ${CMAKE_SKIP_BUILD_RPATH}")
-option(CMAKE_BUILD_WITH_INSTALL_RPATH "Build with install RPATH" OFF)
-message(STATUS "Build with install RPATH: ${CMAKE_BUILD_WITH_INSTALL_RPATH}")
-
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES ${CMAKE_INSTALL_FULL_LIBDIR} isSystemDir)
-
-if ("${isSystemDir}" STREQUAL "-1")
-  if(${CMAKE_INSTALL_FULL_LIBDIR})
-    set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
-  endif()
-  message(STATUS "Install RPATH: ${CMAKE_INSTALL_RPATH}")
-  option(CMAKE_INSTALL_RPATH_USE_LINK_PATH "Use link path for RPATH" TRUE)
-  message(STATUS "Install RPATH use link path: ${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
-endif()
-
-
 # Configure the warning and code coverage suppression file
 configure_file(
   "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
