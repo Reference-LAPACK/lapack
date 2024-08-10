@@ -43,9 +43,11 @@ lapack_int API_SUFFIX(LAPACKE_stfsm)( int matrix_layout, char transr, char side,
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
+        lapack_int mn = m;
+        if( LAPACKE_lsame( side, 'r' ) ) mn = n;
         /* Optionally check input matrices for NaNs */
         if( IS_S_NONZERO(alpha) ) {
-            if( API_SUFFIX(LAPACKE_stf_nancheck)( matrix_layout, transr, uplo, diag, n, a ) ) {
+            if( API_SUFFIX(LAPACKE_stf_nancheck)( matrix_layout, transr, uplo, diag, mn, a ) ) {
                 return -10;
             }
         }
