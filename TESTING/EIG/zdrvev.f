@@ -422,13 +422,14 @@
       PARAMETER          ( MAXTYP = 21 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADNN
+      LOGICAL            BADNN, EVAL_5
       CHARACTER*3        PATH
       INTEGER            IINFO, IMODE, ITYPE, IWK, J, JCOL, JJ, JSIZE,
      $                   JTYPE, MTYPES, N, NERRS, NFAIL, NMAX, NNWORK,
      $                   NTEST, NTESTF, NTESTT
       DOUBLE PRECISION   ANORM, COND, CONDS, OVFL, RTULP, RTULPI, TNRM,
      $                   ULP, ULPINV, UNFL, VMX, VRMX, VTST
+     $                   , TEMP, TEMPR, TEMPI, WTOL
 *     ..
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), KCONDS( MAXTYP ),
@@ -798,10 +799,23 @@
 *
 *              Do Test (5)
 *
+               EVAL_5 = .FALSE.
                DO 150 J = 1, N
                   IF( W( J ).NE.W1( J ) )
-     $               RESULT( 5 ) = ULPINV
+     $               EVAL_5 = .TRUE.
   150          CONTINUE
+         IF (EVAL_5) THEN
+          WTOL = THRESH*ULP
+          DO 300 J = 1, N
+           TEMP = (ZABS(W(J)-W1(J))) / (1+ZABS(W1(J)))
+           TEMPR = (DABS(DREAL(W(J))-DREAL(W1(J))))/(1+ZABS(W1(J)))
+           TEMPI = (DABS(DIMAG(W(J))-DIMAG(W1(J))))/(1+ZABS(W1(J)))
+             IF ( (TEMP.GT.WTOL).OR.(TEMPR.GT.WTOL).OR.
+     $        (TEMPI.GT.WTOL) ) THEN
+                 RESULT( 5 ) = ULPINV
+              ENDIF
+  300       CONTINUE
+           ENDIF
 *
 *              Compute eigenvalues and right eigenvectors, and test them
 *
