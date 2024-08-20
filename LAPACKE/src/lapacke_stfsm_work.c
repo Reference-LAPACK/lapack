@@ -50,7 +50,7 @@ lapack_int API_SUFFIX(LAPACKE_stfsm_work)( int matrix_layout, char transr, char 
         lapack_int mn = MAX(1,m);
         float* b_t = NULL;
         float* a_t = NULL;
-        if( LAPACKE_lsame( side, 'r' ) ) mn = n;
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) mn = n;
         /* Check leading dimension(s) */
         if( ldb < m ) {
             info = -12;
