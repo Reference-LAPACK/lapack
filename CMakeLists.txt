@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(LAPACK)
+project(LAPACK C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 12)
