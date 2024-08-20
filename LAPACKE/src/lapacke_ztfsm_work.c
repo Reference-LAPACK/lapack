@@ -86,7 +86,7 @@ lapack_int API_SUFFIX(LAPACKE_ztfsm_work)( int matrix_layout, char transr, char 
                       b_t, &ldb_t );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         if( IS_Z_NONZERO(alpha) ) {
             LAPACKE_free( a_t );
