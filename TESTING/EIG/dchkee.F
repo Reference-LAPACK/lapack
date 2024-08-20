@@ -27,6 +27,9 @@
 *>     and drivers DSYEV(X), DSBEV(X), DSPEV(X), DSTEV(X),
 *>                 DSYEVD,   DSBEVD,   DSPEVD,   DSTEVD
 *>
+*> KEP (Skew-symmetric Eigenvalue Problem):
+*>     Test DKYTRD, DSTEQR, and driver DSYEV, DSTEV
+*>
 *> SVD (Singular Value Decomposition):
 *>     Test DGEBRD, DORGBR, DBDSQR, DBDSDC
 *>     and the drivers DGESVD, DGESDD
@@ -61,6 +64,9 @@
 *> DSG (Symmetric Generalized Eigenvalue Problem):
 *>     Test DSYGST, DSYGV, DSYGVD, DSYGVX, DSPGST, DSPGV, DSPGVD,
 *>     DSPGVX, DSBGST, DSBGV, DSBGVD, and DSBGVX
+*>
+*> DKG (Skew-symmetric Generalized Eigenvalue Problem):
+*>     Test DKYGST, DKYGV
 *>
 *> DSB (Symmetric Band Eigenvalue Problem):
 *>     Test DSBTRD
@@ -114,6 +120,8 @@
 *> DHS or NEP      21     DCHKHS
 *> DST or SEP      21     DCHKST (routines)
 *>                 18     DDRVST (drivers)
+*> DKT or KEP      21     DCHKKT (routines)
+*>                 18     DDRVKT (drivers)
 *> DBD or SVD      16     DCHKBD (routines)
 *>                  5     DDRVBD (drivers)
 *> DEV             21     DDRVEV
@@ -126,6 +134,7 @@
 *> DGV             26     DDRGEV
 *> DXV              2     DDRGVX
 *> DSG             21     DDRVSG
+*> DKG             21     DDRVKG
 *> DSB             15     DCHKSB
 *> DBB             15     DCHKBB
 *> DEC              -     DCHKEC
@@ -215,7 +224,7 @@
 *>
 *>-----------------------------------------------------------------------
 *>
-*> SEP or DSG input file:
+*> SEP, KEP, DSG or DKG input file:
 *>
 *> line 2:  NN, INTEGER
 *>          Number of values of N.
@@ -263,9 +272,9 @@
 *>          Four integer values for the random number seed.
 *>
 *> lines 13-EOF:  Lines specifying matrix types, as for NEP.
-*>          The 3-character path names are 'SEP' or 'SST' for the
-*>          symmetric eigenvalue routines and driver routines, and
-*>          'DSG' for the routines for the symmetric generalized
+*>          The 3-character path names are 'SEP', 'KEP', 'DST' or 'DKT' for
+*>          the (skew-)symmetric eigenvalue routines and driver routines, and
+*>          'DSG', 'DKG' for the routines for the (skew-)symmetric generalized
 *>          eigenvalue problem.
 *>
 *>-----------------------------------------------------------------------
@@ -1068,9 +1077,9 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            CSD, DBB, DGG, DSB, FATAL, GLM, GQR, GSV, LSE,
-     $                   NEP, DBK, DBL, SEP, DES, DEV, DGK, DGL, DGS,
-     $                   DGV, DGX, DSX, SVD, DVX, DXV, TSTCHK, TSTDIF,
-     $                   TSTDRV, TSTERR
+     $                   NEP, DBK, DBL, SEP, KEP, DES, DEV, DGK, DGL,
+     $                   DGS, DGV, DGX, DSX, SVD, DVX, DXV, TSTCHK,
+     $                   TSTDIF, TSTDRV, TSTERR
       CHARACTER          C1
       CHARACTER*3        C3, PATH
       CHARACTER*32       VNAME
@@ -1111,7 +1120,7 @@
      $                   DDRGEV, DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV,
      $                   DDRVSG, DDRVST, DDRVSX, DDRVVX, DERRBD,
      $                   DERRED, DERRGG, DERRHS, DERRST, ILAVER, XLAENV,
-     $                   DDRGES3, DDRGEV3, 
+     $                   DDRGES3, DDRGEV3, DERRKT, DCHKKT, DDRVKT,
      $                   DCHKST2STG, DDRVST2STG, DCHKSB2STG, DDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -1171,6 +1180,8 @@
       NEP = LSAMEN( 3, PATH, 'NEP' ) .OR. LSAMEN( 3, PATH, 'DHS' )
       SEP = LSAMEN( 3, PATH, 'SEP' ) .OR. LSAMEN( 3, PATH, 'DST' ) .OR.
      $      LSAMEN( 3, PATH, 'DSG' ) .OR. LSAMEN( 3, PATH, 'SE2' )
+      KEP = LSAMEN( 3, PATH, 'KEP' ) .OR. LSAMEN( 3, PATH, 'DKT' ) .OR.
+     $      LSAMEN( 3, PATH, 'DKG' )
       SVD = LSAMEN( 3, PATH, 'SVD' ) .OR. LSAMEN( 3, PATH, 'DBD' )
       DEV = LSAMEN( 3, PATH, 'DEV' )
       DES = LSAMEN( 3, PATH, 'DES' )
@@ -1201,6 +1212,8 @@
          WRITE( NOUT, FMT = 9987 )
       ELSE IF( SEP ) THEN
          WRITE( NOUT, FMT = 9986 )
+      ELSE IF( KEP ) THEN
+         WRITE( NOUT, FMT = 9959 )
       ELSE IF( SVD ) THEN
          WRITE( NOUT, FMT = 9985 )
       ELSE IF( DEV ) THEN
@@ -1492,7 +1505,7 @@
 *
 *        Read the values of NBMIN
 *
-         IF( NEP .OR. SEP .OR. SVD .OR. DGG ) THEN
+         IF( NEP .OR. SEP .OR. KEP .OR. SVD .OR. DGG ) THEN
             READ( NIN, FMT = * )( NBMIN( I ), I = 1, NPARMS )
             DO 80 I = 1, NPARMS
                IF( NBMIN( I ).LT.0 ) THEN
@@ -1513,7 +1526,7 @@
 *
 *        Read the values of NX
 *
-         IF( NEP .OR. SEP .OR. SVD ) THEN
+         IF( NEP .OR. SEP .OR. KEP .OR. SVD ) THEN
             READ( NIN, FMT = * )( NXVAL( I ), I = 1, NPARMS )
             DO 100 I = 1, NPARMS
                IF( NXVAL( I ).LT.0 ) THEN
@@ -1701,7 +1714,7 @@
 *
       READ( NIN, FMT = * )THRESH
       WRITE( NOUT, FMT = 9982 )THRESH
-      IF( SEP .OR. SVD .OR. DGG ) THEN
+      IF( SEP .OR. KEP .OR. SVD .OR. DGG ) THEN
 *
 *        Read the flag that indicates whether to test LAPACK routines.
 *
@@ -1937,6 +1950,67 @@
             END IF
   290    CONTINUE
 *
+      ELSE IF( LSAMEN( 3, C3, 'DKT' ) .OR. LSAMEN( 3, C3, 'KEP' ) ) THEN
+*
+*        ----------------------------------
+*        KEP:  Skew-symmetric Eigenvalue Problem
+*        ----------------------------------
+*        Vary the parameters
+*           NB    = block size
+*           NBMIN = minimum block size
+*           NX    = crossover point
+*
+         MAXTYP = 21
+         NTYPES = MIN( MAXTYP, NTYPES )
+         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL XLAENV( 1, 1 )
+         CALL XLAENV( 9, 25 )
+         IF( TSTERR ) THEN
+#if defined(_OPENMP)
+            N_THREADS = OMP_GET_MAX_THREADS()
+            ONE_THREAD = 1
+            CALL OMP_SET_NUM_THREADS(ONE_THREAD)
+#endif
+            CALL DERRKT( 'DKT', NOUT )
+#if defined(_OPENMP)
+            CALL OMP_SET_NUM_THREADS(N_THREADS)
+#endif
+         END IF
+         DO 400 I = 1, NPARMS
+            CALL XLAENV( 1, NBVAL( I ) )
+            CALL XLAENV( 2, NBMIN( I ) )
+            CALL XLAENV( 3, NXVAL( I ) )
+*
+            IF( NEWSD.EQ.0 ) THEN
+               DO 390 K = 1, 4
+                  ISEED( K ) = IOLDSD( K )
+  390          CONTINUE
+            END IF
+            WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
+     $         NXVAL( I )
+            IF( TSTCHK ) THEN
+               CALL DCHKKT( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), D( 1, 1 ),
+     $                      D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), D( 1, 5 ),
+     $                      D( 1, 6 ), D( 1, 7 ), D( 1, 8 ), D( 1, 9 ),
+     $                      D( 1, 10 ), D( 1, 11 ), A( 1, 3 ), NMAX,
+     $                      A( 1, 4 ), A( 1, 5 ), D( 1, 12 ), A( 1, 6 ),
+     $                      WORK, LWORK, IWORK, LIWORK, RESULT, INFO )
+               IF( INFO.NE.0 )
+     $            WRITE( NOUT, FMT = 9980 )'DCHKKT', INFO
+            END IF
+            IF( TSTDRV ) THEN
+               CALL DDRVKT( NN, NVAL, 18, DOTYPE, ISEED, THRESH,
+     $                      NOUT, A( 1, 1 ), NMAX, D( 1, 3 ), D( 1, 4 ),
+     $                      D( 1, 5 ), D( 1, 6 ), D( 1, 8 ), D( 1, 9 ),
+     $                      D( 1, 10 ), D( 1, 11), A( 1, 2 ), NMAX,
+     $                      A( 1, 3 ), D( 1, 12 ), A( 1, 4 ), WORK,
+     $                      LWORK, IWORK, LIWORK, RESULT, INFO )
+               IF( INFO.NE.0 )
+     $            WRITE( NOUT, FMT = 9980 )'DDRVKT', INFO
+            END IF
+  400    CONTINUE
+*
       ELSE IF( LSAMEN( 3, C3, 'DSG' ) ) THEN
 *
 *        ----------------------------------------------
@@ -1979,6 +2053,49 @@
      $            WRITE( NOUT, FMT = 9980 )'DDRVSG', INFO
             END IF
   310    CONTINUE
+*
+      ELSE IF( LSAMEN( 3, C3, 'DKG' ) ) THEN
+*
+*        ----------------------------------------------
+*        DKG:  Skew-symmetric Generalized Eigenvalue Problem
+*        ----------------------------------------------
+*        Vary the parameters
+*           NB    = block size
+*           NBMIN = minimum block size
+*           NX    = crossover point
+*
+         MAXTYP = 21
+         NTYPES = MIN( MAXTYP, NTYPES )
+         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL XLAENV( 9, 25 )
+         DO 420 I = 1, NPARMS
+            CALL XLAENV( 1, NBVAL( I ) )
+            CALL XLAENV( 2, NBMIN( I ) )
+            CALL XLAENV( 3, NXVAL( I ) )
+*
+            IF( NEWSD.EQ.0 ) THEN
+               DO 410 K = 1, 4
+                  ISEED( K ) = IOLDSD( K )
+  410          CONTINUE
+            END IF
+            WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
+     $         NXVAL( I )
+            IF( TSTCHK ) THEN
+*               CALL DDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+*     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
+*     $                      D( 1, 3 ), A( 1, 3 ), NMAX, A( 1, 4 ),
+*     $                      A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), WORK,
+*     $                      LWORK, IWORK, LIWORK, RESULT, INFO )
+               CALL DDRVKG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $                          NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
+     $                          D( 1, 3 ), D( 1, 3 ), A( 1, 3 ), NMAX,
+     $                          A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
+     $                          A( 1, 7 ), WORK, LWORK, IWORK, LIWORK,
+     $                          RESULT, INFO )
+               IF( INFO.NE.0 )
+     $            WRITE( NOUT, FMT = 9980 )'DDRVSG', INFO
+            END IF
+  420    CONTINUE
 *
       ELSE IF( LSAMEN( 3, C3, 'DBD' ) .OR. LSAMEN( 3, C3, 'SVD' ) ) THEN
 *
@@ -2531,6 +2648,8 @@
      $      ', INWIN =', I4, ', INIBL =', I4, ', ISHFTS =', I4,
      $      ', IACC22 =', I4)
  9960 FORMAT( / ' Tests of the CS Decomposition routines' )
+ 9959 FORMAT( ' Tests of the Skew-symmetric Eigenvalue Problem ',
+     $      'routines' )
 *
 *     End of DCHKEE
 *
