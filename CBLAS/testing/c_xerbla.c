@@ -45,7 +45,7 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
          else if (info == 9 ) info = 11;
       }
 
-      else if (strstr(rout,"symm") != 0 || strstr(rout,"hemm") != 0)
+      else if (strstr(rout,"symm") != 0 || strstr(rout,"kymm") != 0 || strstr(rout,"hemm") != 0)
       {
          if      (info == 5 ) info =  4;
          else if (info == 4 ) info =  5;

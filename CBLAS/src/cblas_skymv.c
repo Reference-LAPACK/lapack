@@ -16,6 +16,7 @@ void API_SUFFIX(cblas_skymv)(const CBLAS_LAYOUT layout,
                  float  *Y, const CBLAS_INT incY)
 {
    char UL;
+   float minus_alpha;
 #ifdef F77_CHAR
    F77_CHAR F77_UL;
 #else
@@ -66,7 +67,8 @@ void API_SUFFIX(cblas_skymv)(const CBLAS_LAYOUT layout,
       #ifdef F77_CHAR
          F77_UL = C2F_CHAR(&UL);
       #endif
-      F77_skymv(F77_UL, &F77_N, &alpha,
+      minus_alpha = -alpha;
+      F77_skymv(F77_UL, &F77_N, &minus_alpha,
                      A ,&F77_lda, X,&F77_incX, &beta, Y, &F77_incY);
    }
    else API_SUFFIX(cblas_xerbla)(1, "cblas_skymv", "Illegal layout setting, %d\n", layout);
