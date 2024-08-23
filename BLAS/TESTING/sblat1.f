@@ -58,7 +58,7 @@
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -76,7 +76,8 @@
      +            ICASE.EQ.10) THEN
             CALL CHECK1(SFAC)
          ELSE IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
-     +            ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13) THEN
+     +            ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13 .OR.
+     +            ICASE.EQ.14 ) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.EQ.4) THEN
             CALL CHECK3(SFAC)
@@ -100,7 +101,7 @@
       INTEGER          ICASE, INCX, INCY, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -117,6 +118,8 @@
       DATA             L(11)/'SROTMG'/
       DATA             L(12)/'SROTM '/
       DATA             L(13)/'SDSDOT'/
+      DATA             L(14)/'SAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -374,7 +377,7 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      REAL              SA
+      REAL              SA,SB
       INTEGER           I, J, KI, KN, KNI, KPAR, KSIZE, LENX, LENY,
      $                  LINCX, LINCY, MX, MY
 *     .. Local Arrays ..
@@ -386,13 +389,13 @@
      $                  DT19XB(7,4,4), DT19XC(7,4,4),DT19XD(7,4,4),
      $                  DT19Y(7,4,16), DT19YA(7,4,4),DT19YB(7,4,4),
      $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5),
-     $                  ST7B(4,4), STY0(1), SX0(1), SY0(1)
+     $                  ST7B(4,4), STY0(1), SX0(1), SY0(1), DT20(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       REAL              SDOT, SDSDOT
       EXTERNAL          SDOT, SDSDOT
 *     .. External Subroutines ..
-      EXTERNAL          SAXPY, SCOPY, SROTM, SSWAP, STEST, STEST1
+      EXTERNAL          SAXPY, SAXPBY,SCOPY, SROTM, SSWAP, STEST, STEST1
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -406,6 +409,7 @@
      B   (DT19Y(1,1,13),DT19YD(1,1,1))
 
       DATA              SA/0.3E0/
+      DATA              SB/0.5E0/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -624,6 +628,27 @@
      M            .7E0,  -.9E0,  1.2E0,   .7E0, -1.5E0,   .2E0,  1.6E0,
      N           1.7E0,  -.9E0,   .5E0,   .7E0, -1.6E0,   .2E0,  2.4E0,
      O          -2.6E0,  -.9E0, -1.3E0,   .7E0,  2.9E0,   .2E0, -4.0E0 /
+      DATA              DT20/0.5E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.43E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.43E0, -0.42E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.43E0, -0.42E0, 0.0E0,
+     +                  0.59E0, 0.0E0, 0.0E0, 0.0E0, 0.5E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.43E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.1E0, -0.9E0, 0.33E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.13E0, -0.9E0, 0.42E0, 0.7E0, -0.45E0,
+     +                  0.2E0, 0.58E0, 0.5E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.43E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.1E0, -0.27E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.13E0,
+     +                  -0.18E0, 0.00E0, 0.53E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.5E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.43E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.43E0, -0.9E0, 0.18E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.43E0, -0.9E0, 0.18E0, 0.7E0,
+     +                  -0.45E0, 0.2E0, 0.64E0/
+
+
 *
 *     .. Executable Statements ..
 *
@@ -655,6 +680,14 @@
                   STY(J) = DT8(J,KN,KI)
    40          CONTINUE
                CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+            ELSE IF (ICASE.EQ.14) THEN
+*              .. SAXPBY ..
+               CALL SAXPBY(N,SA,SX,INCX,SB,SY,INCY)
+               DO 50 J = 1, LENY
+                  STY(J) = DT20(J,KN,KI)
+   50          CONTINUE
+               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+
             ELSE IF (ICASE.EQ.5) THEN
 *              .. SCOPY ..
                DO 60 I = 1, 7
