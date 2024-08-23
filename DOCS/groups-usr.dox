@@ -913,6 +913,7 @@ https://www.netlib.org/xblas/
             @defgroup asum          asum:           sum | real( x_i ) | + | imag( x_i ) |
             @defgroup sum1          sum1:           sum | x_i | (in LAPACK)
             @defgroup axpy          axpy:           y = ax + y
+            @defgroup axpby         axpby:          y = ax + by
             @defgroup copy          copy:           y = x
             @defgroup dot           dot:            x^H x and x^T x
             @defgroup iamax         iamax:          argmax_i | real( x_i ) | + | imag( x_i ) |
