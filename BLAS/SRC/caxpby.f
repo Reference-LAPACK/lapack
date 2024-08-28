@@ -114,12 +114,7 @@
 *     .. Local Scalars ..
       INTEGER I,IX,IY
 *     ..
-*     .. External Functions ..
-      REAL SCABS1
-      EXTERNAL SCABS1
-*     ..
       IF (N.LE.0) RETURN
-      IF (SCABS1(CA).EQ.0.0E+0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

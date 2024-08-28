@@ -119,7 +119,6 @@
       INTRINSIC MOD
 *     ..
       IF (N.LE.0) RETURN
-      IF (DA.EQ.0.0d0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
