@@ -63,17 +63,17 @@ set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
 #---------------------------------------------------------
 #  Level 2 BLAS
 #---------------------------------------------------------
-set(SBLAS2 sgemv.f sgbmv.f ssymv.f ssbmv.f sspmv.f
+set(SBLAS2 sgemv.f sgbmv.f ssymv.f skymv.f ssbmv.f sspmv.f
 	strmv.f stbmv.f stpmv.f strsv.f stbsv.f stpsv.f
-	sger.f ssyr.f sspr.f ssyr2.f sspr2.f)
+	sger.f ssyr.f sspr.f ssyr2.f skyr2.f sspr2.f)
 
 set(CBLAS2 cgemv.f cgbmv.f chemv.f chbmv.f chpmv.f
 	ctrmv.f ctbmv.f ctpmv.f ctrsv.f ctbsv.f ctpsv.f
 	cgerc.f cgeru.f cher.f chpr.f cher2.f chpr2.f)
 
-set(DBLAS2 dgemv.f dgbmv.f dsymv.f dsbmv.f dspmv.f
+set(DBLAS2 dgemv.f dgbmv.f dsymv.f dkymv.f dsbmv.f dspmv.f
 	dtrmv.f dtbmv.f dtpmv.f dtrsv.f dtbsv.f dtpsv.f
-	dger.f dsyr.f dspr.f dsyr2.f dspr2.f)
+	dger.f dsyr.f dspr.f dsyr2.f dkyr2.f dspr2.f)
 
 set(ZBLAS2 zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f
 	ztrmv.f ztbmv.f ztpmv.f ztrsv.f ztbsv.f ztpsv.f
@@ -82,12 +82,12 @@ set(ZBLAS2 zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f
 #---------------------------------------------------------
 #  Level 3 BLAS
 #---------------------------------------------------------
-set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f sgemmtr.f)
+set(SBLAS3 sgemm.f ssymm.f skymm.f ssyrk.f ssyr2k.f skyr2k.f strmm.f strsm.f sgemmtr.f)
 
 set(CBLAS3 cgemm.f csymm.f csyrk.f csyr2k.f ctrmm.f ctrsm.f
 	chemm.f cherk.f cher2k.f cgemmtr.f)
 
-set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f dgemmtr.f)
+set(DBLAS3 dgemm.f dsymm.f dkymm.f dsyrk.f dsyr2k.f dkyr2k.f dtrmm.f dtrsm.f dgemmtr.f)
 
 set(ZBLAS3 zgemm.f zsymm.f zsyrk.f zsyr2k.f ztrmm.f ztrsm.f
 	zhemm.f zherk.f zher2k.f zgemmtr.f)

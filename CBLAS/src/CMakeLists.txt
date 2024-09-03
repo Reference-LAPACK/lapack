@@ -55,13 +55,13 @@ set(SCLEV1 cblas_scasum.c scasumsub.f cblas_scnrm2.c scnrm2sub.f)
 set(SLEV2 cblas_sgemv.c cblas_sgbmv.c cblas_sger.c  cblas_ssbmv.c cblas_sspmv.c
         cblas_sspr.c  cblas_sspr2.c cblas_ssymv.c cblas_ssyr.c  cblas_ssyr2.c
         cblas_stbmv.c cblas_stbsv.c cblas_stpmv.c cblas_stpsv.c cblas_strmv.c
-        cblas_strsv.c)
+        cblas_strsv.c cblas_skymv.c cblas_skyr2.c)
 
 # Files for level 2 double precision real
 set(DLEV2 cblas_dgemv.c cblas_dgbmv.c cblas_dger.c  cblas_dsbmv.c cblas_dspmv.c
         cblas_dspr.c  cblas_dspr2.c cblas_dsymv.c cblas_dsyr.c  cblas_dsyr2.c
         cblas_dtbmv.c cblas_dtbsv.c cblas_dtpmv.c cblas_dtpsv.c cblas_dtrmv.c
-        cblas_dtrsv.c)
+        cblas_dtrsv.c cblas_dkymv.c cblas_dkyr2.c)
 
 # Files for level 2 single precision complex
 set(CLEV2 cblas_cgemv.c cblas_cgbmv.c cblas_chemv.c cblas_chbmv.c cblas_chpmv.c
@@ -85,11 +85,11 @@ set(ZLEV2 cblas_zgemv.c cblas_zgbmv.c cblas_zhemv.c cblas_zhbmv.c cblas_zhpmv.c
 
 # Files for level 3 single precision real
 set(SLEV3 cblas_sgemm.c cblas_ssymm.c cblas_ssyrk.c cblas_ssyr2k.c cblas_strmm.c
-        cblas_strsm.c cblas_sgemmtr.c)
+        cblas_strsm.c cblas_sgemmtr.c cblas_skymm.c cblas_skyr2k.c)
 
 # Files for level 3 double precision real
 set(DLEV3 cblas_dgemm.c cblas_dsymm.c cblas_dsyrk.c cblas_dsyr2k.c cblas_dtrmm.c
-        cblas_dtrsm.c cblas_dgemmtr.c)
+        cblas_dtrsm.c cblas_dgemmtr.c cblas_dkymm.c cblas_dkyr2k.c)
 
 # Files for level 3 single precision complex
 set(CLEV3 cblas_cgemm.c cblas_csymm.c cblas_chemm.c cblas_cherk.c
