@@ -153,7 +153,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, ICOMPZ, II, ISCALE, J, JTOT, K, L, L1, LEND,
-     $                   LENDM1, LENDP1, LENDSV, LM3, LSV, M, MM, MM1,
+     $                   LENDM1, LENDP1, LENDSV, LM3, LSV, M, MM1,
      $                   NM1, NMAXIT
       DOUBLE PRECISION   ANORM, B, EPS, EPS2, P, R, VA, VB, E3,
      $                   S, SAFMAX, SAFMIN, SSFMAX, SSFMIN, TST, TEMP
@@ -165,7 +165,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLAE2, DLAEV2, DLARTG, DLASCL, DLASET,
-     $                   DLASRT, DSWAP, XERBLA
+     $                   DLASRT, DSWAP, DSCAL, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -386,11 +386,8 @@
 *           If eigenvectors are desired, then update Z initially.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  TEMP = Z( J, M )
-                  Z( J, M ) = VA*Z( J, M ) + VB*Z( J, M-2 )
-                  Z( J, M-2 ) = VB*TEMP - VA*Z( J, M-2 )
-               END DO
+               CALL DROT(N, Z(1, M), 1, Z(1, M-2), 1, VA, VB)
+               CALL DSCAL(N, -ONE, Z(1, M-2), 1)
             END IF
 *
             I = L + 1
@@ -403,9 +400,7 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  Z( J, I ) = -Z( J, I )
-               END DO
+               CALL DSCAL(N, -ONE, Z(1, I), 1)
             END IF
 *
             GO TO 40
@@ -441,11 +436,8 @@
 *        If eigenvectors are desired, then update Z initially.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               TEMP = Z( J, M )
-               Z( J, M ) = VA*Z( J, M ) + VB*Z( J, M-2 )
-               Z( J, M-2 ) = VB*TEMP - VA*Z( J, M-2 )
-            END DO
+            CALL DROT(N, Z(1, M), 1, Z(1, M-2), 1, VA, VB)
+            CALL DSCAL(N, -ONE, Z(1, M-2), 1)
          END IF    
 *
 *        Inner loop
@@ -479,11 +471,8 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  TEMP = Z( J, I )
-                  Z( J, I ) = VA*Z( J, I ) + VB*Z( J, I-2 )
-                  Z( J, I-2 ) = VB*TEMP - VA*Z( J, I-2 )
-               END DO
+               CALL DROT(N, Z(1, I), 1, Z(1, I-2), 1, VA, VB)
+               CALL DSCAL(N, -ONE, Z(1, I-2), 1)
             END IF    
 *
   70    CONTINUE
@@ -514,11 +503,8 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               TEMP = Z( J, I )
-               Z( J, I ) = VA*Z( J, I ) + VB*Z( J, I-2 )
-               Z( J, I-2 ) = VB*TEMP - VA*Z( J, I-2 )
-            END DO
+            CALL DROT(N, Z(1, I), 1, Z(1, I-2), 1, VA, VB)
+            CALL DSCAL(N, -ONE, Z(1, I-2), 1)
          END IF
 *
          I = L + 1
@@ -531,9 +517,7 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               Z( J, I ) = -Z( J, I )
-            END DO
+            CALL DSCAL(N, -ONE, Z(1, I), 1)
          END IF
 *
          GO TO 40
@@ -623,11 +607,8 @@
 *           If eigenvectors are desired, then update Z initially.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  TEMP = Z( J, M )
-                  Z( J, M ) = VA*Z( J, M ) + VB*Z( J, M+2 )
-                  Z( J, M+2 ) = VB*TEMP - VA*Z( J, M+2 )
-               END DO
+               CALL DROT(N, Z(1, M), 1, Z(1, M+2), 1, VA, VB)
+               CALL DSCAL(N, -ONE, Z(1, M+2), 1)
             END IF
 *
             I = L - 1
@@ -640,9 +621,7 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  Z( J, I ) = -Z( J, I )
-               END DO
+               CALL DSCAL(N, -ONE, Z(1, I), 1)
             END IF
 *
             GO TO 90
@@ -678,11 +657,8 @@
 *        If eigenvectors are desired, then update Z initially.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               TEMP = Z( J, M )
-               Z( J, M ) = VA*Z( J, M ) + VB*Z( J, M+2 )
-               Z( J, M+2 ) = VB*TEMP - VA*Z( J, M+2 )
-            END DO
+            CALL DROT(N, Z(1, M), 1, Z(1, M+2), 1, VA, VB)
+            CALL DSCAL(N, -ONE, Z(1, M+2), 1)
          END IF    
 *
 *        Inner loop
@@ -716,11 +692,8 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               DO J = 1, N
-                  TEMP = Z( J, I )
-                  Z( J, I ) = VA*Z( J, I ) + VB*Z( J, I+2 )
-                  Z( J, I+2 ) = VB*TEMP - VA*Z( J, I+2 )
-               END DO
+               CALL DROT(N, Z(1, I), 1, Z(1, I+2), 1, VA, VB)
+               CALL DSCAL(N, -ONE, Z(1, I+2), 1)
             END IF    
 *
   120    CONTINUE
@@ -751,11 +724,8 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               TEMP = Z( J, I )
-               Z( J, I ) = VA*Z( J, I ) + VB*Z( J, I+2 )
-               Z( J, I+2 ) = VB*TEMP - VA*Z( J, I+2 )
-            END DO
+            CALL DROT(N, Z(1, I), 1, Z(1, I+2), 1, VA, VB)
+            CALL DSCAL(N, -ONE, Z(1, I+2), 1)
          END IF
 *
          I = L - 1
@@ -768,9 +738,7 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            DO J = 1, N
-               Z( J, I ) = -Z( J, I )
-            END DO
+            CALL DSCAL(N, -ONE, Z(1, I), 1)
          END IF
 *
          GO TO 90
