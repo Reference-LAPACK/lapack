@@ -757,10 +757,10 @@
 *
   140 CONTINUE
       IF( ISCALE.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E(LSV),
      $                N, INFO )
       ELSE IF( ISCALE.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E(LSV),
      $                N, INFO )
       END IF
 *
