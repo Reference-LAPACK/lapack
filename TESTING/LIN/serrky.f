@@ -84,7 +84,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SKYTRI2X, SKYTF2
+      EXTERNAL           ALAESM, CHKXER, SKYTRI2X, SKYTF2,
      $                   SKYTRF, SKYTRI, SKYTRS, SKYTRI2
 *     ..
 *     .. Scalars in Common ..
