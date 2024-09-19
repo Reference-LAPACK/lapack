@@ -373,8 +373,11 @@
          END IF
          IF( M.EQ.1 ) THEN
             W( 1 ) = TMP1
-            IF( WANTZ )
-     $         Z( 1, 1 ) = ONE
+            IF( WANTZ ) THEN
+              Q( 1, 1 ) = ONE
+              Z( 1, 1 ) = ONE
+              IFAIL(1) = ZERO
+            ENDIF
          END IF
          RETURN
       END IF
