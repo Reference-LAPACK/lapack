@@ -90,8 +90,8 @@ jobs:
         echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
     - name: Alias for GCC compilers
       run: |
-        sudo ln -s $(which gcc-11) /usr/local/bin/gcc
-        sudo ln -s $(which gfortran-11) /usr/local/bin/gfortran
+        sudo ln -s $(which gcc-14) /usr/local/bin/gcc
+        sudo ln -s $(which gfortran-14) /usr/local/bin/gfortran
     - name: Install
       run: |
         make -s -j2 all
