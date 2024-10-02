@@ -51,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_ctfsm_work)( int matrix_layout, char transr, char 
         lapack_int mn = m;
         lapack_complex_float* b_t = NULL;
         lapack_complex_float* a_t = NULL;
-        if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) mn = n;
+        if( LAPACKE_lsame( side, 'r' ) ) mn = n;
         /* Check leading dimension(s) */
         if( ldb < m ) {
             info = -12;
