@@ -74,7 +74,7 @@
 *>         On exit, its eigenvalues.
 *> \endverbatim
 *>
-*> \param[in] E
+*> \param[in,out] E
 *> \verbatim
 *>          E is DOUBLE PRECISION array, dimension (N-1)
 *>         The off-diagonal elements of the tridiagonal matrix.
