@@ -367,7 +367,7 @@
 *
 *     Quick return if possible.
 *
-      IF( M.EQ.0 .OR. N.EQ.0 ) THEN
+      IF( M.EQ.0 .OR. N.EQ.0 .OR. NRHS.EQ.0 ) THEN
          RANK = 0
          RETURN
       END IF
