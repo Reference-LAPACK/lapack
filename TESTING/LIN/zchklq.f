@@ -237,7 +237,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRLQ, ZGELS,
      $                   ZGET02, ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLQT01,
-     $                   ZLQT02, ZLQT03
+     $                   ZLQT02, ZLQT03, ZGELQF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -355,16 +355,18 @@
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.LE.N ) THEN
 *
-*                       Test ZUNGLQ, using factorization
-*                       returned by ZLQT01
+*                       Test ZUNGLQ
+*
+                        CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+                        CALL ZGELQF( M, N, AF, LDA, TAU, WORK, LWORK,
+     $                               INFO )
 *
                         CALL ZLQT02( M, N, K, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test ZUNMLQ, using factorization returned
-*                       by ZLQT01
+*                       Test ZUNMLQ
 *
                         CALL ZLQT03( M, N, K, AF, AC, AL, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
