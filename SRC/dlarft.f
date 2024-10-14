@@ -196,6 +196,8 @@
       IF( N.EQ.0 )
      $   RETURN
 *
+      WRITE(*,*) "in dlarft, n = ", N, " k = ", K, "flags: ", DIRECT,
+     $   " ", STOREV
       IF( LSAME( DIRECT, 'F' ) ) THEN
          PREVLASTV = N
          DO I = 1, K
