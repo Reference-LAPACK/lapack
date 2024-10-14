@@ -232,7 +232,7 @@
          IF( NH.LE.1 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
+            NB = MIN( NBMAX, ILAENV( 1, 'CGEHRD', ' ', N, ILO, IHI,
      $                              -1 ) )
             LWKOPT = N*NB + TSIZE
          END IF

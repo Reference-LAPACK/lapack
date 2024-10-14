@@ -133,7 +133,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DSCAL, XERBLA
+      EXTERNAL           DLARF1F, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,8 +176,7 @@
 *        Apply H(i) to A(i:m,i:n) from the left
 *
          IF( I.LT.N ) THEN
-            A( I, I ) = ONE
-            CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+            CALL DLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
      $                  A( I, I+1 ), LDA, WORK )
          END IF
          IF( I.LT.M )

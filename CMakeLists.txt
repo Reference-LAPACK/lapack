@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.13)
 
-project(LAPACK)
+project(LAPACK C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 12)
@@ -107,27 +107,21 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-# By default build extended _64 API for supported compilers only
+
+# By default build extended _64 API for supported compilers only. This needs
+# CMake >= 3.18! Let's disable it by default for CMake < 3.18.
+if(CMAKE_VERSION VERSION_LESS "3.18")
+  set(INDEX64_EXT_API_DEFAULT OFF)
+else()
+  set(INDEX64_EXT_API_DEFAULT ON)
+endif()
 set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
+option(BUILD_INDEX64_EXT_API
+  "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)"
+  ${INDEX64_EXT_API_DEFAULT})
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 include(GNUInstallDirs)
-
-# Updated OSX RPATH settings
-# In response to CMake 3.0 generating warnings regarding policy CMP0042,
-# the OSX RPATH settings have been updated per recommendations found
-# in the CMake Wiki:
-#  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-set(CMAKE_MACOSX_RPATH ON)
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES ${CMAKE_INSTALL_FULL_LIBDIR} isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-endif()
-
 
 # Configure the warning and code coverage suppression file
 configure_file(
@@ -256,15 +250,7 @@ if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${BLAS_LINKER_FLAGS})
 endif()
 
 
@@ -346,15 +332,7 @@ if(NOT LATESTLAPACK_FOUND)
 
   add_subdirectory(SRC)
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
 if(BUILD_TESTING)

@@ -166,7 +166,9 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (4*(N-1))
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          LWORK = 4*N, if NCVT = NRU = NCC = 0, and
+*>          LWORK = 4*(N-1), otherwise
 *> \endverbatim
 *>
 *> \param[out] INFO

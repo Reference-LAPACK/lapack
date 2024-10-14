@@ -8,10 +8,14 @@ CBLAS_INT link_xerbla=TRUE;
 char *cblas_rout;
 
 #ifdef F77_Char
-void F77_xerbla(F77_Char F77_srname, void *vinfo);
+void F77_xerbla(F77_Char F77_srname, void *vinfo
 #else
-void F77_xerbla(char *srname, void *vinfo);
+void F77_xerbla(char *srname, void *vinfo
 #endif
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN srname_len
+#endif
+);
 
 void chkxer(void) {
    extern CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
@@ -24,7 +28,11 @@ void chkxer(void) {
    cblas_lerr = 1 ;
 }
 
-void F77_d2chke(char *rout) {
+void F77_d2chke(char *rout
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rout_len
+#endif
+) {
    char *sf = ( rout ) ;
    double A[2] = {0.0,0.0},
           X[2] = {0.0,0.0},
@@ -38,7 +46,7 @@ void F77_d2chke(char *rout) {
    if (link_xerbla) /* call these first to link */
    {
       cblas_xerbla(cblas_info,cblas_rout,"");
-      F77_xerbla(cblas_rout,&cblas_info);
+      F77_xerbla(cblas_rout,&cblas_info, 1);
    }
 #endif
 

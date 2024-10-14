@@ -171,21 +171,17 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX            ONE
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
-      COMPLEX            AII, TAUI
+      COMPLEX            TAUI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, XERBLA
+      EXTERNAL           CLACGV, CLARF1L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -267,11 +263,8 @@
             TAUI = TAU( I )
          END IF
          CALL CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
-         AII = A( I, NQ-K+I )
-         A( I, NQ-K+I ) = ONE
-         CALL CLARF( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC,
-     $               WORK )
-         A( I, NQ-K+I ) = AII
+         CALL CLARF1L( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC,
+     $                 WORK )
          CALL CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
    10 CONTINUE
       RETURN

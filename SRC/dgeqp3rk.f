@@ -670,7 +670,7 @@
 *           1) DGEQP3RK and DLAQP2RK: 2*N to store full and partial
 *              column 2-norms.
 *           2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in DLARF subroutine inside DLAQP2RK to apply an
+*              in DLARF1F subroutine inside DLAQP2RK to apply an
 *              elementary reflector from the left.
 *           TOTAL_WORK_SIZE = 3*N + NRHS - 1
 *
@@ -686,7 +686,7 @@
 *           1) DGEQP3RK, DLAQP2RK, DLAQP3RK: 2*N to store full and
 *              partial column 2-norms.
 *           2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in DLARF subroutine to apply an elementary reflector
+*              in DLARF1F subroutine to apply an elementary reflector
 *              from the left.
 *           3) DLAQP3RK: NB*(N+NRHS) to use in the work array F that
 *              is used to apply a block reflector from

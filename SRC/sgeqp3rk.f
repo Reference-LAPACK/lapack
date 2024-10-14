@@ -671,7 +671,7 @@
 *           1) SGEQP3RK and SLAQP2RK: 2*N to store full and partial
 *              column 2-norms.
 *           2) SLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in SLARF subroutine inside SLAQP2RK to apply an
+*              in SLARF1F subroutine inside SLAQP2RK to apply an
 *              elementary reflector from the left.
 *           TOTAL_WORK_SIZE = 3*N + NRHS - 1
 *
@@ -687,7 +687,7 @@
 *           1) SGEQP3RK, SLAQP2RK, SLAQP3RK: 2*N to store full and
 *              partial column 2-norms.
 *           2) SLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in SLARF subroutine to apply an elementary reflector
+*              in SLARF1F subroutine to apply an elementary reflector
 *              from the left.
 *           3) SLAQP3RK: NB*(N+NRHS) to use in the work array F that
 *              is used to apply a block reflector from

@@ -163,21 +163,16 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            FORWRD, LEFT, NOTRAN, UPPER
       INTEGER            I, I1, I2, I3, IC, II, JC, MI, NI, NQ
-      REAL               AII
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, XERBLA
+      EXTERNAL           SLARF1F, SLARF1L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -261,12 +256,8 @@
 *
 *           Apply H(i)
 *
-            AII = AP( II )
-            AP( II ) = ONE
-            CALL SLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
-     $                  LDC,
-     $                  WORK )
-            AP( II ) = AII
+            CALL SLARF1L( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C,
+     $                    LDC, WORK )
 *
             IF( FORWRD ) THEN
                II = II + I + 2
@@ -302,8 +293,6 @@
          END IF
 *
          DO 20 I = I1, I2, I3
-            AII = AP( II )
-            AP( II ) = ONE
             IF( LEFT ) THEN
 *
 *              H(i) is applied to C(i+1:m,1:n)
@@ -320,9 +309,8 @@
 *
 *           Apply H(i)
 *
-            CALL SLARF( SIDE, MI, NI, AP( II ), 1, TAU( I ),
-     $                  C( IC, JC ), LDC, WORK )
-            AP( II ) = AII
+            CALL SLARF1F( SIDE, MI, NI, AP( II ), 1, TAU( I ),
+     $                    C( IC, JC ), LDC, WORK )
 *
             IF( FORWRD ) THEN
                II = II + NQ - I + 1

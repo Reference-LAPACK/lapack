@@ -14,7 +14,11 @@
 void F77_cgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CBLAS_INT *n,
      CBLAS_INT *k, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
      CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
-     CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+     CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN transpa_len, FORTRAN_STRLEN transpb_len
+#endif
+) {
 
   CBLAS_TEST_COMPLEX *A, *B, *C;
   CBLAS_INT i,j,LDA, LDB, LDC;
@@ -87,10 +91,95 @@ void F77_cgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      cblas_cgemm( UNDEFINED, transa, transb, *m, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
 }
+
+void F77_cgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, CBLAS_INT *n,
+     CBLAS_INT *k, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
+     CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
+     CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+
+  CBLAS_TEST_COMPLEX *A, *B, *C;
+  CBLAS_INT i,j,LDA, LDB, LDC;
+  CBLAS_TRANSPOSE transa, transb;
+  CBLAS_UPLO uplo;
+
+  get_transpose_type(transpa, &transa);
+  get_transpose_type(transpb, &transb);
+  get_uplo_type(uplop, &uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     if (transa == CblasNoTrans) {
+        LDA = *k+1;
+        A=(CBLAS_TEST_COMPLEX*)malloc((*n)*LDA*sizeof(CBLAS_TEST_COMPLEX));
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*k; j++ ) {
+              A[i*LDA+j].real=a[j*(*lda)+i].real;
+              A[i*LDA+j].imag=a[j*(*lda)+i].imag;
+           }
+     }
+     else {
+        LDA = *n+1;
+        A=(CBLAS_TEST_COMPLEX* )malloc(LDA*(*k)*sizeof(CBLAS_TEST_COMPLEX));
+        for( i=0; i<*k; i++ )
+           for( j=0; j<*n; j++ ) {
+              A[i*LDA+j].real=a[j*(*lda)+i].real;
+              A[i*LDA+j].imag=a[j*(*lda)+i].imag;
+           }
+     }
+
+     if (transb == CblasNoTrans) {
+        LDB = *n+1;
+        B=(CBLAS_TEST_COMPLEX* )malloc((*k)*LDB*sizeof(CBLAS_TEST_COMPLEX) );
+        for( i=0; i<*k; i++ )
+           for( j=0; j<*n; j++ ) {
+              B[i*LDB+j].real=b[j*(*ldb)+i].real;
+              B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
+           }
+     }
+     else {
+        LDB = *k+1;
+        B=(CBLAS_TEST_COMPLEX* )malloc(LDB*(*n)*sizeof(CBLAS_TEST_COMPLEX));
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*k; j++ ) {
+              B[i*LDB+j].real=b[j*(*ldb)+i].real;
+              B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
+           }
+     }
+
+     LDC = *n+1;
+     C=(CBLAS_TEST_COMPLEX* )malloc((*n)*LDC*sizeof(CBLAS_TEST_COMPLEX));
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*n; i++ ) {
+           C[i*LDC+j].real=c[j*(*ldc)+i].real;
+           C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
+        }
+     cblas_cgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
+                  B, LDB, beta, C, LDC );
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*n; i++ ) {
+           c[j*(*ldc)+i].real=C[i*LDC+j].real;
+           c[j*(*ldc)+i].imag=C[i*LDC+j].imag;
+        }
+     free(A);
+     free(B);
+     free(C);
+  }
+  else if (*layout == TEST_COL_MJR)
+     cblas_cgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
+                  b, *ldb, beta, c, *ldc );
+  else
+     cblas_cgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
+                  b, *ldb, beta, c, *ldc );
+}
+
+
 void F77_chemm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
         CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
-	CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
-        CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+	      CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
+        CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len
+#endif
+) {
 
   CBLAS_TEST_COMPLEX *A, *B, *C;
   CBLAS_INT i,j,LDA, LDB, LDC;
@@ -153,8 +242,12 @@ void F77_chemm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
 }
 void F77_csymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
           CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
-	  CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
-          CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+	        CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
+          CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len
+#endif
+) {
 
   CBLAS_TEST_COMPLEX *A, *B, *C;
   CBLAS_INT i,j,LDA, LDB, LDC;
@@ -208,7 +301,11 @@ void F77_csymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
 
 void F77_cherk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
      float *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
-     float *beta, CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+     float *beta, CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
+#endif
+) {
 
   CBLAS_INT i,j,LDA,LDC;
   CBLAS_TEST_COMPLEX *A, *C;
@@ -264,7 +361,11 @@ void F77_cherk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
 
 void F77_csyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
      CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
-     CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+     CBLAS_TEST_COMPLEX *beta, CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
+#endif
+) {
 
   CBLAS_INT i,j,LDA,LDC;
   CBLAS_TEST_COMPLEX *A, *C;
@@ -320,7 +421,11 @@ void F77_csyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
 void F77_cher2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
         CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
 	CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, float *beta,
-        CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+        CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB,LDC;
   CBLAS_TEST_COMPLEX *A, *B, *C;
   CBLAS_UPLO uplo;
@@ -384,7 +489,11 @@ void F77_cher2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
 void F77_csyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
          CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,
 	 CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb, CBLAS_TEST_COMPLEX *beta,
-         CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc ) {
+         CBLAS_TEST_COMPLEX *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB,LDC;
   CBLAS_TEST_COMPLEX *A, *B, *C;
   CBLAS_UPLO uplo;
@@ -447,7 +556,11 @@ void F77_csyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
 }
 void F77_ctrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
        CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a,
-       CBLAS_INT *lda, CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb) {
+       CBLAS_INT *lda, CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB;
   CBLAS_TEST_COMPLEX *A, *B;
   CBLAS_SIDE side;
@@ -506,7 +619,11 @@ void F77_ctrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
 
 void F77_ctrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
          CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a,
-         CBLAS_INT *lda, CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb) {
+         CBLAS_INT *lda, CBLAS_TEST_COMPLEX *b, CBLAS_INT *ldb
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   CBLAS_INT i,j,LDA,LDB;
   CBLAS_TEST_COMPLEX *A, *B;
   CBLAS_SIDE side;

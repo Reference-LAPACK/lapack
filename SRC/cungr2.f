@@ -134,7 +134,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, CSCAL, XERBLA
+      EXTERNAL           CLACGV, CLARF1L, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -183,8 +183,8 @@
 *
          CALL CLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE
-         CALL CLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
-     $               CONJG( TAU( I ) ), A, LDA, WORK )
+         CALL CLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
+     $                 CONJG( TAU( I ) ), A, LDA, WORK )
          CALL CSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
          CALL CLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE - CONJG( TAU( I ) )

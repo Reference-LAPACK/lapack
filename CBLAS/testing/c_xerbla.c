@@ -33,13 +33,18 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
        * for A and B, lda is in position 11 instead of 9, and ldb is in
        * position 9 instead of 11.
        */
-      if (strstr(rout,"gemm") != 0)
+      if (strstr(rout,"gemm") != 0 && strstr(rout, "gemmtr") == 0)
       {
          if      (info == 5 ) info =  4;
          else if (info == 4 ) info =  5;
          else if (info == 11) info =  9;
          else if (info == 9 ) info = 11;
+      } else if (strstr(rout, "gemmtr") != 0)
+      {
+         if (info == 11) info =  9;
+         else if (info == 9 ) info = 11;
       }
+
       else if (strstr(rout,"symm") != 0 || strstr(rout,"hemm") != 0)
       {
          if      (info == 5 ) info =  4;
@@ -85,16 +90,20 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 }
 
 #ifdef F77_Char
-void F77_xerbla(F77_Char F77_srname, void *vinfo)
+void F77_xerbla(F77_Char F77_srname, void *vinfo
 #else
-void F77_xerbla(char *srname, void *vinfo)
+void F77_xerbla(char *srname, void *vinfo
 #endif
+#ifdef BLAS_FORTRAN_STRLEN_END
+, FORTRAN_STRLEN srname_len
+#endif
+)
 {
 #ifdef F77_Char
    char *srname;
 #endif
 
-   char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0'};
+   char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0', '\0'};
 
 #ifdef F77_Integer
    F77_Integer *info=vinfo;
@@ -115,8 +124,8 @@ void F77_xerbla(char *srname, void *vinfo)
       link_xerbla = 0;
       return;
    }
-   for(i=0;  i  < 6; i++) rout[i+6] = tolower(srname[i]);
-   for(i=11; i >= 9; i--) if (rout[i] == ' ') rout[i] = '\0';
+   for(i=0;  i  < 7; i++) rout[i+6] = tolower(srname[i]);
+   for(i=12; i >= 9; i--) if (rout[i] == ' ') rout[i] = '\0';
 
    /* We increment *info by 1 since the CBLAS interface adds one more
     * argument to all level 2 and 3 routines.

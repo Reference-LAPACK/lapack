@@ -180,8 +180,8 @@
 *
 *        Apply H(i) to A(1:m-k+i,1:n-k+i) from the right
 *
-         A( II, N-M+II ) = ONE
-         CALL DLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
+         !A( II, N-M+II ) = ONE
+         CALL DLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
      $               TAU( I ),
      $               A, LDA, WORK )
          CALL DSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )

@@ -140,10 +140,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           DLARF1L, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,11 +176,8 @@
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
-         AII = A( M-K+I, N-K+I )
-         A( M-K+I, N-K+I ) = ONE
-         CALL DLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+         CALL DLARF1L( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
      $               TAU( I ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = AII
    10 CONTINUE
       RETURN
 *

@@ -10,7 +10,11 @@
 
 void F77_dgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, double *alpha,
 	       double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx, double *beta,
-	       double *y, CBLAS_INT *incy ) {
+	       double *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN transp_len
+#endif
+) {
 
   double *A;
   CBLAS_INT i,j,LDA;
@@ -61,7 +65,11 @@ void F77_dger(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, double *alpha, doub
 }
 
 void F77_dtrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	      CBLAS_INT *n, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx) {
+	      CBLAS_INT *n, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,LDA;
   CBLAS_TRANSPOSE trans;
@@ -89,7 +97,11 @@ void F77_dtrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 }
 
 void F77_dtrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	       CBLAS_INT *n, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx ) {
+	       CBLAS_INT *n, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,LDA;
   CBLAS_TRANSPOSE trans;
@@ -114,7 +126,11 @@ void F77_dtrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 }
 void F77_dsymv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *a,
 	      CBLAS_INT *lda, double *x, CBLAS_INT *incx, double *beta, double *y,
-	      CBLAS_INT *incy) {
+	      CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
@@ -137,7 +153,11 @@ void F77_dsymv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doub
 }
 
 void F77_dsyr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
-	     CBLAS_INT *incx, double *a, CBLAS_INT *lda) {
+	     CBLAS_INT *incx, double *a, CBLAS_INT *lda
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
@@ -161,7 +181,11 @@ void F77_dsyr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doubl
 }
 
 void F77_dsyr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
-	     CBLAS_INT *incx, double *y, CBLAS_INT *incy, double *a, CBLAS_INT *lda) {
+	     CBLAS_INT *incx, double *y, CBLAS_INT *incy, double *a, CBLAS_INT *lda
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,LDA;
   CBLAS_UPLO uplo;
@@ -186,7 +210,11 @@ void F77_dsyr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doub
 
 void F77_dgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLAS_INT *kl, CBLAS_INT *ku,
 	       double *alpha, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx,
-	       double *beta, double *y, CBLAS_INT *incy ) {
+	       double *beta, double *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN transp_len
+#endif
+) {
 
   double *A;
   CBLAS_INT i,irow,j,jcol,LDA;
@@ -223,7 +251,11 @@ void F77_dgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLA
 }
 
 void F77_dtbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	      CBLAS_INT *n, CBLAS_INT *k, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx) {
+	      CBLAS_INT *n, CBLAS_INT *k, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A;
   CBLAS_INT irow, jcol, i, j, LDA;
   CBLAS_TRANSPOSE trans;
@@ -269,7 +301,11 @@ void F77_dtbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 }
 
 void F77_dtbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	      CBLAS_INT *n, CBLAS_INT *k, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx) {
+	      CBLAS_INT *n, CBLAS_INT *k, double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A;
   CBLAS_INT irow, jcol, i, j, LDA;
   CBLAS_TRANSPOSE trans;
@@ -316,7 +352,11 @@ void F77_dtbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
 void F77_dsbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, double *alpha,
 	      double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx, double *beta,
-	      double *y, CBLAS_INT *incy) {
+	      double *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
   double *A;
   CBLAS_INT i,j,irow,jcol,LDA;
   CBLAS_UPLO uplo;
@@ -360,7 +400,11 @@ void F77_dsbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, doubl
 }
 
 void F77_dspmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *ap,
-	      double *x, CBLAS_INT *incx, double *beta, double *y, CBLAS_INT *incy) {
+	      double *x, CBLAS_INT *incx, double *beta, double *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
   double *A,*AP;
   CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;
@@ -398,7 +442,11 @@ void F77_dspmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doub
 }
 
 void F77_dtpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	      CBLAS_INT *n, double *ap, double *x, CBLAS_INT *incx) {
+	      CBLAS_INT *n, double *ap, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A, *AP;
   CBLAS_INT i, j, k, LDA;
   CBLAS_TRANSPOSE trans;
@@ -438,7 +486,11 @@ void F77_dtpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 }
 
 void F77_dtpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
-	      CBLAS_INT *n, double *ap, double *x, CBLAS_INT *incx) {
+	      CBLAS_INT *n, double *ap, double *x, CBLAS_INT *incx
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len, FORTRAN_STRLEN diagn_len
+#endif
+) {
   double *A, *AP;
   CBLAS_INT i, j, k, LDA;
   CBLAS_TRANSPOSE trans;
@@ -479,7 +531,11 @@ void F77_dtpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 }
 
 void F77_dspr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
-	     CBLAS_INT *incx, double *ap ){
+	     CBLAS_INT *incx, double *ap
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+){
   double *A, *AP;
   CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;
@@ -531,7 +587,11 @@ void F77_dspr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doubl
 }
 
 void F77_dspr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
-	     CBLAS_INT *incx, double *y, CBLAS_INT *incy, double *ap ){
+	     CBLAS_INT *incx, double *y, CBLAS_INT *incy, double *ap
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+){
   double *A, *AP;
   CBLAS_INT i,j,k,LDA;
   CBLAS_UPLO uplo;

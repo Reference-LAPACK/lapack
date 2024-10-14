@@ -226,7 +226,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV,
+      EXTERNAL           ZLARF1F, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -285,14 +285,12 @@
      $                  S )
          END IF
 *
-         CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          CALL ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = DBLE( X21(I,I) )
-         X21(I,I) = ONE
-         CALL ZLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X11(I,I), LDX11, WORK(ILARF) )
-         CALL ZLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X21(I+1,I), LDX21, WORK(ILARF) )
+         CALL ZLARF1F( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X11(I,I), LDX11, WORK(ILARF) )
+         CALL ZLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X21(I+1,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          C = SQRT( DZNRM2( P-I+1, X11(I,I), 1 )**2
      $           + DZNRM2( M-P-I, X21(I+1,I), 1 )**2 )
@@ -308,24 +306,20 @@
             PHI(I) = ATAN2( DBLE( X21(I+1,I) ), DBLE( X11(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X21(I+1,I) = ONE
-            CALL ZLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1,
-     $                  DCONJG(TAUP2(I)), X21(I+1,I+1), LDX21,
-     $                  WORK(ILARF) )
+            CALL ZLARF1F( 'L', M-P-I, Q-I, X21(I+1,I), 1,
+     $                    CONJG(TAUP2(I)),
+     $                    X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
-         X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
-     $               X11(I,I+1), LDX11, WORK(ILARF) )
-*
+         CALL ZLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, CONJG(TAUP1(I)),
+     $                 X11(I,I+1), LDX11, WORK(ILARF) )
       END DO
 *
 *     Reduce the bottom-right portion of X11 to the identity matrix
 *
       DO I = M-P + 1, Q
          CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
-         X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
-     $               X11(I,I+1), LDX11, WORK(ILARF) )
+         CALL ZLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, CONJG(TAUP1(I)),
+     $                 X11(I,I+1), LDX11, WORK(ILARF) )
       END DO
 *
       RETURN

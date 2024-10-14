@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMLQT overwrites the general real M-by-N matrix C with
+*> SGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q

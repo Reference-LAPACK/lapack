@@ -132,7 +132,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SSCAL, XERBLA
+      EXTERNAL           SLARF1F, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -180,9 +180,8 @@
 *
          IF( I.LT.N ) THEN
             IF( I.LT.M ) THEN
-               A( I, I ) = ONE
-               CALL SLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                     TAU( I ), A( I+1, I ), LDA, WORK )
+               CALL SLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $                       TAU( I ), A( I+1, I ), LDA, WORK )
             END IF
             CALL SSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
          END IF

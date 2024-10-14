@@ -176,8 +176,8 @@
 *        Find max element in matrix A
 *
          XMAX = ZERO
-         DO 20 IP = I, N
-            DO 10 JP = I, N
+         DO 20 JP = I, N
+            DO 10 IP = I, N
                IF( ABS( A( IP, JP ) ).GE.XMAX ) THEN
                   XMAX = ABS( A( IP, JP ) )
                   IPV = IP

@@ -47,10 +47,12 @@ lapack_int API_SUFFIX(LAPACKE_dtfsm_work)( int matrix_layout, char transr, char 
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,m);
+        lapack_int mn = m;
         double* b_t = NULL;
         double* a_t = NULL;
+        if( LAPACKE_lsame( side, 'r' ) ) mn = n;
         /* Check leading dimension(s) */
-        if( ldb < n ) {
+        if( ldb < m ) {
             info = -12;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtfsm_work", info );
             return info;
@@ -64,7 +66,7 @@ lapack_int API_SUFFIX(LAPACKE_dtfsm_work)( int matrix_layout, char transr, char 
         if( IS_D_NONZERO(alpha) ) {
             a_t = (double*)
                 LAPACKE_malloc( sizeof(double) *
-                                ( MAX(1,n) * MAX(2,n+1) ) / 2 );
+                                ( MAX(1,mn) * MAX(2,mn+1) ) / 2 );
             if( a_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_1;
@@ -75,7 +77,7 @@ lapack_int API_SUFFIX(LAPACKE_dtfsm_work)( int matrix_layout, char transr, char 
             API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, b, ldb, b_t, ldb_t );
         }
         if( IS_D_NONZERO(alpha) ) {
-            API_SUFFIX(LAPACKE_dtf_trans)( matrix_layout, transr, uplo, diag, n, a, a_t );
+            API_SUFFIX(LAPACKE_dtf_trans)( matrix_layout, transr, uplo, diag, mn, a, a_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtfsm( &transr, &side, &uplo, &trans, &diag, &m, &n, &alpha, a_t,

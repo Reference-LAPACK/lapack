@@ -289,7 +289,7 @@
       PARAMETER          ( RZERO = 0.0e0, RONE = 1.0e0 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX            BETA, CDUM, S, TAU
+      COMPLEX            CDUM, S, TAU
       REAL               FOO, SAFMAX, SAFMIN, SMLNUM, ULP
       INTEGER            I, IFST, ILST, INFO, INFQR, J, JW, KCOL, KLN,
      $                   KNT, KROW, KWTOP, LTOP, LWK1, LWK2, LWK3,
@@ -303,7 +303,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR,
      $                   CLAQR4,
-     $                   CLARF, CLARFG, CLASET, CTREXC, CUNMHR
+     $                   CLARF1F, CLARFG, CLASET, CTREXC, CUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, MAX, MIN, REAL
@@ -489,19 +489,17 @@
             DO 50 I = 1, NS
                WORK( I ) = CONJG( WORK( I ) )
    50       CONTINUE
-            BETA = WORK( 1 )
-            CALL CLARFG( NS, BETA, WORK( 2 ), 1, TAU )
-            WORK( 1 ) = ONE
+            CALL CLARFG( NS, WORK( 1 ), WORK( 2 ), 1, TAU )
 *
             CALL CLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
      $                   LDT )
 *
-            CALL CLARF( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL CLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
-     $                  WORK( JW+1 ) )
-            CALL CLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
-     $                  WORK( JW+1 ) )
+            CALL CLARF1F( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL CLARF1F( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+     $                    WORK( JW+1 ) )
+            CALL CLARF1F( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+     $                    WORK( JW+1 ) )
 *
             CALL CGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )

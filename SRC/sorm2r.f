@@ -171,21 +171,16 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, IC, JC, MI, NI, NQ
-      REAL               AII
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, XERBLA
+      EXTERNAL           SLARF1F, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -266,12 +261,8 @@
 *
 *        Apply H(i)
 *
-         AII = A( I, I )
-         A( I, I ) = ONE
-         CALL SLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
-     $               JC ),
-     $               LDC, WORK )
-         A( I, I ) = AII
+         CALL SLARF1F( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC,
+     $               JC ), LDC, WORK )
    10 CONTINUE
       RETURN
 *
