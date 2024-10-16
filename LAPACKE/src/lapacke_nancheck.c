@@ -47,7 +47,7 @@ int LAPACKE_get_nancheck( )
     }
 
     /* Check environment variable, once and only once */
-    env = getenv( "API_SUFFIX(LAPACKE_)NANCHECK" );
+    env = getenv( "LAPACKE_NANCHECK" );
     if ( !env ) {
         /* By default, NaN checking is enabled */
         nancheck_flag = 1;

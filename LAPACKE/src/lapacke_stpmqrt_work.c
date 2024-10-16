@@ -49,8 +49,8 @@ lapack_int API_SUFFIX(LAPACKE_stpmqrt_work)( int matrix_layout, char side, char 
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrowsA, ncolsA, nrowsV;
-        if      ( side == API_SUFFIX(LAPACKE_lsame)(side, 'l') ) { nrowsA = k; ncolsA = n; nrowsV = m; }
-        else if ( side == API_SUFFIX(LAPACKE_lsame)(side, 'r') ) { nrowsA = m; ncolsA = k; nrowsV = n; }
+        if      ( API_SUFFIX(LAPACKE_lsame)(side, 'l') ) { nrowsA = k; ncolsA = n; nrowsV = m; }
+        else if ( API_SUFFIX(LAPACKE_lsame)(side, 'r') ) { nrowsA = m; ncolsA = k; nrowsV = n; }
         else {
             info = -2;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stpmqrt_work", info );
