@@ -195,7 +195,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB, MY_DLARFT_REC, DORM2L, XERBLA
+      EXTERNAL           DLARFB, DLARFT, DORM2L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -310,8 +310,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL MY_DLARFT_REC( 'Backward', 'Columnwise', NQ-K+I+IB-1,
-     $                   IB, A( 1, I ), LDA, TAU( I ), WORK( IWT ), LDT)
+            CALL DLARFT( 'Backward', 'Columnwise', NQ-K+I+IB-1, IB, 
+     $                   A( 1, I ), LDA, TAU( I ), WORK( IWT ), LDT)
             IF( LEFT ) THEN
 *
 *              H or H**T is applied to C(1:m-k+i+ib-1,1:n)

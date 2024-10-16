@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       RECURSIVE SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -159,169 +159,468 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      RECURSIVE SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T,
+     $                             LDT )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
-*     .. Scalar Arguments ..
-      CHARACTER          DIRECT, STOREV
-      INTEGER            K, LDT, LDV, N
+*        .. Scalar Arguments
+*
+      CHARACTER         DIRECT, STOREV
+      INTEGER           K, LDT, LDV, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
-*     ..
 *
-*  =====================================================================
+      COMPLEX*16        T( LDT, * ), TAU( * ), V( LDV, * )
+*     ..
 *
 *     .. Parameters ..
-      COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
-*     ..
+*
+      COMPLEX*16        ONE, NEG_ONE, ZERO
+      PARAMETER(ONE=1.0D+0, ZERO = 0.0D+0, NEG_ONE=-1.0D+0)
+*
 *     .. Local Scalars ..
-      INTEGER            I, J, PREVLASTV, LASTV
-*     ..
+*
+      INTEGER           I,J,L
+      LOGICAL           QR,LQ,QL,DIRF,COLV
+*
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZTRMV, ZGEMM
-*     ..
-*     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+*
+      EXTERNAL          ZTRMM,ZGEMM,ZLACPY
+*
+*     .. External Functions..
+*
+      LOGICAL           LSAME
+      EXTERNAL          LSAME
+*
+*     .. Intrinsic Functions..
+*
+      INTRINSIC         CONJG
+*     
+*     The general scheme used is inspired by the approach inside DGEQRT3
+*     which was (at the time of writing this code):
+*     Based on the algorithm of Elmroth and Gustavson,
+*     IBM J. Res. Develop. Vol 44 No. 4 July 2000.
 *     ..
 *     .. Executable Statements ..
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 )
-     $   RETURN
-*
-      IF( LSAME( DIRECT, 'F' ) ) THEN
-         PREVLASTV = N
-         DO I = 1, K
-            PREVLASTV = MAX( PREVLASTV, I )
-            IF( TAU( I ).EQ.ZERO ) THEN
-*
-*              H(i)  =  I
-*
-               DO J = 1, I
-                  T( J, I ) = ZERO
-               END DO
-            ELSE
-*
-*              general case
-*
-               IF( LSAME( STOREV, 'C' ) ) THEN
-*                 Skip any trailing zeros.
-                  DO LASTV = N, I+1, -1
-                     IF( V( LASTV, I ).NE.ZERO ) EXIT
-                  END DO
-                  DO J = 1, I-1
-                     T( J, I ) = -TAU( I ) * CONJG( V( I , J ) )
-                  END DO
-                  J = MIN( LASTV, PREVLASTV )
-*
-*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i)
-*
-                  CALL ZGEMV( 'Conjugate transpose', J-I, I-1,
-     $                        -TAU( I ), V( I+1, 1 ), LDV,
-     $                        V( I+1, I ), 1, ONE, T( 1, I ), 1 )
-               ELSE
-*                 Skip any trailing zeros.
-                  DO LASTV = N, I+1, -1
-                     IF( V( I, LASTV ).NE.ZERO ) EXIT
-                  END DO
-                  DO J = 1, I-1
-                     T( J, I ) = -TAU( I ) * V( J , I )
-                  END DO
-                  J = MIN( LASTV, PREVLASTV )
-*
-*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H
-*
-                  CALL ZGEMM( 'N', 'C', I-1, 1, J-I, -TAU( I ),
-     $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV,
-     $                        ONE, T( 1, I ), LDT )
-               END IF
-*
-*              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
-*
-               CALL ZTRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
-     $                     T,
-     $                     LDT, T( 1, I ), 1 )
-               T( I, I ) = TAU( I )
-               IF( I.GT.1 ) THEN
-                  PREVLASTV = MAX( PREVLASTV, LASTV )
-               ELSE
-                  PREVLASTV = LASTV
-               END IF
-             END IF
-         END DO
-      ELSE
-         PREVLASTV = 1
-         DO I = K, 1, -1
-            IF( TAU( I ).EQ.ZERO ) THEN
-*
-*              H(i)  =  I
-*
-               DO J = I, K
-                  T( J, I ) = ZERO
-               END DO
-            ELSE
-*
-*              general case
-*
-               IF( I.LT.K ) THEN
-                  IF( LSAME( STOREV, 'C' ) ) THEN
-*                    Skip any leading zeros.
-                     DO LASTV = 1, I-1
-                        IF( V( LASTV, I ).NE.ZERO ) EXIT
-                     END DO
-                     DO J = I+1, K
-                        T( J, I ) = -TAU( I ) * CONJG( V( N-K+I , J ) )
-                     END DO
-                     J = MAX( LASTV, PREVLASTV )
-*
-*                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i)
-*
-                     CALL ZGEMV( 'Conjugate transpose', N-K+I-J, K-I,
-     $                           -TAU( I ), V( J, I+1 ), LDV, V( J, I ),
-     $                           1, ONE, T( I+1, I ), 1 )
-                  ELSE
-*                    Skip any leading zeros.
-                     DO LASTV = 1, I-1
-                        IF( V( I, LASTV ).NE.ZERO ) EXIT
-                     END DO
-                     DO J = I+1, K
-                        T( J, I ) = -TAU( I ) * V( J, N-K+I )
-                     END DO
-                     J = MAX( LASTV, PREVLASTV )
-*
-*                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H
-*
-                     CALL ZGEMM( 'N', 'C', K-I, 1, N-K+I-J,
-     $                           -TAU( I ),
-     $                           V( I+1, J ), LDV, V( I, J ), LDV,
-     $                           ONE, T( I+1, I ), LDT )
-                  END IF
-*
-*                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
-*
-                  CALL ZTRMV( 'Lower', 'No transpose', 'Non-unit',
-     $                        K-I,
-     $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
-                  IF( I.GT.1 ) THEN
-                     PREVLASTV = MIN( PREVLASTV, LASTV )
-                  ELSE
-                     PREVLASTV = LASTV
-                  END IF
-               END IF
-               T( I, I ) = TAU( I )
-            END IF
-         END DO
+      IF(N.EQ.0.OR.K.EQ.0) THEN
+         RETURN
       END IF
-      RETURN
 *
-*     End of ZLARFT
+*     Base case
 *
-      END
+      IF(N.EQ.1.OR.K.EQ.1) THEN
+         T(1,1) = TAU(1)
+         RETURN
+      END IF
+*
+*     Beginning of executable statements
+*
+      L = K / 2
+*
+*     Determine what kind of Q we need to compute
+*     We assume that if the user doesn't provide 'F' for DIRECT,
+*     then they meant to provide 'B' and if they don't provide
+*     'C' for STOREV, then they meant to provide 'R'
+*
+      DIRF = LSAME(DIRECT,'F')
+      COLV = LSAME(STOREV,'C')
+*
+*     QR happens when we have forward direction in column storage
+*
+      QR = DIRF.AND.COLV
+*
+*     LQ happens when we have Forward direction in row storage
+*
+      LQ = DIRF.AND.(.NOT.COLV)
+*
+*     QL happens when we have backward direction in column storage
+*
+      QL = (.NOT.DIRF).AND.COLV
+*
+*     The last case is RQ. Due to how we structured this, if the
+*     above 3 are false, then RQ must be true, so we never store 
+*     this
+*     RQ happens when we have backward direction in row storage
+*     RQ = (.NOT.DIRF).AND.(.NOT.COLV)
+*
+      IF(QR) THEN
+*
+*        Break V apart into 6 components
+*
+*        V = |---------------|
+*            |V_{1,1} 0      |
+*            |V_{2,1} V_{2,2}|
+*            |V_{3,1} V_{3,2}|
+*            |---------------|
+*
+*        V_{1,1}\in\C^{l,l}      unit lower triangular
+*        V_{2,1}\in\C^{k-l,l}    rectangular
+*        V_{3,1}\in\C^{n-k,l}    rectangular
+*        
+*        V_{2,2}\in\C^{k-l,k-l}  unit lower triangular
+*        V_{3,2}\in\C^{n-k,k-l}  rectangular
+*
+*        We will construct the T matrix 
+*        T = |---------------| = |--------|
+*            |T_{1,1} T_{1,2}|   |T_1  T_3|
+*            |0       T_{2,2}|   |0    T_2|
+*            |---------------|   |--------|
+*
+*        T is the triangular factor attained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_1
+*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*
+*        T_1\in\C^{l, l}         upper triangular
+*        T_2\in\C^{k-l, k-l}     upper triangular
+*        T_3\in\C^{l, k-l}       rectangular
+*
+*        Where l = floor(k/2)
+*
+*        Then, consider the product:
+*        
+*        (I - V_1T_1V_1')(I - V_2T_2V_2')
+*        = I - V_1T_1V_1' - V_2T_2V_2' + V_1T_1V_1'V_2T_2V_2'
+*        
+*        Define T_3 = -T_1V_1'V_2T_2
+*        
+*        Then, we can define the matrix V as 
+*        V = |-------|
+*            |V_1 V_2|
+*            |-------|
+*        
+*        So, our product is equivalent to the matrix product
+*        I - VTV'
+*        This means, we can compute T_1 and T_2, then use this information
+*        to compute T_3
+*
+*        Compute T_1 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N, L, V, LDV, TAU, T, LDT)
+*
+*        Compute T_2 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
+     $      TAU(L+1), T(L+1,L+1), LDT)
+*
+*        Compute T_3 
+*        T_3 = V_{2,1}'
+*
+         DO J = 1, L
+            DO I = 1, K-L
+               T(J,L+I) = CONJG(V(L+I,J))
+            END DO
+         END DO
+*
+*        T_3 = T_3V_{2,2}
+*
+         CALL ZTRMM('Right', 'Lower', 'No transpose', 'Unit', L, K-L, 
+     $         ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
+
+*
+*        T_3 = V_{3,1}'V_{3,2} + T_3
+*        Note: We assume K <= N, and GEMM will do nothing if N=K
+*
+         CALL ZGEMM('Conjugate', 'No transpose', L, K-L, N-K, ONE, 
+     $         V(K+1, 1), LDV, V(K+1,L+1), LDV, ONE, T(1, L+1), LDT)
+*
+*        At this point, we have that T_3 = V_1'V_2
+*        All that is left is to pre and post multiply by -T_1 and T_2
+*        respectively.
+*
+*        T_3 = -T_1T_3
+*
+         CALL ZTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L,
+     $         K-L, NEG_ONE, T, LDT, T(1, L+1), LDT)
+*
+*        T_3 = T_3T_2
+*
+         CALL ZTRMM('Right', 'Upper', 'No transpose', 'Non-unit', L, 
+     $         K-L, ONE, T(L+1,L+1), LDT, T(1, L+1), LDT)
+
+      ELSE IF(LQ) THEN
+*
+*        Break V apart into 6 components
+*
+*        V = |----------------------|
+*            |V_{1,1} V_{1,2} V{1,3}|
+*            |0       V_{2,2} V{2,3}|
+*            |----------------------|
+*
+*        V_{1,1}\in\C^{l,l}      unit upper triangular
+*        V_{1,2}\in\C^{l,k-l}    rectangular
+*        V_{1,3}\in\C^{l,n-k}    rectangular
+*        
+*        V_{2,2}\in\C^{k-l,k-l}  unit upper triangular
+*        V_{2,3}\in\C^{k-l,n-k}  rectangular
+*
+*        Where l = floor(k/2)
+*
+*        We will construct the T matrix 
+*        T = |---------------| = |--------|
+*            |T_{1,1} T_{1,2}|   |T_1  T_3|
+*            |0       T_{2,2}|   |0    T_2|
+*            |---------------|   |--------|
+*
+*        T is the triangular factor attained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_1
+*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*
+*        T_1\in\C^{l, l}         upper triangular
+*        T_2\in\C^{k-l, k-l}     upper triangular
+*        T_3\in\C^{l, k-l}       rectangular
+*
+*        Then, consider the product:
+*        
+*        (I - V_1'T_1V_1)(I - V_2'T_2V_2)
+*        = I - V_1'T_1V_1 - V_2'T_2V_2 + V_1'T_1V_1V_2'T_2V_2
+*        
+*        Define T_3 = -T_1V_1V_2'T_2
+*        
+*        Then, we can define the matrix V as 
+*        V = |---|
+*            |V_1|
+*            |V_2|
+*            |---|
+*        
+*        So, our product is equivalent to the matrix product
+*        I - V'TV
+*        This means, we can compute T_1 and T_2, then use this information
+*        to compute T_3
+*
+*        Compute T_1 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N, L, V, LDV, TAU, T, LDT)
+*
+*        Compute T_2 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
+     $      TAU(L+1), T(L+1,L+1), LDT)
+
+*
+*        Compute T_3
+*        T_3 = V_{1,2}
+*
+         CALL ZLACPY('All', L, K - L, V(1,L+1), LDV, T(1, L+1), LDT)
+*
+*        T_3 = T_3V_{2,2}'
+*
+         CALL ZTRMM('Right', 'Upper', 'Conjugate', 'Unit', L, K-L, ONE,
+     $      V(L+1, L+1), LDV, T(1, L+1), LDT)
+
+*
+*        T_3 = V_{1,3}V_{2,3}' + T_3
+*        Note: We assume K <= N, and GEMM will do nothing if N=K
+*
+         CALL ZGEMM('No transpose', 'Conjugate', L, K-L, N-K, ONE,
+     $      V(1, K+1), LDV, V(L+1, K+1), LDV, ONE, T(1, L+1), LDT)
+*
+*        At this point, we have that T_3 = V_1V_2'
+*        All that is left is to pre and post multiply by -T_1 and T_2
+*        respectively.
+*
+*        T_3 = -T_1T_3
+*
+         CALL ZTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L, K-L,
+     $      NEG_ONE, T, LDT, T(1, L+1), LDT)
+
+*
+*        T_3 = T_3T_2
+*
+         CALL ZTRMM('Right', 'Upper', 'No transpose', 'Non-unit', L,
+     $      K-L, ONE, T(L+1,L+1), LDT, T(1, L+1), LDT)
+      ELSE IF(QL) THEN
+*
+*        Break V apart into 6 components
+*
+*        V = |---------------|
+*            |V_{1,1} V_{1,2}|
+*            |V_{2,1} V_{2,2}|
+*            |0       V_{3,2}|
+*            |---------------|
+*
+*        V_{1,1}\in\C^{n-k,k-l}  rectangular
+*        V_{2,1}\in\C^{k-l,k-l}  unit upper triangular
+*        
+*        V_{1,2}\in\C^{n-k,l}    rectangular
+*        V_{2,2}\in\C^{k-l,l}    rectangular
+*        V_{3,2}\in\C^{l,l}      unit upper triangular
+*
+*        We will construct the T matrix 
+*        T = |---------------| = |--------|
+*            |T_{1,1} 0      |   |T_1  0  |
+*            |T_{2,1} T_{2,2}|   |T_3  T_2|
+*            |---------------|   |--------|
+*
+*        T is the triangular factor attained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_1
+*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*
+*        T_1\in\C^{k-l, k-l}     non-unit lower triangular
+*        T_2\in\C^{l, l}         non-unit lower triangular
+*        T_3\in\C^{k-l, l}       rectangular
+*
+*        Where l = floor(k/2)
+*
+*        Then, consider the product:
+*        
+*        (I - V_2T_2V_2')(I - V_1T_1V_1')
+*        = I - V_2T_2V_2' - V_1T_1V_1' + V_2T_2V_2'V_1T_1V_1'
+*        
+*        Define T_3 = -T_2V_2'V_1T_1
+*        
+*        Then, we can define the matrix V as 
+*        V = |-------|
+*            |V_1 V_2|
+*            |-------|
+*        
+*        So, our product is equivalent to the matrix product
+*        I - VTV'
+*        This means, we can compute T_1 and T_2, then use this information
+*        to compute T_3
+*
+*        Compute T_1 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N-L, K-L, V, LDV, TAU, T, LDT)
+*
+*        Compute T_2 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N, L, V(1, K-L+1), LDV, TAU(K-L+1),
+     $      T(K-L+1,K-L+1), LDT)
+*
+*        Compute T_3
+*        T_3 = V_{2,2}'
+*
+         DO J = 1, K-L
+            DO I = 1, L
+               T(K-L+I,J) = CONJG(V(N-K+J, K-L+I))
+            END DO
+         END DO
+*
+*        T_3 = T_3V_{2,1}
+*
+         CALL ZTRMM('Right', 'Upper', 'No transpose', 'Unit', L, K-L, 
+     $      ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
+
+*
+*        T_3 = V_{2,2}'V_{2,1} + T_3
+*        Note: We assume K <= N, and GEMM will do nothing if N=K
+*
+         CALL ZGEMM('Conjugate', 'No transpose', L, K-L, N-K, ONE,
+     $      V(1,K-L+1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
+*
+*        At this point, we have that T_3 = V_2'V_1
+*        All that is left is to pre and post multiply by -T_2 and T_1
+*        respectively.
+*
+*        T_3 = -T_2T_3
+*
+         CALL ZTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L, K-L,
+     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+*
+*        T_3 = T_3T_1
+*
+         CALL ZTRMM('Right', 'Lower', 'No transpose', 'Non-unit', L,
+     $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
+      ELSE
+*
+*        Else means RQ case
+*
+*        Break V apart into 6 components
+*
+*        V = |-----------------------|
+*            |V_{1,1} V_{1,2} 0      |
+*            |V_{2,1} V_{2,2} V_{2,3}|
+*            |-----------------------|
+*
+*        V_{1,1}\in\C^{k-l,n-k}  rectangular
+*        V_{1,2}\in\C^{k-l,k-l}  unit lower triangular
+*
+*        V_{2,1}\in\C^{l,n-k}    rectangular
+*        V_{2,2}\in\C^{l,k-l}    rectangular
+*        V_{2,3}\in\C^{l,l}      unit lower triangular
+*
+*        We will construct the T matrix 
+*        T = |---------------| = |--------|
+*            |T_{1,1} 0      |   |T_1  0  |
+*            |T_{2,1} T_{2,2}|   |T_3  T_2|
+*            |---------------|   |--------|
+*
+*        T is the triangular factor attained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_1
+*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*
+*        T_1\in\C^{k-l, k-l}     non-unit lower triangular
+*        T_2\in\C^{l, l}         non-unit lower triangular
+*        T_3\in\C^{k-l, l}       rectangular
+*
+*        Where l = floor(k/2)
+*
+*        Then, consider the product:
+*        
+*        (I - V_2'T_2V_2)(I - V_1'T_1V_1)
+*        = I - V_2'T_2V_2 - V_1'T_1V_1 + V_2'T_2V_2V_1'T_1V_1
+*        
+*        Define T_3 = -T_2V_2V_1'T_1
+*        
+*        Then, we can define the matrix V as 
+*        V = |---|
+*            |V_1|
+*            |V_2|
+*            |---|
+*        
+*        So, our product is equivalent to the matrix product
+*        I - V'TV
+*        This means, we can compute T_1 and T_2, then use this information
+*        to compute T_3
+*
+*        Compute T_1 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N-L, K-L, V, LDV, TAU, T, LDT)
+*
+*        Compute T_2 recursively
+*
+         CALL ZLARFT(DIRECT, STOREV, N, L, V(K-L+1,1), LDV, TAU(K-L+1),
+     $      T(K-L+1,K-L+1), LDT)
+*
+*        Compute T_3
+*        T_3 = V_{2,2}
+*
+         CALL ZLACPY('All', L, K-L, V(K-L+1,N-K+1), LDV, T(K-L+1,1),
+     $      LDT)
+
+*
+*        T_3 = T_3V_{1,2}'
+*
+         CALL ZTRMM('Right', 'Lower', 'Conjugate', 'Unit', L, K-L, ONE,
+     $      V(1, N-K+1), LDV, T(K-L+1,1), LDT)
+
+*
+*        T_3 = V_{2,1}V_{1,1}' + T_3 
+*        Note: We assume K <= N, and GEMM will do nothing if N=K
+*
+         CALL ZGEMM('No transpose', 'Conjugate', L, K-L, N-K, ONE, 
+     $      V(K-L+1,1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
+
+*
+*        At this point, we have that T_3 = V_2V_1'
+*        All that is left is to pre and post multiply by -T_2 and T_1
+*        respectively.
+*
+*        T_3 = -T_2T_3
+*
+         CALL ZTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
+     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+
+*
+*        T_3 = T_3T_1
+*
+         CALL ZTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
+     $      ONE, T, LDT, T(K-L+1,1), LDT)
+      END IF
+      END SUBROUTINE

@@ -156,7 +156,7 @@
      $                   MU, NB, NBMIN, NU, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQL2, DLARFB, MY_DLARFT_REC, XERBLA
+      EXTERNAL           DGEQL2, DLARFB, DLARFT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -256,7 +256,7 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL MY_DLARFT_REC( 'Backward', 'Columnwise', M-K+I+IB-1,
+               CALL DLARFT( 'Backward', 'Columnwise', M-K+I+IB-1,
      $                      IB, A( 1, N-K+I ), LDA, TAU( I ), WORK,
      $                      LDWORK )
 *
