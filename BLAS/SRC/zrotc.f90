@@ -27,9 +27,9 @@
 !>
 !> If side = 'L', rotation G(i,j) is applied to rows i and i+1 of A.
 !> [ A(i,j)   ] = [  C(i,j)        S(i,j) ] [ A(i,j)   ]
-!> [ A(i+1,j) ]   [ -conj(S(i,j))  C(i,j) ] [ A(i+1,j) ]
+!> [ A(i+1,j) ]   [ -conjg(S(i,j))  C(i,j) ] [ A(i+1,j) ]
 !> If side = 'R', rotation G(i,j) is applied to columns j and j+1 of A.
-!> [ A(i,j)   A(i,j+1)   ] = [ A(i,j)   A(i,j+1)   ] [  C(i,j) -conj(S(i,j)) ]
+!> [ A(i,j)   A(i,j+1)   ] = [ A(i,j)   A(i,j+1)   ] [  C(i,j) -conjg(S(i,j)) ]
 !> [ A(i+1,j) A(i+1,j+1) ]   [ A(i+1,j) A(i+1,j+1) ] [  S(i,j)  C(i,j)       ]
 !>
 !> \endverbatim
@@ -234,7 +234,7 @@ subroutine zrotc(side, dir, startup, shutdown, m, n, k,&
                 sn = S(j,l)
                 do i = 1, m
                     temp = cs*A(i,j) + sn*A(i,j+1)
-                    A(i,j+1) = -conj(sn*A(i,j)) + cs*A(i,j+1)
+                    A(i,j+1) = -conjg(sn*A(i,j)) + cs*A(i,j+1)
                     A(i,j) = temp
                 end do
             end do
@@ -246,7 +246,7 @@ subroutine zrotc(side, dir, startup, shutdown, m, n, k,&
                 sn = S(l,j)
                 do i = 1, m
                     temp = cs*A(j,i) + sn*A(j+1,i)
-                    A(j+1,i) = -conj(sn*A(j,i)) + cs*A(j+1,i)
+                    A(j+1,i) = -conjg(sn*A(j,i)) + cs*A(j+1,i)
                     A(j,i) = temp
                 end do
             end do
