@@ -298,7 +298,7 @@
       EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMM, CGEMV, CSCAL, CSWAP
+      EXTERNAL           CCOPY, CGEMMTR, CGEMV, CSCAL, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL, SQRT
@@ -627,26 +627,9 @@
 *
 *        A11 := A11 - U12*D*U12**T = A11 - U12*W**T
 *
-*        computing blocks of NB columns at a time
-*
-         DO 50 J = ( ( K-1 ) / NB )*NB + 1, 1, -NB
-            JB = MIN( NB, K-J+1 )
-*
-*           Update the upper triangle of the diagonal block
-*
-            DO 40 JJ = J, J + JB - 1
-               CALL CGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
-     $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, CONE,
-     $                     A( J, JJ ), 1 )
-   40       CONTINUE
-*
-*           Update the rectangular superdiagonal block
-*
-            IF( J.GE.2 )
-     $         CALL CGEMM( 'No transpose', 'Transpose', J-1, JB,
-     $                     N-K, -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ),
-     $                     LDW, CONE, A( 1, J ), LDA )
-   50    CONTINUE
+         CALL CGEMMTR( 'Upper', 'No transpose', 'Transpose', K, N-K,
+     $                 -CONE, A( 1, K+1 ), LDA, W( 1, KW+1 ), LDW,
+     $                 CONE, A( 1, 1 ), LDA )
 *
 *        Set KB to the number of columns factorized
 *
@@ -945,26 +928,9 @@
 *
 *        A22 := A22 - L21*D*L21**T = A22 - L21*W**T
 *
-*        computing blocks of NB columns at a time
-*
-         DO 110 J = K, N, NB
-            JB = MIN( NB, N-J+1 )
-*
-*           Update the lower triangle of the diagonal block
-*
-            DO 100 JJ = J, J + JB - 1
-               CALL CGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
-     $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, CONE,
-     $                     A( JJ, JJ ), 1 )
-  100       CONTINUE
-*
-*           Update the rectangular subdiagonal block
-*
-            IF( J+JB.LE.N )
-     $         CALL CGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
-     $                     K-1, -CONE, A( J+JB, 1 ), LDA, W( J, 1 ),
-     $                     LDW, CONE, A( J+JB, J ), LDA )
-  110    CONTINUE
+         CALL CGEMMTR( 'Lower', 'No transpose', 'Transpose', N-K+1,
+     $                 K-1, -CONE, A( K, 1 ), LDA, W( K, 1 ), LDW,
+     $                 CONE, A( K, K ), LDA )
 *
 *        Set KB to the number of columns factorized
 *
