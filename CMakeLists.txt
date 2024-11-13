@@ -477,7 +477,10 @@ endif()
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
+  add_library(LAPACK::LAPACK ALIAS ${LAPACKLIB})
   install(EXPORT ${LAPACKLIB}-targets
+    FILE ${LAPACKLIB}-targets.cmake
+    NAMESPACE LAPACK::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
     COMPONENT Development
     )
