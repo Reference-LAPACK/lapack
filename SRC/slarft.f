@@ -127,7 +127,7 @@
 *
 *> \author Univ. of Tennessee
 *> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
+*> \author Johnathan Rhyne, Univ. of Colorado Denver (original author, 2024)
 *> \author NAG Ltd.
 *
 *> \ingroup larft
@@ -231,7 +231,7 @@
 *
       QR = DIRF.AND.COLV
 *
-*     LQ happens when we have Forward direction in row storage
+*     LQ happens when we have forward direction in row storage
 *
       LQ = DIRF.AND.(.NOT.COLV)
 *
@@ -263,27 +263,27 @@
 *        V_{3,2}\in\R^{n-k,k-l}  rectangular
 *
 *        We will construct the T matrix 
-*        T = |---------------| = |--------|
-*            |T_{1,1} T_{1,2}|   |T_1  T_3|
-*            |0       T_{2,2}|   |0    T_2|
-*            |---------------|   |--------|
+*        T = |---------------|
+*            |T_{1,1} T_{1,2}|
+*            |0       T_{2,2}|
+*            |---------------|
 *
-*        T is the triangular factor attained from block reflectors. 
-*        To motivate the structure, assume we have already computed T_1
-*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*        T is the triangular factor obtained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_{1,1}
+*        and T_{2,2}. Then collect the associated reflectors in V_1 and V_2
 *
-*        T_1\in\R^{l, l}         upper triangular
-*        T_2\in\R^{k-l, k-l}     upper triangular
-*        T_3\in\R^{l, k-l}       rectangular
+*        T_{1,1}\in\R^{l, l}     upper triangular
+*        T_{2,2}\in\R^{k-l, k-l} upper triangular
+*        T_{1,2}\in\R^{l, k-l}   rectangular
 *
 *        Where l = floor(k/2)
 *
 *        Then, consider the product:
 *        
-*        (I - V_1T_1V_1')(I - V_2T_2V_2')
-*        = I - V_1T_1V_1' - V_2T_2V_2' + V_1T_1V_1'V_2T_2V_2'
+*        (I - V_1*T_{1,1}*V_1')*(I - V_2*T_{2,2}*V_2')
+*        = I - V_1*T_{1,1}*V_1' - V_2*T_{2,2}*V_2' + V_1*T_{1,1}*V_1'*V_2*T_{2,2}*V_2'
 *        
-*        Define T_3 = -T_1V_1'V_2T_2
+*        Define T_{1,2} = -T_{1,1}*V_1'*V_2*T_{2,2}
 *        
 *        Then, we can define the matrix V as 
 *        V = |-------|
@@ -291,21 +291,21 @@
 *            |-------|
 *        
 *        So, our product is equivalent to the matrix product
-*        I - VTV'
-*        This means, we can compute T_1 and T_2, then use this information
-*        to compute T_3
+*        I - V*T*V'
+*        This means, we can compute T_{1,1} and T_{2,2}, then use this information
+*        to compute T_{1,2}
 *
-*        Compute T_1 recursively
+*        Compute T_{1,1} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N, L, V, LDV, TAU, T, LDT)
 *
-*        Compute T_2 recursively
+*        Compute T_{2,2} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
      $      TAU(L+1), T(L+1,L+1), LDT)
 *
-*        Compute T_3 
-*        T_3 = V_{2,1}'
+*        Compute T_{1,2} 
+*        T_{1,2} = V_{2,1}'
 *
          DO J = 1, L
             DO I = 1, K-L
@@ -313,28 +313,28 @@
             END DO
          END DO
 *
-*        T_3 = T_3V_{2,2}
+*        T_{1,2} = T_{1,2}*V_{2,2}
 *
          CALL STRMM('Right', 'Lower', 'No transpose', 'Unit', L, K-L, 
      $         ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
-*        T_3 = V_{3,1}'V_{3,2} + T_3
+*        T_{1,2} = V_{3,1}'*V_{3,2} + T_{1,2}
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL SGEMM('Transpose', 'No transpose', L, K-L, N-K, ONE, 
      $         V(K+1, 1), LDV, V(K+1,L+1), LDV, ONE, T(1, L+1), LDT)
 *
-*        At this point, we have that T_3 = V_1'V_2
-*        All that is left is to pre and post multiply by -T_1 and T_2
+*        At this point, we have that T_{1,2} = V_1'*V_2
+*        All that is left is to pre and post multiply by -T_{1,1} and T_{2,2}
 *        respectively.
 *
-*        T_3 = -T_1T_3
+*        T_{1,2} = -T_{1,1}*T_{1,2}
 *
          CALL STRMM('Left', 'Upper', 'No transpose', 'Non-unit', L,
      $         K-L, NEG_ONE, T, LDT, T(1, L+1), LDT)
 *
-*        T_3 = T_3T_2
+*        T_{1,2} = T_{1,2}*T_{2,2}
 *
          CALL STRMM('Right', 'Upper', 'No transpose', 'Non-unit', L, 
      $         K-L, ONE, T(L+1,L+1), LDT, T(1, L+1), LDT)
@@ -358,25 +358,25 @@
 *        Where l = floor(k/2)
 *
 *        We will construct the T matrix 
-*        T = |---------------| = |--------|
-*            |T_{1,1} T_{1,2}|   |T_1  T_3|
-*            |0       T_{2,2}|   |0    T_2|
-*            |---------------|   |--------|
+*        T = |---------------|
+*            |T_{1,1} T_{1,2}|
+*            |0       T_{2,2}|
+*            |---------------|
 *
-*        T is the triangular factor attained from block reflectors. 
-*        To motivate the structure, assume we have already computed T_1
-*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*        T is the triangular factor obtained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_{1,1}
+*        and T_{2,2}. Then collect the associated reflectors in V_1 and V_2
 *
-*        T_1\in\R^{l, l}         upper triangular
-*        T_2\in\R^{k-l, k-l}     upper triangular
-*        T_3\in\R^{l, k-l}       rectangular
+*        T_{1,1}\in\R^{l, l}     upper triangular
+*        T_{2,2}\in\R^{k-l, k-l} upper triangular
+*        T_{1,2}\in\R^{l, k-l}   rectangular
 *
 *        Then, consider the product:
 *        
-*        (I - V_1'T_1V_1)(I - V_2'T_2V_2)
-*        = I - V_1'T_1V_1 - V_2'T_2V_2 + V_1'T_1V_1V_2'T_2V_2
+*        (I - V_1'*T_{1,1}*V_1)*(I - V_2'*T_{2,2}*V_2)
+*        = I - V_1'*T_{1,1}*V_1 - V_2'*T_{2,2}*V_2 + V_1'*T_{1,1}*V_1*V_2'*T_{2,2}*V_2
 *        
-*        Define T_3 = -T_1V_1V_2'T_2
+*        Define T_{1,2} = -T_{1,1}*V_1*V_2'*T_{2,2}
 *        
 *        Then, we can define the matrix V as 
 *        V = |---|
@@ -385,48 +385,48 @@
 *            |---|
 *        
 *        So, our product is equivalent to the matrix product
-*        I - V'TV
-*        This means, we can compute T_1 and T_2, then use this information
-*        to compute T_3
+*        I - V'*T*V
+*        This means, we can compute T_{1,1} and T_{2,2}, then use this information
+*        to compute T_{1,2}
 *
-*        Compute T_1 recursively
+*        Compute T_{1,1} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N, L, V, LDV, TAU, T, LDT)
 *
-*        Compute T_2 recursively
+*        Compute T_{2,2} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
      $      TAU(L+1), T(L+1,L+1), LDT)
 
 *
-*        Compute T_3
-*        T_3 = V_{1,2}
+*        Compute T_{1,2}
+*        T_{1,2} = V_{1,2}
 *
          CALL SLACPY('All', L, K - L, V(1,L+1), LDV, T(1, L+1), LDT)
 *
-*        T_3 = T_3V_{2,2}'
+*        T_{1,2} = T_{1,2}*V_{2,2}'
 *
          CALL STRMM('Right', 'Upper', 'Transpose', 'Unit', L, K-L, ONE,
      $      V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
-*        T_3 = V_{1,3}V_{2,3}' + T_3
+*        T_{1,2} = V_{1,3}*V_{2,3}' + T_{1,2}
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL SGEMM('No transpose', 'Transpose', L, K-L, N-K, ONE,
      $      V(1, K+1), LDV, V(L+1, K+1), LDV, ONE, T(1, L+1), LDT)
 *
-*        At this point, we have that T_3 = V_1V_2'
-*        All that is left is to pre and post multiply by -T_1 and T_2
+*        At this point, we have that T_{1,2} = V_1*V_2'
+*        All that is left is to pre and post multiply by -T_{1,1} and T_{2,2}
 *        respectively.
 *
-*        T_3 = -T_1T_3
+*        T_{1,2} = -T_{1,1}*T_{1,2}
 *
          CALL STRMM('Left', 'Upper', 'No transpose', 'Non-unit', L, K-L,
      $      NEG_ONE, T, LDT, T(1, L+1), LDT)
 
 *
-*        T_3 = T_3T_2
+*        T_{1,2} = T_{1,2}*T_{2,2}
 *
          CALL STRMM('Right', 'Upper', 'No transpose', 'Non-unit', L,
      $      K-L, ONE, T(L+1,L+1), LDT, T(1, L+1), LDT)
@@ -448,27 +448,27 @@
 *        V_{3,2}\in\R^{l,l}      unit upper triangular
 *
 *        We will construct the T matrix 
-*        T = |---------------| = |--------|
-*            |T_{1,1} 0      |   |T_1  0  |
-*            |T_{2,1} T_{2,2}|   |T_3  T_2|
-*            |---------------|   |--------|
+*        T = |---------------|
+*            |T_{1,1} 0      |
+*            |T_{2,1} T_{2,2}|
+*            |---------------|
 *
-*        T is the triangular factor attained from block reflectors. 
-*        To motivate the structure, assume we have already computed T_1
-*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*        T is the triangular factor obtained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_{1,1}
+*        and T_{2,2}. Then collect the associated reflectors in V_1 and V_2
 *
-*        T_1\in\R^{k-l, k-l}     non-unit lower triangular
-*        T_2\in\R^{l, l}         non-unit lower triangular
-*        T_3\in\R^{k-l, l}       rectangular
+*        T_{1,1}\in\R^{k-l, k-l} non-unit lower triangular
+*        T_{2,2}\in\R^{l, l}     non-unit lower triangular
+*        T_{2,1}\in\R^{k-l, l}   rectangular
 *
 *        Where l = floor(k/2)
 *
 *        Then, consider the product:
 *        
-*        (I - V_2T_2V_2')(I - V_1T_1V_1')
-*        = I - V_2T_2V_2' - V_1T_1V_1' + V_2T_2V_2'V_1T_1V_1'
+*        (I - V_2*T_{2,2}*V_2')*(I - V_1*T_{1,1}*V_1')
+*        = I - V_2*T_{2,2}*V_2' - V_1*T_{1,1}*V_1' + V_2*T_{2,2}*V_2'*V_1*T_{1,1}*V_1'
 *        
-*        Define T_3 = -T_2V_2'V_1T_1
+*        Define T_{2,1} = -T_{2,2}*V_2'*V_1*T_{1,1}
 *        
 *        Then, we can define the matrix V as 
 *        V = |-------|
@@ -476,21 +476,21 @@
 *            |-------|
 *        
 *        So, our product is equivalent to the matrix product
-*        I - VTV'
-*        This means, we can compute T_1 and T_2, then use this information
-*        to compute T_3
+*        I - V*T*V'
+*        This means, we can compute T_{1,1} and T_{2,2}, then use this information
+*        to compute T_{2,1}
 *
-*        Compute T_1 recursively
+*        Compute T_{1,1} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N-L, K-L, V, LDV, TAU, T, LDT)
 *
-*        Compute T_2 recursively
+*        Compute T_{2,2} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N, L, V(1, K-L+1), LDV, TAU(K-L+1),
      $      T(K-L+1,K-L+1), LDT)
 *
-*        Compute T_3
-*        T_3 = V_{2,2}'
+*        Compute T_{2,1}
+*        T_{2,1} = V_{2,2}'
 *
          DO J = 1, K-L
             DO I = 1, L
@@ -498,28 +498,28 @@
             END DO
          END DO
 *
-*        T_3 = T_3V_{2,1}
+*        T_{2,1} = T_{2,1}*V_{2,1}
 *
          CALL STRMM('Right', 'Upper', 'No transpose', 'Unit', L, K-L, 
      $      ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
 
 *
-*        T_3 = V_{2,2}'V_{2,1} + T_3
+*        T_{2,1} = V_{2,2}'*V_{2,1} + T_{2,1}
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL SGEMM('Transpose', 'No transpose', L, K-L, N-K, ONE,
      $      V(1,K-L+1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
 *
-*        At this point, we have that T_3 = V_2'V_1
-*        All that is left is to pre and post multiply by -T_2 and T_1
+*        At this point, we have that T_{2,1} = V_2'*V_1
+*        All that is left is to pre and post multiply by -T_{2,2} and T_{1,1}
 *        respectively.
 *
-*        T_3 = -T_2T_3
+*        T_{2,1} = -T_{2,2}*T_{2,1}
 *
          CALL STRMM('Left', 'Lower', 'No transpose', 'Non-unit', L, K-L,
      $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 *
-*        T_3 = T_3T_1
+*        T_{2,1} = T_{2,1}*T_{1,1}
 *
          CALL STRMM('Right', 'Lower', 'No transpose', 'Non-unit', L,
      $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
@@ -542,27 +542,27 @@
 *        V_{2,3}\in\R^{l,l}      unit lower triangular
 *
 *        We will construct the T matrix 
-*        T = |---------------| = |--------|
-*            |T_{1,1} 0      |   |T_1  0  |
-*            |T_{2,1} T_{2,2}|   |T_3  T_2|
-*            |---------------|   |--------|
+*        T = |---------------|
+*            |T_{1,1} 0      |
+*            |T_{2,1} T_{2,2}|
+*            |---------------|
 *
-*        T is the triangular factor attained from block reflectors. 
-*        To motivate the structure, assume we have already computed T_1
-*        and T_2. Then collect the associated reflectors in V_1 and V_2
+*        T is the triangular factor obtained from block reflectors. 
+*        To motivate the structure, assume we have already computed T_{1,1}
+*        and T_{2,2}. Then collect the associated reflectors in V_1 and V_2
 *
-*        T_1\in\R^{k-l, k-l}     non-unit lower triangular
-*        T_2\in\R^{l, l}         non-unit lower triangular
-*        T_3\in\R^{k-l, l}       rectangular
+*        T_{1,1}\in\R^{k-l, k-l} non-unit lower triangular
+*        T_{2,2}\in\R^{l, l}     non-unit lower triangular
+*        T_{2,1}\in\R^{k-l, l}   rectangular
 *
 *        Where l = floor(k/2)
 *
 *        Then, consider the product:
 *        
-*        (I - V_2'T_2V_2)(I - V_1'T_1V_1)
-*        = I - V_2'T_2V_2 - V_1'T_1V_1 + V_2'T_2V_2V_1'T_1V_1
+*        (I - V_2'*T_{2,2}*V_2)*(I - V_1'*T_{1,1}*V_1)
+*        = I - V_2'*T_{2,2}*V_2 - V_1'*T_{1,1}*V_1 + V_2'*T_{2,2}*V_2*V_1'*T_{1,1}*V_1
 *        
-*        Define T_3 = -T_2V_2V_1'T_1
+*        Define T_{2,1} = -T_{2,2}*V_2*V_1'*T_{1,1}
 *        
 *        Then, we can define the matrix V as 
 *        V = |---|
@@ -572,49 +572,49 @@
 *        
 *        So, our product is equivalent to the matrix product
 *        I - V'TV
-*        This means, we can compute T_1 and T_2, then use this information
-*        to compute T_3
+*        This means, we can compute T_{1,1} and T_{2,2}, then use this information
+*        to compute T_{2,1}
 *
-*        Compute T_1 recursively
+*        Compute T_{1,1} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N-L, K-L, V, LDV, TAU, T, LDT)
 *
-*        Compute T_2 recursively
+*        Compute T_{2,2} recursively
 *
          CALL SLARFT(DIRECT, STOREV, N, L, V(K-L+1,1), LDV, TAU(K-L+1),
      $      T(K-L+1,K-L+1), LDT)
 *
-*        Compute T_3
-*        T_3 = V_{2,2}
+*        Compute T_{2,1}
+*        T_{2,1} = V_{2,2}
 *
          CALL SLACPY('All', L, K-L, V(K-L+1,N-K+1), LDV, T(K-L+1,1),
      $      LDT)
 
 *
-*        T_3 = T_3V_{1,2}'
+*        T_{2,1} = T_{2,1}*V_{1,2}'
 *
          CALL STRMM('Right', 'Lower', 'Transpose', 'Unit', L, K-L, ONE,
      $      V(1, N-K+1), LDV, T(K-L+1,1), LDT)
 
 *
-*        T_3 = V_{2,1}V_{1,1}' + T_3 
+*        T_{2,1} = V_{2,1}*V_{1,1}' + T_{2,1} 
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL SGEMM('No transpose', 'Transpose', L, K-L, N-K, ONE, 
      $      V(K-L+1,1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
 
 *
-*        At this point, we have that T_3 = V_2V_1'
-*        All that is left is to pre and post multiply by -T_2 and T_1
+*        At this point, we have that T_{2,1} = V_2*V_1'
+*        All that is left is to pre and post multiply by -T_{2,2} and T_{1,1}
 *        respectively.
 *
-*        T_3 = -T_2T_3
+*        T_{2,1} = -T_{2,2}*T_{2,1}
 *
          CALL STRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
      $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 
 *
-*        T_3 = T_3T_1
+*        T_{2,1} = T_{2,1}*T_{1,1}
 *
          CALL STRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
      $      ONE, T, LDT, T(K-L+1,1), LDT)
