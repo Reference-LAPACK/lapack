@@ -382,7 +382,8 @@
    30    CONTINUE
    40 CONTINUE
       IF( P.GT.L )
-     $   CALL CLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ), LDB )
+     $   CALL CLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ),
+     $                LDB )
 *
       IF( WANTQ ) THEN
 *
@@ -444,8 +445,9 @@
 *
 *     Update A12 := U**H*A12, where A12 = A( 1:M, N-L+1:N )
 *
-      CALL CUNM2R( 'Left', 'Conjugate transpose', M, L, MIN( M, N-L ),
-     $             A, LDA, TAU, A( 1, N-L+1 ), LDA, WORK, INFO )
+      CALL CUNM2R( 'Left', 'Conjugate transpose', M, L,
+     $             MIN( M, N-L ), A, LDA, TAU, A( 1, N-L+1 ), LDA, WORK,
+     $             INFO )
 *
       IF( WANTU ) THEN
 *
@@ -453,8 +455,8 @@
 *
          CALL CLASET( 'Full', M, M, CZERO, CZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL CLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
-     $                   LDU )
+     $      CALL CLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA,
+     $                   U( 2, 1 ), LDU )
          CALL CUNG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
 *
@@ -474,7 +476,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL CLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ), LDA )
+     $   CALL CLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -511,9 +514,9 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL CUNM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
-     $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
-     $                   WORK, INFO )
+            CALL CUNM2R( 'Right', 'No transpose', M, M-K,
+     $                   MIN( M-K, L ), A( K+1, N-L+1 ), LDA, TAU,
+     $                   U( 1, K+1 ), LDU, WORK, INFO )
          END IF
 *
 *        Clean up
