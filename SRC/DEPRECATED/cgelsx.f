@@ -294,13 +294,15 @@
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL CLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL CLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL CLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL CLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
