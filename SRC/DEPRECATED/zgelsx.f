@@ -179,8 +179,8 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
-     $                   WORK, RWORK, INFO )
+      SUBROUTINE ZGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND,
+     $                   RANK, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -294,21 +294,23 @@
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
          IBSCL = 2
       END IF
 *
 *     Compute QR factorization with column pivoting of A:
 *        A * P = Q * R
 *
-      CALL ZGEQPF( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ), RWORK,
-     $             INFO )
+      CALL ZGEQPF( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
+     $             RWORK, INFO )
 *
 *     complex workspace MN+N. Real workspace 2*N. Details of Householder
 *     rotations stored in WORK(1:MN).
@@ -362,8 +364,8 @@
 *
 *     B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
-      CALL ZUNM2R( 'Left', 'Conjugate transpose', M, NRHS, MN, A, LDA,
-     $             WORK( 1 ), B, LDB, WORK( 2*MN+1 ), INFO )
+      CALL ZUNM2R( 'Left', 'Conjugate transpose', M, NRHS, MN, A,
+     $             LDA, WORK( 1 ), B, LDB, WORK( 2*MN+1 ), INFO )
 *
 *     workspace NRHS
 *
@@ -382,8 +384,8 @@
 *
       IF( RANK.LT.N ) THEN
          DO 50 I = 1, RANK
-            CALL ZLATZM( 'Left', N-RANK+1, NRHS, A( I, RANK+1 ), LDA,
-     $                   DCONJG( WORK( MN+I ) ), B( I, 1 ),
+            CALL ZLATZM( 'Left', N-RANK+1, NRHS, A( I, RANK+1 ),
+     $                   LDA, DCONJG( WORK( MN+I ) ), B( I, 1 ),
      $                   B( RANK+1, 1 ), LDB, WORK( 2*MN+1 ) )
    50    CONTINUE
       END IF
@@ -420,18 +422,22 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL ZLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB,
+     $                INFO )
          CALL ZLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB,
+     $                INFO )
       END IF
 *
   100 CONTINUE

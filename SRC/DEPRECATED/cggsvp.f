@@ -401,8 +401,8 @@
 *
 *        Update A := A*Z**H
 *
-         CALL CUNMR2( 'Right', 'Conjugate transpose', M, N, L, B, LDB,
-     $                TAU, A, LDA, WORK, INFO )
+         CALL CUNMR2( 'Right', 'Conjugate transpose', M, N, L, B,
+     $                LDB, TAU, A, LDA, WORK, INFO )
          IF( WANTQ ) THEN
 *
 *           Update Q := Q*Z**H
@@ -489,8 +489,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**H
 *
-            CALL CUNMR2( 'Right', 'Conjugate transpose', N, N-L, K, A,
-     $                   LDA, TAU, Q, LDQ, WORK, INFO )
+            CALL CUNMR2( 'Right', 'Conjugate transpose', N, N-L, K,
+     $                   A, LDA, TAU, Q, LDQ, WORK, INFO )
          END IF
 *
 *        Clean up A
