@@ -217,14 +217,15 @@
 *
 *              Form   w = a( k ) + B*z( k )  in TAU.
 *
-               CALL CGEMV( 'No transpose', K-1, N-M, CONE, A( 1, M1 ),
-     $                     LDA, A( K, M1 ), LDA, CONE, TAU, 1 )
+               CALL CGEMV( 'No transpose', K-1, N-M, CONE,
+     $                     A( 1, M1 ), LDA, A( K, M1 ), LDA, CONE,
+     $                     TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - conjg(tau)*w
 *              and       B      := B      - conjg(tau)*w*z( k )**H.
 *
-               CALL CAXPY( K-1, -CONJG( TAU( K ) ), TAU, 1, A( 1, K ),
-     $                     1 )
+               CALL CAXPY( K-1, -CONJG( TAU( K ) ), TAU, 1,
+     $                     A( 1, K ), 1 )
                CALL CGERC( K-1, N-M, -CONJG( TAU( K ) ), TAU, 1,
      $                     A( K, M1 ), LDA, A( 1, M1 ), LDA )
             END IF
