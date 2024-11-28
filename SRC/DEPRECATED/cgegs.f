@@ -219,9 +219,9 @@
 *> \ingroup complexGEeigen
 *
 *  =====================================================================
-      SUBROUTINE CGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA, BETA,
-     $                  VSL, LDVSL, VSR, LDVSR, WORK, LWORK, RWORK,
-     $                  INFO )
+      SUBROUTINE CGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA,
+     $                  BETA, VSL, LDVSL, VSR, LDVSR, WORK, LWORK,
+     $                  RWORK, INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -360,7 +360,8 @@
       END IF
 *
       IF( ILASCL ) THEN
-         CALL CLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA, IINFO )
+         CALL CLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -380,7 +381,8 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL CLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB, IINFO )
+         CALL CLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -493,12 +495,14 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL CLASCL( 'U', -1, -1, ANRMTO, ANRM, N, N, A, LDA, IINFO )
+         CALL CLASCL( 'U', -1, -1, ANRMTO, ANRM, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL CLASCL( 'G', -1, -1, ANRMTO, ANRM, N, 1, ALPHA, N, IINFO )
+         CALL CLASCL( 'G', -1, -1, ANRMTO, ANRM, N, 1, ALPHA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -506,12 +510,14 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL CLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB, IINFO )
+         CALL CLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL CLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N, IINFO )
+         CALL CLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
