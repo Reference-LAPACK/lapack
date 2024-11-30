@@ -159,8 +159,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T,
-     $                             LDT )
+      RECURSIVE SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV,
+     $                             TAU, T, LDT )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -315,8 +315,8 @@
 *
 *        T_{1,2} = T_{1,2}*V_{2,2}
 *
-         CALL DTRMM('Right', 'Lower', 'No transpose', 'Unit', L, K-L, 
-     $         ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
+         CALL DTRMM('Right', 'Lower', 'No transpose', 'Unit', L,
+     $         K-L, ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = V_{3,1}'*V_{3,2} + T_{1,2}
@@ -406,8 +406,8 @@
 *
 *        T_{1,2} = T_{1,2}*V_{2,2}'
 *
-         CALL DTRMM('Right', 'Upper', 'Transpose', 'Unit', L, K-L, ONE,
-     $      V(L+1, L+1), LDV, T(1, L+1), LDT)
+         CALL DTRMM('Right', 'Upper', 'Transpose', 'Unit', L, K-L,
+     $      ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = V_{1,3}*V_{2,3}' + T_{1,2}
@@ -422,8 +422,8 @@
 *
 *        T_{1,2} = -T_{1,1}*T_{1,2}
 *
-         CALL DTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T, LDT, T(1, L+1), LDT)
+         CALL DTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T, LDT, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = T_{1,2}*T_{2,2}
@@ -486,8 +486,8 @@
 *
 *        Compute T_{2,2} recursively
 *
-         CALL DLARFT(DIRECT, STOREV, N, L, V(1, K-L+1), LDV, TAU(K-L+1),
-     $      T(K-L+1,K-L+1), LDT)
+         CALL DLARFT(DIRECT, STOREV, N, L, V(1, K-L+1), LDV,
+     $      TAU(K-L+1), T(K-L+1,K-L+1), LDT)
 *
 *        Compute T_{2,1}
 *        T_{2,1} = V_{2,2}'
@@ -500,8 +500,8 @@
 *
 *        T_{2,1} = T_{2,1}*V_{2,1}
 *
-         CALL DTRMM('Right', 'Upper', 'No transpose', 'Unit', L, K-L, 
-     $      ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Upper', 'No transpose', 'Unit', L,
+     $      K-L, ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = V_{2,2}'*V_{2,1} + T_{2,1}
@@ -516,8 +516,8 @@
 *
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
-         CALL DTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
@@ -581,8 +581,8 @@
 *
 *        Compute T_{2,2} recursively
 *
-         CALL DLARFT(DIRECT, STOREV, N, L, V(K-L+1,1), LDV, TAU(K-L+1),
-     $      T(K-L+1,K-L+1), LDT)
+         CALL DLARFT(DIRECT, STOREV, N, L, V(K-L+1,1), LDV,
+     $      TAU(K-L+1), T(K-L+1,K-L+1), LDT)
 *
 *        Compute T_{2,1}
 *        T_{2,1} = V_{2,2}
@@ -593,8 +593,8 @@
 *
 *        T_{2,1} = T_{2,1}*V_{1,2}'
 *
-         CALL DTRMM('Right', 'Lower', 'Transpose', 'Unit', L, K-L, ONE,
-     $      V(1, N-K+1), LDV, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Lower', 'Transpose', 'Unit', L, K-L,
+     $      ONE, V(1, N-K+1), LDV, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = V_{2,1}*V_{1,1}' + T_{2,1} 
@@ -610,13 +610,13 @@
 *
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
-         CALL DTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
-         CALL DTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
-     $      ONE, T, LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L,
+     $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
       END IF
       END SUBROUTINE

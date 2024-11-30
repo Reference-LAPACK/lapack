@@ -160,7 +160,7 @@
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T,
-     $                             LDT )
+     $                             TAU, T, LDT )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
