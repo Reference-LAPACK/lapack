@@ -257,8 +257,7 @@
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
                CALL DLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
-     $                      A( 1, N-K+I ), LDA, TAU( I ), WORK,
-     $                      LDWORK )
+     $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
