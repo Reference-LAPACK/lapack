@@ -305,15 +305,15 @@
 *
 *        Compute T_{2,2} recursively
 *
-         CALL CLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
-     $      TAU(L+1), T(L+1,L+1), LDT)
+         CALL CLARFT(DIRECT, STOREV, N-L, K-L, V(L+1, L+1), LDV, 
+     $               TAU(L+1), T(L+1, L+1), LDT)
 *
 *        Compute T_{1,2} 
 *        T_{1,2} = V_{2,1}'
 *
          DO J = 1, L
             DO I = 1, K-L
-               T(J,L+I) = CONJG(V(L+I,J))
+               T(J, L+I) = CONJG(V(L+I, J))
             END DO
          END DO
 *
@@ -327,7 +327,8 @@
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL CGEMM('Conjugate', 'No transpose', L, K-L, N-K, ONE, 
-     $         V(K+1, 1), LDV, V(K+1,L+1), LDV, ONE, T(1, L+1), LDT)
+     $         V(K+1, 1), LDV, V(K+1, L+1), LDV, ONE, T(1, L+1),
+     $         LDT)
 *
 *        At this point, we have that T_{1,2} = V_1'*V_2
 *        All that is left is to pre and post multiply by -T_{1,1} and T_{2,2}
@@ -341,7 +342,7 @@
 *        T_{1,2} = T_{1,2}*T_{2,2}
 *
          CALL CTRMM('Right', 'Upper', 'No transpose', 'Non-unit', L, 
-     $         K-L, ONE, T(L+1,L+1), LDT, T(1, L+1), LDT)
+     $         K-L, ONE, T(L+1, L+1), LDT, T(1, L+1), LDT)
 
       ELSE IF(LQ) THEN
 *
@@ -399,14 +400,14 @@
 *
 *        Compute T_{2,2} recursively
 *
-         CALL CLARFT(DIRECT, STOREV, N-L, K-L, V(L+1,L+1), LDV, 
-     $      TAU(L+1), T(L+1,L+1), LDT)
+         CALL CLARFT(DIRECT, STOREV, N-L, K-L, V(L+1, L+1), LDV, 
+     $               TAU(L+1), T(L+1, L+1), LDT)
 
 *
 *        Compute T_{1,2}
 *        T_{1,2} = V_{1,2}
 *
-         CALL CLACPY('All', L, K - L, V(1,L+1), LDV, T(1, L+1), LDT)
+         CALL CLACPY('All', L, K-L, V(1, L+1), LDV, T(1, L+1), LDT)
 *
 *        T_{1,2} = T_{1,2}*V_{2,2}'
 *
@@ -491,28 +492,29 @@
 *        Compute T_{2,2} recursively
 *
          CALL CLARFT(DIRECT, STOREV, N, L, V(1, K-L+1), LDV,
-     $      TAU(K-L+1), T(K-L+1,K-L+1), LDT)
+     $               TAU(K-L+1), T(K-L+1, K-L+1), LDT)
 *
 *        Compute T_{2,1}
 *        T_{2,1} = V_{2,2}'
 *
          DO J = 1, K-L
             DO I = 1, L
-               T(K-L+I,J) = CONJG(V(N-K+J, K-L+I))
+               T(K-L+I, J) = CONJG(V(N-K+J, K-L+I))
             END DO
          END DO
 *
 *        T_{2,1} = T_{2,1}*V_{2,1}
 *
          CALL CTRMM('Right', 'Upper', 'No transpose', 'Unit', L,
-     $      K-L, ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
+     $               K-L, ONE, V(N-K+1, 1), LDV, T(K-L+1, 1), LDT)
 
 *
 *        T_{2,1} = V_{2,2}'*V_{2,1} + T_{2,1}
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL CGEMM('Conjugate', 'No transpose', L, K-L, N-K, ONE,
-     $      V(1,K-L+1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
+     $               V(1, K-L+1), LDV, V, LDV, ONE, T(K-L+1, 1),
+     $               LDT)
 *
 *        At this point, we have that T_{2,1} = V_2'*V_1
 *        All that is left is to pre and post multiply by -T_{2,2} and T_{1,1}
@@ -521,12 +523,13 @@
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
          CALL CTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L,
-     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+     $               K-L, NEG_ONE, T(K-L+1, K-L+1), LDT,
+     $               T(K-L+1, 1), LDT)
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
          CALL CTRMM('Right', 'Lower', 'No transpose', 'Non-unit', L,
-     $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
+     $               K-L, ONE, T, LDT, T(K-L+1, 1), LDT)
       ELSE
 *
 *        Else means RQ case
@@ -586,26 +589,27 @@
 *        Compute T_{2,2} recursively
 *
          CALL CLARFT(DIRECT, STOREV, N, L, V(K-L+1,1), LDV,
-     $      TAU(K-L+1), T(K-L+1,K-L+1), LDT)
+     $               TAU(K-L+1), T(K-L+1, K-L+1), LDT)
 *
 *        Compute T_{2,1}
 *        T_{2,1} = V_{2,2}
 *
-         CALL CLACPY('All', L, K-L, V(K-L+1,N-K+1), LDV, T(K-L+1,1),
-     $      LDT)
+         CALL CLACPY('All', L, K-L, V(K-L+1, N-K+1), LDV, 
+     $               T(K-L+1, 1), LDT)
 
 *
 *        T_{2,1} = T_{2,1}*V_{1,2}'
 *
          CALL CTRMM('Right', 'Lower', 'Conjugate', 'Unit', L, K-L,
-     $      ONE, V(1, N-K+1), LDV, T(K-L+1,1), LDT)
+     $               ONE, V(1, N-K+1), LDV, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = V_{2,1}*V_{1,1}' + T_{2,1}
 *        Note: We assume K <= N, and GEMM will do nothing if N=K
 *
          CALL CGEMM('No transpose', 'Conjugate', L, K-L, N-K, ONE, 
-     $      V(K-L+1,1), LDV, V, LDV, ONE, T(K-L+1,1), LDT)
+     $               V(K-L+1, 1), LDV, V, LDV, ONE, T(K-L+1, 1),
+     $               LDT)
 
 *
 *        At this point, we have that T_{2,1} = V_2*V_1'
@@ -615,12 +619,13 @@
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
          CALL CTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L,
-     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+     $               K-L, NEG_ONE, T(K-L+1, K-L+1), LDT, 
+     $               T(K-L+1, 1), LDT)
 
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
          CALL CTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L,
-     $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
+     $               K-L, ONE, T, LDT, T(K-L+1, 1), LDT)
       END IF
       END SUBROUTINE
