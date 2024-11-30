@@ -1,4 +1,4 @@
-*> \brief \b DLARFT forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b DLARFT VARIANT: left-looking Level 2 BLAS version of the algorithm
 *
 *  =========== DOCUMENTATION ===========
 *
