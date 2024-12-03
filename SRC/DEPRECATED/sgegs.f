@@ -358,7 +358,8 @@
       END IF
 *
       IF( ILASCL ) THEN
-         CALL SLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA, IINFO )
+         CALL SLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -378,7 +379,8 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL SLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB, IINFO )
+         CALL SLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -496,7 +498,8 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL SLASCL( 'H', -1, -1, ANRMTO, ANRM, N, N, A, LDA, IINFO )
+         CALL SLASCL( 'H', -1, -1, ANRMTO, ANRM, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -516,12 +519,14 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL SLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB, IINFO )
+         CALL SLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL SLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N, IINFO )
+         CALL SLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN

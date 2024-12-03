@@ -194,7 +194,8 @@
 *           Use a Householder reflection to zero the kth row of A.
 *           First set up the reflection.
 *
-            CALL SLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K ) )
+            CALL SLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA,
+     $                   TAU( K ) )
 *
             IF( ( TAU( K ).NE.ZERO ) .AND. ( K.GT.1 ) ) THEN
 *
@@ -216,8 +217,8 @@
 *              and       B      := B      - tau*w*z( k )**T.
 *
                CALL SAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
-               CALL SGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LDA,
-     $                    A( 1, M1 ), LDA )
+               CALL SGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ),
+     $                    LDA, A( 1, M1 ), LDA )
             END IF
    20    CONTINUE
       END IF

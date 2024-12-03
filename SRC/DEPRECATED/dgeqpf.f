@@ -253,7 +253,8 @@
 *           Generate elementary reflector H(i)
 *
             IF( I.LT.M ) THEN
-               CALL DLARFG( M-I+1, A( I, I ), A( I+1, I ), 1, TAU( I ) )
+               CALL DLARFG( M-I+1, A( I, I ), A( I+1, I ), 1,
+     $                      TAU( I ) )
             ELSE
                CALL DLARFG( 1, A( M, M ), A( M, M ), 1, TAU( M ) )
             END IF
@@ -264,8 +265,8 @@
 *
                AII = A( I, I )
                A( I, I ) = ONE
-               CALL DLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1, TAU( I ),
-     $                     A( I, I+1 ), LDA, WORK( 2*N+1 ) )
+               CALL DLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1,
+     $                     TAU( I ), A( I, I+1 ), LDA, WORK( 2*N+1 ) )
                A( I, I ) = AII
             END IF
 *

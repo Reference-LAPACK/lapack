@@ -221,8 +221,8 @@
 *           w := V1**T * b1
 *
             CALL SCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL STRMV( 'Lower', 'Transpose', 'Unit', I-1, A( K+1, 1 ),
-     $                  LDA, T( 1, NB ), 1 )
+            CALL STRMV( 'Lower', 'Transpose', 'Unit', I-1,
+     $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**T *b2
 *
@@ -231,13 +231,14 @@
 *
 *           w := T**T *w
 *
-            CALL STRMV( 'Upper', 'Transpose', 'Non-unit', I-1, T, LDT,
-     $                  T( 1, NB ), 1 )
+            CALL STRMV( 'Upper', 'Transpose', 'Non-unit', I-1, T,
+     $                  LDT, T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL SGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1 ),
-     $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
+            CALL SGEMV( 'No transpose', N-K-I+1, I-1, -ONE,
+     $                  A( K+I, 1 ), LDA, T( 1, NB ), 1, ONE,
+     $                  A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
@@ -251,26 +252,26 @@
 *        Generate the elementary reflector H(i) to annihilate
 *        A(k+i+1:n,i)
 *
-         CALL SLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
-     $                TAU( I ) )
+         CALL SLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ),
+     $                1, TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(1:n,i)
 *
-         CALL SGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LDA,
-     $               A( K+I, I ), 1, ZERO, Y( 1, I ), 1 )
-         CALL SGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ), LDA,
-     $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL SGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ), 1,
-     $               ONE, Y( 1, I ), 1 )
+         CALL SGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ),
+     $               LDA, A( K+I, I ), 1, ZERO, Y( 1, I ), 1 )
+         CALL SGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ),
+     $               LDA, A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
+         CALL SGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ),
+     $               1, ONE, Y( 1, I ), 1 )
          CALL SSCAL( N, TAU( I ), Y( 1, I ), 1 )
 *
 *        Compute T(1:i,i)
 *
          CALL SSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL STRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT,
-     $               T( 1, I ), 1 )
+         CALL STRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T,
+     $               LDT, T( 1, I ), 1 )
          T( I, I ) = TAU( I )
 *
    10 CONTINUE

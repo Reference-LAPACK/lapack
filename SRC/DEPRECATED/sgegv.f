@@ -301,8 +301,9 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
-     $                  BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
+      SUBROUTINE SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR,
+     $                  ALPHAI, BETA, VL, LDVL, VR, LDVR, WORK, LWORK,
+     $                  INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

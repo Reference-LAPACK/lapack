@@ -194,7 +194,8 @@
 *           Use a Householder reflection to zero the kth row of A.
 *           First set up the reflection.
 *
-            CALL DLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K ) )
+            CALL DLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA,
+     $                   TAU( K ) )
 *
             IF( ( TAU( K ).NE.ZERO ) .AND. ( K.GT.1 ) ) THEN
 *
@@ -216,8 +217,8 @@
 *              and       B      := B      - tau*w*z( k )**T.
 *
                CALL DAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
-               CALL DGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LDA,
-     $                    A( 1, M1 ), LDA )
+               CALL DGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ),
+     $                    LDA, A( 1, M1 ), LDA )
             END IF
    20    CONTINUE
       END IF

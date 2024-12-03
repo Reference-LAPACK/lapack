@@ -147,7 +147,8 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC, WORK )
+      SUBROUTINE DLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC,
+     $                   WORK )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -202,8 +203,8 @@
 *        w := C1 + C2 * v
 *
          CALL DCOPY( M, C1, 1, WORK, 1 )
-         CALL DGEMV( 'No transpose', M, N-1, ONE, C2, LDC, V, INCV, ONE,
-     $               WORK, 1 )
+         CALL DGEMV( 'No transpose', M, N-1, ONE, C2, LDC, V, INCV,
+     $               ONE, WORK, 1 )
 *
 *        [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T]
 *
