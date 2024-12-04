@@ -389,8 +389,10 @@
                W( 1 ) = DBLE( A( 1, 1 ) )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = CONE
+         IF( WANTZ ) THEN
+            Z( 1, 1 ) = ONE
+            IFAIL(1) = 0
+         ENDIF
          RETURN
       END IF
 *
