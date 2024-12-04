@@ -26,21 +26,21 @@ slev1 = cblas_srotg.o cblas_srotmg.o cblas_srot.o  cblas_srotm.o \
         cblas_sswap.o cblas_sscal.o  cblas_scopy.o cblas_saxpy.o \
         cblas_sdot.o  cblas_sdsdot.o cblas_snrm2.o cblas_sasum.o \
         cblas_isamax.o sdotsub.o sdsdotsub.o snrm2sub.o sasumsub.o \
-        isamaxsub.o
+        isamaxsub.o cblas_saxpby.o
 
 # Files for level 1 double precision real
 dlev1 = cblas_drotg.o cblas_drotmg.o cblas_drot.o  cblas_drotm.o \
         cblas_dswap.o cblas_dscal.o  cblas_dcopy.o cblas_daxpy.o \
         cblas_ddot.o  cblas_dsdot.o  cblas_dnrm2.o cblas_dasum.o \
         cblas_idamax.o ddotsub.o dsdotsub.o dnrm2sub.o \
-        dasumsub.o idamaxsub.o
+        dasumsub.o idamaxsub.o cblas_daxpby.o
 
 # Files for level 1 single precision complex
 clev1 = cblas_crotg.o cblas_csrot.o \
         cblas_cswap.o cblas_cscal.o cblas_csscal.o cblas_ccopy.o \
         cblas_caxpy.o cblas_cdotu_sub.o cblas_cdotc_sub.o \
         cblas_icamax.o cdotcsub.o cdotusub.o icamaxsub.o \
-        cblas_scabs1.o scabs1sub.o
+        cblas_scabs1.o scabs1sub.o cblas_caxpby.o
 
 # Files for level 1 double precision complex
 zlev1 = cblas_zrotg.o cblas_zdrot.o \
@@ -48,7 +48,7 @@ zlev1 = cblas_zrotg.o cblas_zdrot.o \
         cblas_zaxpy.o cblas_zdotu_sub.o cblas_zdotc_sub.o cblas_dznrm2.o \
         cblas_dzasum.o cblas_izamax.o zdotcsub.o zdotusub.o \
         dzasumsub.o dznrm2sub.o izamaxsub.o \
-        cblas_dcabs1.o dcabs1sub.o
+        cblas_dcabs1.o dcabs1sub.o cblas_zaxpby.o
 
 # Common files for level 1 single precision
 sclev1 = cblas_scasum.o scasumsub.o cblas_scnrm2.o scnrm2sub.o
