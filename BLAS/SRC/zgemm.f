@@ -35,6 +35,19 @@
 *>
 *> alpha and beta are scalars, and A, B and C are matrices, with op( A )
 *> an m by k matrix,  op( B )  a  k by n matrix and  C an m by n matrix.
+*>
+*> Note: if alpha and/or beta is zero, some parts of the matrix-matrix
+*>  operations are not performed. This results in the following NaN/Inf
+*>  propagation quirks:
+*>
+*>  1. If alpha is zero and beta is one, NaNs or Infs in A or B do not affect
+*>   the result.
+*>  2. If both alpha and beta are zero, then a zero matrix is returned in C,
+*>   irrespective of any NaNs or Infs in A, B or C.
+*>  3. If alpha is zero and beta is neither zero or one, then beta*C is
+*>   returned in C, irrespective of any NaNs or Infs in A or B.
+*>  4. If only beta is zero, alpha*op( A )*op( B ) is returned, irrespective
+*>   of any NaNs or Infs in C.
 *> \endverbatim
 *
 *  Arguments:
@@ -92,7 +105,9 @@
 *> \param[in] ALPHA
 *> \verbatim
 *>          ALPHA is COMPLEX*16
-*>           On entry, ALPHA specifies the scalar alpha.
+*>           On entry, ALPHA specifies the scalar alpha. If ALPHA is zero the
+*>           values in A and B do not affect the result. This also means that
+*>           NaN/Inf propagation from A and B is inhibited if ALPHA is zero.
 *> \endverbatim
 *>
 *> \param[in] A
@@ -102,7 +117,10 @@
 *>           Before entry with  TRANSA = 'N' or 'n',  the leading  m by k
 *>           part of the array  A  must contain the matrix  A,  otherwise
 *>           the leading  k by m  part of the array  A  must contain  the
-*>           matrix A.
+*>           matrix A, except if ALPHA is zero.
+*>           If ALPHA is zero, none of the values in A affect the result, even
+*>           if they are NaN/Inf. This also implies that if ALPHA is zero,
+*>           the matrix elements of A need not be initialized by the caller.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,7 +139,10 @@
 *>           Before entry with  TRANSB = 'N' or 'n',  the leading  k by n
 *>           part of the array  B  must contain the matrix  B,  otherwise
 *>           the leading  n by k  part of the array  B  must contain  the
-*>           matrix B.
+*>           matrix B, except if ALPHA is zero.
+*>           If ALPHA is zero, none of the values in B affect the result, even
+*>           if they are NaN/Inf. This also implies that if ALPHA is zero,
+*>           the matrix elements of B need not be initialized by the caller.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -136,16 +157,19 @@
 *> \param[in] BETA
 *> \verbatim
 *>          BETA is COMPLEX*16
-*>           On entry,  BETA  specifies the scalar  beta.  When  BETA  is
-*>           supplied as zero then C need not be set on input.
+*>           On entry,  BETA  specifies the scalar  beta. If BETA is zero the
+*>           values in C do not affect the result. This also means that
+*>           NaN/Inf propagation from C is inhibited if BETA is zero.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension ( LDC, N )
 *>           Before entry, the leading  m by n  part of the array  C must
-*>           contain the matrix  C,  except when  beta  is zero, in which
-*>           case C need not be set on entry.
+*>           contain the matrix  C,, except if beta is zero.
+*>           If beta is zero, none of the values in C affect the result, even
+*>           if they are NaN/Inf. This also implies that if beta is zero,
+*>           the matrix elements of C need not be initialized by the caller.
 *>           On exit, the array  C  is overwritten by the  m by n  matrix
 *>           ( alpha*op( A )*op( B ) + beta*C ).
 *> \endverbatim
