@@ -40,13 +40,10 @@
 *>  operations are not performed. This results in the following NaN/Inf
 *>  propagation quirks:
 *>
-*>  1. If alpha is zero and beta is one, NaNs or Infs in A or B do not affect
-*>   the result.
+*>  1. If alpha is zero, NaNs or Infs in A or B do not affect the result.
 *>  2. If both alpha and beta are zero, then a zero matrix is returned in C,
 *>   irrespective of any NaNs or Infs in A, B or C.
-*>  3. If alpha is zero and beta is neither zero or one, then beta*C is
-*>   returned in C, irrespective of any NaNs or Infs in A or B.
-*>  4. If only beta is zero, alpha*op( A )*op( B ) is returned, irrespective
+*>  3. If only beta is zero, alpha*op( A )*op( B ) is returned, irrespective
 *>   of any NaNs or Infs in C.
 *> \endverbatim
 *
