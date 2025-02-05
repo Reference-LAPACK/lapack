@@ -148,7 +148,7 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB, DLARFT, DORGL2, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORGL2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -163,7 +163,8 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DORGLQ', ' ', M, N, K, -1 )
-      LWKOPT = MAX( 1, M )*NB
+      ! DLARFB0C2 means we only need a workspace for calls to dorgl2
+      LWKOPT = MAX( 1, M )
       WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
@@ -227,11 +228,6 @@
 *
 *        Set A(kk+1:m,1:kk) to zero.
 *
-         DO 20 J = 1, KK
-            DO 10 I = KK + 1, M
-               A( I, J ) = ZERO
-   10       CONTINUE
-   20    CONTINUE
       ELSE
          KK = 0
       END IF
@@ -259,26 +255,19 @@
 *
 *              Apply H**T to A(i+ib:m,i:n) from the right
 *
-               CALL DLARFB( 'Right', 'Transpose', 'Forward',
-     $                      'Rowwise',
-     $                      M-I-IB+1, N-I+1, IB, A( I, I ), LDA, WORK,
-     $                      LDWORK, A( I+IB, I ), LDA, WORK( IB+1 ),
-     $                      LDWORK )
+               CALL DLARFB0C2('A', 'A', 'Forward', 'Rowwise', 
+     $               M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, LDWORK,
+     $               A(I+IB,I), LDA)
             END IF
 *
 *           Apply H**T to columns i:n of current block
-*
+
             CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
      $                   WORK,
      $                   IINFO )
 *
 *           Set columns 1:i-1 of current block to zero
 *
-            DO 40 J = 1, I - 1
-               DO 30 L = I, I + IB - 1
-                  A( L, J ) = ZERO
-   30          CONTINUE
-   40       CONTINUE
    50    CONTINUE
       END IF
 *

@@ -149,7 +149,7 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB, DLARFT, DORGR2, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORGR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -266,10 +266,9 @@
 *
 *              Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL DLARFB( 'Right', 'Transpose', 'Backward',
-     $                      'Rowwise',
-     $                      II-1, N-K+I+IB-1, IB, A( II, 1 ), LDA, WORK,
-     $                      LDWORK, A, LDA, WORK( IB+1 ), LDWORK )
+               CALL DLARFB0C2( 'A', 'A', 'Backward', 'Rowwise', 
+     $               II-1, N-K+I+IB-1, IB, A(II,1), LDA, WORK, LDWORK,
+     $               A, LDA)
             END IF
 *
 *           Apply H**T to columns 1:n-k+i+ib-1 of current block
@@ -277,14 +276,6 @@
             CALL DORGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
      $                   TAU( I ),
      $                   WORK, IINFO )
-*
-*           Set columns n-k+i+ib:n of current block to zero
-*
-            DO 40 L = N - K + I + IB, N
-               DO 30 J = II, II + IB - 1
-                  A( J, L ) = ZERO
-   30          CONTINUE
-   40       CONTINUE
    50    CONTINUE
       END IF
 *

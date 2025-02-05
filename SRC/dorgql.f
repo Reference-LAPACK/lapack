@@ -149,7 +149,7 @@
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB, DLARFT, DORG2L, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORG2L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -265,10 +265,9 @@
 *
 *              Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL DLARFB( 'Left', 'No transpose', 'Backward',
-     $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
-     $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
-     $                      WORK( IB+1 ), LDWORK )
+               CALL DLARFB0C2('A', 'A', 'Backward', 'Columnwise',
+     $               M-K+I+IB-1, N-K+I-1, IB, A(1, N-K+I), LDA, 
+     $               WORK, LDWORK, A, LDA)
             END IF
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
@@ -278,11 +277,6 @@
 *
 *           Set rows m-k+i+ib:m of current block to zero
 *
-            DO 40 J = N - K + I, N - K + I + IB - 1
-               DO 30 L = M - K + I + IB, M
-                  A( L, J ) = ZERO
-   30          CONTINUE
-   40       CONTINUE
    50    CONTINUE
       END IF
 *
