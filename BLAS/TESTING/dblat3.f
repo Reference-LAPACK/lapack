@@ -20,7 +20,7 @@
 *>
 *> The program must be driven by a short data file. The first 14 records
 *> of the file are read using list-directed input, the last 9 records
-*> are read using the format ( A6, L2 ). An annotated example of a data
+*> are read using the format ( A7, L2 ). An annotated example of a data
 *> file can be obtained by deleting the first 3 characters from the
 *> following 21 lines:
 *> 'dblat3.out'      NAME OF SUMMARY OUTPUT FILE
@@ -44,7 +44,7 @@
 *> DSYRK   T PUT F FOR NO TEST. SAME COLUMNS.
 *> DSYR2K  T PUT F FOR NO TEST. SAME COLUMNS.
 *> DGEMMTR T PUT F FOR NO TEST. SAME COLUMNS.
-*> DKYRK   T PUT F FOR NO TEST. SAME COLUMNS.
+*> DKYMM   T PUT F FOR NO TEST. SAME COLUMNS.
 *> DKYR2K  T PUT F FOR NO TEST. SAME COLUMNS.
 *>
 *> Further Details
