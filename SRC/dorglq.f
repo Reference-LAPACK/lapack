@@ -5,6 +5,7 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
+*> \htmlonly
 *> Download DORGLQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorglq.f">
 *> [TGZ]</a>
@@ -12,6 +13,7 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorglq.f">
 *> [TXT]</a>
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -161,8 +163,7 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DORGLQ', ' ', M, N, K, -1 )
-      ! DLARFB0C2 means we only need a workspace for calls to dorgl2
-      LWKOPT = MAX( 1, M )
+      LWKOPT = MAX( 1, M ) * NB
       WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
@@ -218,55 +219,90 @@
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
-*        Use blocked code after the last block.
-*        The first kk rows are handled by the block method.
+*        Handle the first block assuming we are applying to the
+*        identity, then resume regular blocking method after
 *
-         KI = ( ( K-NX-1 ) / NB )*NB
-         KK = MIN( K, KI+NB )
-*
-*        Set A(kk+1:m,1:kk) to zero.
-*
+         KI = K - 2 * NB
+         KK = K - NB
       ELSE
          KK = 0
       END IF
 *
-*     Use unblocked code for the last or only block.
+*     Potentially bail to the unblocked version
 *
-      IF( KK.LT.M )
-     $   CALL DORGL2( M-KK, N-KK, K-KK, A( KK+1, KK+1 ), LDA,
-     $                TAU( KK+1 ), WORK, IINFO )
+      IF( KK.EQ.0 ) THEN
+         CALL DORGL2( M, N, K, A, LDA, TAU, WORK, IINFO )
+      END IF
 *
       IF( KK.GT.0 ) THEN
+         I = KK + 1
+         IB = NB
+*
+*        Form the triangular factor of the block reflector
+*        H = H(i) H(i+1) . . . H(i+ib-1)
+*
+         CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+     $               LDA, TAU( I ), WORK, LDWORK )
+*
+*        Apply H**T to A(i+ib:m,i:n) from the right
+*
+         CALL DLARFB0C2(.TRUE., 'Right', 'Transpose', 'Forward',
+     $         'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
+     $         LDWORK, A(I+IB,I), LDA)
+*
+*        Apply H**T to columns i:n of current block
+
+         CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
+     $                WORK, IINFO )
 *
 *        Use blocked code
 *
-         DO 50 I = KI + 1, 1, -NB
-            IB = MIN( NB, K-I+1 )
-            IF( I+IB.LE.M ) THEN
+         DO I = KI + 1, 1, -NB
+            IB = NB
 *
-*              Form the triangular factor of the block reflector
-*              H = H(i) H(i+1) . . . H(i+ib-1)
+*           Form the triangular factor of the block reflector
+*           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
-     $                      I ),
-     $                      LDA, TAU( I ), WORK, LDWORK )
+            CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+     $                  LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H**T to A(i+ib:m,i:n) from the right
+*           Apply H**T to A(i+ib:m,i:n) from the right
 *
-               CALL DLARFB0C2('A', 'A', 'Forward', 'Rowwise', 
-     $               M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, LDWORK,
-     $               A(I+IB,I), LDA)
-            END IF
+            CALL DLARFB0C2(.FALSE., 'Right', 'Transpose', 'Forward',
+     $            'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
+     $            LDWORK, A(I+IB,I), LDA)
 *
 *           Apply H**T to columns i:n of current block
 
             CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                   WORK,
-     $                   IINFO )
+     $                   WORK, IINFO )
+         END DO
 *
-*           Set columns 1:i-1 of current block to zero
+*        This checks for if K was a perfect multiple of NB
+*        so that we only have a special case for the last block when
+*        necessary
 *
-   50    CONTINUE
+         IF(I.LT.1) THEN
+            IB = I + NB - 1
+            I = 1
+*
+*           Form the triangular factor of the block reflector
+*           H = H(i) H(i+1) . . . H(i+ib-1)
+*
+            CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+     $                  LDA, TAU( I ), WORK, LDWORK )
+*
+*           Apply H**T to A(i+ib:m,i:n) from the right
+*
+            CALL DLARFB0C2(.FALSE., 'Right', 'Transpose', 'Forward',
+     $            'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
+     $            LDWORK, A(I+IB,I), LDA)
+*
+*           Apply H**T to columns i:n of current block
+
+            CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
+     $                   WORK, IINFO )
+         END IF
       END IF
 *
       WORK( 1 ) = IWS

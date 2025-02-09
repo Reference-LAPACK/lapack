@@ -1,5 +1,3 @@
-c
-c
 *> \brief \b DORGQR
 *
 *  =========== DOCUMENTATION ===========
@@ -7,6 +5,7 @@ c
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
+*> \htmlonly
 *> Download DORGQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgqr.f">
 *> [TGZ]</a>
@@ -14,6 +13,7 @@ c
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgqr.f">
 *> [TXT]</a>
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,7 +125,6 @@ c
 *
 *  =====================================================================
       SUBROUTINE DORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
-      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,13 +140,13 @@ c
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      DOUBLE PRECISION   ZERO
+      PARAMETER          ( ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I,II, IB, IINFO, IWS, J,JJ, KI, KK, L, LDWORK,
-     $                   LWKOPT, NB, NBMIN, NX
+      INTEGER            I, IB, IINFO, IWS, J, KI, KK, LWKOPT,
+     $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL             DLARFB0C2, DLARFT, DORG2R, XERBLA
@@ -165,7 +164,7 @@ c
 *
       INFO = 0
       NB = ILAENV( 1, 'DORGQR', ' ', M, N, K, -1 )
-      ! Only need a workspace for dorg2r in case of bailout and 
+      ! Only need a workspace for dorg2r in case of bailout and
       ! for the panel factorization
       LWKOPT = MAX( 1, N )
       WORK( 1 ) = LWKOPT
@@ -195,16 +194,14 @@ c
          RETURN
       END IF
 *
-      ! Probably not needed anymore
       NBMIN = 2
-      ! Parameter that controls when we cross from blocked to
-      ! unblocked
-      NX = 0
+      NX = MAX(0, ILAENV(3, 'SORGQR', ' ', M, N, K, -1))
+      IWS = N
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
-*        Use blocked code after the last block.
-*        The first kk columns are handled by the block method.
+*        Handle the first block assuming we are applying to the
+*        identity, then resume regular blocking method after
 *
          KI = K - 2 * NB
          KK = K - NB
@@ -212,59 +209,27 @@ c
          KK = 0
       END IF
 *
-*     Use unblocked code for the only block.
+*     Potentially bail to the unblocked code.
 *
       IF( KK.EQ.0 ) THEN
-            CALL DORG2R( M, N, K, A, LDA, TAU, WORK, IINFO ) 
+            CALL DORG2R( M, N, K, A, LDA, TAU, WORK, IINFO )
       END IF
 *
       IF( KK.GT.0 ) THEN
          I = KK + 1
          IB = NB
-         ! This is a specialized form of our loop below. We could make this its
-         ! own function, however this is a specialized step, so currently we
-         ! don't do that.
 *
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-         CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I), 
+         CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I),
      $                     LDA, TAU(I), A(I,I), LDA)
 *
 *           Apply H to A(i:m,i+ib:n) from the left
 *
-*
-**        W := V2
-*        C1 := V2**T
-*
-*         Since C1 starts as 0, we are using this instead of WORK(IB+1).
-*         This helps us reduce the memory footprint by lowering WORK to
-*         be of only size IB
-*         CALL DLACPY('All', N-K, IB, A(I+IB,I), LDA,WORK(IB+1),LDWORK)
-         DO JJ = K - NB + 1, K
-           DO II = K + 1, N
-              A( JJ, II ) = A( II, JJ)
-           END DO
-         END DO
-*
-*              C1 := T * C1
-*
-         CALL DTRMM( 'Left', 'Upper', 'No transpose', 'Non-unit', IB,
-     $               N-K,ONE, A(I,I), LDA, A(I,I+IB),LDA )
-*
-*                 C2 := C2 - V2 * C1
-*
-         CALL DGEMM( 'No transpose', 'No transpose', M-IB-KK, N-K, IB,
-     $               -ONE, A( I+IB, I ), LDA, A(I,I+IB),LDA, ZERO,
-     $               A( I+IB, I+IB ), LDA )
-         DO JJ = 1, N-K
-            A(I+IB+JJ-1,I+IB+JJ-1) = 1 + A(I+IB+JJ-1,I+IB+JJ-1)
-         END DO
-*
-*              C1 := -V1 * C1 
-*
-         CALL DTRMM( 'Left', 'Lower', 'No transpose', 'Unit', IB, N-K,
-     $               -ONE, A(I,I), LDA, A(I,I+IB),LDA )
+         CALL DLARFB0C2(.TRUE., 'Left', 'No Transpose', 'Forward',
+     $      'Column', M-I+1, N-(I+IB)+1, IB, A(I,I), LDA, A(I,I),
+     $      LDA, A(I,I+IB), LDA)
 *
 *        Apply H to rows i:m of current block
 *
@@ -275,24 +240,26 @@ c
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I), 
+            CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I),
      $         LDA, TAU(I), A(I,I), LDA)
 *
 *           Apply H to A(i:m,i+ib:n) from the left
 *
-            CALL DLARFB0C2('A', 'A', 'Forward', 'Column', M-I+1, 
-     $         N-(I+IB)+1, IB, A(I,I), LDA, A(I,I), LDA, 
-     $         A(I,I+IB), LDA)
+            CALL DLARFB0C2(.FALSE., 'Left', 'No Transpose',
+     $         'Forward', 'Column', M-I+1, N-(I+IB)+1, IB, A(I,I),
+     $         LDA, A(I,I), LDA, A(I,I+IB), LDA)
 
 *
 *           Apply H to rows i:m of current block
 *
-            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, 
+            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
      $         IINFO)
          END DO
+*
 *        This checks for if K was a perfect multiple of NB
 *        so that we only have a special case for the last block when
 *        necessary
+*
          IF(I.LT.1) THEN
             IB = I + NB - 1
             I = 1
@@ -300,24 +267,24 @@ c
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I), 
+            CALL DLARFT('Forward', 'Column', M-I+1, IB, A(I,I),
      $         LDA, TAU(I), A(I,I), LDA)
 *
 *           Apply H to A(i:m,i+ib:n) from the left
 *
-            CALL DLARFB0C2('A', 'A', 'Forward', 'Column', M-I+1, 
-     $         N-(I+IB)+1, IB, A(I,I), LDA, A(I,I), LDA, 
-     $         A(I,I+IB),LDA)
+            CALL DLARFB0C2(.FALSE., 'Left', 'No Transpose',
+     $         'Forward', 'Column', M-I+1, N-(I+IB)+1, IB, A(I,I),
+     $         LDA, A(I,I), LDA, A(I,I+IB), LDA)
 
 *
 *           Apply H to rows i:m of current block
 *
-            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, 
+            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
      $         IINFO)
          END IF
       END IF
 *
-*      WORK( 1 ) = IWS
+      WORK( 1 ) = IWS
       RETURN
 *
 *     End of DORGQR
