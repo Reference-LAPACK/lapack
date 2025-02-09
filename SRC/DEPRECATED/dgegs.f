@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEGS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgegs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgegs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -358,7 +356,8 @@
       END IF
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA, IINFO )
+         CALL DLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -378,7 +377,8 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL DLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB, IINFO )
+         CALL DLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -496,7 +496,8 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'H', -1, -1, ANRMTO, ANRM, N, N, A, LDA, IINFO )
+         CALL DLASCL( 'H', -1, -1, ANRMTO, ANRM, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -516,12 +517,14 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL DLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB, IINFO )
+         CALL DLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL DLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N, IINFO )
+         CALL DLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN

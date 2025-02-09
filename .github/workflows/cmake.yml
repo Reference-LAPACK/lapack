@@ -75,12 +75,12 @@ jobs:
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
-    - name: Use GCC-11 on MacOS
+    - name: Use GCC-14 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
       run: >
         cmake -B build -G Ninja
-        -D CMAKE_C_COMPILER="gcc-11"
-        -D CMAKE_Fortran_COMPILER="gfortran-11"
+        -D CMAKE_C_COMPILER="gcc-14"
+        -D CMAKE_Fortran_COMPILER="gfortran-14"
         -D USE_FLAT_NAMESPACE:BOOL=ON
 
     - name: Special flags for Windows

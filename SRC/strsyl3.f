@@ -177,6 +177,8 @@
 *>               A and B are unchanged).
 *> \endverbatim
 *
+*> \ingroup trsyl3
+*
 *  =====================================================================
 *  References:
 *   E. S. Quintana-Orti and R. A. Van De Geijn (2003). Formal derivation of

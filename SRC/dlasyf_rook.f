@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASYF_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasyf_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasyf_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -205,7 +203,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            DONE
-      INTEGER            IMAX, ITEMP, J, JB, JJ, JMAX, JP1, JP2, K, KK,
+      INTEGER            IMAX, ITEMP, J, JJ, JMAX, JP1, JP2, K, KK,
      $                   KW, KKW, KP, KSTEP, P, II
 
       DOUBLE PRECISION   ABSAKK, ALPHA, COLMAX, D11, D12, D21, D22,
@@ -218,7 +216,7 @@
       EXTERNAL           LSAME, IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DGEMV, DSCAL, DSWAP
+      EXTERNAL           DCOPY, DGEMMTR, DGEMV, DSCAL, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -517,26 +515,9 @@
 *
 *        A11 := A11 - U12*D*U12**T = A11 - U12*W**T
 *
-*        computing blocks of NB columns at a time
-*
-         DO 50 J = ( ( K-1 ) / NB )*NB + 1, 1, -NB
-            JB = MIN( NB, K-J+1 )
-*
-*           Update the upper triangle of the diagonal block
-*
-            DO 40 JJ = J, J + JB - 1
-               CALL DGEMV( 'No transpose', JJ-J+1, N-K, -ONE,
-     $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, ONE,
-     $                     A( J, JJ ), 1 )
-   40       CONTINUE
-*
-*           Update the rectangular superdiagonal block
-*
-            IF( J.GE.2 )
-     $         CALL DGEMM( 'No transpose', 'Transpose', J-1, JB,
-     $                  N-K, -ONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
-     $                  ONE, A( 1, J ), LDA )
-   50    CONTINUE
+         CALL DGEMMTR( 'Upper', 'No transpose', 'Transpose', K, N-K,
+     $                 -ONE, A( 1, K+1 ), LDA, W( 1, KW+1 ), LDW,
+     $                 ONE, A( 1, 1 ), LDA )
 *
 *        Put U12 in standard form by partially undoing the interchanges
 *        in columns k+1:n
@@ -838,26 +819,9 @@
 *
 *        A22 := A22 - L21*D*L21**T = A22 - L21*W**T
 *
-*        computing blocks of NB columns at a time
-*
-         DO 110 J = K, N, NB
-            JB = MIN( NB, N-J+1 )
-*
-*           Update the lower triangle of the diagonal block
-*
-            DO 100 JJ = J, J + JB - 1
-               CALL DGEMV( 'No transpose', J+JB-JJ, K-1, -ONE,
-     $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, ONE,
-     $                     A( JJ, JJ ), 1 )
-  100       CONTINUE
-*
-*           Update the rectangular subdiagonal block
-*
-            IF( J+JB.LE.N )
-     $         CALL DGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
-     $                     K-1, -ONE, A( J+JB, 1 ), LDA, W( J, 1 ), LDW,
-     $                     ONE, A( J+JB, J ), LDA )
-  110    CONTINUE
+         CALL DGEMMTR( 'Lower', 'No transpose', 'Transpose', N-K+1,
+     $                 K-1, -ONE, A( K, 1 ), LDA, W( K, 1 ), LDW,
+     $                 ONE, A( K, K ), LDA )
 *
 *        Put L21 in standard form by partially undoing the interchanges
 *        in columns 1:k-1

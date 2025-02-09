@@ -124,6 +124,7 @@
       EXTERNAL           SDIFF, LSE
 *     .. External Subroutines ..
       EXTERNAL           SCHK1, SCHK2, SCHK3, SCHK4, SCHK5, SCHKE, SMMCH
+      EXTERNAL           SCHK6
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -3124,6 +3125,8 @@
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
       COMMON             /SRNAMC/SRNAMT
+*     .. Locals ..
+      INTEGER            SRLEN
 *     .. Executable Statements ..
       LERR = .TRUE.
       IF( INFO.NE.INFOT )THEN
@@ -3134,7 +3137,8 @@
          END IF
          OK = .FALSE.
       END IF
-      IF( SRNAME .NE. SRNAME ) THEN
+      SRLEN = MIN(LEN_TRIM(SRNAME), LEN_TRIM(SRNAMT))
+      IF( SRNAME(1:SRLEN).NE.SRNAMT(1:SRLEN) )THEN
          WRITE( NOUT, FMT = 9998 )SRNAME, SRNAMT
          OK = .FALSE.
       END IF
@@ -3193,7 +3197,7 @@
       LOGICAL            LSE, LSERES
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           SGEMMTR, DMAKE, DMMTCH
+      EXTERNAL           SGEMMTR, SMAKE, SMMTCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..

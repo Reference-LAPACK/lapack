@@ -43,3 +43,7 @@ build*
 DOCS/man
 DOCS/explore-html
 output_err
+
+# Mod files from compilation in SRC
+SRC/la_constants.mod
+SRC/la_xisnan.mod

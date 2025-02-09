@@ -50,9 +50,9 @@
 *>           On entry, UPLO specifies whether the lower or the upper
 *>           triangular part of C is access and updated.
 *>
-*>              UPLO = 'L' or 'l', the lower tringular part of C is used.
+*>              UPLO = 'L' or 'l', the lower triangular part of C is used.
 *>
-*>              UPLO = 'U' or 'u', the upper tringular part of C is used.
+*>              UPLO = 'U' or 'u', the upper triangular part of C is used.
 *> \endverbatim
 *
 *> \param[in] TRANSA
@@ -154,7 +154,7 @@
 *>           Before entry, the leading  n by n  part of the array  C must
 *>           contain the matrix  C,  except when  beta  is zero, in which
 *>           case C need not be set on entry.
-*>           On exit, the upper or lower trinangular part of the matrix
+*>           On exit, the upper or lower triangular part of the matrix
 *>           C  is overwritten by the n by n matrix
 *>           ( alpha*op( A )*op( B ) + beta*C ).
 *> \endverbatim
