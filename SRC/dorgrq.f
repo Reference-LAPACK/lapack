@@ -139,13 +139,9 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ZERO
-      PARAMETER          ( ZERO = 0.0D+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, II, IINFO, IWS, J, KK, L, LDWORK,
+      INTEGER            I, IB, II, IINFO, IWS, KK, LDWORK,
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..

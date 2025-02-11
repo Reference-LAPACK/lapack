@@ -122,7 +122,7 @@
 *> \ingroup ungrq
 *
 *  =====================================================================
-      SUBROUTINE ZUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE ZUNGRQ(M, N, K, A, LDA, TAU, WORK, LWORK, INFO)
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,13 +137,9 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX*16         ZERO
-      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ) )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, II, IINFO, IWS, J, KK, L, LDWORK,
+      INTEGER            I, IB, II, IINFO, IWS, KK, LDWORK,
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
@@ -230,61 +226,67 @@
 *        Use blocked code after the first block.
 *        The last kk rows are handled by the block method.
 *
-         KK = MIN( K, ( ( K-NX+NB-1 ) / NB )*NB )
-*
-*        Set A(1:m-kk,n-kk+1:n) to zero.
-*
-         DO 20 J = N - KK + 1, N
-            DO 10 I = 1, M - KK
-               A( I, J ) = ZERO
-   10       CONTINUE
-   20    CONTINUE
+         KK = K
       ELSE
          KK = 0
       END IF
 *
-*     Use unblocked code for the first or only block.
+*     Potentially bail to the unblocked code
 *
-      CALL ZUNGR2( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      IF( KK.EQ.0 ) THEN
+         CALL ZUNGR2( M, N, K, A, LDA, TAU, WORK, IINFO )
+      END IF
 *
       IF( KK.GT.0 ) THEN
 *
-*        Use blocked code
+*        Factor the first block assuming that our first application
+*        will be on the Identity matrix
 *
-         DO 50 I = K - KK + 1, K, NB
-            IB = MIN( NB, K-I+1 )
+         I = 1
+         IB = NB
+         II = M - K + I
+*
+*        Form the triangular factor of the block reflector
+*        H = H(i+ib-1) . . . H(i+1) H(i)
+*
+         CALL ZLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+*
+*        Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*
+         CALL ZLARFB0C2(.TRUE., 'Right', 'Conjugate', 'Backward', 
+     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA, WORK,
+     $         LDWORK, A, LDA)
+*
+*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*
+         CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
+     $                TAU( I ), WORK, IINFO )
+
+         DO I = NB+1, K, NB
+*
+*           The last block may be less than size NB
+*
+            IB = MIN(NB, K-I+1)
             II = M - K + I
-            IF( II.GT.1 ) THEN
 *
-*              Form the triangular factor of the block reflector
-*              H = H(i+ib-1) . . . H(i+1) H(i)
+*           Form the triangular factor of the block reflector
+*           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL ZLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                      A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+            CALL ZLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
+     $                   A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*           Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL ZLARFB( 'Right', 'Conjugate transpose',
-     $                      'Backward',
-     $                      'Rowwise', II-1, N-K+I+IB-1, IB, A( II, 1 ),
-     $                      LDA, WORK, LDWORK, A, LDA, WORK( IB+1 ),
-     $                      LDWORK )
-            END IF
+            CALL ZLARFB0C2(.FALSE., 'Right', 'Conjugate', 
+     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, 
+     $            A(II,1), LDA, WORK, LDWORK, A, LDA)
 *
-*           Apply H**H to columns 1:n-k+i+ib-1 of current block
+*           Apply H**T to columns 1:n-k+i+ib-1 of current block
 *
             CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                   TAU( I ),
-     $                   WORK, IINFO )
-*
-*           Set columns n-k+i+ib:n of current block to zero
-*
-            DO 40 L = N - K + I + IB, N
-               DO 30 J = II, II + IB - 1
-                  A( J, L ) = ZERO
-   30          CONTINUE
-   40       CONTINUE
-   50    CONTINUE
+     $                   TAU( I ), WORK, IINFO )
+         END DO
       END IF
 *
       WORK( 1 ) = IWS
