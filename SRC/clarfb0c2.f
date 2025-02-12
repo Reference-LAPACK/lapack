@@ -1,4 +1,4 @@
-      SUBROUTINE SLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N,
+      SUBROUTINE CLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N,
      $                     K, V, LDV, T, LDT, C, LDC)
          ! Scalar arguments
          INTEGER           M, N, K, LDV, LDC, LDT
@@ -9,19 +9,23 @@
          LOGICAL           C2I
 
          ! Array arguments
-         REAL              V(LDV,*), C(LDC,*), T(LDT,*)
+         COMPLEX*8         V(LDV,*), C(LDC,*), T(LDT,*)
          ! Local scalars
          LOGICAL           QR, LQ, QL, DIRF, COLV, SIDEL, SIDER,
      $                     TRANST
          INTEGER           I, J
+         ! Intrinsic Functions
+         INTRINSIC         CONJG
          ! External functions
          LOGICAL           LSAME
          EXTERNAL          LSAME
          ! External Subroutines
-         EXTERNAL          SGEMM, STRMM, XERBLA
+         EXTERNAL          CGEMM, CTRMM
          ! Parameters
-         REAL              ONE, ZERO, NEG_ONE
-         PARAMETER(ONE=1.0E+0, ZERO = 0.0E+0, NEG_ONE = -1.0E+0)
+         COMPLEX*8         ONE, ZERO, NEG_ONE
+         PARAMETER(ONE=(1.0E+0, 0.0E+0),
+     $            ZERO = (0.0E+0, 0.0E+0), 
+     $            NEG_ONE = (-1.0E+0, 0.0E+0))
 
          ! Beginning of executable statements
          ! Convert our character flags to logical values
@@ -29,7 +33,7 @@
          COLV = LSAME(STOREV,'C')
          SIDEL = LSAME(SIDE,'L')
          SIDER = LSAME(SIDE,'R')
-         TRANST = LSAME(TRANS,'T')
+         TRANST = LSAME(TRANS,'C')
 
          ! Determine which of the 4 modes are using.
          ! QR is when we store the reflectors column by column and have the
@@ -88,10 +92,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDEL ) THEN
-               CALL XERBLA('SLARFB0C2', 2)
+               CALL XERBLA('CLARFB0C2', 2)
                RETURN
             ELSE IF(TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
+               CALL XERBLA('CLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -100,38 +104,38 @@
             IF (C2I) THEN
                DO J = 1, N
                   DO I = 1, K
-                     C(I,J) = V(K+J,I)
+                     C(I,J) = CONJG(V(K+J,I))
                   END DO
                END DO
             ELSE
-               CALL SGEMM('Transpose', 'No Transpose', K, N, M - K,
+               CALL CGEMM('Conjugate', 'No Transpose', K, N, M - K,
      $                     ONE, V(K+1,1), LDV, C(K+1,1), LDC, ZERO,
      $                     C, LDC)
             END IF
             !
             ! C1 = T*C1
             !
-            CALL STRMM('Left', 'Upper', 'No Transpose', 'Non-unit',
+            CALL CTRMM('Left', 'Upper', 'No Transpose', 'Non-unit',
      $                  K, N, ONE, T, LDT, C, LDC)
             !
             ! C2 = C2 - V2*C1 = -V2*C1 + C2
             !
             IF (C2I) THEN
-               CALL SGEMM('No Transpose', 'No Transpose', M-K, N, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M-K, N, K,
      $                     NEG_ONE, V(K+1,1), LDV, C, LDC, ZERO,
      $                     C(K+1,1), LDC)
                DO I = 1, N
                   C(K+I,I) = C(K+I,I) + ONE
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'No Transpose', M-K, N, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M-K, N, K,
      $                     NEG_ONE, V(K+1,1), LDV, C, LDC, ONE,
      $                     C(K+1,1), LDC)
             END IF
             !
             ! C1 = -V1*C1
             !
-            CALL STRMM('Left', 'Lower', 'No Transpose', 'Unit',
+            CALL CTRMM('Left', 'Lower', 'No Transpose', 'Unit',
      $                  K, N, NEG_ONE, V, LDV, C, LDC)
          ELSE IF (LQ) THEN
             ! We are computing C = CH' = C(I-V'T'V)
@@ -168,10 +172,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDER ) THEN
-               CALL XERBLA('SLARFB0C2', 2)
+               CALL XERBLA('CLARFB0C2', 2)
                RETURN
             ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
+               CALL XERBLA('CLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -180,38 +184,38 @@
             IF( C2I ) THEN
                DO J = 1, K
                   DO I = 1, M
-                     C(I,J) = V(J,K+I)
+                     C(I,J) = CONJG(V(J,K+I))
                   END DO
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'Transpose', M, K, N-K,
+               CALL CGEMM('No Transpose', 'Conjugate', M, K, N-K,
      $               ONE, C(1,K+1), LDC, V(1, K+1), LDV, ZERO, C,
      $               LDC)
             END IF
             !
             ! C1 = C1*T'
             !
-            CALL STRMM('Right', 'Upper', 'Transpose', 'Non-unit',
+            CALL CTRMM('Right', 'Upper', 'Conjugate', 'Non-unit',
      $            M, K, ONE, T, LDT, C, LDC)
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !
             IF( C2I ) THEN
-               CALL SGEMM('No Transpose', 'No Transpose', M, N-K, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M, N-K, K,
      $               NEG_ONE, C, LDC, V(1,K+1), LDV, ZERO, C(1,K+1),
      $               LDC)
                DO I = 1, M
                   C(I,K+I) = C(I,K+I) + ONE
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'No Transpose', M, N-K, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M, N-K, K,
      $               NEG_ONE, C, LDC, V(1,K+1), LDV, ONE, C(1,K+1),
      $               LDC)
             END IF
             !
             ! C1 = -C1*V1
             !
-            CALL STRMM('Right', 'Upper', 'No Transpose', 'Unit',
+            CALL CTRMM('Right', 'Upper', 'No Transpose', 'Unit',
      $            M, K, NEG_ONE, V, LDV, C, LDC)
          ELSE IF (QL) THEN
             ! We are computing C = HC = (I - VTV')C
@@ -251,10 +255,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDEL ) THEN
-               CALL XERBLA('SLARFB0C2', 2)
+               CALL XERBLA('CLARFB0C2', 2)
                RETURN
             ELSE IF(TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
+               CALL XERBLA('CLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -263,35 +267,35 @@
             IF( C2I ) THEN
                DO J = 1, N
                   DO I = 1, K
-                     C(M-K+I,J) = V(J,I)
+                     C(M-K+I,J) = CONJG(V(J,I))
                   END DO
                END DO
             ELSE
-               CALL SGEMM('Transpose', 'No Transpose', K, N, M-K,
+               CALL CGEMM('Conjugate', 'No Transpose', K, N, M-K,
      $            ONE, V, LDV, C, LDC, ZERO, C(M-K+1, 1), LDC)
             END IF
             !
             ! C1 = T*C1
             !
-            CALL STRMM('Left', 'Lower', 'No Transpose', 'Non-unit',
+            CALL CTRMM('Left', 'Lower', 'No Transpose', 'Non-unit',
      $         K, N, ONE, T, LDT, C(M-K+1,1), LDC)
             !
             ! C2 = C2 - V2*C1 = -V2*C1 + C2
             !
             IF( C2I ) THEN
-               CALL SGEMM('No Transpose', 'No Transpose', M-K, N, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M-K, N, K,
      $            NEG_ONE, V, LDV, C(M-K+1,1), LDC, ZERO, C, LDC)
                DO I = 1, N
                   C(I,I) = C(I,I) + ONE
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'No Transpose', M-K, N, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M-K, N, K,
      $            NEG_ONE, V, LDV, C(M-K+1,1), LDC, ONE, C, LDC)
             END IF
             !
             ! C1 = -V1*C1
             !
-            CALL STRMM('Left', 'Upper', 'No Transpose', 'Unit',
+            CALL CTRMM('Left', 'Upper', 'No Transpose', 'Unit',
      $         K, N, NEG_ONE, V(M-K+1,1), LDV, C(M-K+1,1), LDC)
          ELSE ! IF (RQ) THEN
             ! We are computing C = CH' = C(I-V'T'V)
@@ -331,10 +335,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDER ) THEN
-               CALL XERBLA('SLARFB0C2', 2)
+               CALL XERBLA('CLARFB0C2', 2)
                RETURN
             ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
+               CALL XERBLA('CLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -343,35 +347,35 @@
             IF( C2I ) THEN
                DO J = 1, K
                   DO I = 1, M
-                     C(I,N-K+J) = V(J,I)
+                     C(I,N-K+J) = CONJG(V(J,I))
                   END DO
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'Transpose', M, K, N-K,
+               CALL CGEMM('No Transpose', 'Conjugate', M, K, N-K,
      $            ONE, C, LDC, V, LDV, ZERO, C(1, N-K+1), LDC)
             END IF
             !
             ! C1 = C1*T'
             !
-            CALL STRMM('Right', 'Lower', 'Transpose', 'Non-unit',
+            CALL CTRMM('Right', 'Lower', 'Conjugate', 'Non-unit',
      $         M, K, ONE, T, LDT, C(1, N-K+1), LDC)
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !
             IF( C2I ) THEN
-               CALL SGEMM('No Transpose', 'No Transpose', M, N-K, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M, N-K, K,
      $            NEG_ONE, C(1, N-K+1), LDC, V, LDV, ZERO, C, LDC)
                DO I = 1, M
                   C(I,I) = C(I,I) + ONE
                END DO
             ELSE
-               CALL SGEMM('No Transpose', 'No Transpose', M, N-K, K,
+               CALL CGEMM('No Transpose', 'No Transpose', M, N-K, K,
      $            NEG_ONE, C(1, N-K+1), LDC, V, LDV, ONE, C, LDC)
             END IF
             !
             ! C1 = -C1*V1
             !
-            CALL STRMM('Right', 'Lower', 'No Transpose', 'Unit',
+            CALL CTRMM('Right', 'Lower', 'No Transpose', 'Unit',
      $         M, K, NEG_ONE, V(1, N-K+1), LDV, C(1,N-K+1), LDC)
          END IF
       END SUBROUTINE

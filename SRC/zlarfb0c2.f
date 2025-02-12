@@ -92,10 +92,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDEL ) THEN
-               CALL XERBLA('DLARFB0C2', 2)
+               CALL XERBLA('ZLARFB0C2', 2)
                RETURN
             ELSE IF(TRANST) THEN
-               CALL XERBLA('DLARFB0C2', 3)
+               CALL XERBLA('ZLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -172,10 +172,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDER ) THEN
-               CALL XERBLA('DLARFB0C2', 2)
+               CALL XERBLA('ZLARFB0C2', 2)
                RETURN
             ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('DLARFB0C2', 3)
+               CALL XERBLA('ZLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -255,10 +255,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDEL ) THEN
-               CALL XERBLA('DLARFB0C2', 2)
+               CALL XERBLA('ZLARFB0C2', 2)
                RETURN
             ELSE IF(TRANST) THEN
-               CALL XERBLA('DLARFB0C2', 3)
+               CALL XERBLA('ZLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -335,10 +335,10 @@
             ! Check to ensure side and trans are the expected values 
             !
             IF( .NOT.SIDER ) THEN
-               CALL XERBLA('DLARFB0C2', 2)
+               CALL XERBLA('ZLARFB0C2', 2)
                RETURN
             ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('DLARFB0C2', 3)
+               CALL XERBLA('ZLARFB0C2', 3)
                RETURN
             END IF
             !
