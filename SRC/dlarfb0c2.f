@@ -1,3 +1,182 @@
+*> \brief \b DLARFB0C2 applies a block reflector or its transpose to a
+* rectangular matrix with a 0 block while constructing the explicit Q factor
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
+*
+*
+*  Definition:
+*  ===========
+*
+*     SUBROUTINE DLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N,
+*    $                     K, V, LDV, T, LDT, C, LDC)
+*        ! Scalar arguments
+*        INTEGER           M, N, K, LDV, LDC, LDT
+*        CHARACTER         SIDE, TRANS, DIRECT, STOREV 
+*        ! True means that we are assuming C2 is the identity matrix
+*        !     and thus don't reference whatever is present in C2 
+*        !     at the beginning.
+*        LOGICAL           C2I
+*        ! Array arguments
+*        DOUBLE PRECISION  V(LDV,*), C(LDC,*), T(LDT,*)
+*
+*
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
+*> DLARFB0C2 applies a real block reflector H or its transpose H**T to a
+*> real m by n matrix C with a 0 block, while computing the explicit Q factor
+*> \endverbatim
+*
+*  Arguments:
+*  ==========
+*
+*> \param[in] C2I
+*> \verbatim
+*>          C2I is LOGICAL
+*>          = .TRUE.: Assume the nonzero block of C is the identity matrix
+*>          = .FALSE.: Use existing data in the nonzero block of C
+*> \endverbatim
+*>
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply H or H**T from the Left
+*>          = 'R': apply H or H**T from the Right
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N': apply H (No transpose)
+*>          = 'T': apply H**T (Transpose)
+*> \endverbatim
+*>
+*> \param[in] DIRECT
+*> \verbatim
+*>          DIRECT is CHARACTER*1
+*>          Indicates how H is formed from a product of elementary
+*>          reflectors
+*>          = 'F': H = H(1) H(2) . . . H(k) (Forward)
+*>          = 'B': H = H(k) . . . H(2) H(1) (Backward)
+*> \endverbatim
+*>
+*> \param[in] STOREV
+*> \verbatim
+*>          STOREV is CHARACTER*1
+*>          Indicates how the vectors which define the elementary
+*>          reflectors are stored:
+*>          = 'C': Columnwise
+*>          = 'R': Rowwise
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The order of the matrix T (= the number of elementary
+*>          reflectors whose product defines the block reflector).
+*>          If SIDE = 'L', M >= K >= 0;
+*>          if SIDE = 'R', N >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension
+*>                                (LDV,K) if STOREV = 'C'
+*>                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
+*>                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
+*>          The matrix V. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
+*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
+*>          if STOREV = 'R', LDV >= K.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is DOUBLE PRECISION array, dimension (LDT,K)
+*>          The triangular k by k matrix T in the representation of the
+*>          block reflector.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= K.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (LDC,N)
+*>          On entry, the m by n matrix C.
+*>          On exit, C is overwritten by H*C or H**T*C or C*H or C*H**T.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
+*
+*  Authors:
+*  ========
+*
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
+*
+*> \ingroup larfb
+*
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  The shape of the matrix V and the storage of the vectors which define
+*>  the H(i) is best illustrated by the following example with n = 5 and
+*>  k = 3. The triangular part of V (including its diagonal) is not
+*>  referenced.
+*>
+*>  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
+*>
+*>               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
+*>                   ( v1  1    )                     (     1 v2 v2 v2 )
+*>                   ( v1 v2  1 )                     (        1 v3 v3 )
+*>                   ( v1 v2 v3 )
+*>                   ( v1 v2 v3 )
+*>
+*>  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
+*>
+*>               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
+*>                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
+*>                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
+*>                   (     1 v3 )
+*>                   (        1 )
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N,
      $                     K, V, LDV, T, LDT, C, LDC)
          ! Scalar arguments
@@ -7,7 +186,6 @@
          !     and thus don't reference whatever is present in C2 
          !     at the beginning.
          LOGICAL           C2I
-
          ! Array arguments
          DOUBLE PRECISION  V(LDV,*), C(LDC,*), T(LDT,*)
          ! Local scalars
