@@ -178,7 +178,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N
+      SUBROUTINE CLARFB0C2(C2I, SIDE, TRANS, DIRECT, STOREV, M, N,
      $                     K, V, LDV, T, LDT, C, LDC)
          ! Scalar arguments
          INTEGER           M, N, K, LDV, LDC, LDT
