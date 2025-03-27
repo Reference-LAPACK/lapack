@@ -1,4 +1,4 @@
-!> \brief \b ICAMAX
+!> \brief \b IZAMAX
 !
 !  =========== DOCUMENTATION ===========
 !
@@ -8,13 +8,13 @@
 !  Definition:
 !  ===========
 !
-!       INTEGER FUNCTION ICAMAX(N,X,INCX)
+!       INTEGER FUNCTION IZAMAX(N,X,INCX)
 !
 !       .. Scalar Arguments ..
 !       INTEGER INCX,N
 !       ..
 !       .. Array Arguments ..
-!       COMPLEX X(*)
+!       DOUBLE COMPLEX X(*)
 !       ..
 !
 !
@@ -23,7 +23,7 @@
 !>
 !> \verbatim
 !>
-!>  ICAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
+!>  IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
 !> \endverbatim
 !
 !  Arguments:
@@ -37,7 +37,7 @@
 !>
 !> \param[in] X
 !> \verbatim
-!>          X is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+!>          X is DOUBLE COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 !> \endverbatim
 !>
 !> \param[in] INCX
@@ -65,8 +65,8 @@
 !> \endverbatim
 !>
 !  =====================================================================
-integer function icamax(n, x, incx)
-   integer, parameter :: wp = kind(1.e0)
+integer function izamax(n, x, incx)
+   integer, parameter :: wp = kind(1.d0)
 !
 !  -- Reference BLAS level1 routine --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -87,13 +87,13 @@ integer function icamax(n, x, incx)
 !
 !  Quick return if possible
 !
-   icamax = 0
+   izamax = 0
    if (n < 1 .or. incx < 1) return
 !
-   icamax = 1
+   izamax = 1
    if (n == 1) return
 !
-   icamax = 0
+   izamax = 0
    scaledsmax = 0
    smax = -1
 !
@@ -105,19 +105,19 @@ integer function icamax(n, x, incx)
       do i = 1, n
          if (isnan(real(x(i))) .or. isnan(imag(x(i)))) then
             ! return when first NaN found
-            icamax = i
+            izamax = i
             return
          elseif (abs(real(x(i))) > hugeval .or. abs(imag(x(i))) > hugeval) then
             ! keep looking for first NaN
             do j = i+1, n
                if (isnan(real(x(j))) .or. isnan(imag(x(j)))) then
                   ! return when first NaN found
-                  icamax = j
+                  izamax = j
                   return
                endif
             enddo
             ! record location of first Inf
-            icamax = i
+            izamax = i
             return
          else ! still no Inf found yet
             if (scaledsmax == 0) then
@@ -126,16 +126,16 @@ integer function icamax(n, x, incx)
                if (abs(val) > hugeval) then
                   scaledsmax = 1
                   smax = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
-                  icamax = i
+                  izamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
-                  icamax = i
+                  izamax = i
                endif
             else ! scaledsmax = 1
                val = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
                if (val > smax) then
                   smax = val
-                  icamax = i
+                  izamax = i
                endif
             endif
          endif
@@ -146,7 +146,7 @@ integer function icamax(n, x, incx)
       do i = 1, n
          if (isnan(real(x(ix))) .or. isnan(imag(x(ix)))) then
             ! return when first NaN found
-            icamax = i
+            izamax = i
             return
          elseif (abs(real(x(ix))) > hugeval .or. abs(imag(x(ix))) > hugeval) then
             ! keep looking for first NaN
@@ -154,13 +154,13 @@ integer function icamax(n, x, incx)
             do j = i+1, n
                if (isnan(real(x(jx))) .or. isnan(imag(x(jx)))) then
                   ! return when first NaN found
-                  icamax = j
+                  izamax = j
                   return
                endif
                jx = jx + incx
             enddo
             ! record location of first Inf
-            icamax = i
+            izamax = i
             return
          else ! still no Inf found yet
             if (scaledsmax == 0) then
@@ -169,16 +169,16 @@ integer function icamax(n, x, incx)
                if (abs(val) > hugeval) then
                   scaledsmax = 1
                   smax = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
-                  icamax = i
+                  izamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
-                  icamax = i
+                  izamax = i
                endif
             else ! scaledsmax = 1
                val = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
                if (val > smax) then
                   smax = val
-                  icamax = i
+                  izamax = i
                endif
             endif
          endif

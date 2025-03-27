@@ -40,7 +40,7 @@ set(DBLAS1 idamax.f dasum.f daxpy.f dcopy.f ddot.f dnrm2.f90
 
 set(DB1AUX sscal.f isamax.f)
 
-set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f90 izamax.f zaxpy.f zcopy.f
+set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f90 izamax.f90 zaxpy.f zcopy.f
 	zdotc.f zdotu.f zdscal.f zrotg.f90 zscal.f zswap.f zdrot.f)
 
 set(CB1AUX
