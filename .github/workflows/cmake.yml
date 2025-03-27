@@ -250,7 +250,7 @@ jobs:
       fail-fast: false
       matrix:
         sharedlib: [ OFF, ON ]
-        lapackpp: [ OFF ]
+        lapackpp: [ OFF, ON ]
         optblas: [ OFF, ON ]
         optlapack: [ OFF, ON ]
         exclude:
