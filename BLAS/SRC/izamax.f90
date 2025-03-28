@@ -50,7 +50,7 @@
 !  ========
 !
 !> James Demmel, University of California Berkeley, USA
-!> Weslley Pereira, University of Colorado Denver, USA
+!> Weslley Pereira, National Renewable Energy Laboratory, USA
 !
 !> \ingroup iamax
 !
