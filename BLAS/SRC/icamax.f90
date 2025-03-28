@@ -103,14 +103,14 @@ integer function icamax(n, x, incx)
    if (incx == 1) then
       ! code for increment equal to 1
       do i = 1, n
-         if (isnan(real(x(i))) .or. isnan(imag(x(i)))) then
+         if (x(i) /= x(i)) then
             ! return when first NaN found
             icamax = i
             return
          elseif (abs(real(x(i))) > hugeval .or. abs(imag(x(i))) > hugeval) then
             ! keep looking for first NaN
             do j = i+1, n
-               if (isnan(real(x(j))) .or. isnan(imag(x(j)))) then
+               if (x(j) /= x(j)) then
                   ! return when first NaN found
                   icamax = j
                   return
@@ -144,7 +144,7 @@ integer function icamax(n, x, incx)
       ! code for increment not equal to 1
       ix = 1
       do i = 1, n
-         if (isnan(real(x(ix))) .or. isnan(imag(x(ix)))) then
+         if (x(ix) /= x(ix)) then
             ! return when first NaN found
             icamax = i
             return
@@ -152,7 +152,7 @@ integer function icamax(n, x, incx)
             ! keep looking for first NaN
             jx = ix + incx
             do j = i+1, n
-               if (isnan(real(x(jx))) .or. isnan(imag(x(jx)))) then
+               if (x(jx) /= x(jx)) then
                   ! return when first NaN found
                   icamax = j
                   return
