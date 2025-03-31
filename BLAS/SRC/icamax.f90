@@ -83,7 +83,8 @@ integer function icamax(n, x, incx)
 !  ..
 !  .. Local Scalars ..
    integer :: i, j, ix, jx
-   real(wp) :: val, smax, scaledsmax
+   real(wp) :: val, smax
+   logical :: scaledsmax
 !
 !  Quick return if possible
 !
@@ -94,11 +95,11 @@ integer function icamax(n, x, incx)
    if (n == 1) return
 !
    icamax = 0
-   scaledsmax = 0
+   scaledsmax = .false.
    smax = -1
 !
-!  scaledsmax = 1 indicates that x(i) finite but
-!  abs(real(x(i))) + abs(imag(x(i))) is not finite
+!  scaledsmax = .true. indicates that x(icamax) is finite but
+!  abs(real(x(icamax))) + abs(imag(x(icamax))) overflows
 !
    if (incx == 1) then
       ! code for increment equal to 1
@@ -120,18 +121,18 @@ integer function icamax(n, x, incx)
             icamax = i
             return
          else ! still no Inf found yet
-            if (scaledsmax == 0) then
+            if (.not. scaledsmax) then
                ! no abs(real(x(i))) + abs(imag(x(i))) = Inf yet
                val = abs(real(x(i))) + abs(imag(x(i)))
-               if (abs(val) > hugeval) then
-                  scaledsmax = 1
+               if (val > hugeval) then
+                  scaledsmax = .true.
                   smax = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
                   icamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   icamax = i
                endif
-            else ! scaledsmax = 1
+            else ! scaledsmax
                val = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
                if (val > smax) then
                   smax = val
@@ -163,18 +164,18 @@ integer function icamax(n, x, incx)
             icamax = i
             return
          else ! still no Inf found yet
-            if (scaledsmax == 0) then
+            if (.not. scaledsmax) then
                ! no abs(real(x(ix))) + abs(imag(x(ix))) = Inf yet
                val = abs(real(x(ix))) + abs(imag(x(ix)))
-               if (abs(val) > hugeval) then
-                  scaledsmax = 1
+               if (val > hugeval) then
+                  scaledsmax = .true.
                   smax = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
                   icamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   icamax = i
                endif
-            else ! scaledsmax = 1
+            else ! scaledsmax
                val = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
                if (val > smax) then
                   smax = val
