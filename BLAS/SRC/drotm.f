@@ -38,6 +38,10 @@
 *>    H=(          )    (          )    (          )    (          )
 *>      (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
 *>    SEE DROTMG FOR A DESCRIPTION OF DATA STORAGE IN DPARAM.
+*>
+*>    IF DFLAG IS NOT ONE OF THE LISTED ABOVE, THE BEHAVIOR IS UNDEFINED.
+*>    NANS IN DFLAG MAY NOT PROPAGATE TO THE OUTPUT.
+*>
 *> \endverbatim
 *
 *  Arguments:
