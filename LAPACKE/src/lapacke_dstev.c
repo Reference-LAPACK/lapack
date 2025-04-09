@@ -52,21 +52,8 @@ lapack_int API_SUFFIX(LAPACKE_dstev)( int matrix_layout, char jobz, lapack_int n
         }
     }
 #endif
-    /* Allocate memory for working array(s) */
-    if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-        work = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,2*n-2) );
-        if( work == NULL ) {
-            info = LAPACK_WORK_MEMORY_ERROR;
-            goto exit_level_0;
-        }
-    }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dstev_work)( matrix_layout, jobz, n, d, e, z, ldz, work );
-    /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
-        LAPACKE_free( work );
-    }
-exit_level_0:
+    info = API_SUFFIX(LAPACKE_dstev_work)( matrix_layout, jobz, n, d, e, z, ldz, NULL );
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dstev", info );
     }
