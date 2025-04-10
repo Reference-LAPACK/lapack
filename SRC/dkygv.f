@@ -138,8 +138,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of the array WORK.  LWORK >= max(1,3*N-1).
-*>          For optimal efficiency, LWORK >= (NB+2)*N,
+*>          The length of the array WORK.  LWORK >= max(1,2*N-1).
+*>          For optimal efficiency, LWORK >= (NB+1)*N,
 *>          where NB is the blocksize for SSYTRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
