@@ -174,18 +174,19 @@
 *
 *     Solve L*X = B(1:m,:)
 *
-      CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M, NRHS,
-     $            ONE, A, LDA, B, LDB )
+      CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M,
+     $            NRHS, ONE, A, LDA, B, LDB )
 *
 *     Set B(m+1:n,:) to zero
 *
       IF( M.LT.N )
-     $   CALL DLASET( 'Full', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
+     $   CALL DLASET( 'Full', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ),
+     $                LDB )
 *
 *     B := Q' * B
 *
-      CALL DORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, LDB,
-     $             WORK, LWORK, INFO )
+      CALL DORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B,
+     $             LDB, WORK, LWORK, INFO )
 *
       RETURN
 *

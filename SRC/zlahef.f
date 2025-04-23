@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAHEF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahef.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahef.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -200,7 +198,7 @@
       PARAMETER          ( EIGHT = 8.0D+0, SEVTEN = 17.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            IMAX, J, JB, JJ, JMAX, JP, K, KK, KKW, KP,
+      INTEGER            IMAX, J, JJ, JMAX, JP, K, KK, KKW, KP,
      $                   KSTEP, KW
       DOUBLE PRECISION   ABSAKK, ALPHA, COLMAX, R1, ROWMAX, T
       COMPLEX*16         D11, D21, D22, Z
@@ -211,7 +209,7 @@
       EXTERNAL           LSAME, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZDSCAL, ZGEMM, ZGEMV, ZLACGV,
+      EXTERNAL           ZCOPY, ZDSCAL, ZGEMMTR, ZGEMV, ZLACGV,
      $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -551,28 +549,11 @@
 *
 *        A11 := A11 - U12*D*U12**H = A11 - U12*W**H
 *
-*        computing blocks of NB columns at a time (note that conjg(W) is
-*        actually stored)
+*        (note that conjg(W) is actually stored)
 *
-         DO 50 J = ( ( K-1 ) / NB )*NB + 1, 1, -NB
-            JB = MIN( NB, K-J+1 )
-*
-*           Update the upper triangle of the diagonal block
-*
-            DO 40 JJ = J, J + JB - 1
-               A( JJ, JJ ) = DBLE( A( JJ, JJ ) )
-               CALL ZGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
-     $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, CONE,
-     $                     A( J, JJ ), 1 )
-               A( JJ, JJ ) = DBLE( A( JJ, JJ ) )
-   40       CONTINUE
-*
-*           Update the rectangular superdiagonal block
-*
-            CALL ZGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
-     $                  -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
-     $                  CONE, A( 1, J ), LDA )
-   50    CONTINUE
+         CALL ZGEMMTR( 'Upper', 'No transpose', 'Transpose', K, N-K,
+     $                 -CONE, A( 1, K+1 ), LDA, W( 1, KW+1 ), LDW,
+     $                 CONE, A( 1, 1 ), LDA )
 *
 *        Put U12 in standard form by partially undoing the interchanges
 *        in columns k+1:n looping backwards from k+1 to n
@@ -915,29 +896,11 @@
 *
 *        A22 := A22 - L21*D*L21**H = A22 - L21*W**H
 *
-*        computing blocks of NB columns at a time (note that conjg(W) is
-*        actually stored)
+*        (note that conjg(W) is actually stored)
 *
-         DO 110 J = K, N, NB
-            JB = MIN( NB, N-J+1 )
-*
-*           Update the lower triangle of the diagonal block
-*
-            DO 100 JJ = J, J + JB - 1
-               A( JJ, JJ ) = DBLE( A( JJ, JJ ) )
-               CALL ZGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
-     $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, CONE,
-     $                     A( JJ, JJ ), 1 )
-               A( JJ, JJ ) = DBLE( A( JJ, JJ ) )
-  100       CONTINUE
-*
-*           Update the rectangular subdiagonal block
-*
-            IF( J+JB.LE.N )
-     $         CALL ZGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
-     $                     K-1, -CONE, A( J+JB, 1 ), LDA, W( J, 1 ),
-     $                     LDW, CONE, A( J+JB, J ), LDA )
-  110    CONTINUE
+         CALL ZGEMMTR( 'Lower', 'No transpose', 'Transpose', N-K+1,
+     $                 K-1, -CONE, A( K, 1 ), LDA, W( K, 1 ), LDW,
+     $                 CONE, A( K, K ), LDA )
 *
 *        Put L21 in standard form by partially undoing the interchanges
 *        of rows in columns 1:k-1 looping backwards from k-1 to 1

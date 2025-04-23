@@ -38,6 +38,7 @@
 * VERSION 3.10.1 : April 2022
 * VERSION 3.11.0 : November 2022
 * VERSION 3.12.0 : November 2023
+* VERSION 3.12.1 : January 2025
 
 LAPACK is a library of Fortran subroutines for solving the most commonly
 occurring problems in numerical linear algebra.
@@ -107,8 +108,8 @@ Please see as well the [GitHub issue tracker](https://github.com/Reference-LAPAC
 For further information on LAPACK please read our [FAQ](http://www.netlib.org/lapack/faq.html)
 and [Users' Guide](http://www.netlib.org/lapack/lug/lapack_lug.html).
 A [user forum](http://icl.cs.utk.edu/lapack-forum/) and specific information for
-[running LAPACK under Windows](http://icl.cs.utk.edu/lapack-for-windows/lapack/).
-is also available to help you with the LAPACK library.
+[running LAPACK under Windows](http://icl.cs.utk.edu/lapack-for-windows/lapack/)
+are also available to help you with the LAPACK library.
 
 
 ## Testing

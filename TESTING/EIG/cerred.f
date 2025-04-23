@@ -332,7 +332,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test CGESDD
@@ -367,7 +367,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test CGEJSV
@@ -433,7 +433,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test CGESVDX
@@ -492,7 +492,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test CGESVDQ
@@ -547,7 +547,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
       END IF
 *
@@ -558,7 +558,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
       END IF
 *
