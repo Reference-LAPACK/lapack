@@ -60,6 +60,6 @@ void print_matrix_colmajor_64( char* desc, int64_t m, int64_t n, double* mat, in
 void print_vector_64( char* desc, int64_t n, int64_t* vec ) {
         int64_t j;
         printf( "\n %s\n", desc );
-        for( j = 0; j < n; j++ ) printf( " %6" LAPACK_IFMT, vec[j] );
+        for( j = 0; j < n; j++ ) printf( " %6d", (int) vec[j] );
         printf( "\n" );
 }

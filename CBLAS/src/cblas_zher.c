@@ -7,6 +7,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cblas.h"
 #include "cblas_f77.h"
 void API_SUFFIX(cblas_zher)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
@@ -23,16 +24,21 @@ void API_SUFFIX(cblas_zher)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 #ifdef F77_INT
    F77_INT F77_N=N, F77_lda=lda, F77_incX=incX;
 #else
+   CBLAS_INT incx = incX;
    #define F77_N N
    #define F77_lda lda
    #define F77_incX incx
 #endif
-   CBLAS_INT n, i, tincx, incx=incX;
-   double *x=(double *)X, *xx=(double *)X, *tx, *st;
+   CBLAS_INT n, i, tincx;
+   double *x, *xx, *tx, *st;
 
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
+
+
+   memcpy(&x,&X,sizeof(double*));
+   memcpy(&xx,&X,sizeof(double*));
 
    CBLAS_CallFromC = 1;
    if (layout == CblasColMajor)
@@ -98,7 +104,8 @@ void API_SUFFIX(cblas_zher)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
            incx = 1;
          #endif
       }
-      else x = (double *) X;
+      else
+          memcpy(&x,&X,sizeof(double*));
       F77_zher(F77_UL, &F77_N, &alpha, x, &F77_incX, A, &F77_lda);
    } else API_SUFFIX(cblas_xerbla)(1, "cblas_zher", "Illegal layout setting, %d\n", layout);
    if(X!=x)
