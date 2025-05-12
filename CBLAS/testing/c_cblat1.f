@@ -19,7 +19,7 @@
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 10
+      DO 20 IC = 1, 11
          ICASE = IC
          CALL HEADER
 *
@@ -32,7 +32,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5) THEN
+         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -53,7 +53,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*15      L(10)
+      CHARACTER*15      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -67,6 +67,8 @@
       DATA             L(8)/'CBLAS_CSCAL'/
       DATA             L(9)/'CBLAS_CSSCAL'/
       DATA             L(10)/'CBLAS_ICAMAX'/
+      DATA             L(11)/'CBLAS_CAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -284,23 +286,26 @@
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      COMPLEX           CA,CTEMP
+      COMPLEX           CA,CB,CTEMP
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, MX, MY
 *     .. Local Arrays ..
       COMPLEX           CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
-     +                  CT8(7,4,4), CX(7), CX1(7), CY(7), CY1(7)
+     +                  CT8(7,4,4), CX(7), CX1(7), CY(7), CY1(7),
+     +                  CT11(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       EXTERNAL          CDOTCTEST, CDOTUTEST
 *     .. External Subroutines ..
-      EXTERNAL          CAXPYTEST, CCOPYTEST, CSWAPTEST, CTEST
+      EXTERNAL          CAXPYTEST, CCOPYTEST, CSWAPTEST, CTEST,
+     +                  CAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
       DATA              CA/(0.4E0,-0.7E0)/
+      DATA              CB/(0.7E0,-0.4E0)/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -470,6 +475,54 @@
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0),
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0),
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0)/
+
+      DATA              ((CT11(I,J,1),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.1E0,-1.47E0),
+     +                  (-1.08E0,0.71E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (-1.08E0,0.71E0),
+     +                  (-0.42E0,-0.99E0), (-0.61E0,-0.85E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0)/
+      DATA              ((CT11(I,J,2),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.49E0,-0.95E0),
+     +                  (-0.9E0,0.5E0),(-0.03E0,-1.51E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.36E0,0.00E0), (-0.9E0,0.5E0),
+     +                  (-0.39E0,-0.23E0), (0.1E0,-0.5E0),
+     +                  (-0.82E0,-0.39E0), (-0.5E0,-0.3E0),
+     +                  (0.0E0,-1.62E0)/
+      DATA              ((CT11(I,J,3),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.49E0,-0.95E0),
+     +                  (-0.71E0,-0.1E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.36E0,0.00E0), (-1.07E0,1.18E0),
+     +                  (-0.42E0,-0.99E0), (-0.41E0,-1.2E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0)/
+      DATA              ((CT11(I,J,4),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.1E0,-1.47E0), (-0.9E0,0.5E0),
+     +                  (-0.4E0,-0.7E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (-0.1E0,-1.47E0),
+     +                  (-0.9E0,0.5E0),(-0.4E0,-0.7E0), (0.1E0,-0.5E0),
+     +                  (-0.82E0,-0.39E0), (-0.5E0,-0.3E0),
+     +                  (-0.2E0,-1.27E0)/
+
+
 *     .. Executable Statements ..
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
@@ -510,6 +563,10 @@
                CALL CSWAPTEST(N,CX,INCX,CY,INCY)
                CALL CTEST(LENX,CX,CT10X(1,KN,KI),CSIZE3,1.0E0)
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0E0)
+            ELSE IF (ICASE.EQ.11) THEN
+*              .. CAXPBYTEST ..
+               CALL CAXPBYTEST(N,CA,CX,INCX,CB,CY,INCY)
+               CALL CTEST(LENY,CY,CT11(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
                STOP

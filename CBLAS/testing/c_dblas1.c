@@ -20,6 +20,14 @@ void F77_daxpy(const CBLAS_INT *N, const double *alpha, const double *X,
    return;
 }
 
+void F77_daxpby(const CBLAS_INT *N, const double *alpha, const double *X,
+                    const CBLAS_INT *incX, const double *beta, double *Y, const CBLAS_INT *incY)
+{
+   cblas_daxpby(*N, *alpha, X, *incX, *beta, Y, *incY);
+   return;
+}
+
+
 void F77_dcopy(const CBLAS_INT *N, double *X, const CBLAS_INT *incX,
                     double *Y, const CBLAS_INT *incY)
 {
