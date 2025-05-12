@@ -56,6 +56,9 @@ lapack_int API_SUFFIX(LAPACKE_sgesdd_work)( int matrix_layout, char jobz, lapack
         lapack_int nrows_vt = ( API_SUFFIX(LAPACKE_lsame)( jobz, 'a' ) ||
                               ( API_SUFFIX(LAPACKE_lsame)( jobz, 'o' ) && m>=n) ) ? n :
                               ( API_SUFFIX(LAPACKE_lsame)( jobz, 's' ) ? MIN(m,n) : 1);
+        lapack_int ncols_vt = ( API_SUFFIX(LAPACKE_lsame)( jobz, 'a' ) ||
+                              API_SUFFIX(LAPACKE_lsame)( jobz, 's' ) ||
+                              ( API_SUFFIX(LAPACKE_lsame)( jobz, 'o' ) && m>=n) ) ? n : 1;
         lapack_int lda_t = MAX(1,m);
         lapack_int ldu_t = MAX(1,nrows_u);
         lapack_int ldvt_t = MAX(1,nrows_vt);
@@ -73,7 +76,7 @@ lapack_int API_SUFFIX(LAPACKE_sgesdd_work)( int matrix_layout, char jobz, lapack
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesdd_work", info );
             return info;
         }
-        if( ldvt < n ) {
+        if( ldvt < ncols_vt ) {
             info = -11;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgesdd_work", info );
             return info;
