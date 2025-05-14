@@ -246,7 +246,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRQR, ZGELS,
      $                   ZGET02, ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZQRT01,
-     $                   ZQRT01P, ZQRT02, ZQRT03
+     $                   ZQRT01P, ZQRT02, ZQRT03, ZGEQRF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -373,16 +373,18 @@
                         NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
-*                       Test ZUNGQR, using factorization
-*                       returned by ZQRT01
+*                       Test ZUNGQR
 *
                         CALL ZQRT02( M, N, K, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test ZUNMQR, using factorization returned
-*                       by ZQRT01
+*                       Test ZUNMQR
+*
+                        CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+                        CALL ZGEQRF( M, N, AF, LDA, TAU, WORK, LWORK,
+     $                               INFO )
 *
                         CALL ZQRT03( M, N, K, AF, AC, AR, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
