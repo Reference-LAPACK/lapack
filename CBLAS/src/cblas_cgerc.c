@@ -7,6 +7,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "cblas.h"
 #include "cblas_f77.h"
 void API_SUFFIX(cblas_cgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
@@ -16,6 +18,7 @@ void API_SUFFIX(cblas_cgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
 #ifdef F77_INT
    F77_INT F77_M=M, F77_N=N, F77_lda=lda, F77_incX=incX, F77_incY=incY;
 #else
+   CBLAS_INT incy = incY;
    #define F77_M M
    #define F77_N N
    #define F77_incX incX
@@ -23,8 +26,10 @@ void API_SUFFIX(cblas_cgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
    #define F77_lda lda
 #endif
 
-   CBLAS_INT n, i, tincy, incy=incY;
-   float *y=(float *)Y, *yy=(float *)Y, *ty, *st;
+   CBLAS_INT n, i, tincy;
+   float *y, *yy, *ty, *st;
+   memcpy(&y,&Y,sizeof(float*));
+   memcpy(&yy,&Y,sizeof(float*));
 
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
@@ -70,7 +75,8 @@ void API_SUFFIX(cblas_cgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
             incy = 1;
          #endif
       }
-      else y = (float *) Y;
+      else
+        memcpy(&y,&Y,sizeof(float*));
 
       F77_cgeru( &F77_N, &F77_M, alpha, y, &F77_incY, X, &F77_incX, A,
                       &F77_lda);

@@ -7,6 +7,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cblas.h"
 #include "cblas_f77.h"
 void API_SUFFIX(cblas_cher2)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
@@ -23,18 +24,24 @@ void API_SUFFIX(cblas_cher2)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 #ifdef F77_INT
    F77_INT F77_N=N, F77_lda=lda, F77_incX=incX, F77_incY=incY;
 #else
+   CBLAS_INT incx = incX, incy = incY;
    #define F77_N N
    #define F77_lda lda
    #define F77_incX incx
    #define F77_incY incy
 #endif
-   CBLAS_INT n, i, j, tincx, tincy, incx=incX, incy=incY;
-   float *x=(float *)X, *xx=(float *)X, *y=(float *)Y,
-         *yy=(float *)Y, *tx, *ty, *stx, *sty;
+   CBLAS_INT n, i, j, tincx, tincy;
+   float *x, *xx, *y,
+         *yy, *tx, *ty, *stx, *sty;
 
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
+
+   memcpy(&x,&X,sizeof(float*));
+   memcpy(&xx,&X,sizeof(float*));
+   memcpy(&y,&Y,sizeof(float*));
+   memcpy(&yy,&Y,sizeof(float*));
 
    CBLAS_CallFromC = 1;
    if (layout == CblasColMajor)
@@ -129,8 +136,8 @@ void API_SUFFIX(cblas_cher2)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
          #endif
       }  else
       {
-         x = (float *) X;
-         y = (float *) Y;
+         memcpy(&x,&X,sizeof(float*));
+         memcpy(&y,&Y,sizeof(float*));
       }
       F77_cher2(F77_UL, &F77_N, alpha, y, &F77_incY, x,
                                       &F77_incX, A, &F77_lda);

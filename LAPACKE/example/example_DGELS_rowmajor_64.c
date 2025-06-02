@@ -86,6 +86,9 @@ int main (int argc, const char * argv[])
    /* Solve least squares problem*/
    info = LAPACKE_dgels_64(LAPACK_ROW_MAJOR,'N',m,n,nrhs,*A,lda,*b,ldb);
 
+   if ( info != 0 ) {
+      printf("DGELS failed with info = %d\n", (int) info);
+   }
    /* Print Solution */
    print_matrix_rowmajor_64( "Solution", n, nrhs, *b, ldb );
    printf( "\n" );
