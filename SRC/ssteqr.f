@@ -97,8 +97,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (max(1,2*N-2))
-*>          If COMPZ = 'N', then WORK is not referenced.
+*>          WORK is REAL array.
+*>          WORK is not referenced.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -162,7 +162,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAE2, SLAEV2, SLARTG, SLASCL, SLASET,
-     $                   SLASR,
+     $                   SROT,
      $                   SLASRT, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -321,10 +321,7 @@
             IF( ICOMPZ.GT.0 ) THEN
                CALL SLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C,
      $                      S )
-               WORK( L ) = C
-               WORK( N-1+L ) = S
-               CALL SLASR( 'R', 'V', 'B', N, 2, WORK( L ),
-     $                     WORK( N-1+L ), Z( 1, L ), LDZ )
+               CALL SROT(N, Z( 1, L ), 1, Z( 1, L+1 ), 1, C, S)
             ELSE
                CALL SLAE2( D( L ), E( L ), D( L+1 ), RT1, RT2 )
             END IF
@@ -369,20 +366,10 @@
 *           If eigenvectors are desired, then save rotations.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               WORK( I ) = C
-               WORK( N-1+I ) = -S
+               CALL SROT(N, Z( 1, I ), 1, Z( 1, I+1 ), 1, C, -S)
             END IF
 *
    70    CONTINUE
-*
-*        If eigenvectors are desired, then apply saved rotations.
-*
-         IF( ICOMPZ.GT.0 ) THEN
-            MM = M - L + 1
-            CALL SLASR( 'R', 'V', 'B', N, MM, WORK( L ),
-     $                  WORK( N-1+L ),
-     $                  Z( 1, L ), LDZ )
-         END IF
 *
          D( L ) = D( L ) - P
          E( L ) = G
@@ -430,10 +417,7 @@
             IF( ICOMPZ.GT.0 ) THEN
                CALL SLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C,
      $                      S )
-               WORK( M ) = C
-               WORK( N-1+M ) = S
-               CALL SLASR( 'R', 'V', 'F', N, 2, WORK( M ),
-     $                     WORK( N-1+M ), Z( 1, L-1 ), LDZ )
+               CALL SROT(N, Z( 1, L-1 ), 1, Z( 1, L ), 1, C, S)
             ELSE
                CALL SLAE2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2 )
             END IF
@@ -478,20 +462,10 @@
 *           If eigenvectors are desired, then save rotations.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               WORK( I ) = C
-               WORK( N-1+I ) = S
+               CALL SROT(N, Z( 1, I ), 1, Z( 1, I+1 ), 1, C, S)
             END IF
 *
   120    CONTINUE
-*
-*        If eigenvectors are desired, then apply saved rotations.
-*
-         IF( ICOMPZ.GT.0 ) THEN
-            MM = L - M + 1
-            CALL SLASR( 'R', 'V', 'F', N, MM, WORK( M ),
-     $                  WORK( N-1+M ),
-     $                  Z( 1, M ), LDZ )
-         END IF
 *
          D( L ) = D( L ) - P
          E( LM1 ) = G

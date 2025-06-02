@@ -86,8 +86,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (max(1,2*N-2))
-*>          If JOBZ = 'N', WORK is not referenced.
+*>          WORK is DOUBLE PRECISION array
+*>          WORK is not referenced.
 *> \endverbatim
 *>
 *> \param[out] INFO
