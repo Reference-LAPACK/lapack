@@ -146,7 +146,7 @@
       INTEGER            I, FIRSTV, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER
+      EXTERNAL           DAXPY, DGEMV, DGER, DSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
