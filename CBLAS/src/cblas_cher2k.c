@@ -37,7 +37,7 @@ void API_SUFFIX(cblas_cher2k)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    float ALPHA[2];
-   const float *alp=(float *)alpha;
+   const float *alp=(const float *)alpha;
 
    CBLAS_CallFromC = 1;
    RowMajorStrg = 0;
