@@ -216,7 +216,7 @@
      $                   ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DZNRM2, ZLANGE
       EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2,
@@ -332,6 +332,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( DISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'ZGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL ZLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )

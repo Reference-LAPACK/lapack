@@ -217,7 +217,7 @@
      $                   CTREVC3, CUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       INTEGER            ISAMAX, ILAENV
       REAL               SLAMCH, SCNRM2, CLANGE,
      $                   SROUNDUP_LWORK
@@ -335,6 +335,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( SISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'CGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL CLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
