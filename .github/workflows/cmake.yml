@@ -238,3 +238,83 @@ jobs:
           done
           exit 0
         fi
+
+  test-blaspp-flag:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sharedlib: [ OFF, ON ]
+        lapackpp: [ OFF, ON ]
+        optblas: [ OFF, ON ]
+        optlapack: [ OFF, ON ]
+        exclude:
+          - optblas: ON
+            optlapack: ON
+    
+    steps:
+    
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+    
+    - name: Install the Basics
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gfortran libopenblas-dev
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=OFF
+        -D LAPACKE:BOOL=OFF
+        -D BUILD_TESTING:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.sharedlib }}
+        -D BLAS++:BOOL=ON
+        -D LAPACK++:BOOL=${{ matrix.lapackpp }}
+        -D USE_OPTIMIZED_BLAS:BOOL=${{ matrix.optblas }}
+        -D USE_OPTIMIZED_LAPACK:BOOL=${{ matrix.optlapack }}
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Check dependencies of BLAS++ on BLAS and LAPACK
+      working-directory: ${{github.workspace}}/build
+      run: |
+        configFile="lib/cmake/blaspp/blasppConfig.cmake"
+        if [[ ${{ matrix.optblas }} == 'ON' || ${{ matrix.optlapack }} == 'ON' ]]; then
+          if grep -q "openblas" $configFile; then
+            echo "BLAS++ dependency to openblas is correct."
+          else
+            echo "CMake could not find openblas in $configFile:"
+            cat $configFile
+            exit 1
+          fi
+        else
+          if grep -q "${{github.workspace}}/build/lib/libblas" $configFile; then
+            echo "BLAS++ dependency to BLAS is correct."
+          else
+            echo "CMake could not find ${{github.workspace}}/build/lib/libblas in $configFile:"
+            cat $configFile
+            exit 1
+          fi
+          if grep -q "${{github.workspace}}/build/lib/liblapack" $configFile; then
+            echo "BLAS++ dependency to LAPACK is correct."
+          else
+            echo "CMake could not find ${{github.workspace}}/build/lib/liblapack in $configFile:"
+            cat $configFile
+            exit 1
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
