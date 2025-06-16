@@ -188,7 +188,7 @@
       SUBROUTINE SGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL,
      $                  VR,
      $                  LDVR, WORK, LWORK, INFO )
-      implicit none
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,14 +199,14 @@
       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL   A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+      REAL               A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WI( * ), WORK( * ), WR( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL   ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
@@ -214,12 +214,12 @@
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL   ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
+      REAL               ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
      $                   SN
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
-      REAL   DUM( 1 )
+      REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBAK, SGEBAL, SGEHRD,
@@ -228,7 +228,7 @@
      $                   SSCAL, STREVC3, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       INTEGER            ISAMAX, ILAENV
       REAL               SLAMCH, SLANGE, SLAPY2, SNRM2,
      $                   SROUNDUP_LWORK
@@ -355,6 +355,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( SISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'SGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL SLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
