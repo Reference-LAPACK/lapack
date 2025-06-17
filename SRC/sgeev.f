@@ -519,7 +519,7 @@
 *     Undo scaling if necessary
 *
    50 CONTINUE
-      IF( SCALEA ) THEN
+      IF( SCALEA .AND. INFO.GE.0 ) THEN
          CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
      $                WR( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )

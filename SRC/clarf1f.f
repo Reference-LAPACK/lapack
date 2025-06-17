@@ -149,7 +149,7 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGER, CSCAL
+      EXTERNAL           CAXPY, CGEMV, CGER, CSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
