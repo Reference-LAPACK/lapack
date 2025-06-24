@@ -169,7 +169,8 @@
 *> \ingroup la_geamv
 *
 *  =====================================================================
-      SUBROUTINE DLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+      SUBROUTINE DLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,
+     $                       BETA,
      $                       Y, INCY )
 *
 *  -- LAPACK computational routine --
