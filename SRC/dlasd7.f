@@ -99,7 +99,7 @@
 *>         On entry D contains the singular values of the two submatrices
 *>         to be combined. On exit D contains the trailing (N-K) updated
 *>         singular values (those which were deflated) sorted into
-*>         increasing order.
+*>         decreasing order.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -453,7 +453,7 @@
 *
 *        Check if singular values are close enough to allow deflation.
 *
-         IF( ABS( D( J )-D( JPREV ) ).LE.TOL ) THEN
+         IF( ( D( J )-D( JPREV ) ).LE.TOL ) THEN
 *
 *           Deflation is possible.
 *
@@ -489,7 +489,14 @@
             CALL DROT( 1, VF( JPREV ), 1, VF( J ), 1, C, S )
             CALL DROT( 1, VL( JPREV ), 1, VL( J ), 1, C, S )
             K2 = K2 - 1
-            IDXP( K2 ) = JPREV
+*
+*           Insert the deflated index in the correct position in IDXP.
+*           If J - JPREV is greater than 1, the indices in between
+*           must be shifted to preserve the correct output order.
+*
+            DO 130 JP = JPREV, J - 1
+               IDXP( K2 + J - 1 - JP ) = JP
+  130       CONTINUE
             JPREV = J
          ELSE
             K = K + 1
