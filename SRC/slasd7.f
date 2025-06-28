@@ -453,7 +453,7 @@
 *
 *        Check if singular values are close enough to allow deflation.
 *
-         IF( ABS( D( J )-D( JPREV ) ).LE.TOL ) THEN
+         IF( ( D( J )-D( JPREV ) ).LE.TOL ) THEN
 *
 *           Deflation is possible.
 *
