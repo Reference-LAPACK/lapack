@@ -494,9 +494,9 @@
 *           If J - JPREV is greater than 1, the indices in between
 *           must be shifted to preserve the correct output order.
 *
-            DO 130 JP = JPREV, J - 1
+            DO 85 JP = JPREV, J - 1
                IDXP( K2 + J - 1 - JP ) = JP
-  130       CONTINUE
+   85       CONTINUE
             JPREV = J
          ELSE
             K = K + 1
