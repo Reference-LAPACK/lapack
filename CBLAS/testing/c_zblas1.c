@@ -15,6 +15,14 @@ void F77_zaxpy(const CBLAS_INT *N, const void *alpha, void *X,
    return;
 }
 
+
+void F77_zaxpby(const CBLAS_INT *N, const void *alpha, void *X,
+                    const CBLAS_INT *incX, const void *beta, void *Y, const CBLAS_INT *incY)
+{
+   cblas_zaxpby(*N, alpha, X, *incX, beta, Y, *incY);
+   return;
+}
+
 void F77_zcopy(const CBLAS_INT *N, void *X, const CBLAS_INT *incX,
                     void *Y, const CBLAS_INT *incY)
 {
