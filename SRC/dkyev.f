@@ -155,7 +155,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LOWER, LQUERY, WANTZ
-      INTEGER            IINFO, IMAX, INDE, INDTAU, INDWRK, ISCALE,
+      INTEGER            IINFO, IMAX, INDTAU, INDWRK, ISCALE,
      $                   LLWORK, LWKOPT, NB
       DOUBLE PRECISION   ANRM, BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA,
      $                   SMLNUM
@@ -247,7 +247,6 @@
 *
 *     Call DKYTRD to reduce skew-symmetric matrix to tridiagonal form.
 *
-      INDE = 1
       INDTAU = 1
       INDWRK = INDTAU + N
       LLWORK = LWORK - INDWRK + 1

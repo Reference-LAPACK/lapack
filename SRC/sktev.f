@@ -90,8 +90,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array.
-*>          WORK is not referenced.
+*>          WORK is REAL array, dimension (max(1,2*N-4))
+*>          If JOBZ = 'N', WORK is not referenced.
 *> \endverbatim
 *>
 *> \param[out] INFO

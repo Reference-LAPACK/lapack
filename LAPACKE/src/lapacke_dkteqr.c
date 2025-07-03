@@ -56,8 +56,23 @@ lapack_int API_SUFFIX(LAPACKE_dkteqr)( int matrix_layout, char compz, lapack_int
         }
     }
 #endif
+	/* Additional scalars initializations for work arrays */
+    if( API_SUFFIX(LAPACKE_lsame)( compz, 'n' ) ) {
+        lwork = 1;
+    } else {
+        lwork = MAX(1,2*n-4);
+    }
+    /* Allocate memory for working array(s) */
+    work = (double*)LAPACKE_malloc( sizeof(double) * lwork );
+    if( work == NULL ) {
+        info = LAPACK_WORK_MEMORY_ERROR;
+        goto exit_level_0;
+    }
     /* Call middle-level interface */
-    info = API_SUFFIX(LAPACKE_dkteqr_work)( matrix_layout, compz, n, e, z, ldz, NULL );
+    info = API_SUFFIX(LAPACKE_dkteqr_work)( matrix_layout, compz, n, e, z, ldz, work );
+	/* Release memory and exit */
+    LAPACKE_free( work );
+exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dkteqr", info );
     }

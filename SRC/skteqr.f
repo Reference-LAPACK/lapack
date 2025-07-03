@@ -98,8 +98,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array.
-*>          WORK is not referenced.
+*>          WORK is REAL array, dimension (max(1,2*N-4))
+*>          If COMPZ = 'N', then WORK is not referenced.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -163,7 +163,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAE2, SLAEV2, SLARTG, SLASCL, SLASET,
-     $                   SLASRT, SSWAP, SSCAL, SROT, XERBLA
+     $                   SLASRT, SSWAP, SSCAL, SLASR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -384,8 +384,10 @@
 *           If eigenvectors are desired, then update Z initially.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SROT(N, Z(1, M), 1, Z(1, M-2), 1, VA, VB)
-               CALL SSCAL(N, -ONE, Z(1, M-2), 1)
+               WORK( M-2 ) = -VA
+               WORK( N+M-4 ) = VB
+               CALL SLASR( 'R', 'G', 'B', N, 3, WORK( M-2 ),
+     $                     WORK( N+M-4 ), Z(1, M-2), LDZ )
             END IF
 *
             I = L + 1
@@ -434,8 +436,10 @@
 *        If eigenvectors are desired, then update Z initially.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            CALL SROT(N, Z(1, M), 1, Z(1, M-2), 1, VA, VB)
-            CALL SSCAL(N, -ONE, Z(1, M-2), 1)
+            WORK( M-2 ) = -VA
+            WORK( N+M-4 ) = VB
+            CALL SLASR( 'R', 'G', 'B', N, 3, WORK( M-2 ),
+     $                  WORK( N+M-4 ), Z(1, M-2), LDZ )
          END IF    
 *
 *        Inner loop
@@ -469,11 +473,16 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SROT(N, Z(1, I), 1, Z(1, I-2), 1, VA, VB)
-               CALL SSCAL(N, -ONE, Z(1, I-2), 1)
+               WORK( I-2 ) = -VA
+               WORK( N+I-4 ) = VB
             END IF    
 *
-  70    CONTINUE
+  70     CONTINUE
+*
+         IF( ICOMPZ.GT.0 ) THEN
+            CALL SLASR( 'R', 'G', 'B', N, M-L-1, WORK( L+1 ),
+     $                  WORK( N+L-1 ), Z( 1, L+1 ), LDZ )
+         END IF
 *
          I = L + 2
 *
@@ -501,8 +510,10 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            CALL SROT(N, Z(1, I), 1, Z(1, I-2), 1, VA, VB)
-            CALL SSCAL(N, -ONE, Z(1, I-2), 1)
+            WORK( I-2 ) = -VA
+            WORK( N+I-4 ) = VB
+            CALL SLASR( 'R', 'G', 'B', N, 3, WORK( I-2 ),
+     $                  WORK( N+I-4 ), Z(1, I-2), LDZ )
          END IF
 *
          I = L + 1
@@ -605,8 +616,10 @@
 *           If eigenvectors are desired, then update Z initially.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SROT(N, Z(1, M), 1, Z(1, M+2), 1, VA, VB)
-               CALL SSCAL(N, -ONE, Z(1, M+2), 1)
+               WORK( M ) = VA
+               WORK( N+M-2 ) = VB
+               CALL SLASR( 'R', 'G', 'F', N, 3, WORK( M ),
+     $                     WORK( N+M-2 ), Z( 1, M ), LDZ )
             END IF
 *
             I = L - 1
@@ -655,8 +668,10 @@
 *        If eigenvectors are desired, then update Z initially.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            CALL SROT(N, Z(1, M), 1, Z(1, M+2), 1, VA, VB)
-            CALL SSCAL(N, -ONE, Z(1, M+2), 1)
+            WORK( M ) = VA
+            WORK( N+M-2 ) = VB
+            CALL SLASR( 'R', 'G', 'F', N, 3, WORK( M ),
+     $                  WORK( N+M-2 ), Z( 1, M ), LDZ )
          END IF    
 *
 *        Inner loop
@@ -690,11 +705,16 @@
 *           If eigenvectors are desired, then update Z.
 *
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SROT(N, Z(1, I), 1, Z(1, I+2), 1, VA, VB)
-               CALL SSCAL(N, -ONE, Z(1, I+2), 1)
+               WORK( I ) = VA
+               WORK( N+I-2 ) = VB
             END IF    
 *
   120    CONTINUE
+*
+         IF( ICOMPZ.GT.0 ) THEN
+            CALL SLASR( 'R', 'G', 'F', N, L-M-1, WORK( M+1 ),
+     $                  WORK( N+M-1 ), Z( 1, M+1 ), LDZ )
+         END IF
 *
          I = L - 2
 *
@@ -722,8 +742,10 @@
 *        If eigenvectors are desired, then update Z.
 *
          IF( ICOMPZ.GT.0 ) THEN
-            CALL SROT(N, Z(1, I), 1, Z(1, I+2), 1, VA, VB)
-            CALL SSCAL(N, -ONE, Z(1, I+2), 1)
+            WORK( I ) = VA
+            WORK( N+I-2 ) = VB
+            CALL SLASR( 'R', 'G', 'F', N, 3, WORK( I ),
+     $                  WORK( N+I-2 ), Z( 1, I ), LDZ )
          END IF
 *
          I = L - 1
