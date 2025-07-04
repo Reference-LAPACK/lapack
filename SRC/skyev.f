@@ -258,8 +258,8 @@
 *     SORGTR to generate the orthogonal matrix, then call SKTEQR.
 *
       IF( WANTZ ) THEN
-	   CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
-     $                LLWORK, IINFO )
+	   CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ), LLWORK, IINFO )
       END IF
       IF(.NOT.LOWER)
      $   CALL SSCAL(N-1, -ONE, W, 1)

@@ -777,11 +777,11 @@
 *
   140 CONTINUE
       IF( ISCALE.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E(LSV),
-     $                N, INFO )
+         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1,
+     $                E(LSV), N, INFO )
       ELSE IF( ISCALE.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E(LSV),
-     $                N, INFO )
+         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1,
+     $                E(LSV), N, INFO )
       END IF
 *
 *     Check for no convergence to an eigenvalue after a total

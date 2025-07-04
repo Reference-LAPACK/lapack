@@ -511,16 +511,16 @@
             DO WHILE ( I .GT. 1 )
                IF( IPIV(I-1) .GT. 0 ) THEN
                  IP=IPIV(I-1)
-                 IF ( I .LT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, I ,
+                 IF ( I .LT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, I,
      $                IP  )
-                 IF ( I .GT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, IP ,
+                 IF ( I .GT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, IP,
      $                I )
                  I=I-1
                ELSEIF( IPIV(I-1) .LT. 0 ) THEN
                  IP=-IPIV(I-1)
-                 IF ( I .LT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, I ,
+                 IF ( I .LT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, I,
      $                IP )
-                 IF ( I .GT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, IP ,
+                 IF ( I .GT. IP) CALL SKYSWAPR( UPLO, N, A, LDA, IP,
      $                I )
                  CALL SKYSWAPR( UPLO, N, A, LDA, I-1 ,I )
                  I=I-1

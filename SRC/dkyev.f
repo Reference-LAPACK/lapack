@@ -257,8 +257,8 @@
 *     DORGTR to generate the orthogonal matrix, then call DKTEQR.
 *
       IF( WANTZ ) THEN
-	   CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
-     $                LLWORK, IINFO )
+	   CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ), LLWORK, IINFO )
       END IF
       IF(.NOT.LOWER)
      $   CALL DSCAL(N-1, -ONE, W, 1)

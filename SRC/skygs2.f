@@ -227,8 +227,8 @@
                BKK = B( K, K )
                CALL STRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
      $                     LDB, A( 1, K ), 1 )
-               CALL SKYR2( UPLO, K-1, -ONE, A( 1, K ), 1, B( 1, K ), 1,
-     $                     A, LDA )
+               CALL SKYR2( UPLO, K-1, -ONE, A( 1, K ), 1, B( 1, K ),
+     $                     1, A, LDA )
                CALL SSCAL( K-1, BKK, A( 1, K ), 1 )
    30       CONTINUE
          ELSE
@@ -240,10 +240,10 @@
 *              Update the lower triangle of A(1:k,1:k)
 *
                BKK = B( K, K )
-               CALL STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B, LDB,
-     $                     A( K, 1 ), LDA )
-               CALL SKYR2( UPLO, K-1, ONE, A( K, 1 ), LDA, B( K, 1 ),
-     $                     LDB, A, LDA )
+               CALL STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B,
+     $                     LDB, A( K, 1 ), LDA )
+               CALL SKYR2( UPLO, K-1, ONE, A( K, 1 ), LDA,
+     $                     B( K, 1 ), LDB, A, LDA )
                CALL SSCAL( K-1, BKK, A( K, 1 ), LDA )
    40       CONTINUE
          END IF

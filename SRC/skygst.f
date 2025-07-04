@@ -210,18 +210,19 @@
                   CALL SKYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL STRSM( 'Left', UPLO, 'Transpose', 'Non-unit',
-     $                           KB, N-K-KB+1, ONE, B( K, K ), LDB,
-     $                           A( K, K+KB ), LDA )
+                     CALL STRSM( 'Left', UPLO, 'Transpose',
+     $                           'Non-unit', KB, N-K-KB+1, ONE,
+     $                           B( K, K ), LDB, A( K, K+KB ), LDA )
                      CALL SKYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
-     $                           A( K, K ), LDA, B( K, K+KB ), LDB, ONE,
-     $                           A( K, K+KB ), LDA )
-                     CALL SKYR2K( UPLO, 'Transpose', N-K-KB+1, KB, -ONE,
-     $                            A( K, K+KB ), LDA, B( K, K+KB ), LDB,
-     $                            ONE, A( K+KB, K+KB ), LDA )
+     $                           A( K, K ), LDA, B( K, K+KB ), LDB,
+     $                           ONE, A( K, K+KB ), LDA )
+                     CALL SKYR2K( UPLO, 'Transpose', N-K-KB+1, KB,
+     $                            -ONE, A( K, K+KB ), LDA,
+     $                            B( K, K+KB ), LDB, ONE,
+     $                            A( K+KB, K+KB ), LDA )
                      CALL SKYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
-     $                           A( K, K ), LDA, B( K, K+KB ), LDB, ONE,
-     $                           A( K, K+KB ), LDA )
+     $                           A( K, K ), LDA, B( K, K+KB ), LDB,
+     $                           ONE, A( K, K+KB ), LDA )
                      CALL STRSM( 'Right', UPLO, 'No transpose',
      $                           'Non-unit', KB, N-K-KB+1, ONE,
      $                           B( K+KB, K+KB ), LDB, A( K, K+KB ),
@@ -240,18 +241,19 @@
                   CALL SKYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL STRSM( 'Right', UPLO, 'Transpose', 'Non-unit',
-     $                           N-K-KB+1, KB, ONE, B( K, K ), LDB,
-     $                           A( K+KB, K ), LDA )
+                     CALL STRSM( 'Right', UPLO, 'Transpose',
+     $                           'Non-unit', N-K-KB+1, KB, ONE,
+     $                           B( K, K ), LDB, A( K+KB, K ), LDA )
                      CALL SKYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
-     $                           A( K, K ), LDA, B( K+KB, K ), LDB, ONE,
-     $                           A( K+KB, K ), LDA )
-                     CALL SKYR2K( UPLO, 'No transpose', N-K-KB+1, KB,
-     $                            ONE, A( K+KB, K ), LDA, B( K+KB, K ),
-     $                            LDB, ONE, A( K+KB, K+KB ), LDA )
+     $                           A( K, K ), LDA, B( K+KB, K ), LDB,
+     $                           ONE, A( K+KB, K ), LDA )
+                     CALL SKYR2K( UPLO, 'No transpose', N-K-KB+1,
+     $                            KB, ONE, A( K+KB, K ), LDA,
+     $                            B( K+KB, K ), LDB, ONE,
+     $                            A( K+KB, K+KB ), LDA )
                      CALL SKYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
-     $                           A( K, K ), LDA, B( K+KB, K ), LDB, ONE,
-     $                           A( K+KB, K ), LDA )
+     $                           A( K, K ), LDA, B( K+KB, K ), LDB,
+     $                           ONE, A( K+KB, K ), LDA )
                      CALL STRSM( 'Left', UPLO, 'No transpose',
      $                           'Non-unit', N-K-KB+1, KB, ONE,
      $                           B( K+KB, K+KB ), LDB, A( K+KB, K ),
@@ -269,18 +271,21 @@
 *
 *                 Update the upper triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL STRMM( 'Left', UPLO, 'No transpose', 'Non-unit',
-     $                        K-1, KB, ONE, B, LDB, A( 1, K ), LDA )
-                  CALL SKYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
-     $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
+                  CALL STRMM( 'Left', UPLO, 'No transpose',
+     $                        'Non-unit', K-1, KB, ONE, B, LDB,
+     $                        A( 1, K ), LDA )
+                  CALL SKYMM( 'Right', UPLO, K-1, KB, HALF,
+     $                        A( K, K ), LDA, B( 1, K ), LDB, ONE,
+     $                        A( 1, K ), LDA )
                   CALL SKYR2K( UPLO, 'No transpose', K-1, KB, -ONE,
-     $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE, A,
-     $                         LDA )
-                  CALL SKYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
-     $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
-                  CALL STRMM( 'Right', UPLO, 'Transpose', 'Non-unit',
-     $                        K-1, KB, ONE, B( K, K ), LDB, A( 1, K ),
-     $                        LDA )
+     $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE,
+     $                         A, LDA )
+                  CALL SKYMM( 'Right', UPLO, K-1, KB, HALF,
+     $                        A( K, K ), LDA, B( 1, K ), LDB, ONE,
+     $                        A( 1, K ), LDA )
+                  CALL STRMM( 'Right', UPLO, 'Transpose',
+     $                        'Non-unit', K-1, KB, ONE, B( K, K ),
+     $                        LDB, A( 1, K ), LDA )
                   CALL SKYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    30          CONTINUE
@@ -293,17 +298,21 @@
 *
 *                 Update the lower triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL STRMM( 'Right', UPLO, 'No transpose', 'Non-unit',
-     $                        KB, K-1, ONE, B, LDB, A( K, 1 ), LDA )
-                  CALL SKYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
-     $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
+                  CALL STRMM( 'Right', UPLO, 'No transpose',
+     $                        'Non-unit', KB, K-1, ONE, B, LDB,
+     $                        A( K, 1 ), LDA )
+                  CALL SKYMM( 'Left', UPLO, KB, K-1, HALF,
+     $                        A( K, K ), LDA, B( K, 1 ), LDB, ONE,
+     $                        A( K, 1 ), LDA )
                   CALL SKYR2K( UPLO, 'Transpose', K-1, KB, ONE,
-     $                         A( K, 1 ), LDA, B( K, 1 ), LDB, ONE, A,
-     $                         LDA )
-                  CALL SKYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
-     $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
-                  CALL STRMM( 'Left', UPLO, 'Transpose', 'Non-unit', KB,
-     $                        K-1, ONE, B( K, K ), LDB, A( K, 1 ), LDA )
+     $                         A( K, 1 ), LDA, B( K, 1 ), LDB, ONE,
+     $                         A, LDA )
+                  CALL SKYMM( 'Left', UPLO, KB, K-1, HALF,
+     $                        A( K, K ), LDA, B( K, 1 ), LDB, ONE,
+     $                        A( K, 1 ), LDA )
+                  CALL STRMM( 'Left', UPLO, 'Transpose',
+     $                        'Non-unit', KB, K-1, ONE, B( K, K ),
+     $                        LDB, A( K, 1 ), LDA )
                   CALL SKYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    40          CONTINUE

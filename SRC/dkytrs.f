@@ -206,8 +206,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
-     $                 B( 1, 1 ), LDB )
+            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+     $                 LDB, B( 1, 1 ), LDB )
             CALL DGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                 LDB, B( 1, 1 ), LDB )
 *
@@ -233,8 +233,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
-     $                 B( 1, 1 ), LDB )
+            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+     $                 LDB, B( 1, 1 ), LDB )
             CALL DGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                 LDB, B( 1, 1 ), LDB )
 *
@@ -252,8 +252,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
-     $                 B( 1, 1 ), LDB )
+            CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+     $                 LDB, B( 1, 1 ), LDB )
             CALL DGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                 LDB, B( 1, 1 ), LDB )
 *
@@ -460,11 +460,12 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K-1 ), 1, ONE, B( K-1, 1 ),
-     $                     LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K ),
+     $                     1, ONE, B( K, 1 ), LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K-1 ), 1,
+     $                     ONE, B( K-1, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and IPIV(K).
@@ -482,11 +483,12 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K-1 ), 1, ONE, B( K-1, 1 ),
-     $                     LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K ),
+     $                     1, ONE, B( K, 1 ), LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K-1 ), 1,
+     $                     ONE, B( K-1, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and -IPIV(K), then K and K-1.
@@ -505,11 +507,12 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
-     $                     LDB, A( K+1, K-1 ), 1, ONE, B( K-1, 1 ),
-     $                     LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K ),
+     $                     1, ONE, B( K, 1 ), LDB )
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE,
+     $                     B( K+1, 1 ), LDB, A( K+1, K-1 ), 1,
+     $                     ONE, B( K-1, 1 ), LDB )
             END IF
             K = K - 2
          END IF

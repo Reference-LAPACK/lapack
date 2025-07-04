@@ -226,7 +226,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IMAX1, IMAX2, J,KSTEP
+      INTEGER            I, IMAX1, IMAX2, J, K, KP, KSTEP
       DOUBLE PRECISION   ABSAKP1K, COLMAX1, COLMAX2,
      $                   D21, T, WK, WKM1, WKP1
 *     ..

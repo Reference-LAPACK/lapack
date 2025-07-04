@@ -435,8 +435,8 @@
 *                 Interchange rows K and K-1, then K-1 and IMAX2 in last K+1 columns of A
 *
                   IF( K.LT.N ) THEN
-                     CALL SSWAP( N-K, A( K, K+1 ), LDA, A( K-1, K+1 ),
-     $                        LDA )
+                     CALL SSWAP( N-K, A( K, K+1 ), LDA,
+     $                        A( K-1, K+1 ), LDA )
 
                      CALL SSWAP( N-K, A( K-1, K+1 ), LDA,
      $                        A( IMAX2, K+1 ), LDA )
@@ -795,9 +795,10 @@
 *           Update the rectangular subdiagonal block
 *
             IF( J+JB.LE.N )
-     $         CALL SGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
-     $                     K-1, ONE, A( J+JB, 1 ), LDA, W( J, 1 ),
-     $                     LDW, ONE, A( J+JB, J ), LDA )
+     $         CALL SGEMM( 'No transpose', 'Transpose', N-J-JB+1,
+     $                     JB, K-1, ONE, A( J+JB, 1 ), LDA,
+     $                     W( J, 1 ), LDW, ONE, A( J+JB, J ),
+     $                     LDA )
   110    CONTINUE
 *
 *        Put L21 in standard form by partially undoing the interchanges
