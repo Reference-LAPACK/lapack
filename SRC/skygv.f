@@ -174,8 +174,8 @@
 *> \ingroup kygv
 *
 *  =====================================================================
-      SUBROUTINE SKYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
-     $                  LWORK, INFO )
+      SUBROUTINE SKYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                  WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

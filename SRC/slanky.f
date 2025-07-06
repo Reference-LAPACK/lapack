@@ -116,7 +116,8 @@
 *> \ingroup lanke
 *
 *  =====================================================================
-      REAL             FUNCTION SLANKY( NORM, UPLO, N, A, LDA, WORK )
+      REAL             FUNCTION SLANKY( NORM, UPLO, N, A, LDA,
+     $									WORK )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
