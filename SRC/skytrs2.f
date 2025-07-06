@@ -122,8 +122,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kytrs2
+*> \ingroup hetrs2
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssytrs2.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE SKYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                    WORK, INFO )

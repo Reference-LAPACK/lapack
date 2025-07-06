@@ -118,8 +118,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kygst
+*> \ingroup hegst
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dsygst.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE DKYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *

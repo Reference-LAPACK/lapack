@@ -91,8 +91,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kyswapr
+*> \ingroup heswapr
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssyswapr.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE SKYSWAPR( UPLO, N, A, LDA, I1, I2)
 *

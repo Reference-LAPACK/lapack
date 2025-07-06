@@ -147,7 +147,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kytrf
+*> \ingroup hetrf
 *
 *> \par Further Details:
 *  =====================
@@ -188,6 +188,17 @@
 *>
 *>  Remind that if n is odd, A is always singular.
 *> \endverbatim
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssytrf.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
 *>
 *  =====================================================================
       SUBROUTINE SKYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )

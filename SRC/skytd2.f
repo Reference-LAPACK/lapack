@@ -111,7 +111,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kytd2
+*> \ingroup hetd2
 *
 *> \par Further Details:
 *  =====================
@@ -158,6 +158,17 @@
 *>  where d and e denote diagonal and off-diagonal elements of T, and vi
 *>  denotes an element of the vector defining H(i).
 *> \endverbatim
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssytd2.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
 *>
 *  =====================================================================
       SUBROUTINE SKYTD2( UPLO, N, A, LDA, E, TAU, INFO )

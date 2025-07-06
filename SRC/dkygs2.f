@@ -118,8 +118,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kygs2
+*> \ingroup hegs2
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dsygs2.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE DKYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *

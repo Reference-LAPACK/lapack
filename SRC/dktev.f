@@ -111,8 +111,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup ktev
+*> \ingroup stev
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dstev.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE DKTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
 *

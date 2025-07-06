@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup lankt
+*> \ingroup lanht
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANKT( NORM, N, E )

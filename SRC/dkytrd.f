@@ -129,7 +129,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kytrd
+*> \ingroup hetrd
 *
 *> \par Further Details:
 *  =====================
@@ -176,6 +176,17 @@
 *>  where d and e denote diagonal and off-diagonal elements of T, and vi
 *>  denotes an element of the vector defining H(i).
 *> \endverbatim
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dsytrd.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
 *>
 *  =====================================================================
       SUBROUTINE DKYTRD( UPLO, N, A, LDA, E, TAU, WORK, LWORK, INFO )

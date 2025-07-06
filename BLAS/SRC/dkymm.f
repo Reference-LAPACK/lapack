@@ -176,12 +176,10 @@
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
+*>  Derived from subroutine dsymm.
 *>
-*>  -- Written on 8-February-1989.
-*>     Jack Dongarra, Argonne National Laboratory.
-*>     Iain Duff, AERE Harwell.
-*>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*>     Sven Hammarling, Numerical Algorithms Group Ltd.
+*>  -- Written on 6-Jul-2025.
+*>     Shuo Zheng, China.
 *> \endverbatim
 *>
 *  =====================================================================

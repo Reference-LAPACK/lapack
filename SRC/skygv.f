@@ -171,8 +171,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kygv
+*> \ingroup hegv
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssygv.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE SKYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
      $                  WORK, LWORK, INFO )

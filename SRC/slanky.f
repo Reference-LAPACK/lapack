@@ -113,7 +113,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup lanke
+*> \ingroup lanhe
 *
 *  =====================================================================
       REAL             FUNCTION SLANKY( NORM, UPLO, N, A, LDA,

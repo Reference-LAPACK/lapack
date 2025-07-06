@@ -134,12 +134,10 @@
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
+*>  Derived from subroutine ssyr2.
 *>
-*>  -- Written on 22-October-1986.
-*>     Jack Dongarra, Argonne National Lab.
-*>     Jeremy Du Croz, Nag Central Office.
-*>     Sven Hammarling, Nag Central Office.
-*>     Richard Hanson, Sandia National Labs.
+*>  -- Written on 6-Jul-2025.
+*>     Shuo Zheng, China.
 *> \endverbatim
 *>
 *  =====================================================================

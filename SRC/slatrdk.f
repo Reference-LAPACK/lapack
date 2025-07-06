@@ -135,7 +135,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup latrdk
+*> \ingroup latrd
 *
 *> \par Further Details:
 *  =====================
@@ -187,6 +187,17 @@
 *>  where a denotes an element of the original matrix that is unchanged,
 *>  and vi denotes an element of the vector defining H(i).
 *> \endverbatim
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine slatrd.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Jul 2025 \n
 *>
 *  =====================================================================
       SUBROUTINE SLATRDK( UPLO, N, NB, A, LDA, E, TAU, W, LDW )

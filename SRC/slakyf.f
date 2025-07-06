@@ -169,17 +169,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup lakyf
+*> \ingroup lahef
 *
 *> \par Contributors:
 *  ==================
 *>
 *> \verbatim
 *>
-*>  November 2013,  Igor Kozachenko,
-*>                  Computer Science Division,
-*>                  University of California, Berkeley
-*>  December 2023,  Shuo Zheng
+*>    Shuo Zheng, China, Jul 2025 \n
+*>
 *> \endverbatim
 *
 *  =====================================================================

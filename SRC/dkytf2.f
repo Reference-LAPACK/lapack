@@ -137,7 +137,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kytf2
+*> \ingroup hetf2
 *
 *> \par Further Details:
 *  =====================
@@ -178,28 +178,18 @@
 *>
 *>  Remind that if n is odd, A is always singular.
 *> \endverbatim
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dsytf2.
+*>
+*> \endverbatim
 *
 *> \par Contributors:
 *  ==================
 *>
-*> \verbatim
+*>    Shuo Zheng, China, Jul 2025 \n
 *>
-*>  09-29-06 - patch from
-*>    Bobby Cheng, MathWorks
-*>
-*>    Replace l.204 and l.372
-*>         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
-*>    by
-*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
-*>
-*>  01-01-96 - Based on modifications by
-*>    J. Lewis, Boeing Computer Services Company
-*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
-*>  1-96 - Based on modifications by J. Lewis, Boeing Computer Services
-*>         Company
-*>
-*> \endverbatim
-*
 *  =====================================================================
       SUBROUTINE DKYTF2( UPLO, N, A, LDA, IPIV, INFO )
 *

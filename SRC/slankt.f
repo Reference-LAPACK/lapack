@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup lankt
+*> \ingroup lanht
 *
 *  =====================================================================
       REAL             FUNCTION SLANKT( NORM, N, E )
