@@ -33,7 +33,6 @@ set(SBLAS1 isamax.f sasum.f saxpy.f saxpby.f scopy.f sdot.f snrm2.f90
 	srot.f srotg.f90 sscal.f sswap.f sdsdot.f srotmg.f srotm.f)
 
 set(CBLAS1 scabs1.f scasum.f scnrm2.f90 icamax.f90 caxpy.f caxpby.f ccopy.f
-set(CBLAS1 scabs1.f scasum.f scnrm2.f90 icamax.f90 caxpy.f ccopy.f
 	cdotc.f cdotu.f csscal.f crotg.f90 cscal.f cswap.f csrot.f)
 
 set(DBLAS1 idamax.f dasum.f daxpy.f daxpby.f dcopy.f ddot.f dnrm2.f90

@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    CAXPBY constant times a vector plus constanttimes a vector.
+*>    CAXPBY constant times a vector plus constant times a vector.
 *>
 *>    Y = ALPHA * X + BETA * Y
 *>
@@ -84,18 +84,9 @@
 *
 *> \ingroup axpby
 *
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*>     jack dongarra, linpack, 3/11/78.
-*>     modified 12/3/93, array(1) declarations changed to array(*)
-*>     modfied  8/23/24, implement the axpby case
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE CAXPBY(N,CA,CX,INCX,CB,CY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -108,6 +99,8 @@
 *     .. Array Arguments ..
       COMPLEX CX(*),CY(*)
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL CSCAL
 *
 *  =====================================================================
 *
@@ -115,6 +108,12 @@
       INTEGER I,IX,IY
 *     ..
       IF (N.LE.0) RETURN
+
+      IF (CA .EQ. (0.0,0.0) .AND. CB.NE.(0.0,0.0)) THEN
+         CALL CSCAL(N,CB, CY, INCY)
+         RETURN
+      END IF
+
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

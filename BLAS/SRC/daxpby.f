@@ -24,11 +24,10 @@
 *>
 *> \verbatim
 *>
-*>    DAXPBY constant times a vector plus constanttimes a vector.
+*>    DAXPBY constant times a vector plus constant times a vector.
 *>
 *>    Y = ALPHA * X + BETA * Y
 *>
-*>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
 *  Arguments:
@@ -81,22 +80,13 @@
 *> \author Univ. of California Berkeley
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
-*> \author Martin Koehler, MPI Magdeburg 
+*> \author Martin Koehler, MPI Magdeburg
 *
 *> \ingroup axpby
 *
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*>     jack dongarra, linpack, 3/11/78.
-*>     modified 12/3/93, array(1) declarations changed to array(*)
-*>     modfied  8/23/24, implement the axpby case
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DAXPBY(N,DA,DX,INCX,DB,DY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -109,6 +99,8 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION DX(*),DY(*)
 *     ..
+*     .. External Subroutines
+      EXTERNAL DSCAL
 *
 *  =====================================================================
 *
@@ -119,26 +111,21 @@
       INTRINSIC MOD
 *     ..
       IF (N.LE.0) RETURN
+
+*     Scale if DA.EQ.0
+      IF (DA.EQ.0.0D0 .AND. DB.NE.0.0D0) THEN
+          CALL DSCAL(N, DB, DY, INCY)
+          RETURN
+      END IF
+
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
 *
 *
-*        clean-up loop
 *
-         M = MOD(N,4)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               DY(I) = DB*DY(I) + DA*DX(I)
-            END DO
-         END IF
-         IF (N.LT.4) RETURN
-         MP1 = M + 1
-         DO I = MP1,N,4
-            DY(I)   = DB*DY(I) + DA*DX(I)
-            DY(I+1) = DB*DY(I+1) + DA*DX(I+1)
-            DY(I+2) = DB*DY(I+2) + DA*DX(I+2)
-            DY(I+3) = DB*DY(I+3) + DA*DX(I+3)
+         DO I = 1,N
+            DY(I) = DB*DY(I) + DA*DX(I)
          END DO
       ELSE
 *

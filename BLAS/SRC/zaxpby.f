@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    ZAXPBY constant times a vector plus constanttimes a vector.
+*>    ZAXPBY constant times a vector plus constant times a vector.
 *>
 *>    Y = ALPHA * X + BETA * Y
 *>
@@ -84,18 +84,9 @@
 *
 *> \ingroup axpby
 *
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*>     jack dongarra, 3/11/78.
-*>     modified 12/3/93, array(1) declarations changed to array(*)
-*>     modfied  8/23/24, implement the axpby case
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE ZAXPBY(N,ZA,ZX,INCX,ZB,ZY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -108,6 +99,8 @@
 *     .. Array Arguments ..
       COMPLEX*16 ZX(*),ZY(*)
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL ZSCAL
 *
 *  =====================================================================
 *
@@ -115,6 +108,13 @@
       INTEGER I,IX,IY
 *     ..
       IF (N.LE.0) RETURN
+
+*     Scale if ZA .EQ. 0
+      IF ( ZA.EQ.(0.0D0,0.0D0) .AND. ZB.NE.(0.0D0,0.0D0)) THEN
+        CALL ZSCAL(N, ZB, ZY, INCY)
+        RETURN
+      END IF
+
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

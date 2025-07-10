@@ -24,11 +24,10 @@
 *>
 *> \verbatim
 *>
-*>    SAXPBY constant times a vector plus constanttimes a vector.
+*>    SAXPBY constant times a vector plus constant times a vector.
 *>
 *>    Y = ALPHA * X + BETA * Y
 *>
-*>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
 *  Arguments:
@@ -85,18 +84,9 @@
 *
 *> \ingroup axpby
 *
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*>     jack dongarra, linpack, 3/11/78.
-*>     modified 12/3/93, array(1) declarations changed to array(*)
-*>     modfied  8/23/24, implement the axpby case
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE SAXPBY(N,SA,SX,INCX,SB,SY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -109,6 +99,8 @@
 *     .. Array Arguments ..
       REAL SX(*),SY(*)
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL SSCAL
 *
 *  =====================================================================
 *
@@ -119,26 +111,20 @@
       INTRINSIC MOD
 *     ..
       IF (N.LE.0) RETURN
+
+*     Scale if SA.EQ.0
+      IF (SA.EQ.0.0E0 .AND. SB.NE.0.0E0) THEN
+          CALL SSCAL(N, SB, SY, INCY)
+          RETURN
+      END IF
+
+
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
 *
-*
-*        clean-up loop
-*
-         M = MOD(N,4)
-         IF (M.NE.0) THEN
-            DO I = 1,M
-               SY(I) = SB*SY(I) + SA*SX(I)
-            END DO
-         END IF
-         IF (N.LT.4) RETURN
-         MP1 = M + 1
-         DO I = MP1,N,4
-            SY(I)   = SB*SY(I) + SA*SX(I)
-            SY(I+1) = SB*SY(I+1) + SA*SX(I+1)
-            SY(I+2) = SB*SY(I+2) + SA*SX(I+2)
-            SY(I+3) = SB*SY(I+3) + SA*SX(I+3)
+         DO I = 1,N
+            SY(I) = SB*SY(I) + SA*SX(I)
          END DO
       ELSE
 *
@@ -157,6 +143,6 @@
       END IF
       RETURN
 *
-*     End of SAXPY
+*     End of SAXPBY
 *
       END
