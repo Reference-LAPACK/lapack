@@ -50,19 +50,19 @@ SCIGTST = slafts.o slahd2.o slasum.o slatb9.o sstech.o sstect.o \
 SEIGTST = schkee.o \
    sbdt01.o sbdt02.o sbdt03.o sbdt04.o sbdt05.o \
    schkbb.o schkbd.o schkbk.o schkbl.o schkec.o \
-   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schkst2stg.o schksb2stg.o \
+   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schkkt.o schkst2stg.o schksb2stg.o \
    sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
    sdrges.o sdrgev.o sdrges3.o sdrgev3.o sdrgsx.o sdrgvx.o \
-   sdrvbd.o sdrves.o sdrvev.o sdrvsg.o sdrvsg2stg.o \
-   sdrvst.o sdrvst2stg.o sdrvsx.o sdrvvx.o \
-   serrbd.o serrec.o serred.o serrgg.o serrhs.o serrst.o \
+   sdrvbd.o sdrves.o sdrvev.o sdrvsg.o sdrvsg2stg.o sdrvkg2stg.o \
+   sdrvst.o sdrvkt.o sdrvst2stg.o sdrvsx.o sdrvvx.o \
+   serrbd.o serrec.o serred.o serrgg.o serrhs.o serrst.o serrkt.o \
    sget02.o sget10.o sget22.o sget23.o sget24.o sget31.o \
    sget32.o sget33.o sget34.o sget35.o sget36.o \
    sget37.o sget38.o sget39.o sget40.o sget51.o sget52.o sget53.o \
    sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts3.o \
-   shst01.o slarfy.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
-   sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
-   sstt22.o ssyl01.o ssyt21.o ssyt22.o
+   shst01.o slarfy.o slarfyk.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
+   sort03.o ssbt21.o ssgt01.o skgt01.o sslect.o sspt21.o sstt21.o sktt21.o \
+   sstt22.o ssyl01.o ssyt21.o skyt21.o ssyt22.o
 
 SDMDEIGTST = schkdmd.o
 
@@ -91,19 +91,19 @@ DZIGTST = dlafts.o dlahd2.o dlasum.o dlatb9.o dstech.o dstect.o \
 DEIGTST = dchkee.o \
    dbdt01.o dbdt02.o dbdt03.o dbdt04.o dbdt05.o \
    dchkbb.o dchkbd.o dchkbk.o dchkbl.o dchkec.o \
-   dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o dchkst2stg.o dchksb2stg.o \
+   dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o dchkkt.o dchkst2stg.o dchksb2stg.o \
    dckcsd.o dckglm.o dckgqr.o dckgsv.o dcklse.o dcsdts.o \
    ddrges.o ddrgev.o ddrges3.o ddrgev3.o ddrgsx.o ddrgvx.o \
-   ddrvbd.o ddrves.o ddrvev.o ddrvsg.o ddrvsg2stg.o \
-   ddrvst.o ddrvst2stg.o ddrvsx.o ddrvvx.o \
-   derrbd.o derrec.o derred.o derrgg.o derrhs.o derrst.o \
+   ddrvbd.o ddrves.o ddrvev.o ddrvsg.o ddrvsg2stg.o ddrvkg2stg.o \
+   ddrvst.o ddrvkt.o ddrvst2stg.o ddrvsx.o ddrvvx.o \
+   derrbd.o derrec.o derred.o derrgg.o derrhs.o derrst.o derrkt.o \
    dget02.o dget10.o dget22.o dget23.o dget24.o dget31.o \
    dget32.o dget33.o dget34.o dget35.o dget36.o \
    dget37.o dget38.o dget39.o dget40.o dget51.o dget52.o dget53.o \
    dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts3.o \
-   dhst01.o dlarfy.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
-   dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
-   dstt22.o dsyl01.o dsyt21.o dsyt22.o
+   dhst01.o dlarfy.o dlarfyk.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
+   dort03.o dsbt21.o dsgt01.o dkgt01.o dslect.o dspt21.o dstt21.o dktt21.o \
+   dstt22.o dsyl01.o dsyt21.o dkyt21.o dsyt22.o
 
 DDMDEIGTST = dchkdmd.o
 
