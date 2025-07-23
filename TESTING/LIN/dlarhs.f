@@ -47,6 +47,7 @@
 *>             xPP:  Symmetric positive definite packed
 *>             xPB:  Symmetric positive definite banded
 *>             xSY:  Symmetric indefinite, 2-D storage
+*>             xKY:  Skew-symmetric indefinite, 2-D storage
 *>             xSP:  Symmetric indefinite packed
 *>             xSB:  Symmetric indefinite banded
 *>             xTR:  Triangular
@@ -252,6 +253,7 @@
       GEN = LSAME( PATH( 2: 2 ), 'G' )
       QRS = LSAME( PATH( 2: 2 ), 'Q' ) .OR. LSAME( PATH( 3: 3 ), 'Q' )
       SYM = LSAME( PATH( 2: 2 ), 'P' ) .OR. LSAME( PATH( 2: 2 ), 'S' )
+     $            .OR. LSAME( PATH( 2: 2 ), 'K' )
       TRI = LSAME( PATH( 2: 2 ), 'T' )
       BAND = LSAME( PATH( 3: 3 ), 'B' )
       IF( .NOT.LSAME( C1, 'Double precision' ) ) THEN
@@ -323,6 +325,13 @@
 *        Symmetric matrix, 2-D storage
 *
          CALL DSYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO,
+     $               B, LDB )
+*
+      ELSE IF( LSAMEN( 2, C2, 'KY' ) ) THEN
+*
+*        Skew-symmetric matrix, 2-D storage
+*
+         CALL DKYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO,
      $               B, LDB )
 *
       ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
