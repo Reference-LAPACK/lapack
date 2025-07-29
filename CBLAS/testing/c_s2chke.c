@@ -26,7 +26,6 @@ void chkxer(void) {
       cblas_ok = 0 ;
    }
    cblas_lerr = 1 ;
-   link_xerbla = TRUE;
 }
 
 void F77_s2chke(char *rout
