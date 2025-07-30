@@ -50,6 +50,7 @@ void F77_s2chke(char *rout
    }
 #endif
 
+   link_xerbla = 0;
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;
 

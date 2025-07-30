@@ -85,10 +85,10 @@
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
       CHARACTER*13        SRNAMT
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
       DATA               SNAMES/'cblas_sgemm ', 'cblas_ssymm ',
@@ -365,15 +365,14 @@
   185       IF (CORDER) THEN
             CALL SCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
-     $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
-     $          0 )
-
+     $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
+     $                  CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
             CALL SCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
-     $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
-     $          1 )
+     $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
+     $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
 *
@@ -480,9 +479,9 @@
       INTRINSIC          MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Data statements ..
       DATA               ICH/'NTC'/
 *     .. Executable Statements ..
@@ -808,9 +807,9 @@
       INTRINSIC          MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Data statements ..
       DATA               ICHS/'LR'/, ICHU/'UL'/
 *     .. Executable Statements ..
@@ -1119,9 +1118,9 @@
       INTRINSIC          MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Data statements ..
       DATA               ICHU/'UL'/, ICHT/'NTC'/, ICHD/'UN'/, ICHS/'LR'/
 *     .. Executable Statements ..
@@ -1479,9 +1478,9 @@
       INTRINSIC          MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Data statements ..
       DATA               ICHT/'NTC'/, ICHU/'UL'/
 *     .. Executable Statements ..
@@ -1796,9 +1795,9 @@
       INTRINSIC          MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
-      LOGICAL            OK
+      LOGICAL            LERR, OK
 *     .. Common blocks ..
-      COMMON             /INFOC/INFOT, NOUTC, OK
+      COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Data statements ..
       DATA               ICHT/'NTC'/, ICHU/'UL'/
 *     .. Executable Statements ..

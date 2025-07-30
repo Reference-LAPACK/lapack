@@ -55,6 +55,7 @@ void  F77_c3chke(char *  rout
    }
 #endif
 
+   link_xerbla = 0;
    if (strncmp( sf,"cblas_cgemmtr"   ,13)==0) {
       cblas_rout = "cblas_cgemmtr"   ;
 

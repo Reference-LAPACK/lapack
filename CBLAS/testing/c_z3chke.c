@@ -54,6 +54,8 @@ void F77_z3chke(char *rout
       F77_xerbla(cblas_rout,&cblas_info, 1);
    }
 #endif
+
+   link_xerbla = 0;
    if (strncmp( sf,"cblas_zgemmtr"   ,13)==0) {
       cblas_rout = "cblas_zgemmtr"   ;
 
