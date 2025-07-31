@@ -434,13 +434,17 @@
       PARAMETER          ( MAXTYP = 27 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADNN
+      LOGICAL            BADNN, EVAL_5
       INTEGER            I, IADD, IERR, IN, J, JC, JR, JSIZE, JTYPE,
      $                   MAXWRK, MINWRK, MTYPES, N, N1, NERRS, NMATS,
      $                   NMAX, NTESTT
       DOUBLE PRECISION   SAFMAX, SAFMIN, ULP, ULPINV
+
+      double precision   wtol, atst, btst, rtst
 *     ..
 *     .. Local Arrays ..
+      complex*16         CALPHA(LDA), CALPH1(LDA)
+      complex*16         EVAL(LDA), EVAL1(LDA)
       INTEGER            IASIGN( MAXTYP ), IBSIGN( MAXTYP ),
      $                   IOLDSD( 4 ), KADD( 6 ), KAMAGN( MAXTYP ),
      $                   KATYPE( MAXTYP ), KAZERO( MAXTYP ),
@@ -455,7 +459,7 @@
       EXTERNAL           ILAENV, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DGET52, DGGEV3, DLACPY, DLARFG, DLASET,
+      EXTERNAL           ALASVM, DGET52, DGGEV3, DLACPY, DLARFG, DLASET
      $                   DLATM4, DORM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -484,6 +488,7 @@
       DATA               IBSIGN / 7*0, 2, 2*0, 2*2, 2*0, 2, 0, 2, 10*0 /
 *     ..
 *     .. Executable Statements ..
+
 *
 *     Check for errors
 *
@@ -811,11 +816,53 @@
                GO TO 190
             END IF
 *
+            EVAL_5 = .FALSE.
             DO 120 J = 1, N
+*          eigenvalues+eigenvectors may take a different path through 
+*          code than eigenvalues only
                IF( ALPHAR( J ).NE.ALPHR1( J ) .OR. ALPHAI( J ).NE.
-     $             ALPHI1( J ) .OR. BETA( J ).NE.BETA1( J ) )RESULT( 5 )
-     $              = ULPINV
+     $           ALPHI1( J ) .OR. BETA( J ).NE.BETA1( J ) ) THEN
+                   EVAL_5 = .TRUE.
+               ENDIF
   120       CONTINUE
+*          If alpha,alpaha1 or beta,beta1 were not identical
+*          examine differences more closely and compare to a tolerance.
+            IF ( EVAL_5 ) THEN
+              WTOL = THRESH*ULP
+              DO 121 J = 1, N
+                CALPHA(J) = DCMPLX( ALPHAR(J), ALPHAI(J) )
+                CALPH1(J) = DCMPLX( ALPHR1(J), ALPHI1(J) )
+*          Compute eigenvalues to extent possible
+                IF (BETA(J).NE.ZERO) THEN
+                  EVAL(J) = CALPHA(J)/BETA(J)
+                ELSE
+                  EVAL(J) = DCMPLX(SAFMAX,SAFMAX)
+                ENDIF
+                IF (BETA1(J).NE.ZERO) THEN
+                  EVAL1(J) = CALPH1(J)/BETA1(J)
+                ELSE
+                  EVAL1(J) = DCMPLX(SAFMAX,SAFMAX)
+                ENDIF
+  121         CONTINUE
+
+              DO 122 J = 1, N
+*           Compare eigenvalues
+               RTST = CDABS( EVAL(J)-EVAL1(J) )/
+     $                     ( ONE + CDABS(EVAL(J)) )
+               IF ( RTST .GT. WTOL) THEN
+C compare alphas and betas directly.
+C Don't record an error if relative alpha/beta diffs are both small.
+                  ATST = CDABS(CALPHA(J)-CALPH1(J))/
+     $                        ( ONE + CDABS(CALPHA(J)) )
+                  BTST = DABS(BETA(J)-BETA1(J))/
+     $                        ( ONE + DABS(BETA(J)) )
+*           If error, set RESULT(5) as original code did.
+                 IF(ATST.GT.WTOL .OR. BTST.GT.WTOL) THEN
+                   RESULT( 5 ) = ULPINV
+                 ENDIF
+               ENDIF
+  122         CONTINUE
+            ENDIF
 *
 *           Do the test (6): Compute eigenvalues and left eigenvectors,
 *           and test them
