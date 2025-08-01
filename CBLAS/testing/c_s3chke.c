@@ -26,7 +26,6 @@ void chkxer(void) {
       cblas_ok = 0 ;
    }
    cblas_lerr = 1 ;
-   link_xerbla = TRUE;
 
 }
 
@@ -52,6 +51,7 @@ void F77_s3chke(char *rout
    }
 #endif
 
+   link_xerbla = 0;
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;
 

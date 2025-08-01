@@ -36,7 +36,9 @@
 #
 #######################################################################
 
-set(ALLMOD la_xisnan.F90 la_constants.f90)
+set(CONSTMOD la_constants.f90)
+
+set(NANMOD la_xisnan.F90)
 
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
@@ -523,7 +525,14 @@ list(REMOVE_DUPLICATES SOURCES)
 
 # Use special target for MOD files to guarantee they are built before
 # any other files that depend on them
-add_library(mod_files OBJECT ${ALLMOD})
+add_library(const_mod_file OBJECT ${CONSTMOD})
+set_target_properties(
+  const_mod_file PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(
   mod_files PROPERTIES
   POSITION_INDEPENDENT_CODE ON
