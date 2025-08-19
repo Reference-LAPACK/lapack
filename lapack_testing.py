@@ -224,21 +224,21 @@ for dtype in range_prec:
         sys.stdout.flush()
 
     dtests = (
-    ("nep", "sep", "se2", "svd",
+    ("nep", "sep", "kep", "se2", "svd",
     letter+"ec",letter+"ed",letter+"gg",
-    letter+"gd",letter+"sb",letter+"sg",
+    letter+"gd",letter+"sb",letter+"sg",letter+"kg",
     letter+"bb","glm","gqr",
     "gsv","csd","lse",
     letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
-    ("Nonsymmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem-2-stage", "Singular-Value-Decomposition",
+    ("Nonsymmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem", "Skew-symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem-2-stage", "Singular-Value-Decomposition",
     "Eigen-Condition","Nonsymmetric-Eigenvalue","Nonsymmetric-Generalized-Eigenvalue-Problem",
-    "Nonsymmetric-Generalized-Eigenvalue-Problem-driver", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Generalized-Problem",
+    "Nonsymmetric-Generalized-Eigenvalue-Problem-driver", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Generalized-Problem", "Skew-symmetric-Eigenvalue-Generalized-Problem",
     "Banded-Singular-Value-Decomposition-routines", "Generalized-Linear-Regression-Model-routines", "Generalized-QR-and-RQ-factorization-routines",
     "Generalized-Singular-Value-Decomposition-routines", "CS-Decomposition-routines", "Constrained-Linear-Least-Squares-routines",
     "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines","Dynamic-Mode-Decomposition"),
-    (letter+"nep", letter+"sep", letter+"se2", letter+"svd",
+    (letter+"nep", letter+"sep", letter+"kep", letter+"se2", letter+"svd",
     letter+"ec",letter+"ed",letter+"gg",
-    letter+"gd",letter+"sb",letter+"sg",
+    letter+"gd",letter+"sb",letter+"sg",letter+"kg",
     letter+"bb",letter+"glm",letter+"gqr",
     letter+"gsv",letter+"csd",letter+"lse",
     letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
@@ -248,21 +248,24 @@ for dtype in range_prec:
     for dtest in range_test:
         nb_of_test=0
         # NEED TO SKIP SOME PRECISION (namely s and c) FOR PROTO MIXED PRECISION TESTING
-        if dtest==17 and (letter=="s" or letter=="c"):
+        if dtest==19 and (letter=="s" or letter=="c"):
+            continue
+        # NEED TO SKIP COMPLEX SUBROUTINE (namely c and z) FOR SKEW-SYMMETRIC TESTING
+        if (dtest==2 or dtest==11) and (letter=="c" or letter=="z"):
             continue
         if with_file:
             cmdbase=dtests[2][dtest]+".out"
         else:
-            if dtest==16:
+            if dtest==18:
                 # LIN TESTS
                 cmdbase="xlintst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-            elif dtest==17:
+            elif dtest==19:
                 # PROTO LIN TESTS
                 cmdbase="xlintst"+letter+dtypes[0][dtype-1]+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-            elif dtest==18:
+            elif dtest==20:
                 # PROTO LIN TESTS
                 cmdbase="xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-            elif dtest==20:
+            elif dtest==21:
                 # DMD EIG TESTS
                 cmdbase="xdmdeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             else:
