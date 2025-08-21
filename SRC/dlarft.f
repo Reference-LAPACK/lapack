@@ -324,8 +324,8 @@
 *
 *        T_{1,2} = T_{1,2}*V_{2,2}
 *
-         CALL DTRMM('Right', 'Lower', 'No transpose', 'Unit', L, K-L,
-     $         ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
+         CALL DTRMM('Right', 'Lower', 'No transpose', 'Unit', L,
+     $         K-L, ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = V_{3,1}'*V_{3,2} + T_{1,2}
@@ -415,8 +415,8 @@
 *
 *        T_{1,2} = T_{1,2}*V_{2,2}'
 *
-         CALL DTRMM('Right', 'Upper', 'Transpose', 'Unit', L, K-L, ONE,
-     $      V(L+1, L+1), LDV, T(1, L+1), LDT)
+         CALL DTRMM('Right', 'Upper', 'Transpose', 'Unit', L, K-L,
+     $      ONE, V(L+1, L+1), LDV, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = V_{1,3}*V_{2,3}' + T_{1,2}
@@ -431,8 +431,8 @@
 *
 *        T_{1,2} = -T_{1,1}*T_{1,2}
 *
-         CALL DTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T, LDT, T(1, L+1), LDT)
+         CALL DTRMM('Left', 'Upper', 'No transpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T, LDT, T(1, L+1), LDT)
 
 *
 *        T_{1,2} = T_{1,2}*T_{2,2}
@@ -603,8 +603,8 @@
 *
 *        T_{2,1} = T_{2,1}*V_{2,1}
 *
-         CALL DTRMM('Right', 'Upper', 'No transpose', 'Unit', L, K-L,
-     $      ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Upper', 'No transpose', 'Unit', L,
+     $      K-L, ONE, V(N-K+1,1), LDV, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = V_{2,2}'*V_{2,1} + T_{2,1}
@@ -619,8 +619,8 @@
 *
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
-         CALL DTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
@@ -694,8 +694,8 @@
 *
 *        T_{2,1} = T_{2,1}*V_{1,2}'
 *
-         CALL DTRMM('Right', 'Lower', 'Transpose', 'Unit', L, K-L, ONE,
-     $      V(1, N-K+1), LDV, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Lower', 'Transpose', 'Unit', L, K-L,
+     $      ONE, V(1, N-K+1), LDV, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = V_{2,1}*V_{1,1}' + T_{2,1}
@@ -711,14 +711,14 @@
 *
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
-         CALL DTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
-     $      NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L,
+     $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
-         CALL DTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L, K-L,
-     $      ONE, T, LDT, T(K-L+1,1), LDT)
+         CALL DTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L,
+     $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
       ELSE IF(RQT) THEN
 *        Break V apart into 6 components
 *
