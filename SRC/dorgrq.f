@@ -251,19 +251,18 @@
 *        Form the triangular factor of the block reflector
 *        H = H(i+ib-1) . . . H(i+1) H(i)
 *
-         CALL DLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+         CALL DLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
 *        Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-         CALL DLARFB0C2(.TRUE., 'Right', 'Transpose', 'Backward', 
-     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA, WORK,
-     $         LDWORK, A, LDA)
+         CALL DLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Backward', 
+     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA,
+     $          A( II, N-K+I ), LDA, A, LDA)
 *
 *           Apply H**T to columns 1:n-k+i+ib-1 of current block
 *
-         CALL DORGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                TAU( I ), WORK, IINFO )
+         CALL DORGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
 
          DO I = NB + 1, K, NB
 *
@@ -275,19 +274,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL DLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                   A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+            CALL DLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
 *           Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-            CALL DLARFB0C2(.FALSE., 'Right', 'Transpose', 
-     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, 
-     $            A(II,1), LDA, WORK, LDWORK, A, LDA)
+            CALL DLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1),
+     $             LDA, A( II, N-K+I ), LDA, A, LDA)
 *
 *           Apply H**T to columns 1:n-k+i+ib-1 of current block
 *
-            CALL DORGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL DORGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
          END DO
       END IF
 *

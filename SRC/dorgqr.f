@@ -139,14 +139,14 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, IINFO, IWS, KI, KK, LWKOPT,
+      INTEGER            I, IB, IINFO, KI, KK, LWKOPT,
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL             DLARFB0C2, DLARFT, DORG2R, XERBLA
+      EXTERNAL             DLARFB0C2, DLARFT, DORG2R, DORGKR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -158,8 +158,9 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DORGQR', ' ', M, N, K, -1 )
-      ! Only need a workspace for dorg2r in case of bailout and
-      ! for the panel factorization
+*
+*     Only need a workspace for dorg2r in case of bail out
+*
       LWKOPT = MAX( 1, N )
       WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
@@ -189,8 +190,7 @@
       END IF
 *
       NBMIN = 2
-      NX = MAX(0, ILAENV(3, 'SORGQR', ' ', M, N, K, -1))
-      IWS = N
+      NX = MAX(0, ILAENV(3, 'DORGQR', ' ', M, N, K, -1))
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
@@ -227,7 +227,7 @@
 *
 *        Apply H to rows i:m of current block
 *
-         CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, IINFO)
+         CALL DORGKR(M-I+1, IB, A(I,I), LDA)
          DO I = KI + 1, 1, -NB
             IB = NB
 *
@@ -246,8 +246,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL DORGKR(M-I+1, IB, A(I,I), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
@@ -273,12 +272,11 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL DORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL DORGKR(M-I+1, IB, A(I,I), LDA)
          END IF
       END IF
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = N
       RETURN
 *
 *     End of DORGQR

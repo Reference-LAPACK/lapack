@@ -238,8 +238,7 @@
 *
 *        Apply H to rows 1:m-k+i+ib-1 of current block
 *
-         CALL DORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                TAU( I ), WORK, IINFO )
+         CALL DORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
 
 *        Use blocked code on the remaining blocks if there are any.
 *
@@ -264,8 +263,7 @@
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL DORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL DORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
          END DO
       END IF
 *

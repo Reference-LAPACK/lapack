@@ -316,6 +316,8 @@ set(DLASRC
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrs3.f dlatrz.f dlauu2.f
    dlauum.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f
    dorgbr.f dorghr.f dorgl2.f dorglq.f dorgql.f dorgqr.f dorgr2.f
+   dorgkr.f dorgrk.f dorgkl.f dorglk.f
+   dlumm.f dtrtrm.f dtrmmoop.f
    dorgrq.f dorgtr.f dorgtsqr.f dorgtsqr_row.f dorm2l.f dorm2r.f dorm22.f
    dormbr.f dormhr.f dorml2.f dormlq.f dormql.f dormqr.f dormr2.f
    dormr3.f dormrq.f dormrz.f dormtr.f dpbcon.f dpbequ.f dpbrfs.f

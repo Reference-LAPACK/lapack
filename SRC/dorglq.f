@@ -237,19 +237,18 @@
 *        Form the triangular factor of the block reflector
 *        H = H(i) H(i+1) . . . H(i+ib-1)
 *
-         CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
-     $               LDA, TAU( I ), WORK, LDWORK )
+         CALL DLARFT( 'Forward', 'Transpose', N-I+1, IB, A( I, I ),
+     $               LDA, TAU( I ), A( I, I ), LDA )
 *
-*        Apply H**T to A(i+ib:m,i:n) from the right
+*        Apply H to A(i+ib:m,i:n) from the right
 *
-         CALL DLARFB0C2(.TRUE., 'Right', 'Transpose', 'Forward',
-     $         'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
-     $         LDWORK, A(I+IB,I), LDA)
+         CALL DLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Forward',
+     $         'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, A(I,I), 
+     $         LDA, A(I+IB,I), LDA)
 *
-*        Apply H**T to columns i:n of current block
+*        Apply H to columns i:n of current block
 
-         CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                WORK, IINFO )
+         CALL DORGLK( IB, N-I+1, A( I, I ), LDA)
 *
 *        Use blocked code
 *
@@ -259,19 +258,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
-     $                  LDA, TAU( I ), WORK, LDWORK )
+            CALL DLARFT( 'Forward', 'Transpose', N-I+1, IB, A(I,I),
+     $                  LDA, TAU( I ), A( I, I ), LDA )
 *
-*           Apply H**T to A(i+ib:m,i:n) from the right
+*           Apply H to A(i+ib:m,i:n) from the right
 *
-            CALL DLARFB0C2(.FALSE., 'Right', 'Transpose', 'Forward',
-     $            'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
-     $            LDWORK, A(I+IB,I), LDA)
+            CALL DLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Forward', 'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I),
+     $            LDA, A(I,I), LDA, A(I+IB,I), LDA)
 *
-*           Apply H**T to columns i:n of current block
+*           Apply H to columns i:n of current block
 
-            CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                   WORK, IINFO )
+            CALL DORGLK( IB, N-I+1, A( I, I ), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
