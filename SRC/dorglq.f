@@ -144,7 +144,8 @@
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB0C2, DLARFT, DORGL2, DORGLK, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORGL2,
+     $                   DORGLK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

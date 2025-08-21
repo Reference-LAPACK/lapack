@@ -142,7 +142,8 @@
       INTEGER            I, IB, IINFO, IWS, KK, LWKOPT, NB, NBMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB0C2, DLARFT, DORG2L, DORGKL, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORG2L,
+     $                   DORGKL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
