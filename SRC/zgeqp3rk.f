@@ -750,6 +750,7 @@
 *     for the whole original matrix stored in A(1:M,1:N).
 *
       KP1 = IDAMAX( N, RWORK( 1 ), 1 )
+      MAXC2NRM = RWORK( KP1 )
 *
 *     ==================================================================.
 *

@@ -7,6 +7,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cblas.h"
 #include "cblas_f77.h"
 void API_SUFFIX(cblas_cgemv)(const CBLAS_LAYOUT layout,
@@ -31,17 +32,21 @@ void API_SUFFIX(cblas_cgemv)(const CBLAS_LAYOUT layout,
    #define F77_incY incY
 #endif
 
-   CBLAS_INT n=0, i=0, incx=incX;
+   CBLAS_INT n=0, i=0;
    const float *xx= (const float *)X;
    float ALPHA[2],BETA[2];
    CBLAS_INT tincY, tincx;
-   float *x=(float *)X, *y=(float *)Y, *st=0, *tx=0;
-   const float *stx = x;
+   float *x, *y, *st=0, *tx=0;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
 
    CBLAS_CallFromC = 1;
+
+   memcpy(&x, &X, sizeof(float *));
+   memcpy(&y, &Y, sizeof(float *));
+
+   const float *stx = x;
 
    if (layout == CblasColMajor)
    {

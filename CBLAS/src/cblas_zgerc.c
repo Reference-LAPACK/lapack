@@ -7,6 +7,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "cblas.h"
 #include "cblas_f77.h"
 void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
@@ -16,6 +18,7 @@ void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
 #ifdef F77_INT
    F77_INT F77_M=M, F77_N=N, F77_lda=lda, F77_incX=incX, F77_incY=incY;
 #else
+   CBLAS_INT incy = incY;
    #define F77_M M
    #define F77_N N
    #define F77_incX incX
@@ -23,12 +26,15 @@ void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
    #define F77_lda lda
 #endif
 
-   CBLAS_INT n, i, tincy, incy=incY;
-   double *y=(double *)Y, *yy=(double *)Y, *ty, *st;
+   CBLAS_INT n, i, tincy;
+   double *y,  *yy, *ty, *st;
 
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
+
+   memcpy(&y,&Y,sizeof(double*));
+   memcpy(&yy,&Y,sizeof(double*));
 
    CBLAS_CallFromC = 1;
    if (layout == CblasColMajor)
@@ -56,7 +62,7 @@ void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
          }
          do
          {
-            *y = *yy;
+            *y = (double) *yy;
             y[1] = -yy[1];
             y += tincy ;
             yy += i;
@@ -70,7 +76,8 @@ void API_SUFFIX(cblas_zgerc)(const CBLAS_LAYOUT layout, const CBLAS_INT M, const
             incy = 1;
          #endif
       }
-      else y = (double *) Y;
+      else
+          memcpy(&y,&Y,sizeof(double*));
 
       F77_zgeru( &F77_N, &F77_M, alpha, y, &F77_incY, X, &F77_incX, A,
                       &F77_lda);

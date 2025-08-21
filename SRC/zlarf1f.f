@@ -180,7 +180,7 @@
       INTEGER            I, LASTV, LASTC, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZGERC, ZSCAL
+      EXTERNAL           ZAXPY, ZGEMV, ZGERC, ZSCAL
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG
 *     ..

@@ -83,7 +83,7 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
    }
 
    if (info != cblas_info){
-      printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT " INSTEAD OF %d in %s *******\n",info, cblas_info, rout);
+      printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT " INSTEAD OF %d in %s *******\n",info, (int) cblas_info, rout);
       cblas_lerr = PASSED;
       cblas_ok = FALSE;
    } else cblas_lerr = FAILED;
@@ -103,7 +103,7 @@ void F77_xerbla(char *srname, void *vinfo
    char *srname;
 #endif
 
-   char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0', '\0'};
+   char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0', '\0', '\0'};
 
 #ifdef F77_Integer
    F77_Integer *info=vinfo;
@@ -124,8 +124,12 @@ void F77_xerbla(char *srname, void *vinfo
       link_xerbla = 0;
       return;
    }
-   for(i=0;  i  < 7; i++) rout[i+6] = tolower(srname[i]);
-   for(i=12; i >= 9; i--) if (rout[i] == ' ') rout[i] = '\0';
+#ifndef BLAS_FORTRAN_STRLEN_END
+   const int srname_len = 6;
+#endif
+
+   for(i=0;  i  < srname_len; i++) rout[i+6] = tolower(srname[i]);
+   for(i=13; i >= 9; i--) if (rout[i] == ' ') rout[i] = '\0';
 
    /* We increment *info by 1 since the CBLAS interface adds one more
     * argument to all level 2 and 3 routines.
