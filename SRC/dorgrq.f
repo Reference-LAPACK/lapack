@@ -145,7 +145,7 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFB0C2, DLARFT, DORGR2, XERBLA
+      EXTERNAL           DLARFB0C2, DLARFT, DORGR2, DORGRK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -175,7 +175,8 @@
             LWKOPT = 1
          ELSE
             NB = ILAENV( 1, 'DORGRQ', ' ', M, N, K, -1 )
-            LWKOPT = M*NB
+            ! Only need a workspace for calls to dorgr2
+            LWKOPT = M
          END IF
          WORK( 1 ) = LWKOPT
 *
@@ -277,13 +278,13 @@
             CALL DLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
      $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*           Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*           Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
             CALL DLARFB0C2(.FALSE., 'Right', 'No Transpose',
      $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1),
      $             LDA, A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*           Apply H to columns 1:n-k+i+ib-1 of current block
 *
             CALL DORGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
          END DO
