@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM ZBLAT2
+      IMPLICIT NONE
 *
 *  Test program for the COMPLEX*16          Level 2 Blas.
 *
@@ -459,10 +461,13 @@
 *     End of ZBLAT2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CGEMV and CGBMV.
 *
@@ -815,10 +820,13 @@
 *     End of ZCHK1.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CHEMV, CHBMV and CHPMV.
 *
@@ -1172,9 +1180,12 @@
 *     End of CZHK2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                 INCMAX, A, AA, AS, X, XX, XS, XT, G, Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests ZTRMV, ZTBMV, ZTPMV, ZTRSV, ZTBSV and ZTPSV.
 *
@@ -1554,10 +1565,13 @@
 *     End of ZCHK3.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests ZGERC and ZGERU.
 *
@@ -1832,10 +1846,13 @@
 *     End of ZCHK4.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests ZHER and ZHPR.
 *
@@ -2126,10 +2143,13 @@
 *     End of CZHK5.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests ZHER2 and ZHPR2.
 *
@@ -2454,8 +2474,11 @@
 *     End of ZCHK6.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -2586,7 +2609,10 @@
 *     End of ZMVCH.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LZE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -2616,7 +2642,10 @@
 *     End of LZE.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2676,7 +2705,10 @@
 *     End of LZERES.
 *
       END
+
+*  =====================================================================
       COMPLEX*16 FUNCTION ZBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates complex numbers as pairs of random numbers uniformly
 *  distributed between -0.5 and 0.5.
@@ -2728,7 +2760,10 @@
 *     End of ZBEG.
 *
       END
+
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2744,8 +2779,11 @@
 *     End of DDIFF.
 *
       END
+
+*  =====================================================================
       SUBROUTINE ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A within the bandwidth
 *  defined by KL and KU.
