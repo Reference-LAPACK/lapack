@@ -114,6 +114,7 @@
       CALL MYSUB(NMAX,X,Y)
       END
       SUBROUTINE MYSUB(N,X,Y)
+      IMPLICIT NONE
       INTEGER N
       REAL X(N), Y(N)
       RETURN

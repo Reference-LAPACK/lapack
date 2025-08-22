@@ -65,6 +65,7 @@
 *
 *  =====================================================================
       REAL             FUNCTION SLAMCH( CMACH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -168,6 +169,7 @@
 *>
 *
       REAL             FUNCTION SLAMC3( A, B )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
