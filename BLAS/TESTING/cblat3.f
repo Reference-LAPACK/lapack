@@ -83,6 +83,7 @@
 *
 *  =====================================================================
       PROGRAM CBLAT3
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
