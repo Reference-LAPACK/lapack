@@ -207,28 +207,12 @@
 *        Determine when to cross over from blocked to unblocked code.
 *
          NX = MAX( 0, ILAENV( 3, 'DORGRQ', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = M
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'DORGRQ', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
       END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
 *        We want to use the blocking method as long as our matrix is big enough
-*        and it's deemed worthwhile with the extra memory allocations
+*        and it's deemed worthwhile
 *
          KK = K
       ELSE
@@ -256,13 +240,13 @@
          CALL DLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
      $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*        Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*        Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
          CALL DLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Backward', 
      $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA,
      $          A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*           Apply H to columns 1:n-k+i+ib-1 of current block
 *
          CALL DORGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
 

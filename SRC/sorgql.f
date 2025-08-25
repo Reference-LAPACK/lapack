@@ -145,7 +145,8 @@
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB0C2, SLARFT, SORG2L, XERBLA
+      EXTERNAL           SLARFB0C2, SLARFT, SORG2L,
+     $                   SORGKL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -241,8 +242,7 @@
 *
 *        Apply H to rows 1:m-k+i+ib-1 of current block
 *
-         CALL SORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                TAU( I ), WORK, IINFO )
+         CALL SORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
 
 *        Use blocked code on the remaining blocks if there are any.
 *
@@ -267,8 +267,7 @@
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL SORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL SORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
          END DO
       END IF
 *

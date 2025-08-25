@@ -116,6 +116,8 @@ set(SLASRC
    slauu2.f slauum.f sopgtr.f sopmtr.f sorg2l.f sorg2r.f
    sorgbr.f sorghr.f sorgl2.f sorglq.f sorgql.f sorgqr.f sorgr2.f
    sorgrq.f sorgtr.f sorgtsqr.f sorgtsqr_row.f sorm2l.f sorm2r.f sorm22.f
+   sorgkr.f sorgrk.f sorgkl.f sorglk.f
+   slumm.f strtrm.f strmmoop.f
    sormbr.f sormhr.f sorml2.f sormlq.f sormql.f sormqr.f sormr2.f
    sormr3.f sormrq.f sormrz.f sormtr.f spbcon.f spbequ.f spbrfs.f
    spbstf.f spbsv.f  spbsvx.f

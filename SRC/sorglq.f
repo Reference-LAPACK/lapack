@@ -146,7 +146,8 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB0C2, SLARFT, SORGL2, XERBLA
+      EXTERNAL           SLARFB0C2, SLARFT, SORGL2,
+     $                   SORGLK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -162,7 +163,7 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'SORGLQ', ' ', M, N, K, -1 )
-      LWKOPT = MAX( 1, M )*NB
+      LWKOPT = MAX( 1, M )
       WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
@@ -191,30 +192,8 @@
       END IF
 *
       NBMIN = 2
-      NX = 0
+      NX = MAX( 0, ILAENV( 3, 'SORGLQ', ' ', M, N, K, -1 ) )
       IWS = M
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'SORGLQ', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = M
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'SORGLQ', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
@@ -240,19 +219,18 @@
 *        Form the triangular factor of the block reflector
 *        H = H(i) H(i+1) . . . H(i+ib-1)
 *
-         CALL SLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
-     $               LDA, TAU( I ), WORK, LDWORK )
+         CALL SLARFT( 'Forward', 'Transpose', N-I+1, IB, A( I, I ),
+     $               LDA, TAU( I ), A( I, I ), LDA )
 *
-*        Apply H**T to A(i+ib:m,i:n) from the right
+*        Apply H to A(i+ib:m,i:n) from the right
 *
-         CALL SLARFB0C2(.TRUE., 'Right', 'Transpose', 'Forward',
-     $         'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
-     $         LDWORK, A(I+IB,I), LDA)
+         CALL SLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Forward',
+     $         'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, A(I,I), 
+     $         LDA, A(I+IB,I), LDA)
 *
-*        Apply H**T to columns i:n of current block
+*        Apply H to columns i:n of current block
 
-         CALL SORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                WORK, IINFO )
+         CALL SORGLK( IB, N-I+1, A( I, I ), LDA)
 *
 *        Use blocked code
 *
@@ -262,19 +240,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL SLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
-     $                  LDA, TAU( I ), WORK, LDWORK )
+            CALL SLARFT( 'Forward', 'Transpose', N-I+1, IB, A(I,I),
+     $                  LDA, TAU( I ), A( I, I ), LDA )
 *
-*           Apply H**T to A(i+ib:m,i:n) from the right
+*           Apply H to A(i+ib:m,i:n) from the right
 *
-            CALL SLARFB0C2(.FALSE., 'Right', 'Transpose', 'Forward',
-     $            'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
-     $            LDWORK, A(I+IB,I), LDA)
+            CALL SLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Forward', 'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I),
+     $            LDA, A(I,I), LDA, A(I+IB,I), LDA)
 *
-*           Apply H**T to columns i:n of current block
-
-            CALL SORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                   WORK, IINFO )
+*           Apply H to columns i:n of current block
+*
+            CALL SORGLK( IB, N-I+1, A( I, I ), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
@@ -288,19 +265,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL SLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
-     $                  LDA, TAU( I ), WORK, LDWORK )
+            CALL SLARFT( 'Forward', 'Transpose', N-I+1, IB, A(I,I),
+     $                  LDA, TAU( I ), A( I, I ), LDA )
 *
-*           Apply H**T to A(i+ib:m,i:n) from the right
+*           Apply H to A(i+ib:m,i:n) from the right
 *
-            CALL SLARFB0C2(.FALSE., 'Right', 'Transpose', 'Forward',
-     $            'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I), LDA, WORK, 
-     $            LDWORK, A(I+IB,I), LDA)
+            CALL SLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Forward', 'Rowwise', M-I-IB+1, N-I+1, IB, A(I,I),
+     $            LDA, A(I,I), LDA, A(I+IB,I), LDA)
 *
-*           Apply H**T to columns i:n of current block
-
-            CALL SORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
-     $                   WORK, IINFO )
+*           Apply H to columns i:n of current block
+*
+            CALL SORGLK( IB, N-I+1, A( I, I ), LDA)
          END IF
       END IF
 *

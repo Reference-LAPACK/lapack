@@ -186,20 +186,19 @@
          !     and thus don't reference whatever is present in C2 
          !     at the beginning.
          LOGICAL           C2I
-
          ! Array arguments
          REAL              V(LDV,*), C(LDC,*), T(LDT,*)
          ! Local scalars
-         LOGICAL           QR, LQ, QL, DIRF, COLV, SIDEL, SIDER,
+         LOGICAL           QR, LQ, QL, RQ, DIRF, COLV, SIDEL, SIDER,
      $                     TRANST
          INTEGER           I, J
          ! External functions
          LOGICAL           LSAME
          EXTERNAL          LSAME
-         ! External Subroutines
+         ! External subroutines
          EXTERNAL          SGEMM, STRMM, XERBLA
          ! Parameters
-         REAL              ONE, ZERO, NEG_ONE
+         REAL             ONE, ZERO, NEG_ONE
          PARAMETER(ONE=1.0E+0, ZERO = 0.0E+0, NEG_ONE = -1.0E+0)
 
          ! Beginning of executable statements
@@ -225,10 +224,7 @@
 
          ! RQ is when we store the reflectors row by row and have the
          ! 'first' reflector stored in the last row
-         ! RQ = (.NOT.DIRF).AND.(.NOT.COLV)
-         ! Since we have exactly one of these 4 modes, we don't need to actually
-         ! store the value of RQ, instead we assume this is the case if we fail
-         ! the above 3 checks.
+         RQ = (.NOT.DIRF).AND.(.NOT.COLV)
 
          IF (QR) THEN
             ! We are computing C = HC = (I - VTV')C
@@ -313,7 +309,7 @@
             CALL STRMM('Left', 'Lower', 'No Transpose', 'Unit',
      $                  K, N, NEG_ONE, V, LDV, C, LDC)
          ELSE IF (LQ) THEN
-            ! We are computing C = CH' = C(I-V'T'V)
+            ! We are computing C = C op(H) = C(I-V' op(T) V)
             ! Where: V = [ V1 V2 ] and C = [ C1 C2 ]
             ! with the following dimensions:
             !     V1\in\R^{K\times K}
@@ -325,20 +321,20 @@
             ! without having to allocate anything extra.
             ! This lets us simplify our above equation to get
             !
-            ! C = CH' = [ 0, C2 ](I - [ V1' ]T'[ V1, V2 ])
-            !                         [ V2' ]
+            ! C = C op(H) = [ 0, C2 ](I - [ V1' ]op(T)[ V1, V2 ])
+            !                             [ V2' ]
             !
-            !   = [ 0, C2 ] - [ 0, C2 ][ V1' ]T'[ V1, V2 ]
+            !   = [ 0, C2 ] - [ 0, C2 ][ V1' ]op(T)[ V1, V2 ]
             !                          [ V2' ]
             !
-            !   = [ 0, C2 ] - C2*V2'*T'[ V1, V2 ]
+            !   = [ 0, C2 ] - C2*V2'*op(T)[ V1, V2 ]
             !
-            !   = [ -C2*V2'*T'*V1, C2 - C2*V2'*T'*V2 ]
+            !   = [ -C2*V2'*op(T)*V1, C2 - C2*V2'*op(T)*V2 ]
             !
             ! So, we can order our computations as follows:
             !
             ! C1 = C2*V2'
-            ! C1 = C1*T'
+            ! C1 = C1*op(T)
             ! C2 = C2 - C1*V2
             ! C1 = -C1*V1
             !
@@ -348,9 +344,6 @@
             !
             IF( .NOT.SIDER ) THEN
                CALL XERBLA('SLARFB0C2', 2)
-               RETURN
-            ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -370,8 +363,13 @@
             !
             ! C1 = C1*T'
             !
-            CALL STRMM('Right', 'Upper', 'Transpose', 'Non-unit',
-     $            M, K, ONE, T, LDT, C, LDC)
+            IF (TRANST) THEN
+               CALL STRMM('Right', 'Upper', 'Transpose',
+     $               'Non-unit', M, K, ONE, T, LDT, C, LDC)
+            ELSE
+               CALL STRMM('Right', 'Lower', 'No Transpose',
+     $               'Non-unit', M, K, ONE, T, LDT, C, LDC)
+            END IF
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !
@@ -472,8 +470,8 @@
             !
             CALL STRMM('Left', 'Upper', 'No Transpose', 'Unit',
      $         K, N, NEG_ONE, V(M-K+1,1), LDV, C(M-K+1,1), LDC)
-         ELSE ! IF (RQ) THEN
-            ! We are computing C = CH' = C(I-V'T'V)
+         ELSE IF (RQ) THEN
+            ! We are computing C = C op(H) = C(I-V' op(T) V)
             ! Where: V = [ V2 V1] and C = [ C2 C1 ]
             ! with the following dimensions:
             !     V1\in\R^{K\times K}
@@ -485,35 +483,32 @@
             ! without having to allocate anything extra.
             ! This lets us simplify our above equation to get
             !
-            ! C = CH' = [ C2, 0 ] (I - [ V2' ]T'[ V2, V1 ]
-            !                          [ V1' ]
+            ! C = C op(H) = [ C2, 0 ] (I - [ V2' ]op(T)[ V2, V1 ]
+            !                              [ V1' ]
             !
-            !   = [ C2, 0 ] - [ C2, 0 ] [ V2' ]T'[ V2, V1 ]
+            !   = [ C2, 0 ] - [ C2, 0 ] [ V2' ]op(T)[ V2, V1 ]
             !                           [ V1' ]
             !
-            !   = [ C2, 0 ] - C2*V2'*T'[ V2, V1 ]
+            !   = [ C2, 0 ] - C2*V2'*op(T)[ V2, V1 ]
             !
-            !   = [ C2, 0 ] - [ C2*V2'*T'*V2, C2*V2'*T'*V1 ]
+            !   = [ C2, 0 ] - [ C2*V2'*op(T)*V2, C2*V2'*op(T)*V1 ]
             !
-            !   = [ C2 - C2*V2'*T'*V2, -C2*V2'*T'*V1 ]
+            !   = [ C2 - C2*V2'*op(T)*V2, -C2*V2'*op(T)*V1 ]
             !
             ! So, we can order our computations as follows:
             !
             ! C1 = C2*V2'
-            ! C1 = C1*T'
+            ! C1 = C1*op(T)
             ! C2 = C2 - C1*V2
             ! C1 = -C1*V1
             !
             !
             ! To achieve the same end result
             !
-            ! Check to ensure side and trans are the expected values 
+            ! Check to ensure side has the expected value
             !
             IF( .NOT.SIDER ) THEN
                CALL XERBLA('SLARFB0C2', 2)
-               RETURN
-            ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('SLARFB0C2', 3)
                RETURN
             END IF
             !
@@ -530,10 +525,15 @@
      $            ONE, C, LDC, V, LDV, ZERO, C(1, N-K+1), LDC)
             END IF
             !
-            ! C1 = C1*T'
+            ! C1 = C1*op(T)
             !
-            CALL STRMM('Right', 'Lower', 'Transpose', 'Non-unit',
-     $         M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            IF( TRANST ) THEN
+               CALL STRMM('Right', 'Lower', 'Transpose',
+     $            'Non-unit', M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            ELSE
+               CALL STRMM('Right', 'Upper', 'No Transpose',
+     $            'Non-unit', M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            END IF
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !

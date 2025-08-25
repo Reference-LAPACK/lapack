@@ -145,7 +145,8 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB0C2, SLARFT, SORG2R, XERBLA
+      EXTERNAL           SLARFB0C2, SLARFT, SORG2R,
+     $                   SORGKR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -190,10 +191,10 @@
       END IF
 *
       NBMIN = 2
-      NX = 0
+      NX = MAX(0, ILAENV(3, 'SORGQR', ' ', M, N, K, -1))
       IWS = N
 *
-      IF( NB.GE.NBMIN .AND. NB.LT.K ) THEN
+      IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
 *        Handle the first block assuming we are applying to the
 *        identity, then resume regular blocking method after
@@ -228,7 +229,7 @@
 *
 *        Apply H to rows i:m of current block
 *
-         CALL SORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, IINFO)
+         CALL SORGKR(M-I+1, IB, A(I,I), LDA)
          DO I = KI + 1, 1, -NB
             IB = NB
 *

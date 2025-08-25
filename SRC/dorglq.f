@@ -190,30 +190,8 @@
       END IF
 *
       NBMIN = 2
-      NX = 0
+      NX = MAX( 0, ILAENV( 3, 'DORGLQ', ' ', M, N, K, -1 ) )
       IWS = M
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'DORGLQ', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = M
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'DORGLQ', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *

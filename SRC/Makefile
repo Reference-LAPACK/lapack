@@ -145,6 +145,8 @@ SLASRC = \
    slauu2.o slauum.o sopgtr.o sopmtr.o sorg2l.o sorg2r.o \
    sorgbr.o sorghr.o sorgl2.o sorglq.o sorgql.o sorgqr.o sorgr2.o \
    sorgrq.o sorgtr.o sorgtsqr.o sorgtsqr_row.o sorm2l.o sorm2r.o sorm22.o \
+   sorgkr.o sorgrk.o sorgkl.o sorglk.o \
+   slumm.o strtrm.o strmmoop.o \
    sormbr.o sormhr.o sorml2.o sormlq.o sormql.o sormqr.o sormr2.o \
    sormr3.o sormrq.o sormrz.o sormtr.o spbcon.o spbequ.o spbrfs.o \
    spbstf.o spbsv.o  spbsvx.o \

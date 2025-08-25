@@ -1,4 +1,4 @@
-*> \brief \b DTRMMOOP computes an out of place triangular times general matrix multiplication
+*> \brief \b STRMMOOP computes an out of place triangular times general matrix multiplication
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*     RECURSIVE SUBROUTINE DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB,
+*     RECURSIVE SUBROUTINE STRMMOOP(SIDE, UPLO, TRANSA, TRANSB,
 *    $         DIAG, M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
 *
 *        .. Scalar Arguments ..
-*        DOUBLE PRECISION  ALPHA, BETA
+*        REAL              ALPHA, BETA
 *        INTEGER           M, N, LDA, LDB, LDC
 *        CHARACTER         SIDE, UPLO, TRANSA, TRANSB, DIAG
 *        ..
 *        .. Array Arguments ..
-*        DOUBLE PRECISION  A(LDA,*), B(LDB,*), C(LDC,*)
+*        REAL              A(LDA,*), B(LDB,*), C(LDC,*)
 *        ..
 *
 *> \par Purpose:
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DTRMMOOP performs one of the matrix-matrix operations
+*> STRMMOOP performs one of the matrix-matrix operations
 *>
 *>       C = \alpha op(A) * op(B) + \beta C
 *>                      or
@@ -114,7 +114,7 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is REAL
 *>           On entry, ALPHA specifies the scalar alpha. When alpha is
 *>           zero then A and B are not referenced, and A and B need not
 *>           be set before entry.
@@ -122,7 +122,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, K ) where
+*>          A is REAL array, dimension ( LDA, K ) where
 *>           K is M when SIDE = 'L' and K is N when SIDE='R'
 *>           Before entry with UPLO = 'U' or 'u', the leading k-by-k
 *>           upper triangular part of the array A must contain the upper
@@ -147,7 +147,7 @@
 *>
 *> \param[in] B
 *> \verbatim
-*>           B is DOUBLE PRECISION array, dimension ( LDB, K ), where K is M
+*>           B is REAL array, dimension ( LDB, K ), where K is M
 *>           If SIDE='R' and TRANSA='N', or SIDE='L' and TRANSA='T' and N
 *>           otherwise. On entry, the leading k-by-k submatrix must contain
 *>           B.
@@ -164,7 +164,7 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is REAL            .
 *>           On entry, BETA specifies the scalar beta. When beta is
 *>           zero then C is not referenced on entry, and C need not
 *>           be set before entry.
@@ -172,7 +172,7 @@
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension ( LDC, N )
+*>          C is REAL array, dimension ( LDC, N )
 *>           Before entry, the leading m-by-n part of the array C must
 *>           contain the matrix C, and on exit is overwritten by the
 *>           transformed matrix.
@@ -195,27 +195,27 @@
 *> \author NAG Ltd.
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB,
+      RECURSIVE SUBROUTINE STRMMOOP(SIDE, UPLO, TRANSA, TRANSB,
      $         DIAG, M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
 *
 *        .. Scalar Arguments ..
-         DOUBLE PRECISION  ALPHA, BETA
+         REAL              ALPHA, BETA
          INTEGER           M, N, LDA, LDB, LDC
          CHARACTER         SIDE, UPLO, TRANSA, TRANSB, DIAG
 *        ..
 *        .. Array Arguments ..
-         DOUBLE PRECISION  A(LDA,*), B(LDB,*), C(LDC,*)
+         REAL              A(LDA,*), B(LDB,*), C(LDC,*)
 *        ..
 *
 *  =====================================================================
 *
 *        .. External Functions ..
          LOGICAL           LSAME
-         DOUBLE PRECISION  DDOT
-         EXTERNAL          LSAME, DDOT
+         REAL              SDOT
+         EXTERNAL          LSAME, SDOT
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          DGEMM, DAXPY, DLASET, DSCAL
+         EXTERNAL          SGEMM, SAXPY, SLASET, SSCAL
 *        ..
 *        .. Intrinsic Functions ..
          INTRINSIC         MIN
@@ -225,8 +225,8 @@
          LOGICAL           LSIDE, UPPER, UNIT, TRANST, TRANSG
 *        ..
 *        .. Local Parameters ..
-         DOUBLE PRECISION  ONE, ZERO
-         PARAMETER(ONE=1.0D+0, ZERO=0.0D+0)
+         REAL              ONE, ZERO
+         PARAMETER(ONE=1.0E+0, ZERO=0.0E+0)
 *        ..
 *
 *        Beginning of Executable Statements
@@ -267,9 +267,9 @@
 *
             IF (BETA.EQ.ZERO) THEN
                ! This ensures we don't reference C unless we need to
-               CALL DLASET('All', M, N, ZERO, ZERO, C, LDC)
+               CALL SLASET('All', M, N, ZERO, ZERO, C, LDC)
             ELSE
-               CALL DSCAL(N, BETA, C, LDC)
+               CALL SSCAL(N, BETA, C, LDC)
             END IF
             IF (ALPHA.NE.ZERO) THEN
 *
@@ -289,9 +289,9 @@
 *                 ONE or explicitly stored in A(1,1)
 *
                   IF (UNIT) THEN
-                     CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                     CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                   ELSE
-                     CALL DAXPY(N, ALPHA * A(1,1), B, INCB, C, LDC)
+                     CALL SAXPY(N, ALPHA * A(1,1), B, INCB, C, LDC)
                   END IF
                ELSE ! A is on the right
 *
@@ -310,14 +310,14 @@
                         IF (TRANSG) THEN
                            IF (UNIT) THEN
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I,
+                                 C(1,I) = ALPHA * SDOT(N-I,
      $                              B(I+1,1), 1, A(I,I+1), LDA) +
      $                              C(1,I)
                               END DO
-                              CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                              CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                            ELSE
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I+1,
+                                 C(1,I) = ALPHA * SDOT(N-I+1,
      $                              B(I,1), 1, A(I,I), LDA) +
      $                              C(1,I)
                               END DO
@@ -325,14 +325,14 @@
                         ELSE ! Not transposing B
                            IF (UNIT) THEN
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I,
+                                 C(1,I) = ALPHA * SDOT(N-I,
      $                              B(1,I+1), LDB, A(I,I+1), LDA) +
      $                              C(1,I)
                               END DO
-                              CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                              CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                            ELSE
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I+1,
+                                 C(1,I) = ALPHA * SDOT(N-I+1,
      $                              B(1,I), LDB, A(I,I), LDA) +
      $                              C(1,I)
                               END DO
@@ -341,14 +341,14 @@
                      ELSE ! Not transposing A
                         IF (UNIT) THEN
                            DO I = 1, N
-                              C(1,I) = ALPHA * DDOT(I-1, B, INCB,
+                              C(1,I) = ALPHA * SDOT(I-1, B, INCB,
      $                           A(1,I), 1) + C(1,I)
                            END DO
 
-                           CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                           CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                         ELSE
                            DO I = 1, N
-                              C(1,I) = ALPHA * DDOT(I, B, INCB,
+                              C(1,I) = ALPHA * SDOT(I, B, INCB,
      $                           A(1,I), 1) + C(1,I)
                            END DO
                         END IF
@@ -357,14 +357,14 @@
                      IF (TRANST) THEN
                         IF (UNIT) THEN
                            DO I = 1, N
-                              C(1,I) = ALPHA * DDOT(I-1, B, INCB,
+                              C(1,I) = ALPHA * SDOT(I-1, B, INCB,
      $                           A(I,1), LDA) + C(1,I)
                            END DO
 
-                           CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                           CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                         ELSE
                            DO I = 1, N
-                              C(1,I) = ALPHA * DDOT(I, B, INCB,
+                              C(1,I) = ALPHA * SDOT(I, B, INCB,
      $                           A(I,1), LDA) + C(1,I)
                            END DO
                         END IF
@@ -372,14 +372,14 @@
                         IF (TRANSG) THEN
                            IF (UNIT) THEN
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I,
+                                 C(1,I) = ALPHA * SDOT(N-I,
      $                              B(I+1,1), 1, A(I+1,I), 1) +
      $                              C(1,I)
                               END DO
-                              CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                              CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                            ELSE
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I+1,
+                                 C(1,I) = ALPHA * SDOT(N-I+1,
      $                              B(I,1), 1, A(I,I), 1) +
      $                              C(1,I)
                               END DO
@@ -387,14 +387,14 @@
                         ELSE! B is not transposed
                            IF (UNIT) THEN
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I,
+                                 C(1,I) = ALPHA * SDOT(N-I,
      $                              B(1,I+1), LDB, A(I+1,I), 1) +
      $                              C(1,I)
                               END DO
-                              CALL DAXPY(N, ALPHA, B, INCB, C, LDC)
+                              CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
                            ELSE
                               DO I = 1, N
-                                 C(1,I) = ALPHA * DDOT(N-I+1,
+                                 C(1,I) = ALPHA * SDOT(N-I+1,
      $                              B(1,I), LDB, A(I,I), 1) +
      $                              C(1,I)
                               END DO
@@ -412,9 +412,9 @@
 *
             IF (BETA.EQ.ZERO) THEN
                ! This ensures we don't reference C unless we need to
-               CALL DLASET('All', M, N, ZERO, ZERO, C, LDC)
+               CALL SLASET('All', M, N, ZERO, ZERO, C, LDC)
             ELSE
-               CALL DSCAL(M, BETA, C, 1)
+               CALL SSCAL(M, BETA, C, 1)
             END IF
 
             IF (ALPHA.NE.ZERO) THEN
@@ -428,13 +428,13 @@
                      IF (TRANST) THEN
                         IF (UNIT) THEN
                            DO I = 1, M
-                              C(I,1) = ALPHA * DDOT(I-1, A(1, I),
+                              C(I,1) = ALPHA * SDOT(I-1, A(1, I),
      $                           1, B, INCB) + C(I,1)
                            END DO
-                           CALL DAXPY(M, ALPHA, B, INCB, C, 1)
+                           CALL SAXPY(M, ALPHA, B, INCB, C, 1)
                         ELSE
                            DO I = 1, M
-                              C(I,1) = ALPHA * DDOT(I, A(1, I), 1,
+                              C(I,1) = ALPHA * SDOT(I, A(1, I), 1,
      $                           B, INCB) + C(I,1)
                            END DO
                         END IF
@@ -442,15 +442,15 @@
                         IF (TRANSG) THEN
                            IF (UNIT) THEN
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I,
+                                 C(I,1) = ALPHA * SDOT(M-I,
      $                              A(I,I+1), LDA, B(1, I+1), LDB) +
      $                              C(I,1)
                               END DO
 
-                              CALL DAXPY(M, ALPHA, B, LDB, C, 1)
+                              CALL SAXPY(M, ALPHA, B, LDB, C, 1)
                            ELSE
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I+1,
+                                 C(I,1) = ALPHA * SDOT(M-I+1,
      $                              A(I,I), LDA, B(1,I), LDB) +
      $                              C(I,1)
                               END DO
@@ -458,15 +458,15 @@
                         ELSE ! B is not transposed
                            IF (UNIT) THEN
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I,
+                                 C(I,1) = ALPHA * SDOT(M-I,
      $                              A(I,I+1), LDA, B(I+1,1), 1) +
      $                              C(I,1)
                               END DO
 
-                              CALL DAXPY(M, ALPHA, B, 1, C, 1)
+                              CALL SAXPY(M, ALPHA, B, 1, C, 1)
                            ELSE
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I+1,
+                                 C(I,1) = ALPHA * SDOT(M-I+1,
      $                              A(I,I), LDA, B(I,1), 1) +
      $                              C(I,1)
                               END DO
@@ -478,15 +478,15 @@
                         IF (TRANSG) THEN
                            IF (UNIT) THEN
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I,
+                                 C(I,1) = ALPHA * SDOT(M-I,
      $                              A(I+1,I), 1, B(1,I+1), LDB) +
      $                              C(I,1)
                               END DO
 
-                              CALL DAXPY(M, ALPHA, B, LDB, C, 1)
+                              CALL SAXPY(M, ALPHA, B, LDB, C, 1)
                            ELSE
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I+1,
+                                 C(I,1) = ALPHA * SDOT(M-I+1,
      $                              A(I,I), 1, B(1,I), LDB) +
      $                              C(I,1)
                               END DO
@@ -494,15 +494,15 @@
                         ELSE ! A is not transposed
                            IF (UNIT) THEN
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I,
+                                 C(I,1) = ALPHA * SDOT(M-I,
      $                              A(I+1,I), 1, B(I+1,1), 1) +
      $                              C(I,1)
                               END DO
 
-                              CALL DAXPY(M, ALPHA, B, 1, C, 1)
+                              CALL SAXPY(M, ALPHA, B, 1, C, 1)
                            ELSE
                               DO I = 1, M
-                                 C(I,1) = ALPHA * DDOT(M-I+1,
+                                 C(I,1) = ALPHA * SDOT(M-I+1,
      $                              A(I,I), 1, B(I,1), 1) +
      $                              C(I,1)
                               END DO
@@ -511,13 +511,13 @@
                      ELSE ! A is not transposed
                         IF (UNIT) THEN
                            DO I = 1, M
-                              C(I,1) = ALPHA * DDOT(I-1, A(I,1),
+                              C(I,1) = ALPHA * SDOT(I-1, A(I,1),
      $                           LDA, B, INCB) + C(I,1)
                            END DO
-                           CALL DAXPY(M, ALPHA, B, INCB, C, 1)
+                           CALL SAXPY(M, ALPHA, B, INCB, C, 1)
                         ELSE
                            DO I = 1, M
-                              C(I,1) = ALPHA * DDOT(I, A(I,1), LDA,
+                              C(I,1) = ALPHA * SDOT(I, A(I,1), LDA,
      $                           B, INCB) + C(I,1)
                            END DO
                         END IF
@@ -527,9 +527,9 @@
                   ! Since the trailing dimension of op(A) must be 1,
                   !  we know that A must be a scalar
                   IF (UNIT) THEN
-                     CALL DAXPY(M, ALPHA, B, INCB, C, 1)
+                     CALL SAXPY(M, ALPHA, B, INCB, C, 1)
                   ELSE
-                     CALL DAXPY(M, ALPHA*A(1,1), B, INCB, C, 1)
+                     CALL SAXPY(M, ALPHA*A(1,1), B, INCB, C, 1)
                   END IF
                END IF
             END IF
@@ -596,25 +596,25 @@
 *                    C_{22} = \alpha A_{22}**T * B_{22}**T + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                        L, L, ALPHA, A, LDA, B, LDB, BETA, C,
      $                        LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                        L, N-L, ALPHA, A, LDA, B(L+1, 1), LDB,
      $                        BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
      $                        A(1, L+1), LDA, B, LDB, BETA, C(L+1,1),
      $                        LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                        M-L, L, ALPHA, A(L+1,L+1), LDA, B(1,L+1),
      $                        LDB, ONE, C(L+1,1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, N-L, L, ALPHA,
      $                        A(1, L+1), LDA, B(L+1,1), LDB, BETA,
      $                        C(L+1,L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                        M-L, N-L, ALPHA, A(L+1,L+1), LDA,
      $                        B(L+1,L+1), LDB, ONE, C(L+1,L+1), LDC)
                   ELSE
@@ -661,23 +661,23 @@
 *                    C_{22} = \alpha A_{22}**T * B_{22} + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(1, L+1), LDB, BETA,
      $                     C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
      $                     A(1, L+1), LDA, B, LDB, BETA, C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, ONE, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, N-L, L,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, N-L, L,
      $                     ALPHA, A(1, L+1), LDA, B(1, L+1), LDB, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1,L+1), LDB, ONE, C(L+1,L+1), LDC)
                   ENDIF
@@ -729,23 +729,23 @@
 *                    C_{12} = \alpha A_{11} * B_{21}**T + C_{12} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
      $                     A(1, L+1), LDA, B(1, L+1), LDB, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSA, TRANSB, L, N-L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, N-L, M-L, ALPHA,
      $                     A(1, L+1), LDA, B(L+1, L+1), LDB, BETA,
      $                     C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(L+1,1), LDB, ONE,
      $                     C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ELSE
@@ -792,23 +792,23 @@
 *                    C_{12} = \alpha A_{11} * B_{12} + C_{12} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
      $                     A(1, L+1), LDA, B(L+1, 1), LDB, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, M-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, M-L, ALPHA,
      $                     A(1, L+1), LDA, B(L+1, L+1), LDB, BETA,
      $                     C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(1, L+1), LDB,
      $                     ONE, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ENDIF
@@ -865,23 +865,23 @@
 *                    C_{12} = \alpha A_{11}**T * B_{21}**T + C_{12} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
      $                     A(L+1, 1), LDA, B(1, L+1), LDB, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, M-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, M-L, ALPHA,
      $                     A(L+1, 1), LDA, B(L+1, L+1), LDB, BETA,
      $                     C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(L+1, 1), LDB, ONE,
      $                     C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ELSE
@@ -928,23 +928,23 @@
 *                    C_{12} = \alpha A_{11}**T * B_{12} + C_{12} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, L, M-L, ALPHA,
      $                     A(L+1, 1), LDA, B(L+1, 1), LDB, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSA, TRANSB, L, N-L, M-L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, L, N-L, M-L, ALPHA,
      $                     A(L+1, 1), LDA, B(L+1, L+1), LDB, BETA,
      $                     C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(1, L+1), LDB, ONE,
      $                     C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ENDIF
@@ -996,23 +996,23 @@
 *                    C_{22} = \alpha A_{22} * B_{22}**T + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(L+1, 1), LDB,
      $                     BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
      $                     A(L+1, 1), LDA, B, LDB, BETA, C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, ONE, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, N-L, L,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, N-L, L,
      $                     ALPHA, A(L+1, 1), LDA, B(L+1, 1), LDB, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ELSE
@@ -1059,23 +1059,23 @@
 *                    C_{22} = \alpha A_{22} * B_{22} + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A, LDA, B(1, L+1), LDB,
      $                     BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
+                     CALL SGEMM(TRANSA, TRANSB, M-L, L, L, ALPHA,
      $                     A(L+1, 1), LDA, B, LDB, BETA, C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, ONE, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, N-L, L,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, N-L, L,
      $                     ALPHA, A(L+1, 1), LDA, B(1, L+1), LDB, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ENDIF
@@ -1138,23 +1138,23 @@
 *                    C_{21} = \alpha B_{12}**T * A_{11}**T + C_{21} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
      $                     B(L+1, 1), LDB, A(1, L+1), LDA, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
      $                     B(L+1, L+1), LDB, A(1, L+1), LDA, BETA,
      $                     C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(1, L+1), LDB,
      $                     ONE, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ELSE
@@ -1201,23 +1201,23 @@
 *                    C_{21} = \alpha B_{21} * A_{11}**T + C_{21} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
      $                     B(1,L+1), LDB, A(1,L+1), LDA, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
      $                     B(L+1, L+1), LDB, A(1, L+1), LDA, BETA,
      $                     C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(L+1, 1), LDB,
      $                     ONE, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ENDIF
@@ -1269,23 +1269,23 @@
 *                    C_{22} = \alpha B_{22}**T * A_{22} + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
      $                     B, LDB, A(1, L+1), LDA, BETA, C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, ONE, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(1, L+1), LDB,
      $                     BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, N-L, L,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, N-L, L,
      $                     ALPHA, B(1, L+1), LDB, A(1, L+1), LDA, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ELSE
@@ -1332,23 +1332,23 @@
 *                    C_{22} = \alpha B_{22} * A_{22} + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
      $                     B, LDB, A(1, L+1), LDA, BETA, C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, ONE, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(L+1, 1), LDB, BETA,
      $                     C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, N-L, L,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, N-L, L,
      $                     ALPHA, B(L+1, 1), LDB, A(1, L+1), LDA,
      $                     BETA, C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ENDIF
@@ -1405,23 +1405,23 @@
 *                    C_{22} = \alpha B_{22}**T * A_{22}**T + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
      $                     B, LDB, A(L+1, 1), LDA, BETA, C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, ONE, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(1, L+1), LDB,
      $                     BETA, C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, N-L, L, ALPHA,
      $                     B(1, L+1), LDB, A(L+1, 1), LDA, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ELSE
@@ -1468,23 +1468,23 @@
 *                    C_{22} = \alpha B_{22} * A_{22}**T + C_{22} (This routine)
 *
                      ! C_{11}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
                      ! C_{12}
-                     CALL DGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, N-L, L, ALPHA,
      $                     B, LDB, A(L+1, 1), LDA, BETA, C(1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, ONE, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(L+1, 1), LDB, BETA,
      $                     C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, N-L, L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, N-L, L, ALPHA,
      $                     B(L+1, 1), LDB, A(L+1, 1), LDA, BETA,
      $                     C(L+1, L+1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, ONE, C(L+1, L+1), LDC)
                   ENDIF
@@ -1536,23 +1536,23 @@
 *                    C_{21} = \alpha B_{12}**T * A_{11} + C_{21} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
      $                     B(L+1, 1), LDB, A(L+1, 1), LDA, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(L+1, 1),
      $                     LDB, BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
      $                     B(L+1, L+1), LDB, A(L+1, 1), LDA, BETA,
      $                     C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(1, L+1), LDB, ONE,
      $                     C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ELSE
@@ -1599,23 +1599,23 @@
 *                    C_{21} = \alpha B_{21} * A_{11} + C_{21} (This routine)
 *
                      ! C_{11}
-                     CALL DGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, L, L, N-L, ALPHA,
      $                     B(1, L+1), LDB, A(L+1, 1), LDA, BETA, C, LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, L, ALPHA, A, LDA, B, LDB, ONE, C, LDC)
                      ! C_{12}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     L, N-L, ALPHA, A(L+1, L+1), LDA, B(1, L+1),
      $                     LDB, BETA, C(1, L+1), LDC)
                      ! C_{21}
-                     CALL DGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
+                     CALL SGEMM(TRANSB, TRANSA, M-L, L, N-L, ALPHA,
      $                     B(L+1, L+1), LDB, A(L+1, 1), LDA, BETA,
      $                     C(L+1, 1), LDC)
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, L, ALPHA, A, LDA, B(L+1, 1), LDB, ONE,
      $                     C(L+1, 1), LDC)
                      ! C_{22}
-                     CALL DTRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+                     CALL STRMMOOP(SIDE, UPLO, TRANSA, TRANSB, DIAG,
      $                     M-L, N-L, ALPHA, A(L+1, L+1), LDA,
      $                     B(L+1, L+1), LDB, BETA, C(L+1, L+1), LDC)
                   ENDIF
