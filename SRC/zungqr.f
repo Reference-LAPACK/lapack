@@ -141,10 +141,11 @@
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARFB0C2, ZLARFT, ZUNG2R
+      EXTERNAL           XERBLA, ZLARFB0C2, ZLARFT,
+     $                   ZUNG2R, ZUNGKR
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -233,7 +234,7 @@
 *
 *        Apply H to rows i:m of current block
 *
-         CALL ZUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, IINFO)
+         CALL ZUNGKR(M-I+1, IB, A(I,I), LDA)
 *
 *        Use our standard blocking method after the last block
 *
@@ -255,8 +256,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL ZUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL ZUNGKR(M-I+1, IB, A(I,I), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
@@ -282,8 +282,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL ZUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL ZUNGKR(M-I+1, IB, A(I,I), LDA)
          END IF
       END IF
 *

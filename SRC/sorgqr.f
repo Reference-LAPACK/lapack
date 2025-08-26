@@ -215,13 +215,13 @@
          I = KK + 1
          IB = NB
 *
-*           Form the triangular factor of the block reflector
-*           H = H(i) H(i+1) . . . H(i+ib-1)
+*        Form the triangular factor of the block reflector
+*        H = H(i) H(i+1) . . . H(i+ib-1)
 *
          CALL SLARFT('Forward', 'Column', M-I+1, IB, A(I,I),
      $                     LDA, TAU(I), A(I,I), LDA)
 *
-*           Apply H to A(i:m,i+ib:n) from the left
+*        Apply H to A(i:m,i+ib:n) from the left
 *
          CALL SLARFB0C2(.TRUE., 'Left', 'No Transpose', 'Forward',
      $      'Column', M-I+1, N-(I+IB)+1, IB, A(I,I), LDA, A(I,I),
@@ -248,8 +248,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL SORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL SORGKR(M-I+1, IB, A(I,I), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
@@ -275,8 +274,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL SORG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL SORGKR(M-I+1, IB, A(I,I), LDA)
          END IF
       END IF
       WORK( 1 ) = SROUNDUP_LWORK(IWS)

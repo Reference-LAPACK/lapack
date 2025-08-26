@@ -1,4 +1,4 @@
-*> \brief \b DORGLK computes the explicit Q factor from DGELQF and DLARFT
+*> \brief \b ZUNGLK computes the explicit Q factor from ZGELQF and ZLARFT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE DORGLK(M, N, Q, LDQ)
+*     SUBROUTINE ZUNGLK(M, N, Q, LDQ)
 *
 *        .. Scalar Arguments ..
 *        INTEGER           M, N, LDQ
 *        ..
 *        .. Array Arguments ..
-*        DOUBLE PRECISION  Q(LDQ,*)
+*        COMPLEX*16  Q(LDQ,*)
 *        ..
 *
 *> \par Purpose:
@@ -22,14 +22,14 @@
 *>
 *> \verbatim
 *>
-*> DORGLK generates an m by n real matrix Q with orthonormal columns,
+*> ZUNGLK generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the first n rows of the product of n
 *> elementary reflectors
 *>
 *>       Q  =  I - V'*T*V = H(1) H(2) . . . H(n)
 *>
 *> Where V is an m by n matrix whose rows are householder reflectors
-*> as returned by DGELQF and T is the n by n matrix returned by DLARFT
+*> as returned by ZGELQF and T is the n by n matrix returned by ZLARFT
 *> \endverbatim
 *
 *  Arguments:
@@ -49,12 +49,12 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>       Q is DOUBLE PRECISION array, dimension (LDQ,N)
+*>       Q is COMPLEX*16 array, dimension (LDQ,N)
 *>       On entry, the lower triangular part and diagonal contains
-*>       The array T as returned from DLARFT. In addition, the
+*>       The array T as returned from ZLARFT. In addition, the
 *>       strictly upper triangular portion of the i-th row contains
 *>       the vector which defines the elementary reflector H(i),
-*>       for i = 1,2,...,m, as returned by DGELQF
+*>       for i = 1,2,...,m, as returned by ZGELQF
 *>       On exit, the m-by-n matrix Q.
 *> \endverbatim
 *
@@ -67,7 +67,7 @@
 *> \author NAG Ltd.
 *
 *  =====================================================================
-      SUBROUTINE DORGLK(M, N, Q, LDQ)
+      SUBROUTINE ZUNGLK(M, N, Q, LDQ)
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -77,23 +77,23 @@
       INTEGER           M, N, LDQ
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  Q(LDQ,*)
+      COMPLEX*16        Q(LDQ,*)
 *     ..
 *
 *  =====================================================================
 *
+*     .. External Subroutines ..
+      EXTERNAL          ZTRMM, ZTRTRM, ZLUMM
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          MIN
+*     ..
 *     .. Parameters ..
-      DOUBLE PRECISION  NEG_ONE, ONE
-      PARAMETER(NEG_ONE=-1.0D+0, ONE=1.0D+0)
+      COMPLEX*16        NEG_ONE, ONE
+      PARAMETER(NEG_ONE=(-1.0D+0,0.0D+0), ONE=(1.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
       INTEGER           I, J
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL          DTRMM, DTRTRM, DLUMM
-*     ..
-*     .. Intrinsic Functions..
-      INTRINSIC         MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -119,8 +119,8 @@
 *
 *     Compute T = V_1'*T
 *
-      CALL DTRTRM('Left', 'Lower', 'Transpose', 'Non-unit', 'Unit',
-     $         M, ONE, Q, LDQ, Q, LDQ)
+      CALL ZTRTRM('Left', 'Lower', 'Conjugate Transpose', 
+     $         'Non-unit', 'Unit', M, ONE, Q, LDQ, Q, LDQ)
 *
 *     Compute Q = -TV. This means that we need to break apart
 *     Our computation in two parts
@@ -132,13 +132,13 @@
 *     Q_2 = -T*V_2 (TRMM) but only when necessary
 *
       IF (N.GT.M) THEN
-         CALL DTRMM('Left', 'Lower', 'No Transpose', 'Non-unit',
+         CALL ZTRMM('Left', 'Lower', 'No Transpose', 'Non-unit',
      $            M, N-M, NEG_ONE, Q, LDQ, Q(1,M+1), LDQ)
       END IF
 *
 *     Q_1 = -T*V_1 (Lower-Upper Matrix-Matrix multiplication)
 *
-      CALL DLUMM('Left', 'Non-unit', 'Unit', M, NEG_ONE, Q, LDQ)
+      CALL ZLUMM('Left', 'Non-unit', 'Unit', M, NEG_ONE, Q, LDQ)
 *
 *     Q = "I" + Q
 *

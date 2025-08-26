@@ -95,8 +95,6 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. LWORK >= max(1,M).
-*>          For optimum performance LWORK >= M*NB, where NB is the
-*>          optimal blocksize.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -143,7 +141,8 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARFB, ZLARFT, ZUNGR2
+      EXTERNAL           XERBLA, ZLARFB, ZLARFT,
+     $                   ZUNGR2, ZUNGRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -169,12 +168,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( M.LE.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'ZUNGRQ', ' ', M, N, K, -1 )
-            LWKOPT = M*NB
-         END IF
+         LWKOPT = MAX(1, M)
+         NB = ILAENV( 1, 'ZUNGRQ', ' ', M, N, K, -1 )
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY ) THEN
@@ -195,31 +190,9 @@
          RETURN
       END IF
 *
-      NBMIN = 2
-      NX = 0
+      NBMIN = MAX( 2, ILAENV( 2, 'ZUNGRQ', ' ', M, N, K, -1 ) )
+      NX = MAX( 0, ILAENV( 3, 'ZUNGRQ', ' ', M, N, K, -1 ) )
       IWS = M
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'ZUNGRQ', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = M
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'ZUNGRQ', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
@@ -249,20 +222,19 @@
 *        Form the triangular factor of the block reflector
 *        H = H(i+ib-1) . . . H(i+1) H(i)
 *
-         CALL ZLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+         CALL ZLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*        Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*        Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-         CALL ZLARFB0C2(.TRUE., 'Right', 'Conjugate', 'Backward', 
-     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA, WORK,
-     $         LDWORK, A, LDA)
+         CALL ZLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Backward', 
+     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA,
+     $          A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*        Apply H to columns 1:n-k+i+ib-1 of current block
 *
-         CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                TAU( I ), WORK, IINFO )
-
+         CALL ZUNGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
+*
          DO I = NB+1, K, NB
 *
 *           The last block may be less than size NB
@@ -273,19 +245,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL ZLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                   A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+            CALL ZLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*           Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*           Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-            CALL ZLARFB0C2(.FALSE., 'Right', 'Conjugate', 
-     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, 
-     $            A(II,1), LDA, WORK, LDWORK, A, LDA)
+            CALL ZLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1),
+     $             LDA, A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*           Apply H to columns 1:n-k+i+ib-1 of current block
 *
-            CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL ZUNGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
          END DO
       END IF
 *

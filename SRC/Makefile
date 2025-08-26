@@ -279,6 +279,8 @@ CLASRC = \
    ctptrs.o ctrcon.o ctrevc.o ctrevc3.o ctrexc.o ctrrfs.o ctrsen.o ctrsna.o \
    ctrsyl.o ctrsyl3.o ctrti2.o ctrtri.o ctrtrs.o ctzrzf.o cung2l.o cung2r.o \
    cungbr.o cunghr.o cungl2.o cunglq.o cungql.o cungqr.o cungr2.o \
+   cungkr.o cungrk.o cungkl.o cunglk.o \
+   clumm.o ctrtrm.o ctrmmoop.o cacxpy.o \
    cungrq.o cungtr.o cungtsqr.o cungtsqr_row.o cunm2l.o cunm2r.o cunmbr.o cunmhr.o cunml2.o cunm22.o \
    cunmlq.o cunmql.o cunmqr.o cunmr2.o cunmr3.o cunmrq.o cunmrz.o \
    cunmtr.o cupgtr.o cupmtr.o icmax1.o scsum1.o cstemr.o \
@@ -487,6 +489,8 @@ ZLASRC = \
    ztrsyl.o ztrsyl3.o ztrti2.o ztrtri.o ztrtrs.o ztzrzf.o zung2l.o \
    zung2r.o zungbr.o zunghr.o zungl2.o zunglq.o zungql.o zungqr.o zungr2.o \
    zungrq.o zungtr.o zungtsqr.o zungtsqr_row.o zunm2l.o zunm2r.o zunmbr.o zunmhr.o zunml2.o zunm22.o \
+   zungkr.o zungrk.o zungkl.o zunglk.o \
+   zlumm.o ztrtrm.o ztrmmoop.o zacxpy.o \
    zunmlq.o zunmql.o zunmqr.o zunmr2.o zunmr3.o zunmrq.o zunmrz.o \
    zunmtr.o zupgtr.o \
    zupmtr.o izmax1.o dzsum1.o zstemr.o \

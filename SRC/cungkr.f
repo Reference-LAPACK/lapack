@@ -1,4 +1,4 @@
-*> \brief \b SORGKR computes the explicit Q factor from SGEQRF and SLARFT
+*> \brief \b CUNGKR computes the explicit Q factor from CGEQRF and CLARFT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE SORGKR(M, N, Q, LDQ)
+*     SUBROUTINE CUNGKR(M, N, Q, LDQ)
 *
 *        .. Scalar Arguments ..
 *        INTEGER           M, N, LDQ
 *        ..
 *        .. Array Arguments ..
-*        REAL              Q(LDQ,*)
+*        COMPLEX           Q(LDQ,*)
 *        ..
 *
 *> \par Purpose:
@@ -22,14 +22,14 @@
 *>
 *> \verbatim
 *>
-*> SORGKR generates an m by n real matrix Q with orthonormal columns,
+*> CUNGKR generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the first n columns of the product of n
 *> elementary reflectors
 *>
-*>       Q  =  I - V*T*V**T = H(1) H(2) . . . H(n)
+*>       Q  =  I - V*T*V**H = H(1) H(2) . . . H(n)
 *>
 *> Where V is an m by n matrix whose columns are householder reflectors
-*> as returned by SGEQRF and T is the n by n matrix returned by SLARFT
+*> as returned by CGEQRF and T is the n by n matrix returned by CLARFT
 *> \endverbatim
 *
 *  Arguments:
@@ -50,12 +50,12 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>       Q is REAL array, dimension (LDQ,N)
+*>       Q is COMPLEX array, dimension (LDQ,N)
 *>       On entry, the upper triangular part and diagonal contains
-*>       The array T as returned from SLARFT. In addition, the
+*>       The array T as returned from CLARFT. In addition, the
 *>       strictly lower triangular portion of the i-th column contains
 *>       the vector which defines the elementary reflector H(i),
-*>       for i = 1,2,...,n, as returned by SGEQRF
+*>       for i = 1,2,...,n, as returned by CGEQRF
 *>       On exit, the m-by-n matrix Q.
 *> \endverbatim
 *
@@ -68,7 +68,8 @@
 *> \author NAG Ltd.
 *
 *  =====================================================================
-      SUBROUTINE SORGKR(M, N, Q, LDQ)
+*     Cost: (2mn**2 + n**2 - n)/2
+      SUBROUTINE CUNGKR(M, N, Q, LDQ)
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -78,20 +79,20 @@
       INTEGER           M, N, LDQ
 *     ..
 *     .. Array Arguments ..
-      REAL              Q(LDQ,*)
+      COMPLEX           Q(LDQ,*)
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL              NEG_ONE, ONE
-      PARAMETER(NEG_ONE=-1.0E+0, ONE=1.0E+0)
+      COMPLEX           NEG_ONE, ONE
+      PARAMETER(NEG_ONE=(-1.0E+0,0.0E+0), ONE=(1.0E+0,0.0E+0))
 *     ..
 *     .. Local Scalars ..
       INTEGER           I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          STRMM, STRTRM, SLUMM
+      EXTERNAL          CTRMM, CTRTRM, CLUMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC         MIN
@@ -117,13 +118,13 @@
 *
 *     Where:
 *
-*     V_1 \in \R^{n\times n}   assumed unit lower triangular
-*     V_2 \in \R^{m-n\times n}
+*     V_1 \in \C^{n\times n}   assumed unit lower triangular
+*     V_2 \in \C^{m-n\times n}
 *
-*     Compute T = T*V_1**T
+*     Compute T = T*V_1**H
 *
-      CALL STRTRM('Right', 'Upper', 'Transpose', 'Non-unit', 'Unit',
-     $            N, ONE, Q, LDQ, Q, LDQ)
+      CALL CTRTRM('Right', 'Upper', 'Conjugate Transpose', 
+     $            'Non-unit', 'Unit', N, ONE, Q, LDQ, Q, LDQ)
 *
 *     Compute Q = -VT. This means that we need to break apart
 *     Our computation in two parts
@@ -136,13 +137,13 @@
 *     Q_2 = -V_2*T (TRMM) but only when necessary
 *
       IF (M.GT.N) THEN
-         CALL STRMM('Right', 'Upper', 'No Transpose', 'Non-unit',
+         CALL CTRMM('Right', 'Upper', 'No Transpose', 'Non-unit',
      $               M-N, N, NEG_ONE, Q, LDQ, Q(N+1,1), LDQ)
       END IF
 *
 *     Q_1 = -V_1*T (Lower-Upper Matrix-Matrix multiplication)
 *
-      CALL SLUMM('Left', 'Unit', 'Non-Unit', N, NEG_ONE, Q, LDQ)
+      CALL CLUMM('Left', 'Unit', 'Non-Unit', N, NEG_ONE, Q, LDQ)
 *
 *     Q = "I" + Q
 *

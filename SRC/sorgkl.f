@@ -112,6 +112,9 @@
 *     .. External Subroutines ..
       EXTERNAL          STRMM, STRTRM, SLUMM
 *     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC         MIN
+*     ..
 *     .. Executable Statements ..
 *
 *     Break Q apart as follows

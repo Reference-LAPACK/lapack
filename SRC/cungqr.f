@@ -141,10 +141,11 @@
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARFB0C2, CLARFT, CUNG2R, XERBLA
+      EXTERNAL           CLARFB0C2, CLARFT, CUNG2R,
+     $                   CUNGKR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -226,7 +227,6 @@
      $                     LDA, TAU(I), A(I,I), LDA)
 *
 *        Apply H to A(i:m,i+ib:n) from the left
-*        Exploit the fact that we are applying to an identity 
 *
          CALL CLARFB0C2(.TRUE., 'Left', 'No Transpose', 'Forward',
      $      'Column', M-I+1, N-(I+IB)+1, IB, A(I,I), LDA, A(I,I),
@@ -234,7 +234,7 @@
 *
 *        Apply H to rows i:m of current block
 *
-         CALL CUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK, IINFO)
+         CALL CUNGKR(M-I+1, IB, A(I,I), LDA)
 *
 *        Use our standard blocking method after the last block
 *
@@ -256,8 +256,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL CUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL CUNGKR(M-I+1, IB, A(I,I), LDA)
          END DO
 *
 *        This checks for if K was a perfect multiple of NB
@@ -283,8 +282,7 @@
 *
 *           Apply H to rows i:m of current block
 *
-            CALL CUNG2R(M-I+1, IB, IB, A(I,I), LDA, TAU(I), WORK,
-     $         IINFO)
+            CALL CUNGKR(M-I+1, IB, A(I,I), LDA)
          END IF
       END IF
 *

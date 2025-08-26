@@ -1,4 +1,4 @@
-*> \brief \b SORGKR computes the explicit Q factor from SGEQRF and SLARFT
+*> \brief \b ZUNGKL computes the explicit Q factor from ZGEQLF and ZLARFT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE SORGKR(M, N, Q, LDQ)
+*     SUBROUTINE ZUNGKL(M, N, Q, LDQ)
 *
 *        .. Scalar Arguments ..
 *        INTEGER           M, N, LDQ
 *        ..
 *        .. Array Arguments ..
-*        REAL              Q(LDQ,*)
+*        COMPLEX*16        Q(LDQ,*)
 *        ..
 *
 *> \par Purpose:
@@ -22,14 +22,14 @@
 *>
 *> \verbatim
 *>
-*> SORGKR generates an m by n real matrix Q with orthonormal columns,
-*> which is defined as the first n columns of the product of n
+*> ZUNGKL generates an m by n complex matrix Q with orthonormal columns,
+*> which is defined as the last n columns of the product of n
 *> elementary reflectors
 *>
-*>       Q  =  I - V*T*V**T = H(1) H(2) . . . H(n)
+*>       Q  =  I - V*T*V**H = H(n) . . . H(2) H(1)
 *>
 *> Where V is an m by n matrix whose columns are householder reflectors
-*> as returned by SGEQRF and T is the n by n matrix returned by SLARFT
+*> as returned by ZGEQLF and T is the n by n matrix returned by ZLARFT
 *> \endverbatim
 *
 *  Arguments:
@@ -50,12 +50,12 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>       Q is REAL array, dimension (LDQ,N)
-*>       On entry, the upper triangular part and diagonal contains
-*>       The array T as returned from SLARFT. In addition, the
-*>       strictly lower triangular portion of the i-th column contains
-*>       the vector which defines the elementary reflector H(i),
-*>       for i = 1,2,...,n, as returned by SGEQRF
+*>       Q is COMPLEX*16 array, dimension (LDQ,N)
+*>       On entry, Q(1:m-n+i-1,i) contains the vector which defines the
+*>       elementary reflector H(i), for i=1,...,n as returned by ZGEQLF.
+*>       In addition, the lower triangular portion of the submatrix given
+*>       by Q(m-n+1:m,1:n) will contain the arry T as returned by ZLARFT.
+*>       See further details for more information.
 *>       On exit, the m-by-n matrix Q.
 *> \endverbatim
 *
@@ -67,8 +67,27 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*> The storage of the V and T components inside Q is best illustrated by
+*> the following example with m = 5, n = 3.
+*>
+*> Q =   |----------|
+*>       | V1 V2 V3 |
+*>       | V1 V2 V3 |
+*>       | T1 V2 V3 |
+*>       | T1 T2 V3 |
+*>       | T1 T2 T3 |
+*>       |----------|
+*>
+*> \endverbatim
+*>
 *  =====================================================================
-      SUBROUTINE SORGKR(M, N, Q, LDQ)
+
+      SUBROUTINE ZUNGKL(M, N, Q, LDQ)
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -78,76 +97,78 @@
       INTEGER           M, N, LDQ
 *     ..
 *     .. Array Arguments ..
-      REAL              Q(LDQ,*)
+      COMPLEX*16        Q(LDQ,*)
 *     ..
 *
 *  =====================================================================
 *
+*     .. External Subroutines ..
+      EXTERNAL          ZTRMM, ZTRTRM, ZLUMM
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          MIN
+*     ..
 *     .. Parameters ..
-      REAL              NEG_ONE, ONE
-      PARAMETER(NEG_ONE=-1.0E+0, ONE=1.0E+0)
+      COMPLEX*16        NEG_ONE, ONE
+      PARAMETER(NEG_ONE=(-1.0D+0,0.0D+0), ONE=(1.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
       INTEGER           I, J
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL          STRMM, STRTRM, SLUMM
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC         MIN
 *     ..
 *     .. Executable Statements ..
 *
 *     Break Q apart as follows
 *
 *           |---|
-*     Q =   | T |
-*           | V |
+*     Q =   | V |
+*           | T |
 *           |---|
 *
-*     Where T is an n-by-n upper triangular matrix, and V is an
-*     m-by-n assumed unit lower trapezoidal matrix
+*     Where T is an n-by-n lower triangular matrix, and V is as described
+*     in the Further Details section
 *
 *     In turn, break apart V as follows
 *
 *           |-----|
-*     V =   | V_1 |
-*           | V_2 |
+*     V =   | V_2 |
+*           | V_1 |
 *           |-----|
 *
 *     Where:
 *
-*     V_1 \in \R^{n\times n}   assumed unit lower triangular
-*     V_2 \in \R^{m-n\times n}
+*     V_1 \in \C^{n\times n}   assumed unit upper triangular
+*     V_2 \in \C^{m-n\times n}
 *
 *     Compute T = T*V_1**T
 *
-      CALL STRTRM('Right', 'Upper', 'Transpose', 'Non-unit', 'Unit',
-     $            N, ONE, Q, LDQ, Q, LDQ)
+      CALL ZTRTRM('Right', 'Lower', 'Conjugate Transpose', 
+     $         'Non-Unit', 'Unit', N, ONE, Q(M-N+1,1), LDQ, Q(M-N+1,1),
+     $         LDQ)
 *
 *     Compute Q = -VT. This means that we need to break apart
 *     Our computation in two parts
 *
 *           |--------|
-*     Q =   | -V_1*T |
-*           | -V_2*T |
+*     Q =   | -V_2*T |
+*           | -V_1*T |
 *           |--------|
 *
 *     Q_2 = -V_2*T (TRMM) but only when necessary
 *
       IF (M.GT.N) THEN
-         CALL STRMM('Right', 'Upper', 'No Transpose', 'Non-unit',
-     $               M-N, N, NEG_ONE, Q, LDQ, Q(N+1,1), LDQ)
+         CALL ZTRMM('Right', 'Lower', 'No Transpose', 'Non-Unit',
+     $            M-N, N, NEG_ONE, Q(M-N+1,1), LDQ, Q, LDQ)
       END IF
 *
 *     Q_1 = -V_1*T (Lower-Upper Matrix-Matrix multiplication)
 *
-      CALL SLUMM('Left', 'Unit', 'Non-Unit', N, NEG_ONE, Q, LDQ)
+      CALL ZLUMM('Right', 'Non-Unit', 'Unit', N, NEG_ONE,
+     $         Q(M-N+1,1), LDQ)
 *
 *     Q = "I" + Q
 *
       J = MIN(M,N)
       DO I = 1, J
-         Q(I,I) = Q(I,I) + ONE
+         Q(M-N+I,I) = Q(M-N+I,I) + ONE
       END DO
       END SUBROUTINE

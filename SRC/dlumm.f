@@ -135,7 +135,7 @@ c     Cost: 2/3 * (n^3 - n)
          EXTERNAL          LSAME
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          DGEMM, DTRMM, DLASET
+         EXTERNAL          DGEMM, DTRMM, DLASET, XERBLA
 *        ..
 *        .. Local Scalars ..
          INTEGER           K

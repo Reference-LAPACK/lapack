@@ -93,6 +93,9 @@
 *     .. External Subroutines ..
       EXTERNAL          DTRMM, DTRTRM, DLUMM
 *     ..
+*     .. Intrinsic Functions..
+      INTRINSIC         MIN
+*     ..
 *     .. Executable Statements ..
 *
 *     Break Q apart as follows

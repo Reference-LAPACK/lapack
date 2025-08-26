@@ -187,7 +187,6 @@
          !     and thus don't reference whatever is present in C2 
          !     at the beginning.
          LOGICAL           C2I
-
          ! Array arguments
          COMPLEX           V(LDV,*), C(LDC,*), T(LDT,*)
          ! Local scalars
@@ -240,10 +239,10 @@
             ! Where: V = [ V1 ] and C = [ C1 ]
             !            [ V2 ]         [ C2 ]
             ! with the following dimensions:
-            !     V1\in\R^{K\times K}
-            !     V2\in\R^{M-K\times K}
-            !     C1=0\in\R^{K\times N}
-            !     C2\in\R^{M-K\times N}
+            !     V1\in\C^{K\times K}
+            !     V2\in\C^{M-K\times K}
+            !     C1=0\in\C^{K\times N}
+            !     C2\in\C^{M-K\times N}
             ! Since we are assuming that C1 is a zero matrix and it will be
             ! overwritten on exit, we can use this spot as a temporary workspace
             ! without having to allocate anything extra.
@@ -321,10 +320,10 @@
             ! We are computing C = CH' = C(I-V'T'V)
             ! Where: V = [ V1 V2 ] and C = [ C1 C2 ]
             ! with the following dimensions:
-            !     V1\in\R^{K\times K}
-            !     V2\in\R^{K\times N-K}
-            !     C1=0\in\R^{M\times K}
-            !     C2\in\R^{M\times N-K}
+            !     V1\in\C^{K\times K}
+            !     V2\in\C^{K\times N-K}
+            !     C1=0\in\C^{M\times K}
+            !     C2\in\C^{M\times N-K}
             ! Since we are assuming that C1 is a zero matrix and it will be
             ! overwritten on exit, we can use this spot as a temporary workspace
             ! without having to allocate anything extra.
@@ -354,9 +353,6 @@
             IF( .NOT.SIDER ) THEN
                CALL XERBLA('CLARFB0C2', 2)
                RETURN
-            ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('CLARFB0C2', 3)
-               RETURN
             END IF
             !
             ! C1 = C2*V2'
@@ -375,8 +371,13 @@
             !
             ! C1 = C1*T'
             !
-            CALL CTRMM('Right', 'Upper', 'Conjugate', 'Non-unit',
+            IF( TRANST ) THEN
+               CALL CTRMM('Right', 'Upper', 'Conjugate', 'Non-unit',
      $            M, K, ONE, T, LDT, C, LDC)
+            ELSE 
+               CALL CTRMM('Right', 'Lower', 'No Transpose',
+     $            'Non-unit', M, K, ONE, T, LDT, C, LDC)
+            END IF
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !
@@ -402,10 +403,10 @@
             ! Where: V = [ V2 ] and C = [ C2 ]
             !            [ V1 ]         [ C1 ]
             ! with the following dimensions:
-            !     V1\in\R^{K\times K}
-            !     V2\in\R^{M-K\times K}
-            !     C1=0\in\R^{K\times N}
-            !     C2\in\R^{M-K\times N}
+            !     V1\in\C^{K\times K}
+            !     V2\in\C^{M-K\times K}
+            !     C1=0\in\C^{K\times N}
+            !     C2\in\C^{M-K\times N}
             ! Since we are assuming that C1 is a zero matrix and it will be
             ! overwritten on exit, we can use this spot as a temporary workspace
             ! without having to allocate anything extra.
@@ -481,10 +482,10 @@
             ! We are computing C = CH' = C(I-V'T'V)
             ! Where: V = [ V2 V1] and C = [ C2 C1 ]
             ! with the following dimensions:
-            !     V1\in\R^{K\times K}
-            !     V2\in\R^{K\times N-K}
-            !     C1=0\in\R^{M\times K}
-            !     C2\in\R^{M\times N-K}
+            !     V1\in\C^{K\times K}
+            !     V2\in\C^{K\times N-K}
+            !     C1=0\in\C^{M\times K}
+            !     C2\in\C^{M\times N-K}
             ! Since we are assuming that C1 is a zero matrix and it will be
             ! overwritten on exit, we can use this spot as a temporary workspace
             ! without having to allocate anything extra.
@@ -517,9 +518,6 @@
             IF( .NOT.SIDER ) THEN
                CALL XERBLA('CLARFB0C2', 2)
                RETURN
-            ELSE IF(.NOT.TRANST) THEN
-               CALL XERBLA('CLARFB0C2', 3)
-               RETURN
             END IF
             !
             ! C1 = C2*V2'
@@ -537,8 +535,13 @@
             !
             ! C1 = C1*T'
             !
-            CALL CTRMM('Right', 'Lower', 'Conjugate', 'Non-unit',
-     $         M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            IF( TRANST ) THEN
+               CALL CTRMM('Right', 'Lower', 'Conjugate', 'Non-unit',
+     $            M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            ELSE
+               CALL CTRMM('Right', 'Upper', 'No Transpose',
+     $            'Non-unit', M, K, ONE, T, LDT, C(1, N-K+1), LDC)
+            END IF
             !
             ! C2 = C2 - C1*V2 = -C1*V2 + C2
             !

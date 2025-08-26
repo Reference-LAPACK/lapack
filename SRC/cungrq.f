@@ -143,7 +143,8 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARFB0C2, CLARFT, CUNGR2, XERBLA
+      EXTERNAL           CLARFB0C2, CLARFT, CUNGR2,
+     $                   CUNGRK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -196,31 +197,9 @@
          RETURN
       END IF
 *
-      NBMIN = 2
-      NX = 0
+      NBMIN = MAX( 2, ILAENV( 2, 'CUNGRQ', ' ', M, N, K, -1 ) )
+      NX = MAX( 0, ILAENV( 3, 'CUNGRQ', ' ', M, N, K, -1 ) )
       IWS = M
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'CUNGRQ', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = M
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CUNGRQ', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
@@ -250,19 +229,18 @@
 *        Form the triangular factor of the block reflector
 *        H = H(i+ib-1) . . . H(i+1) H(i)
 *
-         CALL CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+         CALL CLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*        Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*        Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-         CALL CLARFB0C2(.TRUE., 'Right', 'Conjugate', 'Backward', 
-     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA, WORK,
-     $         LDWORK, A, LDA)
+         CALL CLARFB0C2(.TRUE., 'Right', 'No Transpose', 'Backward', 
+     $         'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1), LDA,
+     $          A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*           Apply H to columns 1:n-k+i+ib-1 of current block
 *
-         CALL CUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                TAU( I ), WORK, IINFO )
+         CALL CUNGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
 
          DO I = NB+1, K, NB
 *
@@ -274,19 +252,18 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
-     $                   A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
+            CALL CLARFT( 'Transpose', 'Rowwise', N-K+I+IB-1, IB,
+     $                A( II, 1 ), LDA, TAU( I ), A( II, N-K+I ), LDA )
 *
-*           Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*           Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-            CALL CLARFB0C2(.FALSE., 'Right', 'Conjugate', 
-     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, 
-     $            A(II,1), LDA, WORK, LDWORK, A, LDA)
+            CALL CLARFB0C2(.FALSE., 'Right', 'No Transpose',
+     $            'Backward', 'Rowwise', II-1, N-K+I+IB-1, IB, A(II,1),
+     $             LDA, A( II, N-K+I ), LDA, A, LDA)
 *
-*           Apply H**T to columns 1:n-k+i+ib-1 of current block
+*           Apply H to columns 1:n-k+i+ib-1 of current block
 *
-            CALL CUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL CUNGRK( IB, N-K+I+IB-1, A( II, 1 ), LDA )
          END DO
       END IF
 *

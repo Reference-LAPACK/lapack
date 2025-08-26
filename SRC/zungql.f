@@ -141,7 +141,8 @@
      $                   NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARFB0C2, ZLARFT, ZUNG2L
+      EXTERNAL           XERBLA, ZLARFB0C2, ZLARFT,
+     $                   ZUNG2L, ZUNGKL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -240,8 +241,7 @@
 *
 *        Apply H to rows 1:m-k+i+ib-1 of current block
 *
-         CALL ZUNG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                TAU( I ), WORK, IINFO )
+         CALL ZUNGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
 
 *        Use blocked code on the remaining blocks if there are any.
 *
@@ -266,8 +266,7 @@
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL ZUNG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                   TAU( I ), WORK, IINFO )
+            CALL ZUNGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
          END DO
       END IF
 *

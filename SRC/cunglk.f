@@ -1,4 +1,4 @@
-*> \brief \b DORGRK computes the explicit Q factor from DGERQF and DLARFT
+*> \brief \b CUNGLK computes the explicit Q factor from CGELQF and CLARFT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE DORGRK(M, N, Q, LDQ)
+*     SUBROUTINE CUNGLK(M, N, Q, LDQ)
 *
 *        .. Scalar Arguments ..
 *        INTEGER           M, N, LDQ
 *        ..
 *        .. Array Arguments ..
-*        DOUBLE PRECISION  Q(LDQ,*)
+*        COMPLEX     Q(LDQ,*)
 *        ..
 *
 *> \par Purpose:
@@ -22,14 +22,14 @@
 *>
 *> \verbatim
 *>
-*> DORGRK generates an m by n real matrix Q with orthonormal rows,
-*> which is defined as the last m rows of the product of m
+*> CUNGLK generates an m by n complex matrix Q with orthonormal columns,
+*> which is defined as the first n rows of the product of n
 *> elementary reflectors
 *>
-*>       Q  =  I - V'*T*V = H(m) . . . H(2) H(1)
+*>       Q  =  I - V'*T*V = H(1) H(2) . . . H(n)
 *>
-*> Where V is an m by n matrix whose columns are householder reflectors
-*> as returned by DGERQF and T is the n by n matrix returned by DLARFT
+*> Where V is an m by n matrix whose rows are householder reflectors
+*> as returned by CGELQF and T is the n by n matrix returned by CLARFT
 *> \endverbatim
 *
 *  Arguments:
@@ -38,8 +38,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the matrix V, and the order of T.
-*>          M >= 0.
+*>          The number of rows of the matrix V, and the order of T. M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -50,12 +49,12 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>       Q is DOUBLE PRECISION array, dimension (LDQ,N)
-*>       On entry, Q(i,1:n-m-1+i) contains the vector which defines the
-*>       elementary reflector H(i), for i=1,...,n as returned by DGERQF.
-*>       In addition, the upper triangular portion of the submatrix given
-*>       by Q(1:m,n-m:n) will contain the array T as returned by DLARFT.
-*>       See further details for more information.
+*>       Q is COMPLEX array, dimension (LDQ,N)
+*>       On entry, the lower triangular part and diagonal contains
+*>       The array T as returned from CLARFT. In addition, the
+*>       strictly upper triangular portion of the i-th row contains
+*>       the vector which defines the elementary reflector H(i),
+*>       for i = 1,2,...,m, as returned by CGELQF
 *>       On exit, the m-by-n matrix Q.
 *> \endverbatim
 *
@@ -67,25 +66,8 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \par Further Details:
-*  =====================
-*>
-*> \verbatim
-*>
-*> The storage of the V and T components inside Q is best illustrated by
-*> the following example with m = 3, n = 5.
-*>
-*> Q =   |----------------|
-*>       | V1 V1 T1 T1 T1 |
-*>       | V2 V2 V2 T2 T2 |
-*>       | V3 V3 V3 V3 T3 |
-*>       |----------------|
-*>
-*> \endverbatim
-*>
 *  =====================================================================
-
-      SUBROUTINE DORGRK(M, N, Q, LDQ)
+      SUBROUTINE CUNGLK(M, N, Q, LDQ)
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -95,22 +77,22 @@
       INTEGER           M, N, LDQ
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  Q(LDQ,*)
+      COMPLEX           Q(LDQ,*)
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION  NEG_ONE, ONE
-      PARAMETER(NEG_ONE=-1.0D+0, ONE=1.0D+0)
+      COMPLEX           NEG_ONE, ONE
+      PARAMETER(NEG_ONE=(-1.0D+0,0.0D+0), ONE=(1.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
       INTEGER           I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DTRMM, DTRTRM, DLUMM
+      EXTERNAL          CTRMM, CTRTRM, CLUMM
 *     ..
-*     .. Intrinsic Functions..
+*     .. Intrinsic Functions ..
       INTRINSIC         MIN
 *     ..
 *     .. Executable Statements ..
@@ -118,51 +100,50 @@
 *     Break Q apart as follows
 *
 *           |-----|
-*     Q =   | V T |
+*     Q =   | T V |
 *           |-----|
 *
-*     Where T is an m-by-m upper triangular matrix, and V is as described
-*     in the Further Details section
+*     Where T is an m-by-m lower triangular matrix, and V is an
+*     m-by-n assumed unit upper trapezoidal matrix
 *
 *     In turn, break apart V as follows
 *
 *           |---------|
-*     V =   | V_2 V_1 |
+*     V =   | V_1 V_2 |
 *           |---------|
 *
 *     Where:
 *
-*     V_1 \in \R^{m\times m}   assumed unit lower triangular
+*     V_1 \in \R^{m\times m}   assumed unit upper triangular
 *     V_2 \in \R^{m\times n-m}
 *
 *     Compute T = V_1'*T
 *
-      CALL DTRTRM('Left', 'Upper', 'Transpose', 'Non-Unit', 'Unit',
-     $         M, ONE, Q(1,N-M+1), LDQ, Q(1,N-M+1), LDQ)
+      CALL CTRTRM('Left', 'Lower', 'Conjugate Transpose', 
+     $         'Non-unit', 'Unit', M, ONE, Q, LDQ, Q, LDQ)
 *
 *     Compute Q = -TV. This means that we need to break apart
 *     Our computation in two parts
 *
 *           |---------------|
-*     Q =   | -T*V_2 -T*V_1 |
+*     Q =   | -T*V_1 -T*V_2 |
 *           |---------------|
 *
 *     Q_2 = -T*V_2 (TRMM) but only when necessary
 *
       IF (N.GT.M) THEN
-         CALL DTRMM('Left', 'Upper', 'No Transpose', 'Non-Unit',
-     $            M, N-M, NEG_ONE, Q(1,N-M+1), LDQ, Q, LDQ)
+         CALL CTRMM('Left', 'Lower', 'No Transpose', 'Non-unit',
+     $            M, N-M, NEG_ONE, Q, LDQ, Q(1,M+1), LDQ)
       END IF
 *
 *     Q_1 = -T*V_1 (Lower-Upper Matrix-Matrix multiplication)
 *
-      CALL DLUMM('Right', 'Unit', 'Non-Unit', M, NEG_ONE,
-     $         Q(1,N-M+1), LDQ)
+      CALL CLUMM('Left', 'Non-unit', 'Unit', M, NEG_ONE, Q, LDQ)
 *
 *     Q = "I" + Q
 *
       J = MIN(M,N)
       DO I = 1, J
-         Q(I,N-M+I) = Q(I,N-M+I) + ONE
+         Q(I,I) = Q(I,I) + ONE
       END DO
       END SUBROUTINE
