@@ -158,6 +158,7 @@
      $                                         LDAB, AFB, LDAFB, IPIV,
      $                                         C, CAPPLY, INFO, WORK,
      $                                         RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

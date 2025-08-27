@@ -199,6 +199,7 @@
       SUBROUTINE ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
      $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
