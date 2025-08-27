@@ -20,7 +20,9 @@
 *
 *> \ingroup test_second
 *
-*  =====================================================================      PROGRAM DSECNDTST
+*  =====================================================================
+      PROGRAM DSECNDTST
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *
@@ -117,6 +119,8 @@
      $        ' than zero => timing in TESTING might be dubious' )
       CALL MYSUB(NMAX,X,Y)
       END
+
+*  =====================================================================
       SUBROUTINE MYSUB(N,X,Y)
       IMPLICIT NONE
       INTEGER N
