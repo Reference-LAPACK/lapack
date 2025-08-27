@@ -229,6 +229,7 @@
      $                       LDX11,
      $                       X21, LDX21, THETA, U1, LDU1, U2, LDU2, V1T,
      $                       LDV1T, WORK, LWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine (3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

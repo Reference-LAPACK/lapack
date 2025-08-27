@@ -113,6 +113,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DPTCON( N, D, E, ANORM, RCOND, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

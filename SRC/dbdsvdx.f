@@ -221,6 +221,7 @@
 *  =====================================================================
       SUBROUTINE DBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                    NS, S, Z, LDZ, WORK, IWORK, INFO)
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

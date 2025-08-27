@@ -234,6 +234,7 @@
       SUBROUTINE DLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
      $                   SCALE,
      $                   CNORM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
