@@ -132,6 +132,7 @@
 *  =====================================================================
       SUBROUTINE SLARRC( JOBT, N, VL, VU, D, E, PIVMIN,
      $                            EIGCNT, LCNT, RCNT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

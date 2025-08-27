@@ -300,6 +300,7 @@
      $                    RTOL1, RTOL2, SPLTOL, NSPLIT, ISPLIT, M,
      $                    W, WERR, WGAP, IBLOCK, INDEXW, GERS, PIVMIN,
      $                    WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

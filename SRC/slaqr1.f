@@ -116,6 +116,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

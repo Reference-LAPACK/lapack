@@ -94,6 +94,7 @@
 *
 *  =====================================================================
       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

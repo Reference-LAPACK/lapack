@@ -182,6 +182,7 @@
 *>
 *  =====================================================================
       SUBROUTINE STFTTP( TRANSR, UPLO, N, ARF, AP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -269,6 +269,7 @@
      $                   E,
      $                   M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
