@@ -143,6 +143,7 @@
 *  =====================================================================
       SUBROUTINE SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A, D, E, B, X, XACT, WORK, RWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

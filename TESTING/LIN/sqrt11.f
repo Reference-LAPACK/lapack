@@ -95,6 +95,7 @@
 *
 *  =====================================================================
       REAL             FUNCTION SQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

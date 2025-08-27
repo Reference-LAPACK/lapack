@@ -144,6 +144,7 @@
 *  =====================================================================
       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
      $                   N5, IMAT, NFAIL, NERRS, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -156,6 +156,7 @@
       SUBROUTINE CDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

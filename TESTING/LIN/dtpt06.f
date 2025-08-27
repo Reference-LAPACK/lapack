@@ -108,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE DTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, WORK, RAT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
