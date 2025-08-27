@@ -98,6 +98,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
