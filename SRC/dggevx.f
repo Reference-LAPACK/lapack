@@ -387,6 +387,7 @@
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR, ILO,
      $                   IHI, LSCALE, RSCALE, ABNRM, BBNRM, RCONDE,
      $                   RCONDV, WORK, LWORK, IWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -99,6 +99,7 @@
 *
 *  =====================================================================
       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

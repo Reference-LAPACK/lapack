@@ -66,6 +66,7 @@
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -169,6 +170,7 @@
 *> \ingroup lamc3
 *>
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

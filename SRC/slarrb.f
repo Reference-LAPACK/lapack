@@ -191,6 +191,7 @@
       SUBROUTINE SLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, TWIST, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -76,6 +76,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLA_WWADDW( N, X, Y, W )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

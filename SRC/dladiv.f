@@ -86,6 +86,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLADIV( A, B, C, D, P, Q )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,6 +173,7 @@
 
 
       SUBROUTINE DLADIV1( A, B, C, D, P, Q )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

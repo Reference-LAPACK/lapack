@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM SCBLAT1
+      IMPLICIT NONE
 *     Test program for the REAL             Level 1 CBLAS.
 *     Based upon the original CBLAS test routine together with:
 *     F06EAF Example Program Text
@@ -51,7 +53,10 @@
 99999 FORMAT (' Real CBLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
       END
+
+*  =====================================================================
       SUBROUTINE HEADER
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -79,7 +84,10 @@
 *
 99999 FORMAT (/' Test of subprogram number',I3,9X,A15)
       END
+
+*  =====================================================================
       SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -140,7 +148,10 @@
    20 CONTINUE
    40 RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -234,7 +245,10 @@
    80 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -389,7 +403,10 @@
   120 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK3(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -595,7 +612,10 @@
   200 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -650,7 +670,10 @@
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,3I5,I3,2E36.8,2E12.4)
       END
+
+*  =====================================================================
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -675,7 +698,10 @@
 *
       RETURN
       END
+
+*  =====================================================================
       REAL             FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -685,7 +711,10 @@
       SDIFF = SA - SB
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR

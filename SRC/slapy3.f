@@ -63,6 +63,7 @@
 *
 *  =====================================================================
       REAL             FUNCTION SLAPY3( X, Y, Z )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

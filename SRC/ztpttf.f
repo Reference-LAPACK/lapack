@@ -202,6 +202,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZTPTTF( TRANSR, UPLO, N, AP, ARF, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

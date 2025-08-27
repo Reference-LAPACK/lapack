@@ -94,6 +94,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

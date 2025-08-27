@@ -150,6 +150,7 @@
       DOUBLE PRECISION FUNCTION ZLA_GBRCOND_X( TRANS, N, KL, KU, AB,
      $                                         LDAB, AFB, LDAFB, IPIV,
      $                                         X, INFO, WORK, RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

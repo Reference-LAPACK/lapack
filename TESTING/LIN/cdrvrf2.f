@@ -86,6 +86,7 @@
 *
 *  =====================================================================
       SUBROUTINE CDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

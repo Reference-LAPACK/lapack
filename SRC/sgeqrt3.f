@@ -127,6 +127,7 @@
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE SGEQRT3( M, N, A, LDA, T, LDT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

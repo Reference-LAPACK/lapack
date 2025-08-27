@@ -66,6 +66,7 @@
 !>
 !  =====================================================================
 integer function icamax(n, x, incx)
+   implicit none
    integer, parameter :: wp = kind(1.e0)
 !
 !  -- Reference BLAS level1 routine --
