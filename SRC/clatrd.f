@@ -194,6 +194,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

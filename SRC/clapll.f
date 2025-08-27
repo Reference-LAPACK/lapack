@@ -95,6 +95,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLAPLL( N, X, INCX, Y, INCY, SSMIN )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

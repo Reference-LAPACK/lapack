@@ -316,6 +316,7 @@
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $                             LDV2T, WORK, LWORK, RWORK, LRWORK,
      $                             IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
