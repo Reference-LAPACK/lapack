@@ -418,6 +418,7 @@
      $                   WI1, WR2, WI2, WR3, WI3, EVECTL, EVECTR,
      $                   EVECTY, EVECTX, UU, TAU, WORK, NWORK, IWORK,
      $                   SELECT, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

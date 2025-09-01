@@ -107,6 +107,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLASQ2( N, Z, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

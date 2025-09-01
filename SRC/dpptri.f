@@ -88,6 +88,7 @@
 *
 *  =====================================================================
       SUBROUTINE DPPTRI( UPLO, N, AP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

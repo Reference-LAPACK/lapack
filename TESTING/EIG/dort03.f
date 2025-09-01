@@ -153,6 +153,7 @@
 *  =====================================================================
       SUBROUTINE DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
      $                   RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

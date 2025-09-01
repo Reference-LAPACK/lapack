@@ -162,6 +162,7 @@
       SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM,
      $                   GIVPTR,
      $                   GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

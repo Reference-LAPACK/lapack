@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM DBLAT2
+      IMPLICIT NONE
 *
 *  Test program for the DOUBLE PRECISION Level 2 Blas.
 *
@@ -456,10 +458,13 @@
 *     End of DBLAT2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DGEMV and DGBMV.
 *
@@ -816,10 +821,13 @@
 *     End of DCHK1.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DSYMV, DKYMV, DSBMV and DSPMV.
 *
@@ -1186,9 +1194,12 @@
 *     End of DCHK2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, XT, G, Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DTRMV, DTBMV, DTPMV, DTRSV, DTBSV and DTPSV.
 *
@@ -1573,10 +1584,13 @@
 *     End of DCHK3.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DGER.
 *
@@ -1845,10 +1859,13 @@
 *     End of DCHK4.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DSYR and DSPR.
 *
@@ -2141,10 +2158,13 @@
 *     End of DCHK5.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests DSYR2, DKYR2 and DSPR2.
 *
@@ -2496,8 +2516,11 @@
 *     End of DCHK6.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A within the bandwidth
 *  defined by KL and KU.
@@ -2677,8 +2700,11 @@
 *     End of DMAKE.
 *
       END
+
+*  =====================================================================
       SUBROUTINE DMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -2794,7 +2820,10 @@
 *     End of DMVCH.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LDE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -2824,7 +2853,10 @@
 *     End of LDE.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LDERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2890,7 +2922,10 @@
 *     End of LDERES.
 *
       END
+
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates random numbers uniformly distributed between -0.5 and 0.5.
 *
@@ -2936,7 +2971,10 @@
 *     End of DBEG.
 *
       END
+
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *

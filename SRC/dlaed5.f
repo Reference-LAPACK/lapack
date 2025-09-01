@@ -103,6 +103,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DLAED5( I, D, Z, DELTA, RHO, DLAM )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -99,6 +99,7 @@
 *
 *  =====================================================================
       PROGRAM DBLAT2
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -429,6 +430,7 @@
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G )
+      IMPLICIT NONE
 *
 *  Tests DGEMV and DGBMV.
 *
@@ -798,6 +800,7 @@
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G )
+      IMPLICIT NONE
 *
 *  Tests DSYMV, DKYMV, DSBMV and DSPMV.
 *
@@ -1150,6 +1153,7 @@
       SUBROUTINE DCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, XT, G, Z )
+      IMPLICIT NONE
 *
 *  Tests DTRMV, DTBMV, DTPMV, DTRSV, DTBSV and DTPSV.
 *
@@ -1508,6 +1512,7 @@
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
+      IMPLICIT NONE
 *
 *  Tests DGER.
 *
@@ -1769,6 +1774,7 @@
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
+      IMPLICIT NONE
 *
 *  Tests DSYR and DSPR.
 *
@@ -2047,6 +2053,7 @@
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
+      IMPLICIT NONE
 *
 *  Tests DSYR2, DKYR2 and DSPR2.
 *
@@ -2382,6 +2389,7 @@
 *
       END
       SUBROUTINE DCHKE( ISNUM, SRNAMT, NOUT )
+      IMPLICIT NONE
 *
 *  Tests the error exits from the Level 2 Blas.
 *  Requires a special version of the error-handling routine XERBLA.
@@ -2741,6 +2749,7 @@
       END
       SUBROUTINE DMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A within the bandwidth
 *  defined by KL and KU.
@@ -2923,6 +2932,7 @@
       END
       SUBROUTINE DMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -3039,6 +3049,7 @@
 *
       END
       LOGICAL FUNCTION LDE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -3069,6 +3080,7 @@
 *
       END
       LOGICAL FUNCTION LDERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -3134,6 +3146,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION DBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates random numbers uniformly distributed between -0.5 and 0.5.
 *
@@ -3180,6 +3193,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -3196,6 +3210,7 @@
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      IMPLICIT NONE
 *
 *  Tests whether XERBLA has detected an error when it should.
 *
@@ -3225,6 +3240,7 @@
       END
       SUBROUTINE DREGR1( TRANS, M, N, LY, KL, KU, ALPHA, A, LDA, X,
      $   INCX, BETA, Y, INCY, YS )
+      IMPLICIT NONE
 *
 *  Input initialization for regression test.
 *
@@ -3257,6 +3273,7 @@
       RETURN
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
+      IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 2 BLAS

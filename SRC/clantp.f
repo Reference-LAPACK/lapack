@@ -121,6 +121,7 @@
 *  =====================================================================
       REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP,
      $                                  WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

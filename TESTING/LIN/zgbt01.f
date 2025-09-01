@@ -123,6 +123,7 @@
 *  =====================================================================
       SUBROUTINE ZGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
      $                   RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

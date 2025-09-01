@@ -66,6 +66,7 @@
 !>
 !  =====================================================================
 integer function izamax(n, x, incx)
+   implicit none
    integer, parameter :: wp = kind(1.d0)
 !
 !  -- Reference BLAS level1 routine --

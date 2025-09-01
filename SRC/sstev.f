@@ -111,6 +111,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

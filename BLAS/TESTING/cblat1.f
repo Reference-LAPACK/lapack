@@ -34,6 +34,7 @@
 *
 *  =====================================================================
       PROGRAM CBLAT1
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -88,6 +89,7 @@
 *
       END
       SUBROUTINE HEADER
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -119,6 +121,7 @@
 *
       END
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       REAL              THRESH
@@ -345,6 +348,7 @@
 *
       END
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -611,6 +615,7 @@
 *
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -670,6 +675,7 @@
 *
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -698,6 +704,7 @@
 *
       END
       REAL             FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -711,6 +718,7 @@
 *
       END
       SUBROUTINE CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
+      IMPLICIT NONE
 *     **************************** CTEST *****************************
 *
 *     C.L. LAWSON, JPL, 1978 DEC 6
@@ -745,6 +753,7 @@
 *
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
@@ -788,6 +797,7 @@
 *
       END
       SUBROUTINE CB1NRM2(N,INCX,THRESH)
+      IMPLICIT NONE
 *     Compare NRM2 with a reference computation using combinations
 *     of the following values:
 *
@@ -991,6 +1001,7 @@
       RETURN
       CONTAINS
       REAL FUNCTION SXVALS(XX,K)
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       REAL              XX
       INTEGER           K

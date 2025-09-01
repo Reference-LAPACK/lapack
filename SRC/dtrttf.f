@@ -189,6 +189,7 @@
 *
 *  =====================================================================
       SUBROUTINE DTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

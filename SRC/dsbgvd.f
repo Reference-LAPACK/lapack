@@ -217,6 +217,7 @@
       SUBROUTINE DSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB,
      $                   W,
      $                   Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

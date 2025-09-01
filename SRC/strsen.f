@@ -310,6 +310,7 @@
       SUBROUTINE STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR,
      $                   WI,
      $                   M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -151,6 +151,7 @@
       SUBROUTINE DCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

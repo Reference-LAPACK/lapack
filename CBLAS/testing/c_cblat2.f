@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM CBLAT2
+      IMPLICIT NONE
 *
 *  Test program for the COMPLEX          Level 2 Blas.
 *
@@ -459,10 +461,13 @@
 *     End of CBLAT2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CGEMV and CGBMV.
 *
@@ -814,10 +819,13 @@
 *     End of CCHK1.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CHEMV, CHBMV and CHPMV.
 *
@@ -1170,9 +1178,12 @@
 *     End of CCHK2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                 INCMAX, A, AA, AS, X, XX, XS, XT, G, Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CTRMV, CTBMV, CTPMV, CTRSV, CTBSV and CTPSV.
 *
@@ -1551,10 +1562,13 @@
 *     End of CCHK3.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CGERC and CGERU.
 *
@@ -1828,10 +1842,13 @@
 *     End of CCHK4.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CHER and CHPR.
 *
@@ -2121,10 +2138,13 @@
 *     End of CCHK5.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests CHER2 and CHPR2.
 *
@@ -2448,8 +2468,11 @@
 *     End of CCHK6.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -2580,7 +2603,10 @@
 *     End of CMVCH.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LCE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -2610,7 +2636,10 @@
 *     End of LCE.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LCERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2670,7 +2699,10 @@
 *     End of LCERES.
 *
       END
+
+*  =====================================================================
       COMPLEX FUNCTION CBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates complex numbers as pairs of random numbers uniformly
 *  distributed between -0.5 and 0.5.
@@ -2722,7 +2754,10 @@
 *     End of CBEG.
 *
       END
+
+*  =====================================================================
       REAL FUNCTION SDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2738,8 +2773,11 @@
 *     End of SDIFF.
 *
       END
+
+*  =====================================================================
       SUBROUTINE CMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A within the bandwidth
 *  defined by KL and KU.

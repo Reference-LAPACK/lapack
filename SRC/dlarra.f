@@ -131,6 +131,7 @@
 *  =====================================================================
       SUBROUTINE DLARRA( N, D, E, E2, SPLTOL, TNRM,
      $                    NSPLIT, ISPLIT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

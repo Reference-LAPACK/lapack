@@ -123,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -146,6 +146,7 @@
 *  =====================================================================
       SUBROUTINE CCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, AB, AINV, B, X, XACT, WORK, RWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

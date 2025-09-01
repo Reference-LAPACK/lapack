@@ -130,6 +130,7 @@
 *  =====================================================================
       SUBROUTINE DLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
      $                   WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

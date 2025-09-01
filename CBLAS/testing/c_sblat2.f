@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM SBLAT2
+      IMPLICIT NONE
 *
 *  Test program for the REAL             Level 2 Blas.
 *
@@ -456,10 +458,13 @@
 *     End of SBLAT2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests SGEMV and SGBMV.
 *
@@ -816,10 +821,13 @@
 *     End of SCHK1.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
+      IMPLICIT NONE
 *
 *  Tests SSYMV, SKYMV, SSBMV and SSPMV.
 *
@@ -1186,9 +1194,12 @@
 *     End of SCHK2.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, XT, G, Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests STRMV, STBMV, STPMV, STRSV, STBSV and STPSV.
 *
@@ -1573,10 +1584,13 @@
 *     End of SCHK3.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests SGER.
 *
@@ -1845,10 +1859,13 @@
 *     End of SCHK4.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests SSYR and SSPR.
 *
@@ -2141,10 +2158,13 @@
 *     End of SCHK5.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
+      IMPLICIT NONE
 *
 *  Tests SSYR2, SKYR2 and SSPR2.
 *
@@ -2496,8 +2516,11 @@
 *     End of SCHK6.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A within the bandwidth
 *  defined by KL and KU.
@@ -2677,8 +2700,11 @@
 *     End of SMAKE.
 *
       END
+
+*  =====================================================================
       SUBROUTINE SMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -2794,7 +2820,10 @@
 *     End of SMVCH.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LSE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -2824,7 +2853,10 @@
 *     End of LSE.
 *
       END
+
+*  =====================================================================
       LOGICAL FUNCTION LSERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2890,7 +2922,10 @@
 *     End of LSERES.
 *
       END
+
+*  =====================================================================
       REAL FUNCTION SBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates random numbers uniformly distributed between -0.5 and 0.5.
 *
@@ -2936,7 +2971,10 @@
 *     End of SBEG.
 *
       END
+
+*  =====================================================================
       REAL FUNCTION SDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *

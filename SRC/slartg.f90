@@ -111,6 +111,7 @@ subroutine SLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>sp, zero=>szero, half=>shalf, one=>sone, &
          safmin=>ssafmin, safmax=>ssafmax
+   implicit none
 !
 !  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --

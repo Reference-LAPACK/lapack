@@ -103,6 +103,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

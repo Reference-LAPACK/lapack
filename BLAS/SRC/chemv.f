@@ -151,6 +151,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

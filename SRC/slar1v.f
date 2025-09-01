@@ -225,6 +225,7 @@
       SUBROUTINE SLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
      $           PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
      $           R, ISUPPZ, NRMINV, RESID, RQCORR, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

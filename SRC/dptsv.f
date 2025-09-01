@@ -109,6 +109,7 @@
 *
 *  =====================================================================
       SUBROUTINE DPTSV( N, NRHS, D, E, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

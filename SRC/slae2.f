@@ -97,6 +97,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAE2( A, B, C, RT1, RT2 )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

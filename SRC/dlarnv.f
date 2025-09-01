@@ -92,6 +92,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DLARNV( IDIST, ISEED, N, X )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
