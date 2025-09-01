@@ -172,6 +172,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DKYTD2( UPLO, N, A, LDA, E, TAU, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

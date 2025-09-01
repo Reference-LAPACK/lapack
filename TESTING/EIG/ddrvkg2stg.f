@@ -13,7 +13,6 @@
 *                              BB, AP, BP, WORK, NWORK, IWORK, LIWORK, 
 *                              RESULT, INFO )
 *
-*       IMPLICIT NONE
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB, LDZ, LIWORK, NOUNIT, NSIZES,
 *      $                   NTYPES, NWORK
@@ -325,7 +324,6 @@
      $                       NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
      $                       BB, AP, BP, WORK, NWORK, IWORK, LIWORK, 
      $                       RESULT, INFO )
-*
       IMPLICIT NONE
 *
 *  -- LAPACK test routine --

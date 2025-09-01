@@ -190,6 +190,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SKYTRD( UPLO, N, A, LDA, E, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

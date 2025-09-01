@@ -123,6 +123,7 @@
 *  =====================================================================
       SUBROUTINE DKTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

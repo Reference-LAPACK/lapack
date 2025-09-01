@@ -141,6 +141,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SKTEQR( COMPZ, N, E, Z, LDZ, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,8 +173,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLAPY2
-      EXTERNAL           LSAME, SLAMCH, SLAPY2
+      REAL               SLAMCH, SLAPY2, SLANKT
+      EXTERNAL           LSAME, SLAMCH, SLAPY2, SLANKT
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAE2, SLAEV2, SLARTG, SLASCL, SLASET,
