@@ -19,8 +19,8 @@
 *> Test program for the REAL             Level 3 Blas.
 *>
 *> The program must be driven by a short data file. The first 14 records
-*> of the file are read using list-directed input, the last 7 records
-*> are read using the format ( A7, L2 ). An annotated example of a data
+*> of the file are read using list-directed input, the last 9 records
+*> are read using the format ( A11, L2 ). An annotated example of a data
 *> file can be obtained by deleting the first 3 characters from the
 *> following 20 lines:
 *> 'sblat3.out'      NAME OF SUMMARY OUTPUT FILE
@@ -44,6 +44,8 @@
 *> SSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
 *> SSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
 *> SGEMMTR T PUT F FOR NO TEST. SAME COLUMNS.
+*> SSKEWSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*> SSKEWSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
 *>
 *> Further Details
 *> ===============
@@ -92,7 +94,7 @@
       INTEGER            NIN
       PARAMETER          ( NIN = 5 )
       INTEGER            NSUBS
-      PARAMETER          ( NSUBS = 7 )
+      PARAMETER          ( NSUBS = 9 )
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0, ONE = 1.0 )
       INTEGER            NMAX
@@ -105,7 +107,7 @@
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANSA, TRANSB
-      CHARACTER*7        SNAMET
+      CHARACTER*11       SNAMET
       CHARACTER*32       SNAPS, SUMMRY
 *     .. Local Arrays ..
       REAL               AA( NMAX*NMAX ), AB( NMAX, 2*NMAX ),
@@ -116,7 +118,7 @@
      $                   G( NMAX ), W( 2*NMAX )
       INTEGER            IDIM( NIDMAX )
       LOGICAL            LTEST( NSUBS )
-      CHARACTER*7        SNAMES( NSUBS )
+      CHARACTER*11       SNAMES( NSUBS )
 *     .. External Functions ..
       REAL               SDIFF
       LOGICAL            LSE
@@ -129,13 +131,16 @@
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
-      CHARACTER*7        SRNAMT
+      CHARACTER*11       SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
-      DATA               SNAMES/'SGEMM', 'SSYMM  ', 'STRMM  ',
-     $                   'STRSM  ', 'SSYRK  ', 'SSYR2K ', 'SGEMMTR'/
+      DATA               SNAMES/'SGEMM      ', 'SSYMM      ',
+     $                   'STRMM      ', 'STRSM      ',
+     $                   'SSYRK      ', 'SSYR2K     ',
+     $                   'SGEMMTR    ',
+     $                   'SSKEWSYMM  ', 'SSKEWSYR2K '/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -312,14 +317,14 @@
             INFOT = 0
             OK = .TRUE.
             FATAL = .FALSE.
-            GO TO ( 140, 150, 160, 160, 170, 180, 185 )ISNUM
+            GO TO ( 140, 150, 160, 160, 170, 180, 185, 150, 180 )ISNUM
 *           Test SGEMM, 01.
   140       CALL SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G )
             GO TO 190
-*           Test SSYMM, 02.
+*           Test SSYMM, 02, SSKEWSYMM, 07.
   150       CALL SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
@@ -336,7 +341,7 @@
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G )
             GO TO 190
-*           Test SSYR2K, 06.
+*           Test SSYR2K, 06, SSKEWSYR2K, 08.
   180       CALL SCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W )
@@ -381,7 +386,7 @@
  9992 FORMAT( '   FOR BETA           ', 7F6.1 )
  9991 FORMAT( ' AMEND DATA FILE OR INCREASE ARRAY SIZES IN PROGRAM',
      $      /' ******* TESTS ABANDONED *******' )
- 9990 FORMAT( ' SUBPROGRAM NAME ', A7, ' NOT RECOGNIZED', /' ******* T',
+ 9990 FORMAT( ' SUBPROGRAM NAME ', A11, ' NOT RECOGNIZED', /' ******* T',
      $      'ESTS ABANDONED *******' )
  9989 FORMAT( ' ERROR IN SMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
      $      'ATED WRONGLY.', /' SMMCH WAS CALLED WITH TRANSA = ', A1,
@@ -389,8 +394,8 @@
      $      'ERR = ', F12.3, '.', /' THIS MAY BE DUE TO FAULTS IN THE ',
      $      'ARITHMETIC OR THE COMPILER.', /' ******* TESTS ABANDONED ',
      $      '*******' )
- 9988 FORMAT( A7, L2 )
- 9987 FORMAT( 1X, A7, ' WAS NOT TESTED' )
+ 9988 FORMAT( A11, L2 )
+ 9987 FORMAT( 1X, A11, ' WAS NOT TESTED' )
  9986 FORMAT( /' END OF TESTS' )
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
@@ -420,7 +425,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -663,15 +668,15 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A7, '(''', A1, ''',''', A1, ''',',
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(''', A1, ''',''', A1, ''',',
      $      3( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', ',
      $      'C,', I3, ').' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -702,7 +707,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -715,7 +720,7 @@
       INTEGER            I, IA, IB, ICS, ICU, IM, IN, LAA, LBB, LCC,
      $                   LDA, LDAS, LDB, LDBS, LDC, LDCS, M, MS, N, NA,
      $                   NARGS, NC, NS
-      LOGICAL            LEFT, NULL, RESET, SAME
+      LOGICAL            LEFT, NULL, RESET, SAME, SKEWFULL
       CHARACTER*1        SIDE, SIDES, UPLO, UPLOS
       CHARACTER*2        ICHS, ICHU
 *     .. Local Arrays ..
@@ -724,7 +729,7 @@
       LOGICAL            LSE, LSERES
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           SMAKE, SMMCH, SSYMM
+      EXTERNAL           SMAKE, SMMCH, SSYMM, SSKEWSYMM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -736,6 +741,7 @@
       DATA               ICHS/'LR'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
+      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
@@ -793,8 +799,13 @@
 *
 *                 Generate the symmetric matrix A.
 *
-                  CALL SMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA, LDA,
-     $                        RESET, ZERO )
+                  IF(.NOT.SKEWFULL) THEN
+                     CALL SMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA,
+     $                           LDA, RESET, ZERO )
+                  ELSE
+                     CALL SMAKE( 'SK', UPLO, ' ', NA, NA, A, NMAX, AA,
+     $                           LDA, RESET, ZERO )
+                  END IF
 *
                   DO 60 IA = 1, NALF
                      ALPHA = ALF( IA )
@@ -838,8 +849,13 @@
      $                     UPLO, M, N, ALPHA, LDA, LDB, BETA, LDC
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL SSYMM( SIDE, UPLO, M, N, ALPHA, AA, LDA,
-     $                              BB, LDB, BETA, CC, LDC )
+                        IF(.NOT.SKEWFULL) THEN
+                           CALL SSYMM( SIDE, UPLO, M, N, ALPHA, AA,
+     $                                 LDA, BB, LDB, BETA, CC, LDC )
+                        ELSE
+                           CALL SSKEWSYMM( SIDE, UPLO, M, N, ALPHA, AA,
+     $                                 LDA, BB, LDB, BETA, CC, LDC )
+                        END IF
 *
 *                       Check if error-exit was taken incorrectly.
 *
@@ -934,15 +950,15 @@
   120 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A7, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', C,', I3, ')   ',
      $      ' .' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -973,7 +989,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1241,15 +1257,15 @@
   160 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A7, '(', 4( '''', A1, ''',' ), 2( I3, ',' ),
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(', 4( '''', A1, ''',' ), 2( I3, ',' ),
      $      F4.1, ', A,', I3, ', B,', I3, ')        .' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
@@ -1279,7 +1295,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -1516,16 +1532,16 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A7, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ')           .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
@@ -1555,7 +1571,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               AA( NMAX*NMAX ), AB( 2*NMAX*NMAX ),
      $                   ALF( NALF ), AS( NMAX*NMAX ), BB( NMAX*NMAX ),
@@ -1568,7 +1584,7 @@
       INTEGER            I, IA, IB, ICT, ICU, IK, IN, J, JC, JJ, JJAB,
      $                   K, KS, LAA, LBB, LCC, LDA, LDAS, LDB, LDBS,
      $                   LDC, LDCS, LJ, MA, N, NA, NARGS, NC, NS
-      LOGICAL            NULL, RESET, SAME, TRAN, UPPER
+      LOGICAL            NULL, RESET, SAME, TRAN, UPPER, SKEWFULL
       CHARACTER*1        TRANS, TRANSS, UPLO, UPLOS
       CHARACTER*2        ICHU
       CHARACTER*3        ICHT
@@ -1578,7 +1594,7 @@
       LOGICAL            LSE, LSERES
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           SMAKE, SMMCH, SSYR2K
+      EXTERNAL           SMAKE, SMMCH, SSYR2K, SSKEWSYR2K
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1590,6 +1606,7 @@
       DATA               ICHT/'NTC'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
+      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
@@ -1663,8 +1680,13 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, CC,
-     $                              LDC, RESET, ZERO )
+                        IF(.NOT.SKEWFULL) THEN
+                           CALL SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX,
+     $                                 CC, LDC, RESET, ZERO )
+                        ELSE
+                           CALL SMAKE( 'SK', UPLO, ' ', N, N, C, NMAX,
+     $                                 CC, LDC, RESET, ZERO )
+                        END IF
 *
                         NC = NC + 1
 *
@@ -1696,8 +1718,14 @@
      $                     TRANS, N, K, ALPHA, LDA, LDB, BETA, LDC
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL SSYR2K( UPLO, TRANS, N, K, ALPHA, AA, LDA,
-     $                               BB, LDB, BETA, CC, LDC )
+                        IF(.NOT.SKEWFULL) THEN
+                           CALL SSYR2K( UPLO, TRANS, N, K, ALPHA, AA,
+     $                                 LDA, BB, LDB, BETA, CC, LDC )
+                        ELSE
+                           CALL SSKEWSYR2K( UPLO, TRANS, N, K, ALPHA,
+     $                                 AA, LDA, BB, LDB, BETA, CC,
+     $                                 LDC )
+                        END IF
 *
 *                       Check if error-exit was taken incorrectly.
 *
@@ -1722,8 +1750,13 @@
                         IF( NULL )THEN
                            ISAME( 11 ) = LSE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = LSERES( 'SY', UPLO, N, N, CS,
-     $                                   CC, LDC )
+                           IF(.NOT.SKEWFULL) THEN
+                              ISAME( 11 ) = LSERES( 'SY', UPLO, N, N,
+     $                                    CS, CC, LDC )
+                           ELSE
+                              ISAME( 11 ) = LSERES( 'SK', UPLO, N, N,
+     $                                    CS, CC, LDC )
+                           END IF
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
 *
@@ -1745,20 +1778,37 @@
 *
 *                          Check the result column by column.
 *
+                           IF( .NOT.SKEWFULL.OR.UPPER )THEN
                            JJAB = 1
                            JC = 1
+                           ELSE
+                              JJAB = 1 + 2*NMAX
+                              JC = 2
+                           END IF
                            DO 70 J = 1, N
-                              IF( UPPER )THEN
+                              IF( .NOT.SKEWFULL.AND.UPPER )THEN
                                  JJ = 1
                                  LJ = J
-                              ELSE
+                              ELSE IF( .NOT.SKEWFULL.AND..NOT.UPPER )
+     $                        THEN
                                  JJ = J
                                  LJ = N - J + 1
+                              ELSE IF( SKEWFULL.AND.UPPER )THEN
+                                 JJ = 1
+                                 LJ = J - 1
+                              ELSE
+                                 JJ = J + 1
+                                 LJ = N - J
                               END IF
                               IF( TRAN )THEN
                                  DO 50 I = 1, K
-                                    W( I ) = AB( ( J - 1 )*2*NMAX + K +
-     $                                       I )
+                                    IF(.NOT.SKEWFULL) THEN
+                                       W( I ) = AB( ( J - 1 )*2*NMAX
+     $                                          + K + I )
+                                    ELSE
+                                       W( I ) = -AB( ( J - 1 )*2*NMAX
+     $                                          + K + I )
+                                    END IF
                                     W( K + I ) = AB( ( J - 1 )*2*NMAX +
      $                                           I )
    50                            CONTINUE
@@ -1770,8 +1820,13 @@
      $                                       FATAL, NOUT, .TRUE. )
                               ELSE
                                  DO 60 I = 1, K
-                                    W( I ) = AB( ( K + I - 1 )*NMAX +
-     $                                       J )
+                                    IF(.NOT.SKEWFULL) THEN
+                                       W( I ) = AB( ( K + I - 1 )*NMAX
+     $                                          + J )
+                                    ELSE
+                                       W( I ) = -AB( ( K + I - 1 )*NMAX
+     $                                          + J )
+                                    END IF
                                     W( K + I ) = AB( ( I - 1 )*NMAX +
      $                                           J )
    60                            CONTINUE
@@ -1830,16 +1885,16 @@
   160 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A7, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
+ 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
      $      F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', C,', I3, ')   ',
      $      ' .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -1868,7 +1923,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            ISNUM, NOUT
-      CHARACTER*7        SRNAMT
+      CHARACTER*11       SRNAMT
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
@@ -1897,7 +1952,7 @@
       ALPHA = ONE
       BETA = TWO
 *
-      GO TO ( 10, 20, 30, 40, 50, 60, 70 )ISNUM
+      GO TO ( 10, 20, 30, 40, 50, 60, 70, 80, 90 )ISNUM
    10 INFOT = 1
       CALL SGEMM( '/', 'N', 0, 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -1982,7 +2037,7 @@
       INFOT = 13
       CALL SGEMM( 'T', 'T', 2, 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    20 INFOT = 1
       CALL SSYMM( '/', 'U', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2049,7 +2104,7 @@
       INFOT = 12
       CALL SSYMM( 'R', 'L', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    30 INFOT = 1
       CALL STRMM( '/', 'U', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2158,7 +2213,7 @@
       INFOT = 11
       CALL STRMM( 'R', 'L', 'T', 'N', 2, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    40 INFOT = 1
       CALL STRSM( '/', 'U', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2267,7 +2322,7 @@
       INFOT = 11
       CALL STRSM( 'R', 'L', 'T', 'N', 2, 0, ALPHA, A, 1, B, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    50 INFOT = 1
       CALL SSYRK( '/', 'N', 0, 0, ALPHA, A, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2322,7 +2377,7 @@
       INFOT = 10
       CALL SSYRK( 'L', 'T', 2, 0, ALPHA, A, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    60 INFOT = 1
       CALL SSYR2K( '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2389,7 +2444,7 @@
       INFOT = 12
       CALL SSYR2K( 'L', 'T', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 80
+      GO TO 100
    70 INFOT = 1
       CALL SGEMMTR( '/', 'N', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2468,16 +2523,150 @@
       INFOT = 13
       CALL SGEMMTR( 'U', 'T', 'T', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 100
+   80 INFOT = 1
+      CALL SSKEWSYMM( '/', 'U', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL SSKEWSYMM( 'L', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYMM( 'L', 'U', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYMM( 'R', 'U', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYMM( 'L', 'L', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYMM( 'R', 'L', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYMM( 'L', 'U', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYMM( 'R', 'U', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYMM( 'L', 'L', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYMM( 'R', 'L', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYMM( 'L', 'U', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYMM( 'R', 'U', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYMM( 'L', 'L', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYMM( 'R', 'L', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYMM( 'L', 'U', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYMM( 'R', 'U', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYMM( 'L', 'L', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYMM( 'R', 'L', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYMM( 'L', 'U', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYMM( 'R', 'U', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYMM( 'L', 'L', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYMM( 'R', 'L', 2, 0, ALPHA, A, 1, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 100
+   90 INFOT = 1
+      CALL SSKEWSYR2K( '/', 'N', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL SSKEWSYR2K( 'U', '/', 0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYR2K( 'U', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYR2K( 'U', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYR2K( 'L', 'N', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SSKEWSYR2K( 'L', 'T', -1, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYR2K( 'U', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYR2K( 'U', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYR2K( 'L', 'N', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SSKEWSYR2K( 'L', 'T', 0, -1, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYR2K( 'U', 'N', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYR2K( 'U', 'T', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYR2K( 'L', 'N', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SSKEWSYR2K( 'L', 'T', 0, 2, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYR2K( 'U', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYR2K( 'U', 'T', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYR2K( 'L', 'N', 2, 0, ALPHA, A, 2, B, 1, BETA, C, 2 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL SSKEWSYR2K( 'L', 'T', 0, 2, ALPHA, A, 2, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYR2K( 'U', 'N', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYR2K( 'U', 'T', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYR2K( 'L', 'N', 2, 0, ALPHA, A, 2, B, 2, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 12
+      CALL SSKEWSYR2K( 'L', 'T', 2, 0, ALPHA, A, 1, B, 1, BETA, C, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
-   80 IF( OK )THEN
+  100 IF( OK )THEN
          WRITE( NOUT, FMT = 9999 )SRNAMT
       ELSE
          WRITE( NOUT, FMT = 9998 )SRNAMT
       END IF
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE TESTS OF ERROR-EXITS' )
- 9998 FORMAT( ' ******* ', A7, ' FAILED THE TESTS OF ERROR-EXITS *****',
+ 9999 FORMAT( ' ', A11, ' PASSED THE TESTS OF ERROR-EXITS' )
+ 9998 FORMAT( ' ******* ', A11, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
 *     End of SCHKE
@@ -2491,7 +2680,7 @@
 *  Stores the values in the array AA in the data structure required
 *  by the routine, with unwanted elements set to rogue value.
 *
-*  TYPE is 'GE', 'SY' or 'TR'.
+*  TYPE is 'GE', 'SY', 'SK' or 'TR'.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2516,7 +2705,8 @@
       REAL               A( NMAX, * ), AA( * )
 *     .. Local Scalars ..
       INTEGER            I, IBEG, IEND, J
-      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
+      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER,
+     $                   SKEW
 *     .. External Functions ..
       REAL               SBEG
       EXTERNAL           SBEG
@@ -2524,8 +2714,9 @@
       GEN = TYPE.EQ.'GE'
       SYM = TYPE.EQ.'SY'
       TRI = TYPE.EQ.'TR'
-      UPPER = ( SYM.OR.TRI ).AND.UPLO.EQ.'U'
-      LOWER = ( SYM.OR.TRI ).AND.UPLO.EQ.'L'
+      SKEW = TYPE.EQ.'SK'
+      UPPER = ( SYM.OR.SKEW.OR.TRI ).AND.UPLO.EQ.'U'
+      LOWER = ( SYM.OR.SKEW.OR.TRI ).AND.UPLO.EQ.'L'
       UNIT = TRI.AND.DIAG.EQ.'U'
 *
 *     Generate data in array A.
@@ -2541,6 +2732,8 @@
      $               A( I, J ) = ZERO
                   IF( SYM )THEN
                      A( J, I ) = A( I, J )
+                  ELSE IF( SKEW )THEN
+                     A( J, I ) = -A( I, J )
                   ELSE IF( TRI )THEN
                      A( J, I ) = ZERO
                   END IF
@@ -2551,6 +2744,8 @@
      $      A( J, J ) = A( J, J ) + ONE
          IF( UNIT )
      $      A( J, J ) = ONE
+         IF( SKEW )
+     $      A( J, J ) = ZERO
    20 CONTINUE
 *
 *     Store elements in array AS in data structure required by routine.
@@ -2564,17 +2759,17 @@
                AA( I + ( J - 1 )*LDA ) = ROGUE
    40       CONTINUE
    50    CONTINUE
-      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'TR' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'SK'.OR.TYPE.EQ.'TR' )THEN
          DO 90 J = 1, N
             IF( UPPER )THEN
                IBEG = 1
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKEW )THEN
                   IEND = J - 1
                ELSE
                   IEND = J
                END IF
             ELSE
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKEW )THEN
                   IBEG = J + 1
                ELSE
                   IBEG = J
@@ -2758,7 +2953,7 @@
 *
 *  Tests if selected elements in two arrays are equal.
 *
-*  TYPE is 'GE' or 'SY'.
+*  TYPE is 'GE' or 'SY' or 'SK'.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2786,13 +2981,19 @@
      $            GO TO 70
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( TYPE.EQ.'SY' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'SK' )THEN
          DO 50 J = 1, N
-            IF( UPPER )THEN
+            IF( UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = 1
                IEND = J
-            ELSE
+            ELSE IF( .NOT.UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = J
+               IEND = N
+            ELSE IF( UPPER.AND.TYPE.EQ.'SK' )THEN
+               IBEG = 1
+               IEND = J - 1
+            ELSE
+               IBEG = J + 1
                IEND = N
             END IF
             DO 30 I = 1, IBEG - 1
@@ -2898,7 +3099,7 @@
 *     .. Scalar Arguments ..
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
-      CHARACTER*7        SRNAMT
+      CHARACTER*11       SRNAMT
 *     .. Executable Statements ..
       IF( .NOT.LERR )THEN
          WRITE( NOUT, FMT = 9999 )INFOT, SRNAMT
@@ -2908,7 +3109,7 @@
       RETURN
 *
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
-     $      'ETECTED BY ', A7, ' *****' )
+     $      'ETECTED BY ', A11, ' *****' )
 *
 *     End of CHKXER
 *
@@ -2939,7 +3140,7 @@
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
-      CHARACTER*7        SRNAMT
+      CHARACTER*11       SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
       COMMON             /SRNAMC/SRNAMT
@@ -2964,8 +3165,8 @@
 *
  9999 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEAD',
      $      ' OF ', I2, ' *******' )
- 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A7, ' INSTE',
-     $      'AD OF ', A7, ' *******' )
+ 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A11, ' INSTE',
+     $      'AD OF ', A11, ' *******' )
  9997 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6,
      $      ' *******' )
 *
@@ -2993,7 +3194,7 @@
       REAL               EPS, THRESH
       INTEGER            NALF, NBET, NIDIM, NMAX, NOUT, NTRA
       LOGICAL            FATAL, REWI, TRACE
-      CHARACTER*7        SNAME
+      CHARACTER*11       SNAME
 *     .. Array Arguments ..
       REAL               A( NMAX, NMAX ), AA( NMAX*NMAX ), ALF( NALF ),
      $                   AS( NMAX*NMAX ), B( NMAX, NMAX ),
@@ -3242,15 +3443,15 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A7, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A7, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
      $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
- 9996 FORMAT( ' ******* ', A7, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A7, '(''',A1, ''',''',A1, ''',''', A1,''',',
+ 9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(''',A1, ''',''',A1, ''',''', A1,''',',
      $      2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', ',
      $      'C,', I3, ').' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',

@@ -934,9 +934,9 @@ https://www.netlib.org/xblas/
             @defgroup gemv          gemv:           general matrix-vector multiply
             @defgroup ger           ger:            general matrix rank-1 update
 
-            @defgroup hemv          {he,sy}mv:      Hermitian/symmetric matrix-vector multiply ([cz]symv in LAPACK)
+            @defgroup hemv          {he,sy,skewsy}mv:      Hermitian/symmetric/skew-symmetric matrix-vector multiply ([cz]symv in LAPACK)
             @defgroup her           {he,sy}r:       Hermitian/symmetric rank-1 update
-            @defgroup her2          {he,sy}r2:      Hermitian/symmetric rank-2 update
+            @defgroup her2          {he,sy,skewsy}r2:      Hermitian/symmetric/skew-symmetric rank-2 update
 
             @defgroup trmv          trmv:           triangular matrix-vector multiply
             @defgroup trsv          trsv:           triangular matrix-vector solve
@@ -963,9 +963,9 @@ https://www.netlib.org/xblas/
             @defgroup gemm          gemm:           general matrix-matrix multiply
             @defgroup gemmtr        gemmtr:         general matrix-matrix multiply with triangular output
 
-            @defgroup hemm          {he,sy}mm:      Hermitian/symmetric matrix-matrix multiply
+            @defgroup hemm          {he,sy,skewsy}mm:      Hermitian/symmetric/skew-symmetric matrix-matrix multiply
             @defgroup herk          {he,sy}rk:      Hermitian/symmetric rank-k update
-            @defgroup her2k         {he,sy}r2k:     Hermitian/symmetric rank-2k update
+            @defgroup her2k         {he,sy,skewsy}r2k:     Hermitian/symmetric/skew-symmetric rank-2k update
 
             @defgroup trmm          trmm:           triangular matrix-matrix multiply
             @defgroup trsm          trsm:           triangular matrix-matrix solve
