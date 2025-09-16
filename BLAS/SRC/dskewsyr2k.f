@@ -170,7 +170,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kyr2k
+*> \ingroup skewher2k
 *
 *> \par Further Details:
 *  =====================

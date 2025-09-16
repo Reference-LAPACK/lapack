@@ -168,7 +168,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kymm
+*> \ingroup skewhemm
 *
 *> \par Further Details:
 *  =====================

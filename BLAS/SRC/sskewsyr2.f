@@ -126,7 +126,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kyr2
+*> \ingroup skewher2
 *
 *> \par Further Details:
 *  =====================

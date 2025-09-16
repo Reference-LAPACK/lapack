@@ -130,7 +130,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup kymv
+*> \ingroup skewhemv
 *
 *> \par Further Details:
 *  =====================
