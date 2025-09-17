@@ -236,6 +236,11 @@
             JPVT( J ) = J
          END IF
    10 CONTINUE
+*
+*     Quick return if possible.
+*
+      IF( M.EQ.0 ) RETURN
+*
       NFXD = NFXD - 1
 *
 *     Factorize fixed columns
@@ -286,14 +291,14 @@
 *
 *              Determine if workspace is large enough for blocked code.
 *
-               MINWS = 2*SN + ( SN+1 )*NB
+               MINWS = 2*N + ( SN+1 )*NB
                IWS = MAX( IWS, MINWS )
                IF( LWORK.LT.MINWS ) THEN
 *
 *                 Not enough workspace to use optimal NB: Reduce NB and
 *                 determine the minimum value of NB.
 *
-                  NB = ( LWORK-2*SN ) / ( SN+1 )
+                  NB = ( LWORK-2*N ) / ( SN+1 )
                   NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM,
      $                         SN,
      $                    -1, -1 ) )
