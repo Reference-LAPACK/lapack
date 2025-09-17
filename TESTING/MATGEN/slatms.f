@@ -28,7 +28,7 @@
 *> \verbatim
 *>
 *>    SLATMS generates random matrices with specified singular values
-*>    (or symmetric/hermitian with specified eigenvalues)
+*>    (or symmetric/hermitian/skew-symmetric with specified eigenvalues)
 *>    for testing LAPACK programs.
 *>
 *>    SLATMS operates by applying the following sequence of
@@ -67,8 +67,8 @@
 *>
 *>      Pack the matrix if desired. Options specified by PACK are:
 *>         no packing
-*>         zero out upper half (if symmetric)
-*>         zero out lower half (if symmetric)
+*>         zero out upper half (if symmetric/skew-symmetric)
+*>         zero out lower half (if symmetric/skew-symmetric)
 *>         store the upper half columnwise (if symmetric or upper
 *>               triangular)
 *>         store the lower half columnwise (if symmetric or lower
@@ -104,7 +104,7 @@
 *>           On entry, DIST specifies the type of distribution to be used
 *>           to generate the random eigen-/singular values.
 *>           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
-*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
+*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric/skew-symmetric )
 *>           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
 *>           Not modified.
 *> \endverbatim
@@ -127,6 +127,9 @@
 *> \verbatim
 *>          SYM is CHARACTER*1
 *>           If SYM='S' or 'H', the generated matrix is symmetric, with
+*>             eigenvalues specified by D, COND, MODE, and DMAX; they
+*>             may be positive, negative, or zero.
+*>           If SYM='K', the generated matrix is skew-symmetric, with
 *>             eigenvalues specified by D, COND, MODE, and DMAX; they
 *>             may be positive, negative, or zero.
 *>           If SYM='P', the generated matrix is symmetric, with
@@ -200,7 +203,7 @@
 *>           example, KL=0 implies upper triangular, KL=1 implies upper
 *>           Hessenberg, and KL being at least M-1 means that the matrix
 *>           has full lower bandwidth.  KL must equal KU if the matrix
-*>           is symmetric.
+*>           is symmetric/skew-symmetric.
 *>           Not modified.
 *> \endverbatim
 *>
@@ -211,7 +214,7 @@
 *>           example, KU=0 implies lower triangular, KU=1 implies lower
 *>           Hessenberg, and KU being at least N-1 means that the matrix
 *>           has full upper bandwidth.  KL must equal KU if the matrix
-*>           is symmetric.
+*>           is symmetric/skew-symmetric.
 *>           Not modified.
 *> \endverbatim
 *>
@@ -220,8 +223,8 @@
 *>          PACK is CHARACTER*1
 *>           This specifies packing of matrix as follows:
 *>           'N' => no packing
-*>           'U' => zero out all subdiagonal entries (if symmetric)
-*>           'L' => zero out all superdiagonal entries (if symmetric)
+*>           'U' => zero out all subdiagonal entries (if symmetric/skew-symmetric)
+*>           'L' => zero out all superdiagonal entries (if symmetric/skew-symmetric)
 *>           'C' => store the upper triangle columnwise
 *>                  (only if the matrix is symmetric or upper triangular)
 *>           'R' => store the lower triangle columnwise
@@ -285,7 +288,7 @@
 *>           Error code.  On exit, INFO will be set to one of the
 *>           following values:
 *>             0 => normal return
-*>            -1 => M negative or unequal to N and SYM='S', 'H', or 'P'
+*>            -1 => M negative or unequal to N and SYM='S', 'H', 'K', or 'P'
 *>            -2 => N negative
 *>            -3 => DIST illegal string
 *>            -5 => SYM illegal string
@@ -350,7 +353,7 @@
      $                   IOFFG, IOFFST, IPACK, IPACKG, IR, IR1, IR2,
      $                   IROW, IRSIGN, ISKEW, ISYM, ISYMPK, J, JC, JCH,
      $                   JKL, JKU, JR, K, LLB, MINLDA, MNMIN, MR, NC,
-     $                   UUB
+     $                   UUB, MNMINNEW
       REAL               ALPHA, ANGLE, C, DUMMY, EXTRA, S, TEMP
 *     ..
 *     .. External Functions ..
@@ -359,7 +362,7 @@
       EXTERNAL           LSAME, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGGE, SLAGSY,
+      EXTERNAL           SCOPY, SLAGGE, SLAGSY, SLAGKY,
      $                   SLAROT, SLARTG, SLATM1,
      $                   SLASET, SSCAL, XERBLA
 *     ..
@@ -403,6 +406,9 @@
          IRSIGN = 1
       ELSE IF( LSAME( SYM, 'H' ) ) THEN
          ISYM = 2
+         IRSIGN = 1
+      ELSE IF( LSAME( SYM, 'K' ) ) THEN
+         ISYM = 3
          IRSIGN = 1
       ELSE
          ISYM = -1
@@ -466,6 +472,9 @@
       END IF
       IF( LDA.LT.M .AND. LDA.GE.MINLDA )
      $   GIVENS = .TRUE.
+      IF( ISYM.EQ.3 ) THEN
+         GIVENS = .FALSE.
+      END IF 
 *
 *     Set INFO if an error
 *
@@ -515,17 +524,25 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN,
-     $             IINFO )
+      IF( ISYM.EQ.3 ) THEN
+         MNMINNEW = MNMIN / 2
+      ELSE
+         MNMINNEW = MNMIN
+      END IF
+      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D,
+     $             MNMINNEW, IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
+      END IF
+      IF( ISYM.EQ.3 .AND. MNMIN.EQ.1 ) THEN
+         D(1) = ONE
       END IF
 *
 *     Choose Top-Down if D is (apparently) increasing,
 *     Bottom-Up if D is (apparently) decreasing.
 *
-      IF( ABS( D( 1 ) ).LE.ABS( D( MNMIN ) ) ) THEN
+      IF( ABS( D( 1 ) ).LE.ABS( D( MNMINNEW ) ) ) THEN
          TOPDWN = .TRUE.
       ELSE
          TOPDWN = .FALSE.
@@ -536,7 +553,7 @@
 *        Scale by DMAX
 *
          TEMP = ABS( D( 1 ) )
-         DO 20 I = 2, MNMIN
+         DO 20 I = 2, MNMINNEW
             TEMP = MAX( TEMP, ABS( D( I ) ) )
    20    CONTINUE
 *
@@ -547,8 +564,18 @@
             RETURN
          END IF
 *
-         CALL SSCAL( MNMIN, ALPHA, D, 1 )
+         CALL SSCAL( MNMINNEW, ALPHA, D, 1 )
 *
+      END IF
+*
+      IF( ISYM.EQ.3 ) THEN
+         DO I = MNMIN, 2*MNMINNEW + 1, -1
+            D(I) = ZERO
+         END DO
+         DO I = MNMINNEW, 1, -1
+            D(2*I - 1) = D(I)
+            D(2*I) = ZERO
+         END DO
       END IF
 *
 *     3)      Generate Banded Matrix using Givens rotations.
@@ -1009,11 +1036,17 @@
 *
             CALL SLAGGE( MR, NC, LLB, UUB, D, A, LDA, ISEED, WORK,
      $                   IINFO )
-         ELSE
+         ELSEIF( ISYM.EQ.2 ) THEN
 *
 *           Symmetric -- A = U D U'
 *
             CALL SLAGSY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
+*
+         ELSE
+*
+*           Skew-symmetric -- A = U D U'
+*
+            CALL SLAGKY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
 *
          END IF
          IF( IINFO.NE.0 ) THEN
