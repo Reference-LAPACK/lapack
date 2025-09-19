@@ -21,7 +21,7 @@
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 10
+      DO 20 IC = 1, 11
          ICASE = IC
          CALL HEADER
 *
@@ -40,7 +40,7 @@
      +            ICASE.EQ.10) THEN
             CALL CHECK1(SFAC)
          ELSE IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
-     +            ICASE.EQ.6) THEN
+     +            ICASE.EQ.6 .OR. ICASE.EQ.11 ) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.EQ.4) THEN
             CALL CHECK3(SFAC)
@@ -65,7 +65,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*15      L(10)
+      CHARACTER*15      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -79,6 +79,8 @@
       DATA             L(8)/'CBLAS_DASUM '/
       DATA             L(9)/'CBLAS_DSCAL '/
       DATA             L(10)/'CBLAS_IDAMAX'/
+      DATA             L(11)/'CBLAS_DAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -259,25 +261,27 @@
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      DOUBLE PRECISION  SA
+      DOUBLE PRECISION  SA, SB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, MX, MY
 *     .. Local Arrays ..
       DOUBLE PRECISION  DT10X(7,4,4), DT10Y(7,4,4), DT7(4,4),
      +                  DT8(7,4,4), DX1(7),
      +                  DY1(7), SSIZE1(4), SSIZE2(14,2), STX(7), STY(7),
-     +                  SX(7), SY(7)
+     +                  SX(7), SY(7), DT20(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       EXTERNAL          DDOTTEST
       DOUBLE PRECISION  DDOTTEST
 *     .. External Subroutines ..
       EXTERNAL          DAXPYTEST, DCOPYTEST, DSWAPTEST, STEST, STEST1
+     +                  DAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
       DATA              SA/0.3D0/
+      DATA              SB/0.5D0/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -350,6 +354,27 @@
      +                  0.0D0, 1.17D0, 1.17D0, 1.17D0, 1.17D0, 1.17D0,
      +                  1.17D0, 1.17D0, 1.17D0, 1.17D0, 1.17D0, 1.17D0,
      +                  1.17D0, 1.17D0, 1.17D0/
+      DATA              DT20/0.5D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.43D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.43D0, -0.42D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.43D0, -0.42D0, 0.0D0,
+     +                  0.59D0, 0.0D0, 0.0D0, 0.0D0, 0.5D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.43D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.1D0, -0.9D0, 0.33D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.13D0, -0.9D0, 0.42D0, 0.7D0, -0.45D0,
+     +                  0.2D0, 0.58D0, 0.5D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.43D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.1D0, -0.27D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.13D0,
+     +                  -0.18D0, 0.00D0, 0.53D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.5D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.43D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.43D0, -0.9D0, 0.18D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.43D0, -0.9D0, 0.18D0, 0.7D0,
+     +                  -0.45D0, 0.2D0, 0.64D0/
+
+
 *     .. Executable Statements ..
 *
       DO 120 KI = 1, 4
@@ -380,6 +405,14 @@
                   STY(J) = DT8(J,KN,KI)
    40          CONTINUE
                CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+            ELSE IF (ICASE.EQ.11) THEN
+*              .. DAXPBYTEST ..
+               CALL DAXPBYTEST(N,SA,SX,INCX,SB,SY,INCY)
+               DO 50 J = 1, LENY
+                  STY(J) = DT20(J,KN,KI)
+   50          CONTINUE
+               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+
             ELSE IF (ICASE.EQ.5) THEN
 *              .. DCOPYTEST ..
                DO 60 I = 1, 7
