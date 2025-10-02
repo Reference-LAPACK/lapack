@@ -86,6 +86,9 @@ integer function icamax(n, x, incx)
    integer :: i, j, ix, jx
    real(wp) :: val, smax
    logical :: scaledsmax
+!  ..
+!  .. Intrinsic Functions ..
+   intrinsic :: abs, aimag, huge, real
 !
 !  Quick return if possible
 !
@@ -100,7 +103,7 @@ integer function icamax(n, x, incx)
    smax = -1
 !
 !  scaledsmax = .true. indicates that x(icamax) is finite but
-!  abs(real(x(icamax))) + abs(imag(x(icamax))) overflows
+!  abs(real(x(icamax))) + abs(aimag(x(icamax))) overflows
 !
    if (incx == 1) then
       ! code for increment equal to 1
@@ -109,7 +112,7 @@ integer function icamax(n, x, incx)
             ! return when first NaN found
             icamax = i
             return
-         elseif (abs(real(x(i))) > hugeval .or. abs(imag(x(i))) > hugeval) then
+         elseif (abs(real(x(i))) > hugeval .or. abs(aimag(x(i))) > hugeval) then
             ! keep looking for first NaN
             do j = i+1, n
                if (x(j) /= x(j)) then
@@ -123,18 +126,18 @@ integer function icamax(n, x, incx)
             return
          else ! still no Inf found yet
             if (.not. scaledsmax) then
-               ! no abs(real(x(i))) + abs(imag(x(i))) = Inf yet
-               val = abs(real(x(i))) + abs(imag(x(i)))
+               ! no abs(real(x(i))) + abs(aimag(x(i))) = Inf yet
+               val = abs(real(x(i))) + abs(aimag(x(i)))
                if (val > hugeval) then
                   scaledsmax = .true.
-                  smax = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
+                  smax = 0.25*abs(real(x(i))) + 0.25*abs(aimag(x(i)))
                   icamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   icamax = i
                endif
             else ! scaledsmax
-               val = 0.25*abs(real(x(i))) + 0.25*abs(imag(x(i)))
+               val = 0.25*abs(real(x(i))) + 0.25*abs(aimag(x(i)))
                if (val > smax) then
                   smax = val
                   icamax = i
@@ -150,7 +153,7 @@ integer function icamax(n, x, incx)
             ! return when first NaN found
             icamax = i
             return
-         elseif (abs(real(x(ix))) > hugeval .or. abs(imag(x(ix))) > hugeval) then
+         elseif (abs(real(x(ix))) > hugeval .or. abs(aimag(x(ix))) > hugeval) then
             ! keep looking for first NaN
             jx = ix + incx
             do j = i+1, n
@@ -166,18 +169,18 @@ integer function icamax(n, x, incx)
             return
          else ! still no Inf found yet
             if (.not. scaledsmax) then
-               ! no abs(real(x(ix))) + abs(imag(x(ix))) = Inf yet
-               val = abs(real(x(ix))) + abs(imag(x(ix)))
+               ! no abs(real(x(ix))) + abs(aimag(x(ix))) = Inf yet
+               val = abs(real(x(ix))) + abs(aimag(x(ix)))
                if (val > hugeval) then
                   scaledsmax = .true.
-                  smax = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
+                  smax = 0.25*abs(real(x(ix))) + 0.25*abs(aimag(x(ix)))
                   icamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   icamax = i
                endif
             else ! scaledsmax
-               val = 0.25*abs(real(x(ix))) + 0.25*abs(imag(x(ix)))
+               val = 0.25*abs(real(x(ix))) + 0.25*abs(aimag(x(ix)))
                if (val > smax) then
                   smax = val
                   icamax = i
