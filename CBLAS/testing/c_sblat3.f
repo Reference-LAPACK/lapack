@@ -2822,13 +2822,13 @@
      $ ' (', I6, ' CALL', 'S)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A13, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
-     $      ' - SUSPECT *******' )
+ 9997 FORMAT( ' ', A13, ' COMPLETED THE COMPUTATIONAL TESTS (', I6,
+     $      ' C', 'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO',
+     $      F8.2, ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A13, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A13, '(''',A1, ''',''',A1, ''',''', A1,''',',
-     $      2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', ',
-     $      'C,', I3, ').' )
+ 9995 FORMAT( 1X, I6, ': ', A13, '(''',A1, ''',''',A1, ''',''', A1,
+     $      ''',', 2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',',
+     $      F4.1, ', ', 'C,', I3, ').' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
