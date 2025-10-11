@@ -61,7 +61,7 @@ SLINTST = schkaa.o \
    sgtt05.o slaptm.o slarhs.o slatb4.o slatb5.o slattb.o slattp.o \
    slattr.o slavsp.o slavsy.o slavky.o slavsy_rook.o slqt01.o slqt02.o \
    slqt03.o spbt01.o spbt02.o spbt05.o spot01.o \
-   spot02.o spot03.o spot05.o spot07.o spot08.o spst01.o sppt01.o \
+   spot02.o spot03.o spot05.o spot07.o spot08.o spot09.o spst01.o sppt01.o \
    sppt02.o sppt03.o sppt05.o sptt01.o sptt02.o \
    sptt05.o sqlt01.o sqlt02.o sqlt03.o sqpt01.o \
    sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o \
@@ -153,7 +153,7 @@ DLINTST = dchkaa.o \
    dgtt05.o dlaptm.o dlarhs.o dlatb4.o dlatb5.o dlattb.o dlattp.o \
    dlattr.o dlavsp.o dlavsy.o dlavky.o dlavsy_rook.o dlqt01.o dlqt02.o \
    dlqt03.o dpbt01.o dpbt02.o dpbt05.o dpot01.o \
-   dpot02.o dpot03.o dpot05.o dpot07.o dpot08.o dpst01.o dppt01.o \
+   dpot02.o dpot03.o dpot05.o dpot07.o dpot08.o dpot09.o dpst01.o dppt01.o \
    dppt02.o dppt03.o dppt05.o dptt01.o dptt02.o \
    dptt05.o dqlt01.o dqlt02.o dqlt03.o dqpt01.o \
    dqrt01.o dqrt01p.o dqrt02.o dqrt03.o dqrt11.o dqrt12.o \

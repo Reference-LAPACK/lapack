@@ -17169,6 +17169,46 @@ void LAPACK_zsycon_base(
     #define LAPACK_zsycon(...) LAPACK_zsycon_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dkycon_base LAPACK_GLOBAL_SUFFIX(dkycon,DKYCON)
+void LAPACK_dkycon_base(
+    char const* uplo,
+    lapack_int const* n,
+    double const* A, lapack_int const* lda, lapack_int const* ipiv,
+    double const* anorm,
+    double* rcond,
+    double* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkycon(...) LAPACK_dkycon_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_dkycon(...) LAPACK_dkycon_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skycon_base LAPACK_GLOBAL_SUFFIX(skycon,SKYCON)
+void LAPACK_skycon_base(
+    char const* uplo,
+    lapack_int const* n,
+    float const* A, lapack_int const* lda, lapack_int const* ipiv,
+    float const* anorm,
+    float* rcond,
+    float* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skycon(...) LAPACK_skycon_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_skycon(...) LAPACK_skycon_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_csycon_3_base LAPACK_GLOBAL_SUFFIX(csycon_3,CSYCON_3)
 void LAPACK_csycon_3_base(
     char const* uplo,
@@ -18197,6 +18237,52 @@ void LAPACK_zsyrfs_base(
     #define LAPACK_zsyrfs(...) LAPACK_zsyrfs_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dkyrfs_base LAPACK_GLOBAL_SUFFIX(dkyrfs,DKYRFS)
+void LAPACK_dkyrfs_base(
+    char const* uplo,
+    lapack_int const* n, lapack_int const* nrhs,
+    double const* A, lapack_int const* lda,
+    double const* AF, lapack_int const* ldaf, lapack_int const* ipiv,
+    double const* B, lapack_int const* ldb,
+    double* X, lapack_int const* ldx,
+    double* ferr,
+    double* berr,
+    double* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkyrfs(...) LAPACK_dkyrfs_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_dkyrfs(...) LAPACK_dkyrfs_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skyrfs_base LAPACK_GLOBAL_SUFFIX(skyrfs,SKYRFS)
+void LAPACK_skyrfs_base(
+    char const* uplo,
+    lapack_int const* n, lapack_int const* nrhs,
+    float const* A, lapack_int const* lda,
+    float const* AF, lapack_int const* ldaf, lapack_int const* ipiv,
+    float const* B, lapack_int const* ldb,
+    float* X, lapack_int const* ldx,
+    float* ferr,
+    float* berr,
+    float* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skyrfs(...) LAPACK_skyrfs_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_skyrfs(...) LAPACK_skyrfs_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_csyrfsx_base LAPACK_GLOBAL_SUFFIX(csyrfsx,CSYRFSX)
 void LAPACK_csyrfsx_base(
     char const* uplo, char const* equed,
@@ -18803,6 +18889,54 @@ void LAPACK_zsysvx_base(
     #define LAPACK_zsysvx(...) LAPACK_zsysvx_base(__VA_ARGS__, 1, 1)
 #else
     #define LAPACK_zsysvx(...) LAPACK_zsysvx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dkysvx_base LAPACK_GLOBAL_SUFFIX(dkysvx,DKYSVX)
+void LAPACK_dkysvx_base(
+    char const* fact, char const* uplo,
+    lapack_int const* n, lapack_int const* nrhs,
+    double const* A, lapack_int const* lda,
+    double* AF, lapack_int const* ldaf, lapack_int* ipiv,
+    double const* B, lapack_int const* ldb,
+    double* X, lapack_int const* ldx,
+    double* rcond,
+    double* ferr,
+    double* berr,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkysvx(...) LAPACK_dkysvx_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dkysvx(...) LAPACK_dkysvx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skysvx_base LAPACK_GLOBAL_SUFFIX(skysvx,SKYSVX)
+void LAPACK_skysvx_base(
+    char const* fact, char const* uplo,
+    lapack_int const* n, lapack_int const* nrhs,
+    float const* A, lapack_int const* lda,
+    float* AF, lapack_int const* ldaf, lapack_int* ipiv,
+    float const* B, lapack_int const* ldb,
+    float* X, lapack_int const* ldx,
+    float* rcond,
+    float* ferr,
+    float* berr,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skysvx(...) LAPACK_skysvx_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_skysvx(...) LAPACK_skysvx_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_csysvxx_base LAPACK_GLOBAL_SUFFIX(csysvxx,CSYSVXX)

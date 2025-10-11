@@ -3739,6 +3739,14 @@ lapack_int LAPACKE_zsycon( int matrix_layout, char uplo, lapack_int n,
                            const lapack_int* ipiv, double anorm,
                            double* rcond );
 
+lapack_int LAPACKE_skycon( int matrix_layout, char uplo, lapack_int n,
+                           const float* a, lapack_int lda,
+                           const lapack_int* ipiv, float anorm, float* rcond );
+lapack_int LAPACKE_dkycon( int matrix_layout, char uplo, lapack_int n,
+                           const double* a, lapack_int lda,
+                           const lapack_int* ipiv, double anorm,
+                           double* rcond );
+
 lapack_int LAPACKE_ssyequb( int matrix_layout, char uplo, lapack_int n,
                             const float* a, lapack_int lda, float* s,
                             float* scond, float* amax );
@@ -3864,6 +3872,19 @@ lapack_int LAPACKE_zsyrfs( int matrix_layout, char uplo, lapack_int n,
                            lapack_complex_double* x, lapack_int ldx,
                            double* ferr, double* berr );
 
+lapack_int LAPACKE_skyrfs( int matrix_layout, char uplo, lapack_int n,
+                           lapack_int nrhs, const float* a, lapack_int lda,
+                           const float* af, lapack_int ldaf,
+                           const lapack_int* ipiv, const float* b,
+                           lapack_int ldb, float* x, lapack_int ldx,
+                           float* ferr, float* berr );
+lapack_int LAPACKE_dkyrfs( int matrix_layout, char uplo, lapack_int n,
+                           lapack_int nrhs, const double* a, lapack_int lda,
+                           const double* af, lapack_int ldaf,
+                           const lapack_int* ipiv, const double* b,
+                           lapack_int ldb, double* x, lapack_int ldx,
+                           double* ferr, double* berr );
+
 lapack_int LAPACKE_ssyrfsx( int matrix_layout, char uplo, char equed,
                             lapack_int n, lapack_int nrhs, const float* a,
                             lapack_int lda, const float* af, lapack_int ldaf,
@@ -3951,6 +3972,19 @@ lapack_int LAPACKE_zsysvx( int matrix_layout, char fact, char uplo, lapack_int n
                            const lapack_complex_double* b, lapack_int ldb,
                            lapack_complex_double* x, lapack_int ldx,
                            double* rcond, double* ferr, double* berr );
+
+lapack_int LAPACKE_skysvx( int matrix_layout, char fact, char uplo, lapack_int n,
+                           lapack_int nrhs, const float* a, lapack_int lda,
+                           float* af, lapack_int ldaf, lapack_int* ipiv,
+                           const float* b, lapack_int ldb, float* x,
+                           lapack_int ldx, float* rcond, float* ferr,
+                           float* berr );
+lapack_int LAPACKE_dkysvx( int matrix_layout, char fact, char uplo, lapack_int n,
+                           lapack_int nrhs, const double* a, lapack_int lda,
+                           double* af, lapack_int ldaf, lapack_int* ipiv,
+                           const double* b, lapack_int ldb, double* x,
+                           lapack_int ldx, double* rcond, double* ferr,
+                           double* berr );
 
 lapack_int LAPACKE_ssysvxx( int matrix_layout, char fact, char uplo,
                             lapack_int n, lapack_int nrhs, float* a,
@@ -9488,6 +9522,16 @@ lapack_int LAPACKE_zsycon_work( int matrix_layout, char uplo, lapack_int n,
                                 const lapack_int* ipiv, double anorm,
                                 double* rcond, lapack_complex_double* work );
 
+lapack_int LAPACKE_skycon_work( int matrix_layout, char uplo, lapack_int n,
+                                const float* a, lapack_int lda,
+                                const lapack_int* ipiv, float anorm,
+                                float* rcond, float* work, lapack_int* iwork );
+lapack_int LAPACKE_dkycon_work( int matrix_layout, char uplo, lapack_int n,
+                                const double* a, lapack_int lda,
+                                const lapack_int* ipiv, double anorm,
+                                double* rcond, double* work,
+                                lapack_int* iwork );
+
 lapack_int LAPACKE_ssyequb_work( int matrix_layout, char uplo, lapack_int n,
                                  const float* a, lapack_int lda, float* s,
                                  float* scond, float* amax, float* work );
@@ -9649,6 +9693,21 @@ lapack_int LAPACKE_zsyrfs_work( int matrix_layout, char uplo, lapack_int n,
                                 double* ferr, double* berr,
                                 lapack_complex_double* work, double* rwork );
 
+lapack_int LAPACKE_skyrfs_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_int nrhs, const float* a, lapack_int lda,
+                                const float* af, lapack_int ldaf,
+                                const lapack_int* ipiv, const float* b,
+                                lapack_int ldb, float* x, lapack_int ldx,
+                                float* ferr, float* berr, float* work,
+                                lapack_int* iwork );
+lapack_int LAPACKE_dkyrfs_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_int nrhs, const double* a,
+                                lapack_int lda, const double* af,
+                                lapack_int ldaf, const lapack_int* ipiv,
+                                const double* b, lapack_int ldb, double* x,
+                                lapack_int ldx, double* ferr, double* berr,
+                                double* work, lapack_int* iwork );
+
 lapack_int LAPACKE_ssyrfsx_work( int matrix_layout, char uplo, char equed,
                                  lapack_int n, lapack_int nrhs, const float* a,
                                  lapack_int lda, const float* af,
@@ -9759,6 +9818,23 @@ lapack_int LAPACKE_zsysvx_work( int matrix_layout, char fact, char uplo,
                                 double* rcond, double* ferr, double* berr,
                                 lapack_complex_double* work, lapack_int lwork,
                                 double* rwork );
+
+lapack_int LAPACKE_skysvx_work( int matrix_layout, char fact, char uplo,
+                                lapack_int n, lapack_int nrhs, const float* a,
+                                lapack_int lda, float* af, lapack_int ldaf,
+                                lapack_int* ipiv, const float* b,
+                                lapack_int ldb, float* x, lapack_int ldx,
+                                float* rcond, float* ferr, float* berr,
+                                float* work, lapack_int lwork,
+                                lapack_int* iwork );
+lapack_int LAPACKE_dkysvx_work( int matrix_layout, char fact, char uplo,
+                                lapack_int n, lapack_int nrhs, const double* a,
+                                lapack_int lda, double* af, lapack_int ldaf,
+                                lapack_int* ipiv, const double* b,
+                                lapack_int ldb, double* x, lapack_int ldx,
+                                double* rcond, double* ferr, double* berr,
+                                double* work, lapack_int lwork,
+                                lapack_int* iwork );
 
 lapack_int LAPACKE_ssysvxx_work( int matrix_layout, char fact, char uplo,
                                  lapack_int n, lapack_int nrhs, float* a,

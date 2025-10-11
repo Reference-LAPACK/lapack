@@ -26,7 +26,7 @@ set(SLINTST schkaa.F
    sgtt05.f slaptm.f slarhs.f slatb4.f slatb5.f slattb.f slattp.f
    slattr.f slavsp.f slavsy.f slavky.f slavsy_rook.f slqt01.f slqt02.f
    slqt03.f spbt01.f spbt02.f spbt05.f spot01.f
-   spot02.f spot03.f spot05.f spot07.f spot08.f spst01.f sppt01.f
+   spot02.f spot03.f spot05.f spot07.f spot08.f spot09.f spst01.f sppt01.f
    sppt02.f sppt03.f sppt05.f sptt01.f sptt02.f
    sptt05.f sqlt01.f sqlt02.f sqlt03.f sqpt01.f
    sqrt01.f sqrt01p.f sqrt02.f sqrt03.f sqrt11.f sqrt12.f
@@ -127,7 +127,7 @@ set(DLINTST dchkaa.F
    dgtt05.f dlaptm.f dlarhs.f dlatb4.f dlatb5.f dlattb.f dlattp.f
    dlattr.f dlavsp.f dlavsy.f dlavky.f dlavsy_rook.f dlqt01.f dlqt02.f
    dlqt03.f dpbt01.f dpbt02.f dpbt05.f dpot01.f
-   dpot02.f dpot03.f dpot05.f dpot07.f dpot08.f dpst01.f dppt01.f
+   dpot02.f dpot03.f dpot05.f dpot07.f dpot08.f dpot09.f dpst01.f dppt01.f
    dppt02.f dppt03.f dppt05.f dptt01.f dptt02.f
    dptt05.f dqlt01.f dqlt02.f dqlt03.f dqpt01.f
    dqrt01.f dqrt01p.f dqrt02.f dqrt03.f dqrt11.f dqrt12.f

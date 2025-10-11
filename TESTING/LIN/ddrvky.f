@@ -183,7 +183,7 @@
       CHARACTER*3        PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
-     $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
+     $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT, BIF
       DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
@@ -197,8 +197,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
-     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT07,
-     $                   DKYSV, DKYT01, DKYTRF, DKYTRI2, LSAME, XLAENV
+     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT07, DPOT09,
+     $                   DKYSV, DKYSVX, DKYT01, DKYTRF, DKYTRI2, LSAME,
+     $                   XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -267,8 +268,7 @@
             ZEROT = IMAT.GE.3 .AND. IMAT.LE.6
             IF( ZEROT .AND. N.LT.IMAT-2 )
      $         GO TO 170
-            IF (MOD(N,2).NE.0)
-     $         ZEROT = .FALSE.
+            ZEROT = MOD(N,2).NE.0
 *
 *           Do first for UPLO = 'U', then for UPLO = 'L'
 *
@@ -367,7 +367,8 @@
 *
                   FACT = FACTS( IFACT )
 *
-*                 Compute the condition number.
+*                 Compute the condition number for comparison with
+*                 the value returned by DKYSVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -385,6 +386,7 @@
                      CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
                      CALL DKYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
      $                            LWORK, INFO )
+                     BIF = INFO
 *
 *                    Compute inv(A) and take its norm.
 *
@@ -396,7 +398,10 @@
 *
 *                    Compute the 1-norm condition number of A.
 *
-                     IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
+                     IF( BIF .GT. 0 ) THEN
+                        RCONDC = ZERO
+                        GO TO 150
+                     ELSEIF ( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                         RCONDC = ONE
                      ELSE
                         RCONDC = ( ONE / ANORM ) / AINVNM
@@ -427,7 +432,17 @@
 *                    pivoting.
 *
                      K = IZERO
-                     IF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'U' )) THEN
+                     IF (N.EQ.3 .AND. IMAT.GE.7 .AND. IMAT.LE.10) THEN
+                        IF (LSAME( UPLO, 'U' )) THEN
+                           K = N
+                        ELSEIF (LSAME( UPLO, 'L' )) THEN
+                           K = 1
+                        END IF
+                     ELSEIF (N.EQ.5 .AND. IMAT.GE.6 .AND. IMAT.LE.10)
+     $               THEN
+                        K = (N + 1) / 2
+                     ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'U' ))
+     $               THEN
                         K = 1
                      ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'L' ))
      $               THEN
@@ -507,6 +522,133 @@
                      NRUN = NRUN + NT
   120                CONTINUE
                   END IF
+*
+*                 --- Test DKYSVX ---
+*
+                  IF( IFACT.EQ.2 )
+     $               CALL DLASET( UPLO, N, N, ZERO, ZERO, AFAC, LDA )
+                  CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
+*
+*                 Solve the system and compute the condition number and
+*                 error bounds using SKYSVX.
+*
+                  SRNAMT = 'DKYSVX'
+                  CALL DKYSVX( FACT, UPLO, N, NRHS, A, LDA, AFAC, LDA,
+     $                         IWORK, B, LDA, X, LDA, RCOND, RWORK,
+     $                         RWORK( NRHS+1 ), WORK, LWORK,
+     $                         IWORK( N+1 ), INFO )
+*
+*                 Adjust the expected value of INFO to account for
+*                 pivoting.
+*
+                  K = IZERO
+                  IF (N.EQ.3 .AND. IMAT.GE.7 .AND. IMAT.LE.10) THEN
+                     IF (LSAME( UPLO, 'U' )) THEN
+                        K = N
+                     ELSEIF (LSAME( UPLO, 'L' )) THEN
+                        K = 1
+                     END IF
+                  ELSEIF (N.EQ.5 .AND. IMAT.GE.6 .AND. IMAT.LE.10)
+     $            THEN
+                     K = (N + 1) / 2
+                  ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'U' ))
+     $            THEN
+                     K = 1
+                  ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'L' ))
+     $            THEN
+                     K = N
+                  ELSEIF( K.GT.0 ) THEN
+  130                CONTINUE
+                     IF(LSAME( UPLO, 'U' )) THEN
+                        IF(MOD(N-K+1,2).NE.0 .AND. IWORK(K).LT.0)
+     $                  THEN
+                           K = -IWORK( K )
+                           GO TO 130
+                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND.
+     $                  IWORK(K+1).GT.0) THEN
+                           K = IWORK( K+1 )
+                           GO TO 130
+                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND.
+     $                  IWORK(K+1).EQ.0) THEN
+                           K = K+1
+                        END IF
+                     ELSE IF(LSAME( UPLO, 'L' )) THEN
+                        IF(MOD(K,2).NE.0 .AND. IWORK(K).LT.0)
+     $                  THEN
+                           K = -IWORK( K )
+                           GO TO 130
+                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).GT.0)
+     $                  THEN
+                           K = IWORK( K-1 )
+                           GO TO 130
+                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).EQ.0)
+     $                  THEN
+                           K = K-1  
+                        END IF
+                     END IF
+                  END IF
+*
+*                 Check the error code from DKYSVX.
+*
+                  IF( INFO.NE.K ) THEN
+                     CALL ALAERH( PATH, 'DKYSVX', INFO, K, FACT // UPLO,
+     $                            N, N, -1, -1, NRHS, IMAT, NFAIL,
+     $                            NERRS, NOUT )
+                     GO TO 150
+                  END IF
+*
+                  IF( INFO.EQ.0 ) THEN
+                     IF( IFACT.GE.2 ) THEN
+*
+*                       Reconstruct matrix from factors and compute
+*                       residual.
+*
+                        CALL DKYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+     $                               AINV, LDA, RWORK( 2*NRHS+1 ),
+     $                               RESULT( 1 ) )
+                        K1 = 1
+                     ELSE
+                        K1 = 2
+                     END IF
+*
+*                    Compute residual of the computed solution.
+*
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL DPOT07( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+     $                            LDA, RWORK( 2*NRHS+1 ), RESULT( 2 ) )
+*
+*                    Check solution from generated exact solution.
+*
+                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+     $                            RESULT( 3 ) )
+*
+*                    Check the error bounds from iterative refinement.
+*
+                     CALL DPOT09( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
+     $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
+     $                            RESULT( 4 ) )
+                  ELSE
+                     K1 = 6
+                  END IF
+*
+*                 Compare RCOND from DKYSVX with the computed value
+*                 in RCONDC.
+*
+                  RESULT( 6 ) = DGET06( RCOND, RCONDC )
+*
+*                 Print information about the tests that did not pass
+*                 the threshold.
+*
+                  DO 140 K = K1, 6
+                     IF( RESULT( K ).GE.THRESH ) THEN
+                        IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                     CALL ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 )'DKYSVX', FACT, UPLO,
+     $                     N, IMAT, K, RESULT( K )
+                        NFAIL = NFAIL + 1
+                     END IF
+  140             CONTINUE
+                  NRUN = NRUN + 7 - K1
 *
   150          CONTINUE
 *

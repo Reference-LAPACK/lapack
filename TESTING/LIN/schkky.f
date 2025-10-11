@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKKY tests SKYTRF, -TRI2, -TRS, -TRS2.
+*> SCHKKY tests SKYTRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *> \endverbatim
 *
 *  Arguments:
@@ -209,10 +209,14 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       REAL               RESULT( NTESTS )
 *     ..
+*     .. External Functions ..
+      REAL               SGET06, SLANKY
+      EXTERNAL           SGET06, SLANKY
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
-     $                   SLARHS, SLATB4, SLATMS, SPOT08, SPOT07,
-     $                   SKYT01, SKYTRF,
+     $                   SLARHS, SLATB4, SLATMS, SPOT08, SPOT07, SPOT09,
+     $                   SKYCON, SKYCONV, SKYRFS, SKYT01, SKYTRF,
      $                   SKYTRI2, SKYTRS, SKYTRS2, LSAME, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -281,8 +285,7 @@
             ZEROT = IMAT.GE.3 .AND. IMAT.LE.6
             IF( ZEROT .AND. N.LT.IMAT-2 )
      $         GO TO 170
-            IF (MOD(N,2).NE.0)
-     $         ZEROT = .FALSE.
+            ZEROT = MOD(N,2).NE.0
 *
 *           Do first for UPLO = 'U', then for UPLO = 'L'
 *
@@ -417,32 +420,47 @@
 *                 pivoting.
 *
                   K = IZERO
-                  IF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'U' )) THEN
+                  IF (N.EQ.3 .AND. IMAT.GE.7 .AND. IMAT.LE.10) THEN
+                     IF (LSAME( UPLO, 'U' )) THEN
+                        K = N
+                     ELSEIF (LSAME( UPLO, 'L' )) THEN
+                        K = 1
+                     END IF
+                  ELSEIF (N.EQ.5 .AND. IMAT.GE.6 .AND. IMAT.LE.10)
+     $            THEN
+                     K = (N + 1) / 2
+                  ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'U' ))
+     $            THEN
                      K = 1
-                  ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'L' )) THEN
+                  ELSEIF (MOD(N,2).NE.0 .AND. LSAME( UPLO, 'L' ))
+     $            THEN
                      K = N
                   ELSEIF( K.GT.0 ) THEN
   100                CONTINUE
                      IF(LSAME( UPLO, 'U' )) THEN
-                        IF(MOD(N-K+1,2).NE.0 .AND. IWORK(K).LT.0) THEN
+                        IF(MOD(N-K+1,2).NE.0 .AND. IWORK(K).LT.0)
+     $                  THEN
                            K = -IWORK( K )
                            GO TO 100
-                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND. IWORK(K+1).GT.0) 
-     $                  THEN
+                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND.
+     $                  IWORK(K+1).GT.0) THEN
                            K = IWORK( K+1 )
                            GO TO 100
-                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND. IWORK(K+1).EQ.0) 
-     $                  THEN
+                        ELSEIF(MOD(N-K+1,2).EQ.0 .AND.
+     $                  IWORK(K+1).EQ.0) THEN
                            K = K+1
                         END IF
                      ELSE IF(LSAME( UPLO, 'L' )) THEN
-                        IF(MOD(K,2).NE.0 .AND. IWORK(K).LT.0) THEN
+                        IF(MOD(K,2).NE.0 .AND. IWORK(K).LT.0)
+     $                  THEN
                            K = -IWORK( K )
                            GO TO 100
-                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).GT.0) THEN
+                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).GT.0)
+     $                  THEN
                            K = IWORK( K-1 )
                            GO TO 100
-                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).EQ.0) THEN
+                        ELSEIF(MOD(K,2).EQ.0 .AND. IWORK(K-1).EQ.0)
+     $                  THEN
                            K = K-1  
                         END IF
                      END IF
@@ -474,7 +492,7 @@
 *                 if the factorization was competed without INFO > 0
 *                 (i.e. there is no zero rows and columns).
 *
-                  IF( .NOT.TRFCON ) THEN
+                  IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      SRNAMT = 'SKYTRI2'
                      LWORK = (N+NB+1)*(NB+3)
@@ -513,8 +531,15 @@
 *                 Skip the other tests if this is not the first block
 *                 size.
 *
-                  IF( INB.GT.1 .OR. TRFCON )
+                  IF( INB.GT.1 )
      $               GO TO 150
+*
+*                 Do only the condition estimate if INFO is not 0.
+*
+                  IF( TRFCON ) THEN
+                     RCONDC = ZERO
+                     GO TO 140
+                  END IF
 *
 *                 Do for each value of NRHS in NSVAL.
 *
@@ -587,10 +612,32 @@
                      CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 5 ) )
 *
+*+    TESTS 6, 7, and 8
+*                 Use iterative refinement to improve the solution.
+*
+                     SRNAMT = 'SKYRFS'
+                     CALL SKYRFS( UPLO, N, NRHS, A, LDA, AFAC, LDA,
+     $                            IWORK, B, LDA, X, LDA, RWORK,
+     $                            RWORK( NRHS+1 ), WORK, IWORK( N+1 ),
+     $                            INFO )
+*
+*                    Check error code from SKYRFS and handle error.
+*
+                     IF( INFO.NE.0 )
+     $                  CALL ALAERH( PATH, 'SKYRFS', INFO, 0, UPLO, N,
+     $                               N, -1, -1, NRHS, IMAT, NFAIL,
+     $                               NERRS, NOUT )
+*
+                     CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+     $                            RESULT( 6 ) )
+                     CALL SPOT09( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
+     $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
+     $                            RESULT( 7 ) )
+*
 *                    Print information about the tests that did not pass
 *                    the threshold.
 *
-                     DO 120 K = 3, 5
+                     DO 120 K = 3, 8
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALAHD( NOUT, PATH )
@@ -599,12 +646,42 @@
                            NFAIL = NFAIL + 1
                         END IF
   120                CONTINUE
-                     NRUN = NRUN + 3
+                     NRUN = NRUN + 6
 *
 *                 End do for each value of NRHS in NSVAL.
 *
   130             CONTINUE
 *
+*+    TEST 9
+*                 Get an estimate of RCOND = 1/CNDNUM.
+*
+  140             CONTINUE
+                  ANORM = SLANKY( '1', UPLO, N, A, LDA, RWORK )
+                  SRNAMT = 'SKYCON'
+                  CALL SKYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
+     $                         WORK, IWORK( N+1 ), INFO )
+*
+*                 Check error code from SKYCON and handle error.
+*
+                  IF( INFO.NE.0 )
+     $               CALL ALAERH( PATH, 'SKYCON', INFO, 0, UPLO, N, N,
+     $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Compute the test ratio to compare to values of RCOND
+*
+                  RESULT( 9 ) = SGET06( RCOND, RCONDC )
+*
+*                 Print information about the tests that did not pass
+*                 the threshold.
+*
+                  IF( RESULT( 9 ).GE.THRESH ) THEN
+                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9997 )UPLO, N, IMAT, 9,
+     $                  RESULT( 9 )
+                     NFAIL = NFAIL + 1
+                  END IF
+                  NRUN = NRUN + 1
   150          CONTINUE
 *
   160       CONTINUE

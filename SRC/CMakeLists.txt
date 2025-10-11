@@ -128,8 +128,8 @@ set(SLASRC
    ssbtrd.f sspcon.f sspev.f  sspevd.f sspevx.f sspgst.f
    sspgv.f  sspgvd.f sspgvx.f ssprfs.f sspsv.f  sspsvx.f ssptrd.f
    ssptrf.f ssptri.f ssptrs.f sstegr.f sstev.f  sktev.f  sstevd.f sstevr.f
-   ssycon.f ssyev.f  skyev.f  ssyevd.f ssyevr.f ssyevx.f ssygs2.f skygs2.f
-   ssygst.f skygst.f ssygv.f  skygv.f ssygvd.f ssygvx.f ssyrfs.f ssysv.f  skysv.f ssysvx.f
+   ssycon.f skycon.f ssyev.f  skyev.f  ssyevd.f ssyevr.f ssyevx.f ssygs2.f skygs2.f
+   ssygst.f skygst.f ssygv.f  skygv.f ssygvd.f ssygvx.f ssyrfs.f skyrfs.f ssysv.f  skysv.f ssysvx.f skysvx.f
    ssytd2.f ssytf2.f ssytrd.f ssytrf.f ssytri.f ssytri2.f ssytri2x.f
    skytd2.f skytf2.f skytrd.f skytrf.f skytri.f skytri2.f skytri2x.f
    ssyswapr.f ssytrs.f ssytrs2.f
@@ -331,9 +331,9 @@ set(DLASRC
    dsbtrd.f dspcon.f dspev.f  dspevd.f dspevx.f dspgst.f
    dspgv.f  dspgvd.f dspgvx.f dsprfs.f dspsv.f  dspsvx.f dsptrd.f
    dsptrf.f dsptri.f dsptrs.f dstegr.f dstev.f  dktev.f  dstevd.f dstevr.f
-   dsycon.f dsyev.f  dkyev.f  dsyevd.f dsyevr.f
-   dsyevx.f dsygs2.f dkygs2.f dsygst.f dkygst.f dsygv.f  dkygv.f dsygvd.f dsygvx.f dsyrfs.f
-   dsysv.f  dkysv.f dsysvx.f
+   dsycon.f dkycon.f dsyev.f  dkyev.f  dsyevd.f dsyevr.f
+   dsyevx.f dsygs2.f dkygs2.f dsygst.f dkygst.f dsygv.f  dkygv.f dsygvd.f dsygvx.f dsyrfs.f dkyrfs.f
+   dsysv.f  dkysv.f dsysvx.f dkysvx.f
    dsytd2.f dsytf2.f dsytrd.f dsytrf.f dsytri.f dsytrs.f dsytrs2.f
    dkytd2.f dkytf2.f dkytrd.f dkytrf.f dkytri.f dkytrs.f dkytrs2.f
    dsytri2.f dsytri2x.f dsyswapr.f

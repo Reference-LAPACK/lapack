@@ -1100,6 +1100,8 @@ lapacke_dstevx.o \
 lapacke_dstevx_work.o \
 lapacke_dsycon.o \
 lapacke_dsycon_work.o \
+lapacke_dkycon.o \
+lapacke_dkycon_work.o \
 lapacke_dsycon_3.o \
 lapacke_dsycon_3_work.o \
 lapacke_dsyconv.o \
@@ -1142,6 +1144,8 @@ lapacke_dsygvx.o \
 lapacke_dsygvx_work.o \
 lapacke_dsyrfs.o \
 lapacke_dsyrfs_work.o \
+lapacke_dkyrfs.o \
+lapacke_dkyrfs_work.o \
 lapacke_dsysv.o \
 lapacke_dsysv_work.o \
 lapacke_dkysv.o \
@@ -1156,6 +1160,8 @@ lapacke_dsysv_rook.o \
 lapacke_dsysv_rook_work.o \
 lapacke_dsysvx.o \
 lapacke_dsysvx_work.o \
+lapacke_dkysvx.o \
+lapacke_dkysvx_work.o \
 lapacke_dsyswapr.o \
 lapacke_dsyswapr_work.o \
 lapacke_dkyswapr.o \
@@ -1708,6 +1714,8 @@ lapacke_sstevx.o \
 lapacke_sstevx_work.o \
 lapacke_ssycon.o \
 lapacke_ssycon_work.o \
+lapacke_skycon.o \
+lapacke_skycon_work.o \
 lapacke_ssycon_3.o \
 lapacke_ssycon_3_work.o \
 lapacke_ssyconv.o \
@@ -1750,6 +1758,8 @@ lapacke_ssygvx.o \
 lapacke_ssygvx_work.o \
 lapacke_ssyrfs.o \
 lapacke_ssyrfs_work.o \
+lapacke_skyrfs.o \
+lapacke_skyrfs_work.o \
 lapacke_ssysv.o \
 lapacke_ssysv_work.o \
 lapacke_skysv.o \
@@ -1764,6 +1774,8 @@ lapacke_ssysv_rook.o \
 lapacke_ssysv_rook_work.o \
 lapacke_ssysvx.o \
 lapacke_ssysvx_work.o \
+lapacke_skysvx.o \
+lapacke_skysvx_work.o \
 lapacke_ssyswapr.o \
 lapacke_ssyswapr_work.o \
 lapacke_skyswapr.o \

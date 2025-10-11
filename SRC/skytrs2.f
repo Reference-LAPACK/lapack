@@ -199,7 +199,7 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 .OR. NRHS.EQ.0 )
+      IF( N.EQ.0 .OR. NRHS.EQ.0 .OR. (MOD(N,2).NE.0) )
      $   RETURN
 *
 *     Convert A

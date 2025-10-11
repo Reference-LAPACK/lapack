@@ -171,7 +171,7 @@
       UPPER = LSAME( UPLO, 'U' )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( (N.LT.0) .OR. (MOD(N,2).NE.0) ) THEN
+      ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( NRHS.LT.0 ) THEN
          INFO = -3
@@ -187,7 +187,7 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 .OR. NRHS.EQ.0 )
+      IF( N.EQ.0 .OR. NRHS.EQ.0 .OR. (MOD(N,2).NE.0) )
      $   RETURN
 *
       IF( UPPER ) THEN

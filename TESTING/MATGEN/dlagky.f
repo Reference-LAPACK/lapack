@@ -165,18 +165,47 @@
 *
 *     Generate lower triangle of skew-symmetric matrix
 *
-      DO 40 I = N - 1, 1, -1
+      DO 40 I = N - 1, 2, -1
 *
 *        generate random reflection
 *
-         CALL DLARNV( 3, ISEED, N-I+1, WORK )
-         WN = DNRM2( N-I+1, WORK, 1 )
+         CALL DLARNV( 3, ISEED, N-I+1, WORK( 2 ) )
+         WN = DNRM2( N-I+1, WORK( 2 ), 1 )
+         WA = SIGN( WN, WORK( 2 ) )
+         IF( WN.EQ.ZERO ) THEN
+            TAU = ZERO
+         ELSE
+            WB = WORK( 2 ) + WA
+            CALL DSCAL( N-I, ONE / WB, WORK( 3 ), 1 )
+            WORK( 2 ) = ONE
+            TAU = WB / WA
+         END IF
+         WORK( 1 ) = ZERO
+*
+*        apply random reflection to A(i:n,i:n) from the left
+*        and the right
+*
+*        compute  y := tau * A * u
+*
+         CALL DKYMV( 'Lower', N-I+2, TAU, A( I-1, I-1 ), LDA, WORK,
+     $               1, ZERO, WORK( N+1 ), 1 )
+*
+*        apply the transformation as a rank-2 update to A(i:n,i:n)
+*
+         CALL DKYR2( 'Lower', N-I+2, -ONE, WORK, 1, WORK( N+1 ), 1,
+     $               A( I-1, I-1 ), LDA )
+   40 CONTINUE
+*
+*        generate random reflection
+*
+         CALL DLARNV( 3, ISEED, N, WORK( 1 ) )
+         WN = DNRM2( N, WORK( 1 ), 1 )
          WA = SIGN( WN, WORK( 1 ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL DSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL DSCAL( N-1, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = WB / WA
          END IF
@@ -186,19 +215,13 @@
 *
 *        compute  y := tau * A * u
 *
-         CALL DKYMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZERO,
-     $               WORK( N+1 ), 1 )
-*
-*        compute  v := y - 1/2 * tau * ( y, u ) * u
-*
-         ALPHA = -HALF*TAU*DDOT( N-I+1, WORK( N+1 ), 1, WORK, 1 )
-         CALL DAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
+         CALL DKYMV( 'Lower', N, TAU, A( 1, 1 ), LDA, WORK,
+     $               1, ZERO, WORK( N+1 ), 1 )
 *
 *        apply the transformation as a rank-2 update to A(i:n,i:n)
 *
-         CALL DKYR2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1,
-     $               A( I, I ), LDA )
-   40 CONTINUE
+         CALL DKYR2( 'Lower', N, -ONE, WORK, 1, WORK( N+1 ), 1,
+     $               A( 1, 1 ), LDA )
 *
 *     Reduce number of subdiagonals to K
 *
@@ -230,11 +253,6 @@
 *
          CALL DKYMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
-*
-*        compute  v := y - 1/2 * tau * ( y, u ) * u
-*
-         ALPHA = -HALF*TAU*DDOT( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
-         CALL DAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
 *
 *        apply skew-symmetric rank-2 update to A(k+i:n,k+i:n)
 *
