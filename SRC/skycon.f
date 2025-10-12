@@ -122,6 +122,20 @@
 *
 *> \ingroup hecon
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssycon.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Oct 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE SKYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                   IWORK, INFO )

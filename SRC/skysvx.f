@@ -289,6 +289,20 @@
 *
 *> \ingroup hesvx
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine ssysvx.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Oct 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE SKYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                   B,

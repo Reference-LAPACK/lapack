@@ -183,6 +183,20 @@
 *
 *> \ingroup herfs
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>  Derived from subroutine dsyrfs.
+*>
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>    Shuo Zheng, China, Oct 2025 \n
+*>
 *  =====================================================================
       SUBROUTINE DKYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
      $                   LDB,

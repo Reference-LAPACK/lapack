@@ -149,7 +149,7 @@
             @defgroup hesv          {he,sy,ky}sv:   rook (v1)
             @defgroup hesv_rook     {he,sy}sv_rook: rook (v2)
             @defgroup hesv_rk       {he,sy}sv_rk:   rook (v3)
-            @defgroup hesvx         {he,sy}svx:     rook (v1, expert)
+            @defgroup hesvx         {he,sy,ky}svx:  rook (v1, expert)
             @defgroup hesvxx        {he,sy}svxx:    rook (v1, expert)
 
             @defgroup hpsv_driver   --- packed, rook pivoting ---
@@ -164,13 +164,13 @@
         @defgroup hesv_comp_grp     LDL: computational routines (factor, cond, etc.)
         @{
             @defgroup hesv_comp_v1  --- full, rook v1 ---
-            @defgroup hecon         {he,sy}con:     condition number estimate
+            @defgroup hecon         {he,sy,ky}con:  condition number estimate
             @defgroup hetrf         {he,sy,ky}trf:  triangular factor
             @defgroup lahef         la{he,sy,ky}f:  step in hetrf
             @defgroup hetf2         {he,sy,ky}tf2:  triangular factor, level 2
             @defgroup hetrs         {he,sy,ky}trs:  triangular solve using factor
             @defgroup hetri         {he,sy,ky}tri:  triangular inverse
-            @defgroup herfs         {he,sy}rfs:     iterative refinement
+            @defgroup herfs         {he,sy,ky}rfs:  iterative refinement
             @defgroup herfsx        {he,sy}rfsx:    iterative refinement, expert
             @defgroup heequb        {he,sy}equb:    equilibration, power of 2
             @defgroup syconv        {sy,ky}conv:    convert to/from L and D from hetrf
