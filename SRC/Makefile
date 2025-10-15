@@ -137,7 +137,7 @@ SLASRC = \
    slaqgb.o slaqge.o slaqp2.o slaqps.o slaqp2rk.o slaqp3rk.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
-   slarf.o  slarf1f.o slarf1l.o slarfb.o slarfb0c2.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
+   slarf.o  slarf1f.o slarf1l.o slarfb.o slarfb0c2.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarft2.o slarfx.o slarfy.o \
    slargv.o slarmm.o slarrv.o slartv.o \
    slarz.o  slarzb.o slarzt.o slaswp.o slasy2.o slasyf.o slasyf_rook.o \
    slasyf_rk.o \
