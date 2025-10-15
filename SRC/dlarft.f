@@ -181,17 +181,18 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,L
+      INTEGER           I,J,L,NX
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          DTRMM,DGEMM,DLACPY
+      EXTERNAL          DTRMM,DGEMM,DLACPY!,DLARFT2
 *
 *     .. External Functions..
 *
       LOGICAL           LSAME
-      EXTERNAL          LSAME
+      INTEGER           ILAENV
+      EXTERNAL          LSAME, ILAENV
 *
 *     The general scheme used is inspired by the approach inside DGEQRT3
 *     which was (at the time of writing this code):
@@ -199,6 +200,9 @@
 *     IBM J. Res. Develop. Vol 44 No. 4 July 2000.
 *     ..
 *     .. Executable Statements ..
+*     Determine the crossover point
+*
+      NX = ILAENV(3, "DLARFT", DIRECT // STOREV, N, K, -1, -1)
 *
 *     Quick return if possible
 *
@@ -212,6 +216,9 @@
          T(1,1) = TAU(1)
          RETURN
       END IF
+*
+*
+*
 *
 *     Beginning of executable statements
 *
@@ -254,6 +261,13 @@
 *     would normally compute
 *
       RQ = (.NOT.RQT).AND.(.NOT.COLV)
+      IF(K.LT.NX) THEN
+
+         !Finish this component with the unblocked version.
+ 
+         CALL DLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         RETURN
+      END IF
       IF(QR) THEN
 *
 *        Break V apart into 6 components
@@ -752,8 +766,8 @@
 *
 *        Then, consider the product:
 *
-*        (I - V_2'*T_{2,2}*V_2)*(I - V_1'*T_{1,1}*V_1)
-*        = I - V_2'*T_{2,2}*V_2 - V_1'*T_{1,1}*V_1 + V_2'*T_{2,2}*V_2*V_1'*T_{1,1}*V_1
+*        (I - V_1'*T_{1,1}*V_1)*(I - V_2'*T_{2,2}*V_2)
+*        = I - V_1'*T_{1,1}*V_1 - V_2'*T_{2,2}*V_2 + V_1'*T_{1,1}*V_1*V_2'*T_{2,2}*V_2
 *
 *        Define T_{1,2} = -T_{1,1}*V_1*V_2'*T_{2,2}
 *
