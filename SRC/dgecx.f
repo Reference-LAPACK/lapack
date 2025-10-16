@@ -74,7 +74,7 @@
 *>
 *>   2) The input parameter ABSTOL, the absolute tolerance for
 *>      the maximum column 2-norm of the submatrix residual
-*>      A_sub_resid = A(K+1:M_sub, K+1:N_sub).
+*>      A_sub_resid(K) = A(K+1:M_sub, K+1:N_sub).
 *>      This means that the factorization stops if this norm is less
 *>      or equal to ABSTOL. If ABSTOL < 0.0, the criterion is not used.
 *>
@@ -122,11 +122,11 @@
 *> ==================================
 *>
 *> When the columns are selected for the factor C, and:
-*>  a) If the flag RET_C is set, then the routine explicitly returns
+*>  a) If the flag FACT='C' or 'X', then the routine explicitly returns
 *>     the matrix C, otherwise the routine returns only the indices of 
 *>     the selected columns from the original matrix A stored in the JPIV
 *>     array as the first K elements.
-*>  b) If the flag COMP_X is set, then the routine also explicitly 
+*>  b) If the flag FACT='X', then the routine also explicitly 
 *>     computes and returns the factor X = pseudoinv(C) * A. 
 *> 
 *> \endverbatim
