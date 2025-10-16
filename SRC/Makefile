@@ -460,7 +460,7 @@ ZLASRC = \
    zlaqr0.o zlaqr1.o zlaqr2.o zlaqr3.o zlaqr4.o zlaqr5.o \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
    zlarcm.o zlarf.o  zlarfb.o zlarfb0c2.o zlarfb_gett.o zlarf1f.o zlarf1l.o \
-   zlarfg.o zlarft.o zlarfgp.o \
+   zlarfg.o zlarft.o zlarft2.o zlarfgp.o \
    zlarfx.o zlarfy.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o \
    zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o zlasyf_aa.o \

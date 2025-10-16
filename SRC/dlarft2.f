@@ -184,7 +184,6 @@
       LOGICAL           LSAME
       INTEGER           ILAENV
       EXTERNAL          LSAME, ILAENV
-      ! temporary parameters
 *     ..
 *     .. Executable Statements ..
 *
@@ -281,7 +280,6 @@
 *        T_{2,2} = \tau{i}
 *
          T(1,1) = TAU(1)
-
          DO I = 2, K
 *
 *           T_{1,2} = -V_{2,1}'V_{2,2}T_{2,2} = -\tau_i V_{2,1}'
@@ -292,21 +290,17 @@
             DO J = 1, I-1
                T(J,I) = -V(I,J)*TAU(I)
             END DO
-
 *
 *           T_{1,2} = -V_{3,1}'V_{3,2}T_{2,2} + T_{1,2}
 *                   = -\tau{i} V_{3,2}'V_{3,1} + T_{1,2}
 *
             CALL DGEMV('Transpose', N-I, I-1, -TAU(I), V(I+1,1),
      $            LDV, V(I+1,I), 1, ONE, T(1, I), 1)
-
-
 *
 *           T_{1,2} = T_{1,1}T_{1,2}
 *
             CALL DTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
-
 *
 *           T_{2,2} = \tau{i}
 *
@@ -358,23 +352,26 @@
 *        T_{2,2} = \tau{i}
 *
          T(1,1) = TAU(1)
-
          DO I = 2, K
-
-            ! T_{1,2} = -\tau_{i}V_{1,2}
+*
+*           T_{1,2} = -\tau_{i}V_{1,2}
+*
             DO J = 1, I-1
                T(J, I) = -TAU(I)*V(J, I)
             END DO
-
-            ! T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
+*
+*           T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
+*
             CALL DGEMV('No Transpose', I-1, N-I, -TAU(I), V(1, I+1),
      $            LDV, V(I, I+1), LDV, ONE, T(1,I), 1)
-
-            ! T_{1,2} = T_{1,1}T_{1,2}
+*
+*           T_{1,2} = T_{1,1}T_{1,2}
+*
             CALL DTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
-
-            ! T_{2,2} = \tau{i}
+*
+*           T_{2,2} = \tau{i}
+*
             T(I,I) = TAU(I)
          END DO
       ELSE IF (LQT) THEN
@@ -423,7 +420,6 @@
 *        T_{2,2} = \tau{i}
 *
          T(1,1) = TAU(1)
-
          DO I = 2, K
 *
 *           T_{2,1} = -\tau_{i}V_{1,2}'
@@ -436,11 +432,11 @@
 *
             CALL DGEMV('No transpose', I-1, N-I, -TAU(I), V(1, I+1),
      $            LDV, V(I, I+1), LDV, ONE, T(I, 1), LDT)
-
-            ! T_{2,1}' = T_{1,1}'T_{2,1}'
+*
+*           T_{2,1} = T_{1,1}'T_{2,1}'
+*
             CALL DTRMV('Lower', 'Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(I,1), LDT)
-
             T(I,I) = TAU(I)
          END DO
       ELSE IF (QL) THEN
@@ -516,7 +512,6 @@
 *
             CALL DTRMV('Lower', 'No Transpose', 'Non-unit', I-1,
      $            T(KMI + 1, KMI + 1), LDT, T(KMI + 1, KMI), 1)
-
          END DO
       ELSE IF (RQ) THEN
 *

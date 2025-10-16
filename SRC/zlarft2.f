@@ -1,4 +1,4 @@
-*> \brief \b SLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b ZLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,14 +8,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE ZLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
 *       INTEGER            K, LDT, LDV, N
 *       ..
 *       .. Array Arguments ..
-*       REAL               T( LDT, * ), TAU( * ), V( LDV, * )
+*       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
 *       ..
 *
 *
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFT2 forms the triangular factor T of a real block reflector H
+*> ZLARFT2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -149,7 +149,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+      SUBROUTINE ZLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,13 +162,15 @@
 *     ..
 *     .. Array Arguments ..
 *
-      REAL               T( LDT, * ), TAU( * ), V( LDV, * )
+      COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
 *     ..
 *
 *     .. Parameters ..
 *
-      REAL             ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=1.0E+0, ZERO = 0.0E+0, NEG_ONE=-1.0E+0)
+      COMPLEX*16         ONE, NEG_ONE, ZERO
+      PARAMETER(ONE=(1.0D+0,0.0D+0),
+     $          ZERO = (0.0D+0,0.0D+0),
+     $          NEG_ONE=(-1.0D+0,0.0D+0))
 *
 *     .. Local Scalars ..
 *
@@ -177,13 +179,17 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          STRMV,SGEMV
+      EXTERNAL          ZTRMV,ZGEMV
 *
 *     .. External Functions..
 *
       LOGICAL           LSAME
       INTEGER           ILAENV
       EXTERNAL          LSAME, ILAENV
+*
+*     .. Intrinsic Functions..
+*
+      INTRINSIC         CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -289,21 +295,21 @@
 *           scaled by this value
 *
             DO J = 1, I-1
-               T(J,I) = -V(I,J)*TAU(I)
+               T(J,I) = -TAU(I)*CONJG(V(I,J))
             END DO
 
 *
 *           T_{1,2} = -V_{3,1}'V_{3,2}T_{2,2} + T_{1,2}
 *                   = -\tau{i} V_{3,2}'V_{3,1} + T_{1,2}
 *
-            CALL SGEMV('Transpose', N-I, I-1, -TAU(I), V(I+1,1),
-     $            LDV, V(I+1,I), 1, ONE, T(1, I), 1)
+            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(I),
+     $            V(I+1,1), LDV, V(I+1,I), 1, ONE, T(1, I), 1)
 
 
 *
 *           T_{1,2} = T_{1,1}T_{1,2}
 *
-            CALL STRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
 
 *
@@ -357,6 +363,7 @@
 *        T_{2,2} = \tau{i}
 *
          T(1,1) = TAU(1)
+
          DO I = 2, K
 *
 *           T_{1,2} = -\tau_{i}V_{1,2}
@@ -364,16 +371,19 @@
             DO J = 1, I-1
                T(J, I) = -TAU(I)*V(J, I)
             END DO
+
 *
 *           T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
 *
-            CALL SGEMV('No Transpose', I-1, N-I, -TAU(I), V(1, I+1),
-     $            LDV, V(I, I+1), LDV, ONE, T(1,I), 1)
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+     $            1, N-I, -TAU(I), V(1,I+1), LDV, V(I, I+1), LDV, ONE,
+     $            T(1, I), LDT)
 *
 *           T_{1,2} = T_{1,1}T_{1,2}
 *
-            CALL STRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
+
 *
 *           T_{2,2} = \tau{i}
 *
@@ -424,26 +434,28 @@
 *        T_{2,1} = T_{1,1}'T_{2,1}
 *        T_{2,2} = \tau{i}
 *
-         T(1,1) = TAU(1)
+         T(1,1) = CONJG(TAU(1))
+
          DO I = 2, K
 *
 *           T_{2,1} = -\tau_{i}V_{1,2}'
 *
             DO J = 1, I-1
-               T(I,J) = -TAU(I)*V(J,I)
+               T(I,J) = -CONJG(TAU(I)*V(J,I))
             END DO
 *
-*           T_{2,1} = -\tau_{i}V_{1,3}V_{2,3}' + T_{2,1}
+*           T_{2,1} = -\tau_{i}V_{2,3}V_{1,3}' + T_{2,1}
 *
-            CALL SGEMV('No transpose', I-1, N-I, -TAU(I), V(1, I+1),
-     $            LDV, V(I, I+1), LDV, ONE, T(I, 1), LDT)
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1,
+     $            I-1, N-I, -CONJG(TAU(I)), V(I,I+1), LDV, V(1, I+1),
+     $            LDV, ONE, T(I, 1), LDT)
+*
+*           T_{2,1} = T_{1,1}'T_{2,1}
+*
+            CALL ZTRMV('Lower', 'Transpose', 'Non-unit',
+     $            I-1, T, LDT, T(I,1), LDT)
 
-*
-*           T_{2,1}' = T_{1,1}'T_{2,1}'
-*
-            CALL STRMV('Lower', 'Transpose', 'Non-unit', I-1, 
-     $            T, LDT, T(I,1), LDT)
-            T(I,I) = TAU(I)
+            T(I,I) = CONJG(TAU(I))
          END DO
       ELSE IF (QL) THEN
 *
@@ -505,19 +517,20 @@
 *             T_{3,2} = -\tau(k-i+1)V_{2,3}'
 *
             DO J = 1, I-1
-               T(KMI + J, KMI) = -TAU(KMI)*V(NMI, KMI + J)
+               T(KMI + J, KMI) = -TAU(KMI)*CONJG(V(NMI, KMI + J))
             END DO
 *
 *             T_{3,2} = -\tau(k-i+1)V_{1,3}'V_{1,2} + T_{3,2}
 *
-            CALL SGEMV('Transpose', N-I, I-1, -TAU(KMI), 
+            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(KMI), 
      $            V(1, KMI + 1), LDV, V(1, KMI), 1, ONE,
      $            T(KMI+1, KMI), 1)
 *
 *             T_{3,2} = T_{3,3}T_{3,2}
 *
-            CALL STRMV('Lower', 'No Transpose', 'Non-unit', I-1,
+            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1,
      $            T(KMI + 1, KMI + 1), LDT, T(KMI + 1, KMI), 1)
+
          END DO
       ELSE IF (RQ) THEN
 *
@@ -583,13 +596,13 @@
 *
 *           T_{3,2} = -\tau_{k-i+1}V_{3,1}V_{2,1}' + T_{3,2}
 *
-            CALL SGEMV('No Transpose', I-1, N-I, -TAU(KMI),
-     $            V(KMI+1, 1), LDV, V(KMI, 1), LDV, ONE, T(KMI+1, KMI),
-     $            1)
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+     $            1, N-I, -TAU(KMI), V(KMI+1, 1), LDV, V(KMI, 1), LDV,
+     $            ONE, T(KMI+1, KMI), LDT)
 *
 *           T_{3,2} = T_{3,3}T_{3,2}
 *
-            CALL STRMV('Lower', 'No Transpose', 'Non-unit', I-1, 
+            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1, 
      $            T(KMI+1, KMI+1), LDT, T(KMI+1, KMI), 1)
          END DO
       ELSE IF (RQT) THEN
@@ -630,41 +643,39 @@
 *
 *        T_{2,3} = -T_{2,2}[V_{2,1} V_{2,2} 0][V_{3,1} V_{3,2} V_{3,3}]'T_{3,3}
 *
-*        After transposing when necessary to fit our blas routines' interface,
-*           we get
-*        T_{3,2} = -T_{2,2}(V_{3,1}V_{2,1} + V_{3,2})T_{3,3}
+*        T_{3,2} = -T_{2,2}(V_{2,1}V_{3,1}' + V_{3,2}')T_{3,3}
 *
 *        Thus, we will compute
 *
 *        T_{2,2} = \tau_{k-i+1}
 *        T_{2,3} = -\tau_{k-i+1}V_{3,2}'
-*        T_{2,3} = -\tau_{k-i+1}V_{3,1}V_{2,1} + T_{2,3}
+*        T_{2,3} = -\tau_{k-i+1}V_{2,1}V_{3,1}' + T_{2,3}
 *        T_{2,3} = T_{3,3}'T_{2,3}
 *
-         T(K,K) = TAU(K)
+         T(K,K) = CONJG(TAU(K))
          DO I = 2, K
             KMI = K-I+1
             NMI = N-I+1
 *
 *           T_{2,2} = \tau_{k-i+1}
 *
-            T(KMI,KMI) = TAU(KMI)
+            T(KMI,KMI) = CONJG(TAU(KMI))
 *
 *           T_{2,3} = -\tau_{k-i+1}V_{3,2}'
 *
             DO J = 1, I-1
-               T(KMI, KMI + J) = -TAU(KMI)*V(KMI + J, NMI)
+               T(KMI, KMI + J) = -CONJG(TAU(KMI)*V(KMI + J, NMI))
             END DO
 *
-*           T_{2,3} = -\tau_{k-i+1}V_{3,1}V_{2,1} + T_{2,3}
+*           T_{2,3} = -\tau_{k-i+1}V_{2,1}V_{3,1}' + T_{2,3}
 *
-            CALL SGEMV('No Transpose', I-1, N-I, -TAU(KMI),
-     $            V(KMI+1, 1), LDV, V(KMI, 1), LDV, ONE, T(KMI, KMI+1),
-     $            LDT)
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1, 
+     $            I-1, N-I, -CONJG(TAU(KMI)), V(KMI, 1), LDV,
+     $            V(KMI+1,1), LDV, ONE, T(KMI, KMI+1), LDT)
 *
 *           T_{2,3} = T_{3,3}'T_{2,3}
 *
-            CALL STRMV('Upper', 'Transpose', 'Non-unit', I-1, 
+            CALL ZTRMV('Upper', 'Transpose', 'Non-unit', I-1, 
      $            T(KMI+1, KMI+1), LDT, T(KMI, KMI+1), LDT)
          END DO
       END IF
