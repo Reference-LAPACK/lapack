@@ -1,4 +1,4 @@
-*> \brief \b ZLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b CLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,14 +8,14 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE CLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
 *       INTEGER            K, LDT, LDV, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
+*       COMPLEX            T( LDT, * ), TAU( * ), V( LDV, * )
 *       ..
 *
 *
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZLARFT2 forms the triangular factor T of a real block reflector H
+*> CLARFT2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -149,7 +149,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+      SUBROUTINE CLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,15 +162,15 @@
 *     ..
 *     .. Array Arguments ..
 *
-      COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
+      COMPLEX            T( LDT, * ), TAU( * ), V( LDV, * )
 *     ..
 *
 *     .. Parameters ..
 *
-      COMPLEX*16         ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=(1.0D+0,0.0D+0),
-     $          ZERO = (0.0D+0,0.0D+0),
-     $          NEG_ONE=(-1.0D+0,0.0D+0))
+      COMPLEX            ONE, NEG_ONE, ZERO
+      PARAMETER(ONE=(1.0E+0,0.0E+0),
+     $          ZERO = (0.0E+0,0.0E+0),
+     $          NEG_ONE=(-1.0E+0,0.0E+0))
 *
 *     .. Local Scalars ..
 *
@@ -179,7 +179,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          ZTRMV,ZGEMV,ZGEMM
+      EXTERNAL          CTRMV,CGEMV,CGEMM
 *
 *     .. External Functions..
 *
@@ -302,14 +302,14 @@
 *           T_{1,2} = -V_{3,1}'V_{3,2}T_{2,2} + T_{1,2}
 *                   = -\tau{i} V_{3,2}'V_{3,1} + T_{1,2}
 *
-            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(I),
+            CALL CGEMV('Conjugate Transpose', N-I, I-1, -TAU(I),
      $            V(I+1,1), LDV, V(I+1,I), 1, ONE, T(1, I), 1)
 
 
 *
 *           T_{1,2} = T_{1,1}T_{1,2}
 *
-            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+            CALL CTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
 
 *
@@ -375,13 +375,13 @@
 *
 *           T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
 *
-            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+            CALL CGEMM('No Transpose', 'Conjugate Transpose', I-1,
      $            1, N-I, -TAU(I), V(1,I+1), LDV, V(I, I+1), LDV, ONE,
      $            T(1, I), LDT)
 *
 *           T_{1,2} = T_{1,1}T_{1,2}
 *
-            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+            CALL CTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
      $            T, LDT, T(1,I), 1)
 
 *
@@ -446,13 +446,13 @@
 *
 *           T_{2,1} = -\tau_{i}V_{2,3}V_{1,3}' + T_{2,1}
 *
-            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1,
+            CALL CGEMM('No Transpose', 'Conjugate Transpose', 1,
      $            I-1, N-I, -CONJG(TAU(I)), V(I,I+1), LDV, V(1, I+1),
      $            LDV, ONE, T(I, 1), LDT)
 *
 *           T_{2,1} = T_{1,1}'T_{2,1}
 *
-            CALL ZTRMV('Lower', 'Transpose', 'Non-unit',
+            CALL CTRMV('Lower', 'Transpose', 'Non-unit',
      $            I-1, T, LDT, T(I,1), LDT)
 
             T(I,I) = CONJG(TAU(I))
@@ -522,13 +522,13 @@
 *
 *             T_{3,2} = -\tau(k-i+1)V_{1,3}'V_{1,2} + T_{3,2}
 *
-            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(KMI), 
+            CALL CGEMV('Conjugate Transpose', N-I, I-1, -TAU(KMI), 
      $            V(1, KMI + 1), LDV, V(1, KMI), 1, ONE,
      $            T(KMI+1, KMI), 1)
 *
 *             T_{3,2} = T_{3,3}T_{3,2}
 *
-            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1,
+            CALL CTRMV('Lower', 'No Transpose', 'Non-unit', I-1,
      $            T(KMI + 1, KMI + 1), LDT, T(KMI + 1, KMI), 1)
 
          END DO
@@ -596,13 +596,13 @@
 *
 *           T_{3,2} = -\tau_{k-i+1}V_{3,1}V_{2,1}' + T_{3,2}
 *
-            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+            CALL CGEMM('No Transpose', 'Conjugate Transpose', I-1,
      $            1, N-I, -TAU(KMI), V(KMI+1, 1), LDV, V(KMI, 1), LDV,
      $            ONE, T(KMI+1, KMI), LDT)
 *
 *           T_{3,2} = T_{3,3}T_{3,2}
 *
-            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1, 
+            CALL CTRMV('Lower', 'No Transpose', 'Non-unit', I-1, 
      $            T(KMI+1, KMI+1), LDT, T(KMI+1, KMI), 1)
          END DO
       ELSE IF (RQT) THEN
@@ -669,13 +669,13 @@
 *
 *           T_{2,3} = -\tau_{k-i+1}V_{2,1}V_{3,1}' + T_{2,3}
 *
-            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1, 
+            CALL CGEMM('No Transpose', 'Conjugate Transpose', 1, 
      $            I-1, N-I, -CONJG(TAU(KMI)), V(KMI, 1), LDV,
      $            V(KMI+1,1), LDV, ONE, T(KMI, KMI+1), LDT)
 *
 *           T_{2,3} = T_{3,3}'T_{2,3}
 *
-            CALL ZTRMV('Upper', 'Transpose', 'Non-unit', I-1, 
+            CALL CTRMV('Upper', 'Transpose', 'Non-unit', I-1, 
      $            T(KMI+1, KMI+1), LDT, T(KMI, KMI+1), LDT)
          END DO
       END IF
