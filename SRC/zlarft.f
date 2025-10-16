@@ -258,6 +258,7 @@
 *     Determine crossover point from level 2 to level 3 BLAS implementation
 *
       NX = ILAENV(3, "ZLARFT", DIRECT // STOREV, N, K, -1, -1)
+*
 *     Base case
 *
       IF(N.EQ.1.OR.K.EQ.1) THEN

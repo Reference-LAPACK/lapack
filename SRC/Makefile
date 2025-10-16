@@ -251,7 +251,7 @@ CLASRC = \
    claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqp2rk.o claqp3rk.o claqsb.o \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
-   clarf.o  clarf1f.o clarf1l.o clarfb.o clarfb0c2.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
+   clarf.o  clarf1f.o clarf1l.o clarfb.o clarfb0c2.o clarfb_gett.o clarfg.o clarft.o clarft2.o clarfgp.o \
    clarfx.o clarfy.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
    claswp.o clasyf.o clasyf_rook.o clasyf_rk.o clasyf_aa.o \
