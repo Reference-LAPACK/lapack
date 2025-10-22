@@ -72,13 +72,13 @@ int64_t LAPACKE_zbdsqr_64( int matrix_layout, char uplo, int64_t n,
                            int64_t ldu, lapack_complex_double* c,
                            int64_t ldc );
 int64_t LAPACKE_sbdsvdx_64( int matrix_layout, char uplo, char jobz, char range,
-                           int64_t n, float* d, float* e,
+                           int64_t n, const float* d, const float* e,
                            float vl, float vu,
                            int64_t il, int64_t iu, int64_t* ns,
                            float* s, float* z, int64_t ldz,
                            int64_t* superb );
 int64_t LAPACKE_dbdsvdx_64( int matrix_layout, char uplo, char jobz, char range,
-                           int64_t n, double* d, double* e,
+                           int64_t n, const double* d, const double* e,
                            double vl, double vu,
                            int64_t il, int64_t iu, int64_t* ns,
                            double* s, double* z, int64_t ldz,
@@ -863,11 +863,11 @@ int64_t LAPACKE_zgesv_64( int matrix_layout, int64_t n, int64_t nrhs,
                           int64_t ldb );
 int64_t LAPACKE_dsgesv_64( int matrix_layout, int64_t n, int64_t nrhs,
                            double* a, int64_t lda, int64_t* ipiv,
-                           double* b, int64_t ldb, double* x, int64_t ldx,
+                           const double* b, int64_t ldb, double* x, int64_t ldx,
                            int64_t* iter );
 int64_t LAPACKE_zcgesv_64( int matrix_layout, int64_t n, int64_t nrhs,
                            lapack_complex_double* a, int64_t lda,
-                           int64_t* ipiv, lapack_complex_double* b,
+                           int64_t* ipiv, const lapack_complex_double* b,
                            int64_t ldb, lapack_complex_double* x,
                            int64_t ldx, int64_t* iter );
 
@@ -2480,10 +2480,10 @@ int64_t LAPACKE_zlaset_64( int matrix_layout, char uplo, int64_t m,
 int64_t LAPACKE_slasrt_64( char id, int64_t n, float* d );
 int64_t LAPACKE_dlasrt_64( char id, int64_t n, double* d );
 
-int64_t LAPACKE_slassq_64( int64_t n,                 float* x, int64_t incx,  float* scale,  float* sumsq );
-int64_t LAPACKE_dlassq_64( int64_t n,                double* x, int64_t incx, double* scale, double* sumsq );
-int64_t LAPACKE_classq_64( int64_t n,  lapack_complex_float* x, int64_t incx,  float* scale,  float* sumsq );
-int64_t LAPACKE_zlassq_64( int64_t n, lapack_complex_double* x, int64_t incx, double* scale, double* sumsq );
+int64_t LAPACKE_slassq_64( int64_t n,                 const float* x, int64_t incx,  float* scale,  float* sumsq );
+int64_t LAPACKE_dlassq_64( int64_t n,                const double* x, int64_t incx, double* scale, double* sumsq );
+int64_t LAPACKE_classq_64( int64_t n,  const lapack_complex_float* x, int64_t incx,  float* scale,  float* sumsq );
+int64_t LAPACKE_zlassq_64( int64_t n, const lapack_complex_double* x, int64_t incx, double* scale, double* sumsq );
 
 int64_t LAPACKE_slaswp_64( int matrix_layout, int64_t n, float* a,
                            int64_t lda, int64_t k1, int64_t k2,
@@ -2954,11 +2954,11 @@ int64_t LAPACKE_zposv_64( int matrix_layout, char uplo, int64_t n,
                           int64_t ldb );
 int64_t LAPACKE_dsposv_64( int matrix_layout, char uplo, int64_t n,
                            int64_t nrhs, double* a, int64_t lda,
-                           double* b, int64_t ldb, double* x, int64_t ldx,
+                           const double* b, int64_t ldb, double* x, int64_t ldx,
                            int64_t* iter );
 int64_t LAPACKE_zcposv_64( int matrix_layout, char uplo, int64_t n,
                            int64_t nrhs, lapack_complex_double* a,
-                           int64_t lda, lapack_complex_double* b,
+                           int64_t lda, const lapack_complex_double* b,
                            int64_t ldb, lapack_complex_double* x,
                            int64_t ldx, int64_t* iter );
 
@@ -4725,13 +4725,13 @@ int64_t LAPACKE_dbdsdc_work_64( int matrix_layout, char uplo, char compq,
                                 int64_t* iwork );
 
 int64_t LAPACKE_sbdsvdx_work_64( int matrix_layout, char uplo, char jobz, char range,
-                                 int64_t n, float* d, float* e,
+                                 int64_t n, const float* d, const float* e,
                                  float vl, float vu,
                                  int64_t il, int64_t iu, int64_t* ns,
                                  float* s, float* z, int64_t ldz,
                                  float* work, int64_t* iwork );
 int64_t LAPACKE_dbdsvdx_work_64( int matrix_layout, char uplo, char jobz, char range,
-                                 int64_t n, double* d, double* e,
+                                 int64_t n, const double* d, const double* e,
                                  double vl, double vu,
                                  int64_t il, int64_t iu, int64_t* ns,
                                  double* s, double* z, int64_t ldz,
@@ -5826,12 +5826,12 @@ int64_t LAPACKE_zgesv_work_64( int matrix_layout, int64_t n, int64_t nrhs,
                                int64_t ldb );
 int64_t LAPACKE_dsgesv_work_64( int matrix_layout, int64_t n, int64_t nrhs,
                                 double* a, int64_t lda, int64_t* ipiv,
-                                double* b, int64_t ldb, double* x,
+                                const double* b, int64_t ldb, double* x,
                                 int64_t ldx, double* work, float* swork,
                                 int64_t* iter );
 int64_t LAPACKE_zcgesv_work_64( int matrix_layout, int64_t n, int64_t nrhs,
                                 lapack_complex_double* a, int64_t lda,
-                                int64_t* ipiv, lapack_complex_double* b,
+                                int64_t* ipiv, const lapack_complex_double* b,
                                 int64_t ldb, lapack_complex_double* x,
                                 int64_t ldx, lapack_complex_double* work,
                                 lapack_complex_float* swork, double* rwork,
@@ -7909,10 +7909,10 @@ int64_t LAPACKE_zlaset_work_64( int matrix_layout, char uplo, int64_t m,
 int64_t LAPACKE_slasrt_work_64( char id, int64_t n, float* d );
 int64_t LAPACKE_dlasrt_work_64( char id, int64_t n, double* d );
 
-int64_t LAPACKE_slassq_work_64( int64_t n,                 float* x, int64_t incx,  float* scale,  float* sumsq );
-int64_t LAPACKE_dlassq_work_64( int64_t n,                double* x, int64_t incx, double* scale, double* sumsq );
-int64_t LAPACKE_classq_work_64( int64_t n,  lapack_complex_float* x, int64_t incx,  float* scale,  float* sumsq );
-int64_t LAPACKE_zlassq_work_64( int64_t n, lapack_complex_double* x, int64_t incx, double* scale, double* sumsq );
+int64_t LAPACKE_slassq_work_64( int64_t n,                 const float* x, int64_t incx,  float* scale,  float* sumsq );
+int64_t LAPACKE_dlassq_work_64( int64_t n,                const double* x, int64_t incx, double* scale, double* sumsq );
+int64_t LAPACKE_classq_work_64( int64_t n,  const lapack_complex_float* x, int64_t incx,  float* scale,  float* sumsq );
+int64_t LAPACKE_zlassq_work_64( int64_t n, const lapack_complex_double* x, int64_t incx, double* scale, double* sumsq );
 
 int64_t LAPACKE_slaswp_work_64( int matrix_layout, int64_t n, float* a,
                                 int64_t lda, int64_t k1, int64_t k2,
@@ -8458,12 +8458,12 @@ int64_t LAPACKE_zposv_work_64( int matrix_layout, char uplo, int64_t n,
                                int64_t ldb );
 int64_t LAPACKE_dsposv_work_64( int matrix_layout, char uplo, int64_t n,
                                 int64_t nrhs, double* a, int64_t lda,
-                                double* b, int64_t ldb, double* x,
+                                const double* b, int64_t ldb, double* x,
                                 int64_t ldx, double* work, float* swork,
                                 int64_t* iter );
 int64_t LAPACKE_zcposv_work_64( int matrix_layout, char uplo, int64_t n,
                                 int64_t nrhs, lapack_complex_double* a,
-                                int64_t lda, lapack_complex_double* b,
+                                int64_t lda, const lapack_complex_double* b,
                                 int64_t ldb, lapack_complex_double* x,
                                 int64_t ldx, lapack_complex_double* work,
                                 lapack_complex_float* swork, double* rwork,
@@ -12768,62 +12768,62 @@ int64_t LAPACKE_zhetrf_aa_2stage_work_64( int matrix_layout, char uplo, int64_t 
 
 
 int64_t LAPACKE_ssytrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, float* a, int64_t lda,
-                          float* tb, int64_t ltb, int64_t* ipiv,
-                          int64_t* ipiv2, float* b, int64_t ldb );
+                          int64_t nrhs, const float* a, int64_t lda,
+                          float* tb, int64_t ltb, const int64_t* ipiv,
+                          const int64_t* ipiv2, float* b, int64_t ldb );
 int64_t LAPACKE_ssytrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, float* a, int64_t lda,
-                               float* tb, int64_t ltb, int64_t* ipiv,
-                               int64_t* ipiv2, float* b, int64_t ldb );
+                               int64_t nrhs, const float* a, int64_t lda,
+                               float* tb, int64_t ltb, const int64_t* ipiv,
+                               const int64_t* ipiv2, float* b, int64_t ldb );
 int64_t LAPACKE_dsytrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, double* a, int64_t lda,
+                          int64_t nrhs, const double* a, int64_t lda,
                           double* tb, int64_t ltb,
-                          int64_t* ipiv, int64_t* ipiv2,
+                          const int64_t* ipiv, const int64_t* ipiv2,
                           double* b, int64_t ldb );
 int64_t LAPACKE_dsytrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, double* a, int64_t lda,
+                               int64_t nrhs, const double* a, int64_t lda,
                                double* tb, int64_t ltb,
-                               int64_t* ipiv, int64_t* ipiv2,
+                               const int64_t* ipiv, const int64_t* ipiv2,
                                double* b, int64_t ldb );
 int64_t LAPACKE_csytrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, lapack_complex_float* a,
+                          int64_t nrhs, const lapack_complex_float* a,
                           int64_t lda, lapack_complex_float* tb,
-                          int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                          int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                           lapack_complex_float* b, int64_t ldb );
 int64_t LAPACKE_csytrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, lapack_complex_float* a,
+                               int64_t nrhs, const lapack_complex_float* a,
                                int64_t lda, lapack_complex_float* tb,
-                               int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                               int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                                lapack_complex_float* b, int64_t ldb );
 int64_t LAPACKE_zsytrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, lapack_complex_double* a,
+                          int64_t nrhs, const lapack_complex_double* a,
                           int64_t lda, lapack_complex_double* tb,
-                          int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                          int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                           lapack_complex_double* b, int64_t ldb );
 int64_t LAPACKE_zsytrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, lapack_complex_double* a,
+                               int64_t nrhs, const lapack_complex_double* a,
                                int64_t lda, lapack_complex_double* tb,
-                               int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                               int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                                lapack_complex_double* b, int64_t ldb );
 int64_t LAPACKE_chetrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, lapack_complex_float* a,
+                          int64_t nrhs, const lapack_complex_float* a,
                           int64_t lda, lapack_complex_float* tb,
-                          int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                          int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                           lapack_complex_float* b, int64_t ldb );
 int64_t LAPACKE_chetrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, lapack_complex_float* a,
+                               int64_t nrhs, const lapack_complex_float* a,
                                int64_t lda, lapack_complex_float* tb,
-                               int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                               int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                                lapack_complex_float* b, int64_t ldb );
 int64_t LAPACKE_zhetrs_aa_2stage_64( int matrix_layout, char uplo, int64_t n,
-                          int64_t nrhs, lapack_complex_double* a,
+                          int64_t nrhs, const lapack_complex_double* a,
                           int64_t lda, lapack_complex_double* tb,
-                          int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                          int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                           lapack_complex_double* b, int64_t ldb );
 int64_t LAPACKE_zhetrs_aa_2stage_work_64( int matrix_layout, char uplo, int64_t n,
-                               int64_t nrhs, lapack_complex_double* a,
+                               int64_t nrhs, const lapack_complex_double* a,
                                int64_t lda, lapack_complex_double* tb,
-                               int64_t ltb, int64_t* ipiv, int64_t* ipiv2,
+                               int64_t ltb, const int64_t* ipiv, const int64_t* ipiv2,
                                lapack_complex_double* b, int64_t ldb );
 //LAPACK 3.10.0
 int64_t LAPACKE_sorhr_col_64( int matrix_layout, int64_t m, int64_t n,
