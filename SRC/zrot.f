@@ -98,6 +98,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -326,6 +326,7 @@
      $                   B, LDB, SDIM, ALPHA, BETA, VSL, LDVSL, VSR,
      $                   LDVSR, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                   IWORK, LIWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

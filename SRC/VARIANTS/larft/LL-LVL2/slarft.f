@@ -158,8 +158,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
-     $            T, LDT )
+      SUBROUTINE SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

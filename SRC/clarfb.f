@@ -192,6 +192,7 @@
       SUBROUTINE CLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V,
      $                   LDV,
      $                   T, LDT, C, LDC, WORK, LDWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

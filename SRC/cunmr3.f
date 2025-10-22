@@ -174,6 +174,7 @@
       SUBROUTINE CUNMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C,
      $                   LDC,
      $                   WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

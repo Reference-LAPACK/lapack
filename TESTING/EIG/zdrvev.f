@@ -388,6 +388,7 @@
      $                   NOUNIT, A, LDA, H, W, W1, VL, LDVL, VR, LDVR,
      $                   LRE, LDLRE, RESULT, WORK, NWORK, RWORK, IWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

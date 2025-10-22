@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for dzasum.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine dzasumsub(n,x,incx,asum)
+      implicit none
 c
       external dzasum
       double precision dzasum,asum

@@ -263,6 +263,7 @@
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

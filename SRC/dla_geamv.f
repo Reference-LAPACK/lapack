@@ -169,8 +169,10 @@
 *> \ingroup la_geamv
 *
 *  =====================================================================
-      SUBROUTINE DLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+      SUBROUTINE DLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,
+     $                       BETA,
      $                       Y, INCY )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -128,6 +128,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CLACN2( N, V, X, EST, KASE, ISAVE )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

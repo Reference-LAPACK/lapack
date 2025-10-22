@@ -188,6 +188,7 @@
      $                   W, WGAP, WERR,
      $                   SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
      $                   DPLUS, LPLUS, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

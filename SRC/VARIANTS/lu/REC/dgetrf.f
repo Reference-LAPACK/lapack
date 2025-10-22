@@ -133,8 +133,9 @@ C> \ingroup variantsGEcomputational
 *
 *  =====================================================================
       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
+      IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.X) --
+*  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *

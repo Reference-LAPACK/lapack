@@ -161,6 +161,7 @@
 *  =====================================================================
       SUBROUTINE CHECON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
      $                     WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

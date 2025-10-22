@@ -123,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLARF1F( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,7 +150,7 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGER, CSCAL
+      EXTERNAL           CAXPY, CGEMV, CGER, CSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG

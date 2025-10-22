@@ -130,6 +130,8 @@ void cblas_scopy(const CBLAS_INT N, const float *X, const CBLAS_INT incX,
                  float *Y, const CBLAS_INT incY);
 void cblas_saxpy(const CBLAS_INT N, const float alpha, const float *X,
                  const CBLAS_INT incX, float *Y, const CBLAS_INT incY);
+void cblas_saxpby(const CBLAS_INT N, const float alpha, const float *X,
+                 const CBLAS_INT incX, const float beta, float *Y, const CBLAS_INT incY);
 
 void cblas_dswap(const CBLAS_INT N, double *X, const CBLAS_INT incX,
                  double *Y, const CBLAS_INT incY);
@@ -137,6 +139,8 @@ void cblas_dcopy(const CBLAS_INT N, const double *X, const CBLAS_INT incX,
                  double *Y, const CBLAS_INT incY);
 void cblas_daxpy(const CBLAS_INT N, const double alpha, const double *X,
                  const CBLAS_INT incX, double *Y, const CBLAS_INT incY);
+void cblas_daxpby(const CBLAS_INT N, const double alpha, const double *X,
+                 const CBLAS_INT incX, const double beta, double *Y, const CBLAS_INT incY);
 
 void cblas_cswap(const CBLAS_INT N, void *X, const CBLAS_INT incX,
                  void *Y, const CBLAS_INT incY);
@@ -144,6 +148,8 @@ void cblas_ccopy(const CBLAS_INT N, const void *X, const CBLAS_INT incX,
                  void *Y, const CBLAS_INT incY);
 void cblas_caxpy(const CBLAS_INT N, const void *alpha, const void *X,
                  const CBLAS_INT incX, void *Y, const CBLAS_INT incY);
+void cblas_caxpby(const CBLAS_INT N, const void *alpha, const void *X,
+                 const CBLAS_INT incX, const void *beta, void *Y, const CBLAS_INT incY);
 
 void cblas_zswap(const CBLAS_INT N, void *X, const CBLAS_INT incX,
                  void *Y, const CBLAS_INT incY);
@@ -151,6 +157,8 @@ void cblas_zcopy(const CBLAS_INT N, const void *X, const CBLAS_INT incX,
                  void *Y, const CBLAS_INT incY);
 void cblas_zaxpy(const CBLAS_INT N, const void *alpha, const void *X,
                  const CBLAS_INT incX, void *Y, const CBLAS_INT incY);
+void cblas_zaxpby(const CBLAS_INT N, const void *alpha, const void *X,
+                 const CBLAS_INT incX, const void *beta, void *Y, const CBLAS_INT incY);
 
 
 /*

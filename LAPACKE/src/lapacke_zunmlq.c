@@ -49,7 +49,8 @@ lapack_int API_SUFFIX(LAPACKE_zunmlq)( int matrix_layout, char side, char trans,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, k, m, a, lda ) ) {
+        lapack_int r = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, k, r, a, lda ) ) {
             return -7;
         }
         if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, c, ldc ) ) {

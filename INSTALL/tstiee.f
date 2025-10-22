@@ -17,6 +17,7 @@
 *
 *  =====================================================================
       PROGRAM TSTIEE
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

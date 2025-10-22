@@ -22,7 +22,7 @@ void chkxer(void) {
    extern CBLAS_INT link_xerbla;
    extern char *cblas_rout;
    if (cblas_lerr == 1 ) {
-      printf("***** ILLEGAL VALUE OF PARAMETER NUMBER %d NOT DETECTED BY %s *****\n", cblas_info, cblas_rout);
+      printf("***** ILLEGAL VALUE OF PARAMETER NUMBER %d NOT DETECTED BY %s *****\n", (int) cblas_info, cblas_rout);
       cblas_ok = 0 ;
    }
    cblas_lerr = 1 ;
@@ -54,6 +54,8 @@ void F77_z3chke(char *rout
       F77_xerbla(cblas_rout,&cblas_info, 1);
    }
 #endif
+
+   link_xerbla = 0;
    if (strncmp( sf,"cblas_zgemmtr"   ,13)==0) {
       cblas_rout = "cblas_zgemmtr"   ;
 

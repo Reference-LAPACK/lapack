@@ -127,6 +127,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZLARF1L( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -153,7 +154,7 @@
       INTEGER            I, J, LASTV, LASTC, FIRSTV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZGERC, ZSCAL
+      EXTERNAL           ZAXPY, ZGEMV, ZGERC, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG

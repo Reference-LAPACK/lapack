@@ -123,6 +123,7 @@ subroutine ZLASSQ( n, x, incx, scale, sumsq )
       only: wp=>dp, zero=>dzero, one=>done, &
             sbig=>dsbig, ssml=>dssml, tbig=>dtbig, tsml=>dtsml
    use LA_XISNAN
+   implicit none
 !
 !  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --

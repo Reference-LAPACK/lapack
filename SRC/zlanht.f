@@ -96,6 +96,7 @@
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANHT( NORM, N, D, E )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

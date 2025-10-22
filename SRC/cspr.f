@@ -127,6 +127,7 @@
 *
 *  =====================================================================
       SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
