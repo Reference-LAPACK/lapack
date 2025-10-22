@@ -181,7 +181,7 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,L
+      INTEGER           I,J,L,NX
       LOGICAL           QR,LQ,QL,DIRF,COLV
 *
 *     .. External Subroutines ..
