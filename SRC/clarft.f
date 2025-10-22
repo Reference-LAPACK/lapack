@@ -217,6 +217,14 @@
          RETURN
       END IF
 *
+*     Determine when to cross over into the level 2 based implementation
+*
+      NX = ILAENV(3, "CLARFT", DIRECT // STOREV, N, K, -1, -1)
+      IF(K.LT.NX) THEN
+         CALL CLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         RETURN
+      END IF
+*
 *     Beginning of executable statements
 *
       L = K / 2

@@ -1,29 +1,30 @@
-*> \brief \b ZLARFT VARIANT: left-looking Level 2 BLAS version of the algorithm.
+*> \brief \b DLARFT_LVL2: Level 2 BLAS version for terminating case of DLARFT.
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download ZLARFT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarft.f">
+*> Download DLARFT_LVL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarft.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarft.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarft.f">
 *> [TXT]</a>
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE DLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+*                    T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
 *       INTEGER            K, LDT, LDV, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
+*       DOUBLE PRECISION   T( LDT, * ), TAU( * ), V( LDV, * )
 *       ..
 *
 *
@@ -32,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZLARFT forms the triangular factor T of a complex block reflector H
+*> DLARFT_LVL2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -42,12 +43,12 @@
 *> If STOREV = 'C', the vector which defines the elementary reflector
 *> H(i) is stored in the i-th column of the array V, and
 *>
-*>    H  =  I - V * T * V**H
+*>    H  =  I - V * T * V**T
 *>
 *> If STOREV = 'R', the vector which defines the elementary reflector
 *> H(i) is stored in the i-th row of the array V, and
 *>
-*>    H  =  I - V**H * T * V
+*>    H  =  I - V**T * T * V
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +87,7 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is COMPLEX*16 array, dimension
+*>          V is DOUBLE PRECISION array, dimension
 *>                               (LDV,K) if STOREV = 'C'
 *>                               (LDV,N) if STOREV = 'R'
 *>          The matrix V. See further details.
@@ -101,14 +102,14 @@
 *>
 *> \param[in] TAU
 *> \verbatim
-*>          TAU is COMPLEX*16 array, dimension (K)
+*>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i).
 *> \endverbatim
 *>
 *> \param[out] T
 *> \verbatim
-*>          T is COMPLEX*16 array, dimension (LDT,K)
+*>          T is DOUBLE PRECISION array, dimension (LDT,K)
 *>          The k by k triangular factor T of the block reflector.
 *>          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
 *>          lower triangular. The rest of the array is not used.
@@ -157,7 +158,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE DLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+     $            T, LDT )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -168,21 +170,20 @@
       INTEGER            K, LDT, LDV, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
+      DOUBLE PRECISION   T( LDT, * ), TAU( * ), V( LDV, * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
+      DOUBLE PRECISION   ONE, ZERO
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, PREVLASTV, LASTV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZTRMV, ZGEMM
+      EXTERNAL           DGEMV, DTRMV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -198,7 +199,7 @@
       IF( LSAME( DIRECT, 'F' ) ) THEN
          PREVLASTV = N
          DO I = 1, K
-            PREVLASTV = MAX( PREVLASTV, I )
+            PREVLASTV = MAX( I, PREVLASTV )
             IF( TAU( I ).EQ.ZERO ) THEN
 *
 *              H(i)  =  I
@@ -216,15 +217,15 @@
                      IF( V( LASTV, I ).NE.ZERO ) EXIT
                   END DO
                   DO J = 1, I-1
-                     T( J, I ) = -TAU( I ) * CONJG( V( I , J ) )
+                     T( J, I ) = -TAU( I ) * V( I , J )
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i)
+*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i)
 *
-                  CALL ZGEMV( 'Conjugate transpose', J-I, I-1,
-     $                        -TAU( I ), V( I+1, 1 ), LDV,
-     $                        V( I+1, I ), 1, ONE, T( 1, I ), 1 )
+                  CALL DGEMV( 'Transpose', J-I, I-1, -TAU( I ),
+     $                        V( I+1, 1 ), LDV, V( I+1, I ), 1, ONE,
+     $                        T( 1, I ), 1 )
                ELSE
 *                 Skip any trailing zeros.
                   DO LASTV = N, I+1, -1
@@ -235,16 +236,16 @@
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H
+*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T
 *
-                  CALL ZGEMM( 'N', 'C', I-1, 1, J-I, -TAU( I ),
-     $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV,
-     $                        ONE, T( 1, I ), LDT )
+                  CALL DGEMV( 'No transpose', I-1, J-I, -TAU( I ),
+     $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV, ONE,
+     $                        T( 1, I ), 1 )
                END IF
 *
 *              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
 *
-               CALL ZTRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
+               CALL DTRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
      $                     T,
      $                     LDT, T( 1, I ), 1 )
                T( I, I ) = TAU( I )
@@ -253,7 +254,7 @@
                ELSE
                   PREVLASTV = LASTV
                END IF
-             END IF
+            END IF
          END DO
       ELSE
          PREVLASTV = 1
@@ -276,15 +277,16 @@
                         IF( V( LASTV, I ).NE.ZERO ) EXIT
                      END DO
                      DO J = I+1, K
-                        T( J, I ) = -TAU( I ) * CONJG( V( N-K+I , J ) )
+                        T( J, I ) = -TAU( I ) * V( N-K+I , J )
                      END DO
                      J = MAX( LASTV, PREVLASTV )
 *
-*                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i)
+*                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
 *
-                     CALL ZGEMV( 'Conjugate transpose', N-K+I-J, K-I,
-     $                           -TAU( I ), V( J, I+1 ), LDV, V( J, I ),
-     $                           1, ONE, T( I+1, I ), 1 )
+                     CALL DGEMV( 'Transpose', N-K+I-J, K-I,
+     $                           -TAU( I ),
+     $                           V( J, I+1 ), LDV, V( J, I ), 1, ONE,
+     $                           T( I+1, I ), 1 )
                   ELSE
 *                    Skip any leading zeros.
                      DO LASTV = 1, I-1
@@ -295,17 +297,16 @@
                      END DO
                      J = MAX( LASTV, PREVLASTV )
 *
-*                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H
+*                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T
 *
-                     CALL ZGEMM( 'N', 'C', K-I, 1, N-K+I-J,
-     $                           -TAU( I ),
-     $                           V( I+1, J ), LDV, V( I, J ), LDV,
-     $                           ONE, T( I+1, I ), LDT )
+                     CALL DGEMV( 'No transpose', K-I, N-K+I-J,
+     $                    -TAU( I ), V( I+1, J ), LDV, V( I, J ), LDV,
+     $                    ONE, T( I+1, I ), 1 )
                   END IF
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-                  CALL ZTRMV( 'Lower', 'No transpose', 'Non-unit',
+                  CALL DTRMV( 'Lower', 'No transpose', 'Non-unit',
      $                        K-I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
                   IF( I.GT.1 ) THEN
@@ -320,6 +321,6 @@
       END IF
       RETURN
 *
-*     End of ZLARFT
+*     End of DLARFT_LVL2
 *
       END
