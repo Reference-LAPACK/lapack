@@ -33,9 +33,9 @@
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_chetrs_aa_2stage_work)( int matrix_layout, char uplo, lapack_int n,
-                               lapack_int nrhs, lapack_complex_float* a, lapack_int lda,
-                               lapack_complex_float* tb, lapack_int ltb, lapack_int* ipiv, 
-                               lapack_int* ipiv2, lapack_complex_float* b, lapack_int ldb )
+                               lapack_int nrhs, const lapack_complex_float* a, lapack_int lda,
+                               lapack_complex_float* tb, lapack_int ltb, const lapack_int* ipiv, 
+                               const lapack_int* ipiv2, lapack_complex_float* b, lapack_int ldb )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
@@ -94,7 +94,6 @@ lapack_int API_SUFFIX(LAPACKE_chetrs_aa_2stage_work)( int matrix_layout, char up
             info = info - 1;
         }
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_che_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
