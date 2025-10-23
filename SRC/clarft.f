@@ -273,7 +273,7 @@
 *
 *        Finish this component with a level 2 BLAS implementation
 *
-         CALL CLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         CALL CLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
          RETURN
       END IF
       IF(QR) THEN
