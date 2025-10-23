@@ -1,4 +1,4 @@
-*> \brief \b DLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b DLARFT_LVL2 forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE DLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLARFT2 forms the triangular factor T of a real block reflector H
+*> DLARFT_LVL2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -149,7 +149,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+      SUBROUTINE DLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU,
+     $            T, LDT)
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +173,7 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,KMI,NMI,L,NX
+      INTEGER           I,J,KMI,NMI,L
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..
@@ -182,8 +183,7 @@
 *     .. External Functions..
 *
       LOGICAL           LSAME
-      INTEGER           ILAENV
-      EXTERNAL          LSAME, ILAENV
+      EXTERNAL          LSAME
 *     ..
 *     .. Executable Statements ..
 *

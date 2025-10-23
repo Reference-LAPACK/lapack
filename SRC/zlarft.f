@@ -188,13 +188,13 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT2
+      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT_LVL2
 *
 *     .. External Functions..
 *
-      INTEGER           ILAENV
       LOGICAL           LSAME
-      EXTERNAL          LSAME, ILAENV
+      INTEGER           ILAENV
+      EXTERNAL          LSAME,ILAENV
 *
 *     .. Intrinsic Functions..
 *
@@ -273,7 +273,7 @@
 *
 *        Finish this component with a level 2 BLAS implementation
 *
-         CALL ZLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         CALL ZLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
          RETURN
       END IF
       IF(QR) THEN

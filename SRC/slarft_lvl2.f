@@ -1,4 +1,4 @@
-*> \brief \b SLARFT2 forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b SLARFT_LVL2 forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFT2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE SLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFT2 forms the triangular factor T of a real block reflector H
+*> SLARFT_LVL2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -149,7 +149,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLARFT2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+      SUBROUTINE SLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU,
+     $            T, LDT)
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +173,7 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,KMI,NMI,L,NX
+      INTEGER           I,J,KMI,NMI,L
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..
@@ -182,8 +183,7 @@
 *     .. External Functions..
 *
       LOGICAL           LSAME
-      INTEGER           ILAENV
-      EXTERNAL          LSAME, ILAENV
+      EXTERNAL          LSAME
 *     ..
 *     .. Executable Statements ..
 *
@@ -226,7 +226,7 @@
       RQ = (.NOT.RQT).AND.(.NOT.COLV)
 *
 *     If you want to see comments of how this subroutine works, we 
-*     are essentially unrolling the recursion present in DLARFT, so
+*     are essentially unrolling the recursion present in SLARFT, so
 *     to see what we are doing in each step (for each switch) look at the
 *     comments in dlarft.f by replacing K with I and L with I-1
 *     
