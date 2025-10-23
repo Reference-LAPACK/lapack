@@ -158,7 +158,6 @@
 *     Test the input arguments
 *
       INFO = 0
-      NB = ILAENV( 1, 'DORGQR', ' ', M, N, K, -1 )
 *
 *     Only need a workspace for dorg2r in case of bail out
 *
@@ -190,7 +189,8 @@
          RETURN
       END IF
 *
-      NBMIN = 2
+      NB = ILAENV( 1, 'DORGQR', ' ', M, N, K, -1 )
+      NBMIN = ILAENV(2, 'DORGQR', ' ', M, N, K, -1)
       NX = MAX(0, ILAENV(3, 'DORGQR', ' ', M, N, K, -1))
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN

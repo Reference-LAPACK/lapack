@@ -183,17 +183,18 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,L
+      INTEGER           I,J,L,NX
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          ZTRMM,ZGEMM,ZLACPY
+      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT_LVL2
 *
 *     .. External Functions..
 *
       LOGICAL           LSAME
-      EXTERNAL          LSAME
+      INTEGER           ILAENV
+      EXTERNAL          LSAME,ILAENV
 *
 *     .. Intrinsic Functions..
 *
@@ -254,6 +255,10 @@
 *
       RQ = (.NOT.RQT).AND.(.NOT.COLV)
 *
+*     Determine crossover point from level 2 to level 3 BLAS implementation
+*
+      NX = ILAENV(3, "ZLARFT", DIRECT // STOREV, N, K, -1, -1)
+*
 *     Base case
 *
       IF(N.EQ.1.OR.K.EQ.1) THEN
@@ -262,6 +267,13 @@
          ELSE
             T(1,1) = TAU(1)
          END IF
+         RETURN
+      END IF
+      IF(K.LT.NX) THEN
+*
+*        Finish this component with a level 2 BLAS implementation
+*
+         CALL ZLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
          RETURN
       END IF
       IF(QR) THEN
