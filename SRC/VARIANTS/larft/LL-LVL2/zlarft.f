@@ -1,11 +1,11 @@
-*> \brief \b ZLARFT VARIANT: left-looking Level 2 BLAS version of the algorithm.
+*> \brief \b ZLARFT_LVL2: Level 2 BLAS version for terminating case of ZLARFT.
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download ZLARFT + dependencies
+*> Download ZLARFT_LVL2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarft.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarft.f">
@@ -16,7 +16,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE ZLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+*                    T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -32,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZLARFT forms the triangular factor T of a complex block reflector H
+*> ZLARFT_LVL2 forms the triangular factor T of a complex block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -321,6 +322,6 @@
       END IF
       RETURN
 *
-*     End of ZLARFT
+*     End of ZLARFT_LVL2
 *
       END

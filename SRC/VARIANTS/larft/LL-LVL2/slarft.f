@@ -1,11 +1,11 @@
-*> \brief \b SLARFT VARIANT: left-looking Level 2 BLAS version of the algorithm.
+*> \brief \b SLARFT_LVL2: Level 2 BLAS version for terminating case of SLARFT.
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download SLARFT + dependencies
+*> Download SLARFT_LVL2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarft.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarft.f">
@@ -16,7 +16,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE SLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+*                    T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -32,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFT forms the triangular factor T of a real block reflector H
+*> SLARFT_LVL2 forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -320,6 +321,6 @@
       END IF
       RETURN
 *
-*     End of SLARFT
+*     End of SLARFT_LVL2
 *
       END

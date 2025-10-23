@@ -182,7 +182,7 @@
 *
 *     .. Local Scalars ..
 *
-      INTEGER            I,J,L
+      INTEGER            I,J,L,NX
       LOGICAL            QR,LQ,QL,DIRF,COLV
 *
 *     .. External Subroutines ..
@@ -192,7 +192,8 @@
 *     .. External Functions..
 *
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     
 *     The general scheme used is inspired by the approach inside DGEQRT3
 *     which was (at the time of writing this code):
@@ -211,6 +212,14 @@
 *
       IF(N.EQ.1.OR.K.EQ.1) THEN
          T(1,1) = TAU(1)
+         RETURN
+      END IF
+*
+*     Determine when to cross over into the level 2 based implementation
+*
+      NX = ILAENV(3, "SLARFT", DIRECT // STOREV, N, K, -1, -1)
+      IF(K.LT.NX) THEN
+         CALL SLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
          RETURN
       END IF
 *
