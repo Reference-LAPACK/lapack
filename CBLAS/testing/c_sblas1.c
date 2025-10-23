@@ -20,6 +20,14 @@ void F77_saxpy(const CBLAS_INT *N, const float *alpha, const float *X,
    return;
 }
 
+void F77_saxpby(const CBLAS_INT *N, const float *alpha, const float *X,
+                    const CBLAS_INT *incX, const float *beta, float *Y, const CBLAS_INT *incY)
+{
+   cblas_saxpby(*N, *alpha, X, *incX, *beta, Y, *incY);
+   return;
+}
+
+
 float F77_scasum(const CBLAS_INT *N, void *X, const CBLAS_INT *incX)
 {
    return cblas_scasum(*N, X, *incX);

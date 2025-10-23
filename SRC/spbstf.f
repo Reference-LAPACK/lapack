@@ -147,6 +147,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

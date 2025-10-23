@@ -19,9 +19,9 @@
 *     SUBROUTINE ZGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,
 *                         M, N, A, LDA, SVA, U, LDU, V, LDV,
 *                         CWORK, LWORK, RWORK, LRWORK, IWORK, INFO )
+*     IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-*     IMPLICIT    NONE
 *     INTEGER     INFO, LDA, LDU, LDV, LWORK, M, N
 *     ..
 *     .. Array Arguments ..
@@ -564,13 +564,13 @@
       SUBROUTINE ZGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,
      $                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      $                   CWORK, LWORK, RWORK, LRWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
-      IMPLICIT    NONE
       INTEGER     INFO, LDA, LDU, LDV, LWORK, LRWORK, M, N
 *     ..
 *     .. Array Arguments ..

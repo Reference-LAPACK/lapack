@@ -81,6 +81,9 @@ void cblas_scopy_64(const int64_t N, const float *X, const int64_t incX,
                  float *Y, const int64_t incY);
 void cblas_saxpy_64(const int64_t N, const float alpha, const float *X,
                  const int64_t incX, float *Y, const int64_t incY);
+void cblas_saxpby_64(const int64_t N, const float alpha, const float *X,
+                 const int64_t incX, const float beta, float *Y, const int64_t incY);
+
 
 void cblas_dswap_64(const int64_t N, double *X, const int64_t incX,
                  double *Y, const int64_t incY);
@@ -88,6 +91,8 @@ void cblas_dcopy_64(const int64_t N, const double *X, const int64_t incX,
                  double *Y, const int64_t incY);
 void cblas_daxpy_64(const int64_t N, const double alpha, const double *X,
                  const int64_t incX, double *Y, const int64_t incY);
+void cblas_daxpby_64(const int64_t N, const double alpha, const double *X,
+                 const int64_t incX, const double beta, double *Y, const int64_t incY);
 
 void cblas_cswap_64(const int64_t N, void *X, const int64_t incX,
                  void *Y, const int64_t incY);
@@ -95,6 +100,8 @@ void cblas_ccopy_64(const int64_t N, const void *X, const int64_t incX,
                  void *Y, const int64_t incY);
 void cblas_caxpy_64(const int64_t N, const void *alpha, const void *X,
                  const int64_t incX, void *Y, const int64_t incY);
+void cblas_caxpby_64(const int64_t N, const void *alpha, const void *X,
+                 const int64_t incX, const void *beta, void *Y, const int64_t incY);
 
 void cblas_zswap_64(const int64_t N, void *X, const int64_t incX,
                  void *Y, const int64_t incY);
@@ -102,6 +109,8 @@ void cblas_zcopy_64(const int64_t N, const void *X, const int64_t incX,
                  void *Y, const int64_t incY);
 void cblas_zaxpy_64(const int64_t N, const void *alpha, const void *X,
                  const int64_t incX, void *Y, const int64_t incY);
+void cblas_zaxbpy_64(const int64_t N, const void *alpha, const void *X,
+                 const int64_t incX, const void *beta, void *Y, const int64_t incY);
 
 
 /*

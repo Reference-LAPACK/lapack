@@ -112,6 +112,7 @@
 *
 *  =====================================================================
       SUBROUTINE DDISNA( JOB, M, N, D, SEP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

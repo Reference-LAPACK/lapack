@@ -108,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE CUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -29,18 +29,18 @@
 #  Level 1 BLAS
 #---------------------------------------------------------
 
-set(SBLAS1 isamax.f sasum.f saxpy.f scopy.f sdot.f snrm2.f90
+set(SBLAS1 isamax.f sasum.f saxpy.f saxpby.f scopy.f sdot.f snrm2.f90
 	srot.f srotg.f90 sscal.f sswap.f sdsdot.f srotmg.f srotm.f)
 
-set(CBLAS1 scabs1.f scasum.f scnrm2.f90 icamax.f caxpy.f ccopy.f
+set(CBLAS1 scabs1.f scasum.f scnrm2.f90 icamax.f90 caxpy.f caxpby.f ccopy.f
 	cdotc.f cdotu.f csscal.f crotg.f90 cscal.f cswap.f csrot.f)
 
-set(DBLAS1 idamax.f dasum.f daxpy.f dcopy.f ddot.f dnrm2.f90
+set(DBLAS1 idamax.f dasum.f daxpy.f daxpby.f dcopy.f ddot.f dnrm2.f90
 	drot.f drotg.f90 dscal.f dsdot.f dswap.f drotmg.f drotm.f)
 
 set(DB1AUX sscal.f isamax.f)
 
-set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f90 izamax.f zaxpy.f zcopy.f
+set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f90 izamax.f90 zaxpy.f zaxpby.f zcopy.f
 	zdotc.f zdotu.f zdscal.f zrotg.f90 zscal.f zswap.f zdrot.f)
 
 set(CB1AUX
@@ -49,7 +49,7 @@ set(CB1AUX
     sswap.f)
 
 set(ZB1AUX
-    icamax.f idamax.f
+    icamax.f90 idamax.f
     cgemm.f cherk.f cscal.f ctrsm.f
     dasum.f daxpy.f dcopy.f ddot.f dgemm.f dgemv.f dnrm2.f90 drot.f dscal.f
     dswap.f

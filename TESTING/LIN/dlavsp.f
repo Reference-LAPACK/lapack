@@ -127,6 +127,7 @@
 *  =====================================================================
       SUBROUTINE DLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

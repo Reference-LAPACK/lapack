@@ -90,6 +90,7 @@
 *
 *  =====================================================================
       SUBROUTINE SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -100,6 +100,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAS2( F, G, H, SSMIN, SSMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

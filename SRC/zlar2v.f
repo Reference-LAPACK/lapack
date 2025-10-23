@@ -106,6 +106,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

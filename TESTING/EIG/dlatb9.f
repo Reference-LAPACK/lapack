@@ -167,6 +167,7 @@
       SUBROUTINE DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

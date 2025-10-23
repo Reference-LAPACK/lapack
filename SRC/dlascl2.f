@@ -85,6 +85,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLASCL2 ( M, N, D, X, LDX )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

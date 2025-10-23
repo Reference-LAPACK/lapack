@@ -1,4 +1,6 @@
+*  =====================================================================
       PROGRAM SCBLAT1
+      IMPLICIT NONE
 *     Test program for the REAL             Level 1 CBLAS.
 *     Based upon the original CBLAS test routine together with:
 *     F06EAF Example Program Text
@@ -19,7 +21,7 @@
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 10
+      DO 20 IC = 1, 11
          ICASE = IC
          CALL HEADER
 *
@@ -38,7 +40,7 @@
      +            ICASE.EQ.10) THEN
             CALL CHECK1(SFAC)
          ELSE IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
-     +            ICASE.EQ.6) THEN
+     +            ICASE.EQ.6 .OR. ICASE.EQ.11) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.EQ.4) THEN
             CALL CHECK3(SFAC)
@@ -51,7 +53,10 @@
 99999 FORMAT (' Real CBLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
       END
+
+*  =====================================================================
       SUBROUTINE HEADER
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -59,7 +64,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*15      L(10)
+      CHARACTER*15      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -73,13 +78,18 @@
       DATA             L(8)/'CBLAS_SASUM '/
       DATA             L(9)/'CBLAS_SSCAL '/
       DATA             L(10)/'CBLAS_ISAMAX'/
+      DATA             L(11)/'CBLAS_SAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
 *
 99999 FORMAT (/' Test of subprogram number',I3,9X,A15)
       END
+
+*  =====================================================================
       SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -140,7 +150,10 @@
    20 CONTINUE
    40 RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -234,7 +247,10 @@
    80 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -244,25 +260,27 @@
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      REAL              SA
+      REAL              SA, SB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, MX, MY
 *     .. Local Arrays ..
       REAL              DT10X(7,4,4), DT10Y(7,4,4), DT7(4,4),
      +                  DT8(7,4,4), DX1(7),
      +                  DY1(7), SSIZE1(4), SSIZE2(14,2), STX(7), STY(7),
-     +                  SX(7), SY(7)
+     +                  SX(7), SY(7), DT20(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       REAL              SDOTTEST
       EXTERNAL          SDOTTEST
 *     .. External Subroutines ..
       EXTERNAL          SAXPYTEST, SCOPYTEST, SSWAPTEST, STEST, STEST1
+     +                  SAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
       DATA              SA/0.3E0/
+      DATA              SB/0.5E0/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -335,6 +353,26 @@
      +                  0.0E0, 1.17E0, 1.17E0, 1.17E0, 1.17E0, 1.17E0,
      +                  1.17E0, 1.17E0, 1.17E0, 1.17E0, 1.17E0, 1.17E0,
      +                  1.17E0, 1.17E0, 1.17E0/
+      DATA              DT20/0.5E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.43E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.43E0, -0.42E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.43E0, -0.42E0, 0.0E0,
+     +                  0.59E0, 0.0E0, 0.0E0, 0.0E0, 0.5E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.43E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.1E0, -0.9E0, 0.33E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.13E0, -0.9E0, 0.42E0, 0.7E0, -0.45E0,
+     +                  0.2E0, 0.58E0, 0.5E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.43E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.1E0, -0.27E0,
+     +                  0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.13E0,
+     +                  -0.18E0, 0.00E0, 0.53E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.5E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.43E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.43E0, -0.9E0, 0.18E0, 0.0E0, 0.0E0,
+     +                  0.0E0, 0.0E0, 0.43E0, -0.9E0, 0.18E0, 0.7E0,
+     +                  -0.45E0, 0.2E0, 0.64E0/
+
 *     .. Executable Statements ..
 *
       DO 120 KI = 1, 4
@@ -365,6 +403,13 @@
                   STY(J) = DT8(J,KN,KI)
    40          CONTINUE
                CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+            ELSE IF (ICASE.EQ.11) THEN
+*              .. SAXPBYTEST ..
+               CALL SAXPBYTEST(N,SA,SX,INCX,SB,SY,INCY)
+               DO 50 J = 1, LENY
+                  STY(J) = DT20(J,KN,KI)
+   50          CONTINUE
+               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
             ELSE IF (ICASE.EQ.5) THEN
 *              .. SCOPYTEST ..
                DO 60 I = 1, 7
@@ -389,7 +434,10 @@
   120 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE CHECK3(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -595,7 +643,10 @@
   200 CONTINUE
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -650,7 +701,10 @@
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,3I5,I3,2E36.8,2E12.4)
       END
+
+*  =====================================================================
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -675,7 +729,10 @@
 *
       RETURN
       END
+
+*  =====================================================================
       REAL             FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -685,7 +742,10 @@
       SDIFF = SA - SB
       RETURN
       END
+
+*  =====================================================================
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR

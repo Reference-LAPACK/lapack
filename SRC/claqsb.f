@@ -137,6 +137,7 @@
 *  =====================================================================
       SUBROUTINE CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX,
      $                   EQUED )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

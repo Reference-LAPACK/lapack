@@ -133,6 +133,7 @@
 *  =====================================================================
       SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

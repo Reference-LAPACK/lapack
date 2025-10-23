@@ -204,6 +204,7 @@
 *> \endverbatim
 *  =====================================================================
       SUBROUTINE ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

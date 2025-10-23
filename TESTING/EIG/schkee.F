@@ -2511,7 +2511,7 @@
  9974 FORMAT( ' Tests of SSBTRD', / ' (reduction of a symmetric band ',
      $      'matrix to tridiagonal form)' )
  9973 FORMAT( / 1X, 71( '-' ) )
- 9972 FORMAT( / ' LAPACK VERSION ', I1, '.', I1, '.', I1 )
+ 9972 FORMAT( / ' LAPACK VERSION ', I1, '.', I2, '.', I1 )
  9971 FORMAT( / ' Tests of the Generalized Linear Regression Model ',
      $      'routines' )
  9970 FORMAT( / ' Tests of the Generalized QR and RQ routines' )

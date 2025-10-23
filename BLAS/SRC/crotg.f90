@@ -86,6 +86,7 @@
 !
 !  =====================================================================
 subroutine CROTG( a, b, c, s )
+   implicit none
    integer, parameter :: wp = kind(1.e0)
 !
 !  -- Reference BLAS level1 routine --

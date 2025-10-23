@@ -113,6 +113,7 @@
 *  =====================================================================
       REAL             FUNCTION CQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

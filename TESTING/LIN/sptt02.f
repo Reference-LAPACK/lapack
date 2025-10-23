@@ -101,6 +101,7 @@
 *
 *  =====================================================================
       SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
