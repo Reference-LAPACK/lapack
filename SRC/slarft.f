@@ -191,7 +191,8 @@
 *     .. External Functions..
 *
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     
 *     The general scheme used is inspired by the approach inside DGEQRT3
 *     which was (at the time of writing this code):
