@@ -506,6 +506,42 @@
             ANORM = ONE
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'KY' ) ) THEN
+*
+*        xKY: Set parameters to generate a
+*        skew-symmetric matrix.
+*
+*        Set TYPE, the type of matrix to be generated.
+*
+         TYPE = C2( 1: 1 )
+*
+*        Set the lower and upper bandwidths.
+*
+         IF( IMAT.EQ.1 ) THEN
+            KL = 0
+         ELSE
+            KL = MAX( N-1, 0 )
+         END IF
+         KU = KL
+*
+*        Set the condition number and norm.
+*
+         IF( IMAT.EQ.7 ) THEN
+            CNDNUM = BADC1
+         ELSE IF( IMAT.EQ.8 ) THEN
+            CNDNUM = BADC2
+         ELSE
+            CNDNUM = TWO
+         END IF
+*
+         IF( IMAT.EQ.9 ) THEN
+            ANORM = SMALL
+         ELSE IF( IMAT.EQ.10 ) THEN
+            ANORM = LARGE
+         ELSE
+            ANORM = ONE
+         END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
 *
 *        xPB:  Set parameters to generate a symmetric band matrix.
