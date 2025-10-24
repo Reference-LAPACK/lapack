@@ -331,8 +331,10 @@
                W( 1 ) = AP( 1 )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = ONE
+         IF( WANTZ ) THEN
+           Z( 1, 1 ) = ONE
+           IFAIL(1) = ZERO
+         ENDIF
          RETURN
       END IF
 *
