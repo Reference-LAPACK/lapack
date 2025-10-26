@@ -171,7 +171,7 @@
 *     .. Local Scalars ..
       LOGICAL            LOWER, LQUERY, WANTZ
       INTEGER            IINFO, IMAX, INDTAU, INDWRK, ISCALE,
-     $                   LLWORK, LWKOPT, NB
+     $                   LLWORK, LWKOPT, NB, J
       REAL               ANRM, BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA,
      $                   SMLNUM
 *     ..
@@ -183,7 +183,7 @@
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, SORGTR, SSCAL, SKTEQR, SKYTRD,
+      EXTERNAL           SORGTR, SSCAL, SKTEQR, SKYTRD,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -258,8 +258,17 @@
          ISCALE = 1
          SIGMA = RMAX / ANRM
       END IF
-      IF( ISCALE.EQ.1 )
-     $   CALL SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+      IF( ISCALE.EQ.1 ) THEN
+         IF( LOWER ) THEN
+            DO 10 J = 1, N-1
+               CALL SSCAL( N-J, SIGMA, A( J+1, J ), 1 )
+   10       CONTINUE
+         ELSE
+            DO 20 J = 2, N
+               CALL SSCAL( J-1, SIGMA, A( 1, J ), 1 )
+   20       CONTINUE
+         END IF
+      END IF
 *
 *     Call SKYTRD to reduce skew-symmetric matrix to tridiagonal form.
 *
