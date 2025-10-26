@@ -86,13 +86,13 @@ zlib1: $(zlev1)
 slev2 = cblas_sgemv.o cblas_sgbmv.o cblas_sger.o  cblas_ssbmv.o cblas_sspmv.o \
         cblas_sspr.o  cblas_sspr2.o cblas_ssymv.o cblas_ssyr.o  cblas_ssyr2.o \
         cblas_stbmv.o cblas_stbsv.o cblas_stpmv.o cblas_stpsv.o cblas_strmv.o \
-        cblas_strsv.o
+        cblas_strsv.o cblas_skymv.o cblas_skyr2.o
 
 # Files for level 2 double precision real
 dlev2 = cblas_dgemv.o cblas_dgbmv.o cblas_dger.o  cblas_dsbmv.o cblas_dspmv.o \
         cblas_dspr.o  cblas_dspr2.o cblas_dsymv.o cblas_dsyr.o  cblas_dsyr2.o \
         cblas_dtbmv.o cblas_dtbsv.o cblas_dtpmv.o cblas_dtpsv.o cblas_dtrmv.o \
-        cblas_dtrsv.o
+        cblas_dtrsv.o cblas_dkymv.o cblas_dkyr2.o
 
 # Files for level 2 single precision complex
 clev2 = cblas_cgemv.o cblas_cgbmv.o cblas_chemv.o cblas_chbmv.o cblas_chpmv.o \
@@ -137,11 +137,11 @@ zlib2: $(zlev2) $(errhand)
 
 # Files for level 3 single precision real
 slev3 = cblas_sgemm.o cblas_ssymm.o cblas_ssyrk.o cblas_ssyr2k.o cblas_strmm.o \
-        cblas_strsm.o cblas_sgemmtr.o
+        cblas_strsm.o cblas_sgemmtr.o cblas_skymm.o cblas_skyr2k.o
 
 # Files for level 3 double precision real
 dlev3 = cblas_dgemm.o cblas_dsymm.o cblas_dsyrk.o cblas_dsyr2k.o cblas_dtrmm.o \
-        cblas_dtrsm.o cblas_dgemmtr.o
+        cblas_dtrsm.o cblas_dgemmtr.o cblas_dkymm.o cblas_dkyr2k.o
 
 # Files for level 3 single precision complex
 clev3 = cblas_cgemm.o cblas_csymm.o cblas_chemm.o cblas_cherk.o \

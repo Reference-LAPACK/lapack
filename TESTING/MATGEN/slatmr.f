@@ -36,8 +36,8 @@
 *>    operations:
 *>
 *>      Generate a matrix A with random entries of distribution DIST
-*>         which is symmetric if SYM='S', and nonsymmetric
-*>         if SYM='N'.
+*>         which is symmetric if SYM='S', skew-symmetric if SYM='K',
+*>         and nonsymmetric if SYM='N'.
 *>
 *>      Set the diagonal to D, where D may be input or
 *>         computed according to MODE, COND, DMAX and RSIGN
@@ -61,8 +61,8 @@
 *>
 *>      Pack the matrix if desired. Options specified by PACK are:
 *>         no packing
-*>         zero out upper half (if symmetric)
-*>         zero out lower half (if symmetric)
+*>         zero out upper half (if symmetric/skew-symmetric)
+*>         zero out lower half (if symmetric/skew-symmetric)
 *>         store the upper half columnwise (if symmetric or
 *>             square upper triangular)
 *>         store the lower half columnwise (if symmetric or
@@ -104,7 +104,7 @@
 *>           On entry, DIST specifies the type of distribution to be used
 *>           to generate a random matrix .
 *>           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
-*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
+*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric/skew-symmetric )
 *>           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
 *>           Not modified.
 *> \endverbatim
@@ -128,6 +128,7 @@
 *>          SYM is CHARACTER*1
 *>           If SYM='S' or 'H', generated matrix is symmetric.
 *>           If SYM='N', generated matrix is nonsymmetric.
+*>           If SYM='K', generated matrix is skew-symmetric.
 *>           Not modified.
 *> \endverbatim
 *>
@@ -203,6 +204,9 @@
 *>           'S' or 'H'  => matrix premultiplied by diag( DL ) and
 *>                          postmultiplied by diag( DL )
 *>                          ('S' for symmetric, or 'H' for Hermitian)
+*>           'K'  => matrix premultiplied by diag( DL ) and
+*>                          postmultiplied by diag( DL )
+*>                          ('K' for skew-symmetric)
 *>           'E'  => matrix premultiplied by diag( DL ) and
 *>                         postmultiplied by inv( diag( DL ) )
 *>                         ( 'E' for eigenvalue invariance)
@@ -309,7 +313,7 @@
 *>           On entry specifies the lower bandwidth of the  matrix. For
 *>           example, KL=0 implies upper triangular, KL=1 implies upper
 *>           Hessenberg, and KL at least M-1 implies the matrix is not
-*>           banded. Must equal KU if matrix is symmetric.
+*>           banded. Must equal KU if matrix is symmetric/skew-symmetric.
 *>           Not modified.
 *> \endverbatim
 *>
@@ -319,7 +323,7 @@
 *>           On entry specifies the upper bandwidth of the  matrix. For
 *>           example, KU=0 implies lower triangular, KU=1 implies lower
 *>           Hessenberg, and KU at least N-1 implies the matrix is not
-*>           banded. Must equal KL if matrix is symmetric.
+*>           banded. Must equal KL if matrix is symmetric/skew-symmetric.
 *>           Not modified.
 *> \endverbatim
 *>
@@ -352,8 +356,8 @@
 *>          PACK is CHARACTER*1
 *>           On entry specifies packing of matrix as follows:
 *>           'N' => no packing
-*>           'U' => zero out all subdiagonal entries (if symmetric)
-*>           'L' => zero out all superdiagonal entries (if symmetric)
+*>           'U' => zero out all subdiagonal entries (if symmetric/skew-symmetric)
+*>           'L' => zero out all superdiagonal entries (if symmetric/skew-symmetric)
 *>           'C' => store the upper triangle columnwise
 *>                  (only if matrix symmetric or square upper triangular)
 *>           'R' => store the lower triangle columnwise
@@ -549,6 +553,8 @@
          ISYM = 1
       ELSE IF( LSAME( SYM, 'H' ) ) THEN
          ISYM = 0
+      ELSE IF( LSAME( SYM, 'K' ) ) THEN
+         ISYM = 2
       ELSE
          ISYM = -1
       END IF
@@ -655,7 +661,7 @@
 *
       IF( M.LT.0 ) THEN
          INFO = -1
-      ELSE IF( M.NE.N .AND. ISYM.EQ.0 ) THEN
+      ELSE IF( M.NE.N .AND. (ISYM.EQ.0 .OR. ISYM.EQ.2) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -672,8 +678,8 @@
      $         IRSIGN.EQ.-1 ) THEN
          INFO = -10
       ELSE IF( IGRADE.EQ.-1 .OR. ( IGRADE.EQ.4 .AND. M.NE.N ) .OR.
-     $         ( ( IGRADE.GE.1 .AND. IGRADE.LE.4 ) .AND. ISYM.EQ.0 ) )
-     $          THEN
+     $         ( ( IGRADE.GE.1 .AND. IGRADE.LE.4 ) .AND.
+     $          ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) ) ) THEN
          INFO = -11
       ELSE IF( IGRADE.EQ.4 .AND. DZERO ) THEN
          INFO = -12
@@ -693,14 +699,15 @@
      $         CONDR.LT.ONE ) THEN
          INFO = -17
       ELSE IF( IPVTNG.EQ.-1 .OR. ( IPVTNG.EQ.3 .AND. M.NE.N ) .OR.
-     $         ( ( IPVTNG.EQ.1 .OR. IPVTNG.EQ.2 ) .AND. ISYM.EQ.0 ) )
-     $          THEN
+     $         ( ( IPVTNG.EQ.1 .OR. IPVTNG.EQ.2 ) .AND.
+     $          ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) ) ) THEN
          INFO = -18
       ELSE IF( IPVTNG.NE.0 .AND. BADPVT ) THEN
          INFO = -19
       ELSE IF( KL.LT.0 ) THEN
          INFO = -20
-      ELSE IF( KU.LT.0 .OR. ( ISYM.EQ.0 .AND. KL.NE.KU ) ) THEN
+      ELSE IF( KU.LT.0 .OR. ( ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) .AND.
+     $         KL.NE.KU ) ) THEN
          INFO = -21
       ELSE IF( SPARSE.LT.ZERO .OR. SPARSE.GT.ONE ) THEN
          INFO = -22
@@ -814,8 +821,8 @@
       END IF
 *
 *     4)      Generate matrices for each kind of PACKing
-*             Always sweep matrix columnwise (if symmetric, upper
-*             half only) so that matrix generated does not depend
+*             Always sweep matrix columnwise (if symmetric/skew-symmetric,
+*             upper half only) so that matrix generated does not depend
 *             on PACK
 *
       IF( FULBND ) THEN
@@ -824,7 +831,7 @@
 *        differ only in the order of their rows and/or columns.
 *
          IF( IPACK.EQ.0 ) THEN
-            IF( ISYM.EQ.0 ) THEN
+            IF( ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) ) THEN
                DO 100 J = 1, N
                   DO 90 I = 1, J
                      TEMP = SLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
@@ -997,7 +1004,7 @@
 *        Use SLATM2
 *
          IF( IPACK.EQ.0 ) THEN
-            IF( ISYM.EQ.0 ) THEN
+            IF( (ISYM.EQ.0 .OR. ISYM.EQ.2 ) ) THEN
                DO 300 J = 1, N
                   DO 290 I = 1, J
                      A( I, J ) = SLATM2( M, N, I, J, KL, KU, IDIST,

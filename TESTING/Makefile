@@ -42,6 +42,7 @@ all: single complex double complex16 singleproto doubleproto complexproto comple
 
 SEIGTST= snep.out \
          ssep.out \
+		 skep.out \
          sse2.out \
          ssvd.out \
          sec.out \
@@ -50,6 +51,7 @@ SEIGTST= snep.out \
          sgd.out \
          ssb.out \
          ssg.out \
+		 skg.out \
          sbal.out \
          sbak.out \
          sgbal.out \
@@ -88,6 +90,7 @@ CDMDEIGTST= cdmd.out
 
 DEIGTST= dnep.out \
          dsep.out \
+		 dkep.out \
          dse2.out \
          dsvd.out \
          dec.out \
@@ -96,6 +99,7 @@ DEIGTST= dnep.out \
          dgd.out \
          dsb.out \
          dsg.out \
+		 dkg.out \
          dbal.out \
          dbak.out \
          dgbal.out \
@@ -233,6 +237,10 @@ ssep.out: sep.in EIG/xeigtsts
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./EIG/xeigtsts < sep.in > $@ 2>&1
 
+skep.out: kep.in EIG/xeigtsts
+	@echo KEP: Testing Skew-symmetric Eigenvalue Problem routines
+	./EIG/xeigtsts < kep.in > $@ 2>&1
+
 sse2.out: se2.in EIG/xeigtsts
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./EIG/xeigtsts < se2.in > $@ 2>&1
@@ -264,6 +272,10 @@ ssb.out: ssb.in EIG/xeigtsts
 ssg.out: ssg.in EIG/xeigtsts
 	@echo SSG: Testing REAL Symmetric Generalized Eigenvalue Problem routines
 	./EIG/xeigtsts < ssg.in > $@ 2>&1
+
+skg.out: skg.in EIG/xeigtsts
+	@echo SKG: Testing REAL Skew-symmetric Generalized Eigenvalue Problem routines
+	./EIG/xeigtsts < skg.in > $@ 2>&1
 
 sbal.out: sbal.in EIG/xeigtsts
 	@echo SGEBAL: Testing the balancing of a REAL general matrix
@@ -405,6 +417,10 @@ dsep.out: sep.in EIG/xeigtstd
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./EIG/xeigtstd < sep.in > $@ 2>&1
 
+dkep.out: kep.in EIG/xeigtstd
+	@echo KEP: Testing Skew-symmetric Eigenvalue Problem routines
+	./EIG/xeigtstd < kep.in > $@ 2>&1
+
 dse2.out: se2.in EIG/xeigtstd
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./EIG/xeigtstd < se2.in > $@ 2>&1
@@ -436,6 +452,10 @@ dsb.out: dsb.in EIG/xeigtstd
 dsg.out: dsg.in EIG/xeigtstd
 	@echo DSG: Testing DOUBLE PRECISION Symmetric Generalized Eigenvalue Problem routines
 	./EIG/xeigtstd < dsg.in > $@ 2>&1
+
+dkg.out: dkg.in EIG/xeigtstd
+	@echo DKG: Testing DOUBLE PRECISION Skew-symmetric Generalized Eigenvalue Problem routines
+	./EIG/xeigtstd < dkg.in > $@ 2>&1
 
 dbal.out: dbal.in EIG/xeigtstd
 	@echo DGEBAL: Testing the balancing of a DOUBLE PRECISION general matrix
