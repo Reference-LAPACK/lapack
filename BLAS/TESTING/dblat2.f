@@ -862,7 +862,7 @@
       FULL = SNAME( 3: 3 ).EQ.'Y'
       BANDED = SNAME( 3: 3 ).EQ.'B'
       PACKED = SNAME( 3: 3 ).EQ.'P'
-      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
+      SKEWFULL = SNAME( 2: 5 ).EQ.'SKEW'
 *     Define the number of arguments.
       IF( FULL.OR.SKEWFULL )THEN
          NARGS = 10
@@ -2113,7 +2113,7 @@
 *     .. Executable Statements ..
       FULL = SNAME( 3: 3 ).EQ.'Y'
       PACKED = SNAME( 3: 3 ).EQ.'P'
-      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
+      SKEWFULL = SNAME( 2: 5 ).EQ.'SKEW'
 *     Define the number of arguments.
       IF( FULL.OR.SKEWFULL )THEN
          NARGS = 9

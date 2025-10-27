@@ -741,7 +741,7 @@
       DATA               ICHS/'LR'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
-      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
+      SKEWFULL = SNAME( 2: 5 ).EQ.'SKEW'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
@@ -1606,7 +1606,7 @@
       DATA               ICHT/'NTC'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
-      SKEWFULL = SNAME( 2: 2 ).EQ.'S'.AND.SNAME( 3: 3 ).EQ.'K'
+      SKEWFULL = SNAME( 2: 5 ).EQ.'SKEW'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
