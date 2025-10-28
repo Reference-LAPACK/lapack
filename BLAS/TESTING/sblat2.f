@@ -3299,7 +3299,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO
-      CHARACTER*10       SRNAME
+      CHARACTER*(*)      SRNAME
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
