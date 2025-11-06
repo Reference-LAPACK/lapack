@@ -47,7 +47,11 @@
 #else
 #include <complex>
 #endif
+#if _MSC_VER
+#define lapack_complex_float    _Fcomplex
+#else
 #define lapack_complex_float    float _Complex
+#endif
 #endif
 
 #ifndef lapack_complex_float_real
@@ -65,7 +69,11 @@
 #else
 #include <complex>
 #endif
+#if _MSC_VER
+#define lapack_complex_double   _Dcomplex
+#else
 #define lapack_complex_double   double _Complex
+#endif
 #endif
 
 #ifndef lapack_complex_double_real
