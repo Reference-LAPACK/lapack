@@ -238,7 +238,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRLQ, CGELS, CGET02,
      $                   CLACPY, CLARHS, CLATB4, CLATMS, CLQT01, CLQT02,
-     $                   CLQT03, XLAENV
+     $                   CLQT03, CGELQF, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -356,16 +356,18 @@
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.LE.N ) THEN
 *
-*                       Test CUNGLQ, using factorization
-*                       returned by CLQT01
+*                       Test CUNGLQ
+*
+                        CALL CLACPY( 'Full', M, N, A, LDA, AF, LDA )
+                        CALL CGELQF( M, N, AF, LDA, TAU, WORK, LWORK,
+     $                               INFO )
 *
                         CALL CLQT02( M, N, K, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test CUNMLQ, using factorization returned
-*                       by CLQT01
+*                       Test CUNMLQ
 *
                         CALL CLQT03( M, N, K, AF, AC, AL, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
