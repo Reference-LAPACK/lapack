@@ -143,13 +143,13 @@
             @defgroup ptrfs         ptrfs:          iterative refinement
         @}
 
-        @defgroup hesv_driver_grp   LDL: Hermitian/symmetric indefinite matrix, driver
+        @defgroup hesv_driver_grp   LDL: Hermitian/symmetric indefinite/skew-symmetric matrix, driver
         @{
             @defgroup hesv_driver   --- full, rook pivoting ---
-            @defgroup hesv          {he,sy}sv:      rook (v1)
+            @defgroup hesv          {he,sy,ky}sv:   rook (v1)
             @defgroup hesv_rook     {he,sy}sv_rook: rook (v2)
             @defgroup hesv_rk       {he,sy}sv_rk:   rook (v3)
-            @defgroup hesvx         {he,sy}svx:     rook (v1, expert)
+            @defgroup hesvx         {he,sy,ky}svx:  rook (v1, expert)
             @defgroup hesvxx        {he,sy}svxx:    rook (v1, expert)
 
             @defgroup hpsv_driver   --- packed, rook pivoting ---
@@ -164,26 +164,26 @@
         @defgroup hesv_comp_grp     LDL: computational routines (factor, cond, etc.)
         @{
             @defgroup hesv_comp_v1  --- full, rook v1 ---
-            @defgroup hecon         {he,sy}con:     condition number estimate
-            @defgroup hetrf         {he,sy}trf:     triangular factor
-            @defgroup lahef         la{he,sy}f:     step in hetrf
-            @defgroup hetf2         {he,sy}tf2:     triangular factor, level 2
-            @defgroup hetrs         {he,sy}trs:     triangular solve using factor
-            @defgroup hetri         {he,sy}tri:     triangular inverse
-            @defgroup herfs         {he,sy}rfs:     iterative refinement
+            @defgroup hecon         {he,sy,ky}con:  condition number estimate
+            @defgroup hetrf         {he,sy,ky}trf:  triangular factor
+            @defgroup lahef         la{he,sy,ky}f:  step in hetrf
+            @defgroup hetf2         {he,sy,ky}tf2:  triangular factor, level 2
+            @defgroup hetrs         {he,sy,ky}trs:  triangular solve using factor
+            @defgroup hetri         {he,sy,ky}tri:  triangular inverse
+            @defgroup herfs         {he,sy,ky}rfs:  iterative refinement
             @defgroup herfsx        {he,sy}rfsx:    iterative refinement, expert
             @defgroup heequb        {he,sy}equb:    equilibration, power of 2
-            @defgroup syconv        syconv:         convert to/from L and D from hetrf
+            @defgroup syconv        {sy,ky}conv:    convert to/from L and D from hetrf
 
             @defgroup hecon_3       {he,sy}con_3:   condition number estimate
-            @defgroup hetri2        {he,sy}tri2:    inverse
-            @defgroup hetri2x       {he,sy}tri2x:   inverse
+            @defgroup hetri2        {he,sy,ky}tri2: inverse
+            @defgroup hetri2x       {he,sy,ky}tri2x:inverse
             @defgroup hetri_3       {he,sy}tri_3:   inverse
             @defgroup hetri_3x      {he,sy}tri_3x:  inverse
-            @defgroup hetrs2        {he,sy}trs2:    solve using factor
+            @defgroup hetrs2        {he,sy,ky}trs2: solve using factor
             @defgroup hetrs_3       {he,sy}trs_3:   solve using factor
 
-            @defgroup heswapr             {he,sy}swapr:         apply 2-sided permutation
+            @defgroup heswapr             {he,sy,ky}swapr:      apply 2-sided permutation
             @defgroup la_hercond          la_hercond:           Skeel condition number estimate
             @defgroup la_herfsx_extended  la_herfsx_extended:   step in herfsx
             @defgroup la_herpvgrw         la_herpvgrw:          reciprocal pivot growth
@@ -545,12 +545,12 @@
         @}
     @}
 
-    @defgroup heev_top              Hermitian/symmetric eigenvalues
+    @defgroup heev_top              Hermitian/symmetric/skew-symmetric eigenvalues
     @{
         @defgroup heev_driver_grp   Standard eig driver, AV = VΛ
         @{
             @defgroup heev_driver   --- full ---
-            @defgroup heev          {he,sy}ev:      eig, QR iteration
+            @defgroup heev          {he,sy,ky}ev:   eig, QR iteration
             @defgroup heevd         {he,sy}evd:     eig, divide and conquer
             @defgroup heevr         {he,sy}evr:     eig, MRRR
             @defgroup heevx         {he,sy}evx:     eig, bisection
@@ -577,7 +577,7 @@
             @defgroup hbevx_2stage  {hb,sb}evx_2stage:  eig, bisection
 
             @defgroup stev_driver   --- tridiagonal ---
-            @defgroup stev          stev:           eig, QR iteration
+            @defgroup stev          {st,kt}ev:      eig, QR iteration
             @defgroup stevd         stevd:          eig, divide and conquer
             @defgroup stevr         stevr:          eig, MRRR
             @defgroup stevx         stevx:          eig, bisection
@@ -589,13 +589,13 @@
             @defgroup stegr         stegr:          eig, bisection, see stemr
             @defgroup stein         stein:          eig, inverse iteration
             @defgroup stemr         stemr:          eig, relatively robust representation (RRR)
-            @defgroup steqr         steqr:          eig, QR iteration
+            @defgroup steqr         {st,kt}eqr:     eig, QR iteration
         @}
 
         @defgroup hegv_driver_grp   Generalized eig driver, AV = BVΛ, etc.
         @{
             @defgroup hegv_driver   --- full ---
-            @defgroup hegv          {he,sy}gv:      eig, QR iteration
+            @defgroup hegv          {he,sy,ky}gv:     eig, QR iteration
             @defgroup hegv_2stage   {he,sy}gv_2stage: eig, QR iteration, 2-stage
             @defgroup hegvd         {he,sy}gvd:     eig, divide and conquer
             @defgroup hegvx         {he,sy}gvx:     eig, bisection
@@ -615,9 +615,9 @@
         @{
             @defgroup heev_comp     --- full ---
             @defgroup disna         disna:          eig condition numbers
-            @defgroup hetrd         {he,sy}trd:     reduction to tridiagonal
-            @defgroup hetd2         {he,sy}td2:     reduction to tridiagonal, level 2
-            @defgroup latrd         latrd:          step in hetrd
+            @defgroup hetrd         {he,sy,ky}trd:  reduction to tridiagonal
+            @defgroup hetd2         {he,sy,ky}td2:  reduction to tridiagonal, level 2
+            @defgroup latrd         latrd{,k}:      step in hetrd
             @defgroup ungtr         {un,or}gtr:     generate Q from hetrd
             @defgroup unmtr         {un,or}mtr:     multiply by Q from hetrd
 
@@ -643,8 +643,8 @@
 
         @defgroup hegv_comp_grp     Generalized eig computational routines
         @{
-            @defgroup hegst         {he,sy}gst:     reduction to standard form
-            @defgroup hegs2         {he,sy}gs2:     reduction to standard form, level 2
+            @defgroup hegst         {he,sy,ky}gst:     reduction to standard form
+            @defgroup hegs2         {he,sy,ky}gs2:     reduction to standard form, level 2
             @defgroup hpgst         {hp,sp}gst:     reduction to standard form, packed
             @defgroup hbgst         {hb,sb}gst:     reduction to standard form, banded
             @defgroup pbstf         pbstf:          split Cholesky factor, use with hbgst
@@ -798,11 +798,11 @@
 
             @defgroup lanhs         lanhs:          Hessenberg
 
-            @defgroup lanhe         lan{he,sy}:     Hermitian/symmetric matrix
+            @defgroup lanhe         lan{he,sy,ky}:  Hermitian/symmetric/skew-symmetric matrix
             @defgroup lanhf         lan{hf,sf}:     Hermitian/symmetric matrix, RFP
             @defgroup lanhp         lan{hp,sp}:     Hermitian/symmetric matrix, packed
             @defgroup lanhb         lan{hb,sb}:     Hermitian/symmetric matrix, banded
-            @defgroup lanht         lan{ht,st}:     Hermitian/symmetric matrix, tridiagonal
+            @defgroup lanht         lan{ht,st,kt}:  Hermitian/symmetric/skew-symmetric matrix, tridiagonal
 
             @defgroup lantr         lantr:          triangular matrix
             @defgroup lantp         lantp:          triangular matrix, packed
@@ -935,9 +935,9 @@ https://www.netlib.org/xblas/
             @defgroup gemv          gemv:           general matrix-vector multiply
             @defgroup ger           ger:            general matrix rank-1 update
 
-            @defgroup hemv          {he,sy}mv:      Hermitian/symmetric matrix-vector multiply ([cz]symv in LAPACK)
+            @defgroup hemv          {he,sy,ky}mv:   Hermitian/symmetric/skew-symmetric matrix-vector multiply ([cz]symv in LAPACK)
             @defgroup her           {he,sy}r:       Hermitian/symmetric rank-1 update
-            @defgroup her2          {he,sy}r2:      Hermitian/symmetric rank-2 update
+            @defgroup her2          {he,sy,ky}r2:   Hermitian/symmetric/skew-symmetric rank-2 update
 
             @defgroup trmv          trmv:           triangular matrix-vector multiply
             @defgroup trsv          trsv:           triangular matrix-vector solve
@@ -964,9 +964,9 @@ https://www.netlib.org/xblas/
             @defgroup gemm          gemm:           general matrix-matrix multiply
             @defgroup gemmtr        gemmtr:         general matrix-matrix multiply with triangular output
 
-            @defgroup hemm          {he,sy}mm:      Hermitian/symmetric matrix-matrix multiply
+            @defgroup hemm          {he,sy,ky}mm:   Hermitian/symmetric/skew-symmetric matrix-matrix multiply
             @defgroup herk          {he,sy}rk:      Hermitian/symmetric rank-k update
-            @defgroup her2k         {he,sy}r2k:     Hermitian/symmetric rank-2k update
+            @defgroup her2k         {he,sy,ky}r2k:  Hermitian/symmetric/skew-symmetric rank-2k update
 
             @defgroup trmm          trmm:           triangular matrix-matrix multiply
             @defgroup trsm          trsm:           triangular matrix-matrix solve

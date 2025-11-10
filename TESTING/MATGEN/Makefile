@@ -36,7 +36,7 @@ include $(TOPSRCDIR)/make.inc
 SCATGEN = slatm1.o slatm7.o slaran.o slarnd.o
 
 SMATGEN = slatms.o slatme.o slatmr.o slatmt.o \
-   slagge.o slagsy.o slakf2.o slarge.o slaror.o slarot.o slatm2.o \
+   slagge.o slagsy.o slagky.o slakf2.o slarge.o slaror.o slarot.o slatm2.o \
    slatm3.o slatm5.o slatm6.o slahilb.o
 
 CMATGEN = clatms.o clatme.o clatmr.o clatmt.o \
@@ -46,7 +46,7 @@ CMATGEN = clatms.o clatme.o clatmr.o clatmt.o \
 DZATGEN = dlatm1.o dlatm7.o dlaran.o dlarnd.o
 
 DMATGEN = dlatms.o dlatme.o dlatmr.o dlatmt.o \
-   dlagge.o dlagsy.o dlakf2.o dlarge.o dlaror.o dlarot.o dlatm2.o \
+   dlagge.o dlagsy.o dlagky.o dlakf2.o dlarge.o dlaror.o dlarot.o dlatm2.o \
    dlatm3.o dlatm5.o dlatm6.o dlahilb.o
 
 ZMATGEN = zlatms.o zlatme.o zlatmr.o zlatmt.o \
