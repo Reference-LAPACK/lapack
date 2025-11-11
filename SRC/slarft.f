@@ -186,7 +186,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          STRMM,SGEMM,SLACPY,SLARFT_LVL2
+      EXTERNAL          STRMM,SGEMM,SLACPY,SLARFT_UT
 *
 *     .. External Functions..
 *
@@ -221,7 +221,8 @@
 *
 *        Finish this component with a level 2 BLAS implementation
 *
-         CALL SLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         CALL SLARFT_UT(DIRECT, STOREV, '1', N, K, V, LDV, TAU,
+     $         T, LDT)
          RETURN
       END IF
 *
