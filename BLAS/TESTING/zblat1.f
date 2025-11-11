@@ -34,6 +34,7 @@
 *
 *  =====================================================================
       PROGRAM ZBLAT1
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -58,7 +59,7 @@
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 10
+      DO 20 IC = 1, 11
          ICASE = IC
          CALL HEADER
 *
@@ -71,7 +72,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5) THEN
+         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -95,7 +96,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(10)
+      CHARACTER*6      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -109,6 +110,8 @@
       DATA             L(8)/'ZSCAL '/
       DATA             L(9)/'ZDSCAL'/
       DATA             L(10)/'IZAMAX'/
+      DATA             L(11)/'ZAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -119,6 +122,7 @@
 *
       END
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       DOUBLE PRECISION  THRESH
@@ -345,6 +349,7 @@
 *
       END
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -354,26 +359,27 @@
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      COMPLEX*16        CA
+      COMPLEX*16        CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
 *     .. Local Arrays ..
       COMPLEX*16        CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
      +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
-     +                  CY(7), CY0(1), CY1(7)
+     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX*16        ZDOTC, ZDOTU
       EXTERNAL          ZDOTC, ZDOTU
 *     .. External Subroutines ..
-      EXTERNAL          ZAXPY, ZCOPY, ZSWAP, CTEST
+      EXTERNAL          ZAXPY, ZAXPBY, ZCOPY, ZSWAP, CTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
       DATA              CA/(0.4D0,-0.7D0)/
+      DATA              CB/(0.7D0,-0.4D0)/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -543,6 +549,54 @@
      +                  (1.54D0,1.54D0), (1.54D0,1.54D0),
      +                  (1.54D0,1.54D0), (1.54D0,1.54D0),
      +                  (1.54D0,1.54D0), (1.54D0,1.54D0)/
+
+      DATA              ((CT11(I,J,1),I=1,7),J=1,4)/(0.6D0,-0.6D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (-0.1D0,-1.47D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.1D0,-1.47D0),
+     +                  (-1.08D0,0.71D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (-0.1D0,-1.47D0), (-1.08D0,0.71D0),
+     +                  (-0.42D0,-0.99D0), (-0.61D0,-0.85D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0)/
+      DATA              ((CT11(I,J,2),I=1,7),J=1,4)/(0.6D0,-0.6D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (-0.1D0,-1.47D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.49D0,-0.95D0),
+     +                  (-0.9D0,0.5D0),(-0.03D0,-1.51D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.36D0,0.00D0), (-0.9D0,0.5D0),
+     +                  (-0.39D0,-0.23D0), (0.1D0,-0.5D0),
+     +                  (-0.82D0,-0.39D0), (-0.5D0,-0.3D0),
+     +                  (0.0D0,-1.62D0)/
+      DATA              ((CT11(I,J,3),I=1,7),J=1,4)/(0.6D0,-0.6D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (-0.1D0,-1.47D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.49D0,-0.95D0),
+     +                  (-0.71D0,-0.1D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.36D0,0.00D0), (-1.07D0,1.18D0),
+     +                  (-0.42D0,-0.99D0), (-0.41D0,-1.2D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0)/
+      DATA              ((CT11(I,J,4),I=1,7),J=1,4)/(0.6D0,-0.6D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (-0.1D0,-1.47D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.1D0,-1.47D0), (-0.9D0,0.5D0),
+     +                  (-0.4D0,-0.7D0), (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0), (-0.1D0,-1.47D0),
+     +                  (-0.9D0,0.5D0),(-0.4D0,-0.7D0), (0.1D0,-0.5D0),
+     +                  (-0.82D0,-0.39D0), (-0.5D0,-0.3D0),
+     +                  (-0.2D0,-1.27D0)/
+
+
 *     .. Executable Statements ..
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
@@ -598,6 +652,10 @@
                CALL ZSWAP(N,CX,INCX,CY,INCY)
                CALL CTEST(LENX,CX,CT10X(1,KN,KI),CSIZE3,1.0D0)
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
+            ELSE IF (ICASE.EQ.11) THEN
+*              .. ZAXPY ..
+               CALL ZAXPBY(N,CA,CX,INCX,CB, CY,INCY)
+               CALL CTEST(LENY,CY,CT11(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
                STOP
@@ -611,6 +669,7 @@
 *
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -670,6 +729,7 @@
 *
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -698,6 +758,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -711,6 +772,7 @@
 *
       END
       SUBROUTINE CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
+      IMPLICIT NONE
 *     **************************** CTEST *****************************
 *
 *     C.L. LAWSON, JPL, 1978 DEC 6
@@ -745,6 +807,7 @@
 *
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
@@ -788,6 +851,7 @@
 *
       END
       SUBROUTINE ZB1NRM2(N,INCX,THRESH)
+      IMPLICIT NONE
 *     Compare NRM2 with a reference computation using combinations
 *     of the following values:
 *
@@ -991,6 +1055,7 @@
       RETURN
       CONTAINS
       DOUBLE PRECISION FUNCTION DXVALS(XX,K)
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       DOUBLE PRECISION  XX
       INTEGER           K

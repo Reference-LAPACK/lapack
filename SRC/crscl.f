@@ -79,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE CRSCL( N, A, X, INCX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

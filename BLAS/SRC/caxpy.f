@@ -85,6 +85,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

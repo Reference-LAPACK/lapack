@@ -33,7 +33,7 @@
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_dbdsvdx)( int matrix_layout, char uplo, char jobz, char range,
-                           lapack_int n, double* d, double* e,
+                           lapack_int n, const double* d, const double* e,
                            double vl, double vu,
                            lapack_int il, lapack_int iu, lapack_int* ns,
                            double* s, double* z, lapack_int ldz,

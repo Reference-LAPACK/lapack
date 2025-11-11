@@ -114,6 +114,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

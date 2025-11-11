@@ -88,6 +88,7 @@
 *
 *  =====================================================================
       SUBROUTINE CGET38( RMAX, LMAX, NINFO, KNT, NIN )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

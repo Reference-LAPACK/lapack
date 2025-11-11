@@ -207,6 +207,7 @@
       SUBROUTINE DGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                    LWORK, RWORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

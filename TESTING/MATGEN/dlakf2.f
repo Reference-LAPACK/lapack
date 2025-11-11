@@ -102,6 +102,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -147,6 +147,7 @@
       DOUBLE PRECISION FUNCTION DLA_GERCOND( TRANS, N, A, LDA, AF,
      $                                       LDAF, IPIV, CMODE, C,
      $                                       INFO, WORK, IWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

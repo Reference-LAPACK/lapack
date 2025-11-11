@@ -159,6 +159,7 @@
 *  =====================================================================
       RECURSIVE SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV,
      $                             TAU, T, LDT )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,7 +193,7 @@
 *
       INTEGER           ILAENV
       LOGICAL           LSAME
-      EXTERNAL          LSAME,ILAENV
+      EXTERNAL          LSAME, ILAENV
 *
 *     The general scheme used is inspired by the approach inside DGEQRT3
 *     which was (at the time of writing this code):

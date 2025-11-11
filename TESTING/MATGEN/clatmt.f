@@ -337,6 +337,7 @@
 *  =====================================================================
       SUBROUTINE CLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   RANK, KL, KU, PACK, A, LDA, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

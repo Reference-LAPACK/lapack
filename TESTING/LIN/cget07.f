@@ -163,6 +163,7 @@
 *  =====================================================================
       SUBROUTINE CGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
      $                   LDXACT, FERR, CHKFERR, BERR, RESLTS )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

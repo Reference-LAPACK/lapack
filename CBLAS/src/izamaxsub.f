@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for izamax.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine izamaxsub(n,x,incx,iamax)
+      implicit none
 c
       external izamax
       integer  izamax,iamax

@@ -1,11 +1,11 @@
-*> \brief \b CLARFT VARIANT: left-looking Level 2 BLAS version of the algorithm
+*> \brief \b CLARFT_LVL2: Level 2 BLAS version for terminating case of CLARFT
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download CLARFT + dependencies
+*> Download CLARFT_LVL2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarft.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarft.f">
@@ -16,7 +16,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE CLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+*                    T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -32,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CLARFT forms the triangular factor T of a complex block reflector H
+*> CLARFT_LVL2 forms the triangular factor T of a complex block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -158,6 +159,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -321,6 +323,6 @@
       END IF
       RETURN
 *
-*     End of CLARFT
+*     End of CLARFT_LVL2
 *
       END

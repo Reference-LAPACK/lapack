@@ -235,6 +235,7 @@
      +              D_WORK_DLATMS, D_WORK_DPOT01, D_TEMP_DPOT02,
      +              D_TEMP_DPOT03, D_WORK_DLANSY,
      +              D_WORK_DPOT02, D_WORK_DPOT03 )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

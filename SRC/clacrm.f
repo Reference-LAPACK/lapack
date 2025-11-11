@@ -109,6 +109,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

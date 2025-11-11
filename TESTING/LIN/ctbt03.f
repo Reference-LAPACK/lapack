@@ -174,6 +174,7 @@
       SUBROUTINE CTBT03( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB,
      $                   SCALE, CNORM, TSCAL, X, LDX, B, LDB, WORK,
      $                   RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

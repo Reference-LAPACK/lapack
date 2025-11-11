@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for zdotc.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine zdotcsub(n,x,incx,y,incy,dotc)
+      implicit none
 c
       external zdotc
       double complex zdotc,dotc

@@ -235,6 +235,7 @@
      +              S_WORK_SLATMS, S_WORK_SPOT01, S_TEMP_SPOT02,
      +              S_TEMP_SPOT03, S_WORK_SLANSY,
      +              S_WORK_SPOT02, S_WORK_SPOT03 )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

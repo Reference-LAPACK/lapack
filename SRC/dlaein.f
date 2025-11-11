@@ -168,6 +168,7 @@
       SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI,
      $                   B,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

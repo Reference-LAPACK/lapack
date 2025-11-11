@@ -34,6 +34,7 @@
 *
 *  =====================================================================
       PROGRAM DBLAT1
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -58,7 +59,7 @@
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -76,7 +77,8 @@
      +            ICASE.EQ.10) THEN
             CALL CHECK1(SFAC)
          ELSE IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
-     +            ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13) THEN
+     +            ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13 .OR.
+     +            ICASE.EQ.14 ) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.EQ.4) THEN
             CALL CHECK3(SFAC)
@@ -100,7 +102,7 @@
       INTEGER          ICASE, INCX, INCY, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -117,6 +119,8 @@
       DATA             L(11)/'DROTMG'/
       DATA             L(12)/'DROTM '/
       DATA             L(13)/'DSDOT '/
+      DATA             L(14)/'DAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -127,6 +131,7 @@
 *
       END
       SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -246,6 +251,7 @@
 *
       END
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       DOUBLE PRECISION  THRESH
       INTEGER           NOUT
@@ -365,6 +371,7 @@
 *
       END
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -374,7 +381,7 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      DOUBLE PRECISION  SA
+      DOUBLE PRECISION  SA, SB
       INTEGER           I, J, KI, KN, KNI, KPAR, KSIZE, LENX, LENY,
      $                  LINCX, LINCY, MX, MY
 *     .. Local Arrays ..
@@ -386,14 +393,14 @@
      $                  DT19XB(7,4,4), DT19XC(7,4,4),DT19XD(7,4,4),
      $                  DT19Y(7,4,16), DT19YA(7,4,4),DT19YB(7,4,4),
      $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5),
-     $                  STY0(1), SX0(1), SY0(1)
+     $                  STY0(1), SX0(1), SY0(1), DT20(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       DOUBLE PRECISION  DDOT, DSDOT
       EXTERNAL          DDOT, DSDOT
 *     .. External Subroutines ..
-      EXTERNAL          DAXPY, DCOPY, DROTM, DSWAP, STEST, STEST1,
-     $                  TESTDSDOT
+      EXTERNAL          DAXPY, DAXPBY, DCOPY, DROTM, DSWAP, STEST,
+     $                  STEST1, TESTDSDOT
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -407,6 +414,7 @@
      B   (DT19Y(1,1,13),DT19YD(1,1,1))
 
       DATA              SA/0.3D0/
+      DATA              SB/0.5D0/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -622,6 +630,27 @@
      M            .7D0,  -.9D0,  1.2D0,   .7D0, -1.5D0,   .2D0,  1.6D0,
      N           1.7D0,  -.9D0,   .5D0,   .7D0, -1.6D0,   .2D0,  2.4D0,
      O          -2.6D0,  -.9D0, -1.3D0,   .7D0,  2.9D0,   .2D0, -4.0D0 /
+      DATA              DT20/0.5D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.43D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.43D0, -0.42D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.43D0, -0.42D0, 0.0D0,
+     +                  0.59D0, 0.0D0, 0.0D0, 0.0D0, 0.5D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.43D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.1D0, -0.9D0, 0.33D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.13D0, -0.9D0, 0.42D0, 0.7D0, -0.45D0,
+     +                  0.2D0, 0.58D0, 0.5D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.43D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.1D0, -0.27D0,
+     +                  0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.13D0,
+     +                  -0.18D0, 0.00D0, 0.53D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.5D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.43D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.43D0, -0.9D0, 0.18D0, 0.0D0, 0.0D0,
+     +                  0.0D0, 0.0D0, 0.43D0, -0.9D0, 0.18D0, 0.7D0,
+     +                  -0.45D0, 0.2D0, 0.64D0/
+
+
 *
 *     .. Executable Statements ..
 *
@@ -653,6 +682,14 @@
                   STY(J) = DT8(J,KN,KI)
    40          CONTINUE
                CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+            ELSE IF (ICASE.EQ.14) THEN
+*              .. DAXPBY ..
+               CALL DAXPBY(N,SA,SX,INCX,SB,SY,INCY)
+               DO 50 J = 1, LENY
+                  STY(J) = DT20(J,KN,KI)
+   50          CONTINUE
+               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+
             ELSE IF (ICASE.EQ.5) THEN
 *              .. DCOPY ..
                DO 60 I = 1, 7
@@ -731,6 +768,7 @@
 *
       END
       SUBROUTINE CHECK3(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -940,6 +978,7 @@
 *
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -999,6 +1038,7 @@
 *
       END
       SUBROUTINE TESTDSDOT(SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -1050,6 +1090,7 @@
 *
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -1078,6 +1119,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -1091,6 +1133,7 @@
 *
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
@@ -1135,6 +1178,7 @@
 *
       END
       SUBROUTINE DB1NRM2(N,INCX,THRESH)
+      IMPLICIT NONE
 *     Compare NRM2 with a reference computation using combinations
 *     of the following values:
 *
@@ -1323,6 +1367,7 @@
       RETURN
       CONTAINS
       DOUBLE PRECISION FUNCTION DXVALS(XX,K)
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       DOUBLE PRECISION  XX
       INTEGER           K

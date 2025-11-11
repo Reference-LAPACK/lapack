@@ -298,6 +298,7 @@
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
      $  A,
      $                   LDA, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

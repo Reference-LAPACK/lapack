@@ -108,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

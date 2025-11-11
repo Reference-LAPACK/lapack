@@ -144,6 +144,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CTRMV(UPLO,TRANS,DIAG,N,A,LDA,X,INCX)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
