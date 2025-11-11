@@ -188,7 +188,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT_LVL2
+      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT_UT
 *
 *     .. External Functions..
 *
@@ -273,7 +273,8 @@
 *
 *        Finish this component with a level 2 BLAS implementation
 *
-         CALL ZLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         CALL ZLARFT_UT(DIRECT, STOREV, '1', N, K, V, LDV, TAU,
+     $         T, LDT)
          RETURN
       END IF
       IF(QR) THEN

@@ -1,4 +1,4 @@
-*> \brief \b DSTRK
+*> \brief \b ZHTRK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE DSTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
+*     SUBROUTINE ZHTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
 *    $            BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *     CHARACTER         UPLOA,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-*     DOUBLE PRECISION  A(LDA,*),C(LDC,*)
+*     COMPLEX*16        A(LDA,*),C(LDC,*)
 *
 *
 *> \par Purpose:
@@ -25,16 +25,16 @@
 *>
 *> \verbatim
 *>
-*> DSTRK  performs one of the symmetric rank k operations
+*> ZHTRK  performs one of the hermitian rank k operations
 *>
-*>    C := alpha*A*A**T + beta*C,
+*>    C := alpha*A*A**H + beta*C,
 *>
 *> or
 *>
-*>    C := alpha*A**T*A + beta*C,
+*>    C := alpha*A**H*A + beta*C,
 *>
-*> where  alpha and beta  are scalars, C is a  k by k  symmetric matrix
-*> and  A  is an  k by k  either upport or lower triangular matrix 
+*> where  alpha and beta  are real scalars, C is a  k by k  hermitian matrix
+*> and  A  is an  k by k  either upper or or lower triangular matrix 
 *> \endverbatim
 *
 *  Arguments:
@@ -74,11 +74,9 @@
 *>           On entry,  TRANS  specifies the operation to be performed as
 *>           follows:
 *>
-*>              TRANS = 'N' or 'n'   C := alpha*A*A**T + beta*C.
+*>              TRANS = 'N' or 'n'   C := alpha*A*A**H + beta*C.
 *>
-*>              TRANS = 'T' or 't'   C := alpha*A**T*A + beta*C.
-*>
-*>              TRANS = 'C' or 'c'   C := alpha*A**T*A + beta*C.
+*>              TRANS = 'C' or 'c'   C := alpha*A**H*A + beta*C.
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -102,13 +100,13 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is REAL.
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, k ).
+*>          A is COMPLEX*16 array, dimension ( LDA, k ).
 *>          If UPLOA = 'U' or 'u', then the leading k by k upper triangular
 *>          part of the array A must contain the upper triangular part of
 *>          the triangular matrix, and the strictly lower triangular part of A
@@ -128,22 +126,22 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is REAL.
 *>           On entry, BETA specifies the scalar beta.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension ( LDC, N )
+*>          C is COMPLEX*16 array, dimension ( LDC, N )
 *>           Before entry  with  UPLOC = 'U' or 'u',  the leading  k by k
 *>           upper triangular part of the array C must contain the upper
-*>           triangular part  of the  symmetric matrix  and the strictly
+*>           triangular part  of the  hermitian matrix  and the strictly
 *>           lower triangular part of C is not referenced.  On exit, the
 *>           upper triangular part of the array  C is overwritten by the
 *>           upper triangular part of the updated matrix.
 *>           Before entry  with  UPLOC = 'L' or 'l',  the leading  n by n
 *>           lower triangular part of the array C must contain the lower
-*>           triangular part  of the  symmetric matrix  and the strictly
+*>           triangular part  of the  hermitian matrix  and the strictly
 *>           upper triangular part of C is not referenced.  On exit, the
 *>           lower triangular part of the array  C is overwritten by the
 *>           lower triangular part of the updated matrix.
@@ -177,7 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
+      SUBROUTINE ZHTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
      $            BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
@@ -186,24 +184,26 @@
       CHARACTER         UPLOA,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A(LDA,*),C(LDC,*)
+      COMPLEX*16        A(LDA,*),C(LDC,*)
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION  ZERO, ONE
-      PARAMETER(ZERO = 0.0D+0, ONE = 1.0D+0)
+      DOUBLE PRECISION  ONE
+      PARAMETER(ONE = 1.0D+0)
 *     ..
 *     .. Local Scalars ..
-      DOUBLE PRECISION  TMP
       INTEGER           I, L
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DTRMMOOP
+      EXTERNAL          ZTRMMOOP
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC         DCMPLX,DBLE
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME
-      DOUBLE PRECISION  DDOT
-      EXTERNAL          LSAME,DDOT
+      COMPLEX*16        ZDOTC
+      EXTERNAL          LSAME,ZDOTC
 *     ..
 *     .. Executable Statements ..
 *
@@ -217,8 +217,11 @@
 *
       UPPERA = LSAME(UPLOA,'U')
       UPPERC = LSAME(UPLOC,'U')
-      TRANSL = LSAME(TRANS,'T').OR.LSAME(TRANS,'C')
+      TRANSL = LSAME(TRANS,'C')
       UNITT = LSAME(DIAG,'U')
+      ! Consider erroring if (.NOT.TRANSL).AND.(.NOT.LSAME(TRANS,'N'))
+      ! Also consider erroring if (.NOT.UPPERA).AND.(.NOT.LSAME(UPLOA,'L'))
+      ! Also consider erroring if (.NOT.UPPERC).AND.(.NOT.LSAME(UPLOC,'L'))
 *
       IF(TRANSL) THEN
 *
@@ -234,19 +237,20 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, I-1, 1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(1,I), LDC)
+                     CALL ZTRMMOOP('Left', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, I-1, 1, DCMPLX(ALPHA), 
+     $                     A, LDA, A(1,I), LDA, DCMPLX(BETA),
+     $                     C(1,I), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(1,I), 1, A(1,I), 1) + ONE)
-     $                  + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(I-1, A(1,I), 1, A(1,I), 1))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, I, 1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(1,I), LDC)
+                     CALL ZTRMMOOP('Left', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, I, 1, DCMPLX(ALPHA), A,
+     $                     LDA, A(1,I), LDA, DCMPLX(BETA), C(1,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -255,46 +259,49 @@
 *
                IF(UNITT) THEN
                  DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, 1, K-I, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, BETA,
+                     CALL ZTRMMOOP('Right', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, 1, K-I, DCMPLX(ALPHA),
+     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, DCMPLX(BETA),
      $                     C(I,I+1), LDC)
-*
+ 
                     C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I+1,I), 1, A(I+1,I), 1) +
-     $                  ONE) + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                  END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, 1, K-I+1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+                     CALL ZTRMMOOP('Right', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, 1, K-I+1, DCMPLX(ALPHA),
+     $                     A(I,I), LDA, A(I,I), LDA, DCMPLX(BETA),
+     $                     C(I,I), LDC)
                   END DO
                END IF
-            END IF
+           END IF
          ELSE
 *
 *           This means we are only storing the lower triangular component of C
 *
-            IF (UPPERA) THEN
+           IF (UPPERA) THEN
 *
 *              This means T is upper triangular
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose', 
-     $                     'Transpose', DIAG, 1, I-1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(I,1), LDC)
-*
+                     CALL ZTRMMOOP('Right', UPLOA, 'No Transpose', 
+     $                     'Conjugate', DIAG, 1, I-1, DCMPLX(ALPHA), 
+     $                     A, LDA, A(1,I), LDA, DCMPLX(BETA),
+     $                     C(I,1), LDC)
+ 
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(1,I), 1, A(1,I), 1) + ONE)
-     $                  + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(I-1, A(1,I), 1, A(1,I), 1))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose', 
-     $                     'Transpose', DIAG, 1, I, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(I,1), LDC)
+                     CALL ZTRMMOOP('Right', UPLOA, 'No Transpose', 
+     $                     'Conjugate', DIAG, 1, I, DCMPLX(ALPHA),
+     $                     A, LDA, A(1,I), LDA, DCMPLX(BETA),
+     $                     C(I,1), LDC)
                   END DO
                END IF
             ELSE 
@@ -303,20 +310,21 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose', 
-     $                     'No Transpose', DIAG, K-I, 1, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, BETA,
+                     CALL ZTRMMOOP('Left', UPLOA, 'Conjugate', 
+     $                     'No Transpose', DIAG, K-I, 1, DCMPLX(ALPHA),
+     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, DCMPLX(BETA),
      $                     C(I+1,I), LDC)
-*
+ 
                      C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I+1,I), 1, A(I+1,I), 1) + ONE)
-     $                  + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose', 
-     $                     'No Transpose', DIAG, K-I+1, 1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+                     CALL ZTRMMOOP('Left', UPLOA, 'Conjugate', 
+     $                     'No Transpose', DIAG, K-I+1, 1,
+     $                     DCMPLX(ALPHA), A(I,I), LDA, A(I,I), LDA,
+     $                     DCMPLX(BETA), C(I,I), LDC)
                   END DO
                END IF
             END IF
@@ -335,20 +343,21 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, K-I, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, BETA,
+                     CALL ZTRMMOOP('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, K-I, DCMPLX(ALPHA),
+     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, DCMPLX(BETA),
      $                     C(I,I+1), LDC)
-*
+ 
                      C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                  + ONE) + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(K-I, A(I,I+1), LDA,
+     $                  A(I,I+1), LDA)) + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, K-I+1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+                     CALL ZTRMMOOP('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, K-I+1,
+     $                     DCMPLX(ALPHA), A(I,I), LDA, A(I,I), LDA,
+     $                     DCMPLX(BETA), C(I,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -357,19 +366,21 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, I-1, 1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(1,I), LDC)
-*
+                     CALL ZTRMMOOP('Left', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, I-1, 1, DCMPLX(ALPHA),
+     $                     A, LDA, A(I,1), LDA, DCMPLX(BETA),
+     $                     C(1,I), LDC)
+ 
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(I,1), LDA, A(I,1), LDA) + ONE)
-     $                  + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, I, 1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(1,I), LDC)
+                     CALL ZTRMMOOP('Left', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, I, 1, DCMPLX(ALPHA),
+     $                     A, LDA, A(I,1), LDA, DCMPLX(BETA),
+     $                     C(1,I), LDC)
                   END DO
                END IF
             END IF
@@ -383,20 +394,21 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, K-I, 1, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, BETA,
+                     CALL ZTRMMOOP('Left', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, K-I, 1, DCMPLX(ALPHA),
+     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, DCMPLX(BETA),
      $                     C(I+1,I), LDC)
-*
+ 
                      C(I,I) = ALPHA *
-     $                  (DDOT(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                  + ONE) + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(K-I, A(I,I+1), LDA,
+     $                  A(I,I+1), LDA)) + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, K-I+1, 1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+                     CALL ZTRMMOOP('Left', UPLOA, 'No Transpose',
+     $                     'Conjugate', DIAG, K-I+1, 1, DCMPLX(ALPHA),
+     $                     A(I,I), LDA, A(I,I), LDA, DCMPLX(BETA),
+     $                     C(I,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -405,19 +417,21 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, I-1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(I,1), LDC)
-*
+                     CALL ZTRMMOOP('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, I-1, DCMPLX(ALPHA),
+     $                     A, LDA, A(I,1), LDA, DCMPLX(BETA),
+     $                     C(I,1), LDC)
+ 
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(I,1), LDA, A(I,1), LDA) + ONE)
-     $                  + BETA*C(I,I)
+     $                  (DBLE(ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA))
+     $                  + ONE) + BETA*DBLE(C(I,I))
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, I, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(I,1), LDC)
+                     CALL ZTRMMOOP('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, I, DCMPLX(ALPHA),
+     $                     A, LDA, A(I,1), LDA, DCMPLX(BETA),
+     $                     C(I,1), LDC)
                   END DO
                END IF
             END IF

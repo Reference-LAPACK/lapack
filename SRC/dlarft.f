@@ -186,7 +186,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          DTRMM,DGEMM,DLACPY,DLARFT_LVL2
+      EXTERNAL          DTRMM,DGEMM,DLACPY,DLARFT_UT
 *
 *     .. External Functions..
 *
@@ -203,13 +203,13 @@
 *
 *     Quick return if possible
 *
-      IF(N.EQ.0.OR.K.EQ.0) THEN
+      IF(K.EQ.0) THEN
          RETURN
       END IF
 *
 *     Base case
 *
-      IF(N.EQ.1.OR.K.EQ.1) THEN
+      IF(K.EQ.1) THEN
          T(1,1) = TAU(1)
          RETURN
       END IF
@@ -219,9 +219,11 @@
       NX = ILAENV(3, "DLARFT", DIRECT // STOREV, N, K, -1, -1)
       IF(K.LT.NX) THEN
 *
-*        Finish this component with a level 2 BLAS implementation
+*        Try to finish this component with the UT-based implementation.
+*        if this fails, then we bail to LARFT_LVL2
 *
-         CALL DLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         CALL DLARFT_UT(DIRECT, STOREV, '1', N, K, V, LDV, TAU,
+     $         T, LDT)
          RETURN
       END IF
 *

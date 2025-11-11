@@ -1,4 +1,4 @@
-*> \brief \b DST3RK
+*> \brief \b ZHT3RK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*     RECURSIVE SUBROUTINE DST3RK(UPLOT, UPLOC, TRANS, DIAG, K,
-*    $            ALPHA, T, LDT, BETA, C, LDC)
+*     RECURSIVE SUBROUTINE ZHT3RK(UPLOA, UPLOC, TRANS, DIAG, K,
+*    $            ALPHA, A, LDA,BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
-*     DOUBLE PRECISION  ALPHA,BETA
+*     COMPLEX*16        ALPHA,BETA
 *     INTEGER           K,LDA,LDC
 *     CHARACTER         UPLOA,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-*     DOUBLE PRECISION  A(LDA,*),C(LDC,*)
+*     COMPLEX*16        A(LDA,*),C(LDC,*)
 *
 *
 *> \par Purpose:
@@ -25,16 +25,16 @@
 *>
 *> \verbatim
 *>
-*> DST3RK  performs one of the symmetric rank k operations
+*> ZHT3RK  performs one of the hermitian rank k operations
 *>
-*>    C := alpha*A*A**T + beta*C,
+*>    C := alpha*A*A**H + beta*C,
 *>
 *> or
 *>
-*>    C := alpha*A**T*A + beta*C,
+*>    C := alpha*A**H*A + beta*C,
 *>
-*> where  alpha and beta  are scalars, C is a  k by k  symmetric matrix
-*> and  A  is an  k by k  either upport or lower triangular matrix 
+*> where  alpha and beta  are real scalars, C is a  k by k  hermitian matrix
+*> and  A  is an  k by k  either upper or or lower triangular matrix 
 *> \endverbatim
 *
 *  Arguments:
@@ -74,11 +74,9 @@
 *>           On entry,  TRANS  specifies the operation to be performed as
 *>           follows:
 *>
-*>              TRANS = 'N' or 'n'   C := alpha*A*A**T + beta*C.
+*>              TRANS = 'N' or 'n'   C := alpha*A*A**H + beta*C.
 *>
-*>              TRANS = 'T' or 't'   C := alpha*A**T*A + beta*C.
-*>
-*>              TRANS = 'C' or 'c'   C := alpha*A**T*A + beta*C.
+*>              TRANS = 'C' or 'c'   C := alpha*A**H*A + beta*C.
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -102,13 +100,13 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is REAL.
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, k ).
+*>          A is COMPLEX*16 array, dimension ( LDA, k ).
 *>          If UPLOA = 'U' or 'u', then the leading k by k upper triangular
 *>          part of the array A must contain the upper triangular part of
 *>          the triangular matrix, and the strictly lower triangular part of A
@@ -128,22 +126,22 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is REAL.
 *>           On entry, BETA specifies the scalar beta.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension ( LDC, N )
+*>          C is COMPLEX*16 array, dimension ( LDC, N )
 *>           Before entry  with  UPLOC = 'U' or 'u',  the leading  k by k
 *>           upper triangular part of the array C must contain the upper
-*>           triangular part  of the  symmetric matrix  and the strictly
+*>           triangular part  of the  hermitian matrix  and the strictly
 *>           lower triangular part of C is not referenced.  On exit, the
 *>           upper triangular part of the array  C is overwritten by the
 *>           upper triangular part of the updated matrix.
 *>           Before entry  with  UPLOC = 'L' or 'l',  the leading  n by n
 *>           lower triangular part of the array C must contain the lower
-*>           triangular part  of the  symmetric matrix  and the strictly
+*>           triangular part  of the  hermitian matrix  and the strictly
 *>           upper triangular part of C is not referenced.  On exit, the
 *>           lower triangular part of the array  C is overwritten by the
 *>           lower triangular part of the updated matrix.
@@ -177,7 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE DST3RK(UPLOT, UPLOC, TRANS, DIAG, K,
+      RECURSIVE SUBROUTINE ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, K,
      $            ALPHA, T, LDT, BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
@@ -186,23 +184,28 @@
       CHARACTER         UPLOT,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  T(LDT,*),C(LDC,*)
+      COMPLEX*16        T(LDT,*),C(LDC,*)
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION  ZERO, ONE
-      PARAMETER(ZERO = 0.0D+0, ONE = 1.0D+0)
+      DOUBLE PRECISION  ONE
+      PARAMETER(ONE = 1.0D+0)
+      COMPLEX*16        ZERO
+      PARAMETER(ZERO = (0.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
       INTEGER           L,NX
       LOGICAL           UPPERT,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DSYRK,DTRMMOOP
+      EXTERNAL          ZHERK,ZTRMMOOP
 *     ..
 *     .. External Functions ..
       INTEGER           ILAENV
       LOGICAL           LSAME
       EXTERNAL          LSAME,ILAENV
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC         DCMPLX
 *     ..
 *     .. Executable Statements ..
 *
@@ -214,11 +217,11 @@
 *
 *     Determine the crossover point into the unblocked variant
 *
-      NX = ILAENV(3, 'DST3RK', UPLOT // UPLOC // TRANS // DIAG,
+      NX = ILAENV(3, 'ZHT3RK', UPLOT // UPLOC // TRANS // DIAG,
      $      K, -1, -1, -1)
 *
       IF(K.LT.NX) THEN
-         CALL DSTRK(UPLOT, UPLOC, TRANS, DIAG, K, ALPHA, T, LDT,
+         CALL ZHTRK(UPLOT, UPLOC, TRANS, DIAG, K, ALPHA, T, LDT,
      $         BETA, C, LDC)
          RETURN
       END IF
@@ -236,12 +239,12 @@
          IF(BETA.EQ.ZERO) THEN
             C(1,1) = ZERO
          ELSE
-            C(1,1) = BETA*C(1,1)
+            C(1,1) = BETA*DBLE(C(1,1))
          END IF
          IF(UNITT) THEN
             C(1,1) = ALPHA + C(1,1)
          ELSE
-            C(1,1) = ALPHA*T(1,1)*T(1,1) + C(1,1)
+            C(1,1) = ALPHA*DBLE(T(1,1)*DCONJG(T(1,1))) + C(1,1)
          END IF
          RETURN
       END IF
@@ -292,33 +295,34 @@
 *
 *           Compute C_{1,1} = \alpha*T_{1,1}**H*T_{1,1} + \beta C_{1,1}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
      $            T, LDT, BETA, C, LDC)
 *
 *           Compute C_{2,2}
 *           C_{2,2} = \alpha*T_{2,2}**H*T_{2,2} + \beta C_{2,2}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
      $            T(L+1,L+1), LDT, BETA, C(L+1,L+1), LDC)
 *
 *           C_{2,2} = \alpha*T_{1,2}**H*T_{1,2} + C_{2,2}
 *
-            CALL DSYRK(UPLOC, TRANS, K-L, L, ALPHA, T(1,L+1), LDT,
+            CALL ZHERK(UPLOC, TRANS, K-L, L, ALPHA, T(1,L+1), LDT,
      $            ONE, C(L+1,L+1), LDC)
             IF(UPPERC) THEN
 *
 *              Compute C_{1,2} = \alpha*T_{1,1}**H*T_{1,2} + \beta C_{1,2} (TRMMOOP)
 *
-               CALL DTRMMOOP('Left', UPLOT, 'Transpose',
-     $               'No Transpose', DIAG, L, K-L, ALPHA, T, LDT,
-     $               T(1, L+1), LDT, BETA, C(1,L+1), LDC)
+               CALL ZTRMMOOP('Left', UPLOT, 'Conjugate',
+     $               'No Transpose', DIAG, L, K-L, DCMPLX(ALPHA),
+     $               T, LDT, T(1, L+1), LDT, DCMPLX(BETA),
+     $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{1,2}**H*T_{1,1} + \beta C_{2,1} (TRMMOOP)
 *
-               CALL DTRMMOOP('Right', UPLOT, 'No Transpose',
-     $               'Transpose', DIAG, K-L, L, ALPHA, T, LDT,
-     $               T(1, L+1), LDT, BETA, C(L+1,1), LDC)
+               CALL ZTRMMOOP('Right', UPLOT, 'No Transpose',
+     $               'Conjugate', DIAG, K-L, L, DCMPLX(ALPHA), T, LDT,
+     $               T(1, L+1), LDT, DCMPLX(BETA), C(L+1,1), LDC)
             END IF
          ELSE
 *
@@ -359,32 +363,33 @@
 *           Compute C_{1,1}
 *           C_{1,1} = \alpha*T_{1,1}**H*T_{1,1} + \beta*C_{1,1}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
      $            T, LDT, BETA, C, LDC)
 *
 *           C_{1,1} = \alpha*T_{2,1}**H*T_{2,1} + C_{1,1}
 *
-            CALL DSYRK(UPLOC, TRANS, L, K-L, ALPHA, T(L+1,1), LDT,
+            CALL ZHERK(UPLOC, TRANS, L, K-L, ALPHA, T(L+1,1), LDT,
      $            ONE, C, LDC)
 *
 *           Compute C_{2,2} = \alpha*T_{2,2}**H*T_{2,2} + \beta*C_{2,2}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
      $            T(L+1,L+1), LDT, BETA, C(L+1,L+1), LDC)
             IF(UPPERC) THEN
 *
 *              Compute C_{1,2} = \alpha*T_{2,1}**H*T_{2,2} + \beta*C_{1,2}
 *
-               CALL DTRMMOOP('Right', UPLOT, 'No Transpose',
-     $               'Transpose', DIAG, L, K-L, ALPHA, T(L+1,L+1), LDT,
-     $                T(L+1,1), LDT, BETA, C(1,L+1), LDC)
+               CALL ZTRMMOOP('Right', UPLOT, 'No Transpose',
+     $               'Conjugate', DIAG, L, K-L, DCMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(L+1,1), LDT, DCMPLX(BETA),
+     $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,2}**H*T_{2,1} + \beta*C_{2,1}
 *
-               CALL DTRMMOOP('Left', UPLOT, 'Transpose',
-     $               'No Transpose', DIAG, K-L, L, ALPHA,
-     $               T(L+1,L+1), LDT, T(L+1, 1), LDT, BETA,
+               CALL ZTRMMOOP('Left', UPLOT, 'Conjugate',
+     $               'No Transpose', DIAG, K-L, L, DCMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(L+1, 1), LDT, DCMPLX(BETA),
      $               C(L+1,1), LDC)
             END IF
          END IF
@@ -431,33 +436,33 @@
 *           Compute C_{1,1}
 *           C_{1,1} = \alpha*T_{1,1}*T_{1,1}**H + \beta*C_{1,1}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA,
      $            T, LDT, BETA, C, LDC)
 *
 *           C_{1,1} = \alpha*T_{1,2}*T_{1,2}**H + C_{1,1}
 *
-            CALL DSYRK(UPLOC, TRANS, L, K-L, ALPHA, T(1,L+1), LDT,
+            CALL ZHERK(UPLOC, TRANS, L, K-L, ALPHA, T(1,L+1), LDT,
      $            ONE, C, LDC)
 *
 *           Compute C_{2,2} = \alpha*T_{2,2}*T_{2,2}**H + \beta*C_{2,2}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
      $            T(L+1,L+1), LDT, BETA, C(L+1,L+1), LDC)
             IF(UPPERC) THEN
 *
 *              Compute C_{1,2} = \alpha*T_{1,2}*T_{2,2}**H + \beta*C_{1,2}
 *
-               CALL DTRMMOOP('Right', UPLOT, 'Transpose',
-     $               'No Transpose', DIAG, L, K-L, ALPHA,
-     $               T(L+1,L+1), LDT, T(1, L+1), LDT, BETA,
+               CALL ZTRMMOOP('Right', UPLOT, 'Conjugate',
+     $               'No Transpose', DIAG, L, K-L, DCMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(1, L+1), LDT, DCMPLX(BETA),
      $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,2}*T_{1,2}**H + \beta*C_{2,1}
 *
-               CALL DTRMMOOP('Left', UPLOT, 'No Transpose',
-     $               'Transpose', DIAG, K-L, L, ALPHA,
-     $               T(L+1,L+1), LDT, T(1, L+1), LDT, BETA,
+               CALL ZTRMMOOP('Left', UPLOT, 'No Transpose',
+     $               'Conjugate', DIAG, K-L, L, DCMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(1, L+1), LDT, DCMPLX(BETA),
      $               C(L+1,1), LDC)
             END IF
          ELSE
@@ -498,33 +503,33 @@
 *
 *           Compute C_{1,1} = \alpha*T_{1,1}*T_{1,1}**H + \beta*C_{1,1}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA, T, LDT,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, L, ALPHA, T, LDT,
      $            BETA, C, LDC)
 *
 *           Compute C_{2,2}
 *           C_{2,2} = \alpha*T_{2,2}*T_{2,2}**H + \beta*C_{2,2}
 *
-            CALL DST3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
+            CALL ZHT3RK(UPLOT, UPLOC, TRANS, DIAG, K-L, ALPHA,
      $            T(L+1,L+1), LDT, BETA, C(L+1,L+1), LDC)
 *
 *           C_{2,2} = \alpha*T_{2,1}*T_{2,1}**H + C_{2,2}
 *
-            CALL DSYRK(UPLOC, TRANS, K-L, L, ALPHA, T(L+1,1), LDT,
+            CALL ZHERK(UPLOC, TRANS, K-L, L, ALPHA, T(L+1,1), LDT,
      $            ONE, C(L+1,L+1), LDC)
             IF(UPPERC) THEN
 *
 *              Compute C_{1,2} = \alpha*T_{1,1}*T_{2,1}**H + \beta*C_{1,2}
 *
-               CALL DTRMMOOP('Left', UPLOT, 'No Transpose',
-     $               'Transpose', DIAG, L, K-L, ALPHA, T, LDT,
-     $               T(L+1,1), LDT, BETA, C(1,L+1), LDC)
+               CALL ZTRMMOOP('Left', UPLOT, 'No Transpose',
+     $               'Conjugate', DIAG, L, K-L, DCMPLX(ALPHA), T, LDT,
+     $               T(L+1,1), LDT, DCMPLX(BETA), C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,1}*T_{1,1}**H + \beta*C_{2,1}
 *
-               CALL DTRMMOOP('Right', UPLOT, 'Transpose',
-     $               'No Transpose', DIAG, K-L, L, ALPHA, T, LDT,
-     $               T(L+1,1), LDT, BETA, C(L+1,1), LDC)
+               CALL ZTRMMOOP('Right', UPLOT, 'Conjugate',
+     $               'No Transpose', DIAG, K-L, L, DCMPLX(ALPHA),
+     $               T, LDT, T(L+1,1), LDT, DCMPLX(BETA), C(L+1,1), LDC)
             END IF
          END IF
       END IF

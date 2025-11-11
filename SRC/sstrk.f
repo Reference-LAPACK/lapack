@@ -1,4 +1,4 @@
-*> \brief \b DSTRK
+*> \brief \b SSTRK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE DSTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
+*     SUBROUTINE SSTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
 *    $            BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
-*     DOUBLE PRECISION  ALPHA,BETA
+*     REAL              ALPHA,BETA
 *     INTEGER           K,LDA,LDC
 *     CHARACTER         UPLOA,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-*     DOUBLE PRECISION  A(LDA,*),C(LDC,*)
+*     REAL              A(LDA,*),C(LDC,*)
 *
 *
 *> \par Purpose:
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DSTRK  performs one of the symmetric rank k operations
+*> SSTRK  performs one of the symmetric rank k operations
 *>
 *>    C := alpha*A*A**T + beta*C,
 *>
@@ -102,13 +102,13 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is REAL.
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension ( LDA, k ).
+*>          A is REAL array, dimension ( LDA, k ).
 *>          If UPLOA = 'U' or 'u', then the leading k by k upper triangular
 *>          part of the array A must contain the upper triangular part of
 *>          the triangular matrix, and the strictly lower triangular part of A
@@ -128,13 +128,13 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is REAL.
 *>           On entry, BETA specifies the scalar beta.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is DOUBLE PRECISION array, dimension ( LDC, N )
+*>          C is REAL array, dimension ( LDC, N )
 *>           Before entry  with  UPLOC = 'U' or 'u',  the leading  k by k
 *>           upper triangular part of the array C must contain the upper
 *>           triangular part  of the  symmetric matrix  and the strictly
@@ -177,33 +177,33 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSTRK(UPLOA, UPLOC, TRANS, DIAG, K, ALPHA, A, LDA,
+      SUBROUTINE SSTRK(UPLOT, UPLOC, TRANS, DIAG, K, ALPHA, T, LDT,
      $            BETA, C, LDC)
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION  ALPHA,BETA
-      INTEGER           K,LDA,LDC
-      CHARACTER         UPLOA,UPLOC,TRANS,DIAG
+      REAL              ALPHA,BETA
+      INTEGER           K,LDT,LDC
+      CHARACTER         UPLOT,UPLOC,TRANS,DIAG
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A(LDA,*),C(LDC,*)
+      REAL              T(LDT,*),C(LDC,*)
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION  ZERO, ONE
-      PARAMETER(ZERO = 0.0D+0, ONE = 1.0D+0)
+      REAL              ZERO, ONE
+      PARAMETER(ZERO = 0.0E+0, ONE = 1.0E+0)
 *     ..
 *     .. Local Scalars ..
-      DOUBLE PRECISION  TMP
+      REAL              TMP
       INTEGER           I, L
-      LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
+      LOGICAL           UPPERT,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DTRMMOOP
+      EXTERNAL          STRMMOOP
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME
-      DOUBLE PRECISION  DDOT
-      EXTERNAL          LSAME,DDOT
+      REAL              SDOT
+      EXTERNAL          LSAME,SDOT
 *     ..
 *     .. Executable Statements ..
 *
@@ -215,7 +215,7 @@
 *
 *     Convert our character inputs into logical variables
 *
-      UPPERA = LSAME(UPLOA,'U')
+      UPPERT = LSAME(UPLOT,'U')
       UPPERC = LSAME(UPLOC,'U')
       TRANSL = LSAME(TRANS,'T').OR.LSAME(TRANS,'C')
       UNITT = LSAME(DIAG,'U')
@@ -228,25 +228,25 @@
 *
 *           This means we are only storing the upper triangular component of C
 *
-            IF (UPPERA) THEN
+            IF (UPPERT) THEN
 *
 *              This means T is upper triangular
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, I-1, 1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(1,I), LDC)
+                     CALL STRMMOOP('Left', UPLOT, 'Transpose',
+     $                     'No Transpose', DIAG, I-1, 1, ALPHA, T, LDT, 
+     $                     T(1,I), LDT, BETA, C(1,I), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                  (SDOT(I-1, T(1,I), 1, T(1,I), 1) + ONE)
      $                  + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, I, 1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(1,I), LDC)
+                     CALL STRMMOOP('Left', UPLOT, 'Transpose',
+     $                     'No Transpose', DIAG, I, 1, ALPHA, T, LDT, 
+     $                     T(1,I), LDT, BETA, C(1,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -255,20 +255,20 @@
 *
                IF(UNITT) THEN
                  DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose',
+                     CALL STRMMOOP('Right', UPLOT, 'No Transpose',
      $                     'Transpose', DIAG, 1, K-I, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, BETA,
+     $                     T(I+1,I+1), LDT, T(I+1,I), LDT, BETA,
      $                     C(I,I+1), LDC)
 *
                     C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I+1,I), 1, A(I+1,I), 1) +
+     $                  (SDOT(K-I, T(I+1,I), 1, T(I+1,I), 1) +
      $                  ONE) + BETA*C(I,I)
                  END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose',
+                     CALL STRMMOOP('Right', UPLOT, 'No Transpose',
      $                     'Transpose', DIAG, 1, K-I+1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+     $                     T(I,I), LDT, T(I,I), LDT, BETA, C(I,I), LDC)
                   END DO
                END IF
             END IF
@@ -276,25 +276,25 @@
 *
 *           This means we are only storing the lower triangular component of C
 *
-            IF (UPPERA) THEN
+            IF (UPPERT) THEN
 *
 *              This means T is upper triangular
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose', 
-     $                     'Transpose', DIAG, 1, I-1, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(I,1), LDC)
+                     CALL STRMMOOP('Right', UPLOT, 'No Transpose', 
+     $                     'Transpose', DIAG, 1, I-1, ALPHA, T, LDT, 
+     $                     T(1,I), LDT, BETA, C(I,1), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                  (SDOT(I-1, T(1,I), 1, T(1,I), 1) + ONE)
      $                  + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'No Transpose', 
-     $                     'Transpose', DIAG, 1, I, ALPHA, A, LDA, 
-     $                     A(1,I), LDA, BETA, C(I,1), LDC)
+                     CALL STRMMOOP('Right', UPLOT, 'No Transpose', 
+     $                     'Transpose', DIAG, 1, I, ALPHA, T, LDT, 
+     $                     T(1,I), LDT, BETA, C(I,1), LDC)
                   END DO
                END IF
             ELSE 
@@ -303,20 +303,20 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose', 
+                     CALL STRMMOOP('Left', UPLOT, 'Transpose', 
      $                     'No Transpose', DIAG, K-I, 1, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I+1,I), LDA, BETA,
+     $                     T(I+1,I+1), LDT, T(I+1,I), LDT, BETA,
      $                     C(I+1,I), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I+1,I), 1, A(I+1,I), 1) + ONE)
+     $                  (SDOT(K-I, T(I+1,I), 1, T(I+1,I), 1) + ONE)
      $                  + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'Transpose', 
+                     CALL STRMMOOP('Left', UPLOT, 'Transpose', 
      $                     'No Transpose', DIAG, K-I+1, 1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+     $                     T(I,I), LDT, T(I,I), LDT, BETA, C(I,I), LDC)
                   END DO
                END IF
             END IF
@@ -329,26 +329,26 @@
 *
 *           This means we are only storing the upper triangular component of C
 *
-            IF (UPPERA) THEN
+            IF (UPPERT) THEN
 *
 *              This means T is upper triangular
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
+                     CALL STRMMOOP('Right', UPLOT, 'Transpose',
      $                     'No Transpose', DIAG, 1, K-I, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, BETA,
+     $                     T(I+1,I+1), LDT, T(I,I+1), LDT, BETA,
      $                     C(I,I+1), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                  (SDOT(K-I, T(I,I+1), LDT, T(I,I+1), LDT)
      $                  + ONE) + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
+                     CALL STRMMOOP('Right', UPLOT, 'Transpose',
      $                     'No Transpose', DIAG, 1, K-I+1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+     $                     T(I,I), LDT, T(I,I), LDT, BETA, C(I,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -357,19 +357,19 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, I-1, 1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(1,I), LDC)
+                     CALL STRMMOOP('Left', UPLOT, 'No Transpose',
+     $                     'Transpose', DIAG, I-1, 1, ALPHA, T, LDT,
+     $                     T(I,1), LDT, BETA, C(1,I), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(I,1), LDA, A(I,1), LDA) + ONE)
+     $                  (SDOT(I-1, T(I,1), LDT, T(I,1), LDT) + ONE)
      $                  + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
-     $                     'Transpose', DIAG, I, 1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(1,I), LDC)
+                     CALL STRMMOOP('Left', UPLOT, 'No Transpose',
+     $                     'Transpose', DIAG, I, 1, ALPHA, T, LDT,
+     $                     T(I,1), LDT, BETA, C(1,I), LDC)
                   END DO
                END IF
             END IF
@@ -377,26 +377,26 @@
 *
 *           This means we are only storing the lower triangular component of C
 *
-            IF (UPPERA) THEN
+            IF (UPPERT) THEN
 *
 *              This means T is upper triangular
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
+                     CALL STRMMOOP('Left', UPLOT, 'No Transpose',
      $                     'Transpose', DIAG, K-I, 1, ALPHA,
-     $                     A(I+1,I+1), LDA, A(I,I+1), LDA, BETA,
+     $                     T(I+1,I+1), LDT, T(I,I+1), LDT, BETA,
      $                     C(I+1,I), LDC)
 *
                      C(I,I) = ALPHA *
-     $                  (DDOT(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                  (SDOT(K-I, T(I,I+1), LDT, T(I,I+1), LDT)
      $                  + ONE) + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Left', UPLOA, 'No Transpose',
+                     CALL STRMMOOP('Left', UPLOT, 'No Transpose',
      $                     'Transpose', DIAG, K-I+1, 1, ALPHA,
-     $                     A(I,I), LDA, A(I,I), LDA, BETA, C(I,I), LDC)
+     $                     T(I,I), LDT, T(I,I), LDT, BETA, C(I,I), LDC)
                   END DO
                END IF
             ELSE 
@@ -405,19 +405,19 @@
 *
                IF(UNITT) THEN
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, I-1, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(I,1), LDC)
+                     CALL STRMMOOP('Right', UPLOT, 'Transpose',
+     $                     'No Transpose', DIAG, 1, I-1, ALPHA, T, LDT,
+     $                     T(I,1), LDT, BETA, C(I,1), LDC)
 *
                      C(I,I) = ALPHA * 
-     $                  (DDOT(I-1, A(I,1), LDA, A(I,1), LDA) + ONE)
+     $                  (SDOT(I-1, T(I,1), LDT, T(I,1), LDT) + ONE)
      $                  + BETA*C(I,I)
                   END DO
                ELSE
                   DO I = 1, K
-                     CALL DTRMMOOP('Right', UPLOA, 'Transpose',
-     $                     'No Transpose', DIAG, 1, I, ALPHA, A, LDA,
-     $                     A(I,1), LDA, BETA, C(I,1), LDC)
+                     CALL STRMMOOP('Right', UPLOT, 'Transpose',
+     $                     'No Transpose', DIAG, 1, I, ALPHA, T, LDT,
+     $                     T(I,1), LDT, BETA, C(I,1), LDC)
                   END DO
                END IF
             END IF
