@@ -136,6 +136,7 @@
 *  =====================================================================
       SUBROUTINE DSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

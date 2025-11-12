@@ -132,6 +132,7 @@
 *  =====================================================================
       SUBROUTINE ZLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

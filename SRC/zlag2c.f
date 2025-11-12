@@ -102,6 +102,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

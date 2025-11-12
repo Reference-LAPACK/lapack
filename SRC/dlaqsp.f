@@ -120,6 +120,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

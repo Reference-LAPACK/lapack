@@ -152,6 +152,7 @@
       SUBROUTINE DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO,
      $                   DLAMBDA,
      $                   W, S, LDS, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

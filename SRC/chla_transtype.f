@@ -53,6 +53,7 @@
 *
 *  =====================================================================
       CHARACTER*1 FUNCTION CHLA_TRANSTYPE( TRANS )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

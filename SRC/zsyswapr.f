@@ -95,6 +95,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZSYSWAPR( UPLO, N, A, LDA, I1, I2)
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

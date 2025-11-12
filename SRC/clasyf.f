@@ -173,6 +173,7 @@
 *  =====================================================================
       SUBROUTINE CLASYF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

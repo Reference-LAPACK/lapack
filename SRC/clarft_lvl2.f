@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CLARFT_LVL2 forms the triangular factor T of a real block reflector H
+*> CLARFT_LVL2 forms the triangular factor T of a complex block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -34,12 +34,12 @@
 *> If STOREV = 'C', the vector which defines the elementary reflector
 *> H(i) is stored in the i-th column of the array V, and
 *>
-*>    H  =  I - V * T * V**T
+*>    H  =  I - V * T * V**H
 *>
 *> If STOREV = 'R', the vector which defines the elementary reflector
 *> H(i) is stored in the i-th row of the array V, and
 *>
-*>    H  =  I - V**T * T * V
+*>    H  =  I - V**H * T * V
 *> \endverbatim
 *
 *  Arguments:
@@ -78,7 +78,7 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is REAL array, dimension
+*>          V is COMPLEX array, dimension
 *>                               (LDV,K) if STOREV = 'C'
 *>                               (LDV,N) if STOREV = 'R'
 *>          The matrix V. See further details.
@@ -93,14 +93,14 @@
 *>
 *> \param[in] TAU
 *> \verbatim
-*>          TAU is REAL array, dimension (K)
+*>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i).
 *> \endverbatim
 *>
 *> \param[out] T
 *> \verbatim
-*>          T is REAL array, dimension (LDT,K)
+*>          T is COMPLEX array, dimension (LDT,K)
 *>          The k by k triangular factor T of the block reflector.
 *>          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
 *>          lower triangular. The rest of the array is not used.
@@ -149,15 +149,14 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU,
-     $            T, LDT)
+      SUBROUTINE CLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
+     $            T, LDT )
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
-*        .. Scalar Arguments
-*
+*     .. Scalar Arguments ..
       CHARACTER          DIRECT, STOREV
       INTEGER            K, LDT, LDV, N
 *     ..

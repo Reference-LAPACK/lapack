@@ -108,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

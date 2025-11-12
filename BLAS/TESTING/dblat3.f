@@ -80,6 +80,7 @@
 *
 *  =====================================================================
       PROGRAM DBLAT3
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -400,6 +401,7 @@
       SUBROUTINE DCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
+      IMPLICIT NONE
 *
 *  Tests DGEMM.
 *
@@ -681,6 +683,7 @@
       SUBROUTINE DCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
+      IMPLICIT NONE
 *
 *  Tests DSYMM.
 *
@@ -951,6 +954,7 @@
       SUBROUTINE DCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NMAX, A, AA, AS,
      $                  B, BB, BS, CT, G, C )
+      IMPLICIT NONE
 *
 *  Tests DTRMM and DTRSM.
 *
@@ -1256,6 +1260,7 @@
       SUBROUTINE DCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
+      IMPLICIT NONE
 *
 *  Tests DSYRK.
 *
@@ -1531,6 +1536,7 @@
       SUBROUTINE DCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  AB, AA, AS, BB, BS, C, CC, CS, CT, G, W )
+      IMPLICIT NONE
 *
 *  Tests DSYR2K.
 *
@@ -1843,6 +1849,7 @@
 *
       END
       SUBROUTINE DCHKE( ISNUM, SRNAMT, NOUT )
+      IMPLICIT NONE
 *
 *  Tests the error exits from the Level 3 Blas.
 *  Requires a special version of the error-handling routine XERBLA.
@@ -2478,6 +2485,7 @@
       END
       SUBROUTINE DMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RESET,
      $                  TRANSL )
+      IMPLICIT NONE
 *
 *  Generates values for an M by N matrix A.
 *  Stores the values in the array AA in the data structure required
@@ -2592,6 +2600,7 @@
       SUBROUTINE DMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, LDB,
      $                  BETA, C, LDC, CT, G, CC, LDCC, EPS, ERR, FATAL,
      $                  NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *
@@ -2712,6 +2721,7 @@
 *
       END
       LOGICAL FUNCTION LDE( RI, RJ, LR )
+      IMPLICIT NONE
 *
 *  Tests if two arrays are identical.
 *
@@ -2744,6 +2754,7 @@
 *
       END
       LOGICAL FUNCTION LDERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      IMPLICIT NONE
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2805,6 +2816,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION DBEG( RESET )
+      IMPLICIT NONE
 *
 *  Generates random numbers uniformly distributed between -0.5 and 0.5.
 *
@@ -2851,6 +2863,7 @@
 *
       END
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
+      IMPLICIT NONE
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2870,6 +2883,7 @@
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      IMPLICIT NONE
 *
 *  Tests whether XERBLA has detected an error when it should.
 *
@@ -2900,6 +2914,7 @@
 *
       END
       SUBROUTINE XERBLA( SRNAME, INFO )
+      IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 3 BLAS
@@ -2961,6 +2976,7 @@
       SUBROUTINE DCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G )
+      IMPLICIT NONE
 *
 *  Tests DGEMMTR.
 *
@@ -3246,6 +3262,7 @@
       SUBROUTINE DMMTCH( UPLO, TRANSA, TRANSB, N, KK, ALPHA, A, LDA,
      $                  B, LDB, BETA, C, LDC, CT, G, CC, LDCC, EPS, ERR,
      $                  FATAL, NOUT, MV )
+      IMPLICIT NONE
 *
 *  Checks the results of the computational tests.
 *

@@ -108,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

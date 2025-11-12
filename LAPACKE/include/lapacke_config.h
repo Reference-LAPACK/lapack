@@ -99,6 +99,16 @@ typedef struct { double real, imag; } _lapack_complex_double;
 #define lapack_complex_double_real(z)       ((z).real())
 #define lapack_complex_double_imag(z)       ((z).imag())
 
+#elif _MSC_VER
+
+#include <complex.h>
+#define lapack_complex_float    _Fcomplex
+#define lapack_complex_double   _Dcomplex
+#define lapack_complex_float_real(z)       (crealf(z))
+#define lapack_complex_float_imag(z)       (cimagf(z))
+#define lapack_complex_double_real(z)       (creal(z))
+#define lapack_complex_double_imag(z)       (cimag(z))
+
 #else
 
 #include <complex.h>

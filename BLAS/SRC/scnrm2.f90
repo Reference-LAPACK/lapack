@@ -86,7 +86,8 @@
 !> \endverbatim
 !>
 !  =====================================================================
-function SCNRM2( n, x, incx ) 
+function SCNRM2( n, x, incx )
+   implicit none
    integer, parameter :: wp = kind(1.e0)
    real(wp) :: SCNRM2
 !

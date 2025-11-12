@@ -139,6 +139,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CPPSV( UPLO, N, NRHS, AP, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -69,19 +69,19 @@ all: $(BLASLIB)
 #  Comment out the next 6 definitions if you already have
 #  the Level 1 BLAS.
 #---------------------------------------------------------
-SBLAS1 = isamax.o sasum.o saxpy.o scopy.o sdot.o snrm2.o \
+SBLAS1 = isamax.o sasum.o saxpy.o saxpby.o scopy.o sdot.o snrm2.o \
 	srot.o srotg.o sscal.o sswap.o sdsdot.o srotmg.o srotm.o
 $(SBLAS1): $(FRC)
 
-CBLAS1 = scabs1.o scasum.o scnrm2.o icamax.o caxpy.o ccopy.o \
+CBLAS1 = scabs1.o scasum.o scnrm2.o icamax.o caxpy.o caxpby.o ccopy.o \
 	cdotc.o cdotu.o csscal.o crotg.o cscal.o cswap.o csrot.o
 $(CBLAS1): $(FRC)
 
-DBLAS1 = idamax.o dasum.o daxpy.o dcopy.o ddot.o dnrm2.o \
+DBLAS1 = idamax.o dasum.o daxpy.o daxpby.o dcopy.o ddot.o dnrm2.o \
 	drot.o drotg.o dscal.o dsdot.o dswap.o drotmg.o drotm.o
 $(DBLAS1): $(FRC)
 
-ZBLAS1 = dcabs1.o dzasum.o dznrm2.o izamax.o zaxpy.o zcopy.o \
+ZBLAS1 = dcabs1.o dzasum.o dznrm2.o izamax.o zaxpy.o zaxpby.o zcopy.o \
 	zdotc.o zdotu.o zdscal.o zrotg.o zscal.o zswap.o zdrot.o
 $(ZBLAS1): $(FRC)
 

@@ -34,7 +34,7 @@
 
 lapack_int API_SUFFIX(LAPACKE_zcgesv_work)( int matrix_layout, lapack_int n, lapack_int nrhs,
                                 lapack_complex_double* a, lapack_int lda,
-                                lapack_int* ipiv, lapack_complex_double* b,
+                                lapack_int* ipiv, const lapack_complex_double* b,
                                 lapack_int ldb, lapack_complex_double* x,
                                 lapack_int ldx, lapack_complex_double* work,
                                 lapack_complex_float* swork, double* rwork,
@@ -103,7 +103,6 @@ lapack_int API_SUFFIX(LAPACKE_zcgesv_work)( int matrix_layout, lapack_int n, lap
         }
         /* Transpose output matrices */
         API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );

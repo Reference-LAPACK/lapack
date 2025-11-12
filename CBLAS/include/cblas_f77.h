@@ -76,18 +76,22 @@
 #define F77_sswap_base        F77_GLOBAL_SUFFIX(sswap,SSWAP)
 #define F77_scopy_base        F77_GLOBAL_SUFFIX(scopy,SCOPY)
 #define F77_saxpy_base        F77_GLOBAL_SUFFIX(saxpy,SAXPY)
+#define F77_saxpby_base       F77_GLOBAL_SUFFIX(saxpby,SAXPBY)
 #define F77_isamax_sub_base   F77_GLOBAL_SUFFIX(isamaxsub,ISAMAXSUB)
 #define F77_dswap_base        F77_GLOBAL_SUFFIX(dswap,DSWAP)
 #define F77_dcopy_base        F77_GLOBAL_SUFFIX(dcopy,DCOPY)
 #define F77_daxpy_base        F77_GLOBAL_SUFFIX(daxpy,DAXPY)
+#define F77_daxpby_base       F77_GLOBAL_SUFFIX(daxpby,DAXPBY)
 #define F77_idamax_sub_base   F77_GLOBAL_SUFFIX(idamaxsub,IDAMAXSUB)
 #define F77_cswap_base        F77_GLOBAL_SUFFIX(cswap,CSWAP)
 #define F77_ccopy_base        F77_GLOBAL_SUFFIX(ccopy,CCOPY)
 #define F77_caxpy_base        F77_GLOBAL_SUFFIX(caxpy,CAXPY)
+#define F77_caxpby_base       F77_GLOBAL_SUFFIX(caxpby,CAXPBY)
 #define F77_icamax_sub_base   F77_GLOBAL_SUFFIX(icamaxsub,ICAMAXSUB)
 #define F77_zswap_base        F77_GLOBAL_SUFFIX(zswap,ZSWAP)
 #define F77_zcopy_base        F77_GLOBAL_SUFFIX(zcopy,ZCOPY)
 #define F77_zaxpy_base        F77_GLOBAL_SUFFIX(zaxpy,ZAXPY)
+#define F77_zaxpby_base       F77_GLOBAL_SUFFIX(zaxpby,ZAXPBY)
 #define F77_izamax_sub_base   F77_GLOBAL_SUFFIX(izamaxsub,IZAMAXSUB)
 #define F77_sdot_sub_base     F77_GLOBAL_SUFFIX(sdotsub,SDOTSUB)
 #define F77_ddot_sub_base     F77_GLOBAL_SUFFIX(ddotsub,DDOTSUB)
@@ -239,6 +243,7 @@
 #define F77_sswap(...)        F77_sswap_base(__VA_ARGS__)
 #define F77_scopy(...)        F77_scopy_base(__VA_ARGS__)
 #define F77_saxpy(...)        F77_saxpy_base(__VA_ARGS__)
+#define F77_saxpby(...)       F77_saxpby_base(__VA_ARGS__)
 #define F77_sdot_sub(...)     F77_sdot_sub_base(__VA_ARGS__)
 #define F77_sdsdot_sub(...)   F77_sdsdot_sub_base(__VA_ARGS__)
 #define F77_sscal(...)        F77_sscal_base(__VA_ARGS__)
@@ -256,6 +261,7 @@
 #define F77_dswap(...)        F77_dswap_base(__VA_ARGS__)
 #define F77_dcopy(...)        F77_dcopy_base(__VA_ARGS__)
 #define F77_daxpy(...)        F77_daxpy_base(__VA_ARGS__)
+#define F77_daxpby(...)       F77_daxpby_base(__VA_ARGS__)
 #define F77_dswap(...)        F77_dswap_base(__VA_ARGS__)
 #define F77_dsdot_sub(...)    F77_dsdot_sub_base(__VA_ARGS__)
 #define F77_ddot_sub(...)     F77_ddot_sub_base(__VA_ARGS__)
@@ -272,6 +278,7 @@
 #define F77_cswap(...)        F77_cswap_base(__VA_ARGS__)
 #define F77_ccopy(...)        F77_ccopy_base(__VA_ARGS__)
 #define F77_caxpy(...)        F77_caxpy_base(__VA_ARGS__)
+#define F77_caxpby(...)       F77_caxpby_base(__VA_ARGS__)
 #define F77_cswap(...)        F77_cswap_base(__VA_ARGS__)
 #define F77_cdotc_sub(...)    F77_cdotc_sub_base(__VA_ARGS__)
 #define F77_cdotu_sub(...)    F77_cdotu_sub_base(__VA_ARGS__)
@@ -288,6 +295,7 @@
 #define F77_zswap(...)        F77_zswap_base(__VA_ARGS__)
 #define F77_zcopy(...)        F77_zcopy_base(__VA_ARGS__)
 #define F77_zaxpy(...)        F77_zaxpy_base(__VA_ARGS__)
+#define F77_zaxpby(...)       F77_zaxpby_base(__VA_ARGS__)
 #define F77_zswap(...)        F77_zswap_base(__VA_ARGS__)
 #define F77_zdotc_sub(...)    F77_zdotc_sub_base(__VA_ARGS__)
 #define F77_zdotu_sub(...)    F77_zdotu_sub_base(__VA_ARGS__)
@@ -602,6 +610,7 @@ void F77_srotmg_base(float *,float *,float *,const float *, float *);
 void F77_sswap_base(FINT, float *, FINT, float *, FINT);
 void F77_scopy_base(FINT, const float *, FINT, float *, FINT);
 void F77_saxpy_base(FINT, const float *, const float *, FINT, float *, FINT);
+void F77_saxpby_base(FINT, const float *, const float *, FINT, const float *, float *, FINT);
 void F77_sdot_sub_base(FINT, const float *, FINT, const float *, FINT, float *);
 void F77_sdsdot_sub_base(FINT, const float *, const float *, FINT, const float *, FINT, float *);
 void F77_sscal_base(FINT, const float *, float *, FINT);
@@ -618,6 +627,7 @@ void F77_drotmg_base(double *,double *,double *,const double *, double *);
 void F77_dswap_base(FINT, double *, FINT, double *, FINT);
 void F77_dcopy_base(FINT, const double *, FINT, double *, FINT);
 void F77_daxpy_base(FINT, const double *, const double *, FINT, double *, FINT);
+void F77_daxpby_base(FINT, const double *, const double *, FINT, const double *, double *, FINT);
 void F77_dswap_base(FINT, double *, FINT, double *, FINT);
 void F77_dsdot_sub_base(FINT, const float *, FINT, const float *, FINT, double *);
 void F77_ddot_sub_base(FINT, const double *, FINT, const double *, FINT, double *);
@@ -633,6 +643,7 @@ void F77_csrot_base(FINT, void *X, FINT, void *, FINT, const float *, const floa
 void F77_cswap_base(FINT, void *, FINT, void *, FINT);
 void F77_ccopy_base(FINT, const void *, FINT, void *, FINT);
 void F77_caxpy_base(FINT, const void *, const void *, FINT, void *, FINT);
+void F77_caxpby_base(FINT, const void *, const void *, FINT, const void *, void *, FINT);
 void F77_cswap_base(FINT, void *, FINT, void *, FINT);
 void F77_cdotc_sub_base(FINT, const void *, FINT, const void *, FINT, void *);
 void F77_cdotu_sub_base(FINT, const void *, FINT, const void *, FINT, void *);
@@ -650,6 +661,7 @@ void F77_zdrot_base(FINT, void *X, FINT, void *, FINT, const double *, const dou
 void F77_zswap_base(FINT, void *, FINT, void *, FINT);
 void F77_zcopy_base(FINT, const void *, FINT, void *, FINT);
 void F77_zaxpy_base(FINT, const void *, const void *, FINT, void *, FINT);
+void F77_zaxpby_base(FINT, const void *, const void *, FINT, const void*, void *, FINT);
 void F77_zswap_base(FINT, void *, FINT, void *, FINT);
 void F77_zdotc_sub_base(FINT, const void *, FINT, const void *, FINT, void *);
 void F77_zdotu_sub_base(FINT, const void *, FINT, const void *, FINT, void *);

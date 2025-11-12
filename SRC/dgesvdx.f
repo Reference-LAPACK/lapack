@@ -258,6 +258,7 @@
       SUBROUTINE DGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

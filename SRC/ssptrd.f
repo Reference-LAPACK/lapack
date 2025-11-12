@@ -145,6 +145,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SSPTRD( UPLO, N, AP, D, E, TAU, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

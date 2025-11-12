@@ -210,6 +210,7 @@
       SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T,
      $                    LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
