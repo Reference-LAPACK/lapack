@@ -167,14 +167,12 @@
 *
 *     .. Parameters ..
 *
-      COMPLEX            ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=(1.0E+0,0.0E+0),
-     $          ZERO = (0.0E+0,0.0E+0),
-     $          NEG_ONE=(-1.0E+0,0.0E+0))
+      COMPLEX            ONE
+      PARAMETER(ONE=(1.0E+0,0.0E+0))
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,KMI,NMI,L
+      INTEGER           I,J,KMI,NMI
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..

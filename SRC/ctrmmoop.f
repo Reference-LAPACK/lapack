@@ -222,7 +222,7 @@
       INTRINSIC         CONJG, MIN
 *     ..
 *     .. Local Scalars ..
-      INTEGER           I, J, L, K, INCB
+      INTEGER           I, J, L, INCB
       LOGICAL           LSIDE, UPPER, UNIT, TRANST, TRANSG,
      $                  CONJA, CONJB
 *     ..

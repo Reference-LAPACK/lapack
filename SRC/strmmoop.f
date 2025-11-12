@@ -221,7 +221,7 @@
          INTRINSIC         MIN
 *        ..
 *        .. Local Scalars ..
-         INTEGER           I, L, K, INCB
+         INTEGER           I, L, INCB
          LOGICAL           LSIDE, UPPER, UNIT, TRANST, TRANSG
 *        ..
 *        .. Local Parameters ..

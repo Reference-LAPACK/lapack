@@ -186,7 +186,7 @@
          EXTERNAL          DTRMM, DTRMMOOP, DLASET
 *        ..
 *        .. Local Scalars ..
-         INTEGER           K, INFO
+         INTEGER           K
          LOGICAL           TLEFT, TUPPER, VTRANS, VUNIT, TUNIT
 *        ..
 *        .. Local Parameters ..

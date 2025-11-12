@@ -158,6 +158,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'DORGQL', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -170,13 +171,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( N.EQ.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'DORGQL', ' ', M, N, K, -1 )
-            ! Only need a workspace for calls to dorg2l
-            LWKOPT = N
-         END IF
+         LWKOPT = MAX(1,N)
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN

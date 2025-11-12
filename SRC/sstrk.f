@@ -189,12 +189,11 @@
       REAL              T(LDT,*),C(LDC,*)
 *     ..
 *     .. Parameters ..
-      REAL              ZERO, ONE
-      PARAMETER(ZERO = 0.0E+0, ONE = 1.0E+0)
+      REAL              ONE
+      PARAMETER(ONE = 1.0E+0)
 *     ..
 *     .. Local Scalars ..
-      REAL              TMP
-      INTEGER           I, L
+      INTEGER           I
       LOGICAL           UPPERT,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..

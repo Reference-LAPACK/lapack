@@ -137,14 +137,10 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, II, IINFO, IWS, J, KK, L, LDWORK,
+      INTEGER            I, IB, II, IINFO, IWS, KK,
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
@@ -164,6 +160,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'SORGRQ', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -176,12 +173,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( M.LE.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'SORGRQ', ' ', M, N, K, -1 )
-            LWKOPT = M
-         END IF
+         LWKOPT = MAX(1,M)
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY ) THEN
@@ -203,14 +195,8 @@
       END IF
 *
       NBMIN = 2
-      NX = 0
+      NX = MAX( 0, ILAENV( 3, 'SORGRQ', ' ', M, N, K, -1 ) )
       IWS = M
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'SORGRQ', ' ', M, N, K, -1 ) )
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *

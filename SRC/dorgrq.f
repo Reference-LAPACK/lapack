@@ -142,7 +142,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, II, IINFO, IWS, KK, LDWORK,
+      INTEGER            I, IB, II, IINFO, IWS, KK,
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
@@ -161,6 +161,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'DORGRQ', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -173,13 +174,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( M.LE.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'DORGRQ', ' ', M, N, K, -1 )
-            ! Only need a workspace for calls to dorgr2
-            LWKOPT = M
-         END IF
+         LWKOPT = MAX(1,M)
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY ) THEN

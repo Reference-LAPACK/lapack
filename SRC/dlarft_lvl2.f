@@ -167,12 +167,12 @@
 *
 *     .. Parameters ..
 *
-      DOUBLE PRECISION   ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=1.0D+0, ZERO = 0.0D+0, NEG_ONE=-1.0D+0)
+      DOUBLE PRECISION ONE
+      PARAMETER(ONE=1.0D+0)
 *
 *     .. Local Scalars ..
 *
-      INTEGER           I,J,KMI,NMI,L
+      INTEGER           I,J,KMI,NMI
       LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
 *
 *     .. External Subroutines ..

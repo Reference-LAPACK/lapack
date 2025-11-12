@@ -141,7 +141,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, IINFO, IWS, KI, KK, LDWORK, LWKOPT,
+      INTEGER            I, IB, IINFO, IWS, KI, KK, LWKOPT,
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..

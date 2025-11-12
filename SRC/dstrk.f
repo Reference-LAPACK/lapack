@@ -189,12 +189,11 @@
       DOUBLE PRECISION  A(LDA,*),C(LDC,*)
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION  ZERO, ONE
-      PARAMETER(ZERO = 0.0D+0, ONE = 1.0D+0)
+      DOUBLE PRECISION  ONE
+      PARAMETER(ONE = 1.0D+0)
 *     ..
 *     .. Local Scalars ..
-      DOUBLE PRECISION  TMP
-      INTEGER           I, L
+      INTEGER           I
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..

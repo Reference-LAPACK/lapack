@@ -177,8 +177,8 @@
 *
 *     .. Parameters ..
 *
-      DOUBLE PRECISION ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=1.0D+0, ZERO = 0.0D+0, NEG_ONE=-1.0D+0)
+      DOUBLE PRECISION ONE, NEG_ONE
+      PARAMETER(ONE=1.0D+0, NEG_ONE=-1.0D+0)
 *
 *     .. Local Scalars ..
 *

@@ -138,7 +138,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, II, IINFO, IWS, KK, LDWORK,
+      INTEGER            I, IB, II, IINFO, IWS, KK,
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
@@ -157,6 +157,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'ZUNGRQ', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -170,7 +171,6 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKOPT = MAX(1, M)
-         NB = ILAENV( 1, 'ZUNGRQ', ' ', M, N, K, -1 )
          WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY ) THEN
