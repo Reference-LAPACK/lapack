@@ -176,8 +176,8 @@
 *
 *     .. Parameters ..
 *
-      REAL             ONE, NEG_ONE, ZERO
-      PARAMETER(ONE=1.0E+0, ZERO = 0.0E+0, NEG_ONE=-1.0E+0)
+      REAL             ONE, NEG_ONE
+      PARAMETER(ONE=1.0E+0, NEG_ONE=-1.0E+0)
 *
 *     .. Local Scalars ..
 *

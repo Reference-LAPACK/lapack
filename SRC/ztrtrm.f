@@ -170,10 +170,10 @@
 *     .. Scalar Arguments ..
       INTEGER           N, LDT, LDV
       CHARACTER         SIDE, UPLO, TRANSV, DIAGT, DIAGV
-      COMPLEX*16		   ALPHA
+      COMPLEX*16        ALPHA
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16		   T(LDT,*), V(LDV,*)
+      COMPLEX*16        T(LDT,*), V(LDV,*)
 *     ..
 *
 *  =====================================================================
@@ -189,11 +189,11 @@
       INTRINSIC         CONJG
 *     ..
 *     .. Local Scalars ..
-      INTEGER           K, INFO
+      INTEGER           K
       LOGICAL           TLEFT, TUPPER, VTRANS, VUNIT, TUNIT, CONJV
 *     ..
 *     .. Local Parameters ..
-      COMPLEX*16		  ONE, ZERO
+      COMPLEX*16       ONE, ZERO
       PARAMETER(ONE=(1.0D+0,0.D+0), ZERO=(0.0D+0,0.0D+0))
 *     ..
 *
@@ -211,6 +211,7 @@
       END IF
       TUNIT = LSAME(DIAGT, 'U')
       VUNIT = LSAME(DIAGV, 'U')
+      CONJV = LSAME(TRANSV, 'C')
 *
 *     Terminating Case
 *
@@ -237,8 +238,7 @@
 *
       TLEFT = LSAME(SIDE, 'R')
       TUPPER = LSAME(UPLO, 'U')
-      CONJV = LSAME(TRANSV, 'C')
-      VTRANS = CONJV.OR.LSAME(TRANSV, 'T')
+      VTRANS = LSAME(TRANSV, 'T').OR.CONJV
 
       K = N / 2
       IF(TUPPER) THEN

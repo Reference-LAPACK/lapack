@@ -176,9 +176,8 @@
 *
 *     .. Parameters ..
 *
-      COMPLEX*16         ONE, NEG_ONE, ZERO
+      COMPLEX*16         ONE, NEG_ONE
       PARAMETER(ONE=(1.0D+0,0.0D+0),
-     $          ZERO = (0.0D+0,0.0D+0),
      $          NEG_ONE=(-1.0D+0,0.0D+0))
 *
 *     .. Local Scalars ..

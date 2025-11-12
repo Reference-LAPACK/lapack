@@ -191,7 +191,7 @@
       PARAMETER(ONE = 1.0E+0)
 *     ..
 *     .. Local Scalars ..
-      INTEGER           I, L
+      INTEGER           I
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..

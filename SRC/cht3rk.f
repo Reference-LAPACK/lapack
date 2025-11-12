@@ -203,7 +203,7 @@
       EXTERNAL          LSAME,ILAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC         DCMPLX
+      INTRINSIC         CMPLX,REAL,CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -311,16 +311,16 @@
 *              Compute C_{1,2} = \alpha*T_{1,1}**H*T_{1,2} + \beta C_{1,2} (TRMMOOP)
 *
                CALL CTRMMOOP('Left', UPLOT, 'Conjugate',
-     $               'No Transpose', DIAG, L, K-L, DCMPLX(ALPHA),
-     $               T, LDT, T(1, L+1), LDT, DCMPLX(BETA),
+     $               'No Transpose', DIAG, L, K-L, CMPLX(ALPHA),
+     $               T, LDT, T(1, L+1), LDT, CMPLX(BETA),
      $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{1,2}**H*T_{1,1} + \beta C_{2,1} (TRMMOOP)
 *
                CALL CTRMMOOP('Right', UPLOT, 'No Transpose',
-     $               'Conjugate', DIAG, K-L, L, DCMPLX(ALPHA), T, LDT,
-     $               T(1, L+1), LDT, DCMPLX(BETA), C(L+1,1), LDC)
+     $               'Conjugate', DIAG, K-L, L, CMPLX(ALPHA), T, LDT,
+     $               T(1, L+1), LDT, CMPLX(BETA), C(L+1,1), LDC)
             END IF
          ELSE
 *
@@ -378,16 +378,16 @@
 *              Compute C_{1,2} = \alpha*T_{2,1}**H*T_{2,2} + \beta*C_{1,2}
 *
                CALL CTRMMOOP('Right', UPLOT, 'No Transpose',
-     $               'Conjugate', DIAG, L, K-L, DCMPLX(ALPHA),
-     $               T(L+1,L+1), LDT, T(L+1,1), LDT, DCMPLX(BETA),
+     $               'Conjugate', DIAG, L, K-L, CMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(L+1,1), LDT, CMPLX(BETA),
      $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,2}**H*T_{2,1} + \beta*C_{2,1}
 *
                CALL CTRMMOOP('Left', UPLOT, 'Conjugate',
-     $               'No Transpose', DIAG, K-L, L, DCMPLX(ALPHA),
-     $               T(L+1,L+1), LDT, T(L+1, 1), LDT, DCMPLX(BETA),
+     $               'No Transpose', DIAG, K-L, L, CMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(L+1, 1), LDT, CMPLX(BETA),
      $               C(L+1,1), LDC)
             END IF
          END IF
@@ -451,16 +451,16 @@
 *              Compute C_{1,2} = \alpha*T_{1,2}*T_{2,2}**H + \beta*C_{1,2}
 *
                CALL CTRMMOOP('Right', UPLOT, 'Conjugate',
-     $               'No Transpose', DIAG, L, K-L, DCMPLX(ALPHA),
-     $               T(L+1,L+1), LDT, T(1, L+1), LDT, DCMPLX(BETA),
+     $               'No Transpose', DIAG, L, K-L, CMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(1, L+1), LDT, CMPLX(BETA),
      $               C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,2}*T_{1,2}**H + \beta*C_{2,1}
 *
                CALL CTRMMOOP('Left', UPLOT, 'No Transpose',
-     $               'Conjugate', DIAG, K-L, L, DCMPLX(ALPHA),
-     $               T(L+1,L+1), LDT, T(1, L+1), LDT, DCMPLX(BETA),
+     $               'Conjugate', DIAG, K-L, L, CMPLX(ALPHA),
+     $               T(L+1,L+1), LDT, T(1, L+1), LDT, CMPLX(BETA),
      $               C(L+1,1), LDC)
             END IF
          ELSE
@@ -519,15 +519,15 @@
 *              Compute C_{1,2} = \alpha*T_{1,1}*T_{2,1}**H + \beta*C_{1,2}
 *
                CALL CTRMMOOP('Left', UPLOT, 'No Transpose',
-     $               'Conjugate', DIAG, L, K-L, DCMPLX(ALPHA), T, LDT,
-     $               T(L+1,1), LDT, DCMPLX(BETA), C(1,L+1), LDC)
+     $               'Conjugate', DIAG, L, K-L, CMPLX(ALPHA), T, LDT,
+     $               T(L+1,1), LDT, CMPLX(BETA), C(1,L+1), LDC)
             ELSE
 *
 *              Compute C_{2,1} = \alpha*T_{2,1}*T_{1,1}**H + \beta*C_{2,1}
 *
                CALL CTRMMOOP('Right', UPLOT, 'Conjugate',
-     $               'No Transpose', DIAG, K-L, L, DCMPLX(ALPHA),
-     $               T, LDT, T(L+1,1), LDT, DCMPLX(BETA), C(L+1,1), LDC)
+     $               'No Transpose', DIAG, K-L, L, CMPLX(ALPHA),
+     $               T, LDT, T(L+1,1), LDT, CMPLX(BETA), C(L+1,1), LDC)
             END IF
          END IF
       END IF

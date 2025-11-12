@@ -134,14 +134,10 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, IINFO, IWS, J, KK, LWKOPT, NB,
+      INTEGER            I, IB, IINFO, IWS, KK, LWKOPT, NB,
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
@@ -161,6 +157,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'SORGQL', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -173,13 +170,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( N.EQ.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'SORGQL', ' ', M, N, K, -1 )
-            ! Only need a workspace for calls to dorg2l
-            LWKOPT = N
-         END IF
+         LWKOPT = MAX(1,N)
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN

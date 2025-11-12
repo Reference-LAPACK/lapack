@@ -186,7 +186,7 @@
          EXTERNAL          STRMM, STRMMOOP, SLASET
 *        ..
 *        .. Local Scalars ..
-         INTEGER           K, INFO
+         INTEGER           K
          LOGICAL           TLEFT, TUPPER, VTRANS, VUNIT, TUNIT
 *        ..
 *        .. Local Parameters ..
