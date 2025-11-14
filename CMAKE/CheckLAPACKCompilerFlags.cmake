@@ -59,6 +59,22 @@ macro(CheckLAPACKCompilerFlags)
       add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
     endif()
 
+    # Disabling loop vectorization for GNU Fortran versions affected by
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408. See issue
+    # https://github.com/Reference-LAPACK/lapack/issues/1160 as well.
+    if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm|arm64|aarch64")
+      if((CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "14.0" AND
+          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "14.4") OR
+         (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
+          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "15.2"))
+        message(WARNING
+          "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
+          "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
+          "For full performance, consider changing to a different compiler or compiler version.")
+        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
+      endif()
+    endif()
+
   # Intel Fortran
   elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
     set(FPE_EXIT_FLAG "[-/]fpe(-all=|)0")
