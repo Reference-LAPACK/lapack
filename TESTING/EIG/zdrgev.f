@@ -429,14 +429,16 @@
       PARAMETER          ( MAXTYP = 26 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADNN
+      LOGICAL            BADNN, EVAL_5
       INTEGER            I, IADD, IERR, IN, J, JC, JR, JSIZE, JTYPE,
      $                   MAXWRK, MINWRK, MTYPES, N, N1, NB, NERRS,
      $                   NMATS, NMAX, NTESTT
       DOUBLE PRECISION   SAFMAX, SAFMIN, ULP, ULPINV
       COMPLEX*16         CTEMP
+      double precision   wtol, atst, btst, rtst
 *     ..
 *     .. Local Arrays ..
+      complex*16         eval(LDA),eval1(lda)
       LOGICAL            LASIGN( MAXTYP ), LBSIGN( MAXTYP )
       INTEGER            IOLDSD( 4 ), KADD( 6 ), KAMAGN( MAXTYP ),
      $                   KATYPE( MAXTYP ), KAZERO( MAXTYP ),
@@ -779,10 +781,51 @@
                GO TO 190
             END IF
 *
+            EVAL_5 = .FALSE.
             DO 120 J = 1, N
+*          eigenvalues+eigenvectors may take different path through 
+*          code than eigenvalues only.
                IF( ALPHA( J ).NE.ALPHA1( J ) .OR. BETA( J ).NE.
-     $             BETA1( J ) )RESULT( 5 ) = ULPINV
+     $             BETA1( J ) ) THEN
+                     EVAL_5 = .TRUE.
+               ENDIF
   120       CONTINUE
+*          If alpha,alpaha1 or beta,beta1 were not identical, examine
+*          differences more closely and compare to a tolerance.
+            IF( EVAL_5 ) THEN
+              WTOL = THRESH*ULP
+              DO 121 J = 1, N
+*          Compute eigenvalues to extent possible
+                IF (BETA(J).NE.CZERO) THEN
+                  EVAL(J) = ALPHA(J)/BETA(J)
+                ELSE
+                  EVAL(J) = DCMPLX(SAFMAX,SAFMAX)
+                ENDIF
+                IF (BETA1(J).NE.CZERO) THEN
+                  EVAL1(J) = ALPHA1(J)/BETA1(J)
+                ELSE
+                  EVAL1(J) = DCMPLX(SAFMAX,SAFMAX)
+                ENDIF
+  121         CONTINUE
+
+              DO 122 J = 1, N
+*           Compare eigenvalues
+                RTST = CDABS( EVAL(J)-EVAL1(J) )/
+     $                   ( ONE+ CDABS(EVAL(J)) )
+                IF ( RTST .GT. WTOL) THEN
+*           Compare alphas and betas directly. Don't record an
+*           error if relative alpha and beta diffs are both small.
+                  ATST = CDABS(ALPHA(J)-ALPHA1(J))/
+     $                   (ONE + CDABS(ALPHA(J)) )
+                  BTST = CDABS(BETA(J)-BETA1(J))/
+     $                   (ONE + CDABS(BETA(J)) )
+                 IF(ATST.GT.WTOL .OR. BTST.GT.WTOL) THEN
+*           If error detected, set RESULT(5) as original code did.
+                   RESULT( 5 ) = ULPINV
+                 ENDIF
+                ENDIF
+  122         CONTINUE
+            ENDIF
 *
 *           Do test (6): Compute eigenvalues and left eigenvectors,
 *           and test them
