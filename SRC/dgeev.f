@@ -188,7 +188,7 @@
       SUBROUTINE DGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL,
      $                  VR,
      $                  LDVR, WORK, LWORK, INFO )
-      implicit none
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -227,7 +227,7 @@
      $                   DLASCL, DORGHR, DROT, DSCAL, DTREVC3, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DLANGE, DLAPY2, DNRM2
       EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DLANGE,
@@ -353,6 +353,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( DISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'DGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL DLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
