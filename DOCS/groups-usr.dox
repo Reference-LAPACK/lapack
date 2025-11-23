@@ -938,6 +938,9 @@ https://www.netlib.org/xblas/
             @defgroup hemv          {he,sy}mv:      Hermitian/symmetric matrix-vector multiply ([cz]symv in LAPACK)
             @defgroup her           {he,sy}r:       Hermitian/symmetric rank-1 update
             @defgroup her2          {he,sy}r2:      Hermitian/symmetric rank-2 update
+				
+            @defgroup skewhemv      skew{he,sy}mv:  skew-Hermitian/symmetric matrix-vector multiply
+            @defgroup skewher2      skew{he,sy}r2:  skew-Hermitian/symmetric rank-2 update
 
             @defgroup trmv          trmv:           triangular matrix-vector multiply
             @defgroup trsv          trsv:           triangular matrix-vector solve
@@ -967,6 +970,9 @@ https://www.netlib.org/xblas/
             @defgroup hemm          {he,sy}mm:      Hermitian/symmetric matrix-matrix multiply
             @defgroup herk          {he,sy}rk:      Hermitian/symmetric rank-k update
             @defgroup her2k         {he,sy}r2k:     Hermitian/symmetric rank-2k update
+				
+            @defgroup skewhemm      skew{he,sy}mm:  skew-Hermitian/symmetric matrix-matrix multiply
+            @defgroup skewher2k     skew{he,sy}r2k: skew-Hermitian/symmetric rank-2k update
 
             @defgroup trmm          trmm:           triangular matrix-matrix multiply
             @defgroup trsm          trsm:           triangular matrix-matrix solve
