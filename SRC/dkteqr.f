@@ -271,19 +271,22 @@
             TST = ABS( E( M ) )
             IF( TST.EQ.ZERO )
      $         GO TO 30
-            IF( TST.LE.( ABS( E( M+
-     $          1 ) ) )*EPS .AND. M.EQ.L1 ) THEN
-               E( M ) = ZERO
-               GO TO 30
-            ELSEIF( TST.LE.( ABS( E( M-
-     $          1 ) ) )*EPS .AND. M.EQ.NM1 ) THEN
-               E( M ) = ZERO
-               GO TO 30
-            ELSEIF( TST.LE.( SQRT( ABS( E( M-1 ) ) )*
-     $          SQRT( ABS( E( M+1 ) ) ) )*EPS .AND.
-     $          M.NE.L1 .AND. M.NE.NM1 ) THEN
-               E( M ) = ZERO
-               GO TO 30
+            IF( M.EQ.L1 ) THEN
+               IF ( TST.LE.( ABS( E( M+1 ) ) )*EPS ) THEN
+                  E( M ) = ZERO
+                  GO TO 30
+               END IF
+            ELSEIF( M.EQ.NM1 ) THEN
+               IF ( TST.LE.( ABS( E( M-1 ) ) )*EPS ) THEN
+                  E( M ) = ZERO
+                  GO TO 30
+               END IF
+            ELSEIF( M.NE.L1 .AND. M.NE.NM1 ) THEN
+               IF ( TST.LE.( SQRT( ABS( E( M-1 ) ) )*
+     $              SQRT( ABS( E( M+1 ) ) ) )*EPS ) THEN
+                  E( M ) = ZERO
+                  GO TO 30
+               END IF
             END IF
    20    CONTINUE
       END IF
@@ -334,16 +337,22 @@
             LENDM1 = LEND - 1
             DO 50 M = L, LENDM1
                TST = ABS( E( M ) )**2
-     		   IF( TST.LE.( EPS2*ABS( E( M+1 ) ) )*ABS( E( M+1 ) )+
-     $             SAFMIN .AND. M.EQ.L) THEN
-                  GO TO 60
-     		   ELSEIF( TST.LE.( EPS2*ABS( E( M-1 ) ) )*ABS( E( M-1 ) )+
-     $             SAFMIN .AND. M.EQ.LENDM1 ) THEN
-                  GO TO 60
-     		   ELSEIF( TST.LE.( EPS2*ABS( E( M-1 ) ) )*ABS( E( M+1 ) )+
-     $             SAFMIN .AND. M.NE.L .AND. M.NE.LENDM1 ) THEN
-                  GO TO 60
-     		   END IF
+               IF( M.EQ.L) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M+1 ) ) )*
+     $                 ABS( E( M+1 ) )+SAFMIN ) THEN
+                     GO TO 60
+                  END IF
+               ELSEIF( M.EQ.LENDM1 ) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M-1 ) ) )*
+     $                 ABS( E( M-1 ) )+SAFMIN ) THEN
+                     GO TO 60
+                  END IF
+               ELSEIF( M.NE.L .AND. M.NE.LENDM1 ) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M-1 ) ) )*
+     $                 ABS( E( M+1 ) )+SAFMIN ) THEN
+                     GO TO 60
+                  END IF
+               END IF
    50       CONTINUE
          END IF
 *
@@ -566,16 +575,22 @@
             LENDP1 = LEND + 1
             DO 100 M = L, LENDP1, -1
                TST = ABS( E( M-1 ) )**2
-     		   IF( TST.LE.( EPS2*ABS( E( M-2 ) ) )*ABS( E( M-2 ) )+
-     $             SAFMIN .AND. M.EQ.L) THEN
-                  GO TO 110
-     		   ELSEIF( TST.LE.( EPS2*ABS( E( M ) ) )*ABS( E( M ) )+
-     $             SAFMIN .AND. M.EQ.LENDP1 ) THEN
-                  GO TO 110
-     		   ELSEIF( TST.LE.( EPS2*ABS( E( M-2 ) ) )*ABS( E( M ) )+
-     $             SAFMIN .AND. M.NE.L .AND. M.NE.LENDP1 ) THEN
-                  GO TO 110
-     		   END IF
+               IF( M.EQ.L) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M-2 ) ) )*
+     $                 ABS( E( M-2 ) )+SAFMIN ) THEN
+                     GO TO 110
+                  END IF
+               ELSEIF( M.EQ.LENDP1 ) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M ) ) )*
+     $                 ABS( E( M ) )+SAFMIN ) THEN
+                     GO TO 110
+                  END IF
+               ELSEIF( M.NE.L .AND. M.NE.LENDP1 ) THEN
+                  IF ( TST.LE.( EPS2*ABS( E( M-2 ) ) )*
+     $                 ABS( E( M ) )+SAFMIN ) THEN
+                     GO TO 110
+                  END IF
+               END IF
   100       CONTINUE
          END IF
 *
