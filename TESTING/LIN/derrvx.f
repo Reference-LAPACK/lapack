@@ -90,7 +90,7 @@
      $                   DGTSVX, DPBSV, DPBSVX, DPOSV, DPOSVX, DPPSV,
      $                   DPPSVX, DPTSV, DPTSVX, DSPSV, DSPSVX, DSYSV,
      $                   DSYSV_AA, DSYSV_RK, DSYSV_ROOK, DSYSVX,
-     $                   DSYSV_AA_2STAGE
+     $                   DSYSV_AA_2STAGE, DKYSV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -635,6 +635,33 @@
          CALL DSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 3, IW, INFO )
          CALL CHKXER( 'DSYSVX', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'KY' ) ) THEN
+*
+*        DKYSV
+*
+         SRNAMT = 'DKYSV '
+         INFOT = 1
+         CALL DKYSV( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYSV( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKYSV( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DKYSV( 'U', 2, 0, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'DKYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYSV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYSV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYSV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'DKYSV ', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *

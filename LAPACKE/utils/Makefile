@@ -104,6 +104,9 @@ OBJ = lapacke_cgb_nancheck.o \
       lapacke_dst_nancheck.o \
       lapacke_dsy_nancheck.o \
       lapacke_dsy_trans.o \
+      lapacke_dkt_nancheck.o \
+      lapacke_dky_nancheck.o \
+      lapacke_dky_trans.o \
       lapacke_dtb_nancheck.o \
       lapacke_dtb_trans.o \
       lapacke_dtf_nancheck.o \
@@ -141,6 +144,9 @@ OBJ = lapacke_cgb_nancheck.o \
       lapacke_sst_nancheck.o \
       lapacke_ssy_nancheck.o \
       lapacke_ssy_trans.o \
+      lapacke_skt_nancheck.o \
+      lapacke_sky_nancheck.o \
+      lapacke_sky_trans.o \
       lapacke_stb_nancheck.o \
       lapacke_stb_trans.o \
       lapacke_stf_nancheck.o \

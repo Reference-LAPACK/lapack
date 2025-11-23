@@ -10,7 +10,7 @@ set(SLINTST schkaa.F
    schkeq.f schkgb.f schkge.f schkgt.f
    schklq.f schkpb.f schkpo.f schkps.f schkpp.f
    schkpt.f schkq3.f schkqp3rk.f schkql.f schkqr.f schkrq.f
-   schksp.f schksy.f schksy_rook.f schksy_rk.f 
+   schksp.f schksy.f schkky.f schksy_rook.f schksy_rk.f 
    schksy_aa.f schksy_aa_2stage.f 
    schktb.f schktp.f schktr.f
    schktz.f
@@ -24,15 +24,15 @@ set(SLINTST schkaa.F
    sgerqs.f sget01.f sget02.f
    sget03.f sget04.f sget06.f sget07.f sgtt01.f sgtt02.f
    sgtt05.f slaptm.f slarhs.f slatb4.f slatb5.f slattb.f slattp.f
-   slattr.f slavsp.f slavsy.f slavsy_rook.f slqt01.f slqt02.f
+   slattr.f slavsp.f slavsy.f slavky.f slavsy_rook.f slqt01.f slqt02.f
    slqt03.f spbt01.f spbt02.f spbt05.f spot01.f
-   spot02.f spot03.f spot05.f spst01.f sppt01.f
+   spot02.f spot03.f spot05.f spot07.f spot08.f spot09.f spst01.f sppt01.f
    sppt02.f sppt03.f sppt05.f sptt01.f sptt02.f
    sptt05.f sqlt01.f sqlt02.f sqlt03.f sqpt01.f
    sqrt01.f sqrt01p.f sqrt02.f sqrt03.f sqrt11.f sqrt12.f
    sqrt13.f sqrt14.f sqrt15.f sqrt16.f sqrt17.f
    srqt01.f srqt02.f srqt03.f srzt01.f srzt02.f
-   sspt01.f ssyt01.f ssyt01_rook.f ssyt01_3.f 
+   sspt01.f ssyt01.f skyt01.f ssyt01_rook.f ssyt01_3.f 
    ssyt01_aa.f
    stbt02.f stbt03.f stbt05.f stbt06.f stpt01.f
    stpt02.f stpt03.f stpt05.f stpt06.f strt01.f
@@ -43,12 +43,12 @@ set(SLINTST schkaa.F
    schkorhr_col.f serrorhr_col.f sorhr_col01.f sorhr_col02.f)
 
 if(USE_XBLAS)
-  list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
-                      serrvxx.f serrgex.f serrsyx.f serrpox.f
+  list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvky.f sdrvpox.f
+                      serrvxx.f serrgex.f serrsyx.f serrkyx.f serrpox.f
                       sebchvxx.f)
 else()
-  list(APPEND SLINTST sdrvgb.f sdrvge.f sdrvsy.f sdrvpo.f
-                      serrvx.f serrge.f serrsy.f serrpo.f)
+  list(APPEND SLINTST sdrvgb.f sdrvge.f sdrvsy.f sdrvky.f sdrvpo.f
+                      serrvx.f serrge.f serrsy.f serrky.f serrpo.f)
 endif()
 
 set(CLINTST cchkaa.F
@@ -111,7 +111,7 @@ set(DLINTST dchkaa.F
    dchkeq.f dchkgb.f dchkge.f dchkgt.f
    dchklq.f dchkpb.f dchkpo.f dchkps.f dchkpp.f
    dchkpt.f dchkq3.f dchkqp3rk.f dchkql.f dchkqr.f dchkrq.f
-   dchksp.f dchksy.f dchksy_rook.f dchksy_rk.f 
+   dchksp.f dchksy.f dchkky.f dchksy_rook.f dchksy_rk.f 
    dchksy_aa.f dchksy_aa_2stage.f
    dchktb.f dchktp.f dchktr.f
    dchktz.f
@@ -125,15 +125,15 @@ set(DLINTST dchkaa.F
    dgerqs.f dget01.f dget02.f
    dget03.f dget04.f dget06.f dget07.f dgtt01.f dgtt02.f
    dgtt05.f dlaptm.f dlarhs.f dlatb4.f dlatb5.f dlattb.f dlattp.f
-   dlattr.f dlavsp.f dlavsy.f dlavsy_rook.f dlqt01.f dlqt02.f
+   dlattr.f dlavsp.f dlavsy.f dlavky.f dlavsy_rook.f dlqt01.f dlqt02.f
    dlqt03.f dpbt01.f dpbt02.f dpbt05.f dpot01.f
-   dpot02.f dpot03.f dpot05.f dpst01.f dppt01.f
+   dpot02.f dpot03.f dpot05.f dpot07.f dpot08.f dpot09.f dpst01.f dppt01.f
    dppt02.f dppt03.f dppt05.f dptt01.f dptt02.f
    dptt05.f dqlt01.f dqlt02.f dqlt03.f dqpt01.f
    dqrt01.f dqrt01p.f dqrt02.f dqrt03.f dqrt11.f dqrt12.f
    dqrt13.f dqrt14.f dqrt15.f dqrt16.f dqrt17.f
    drqt01.f drqt02.f drqt03.f drzt01.f drzt02.f
-   dspt01.f dsyt01.f dsyt01_rook.f dsyt01_3.f
+   dspt01.f dsyt01.f dkyt01.f dsyt01_rook.f dsyt01_3.f
    dsyt01_aa.f
    dtbt02.f dtbt03.f dtbt05.f dtbt06.f dtpt01.f
    dtpt02.f dtpt03.f dtpt05.f dtpt06.f dtrt01.f
@@ -145,12 +145,12 @@ set(DLINTST dchkaa.F
    dchkorhr_col.f derrorhr_col.f dorhr_col01.f dorhr_col02.f)
 
 if(USE_XBLAS)
-  list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f
-                      derrvxx.f derrgex.f derrsyx.f derrpox.f
+  list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvky.f ddrvpox.f
+                      derrvxx.f derrgex.f derrsyx.f derrkyx.f derrpox.f
                       debchvxx.f)
 else()
-  list(APPEND DLINTST ddrvgb.f ddrvge.f ddrvsy.f ddrvpo.f
-                      derrvx.f derrge.f derrsy.f derrpo.f)
+  list(APPEND DLINTST ddrvgb.f ddrvge.f ddrvsy.f ddrvky.f ddrvpo.f
+                      derrvx.f derrge.f derrsy.f derrky.f derrpo.f)
 endif()
 
 set(ZLINTST zchkaa.F

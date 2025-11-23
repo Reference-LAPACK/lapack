@@ -29,6 +29,9 @@ lapacke_csp_trans.c           lapacke_dsp_trans.c           lapacke_ssp_trans.c 
 lapacke_cst_nancheck.c        lapacke_dst_nancheck.c        lapacke_sst_nancheck.c        lapacke_zst_nancheck.c
 lapacke_csy_nancheck.c        lapacke_dsy_nancheck.c        lapacke_ssy_nancheck.c        lapacke_zsy_nancheck.c
 lapacke_csy_trans.c           lapacke_dsy_trans.c           lapacke_ssy_trans.c           lapacke_zsy_trans.c
+                              lapacke_dkt_nancheck.c        lapacke_skt_nancheck.c
+                              lapacke_dky_nancheck.c        lapacke_sky_nancheck.c
+                              lapacke_dky_trans.c           lapacke_sky_trans.c
 lapacke_ctb_nancheck.c        lapacke_dtb_nancheck.c        lapacke_stb_nancheck.c        lapacke_ztb_nancheck.c
 lapacke_ctb_trans.c           lapacke_dtb_trans.c           lapacke_stb_trans.c           lapacke_ztb_trans.c
 lapacke_ctf_nancheck.c        lapacke_dtf_nancheck.c        lapacke_stf_nancheck.c        lapacke_ztf_nancheck.c

@@ -5,7 +5,7 @@
 *  Test program for the DOUBLE PRECISION Level 3 Blas.
 *
 *  The program must be driven by a short data file. The first 13 records
-*  of the file are read using list-directed input, the last 6 records
+*  of the file are read using list-directed input, the last 8 records
 *  are read using the format ( A13, L2 ). An annotated example of a data
 *  file can be obtained by deleting the first 3 characters from the
 *  following 19 lines:
@@ -24,10 +24,12 @@
 *  0.0 1.0 1.3       VALUES OF BETA
 *  cblas_dgemm   T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dsymm   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_dkymm   T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dtrmm   T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dtrsm   T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dsyrk   T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dsyr2k  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_dkyr2k  T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_dgemmtr T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *  See:
@@ -49,7 +51,7 @@
       INTEGER            NIN, NOUT
       PARAMETER          ( NIN = 5, NOUT = 6 )
       INTEGER            NSUBS
-      PARAMETER          ( NSUBS = 7 )
+      PARAMETER          ( NSUBS = 9 )
       DOUBLE PRECISION   ZERO, HALF, ONE
       PARAMETER          ( ZERO = 0.0D0, HALF = 0.5D0, ONE = 1.0D0 )
       INTEGER            NMAX
@@ -94,7 +96,8 @@
 *     .. Data statements ..
       DATA               SNAMES/'cblas_dgemm ', 'cblas_dsymm ',
      $                   'cblas_dtrmm ', 'cblas_dtrsm ','cblas_dsyrk ',
-     $                   'cblas_dsyr2k', 'cblas_dgemmtr'/
+     $                   'cblas_dsyr2k', 'cblas_dgemmtr',
+     $                   'cblas_dkymm ', 'cblas_dkyr2k'/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -292,7 +295,7 @@
             INFOT = 0
             OK = .TRUE.
             FATAL = .FALSE.
-            GO TO ( 140, 150, 160, 160, 170, 180, 185 )ISNUM
+            GO TO ( 140, 150, 160, 160, 170, 180, 185, 150, 180 )ISNUM
 *           Test DGEMM, 01.
   140       IF (CORDER) THEN
             CALL DCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
@@ -307,7 +310,7 @@
      $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test DSYMM, 02.
+*           Test DSYMM, 02 and DKYMM, 08.
   150       IF (CORDER) THEN
             CALL DCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
@@ -349,7 +352,7 @@
      $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test DSYR2K, 06.
+*           Test DSYR2K, 06 and DKYR2K, 09.
   180       IF (CORDER) THEN
             CALL DCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
@@ -799,7 +802,7 @@
       INTEGER            I, IA, IB, ICS, ICU, IM, IN, LAA, LBB, LCC,
      $                   LDA, LDAS, LDB, LDBS, LDC, LDCS, M, MS, N, NA,
      $                   NARGS, NC, NS
-      LOGICAL            LEFT, NULL, RESET, SAME
+      LOGICAL            LEFT, NULL, RESET, SAME, KYFULL
       CHARACTER*1        SIDE, SIDES, UPLO, UPLOS
       CHARACTER*2        ICHS, ICHU
 *     .. Local Arrays ..
@@ -808,7 +811,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DMAKE, DMMCH, CDSYMM
+      EXTERNAL           DMAKE, DMMCH, CDSYMM, CDKYMM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -820,6 +823,7 @@
       DATA               ICHS/'LR'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
+      KYFULL = SNAME( 8: 8 ).EQ.'k'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
@@ -877,8 +881,13 @@
 *
 *                 Generate the symmetric matrix A.
 *
-                  CALL DMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA, LDA,
-     $                        RESET, ZERO )
+                  IF(.NOT.KYFULL) THEN
+                     CALL DMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA,
+     $                           LDA, RESET, ZERO )
+                  ELSE
+                     CALL DMAKE( 'KY', UPLO, ' ', NA, NA, A, NMAX, AA,
+     $                           LDA, RESET, ZERO )
+                  END IF
 *
                   DO 60 IA = 1, NALF
                      ALPHA = ALF( IA )
@@ -923,8 +932,13 @@
      $                      BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CDSYMM( IORDER, SIDE, UPLO, M, N, ALPHA,
-     $                              AA, LDA, BB, LDB, BETA, CC, LDC )
+                       IF(.NOT.KYFULL) THEN
+                           CALL CDSYMM( IORDER, SIDE, UPLO, M, N,
+     $                         ALPHA, AA, LDA, BB, LDB, BETA, CC, LDC )
+                        ELSE
+                           CALL CDKYMM( IORDER, SIDE, UPLO, M, N,
+     $                         ALPHA, AA, LDA, BB, LDB, BETA, CC, LDC )
+                        END IF
 *
 *                       Check if error-exit was taken incorrectly.
 *
@@ -1800,7 +1814,7 @@
       INTEGER            I, IA, IB, ICT, ICU, IK, IN, J, JC, JJ, JJAB,
      $                   K, KS, LAA, LBB, LCC, LDA, LDAS, LDB, LDBS,
      $                   LDC, LDCS, LJ, MA, N, NA, NARGS, NC, NS
-      LOGICAL            NULL, RESET, SAME, TRAN, UPPER
+      LOGICAL            NULL, RESET, SAME, TRAN, UPPER, KYFULL
       CHARACTER*1        TRANS, TRANSS, UPLO, UPLOS
       CHARACTER*2        ICHU
       CHARACTER*3        ICHT
@@ -1810,7 +1824,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DMAKE, DMMCH, CDSYR2K
+      EXTERNAL           DMAKE, DMMCH, CDSYR2K, CDKYR2K
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1822,6 +1836,7 @@
       DATA               ICHT/'NTC'/, ICHU/'UL'/
 *     .. Executable Statements ..
 *
+      KYFULL = SNAME( 8: 8 ).EQ.'k'
       NARGS = 12
       NC = 0
       RESET = .TRUE.
@@ -1895,8 +1910,13 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL DMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, CC,
-     $                              LDC, RESET, ZERO )
+                        IF(.NOT.KYFULL) THEN
+                           CALL DMAKE( 'SY', UPLO, ' ', N, N, C, NMAX,
+     $                                 CC, LDC, RESET, ZERO )
+                        ELSE
+                           CALL DMAKE( 'KY', UPLO, ' ', N, N, C, NMAX,
+     $                                 CC, LDC, RESET, ZERO )
+                        END IF
 *
                         NC = NC + 1
 *
@@ -1928,9 +1948,13 @@
      $                     TRANS, N, K, ALPHA, LDA, LDB, BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CDSYR2K( IORDER, UPLO, TRANS, N, K,
-     $                               ALPHA, AA, LDA, BB, LDB, BETA,
-     $                   CC, LDC )
+                        IF(.NOT.KYFULL) THEN
+                           CALL CDSYR2K( IORDER, UPLO, TRANS, N, K,
+     $                         ALPHA, AA, LDA, BB, LDB, BETA, CC, LDC )
+                        ELSE
+                           CALL CDKYR2K( IORDER, UPLO, TRANS, N, K,
+     $                         ALPHA, AA, LDA, BB, LDB, BETA, CC, LDC )
+                        END IF
 *
 *                       Check if error-exit was taken incorrectly.
 *
@@ -1955,8 +1979,13 @@
                         IF( NULL )THEN
                            ISAME( 11 ) = LDE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = LDERES( 'SY', UPLO, N, N, CS,
-     $                                   CC, LDC )
+                           IF(.NOT.KYFULL) THEN
+                              ISAME( 11 ) = LDERES( 'SY', UPLO, N, N,
+     $                                    CS, CC, LDC )
+                           ELSE
+                              ISAME( 11 ) = LDERES( 'KY', UPLO, N, N,
+     $                                    CS, CC, LDC )
+                           END IF
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
 *
@@ -1978,20 +2007,36 @@
 *
 *                          Check the result column by column.
 *
-                           JJAB = 1
-                           JC = 1
+                           IF( .NOT.KYFULL.OR.UPPER )THEN
+                              JJAB = 1
+                              JC = 1
+                           ELSE
+                              JJAB = 1 + 2*NMAX
+                              JC = 2
+                           END IF
                            DO 70 J = 1, N
-                              IF( UPPER )THEN
+                              IF( .NOT.KYFULL.AND.UPPER )THEN
                                  JJ = 1
                                  LJ = J
-                              ELSE
+                              ELSE IF( .NOT.KYFULL.AND..NOT.UPPER )THEN
                                  JJ = J
                                  LJ = N - J + 1
+                              ELSE IF( KYFULL.AND.UPPER )THEN
+                                 JJ = 1
+                                 LJ = J - 1
+                              ELSE
+                                 JJ = J + 1
+                                 LJ = N - J
                               END IF
                               IF( TRAN )THEN
                                  DO 50 I = 1, K
-                                    W( I ) = AB( ( J - 1 )*2*NMAX + K +
-     $                                       I )
+                                    IF(.NOT.KYFULL) THEN
+                                       W( I ) = AB( ( J - 1 )*2*NMAX
+     $                                          + K + I )
+                                    ELSE
+                                       W( I ) = -AB( ( J - 1 )*2*NMAX
+     $                                          + K + I )
+                                    END IF
                                     W( K + I ) = AB( ( J - 1 )*2*NMAX +
      $                                           I )
    50                            CONTINUE
@@ -2003,8 +2048,13 @@
      $                                       FATAL, NOUT, .TRUE. )
                               ELSE
                                  DO 60 I = 1, K
-                                    W( I ) = AB( ( K + I - 1 )*NMAX +
-     $                                       J )
+                                    IF(.NOT.KYFULL) THEN
+                                       W( I ) = AB( ( K + I - 1 )*NMAX
+     $                                          + J )
+                                    ELSE
+                                       W( I ) = -AB( ( K + I - 1 )*NMAX
+     $                                          + J )
+                                    END IF
                                     W( K + I ) = AB( ( I - 1 )*NMAX +
      $                                           J )
    60                            CONTINUE
@@ -2134,7 +2184,7 @@
 *  Stores the values in the array AA in the data structure required
 *  by the routine, with unwanted elements set to rogue value.
 *
-*  TYPE is 'GE', 'SY' or 'TR'.
+*  TYPE is 'GE', 'SY', 'KY' or 'TR'.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2159,7 +2209,7 @@
       DOUBLE PRECISION   A( NMAX, * ), AA( * )
 *     .. Local Scalars ..
       INTEGER            I, IBEG, IEND, J
-      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
+      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER, SKY
 *     .. External Functions ..
       DOUBLE PRECISION   DBEG
       EXTERNAL           DBEG
@@ -2167,8 +2217,9 @@
       GEN = TYPE.EQ.'GE'
       SYM = TYPE.EQ.'SY'
       TRI = TYPE.EQ.'TR'
-      UPPER = ( SYM.OR.TRI ).AND.UPLO.EQ.'U'
-      LOWER = ( SYM.OR.TRI ).AND.UPLO.EQ.'L'
+      SKY = TYPE.EQ.'KY'
+      UPPER = ( SYM.OR.SKY.OR.TRI ).AND.UPLO.EQ.'U'
+      LOWER = ( SYM.OR.SKY.OR.TRI ).AND.UPLO.EQ.'L'
       UNIT = TRI.AND.DIAG.EQ.'U'
 *
 *     Generate data in array A.
@@ -2184,6 +2235,8 @@
      $               A( I, J ) = ZERO
                   IF( SYM )THEN
                      A( J, I ) = A( I, J )
+                  ELSE IF( SKY )THEN
+                     A( J, I ) = -A( I, J )
                   ELSE IF( TRI )THEN
                      A( J, I ) = ZERO
                   END IF
@@ -2194,6 +2247,8 @@
      $      A( J, J ) = A( J, J ) + ONE
          IF( UNIT )
      $      A( J, J ) = ONE
+         IF( SKY )
+     $      A( J, J ) = ZERO
    20 CONTINUE
 *
 *     Store elements in array AS in data structure required by routine.
@@ -2207,17 +2262,17 @@
                AA( I + ( J - 1 )*LDA ) = ROGUE
    40       CONTINUE
    50    CONTINUE
-      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'TR' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'KY'.OR.TYPE.EQ.'TR' )THEN
          DO 90 J = 1, N
             IF( UPPER )THEN
                IBEG = 1
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKY )THEN
                   IEND = J - 1
                ELSE
                   IEND = J
                END IF
             ELSE
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKY )THEN
                   IBEG = J + 1
                ELSE
                   IBEG = J
@@ -2407,7 +2462,7 @@
 *
 *  Tests if selected elements in two arrays are equal.
 *
-*  TYPE is 'GE' or 'SY'.
+*  TYPE is 'GE' or 'SY' or 'KY'.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2435,13 +2490,19 @@
      $            GO TO 70
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( TYPE.EQ.'SY' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'KY' )THEN
          DO 50 J = 1, N
-            IF( UPPER )THEN
+            IF( UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = 1
                IEND = J
-            ELSE
+            ELSE IF( .NOT.UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = J
+               IEND = N
+            ELSE IF( UPPER.AND.TYPE.EQ.'KY' )THEN
+               IBEG = 1
+               IEND = J - 1
+            ELSE
+               IBEG = J + 1
                IEND = N
             END IF
             DO 30 I = 1, IBEG - 1

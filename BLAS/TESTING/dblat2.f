@@ -111,7 +111,7 @@
       INTEGER            NIN
       PARAMETER          ( NIN = 5 )
       INTEGER            NSUBS
-      PARAMETER          ( NSUBS = 16 )
+      PARAMETER          ( NSUBS = 18 )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       INTEGER            NMAX, INCMAX
@@ -158,7 +158,8 @@
       DATA               SNAMES/'DGEMV ', 'DGBMV ', 'DSYMV ', 'DSBMV ',
      $                   'DSPMV ', 'DTRMV ', 'DTBMV ', 'DTPMV ',
      $                   'DTRSV ', 'DTBSV ', 'DTPSV ', 'DGER  ',
-     $                   'DSYR  ', 'DSPR  ', 'DSYR2 ', 'DSPR2 '/
+     $                   'DSYR  ', 'DSPR  ', 'DSYR2 ', 'DSPR2 ',
+     $                   'DKYMV ', 'DKYR2 '/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -334,14 +335,14 @@
             FATAL = .FALSE.
             GO TO ( 140, 140, 150, 150, 150, 160, 160,
      $              160, 160, 160, 160, 170, 180, 180,
-     $              190, 190 )ISNUM
+     $              190, 190, 150, 190 )ISNUM
 *           Test DGEMV, 01, and DGBMV, 02.
   140       CALL DCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G )
             GO TO 200
-*           Test DSYMV, 03, DSBMV, 04, and DSPMV, 05.
+*           Test DSYMV, 03, DSBMV, 04, DSPMV, 05, and DKYMV, 17.
   150       CALL DCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
@@ -365,7 +366,7 @@
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z )
             GO TO 200
-*           Test DSYR2, 15, and DSPR2, 16.
+*           Test DSYR2, 15, DSPR2, 16, and DKYR2, 18.
   190       CALL DCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
@@ -801,7 +802,7 @@
      $                  XS, Y, YY, YS, YT, G )
       IMPLICIT NONE
 *
-*  Tests DSYMV, DSBMV and DSPMV.
+*  Tests DSYMV, DKYMV, DSBMV and DSPMV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -831,7 +832,8 @@
       INTEGER            I, IA, IB, IC, IK, IN, INCX, INCXS, INCY,
      $                   INCYS, IX, IY, K, KS, LAA, LDA, LDAS, LX, LY,
      $                   N, NARGS, NC, NK, NS
-      LOGICAL            BANDED, FULL, NULL, PACKED, RESET, SAME
+      LOGICAL            BANDED, FULL, NULL, PACKED, RESET, SAME,
+     $                   KYFULL
       CHARACTER*1        UPLO, UPLOS
       CHARACTER*2        ICH
 *     .. Local Arrays ..
@@ -840,7 +842,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DMAKE, DMVCH, DSBMV, DSPMV, DSYMV
+      EXTERNAL           DMAKE, DMVCH, DSBMV, DSPMV, DSYMV, DKYMV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -851,11 +853,12 @@
 *     .. Data statements ..
       DATA               ICH/'UL'/
 *     .. Executable Statements ..
-      FULL = SNAME( 3: 3 ).EQ.'Y'
+      FULL = SNAME( 2: 2 ).NE.'K'.AND.SNAME( 3: 3 ).EQ.'Y'
       BANDED = SNAME( 3: 3 ).EQ.'B'
       PACKED = SNAME( 3: 3 ).EQ.'P'
+      KYFULL = SNAME( 2: 2 ).EQ.'K'
 *     Define the number of arguments.
-      IF( FULL )THEN
+      IF( FULL.OR.KYFULL )THEN
          NARGS = 10
       ELSE IF( BANDED )THEN
          NARGS = 11
@@ -972,6 +975,14 @@
      $                           REWIND NTRA
                               CALL DSYMV( UPLO, N, ALPHA, AA, LDA, XX,
      $                                    INCX, BETA, YY, INCY )
+                           ELSE IF( KYFULL )THEN
+                              IF( TRACE )
+     $                           WRITE( NTRA, FMT = 9993 )NC, SNAME,
+     $                           UPLO, N, ALPHA, LDA, INCX, BETA, INCY
+                              IF( REWI )
+     $                           REWIND NTRA
+                              CALL DKYMV( UPLO, N, ALPHA, AA, LDA, XX,
+     $                                    INCX, BETA, YY, INCY )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
      $                           WRITE( NTRA, FMT = 9994 )NC, SNAME,
@@ -1003,7 +1014,7 @@
 *
                            ISAME( 1 ) = UPLO.EQ.UPLOS
                            ISAME( 2 ) = NS.EQ.N
-                           IF( FULL )THEN
+                           IF( FULL.OR.KYFULL )THEN
                               ISAME( 3 ) = ALS.EQ.ALPHA
                               ISAME( 4 ) = LDE( AS, AA, LAA )
                               ISAME( 5 ) = LDAS.EQ.LDA
@@ -2044,7 +2055,7 @@
      $                  Z )
       IMPLICIT NONE
 *
-*  Tests DSYR2 and DSPR2.
+*  Tests DSYR2, DKYR2 and DSPR2.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2072,7 +2083,7 @@
       INTEGER            I, IA, IC, IN, INCX, INCXS, INCY, INCYS, IX,
      $                   IY, J, JA, JJ, LAA, LDA, LDAS, LJ, LX, LY, N,
      $                   NARGS, NC, NS
-      LOGICAL            FULL, NULL, PACKED, RESET, SAME, UPPER
+      LOGICAL            FULL, NULL, PACKED, RESET, SAME, UPPER, KYFULL
       CHARACTER*1        UPLO, UPLOS
       CHARACTER*2        ICH
 *     .. Local Arrays ..
@@ -2082,7 +2093,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DMAKE, DMVCH, DSPR2, DSYR2
+      EXTERNAL           DMAKE, DMVCH, DSPR2, DSYR2, DKYR2
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -2093,10 +2104,11 @@
 *     .. Data statements ..
       DATA               ICH/'UL'/
 *     .. Executable Statements ..
-      FULL = SNAME( 3: 3 ).EQ.'Y'
+      FULL = SNAME( 2: 2 ).NE.'K'.AND.SNAME( 3: 3 ).EQ.'Y'
       PACKED = SNAME( 3: 3 ).EQ.'P'
+      KYFULL = SNAME( 2: 2 ).EQ.'K'
 *     Define the number of arguments.
-      IF( FULL )THEN
+      IF( FULL.OR.KYFULL )THEN
          NARGS = 9
       ELSE IF( PACKED )THEN
          NARGS = 8
@@ -2194,6 +2206,14 @@
      $                     REWIND NTRA
                         CALL DSYR2( UPLO, N, ALPHA, XX, INCX, YY, INCY,
      $                              AA, LDA )
+                     ELSE IF( KYFULL )THEN
+                        IF( TRACE )
+     $                     WRITE( NTRA, FMT = 9993 )NC, SNAME, UPLO, N,
+     $                     ALPHA, INCX, INCY, LDA
+                        IF( REWI )
+     $                     REWIND NTRA
+                        CALL DKYR2( UPLO, N, ALPHA, XX, INCX, YY, INCY,
+     $                              AA, LDA )
                      ELSE IF( PACKED )THEN
                         IF( TRACE )
      $                     WRITE( NTRA, FMT = 9994 )NC, SNAME, UPLO, N,
@@ -2266,22 +2286,36 @@
                               Z( I, 2 ) = Y( N - I + 1 )
    80                      CONTINUE
                         END IF
-                        JA = 1
+                        IF( .NOT.KYFULL.OR.UPPER )THEN
+                           JA = 1
+                        ELSE
+                           JA = 2
+                        END IF
                         DO 90 J = 1, N
-                           W( 1 ) = Z( J, 2 )
+                           IF( .NOT.KYFULL )THEN
+                              W( 1 ) = Z( J, 2 )
+                           ELSE
+                              W( 1 ) = -Z( J, 2 )
+                           END IF
                            W( 2 ) = Z( J, 1 )
-                           IF( UPPER )THEN
+                           IF( .NOT.KYFULL.AND.UPPER )THEN
                               JJ = 1
                               LJ = J
-                           ELSE
+                           ELSE IF( .NOT.KYFULL.AND..NOT.UPPER )THEN
                               JJ = J
                               LJ = N - J + 1
+                           ELSE IF( KYFULL.AND.UPPER )THEN
+                              JJ = 1
+                              LJ = J - 1
+                           ELSE
+                              JJ = J + 1
+                              LJ = N - J
                            END IF
                            CALL DMVCH( 'N', LJ, 2, ALPHA, Z( JJ, 1 ),
      $                                 NMAX, W, 1, ONE, A( JJ, J ), 1,
      $                                 YT, G, AA( JA ), EPS, ERR, FATAL,
      $                                 NOUT, .TRUE. )
-                           IF( FULL )THEN
+                           IF( FULL.OR.KYFULL )THEN
                               IF( UPPER )THEN
                                  JA = JA + LDA
                               ELSE
@@ -2325,7 +2359,7 @@
 *
   160 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      IF( FULL )THEN
+      IF( FULL.OR.KYFULL )THEN
          WRITE( NOUT, FMT = 9993 )NC, SNAME, UPLO, N, ALPHA, INCX,
      $      INCY, LDA
       ELSE IF( PACKED )THEN
@@ -2392,7 +2426,7 @@
       LERR = .FALSE.
       GO TO ( 10, 20, 30, 40, 50, 60, 70, 80,
      $        90, 100, 110, 120, 130, 140, 150,
-     $        160 )ISNUM
+     $        160, 170, 180 )ISNUM
    10 INFOT = 1
       CALL DGEMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2411,7 +2445,7 @@
       INFOT = 11
       CALL DGEMV( 'N', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    20 INFOT = 1
       CALL DGBMV( '/', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2436,7 +2470,7 @@
       INFOT = 13
       CALL DGBMV( 'N', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    30 INFOT = 1
       CALL DSYMV( '/', 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2452,7 +2486,7 @@
       INFOT = 10
       CALL DSYMV( 'U', 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    40 INFOT = 1
       CALL DSBMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2471,7 +2505,7 @@
       INFOT = 11
       CALL DSBMV( 'U', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    50 INFOT = 1
       CALL DSPMV( '/', 0, ALPHA, A, X, 1, BETA, Y, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2484,7 +2518,7 @@
       INFOT = 9
       CALL DSPMV( 'U', 0, ALPHA, A, X, 1, BETA, Y, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    60 INFOT = 1
       CALL DTRMV( '/', 'N', 'N', 0, A, 1, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2503,7 +2537,7 @@
       INFOT = 8
       CALL DTRMV( 'U', 'N', 'N', 0, A, 1, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    70 INFOT = 1
       CALL DTBMV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2525,7 +2559,7 @@
       INFOT = 9
       CALL DTBMV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    80 INFOT = 1
       CALL DTPMV( '/', 'N', 'N', 0, A, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2541,7 +2575,7 @@
       INFOT = 7
       CALL DTPMV( 'U', 'N', 'N', 0, A, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
    90 INFOT = 1
       CALL DTRSV( '/', 'N', 'N', 0, A, 1, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2560,7 +2594,7 @@
       INFOT = 8
       CALL DTRSV( 'U', 'N', 'N', 0, A, 1, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   100 INFOT = 1
       CALL DTBSV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2582,7 +2616,7 @@
       INFOT = 9
       CALL DTBSV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   110 INFOT = 1
       CALL DTPSV( '/', 'N', 'N', 0, A, X, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2598,7 +2632,7 @@
       INFOT = 7
       CALL DTPSV( 'U', 'N', 'N', 0, A, X, 0 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   120 INFOT = 1
       CALL DGER( -1, 0, ALPHA, X, 1, Y, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2614,7 +2648,7 @@
       INFOT = 9
       CALL DGER( 2, 0, ALPHA, X, 1, Y, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   130 INFOT = 1
       CALL DSYR( '/', 0, ALPHA, X, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2627,7 +2661,7 @@
       INFOT = 7
       CALL DSYR( 'U', 2, ALPHA, X, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   140 INFOT = 1
       CALL DSPR( '/', 0, ALPHA, X, 1, A )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2637,7 +2671,7 @@
       INFOT = 5
       CALL DSPR( 'U', 0, ALPHA, X, 0, A )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   150 INFOT = 1
       CALL DSYR2( '/', 0, ALPHA, X, 1, Y, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2653,7 +2687,7 @@
       INFOT = 9
       CALL DSYR2( 'U', 2, ALPHA, X, 1, Y, 1, A, 1 )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
-      GO TO 170
+      GO TO 190
   160 INFOT = 1
       CALL DSPR2( '/', 0, ALPHA, X, 1, Y, 1, A )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2666,8 +2700,40 @@
       INFOT = 7
       CALL DSPR2( 'U', 0, ALPHA, X, 1, Y, 0, A )
       CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 190
+  170 INFOT = 1
+      CALL DKYMV( '/', 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL DKYMV( 'U', -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL DKYMV( 'U', 2, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL DKYMV( 'U', 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 10
+      CALL DKYMV( 'U', 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      GO TO 190
+  180 INFOT = 1
+      CALL DKYR2( '/', 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL DKYR2( 'U', -1, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 5
+      CALL DKYR2( 'U', 0, ALPHA, X, 0, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL DKYR2( 'U', 0, ALPHA, X, 1, Y, 0, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      INFOT = 9
+      CALL DKYR2( 'U', 2, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
-  170 IF( OK )THEN
+  190 IF( OK )THEN
          WRITE( NOUT, FMT = 9999 )SRNAMT
       ELSE
          WRITE( NOUT, FMT = 9998 )SRNAMT
@@ -2690,7 +2756,7 @@
 *  Stores the values in the array AA in the data structure required
 *  by the routine, with unwanted elements set to rogue value.
 *
-*  TYPE is 'GE', 'GB', 'SY', 'SB', 'SP', 'TR', 'TB' OR 'TP'.
+*  TYPE is 'GE', 'GB', 'SY', 'SB', 'SP', 'KY', 'TR', 'TB' OR 'TP'.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2713,7 +2779,8 @@
       DOUBLE PRECISION   A( NMAX, * ), AA( * )
 *     .. Local Scalars ..
       INTEGER            I, I1, I2, I3, IBEG, IEND, IOFF, J, KK
-      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
+      LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER,
+     $                   SKY
 *     .. External Functions ..
       DOUBLE PRECISION   DBEG
       EXTERNAL           DBEG
@@ -2722,9 +2789,10 @@
 *     .. Executable Statements ..
       GEN = TYPE( 1: 1 ).EQ.'G'
       SYM = TYPE( 1: 1 ).EQ.'S'
+      SKY = TYPE( 1: 1 ).EQ.'K'
       TRI = TYPE( 1: 1 ).EQ.'T'
-      UPPER = ( SYM.OR.TRI ).AND.UPLO.EQ.'U'
-      LOWER = ( SYM.OR.TRI ).AND.UPLO.EQ.'L'
+      UPPER = ( SYM.OR.SKY.OR.TRI ).AND.UPLO.EQ.'U'
+      LOWER = ( SYM.OR.SKY.OR.TRI ).AND.UPLO.EQ.'L'
       UNIT = TRI.AND.DIAG.EQ.'U'
 *
 *     Generate data in array A.
@@ -2742,6 +2810,8 @@
                IF( I.NE.J )THEN
                   IF( SYM )THEN
                      A( J, I ) = A( I, J )
+                  ELSE IF( SKY )THEN
+                     A( J, I ) = -A( I, J )
                   ELSE IF( TRI )THEN
                      A( J, I ) = ZERO
                   END IF
@@ -2752,6 +2822,8 @@
      $      A( J, J ) = A( J, J ) + ONE
          IF( UNIT )
      $      A( J, J ) = ONE
+         IF( SKY )
+     $      A( J, J ) = ZERO
    20 CONTINUE
 *
 *     Store elements in array AS in data structure required by routine.
@@ -2777,17 +2849,17 @@
                AA( I3 + ( J - 1 )*LDA ) = ROGUE
    80       CONTINUE
    90    CONTINUE
-      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'TR' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'KY'.OR.TYPE.EQ.'TR' )THEN
          DO 130 J = 1, N
             IF( UPPER )THEN
                IBEG = 1
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKY )THEN
                   IEND = J - 1
                ELSE
                   IEND = J
                END IF
             ELSE
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKY )THEN
                   IBEG = J + 1
                ELSE
                   IBEG = J
@@ -3038,13 +3110,19 @@
      $            GO TO 70
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( TYPE.EQ.'SY' )THEN
+      ELSE IF( TYPE.EQ.'SY'.OR.TYPE.EQ.'KY' )THEN
          DO 50 J = 1, N
-            IF( UPPER )THEN
+            IF( UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = 1
                IEND = J
-            ELSE
+            ELSE IF( .NOT.UPPER.AND.TYPE.EQ.'SY' )THEN
                IBEG = J
+               IEND = N
+            ELSE IF( UPPER.AND.TYPE.EQ.'KY' )THEN
+               IBEG = 1
+               IEND = J - 1
+            ELSE
+               IBEG = J + 1
                IEND = N
             END IF
             DO 30 I = 1, IBEG - 1

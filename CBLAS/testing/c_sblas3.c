@@ -208,6 +208,64 @@ void F77_ssymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
                   *beta, c, *ldc );
 }
 
+void F77_skymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
+              float *alpha, float *a, CBLAS_INT *lda, float *b, CBLAS_INT *ldb,
+              float *beta, float *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN rtlf_len, FORTRAN_STRLEN uplow_len
+#endif
+) {
+
+  float *A, *B, *C;
+  CBLAS_INT i,j,LDA, LDB, LDC;
+  CBLAS_UPLO uplo;
+  CBLAS_SIDE side;
+
+  get_uplo_type(uplow,&uplo);
+  get_side_type(rtlf,&side);
+
+  if (*layout == TEST_ROW_MJR) {
+     if (side == CblasLeft) {
+        LDA = *m+1;
+        A   = ( float* )malloc( (*m)*LDA*sizeof( float ) );
+        for( i=0; i<*m; i++ )
+           for( j=0; j<*m; j++ )
+              A[i*LDA+j]=a[j*(*lda)+i];
+     }
+     else{
+        LDA = *n+1;
+        A   = ( float* )malloc( (*n)*LDA*sizeof( float ) );
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*n; j++ )
+              A[i*LDA+j]=a[j*(*lda)+i];
+     }
+     LDB = *n+1;
+     B   = ( float* )malloc( (*m)*LDB*sizeof( float ) );
+     for( i=0; i<*m; i++ )
+        for( j=0; j<*n; j++ )
+           B[i*LDB+j]=b[j*(*ldb)+i];
+     LDC = *n+1;
+     C   = ( float* )malloc( (*m)*LDC*sizeof( float ) );
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*m; i++ )
+           C[i*LDC+j]=c[j*(*ldc)+i];
+     cblas_skymm( CblasRowMajor, side, uplo, *m, *n, *alpha, A, LDA, B, LDB,
+                  *beta, C, LDC );
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*m; i++ )
+           c[j*(*ldc)+i]=C[i*LDC+j];
+     free(A);
+     free(B);
+     free(C);
+  }
+  else if (*layout == TEST_COL_MJR)
+     cblas_skymm( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+                  *beta, c, *ldc );
+  else
+     cblas_skymm( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+                  *beta, c, *ldc );
+}
+
 void F77_ssyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
               float *alpha, float *a, CBLAS_INT *lda,
               float *beta, float *c, CBLAS_INT *ldc
@@ -317,6 +375,65 @@ void F77_ssyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
 		   b, *ldb, *beta, c, *ldc );
   else
      cblas_ssyr2k(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
+		   b, *ldb, *beta, c, *ldc );
+}
+void F77_skyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
+               float *alpha, float *a, CBLAS_INT *lda, float *b, CBLAS_INT *ldb,
+               float *beta, float *c, CBLAS_INT *ldc
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len, FORTRAN_STRLEN transp_len
+#endif
+) {
+  CBLAS_INT i,j,LDA,LDB,LDC;
+  float *A, *B, *C;
+  CBLAS_UPLO uplo;
+  CBLAS_TRANSPOSE trans;
+
+  get_uplo_type(uplow,&uplo);
+  get_transpose_type(transp,&trans);
+
+  if (*layout == TEST_ROW_MJR) {
+     if (trans == CblasNoTrans) {
+        LDA = *k+1;
+        LDB = *k+1;
+        A   = ( float* )malloc( (*n)*LDA*sizeof( float ) );
+        B   = ( float* )malloc( (*n)*LDB*sizeof( float ) );
+        for( i=0; i<*n; i++ )
+           for( j=0; j<*k; j++ ) {
+              A[i*LDA+j]=a[j*(*lda)+i];
+              B[i*LDB+j]=b[j*(*ldb)+i];
+           }
+     }
+     else {
+        LDA = *n+1;
+        LDB = *n+1;
+        A   = ( float* )malloc( LDA*(*k)*sizeof( float ) );
+        B   = ( float* )malloc( LDB*(*k)*sizeof( float ) );
+        for( i=0; i<*k; i++ )
+           for( j=0; j<*n; j++ ){
+              A[i*LDA+j]=a[j*(*lda)+i];
+              B[i*LDB+j]=b[j*(*ldb)+i];
+           }
+     }
+     LDC = *n+1;
+     C   = ( float* )malloc( (*n)*LDC*sizeof( float ) );
+     for( i=0; i<*n; i++ )
+        for( j=0; j<*n; j++ )
+           C[i*LDC+j]=c[j*(*ldc)+i];
+     cblas_skyr2k(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA,
+		  B, LDB, *beta, C, LDC );
+     for( j=0; j<*n; j++ )
+        for( i=0; i<*n; i++ )
+           c[j*(*ldc)+i]=C[i*LDC+j];
+     free(A);
+     free(B);
+     free(C);
+  }
+  else if (*layout == TEST_COL_MJR)
+     cblas_skyr2k(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
+		   b, *ldb, *beta, c, *ldc );
+  else
+     cblas_skyr2k(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_strmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,

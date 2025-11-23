@@ -169,6 +169,9 @@ extern "C" {
     void API_SUFFIX(LAPACKE_dsy_trans)( int matrix_layout, char uplo, lapack_int n,
             const double *in, lapack_int ldin,
             double *out, lapack_int ldout );
+    void API_SUFFIX(LAPACKE_dky_trans)( int matrix_layout, char uplo, lapack_int n,
+            const double *in, lapack_int ldin,
+            double *out, lapack_int ldout );
     void API_SUFFIX(LAPACKE_dtb_trans)( int matrix_layout, char uplo, char diag,
             lapack_int n, lapack_int kd,
             const double *in, lapack_int ldin,
@@ -221,6 +224,9 @@ extern "C" {
             const float *in,
             float *out );
     void API_SUFFIX(LAPACKE_ssy_trans)( int matrix_layout, char uplo, lapack_int n,
+            const float *in, lapack_int ldin,
+            float *out, lapack_int ldout );
+    void API_SUFFIX(LAPACKE_sky_trans)( int matrix_layout, char uplo, lapack_int n,
             const float *in, lapack_int ldin,
             float *out, lapack_int ldout );
     void API_SUFFIX(LAPACKE_stb_trans)( int matrix_layout, char uplo, char diag,
@@ -441,7 +447,14 @@ extern "C" {
     lapack_logical API_SUFFIX(LAPACKE_dst_nancheck)( lapack_int n,
             const double *d,
             const double *e );
+    lapack_logical API_SUFFIX(LAPACKE_dkt_nancheck)( lapack_int n,
+            const double *d,
+            const double *e );
     lapack_logical API_SUFFIX(LAPACKE_dsy_nancheck)( int matrix_layout, char uplo,
+            lapack_int n,
+            const double *a,
+            lapack_int lda );
+    lapack_logical API_SUFFIX(LAPACKE_dky_nancheck)( int matrix_layout, char uplo,
             lapack_int n,
             const double *a,
             lapack_int lda );
@@ -508,7 +521,14 @@ extern "C" {
     lapack_logical API_SUFFIX(LAPACKE_sst_nancheck)( lapack_int n,
             const float *d,
             const float *e );
+    lapack_logical API_SUFFIX(LAPACKE_skt_nancheck)( lapack_int n,
+            const float *d,
+            const float *e );
     lapack_logical API_SUFFIX(LAPACKE_ssy_nancheck)( int matrix_layout, char uplo,
+            lapack_int n,
+            const float *a,
+            lapack_int lda );
+    lapack_logical API_SUFFIX(LAPACKE_sky_nancheck)( int matrix_layout, char uplo,
             lapack_int n,
             const float *a,
             lapack_int lda );

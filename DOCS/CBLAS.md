@@ -72,14 +72,14 @@ This section contains the list of the currently available CBLAS interfaces.
 * Single Precision Real:
   ```
   SGEMV SGBMV SGER  SSBMV SSPMV SSPR
-  SSPR2 SSYMV SSYR  SSYR2 STBMV STBSV
-  STPMV STPSV STRMV STRSV
+  SSPR2 SSYMV SKYMV SSYR  SSYR2 SKYR2
+  STBMV STBSV STPMV STPSV STRMV STRSV
   ```
 * Double Precision Real:
   ```
   DGEMV DGBMV DGER  DSBMV DSPMV DSPR
-  DSPR2 DSYMV DSYR  DSYR2 DTBMV DTBSV
-  DTPMV DTPSV DTRMV DTRSV
+  DSPR2 DSYMV DKYMV DSYR  DSYR2 DKYR2
+  DTBMV DTBSV DTPMV DTPSV DTRMV DTRSV
   ```
 * Single Precision Complex:
   ```
@@ -96,11 +96,13 @@ This section contains the list of the currently available CBLAS interfaces.
 ### 2.3 BLAS Level 3
 * Single Precision Real:
   ```
-  SGEMM SSYMM SSYRK SSERK2K STRMM STRSM
+  SGEMM SSYMM SKYMM SSYRK SSYR2K SKYR2K
+  STRMM STRSM
   ```
 * Double Precision Real:
   ```
-  DGEMM DSYMM DSYRK DSERK2K DTRMM DTRSM
+  DGEMM DSYMM DKYMM DSYRK DSYR2K DKYR2K
+  DTRMM DTRSM
   ```
 * Single Precision Complex:
   ```

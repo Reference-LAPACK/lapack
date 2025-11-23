@@ -389,6 +389,26 @@
          ELSE IF( SNAME .AND. C3.EQ.'GST' ) THEN
             NB = 64
          END IF
+      ELSE IF( C2.EQ.'KY' ) THEN
+         IF( C3.EQ.'TRF' ) THEN
+            IF( SNAME ) THEN
+               IF( TWOSTAGE ) THEN
+                  NB = 192
+               ELSE
+                  NB = 64
+               END IF
+            ELSE
+               IF( TWOSTAGE ) THEN
+                  NB = 192
+               ELSE
+                  NB = 64
+               END IF
+            END IF
+         ELSE IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+            NB = 32
+         ELSE IF( SNAME .AND. C3.EQ.'GST' ) THEN
+            NB = 64
+         END IF
       ELSE IF( CNAME .AND. C2.EQ.'HE' ) THEN
          IF( C3.EQ.'TRF' ) THEN
             IF( TWOSTAGE ) THEN
@@ -564,6 +584,16 @@
          ELSE IF( SNAME .AND. C3.EQ.'TRD' ) THEN
             NBMIN = 2
          END IF
+      ELSE IF( C2.EQ.'KY' ) THEN
+         IF( C3.EQ.'TRF' ) THEN
+            IF( SNAME ) THEN
+               NBMIN = 8
+            ELSE
+               NBMIN = 8
+            END IF
+         ELSE IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+            NBMIN = 2
+         END IF
       ELSE IF( CNAME .AND. C2.EQ.'HE' ) THEN
          IF( C3.EQ.'TRD' ) THEN
             NBMIN = 2
@@ -638,6 +668,10 @@
             END IF
          END IF
       ELSE IF( C2.EQ.'SY' ) THEN
+         IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+            NX = 32
+         END IF
+      ELSE IF( C2.EQ.'KY' ) THEN
          IF( SNAME .AND. C3.EQ.'TRD' ) THEN
             NX = 32
          END IF
