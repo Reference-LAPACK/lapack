@@ -87,7 +87,7 @@
 *>          W is DOUBLE PRECISION array, dimension (N)
 *>          If INFO = 0, the (N-1) lower subdiagonal elements of the
 *>          block diagonal matrix at front, and zero at last.
-*>		    The matrix consists of 2-by-2 skew-symmetric blocks, and zeros.
+*>		The matrix consists of 2-by-2 skew-symmetric blocks, and zeros.
 *>          The values in W, which represent blocks, are always
 *>          positive, and sorted in descending order.
 *>          The eigenvalues of each blocks can be evaluated directly.

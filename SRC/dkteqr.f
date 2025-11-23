@@ -280,7 +280,8 @@
                E( M ) = ZERO
                GO TO 30
             ELSEIF( TST.LE.( SQRT( ABS( E( M-1 ) ) )*
-     $          SQRT( ABS( E( M+1 ) ) ) )*EPS ) THEN
+     $          SQRT( ABS( E( M+1 ) ) ) )*EPS .AND.
+     $          M.NE.L1 .AND. M.NE.NM1 ) THEN
                E( M ) = ZERO
                GO TO 30
             END IF
@@ -340,7 +341,7 @@
      $             SAFMIN .AND. M.EQ.LENDM1 ) THEN
                   GO TO 60
      		   ELSEIF( TST.LE.( EPS2*ABS( E( M-1 ) ) )*ABS( E( M+1 ) )+
-     $             SAFMIN ) THEN
+     $             SAFMIN .AND. M.NE.L .AND. M.NE.LENDM1 ) THEN
                   GO TO 60
      		   END IF
    50       CONTINUE
@@ -572,7 +573,7 @@
      $             SAFMIN .AND. M.EQ.LENDP1 ) THEN
                   GO TO 110
      		   ELSEIF( TST.LE.( EPS2*ABS( E( M-2 ) ) )*ABS( E( M ) )+
-     $             SAFMIN ) THEN
+     $             SAFMIN .AND. M.NE.L .AND. M.NE.LENDP1 ) THEN
                   GO TO 110
      		   END IF
   100       CONTINUE
