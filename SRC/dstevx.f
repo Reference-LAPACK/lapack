@@ -250,8 +250,8 @@
       CHARACTER          ORDER
       INTEGER            I, IMAX, INDISP, INDIWO, INDWRK,
      $                   ISCALE, ITMP1, J, JJ, NSPLIT
-      DOUBLE PRECISION   BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA, SMLNUM,
-     $                   TMP1, TNRM, VLL, VUU
+      DOUBLE PRECISION   ABSTLL, BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA,
+     $                   SMLNUM, TMP1, TNRM, VLL, VUU
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -320,8 +320,10 @@
                W( 1 ) = D( 1 )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = ONE
+         IF( WANTZ ) THEN
+           Z( 1, 1 ) = ONE
+           IFAIL(1) = ZERO
+         ENDIF
          RETURN
       END IF
 *
@@ -337,6 +339,7 @@
 *     Scale matrix to allowable range, if necessary.
 *
       ISCALE = 0
+      ABSTLL = ABSTOL
       IF( VALEIG ) THEN
          VLL = VL
          VUU = VU
@@ -355,6 +358,8 @@
       IF( ISCALE.EQ.1 ) THEN
          CALL DSCAL( N, SIGMA, D, 1 )
          CALL DSCAL( N-1, SIGMA, E( 1 ), 1 )
+         IF( ABSTOL.GT.0 )
+     $      ABSTLL = ABSTOL*SIGMA
          IF( VALEIG ) THEN
             VLL = VL*SIGMA
             VUU = VU*SIGMA
@@ -403,7 +408,7 @@
       INDWRK = 1
       INDISP = 1 + N
       INDIWO = INDISP + N
-      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
+      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL, D, E,
      $             M,
      $             NSPLIT, W, IWORK( 1 ), IWORK( INDISP ),
      $             WORK( INDWRK ), IWORK( INDIWO ), INFO )
