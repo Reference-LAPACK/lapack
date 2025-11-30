@@ -227,8 +227,12 @@
      $                   WR( * )
 *     ..
 *     .. Function Arguments ..
-      LOGICAL            SELECT
-      EXTERNAL           SELECT
+      INTERFACE
+        LOGICAL FUNCTION SELECT_PROC_TYPE(WR, WI) BIND(C)
+          DOUBLE PRECISION WR, WI
+        END FUNCTION SELECT_PROC_TYPE
+      END INTERFACE
+      PROCEDURE(SELECT_PROC_TYPE) :: SELECT
 *     ..
 *
 *  =====================================================================
