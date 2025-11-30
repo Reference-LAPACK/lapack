@@ -208,8 +208,12 @@
       COMPLEX            A( LDA, * ), VS( LDVS, * ), W( * ), WORK( * )
 *     ..
 *     .. Function Arguments ..
-      LOGICAL            SELECT
-      EXTERNAL           SELECT
+      INTERFACE
+        LOGICAL FUNCTION SELECT_PROC_TYPE(EV) BIND(C)
+          COMPLEX EV
+        END FUNCTION SELECT_PROC_TYPE
+      END INTERFACE
+      PROCEDURE(SELECT_PROC_TYPE) :: SELECT
 *     ..
 *
 *  =====================================================================
