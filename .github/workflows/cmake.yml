@@ -221,7 +221,7 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: |
-        ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 -T memcheck > memcheck.out
+        ctest -C ${{env.BUILD_TYPE}} --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out
         cat memcheck.out
         if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
           exit 0
