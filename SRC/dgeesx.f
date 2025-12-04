@@ -420,6 +420,8 @@
 *
       IF( N.EQ.0 ) THEN
          SDIM = 0
+         IF (WANTSE .OR. WANTSB) RCONDE = 1.0D0
+         IF (WANTSV .OR. WANTSB) RCONDV = 0.0D0
          RETURN
       END IF
 *
