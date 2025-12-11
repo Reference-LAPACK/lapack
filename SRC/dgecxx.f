@@ -1,4 +1,4 @@
-*> \brief \b DGECXX computes a CX factorization of a real M-by-N matrix A using a truncated (rank k) Householder QR factorization with column pivoting algorithm.
+*> \brief \b DGECXX computes a CX factorization of a real M-by-N matrix A using a truncated (rank k) Householder QR factorization with column pivoting.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQP3RK + dependencies
+*> Download DGECXX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgecxx.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgecxx.f">
@@ -45,52 +45,52 @@
 *> \verbatim
 *>
 *> DGECXX computes a CX factorization of a real M-by-N matrix A using
-*> a truncated (rank k) Householder QR factorization with column
-*> pivoting algorithm implemented in DGEQP3RK routine.
+*> a truncated rank-K Householder QR factorization with a column
+*> pivoting algorithm, which is implemented in the DGEQP3RK routine.
 *>
-*>   A * P(K) = C*X + A_resid, where
+*>   A * P = C*X + A_resid, where
 *> 
-*>   C is an M-by-K matrix which is a subset of K columns selected
+*>   C is an M-by-K matrix consisting of K columns selected
 *>     from the original matrix A,
 *>
 *>   X is a K-by-N matrix that minimizes the Frobenius norm of the
 *>     residual matrix A_resid, X = pseudoinv(C) * A,
 *>
-*>   P(K) is an N-by-N permutation matrix chosen so that the first
-*>     K columns of A*P(K) equal C,
+*>   P is an N-by-N permutation matrix chosen so that the first
+*>     K columns of A*P equal C,
 *> 
 *>   A_resid is an M-by-N residual matrix.
 *>
 *> The column selection for the matrix C has two stages.
 *> 
-*> Column selection stage 1.
-*> =========================
+*> Column preselection stage 1.
+*> ============================
 *> 
 *> The user can select N_sel columns and deselect N_desel columns
 *> of the matrix A that MUST be included and excluded respectively
 *> from the matrix C a priori, before running the column selection
-*> algorithm. This is controlled by the flags in the array 
+*> algorithm. This is controlled by flags in the array 
 *> SEL_DESEL_COLS. The deselected columns are permuted to the right 
-*> side of the array A and selected columns are permuted to the left
-*> side of the array A. The details of the column permutation 
-*> (i.e. the column permutation matrix P(K)) are stored in the 
+*> side of the matrix A and selected columns are permuted to the left
+*> side of the matrix A. The details of the column permutation 
+*> (i.e. the column permutation matrix P) are stored in the 
 *> array JPIV. This feature can be used when the goal is to approximate
 *> the deselected columns by linear combinations of K selected columns,
-*> where the K columns MUST include the N_sel selected columns.
+*> where the K columns MUST include the N_sel preselected columns.
 *>
 *> Column selection stage 2.
 *> =========================
 *>
-*> The routine runs the column selection algorithm that can
-*> be controlled with three stopping criteria described below.
-*> For the column selection, the routine uses a truncated (rank K) 
+*> The routine runs a column selection algorithm that can
+*> be controlled by three stopping criteria described below.
+*> For column selection, the routine uses a truncated (rank-K) 
 *> Householder QR factorization with column pivoting algorithm using
-*> DGEQP3RK routine. Note, that before running the column selection
+*> the routine DGEQP3RK. Note that before running the column selection
 *> algorithm, the user can deselect M_desel rows of the matrix A that
 *> should NOT be considered by the column selection algorithm (i.e.
-*> during the factorization). This is controlled by the flags in 
+*> during the factorization). This is controlled by flags in 
 *> the array DESEL_ROWS. The deselected rows are permuted to the
-*> bottom of the array A. The details of the row permutation (i.e. the
+*> bottom of the matrix A. The details of the row permutation (i.e. the
 *> row permutation matrix) are stored in the array IPIV. This feature
 *> can be used when the goal is to use the deselected rows as test data,
 *> and the selected rows as training data.
@@ -109,56 +109,57 @@
 *> The column selection criteria (i.e. when to stop the factorization)
 *> can be any of the following:
 *>
-*>   1) The input parameter KMAXFREE, the maximum number of columns
-*>      to factorize outside of the N_sel preselected columns,
-*>      i.e. the factorization rank is limited to N_sel + KMAXFREE.
-*>      If N_sel + KMAXFREE >= min(M_sub, N_sub), the criterion 
+*>   1) KMAXFREE: This input parameter specifies the maximum number of
+*>      columns to factorize outside of the N_sel preselected columns.
+*>      The factorization rank is limited to N_sel + KMAXFREE.
+*>      If N_sel + KMAXFREE >= min(M_sub, N_sub), this criterion 
 *>      is not used.
 *>
-*>   2) The input parameter ABSTOL, the absolute tolerance for
-*>      the maximum column 2-norm of the submatrix residual
-*>      A_sub_resid = A(K+1:M_sub, K+1:N_sub).
+*>   2) ABSTOL: This input parameter specifies the absolute tolerance
+*>      for the maximum column 2-norm of the submatrix residual
+*>      A_sub_resid(K) = A(K+1:M_sub, K+1:N_sub).
 *>      This means that the factorization stops if this norm is less
-*>      or equal to ABSTOL. If ABSTOL < 0.0, the criterion is not used.
+*>      than or equal to ABSTOL. If ABSTOL < 0.0, this criterion is
+*>      not used.
 *>
-*>   3) The input parameter RELTOL, the tolerance for the maximum
-*>      column 2-norm matrix of the submatrix residual 
+*>   3) RELTOL: This input parameter specifies the tolerance for
+*>      the maximum column 2-norm of the submatrix residual 
 *>      A_sub_resid(K) = A(K+1:M_sub, K+1:N_sub) divided
 *>      by the maximum column 2-norm of the submatrix 
 *>      A_sub = A(1:M_sub, 1:N_sub).
 *>      This means that the factorization stops when the ratio of the
-*>      maximum column 2-norm of A_sub_resid to the maximum column
+*>      maximum column 2-norm of A_sub_resid(K) to the maximum column
 *>      2-norm of A_sub is less than or equal to RELTOL.
-*>      If RELTOL < 0.0, the criterion is not used.
+*>      If RELTOL < 0.0, this criterion is not used.
 *>
 *> The algorithm stops when any of these conditions is first
-*> satisfied, otherwise the whole submatrix A_sub is factorized.
+*> satisfied, otherwise the entire submatrix A_sub is factorized.
 *>
-*> For a full rank factorization of the matrix A_sub, use selection 
-*> criteria that satisfy N_sel + KMAXFREE >= min(M_sub,N_sub) and 
-*> ABSTOL < 0.0 and RELTOL < 0.0.
+*> To perform a full-rank factorization of the matrix A_sub, use 
+*> selection criteria that satisfy N_sel + KMAXFREE >= min(M_sub,N_sub)
+*> and  ABSTOL < 0.0 and RELTOL < 0.0.
 *>
-*> If the user wants to verify whether the columns of the matrix C are
+*> If the user wishes to verify that the columns of the matrix C are
 *> sufficiently linearly independent for their intended use, the user 
 *> can compute the condition number of its R factor by calling DTRCON 
-*> on the upper-triangular part of QRC(1:K,1:K) of the output
-*>  array QRC.
+*> on the upper-triangular part of QRC(1:K,1:K) in the output
+*> array QRC.
 *> 
 *> How N_sel affects the column selection algorithm.
 *> =================================================
 *>
-*> As mentioned above, the N_sel selected columns are permuted to the 
-*> right side of the array A, and will be included in the column 
-*> selection. Then the routine runs the factorization of that block 
-*> A(1:M_sub,1:N_sel), and if any of the three stopping criteria is met
-*> immediately after factoring the first N_sel columns the routine exits
+*> As mentioned above, the N_sel preselected columns are permuted to the 
+*> left side of the matrix A, and will be included in the column 
+*> selection. Then the routine factorizes that block A(1:M_sub,1:N_sel),
+*> and if any of the three stopping criteria is met immediately after
+*> factoring the first N_sel columns the routine exits
 *> (i.e. the user does not want to select KMAXFREE extra columns, or
 *> if the absolute or relative tolerance of the maximum column 2-norm of
 *> the residual is satisfied). In this case, the number 
 *> of selected columns would be K = N_sel. Otherwise, the factorization
 *> routine finds a new column to select with the maximum column 2-norm 
 *> in the residual A(N_sel+1:M_sub,N_sel+1:N_sub), and permutes that
-*> column to the right side of A(1:M,N_sel+1:N_sub). Then the routine 
+*> column to the left side of A(1:M,N_sel+1:N_sub). Then the routine 
 *> checks if the stopping criteria are met in the next residual
 *> A(N_sel+2:M_sub,N_sel+2:N_sub), and so on.
 *>
@@ -167,13 +168,13 @@
 *>
 *> When the columns are selected for the factor C, and:
 *>  (a) If the flag FACT = 'P', the routine returns only the indices of 
-*>      the selected columns from the original matrix A that are stored 
-*>      in the JPIV array as the first K elements.
+*>      the selected columns from the original matrix A, which are
+*>      stored in the first K elements of the JPIV array.
 *>  (b) If the flag FACT = 'C', then in addition to (a), the routine
 *>      explicitly returns the matrix C in the array C.
 *>  (c) If the flag FACT = 'X', then in addition to (b), the routine
 *>      explicitly computes and returns the factor 
-*>      X = pseudoinv(C) * A in the array X, and it returns 
+*>      X = pseudoinv(C) * A in the array X, and it also returns 
 *>      the factor R alongside the Householder vectors 
 *>      of the QR factorization of the matrix C in the array QRC.
 *> 
@@ -185,57 +186,60 @@
 *> \param[in] FACT
 *> \verbatim
 *>          FACT is CHARACTER*1
-*>          Specifies how the factors of a CX factorization
+*>          The flag specifies how the factors of a CX factorization
 *>          are returned.
 *>
-*>          = 'P' or 'p' : return only the column permutation matrix P
-*>                         in the array JPIV. The first K elements
-*>                         of the array JPIV contain indices of 
-*>                         the factor C columns that were selected
-*>                         from the matrix A.
-*>                         (fastest, smallest memory space)
+*>          = 'P': the routine returns: 
+*>                 (1) only the column permutation matrix P in
+*>                     the array JPIV.
+*>                     ( The first K elements of the array JPIV
+*>                     contain indices of the columns that were
+*>                     selected from the matrix A to form the
+*>                     factor C. )
+*>                 (fastest option, smallest memory space)        
+*>                         
+*>          = 'C': the routine returns:
+*>                 (1) the column permutation matrix P
+*>                     in the array JPIV.
+*>                 (2) the factor C explicitly in the array C.
+*>                 (slower option, more memory space)                          
 *>
-*>          = 'C' or 'c' : return the column permutation matrix P
-*>                         in the array JPIV and the factor C
-*>                         explicitly in the array C
-*>                         (slower, more memory space)
-*>
-*>          = 'X' or 'x' : return the column permutation matrix P
-*>                         in the array JPIV, and both factors
-*>                         C and X explicitly in the arrays
-*>                         C and X respectively. In addition,
-*>                         the factor R and the Householder vectors
-*>                         of the QR factorization of the factor C
-*>                         are returned in the array QRC.
-*>                         (R factor may be useful for checking 
-*>                         the factor C for singularity (R will
-*>                         have zero on the diagonal), and in this
-*>                         case the factor X cannot be computed.)
-*>                         (slowest, largest memory space)
+*>          = 'X': the routine returns:
+*>                 (1) the column permutation matrix P in
+*>                     the array JPIV.
+*>                 (2) the factor C explicitly in the array C.
+*>                 (3) the factor X explicitly in the array X.
+*>                 (4) the factor R and the Householder vectors
+*>                     of the QR factorization of the factor C
+*>                     in the array QRC.
+*>                     ( The factor R may be useful for checking 
+*>                       the factor C for singularity, in which case
+*>                       R will have a zero on the diagonal, and
+*>                       the factor X cannot be computed. )
+*>                 (slowest option, largest memory space)
 *> \endverbatim
 *>
 *> \param[in] USESD
 *> \verbatim
 *>          USESD is CHARACTER*1
-*>          Specifies if row deselection and column 
+*>          The flag specifies whether the row deselection and column 
 *>          preselection-deselection functionality is turned ON or OFF.
 *>
-*>          = 'N' or 'n' : Both row deselection and column
-*>                         preselection-deselection are OFF. 
-*>                         Both arrays DESEL_ROWS and
-*>                         SEL_DESEL_COLS are not used.
+*>          = 'N': Both row deselection and column
+*>                 preselection-deselection are OFF. 
+*>                 Both arrays DESEL_ROWS and SEL_DESEL_COLS
+*>                 are not used.
 *>
-*>          = 'R' or 'r' : Only row deselection is ON. 
-*>                         Column preselection-deselection is OFF.
-*>                         The array SEL_DESEL_COLS is not used.
+*>          = 'R': Only row deselection is ON. 
+*>                 Column preselection-deselection is OFF.
+*>                 Only the array SEL_DESEL_COLS is not used.
 *>
-*>          = 'C' or 'c' : Only column preselection-deselection is ON.
-*>                         Row deselection is OFF. 
-*>                         The array DESEL_ROWS is not used.
+*>          = 'C': Only column preselection-deselection is ON.
+*>                 Row deselection is OFF. 
+*>                 Only the array DESEL_ROWS is not used.
 *>
-*>          = 'A' or 'a' : Means "All".
-*>                         Both row deselection and column
-*>                         preselection-deselection are ON. 
+*>          = 'A': Means "All". Both row deselection and column
+*>                 preselection-deselection are ON.                      
 *> \endverbatim
 *>
 *> \param[in] M
@@ -253,31 +257,38 @@
 *> \param[in] DESEL_ROWS
 *> \verbatim
 *>          DESEL_ROWS is INTEGER array, dimension (M)
+*>          DESEL_ROWS is only accessed, if USESD = 'R' or 'A'.
 *>          This is a row deselection mask array that separates
-*.          the matrix A rows into 2 sets.
+*>          the matrix A rows into 2 sets. 
 *>
 *>          a) If DESEL_ROWS(i) = -1, the i-th row of the matrix A is
 *>             deselected by the user, i.e. chosen to be excluded from 
-*.             the algorithm and will be permuted to the bottom of A.
-*>             The number of deselected rows is denoted by M_desel.         
+*>             the column selection algorithm (in both preselection and
+*>             selection stages) and will be permuted to the bottom
+*>             of the matrix A.
+*>             The number of deselected rows is denoted by M_desel.       
 *>         
-*>          b) If DESEL_ROWS(i) not equal -1,
-*>             the i-th row of A is a free row and will be used by the
-*>             algorithm. This defines a set of M_sub = M - M_desel
-*>             rows that the algorithm will work on. After permutation,
-*>             this set will be in the top of the matrix A.
+*>          b) If DESEL_ROWS(i) is not equal -1,
+*>             the i-th row of A will be used in the column selection
+*>             algorithm (in both preselection and selection stages).
+*>             This defines a set of M_sub = M - M_desel rows that
+*>             the algorithm will use to select columns.
+*>             After the permutation, this set will be at the top
+*>             of the matrix A.
 *> \endverbatim
 *>
 *> \param[in] SEL_DESEL_COLS
 *> \verbatim
 *>          SEL_DESEL_COLS is INTEGER array, dimension (N)
-*>          This is a column preselection/deselection mask array that
-*.          separates the matrix A columns into 3 sets.
+*>          SEL_DESEL_COLS is only accessed, if USESD = 'C' or 'A'.
+*>          This is a column preselection-deselection mask array that
+*>          separates the matrix A columns into 3 sets.
 *>
 *>          a) If SEL_DESEL_COLS(j) = +1, the j-th column of the matrix 
-*>             A is selected by the user to be included in the factor C
-*>             and will be permuted to the left side of the array A.
-*>             The number of selected columns is denoted by N_sel.
+*>             A is preselected by the user to be included 
+*>             in the factor C and will be permuted to the left side
+*>             of the array A. The number of selected columns is
+*>             denoted by N_sel.
 *>
 *>          b) If SEL_DESEL_COLS(j) = -1, the j-th column of the matrix
 *>             A is deselected by the user, i.e. chosen to be excluded
@@ -285,118 +296,135 @@
 *>             of the array A. The number of deselected columns is
 *>             denoted by N_desel.          
 *>         
-*>          c) If SEL_DESEL_COLS(j) not equal 1, and not equal -1,
-*>             the j-th column of A is a free column and will be used by
-*>             the algorithm to determine if this column has to be 
-*>             selected. This defines a set of 
-*>             N_free = N - N_sel - N_desel.
+*>          c) If SEL_DESEL_COLS(j) is not equal 1 and not equal -1,
+*>             the j-th column of A is a free column and will be used
+*>             by the column selection algorithm to determine if this
+*>             column will be selected. This defines a set of 
+*>             columns of size N_free = N - N_sel - N_desel.
 *>         
-*>          NOTE: Error returned as INFO = -6 means that the number of
-*>          preselected N_sel colunms is larger than M_sub. 
+*>          NOTE: An error returned as INFO = -6 means that the number
+*>          of preselected N_sel columns is larger than M_sub. 
 *>          Therefore, the QR factorization of all N_sel preselected
 *>          columns cannot be completed.           
 *> \endverbatim
 *>
 *> \param[in] KMAXFREE
 *> \verbatim
-*>          KMAXFREE is INTEGER
+*>          KMAXFREE is INTEGER, KMAXFREE >= 0.
 *>
-*>          The first column selection stopping criterion in the 
-*>          column selection stage 2.
+*>          The first column selection stopping criterion from
+*>          the N_free columns (N_sel+1:N_sub) of the submatrix 
+*>          A_sub = A(1:M_sub, 1:N_sub) in the column selection stage 2.
 *>
-*>          The maximum number of columns of the matrix A_sub to select
-*>          during the factorization stage, KMAXFREE >= 0. 
+*>          KMAXFREE is the maximum number of columns of the matrix
+*>          A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) to select
+*>          during the column selection stage 2.
 *>          
-*>          KMAXFREE does not include the preselected columns.
+*>          KMAXFREE does not include the preselected N_sel columns.
 *>          N_sel + KMAXFREE is the maximum factorization rank of
-*>          the matrix A_sub = A(1:M_sub, 1:N_sub).
+*>          the matrix A_sub.
 *>
 *>          a) If N_sel + KMAXFREE >= min(M_sub, N_sub), then this 
-*>                stopping criterion is not used, i.e. columns are selected
-*>                in the factorization stage depending on 
-*>                ABSTOL and RELTOL.
+*>             stopping criterion is not used, i.e. columns are
+*>             selected in the factorization stage 2 depending 
+*>             on ABSTOL and RELTOL.
 *>
 *>          b) If KMAXFREE = 0, then this stopping criterion is
-*>                satisfied on input and the routine exits without 
-*>                performing column selection stage 2 on the submatrix 
-*>                A_sub. This means that the matrix
-*>                A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) is not modified.
-*>                and A_free is itself the residual for the factorization.
+*>             satisfied on input and the routine exits without 
+*>             performing column selection stage 2
+*>             on the submatrix A_sub. This means that the matrix
+*>             A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) is not modified.
+*>             and A_free is itself the residual for the factorization.
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
 *> \verbatim
 *>          ABSTOL is DOUBLE PRECISION, cannot be NaN.
 *>
-*>          The second column selection stopping criterion in the 
-*>          column selection stage 2.
+*>          The second column selection stopping criterion from
+*>          the N_free columns (N_sel+1:N_sub) of the submatrix 
+*>          A_sub = A(1:M_sub, 1:N_sub) in the column selection stage 2.
 *>
-*>          Here, SAFMIN = DLAMCH('S').
+*>          ABSTOL is the absolute tolerance (stopping threshold)
+*>          for maxcol2norm(A_sub_resid(K)), where K >= N_sel.
+*> 
+*>          maxcol2norm(A_sub_resid(K)) is the maximum column 2-norm
+*>          of the residual matrix 
+*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub)
+*>          when K columns have been factorized.
+*>          The column selection algorithm converges (stops
+*>          the factorization) when
+*>          maxcol2norm(A_sub_resid(K)) <= ABSTOL, where K >= N_sel.
 *>
-*>          The absolute tolerance (stopping threshold) for
-*>          maximum column 2-norm of the residual matrix
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub),
-*>          when K columns were factorized.
-*>          The algorithm converges (stops the factorization) when
-*>          the maximum column 2-norm of the residual matrix
-*>          A_sub_resid is less than or equal to ABSTOL.
+*>          Here, SAFMIN = DLAMCH('S'),
+*>                A_free = A(N_sel+1:M_sub, N_sel+1:N_sub),
+*>                maxcol2norm(A_free) is the maximum column 2-norm
+*>                of the matrix A_free.
 *>
 *>          a) If ABSTOL is NaN, then no computation is performed
 *>                and an error message ( INFO = -8 ) is issued
 *>                by XERBLA.
 *>
 *>          b) If ABSTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on KMAXFREE
-*>                and RELTOL.
-*>                This includes the case ABSTOL = -Inf.
+*>                used, and the column selection algorithm stops 
+*>                the factorization of A_free depending 
+*>                on KMAXFREE and RELTOL.
+*>                This includes the case where ABSTOL = -Inf.
 *>      
 *>          c) If 0.0 <= ABSTOL < 2*SAFMIN, then ABSTOL = 2*SAFMIN
-*>                is used. This includes the case ABSTOL = -0.0.
+*>                is used. This includes the case where ABSTOL = -0.0.
 *>
 *>          d) If 2*SAFMIN <= ABSTOL then the input value
 *>                of ABSTOL is used.
 *>
-*>          Here, maxcol2norm(A_free) is the maximum column 2-norm
-*>          of the matrix A_free = A(N_sel+1:M_sub, N_sel+1:N_sub).
-*>
 *>          If ABSTOL chosen above is >= maxcol2norm(A_free), then
-*>          this stopping criterion is satisfied after the matrix
-*>          A_sel = A(1:M_sub, 1:N_sel) is factorized and the 
-*>          routine exits immediately after maxcol2norm(A_free) is
-*>          computed to return it in MAXC2NORMK. This means that 
-*>          the factorization residual
-*>          A_sub_resid = A_free = A(N_sel+1:M_sub, N_sel+1:N_sub)
-*>          is not modified.
-*>          Also RELMAXC2NORMK of A_free is returned.
-*>          This includes the case ABSTOL = +Inf.          
+*>          this stopping criterion is satisfied on input, and 
+*>          the routine only preselects K = N_sel columns. The leftmost
+*>          preselected N_sel columns in the submatrix
+*>          A_sub = A(1:M_sub, 1:N_sub) are factorized. The routine
+*>          then computes maxcol2norm(A_free) and returns it
+*>          in MAXC2NORMK, computes and returns RELMAXC2NORMK of A_free,
+*>          and exits immediately.
+*>          This means that the factorization residual
+*>          A_sub_resid(N_sel) = A_free = A(N_sel+1:M_sub,N_sel+1:N_sub) 
+*>          is not modified.         
+*>          This includes the case where ABSTOL = +Inf.          
 *> \endverbatim
 *>
 *> \param[in] RELTOL
 *> \verbatim
 *>          RELTOL is DOUBLE PRECISION, cannot be NaN.
 *>
-*>          The third column selection stopping criterion in the 
-*>          column selection stage 2.
+*>          The third column selection stopping criterion from
+*>          the N_free columns (N_sel+1:N_sub) of the submatrix 
+*>          A_sub = A(1:M_sub, 1:N_sub) in the column selection stage 2.
 *>
-*>          Here, EPS = DLAMCH('E').
+*>          RELTOL is the tolerance (stopping threshold) for the ratio
+*>          relmaxcol2norm(A_sub_resid(K)) =
+*>                 = maxcol2norm(A_sub_resid(K))/maxcol2norm(A_sub),
+*>          where K >= N_sel.
 *>
-*>          The tolerance (stopping threshold) for the ratio
-*>          maxcol2norm(A_sub_resid(K))/maxcol2norm(A_sub) of
-*>          the maximum column 2-norm of the residual matrix 
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub) and 
-*>          the maximum column 2-norm of the original submatrix
-*>          A_sub = A(1:M_sub, 1:N_sub). The algorithm
-*>          converges (stops the factorization), when
-*>          maxcol2norm(A_sub_resid(K))/maxcol2norm(A_sub) is 
-*>          less than or equal to RELTOL.
+*>          maxcol2norm(A_sub_resid(K)) is the maximum column 2-norm
+*>          of the residual matrix 
+*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub)
+*>          when K columns have been factorized.
+*>          maxcol2norm(A_sub) is the maximum column 2-norm 
+*>          of the original submatrix A_sub = A(1:M_sub, 1:N_sub).
+*>          The column selection algorithm converges
+*>          (stops the factorization) when the ratio 
+*>          relmaxcol2norm(A_sub_resid(K)) <= RELTOL, where K >= N_sel.
+*>
+*>          Here, EPS = DLAMCH('E'),
+*>                A_free = A(N_sel+1:M_sub, N_sel+1:N_sub).          
 *>
 *>          a) If RELTOL is NaN, then no computation is performed
 *>                and an error message ( INFO = -9 ) is issued
 *>                by XERBLA.
 *>
 *>          b) If RELTOL < 0.0, then this stopping criterion is not
-*>                used, factorize columns depending on KMAXFREE 
-*>                and ABSTOL.
+*>                used and the column selection algorithm stops 
+*>                the factorization of A_free depending 
+*>                on KMAXFREE and ABSTOL.
 *>                This includes the case RELTOL = -Inf.
 *>
 *>          c) If 0.0 <= RELTOL < EPS, then RELTOL = EPS is used.
@@ -406,19 +434,20 @@
 *>                is used.
 *>
 *>          If RELTOL chosen above is >= 1.0, then this stopping
-*>          criterion is satisfied on input and routine exits
-*>          immediately after A_sel = A(1:M_sub, 1:N_sel))
-*>          is factorized and maxcol2norm(A_free) is computed to
-*>          return it in MAXC2NORMK. This means that 
-*>          the factorization residual 
-*>          A_sub_resid = A_free = A(N_sel+1:M_sub, N_sel+1:N_sub)
+*>          criterion is satisfied on input, and the routine
+*>          only preselects K = N_sel columns. The leftmost
+*>          preselected N_sel columns in the submatrix
+*>          A_sub = A(1:M_sub, 1:N_sub) are factorized. 
+*>          The routine then computes maxcol2norm(A_free) and returns
+*>          it in MAXC2NORMK, returns RELMAXC2NORMK as 1.0, and exits
+*>          immediately.
+*>          This means that the factorization residual
+*>          A_sub_resid(N_sel) = A_free = A(N_sel+1:M_sub,N_sel+1:N_sub)
 *>          is not modified.
-*>          Also RELMAXC2NORMK is returned as 1.0.
 *>          This includes the case RELTOL = +Inf.
 *>
 *>          NOTE: We recommend RELTOL to satisfy
 *>                min(max(M_sub,N_sub)*EPS, sqrt(EPS)) <= RELTOL
-*>
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -429,60 +458,60 @@
 *>            the M-by-N matrix A.
 *>
 *>          On exit:
-*>            NOTE DEFINITIONS: M_sub = M_free,
-*>                              N_sub = N_sel + N_free
 *>
-*>            The output parameter K, the number of selected columns,
-*>            is described later. 
+*>            NOTE: 
+*>            The output parameter K, the number of selected
+*>            columns, is described later.
+*>            A_sub = A(1:M_sub, 1:N_sub).         
 *>
 *>            1) If K = 0, A(1:M,1:N) contains the original matrix A.
 *>
-*>            2) If K > 0, A(1:M,1:N): contains the following parts:
+*>            2) If K > 0, A(1:M,1:N) contains the following parts:
 *>                  
 *>            (a) If M_sub < M (which is the same as M_desel > 0),
-*>               the subarray A(M_sub+1:M,1:N) contains the deselected
-*>               rows.
+*>                the subarray A(M_sub+1:M,1:N) contains the deselected
+*>                rows.
 *> 
-*>            (b) If N_sub < N ( which is the same as N_desel > 1 ).
-*>               the subarray A(1:M,N_sub+1:N) contains the
-*>               deselected columns.
+*>            (b) If N_sub < N ( which is the same as N_desel > 0 ),
+*>                the subarray A(1:M,N_sub+1:N) contains the
+*>                deselected columns.
 *>
 *>            (c) If N_sel > 0,
-*>               the union of the subarray A(1:M_sub, 1:N_sel)
-*>               and the subarray A(1:N_sel, 1:N_sub) contains parts
-*>               of the factors obtained by computing Householder QR 
-*>               factorization WITHOUT column pivoting of N_sel
-*>               preselected columns using DGEQRF routine.
+*>                the union of the subarray A(1:M_sub, 1:N_sel)
+*>                and the subarray A(1:N_sel, 1:N_sub) contains parts
+*>                of the factors obtained by computing Householder QR 
+*>                factorization WITHOUT column pivoting of N_sel
+*>                preselected columns using the routine DGEQRF.
 *>               
-*>            (d) The subarray A(N_sel:M_sub, N_sel:N_sub) contains 
-*>               parts of the factors obtained by computing a truncated
-*>               (rank K) Householder QR factorization with
-*>               column pivoting using DGEQP3RK on the matrix
-*>               A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) which
-*>               is the result of applying selection and deselection
-*>               of columns, applying deselection of rows to the 
-*>               original matrix A, and applying orthogonal
-*>               transformation from the factorization of the first
-*>               N_sel columns as described in part (c).
+*>            (d) The subarray A(N_sel+1:M_sub, N_sel+1:N_sub)
+*>                contains parts of the factors obtained by computing 
+*>                a truncated (rank K) Householder QR factorization with
+*>                column pivoting using the routine DGEQP3RK on
+*>                the matrix A_free = A(N_sel+1:M_sub, N_sel+1:N_sub),
+*>                which is the result of applying selection and 
+*>                deselection of columns, applying deselection of rows
+*>                to the original matrix A, and applying orthogonal
+*>                transformation from the factorization of the first
+*>                N_sel columns as described in part (c).
 *>
-*>              1. The elements below the diagonal of the subarray
-*>                 A_sub(1:M_sub,1:K) together with TAU(1:K)
-*>                 represent the orthogonal matrix Q(K) as a
-*>                 product of K Householder elementary reflectors.
+*>             1. The elements below the diagonal of the subarray
+*>                A_sub(1:M_sub,1:K) together with TAU(1:K)
+*>                represent the orthogonal matrix Q(K) as a
+*>                product of K Householder elementary reflectors.
 *>
-*>              2. The elements on and above the diagonal of
-*>                 the subarray A_sub(1:K,1:N_sub) contain 
-*>                 K-by-N_sub upper-trapezoidal matrix
-*>                 R_sub_approx(K) = ( R_sub11(K), R_sub12(K) ).
-*>                 NOTE: If K=min(M_sub,N_sub), i.e. full rank 
-*>                       factorization, then R_sub_approx(K) is the
-*>                       full factor R which is upper-trapezoidal.
-*>                       If, in addition, M_sub>=N_sub, then R is
-*>                       upper-triangular.
+*>             2. The elements on and above the diagonal of
+*>                the subarray A_sub(1:K,1:N_sub) contain the 
+*>                K-by-N_sub upper-trapezoidal matrix
+*>                R_sub_approx(K) = ( R_sub11(K), R_sub12(K) ).
+*>                NOTE: If K = min(M_sub,N_sub), i.e. full rank 
+*>                      factorization, then R_sub_approx(K) is the
+*>                      full factor R which is upper-trapezoidal.
+*>                      If, in addition, M_sub >= N_sub, then R is
+*>                      upper-triangular.
 *>
-*>              3. The subarray A_sub(K+1:M_sub,K+1:N_sub) contains
-*>                 (M_sub-K)-by-(N_sub-K) rectangular matrix
-*>                 A_sub_resid(K).
+*>             3. The subarray A_sub(K+1:M_sub,K+1:N_sub) contains
+*>                the (M_sub-K)-by-(N_sub-K) rectangular matrix
+*>                A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub).
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -494,8 +523,8 @@
 *> \param[out] K
 *> \verbatim
 *>          K is INTEGER
-*>          The number of columns that were selected.
-*>          (K is the factorization rank)
+*>          The number of columns that were selected
+*>          (K is the factorization rank).
 *>          0 <= K <= min( M_sub, min(N_sel+KMAXFREE, N_sub) ).
 *>
 *>          If K = 0, the arrays A, TAU were not modified.
@@ -516,10 +545,10 @@
 *>          b) If 0 < K < min(M_sub, N_sub), then MAXC2NRMK is returned.
 *>
 *>          c) If K = min(M_sub, N_sub), i.e. the whole matrix A_sub was
-*>             factorized and there is no factorization residual matrix,
+*>             factorized and there is no residual matrix,
 *>             then MAXC2NRMK = 0.0.
 *>
-*>          NOTE: MAXC2NRMK at the factorization step K would equal
+*>          NOTE: MAXC2NRMK at the factorization step K is equal
 *>                to the diagonal element R_sub(K+1,K+1) of the factor
 *>                R_sub in the next factorization step K+1.
 *> \endverbatim
@@ -527,9 +556,9 @@
 *> \param[out] RELMAXC2NRMK
 *> \verbatim
 *>          RELMAXC2NRMK is DOUBLE PRECISION
-*>          The ratio MAXC2NRMK / MAXC2NRM of the maximum column
-*>          2-norm of the residual matrix 
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub) (when
+*>          The ratio MAXC2NRMK / MAXC2NRM 
+*>          of the maximum column 2-norm MAXC2NRMK of the residual
+*>          matrix A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub) (when
 *>          factorization stopped at rank K) and maximum column 2-norm 
 *>          MAXC2NRM of the matrix A_sub = A(1:M_sub, 1:N_sub).
 *>          RELMAXC2NRMK >= 0.
@@ -549,14 +578,14 @@
 *>         NOTE: RELMAXC2NRMK at the factorization step K would equal
 *>               abs(R_sub(K+1,K+1))/MAXC2NRM in the next
 *>               factorization step K+1, where R_sub(K+1,K+1) is the 
-*>               diaginal element of the factor R_sub in the next
+*>               diagonal element of the factor R_sub in the next
 *>               factorization step K+1.
 *> \endverbatim
 *>
 *> \param[out] FNRMK
 *> \verbatim
 *>          FNRMK is DOUBLE PRECISION
-*>          Frobenius norm of the factorization residual matrix 
+*>          Frobenius norm of the residual matrix 
 *>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub).
 *>          FNRMK >= 0.0
 *> \endverbatim
@@ -564,9 +593,9 @@
 *> \param[out] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (M)
-*>          Row permutation indices due to row
-*>          deselection, for 1 <= i <= M.
-*>          If IPIV(i)= k, then the row i of A_sub was the
+*>          Row permutation indices due to row deselection,
+*>          for 1 <= i <= M.
+*>          If IPIV(i)= k, then the row i of A_sub was
 *>          the row k of A.
 *> \endverbatim
 *>
@@ -574,11 +603,11 @@
 *> \verbatim
 *>          JPIV is INTEGER array, dimension (N)
 *>          Column permutation indices, for 1 <= j <= N.
-*>          If JPIV(j)= k, then the column j of A*P was the
+*>          If JPIV(j)= k, then the column j of A*P (and of A_sub) was
 *>          the column k of A.
 *> 
 *>          The first K elements of the array JPIV contain
-*>          indices of the factor C columns that were selected
+*>          indices of the columns of the factor C that were selected
 *>          from the matrix A.
 *> \endverbatim
 *>
@@ -597,9 +626,9 @@
 *> \verbatim
 *>          C is DOUBLE PRECISION array.
 *>          If FACT = 'P':
-*>             the array is not used and can have linear dimension >=1.
+*>             the array is not used, the array dimension >= (1,1).
 *>          If FACT = 'C' or 'X': 
-*>             If USESD = ’N’, the array dimension is (LDC,min(M,N)).
+*>             If USESD = 'N', the array dimension is (LDC,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
 *>                        the array dimension (LDC,min(M_sub,N_sub)).
 *>
@@ -618,9 +647,10 @@
 *> \param[out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array.
-*>          If FACT = 'P' or 'C': array is not used
-*>              and can have linear dimension >=1.
-*>          If FACT = 'X': array has dimension (LDX,N).
+*>          If FACT = 'P' or 'C': The array is not used,
+*>                       the array dimension is >= (1,1).
+*>          If FACT = 'X': 
+*>                       The array dimension is (LDX,N).
 *>             If K = 0, the array is not used.
 *>             If K > 0, the array X stores the K-by-N factor X.
 *> \endverbatim
@@ -631,7 +661,7 @@
 *>          The leading dimension of the array X.
 *>          If FACT = 'P' or 'C': LDX >= 1.
 *>          If FACT = 'X':
-*>             If USESD = ’N’, LDX >= max(1,min(M,N)).
+*>             If USESD = 'N', LDX >= max(1,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
 *>                             LDX >= max(1,min(M_sub,N_sub)).
 *> \endverbatim
@@ -639,14 +669,15 @@
 *> \param[out] QRC
 *> \verbatim
 *>          QRC is DOUBLE PRECISION array.
-*>          If FACT = 'P' or 'C':
-*>             the array is not used and can have linear dimension >=1.
+*>          If FACT = 'P' or 'C': The array is not used, 
+*>                       the array dimension is >= (1,1).
 *>          If FACT = 'X':
-*>             If USESD = ’N’, the array dimension is (LDQRC,min(M,N)),
+*>             If USESD = 'N',
+*>                       the array dimension is (LDQRC,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
-*>                          the array dimension (LDC,min(M_sub,N_sub)).
+*>                       the array dimension is (LDC,min(M_sub,N_sub)).
 *>
-*>             If K > 0, the array is not used.
+*>             If K = 0, the array is not used.
 *>             If K > 0, QRC(1:M_sub,1:K) stores two components from
 *>             the QR factorization of the factor C. The K-by-K
 *>             factor R is stored in the upper triangle. 
@@ -674,9 +705,9 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. 
 *>          If FACT = 'P' or 'C': 
-*>             minimal LWORK >= max( 1, NSUB, NSEL, 3*NFREE+1 ).
+*>           the minimal LWORK >= max( 1, NSUB, NSEL, 3*NFREE+1 ).
 *>          If FACT = 'X':
-*>             minimal LWORK >= max( 1, NSUB, 3*NFREE+1, min(M,N)+N ).
+*>           the minimal LWORK >= max( 1, NSUB, 3*NFREE+1, min(M,N)+N ).
 *>          
 *>          For good performance, LWORK should generally be larger, and
 *>          the user should query the routine for the optimal LWORK.
@@ -695,16 +726,16 @@
 *>          of "bad" columns for norm downdating in the residual
 *>          matrix in the blocked step auxiliary subroutine DLAQP3RK ).
 *>
-*>          On exit, if INFO >= 0, WORK(1) returns the optimal LIWORK.
+*>          On exit, if INFO >= 0, IWORK(1) returns the optimal LIWORK.
 *> \endverbatim
 *>
-*> \param[out] LIWORK
+*> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
 *>          The dimension of the array LIWORK. 
-*>             If FACT = 'P': minimal LIWORK >= max(1,N-1).
-*>             If FACT = 'C' or 'X': minimal LIWORK >= max(1,N).
-*>          Optimal LIWORK is the same as minimal LIWORK.
+*>             If FACT = 'P': the minimal LIWORK >= max(1,N-1).
+*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,N).
+*>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the routine
@@ -721,8 +752,8 @@
 *>          < 0: if INFO = -i, the i-th argument had an illegal value.
 *>          > 0: if INFO =  i, the i-th diagonal element of the
 *>               triangular R factor of the QR factorization of 
-*>               the matrix C is zero, so that C does not have
-*>               full rank, X cannot be computed as the least
+*>               the matrix C is zero. Consequently, C does not have
+*>               full rank, and X cannot be computed as the least
 *>               squares solution to C*X = A.
 *>               (R is stored in the array QRC.)
 *> \endverbatim
@@ -737,7 +768,7 @@
 *
 *> \ingroup gecxx
 *
-*  =====================================================================      
+*  =====================================================================     
       SUBROUTINE DGECXX( FACT, USESD, M, N,
      $                   DESEL_ROWS, SEL_DESEL_COLS,
      $                   KMAXFREE, ABSTOL, RELTOL, A, LDA,
