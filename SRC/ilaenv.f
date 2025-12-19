@@ -670,6 +670,10 @@
          IF( C3.EQ.'RFT' ) THEN
             NX = 64
          END IF
+      ELSE IF( C2.EQ.'ST' ) THEN
+         IF( C3.EQ.'3RK' ) THEN
+            NX = 64
+         END IF
       END IF
       ILAENV = NX
       RETURN

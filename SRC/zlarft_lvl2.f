@@ -1,23 +1,14 @@
-*> \brief \b ZLARFT_LVL2: Level 2 BLAS version for terminating case of ZLARFT.
+*> \brief \b ZLARFT_LVL2 forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download ZLARFT_LVL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarft.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarft.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarft.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU,
-*                    T, LDT )
+*       SUBROUTINE ZLARFT_LVL2( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -170,158 +161,519 @@
       INTEGER            K, LDT, LDV, N
 *     ..
 *     .. Array Arguments ..
+*
       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
 *     ..
 *
-*  =====================================================================
-*
 *     .. Parameters ..
-      COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
-*     ..
+*
+      COMPLEX*16         ONE
+      PARAMETER(ONE=(1.0D+0,0.0D+0))
+*
 *     .. Local Scalars ..
-      INTEGER            I, J, PREVLASTV, LASTV
-*     ..
+*
+      INTEGER           I,J,KMI,NMI
+      LOGICAL           QR,LQ,QL,RQ,LQT,RQT,DIRF,COLV,TDIRF,TCOLV
+*
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZTRMV, ZGEMM
-*     ..
-*     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+*
+      EXTERNAL          ZTRMV,ZGEMV,ZGEMM
+*
+*     .. External Functions..
+*
+      LOGICAL           LSAME
+      EXTERNAL          LSAME
+*
+*     .. Intrinsic Functions..
+*
+      INTRINSIC         CONJG
 *     ..
 *     .. Executable Statements ..
 *
-*     Quick return if possible
+*     Determine what kind of Q we need to compute
+*     We assume that if the user doesn't provide 'F' for DIRECT,
+*     then they meant to provide 'B' and if they don't provide
+*     'C' for STOREV, then they meant to provide 'R'
 *
-      IF( N.EQ.0 )
-     $   RETURN
+      DIRF = LSAME(DIRECT,'F')
+      TDIRF = LSAME(DIRECT,'T')
+      COLV = LSAME(STOREV,'C')
+      TCOLV = LSAME(STOREV,'T')
 *
-      IF( LSAME( DIRECT, 'F' ) ) THEN
-         PREVLASTV = N
-         DO I = 1, K
-            PREVLASTV = MAX( PREVLASTV, I )
-            IF( TAU( I ).EQ.ZERO ) THEN
+*     QR happens when we have forward direction in column storage
 *
-*              H(i)  =  I
+      QR = DIRF.AND.COLV
 *
-               DO J = 1, I
-                  T( J, I ) = ZERO
-               END DO
-            ELSE
+*     LQT happens when we have forward direction in row storage and want to compute the transpose of
+*     the T we would normally compute
 *
-*              general case
+      LQT = DIRF.AND.TCOLV
 *
-               IF( LSAME( STOREV, 'C' ) ) THEN
-*                 Skip any trailing zeros.
-                  DO LASTV = N, I+1, -1
-                     IF( V( LASTV, I ).NE.ZERO ) EXIT
-                  END DO
-                  DO J = 1, I-1
-                     T( J, I ) = -TAU( I ) * CONJG( V( I , J ) )
-                  END DO
-                  J = MIN( LASTV, PREVLASTV )
+*     LQ happens when we have forward direction in row storage and want to compute the T we would
+*     normally compute
 *
-*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i)
+      LQ = DIRF.AND.(.NOT.LQT)
 *
-                  CALL ZGEMV( 'Conjugate transpose', J-I, I-1,
-     $                        -TAU( I ), V( I+1, 1 ), LDV,
-     $                        V( I+1, I ), 1, ONE, T( 1, I ), 1 )
-               ELSE
-*                 Skip any trailing zeros.
-                  DO LASTV = N, I+1, -1
-                     IF( V( I, LASTV ).NE.ZERO ) EXIT
-                  END DO
-                  DO J = 1, I-1
-                     T( J, I ) = -TAU( I ) * V( J , I )
-                  END DO
-                  J = MIN( LASTV, PREVLASTV )
+*     QL happens when we have backward direction in column storage
 *
-*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H
+      QL = (.NOT.DIRF).AND.COLV
 *
-                  CALL ZGEMM( 'N', 'C', I-1, 1, J-I, -TAU( I ),
-     $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV,
-     $                        ONE, T( 1, I ), LDT )
-               END IF
+*     RQT happens when we have backward direction in row storage and want to compute the transpose
+*     of the T we would normally compute
 *
-*              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
+      RQT = TDIRF.AND.(.NOT.COLV)
 *
-               CALL ZTRMV( 'Upper', 'No transpose', 'Non-unit', I-1,
-     $                     T,
-     $                     LDT, T( 1, I ), 1 )
-               T( I, I ) = TAU( I )
-               IF( I.GT.1 ) THEN
-                  PREVLASTV = MAX( PREVLASTV, LASTV )
-               ELSE
-                  PREVLASTV = LASTV
-               END IF
-             END IF
+*     RQ happens when we have backward direction in row storage and want to compute the T that we
+*     would normally compute
+*
+      RQ = (.NOT.RQT).AND.(.NOT.COLV)
+*
+*     If you want to see comments of how this subroutine works, we 
+*     are essentially unrolling the recursion present in ZLARFT, so
+*     to see what we are doing in each step (for each switch) look at the
+*     comments in dlarft.f by replacing K with I and L with I-1
+*     
+*
+      IF (QR) THEN
+*
+*        Break V into 9 components
+*        
+*        V = |-----------------------|
+*            |V_{1,1} 0       0      | i-1
+*            |V_{2,1} V_{2,2} 0      | 1
+*            |V_{3,1} V_{3,2} V_{3,3}| n-i
+*            |-----------------------|
+*             i-1     1       k-i
+*
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit lower triangular
+*
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{3,3} and repeat until we
+*        reach the end. On each iteration V_{3,3} is not referenced
+*
+*        We will construct T one column at a time from left to right
+*        after initializing T(1,1) = TAU(1)
+*
+*        T = |-------------------------|
+*            | T_{1,1} T_{1,2} T_{1,3} | i-1
+*            | 0       T_{2,2} T_{2,3} | 1
+*            | 0       0       T_{3,3} | k-i
+*            |-------------------------|
+*              i-1     1       k-i
+*
+*        T_{1,1}, T_{2,2}, and T_{3,3} are non-unit lower triangular 
+*
+*        Similarly as above, we will construct T_{1,2} and T_{2,2} at
+*        each iteration i = 2, \dots k, and then grow into T_{1:3,3}. On
+*        each iteration, T_{1:3,3} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
+*
+*        We now get
+*
+*        T_{1,2} = -T_{1,1}[V_{1,1}\\V_{2,1}\\V_{3,1}]'
+*                       [0\\V_{2,2}\\V_{3,2}]T_{2,2}
+*
+*        T_{1,2} = -T_{1,1}(V_{2,1}' + V_{3,1}'V_{3,2})T_{2,2}
+*
+*        This means we will do the following
+*
+*        T_{1,2} = -V_{2,1}'T_{2,2} = -\tau_{i}V_{2,1}'
+*        T_{1,2} = -\tau_{i}V_{3,2}' V_{3,1} + T_{1,2}
+*        T_{1,2} = T_{1,1}T_{1,2}
+*        T_{2,2} = \tau{i}
+*
+         T(1,1) = TAU(1)
+
+         DO I = 2, K
+*
+*           T_{1,2} = -V_{2,1}'V_{2,2}T_{2,2} = -\tau_i V_{2,1}'
+*           We must do this at copy time as otherwise gemv will do nothing
+*           on the last column when n=k, but we neet to make sure we are
+*           scaled by this value
+*
+            DO J = 1, I-1
+               T(J,I) = -TAU(I)*CONJG(V(I,J))
+            END DO
+
+*
+*           T_{1,2} = -V_{3,1}'V_{3,2}T_{2,2} + T_{1,2}
+*                   = -\tau{i} V_{3,2}'V_{3,1} + T_{1,2}
+*
+            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(I),
+     $            V(I+1,1), LDV, V(I+1,I), 1, ONE, T(1, I), 1)
+
+
+*
+*           T_{1,2} = T_{1,1}T_{1,2}
+*
+            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+     $            T, LDT, T(1,I), 1)
+
+*
+*           T_{2,2} = \tau{i}
+*
+            T(I,I) = TAU(I)
          END DO
-      ELSE
-         PREVLASTV = 1
-         DO I = K, 1, -1
-            IF( TAU( I ).EQ.ZERO ) THEN
+      ELSE IF (LQ) THEN
 *
-*              H(i)  =  I
+*        Break V into 9 components
 *
-               DO J = I, K
-                  T( J, I ) = ZERO
-               END DO
-            ELSE
+*        V = |-------------------------|
+*            | V_{1,1} V_{1,2} V_{1,3} | i-1
+*            | 0       V_{2,2} V_{2,3} | 1
+*            | 0       0       V_{3,3} | k-i
+*            |-------------------------|
+*              i-1     1       n-i
 *
-*              general case
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit upper triangular
 *
-               IF( I.LT.K ) THEN
-                  IF( LSAME( STOREV, 'C' ) ) THEN
-*                    Skip any leading zeros.
-                     DO LASTV = 1, I-1
-                        IF( V( LASTV, I ).NE.ZERO ) EXIT
-                     END DO
-                     DO J = I+1, K
-                        T( J, I ) = -TAU( I ) * CONJG( V( N-K+I , J ) )
-                     END DO
-                     J = MAX( LASTV, PREVLASTV )
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{3,3} and repeat until we
+*        reach the end. On each iteration V_{3,3} is not referenced
 *
-*                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i)
+*        We will construct T one column at a time from left to right
+*        after initializing T(1,1) = TAU(1)
 *
-                     CALL ZGEMV( 'Conjugate transpose', N-K+I-J, K-I,
-     $                           -TAU( I ), V( J, I+1 ), LDV, V( J, I ),
-     $                           1, ONE, T( I+1, I ), 1 )
-                  ELSE
-*                    Skip any leading zeros.
-                     DO LASTV = 1, I-1
-                        IF( V( I, LASTV ).NE.ZERO ) EXIT
-                     END DO
-                     DO J = I+1, K
-                        T( J, I ) = -TAU( I ) * V( J, N-K+I )
-                     END DO
-                     J = MAX( LASTV, PREVLASTV )
+*        T = |-------------------------|
+*            | T_{1,1} T_{1,2} T_{1,3} | i-1
+*            | 0       T_{2,2} T_{2,3} | 1
+*            | 0       0       T_{3,3} | k-i
+*            |-------------------------|
+*              i-1     1       k-i
 *
-*                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H
+*        Similarly as above, we will construct T_{1,2} and T_{2,2} at
+*        each iteration i = 2, \dots k, and then grow into T_{1:3,3}. On
+*        each iteration, T_{1:3,3} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
 *
-                     CALL ZGEMM( 'N', 'C', K-I, 1, N-K+I-J,
-     $                           -TAU( I ),
-     $                           V( I+1, J ), LDV, V( I, J ), LDV,
-     $                           ONE, T( I+1, I ), LDT )
-                  END IF
+*        We now get
 *
-*                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
+*        T_{1,2} = -T_{1,1}[V_{1,1} V_{1,2} V_{1,3}][ 0 V_{2,2} V_{2,3} ]'T_{2,2}
 *
-                  CALL ZTRMV( 'Lower', 'No transpose', 'Non-unit',
-     $                        K-I,
-     $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
-                  IF( I.GT.1 ) THEN
-                     PREVLASTV = MIN( PREVLASTV, LASTV )
-                  ELSE
-                     PREVLASTV = LASTV
-                  END IF
-               END IF
-               T( I, I ) = TAU( I )
-            END IF
+*        T_{1,2} = -T_{1,1}(V_{1,2} + V_{1,3}V_{2,3}')T_{2,2}
+*
+*        This means we will do the following
+*
+*        T_{1,2} = -V_{1,2}T_{2,2} = -\tau_{i}V_{1,2}
+*        T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
+*        T_{1,2} = T_{1,1}T_{1,2}
+*        T_{2,2} = \tau{i}
+*
+         T(1,1) = TAU(1)
+
+         DO I = 2, K
+*
+*           T_{1,2} = -\tau_{i}V_{1,2}
+*
+            DO J = 1, I-1
+               T(J, I) = -TAU(I)*V(J, I)
+            END DO
+
+*
+*           T_{1,2} = -\tau_{i}V_{1,3}V_{2,3}' + T_{1,2}
+*
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+     $            1, N-I, -TAU(I), V(1,I+1), LDV, V(I, I+1), LDV, ONE,
+     $            T(1, I), LDT)
+*
+*           T_{1,2} = T_{1,1}T_{1,2}
+*
+            CALL ZTRMV('Upper', 'No Transpose', 'Non-unit', I-1, 
+     $            T, LDT, T(1,I), 1)
+
+*
+*           T_{2,2} = \tau{i}
+*
+            T(I,I) = TAU(I)
+         END DO
+      ELSE IF (LQT) THEN
+*
+*        Break V into 9 components
+*
+*        V = |-------------------------|
+*            | V_{1,1} V_{1,2} V_{1,3} | i-1
+*            | 0       V_{2,2} V_{2,3} | 1
+*            | 0       0       V_{3,3} | k-i
+*            |-------------------------|
+*              i-1     1       n-i
+*
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit upper triangular
+*
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{3,3} and repeat until we
+*        reach the end. On each iteration V_{3,3} is not referenced
+*
+*        We will construct T one column at a time from left to right
+*        after initializing T(1,1) = TAU(1)
+*
+*        T = |-------------------------|
+*            | T_{1,1} 0       0       | i-1
+*            | T_{2,1} T_{2,2} 0       | 1
+*            | T_{3,1} T_{3,2} T_{3,3} | k-i
+*            |-------------------------|
+*              i-1     1       k-i
+*
+*        Similarly as above, we will construct T_{2,1} and T_{2,2} at
+*        each iteration i = 2, \dots k, and then grow into T_{3,1:3}. On
+*        each iteration, T_{3,1:3} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
+*
+*        We now get
+*
+*        T_{2,1} = -T_{2,2}[0 V_{2,2} V_{2,3}][V_{1,1} V_{1,2} V_{1,3}]'T_{1,1}
+*
+*        T_{2,1} = -T_{2,2}(V_{1,2}' + V_{2,3}V_{1,3}')T_{1,1}
+*
+*        This means we will do the following
+*
+*        T_{2,1} = -T_{2,2}V_{1,2}' = -\tau_{i}V_{1,2}'
+*        T_{2,1} = -\tau_{i}V_{1,3}V_{2,3}' + T_{2,1}
+*        T_{2,1} = T_{1,1}'T_{2,1}
+*        T_{2,2} = \tau{i}
+*
+         T(1,1) = CONJG(TAU(1))
+
+         DO I = 2, K
+*
+*           T_{2,1} = -\tau_{i}V_{1,2}'
+*
+            DO J = 1, I-1
+               T(I,J) = -CONJG(TAU(I)*V(J,I))
+            END DO
+*
+*           T_{2,1} = -\tau_{i}V_{2,3}V_{1,3}' + T_{2,1}
+*
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1,
+     $            I-1, N-I, -CONJG(TAU(I)), V(I,I+1), LDV, V(1, I+1),
+     $            LDV, ONE, T(I, 1), LDT)
+*
+*           T_{2,1} = T_{1,1}'T_{2,1}
+*
+            CALL ZTRMV('Lower', 'Transpose', 'Non-unit',
+     $            I-1, T, LDT, T(I,1), LDT)
+
+            T(I,I) = CONJG(TAU(I))
+         END DO
+      ELSE IF (QL) THEN
+*
+*     Break V into 9 components
+*     
+*     V = |-------------------------|
+*         | V_{1,1} V_{1,2} V_{1,3} | n-i
+*         | 0       V_{2,2} V_{2,3} | 1
+*         | 0       0       V_{3,3} | i-1
+*         |-------------------------|
+*           k-i     1       i-1
+*
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit upper triangular
+*
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{1,1} and repeat until we
+*        reach the end. On each iteration V_{1,1} is not referenced
+*
+*        We will construct T one column at a time from right to left
+*        after initializing T(K,K) = TAU(K)
+* 
+*     T = |-------------------------|
+*         | T_{1,1} 0       0       | k-i
+*         | T_{2,1} T_{2,2} 0       | 1
+*         | T_{3,1} T_{3,2} T_{3,3} | i-1
+*         |-------------------------|
+*           k-i     1       i-1
+*
+*        T_{1,1}, T_{2,2}, and T_{3,3} are non-unit lower triangular 
+*
+*        Similarly as above, we will construct T_{2,2} and T_{3,2} at
+*        each iteration i = 2, \dots k, and then grow into T_{1:3,1}. On
+*        each iteration, T_{1:3,1} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
+*
+*        We get that
+*
+*        T_{3,2} = -T_{3,3}[V_{1,3}\\V_{2,3}\\V_{3,3}]'
+*        [V_{1,2}\\V_{2,2}\\0]T_{2,2}
+*
+*        T_{3,2} = -T_{3,3}(V_{1,3}'V_{1,2} + V_{2,3}')T_{2,2}
+*
+*        Thus, we will compute
+*
+*        T_{2,2} = \tau_{k-i+1}
+*        T_{3,2} = -T_{3,3}V_{3,2}' = -\tau_{k-i+1}V_{3,2}'
+*        T_{3,2} = -\tau_{k-i+1}V_{1,3}'V_{1,2} + T_{3,2}
+*        T_{3,2} = T_{3,3}T_{3,2}
+*
+         T(K,K) = TAU(K)
+         DO I = 2, K
+            KMI = K-I+1
+            NMI = N-I+1
+*
+*             T_{2,2} = \tau(k-i+1)
+*
+            T(KMI,KMI) = TAU(KMI)
+*
+*             T_{3,2} = -\tau(k-i+1)V_{2,3}'
+*
+            DO J = 1, I-1
+               T(KMI + J, KMI) = -TAU(KMI)*CONJG(V(NMI, KMI + J))
+            END DO
+*
+*             T_{3,2} = -\tau(k-i+1)V_{1,3}'V_{1,2} + T_{3,2}
+*
+            CALL ZGEMV('Conjugate Transpose', N-I, I-1, -TAU(KMI), 
+     $            V(1, KMI + 1), LDV, V(1, KMI), 1, ONE,
+     $            T(KMI+1, KMI), 1)
+*
+*             T_{3,2} = T_{3,3}T_{3,2}
+*
+            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1,
+     $            T(KMI + 1, KMI + 1), LDT, T(KMI + 1, KMI), 1)
+
+         END DO
+      ELSE IF (RQ) THEN
+*
+*     Break V into 9 components
+*
+*     V = |-------------------------|
+*         | V_{1,1} 0       0       | k-i
+*         | V_{2,1} V_{2,2} 0       | 1
+*         | V_{3,1} V_{3,2} V_{3,3} | i-1
+*         |-------------------------|
+*           n-i     1       i-1
+*
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit lower triangular
+*
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{1,1} and repeat until we
+*        reach the end. On each iteration V_{1,1} is not referenced
+*
+*        We will construct T one column at a time from right to left
+*        after initializing T(K,K) = TAU(K)
+*        
+*     T = |-------------------------|
+*         | T_{1,1} 0       0       | k-i
+*         | T_{2,1} T_{2,2} 0       | 1
+*         | T_{3,1} T_{3,2} T_{3,3} | i-1
+*         |-------------------------|
+*           k-i     1       i-1
+*
+*        T_{1,1}, T_{2,2}, and T_{3,3} are non-unit lower triangular 
+*
+*        Similarly as above, we will construct T_{2,2} and T_{3,2} at
+*        each iteration i = 2, \dots k, and then grow into T_{1:3,1}. On
+*        each iteration, T_{1:3,1} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
+*
+*        We get that
+*
+*        T_{3,2} = -T_{3,3}[V_{3,1} V_{3,2} V_{3,3}][V_{2,1} V_{2,2} 0]'T_{2,2}
+*
+*        T_{3,2} = -T_{3,3}(V_{3,1}V_{2,1}' + V_{3,2})T_{2,2}
+*
+*        Thus, we will compute
+*
+*        T_{2,2} = \tau_{k-i+1}
+*        T_{3,2} = -\tau_{k-i+1}V_{3,2}
+*        T_{3,2} = -\tau_{k-i+1}V_{3,1}V_{2,1}' + T_{3,2}
+*        T_{3,2} = T_{3,3}T_{3,2}
+*
+         T(K,K) = TAU(K)
+         DO I = 2, K
+            KMI = K-I+1
+            NMI = N-I+1
+*
+*           T_{2,2} = \tau_{k-i+1}
+*
+            T(KMI,KMI) = TAU(KMI)
+*
+*           T_{3,2} = -\tau_{k-i+1}V_{3,2}
+*
+            DO J = 1, I-1
+               T(KMI + J, KMI) = -TAU(KMI)*V(KMI + J, NMI)
+            END DO
+*
+*           T_{3,2} = -\tau_{k-i+1}V_{3,1}V_{2,1}' + T_{3,2}
+*
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', I-1,
+     $            1, N-I, -TAU(KMI), V(KMI+1, 1), LDV, V(KMI, 1), LDV,
+     $            ONE, T(KMI+1, KMI), LDT)
+*
+*           T_{3,2} = T_{3,3}T_{3,2}
+*
+            CALL ZTRMV('Lower', 'No Transpose', 'Non-unit', I-1, 
+     $            T(KMI+1, KMI+1), LDT, T(KMI+1, KMI), 1)
+         END DO
+      ELSE IF (RQT) THEN
+*
+*     Break V into 9 components
+*
+*     V = |-------------------------|
+*         | V_{1,1} 0       0       | k-i
+*         | V_{2,1} V_{2,2} 0       | 1
+*         | V_{3,1} V_{3,2} V_{3,3} | i-1
+*         |-------------------------|
+*           n-i     1       i-1
+*
+*        V_{1,1}, V_{2,2} and V_{3,3} are unit lower triangular
+*
+*        This is how we are going to view the matrix V at each step 
+*        i=2,\dots,k, then we grow into V_{1,1} and repeat until we
+*        reach the end. On each iteration V_{1,1} is not referenced
+*
+*        We will construct T one column at a time from right to left
+*        after initializing T(K,K) = TAU(K)
+*        
+*     T = |-------------------------|
+*         | T_{1,1} T_{1,2} T_{1,3} | k-i
+*         | 0       T_{2,2} T_{2,3} | 1
+*         | 0       0       T_{3,3} | i-1
+*         |-------------------------|
+*           k-i     1       i-1
+*
+*        T_{1,1}, T_{2,2}, and T_{3,3} are non-unit lower triangular 
+*
+*        Similarly as above, we will construct T_{2,2} and T_{2,3} at
+*        each iteration i = 2, \dots k, and then grow into T_{1,1:3}. On
+*        each iteration, T_{1,1:3} are not referenced. See dlarft.f
+*        for details on how these formulae were constructed.
+*
+*        We get that
+*
+*        T_{2,3} = -T_{2,2}[V_{2,1} V_{2,2} 0][V_{3,1} V_{3,2} V_{3,3}]'T_{3,3}
+*
+*        T_{3,2} = -T_{2,2}(V_{2,1}V_{3,1}' + V_{3,2}')T_{3,3}
+*
+*        Thus, we will compute
+*
+*        T_{2,2} = \tau_{k-i+1}
+*        T_{2,3} = -\tau_{k-i+1}V_{3,2}'
+*        T_{2,3} = -\tau_{k-i+1}V_{2,1}V_{3,1}' + T_{2,3}
+*        T_{2,3} = T_{3,3}'T_{2,3}
+*
+         T(K,K) = CONJG(TAU(K))
+         DO I = 2, K
+            KMI = K-I+1
+            NMI = N-I+1
+*
+*           T_{2,2} = \tau_{k-i+1}
+*
+            T(KMI,KMI) = CONJG(TAU(KMI))
+*
+*           T_{2,3} = -\tau_{k-i+1}V_{3,2}'
+*
+            DO J = 1, I-1
+               T(KMI, KMI + J) = -CONJG(TAU(KMI)*V(KMI + J, NMI))
+            END DO
+*
+*           T_{2,3} = -\tau_{k-i+1}V_{2,1}V_{3,1}' + T_{2,3}
+*
+            CALL ZGEMM('No Transpose', 'Conjugate Transpose', 1, 
+     $            I-1, N-I, -CONJG(TAU(KMI)), V(KMI, 1), LDV,
+     $            V(KMI+1,1), LDV, ONE, T(KMI, KMI+1), LDT)
+*
+*           T_{2,3} = T_{3,3}'T_{2,3}
+*
+            CALL ZTRMV('Upper', 'Transpose', 'Non-unit', I-1, 
+     $            T(KMI+1, KMI+1), LDT, T(KMI, KMI+1), LDT)
          END DO
       END IF
-      RETURN
-*
-*     End of ZLARFT_LVL2
-*
-      END
+      END SUBROUTINE
