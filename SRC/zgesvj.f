@@ -99,7 +99,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the input matrix A. 1/DLAMCH('E') > M >= 0.
+*>          The number of rows of the input matrix A. 1/DLAMCH('E') >= M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -215,7 +215,7 @@
 *>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M+N, otherwise.
 *>
 *>          If on entry LWORK = -1, then a workspace query is assumed and
-*>          no computation is done; CWORK(1) is set to the minial (and optimal)
+*>          no computation is done; CWORK(1) is set to the minimal (and optimal)
 *>          length of CWORK.
 *> \endverbatim
 *>
@@ -256,7 +256,7 @@
 *>         LRWORK >= 1, if MIN(M,N) = 0, and LRWORK >= MAX(6,N), otherwise.
 *>
 *>         If on entry LRWORK = -1, then a workspace query is assumed and
-*>         no computation is done; RWORK(1) is set to the minial (and optimal)
+*>         no computation is done; RWORK(1) is set to the minimal (and optimal)
 *>         length of RWORK.
 *> \endverbatim
 *>
@@ -458,7 +458,7 @@
       ELSE IF( ( RSVEC .AND. ( LDV.LT.N ) ) .OR.
      $          ( APPLV .AND. ( LDV.LT.MV ) ) ) THEN
          INFO = -11
-      ELSE IF( UCTOL .AND. ( RWORK( 1 ).LE.ONE ) ) THEN
+      ELSE IF( UCTOL .AND. ( RWORK( 1 ).LT.ONE ) ) THEN
          INFO = -12
       ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
