@@ -51,11 +51,16 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrows_u = ( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobu, 'r' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobu, 'f' ) ||
                              API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) ? m : 1;
         lapack_int ncols_u = API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) ? m :
-                             (API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ? MIN(m,n) : 1);
-        lapack_int nrows_v = API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) ? n :
-                              ( API_SUFFIX(LAPACKE_lsame)( jobv, 's' ) ? MIN(m,n) : 1);
+                             ( (API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ) ? MIN(m,n) : 1);
+        lapack_int nrows_v = ( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ||
+                             API_SUFFIX(LAPACKE_lsame)( jobv, 'r' )) ? n : 1;
         lapack_int lda_t = MAX(1,m);
         lapack_int ldu_t = MAX(1,nrows_u);
         lapack_int ldv_t = MAX(1,nrows_v);
@@ -91,7 +96,10 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'r' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'f' ) ) {
             u_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) * ldu_t * MAX(1,ncols_u) );
             if( u_t == NULL ) {
@@ -99,7 +107,8 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
                 goto exit_level_1;
             }
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobv, 'r' ) ) {
             v_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) * ldv_t * MAX(1,n) );
             if( v_t == NULL ) {
@@ -118,20 +127,28 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
         }
         /* Transpose output matrices */
         API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'r' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'f' ) ) {
             API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, nrows_u, ncols_u, u_t, ldu_t,
                                u, ldu );
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobv, 'r' )) {
             API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, nrows_v, n, v_t, ldv_t, v,
                                ldv );
         }
         /* Release memory and exit */
-        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobv, 'r' ) ) {
             LAPACKE_free( v_t );
         }
 exit_level_2:
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'r' ) ||
+                API_SUFFIX(LAPACKE_lsame)( jobu, 'f' ) ) {
             LAPACKE_free( u_t );
         }
 exit_level_1:
