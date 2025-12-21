@@ -580,7 +580,7 @@
      $                1, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $                RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
      $                RWORK(IB22D), RWORK(IB22E), RWORK(IBBCSD),
-     $                LRWORK-IBBCSD+1, CHILDINFO )
+     $                LRWORK-IBBCSD+1, INFO )
 *
 *        Permute rows and columns to place zero submatrices in
 *        preferred positions
@@ -635,7 +635,7 @@
      $                LDU2, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $                RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
      $                RWORK(IB22D), RWORK(IB22E), RWORK(IBBCSD), LBBCSD,
-     $                CHILDINFO )
+     $                INFO )
 *
 *        Permute rows and columns to place identity submatrices in
 *        preferred positions
@@ -691,7 +691,7 @@
      $                U1, LDU1, RWORK(IB11D), RWORK(IB11E),
      $                RWORK(IB12D), RWORK(IB12E), RWORK(IB21D),
      $                RWORK(IB21E), RWORK(IB22D), RWORK(IB22E),
-     $                RWORK(IBBCSD), LBBCSD, CHILDINFO )
+     $                RWORK(IBBCSD), LBBCSD, INFO )
 *
 *        Permute rows and columns to place identity submatrices in
 *        preferred positions
@@ -764,7 +764,7 @@
      $                V1T, LDV1T, RWORK(IB11D), RWORK(IB11E),
      $                RWORK(IB12D), RWORK(IB12E), RWORK(IB21D),
      $                RWORK(IB21E), RWORK(IB22D), RWORK(IB22E),
-     $                RWORK(IBBCSD), LBBCSD, CHILDINFO )
+     $                RWORK(IBBCSD), LBBCSD, INFO )
 *
 *        Permute rows and columns to place identity submatrices in
 *        preferred positions
