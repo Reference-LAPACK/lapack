@@ -254,7 +254,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. LWORK >=  4*N+16.
-*>          If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M)).
+*>          If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M) + 1).
 *>          If IJOB = 3 or 5, LWORK >= MAX(4*N+16, 4*M*(N-M)).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -562,7 +562,7 @@
       END IF
 *
       IF( IJOB.EQ.1 .OR. IJOB.EQ.2 .OR. IJOB.EQ.4 ) THEN
-         LWMIN = MAX( 1, 4*N+16, 2*M*( N-M ) )
+         LWMIN = MAX( 1, 4*N+16, 2*M*( N-M ) + 1 )
          LIWMIN = MAX( 1, N+6 )
       ELSE IF( IJOB.EQ.3 .OR. IJOB.EQ.5 ) THEN
          LWMIN = MAX( 1, 4*N+16, 4*M*( N-M ) )
