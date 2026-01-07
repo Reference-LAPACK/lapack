@@ -416,8 +416,8 @@
  9988 FORMAT( '   FOR BETA           ', 7F6.1 )
  9987 FORMAT( ' AMEND DATA FILE OR INCREASE ARRAY SIZES IN PROGRAM',
      $      /' ******* TESTS ABANDONED *******' )
- 9986 FORMAT( ' SUBPROGRAM NAME ', A10, ' NOT RECOGNIZED', /' ******* T',
-     $      'ESTS ABANDONED *******' )
+ 9986 FORMAT( ' SUBPROGRAM NAME ', A10, ' NOT RECOGNIZED', /' ******* ',
+     $      'TESTS ABANDONED *******' )
  9985 FORMAT( ' ERROR IN SMVCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
      $      'ATED WRONGLY.', /' SMVCH WAS CALLED WITH TRANS = ', A1,
      $      ' AND RETURNED SAME = ', L1, ' AND ERR = ', F12.3, '.', /
@@ -783,12 +783,12 @@
   140 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', 4( I3, ',' ), F4.1,
@@ -1135,21 +1135,22 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', AP',
-     $      ', X,', I2, ',', F4.1, ', Y,', I2, ')                .' )
+ 9995 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', A',
+     $      'P, X,', I2, ',', F4.1, ', Y,', I2, ')                .' )
  9994 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', 2( I3, ',' ), F4.1,
      $      ', A,', I3, ', X,', I2, ',', F4.1, ', Y,', I2,
      $      ')         .' )
- 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', A,',
-     $      I3, ', X,', I2, ',', F4.1, ', Y,', I2, ')             .' )
+ 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', A',
+     $       ',', I3, ', X,', I2, ',', F4.1, ', Y,', I2, ')           ',
+     $       '  .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -1494,18 +1495,18 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A10, '(', 3( '''', A1, ''',' ), I3, ', AP, ',
-     $      'X,', I2, ')                        .' )
- 9994 FORMAT( 1X, I6, ': ', A10, '(', 3( '''', A1, ''',' ), 2( I3, ',' ),
-     $      ' A,', I3, ', X,', I2, ')                 .' )
+ 9995 FORMAT( 1X, I6, ': ', A10, '(', 3( '''', A1, ''',' ), I3, ', AP,',
+     $      ' X,', I2, ')                        .' )
+ 9994 FORMAT( 1X, I6, ': ', A10, '(', 3( '''', A1, ''',' ),
+     $      2( I3, ',' ), ' A,', I3, ', X,', I2, ')                 .' )
  9993 FORMAT( 1X, I6, ': ', A10, '(', 3( '''', A1, ''',' ), I3, ', A,',
      $      I3, ', X,', I2, ')                     .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
@@ -1759,12 +1760,12 @@
   150 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
@@ -2036,19 +2037,19 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X,',
-     $      I2, ', AP)                           .' )
- 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X,',
-     $      I2, ', A,', I3, ')                        .' )
+ 9994 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X',
+     $      ',', I2, ', AP)                           .' )
+ 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X',
+     $      ',', I2, ', A,', I3, ')                        .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -2376,19 +2377,19 @@
   170 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A10, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A10, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X,',
-     $      I2, ', Y,', I2, ', AP)                     .' )
- 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X,',
-     $      I2, ', Y,', I2, ', A,', I3, ')                  .' )
+ 9994 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X',
+     $      ',', I2, ', Y,', I2, ', AP)                     .' )
+ 9993 FORMAT( 1X, I6, ': ', A10, '(''', A1, ''',', I3, ',', F4.1, ', X',
+     $      ',', I2, ', Y,', I2, ', A,', I3, ')                  .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -2748,8 +2749,8 @@
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE TESTS OF ERROR-EXITS' )
- 9998 FORMAT( ' ******* ', A10, ' FAILED THE TESTS OF ERROR-EXITS *****',
-     $      '**' )
+ 9998 FORMAT( ' ******* ', A10, ' FAILED THE TESTS OF ERROR-EXITS ****',
+     $      '***' )
 *
 *     End of SCHKE
 *
@@ -3328,8 +3329,8 @@
 *
  9999 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEAD',
      $      ' OF ', I2, ' *******' )
- 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A10, ' INSTE',
-     $      'AD OF ', A10, ' *******' )
+ 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A10, ' INST',
+     $      'EAD OF ', A10, ' *******' )
  9997 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6,
      $      ' *******' )
 *
