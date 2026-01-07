@@ -73,8 +73,8 @@
       INTEGER            I, INFO, J, MB, NB
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX*2)
+      DOUBLE PRECISION   A( NMAX, NMAX ), W( NMAX ),
+     $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DGEQR,
@@ -103,7 +103,6 @@
          DO I = 1, NMAX
             A( I, J ) = 1.D0 / DBLE( I+J )
             C( I, J ) = 1.D0 / DBLE( I+J )
-            T( I, J ) = 1.D0 / DBLE( I+J )
          END DO
          W( J ) = 0.D0
       END DO
@@ -161,10 +160,9 @@
 *
 *     DGEMQR
 *
-      TAU(1)=1
-      TAU(2)=1
-      TAU(3)=1
-      TAU(4)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'DGEMQR'
       NB=1
       INFOT = 1
@@ -253,8 +251,9 @@
 *
 *     DGEMLQ
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'DGEMLQ'
       NB=1
       INFOT = 1

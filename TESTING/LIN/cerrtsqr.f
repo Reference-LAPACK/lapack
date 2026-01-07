@@ -73,8 +73,8 @@
       INTEGER            I, INFO, J, MB, NB
 *     ..
 *     .. Local Arrays ..
-      COMPLEX            A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX)
+      COMPLEX            A( NMAX, NMAX ), W( NMAX ),
+     $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, CGEQR,
@@ -103,7 +103,6 @@
          DO I = 1, NMAX
             A( I, J ) = 1.E0 / CMPLX( REAL( I+J ), 0.E0 )
             C( I, J ) = 1.E0 / CMPLX( REAL( I+J ), 0.E0 )
-            T( I, J ) = 1.E0 / CMPLX( REAL( I+J ), 0.E0 )
          END DO
          W( J ) = 0.E0
       END DO
@@ -161,8 +160,9 @@
 *
 *     CGEMQR
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'CGEMQR'
       NB=1
       INFOT = 1
@@ -251,8 +251,9 @@
 *
 *     CGEMLQ
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'CGEMLQ'
       NB=1
       INFOT = 1

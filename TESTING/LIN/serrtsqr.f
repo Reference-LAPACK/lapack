@@ -73,8 +73,8 @@
       INTEGER            I, INFO, J, MB, NB
 *     ..
 *     .. Local Arrays ..
-      REAL               A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX*2)
+      REAL               A( NMAX, NMAX ), W( NMAX ),
+     $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SGEQR,
@@ -103,7 +103,6 @@
          DO I = 1, NMAX
             A( I, J ) = 1. / REAL( I+J )
             C( I, J ) = 1. / REAL( I+J )
-            T( I, J ) = 1. / REAL( I+J )
          END DO
          W( J ) = 0.
       END DO
@@ -161,10 +160,9 @@
 *
 *     SGEMQR
 *
-      TAU(1)=1
-      TAU(2)=1
-      TAU(3)=1
-      TAU(4)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'SGEMQR'
       NB=1
       INFOT = 1
@@ -253,8 +251,9 @@
 *
 *     SGEMLQ
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'SGEMLQ'
       NB=1
       INFOT = 1
