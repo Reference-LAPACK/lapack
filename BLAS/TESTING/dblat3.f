@@ -386,8 +386,8 @@
  9992 FORMAT( '   FOR BETA           ', 7F6.1 )
  9991 FORMAT( ' AMEND DATA FILE OR INCREASE ARRAY SIZES IN PROGRAM',
      $      /' ******* TESTS ABANDONED *******' )
- 9990 FORMAT( ' SUBPROGRAM NAME ', A11, ' NOT RECOGNIZED', /' ******* T',
-     $      'ESTS ABANDONED *******' )
+ 9990 FORMAT( ' SUBPROGRAM NAME ', A11, ' NOT RECOGNIZED', /' ******* ',
+     $      'TESTS ABANDONED *******' )
  9989 FORMAT( ' ERROR IN DMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
      $      'ATED WRONGLY.', /' DMMCH WAS CALLED WITH TRANSA = ', A1,
      $      ' AND TRANSB = ', A1, /' AND RETURNED SAME = ', L1, ' AND ',
@@ -668,12 +668,12 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( 1X, I6, ': ', A11, '(''', A1, ''',''', A1, ''',',
@@ -950,17 +950,17 @@
   120 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
-     $      F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', C,', I3, ')   ',
-     $      ' .' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ),
+     $       2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1,
+     $       ', C,', I3, ')   ', ' .' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -1257,16 +1257,16 @@
   160 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A11, '(', 4( '''', A1, ''',' ), 2( I3, ',' ),
-     $      F4.1, ', A,', I3, ', B,', I3, ')        .' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(', 4( '''', A1, ''',' ),
+     $       2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ')        .' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -1532,17 +1532,18 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
-     $      F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ')           .' )
+ 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ),
+     $       2( I3, ',' ), F4.1, ', A,', I3, ',', F4.1, ', C,', I3,
+     $       ')           .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -1885,18 +1886,18 @@
   160 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
  9995 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
- 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' ), 2( I3, ',' ),
-     $      F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', C,', I3, ')   ',
-     $      ' .' )
+ 9994 FORMAT( 1X, I6, ': ', A11, '(', 2( '''', A1, ''',' )
+     $      , 2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1,
+     $       ', C,', I3, ')   ', ' .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
@@ -2666,8 +2667,8 @@
       RETURN
 *
  9999 FORMAT( ' ', A11, ' PASSED THE TESTS OF ERROR-EXITS' )
- 9998 FORMAT( ' ******* ', A11, ' FAILED THE TESTS OF ERROR-EXITS *****',
-     $      '**' )
+ 9998 FORMAT( ' ******* ', A11, ' FAILED THE TESTS OF ERROR-EXITS ****',
+     $      '***' )
 *
 *     End of DCHKE
 *
@@ -3165,8 +3166,8 @@
 *
  9999 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEAD',
      $      ' OF ', I2, ' *******' )
- 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A11, ' INSTE',
-     $      'AD OF ', A11, ' *******' )
+ 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A11, ' INST',
+     $      'EAD OF ', A11, ' *******' )
  9997 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6,
      $      ' *******' )
 *
@@ -3442,17 +3443,17 @@
   130 CONTINUE
       RETURN
 *
- 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
-     $      'S)' )
+ 9999 FORMAT( ' ', A11, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
+     $      'LS)' )
  9998 FORMAT( ' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
      $      'ANGED INCORRECTLY *******' )
- 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' C',
-     $      'ALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
+ 9997 FORMAT( ' ', A11, ' COMPLETED THE COMPUTATIONAL TESTS (', I6, ' ',
+     $      'CALLS)', /' ******* BUT WITH MAXIMUM TEST RATIO', F8.2,
      $      ' - SUSPECT *******' )
  9996 FORMAT( ' ******* ', A11, ' FAILED ON CALL NUMBER:' )
- 9995 FORMAT( 1X, I6, ': ', A11, '(''',A1, ''',''',A1, ''',''', A1,''',',
-     $      2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',', F4.1, ', ',
-     $      'C,', I3, ').' )
+ 9995 FORMAT( 1X, I6, ': ', A11, '(''', A1, ''',''', A1, ''',''', A1,
+     $      ''',', 2( I3, ',' ), F4.1, ', A,', I3, ', B,', I3, ',',
+     $       F4.1, ', ', 'C,', I3, ').' )
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
