@@ -33,7 +33,6 @@ message(STATUS "Build LAPACKE double precision real: ${LAPACKE_BUILD_DOUBLE}")
 message(STATUS "Build LAPACKE single precision complex: ${LAPACKE_BUILD_COMPLEX}")
 message(STATUS "Build LAPACKE double precision complex: ${LAPACKE_BUILD_COMPLEX16}")
 
-append_subdir_files(LAPACKE_INCLUDE "include")
 append_subdir_files(SOURCES "src")
 if (LAPACKE_BUILD_SINGLE)
   append_subdir_files(SOURCES_SINGLE "src")
@@ -112,11 +111,6 @@ endif()
 target_link_libraries(${LAPACKELIB} PRIVATE ${LAPACK_LIBRARIES})
 
 lapack_install_library(${LAPACKELIB})
-install(
-  FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  COMPONENT Development
-  )
 
 if(BUILD_TESTING)
   add_subdirectory(example)

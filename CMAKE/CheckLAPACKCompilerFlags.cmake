@@ -57,6 +57,7 @@ macro(CheckLAPACKCompilerFlags)
 
     if(CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "8")
       add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+      set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
     endif()
 
     # Disabling loop vectorization for GNU Fortran versions affected by
@@ -137,12 +138,14 @@ macro(CheckLAPACKCompilerFlags)
     if(UNIX)
       if(APPLE)
         add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+        set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
       else()
         # Get all flags added via `add_compile_options(...)`
         get_directory_property(COMP_OPTIONS COMPILE_OPTIONS)
 
         if(NOT("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "-abi=64c"))
           add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+          set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
         endif()
       endif()
     endif()
