@@ -249,6 +249,9 @@ if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
+
+  # Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
+  add_subdirectory(CBLAS/include)
 else()
   add_link_options(${BLAS_LINKER_FLAGS})
 endif()
