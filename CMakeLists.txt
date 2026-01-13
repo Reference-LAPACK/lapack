@@ -290,7 +290,7 @@ if(LAPACK_LIBRARIES)
   check_language(Fortran)
   if(CMAKE_Fortran_COMPILER)
     enable_language(Fortran)
-    incldude(CheckFortranFunctionExists)
+    include(CheckFortranFunctionExists)
     set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
     # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
     CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
