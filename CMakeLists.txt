@@ -249,9 +249,6 @@ if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
-
-  # Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
-  add_subdirectory(CBLAS/include)
 else()
   add_link_options(${BLAS_LINKER_FLAGS})
 endif()
@@ -260,6 +257,11 @@ endif()
 # --------------------------------------------------
 # CBLAS
 option(CBLAS "Build CBLAS" OFF)
+
+# Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
+if(CBLAS OR NOT BLAS_FOUND)
+  add_subdirectory(CBLAS/include)
+endif()
 
 if(CBLAS)
   add_subdirectory(CBLAS)
@@ -288,7 +290,7 @@ if(LAPACK_LIBRARIES)
   check_language(Fortran)
   if(CMAKE_Fortran_COMPILER)
     enable_language(Fortran)
-    include(CheckFortranFunctionExists)
+    incldude(CheckFortranFunctionExists)
     set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
     # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
     CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)

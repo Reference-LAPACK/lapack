@@ -1,10 +1,15 @@
 message(STATUS "CBLAS enabled")
 enable_language(C)
-enable_language(Fortran)
 
-# Check for any necessary platform specific compiler flags
-include(CheckLAPACKCompilerFlags)
-CheckLAPACKCompilerFlags()
+include(CheckLanguage)
+check_language(Fortran)
+if(CMAKE_Fortran_COMPILER)
+  enable_language(Fortran)
+
+  # Check for any necessary platform specific compiler flags
+  include(CheckLAPACKCompilerFlags)
+  CheckLAPACKCompilerFlags()
+endif()
 
 set(LAPACK_INSTALL_EXPORT_NAME ${CBLASLIB}-targets)
 

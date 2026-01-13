@@ -42,7 +42,7 @@ endif()
 if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
   message(WARNING "Reverting to pre-defined include/cblas_mangling.h")
     configure_file(
-      include/cblas_mangling_with_flags.h.in
+      cblas_mangling_with_flags.h.in
       ${LAPACK_BINARY_DIR}/include/cblas_mangling.h)
 endif()
 
