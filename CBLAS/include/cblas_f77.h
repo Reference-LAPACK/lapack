@@ -130,19 +130,23 @@
 #define F77_ssymv_base        F77_GLOBAL_SUFFIX(ssymv,SSYMV)
 #define F77_ssbmv_base        F77_GLOBAL_SUFFIX(ssbmv,SSBMV)
 #define F77_sspmv_base        F77_GLOBAL_SUFFIX(sspmv,SSPMV)
+#define F77_sskewsymv_base    F77_GLOBAL_SUFFIX(sskewsymv,SSKEWSYMV)
 #define F77_sger_base         F77_GLOBAL_SUFFIX(sger,SGER)
 #define F77_ssyr_base         F77_GLOBAL_SUFFIX(ssyr,SSYR)
 #define F77_sspr_base         F77_GLOBAL_SUFFIX(sspr,SSPR)
 #define F77_ssyr2_base        F77_GLOBAL_SUFFIX(ssyr2,SSYR2)
 #define F77_sspr2_base        F77_GLOBAL_SUFFIX(sspr2,SSPR2)
+#define F77_sskewsyr2_base    F77_GLOBAL_SUFFIX(sskewsyr2,SSKEWSYR2)
 #define F77_dsymv_base        F77_GLOBAL_SUFFIX(dsymv,DSYMV)
 #define F77_dsbmv_base        F77_GLOBAL_SUFFIX(dsbmv,DSBMV)
 #define F77_dspmv_base        F77_GLOBAL_SUFFIX(dspmv,DSPMV)
+#define F77_dskewsymv_base    F77_GLOBAL_SUFFIX(dskewsymv,DSKEWSYMV)
 #define F77_dger_base         F77_GLOBAL_SUFFIX(dger,DGER)
 #define F77_dsyr_base         F77_GLOBAL_SUFFIX(dsyr,DSYR)
 #define F77_dspr_base         F77_GLOBAL_SUFFIX(dspr,DSPR)
 #define F77_dsyr2_base        F77_GLOBAL_SUFFIX(dsyr2,DSYR2)
 #define F77_dspr2_base        F77_GLOBAL_SUFFIX(dspr2,DSPR2)
+#define F77_dskewsyr2_base    F77_GLOBAL_SUFFIX(dskewsyr2,DSKEWSYR2)
 #define F77_chemv_base        F77_GLOBAL_SUFFIX(chemv,CHEMV)
 #define F77_chbmv_base        F77_GLOBAL_SUFFIX(chbmv,CHBMV)
 #define F77_chpmv_base        F77_GLOBAL_SUFFIX(chpmv,CHPMV)
@@ -205,15 +209,19 @@
 #define F77_sgemm_base        F77_GLOBAL_SUFFIX(sgemm,SGEMM)
 #define F77_sgemmtr_base        F77_GLOBAL_SUFFIX(sgemmtr,SGEMMTR)
 #define F77_ssymm_base        F77_GLOBAL_SUFFIX(ssymm,SSYMM)
+#define F77_sskewsymm_base    F77_GLOBAL_SUFFIX(sskewsymm,SSKEWSYMM)
 #define F77_ssyrk_base        F77_GLOBAL_SUFFIX(ssyrk,SSYRK)
 #define F77_ssyr2k_base       F77_GLOBAL_SUFFIX(ssyr2k,SSYR2K)
+#define F77_sskewsyr2k_base   F77_GLOBAL_SUFFIX(sskewsyr2k,SSKEWSYR2K)
 #define F77_strmm_base        F77_GLOBAL_SUFFIX(strmm,STRMM)
 #define F77_strsm_base        F77_GLOBAL_SUFFIX(strsm,STRSM)
 #define F77_dgemm_base        F77_GLOBAL_SUFFIX(dgemm,DGEMM)
 #define F77_dgemmtr_base        F77_GLOBAL_SUFFIX(dgemmtr,DGEMMTR)
 #define F77_dsymm_base        F77_GLOBAL_SUFFIX(dsymm,DSYMM)
+#define F77_dskewsymm_base    F77_GLOBAL_SUFFIX(dskewsymm,DSKEWSYMM)
 #define F77_dsyrk_base        F77_GLOBAL_SUFFIX(dsyrk,DSYRK)
 #define F77_dsyr2k_base       F77_GLOBAL_SUFFIX(dsyr2k,DSYR2K)
+#define F77_dskewsyr2k_base   F77_GLOBAL_SUFFIX(dskewsyr2k,DSKEWSYR2K)
 #define F77_dtrmm_base        F77_GLOBAL_SUFFIX(dtrmm,DTRMM)
 #define F77_dtrsm_base        F77_GLOBAL_SUFFIX(dtrsm,DTRSM)
 #define F77_cgemm_base        F77_GLOBAL_SUFFIX(cgemm,CGEMM)
@@ -331,6 +339,7 @@
    #define F77_ssymv(...)     F77_ssymv_base(__VA_ARGS__, 1)
    #define F77_ssbmv(...)     F77_ssbmv_base(__VA_ARGS__, 1)
    #define F77_sspmv(...)     F77_sspmv_base(__VA_ARGS__, 1)
+   #define F77_sskewsymv(...) F77_sskewsymv_base(__VA_ARGS__, 1)
    #define F77_strmv(...)     F77_strmv_base(__VA_ARGS__, 1, 1, 1)
    #define F77_stbmv(...)     F77_stbmv_base(__VA_ARGS__, 1, 1, 1)
    #define F77_strsv(...)     F77_strsv_base(__VA_ARGS__, 1, 1, 1)
@@ -341,6 +350,7 @@
    #define F77_sspr(...)      F77_sspr_base(__VA_ARGS__, 1)
    #define F77_sspr2(...)     F77_sspr2_base(__VA_ARGS__, 1)
    #define F77_ssyr2(...)     F77_ssyr2_base(__VA_ARGS__, 1)
+   #define F77_sskewsyr2(...) F77_sskewsyr2_base(__VA_ARGS__, 1)
 
    /* Double Precision */
 
@@ -349,6 +359,7 @@
    #define F77_dsymv(...)     F77_dsymv_base(__VA_ARGS__, 1)
    #define F77_dsbmv(...)     F77_dsbmv_base(__VA_ARGS__, 1)
    #define F77_dspmv(...)     F77_dspmv_base(__VA_ARGS__, 1)
+   #define F77_dskewsymv(...) F77_dskewsymv_base(__VA_ARGS__, 1)
    #define F77_dtrmv(...)     F77_dtrmv_base(__VA_ARGS__, 1, 1, 1)
    #define F77_dtbmv(...)     F77_dtbmv_base(__VA_ARGS__, 1, 1, 1)
    #define F77_dtrsv(...)     F77_dtrsv_base(__VA_ARGS__, 1, 1, 1)
@@ -359,6 +370,7 @@
    #define F77_dspr(...)      F77_dspr_base(__VA_ARGS__, 1)
    #define F77_dspr2(...)     F77_dspr2_base(__VA_ARGS__, 1)
    #define F77_dsyr2(...)     F77_dsyr2_base(__VA_ARGS__, 1)
+   #define F77_dskewsyr2(...) F77_dskewsyr2_base(__VA_ARGS__, 1)
 
       /* Single Complex Precision */
 
@@ -405,8 +417,10 @@
    #define F77_sgemm(...)     F77_sgemm_base(__VA_ARGS__, 1, 1)
    #define F77_sgemmtr(...)    F77_sgemmtr_base(__VA_ARGS__, 1, 1, 1)
    #define F77_ssymm(...)     F77_ssymm_base(__VA_ARGS__, 1, 1)
+   #define F77_sskewsymm(...) F77_sskewsymm_base(__VA_ARGS__, 1, 1)
    #define F77_ssyrk(...)     F77_ssyrk_base(__VA_ARGS__, 1, 1)
    #define F77_ssyr2k(...)    F77_ssyr2k_base(__VA_ARGS__, 1, 1)
+   #define F77_sskewsyr2k(...) F77_sskewsyr2k_base(__VA_ARGS__, 1, 1)
    #define F77_strmm(...)     F77_strmm_base(__VA_ARGS__, 1, 1, 1, 1)
    #define F77_strsm(...)     F77_strsm_base(__VA_ARGS__, 1, 1, 1, 1)
 
@@ -415,8 +429,10 @@
    #define F77_dgemm(...)     F77_dgemm_base(__VA_ARGS__, 1, 1)
    #define F77_dgemmtr(...)    F77_dgemmtr_base(__VA_ARGS__, 1, 1, 1)
    #define F77_dsymm(...)     F77_dsymm_base(__VA_ARGS__, 1, 1)
+   #define F77_dskewsymm(...) F77_dskewsymm_base(__VA_ARGS__, 1, 1)
    #define F77_dsyrk(...)     F77_dsyrk_base(__VA_ARGS__, 1, 1)
    #define F77_dsyr2k(...)    F77_dsyr2k_base(__VA_ARGS__, 1, 1)
+   #define F77_dskewsyr2k(...) F77_dskewsyr2k_base(__VA_ARGS__, 1, 1)
    #define F77_dtrmm(...)     F77_dtrmm_base(__VA_ARGS__, 1, 1, 1, 1)
    #define F77_dtrsm(...)     F77_dtrsm_base(__VA_ARGS__, 1, 1, 1, 1)
 
@@ -459,6 +475,7 @@
    #define F77_ssymv(...)     F77_ssymv_base(__VA_ARGS__)
    #define F77_ssbmv(...)     F77_ssbmv_base(__VA_ARGS__)
    #define F77_sspmv(...)     F77_sspmv_base(__VA_ARGS__)
+   #define F77_sskewsymv(...) F77_sskewsymv_base(__VA_ARGS__)
    #define F77_strmv(...)     F77_strmv_base(__VA_ARGS__)
    #define F77_stbmv(...)     F77_stbmv_base(__VA_ARGS__)
    #define F77_strsv(...)     F77_strsv_base(__VA_ARGS__)
@@ -469,6 +486,7 @@
    #define F77_sspr(...)      F77_sspr_base(__VA_ARGS__)
    #define F77_sspr2(...)     F77_sspr2_base(__VA_ARGS__)
    #define F77_ssyr2(...)     F77_ssyr2_base(__VA_ARGS__)
+   #define F77_sskewsyr2(...) F77_sskewsyr2_base(__VA_ARGS__)
 
    /* Double Precision */
 
@@ -477,6 +495,7 @@
    #define F77_dsymv(...)     F77_dsymv_base(__VA_ARGS__)
    #define F77_dsbmv(...)     F77_dsbmv_base(__VA_ARGS__)
    #define F77_dspmv(...)     F77_dspmv_base(__VA_ARGS__)
+   #define F77_dskewsymv(...) F77_dskewsymv_base(__VA_ARGS__)
    #define F77_dtrmv(...)     F77_dtrmv_base(__VA_ARGS__)
    #define F77_dtbmv(...)     F77_dtbmv_base(__VA_ARGS__)
    #define F77_dtrsv(...)     F77_dtrsv_base(__VA_ARGS__)
@@ -487,6 +506,7 @@
    #define F77_dspr(...)      F77_dspr_base(__VA_ARGS__)
    #define F77_dspr2(...)     F77_dspr2_base(__VA_ARGS__)
    #define F77_dsyr2(...)     F77_dsyr2_base(__VA_ARGS__)
+   #define F77_dskewsyr2(...) F77_dskewsyr2_base(__VA_ARGS__)
 
    /* Single Complex Precision */
 
@@ -533,8 +553,10 @@
    #define F77_sgemm(...)     F77_sgemm_base(__VA_ARGS__)
    #define F77_sgemmtr(...)    F77_sgemmtr_base(__VA_ARGS__)
    #define F77_ssymm(...)     F77_ssymm_base(__VA_ARGS__)
+   #define F77_sskewsymm(...) F77_sskewsymm_base(__VA_ARGS__)
    #define F77_ssyrk(...)     F77_ssyrk_base(__VA_ARGS__)
    #define F77_ssyr2k(...)    F77_ssyr2k_base(__VA_ARGS__)
+   #define F77_sskewsyr2k(...) F77_sskewsyr2k_base(__VA_ARGS__)
    #define F77_strmm(...)     F77_strmm_base(__VA_ARGS__)
    #define F77_strsm(...)     F77_strsm_base(__VA_ARGS__)
 
@@ -543,8 +565,10 @@
    #define F77_dgemm(...)     F77_dgemm_base(__VA_ARGS__)
    #define F77_dgemmtr(...)    F77_dgemmtr_base(__VA_ARGS__)
    #define F77_dsymm(...)     F77_dsymm_base(__VA_ARGS__)
+   #define F77_dskewsymm(...) F77_dskewsymm_base(__VA_ARGS__)
    #define F77_dsyrk(...)     F77_dsyrk_base(__VA_ARGS__)
    #define F77_dsyr2k(...)    F77_dsyr2k_base(__VA_ARGS__)
+   #define F77_dskewsyr2k(...) F77_dskewsyr2k_base(__VA_ARGS__)
    #define F77_dtrmm(...)     F77_dtrmm_base(__VA_ARGS__)
    #define F77_dtrsm(...)     F77_dtrsm_base(__VA_ARGS__)
 
@@ -705,6 +729,11 @@ void F77_sspmv_base(FCHAR, FINT, const float *, const float *, const float *, FI
    , FORTRAN_STRLEN
 #endif
 );
+void F77_sskewsymv_base(FCHAR, FINT, const float *, const float *, FINT, const float *,  FINT, const float *, float *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN
+#endif
+);
 void F77_strmv_base(FCHAR, FCHAR, FCHAR, FINT, const float *, FINT, float *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
@@ -756,6 +785,11 @@ void F77_ssyr2_base(FCHAR, FINT, const float *, const float *, FINT, const float
    , FORTRAN_STRLEN
 #endif
 );
+void F77_sskewsyr2_base(FCHAR, FINT, const float *, const float *, FINT, const float *, FINT,  float *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN
+#endif
+);
 
 /* Double Precision */
 
@@ -780,6 +814,11 @@ void F77_dsbmv_base(FCHAR, FINT, FINT, const double *, const double *, FINT, con
 #endif
 );
 void F77_dspmv_base(FCHAR, FINT, const double *, const double *, const double *, FINT, const double *, double *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN
+#endif
+);
+void F77_dskewsymv_base(FCHAR, FINT, const double *, const double *, FINT, const double *,  FINT, const double *, double *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN
 #endif
@@ -831,6 +870,11 @@ void F77_dspr2_base(FCHAR, FINT, const double *, const double *, FINT, const dou
 #endif
 );
 void F77_dsyr2_base(FCHAR, FINT, const double *, const double *, FINT, const double *, FINT,  double *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN
+#endif
+);
+void F77_dskewsyr2_base(FCHAR, FINT, const double *, const double *, FINT, const double *, FINT,  double *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN
 #endif
@@ -1018,12 +1062,22 @@ void F77_ssymm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
+void F77_sskewsymm_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
 void F77_ssyrk_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, float *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
 void F77_ssyr2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+void F77_sskewsyr2k_base(FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
@@ -1057,12 +1111,22 @@ void F77_dsymm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FI
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
+void F77_dskewsymm_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
 void F77_dsyrk_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, double *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
 void F77_dsyr2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
+#ifdef BLAS_FORTRAN_STRLEN_END
+   , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+void F77_dskewsyr2k_base(FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif

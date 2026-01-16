@@ -152,6 +152,34 @@ void F77_dsymv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doub
 		 *beta, y, *incy );
 }
 
+void F77_dskewsymv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *a,
+	      CBLAS_INT *lda, double *x, CBLAS_INT *incx, double *beta, double *y,
+	      CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
+  double *A;
+  CBLAS_INT i,j,LDA;
+  CBLAS_UPLO uplo;
+
+  get_uplo_type(uplow,&uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     LDA = *n+1;
+     A   = ( double* )malloc( (*n)*LDA*sizeof( double ) );
+     for( i=0; i<*n; i++ )
+        for( j=0; j<*n; j++ )
+           A[ LDA*i+j ]=a[ (*lda)*j+i ];
+     cblas_dskewsymv(CblasRowMajor, uplo, *n, *alpha, A, LDA, x, *incx,
+		 *beta, y, *incy );
+     free(A);
+   }
+   else
+     cblas_dskewsymv(CblasColMajor, uplo, *n, *alpha, a, *lda, x, *incx,
+		 *beta, y, *incy );
+}
+
 void F77_dsyr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
 	     CBLAS_INT *incx, double *a, CBLAS_INT *lda
 #ifdef BLAS_FORTRAN_STRLEN_END
@@ -206,6 +234,34 @@ void F77_dsyr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, doub
    }
    else
      cblas_dsyr2(CblasColMajor, uplo, *n, *alpha, x, *incx, y, *incy, a, *lda);
+}
+
+void F77_dskewsyr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *x,
+	     CBLAS_INT *incx, double *y, CBLAS_INT *incy, double *a, CBLAS_INT *lda
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
+  double *A;
+  CBLAS_INT i,j,LDA;
+  CBLAS_UPLO uplo;
+
+  get_uplo_type(uplow,&uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     LDA = *n+1;
+     A   = ( double* )malloc( (*n)*LDA*sizeof( double ) );
+     for( i=0; i<*n; i++ )
+        for( j=0; j<*n; j++ )
+           A[ LDA*i+j ]=a[ (*lda)*j+i ];
+     cblas_dskewsyr2(CblasRowMajor, uplo, *n, *alpha, x, *incx, y, *incy, A, LDA);
+     for( i=0; i<*n; i++ )
+       for( j=0; j<*n; j++ )
+         a[ (*lda)*j+i ]=A[ LDA*i+j ];
+     free(A);
+   }
+   else
+     cblas_dskewsyr2(CblasColMajor, uplo, *n, *alpha, x, *incx, y, *incy, a, *lda);
 }
 
 void F77_dgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLAS_INT *kl, CBLAS_INT *ku,

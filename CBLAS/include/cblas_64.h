@@ -306,6 +306,10 @@ void cblas_sspmv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const int64_t N, const float alpha, const float *Ap,
                  const float *X, const int64_t incX,
                  const float beta, float *Y, const int64_t incY);
+void cblas_sskewsymv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                 const int64_t N, const float alpha, const float *A,
+                 const int64_t lda, const float *X, const int64_t incX,
+                 const float beta, float *Y, const int64_t incY);
 void cblas_sger_64(CBLAS_LAYOUT layout, const int64_t M, const int64_t N,
                 const float alpha, const float *X, const int64_t incX,
                 const float *Y, const int64_t incY, float *A, const int64_t lda);
@@ -322,6 +326,10 @@ void cblas_ssyr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
 void cblas_sspr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                 const int64_t N, const float alpha, const float *X,
                 const int64_t incX, const float *Y, const int64_t incY, float *A);
+void cblas_sskewsyr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                const int64_t N, const float alpha, const float *X,
+                const int64_t incX, const float *Y, const int64_t incY, float *A,
+                const int64_t lda);
 
 void cblas_dsymv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const int64_t N, const double alpha, const double *A,
@@ -334,6 +342,10 @@ void cblas_dsbmv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
 void cblas_dspmv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const int64_t N, const double alpha, const double *Ap,
                  const double *X, const int64_t incX,
+                 const double beta, double *Y, const int64_t incY);
+void cblas_dskewsymv_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                 const int64_t N, const double alpha, const double *A,
+                 const int64_t lda, const double *X, const int64_t incX,
                  const double beta, double *Y, const int64_t incY);
 void cblas_dger_64(CBLAS_LAYOUT layout, const int64_t M, const int64_t N,
                 const double alpha, const double *X, const int64_t incX,
@@ -351,6 +363,10 @@ void cblas_dsyr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
 void cblas_dspr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                 const int64_t N, const double alpha, const double *X,
                 const int64_t incX, const double *Y, const int64_t incY, double *A);
+void cblas_dskewsyr2_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                const int64_t N, const double alpha, const double *X,
+                const int64_t incX, const double *Y, const int64_t incY, double *A,
+                const int64_t lda);
 
 
 /*
@@ -443,11 +459,21 @@ void cblas_ssymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  const float alpha, const float *A, const int64_t lda,
                  const float *B, const int64_t ldb, const float beta,
                  float *C, const int64_t ldc);
+void cblas_sskewsymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
+                 CBLAS_UPLO Uplo, const int64_t M, const int64_t N,
+                 const float alpha, const float *A, const int64_t lda,
+                 const float *B, const int64_t ldb, const float beta,
+                 float *C, const int64_t ldc);
 void cblas_ssyrk_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
                  const float alpha, const float *A, const int64_t lda,
                  const float beta, float *C, const int64_t ldc);
 void cblas_ssyr2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                  CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
+                  const float alpha, const float *A, const int64_t lda,
+                  const float *B, const int64_t ldb, const float beta,
+                  float *C, const int64_t ldc);
+void cblas_sskewsyr2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
                   const float alpha, const float *A, const int64_t lda,
                   const float *B, const int64_t ldb, const float beta,
@@ -478,11 +504,21 @@ void cblas_dsymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
                  const double alpha, const double *A, const int64_t lda,
                  const double *B, const int64_t ldb, const double beta,
                  double *C, const int64_t ldc);
+void cblas_dskewsymm_64(CBLAS_LAYOUT layout, CBLAS_SIDE Side,
+                 CBLAS_UPLO Uplo, const int64_t M, const int64_t N,
+                 const double alpha, const double *A, const int64_t lda,
+                 const double *B, const int64_t ldb, const double beta,
+                 double *C, const int64_t ldc);
 void cblas_dsyrk_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
                  const double alpha, const double *A, const int64_t lda,
                  const double beta, double *C, const int64_t ldc);
 void cblas_dsyr2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                  CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
+                  const double alpha, const double *A, const int64_t lda,
+                  const double *B, const int64_t ldb, const double beta,
+                  double *C, const int64_t ldc);
+void cblas_dskewsyr2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   CBLAS_TRANSPOSE Trans, const int64_t N, const int64_t K,
                   const double alpha, const double *A, const int64_t lda,
                   const double *B, const int64_t ldb, const double beta,
