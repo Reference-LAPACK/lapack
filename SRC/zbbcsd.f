@@ -300,7 +300,7 @@
 *  =========================
 *>
 *> \verbatim
-*>  TOLMUL  DOUBLE PRECISION, default = MAX(10,MIN(100,EPS**(-1/8)))
+*>  TOLMUL  DOUBLE PRECISION, default = 10
 *>          TOLMUL controls the convergence criterion of the QR loop.
 *>          Angles THETA(i), PHI(i) are rounded to 0 or PI/2 when they
 *>          are within TOLMUL*EPS of either bound.
@@ -451,7 +451,7 @@
 *
       EPS = DLAMCH( 'Epsilon' )
       UNFL = DLAMCH( 'Safe minimum' )
-      TOLMUL = MAX( TEN, MIN( HUNDRED, EPS**MEIGHTH ) )
+      TOLMUL = TEN
       TOL = TOLMUL*EPS
       THRESH = MAX( TOL, MAXITR*Q*Q*UNFL )
 *
