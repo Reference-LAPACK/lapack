@@ -24,6 +24,7 @@
 *      $                   K, MAXC2NRMK, RELMAXC2NRMK, FNRMK,       
 *      $                   IPIV, JPIV, TAU, C, LDC, QRC, LDQRC,
 *      $                   X, LDX,  WORK, LWORK, IWORK, LIWORK, INFO )
+*       IMPLICIT NONE
 *
 *       .. Scalar Arguments ..
 *       CHARACTER           FACT, USESD
@@ -63,8 +64,8 @@
 *>
 *> The column selection for the matrix C has two stages.
 *> 
-*> Column preselection stage 1.
-*> ============================
+*> Column preselection stage 1 (optional).
+*> =======================================
 *> 
 *> The user can select N_sel columns and deselect N_desel columns
 *> of the matrix A that MUST be included and excluded respectively
@@ -85,7 +86,9 @@
 *> be controlled by three stopping criteria described below.
 *> For column selection, the routine uses a truncated (rank-K) 
 *> Householder QR factorization with column pivoting algorithm using
-*> the routine DGEQP3RK. Note that before running the column selection
+*> the routine DGEQP3RK.
+*>
+*> Optionally, before running the column selection
 *> algorithm, the user can deselect M_desel rows of the matrix A that
 *> should NOT be considered by the column selection algorithm (i.e.
 *> during the factorization). This is controlled by flags in 
@@ -103,6 +106,9 @@
 *> of columns of the matrix A minus the number of deselected columns 
 *> N_desel, i.e. N_sub = N - N_desel.
 *>
+*> The reported column selection error metrics MAXC2NRMK, RELMAXC2NRMK 
+*> and FNRMK described below are computed using only A_sub.
+*>
 *> Column selection criteria.
 *> ==========================
 *>
@@ -110,23 +116,26 @@
 *> can be any of the following:
 *>
 *>   1) KMAXFREE: This input parameter specifies the maximum number of
-*>      columns to factorize outside of the N_sel preselected columns.
-*>      The factorization rank is limited to N_sel + KMAXFREE.
+*>      columns to factorize in addition to the N_sel preselected
+*>      columns. The factorization rank is limited to N_sel + KMAXFREE.
 *>      If N_sel + KMAXFREE >= min(M_sub, N_sub), this criterion 
 *>      is not used.
 *>
 *>   2) ABSTOL: This input parameter specifies the absolute tolerance
 *>      for the maximum column 2-norm of the submatrix residual
-*>      A_sub_resid(K) = A(K+1:M_sub, K+1:N_sub).
+*>      A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub), where
+*>      A_sub(K) denotes the contents of the array
+*>      A_sub = A(1:M_sub, 1:N_sub) after K columns were factorized.
 *>      This means that the factorization stops if this norm is less
 *>      than or equal to ABSTOL. If ABSTOL < 0.0, this criterion is
 *>      not used.
 *>
 *>   3) RELTOL: This input parameter specifies the tolerance for
 *>      the maximum column 2-norm of the submatrix residual 
-*>      A_sub_resid(K) = A(K+1:M_sub, K+1:N_sub) divided
+*>      A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub) divided
 *>      by the maximum column 2-norm of the submatrix 
-*>      A_sub = A(1:M_sub, 1:N_sub).
+*>      A_sub = A(1:M_sub, 1:N_sub), where A_sub(K) denotes the contents
+*>      of the array A_sub after K columns were factorized.
 *>      This means that the factorization stops when the ratio of the
 *>      maximum column 2-norm of A_sub_resid(K) to the maximum column
 *>      2-norm of A_sub is less than or equal to RELTOL.
@@ -153,13 +162,13 @@
 *> selection. Then the routine factorizes that block A(1:M_sub,1:N_sel),
 *> and if any of the three stopping criteria is met immediately after
 *> factoring the first N_sel columns the routine exits
-*> (i.e. the user does not want to select KMAXFREE extra columns, or
-*> if the absolute or relative tolerance of the maximum column 2-norm of
-*> the residual is satisfied). In this case, the number 
+*> (i.e. if the user does not want to select KMAXFREE > 0 extra columns,
+*> or if the absolute or relative tolerance of the maximum column 2-norm
+*> of the residual is satisfied). In this case, the number 
 *> of selected columns would be K = N_sel. Otherwise, the factorization
 *> routine finds a new column to select with the maximum column 2-norm 
-*> in the residual A(N_sel+1:M_sub,N_sel+1:N_sub), and permutes that
-*> column to the left side of A(1:M,N_sel+1:N_sub). Then the routine 
+*> in the residual A(N_sel+1:M_sub,N_sel+1:N_sub), and swaps that
+*> column with the first column of A(1:M,N_sel+1:N_sub). Then the routine 
 *> checks if the stopping criteria are met in the next residual
 *> A(N_sel+2:M_sub,N_sel+2:N_sub), and so on.
 *>
@@ -172,8 +181,8 @@
 *>      stored in the first K elements of the JPIV array.
 *>  (b) If the flag FACT = 'C', then in addition to (a), the routine
 *>      explicitly returns the matrix C in the array C.
-*>  (c) If the flag FACT = 'X', then in addition to (b), the routine
-*>      explicitly computes and returns the factor 
+*>  (c) If the flag FACT = 'X', then in addition to (a) and (b),
+*>      the routine explicitly computes and returns the factor 
 *>      X = pseudoinv(C) * A in the array X, and it also returns 
 *>      the factor R alongside the Householder vectors 
 *>      of the QR factorization of the matrix C in the array QRC.
@@ -192,10 +201,10 @@
 *>          = 'P': the routine returns: 
 *>                 (1) only the column permutation matrix P in
 *>                     the array JPIV.
-*>                     ( The first K elements of the array JPIV
+*>                     (The first K elements of the array JPIV
 *>                     contain indices of the columns that were
 *>                     selected from the matrix A to form the
-*>                     factor C. )
+*>                     factor C.)
 *>                 (fastest option, smallest memory space)        
 *>                         
 *>          = 'C': the routine returns:
@@ -232,11 +241,11 @@
 *>
 *>          = 'R': Only row deselection is ON. 
 *>                 Column preselection-deselection is OFF.
-*>                 Only the array SEL_DESEL_COLS is not used.
+*>                 The array SEL_DESEL_COLS is not used.
 *>
 *>          = 'C': Only column preselection-deselection is ON.
 *>                 Row deselection is OFF. 
-*>                 Only the array DESEL_ROWS is not used.
+*>                 The array DESEL_ROWS is not used.
 *>
 *>          = 'A': Means "All". Both row deselection and column
 *>                 preselection-deselection are ON.                      
@@ -257,9 +266,9 @@
 *> \param[in] DESEL_ROWS
 *> \verbatim
 *>          DESEL_ROWS is INTEGER array, dimension (M)
-*>          DESEL_ROWS is only accessed, if USESD = 'R' or 'A'.
+*>          DESEL_ROWS is only accessed if USESD = 'R' or 'A'.
 *>          This is a row deselection mask array that separates
-*>          the matrix A rows into 2 sets. 
+*>          the rows of matrix A into 2 sets. 
 *>
 *>          a) If DESEL_ROWS(i) = -1, the i-th row of the matrix A is
 *>             deselected by the user, i.e. chosen to be excluded from 
@@ -280,9 +289,9 @@
 *> \param[in] SEL_DESEL_COLS
 *> \verbatim
 *>          SEL_DESEL_COLS is INTEGER array, dimension (N)
-*>          SEL_DESEL_COLS is only accessed, if USESD = 'C' or 'A'.
+*>          SEL_DESEL_COLS is only accessed if USESD = 'C' or 'A'.
 *>          This is a column preselection-deselection mask array that
-*>          separates the matrix A columns into 3 sets.
+*>          separates the columns of matrix A into 3 sets.
 *>
 *>          a) If SEL_DESEL_COLS(j) = +1, the j-th column of the matrix 
 *>             A is preselected by the user to be included 
@@ -296,9 +305,9 @@
 *>             of the array A. The number of deselected columns is
 *>             denoted by N_desel.          
 *>         
-*>          c) If SEL_DESEL_COLS(j) is not equal 1 and not equal -1,
-*>             the j-th column of A is a free column and will be used
-*>             by the column selection algorithm to determine if this
+*>          c) If SEL_DESEL_COLS(j) is not equal to 1 and not equal
+*>             to -1, the j-th column of A is a free column and will be
+*>             used by the column selection algorithm to determine if this
 *>             column will be selected. This defines a set of 
 *>             columns of size N_free = N - N_sel - N_desel.
 *>         
@@ -333,7 +342,8 @@
 *>             satisfied on input and the routine exits without 
 *>             performing column selection stage 2
 *>             on the submatrix A_sub. This means that the matrix
-*>             A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) is not modified.
+*>             A_free = A(N_sel+1:M_sub, N_sel+1:N_sub) is not modified
+*>             in the column selection stage 2
 *>             and A_free is itself the residual for the factorization.
 *> \endverbatim
 *>
@@ -350,13 +360,14 @@
 *> 
 *>          maxcol2norm(A_sub_resid(K)) is the maximum column 2-norm
 *>          of the residual matrix 
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub)
+*>          A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub)
 *>          when K columns have been factorized.
-*>          The column selection algorithm converges (stops
-*>          the factorization) when
+*>          The column selection algorithm converges
+*>          (stops the factorization) when
 *>          maxcol2norm(A_sub_resid(K)) <= ABSTOL, where K >= N_sel.
 *>
-*>          Here, SAFMIN = DLAMCH('S'),
+*>          In the following,
+*>                SAFMIN = DLAMCH('S'),
 *>                A_free = A(N_sel+1:M_sub, N_sel+1:N_sub),
 *>                maxcol2norm(A_free) is the maximum column 2-norm
 *>                of the matrix A_free.
@@ -387,7 +398,7 @@
 *>          and exits immediately.
 *>          This means that the factorization residual
 *>          A_sub_resid(N_sel) = A_free = A(N_sel+1:M_sub,N_sel+1:N_sub) 
-*>          is not modified.         
+*>          is not modified in the column selection stage 2.         
 *>          This includes the case where ABSTOL = +Inf.          
 *> \endverbatim
 *>
@@ -406,7 +417,7 @@
 *>
 *>          maxcol2norm(A_sub_resid(K)) is the maximum column 2-norm
 *>          of the residual matrix 
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub)
+*>          A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub)
 *>          when K columns have been factorized.
 *>          maxcol2norm(A_sub) is the maximum column 2-norm 
 *>          of the original submatrix A_sub = A(1:M_sub, 1:N_sub).
@@ -414,7 +425,8 @@
 *>          (stops the factorization) when the ratio 
 *>          relmaxcol2norm(A_sub_resid(K)) <= RELTOL, where K >= N_sel.
 *>
-*>          Here, EPS = DLAMCH('E'),
+*>          In the following,
+*>                EPS = DLAMCH('E'),
 *>                A_free = A(N_sel+1:M_sub, N_sel+1:N_sub).          
 *>
 *>          a) If RELTOL is NaN, then no computation is performed
@@ -511,7 +523,7 @@
 *>
 *>             3. The subarray A_sub(K+1:M_sub,K+1:N_sub) contains
 *>                the (M_sub-K)-by-(N_sub-K) rectangular matrix
-*>                A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub).
+*>                A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub).
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -525,7 +537,7 @@
 *>          K is INTEGER
 *>          The number of columns that were selected
 *>          (K is the factorization rank).
-*>          0 <= K <= min( M_sub, min(N_sel+KMAXFREE, N_sub) ).
+*>          0 <= K <= min( M_sub, N_sel+KMAXFREE, N_sub ).
 *>
 *>          If K = 0, the arrays A, TAU were not modified.
 *> \endverbatim
@@ -534,10 +546,10 @@
 *> \verbatim
 *>          MAXC2NRMK is DOUBLE PRECISION
 *>          The maximum column 2-norm of the residual matrix
-*>          A_sub_resid(K) = A_sub(K+1:M_sub, K+1:N_sub),
+*>          A_sub_resid(K) = A_sub(K)(K+1:M_sub, K+1:N_sub),
 *>          when factorization stopped at rank K. MAXC2NRMK >= 0.
 *>
-*>          a) If K = 0, i.e. the factorization was not performed,
+*>          a) If K = 0, i.e. the factorization was not performed, so
 *>             the matrix A_sub = A(1:M_sub, 1:N_sub) was not modified
 *>             and is itself a residual matrix, then MAXC2NRMK equals
 *>             the maximum column 2-norm of the original matrix A_sub.
@@ -630,7 +642,7 @@
 *>          If FACT = 'C' or 'X': 
 *>             If USESD = 'N', the array dimension is (LDC,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
-*>                        the array dimension (LDC,min(M_sub,N_sub)).
+*>                        the array dimension is (LDC,min(M_sub,N_sub)).
 *>
 *>             If K = 0, the array is not used.  
 *>             If K > 0, the array C stores the M-by-K factor C.
@@ -705,9 +717,9 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. 
 *>          If FACT = 'P' or 'C': 
-*>           the minimal LWORK >= max( 1, NSUB, NSEL, 3*NFREE+1 ).
+*>           the minimal LWORK >= max( 1, N_sub, N_sel, 3*N_free+1 ).
 *>          If FACT = 'X':
-*>           the minimal LWORK >= max( 1, NSUB, 3*NFREE+1, min(M,N)+N ).
+*>           the minimal LWORK >= max( 1, N_sub, 3*N_free+1, min(M,N)+N ).
 *>          
 *>          For good performance, LWORK should generally be larger, and
 *>          the user should query the routine for the optimal LWORK.
@@ -722,9 +734,9 @@
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, dimension (N).
-*>          Is a work array. ( IWORK is used by DGEQP3RK to store indices
+*>          Is a work array. (IWORK is used by DGEQP3RK to store indices
 *>          of "bad" columns for norm downdating in the residual
-*>          matrix in the blocked step auxiliary subroutine DLAQP3RK ).
+*>          matrix in the blocked step auxiliary subroutine DLAQP3RK.)
 *>
 *>          On exit, if INFO >= 0, IWORK(1) returns the optimal LIWORK.
 *> \endverbatim
@@ -733,8 +745,8 @@
 *> \verbatim
 *>          LIWORK is INTEGER
 *>          The dimension of the array LIWORK. 
-*>             If FACT = 'P': the minimal LIWORK >= max(1,N-1).
-*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,N).
+*>             If FACT = 'P': the minimal LIWORK >= max(1,2N-2).
+*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,3N-1).
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
 *>
@@ -768,13 +780,14 @@
 *
 *> \ingroup gecxx
 *
-*  =====================================================================     
-      SUBROUTINE DGECXX( FACT, USESD, M, N,
+*  =====================================================================      
+      SUBROUTINE DGECXX22( FACT, USESD, M, N,
      $                   DESEL_ROWS, SEL_DESEL_COLS,
      $                   KMAXFREE, ABSTOL, RELTOL, A, LDA,
      $                   K, MAXC2NRMK, RELMAXC2NRMK, FNRMK,       
      $                   IPIV, JPIV, TAU, C, LDC, QRC, LDQRC,
      $                   X, LDX, WORK, LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -802,8 +815,8 @@
 *     .. Local Scalars ..
       LOGICAL            LIQUERY, LQUERY, RETURNC, RETURNX,
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
-      INTEGER            I, J, NSUB, MFREE, MSUB, MNSUB, NSEL, JDESEL,
-     $                   ITEMP, IINFO, KP, KP0, KFREE, MRESID, NRESID,
+      INTEGER            I, J, NSUB, MFREE, MSUB, NSEL, JDESEL,
+     $                   ITEMP, IINFO, KP0, KFREE, MRESID, NRESID,
      $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP, JJ, JPW,
      $                   MINMN, MDESEL, NDESEL, NFREE
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
@@ -823,7 +836,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN      
 *     ..
-*     .. Executable Statements ..      
+*     .. Executable Statements ..    
 *
 *     Test the input arguments
 *
@@ -856,20 +869,22 @@
          INFO = -4
       END IF   
 *
-*     This is to check that NSEL cannot be larger than MSUB.
-*     When the number of preselected columns is larger than MSUB,
-*     the factorization of all NSEL columns cannot be completed.
+*     This is to check that the number of preselected columns NSEL
+*     cannot be larger than MSUB, which is the number of rows 
+*     without MDESEL deselected rows. When the number of
+*     preselected columns NSEL is larger than MSUB, the factorization
+*     of all preselected NSEL columns cannot be completed.
 *     MSUB also will be used for LDX argument check later.
 *
       IF( USE_DESEL_ROWS ) THEN
 *
-*          Count the number of free rows MSUB.
+*        Count the number of free rows MSUB.
 *          
-            DO I = 1, M
-               IF( DESEL_ROWS( I ).EQ.-1) MDESEL = MDESEL + 1
-            END DO
-            MSUB = M - MDESEL
-            MFREE = MSUB
+         DO I = 1, M
+            IF( DESEL_ROWS( I ).EQ.-1 ) MDESEL = MDESEL + 1
+         END DO
+         MSUB = M - MDESEL
+         MFREE = MSUB
       END IF
 *      
       IF( USE_SEL_DESEL_COLS ) THEN
@@ -878,8 +893,8 @@
 *        number of preselected and freecolumns NSUB = N - NDESEL.
 *
          DO J = 1, N
-            IF( SEL_DESEL_COLS( J ).EQ.1) NSEL = NSEL + 1
-            IF( SEL_DESEL_COLS( J ).EQ.-1) NDESEL = NDESEL + 1
+            IF( SEL_DESEL_COLS( J ).EQ.1 ) NSEL = NSEL + 1
+            IF( SEL_DESEL_COLS( J ).EQ.-1 ) NDESEL = NDESEL + 1
          END DO
          NSUB = N - NDESEL
          MFREE = MSUB - NSEL         
@@ -899,15 +914,20 @@
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -11
       END IF
-*          
+*
+*
+*        This is a check for LDC          
       IF( ( RETURNC .AND. LDC.LT.MAX( 1, M ) ) .OR.
      $    ( .NOT.RETURNC .AND. LDC.LT.1 ) ) THEN
          INFO = -20
+*        This is a check for LDQRC           
       ELSE IF( ( RETURNX .AND. LDQRC.LT.MAX( 1, M ) ) .OR.
      $    ( .NOT.RETURNX .AND. LDQRC.LT.1 ) ) THEN
-         INFO = -22         
+    
+         INFO = -22
+*        This is a check for LDX                   
       ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, MAX(MSUB, NSUB) ) ) .OR.
-     $    ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN
+     $    ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN     
          INFO = -24
       END IF
 *
@@ -915,13 +935,13 @@
 *               
 *       a) Test the input workspace size LWORK and LIWORK for the
 *          minimum size requirement LWKMIN and LIWKMIN respectively. 
-*       b) Determine the optimal workspace sizes LWKOPT LIWKOPT to be
+*       b) Determine the optimal workspace sizes LWKOPT and LIWKOPT to be
 *          returned  in WORK( 1 ) and IWORK( 1 ) respectively,
 *          if INFO >= 0 in cases:
 *           (1) LQUERY = .TRUE.,
 *           (2) LIQUERY = .TRUE.,
 *           (3) when the routine exits.
-*     Here, LWKMIN and LIWORK are the miminum workspaces required for
+*     Here, LWKMIN and LIWKMIN are the miminum workspaces required for
 *     unblocked code.
 *
       IF( INFO.EQ.0 ) THEN
@@ -960,7 +980,7 @@
 *                                   
                IF( RETURNX ) THEN
 *                     
-                  LWKMIN = MAX( LWKMIN, MIN(M,N) + N ) 
+                  LWKMIN = MAX( LWKMIN, MINMN + N ) 
 *
 *                 Query for optimal workspace size for DGELS.
 *
@@ -970,10 +990,12 @@
 *                                   
                END IF
 *
-*           End IF( LSAME( USESD, 'N') )
+*              End IF( LSAME( USESD, 'N') )
 *               
             ELSE
-*            
+*
+*              Begin of ELSE( LSAME( USESD, 'N') )
+*           
                LWKMIN = MAX( MAX( 1, NSUB ), 3*NFREE + 1 )
 *
 *              Optimal workspace for column 2-norm computation.
@@ -996,6 +1018,11 @@
                LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *                  
                LIWKMIN = MAX( 1, N-1 )
+*
+*              Integer workspace for JPIV ajustment.
+* 
+               LIWKMIN = LIWKMIN + N-1
+*
                LIWKOPT = LIWKMIN
 *
                IF( RETURNC ) THEN
@@ -1013,10 +1040,9 @@
      $                        WORK, -1, IINFO )
                   LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
 *                                   
-               END IF                   
-*                 
+               END IF                                    
 *
-*           End of ELSE( LSAME( USESD, 'N') )
+*              End of ELSE( LSAME( USESD, 'N') )
 * 
             END IF
 *
@@ -1063,45 +1089,49 @@
 *      
 *     ==================================================================
 *     Permute the deselected rows to the bottom of the matrix A.
-*     1) Order of free rows is preserved.
-*     2) Order of deselected rows is not preserved.
+*     1) The order of free rows is preserved.
+*     2) The order of deselected rows is not preserved.
 *     ==================================================================
 *
-*     I is the index of DESEL_ROWS array and row I
-*     of the matrix A.
-*     MFREE is the number of free rows, also the pointer to the last
-*     free row.
-*     (For each position I, we check if this position is a FREE row.
-*     If it is a FREE row we increment the MFREE pointer, otherwise we 
-*     do not change the MFREE pointer. Also, if it is a FREE row, we move
-*     this row from the larger (or same) I index into samaller (or same)
-*     MFREE index. This way we move all the FREE rows to the lower index
-*     block preserving FREE row order. Deselected rows will be )
+*     I is the index of DESEL_ROWS array and row I of the matrix A.
+*     MSUB is the number of included rows, i.e rows of the matrix A without
+*      deselected rows.
+*     (For each position I, we check if this position is an included row.
+*     If it is an included row, we increment MSUB, which is also a pointer
+*     to the last included row, otherwise we do not change MSUB pointer.
+*     Also, if it is an included row, we move this row from the larger 
+*     (or same) I index into samaller (or same) MSUB index. This way
+*     we move all the included rows to the larger index block preserving
+*     included row order. The deselected rows will be at the bottom of the
+*     matrix A.)
 *      
       IF( USE_DESEL_ROWS ) THEN
 *      
-         MFREE = 0 
+         MSUB = 0 
          DO I = 1, M, 1
 *
-*           Initialize row pivot array IPIV.          
+*           Initialize the row pivot array IPIV.          
             IPIV( I ) = I
 *
-            IF( DESEL_ROWS(I).NE.-1 ) THEN
-               MFREE = MFREE + 1
+*           The row at the index I is an included row and should be
+*           moved to the top of the matrix A. 
 *
-*              This is the check whether the deselected row is
-*              on the deselected place already.
+            IF( DESEL_ROWS( I ).NE.-1 ) THEN
+               MSUB = MSUB + 1
+*
+*              This is a check whether the included row is
+*              on the included place already.
 *            
-               IF( I.NE.MFREE ) THEN
+               IF( I.NE.MSUB ) THEN
 *
-*                 Here, we swap A(I,1:N) into A(MFREE,1:N)
+*                 Here, we swap A(I,1:N) into A(MSUB,1:N)
 *
-                  CALL DSWAP( N, A( I, 1 ), LDA, A( MFREE, 1 ), LDA )                   
-                  IPIV( I ) = IPIV( MFREE )
-                  IPIV( MFREE ) = I
+                  CALL DSWAP( N, A( I, 1 ), LDA, A( MSUB, 1 ), LDA )                   
+                  IPIV( I ) = IPIV( MSUB )
+                  IPIV( MSUB ) = I
                   ITEMP = DESEL_ROWS( I )
-                  DESEL_ROWS( I ) = DESEL_ROWS( MFREE )
-                  DESEL_ROWS( MFREE ) = ITEMP
+                  DESEL_ROWS( I ) = DESEL_ROWS( MSUB )
+                  DESEL_ROWS( MSUB ) = ITEMP
                END IF                       
             END IF
 *            
@@ -1109,35 +1139,34 @@
 *         
       ELSE
 *
-*        We do not row deselection DESEL_ROWS array.
-*        Initialize row pivot array IPIV.
+*        We do not use the row deselection DESEL_ROWS array.
+*        Initialize the row pivot array IPIV.
+*        NOTE: MSUB=M has default value,
+*        which is set at the beginning of the routine, before argument checks.
 *
          DO I = 1, M, 1
             IPIV( I ) = I
          END DO
-*
-         MFREE = M
       END IF
-      MSUB = M
 *            
 *     ==================================================================
 *     Permute the pseselected columns to the left and deselected 
 *     columns to the right of the matrix A.
-*     1) Order of preselected columns is preserved.
-*     2) Order of free columns is not preserved.
-*     3) Order of deselected columns is not preserved.
+*     1) The order of preselected columns is preserved.
+*     2) The order of free columns is not preserved.
+*     3) The order of deselected columns is not preserved.
 *     ==================================================================
 *
 *     J is the index of SEL_DESEL_COLS array and column J
 *     of the matrix A.
 *
-*     Column selection.
-*     NSEL is the number of selected columns, also the pointer to the last
-*     selected column.
-*
-      NSEL = 0
       IF( USE_SEL_DESEL_COLS ) THEN
-*                        
+*
+*        Column selection.
+*        NSEL is the number of selected columns, also the pointer to the last
+*        selected column.
+*
+         NSEL = 0                        
          DO J = 1, N, 1
 *         
 *           Initialize column pivot array JPIV.         
@@ -1163,6 +1192,8 @@
          END DO
 *
 *        Column deselection.
+*        JDEEL the pointer to the last
+*        deselected column counting right-to-left.
 *
          JDESEL = N+1
          DO J = N, NSEL+1, -1
@@ -1190,16 +1221,18 @@
 *
       ELSE
 *
-*        We do not column selection deselection SEL_DESEL_COLS array.
+*        We do not use the column selection deselection
+*        SEL_DESEL_COLS array.
 *        Initialize column pivot array JPIV.
+*        NOTE: NSUB=N has default value,
+*        which is set at the beginning of the routine, before argument checks.
 *
          DO J = 1, N, 1
             JPIV( J ) = J
          END DO
+           
+      END IF 
 *
-         NSUB = N            
-      END IF
-*    
 *     ==================================================================
 *     Compute the complete column 2-norms of the submatrix 
 *     A_sub = A(1:MSUB, 1:NSUB) and store them in WORK(1:NSUB).
@@ -1215,204 +1248,169 @@
       KP0 = IDAMAX( NSUB, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP0 )
 *
-*     ==================================================================
 *     Process preselected columns
 *
 *     Compute the QR factorization of NSEL preselected columns (1:NSEL)
 *     in the submatrix A_sub = A(1:MSUB, 1:NSUB) and update
-*     remaining NFEE free columns (NSEL+1:NSUB).
-*     MSUB = MFREE, NSUB = MSEL + NFREE 
+*     remaining NFREE free columns (NSEL+1:NSUB).
+*     NSUB = NSEL + NFREE 
 *
-      MNSUB = MIN( MSUB, NSUB )
-      MRESID = MSUB-NSEL
-      NRESID = NSUB-NSEL
       IF( NSEL.GT.0 ) THEN
-*           (a) Case MSUB < NSEL. 
-*           This is handled at the argument check stage in the begining
-*           of the routine. When the number of preselected columns
-*           is larger than MSUB, hence the factorization of all NSEL 
-*           columns cannot be completed. Return from the routine with
-*           the error of COL_SEL_DESEL parameter.
-*
-         IF( MSUB.EQ.NSEL.OR. 
-     $                ( MSUB.GT.NSEL.AND.NSEL.EQ.NSUB )) THEN
-*
-*           (b) Case MSUB = NSEL.
-*           (c-1) Case MSUB > NSEL and NSEL = NSUB.
-*
-*           There will be no residual submatrix after factorization 
-*           of NSEL columns at step K = NSEL:
-*           A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB).
-*           Therefore, ther is no need to do the factorization of NSEL
-*           columns. Set norms to ZERO and return from the routine.
-*
-            K = NSEL
-            MAXC2NRMK = ZERO
-            RELMAXC2NRMK = ZERO
-            FNRMK = ZERO
+*         
+*           Case (a): MSUB < NSEL.
 * 
-*           Zero out TAU(K+1, MSUB)
-*           
-            DO J = K + 1, MNSUB
-               TAU( J ) = ZERO
-            END DO
+*              This is handled at the argument check stage in the
+*              begining of the routine. When the number of preselected
+*              columns is larger than MSUB, hence the factorization of
+*              all NSEL columns cannot be completed. Return from the 
+*              routine with the error of COL_SEL_DESEL parameter.
 *
-*           Go to the construction of the matrix C.
+*           Case (b): MSUB = NSEL.
+*           Case (c-1): MSUB > NSEL and NSEL = NSUB.
+*
+*              For cases (b) and (c-1), ther will be no residual
+*              submatrix  after factorization of NSEL columns 
+*              at step K = NSEL: 
+*              A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB).
+*
+*           Case (c-2): MSUB > NSEL and NSEL < NSUB.
+*
+*              For Case (c-2) is a submatrix residual at step K=NSEL
+*              A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB)
+*
+         CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK, LWORK, IINFO )
+*
+*        Apply Q**T from the left to A(NSEL+1:MSUB, NSEL+1:NSUB)            
+*
+         IF( NFREE.GT.0 ) THEN
+*
+*           This is only for case (c-2).
+*     
+            CALL DORMQR( 'Left', 'Transpose', MSUB, NFREE, NSEL,
+     $                   A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
+     $                   LWORK, IINFO )
+         END IF    
+*
+         K = NSEL
+*
+*        End of IF(NSEL.GT.0)
 *            
-            GO TO 10  
-         ELSE
-*
-*           (c-2) Case MSUB > NSEL and NSEL < NSUB.
-*
-*           There is a submatrix residual at step K=NSEL
-*           A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB)
-*
-            CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK, LWORK, IINFO )
-*
-*           Apply Q**T from the left to A(NSEL+1:MSUB, NSEL+1:NSUB)            
-*
-            CALL DORMQR( 'Left', 'Transpose', MSUB, NSUB-NSEL, NSEL,
-     $        A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK, LWORK, IINFO )
-*
-*           Compute the complete column 2-norms of the submatrix
-*           residual at step NSEL
-*           A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB) and
-*           store them in WORK(NSUB+NSEL+1:2*NSUB).
-*
-            DO J = NSEL+1, NSUB
-               WORK( NSUB+J ) = DNRM2( MRESID, A( NSEL+1, J ), 1 )
-            END DO
+      END IF
 *      
-*           Compute the column index and the maximum column 2-norm
-*           and the relative maximum column 2-norm for the submatrix
-*           residual.
+*     ==================================================================
+*      
+      KFREE = 0 
 *
-            KP =  IDAMAX( NRESID, WORK( NSUB+NSEL+1 ), 1 )
+      IF( MIN( MFREE, NFREE ).NE.0 ) THEN
 *
-            K = NSEL
-            MAXC2NRMK = WORK( NSUB + NSEL + KP )
-            RELMAXC2NRMK = MAXC2NRMK / MAXC2NRM
+*        Factorize NFREE free columns of
+*        A_free = A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB),
+*        KFREE is the number of columns that were actually factorized
+*        among NFREE columns.
+*     
+*     ==================================================================
 *
-*           Test for the first, second and third tolerance stopping
-*           criteria after factorizarion of preselected columns.
-*           If any of them is met, return. Otherwise,
-*           proceed with factorization of the NFREE free columns.
-*           NOTE: There is no need to test for ABSTOL.GE.ZERO, since
-*           MAXC2NRMK is non-negative. Similarly, there is no need
-*           to test for RELTOL.GE.ZERO, since RELMAXC2NRMK is
-*           non-negative.            
+         EPS = DLAMCH('Epsilon')
 *
-            IF( KMAXFREE.EQ.0 
-     $        .OR. MAXC2NRMK.LE.ABSTOL
-     $        .OR. RELMAXC2NRMK.LE.RELTOL ) THEN
+         USETOL = .FALSE.
 *
-*              NOTE: In this (c-2) case. There is a submatrix
-*              residual A_sub_resid(NSEL). We do not need to have a check
-*              for  MIN(MRESID, NRESID) = 0 to call DLANGE.
+*        Adjust ABSTOL only if nonnegative. Negative value means disabled.
+*        We need to keep negtive value for later use in criterion
+*        check.
 *
-               FNRMK = DLANGE( 'F', MRESID, NRESID, A(NSEL+1,NSEL+1),
-     $                         LDA, WORK )
-* 
-*              Zero out TAU(K+1, MSUB)
-* 
-               DO J = K + 1, MNSUB
-                  TAU( J ) = ZERO
-               END DO
-*
-*              Go to the construction of the matrix C.
-*               
-               GO TO 10              
-            END IF
-*
+         IF( ABSTOL.GE.ZERO ) THEN
+            SAFMIN = DLAMCH('Safe minimum')
+            ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
+            USETOL = .TRUE.
          END IF
 *
-*      End of IF(NSEL.GT.0)
-*            
-      END IF
+*        Ajust RELTOL only if nonnegative. Negative value means disabled.
+*        We need to keep negtive value for later use in criterion
+*        check.
+*
+         IF( RELTOL.GE.ZERO ) THEN
+            RELTOL = MAX( RELTOL, EPS )
+            USETOL = .TRUE.
+         END IF
+*
+*     ==================================================================
+*
+*        Disable RELTOLFREE when calling DGEQP3RK for free columns 
+*        factorization, since DGEQP3RK expects RELTOLFREE with respect
+*        to the residual matrix A_sub_resid(NSEL), not the whole
+*        original marix A. We can use RELTOL criterion by passing it
+*        to ABSTOLFREE as RELTOL*MAXC2NRM. We need to make sure that
+*        the negative values of ABSTOL and RELTOL are propagated
+*        to ABSTOLFREE and RELTOLFREE, since negative values means
+*        that the criterionis is disabled.
+*
+         IF( USETOL ) THEN
+            ABSTOLFREE = MAX( ABSTOL, RELTOL * MAXC2NRM )
+         ELSE
+            ABSTOLFREE = MINUSONE
+         END IF
+         RELTOLFREE = MINUSONE
+*
+*        Save JPIV(NSEL+1:NSUB) into WORK(1:NFREE)
+*
+         IF( NSEL.NE.0 ) THEN
+            DO J = 1, NFREE, 1
+               IWORK( NFREE-1+J ) = JPIV( NSEL+J )
+            END DO
+         END IF
+*
+         CALL DGEQP3RK( MFREE, NFREE, 0, KMAXFREE,
+     $                  ABSTOLFREE, RELTOLFREE,
+     $                  A( NSEL+1, NSEL+1 ), LDA, KFREE, MAXC2NRMKFREE, 
+     $                  RELMAXC2NRMKFREE, JPIV( NSEL+1 ),
+     $                  TAU( NSEL+1 ), WORK, LWORK, IWORK, IINFO ) 
+*
+*        Ajust JPIV
+*
+         IF( NSEL.NE.0 ) THEN
+            DO J = 1, NFREE, 1
+               JPIV( NSEL+J ) = IWORK( NFREE-1+JPIV( NSEL+J ) )
+            END DO
+         END IF         
+*
+*        1) Adjust the return value for the number of factorized 
+*           columns K for the whole submatrix A_sub.
+*        2) MAXC2NRMK is returned transparently without change 
+*           as MAXC2NRMKFREE is returned from DGEQP3RK.
+*        3) Adjust the return value RELMAXC2NRMK for the whole
+*           submatrix A_sub. We do not use RELMAXC2NRMKFREE
+*           returned from DGEQP3RK.
+*
+         K = NSEL + KFREE
+         MAXC2NRMK =  MAXC2NRMKFREE
+         RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM 
 *      
-*     ==================================================================
-*
-*     Factorize NFREE free columns of
-*     A_free = A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB),
-*     KFREE is the number of columns that were actually factorized among
-*     NFREE columns.
-*      
-*     ==================================================================
-*
-      EPS = DLAMCH('Epsilon')
-*
-      USETOL = .FALSE.
-*
-*     Adjust ABSTOL only if nonnegative. Negative value means disabled.
-*     We need to keep negtive value for later use in criterion
-*     check.
-*
-      IF( ABSTOL.GE.ZERO ) THEN
-         SAFMIN = DLAMCH('Safe minimum')
-         ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
-         USETOL = .TRUE.
-      END IF
-*
-*     Ajust RELTOL only if nonnegative. Negative value means disabled.
-*     We need to keep negtive value for later use in criterion
-*     check.
-*
-      IF( RELTOL.GE.ZERO ) THEN
-         RELTOL = MAX( RELTOL, EPS )
-         USETOL = .TRUE.
-      END IF
-*
-*     ==================================================================
-*
-*     Disable RELTOLFREE when calling DGEQP3RK for free columns 
-*     factorization, since it expects RELTOLFREE with respect to 
-*     the residual matrix A_sub_resid(NSEL), not the whole original
-*     marix A. We can use RELTOL criterion by passing it to
-*     ABSTOLFREE as RELTOL*MAXC2NRM. We need to make sure that
-*     the negative values of ABSTOL and RELTOL are propagated
-*     to ABSTOLFREE and RELTOLFREE, since negative vaslues means
-*     that the criterionis is disabled.
-*
-      IF( USETOL ) THEN
-         ABSTOLFREE = MAX( ABSTOL, RELTOL * MAXC2NRM )
       ELSE
-         ABSTOLFREE = MINUSONE
+*
+*        Set norms to zero
+*
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
+* 
       END IF
-      RELTOLFREE = MINUSONE
-*
-      CALL DGEQP3RK( MRESID, NRESID, 0, KMAXFREE,
-     $               ABSTOLFREE, RELTOLFREE,
-     $               A( K+1, K+1 ), LDA, KFREE, MAXC2NRMKFREE, 
-     $               RELMAXC2NRMKFREE, JPIV( K+1 ), TAU( K+1 ),
-     $               WORK, LWORK, IWORK, IINFO )
-*
-*     1) Adjust the return value for the number of factorized 
-*        columns K for the whole submatrix A_sub.
-*     2) MAXC2NRMK is returned transparently without change 
-*        as MAXC2NRMKFREE is returned from DGEQP3RK.
-*     3) Adjust the return value RELMAXC2NRMK for the whole
-*        submatrix A_sub. We do not use RELMAXC2NRMKFREE
-*        returned from DGEQP3RK.
-*
-      K = K + KFREE
-      MAXC2NRMK =  MAXC2NRMKFREE
-      RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM 
 *
 *     Now, MRESID and NRESID is the number of rows and columns
 *     respectively in  A_free_resid = A(K+1:MSUB,K+1:NSUB).
 *      
-      MRESID = MRESID-KFREE
-      NRESID = NRESID-KFREE
+      MRESID = MFREE-KFREE
+      NRESID = NFREE-KFREE
+*
       IF( MIN( MRESID, NRESID ).NE.0 ) THEN
          FNRMK = DLANGE( 'F',  MRESID, NRESID, A( K+1, K+1 ),
      $                   LDA, WORK )
-      ELSE
-         FNRMK = ZERO
-      END IF 
+      ELSE        
+         FNRMK = ZERO                
+      END IF
+* 
+*      
+*     ==================================================================
 *
 *     Construct matrix C.
-*
-   10 CONTINUE 
 *   
       IF( RETURNC .AND. K.GT.0 ) THEN
 *
@@ -1458,11 +1456,11 @@
          CALL DGELS( 'N', M, K, N, QRC, LDQRC, X, LDX,
      $               WORK, LWORK, IINFO )
          INFO = IINFO
+*
       END IF
-*      
       WORK( 1 ) = DBLE( LWKOPT )
       IWORK( 1 ) = LIWKOPT 
 *
 *     DGECXX
 *
-      END 
+      END
