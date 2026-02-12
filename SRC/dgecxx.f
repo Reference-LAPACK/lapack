@@ -745,8 +745,8 @@
 *> \verbatim
 *>          LIWORK is INTEGER
 *>          The dimension of the array LIWORK. 
-*>             If FACT = 'P': the minimal LIWORK >= max(1,2N-2).
-*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,3N-1).
+*>             If FACT = 'P': the minimal LIWORK >= max(1,2N-1).
+*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,2N-1).
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
 *>
@@ -1016,13 +1016,11 @@
      $                        RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
      $                        WORK, -1, IWORK, IINFO )
                LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*
+*              Integer workspace.
+*              N is for DGEQP3RK and N-1 for JPIV ajustment.
 *                  
-               LIWKMIN = MAX( 1, N-1 )
-*
-*              Integer workspace for JPIV ajustment.
-* 
-               LIWKMIN = LIWKMIN + N-1
-*
+               LIWKMIN = MAX( 1, N + N-1 )
                LIWKOPT = LIWKMIN
 *
                IF( RETURNC ) THEN
@@ -1351,11 +1349,11 @@
          END IF
          RELTOLFREE = MINUSONE
 *
-*        Save JPIV(NSEL+1:NSUB) into WORK(1:NFREE)
+*        Save JPIV(NSEL+1:NSUB) into WORK(NFREE+1:2*NFREE-1)
 *
          IF( NSEL.NE.0 ) THEN
             DO J = 1, NFREE, 1
-               IWORK( NFREE-1+J ) = JPIV( NSEL+J )
+               IWORK( NFREE + J ) = JPIV( NSEL+J )
             END DO
          END IF
 *
@@ -1369,9 +1367,9 @@
 *
          IF( NSEL.NE.0 ) THEN
             DO J = 1, NFREE, 1
-               JPIV( NSEL+J ) = IWORK( NFREE-1+JPIV( NSEL+J ) )
+               JPIV( NSEL+J ) = IWORK( NFREE + JPIV( NSEL+J ) )
             END DO
-         END IF         
+         END IF           
 *
 *        1) Adjust the return value for the number of factorized 
 *           columns K for the whole submatrix A_sub.
