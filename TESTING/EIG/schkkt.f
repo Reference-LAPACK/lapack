@@ -49,6 +49,15 @@
 *>    the eigenvalues on the diagonal.  D2 is the matrix of
 *>    eigenvalues computed when Z is not computed.
 *>
+*>    SKTEBZ computes selected eigenvalues.  WA1, WA2, and
+*>    WA3 will denote eigenvalues computed to high
+*>    absolute accuracy, with different range options.
+*>    WR will denote eigenvalues computed to high relative
+*>    accuracy.
+*>
+*>    SKTEIN computes Y, the eigenvectors of S, given the
+*>    eigenvalues.
+*>
 *> When SCHKKT is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
@@ -91,19 +100,19 @@
 *> (17)    max | D4(i) - WR(i) | / ( |D4(i)| omega ) ,
 *>          i
 *>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*>                                              SSTEBZ( 'A', 'E', ...)
+*>                                              SKTEBZ( 'A', 'E', ...)
 *>
-*> (18)    | WA1 - D3 | / ( |D3| ulp )          SSTEBZ( 'A', 'E', ...)
+*> (18)    | WA1 - D3 | / ( |D3| ulp )          SKTEBZ( 'A', 'E', ...)
 *>
 *> (19)    ( max { min | WA2(i)-WA3(j) | } +
 *>            i     j
 *>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
 *>            i     j
-*>                                              SSTEBZ( 'I', 'E', ...)
+*>                                              SKTEBZ( 'I', 'E', ...)
 *>
-*> (20)    | S - Y WA1 Y' | / ( |S| n ulp )  SSTEBZ, SSTEIN
+*> (20)    | S - Y WA1 Y' | / ( |S| n ulp )  SKTEBZ, SKTEIN
 *>
-*> (21)    | I - Y Y' | / ( n ulp )          SSTEBZ, SSTEIN
+*> (21)    | I - Y Y' | / ( n ulp )          SKTEBZ, SKTEIN
 *>
 *> (22)    | S - Z D Z' | / ( |S| n ulp )    SSTEDC('I')
 *>
@@ -327,7 +336,7 @@
 *> \verbatim
 *>          D1 is REAL array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by SKTEQR simlutaneously
+*>          The eigenvalues of A, as computed by SKTEQR simultaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *> \endverbatim
@@ -373,7 +382,7 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by SKTEBZ.
 *> \endverbatim
 *>
 *> \param[out] WA2
@@ -382,7 +391,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by SKTEBZ.
 *>          Choose random values for IL and IU, and ask for the
 *>          IL-th through IU-th eigenvalues.
 *> \endverbatim
@@ -393,7 +402,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by SKTEBZ.
 *>          Determine the values VL and VU of the IL-th and IU-th
 *>          eigenvalues and ask for all eigenvalues in this range.
 *> \endverbatim
@@ -404,7 +413,7 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different options.
-*>          as computed by SSTEBZ.
+*>          as computed by SKTEBZ.
 *> \endverbatim
 *>
 *> \param[out] U
@@ -606,13 +615,13 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH
-      EXTERNAL           ILAENV, SLAMCH
+      REAL               SLAMCH, SLARND, SSXT1
+      EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLABAD, SLACPY, SLASET, SLASUM, SLATMR,
-     $                   SLATMS, SORGTR, SKTEQR, SKTT21, SKYT21,
-     $                   SKYTRD, XERBLA
+     $                   SLATMS, SORGTR, SKTEBZ, SKTEIN, SKTEQR, 
+     $                   SKTT21, SKTT22, SKYT21, SKYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, REAL, SQRT
@@ -786,8 +795,9 @@
 *
 *              Identity
 *
-               DO 80 JC = 1, N
-                  A( JC, JC ) = ANORM
+               DO 80 JC = 1, N-1, 2
+                  A( JC+1, JC ) = ANORM
+                  A( JC, JC+1 ) = -ANORM
    80          CONTINUE
 *
             ELSE IF( ITYPE.EQ.4 ) THEN
@@ -1018,6 +1028,254 @@
   150       CONTINUE
 *
             RESULT( 7 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
+*
+*           Do Test 8 -- Sturm Sequence Test of Eigenvalues
+*                         Go up by factors of two until it succeeds
+*
+            NTEST = 8
+            TEMP1 = THRESH*( HALF-ULP )
+*
+            DO J = 1, N
+               SD( J ) = ZERO
+               IF( MOD( J, 2 ).EQ.0 ) THEN
+					   D1( J ) = -D1( J-1 )
+               END IF
+            END DO
+*
+            DO 160 J = 0, LOG2UI
+               CALL SSTECH( N, SD, SE, D1, TEMP1, WORK, IINFO )
+               IF( IINFO.EQ.0 )
+     $            GO TO 170
+               TEMP1 = TEMP1*TWO
+  160       CONTINUE
+*
+  170       CONTINUE
+            RESULT( 8 ) = TEMP1
+*
+*           Call SKTEBZ with different options and do tests 17-18.
+*
+*              If S is positive definite and diagonally dominant,
+*              ask for all eigenvalues with high relative accuracy.
+*
+            VL = ZERO
+            VU = ZERO
+            IL = 0
+            IU = 0
+            IF( JTYPE.EQ.21 ) THEN
+               NTEST = 9
+               ABSTOL = UNFL + UNFL
+               CALL SKTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SE,
+     $                      M, NSPLIT, WR, IWORK( 1 ), IWORK( N+1 ),
+     $                      WORK, IWORK( 2*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEBZ(A,rel)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 9 ) = ULPINV
+                     GO TO 280
+                  END IF
+               END IF
+*
+*              Do test 9
+*
+               TEMP2 = TWO*( TWO*N-ONE )*ULP*( ONE+EIGHT*HALF**2 ) /
+     $                 ( ONE-HALF )**4
+*
+               TEMP1 = ZERO
+               DO 190 J = 1, N
+                  TEMP1 = MAX( TEMP1, ABS( D2( J )-WR( J ) ) /
+     $                    ( ABSTOL+ABS( D4( J ) ) ) )
+  190          CONTINUE
+*
+               RESULT( 9 ) = TEMP1 / TEMP2
+            ELSE
+               RESULT( 9 ) = ZERO
+            END IF
+*
+*           Now ask for all eigenvalues with high absolute accuracy.
+*
+            NTEST = 10
+            ABSTOL = UNFL + UNFL
+            CALL SKTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SE, M,
+     $                   NSPLIT, WA1, IWORK( 1 ), IWORK( N+1 ), WORK,
+     $                   IWORK( 2*N+1 ), IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEBZ(A)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 10 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do test 10
+*
+            TEMP1 = ZERO
+            TEMP2 = ZERO
+            DO 200 J = 1, N
+               TEMP1 = MAX( TEMP1, ABS( D2( J ) ), ABS( WA1( J ) ) )
+               TEMP2 = MAX( TEMP2, ABS( D2( J )-WA1( J ) ) )
+  200       CONTINUE
+*
+            RESULT( 10 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
+*
+*           Choose random values for IL and IU, and ask for the
+*           IL-th through IU-th eigenvalues.
+*
+            NTEST = 11
+            IF( N.LE.1 ) THEN
+               IL = 1
+               IU = N
+            ELSE
+               IL = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
+               IF( IU.LT.IL ) THEN
+                  ITEMP = IU
+                  IU = IL
+                  IL = ITEMP
+               END IF
+            END IF
+*
+            CALL SKTEBZ( 'I', 'E', N, VL, VU, IL, IU, ABSTOL, SE,
+     $                   M2, NSPLIT, WA2, IWORK( 1 ), IWORK( N+1 ),
+     $                   WORK, IWORK( 2*N+1 ), IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEBZ(I)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 11 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Determine the values VL and VU of the IL-th and IU-th
+*           eigenvalues and ask for all eigenvalues in this range.
+*
+				IF( N.GT.0 .AND. MOD(N, 2).EQ.0 ) THEN
+               IF( IL.NE.1 ) THEN
+                  VL = WA1( N+1-IL*2 ) - MAX( HALF*
+     $                 ( WA1( N+1-IL*2 )-WA1( N+3-IL*2 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               ELSE
+                  VL = WA1( N-1 ) -
+     $                 MAX( HALF*( WA1( 1 )-WA1( N-1 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               END IF
+               IF( IU.NE.N/2 ) THEN
+                  VU = WA1( N+1-IU*2 ) + MAX( HALF*
+     $                 ( WA1( N-1-IU*2 )-WA1( N+1-IU*2 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               ELSE
+                  VU = WA1( 1 ) +
+     $                 MAX( HALF*( WA1( 1 )-WA1( N-1 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               END IF
+            ELSEIF( N.GT.0 .AND. MOD(N, 2).NE.0 ) THEN
+               IF( IL.NE.1 ) THEN
+                  VL = WA1( N+2-IL*2 ) - MAX( HALF*
+     $                 ( WA1( N+2-IL*2 )-WA1( N+4-IL*2 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               ELSE
+                  VL = WA1( N ) -
+     $                 MAX( HALF*( WA1( 1 )-WA1( N ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               END IF
+               IF( IU.NE.( N+1 )/2 ) THEN
+                  VU = WA1( N+2-IU*2 ) + MAX( HALF*
+     $                 ( WA1( N-IU*2 )-WA1( N+2-IU*2 ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               ELSE
+                  VU = WA1( 1 ) +
+     $                 MAX( HALF*( WA1( 1 )-WA1( N ) ),
+     $                 ULP*ANORM, TWO*RTUNFL )
+               END IF
+            ELSE
+               VL = ZERO
+               VU = ONE
+            END IF
+*
+            CALL SKTEBZ( 'V', 'E', N, VL, VU, IL, IU, ABSTOL, SE,
+     $                   M3, NSPLIT, WA3, IWORK( 1 ), IWORK( N+1 ),
+     $                   WORK, IWORK( 2*N+1 ), IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEBZ(V)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 11 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+            IF( M3.EQ.0 .AND. N.NE.0 ) THEN
+               RESULT( 11 ) = ULPINV
+               GO TO 280
+            END IF
+*
+*           Do test 1
+*
+            TEMP1 = SSXT1( 3, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+            TEMP2 = SSXT1( 3, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+            IF( N.GT.0 ) THEN
+               TEMP3 = MAX( ABS( WA1( N ) ), ABS( WA1( 1 ) ) )
+            ELSE
+               TEMP3 = ZERO
+            END IF
+*
+            RESULT( 11 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, TEMP3*ULP )
+*
+*           Call SKTEIN to compute eigenvectors corresponding to
+*           eigenvalues in WA1.  (First call SKTEBZ again, to make sure
+*           it returns these eigenvalues in the correct order.)
+*
+            NTEST = 13
+            CALL SKTEBZ( 'A', 'B', N, VL, VU, IL, IU, ABSTOL, SE, M,
+     $                   NSPLIT, WA1, IWORK( 1 ), IWORK( N+1 ), WORK,
+     $                   IWORK( 2*N+1 ), IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEBZ(A,B)', IINFO, N,
+     $            JTYPE, IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 12 ) = ULPINV
+                  RESULT( 13 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+            CALL SKTEIN( N, SE, M, WA1, IWORK( 1 ), IWORK( N+1 ), Z,
+     $                   LDU, WORK, IWORK( 2*N+1 ), IWORK( 3*N+1 ),
+     $                   IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEIN', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 12 ) = ULPINV
+                  RESULT( 13 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do tests 12 and 13
+*
+            CALL SKTT21( N, 1, SD, SE, DUMMA, WA1, Z, LDU, WORK,
+     $                   RESULT( 12 ) )
 *
   280       CONTINUE
             NTESTT = NTESTT + NTEST

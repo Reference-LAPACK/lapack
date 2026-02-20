@@ -237,7 +237,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLACPY, DLARFYK, DLASET, DORM2L, DORM2R,
-     $                   DSYR, DKYR2
+     $                   DKYR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, DBLE

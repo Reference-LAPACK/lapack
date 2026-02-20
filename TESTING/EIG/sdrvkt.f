@@ -38,7 +38,13 @@
 *>              SKTEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real skew-symmetric tridiagonal matrix.
 *>
+*>              SKTEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real skew-symmetric tridiagonal matrix.
+*>
 *>              SKYEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a real skew-symmetric matrix.
+*>
+*>              SKYEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real skew-symmetric matrix.
 *>
 *>      When SDRVKT is called, a number of matrix "sizes" ("n's") and a
@@ -174,7 +180,7 @@
 *>          Not modified.
 *>
 *>  D1      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by SKTEQR simultaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
@@ -293,18 +299,18 @@
 *>    1= | A - U S U' | / ( |A| n ulp )         SKTEV('V', ... )
 *>    2= | I - U U' | / ( n ulp )               SKTEV('V', ... )
 *>    3= |D(with Z) - D(w/o Z)| / (|D| ulp)     SKTEV('N', ... )
-*>    4= | A - U S U' | / ( |A| n ulp )         SSTEVX('V','A', ... )
-*>    5= | I - U U' | / ( n ulp )               SSTEVX('V','A', ... )
-*>    6= |D(with Z) - EVEIGS| / (|D| ulp)       SSTEVX('N','A', ... )
+*>    4= | A - U S U' | / ( |A| n ulp )         SKTEVX('V','A', ... )
+*>    5= | I - U U' | / ( n ulp )               SKTEVX('V','A', ... )
+*>    6= |D(with Z) - EVEIGS| / (|D| ulp)       SKTEVX('N','A', ... )
 *>    7= | A - U S U' | / ( |A| n ulp )         SSTEVR('V','A', ... )
 *>    8= | I - U U' | / ( n ulp )               SSTEVR('V','A', ... )
 *>    9= |D(with Z) - EVEIGS| / (|D| ulp)       SSTEVR('N','A', ... )
-*>    10= | A - U S U' | / ( |A| n ulp )        SSTEVX('V','I', ... )
-*>    11= | I - U U' | / ( n ulp )              SSTEVX('V','I', ... )
-*>    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVX('N','I', ... )
-*>    13= | A - U S U' | / ( |A| n ulp )        SSTEVX('V','V', ... )
-*>    14= | I - U U' | / ( n ulp )              SSTEVX('V','V', ... )
-*>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVX('N','V', ... )
+*>    10= | A - U S U' | / ( |A| n ulp )        SKTEVX('V','I', ... )
+*>    11= | I - U U' | / ( n ulp )              SKTEVX('V','I', ... )
+*>    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKTEVX('N','I', ... )
+*>    13= | A - U S U' | / ( |A| n ulp )        SKTEVX('V','V', ... )
+*>    14= | I - U U' | / ( n ulp )              SKTEVX('V','V', ... )
+*>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKTEVX('N','V', ... )
 *>    16= | A - U S U' | / ( |A| n ulp )        SSTEVD('V', ... )
 *>    17= | I - U U' | / ( n ulp )              SSTEVD('V', ... )
 *>    18= |D(with Z) - EVEIGS| / (|D| ulp)      SSTEVD('N', ... )
@@ -318,15 +324,15 @@
 *>    25= | A - U S U' | / ( |A| n ulp )        SKYEV('L','V', ... )
 *>    26= | I - U U' | / ( n ulp )              SKYEV('L','V', ... )
 *>    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKYEV('L','N', ... )
-*>    28= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','A', ... )
-*>    29= | I - U U' | / ( n ulp )              SSYEVX('L','V','A', ... )
-*>    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','A', ... )
-*>    31= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','I', ... )
-*>    32= | I - U U' | / ( n ulp )              SSYEVX('L','V','I', ... )
-*>    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','I', ... )
-*>    34= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','V', ... )
-*>    35= | I - U U' | / ( n ulp )              SSYEVX('L','V','V', ... )
-*>    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','V', ... )
+*>    28= | A - U S U' | / ( |A| n ulp )        SKYEVX('L','V','A', ... )
+*>    29= | I - U U' | / ( n ulp )              SKYEVX('L','V','A', ... )
+*>    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKYEVX('L','N','A', ... )
+*>    31= | A - U S U' | / ( |A| n ulp )        SKYEVX('L','V','I', ... )
+*>    32= | I - U U' | / ( n ulp )              SKYEVX('L','V','I', ... )
+*>    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKYEVX('L','N','I', ... )
+*>    34= | A - U S U' | / ( |A| n ulp )        SKYEVX('L','V','V', ... )
+*>    35= | I - U U' | / ( n ulp )              SKYEVX('L','V','V', ... )
+*>    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKYEVX('L','N','V', ... )
 *>    37= | A - U S U' | / ( |A| n ulp )        SSPEV('L','V', ... )
 *>    38= | I - U U' | / ( n ulp )              SSPEV('L','V', ... )
 *>    39= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEV('L','N', ... )
@@ -446,12 +452,12 @@
       CHARACTER          UPLO
       INTEGER            I, IDIAG, IHBW, IINFO, IL, IMODE, IROW,
      $                   ITEMP, ITYPE, IU, IUPLO, J, J1, J2, JCOL,
-     $                   JSIZE, JTYPE, LGN, LIWEDC, LWEDC,
-     $                   MTYPES, N, NERRS, NMATS, NMAX, NTEST,
+     $                   JSIZE, JTYPE, LGN, LIWEDC, LWEDC, M, M2,
+     $                   M3, MTYPES, N, NERRS, NMATS, NMAX, NTEST,
      $                   NTESTT
       REAL               ABSTOL, ANINV, ANORM, COND, OVFL, RTOVFL,
-     $                   RTUNFL, TEMP1, TEMP2, ULP, ULPINV, UNFL,
-     $                   VL, VU
+     $                   RTUNFL, TEMP1, TEMP2, TEMP3, ULP, ULPINV,
+     $                   UNFL, VL, VU
 *     ..
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
@@ -464,7 +470,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SLABAD, SLACPY, SLAFTS, SLASET, SLATMR,
-     $                   SLATMS, SKTEV, SKTT21, SKYEV, SKYT21, XERBLA
+     $                   SLATMS, SKTEV, SKTEVX, SKTT21, SKTT22, SKYEV,
+     $                   SKYEVX, SKYT21, SKYT22, XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -638,8 +645,9 @@ c           LIWEDC = 12
 *
 *              Identity
 *
-               DO 80 JCOL = 1, N
-                  A( JCOL, JCOL ) = ANORM
+               DO 80 JCOL = 1, N-1, 2
+                  A( JCOL+1, JCOL ) = ANORM
+                  A( JCOL, JCOL+1 ) = -ANORM
    80          CONTINUE
 *
             ELSE IF( ITYPE.EQ.4 ) THEN
@@ -717,8 +725,8 @@ c           LIWEDC = 12
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -794,12 +802,268 @@ c           LIWEDC = 12
 *
   180          CONTINUE
 *
+               NTEST = 4
+               DO 190 I = 1, N
+                  EVEIGS( I ) = D3( I )
+                  D1( I ) = REAL( A( I, I ) )
+  190          CONTINUE
+               DO 200 I = 1, N - 1
+                  D2( I ) = REAL( A( I+1, I ) )
+  200          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'V', 'A', N, D2, VL, VU, IL, IU, ABSTOL,
+     $                      M, WA1, Z, LDU, WORK, IWORK, IWORK( 5*N+1 ),
+     $                      IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(V,A)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 4 ) = ULPINV
+                     RESULT( 5 ) = ULPINV
+                     RESULT( 6 ) = ULPINV
+                     GO TO 250
+                  END IF
+               END IF
+               IF( N.GT.0 ) THEN
+                  TEMP3 = ABS( WA1( 1 ) )
+               ELSE
+                  TEMP3 = ZERO
+               END IF
+*
+*              Do tests 4 and 5.
+*
+               DO 210 I = 1, N
+                  D3( I ) = REAL( A( I, I ) )
+  210          CONTINUE
+               DO 220 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  220          CONTINUE
+               CALL SKTT21( N, 1, D3, D4, D2, WA1, Z, LDU, WORK,
+     $                      RESULT( 4 ) )
+*
+               NTEST = 6
+               DO 230 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  230          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'N', 'A', N, D4, VL, VU, IL, IU, ABSTOL,
+     $                      M2, WA2, Z, LDU, WORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(N,A)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 6 ) = ULPINV
+                     GO TO 250
+                  END IF
+               END IF
+*
+*              Do test 6.
+*
+               TEMP1 = ZERO
+               TEMP2 = ZERO
+               DO 240 J = 1, N-1
+                  TEMP1 = MAX( TEMP1, ABS( WA2( J ) ),
+     $                    ABS( EVEIGS( J ) ) )
+                  TEMP2 = MAX( TEMP2, ABS( WA2( J )-EVEIGS( J ) ) )
+  240          CONTINUE
+               RESULT( 6 ) = TEMP2 / MAX( UNFL,
+     $                       ULP*MAX( TEMP1, TEMP2 ) )
+*
+  250          CONTINUE
+*
+*
+               NTEST = 7
+               DO 330 I = 1, N
+                  D1( I ) = REAL( A( I, I ) )
+  330          CONTINUE
+               DO 340 I = 1, N - 1
+                  D2( I ) = REAL( A( I+1, I ) )
+  340          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'V', 'I', N, D2, VL, VU, IL, IU, ABSTOL,
+     $                      M2, WA2, Z, LDU, WORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(V,I)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 7 ) = ULPINV
+                     RESULT( 8 ) = ULPINV
+                     RESULT( 9 ) = ULPINV
+                     GO TO 380
+                  END IF
+               END IF
+*
+*              Do tests 10 and 11.
+*
+               DO 350 I = 1, N
+                  D3( I ) = REAL( A( I, I ) )
+  350          CONTINUE
+               DO 360 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  360          CONTINUE
+               CALL SKTT22( N, M2, 1, D3, D4, D2, WA2, Z, LDU, WORK,
+     $                      MAX( 1, M2 ), RESULT( 7 ) )
+*
+*
+               NTEST = 9
+               DO 370 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  370          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'N', 'I', N, D4, VL, VU, IL, IU, ABSTOL,
+     $                      M3, WA3, Z, LDU, WORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(N,I)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 9 ) = ULPINV
+                     GO TO 380
+                  END IF
+               END IF
+*
+*              Do test 12.
+*
+               TEMP1 = SSXT1( 3, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = SSXT1( 3, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               RESULT( 9 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, ULP*TEMP3 )
+*
+  380          CONTINUE
+*
+               NTEST = 9
+               IF( N.GT.0 .AND. MOD(N, 2).EQ.0 ) THEN
+                  IF( IL.NE.1 ) THEN
+                     VL = WA1( N+1-IL*2 ) - MAX( HALF*
+     $                    ( WA1( N+1-IL*2 )-WA1( N+3-IL*2 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE
+                     VL = WA1( N-1 ) -
+     $                    MAX( HALF*( WA1( 1 )-WA1( N-1 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+                  IF( IU.NE.N/2 ) THEN
+                     VU = WA1( N+1-IU*2 ) + MAX( HALF*
+     $                    ( WA1( N-1-IU*2 )-WA1( N+1-IU*2 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE
+                     VU = WA1( 1 ) +
+     $                    MAX( HALF*( WA1( 1 )-WA1( N-1 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+               ELSEIF( N.GT.0 .AND. MOD(N, 2).NE.0 ) THEN
+                  IF( IL.NE.1 ) THEN
+                     VL = WA1( N+2-IL*2 ) - MAX( HALF*
+     $                    ( WA1( N+2-IL*2 )-WA1( N+4-IL*2 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE
+                     VL = WA1( N ) -
+     $                    MAX( HALF*( WA1( 1 )-WA1( N ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+                  IF( IU.NE.( N+1 )/2 ) THEN
+                     VU = WA1( N+2-IU*2 ) + MAX( HALF*
+     $                    ( WA1( N-IU*2 )-WA1( N+2-IU*2 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE
+                     VU = WA1( 1 ) +
+     $                    MAX( HALF*( WA1( 1 )-WA1( N ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+               ELSE
+                  VL = ZERO
+                  VU = ONE
+               END IF
+*
+               DO 390 I = 1, N
+                  D1( I ) = REAL( A( I, I ) )
+  390          CONTINUE
+               DO 400 I = 1, N - 1
+                  D2( I ) = REAL( A( I+1, I ) )
+  400          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'V', 'V', N, D2, VL, VU, IL, IU, ABSTOL,
+     $                      M2, WA2, Z, LDU, WORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(V,V)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 10 ) = ULPINV
+                     RESULT( 11 ) = ULPINV
+                     RESULT( 12 ) = ULPINV
+                     GO TO 440
+                  END IF
+               END IF
+*
+               IF( M2.EQ.0 .AND. N.GT.0 ) THEN
+                  RESULT( 10 ) = ULPINV
+                  RESULT( 11 ) = ULPINV
+                  RESULT( 12 ) = ULPINV
+                  GO TO 440
+               END IF
+*
+*              Do tests 13 and 14.
+*
+               DO 410 I = 1, N
+                  D3( I ) = REAL( A( I, I ) )
+  410          CONTINUE
+               DO 420 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  420          CONTINUE
+               CALL SKTT22( N, M2, 1, D3, D4, D2, WA2, Z, LDU, WORK,
+     $                      MAX( 1, M2 ), RESULT( 10 ) )
+*
+               NTEST = 12
+               DO 430 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  430          CONTINUE
+               SRNAMT = 'SKTEVX'
+               CALL SKTEVX( 'N', 'V', N, D4, VL, VU, IL, IU, ABSTOL,
+     $                      M3, WA3, Z, LDU, WORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVX(N,V)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 12 ) = ULPINV
+                     GO TO 440
+                  END IF
+               END IF
+*
+*              Do test 15.
+*
+               TEMP1 = SSXT1( 3, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = SSXT1( 3, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               RESULT( 12 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, TEMP3*ULP )
+*
+  440          CONTINUE
+*
             ELSE
 *
-               DO 640 I = 1, 3
+               DO 640 I = 1, 12
                   RESULT( I ) = ZERO
   640          CONTINUE
-               NTEST = 3
+               NTEST = 12
             END IF
 *
 *           Perform remaining tests storing upper or lower triangular
@@ -869,8 +1133,221 @@ c           LIWEDC = 12
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   660          CONTINUE
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+               NTEST = NTEST + 1
+*
+               TEMP3 = ABS( D1( 1 ) )
+               IF( N.GT.0 .AND. MOD(N, 2).EQ.0 ) THEN
+                  IF( IL.NE.1 ) THEN
+                     VL = D1( N+1-IL*2 ) - MAX( HALF*( D1( N+1-IL*2 )
+     $                   -D1( N+3-IL*2 ) ), TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE IF( N.GT.0 ) THEN
+                     VL = D1( N-1 ) - MAX( HALF*( D1( 1 )-D1( N-1 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+                  IF( IU.NE.N/2 ) THEN
+                     VU = D1( N+1-IU*2 ) + MAX( HALF*( D1( N-1-IU*2 )
+     $                   -D1( N+1-IU*2 ) ), TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE IF( N.GT.0 ) THEN
+                     VU = D1( 1 ) + MAX( HALF*( D1( 1 )-D1( N-1 ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+               ELSEIF( N.GT.0 .AND. MOD(N, 2).NE.0 ) THEN
+                  IF( IL.NE.1 ) THEN
+                     VL = D1( N+2-IL*2 ) - MAX( HALF*( D1( N+2-IL*2 )
+     $                   -D1( N+4-IL*2 ) ), TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE IF( N.GT.0 ) THEN
+                     VL = D1( N ) - MAX( HALF*( D1( 1 )-D1( N ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+                  IF( IU.NE.( N+1 )/2 ) THEN
+                     VU = D1( N+2-IU*2 ) + MAX( HALF*( D1( N-IU*2 )
+     $                   -D1( N+2-IU*2 ) ), TEN*ULP*TEMP3, TEN*RTUNFL )
+                  ELSE IF( N.GT.0 ) THEN
+                     VU = D1( 1 ) + MAX( HALF*( D1( 1 )-D1( N ) ),
+     $                    TEN*ULP*TEMP3, TEN*RTUNFL )
+                  END IF
+               ELSE
+                  TEMP3 = ZERO
+                  VL = ZERO
+                  VU = ONE
+               END IF
+*
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M, WA1, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(V,A,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     RESULT( NTEST+1 ) = ULPINV
+                     RESULT( NTEST+2 ) = ULPINV
+                     GO TO 680
+                  END IF
+               END IF
+*
+*              Do tests 28 and 29 (or +54)
 *
                CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+               CALL SKYT21( 1, UPLO, N, 1, A, LDU, D2, WA1, Z, LDU, V,
+     $                      LDU, TAU, WORK, RESULT( NTEST ) )
+*
+               NTEST = NTEST + 2
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(N,A,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 680
+                  END IF
+               END IF
+*
+*              Do test 30 (or +54)
+*
+               TEMP1 = ZERO
+               TEMP2 = ZERO
+               DO 670 J = 1, N
+                  TEMP1 = MAX( TEMP1, ABS( WA1( J ) ), ABS( WA2( J ) ) )
+                  TEMP2 = MAX( TEMP2, ABS( WA1( J )-WA2( J ) ) )
+  670          CONTINUE
+               RESULT( NTEST ) = TEMP2 / MAX( UNFL,
+     $                           ULP*MAX( TEMP1, TEMP2 ) )
+*
+  680          CONTINUE
+*
+               NTEST = NTEST + 1
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(V,I,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     RESULT( NTEST+1 ) = ULPINV
+                     RESULT( NTEST+2 ) = ULPINV
+                     GO TO 690
+                  END IF
+               END IF
+*
+*              Do tests 31 and 32 (or +54)
+*
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+               CALL SKYT22( 1, UPLO, N, M2, 1, A, LDU, D2, WA2, Z, LDU,
+     $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
+*
+               NTEST = NTEST + 2
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(N,I,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 690
+                  END IF
+               END IF
+*
+*              Do test 33 (or +54)
+*
+               TEMP1 = SSXT1( 3, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = SSXT1( 3, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
+     $                           MAX( UNFL, ULP*TEMP3 )
+  690          CONTINUE
+*
+               NTEST = NTEST + 1
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(V,V,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     RESULT( NTEST+1 ) = ULPINV
+                     RESULT( NTEST+2 ) = ULPINV
+                     GO TO 700
+                  END IF
+               END IF
+*
+*              Do tests 34 and 35 (or +54)
+*
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+               CALL SKYT22( 1, UPLO, N, M2, 1, A, LDU, D2, WA2, Z, LDU,
+     $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
+*
+               NTEST = NTEST + 2
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'SKYEVX'
+               CALL SKYEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+     $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, IWORK,
+     $                      IWORK( 5*N+1 ), IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVX(N,V,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 700
+                  END IF
+               END IF
+*
+               IF( M3.EQ.0 .AND. N.GT.0 ) THEN
+                  RESULT( NTEST ) = ULPINV
+                  GO TO 700
+               END IF
+*
+*              Do test 36 (or +54)
+*
+               TEMP1 = SSXT1( 3, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = SSXT1( 3, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               IF( N.GT.0 ) THEN
+                  TEMP3 = ABS( WA1( 1 ) )
+               ELSE
+                  TEMP3 = ZERO
+               END IF
+               RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
+     $                           MAX( UNFL, TEMP3*ULP )
+*
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+  700          CONTINUE
+*
 *
  1720       CONTINUE
 *

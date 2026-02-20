@@ -28,12 +28,23 @@
 *> DSXT1  computes the difference between a set of eigenvalues.
 *> The result is returned as the function value.
 *>
-*> IJOB = 1:   Computes   max { min | D1(i)-D2(j) | }
+*> IJOB = 1:   Computes   max { min | D1(i)-D2(j) | },
 *>                         i     j
+*>             where D is in symmetric layout.
 *>
 *> IJOB = 2:   Computes   max { min | D1(i)-D2(j) | /
 *>                         i     j
-*>                              ( ABSTOL + |D1(i)|*ULP ) }
+*>                              ( ABSTOL + |D1(i)|*ULP ) },
+*>             where D is in symmetric layout.
+*>
+*> IJOB = 3:   Computes   max { min | D1(i)-D2(j) | },
+*>                         i     j
+*>             where D is in skew-symmetric layout.
+*>
+*> IJOB = 4:   Computes   max { min | D1(i)-D2(j) | /
+*>                         i     j
+*>                              ( ABSTOL + |D1(i)|*ULP ) },
+*>             where D is in skew-symmetric layout.
 *> \endverbatim
 *
 *  Arguments:
@@ -135,24 +146,55 @@
       TEMP1 = ZERO
 *
       J = 1
-      DO 20 I = 1, N1
-   10    CONTINUE
-         IF( D2( J ).LT.D1( I ) .AND. J.LT.N2 ) THEN
-            J = J + 1
-            GO TO 10
-         END IF
-         IF( J.EQ.1 ) THEN
-            TEMP2 = ABS( D2( J )-D1( I ) )
-            IF( IJOB.EQ.2 )
-     $         TEMP2 = TEMP2 / MAX( UNFL, ABSTOL+ULP*ABS( D1( I ) ) )
-         ELSE
-            TEMP2 = MIN( ABS( D2( J )-D1( I ) ),
-     $              ABS( D1( I )-D2( J-1 ) ) )
-            IF( IJOB.EQ.2 )
-     $         TEMP2 = TEMP2 / MAX( UNFL, ABSTOL+ULP*ABS( D1( I ) ) )
-         END IF
-         TEMP1 = MAX( TEMP1, TEMP2 )
-   20 CONTINUE
+      IF (IJOB.LE.2) THEN
+         DO 20 I = 1, N1
+   10       CONTINUE
+            IF( D2( J ).LT.D1( I ) .AND. J.LT.N2 ) THEN
+               J = J + 1
+               GO TO 10
+            END IF
+            IF( J.EQ.1 ) THEN
+               TEMP2 = ABS( D2( J )-D1( I ) )
+               IF( IJOB.EQ.2 )
+     $            TEMP2 = TEMP2 / MAX( UNFL,
+     $                    ABSTOL+ULP*ABS( D1( I ) ) )
+            ELSE
+               TEMP2 = MIN( ABS( D2( J )-D1( I ) ),
+     $                 ABS( D1( I )-D2( J-1 ) ) )
+               IF( IJOB.EQ.2 )
+     $            TEMP2 = TEMP2 / MAX( UNFL,
+     $                    ABSTOL+ULP*ABS( D1( I ) ) )
+            END IF
+            TEMP1 = MAX( TEMP1, TEMP2 )
+   20    CONTINUE
+      ELSE
+		   I = 1
+         DO WHILE(I.LE.N1)
+   30       CONTINUE
+            IF( D2( J ).GT.D1( I ) .AND. J.LT.N2-1 ) THEN
+                  J = J + 2
+               GO TO 30
+            END IF
+            IF( J.EQ.1 ) THEN
+               TEMP2 = ABS( D2( J )-D1( I ) )
+               IF( IJOB.EQ.4 )
+     $            TEMP2 = TEMP2 / MAX( UNFL,
+     $                    ABSTOL+ULP*ABS( D1( I ) ) )
+            ELSE
+               TEMP2 = MIN( ABS( D2( J )-D1( I ) ),
+     $                 ABS( D1( I )-D2( J-2 ) ) )
+               IF( IJOB.EQ.4 )
+     $            TEMP2 = TEMP2 / MAX( UNFL,
+     $                    ABSTOL+ULP*ABS( D1( I ) ) )
+            END IF
+            TEMP1 = MAX( TEMP1, TEMP2 )
+				IF( D1( I ).NE.ZERO ) THEN
+				   I = I + 2
+				ELSE
+				   I = I + 1
+				END IF
+         END DO
+      END IF
 *
       DSXT1 = TEMP1
       RETURN

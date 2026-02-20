@@ -237,7 +237,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY, SLARFYK, SLASET, SORM2L, SORM2R,
-     $                   SSYR, SKYR2
+     $                   SKYR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL

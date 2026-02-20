@@ -62,7 +62,7 @@ SEIGTST = schkee.o \
    sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts3.o \
    shst01.o slarfy.o slarfyk.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
    sort03.o ssbt21.o ssgt01.o skgt01.o sslect.o sspt21.o sstt21.o sktt21.o \
-   sstt22.o ssyl01.o ssyt21.o skyt21.o ssyt22.o
+   sstt22.o sktt22.o ssyl01.o ssyt21.o skyt21.o ssyt22.o skyt22.o
 
 SDMDEIGTST = schkdmd.o
 
@@ -103,7 +103,7 @@ DEIGTST = dchkee.o \
    dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts3.o \
    dhst01.o dlarfy.o dlarfyk.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
    dort03.o dsbt21.o dsgt01.o dkgt01.o dslect.o dspt21.o dstt21.o dktt21.o \
-   dstt22.o dsyl01.o dsyt21.o dkyt21.o dsyt22.o
+   dstt22.o dktt22.o dsyl01.o dsyt21.o dkyt21.o dsyt22.o dkyt22.o
 
 DDMDEIGTST = dchkdmd.o
 
