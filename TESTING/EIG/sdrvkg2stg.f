@@ -39,6 +39,10 @@
 *>              eigenvectors of a real skew-symmetric-definite generalized
 *>              eigenproblem.
 *>
+*>              SKYGVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real skew-symmetric-definite generalized
+*>              eigenproblem.
+*>
 *>      When SDRVKG2STG is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix A of the given type will be
@@ -373,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
-     $                   SLATMS, SKYGV, SKGT01
+     $                   SLATMS, SKYGV, SSYGVX, SKGT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -528,8 +532,9 @@
                KA = 0
                KB = 0
                CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
-               DO 80 JCOL = 1, N
-                  A( JCOL, JCOL ) = ANORM
+               DO 80 JCOL = 1, N-1, 2
+                  A( JCOL+1, JCOL ) = ANORM
+                  A( JCOL, JCOL+1 ) = -ANORM
    80          CONTINUE
 *
             ELSE IF( ITYPE.EQ.4 ) THEN
@@ -615,10 +620,10 @@
             ABSTOL = UNFL + UNFL
             IF( N.LE.1 ) THEN
                IL = 1
-               IU = N
+               IU = (N+1)/2
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( (N+1)/2-1 )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -677,6 +682,94 @@
 *
                   CALL SKGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+*                 Test SKYGVX
+*
+                  NTEST = NTEST + 1
+*
+                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+                  CALL SKYGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'SKYGVX(V,A' // UPLO //
+     $                  ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL SKGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+                  NTEST = NTEST + 1
+*
+                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+*                 since we do not know the exact eigenvalues of this
+*                 eigenpair, we just set VL and VU as constants.
+*                 It is quite possible that there are no eigenvalues
+*                 in this interval.
+*
+                  VL = ZERO
+                  VU = ANORM
+                  CALL SKYGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'SKYGVX(V,V,' //
+     $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL SKGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+                  NTEST = NTEST + 1
+*
+                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+                  CALL SKYGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'SKYGVX(V,I,' //
+     $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL SKGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
   100             CONTINUE
 *
   620          CONTINUE

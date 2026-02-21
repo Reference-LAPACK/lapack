@@ -436,6 +436,20 @@
             M = 1
          END IF
          RETURN
+      ELSEIF( N.EQ.2 ) THEN
+         NSPLIT = 1
+         ISPLIT( 1 ) = 2
+         IF( IRANGE.EQ.2 .AND. ( VL.GE.ABS( E( 1 ) ) .OR.
+     $   VU.LT.ABS( E( 1 ) ) ) ) THEN
+            M = 0
+         ELSE
+            W( 1 ) = ABS( E( 1 ) )
+            W( 2 ) = ZERO
+            IBLOCK( 1 ) = 1
+            IBLOCK( 2 ) = 1
+            M = 2
+         END IF
+         RETURN
       END IF
 *
       DO J = 1, N

@@ -723,7 +723,7 @@ c           LIWEDC = 12
             ABSTOL = UNFL + UNFL
             IF( N.LE.1 ) THEN
                IL = 1
-               IU = N
+               IU = (N+1)/2
             ELSE
                IL = 1 + INT( ( (N+1)/2-1 )*DLARND( 1, ISEED2 ) )
                IU = 1 + INT( ( (N+1)/2-1 )*DLARND( 1, ISEED2 ) )

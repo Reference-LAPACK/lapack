@@ -32,11 +32,15 @@
 *>
 *> \verbatim
 *>
-*>      DDRVKG2STG checks the DOUBLE PRECISION skew-symmetric generalized eigenproblem
+*>      DDRVKG2STG checks the real skew-symmetric generalized eigenproblem
 *>      drivers.
 *>
 *>              DKYGV computes all eigenvalues and, optionally,
-*>              eigenvectors of a DOUBLE PRECISION skew-symmetric-definite generalized
+*>              eigenvectors of a real skew-symmetric-definite generalized
+*>              eigenproblem.
+*>
+*>              DKYGVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real skew-symmetric-definite generalized
 *>              eigenproblem.
 *>
 *>      When DDRVKG2STG is called, a number of matrix "sizes" ("n's") and a
@@ -192,7 +196,7 @@
 *>          (e.g., if a routine returns IINFO not equal to 0.)
 *>          Not modified.
 *>
-*>  A       DOUBLE PRECISION             array, dimension (LDA , max(NN))
+*>  A       DOUBLE PRECISION array, dimension (LDA , max(NN))
 *>          Used to hold the matrix whose eigenvalues are to be
 *>          computed.  On exit, A contains the last matrix actually
 *>          used.
@@ -203,7 +207,7 @@
 *>          least 1 and at least max( NN ).
 *>          Not modified.
 *>
-*>  B       DOUBLE PRECISION             array, dimension (LDB , max(NN))
+*>  B       DOUBLE PRECISION array, dimension (LDB , max(NN))
 *>          Used to hold the symmetric positive definite matrix for
 *>          the generailzed problem.
 *>          On exit, B contains the last matrix actually
@@ -215,12 +219,12 @@
 *>          least 1 and at least max( NN ).
 *>          Not modified.
 *>
-*>  D       DOUBLE PRECISION             array, dimension (max(NN))
+*>  D       DOUBLE PRECISION array, dimension (max(NN))
 *>          The eigenvalues of A. On exit, the eigenvalues in D
 *>          correspond with the matrix in A.
 *>          Modified.
 *>
-*>  Z       DOUBLE PRECISION             array, dimension (LDZ, max(NN))
+*>  Z       DOUBLE PRECISION array, dimension (LDZ, max(NN))
 *>          The matrix of eigenvectors.
 *>          Modified.
 *>
@@ -229,19 +233,19 @@
 *>          at least max( NN ).
 *>          Not modified.
 *>
-*>  AB      DOUBLE PRECISION             array, dimension (LDA, max(NN))
+*>  AB      DOUBLE PRECISION array, dimension (LDA, max(NN))
 *>          Workspace.
 *>          Modified.
 *>
-*>  BB      DOUBLE PRECISION             array, dimension (LDB, max(NN))
+*>  BB      DOUBLE PRECISION array, dimension (LDB, max(NN))
 *>          Workspace.
 *>          Modified.
 *>
-*>  AP      DOUBLE PRECISION             array, dimension (max(NN)**2)
+*>  AP      DOUBLE PRECISION array, dimension (max(NN)**2)
 *>          Workspace.
 *>          Modified.
 *>
-*>  BP      DOUBLE PRECISION             array, dimension (max(NN)**2)
+*>  BP      DOUBLE PRECISION array, dimension (max(NN)**2)
 *>          Workspace.
 *>          Modified.
 *>
@@ -373,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLACPY, DLAFTS, DLASET, DLASUM, DLATMR,
-     $                   DLATMS, DKYGV, DKGT01
+     $                   DLATMS, DKYGV, DSYGVX, DKGT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -528,8 +532,9 @@
                KA = 0
                KB = 0
                CALL DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
-               DO 80 JCOL = 1, N
-                  A( JCOL, JCOL ) = ANORM
+               DO 80 JCOL = 1, N-1, 2
+                  A( JCOL+1, JCOL ) = ANORM
+                  A( JCOL, JCOL+1 ) = -ANORM
    80          CONTINUE
 *
             ELSE IF( ITYPE.EQ.4 ) THEN
@@ -615,10 +620,10 @@
             ABSTOL = UNFL + UNFL
             IF( N.LE.1 ) THEN
                IL = 1
-               IU = N
+               IU = (N+1)/2
             ELSE
-               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( (N+1)/2-1 )*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( (N+1)/2-1 )*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -677,6 +682,94 @@
 *
                   CALL DKGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+*                 Test DKYGVX
+*
+                  NTEST = NTEST + 1
+*
+                  CALL DLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL DLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+                  CALL DKYGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'DKYGVX(V,A' // UPLO //
+     $                  ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL DKGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+                  NTEST = NTEST + 1
+*
+                  CALL DLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL DLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+*                 since we do not know the exact eigenvalues of this
+*                 eigenpair, we just set VL and VU as constants.
+*                 It is quite possible that there are no eigenvalues
+*                 in this interval.
+*
+                  VL = ZERO
+                  VU = ANORM
+                  CALL DKYGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'DKYGVX(V,V,' //
+     $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL DKGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+                  NTEST = NTEST + 1
+*
+                  CALL DLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL DLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+                  CALL DKYGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA, BB,
+     $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
+     $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
+     $                         IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'DKYGVX(V,I,' //
+     $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL DKGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
   100             CONTINUE
 *
   620          CONTINUE
