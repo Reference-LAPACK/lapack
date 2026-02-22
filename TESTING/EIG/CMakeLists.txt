@@ -40,7 +40,7 @@ set(SEIGTST schkee.F
    sget54.f sglmts.f sgqrts.f sgrqts.f sgsvts3.f
    shst01.f slarfy.f slarfyk.f slarhs.f slatm4.f slctes.f slctsx.f slsets.f sort01.f
    sort03.f ssbt21.f ssgt01.f skgt01.f sslect.f sspt21.f sstt21.f sktt21.f
-   sstt22.f ssyl01.f ssyt21.f skyt21.f ssyt22.f)
+   sstt22.f sktt22.f ssyl01.f ssyt21.f skyt21.f ssyt22.f skyt22.f)
 
 set(SDMDEIGTST schkdmd.f90)
 
@@ -81,7 +81,7 @@ set(DEIGTST dchkee.F
    dget54.f dglmts.f dgqrts.f dgrqts.f dgsvts3.f
    dhst01.f dlarfy.f dlarfyk.f dlarhs.f dlatm4.f dlctes.f dlctsx.f dlsets.f dort01.f
    dort03.f dsbt21.f dsgt01.f dkgt01.f dslect.f dspt21.f dstt21.f dktt21.f
-   dstt22.f dsyl01.f dsyt21.f dkyt21.f dsyt22.f)
+   dstt22.f dktt22.f dsyl01.f dsyt21.f dkyt21.f dsyt22.f dkyt22.f)
 
 set(DDMDEIGTST dchkdmd.f90)
 

@@ -259,7 +259,7 @@
          RETURN
       ELSE IF( N.EQ.1 ) THEN
          Z( 1, 1 ) = ONE
-         
+         RETURN
       ELSE IF( N.EQ.2 ) THEN
          IF( E(1).GE.ZERO ) THEN
             Z( 1, 1 ) = ONE

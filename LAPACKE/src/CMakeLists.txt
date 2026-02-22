@@ -1027,12 +1027,16 @@ lapacke_dsptrs.c
 lapacke_dsptrs_work.c
 lapacke_dstebz.c
 lapacke_dstebz_work.c
+lapacke_dktebz.c
+lapacke_dktebz_work.c
 lapacke_dstedc.c
 lapacke_dstedc_work.c
 lapacke_dstegr.c
 lapacke_dstegr_work.c
 lapacke_dstein.c
 lapacke_dstein_work.c
+lapacke_dktein.c
+lapacke_dktein_work.c
 lapacke_dstemr.c
 lapacke_dstemr_work.c
 lapacke_dsteqr.c
@@ -1051,6 +1055,8 @@ lapacke_dstevr.c
 lapacke_dstevr_work.c
 lapacke_dstevx.c
 lapacke_dstevx_work.c
+lapacke_dktevx.c
+lapacke_dktevx_work.c
 lapacke_dsycon.c
 lapacke_dsycon_work.c
 lapacke_dkycon.c
@@ -1079,6 +1085,8 @@ lapacke_dsyevr_2stage.c
 lapacke_dsyevr_2stage_work.c
 lapacke_dsyevx.c
 lapacke_dsyevx_work.c
+lapacke_dkyevx.c
+lapacke_dkyevx_work.c
 lapacke_dsyevx_2stage.c
 lapacke_dsyevx_2stage_work.c
 lapacke_dsygst.c
@@ -1095,6 +1103,8 @@ lapacke_dsygvd.c
 lapacke_dsygvd_work.c
 lapacke_dsygvx.c
 lapacke_dsygvx_work.c
+lapacke_dkygvx.c
+lapacke_dkygvx_work.c
 lapacke_dsyrfs.c
 lapacke_dsyrfs_work.c
 lapacke_dkyrfs.c
@@ -1646,12 +1656,16 @@ lapacke_ssptrs.c
 lapacke_ssptrs_work.c
 lapacke_sstebz.c
 lapacke_sstebz_work.c
+lapacke_sktebz.c
+lapacke_sktebz_work.c
 lapacke_sstedc.c
 lapacke_sstedc_work.c
 lapacke_sstegr.c
 lapacke_sstegr_work.c
 lapacke_sstein.c
 lapacke_sstein_work.c
+lapacke_sktein.c
+lapacke_sktein_work.c
 lapacke_sstemr.c
 lapacke_sstemr_work.c
 lapacke_ssteqr.c
@@ -1670,6 +1684,8 @@ lapacke_sstevr.c
 lapacke_sstevr_work.c
 lapacke_sstevx.c
 lapacke_sstevx_work.c
+lapacke_sktevx.c
+lapacke_sktevx_work.c
 lapacke_ssycon.c
 lapacke_ssycon_work.c
 lapacke_skycon.c
@@ -1698,6 +1714,8 @@ lapacke_ssyevr_2stage.c
 lapacke_ssyevr_2stage_work.c
 lapacke_ssyevx.c
 lapacke_ssyevx_work.c
+lapacke_skyevx.c
+lapacke_skyevx_work.c
 lapacke_ssyevx_2stage.c
 lapacke_ssyevx_2stage_work.c
 lapacke_ssygst.c
@@ -1714,6 +1732,8 @@ lapacke_ssygvd.c
 lapacke_ssygvd_work.c
 lapacke_ssygvx.c
 lapacke_ssygvx_work.c
+lapacke_skygvx.c
+lapacke_skygvx_work.c
 lapacke_ssyrfs.c
 lapacke_ssyrfs_work.c
 lapacke_skyrfs.c

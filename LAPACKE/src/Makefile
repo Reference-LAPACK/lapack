@@ -1074,12 +1074,16 @@ lapacke_dsptrs.o \
 lapacke_dsptrs_work.o \
 lapacke_dstebz.o \
 lapacke_dstebz_work.o \
+lapacke_dktebz.o \
+lapacke_dktebz_work.o \
 lapacke_dstedc.o \
 lapacke_dstedc_work.o \
 lapacke_dstegr.o \
 lapacke_dstegr_work.o \
 lapacke_dstein.o \
 lapacke_dstein_work.o \
+lapacke_dktein.o \
+lapacke_dktein_work.o \
 lapacke_dstemr.o \
 lapacke_dstemr_work.o \
 lapacke_dsteqr.o \
@@ -1098,6 +1102,8 @@ lapacke_dstevr.o \
 lapacke_dstevr_work.o \
 lapacke_dstevx.o \
 lapacke_dstevx_work.o \
+lapacke_dktevx.o \
+lapacke_dktevx_work.o \
 lapacke_dsycon.o \
 lapacke_dsycon_work.o \
 lapacke_dkycon.o \
@@ -1126,6 +1132,8 @@ lapacke_dsyevr_2stage.o \
 lapacke_dsyevr_2stage_work.o \
 lapacke_dsyevx.o \
 lapacke_dsyevx_work.o \
+lapacke_dkyevx.o \
+lapacke_dkyevx_work.o \
 lapacke_dsyevx_2stage.o \
 lapacke_dsyevx_2stage_work.o \
 lapacke_dsygst.o \
@@ -1142,6 +1150,8 @@ lapacke_dsygvd.o \
 lapacke_dsygvd_work.o \
 lapacke_dsygvx.o \
 lapacke_dsygvx_work.o \
+lapacke_dkygvx.o \
+lapacke_dkygvx_work.o \
 lapacke_dsyrfs.o \
 lapacke_dsyrfs_work.o \
 lapacke_dkyrfs.o \
@@ -1688,12 +1698,16 @@ lapacke_ssptrs.o \
 lapacke_ssptrs_work.o \
 lapacke_sstebz.o \
 lapacke_sstebz_work.o \
+lapacke_sktebz.o \
+lapacke_sktebz_work.o \
 lapacke_sstedc.o \
 lapacke_sstedc_work.o \
 lapacke_sstegr.o \
 lapacke_sstegr_work.o \
 lapacke_sstein.o \
 lapacke_sstein_work.o \
+lapacke_sktein.o \
+lapacke_sktein_work.o \
 lapacke_sstemr.o \
 lapacke_sstemr_work.o \
 lapacke_ssteqr.o \
@@ -1712,6 +1726,8 @@ lapacke_sstevr.o \
 lapacke_sstevr_work.o \
 lapacke_sstevx.o \
 lapacke_sstevx_work.o \
+lapacke_sktevx.o \
+lapacke_sktevx_work.o \
 lapacke_ssycon.o \
 lapacke_ssycon_work.o \
 lapacke_skycon.o \
@@ -1740,6 +1756,8 @@ lapacke_ssyevr_2stage.o \
 lapacke_ssyevr_2stage_work.o \
 lapacke_ssyevx.o \
 lapacke_ssyevx_work.o \
+lapacke_skyevx.o \
+lapacke_skyevx_work.o \
 lapacke_ssyevx_2stage.o \
 lapacke_ssyevx_2stage_work.o \
 lapacke_ssygst.o \
@@ -1756,6 +1774,8 @@ lapacke_ssygvd.o \
 lapacke_ssygvd_work.o \
 lapacke_ssygvx.o \
 lapacke_ssygvx_work.o \
+lapacke_skygvx.o \
+lapacke_skygvx_work.o \
 lapacke_ssyrfs.o \
 lapacke_ssyrfs_work.o \
 lapacke_skyrfs.o \

@@ -259,19 +259,19 @@
          RETURN
       ELSE IF( N.EQ.1 ) THEN
          Z( 1, 1 ) = ONE
-         
+         RETURN
       ELSE IF( N.EQ.2 ) THEN
          IF( E(1).GE.ZERO ) THEN
             Z( 1, 1 ) = ONE
             Z( 1, 2 ) = ZERO
             Z( 2, 1 ) = ZERO
             Z( 2, 2 ) = ONE
-			ELSE
-			   Z( 1, 1 ) = ONE
+         ELSE
+            Z( 1, 1 ) = ONE
             Z( 1, 2 ) = ZERO
             Z( 2, 1 ) = ZERO
             Z( 2, 2 ) = -ONE
-			END IF
+         END IF
          RETURN
       END IF
 *

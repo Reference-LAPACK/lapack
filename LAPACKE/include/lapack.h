@@ -16439,6 +16439,50 @@ void LAPACK_sstebz_base(
     #define LAPACK_sstebz(...) LAPACK_sstebz_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dktebz_base LAPACK_GLOBAL_SUFFIX(dktebz,DKTEBZ)
+void LAPACK_dktebz_base(
+    char const* range, char const* order,
+    lapack_int const* n,
+    double const* vl,
+    double const* vu, lapack_int const* il, lapack_int const* iu,
+    double const* abstol,
+    double const* E, lapack_int* m, lapack_int* nsplit,
+    double* W, lapack_int* IBLOCK, lapack_int* ISPLIT,
+    double* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dktebz(...) LAPACK_dktebz_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dktebz(...) LAPACK_dktebz_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_sktebz_base LAPACK_GLOBAL_SUFFIX(sktebz,SKTEBZ)
+void LAPACK_sktebz_base(
+    char const* range, char const* order,
+    lapack_int const* n,
+    float const* vl,
+    float const* vu, lapack_int const* il, lapack_int const* iu,
+    float const* abstol,
+    float const* E, lapack_int* m, lapack_int* nsplit,
+    float* W, lapack_int* IBLOCK, lapack_int* ISPLIT,
+    float* work,
+    lapack_int* iwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_sktebz(...) LAPACK_sktebz_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_sktebz(...) LAPACK_sktebz_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_cstedc_base LAPACK_GLOBAL_SUFFIX(cstedc,CSTEDC)
 void LAPACK_cstedc_base(
     char const* compz,
@@ -16643,6 +16687,26 @@ void LAPACK_dstein(
 void LAPACK_sstein(
     lapack_int const* n,
     float const* D,
+    float const* E, lapack_int const* m,
+    float const* W, lapack_int const* IBLOCK, lapack_int const* ISPLIT,
+    float* Z, lapack_int const* ldz,
+    float* work,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info );
+    
+#define LAPACK_dktein LAPACK_GLOBAL_SUFFIX(dktein,DKTEIN)
+void LAPACK_dktein(
+    lapack_int const* n,
+    double const* E, lapack_int const* m,
+    double const* W, lapack_int const* IBLOCK, lapack_int const* ISPLIT,
+    double* Z, lapack_int const* ldz,
+    double* work,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info );
+
+#define LAPACK_sktein LAPACK_GLOBAL_SUFFIX(sktein,SKTEIN)
+void LAPACK_sktein(
+    lapack_int const* n,
     float const* E, lapack_int const* m,
     float const* W, lapack_int const* IBLOCK, lapack_int const* ISPLIT,
     float* Z, lapack_int const* ldz,
@@ -17089,6 +17153,52 @@ void LAPACK_sstevx_base(
     #define LAPACK_sstevx(...) LAPACK_sstevx_base(__VA_ARGS__, 1, 1)
 #else
     #define LAPACK_sstevx(...) LAPACK_sstevx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dktevx_base LAPACK_GLOBAL_SUFFIX(dktevx,DKTEVX)
+void LAPACK_dktevx_base(
+    char const* jobz, char const* range,
+    lapack_int const* n,
+    double* E,
+    double const* vl,
+    double const* vu, lapack_int const* il, lapack_int const* iu,
+    double const* abstol, lapack_int* m,
+    double* W,
+    double* Z, lapack_int const* ldz,
+    double* work,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dktevx(...) LAPACK_dktevx_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dktevx(...) LAPACK_dktevx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_sktevx_base LAPACK_GLOBAL_SUFFIX(sktevx,SKTEVX)
+void LAPACK_sktevx_base(
+    char const* jobz, char const* range,
+    lapack_int const* n,
+    float* E,
+    float const* vl,
+    float const* vu, lapack_int const* il, lapack_int const* iu,
+    float const* abstol, lapack_int* m,
+    float* W,
+    float* Z, lapack_int const* ldz,
+    float* work,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_sktevx(...) LAPACK_sktevx_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_sktevx(...) LAPACK_sktevx_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_csycon_base LAPACK_GLOBAL_SUFFIX(csycon,CSYCON)
@@ -17795,6 +17905,52 @@ void LAPACK_ssyevx_base(
     #define LAPACK_ssyevx(...) LAPACK_ssyevx_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dkyevx_base LAPACK_GLOBAL_SUFFIX(dkyevx,DKYEVX)
+void LAPACK_dkyevx_base(
+    char const* jobz, char const* range, char const* uplo,
+    lapack_int const* n,
+    double* A, lapack_int const* lda,
+    double const* vl,
+    double const* vu, lapack_int const* il, lapack_int const* iu,
+    double const* abstol, lapack_int* m,
+    double* W,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkyevx(...) LAPACK_dkyevx_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_dkyevx(...) LAPACK_dkyevx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skyevx_base LAPACK_GLOBAL_SUFFIX(skyevx,SKYEVX)
+void LAPACK_skyevx_base(
+    char const* jobz, char const* range, char const* uplo,
+    lapack_int const* n,
+    float* A, lapack_int const* lda,
+    float const* vl,
+    float const* vu, lapack_int const* il, lapack_int const* iu,
+    float const* abstol, lapack_int* m,
+    float* W,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skyevx(...) LAPACK_skyevx_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_skyevx(...) LAPACK_skyevx_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_dsyevx_2stage_base LAPACK_GLOBAL_SUFFIX(dsyevx_2stage,DSYEVX_2STAGE)
 void LAPACK_dsyevx_2stage_base(
     char const* jobz, char const* range, char const* uplo,
@@ -18109,6 +18265,54 @@ void LAPACK_ssygvx_base(
     #define LAPACK_ssygvx(...) LAPACK_ssygvx_base(__VA_ARGS__, 1, 1, 1)
 #else
     #define LAPACK_ssygvx(...) LAPACK_ssygvx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dkygvx_base LAPACK_GLOBAL_SUFFIX(dkygvx,DKYGVX)
+void LAPACK_dkygvx_base(
+    lapack_int const* itype, char const* jobz, char const* range, char const* uplo,
+    lapack_int const* n,
+    double* A, lapack_int const* lda,
+    double* B, lapack_int const* ldb,
+    double const* vl,
+    double const* vu, lapack_int const* il, lapack_int const* iu,
+    double const* abstol, lapack_int* m,
+    double* W,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkygvx(...) LAPACK_dkygvx_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_dkygvx(...) LAPACK_dkygvx_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skygvx_base LAPACK_GLOBAL_SUFFIX(skygvx,SKYGVX)
+void LAPACK_skygvx_base(
+    lapack_int const* itype, char const* jobz, char const* range, char const* uplo,
+    lapack_int const* n,
+    float* A, lapack_int const* lda,
+    float* B, lapack_int const* ldb,
+    float const* vl,
+    float const* vu, lapack_int const* il, lapack_int const* iu,
+    float const* abstol, lapack_int* m,
+    float* W,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int* IFAIL,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skygvx(...) LAPACK_skygvx_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_skygvx(...) LAPACK_skygvx_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_csyr_base LAPACK_GLOBAL_SUFFIX(csyr,CSYR)
