@@ -479,7 +479,7 @@
          NB = MAX( NB, ILAENV( 1, 'ZUNMTR', UPLO, N, -1, -1, -1 ) )
          LWKOPT = MAX( ( NB+1 )*N, LWMIN )
          WORK( 1 )  = LWKOPT
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -736,7 +736,7 @@
 *     Set WORK(1) to optimal workspace size.
 *
       WORK( 1 )  = LWKOPT
-      RWORK( 1 ) = REAL( LRWMIN )
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN
