@@ -377,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
-     $                   SLATMS, SKYGV, SSYGVX, SKGT01
+     $                   SLATMS, SKYGV, SSYGVX, SKGT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT

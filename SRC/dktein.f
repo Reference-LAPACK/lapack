@@ -193,9 +193,7 @@
      $                   INDRV2, INDRV3, INDRV4, INDRV5, ITS, J, J1,
      $                   JBLK, JMAX, JMAX1, JMAX2, NBLK, NRMCHK
       DOUBLE PRECISION   CTR, EPS, EPS1, NRM, ONENRM, ORTOL, PERTOL,
-     $                   SCL, SEP, STPCRT, TOL, XJ, XJM, S1, S2, K1,
-     $                   K2, P1, P2, P3, Q1, Q2, Q3, TS1, TS2, TK1,
-     $                   TK2
+     $                   SCL, SEP, STPCRT, TOL, XJ, XJM, CTR1, CTR2
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 8 )
@@ -343,10 +341,17 @@
 *              Skip all the work if the block size is one.
 *
                IF( BLKSIZ.EQ.2 ) THEN
-                  WORK( INDRV1+1 ) = ONE
-                  WORK( INDRV1+2 ) = ZERO
-                  WORK( N+INDRV1+1 ) = ZERO
-                  WORK( N+INDRV1+2 ) = ONE
+                  IF( E( B1 ).GE.ZERO ) THEN
+                     WORK( INDRV1+1 ) = ONE
+                     WORK( INDRV1+2 ) = ZERO
+                     WORK( N+INDRV1+1 ) = ZERO
+                     WORK( N+INDRV1+2 ) = ONE
+                  ELSE
+                     WORK( INDRV1+1 ) = ONE
+                     WORK( INDRV1+2 ) = ZERO
+                     WORK( N+INDRV1+1 ) = ZERO
+                     WORK( N+INDRV1+2 ) = -ONE
+                  END IF
                   GO TO 120
                END IF
 *
@@ -402,7 +407,7 @@
                SCL = DBLE( BLKSIZ )*ONENRM*MAX( EPS,
      $               ABS( WORK( INDRV4+BLKSIZ ) ) ) /
      $               MAX( ABS( WORK( INDRV1+JMAX1 ) ),
-     $               ABS( WORK( INDRV1+JMAX2 ) ))
+     $               ABS( WORK( N+INDRV1+JMAX2 ) ))
                CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
                CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
 *
@@ -414,51 +419,6 @@
      $                       WORK( INDRV1+1 ), WORK( N+INDRV1+1 ),
      $                       TOL, IINFO )
 *
-*              Equalize the L2 norm of vectors in a pair
-*
-               JMAX1 = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
-               JMAX2 = IDAMAX( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
-               S1 = DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
-               S2 = DNRM2( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
-               IF( S1.GT.S2 ) THEN
-                  SCL = S2 / S1
-                  CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
-               ELSE
-                  SCL = S1 / S2
-                  CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
-               END IF
-               IF ( ABS( WORK( INDRV1+JMAX1 ) ).GT.
-     $              ABS( WORK( N+INDRV1+JMAX2 ) ) .AND.
-     $              WORK( INDRV1+JMAX1 ).LT.ZERO .OR.
-     $              ABS( WORK( INDRV1+JMAX1 ) ).LE.
-     $              ABS( WORK( N+INDRV1+JMAX2 ) ) .AND.
-     $              WORK( N+INDRV1+JMAX2 ).LT.ZERO ) THEN
-                  CALL DSCAL( BLKSIZ, -ONE, WORK( INDRV1+1 ), 1 )
-                  CALL DSCAL( BLKSIZ, -ONE, WORK( N+INDRV1+1 ), 1 )
-               END IF
-               CALL DCOPY( BLKSIZ, WORK( INDRV1+1 ), 1,
-     $                     Z( B1, J ), 1 )
-               CALL DCOPY( BLKSIZ, WORK( N+INDRV1+1 ), 1,
-     $                     Z( B1, J+1 ), 1 )
-               CALL DAXPY( BLKSIZ, -ONE, Z( B1, J+1 ), 1,
-     $                     WORK( INDRV1+1 ), 1 )
-               CALL DAXPY( BLKSIZ, ONE, Z( B1, J ), 1,
-     $                     WORK( N+INDRV1+1 ), 1 )
-               SCL = SQRT( TWO ) / TWO
-               CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
-               CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
-               IF ( XJ.LT.ORTOL / TWO ) THEN
-                  S1 = DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
-                  S2 = DNRM2( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
-                  IF( S1.GT.S2 ) THEN
-                     SCL = S2 / S1
-                     CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
-                  ELSE
-                     SCL = S1 / S2
-                     CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
-                  END IF
-               END IF
-*
 *              Reorthogonalize by modified Gram-Schmidt if eigenvalues are
 *              close enough.
 *
@@ -468,71 +428,63 @@
      $            GPIND = J
                IF( GPIND.NE.J ) THEN
                   DO 80 I = GPIND, J - 2, 2
-                     CALL DCOPY( BLKSIZ, WORK( INDRV1+1 ), 1,
-     $                           Z( B1, J ), 1 )
-                     CALL DCOPY( BLKSIZ, WORK( N+INDRV1+1 ), 1,
-     $                           Z( B1, J+1 ), 1 )
-                     S1 = DDOT( BLKSIZ, WORK( INDRV1+1 ), 1,
-     $                          Z( B1, I ), 1 )
-                     K1 = DDOT( BLKSIZ, WORK( N+INDRV1+1 ), 1,
-     $                          Z( B1, I ), 1 )
-                     S2 = DDOT( BLKSIZ, WORK( N+INDRV1+1 ), 1,
-     $                          Z( B1, I+1 ), 1 )
-                     K2 = DDOT( BLKSIZ, WORK( INDRV1+1 ), 1,
-     $                          Z( B1, I+1 ), 1 )
-                     SCL = MAX( MAX(ABS(S1), ABS(K1)), MAX(ABS(S2),
-     $                         ABS(K2)) )
-                     TS1 = S1 / SCL;
-                     TK1 = K1 / SCL;
-                     TS2 = S2 / SCL;
-                     TK2 = K2 / SCL;
-                     IF( ABS(TS1*TK1 + TS2*TK2) .GT. ZERO ) THEN
-                        CTR = (TK1*TK1 - TK2*TK2 + TS2*TS2 -
-     $                         TS1*TS1) / (TS1*TK1 + TS2*TK2)
-                        IF( CTR.LT.ZERO ) THEN
-                           P1 = (SQRT(CTR*CTR + FOUR) - CTR) / TWO
-                        ELSE
-                           P1 = (-SQRT(CTR*CTR + FOUR) - CTR) / TWO
-                        END IF
-                        Q1 = -P1
-                        P2 = S1 - P1 * K1
-                        Q2 = S2 - Q1 * K2
-                        P3 = K2 - P1 * S2
-                        Q3 = K1 - Q1 * S1
-                        CALL DAXPY( BLKSIZ, -P1, Z( B1, J+1 ), 1,
-     $                              WORK( INDRV1+1 ), 1 )
-                        CALL DAXPY( BLKSIZ, -Q1, Z( B1, J ), 1,
-     $                              WORK( N+INDRV1+1 ), 1 )
-                        CALL DAXPY( BLKSIZ, -P2, Z( B1, I ), 1,
-     $                              WORK( INDRV1+1 ), 1 )
-                        CALL DAXPY( BLKSIZ, -Q2, Z( B1, I+1 ), 1,
-     $                              WORK( N+INDRV1+1 ), 1 )
-                        CALL DAXPY( BLKSIZ, -P3, Z( B1, I+1 ), 1,
-     $                              WORK( INDRV1+1 ), 1 )
-                        CALL DAXPY( BLKSIZ, -Q3, Z( B1, I ), 1,
-     $                              WORK( N+INDRV1+1 ), 1 )
-                        IF ( XJ.LT.ORTOL / TWO ) THEN
-                           S1 = DNRM2( BLKSIZ, WORK( INDRV1+1 ),
-     $                                 1 )
-                           S2 = DNRM2( BLKSIZ, WORK( N+INDRV1+1 ),
-     $                                 1 )
-                           IF( S1.GT.S2 ) THEN
-                              SCL = S2 / S1
-                              CALL DSCAL( BLKSIZ, SCL,
-     $                                    WORK( INDRV1+1 ), 1 )
-                           ELSE
-                              SCL = S1 / S2
-                              CALL DSCAL( BLKSIZ, SCL,
-     $                                    WORK( N+INDRV1+1 ), 1 )
-                           END IF
-                        END IF
-                     END IF
+                     CTR1 = -DDOT( BLKSIZ, WORK( INDRV1+1 ), 1,
+     $                             Z( B1, I ), 1 )
+                     CTR2 = -DDOT( BLKSIZ, WORK( INDRV1+1 ), 1,
+     $                             Z( B1, I+1 ), 1 )
+                     CALL DAXPY( BLKSIZ, CTR1, Z( B1, I ), 1,
+     $                           WORK( INDRV1+1 ), 1 )
+                     CALL DAXPY( BLKSIZ, CTR2, Z( B1, I+1 ), 1,
+     $                           WORK( INDRV1+1 ), 1 )
+                     CTR1 = -DDOT( BLKSIZ, WORK( N+INDRV1+1 ), 1,
+     $                             Z( B1, I ), 1 )
+                     CTR2 = -DDOT( BLKSIZ, WORK( N+INDRV1+1 ), 1,
+     $                             Z( B1, I+1 ), 1 )
+                     CALL DAXPY( BLKSIZ, CTR1, Z( B1, I ), 1,
+     $                           WORK( N+INDRV1+1 ), 1 )
+                     CALL DAXPY( BLKSIZ, CTR2, Z( B1, I+1 ), 1,
+     $                           WORK( N+INDRV1+1 ), 1 )
    80             CONTINUE
+               END IF
+   90          CONTINUE
+               IF( GPIND.NE.J .OR. XJ.LT.ORTOL / TWO ) THEN
+                  CTR1 = DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+                  CTR2 = DNRM2( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
+                  IF( CTR1.GT.CTR2 ) THEN
+                     SCL = CTR2 / CTR1
+                     CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+                  ELSE
+                     SCL = CTR1 / CTR2
+                     CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
+                  END IF
+                  CALL DCOPY( BLKSIZ, WORK( INDRV1+1 ), 1,
+     $                        Z( B1, J ), 1 )
+                  CALL DCOPY( BLKSIZ, WORK( N+INDRV1+1 ), 1,
+     $                        Z( B1, J+1 ), 1 )
+                  CALL DAXPY( BLKSIZ, -ONE, Z( B1, J+1 ), 1,
+     $                        WORK( INDRV1+1 ), 1 )
+                  CALL DAXPY( BLKSIZ, ONE, Z( B1, J ), 1,
+     $                        WORK( N+INDRV1+1 ), 1 )
+                  SCL = SQRT( TWO ) / TWO
+                  CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+                  CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
+                  IF( XJ.LT.TEN * EPS * ONENRM ) THEN
+                     CTR1 = DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+                     CTR2 = DNRM2( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
+                     IF( CTR1.GT.CTR2 ) THEN
+                        SCL = CTR2 / CTR1
+                        CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ),
+     $                              1 )
+                     ELSE
+                        SCL = CTR1 / CTR2
+                        CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ),
+     $                              1 )
+                     END IF
+                  END IF
                END IF
 *
 *              Check the infinity norm of the iterate.
 *
-   90          CONTINUE
                JMAX1 = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
                JMAX2 = IDAMAX( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
                NRM = MAX( ABS( WORK( INDRV1+JMAX1 ) ),
@@ -559,11 +511,11 @@
 *              Accept iterate as jth eigenvector.
 *
   110          CONTINUE
-               JMAX1 = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
                SCL = ONE / DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+               JMAX1 = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
                CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
-               JMAX2 = IDAMAX( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
                SCL = ONE / DNRM2( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
+               JMAX2 = IDAMAX( BLKSIZ, WORK( N+INDRV1+1 ), 1 )
                CALL DSCAL( BLKSIZ, SCL, WORK( N+INDRV1+1 ), 1 )
                IF ( ABS( WORK( INDRV1+JMAX1 ) ).GT.
      $              ABS( WORK( N+INDRV1+JMAX2 ) ) .AND.

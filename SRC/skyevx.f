@@ -503,7 +503,7 @@
 *
          IF( INFO.EQ.0 ) THEN
             M = N
-            GO TO 60
+            GO TO 40
          END IF
          INFO = 0
       END IF
@@ -536,6 +536,18 @@
          CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
      $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
+      END IF
+*
+*     If matrix was scaled, then rescale eigenvalues appropriately.
+*
+   40 CONTINUE
+      IF( ISCALE.EQ.1 ) THEN
+         IF( INFO.EQ.0 ) THEN
+            IMAX = M
+         ELSE
+            IMAX = INFO - 1
+         END IF
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -610,15 +622,15 @@
             JJ = JJ+2
          END DO
 *
-         DO 50 JJ = 1, M-1, 2
+         DO 60 JJ = 1, M-1, 2
             I = JJ
             TMP1 = ABS(W(JJ))
-            DO 40 K = JJ+2, M-1, 2
+            DO 50 K = JJ+2, M-1, 2
                IF(ABS(W(K)).GT.TMP1) THEN
                   I = K
                   TMP1 = ABS(W(K))
                END IF
-   40       CONTINUE
+   50       CONTINUE
             IF(I.NE.JJ) THEN
                CALL SSWAP( 1, W( I ), 1, W( JJ ), 1 )
                CALL SSWAP( N, Z( 1, I ), 1, Z( 1, JJ ), 1 )
@@ -632,19 +644,7 @@
                   IFAIL( JJ+1 ) = ITMP1
                END IF
             END IF
-   50    CONTINUE
-      END IF
-*
-*     If matrix was scaled, then rescale eigenvalues appropriately.
-*
-   60 CONTINUE
-      IF( ISCALE.EQ.1 ) THEN
-         IF( INFO.EQ.0 ) THEN
-            IMAX = M
-         ELSE
-            IMAX = INFO - 1
-         END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+   60    CONTINUE
       END IF
 *
 *     Set WORK(1) to optimal workspace size.

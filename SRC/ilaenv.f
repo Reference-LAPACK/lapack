@@ -522,6 +522,10 @@
          IF( C3.EQ.'EBZ' ) THEN
             NB = 1
          END IF
+      ELSE IF( SNAME .AND. C2.EQ.'KT' ) THEN
+         IF( C3.EQ.'EBZ' ) THEN
+            NB = 1
+         END IF
       ELSE IF( C2.EQ.'GG' ) THEN
          NB = 32
          IF( C3.EQ.'HD3' ) THEN

@@ -409,7 +409,7 @@
          END IF
          IF( INFO.EQ.0 ) THEN
             M = N
-            GO TO 40
+            GO TO 20
          END IF
          INFO = 0
       END IF
@@ -433,6 +433,18 @@
          CALL DKTEIN( N, E, M, W, IWORK( 1 ), IWORK( INDISP ),
      $                Z, LDZ, WORK( INDWRK ), IWORK( INDIWO ), IFAIL,
      $                INFO )
+      END IF
+*
+*     If matrix was scaled, then rescale eigenvalues appropriately.
+*
+   20 CONTINUE
+      IF( ISCALE.EQ.1 ) THEN
+         IF( INFO.EQ.0 ) THEN
+            IMAX = M
+         ELSE
+            IMAX = INFO - 1
+         END IF
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -507,15 +519,15 @@
             JJ = JJ+2
          END DO
 *
-         DO 30 JJ = 1, M-1, 2
+         DO 40 JJ = 1, M-1, 2
             I = JJ
             TMP1 = ABS(W(JJ))
-            DO 20 K = JJ+2, M-1, 2
+            DO 30 K = JJ+2, M-1, 2
                IF(ABS(W(K)).GT.TMP1) THEN
                   I = K
                   TMP1 = ABS(W(K))
                END IF
-   20       CONTINUE
+   30       CONTINUE
             IF(I.NE.JJ) THEN
                CALL DSWAP( 1, W( I ), 1, W( JJ ), 1 )
                CALL DSWAP( N, Z( 1, I ), 1, Z( 1, JJ ), 1 )
@@ -529,19 +541,7 @@
                   IFAIL( JJ+1 ) = ITMP1
                END IF
             END IF
-   30    CONTINUE
-      END IF
-*
-*     If matrix was scaled, then rescale eigenvalues appropriately.
-*
-   40 CONTINUE
-      IF( ISCALE.EQ.1 ) THEN
-         IF( INFO.EQ.0 ) THEN
-            IMAX = M
-         ELSE
-            IMAX = INFO - 1
-         END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+   40    CONTINUE
       END IF
 *
       RETURN
