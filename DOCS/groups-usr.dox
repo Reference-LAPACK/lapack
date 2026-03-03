@@ -553,7 +553,7 @@
             @defgroup heev          {he,sy,ky}ev:   eig, QR iteration
             @defgroup heevd         {he,sy}evd:     eig, divide and conquer
             @defgroup heevr         {he,sy}evr:     eig, MRRR
-            @defgroup heevx         {he,sy}evx:     eig, bisection
+            @defgroup heevx         {he,sy,ky}evx:  eig, bisection
 
             @defgroup heev_driver2  --- full, 2-stage ---
             @defgroup heev_2stage   {he,sy}ev_2stage:   eig, QR iteration
@@ -580,14 +580,14 @@
             @defgroup stev          {st,kt}ev:      eig, QR iteration
             @defgroup stevd         stevd:          eig, divide and conquer
             @defgroup stevr         stevr:          eig, MRRR
-            @defgroup stevx         stevx:          eig, bisection
+            @defgroup stevx         {st,kt}evx:     eig, bisection
             @defgroup pteqr         pteqr:          eig, positive definite tridiagonal
 
-            @defgroup stebz         stebz:          eig, Kahan
+            @defgroup stebz         {st,kt}ebz:     eig, Kahan
             @defgroup sterf         sterf:          eig, QR iteration
             @defgroup stedc         stedc:          eig, divide and conquer
             @defgroup stegr         stegr:          eig, bisection, see stemr
-            @defgroup stein         stein:          eig, inverse iteration
+            @defgroup stein         {st,kt}ein:     eig, inverse iteration
             @defgroup stemr         stemr:          eig, relatively robust representation (RRR)
             @defgroup steqr         {st,kt}eqr:     eig, QR iteration
         @}
@@ -598,7 +598,7 @@
             @defgroup hegv          {he,sy,ky}gv:     eig, QR iteration
             @defgroup hegv_2stage   {he,sy}gv_2stage: eig, QR iteration, 2-stage
             @defgroup hegvd         {he,sy}gvd:     eig, divide and conquer
-            @defgroup hegvx         {he,sy}gvx:     eig, bisection
+            @defgroup hegvx         {he,sy,ky}gvx:    eig, bisection
 
             @defgroup hpgv_driver   --- packed ---
             @defgroup hpgv          {hp,sp}gv:      eig, QR iteration
@@ -629,8 +629,8 @@
             @defgroup lae2          lae2:           2x2 eig, step in steqr, stemr
             @defgroup laesy         laesy:          2x2 eig
             @defgroup laev2         laev2:          2x2 eig
-            @defgroup lagtf         lagtf:          LU factor of (T - λI)
-            @defgroup lagts         lagts:          LU solve  of (T - λI) x = y
+            @defgroup lagtf         lagtf{,k}:      LU factor of (T - λI)
+            @defgroup lagts         lagts{,k}:      LU solve  of (T - λI) x = y
 
             @defgroup hpev_comp     --- packed ---
             @defgroup hptrd         {hp,sp}trd:     reduction to tridiagonal

@@ -310,19 +310,19 @@
       ELSE
          IF( VALEIG ) THEN
             IF( N.GT.0 .AND. VU.LE.VL .OR. VU.LT.ZERO )
-     $         INFO = -7
+     $         INFO = -6
          ELSE IF( INDEIG ) THEN
             IF( IL.LT.1 .OR. IL.GT.MAX( 1, (N+1)/2 ) ) THEN
-               INFO = -8
+               INFO = -7
             ELSE IF( IU.LT.MIN( (N+1)/2, IL ) .OR. IU.GT.(N+1)/2 )
      $      THEN
-               INFO = -9
+               INFO = -8
             END IF
          END IF
       END IF
       IF( INFO.EQ.0 ) THEN
          IF( LDZ.LT.1 .OR. ( WANTZ .AND. LDZ.LT.N ) )
-     $      INFO = -14
+     $      INFO = -13
       END IF
 *
       IF( INFO.NE.0 ) THEN

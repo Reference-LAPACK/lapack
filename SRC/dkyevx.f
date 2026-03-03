@@ -320,9 +320,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANKY, SROUNDUP_LWORK
+      DOUBLE PRECISION   DLAMCH, DLANKY
       EXTERNAL           LSAME, ILAENV, DLAMCH,
-     $                   DLANKY, SROUNDUP_LWORK
+     $                   DLANKY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL,
@@ -385,7 +385,7 @@
      $                -1 ) )
             LWKOPT = MAX( LWKMIN, ( NB + 2 )*N )
          END IF
-         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
+         WORK( 1 ) = LWKOPT
 *
          IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY )
      $      INFO = -17
@@ -649,7 +649,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
+      WORK( 1 ) = LWKOPT
 *
       RETURN
 *

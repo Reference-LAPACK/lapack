@@ -85,7 +85,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, DKTEQR, DKYEV, DKTEV, DKYTRD
+      EXTERNAL           CHKXER, DKTEQR, DKYEV, DKTEV, DKYTRD,
+     $                   DKTEBZ, DKTEIN, DKYEVX, DKTEVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -143,6 +144,60 @@
          CALL CHKXER( 'DKYTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
+*        DKTEBZ
+*
+         SRNAMT = 'DKTEBZ'
+         INFOT = 1
+         CALL DKTEBZ( '/', 'E', 0, 0.0, 1.0, 1, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKTEBZ( 'A', '/', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKTEBZ( 'A', 'E', -1, 0.0, 0.0, 0, 0, 0.0, E, M,
+     $                NSPLIT, X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DKTEBZ( 'V', 'E', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKTEBZ( 'I', 'E', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKTEBZ( 'I', 'E', 1, 0.0, 0.0, 2, 1, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 2, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'DKTEBZ', INFOT, NOUT, LERR, OK )
+         NT = NT + 8
+*
+*        DKTEIN
+*
+         SRNAMT = 'DKTEIN'
+         INFOT = 1
+         CALL DKTEIN( -1, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKTEIN( 0, E, -1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKTEIN( 0, E, 1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKTEIN( 2, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEIN', INFOT, NOUT, LERR, OK )
+         NT = NT + 4
+*
 *        DKTEQR
 *
          SRNAMT = 'DKTEQR'
@@ -190,6 +245,107 @@
          CALL DKTEV( 'V', 2, D, E, Z, 1, W, INFO )
          CALL CHKXER( 'DKTEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 3
+*
+*        DKYEVX
+*
+         SRNAMT = 'DKYEVX'
+         INFOT = 1
+         CALL DKYEVX( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYEVX( 'N', '/', 'U', 0, A, 1, 0.0, 1.0, 1, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKYEVX( 'N', 'A', '/', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         INFOT = 4
+         CALL DKYEVX( 'N', 'A', 'U', -1, A, 1, 0.0, 0.0, 0, 0, 0.0, M,
+     $                X, Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKYEVX( 'N', 'A', 'U', 2, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYEVX( 'N', 'V', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYEVX( 'N', 'V', 'U', 1, A, 1, -2.0, -1.0, 0, 0, 0.0, M,
+     $                X, Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DKYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DKYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 2, 1, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYEVX( 'N', 'I', 'U', 3, A, 3, 0.0, 0.0, 2, 1, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYEVX( 'N', 'I', 'U', 2, A, 2, 0.0, 0.0, 1, 2, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL DKYEVX( 'V', 'A', 'U', 2, A, 2, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 17
+         CALL DKYEVX( 'V', 'A', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 0, IW, I3, INFO )
+         CALL CHKXER( 'DKYEVX', INFOT, NOUT, LERR, OK )
+         NT = NT + 13
+*
+*        DKTEVX
+*
+         SRNAMT = 'DKTEVX'
+         INFOT = 1
+         CALL DKTEVX( '/', 'A', 0, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKTEVX( 'N', '/', 0, E, 0.0, 1.0, 1, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKTEVX( 'N', 'A', -1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKTEVX( 'N', 'V', 1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKTEVX( 'N', 'V', 1, E, -2.0, -1.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEVX( 'N', 'I', 1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEVX( 'N', 'I', 1, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKTEVX( 'N', 'I', 3, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKTEVX( 'N', 'I', 2, E, 0.0, 0.0, 1, 2, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL DKTEVX( 'V', 'A', 2, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         NT = NT + 10
       END IF
 *
 *     Print a summary line.

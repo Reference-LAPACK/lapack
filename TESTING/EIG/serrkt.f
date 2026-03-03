@@ -85,7 +85,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, SKTEQR, SKYEV, SKTEV, SKYTRD
+      EXTERNAL           CHKXER, SKTEQR, SKYEV, SKTEV, SKYTRD,
+     $                   SKTEBZ, SKTEIN, SKYEVX, SKTEVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -143,6 +144,60 @@
          CALL CHKXER( 'SKYTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
+*        SKTEBZ
+*
+         SRNAMT = 'SKTEBZ'
+         INFOT = 1
+         CALL SKTEBZ( '/', 'E', 0, 0.0, 1.0, 1, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKTEBZ( 'A', '/', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKTEBZ( 'A', 'E', -1, 0.0, 0.0, 0, 0, 0.0, E, M,
+     $                NSPLIT, X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SKTEBZ( 'V', 'E', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SKTEBZ( 'I', 'E', 0, 0.0, 0.0, 0, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SKTEBZ( 'I', 'E', 1, 0.0, 0.0, 2, 1, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 0, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 2, 0.0, E, M, NSPLIT,
+     $                X, I1, I2, W, IW, INFO )
+         CALL CHKXER( 'SKTEBZ', INFOT, NOUT, LERR, OK )
+         NT = NT + 8
+*
+*        SKTEIN
+*
+         SRNAMT = 'SKTEIN'
+         INFOT = 1
+         CALL SKTEIN( -1, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKTEIN( 0, E, -1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKTEIN( 0, E, 1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEIN', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKTEIN( 2, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEIN', INFOT, NOUT, LERR, OK )
+         NT = NT + 4
+*
 *        SKTEQR
 *
          SRNAMT = 'SKTEQR'
@@ -190,6 +245,107 @@
          CALL SKTEV( 'V', 2, D, E, Z, 1, W, INFO )
          CALL CHKXER( 'SKTEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 3
+*
+*        SKYEVX
+*
+         SRNAMT = 'SKYEVX'
+         INFOT = 1
+         CALL SKYEVX( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKYEVX( 'N', '/', 'U', 0, A, 1, 0.0, 1.0, 1, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKYEVX( 'N', 'A', '/', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 1, IW, I3, INFO )
+         INFOT = 4
+         CALL SKYEVX( 'N', 'A', 'U', -1, A, 1, 0.0, 0.0, 0, 0, 0.0, M,
+     $                X, Z, 1, W, 1, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SKYEVX( 'N', 'A', 'U', 2, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKYEVX( 'N', 'V', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKYEVX( 'N', 'V', 'U', 1, A, 1, -2.0, -1.0, 0, 0, 0.0, M,
+     $                X, Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SKYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SKYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 2, 1, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SKYEVX( 'N', 'I', 'U', 3, A, 3, 0.0, 0.0, 2, 1, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SKYEVX( 'N', 'I', 'U', 2, A, 2, 0.0, 0.0, 1, 2, 0.0, M, X,
+     $                Z, 1, W, 8, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL SKYEVX( 'V', 'A', 'U', 2, A, 2, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 16, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 17
+         CALL SKYEVX( 'V', 'A', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
+     $                Z, 1, W, 0, IW, I3, INFO )
+         CALL CHKXER( 'SKYEVX', INFOT, NOUT, LERR, OK )
+         NT = NT + 13
+*
+*        SKTEVX
+*
+         SRNAMT = 'SKTEVX'
+         INFOT = 1
+         CALL SKTEVX( '/', 'A', 0, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKTEVX( 'N', '/', 0, E, 0.0, 1.0, 1, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKTEVX( 'N', 'A', -1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SKTEVX( 'N', 'V', 1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SKTEVX( 'N', 'V', 1, E, -2.0, -1.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKTEVX( 'N', 'I', 1, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKTEVX( 'N', 'I', 1, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKTEVX( 'N', 'I', 3, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKTEVX( 'N', 'I', 2, E, 0.0, 0.0, 1, 2, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL SKTEVX( 'V', 'A', 2, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
+     $                1, W, IW, I3, INFO )
+         CALL CHKXER( 'SKTEVX', INFOT, NOUT, LERR, OK )
+         NT = NT + 10
       END IF
 *
 *     Print a summary line.
