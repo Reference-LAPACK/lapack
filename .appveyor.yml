@@ -33,4 +33,4 @@ build_script:
   - cmake --build .
 
 test_script:
-  - ctest -j2
+  - ctest -j2 --output-on-failure 

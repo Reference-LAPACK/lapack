@@ -258,6 +258,11 @@ endif()
 # CBLAS
 option(CBLAS "Build CBLAS" OFF)
 
+# Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
+if(CBLAS OR NOT BLAS_FOUND)
+  add_subdirectory(CBLAS/include)
+endif()
+
 if(CBLAS)
   add_subdirectory(CBLAS)
 endif()

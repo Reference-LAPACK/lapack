@@ -34,7 +34,7 @@
 
 lapack_int API_SUFFIX(LAPACKE_dsposv_work)( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int nrhs, double* a, lapack_int lda,
-                                double* b, lapack_int ldb, double* x,
+                                const double* b, lapack_int ldb, double* x,
                                 lapack_int ldx, double* work, float* swork,
                                 lapack_int* iter )
 {
@@ -96,7 +96,6 @@ lapack_int API_SUFFIX(LAPACKE_dsposv_work)( int matrix_layout, char uplo, lapack
         }
         /* Transpose output matrices */
         API_SUFFIX(LAPACKE_dpo_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
-        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );

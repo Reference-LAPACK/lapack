@@ -34,7 +34,7 @@
 
 lapack_int API_SUFFIX(LAPACKE_zcposv)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, lapack_complex_double* a,
-                           lapack_int lda, lapack_complex_double* b,
+                           lapack_int lda, const lapack_complex_double* b,
                            lapack_int ldb, lapack_complex_double* x,
                            lapack_int ldx, lapack_int* iter )
 {

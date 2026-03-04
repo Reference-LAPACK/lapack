@@ -1,36 +1,23 @@
 message(STATUS "CBLAS enabled")
 enable_language(C)
 
-set(LAPACK_INSTALL_EXPORT_NAME ${CBLASLIB}-targets)
-
-# Create a header file cblas.h for the routines called in my C programs
 include(CheckLanguage)
 check_language(Fortran)
 if(CMAKE_Fortran_COMPILER)
   enable_language(Fortran)
-  include(FortranCInterface)
-  ## Ensure that the fortran compiler and c compiler specified are compatible
-  FortranCInterface_VERIFY()
-  FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/cblas_mangling.h
-                          MACRO_NAMESPACE "F77_"
-                          SYMBOL_NAMESPACE "F77_")
 
   # Check for any necessary platform specific compiler flags
   include(CheckLAPACKCompilerFlags)
   CheckLAPACKCompilerFlags()
 endif()
-if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
-  message(WARNING "Reverting to pre-defined include/cblas_mangling.h")
-    configure_file(include/cblas_mangling_with_flags.h.in
-                 ${LAPACK_BINARY_DIR}/include/cblas_mangling.h)
-endif()
+
+set(LAPACK_INSTALL_EXPORT_NAME ${CBLASLIB}-targets)
 
 include(CheckCSourceCompiles)
 check_c_source_compiles("int __attribute__((weak)) main() {};"
                         HAS_ATTRIBUTE_WEAK_SUPPORT)
 
 include_directories(include ${LAPACK_BINARY_DIR}/include)
-add_subdirectory(include)
 add_subdirectory(src)
 
 macro(append_subdir_files variable dirname)
@@ -39,12 +26,6 @@ foreach(depfile ${holder})
   list(APPEND ${variable} "${dirname}/${depfile}")
 endforeach()
 endmacro()
-
-append_subdir_files(CBLAS_INCLUDE "include")
-install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  COMPONENT Development
-  )
 
 if(BUILD_TESTING)
   add_subdirectory(testing)

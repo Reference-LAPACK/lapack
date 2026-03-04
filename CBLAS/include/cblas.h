@@ -44,8 +44,6 @@ typedef enum CBLAS_SIDE {CblasLeft=141, CblasRight=142} CBLAS_SIDE;
 
 #define CBLAS_ORDER CBLAS_LAYOUT /* this for backward compatibility with CBLAS_ORDER */
 
-#include "cblas_mangling.h"
-
 /*
  * Integer specific API
  */

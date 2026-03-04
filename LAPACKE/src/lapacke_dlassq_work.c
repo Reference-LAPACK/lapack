@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlassq_work)( lapack_int n, double* x, lapack_int incx, double* scale, double* sumsq )
+lapack_int API_SUFFIX(LAPACKE_dlassq_work)( lapack_int n, const double* x, lapack_int incx, double* scale, double* sumsq )
 {
     lapack_int info = 0;
     LAPACK_dlassq( &n, x, &incx, scale, sumsq );

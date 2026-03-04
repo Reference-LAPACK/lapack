@@ -9,6 +9,8 @@
 #ifndef CBLAS_F77_H
 #define CBLAS_F77_H
 
+#include "cblas_mangling.h"
+
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -1007,7 +1009,7 @@ void F77_sgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const float *, const float *
 );
 void F77_sgemmtr_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const float *, const float *, FINT, const float *, FINT, const float *, float *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
-   , size_t, size_t, size_t
+   , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
 
@@ -1046,7 +1048,7 @@ void F77_dgemm_base(FCHAR, FCHAR, FINT, FINT, FINT, const double *, const double
 );
 void F77_dgemmtr_base(FCHAR, FCHAR, FCHAR, FINT, FINT, const double *, const double *, FINT, const double *, FINT, const double *, double *, FINT
 #ifdef BLAS_FORTRAN_STRLEN_END
-   , size_t, size_t, size_t
+   , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
 #endif
 );
 

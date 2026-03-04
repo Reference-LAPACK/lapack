@@ -34,7 +34,7 @@
 
 lapack_int API_SUFFIX(LAPACKE_dsgesv)( int matrix_layout, lapack_int n, lapack_int nrhs,
                            double* a, lapack_int lda, lapack_int* ipiv,
-                           double* b, lapack_int ldb, double* x, lapack_int ldx,
+                           const double* b, lapack_int ldb, double* x, lapack_int ldx,
                            lapack_int* iter )
 {
     lapack_int info = 0;

@@ -33,9 +33,9 @@
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_zhetrs_aa_2stage)( int matrix_layout, char uplo, lapack_int n,
-                          lapack_int nrhs, lapack_complex_double* a,
+                          lapack_int nrhs, const lapack_complex_double* a,
                           lapack_int lda, lapack_complex_double* tb,
-                          lapack_int ltb, lapack_int* ipiv, lapack_int* ipiv2,
+                          lapack_int ltb, const lapack_int* ipiv, const lapack_int* ipiv2,
                           lapack_complex_double* b, lapack_int ldb )
 {
     lapack_int info = 0;

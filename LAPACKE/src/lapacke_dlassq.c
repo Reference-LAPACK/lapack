@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int API_SUFFIX(LAPACKE_dlassq)( lapack_int n, double* x, lapack_int incx, double* scale, double* sumsq )
+lapack_int API_SUFFIX(LAPACKE_dlassq)( lapack_int n, const double* x, lapack_int incx, double* scale, double* sumsq )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {

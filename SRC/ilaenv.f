@@ -666,6 +666,10 @@
          IF( C3.EQ.'HD3' ) THEN
             NX = 128
          END IF
+      ELSE IF( C2.EQ.'LA' ) THEN
+         IF( C3.EQ.'RFT' ) THEN
+            NX = 64
+         END IF
       END IF
       ILAENV = NX
       RETURN
