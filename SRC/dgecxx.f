@@ -781,7 +781,7 @@
 *> \ingroup gecxx
 *
 *  =====================================================================      
-      SUBROUTINE DGECXX22( FACT, USESD, M, N,
+      SUBROUTINE DGECXX( FACT, USESD, M, N,
      $                   DESEL_ROWS, SEL_DESEL_COLS,
      $                   KMAXFREE, ABSTOL, RELTOL, A, LDA,
      $                   K, MAXC2NRMK, RELMAXC2NRMK, FNRMK,       
