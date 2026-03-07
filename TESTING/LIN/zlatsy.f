@@ -15,7 +15,7 @@
 *       INTEGER            LDX, N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX*16         X( LDX, * )
 *       ..
 *
@@ -97,7 +97,7 @@
       INTEGER            LDX, N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX*16         X( LDX, * )
 *     ..
 *
