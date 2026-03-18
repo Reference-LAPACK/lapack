@@ -656,28 +656,6 @@
 *>          If FACT = 'C' or 'X', LDC >= max(1,M).
 *> \endverbatim
 *>
-*> \param[out] X
-*> \verbatim
-*>          X is DOUBLE PRECISION array.
-*>          If FACT = 'P' or 'C': The array is not used,
-*>                       the array dimension is >= (1,1).
-*>          If FACT = 'X': 
-*>                       The array dimension is (LDX,N).
-*>             If K = 0, the array is not used.
-*>             If K > 0, the array X stores the K-by-N factor X.
-*> \endverbatim
-*>
-*> \param[in] LDX
-*> \verbatim
-*>          LDX is INTEGER
-*>          The leading dimension of the array X.
-*>          If FACT = 'P' or 'C': LDX >= 1.
-*>          If FACT = 'X':
-*>             If USESD = 'N', LDX >= max(1,min(M,N)).
-*>             If USESD = 'C' or 'R' or 'A',
-*>                             LDX >= max(1,min(M_sub,N_sub)).
-*> \endverbatim
-*>
 *> \param[out] QRC
 *> \verbatim
 *>          QRC is DOUBLE PRECISION array.
@@ -701,8 +679,27 @@
 *> \verbatim
 *>          LDQRC is INTEGER
 *>          The leading dimension of the array QRC.
-*>          If FACT = 'P', LDQRC >= 1.
-*>          If FACT = 'C' or 'X', LDQRC >= max(1,M).
+*>          If FACT = 'P' or 'C', LDQRC >= 1.
+*>          If FACT = 'X', LDQRC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array.
+*>          If FACT = 'P' or 'C': The array is not used,
+*>                       the array dimension is >= (1,1).
+*>          If FACT = 'X': 
+*>                       The array dimension is (LDX,N).
+*>             If K = 0, the array is not used.
+*>             If K > 0, the array X stores the K-by-N factor X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.
+*>          If FACT = 'P' or 'C', LDQRC >= 1.
+*>          If FACT = 'X', LDQRC >= max(1,M).
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -715,11 +712,16 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. 
-*>          If FACT = 'P' or 'C': 
-*>           the minimal LWORK >= max( 1, N_sub, N_sel, 3*N_free+1 ).
-*>          If FACT = 'X':
-*>           the minimal LWORK >= max( 1, N_sub, 3*N_free+1, min(M,N)+N ).
+*>          The dimension of the array WORK.
+*>          For USESD = 'N' or 'R' and for all FACT: 
+*>              LWORK >= max( 1, 3*N - 1 )
+*>          For USESD = 'C' or 'A':
+*>            a) If FACT = 'P' or 'C': 
+*>              LWORK >= max( 1, N_sub, min(1,MINMNFREE)*(3*N_free-1) )
+*>            b) If FACT = 'X':
+*>              LWORK >= max( 1, min(M,N)+N,
+*>                               min(1,MINMNFREE)*(3*N_free-1) )
+*>          where MINMNFREE = min( M_free, N_free ).
 *>          
 *>          For good performance, LWORK should generally be larger, and
 *>          the user should query the routine for the optimal LWORK.
@@ -733,10 +735,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (N).
-*>          Is a work array. (IWORK is used by DGEQP3RK to store indices
-*>          of "bad" columns for norm downdating in the residual
-*>          matrix in the blocked step auxiliary subroutine DLAQP3RK.)
+*>          IWORK is INTEGER array, dimension (MAX(1,LIWORK)).      
 *>
 *>          On exit, if INFO >= 0, IWORK(1) returns the optimal LIWORK.
 *> \endverbatim
@@ -744,9 +743,18 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array LIWORK. 
-*>             If FACT = 'P': the minimal LIWORK >= max(1,2N-1).
-*>             If FACT = 'C' or 'X': the minimal LIWORK >= max(1,2N-1).
+*>          The dimension of the array LIWORK.
+*>          For USESD = 'N' or 'R': 
+*>            a) If FACT = 'P': 
+*>              min LIWORK >= max( 1, N-1 )
+*>            b) If FACT = 'C' or 'X':
+*>              min LIWORK >= max( 1, N)
+*>          For USESD = 'C' or 'A':
+*>            a) If FACT = 'P':
+*>          min LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
+*>            b) If FACT = 'C' or 'X':
+*>          min LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, N )
+*>
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
 *>
@@ -816,9 +824,10 @@
       LOGICAL            LIQUERY, LQUERY, RETURNC, RETURNX,
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
       INTEGER            I, J, NSUB, MFREE, MSUB, NSEL, JDESEL,
-     $                   ITEMP, IINFO, KP0, KFREE, MRESID, NRESID,
+     $                   ITEMP, IINFO, KFREE, KMAXLS, KP0, 
      $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP, JJ, JPW,
-     $                   MINMN, MDESEL, NDESEL, NFREE
+     $                   MRESID, NRESID, MINMN, MINMNFREE, MDESEL,
+     $                   NDESEL, NFREE
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
      $                   RELTOLFREE, RELMAXC2NRMKFREE, SAFMIN
 
@@ -867,68 +876,67 @@
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
-      END IF   
+      ELSE
 *
-*     This is to check that the number of preselected columns NSEL
-*     cannot be larger than MSUB, which is the number of rows 
-*     without MDESEL deselected rows. When the number of
-*     preselected columns NSEL is larger than MSUB, the factorization
-*     of all preselected NSEL columns cannot be completed.
-*     MSUB also will be used for LDX argument check later.
+*        This is to check that the number of preselected columns NSEL
+*        cannot be larger than MSUB, which is the number of rows 
+*        without MDESEL deselected rows. When the number of
+*        preselected columns NSEL is larger than MSUB,
+*        the factorizationof all preselected NSEL columns cannot be 
+*        completed. MSUB also will be used for LDX argument check
+*        later.
 *
-      IF( USE_DESEL_ROWS ) THEN
+         IF( USE_DESEL_ROWS ) THEN
 *
-*        Count the number of free rows MSUB.
+*           Count the number of free rows MSUB.
 *          
-         DO I = 1, M
-            IF( DESEL_ROWS( I ).EQ.-1 ) MDESEL = MDESEL + 1
-         END DO
-         MSUB = M - MDESEL
-         MFREE = MSUB
-      END IF
+            DO I = 1, M
+               IF( DESEL_ROWS( I ).EQ.-1 ) MDESEL = MDESEL + 1
+            END DO
+            MSUB = M - MDESEL
+            MFREE = MSUB
+         END IF
 *      
-      IF( USE_SEL_DESEL_COLS ) THEN
+         IF( USE_SEL_DESEL_COLS ) THEN
 *
-*        Count the number of preselected columns NSEL and the
-*        number of preselected and freecolumns NSUB = N - NDESEL.
+*           Count the number of preselected columns NSEL and the
+*           number of preselected and freecolumns NSUB = N - NDESEL.
 *
-         DO J = 1, N
-            IF( SEL_DESEL_COLS( J ).EQ.1 ) NSEL = NSEL + 1
-            IF( SEL_DESEL_COLS( J ).EQ.-1 ) NDESEL = NDESEL + 1
-         END DO
-         NSUB = N - NDESEL
-         MFREE = MSUB - NSEL         
-         NFREE = NSUB - NSEL
-*
+            DO J = 1, N
+               IF( SEL_DESEL_COLS( J ).EQ.1 ) NSEL = NSEL + 1
+               IF( SEL_DESEL_COLS( J ).EQ.-1 ) NDESEL = NDESEL + 1  
+            END DO
+            NSUB = N - NDESEL
+            MFREE = MSUB - NSEL         
+            NFREE = NSUB - NSEL
+*   
+         END IF
+         MINMNFREE = MIN( MFREE, NFREE )
+*         
          IF( NSEL.GT.MSUB ) THEN
             INFO = -6
-         END IF      
-      END IF
-*
-      IF( KMAXFREE.LT.0 ) THEN
-         INFO = -7
-      ELSE IF( DISNAN( ABSTOL ) ) THEN
-         INFO = -8
-      ELSE IF( DISNAN( RELTOL ) ) THEN
-         INFO = -9
-      ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -11
-      END IF
-*
-*
+         ELSE IF( KMAXFREE.LT.0 ) THEN
+            INFO = -7
+         ELSE IF( DISNAN( ABSTOL ) ) THEN
+            INFO = -8
+         ELSE IF( DISNAN( RELTOL ) ) THEN
+            INFO = -9
+         ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
+            INFO = -11
 *        This is a check for LDC          
-      IF( ( RETURNC .AND. LDC.LT.MAX( 1, M ) ) .OR.
-     $    ( .NOT.RETURNC .AND. LDC.LT.1 ) ) THEN
-         INFO = -20
+         ELSE IF( ( RETURNC .AND. LDC.LT.MAX( 1, M ) )
+     $      .OR. ( .NOT.RETURNC .AND. LDC.LT.1 ) ) THEN
+            INFO = -20
 *        This is a check for LDQRC           
-      ELSE IF( ( RETURNX .AND. LDQRC.LT.MAX( 1, M ) ) .OR.
-     $    ( .NOT.RETURNX .AND. LDQRC.LT.1 ) ) THEN
-    
-         INFO = -22
+         ELSE IF( ( RETURNX .AND. LDQRC.LT.MAX( 1, M ) )
+     $      .OR. ( .NOT.RETURNX .AND. LDQRC.LT.1 ) ) THEN    
+            INFO = -22
 *        This is a check for LDX                   
-      ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, MAX(MSUB, NSUB) ) ) .OR.
-     $    ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN     
-         INFO = -24
+         ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, M ) )
+     $      .OR. ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN     
+            INFO = -24
+         END IF
+*         
       END IF
 *
 *     ==================================================================    
@@ -953,13 +961,18 @@
             LIWKOPT = 1
          ELSE
 *
-            IF( LSAME( USESD, 'N') ) THEN
+            IF( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) ) THEN
+*
+*              Real minimum workspace computation.
+*              a) LWKMIN = NSUB = N for column 2-norm computation
+*              b) LWKMIN = 3*NFREE+1 = 3*N-1 for the call of DGEQP3RK. 
+*              Therefore:           
 *            
-               LWKMIN = MAX( 1, 3*N + 1 )
+               LWKMIN = MAX( 1, 3*N - 1 )
 *
 *              Optimal workspace for column 2-norm computation.
 *               
-               LWKOPT = N
+               LWKOPT = MAX( 1 , N )
 *
 *              Query for optimal workspace size for DGEQP3RK.
 *
@@ -969,78 +982,161 @@
      $                        RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
      $                        WORK, -1, IWORK, IINFO )
                LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-*                  
+*
+*              Integer minimum workspace compuation. 
+*              aa) LIWKMIN =  NFREE-1  =  N-1 for the call of DGEQP3RK.
+*                         
                LIWKMIN = MAX( 1, N-1 )
-               LIWKOPT = LIWKMIN
 *
                IF( RETURNC ) THEN
-                  LIWKMIN = MAX( LIWKOPT, N )
-                  LIWKOPT = LIWKMIN
+*
+*              Integer minimum workspace compuation. 
+*              bb) LIWKMIN = N for applying the interchanges for
+*                  the columns in the matrix C.
+*                  
+                  LIWKMIN = MAX( LIWKMIN, N )
+*
                END IF
-*                                   
+               LIWKOPT = LIWKMIN
+* 
+*              Call of DGELS.
+*                                  
                IF( RETURNX ) THEN
+*
+*                 Real minimum workspace computation.
+*                 c) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
+*                           = max( 1, MINMN + N ) for the call of DGELS.
+*                 NOTE: MINMN + N  < 3*N + 1, therfore effectively,
+*                 LWKMIN = MAX( LWKMIN, MINMN + N ) = 3*N + 1
 *                     
                   LWKMIN = MAX( LWKMIN, MINMN + N ) 
 *
 *                 Query for optimal workspace size for DGELS.
 *
-                  CALL DGELS( 'N', M, N, N, QRC, LDQRC, X, LDX,
+                  KMAXLS = MINMN
+*                  
+                  CALL DGELS( 'N', M, KMAXLS, N, QRC, LDQRC, X, LDX,
      $                        WORK, -1, IINFO )
                   LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
 *                                   
                END IF
 *
-*              End IF( LSAME( USESD, 'N') )
+*              End IF( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
 *               
-            ELSE
+            ELSE            
 *
-*              Begin of ELSE( LSAME( USESD, 'N') )
-*           
-               LWKMIN = MAX( MAX( 1, NSUB ), 3*NFREE + 1 )
+*              Begin of ELSE( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
+*
+*              Real minimum workspace computation.
+*              a) LWKMIN = MAX(1, NSUB) for column 2-norm computation           
+*          
+               LWKMIN = MAX( 1, NSUB )
 *
 *              Optimal workspace for column 2-norm computation.
 *               
-               LWKOPT = NSUB
+               LWKOPT = LWKMIN
 *
-*              Query for optimal workspace size for DGEQRF.
+*              Call of DGEQRF.
+*
+               IF( NSEL.GT.0 ) THEN
 *                  
-               CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK, -1, IINFO )
-               LWKMIN = MAX( LWKMIN, NSEL )
-               LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*                 Real minimum workspace computation.
+*                 b) LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
+*                 We can skip counting this workspace as 
+*                 LWKMIN = MAX( LWKMIN, NSEL ), since NSEL <= NSUB.                  
 *
-*              Query for optimal workspace size for DGEQP3RK.
-*
-               CALL DGEQP3RK( MFREE, NFREE, 0, NFREE,
-     $                        MINUSONE, MINUSONE,
-     $                        A( 1, 1 ), LDA, KFREE, MAXC2NRMKFREE, 
-     $                        RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
-     $                        WORK, -1, IWORK, IINFO )
-               LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-*
-*              Integer workspace.
-*              N is for DGEQP3RK and N-1 for JPIV ajustment.
+*                 Query for optimal workspace size for DGEQRF.
 *                  
-               LIWKMIN = MAX( 1, N + N-1 )
-               LIWKOPT = LIWKMIN
+                  CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK,
+     $                         -1, IINFO )
+                  LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*
+*                 Call of DORMQR.
+*
+                  IF( NFREE.GT.0 ) THEN                  
+*
+*                    Real minimum workspace computation.
+*                    c) NOTE: minimum workspace requirement for DORMQR 
+*                    LWKMIN = MAX(1, NFREE) is smaller than
+*                    LWKMIN = 3*NFREE-1 for DGEQP3RK and it is
+*                    smaller than NSUB. We can skip counting this 
+*                    workspace as LWKMIN = MAX( LWKMIN, NFREE ).
+*
+*                    Query for optimal workspace size for DORMQR.
+*
+                     CALL DORMQR( 'L', 'T', MSUB, NFREE,
+     $                   NSEL, A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
+     $                   -1, IINFO )
+                     LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )                     
+                  END IF
+*
+               END IF
+*
+*              Call of DGEQP3RK.
+*
+               LIWKMIN = 1
+               IF ( MINMNFREE.NE.0 ) THEN
+*                  
+*                 Real minimum workspace computation.
+*                 d) LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.            
+*            
+                  LWKMIN = MAX( LWKMIN, 3*NFREE - 1 )
+*
+*                 Query for optimal workspace size for DGEQP3RK.
+*
+                  CALL DGEQP3RK( MFREE, NFREE, 0, NFREE,
+     $                           MINUSONE, MINUSONE,
+     $                           A( 1, 1 ), LDA, KFREE, MAXC2NRMKFREE, 
+     $                           RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
+     $                           WORK, -1, IWORK, IINFO )
+                  LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*
+*                 Integer minimum workspace compuation. 
+*                 aa) LIWKMIN =  NFREE-1 for the call of DGEQP3RK.
+*
+                  LIWKMIN = MAX( LIWKMIN, NFREE-1 )
+*
+                  IF( NSEL.NE.0 ) THEN 
+*                  
+*                    Integer minimum workspace compuation.
+*                    bb) NFREE is for DGEQP3RK and NFREE-1 for JPIV ajustment.
+*                                      
+                     LIWKMIN = MAX( LIWKMIN, NFREE + NFREE-1 )
+                  END IF
+*
+               END IF
 *
                IF( RETURNC ) THEN
-                  LIWKMIN = MAX( LIWKOPT, N )
-                  LIWKOPT = LIWKMIN
+*
+*                 Integer minimum workspace compuation. 
+*                 cc) LIWKMIN = N for applying the interchanges for
+*                 the columns in the matrix C.
+*                  
+                  LIWKMIN = MAX( LIWKMIN, N ) 
                END IF
-*                                   
+               LIWKOPT = LIWKMIN 
+*
+*              Call of DGELS.
+*                                  
                IF( RETURNX ) THEN
-*                     
-                  LWKMIN = MAX( LWKMIN, MIN(M,N) + N ) 
+*
+*                 Real minimum workspace computation.
+*                 e) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
+*                           = max( 1, MINMN + N ) for the call of DGELS.
+*                    
+                  LWKMIN = MAX( LWKMIN, MINMN + N ) 
 *
 *                 Query for optimal workspace size for DGELS.
 *
-                  CALL DGELS( 'N', M, N, N, QRC, LDQRC, X, LDX,
+                  KMAXLS = MINMN
+*                 
+                  CALL DGELS( 'N', M, KMAXLS, N, QRC, LDQRC, X, LDX,
      $                        WORK, -1, IINFO )
                   LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
 *                                   
-               END IF                                    
+               END IF                                   
 *
-*              End of ELSE( LSAME( USESD, 'N') )
+*              End of ELSE( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
 * 
             END IF
 *
@@ -1282,9 +1378,9 @@
 *
          IF( NFREE.GT.0 ) THEN
 *
-*           This is only for case (c-2).
+*           This is only for case (c-2) ('L' = Left, 'T' = Transpose)
 *     
-            CALL DORMQR( 'Left', 'Transpose', MSUB, NFREE, NSEL,
+            CALL DORMQR( 'L', 'T', MSUB, NFREE, NSEL,
      $                   A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
      $                   LWORK, IINFO )
          END IF    
@@ -1299,7 +1395,7 @@
 *      
       KFREE = 0 
 *
-      IF( MIN( MFREE, NFREE ).NE.0 ) THEN
+      IF( MINMNFREE.NE.0 ) THEN
 *
 *        Factorize NFREE free columns of
 *        A_free = A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB),
@@ -1456,9 +1552,10 @@
          INFO = IINFO
 *
       END IF
+*      
       WORK( 1 ) = DBLE( LWKOPT )
       IWORK( 1 ) = LIWKOPT 
 *
-*     DGECXX
+*     End of DGECXX
 *
       END
