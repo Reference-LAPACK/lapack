@@ -961,22 +961,68 @@
             LIWKOPT = 1
          ELSE
 *
-            IF( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) ) THEN
-*
-*              Real minimum workspace computation.
-*              a) LWKMIN = NSUB = N for column 2-norm computation
-*              b) LWKMIN = 3*NFREE+1 = 3*N-1 for the call of DGEQP3RK. 
-*              Therefore:           
-*            
-               LWKMIN = MAX( 1, 3*N - 1 )
-*
-*              Optimal workspace for column 2-norm computation.
+*           Real minimum workspace computation.
+*           a) LWKMIN = MAX(1, NSUB) for column 2-norm computation           
+*          
+            LWKMIN = MAX( 1, NSUB )
 *               
-               LWKOPT = MAX( 1 , N )
+*           aa) Initial integer minimum workspace
+*               
+            LIWKMIN = 1
+*
+*           Optimal workspace for column 2-norm computation.
+*               
+            LWKOPT = LWKMIN
+*
+*           Call of DGEQRF.
+*
+            IF( NSEL.GT.0 ) THEN
+*                  
+*              Real minimum workspace computation.
+*              b) LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
+*              We can skip counting this workspace as 
+*              LWKMIN = MAX( LWKMIN, NSEL ), since NSEL <= NSUB.                  
+*
+*              Query for optimal workspace size for DGEQRF.
+*                  
+               CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK,
+     $                         -1, IINFO )
+               LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*
+*              Call of DORMQR.
+*
+               IF( NFREE.GT.0 ) THEN                  
+*
+*                 Real minimum workspace computation.
+*                 c) NOTE: minimum workspace requirement for DORMQR 
+*                 LWKMIN = MAX(1, NFREE) is smaller than
+*                 LWKMIN = 3*NFREE-1 for DGEQP3RK and it is
+*                 smaller than NSUB. We can skip counting this 
+*                 workspace as LWKMIN = MAX( LWKMIN, NFREE ).
+*
+*                 Query for optimal workspace size for DORMQR.
+*
+                  CALL DORMQR( 'L', 'T', MSUB, NFREE,
+     $               NSEL, A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
+     $               -1, IINFO )
+                  LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )                     
+               END IF
+*
+            END IF
+*
+*           Call of DGEQP3RK.
+*
+
+            IF ( MINMNFREE.NE.0 ) THEN
+*                  
+*              Real minimum workspace computation.
+*              d) LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.            
+*            
+               LWKMIN = MAX( LWKMIN, 3*NFREE - 1 )
 *
 *              Query for optimal workspace size for DGEQP3RK.
 *
-               CALL DGEQP3RK( M, N, 0, N,
+               CALL DGEQP3RK( MFREE, NFREE, 0, NFREE,
      $                        MINUSONE, MINUSONE,
      $                        A( 1, 1 ), LDA, KFREE, MAXC2NRMKFREE, 
      $                        RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
@@ -984,161 +1030,49 @@
                LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
 *              Integer minimum workspace compuation. 
-*              aa) LIWKMIN =  NFREE-1  =  N-1 for the call of DGEQP3RK.
-*                         
-               LIWKMIN = MAX( 1, N-1 )
+*              bb) LIWKMIN =  NFREE-1 for the call of DGEQP3RK.
 *
-               IF( RETURNC ) THEN
+               LIWKMIN = MAX( LIWKMIN, NFREE-1 )
+*
+               IF( NSEL.NE.0 ) THEN 
+*                  
+*                 Integer minimum workspace compuation.
+*                 cc) NFREE is for DGEQP3RK and NFREE-1 for JPIV ajustment.
+*                                      
+                  LIWKMIN = MAX( LIWKMIN, NFREE + NFREE-1 )
+               END IF
+*
+            END IF
+*
+            IF( RETURNC ) THEN
 *
 *              Integer minimum workspace compuation. 
-*              bb) LIWKMIN = N for applying the interchanges for
-*                  the columns in the matrix C.
+*              dd) LIWKMIN = N for applying the interchanges for
+*              the columns in the matrix C.
 *                  
-                  LIWKMIN = MAX( LIWKMIN, N )
+               LIWKMIN = MAX( LIWKMIN, N ) 
+            END IF
+            LIWKOPT = LIWKMIN 
 *
-               END IF
-               LIWKOPT = LIWKMIN
-* 
-*              Call of DGELS.
+*           Call of DGELS.
 *                                  
-               IF( RETURNX ) THEN
-*
-*                 Real minimum workspace computation.
-*                 c) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
-*                           = max( 1, MINMN + N ) for the call of DGELS.
-*                 NOTE: MINMN + N  < 3*N + 1, therfore effectively,
-*                 LWKMIN = MAX( LWKMIN, MINMN + N ) = 3*N + 1
-*                     
-                  LWKMIN = MAX( LWKMIN, MINMN + N ) 
-*
-*                 Query for optimal workspace size for DGELS.
-*
-                  KMAXLS = MINMN
-*                  
-                  CALL DGELS( 'N', M, KMAXLS, N, QRC, LDQRC, X, LDX,
-     $                        WORK, -1, IINFO )
-                  LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
-*                                   
-               END IF
-*
-*              End IF( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
-*               
-            ELSE            
-*
-*              Begin of ELSE( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
+            IF( RETURNX ) THEN
 *
 *              Real minimum workspace computation.
-*              a) LWKMIN = MAX(1, NSUB) for column 2-norm computation           
-*          
-               LWKMIN = MAX( 1, NSUB )
-*
-*              Optimal workspace for column 2-norm computation.
-*               
-               LWKOPT = LWKMIN
-*
-*              Call of DGEQRF.
-*
-               IF( NSEL.GT.0 ) THEN
-*                  
-*                 Real minimum workspace computation.
-*                 b) LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
-*                 We can skip counting this workspace as 
-*                 LWKMIN = MAX( LWKMIN, NSEL ), since NSEL <= NSUB.                  
-*
-*                 Query for optimal workspace size for DGEQRF.
-*                  
-                  CALL DGEQRF( MSUB, NSEL, A, LDA, TAU, WORK,
-     $                         -1, IINFO )
-                  LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-*
-*                 Call of DORMQR.
-*
-                  IF( NFREE.GT.0 ) THEN                  
-*
-*                    Real minimum workspace computation.
-*                    c) NOTE: minimum workspace requirement for DORMQR 
-*                    LWKMIN = MAX(1, NFREE) is smaller than
-*                    LWKMIN = 3*NFREE-1 for DGEQP3RK and it is
-*                    smaller than NSUB. We can skip counting this 
-*                    workspace as LWKMIN = MAX( LWKMIN, NFREE ).
-*
-*                    Query for optimal workspace size for DORMQR.
-*
-                     CALL DORMQR( 'L', 'T', MSUB, NFREE,
-     $                   NSEL, A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
-     $                   -1, IINFO )
-                     LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )                     
-                  END IF
-*
-               END IF
-*
-*              Call of DGEQP3RK.
-*
-               LIWKMIN = 1
-               IF ( MINMNFREE.NE.0 ) THEN
-*                  
-*                 Real minimum workspace computation.
-*                 d) LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.            
-*            
-                  LWKMIN = MAX( LWKMIN, 3*NFREE - 1 )
-*
-*                 Query for optimal workspace size for DGEQP3RK.
-*
-                  CALL DGEQP3RK( MFREE, NFREE, 0, NFREE,
-     $                           MINUSONE, MINUSONE,
-     $                           A( 1, 1 ), LDA, KFREE, MAXC2NRMKFREE, 
-     $                           RELMAXC2NRMKFREE, JPIV( 1 ), TAU( 1 ),
-     $                           WORK, -1, IWORK, IINFO )
-                  LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-*
-*                 Integer minimum workspace compuation. 
-*                 aa) LIWKMIN =  NFREE-1 for the call of DGEQP3RK.
-*
-                  LIWKMIN = MAX( LIWKMIN, NFREE-1 )
-*
-                  IF( NSEL.NE.0 ) THEN 
-*                  
-*                    Integer minimum workspace compuation.
-*                    bb) NFREE is for DGEQP3RK and NFREE-1 for JPIV ajustment.
-*                                      
-                     LIWKMIN = MAX( LIWKMIN, NFREE + NFREE-1 )
-                  END IF
-*
-               END IF
-*
-               IF( RETURNC ) THEN
-*
-*                 Integer minimum workspace compuation. 
-*                 cc) LIWKMIN = N for applying the interchanges for
-*                 the columns in the matrix C.
-*                  
-                  LIWKMIN = MAX( LIWKMIN, N ) 
-               END IF
-               LIWKOPT = LIWKMIN 
-*
-*              Call of DGELS.
-*                                  
-               IF( RETURNX ) THEN
-*
-*                 Real minimum workspace computation.
-*                 e) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
-*                           = max( 1, MINMN + N ) for the call of DGELS.
+*              e) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
+*                        = max( 1, MINMN + N ) for the call of DGELS.
 *                    
-                  LWKMIN = MAX( LWKMIN, MINMN + N ) 
+               LWKMIN = MAX( LWKMIN, MINMN + N ) 
 *
-*                 Query for optimal workspace size for DGELS.
+*              Query for optimal workspace size for DGELS.
 *
-                  KMAXLS = MINMN
+               KMAXLS = MINMN
 *                 
-                  CALL DGELS( 'N', M, KMAXLS, N, QRC, LDQRC, X, LDX,
-     $                        WORK, -1, IINFO )
-                  LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
+               CALL DGELS( 'N', M, KMAXLS, N, QRC, LDQRC, X, LDX,
+     $                     WORK, -1, IINFO )
+               LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
 *                                   
-               END IF                                   
-*
-*              End of ELSE( LSAME( USESD, 'N') .OR. LSAME( USESD, 'R' ) )
-* 
-            END IF
+            END IF                                   
 *
 *           End of ELSE for IF( MINMN.EQ.0 )
 *              
