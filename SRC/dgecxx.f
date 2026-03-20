@@ -713,6 +713,21 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
+*>
+*>          Minimal LWORK workspace requirement.
+*>          LWORK >= max( 1, 3*N - 1 ) would be sufficient for all values
+*>          of FACT and USESD flags.
+*>
+*>          For good performance, LWORK should generally be larger, and
+*>          the user should query the routine for the optimal LWORK.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK and IWORK arrays,
+*>          returns these values as the first entry of the WORK and IWORK 
+*>          arrays respectively, and no error message related to LWORK
+*>          is issued by XERBLA.
+*>
+*>          Exact minimal workspcae requirements.
 *>          For USESD = 'N' or 'R' and for all FACT: 
 *>              LWORK >= max( 1, 3*N - 1 )
 *>          For USESD = 'C' or 'A':
@@ -722,15 +737,6 @@
 *>              LWORK >= max( 1, min(M,N)+N,
 *>                               min(1,MINMNFREE)*(3*N_free-1) )
 *>          where MINMNFREE = min( M_free, N_free ).
-*>          
-*>          For good performance, LWORK should generally be larger, and
-*>          the user should query the routine for the optimal LWORK.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK and IWORK arrays,
-*>          returns these values as the first entry of the WORK and IWORK 
-*>          arrays respectively, and no error message related to LWORK
-*>          is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -744,16 +750,12 @@
 *> \verbatim
 *>          LIWORK is INTEGER
 *>          The dimension of the array LIWORK.
-*>          For USESD = 'N' or 'R': 
-*>            a) If FACT = 'P': 
-*>              min LIWORK >= max( 1, N-1 )
-*>            b) If FACT = 'C' or 'X':
-*>              min LIWORK >= max( 1, N)
-*>          For USESD = 'C' or 'A':
-*>            a) If FACT = 'P':
-*>          min LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
-*>            b) If FACT = 'C' or 'X':
-*>          min LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, N )
+*>
+*>          Minimal LIWORK workspace requirement.
+*>          For USESD = 'N' or 'R': LIWORK >= max( 1, N )
+*>            for all FACT flags.
+*>          For USESD = 'C' or 'A': LIWORK >= max( 1, 2N - 1 ) 
+*>            for all FACT flags.
 *>
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
@@ -763,6 +765,18 @@
 *>          returns these values as the first entry of the WORK and IWORK 
 *>          arrays respectively, and no error message related to LIWORK
 *>          is issued by XERBLA.
+*>
+*>          Exact minimal workspcae requirements.
+*>          For USESD = 'N' or 'R':                      
+*>            a) If FACT = 'P': 
+*>              LIWORK >= max( 1, N-1 )
+*>            b) If FACT = 'C' or 'X':
+*>              LIWORK >= max( 1, N )
+*>          For USESD = 'C' or 'A':
+*>            a) If FACT = 'P':
+*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
+*>            b) If FACT = 'C' or 'X':
+*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, N )
 *> \endverbatim
 *>
 *> \param[out] INFO
