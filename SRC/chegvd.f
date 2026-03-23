@@ -319,7 +319,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 ) = SROUNDUP_LWORK(LOPT)
-         RWORK( 1 ) = REAL( LROPT )
+         RWORK( 1 ) = SROUNDUP_LWORK(LROPT)
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -357,9 +357,9 @@
       CALL CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
      $             LRWORK,
      $             IWORK, LIWORK, INFO )
-      LOPT = INT( MAX( REAL( LOPT ), REAL( WORK( 1 ) ) ) )
-      LROPT = INT( MAX( REAL( LROPT ), REAL( RWORK( 1 ) ) ) )
-      LIOPT = INT( MAX( REAL( LIOPT ), REAL( IWORK( 1 ) ) ) )
+      LOPT = MAX( LOPT, INT( REAL( WORK( 1 ) ) ) )
+      LROPT = MAX( LROPT, INT( RWORK( 1 ) ) )
+      LIOPT = MAX( LIOPT, IWORK( 1 ) )
 *
       IF( WANTZ .AND. INFO.EQ.0 ) THEN
 *
@@ -396,7 +396,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LOPT)
-      RWORK( 1 ) = REAL( LROPT )
+      RWORK( 1 ) = SROUNDUP_LWORK(LROPT)
       IWORK( 1 ) = LIOPT
 *
       RETURN

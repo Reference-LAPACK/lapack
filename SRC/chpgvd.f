@@ -295,7 +295,7 @@
          END IF
 *
          WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = SROUNDUP_LWORK(LRWMIN)
          IWORK( 1 ) = LIWMIN
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11
@@ -331,9 +331,9 @@
       CALL CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
       CALL CHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, RWORK,
      $             LRWORK, IWORK, LIWORK, INFO )
-      LWMIN = INT( MAX( REAL( LWMIN ), REAL( WORK( 1 ) ) ) )
-      LRWMIN = INT( MAX( REAL( LRWMIN ), REAL( RWORK( 1 ) ) ) )
-      LIWMIN = INT( MAX( REAL( LIWMIN ), REAL( IWORK( 1 ) ) ) )
+      LWMIN = MAX( LWMIN, INT( REAL( WORK( 1 ) ) ) )
+      LRWMIN = MAX( LRWMIN, INT( RWORK( 1 ) ) )
+      LIWMIN = MAX( LIWMIN, IWORK( 1 ) )
 *
       IF( WANTZ ) THEN
 *
@@ -377,7 +377,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-      RWORK( 1 ) = REAL( LRWMIN )
+      RWORK( 1 ) = SROUNDUP_LWORK(LRWMIN)
       IWORK( 1 ) = LIWMIN
       RETURN
 *
