@@ -355,8 +355,8 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP, KBOUND, MINMNFACT,
-     $                   MINMNUPDT
+      INTEGER            I, ITEMP, J, JMAXC2NRM, KK, KP,
+     $                   KBOUND, MINMNFACT, MINMNUPDT
       REAL               HUGEVAL, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
