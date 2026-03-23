@@ -246,7 +246,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      DOUBLE PRECISION   DROUNDUP_LWORK
+      EXTERNAL           LSAME, DROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZHPEVD, ZHPGST, ZPPTRF, ZTPMV,
@@ -293,8 +294,8 @@
             END IF
          END IF
 *
-         WORK( 1 ) = LWMIN
-         RWORK( 1 ) = REAL( LRWMIN )
+         WORK( 1 ) = DROUNDUP_LWORK(LWMIN)
+         RWORK( 1 ) = DROUNDUP_LWORK(LRWMIN)
          IWORK( 1 ) = LIWMIN
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11
@@ -330,9 +331,9 @@
       CALL ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
       CALL ZHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, RWORK,
      $             LRWORK, IWORK, LIWORK, INFO )
-      LWMIN = INT( MAX( DBLE( LWMIN ), DBLE( WORK( 1 ) ) ) )
-      LRWMIN = INT( MAX( DBLE( LRWMIN ), DBLE( RWORK( 1 ) ) ) )
-      LIWMIN = INT( MAX( DBLE( LIWMIN ), DBLE( IWORK( 1 ) ) ) )
+      LWMIN = MAX( LWMIN, INT( DBLE( WORK( 1 ) ) ) )
+      LRWMIN = MAX( LRWMIN, INT( RWORK( 1 ) ) )
+      LIWMIN = MAX( LIWMIN, IWORK( 1 ) )
 *
       IF( WANTZ ) THEN
 *
@@ -375,8 +376,8 @@
          END IF
       END IF
 *
-      WORK( 1 ) = LWMIN
-      RWORK( 1 ) = REAL( LRWMIN )
+      WORK( 1 ) = DROUNDUP_LWORK(LWMIN)
+      RWORK( 1 ) = DROUNDUP_LWORK(LRWMIN)
       IWORK( 1 ) = LIWMIN
       RETURN
 *
