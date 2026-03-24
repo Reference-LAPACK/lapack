@@ -1009,7 +1009,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   CALL ZHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1055,7 +1055,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
                   VU = ANORM
                   CALL ZHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1099,7 +1099,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   CALL ZHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
