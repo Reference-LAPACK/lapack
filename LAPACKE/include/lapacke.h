@@ -3326,6 +3326,15 @@ lapack_int LAPACKE_zpttrs( int matrix_layout, char uplo, lapack_int n,
                            const lapack_complex_double* e,
                            lapack_complex_double* b, lapack_int ldb );
 
+lapack_int LAPACKE_crot( lapack_int n,
+                         lapack_complex_float* cx, lapack_int incx,
+                         lapack_complex_float* cy, lapack_int incy,
+                         float c, lapack_complex_float s );
+lapack_int LAPACKE_zrot( lapack_int n,
+                         lapack_complex_double* cx, lapack_int incx,
+                         lapack_complex_double* cy, lapack_int incy,
+                         double c, lapack_complex_double s );
+
 lapack_int LAPACKE_ssbev( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int kd, float* ab, lapack_int ldab, float* w,
                           float* z, lapack_int ldz );
@@ -8883,6 +8892,15 @@ lapack_int LAPACKE_zpttrs_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int nrhs, const double* d,
                                 const lapack_complex_double* e,
                                 lapack_complex_double* b, lapack_int ldb );
+
+lapack_int LAPACKE_crot_work( lapack_int n,
+                              lapack_complex_float* cx, lapack_int incx,
+                              lapack_complex_float* cy, lapack_int incy,
+                              float c, lapack_complex_float s );
+lapack_int LAPACKE_zrot_work( lapack_int n,
+                              lapack_complex_double* cx, lapack_int incx,
+                              lapack_complex_double* cy, lapack_int incy,
+                              double c, lapack_complex_double s );
 
 lapack_int LAPACKE_ssbev_work( int matrix_layout, char jobz, char uplo,
                                lapack_int n, lapack_int kd, float* ab,
