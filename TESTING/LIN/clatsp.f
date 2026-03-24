@@ -15,7 +15,7 @@
 *       INTEGER            N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX            X( * )
 *       ..
 *
@@ -92,7 +92,7 @@
       INTEGER            N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX            X( * )
 *     ..
 *

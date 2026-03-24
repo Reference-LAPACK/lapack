@@ -14981,6 +14981,22 @@ void LAPACK_zpttrs_base(
     #define LAPACK_zpttrs(...) LAPACK_zpttrs_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_crot LAPACK_GLOBAL_SUFFIX(crot,CROT)
+void LAPACK_crot(
+    lapack_int const* n,
+    lapack_complex_float* CX, lapack_int const* incx,
+    lapack_complex_float* CY, lapack_int const* incy,
+    float const* c,
+    lapack_complex_float const* s );
+
+#define LAPACK_zrot LAPACK_GLOBAL_SUFFIX(zrot,ZROT)
+void LAPACK_zrot(
+    lapack_int const* n,
+    lapack_complex_double* CX, lapack_int const* incx,
+    lapack_complex_double* CY, lapack_int const* incy,
+    double const* c,
+    lapack_complex_double const* s );
+
 #define LAPACK_dsbev_base LAPACK_GLOBAL_SUFFIX(dsbev,DSBEV)
 void LAPACK_dsbev_base(
     char const* jobz, char const* uplo,

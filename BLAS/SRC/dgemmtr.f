@@ -426,6 +426,6 @@
 *
       RETURN
 *
-*     End of SGEMM
+*     End of DGEMMTR
 *
       END
