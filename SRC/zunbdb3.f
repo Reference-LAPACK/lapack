@@ -284,6 +284,7 @@
      $                  S )
          END IF
 *
+         CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          CALL ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = DBLE( X21(I,I) )
          CALL ZLARF1F( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
