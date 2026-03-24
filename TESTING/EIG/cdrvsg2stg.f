@@ -1009,7 +1009,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   CALL CHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1055,7 +1055,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
                   VU = ANORM
                   CALL CHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1099,7 +1099,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   CALL CHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         RWORK, IWORK( N+1 ), IWORK, INFO )
+     $                         RWORK, IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
