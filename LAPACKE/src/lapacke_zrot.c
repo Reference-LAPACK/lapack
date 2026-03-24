@@ -46,6 +46,12 @@ lapack_int API_SUFFIX(LAPACKE_zrot)( lapack_int n,
         if( API_SUFFIX(LAPACKE_z_nancheck)( n, cy, incy ) ) {
             return -4;
         }
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, c, 1 ) ) {
+            return -6;
+        }
+        if( API_SUFFIX(LAPACKE_z_nancheck)( 1, s, 1 ) ) {
+            return -7;
+        }
     }
 #endif
     return API_SUFFIX(LAPACKE_zrot_work)( n, cx, incx, cy, incy, c, s );
