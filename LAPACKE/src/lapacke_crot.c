@@ -46,10 +46,10 @@ lapack_int API_SUFFIX(LAPACKE_crot)( lapack_int n,
         if( API_SUFFIX(LAPACKE_c_nancheck)( n, cy, incy ) ) {
             return -4;
         }
-        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, c, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &c, 1 ) ) {
             return -6;
         }
-        if( API_SUFFIX(LAPACKE_c_nancheck)( 1, s, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( 1, &s, 1 ) ) {
             return -7;
         }
     }
