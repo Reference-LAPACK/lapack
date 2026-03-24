@@ -259,7 +259,6 @@
       LQUERY = ( LIWORK.EQ.-1 .OR. LDSWORK.EQ.-1 )
       IWORK( 1 ) = NBA + NBB + 2
       IF( LQUERY ) THEN
-         LDSWORK = 2
          SWORK( 1, 1 ) = REAL( MAX( NBA, NBB ) )
          SWORK( 2, 1 ) = REAL( 2 * NBB + NBA )
       END IF
