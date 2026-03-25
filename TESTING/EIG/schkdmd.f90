@@ -42,9 +42,9 @@
 !     work space query. (At least in our Windows 10 MSVS 2019.)
 !     The problem can be mitigated by downloading the source
 !     code of xGESVDQ from the LAPACK repository and use it
-!     localy instead of the one in the MKL. This seems to
+!     locally instead of the one in the MKL. This seems to
 !     indicate that the problem is indeed in the MKL.
-!     This problem did not appear whith Intel MKL 2022.2.0.
+!     This problem did not appear with Intel MKL 2022.2.0.
 !
 !     NOTE:
 !     xGESDD seems to have a problem with workspace. In some
@@ -53,7 +53,7 @@
 !     code. As a precaution, all optimal workspaces are
 !     set as MAX(minimal, optimal).
 !     Latest implementations of complex xGESDD have different
-!     length of the real worksapce. We use max value over
+!     length of the real workspace. We use max value over
 !     two versions.
 !............................................................
 !............................................................
@@ -224,7 +224,7 @@
 !.............
 
       DO K_TRAJ = 1, 2
-      !  Number of intial conditions in the simulation/trajectories (1 or 2)
+      !  Number of initial conditions in the simulation/trajectories (1 or 2)
 
       COND = 1.0D8
       DMAX = 1.0D2
@@ -269,7 +269,7 @@
       ANORM = SLANGE( 'F', N, N, A, M, WDUMMY )
 
       IF ( K_TRAJ == 2 ) THEN
-          ! generate data with two inital conditions
+          ! generate data with two initial conditions
       CALL SLARNV(2, ISEED, M, F1(1,1) )
       F1(1:M,1) = 1.0E-10*F1(1:M,1)
       DO i = 1, N/2
@@ -383,9 +383,9 @@
        !...... SGEDMD check point
        IF ( LSAME(JOBZ,'V')  ) THEN
           ! Check that Z = X*W, on return from SGEDMD
-          ! This checks that the returned aigenvectors in Z are
+          ! This checks that the returned eigenvectors in Z are
           ! the product of the SVD'POD basis returned in X
-          ! and the eigenvectors of the rayleigh quotient
+          ! and the eigenvectors of the Rayleigh quotient
           ! returned in W
           CALL SGEMM( 'N', 'N', M, K, K, ONE, X, LDX, W, LDW, &
                       ZERO, Z1, LDZ )
@@ -473,7 +473,7 @@
           CALL SGEMM( 'N', 'N', M, K, M, ONE, A, LDA, Z, LDZ, ZERO, Y1, M )
           ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
           ! of the invariant subspaces that correspond to complex conjugate
-          ! pairs of eigencalues. (See the description of Z in SGEDMD,)
+          ! pairs of eigenvalues. (See the description of Z in SGEDMD,)
           i = 1
           DO WHILE ( i <= K )
             IF ( IEIG(i) == ZERO ) THEN
@@ -596,7 +596,7 @@
               CALL SGEMM( 'N', 'N', M, KQ, M, ONE, A, M, Z, M, ZERO, Y1, M )
               ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
               ! of the invariant subspaces that correspond to complex conjugate
-              ! pairs of eigencalues. (See the description of Z in SGEDMDQ)
+              ! pairs of eigenvalues. (See the description of Z in SGEDMDQ)
               i = 1
               DO WHILE ( i <= KQ )
                 IF ( IEIGQ(i) == ZERO ) THEN
@@ -725,9 +725,9 @@
       END IF
 
       IF ( NFAIL_REZ == 0 ) THEN
-          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+          WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZ, 'time(s)'
+          WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZ, 'time(s)'
           WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZ
           WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
           NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
@@ -769,9 +769,9 @@
       END IF
 
       IF ( NFAIL_REZQ == 0 ) THEN
-          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+          WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
+          WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZQ, 'time(s)'
           WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
           WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
           NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ

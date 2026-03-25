@@ -198,7 +198,7 @@
 !.............
 
       DO K_TRAJ = 1, 2
-      !  Number of intial conditions in the simulation/trajectories (1 or 2)
+      !  Number of initial conditions in the simulation/trajectories (1 or 2)
 
       COND = 1.0D4
       ZMAX = (1.0D1,1.0D1)
@@ -247,7 +247,7 @@
 
       IF ( K_TRAJ == 2 ) THEN
           ! generate data as two trajectories
-          ! with two inital conditions
+          ! with two initial conditions
           CALL ZLARNV(2, ISEED, M, ZF(1,1) )
           DO i = 1, N/2
              CALL ZGEMV( 'N', M, M, ZONE, ZA, LDA, ZF(1,i), 1,  &
@@ -385,7 +385,7 @@
           ! Check that Z = X*W, on return from ZGEDMD
           ! This checks that the returned eigenvectors in Z are
           ! the product of the SVD'POD basis returned in X
-          ! and the eigenvectors of the rayleigh quotient
+          ! and the eigenvectors of the Rayleigh quotient
           ! returned in W
           CALL ZGEMM( 'N', 'N', M, K, K, ZONE, ZX, LDX, ZW, LDW, &
                       ZZERO, ZZ1, LDZ )
@@ -462,7 +462,7 @@
           CALL ZGEMM( 'N', 'N', M, K, M, ZONE, ZA, LDA, ZZ, LDZ, ZZERO, ZY1, LDY )
           ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
           ! of the invariant subspaces that correspond to complex conjugate
-          ! pairs of eigencalues. (See the description of Z in ZGEDMD,)
+          ! pairs of eigenvalues. (See the description of Z in ZGEDMD,)
 
           DO i=1, K
                 ! have a real eigenvalue with real eigenvector
@@ -582,7 +582,7 @@
           CALL ZGEMM( 'N', 'N', M, KQ, M, ZONE, ZA, LDA, ZZ, LDZ, ZZERO, ZY1, LDY )
           ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
           ! of the invariant subspaces that correspond to complex conjugate
-          ! pairs of eigencalues. (See the description of Z in ZGEDMDQ)
+          ! pairs of eigenvalues. (See the description of Z in ZGEDMDQ)
 
           DO i=1, KQ
                 ! have a real eigenvalue with real eigenvector
@@ -678,9 +678,9 @@
       END IF
 
       IF ( NFAIL_REZ == 0 ) THEN
-        WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+        WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-        WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZ, 'time(s)'
+        WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZ, 'time(s)'
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZ
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
@@ -722,9 +722,9 @@
       END IF
 
       IF ( NFAIL_REZQ == 0 ) THEN
-          WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+          WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-          WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
+          WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZQ, 'time(s)'
           WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
           WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
           NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
