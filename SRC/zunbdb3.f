@@ -214,10 +214,6 @@
 *
 *  ====================================================================
 *
-*     .. Parameters ..
-      COMPLEX*16         ONE
-      PARAMETER          ( ONE = (1.0D0,0.0D0) )
-*     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
