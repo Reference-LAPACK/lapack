@@ -296,7 +296,7 @@
             LIWMIN = 3 + 5*N
          END IF
          WORK( 1 ) = LWMIN
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -472,7 +472,7 @@
 *
    70 CONTINUE
       WORK( 1 ) = LWMIN
-      RWORK( 1 ) = REAL( LRWMIN )
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

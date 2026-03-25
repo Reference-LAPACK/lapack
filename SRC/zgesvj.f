@@ -474,7 +474,7 @@
          RETURN
       ELSE IF( LQUERY ) THEN
          CWORK( 1 ) = LWMIN
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = DBLE( LRWMIN )
          RETURN
       END IF
 *

@@ -177,6 +177,9 @@ add_lapack_test(zlse.out lse.in xeigtstz)
 #
 # ======== COMPLEX16 DMD EIG TESTS ===========================
 add_lapack_test(zdmd.out zdmd.in xdmdeigtstz)
+#
+# ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
+add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
 endif()
 
 

@@ -284,7 +284,7 @@
             LIOPT = LIWMIN
          END IF
          WORK( 1 ) = LOPT
-         RWORK( 1 ) = REAL( LROPT )
+         RWORK( 1 ) = DBLE( LROPT )
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -380,7 +380,7 @@
       END IF
 *
       WORK( 1 ) = LOPT
-      RWORK( 1 ) = REAL( LROPT )
+      RWORK( 1 ) = DBLE( LROPT )
       IWORK( 1 ) = LIOPT
 *
       RETURN
