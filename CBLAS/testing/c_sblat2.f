@@ -2418,7 +2418,7 @@
    80                      CONTINUE
                         END IF
                         IF( .NOT.SKEWFULL.OR.UPPER )THEN
-                        JA = 1
+                           JA = 1
                         ELSE
                            JA = 2
                         END IF

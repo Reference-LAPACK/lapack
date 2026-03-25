@@ -2019,8 +2019,8 @@
 *                          Check the result column by column.
 *
                            IF( .NOT.SKEWFULL.OR.UPPER )THEN
-                           JJAB = 1
-                           JC = 1
+                              JJAB = 1
+                              JC = 1
                            ELSE
                               JJAB = 1 + 2*NMAX
                               JC = 2
