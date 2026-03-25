@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAEIN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaein.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaein.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -167,8 +165,10 @@
 *> \ingroup laein
 *
 *  =====================================================================
-      SUBROUTINE SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+      SUBROUTINE SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI,
+     $                   B,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -332,7 +332,8 @@
 *             or U**T*x = scale*v for a left eigenvector,
 *           overwriting x on v.
 *
-            CALL SLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB,
+            CALL SLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B,
+     $                   LDB,
      $                   VR, SCALE, WORK, IERR )
             NORMIN = 'Y'
 *
@@ -378,7 +379,8 @@
 *
 *           Scale supplied initial vector.
 *
-            NORM = SLAPY2( SNRM2( N, VR, 1 ), SNRM2( N, VI, 1 ) )
+            NORM = SLAPY2( SNRM2( N, VR, 1 ),
+     $                     SNRM2( N, VI, 1 ) )
             REC = ( EPS3*ROOTN ) / MAX( NORM, NRMSML )
             CALL SSCAL( N, REC, VR, 1 )
             CALL SSCAL( N, REC, VI, 1 )
@@ -569,7 +571,8 @@
 *
 *                 Divide by diagonal element of B.
 *
-                  CALL SLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I ),
+                  CALL SLADIV( XR, XI, B( I, I ), B( I+1, I ),
+     $                         VR( I ),
      $                         VI( I ) )
                   VMAX = MAX( ABS( VR( I ) )+ABS( VI( I ) ), VMAX )
                   VCRIT = BIGNUM / VMAX

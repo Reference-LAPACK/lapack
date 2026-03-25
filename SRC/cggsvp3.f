@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGGSVP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -311,7 +309,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQP3, CGEQR2, CGERQ2, CLACPY, CLAPMT,
+      EXTERNAL           CGEQP3, CGEQR2, CGERQ2, CLACPY,
+     $                   CLAPMT,
      $                   CLASET, CUNG2R, CUNM2R, CUNMR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,7 +359,8 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CGEQP3( P, N, B, LDB, IWORK, TAU, WORK, -1, RWORK, INFO )
+         CALL CGEQP3( P, N, B, LDB, IWORK, TAU, WORK, -1, RWORK,
+     $                INFO )
          LWKOPT = INT( WORK ( 1 ) )
          IF( WANTV ) THEN
             LWKOPT = MAX( LWKOPT, P )
@@ -370,7 +370,8 @@
          IF( WANTQ ) THEN
             LWKOPT = MAX( LWKOPT, N )
          END IF
-         CALL CGEQP3( M, N, A, LDA, IWORK, TAU, WORK, -1, RWORK, INFO )
+         CALL CGEQP3( M, N, A, LDA, IWORK, TAU, WORK, -1, RWORK,
+     $                INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK ( 1 ) ) )
          LWKOPT = MAX( 1, LWKOPT )
          WORK( 1 ) = CMPLX( LWKOPT )
@@ -390,7 +391,8 @@
       DO 10 I = 1, N
          IWORK( I ) = 0
    10 CONTINUE
-      CALL CGEQP3( P, N, B, LDB, IWORK, TAU, WORK, LWORK, RWORK, INFO )
+      CALL CGEQP3( P, N, B, LDB, IWORK, TAU, WORK, LWORK, RWORK,
+     $             INFO )
 *
 *     Update A := A*P
 *
@@ -423,7 +425,8 @@
    30    CONTINUE
    40 CONTINUE
       IF( P.GT.L )
-     $   CALL CLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ), LDB )
+     $   CALL CLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ),
+     $                LDB )
 *
       IF( WANTQ ) THEN
 *
@@ -441,7 +444,8 @@
 *
 *        Update A := A*Z**H
 *
-         CALL CUNMR2( 'Right', 'Conjugate transpose', M, N, L, B, LDB,
+         CALL CUNMR2( 'Right', 'Conjugate transpose', M, N, L, B,
+     $                LDB,
      $                TAU, A, LDA, WORK, INFO )
          IF( WANTQ ) THEN
 *
@@ -486,7 +490,8 @@
 *
 *     Update A12 := U**H*A12, where A12 = A( 1:M, N-L+1:N )
 *
-      CALL CUNM2R( 'Left', 'Conjugate transpose', M, L, MIN( M, N-L ),
+      CALL CUNM2R( 'Left', 'Conjugate transpose', M, L, MIN( M,
+     $             N-L ),
      $             A, LDA, TAU, A( 1, N-L+1 ), LDA, WORK, INFO )
 *
       IF( WANTU ) THEN
@@ -495,7 +500,8 @@
 *
          CALL CLASET( 'Full', M, M, CZERO, CZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL CLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
+     $      CALL CLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2,
+     $                   1 ),
      $                   LDU )
          CALL CUNG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
@@ -516,7 +522,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL CLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ), LDA )
+     $   CALL CLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -528,7 +535,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**H
 *
-            CALL CUNMR2( 'Right', 'Conjugate transpose', N, N-L, K, A,
+            CALL CUNMR2( 'Right', 'Conjugate transpose', N, N-L, K,
+     $                   A,
      $                   LDA, TAU, Q, LDQ, WORK, INFO )
          END IF
 *
@@ -553,7 +561,8 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL CUNM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
+            CALL CUNM2R( 'Right', 'No transpose', M, M-K, MIN( M-K,
+     $                   L ),
      $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
      $                   WORK, INFO )
          END IF

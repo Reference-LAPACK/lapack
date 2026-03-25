@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEHD2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgehd2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgehd2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -146,6 +144,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,10 +165,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFG
+      EXTERNAL           XERBLA, ZLARF1F, ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -197,21 +195,19 @@
 *
 *        Compute elementary reflector H(i) to annihilate A(i+2:ihi,i)
 *
-         ALPHA = A( I+1, I )
-         CALL ZLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU( I ) )
-         A( I+1, I ) = ONE
+         CALL ZLARFG( IHI-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
+     $                TAU( I ) )
 *
 *        Apply H(i) to A(1:ihi,i+1:ihi) from the right
 *
-         CALL ZLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
-     $               A( 1, I+1 ), LDA, WORK )
+         CALL ZLARF1F( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
+     $                 A( 1, I+1 ), LDA, WORK )
 *
 *        Apply H(i)**H to A(i+1:ihi,i+1:n) from the left
 *
-         CALL ZLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1,
-     $               DCONJG( TAU( I ) ), A( I+1, I+1 ), LDA, WORK )
+         CALL ZLARF1F( 'Left', IHI-I, N-I, A( I+1, I ), 1,
+     $                 CONJG( TAU( I ) ), A( I+1, I+1 ), LDA, WORK )
 *
-         A( I+1, I ) = ALPHA
    10 CONTINUE
 *
       RETURN

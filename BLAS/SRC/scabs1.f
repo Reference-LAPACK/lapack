@@ -43,6 +43,7 @@
 *
 *  =====================================================================
       REAL FUNCTION SCABS1(Z)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

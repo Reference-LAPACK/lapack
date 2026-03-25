@@ -1,7 +1,7 @@
 *> \brief \b DLARMM
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
 *
 *      DOUBLE PRECISION FUNCTION DLARMM( ANORM, BNORM, CNORM )
 *

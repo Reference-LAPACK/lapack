@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLATRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -195,6 +193,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -248,7 +247,8 @@
 *
                CALL DGEMV( 'No transpose', I, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, W( I, IW+1 ), LDW, ONE, A( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 ),
+               CALL DGEMV( 'No transpose', I, N-I, -ONE, W( 1,
+     $                     IW+1 ),
      $                     LDW, A( I, I+1 ), LDA, ONE, A( 1, I ), 1 )
             END IF
             IF( I.GT.1 ) THEN
@@ -256,7 +256,8 @@
 *              Generate elementary reflector H(i) to annihilate
 *              A(1:i-2,i)
 *
-               CALL DLARFG( I-1, A( I-1, I ), A( 1, I ), 1, TAU( I-1 ) )
+               CALL DLARFG( I-1, A( I-1, I ), A( 1, I ), 1,
+     $                      TAU( I-1 ) )
                E( I-1 ) = A( I-1, I )
                A( I-1, I ) = ONE
 *
@@ -265,12 +266,14 @@
                CALL DSYMV( 'Upper', I-1, ONE, A, LDA, A( 1, I ), 1,
      $                     ZERO, W( 1, IW ), 1 )
                IF( I.LT.N ) THEN
-                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, W( 1, IW+1 ),
+                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, W( 1,
+     $                        IW+1 ),
      $                        LDW, A( 1, I ), 1, ZERO, W( I+1, IW ), 1 )
                   CALL DGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        A( 1, I+1 ), LDA, W( I+1, IW ), 1, ONE,
      $                        W( 1, IW ), 1 )
-                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, A( 1, I+1 ),
+                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, A( 1,
+     $                        I+1 ),
      $                        LDA, A( 1, I ), 1, ZERO, W( I+1, IW ), 1 )
                   CALL DGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        W( 1, IW+1 ), LDW, W( I+1, IW ), 1, ONE,
@@ -300,7 +303,8 @@
 *              Generate elementary reflector H(i) to annihilate
 *              A(i+2:n,i)
 *
-               CALL DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
+               CALL DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ),
+     $                      1,
      $                      TAU( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
@@ -309,18 +313,23 @@
 *
                CALL DSYMV( 'Lower', N-I, ONE, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, W( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', N-I, I-1, ONE, W( I+1, 1 ), LDW,
+               CALL DGEMV( 'Transpose', N-I, I-1, ONE, W( I+1, 1 ),
+     $                     LDW,
      $                     A( I+1, I ), 1, ZERO, W( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 ),
+               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1,
+     $                     1 ),
      $                     LDA, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), LDA,
+               CALL DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ),
+     $                     LDA,
      $                     A( I+1, I ), 1, ZERO, W( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 ),
+               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1,
+     $                     1 ),
      $                     LDW, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
                CALL DSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
                ALPHA = -HALF*TAU( I )*DDOT( N-I, W( I+1, I ), 1,
      $                 A( I+1, I ), 1 )
-               CALL DAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1 )
+               CALL DAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ),
+     $                     1 )
             END IF
 *
    20    CONTINUE

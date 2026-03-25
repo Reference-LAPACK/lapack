@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dpprfs( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dpprfs)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, const double* ap, const double* afp,
                            const double* b, lapack_int ldb, double* x,
                            lapack_int ldx, double* ferr, double* berr )
@@ -41,22 +41,22 @@ lapack_int LAPACKE_dpprfs( int matrix_layout, char uplo, lapack_int n,
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dpprfs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpprfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dpp_nancheck( n, afp ) ) {
+        if( API_SUFFIX(LAPACKE_dpp_nancheck)( n, afp ) ) {
             return -6;
         }
-        if( LAPACKE_dpp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_dpp_nancheck)( n, ap ) ) {
             return -5;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -7;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
             return -9;
         }
     }
@@ -73,7 +73,7 @@ lapack_int LAPACKE_dpprfs( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dpprfs_work( matrix_layout, uplo, n, nrhs, ap, afp, b, ldb, x,
+    info = API_SUFFIX(LAPACKE_dpprfs_work)( matrix_layout, uplo, n, nrhs, ap, afp, b, ldb, x,
                                 ldx, ferr, berr, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -81,7 +81,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dpprfs", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpprfs", info );
     }
     return info;
 }

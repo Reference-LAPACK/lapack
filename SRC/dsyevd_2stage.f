@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYEVD_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyevd_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevd_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -216,7 +214,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE DSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                          IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -256,7 +255,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC, DSTERF,
+      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC,
+     $                   DSTERF,
      $                   DSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

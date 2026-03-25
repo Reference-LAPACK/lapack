@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPFTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -208,6 +206,7 @@
 *
 *  =====================================================================
       SUBROUTINE CPFTRF( TRANSR, UPLO, N, A, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -304,7 +303,8 @@
                CALL CPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ), N,
+               CALL CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ),
+     $                     N,
      $                     A( N1 ), N )
                CALL CHERK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
      $                     A( N ), N )
@@ -321,7 +321,8 @@
                CALL CPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ), N,
+               CALL CTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL CHERK( 'U', 'C', N2, N1, -ONE, A( 0 ), N, ONE,
      $                     A( N1 ), N )
@@ -344,9 +345,11 @@
                CALL CPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ), N1,
+               CALL CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
-               CALL CHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
+               CALL CHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 1 ), N1 )
                CALL CPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
@@ -361,7 +364,8 @@
                CALL CPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE, A( N2*N2 ),
+               CALL CTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE,
+     $                     A( N2*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL CHERK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
      $                     A( N1*N2 ), N2 )
@@ -390,7 +394,8 @@
                CALL CPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ), N+1,
+               CALL CTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL CHERK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
      $                     A( 0 ), N+1 )
@@ -430,9 +435,11 @@
                CALL CPOTRF( 'U', K, A( 0+K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ), N1,
+               CALL CTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ),
+     $                     N1,
      $                     A( K*( K+1 ) ), K )
-               CALL CHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
+               CALL CHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( 0 ), K )
                CALL CPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )

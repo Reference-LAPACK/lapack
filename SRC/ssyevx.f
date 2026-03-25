@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -232,8 +230,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     SSTEIN; their indices are stored in IFAIL.
+*>                > N: SSTEBZ returned INFO = INFO - N;
+*>                     see SSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -247,9 +248,11 @@
 *> \ingroup heevx
 *
 *  =====================================================================
-      SUBROUTINE SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, LWORK, IWORK,
      $                   IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -286,10 +289,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   SLANSY, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL, SSTEBZ,
+      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL,
+     $                   SSTEBZ,
      $                   SSTEIN, SSTEQR, SSTERF, SSWAP, SSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -342,7 +347,8 @@
          ELSE
             LWKMIN = 8*N
             NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
-            NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1, -1 ) )
+            NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1,
+     $                -1 ) )
             LWKOPT = MAX( LWKMIN, ( NB + 3 )*N )
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
@@ -482,19 +488,27 @@
       CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
-     $             IWORK( INDIWO ), INFO )
+     $             IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 40
+      END IF
 *
       IF( WANTZ ) THEN
          CALL SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
-     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
+     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by SSTEIN.
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

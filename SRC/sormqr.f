@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORMQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -165,6 +163,7 @@
 *  =====================================================================
       SUBROUTINE SORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -243,7 +242,8 @@
 *
 *        Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'SORMQR', SIDE // TRANS, M, N, K,
+         NB = MIN( NBMAX, ILAENV( 1, 'SORMQR', SIDE // TRANS, M, N,
+     $             K,
      $        -1 ) )
          LWKOPT = NW*NB + TSIZE
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
@@ -268,7 +268,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.LWKOPT ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'SORMQR', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'SORMQR', SIDE // TRANS, M, N,
+     $                   K,
      $              -1 ) )
          END IF
       END IF
@@ -277,7 +278,8 @@
 *
 *        Use unblocked code
 *
-         CALL SORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK,
+         CALL SORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+     $                WORK,
      $                IINFO )
       ELSE
 *
@@ -309,7 +311,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL SLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I, I ),
+            CALL SLARFT( 'Forward', 'Columnwise', NQ-I+1, IB, A( I,
+     $                   I ),
      $                   LDA, TAU( I ), WORK( IWT ), LDT )
             IF( LEFT ) THEN
 *
@@ -327,7 +330,8 @@
 *
 *           Apply H or H**T
 *
-            CALL SLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI, NI,
+            CALL SLARFB( SIDE, TRANS, 'Forward', 'Columnwise', MI,
+     $                   NI,
      $                   IB, A( I, I ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE

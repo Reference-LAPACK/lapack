@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLAED2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -75,7 +73,7 @@
 *>         On entry, D contains the eigenvalues of the two submatrices to
 *>         be combined.
 *>         On exit, D contains the trailing (N-K) updated eigenvalues
-*>         (those which were deflated) sorted into increasing order.
+*>         (those which were deflated) sorted into decreasing order.
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -207,8 +205,10 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE DLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA, W,
+      SUBROUTINE DLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA,
+     $                   W,
      $                   Q2, INDX, INDXC, INDXP, COLTYP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -246,7 +246,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DLAMRG, DROT, DSCAL, XERBLA
+      EXTERNAL           DCOPY, DLACPY, DLAMRG, DROT, DSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT

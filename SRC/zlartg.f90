@@ -116,6 +116,7 @@ subroutine ZLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>dp, zero=>dzero, one=>done, two=>dtwo, czero=>zzero, &
          safmin=>dsafmin, safmax=>dsafmax
+   implicit none
 !
 !  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgesvj( int matrix_layout, char joba, char jobu, char jobv,
+lapack_int API_SUFFIX(LAPACKE_cgesvj)( int matrix_layout, char joba, char jobu, char jobv,
                            lapack_int m, lapack_int n,
                            lapack_complex_float * a, lapack_int lda,
                            float* sva, lapack_int mv,
@@ -46,19 +46,19 @@ lapack_int LAPACKE_cgesvj( int matrix_layout, char joba, char jobu, char jobv,
     lapack_int i;
     lapack_int nrows_v;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_cgesvj", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvj", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        nrows_v = LAPACKE_lsame( jobv, 'v' ) ? MAX(0,n) :
-                ( LAPACKE_lsame( jobv, 'a' ) ? MAX(0,mv) : 0);
-        if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        nrows_v = API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ? MAX(0,n) :
+                ( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) ? MAX(0,mv) : 0);
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -7;
         }
-        if( LAPACKE_lsame( jobv, 'a' ) || LAPACKE_lsame( jobv, 'v' ) ) {
-            if( LAPACKE_cge_nancheck( matrix_layout, nrows_v, n, v, ldv ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, nrows_v, n, v, ldv ) ) {
                 return -11;
             }
         }
@@ -78,7 +78,7 @@ lapack_int LAPACKE_cgesvj( int matrix_layout, char joba, char jobu, char jobv,
     }
     rwork[0] = stat[0];  /* Significant if jobu = 'c' */
     /* Call middle-level interface */
-    info = LAPACKE_cgesvj_work( matrix_layout, joba, jobu, jobv, m, n, a, lda,
+    info = API_SUFFIX(LAPACKE_cgesvj_work)( matrix_layout, joba, jobu, jobv, m, n, a, lda,
                                 sva, mv, v, ldv, cwork, lwork, rwork, lrwork );
     /* Backup significant data from working array(s) */
     for( i=0; i<6; i++ ) {
@@ -91,7 +91,7 @@ exit_level_1:
     LAPACKE_free( cwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_cgesvj", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvj", info );
     }
     return info;
 }

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAED8 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaed8.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaed8.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -222,9 +220,11 @@
 *> \ingroup laed8
 *
 *  =====================================================================
-      SUBROUTINE ZLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMBDA,
+      SUBROUTINE ZLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z,
+     $                   DLAMBDA,
      $                   Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -259,7 +259,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAMRG, DSCAL, XERBLA, ZCOPY, ZDROT,
+      EXTERNAL           DCOPY, DLAMRG, DSCAL, XERBLA, ZCOPY,
+     $                   ZDROT,
      $                   ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
@@ -350,7 +351,8 @@
             PERM( J ) = INDXQ( INDX( J ) )
             CALL ZCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
    50    CONTINUE
-         CALL ZLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ), LDQ )
+         CALL ZLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
+     $                LDQ )
          RETURN
       END IF
 *
@@ -472,7 +474,8 @@
 *
       IF( K.LT.N ) THEN
          CALL DCOPY( N-K, DLAMBDA( K+1 ), 1, D( K+1 ), 1 )
-         CALL ZLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1, K+1 ),
+         CALL ZLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1,
+     $                K+1 ),
      $                LDQ )
       END IF
 *

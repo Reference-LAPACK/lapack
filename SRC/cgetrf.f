@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGETRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -105,6 +103,7 @@
 *
 *  =====================================================================
       SUBROUTINE CGETRF( M, N, A, LDA, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,7 +127,8 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGETRF2, CLASWP, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CGETRF2, CLASWP, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -177,7 +177,8 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL CGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL CGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ),
+     $                    IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -200,14 +201,16 @@
 *
 *              Compute block row of U.
 *
-               CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
+               CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+     $                     JB,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M-J-JB+1,
+                  CALL CGEMM( 'No transpose', 'No transpose',
+     $                        M-J-JB+1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )

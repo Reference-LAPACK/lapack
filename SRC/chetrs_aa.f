@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETRS_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -165,7 +163,8 @@
       EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX
@@ -227,7 +226,8 @@
 *
 *           Compute U**H \ B -> B    [ (U**H \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B( 2, 1 ), LDB)
          END IF
 *
@@ -237,8 +237,10 @@
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
+             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ),
+     $                    1)
+             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ),
+     $                    1)
              CALL CLACGV( N-1, WORK( 1 ), 1 )
          END IF
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -250,7 +252,8 @@
 *
 *           Compute U \ B -> B   [ U \ (T \ (U**H \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B(2, 1), LDB)
 *
 *           Pivot, P * B  -> B [ P * (U \ (T \ (U**H \P**T * B) )) ]
@@ -294,8 +297,10 @@
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1 )
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
+             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ),
+     $                    1 )
+             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ),
+     $                    1)
              CALL CLACGV( N-1, WORK( 2*N ), 1 )
          END IF
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -307,7 +312,8 @@
 *
 *           Compute (L**H \ B) -> B   [ L**H \ (T \ (L \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ),
+            CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2,
+     $                  1 ),
      $                  LDA, B( 2, 1 ), LDB )
 *
 *           Pivot, P * B -> B  [ P * (L**H \ (T \ (L \P**T * B) )) ]

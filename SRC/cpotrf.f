@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPOTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -104,6 +102,7 @@
 *
 *  =====================================================================
       SUBROUTINE CPOTRF( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,7 +133,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -193,7 +193,8 @@
 *
 *                 Compute the current block row.
 *
-                  CALL CGEMM( 'Conjugate transpose', 'No transpose', JB,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose',
+     $                        JB,
      $                        N-J-JB+1, J-1, -CONE, A( 1, J ), LDA,
      $                        A( 1, J+JB ), LDA, CONE, A( J, J+JB ),
      $                        LDA )
@@ -226,7 +227,8 @@
      $                        N-J-JB+1, JB, J-1, -CONE, A( J+JB, 1 ),
      $                        LDA, A( J, 1 ), LDA, CONE, A( J+JB, J ),
      $                        LDA )
-                  CALL CTRSM( 'Right', 'Lower', 'Conjugate transpose',
+                  CALL CTRSM( 'Right', 'Lower',
+     $                        'Conjugate transpose',
      $                        'Non-unit', N-J-JB+1, JB, CONE, A( J, J ),
      $                        LDA, A( J+JB, J ), LDA )
                END IF

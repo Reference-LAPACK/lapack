@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGEQLF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqlf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqlf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -136,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -249,7 +248,8 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL CGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
+            CALL CGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *
@@ -261,7 +261,8 @@
 *
 *              Apply H**H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL CLARFB( 'Left', 'Conjugate transpose', 'Backward',
+               CALL CLARFB( 'Left', 'Conjugate transpose',
+     $                      'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
      $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )

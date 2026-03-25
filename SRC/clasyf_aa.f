@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLASYF_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -172,7 +170,8 @@
       EXTERNAL           LSAME, ILAENV, ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEMV, CSCAL, CCOPY, CSWAP, CLASET,
+      EXTERNAL           CAXPY, CGEMV, CSCAL, CCOPY, CSWAP,
+     $                   CLASET,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

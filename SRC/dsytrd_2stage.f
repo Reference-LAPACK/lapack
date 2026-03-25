@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYTRD_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -268,14 +266,18 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', VECT, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', VECT, N, KD, -1, -1 )
+      KD     = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', VECT, N, -1, -1,
+     $                      -1 )
+      IB     = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', VECT, N, KD, -1,
+     $                      -1 )
       IF( N.EQ.0 ) THEN
          LHMIN = 1
          LWMIN = 1
       ELSE
-         LHMIN = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
-         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+         LHMIN = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', VECT, N, KD, IB,
+     $                        -1 )
+         LWMIN = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', VECT, N, KD, IB,
+     $                        -1 )
       END IF
 *
       IF( .NOT.LSAME( VECT, 'N' ) ) THEN

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLATDF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatdf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatdf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -168,6 +166,7 @@
 *  =====================================================================
       SUBROUTINE SLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,7 +198,8 @@
       REAL               WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGECON, SGESC2, SLASSQ, SLASWP,
+      EXTERNAL           SAXPY, SCOPY, SGECON, SGESC2, SLASSQ,
+     $                   SLASWP,
      $                   SSCAL
 *     ..
 *     .. External Functions ..
@@ -229,7 +229,8 @@
 *           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and
 *           SMIN computed more efficiently than in BSOLVE [1].
 *
-            SPLUS = SPLUS + SDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 )
+            SPLUS = SPLUS + SDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ),
+     $                            1 )
             SMINU = SDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
             SPLUS = SPLUS*RHS( J )
             IF( SPLUS.GT.SMINU ) THEN

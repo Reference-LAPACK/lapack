@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMLQT overwrites the general real M-by-N matrix C with
+*> SGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -150,6 +150,7 @@
 *  =====================================================================
       SUBROUTINE SGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
      $                   C, LDC, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

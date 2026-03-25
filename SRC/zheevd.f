@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -193,8 +191,10 @@
 *> at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+      SUBROUTINE ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -233,7 +233,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHETRD, ZLACPY, ZLASCL,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHETRD, ZLACPY,
+     $                   ZLASCL,
      $                   ZSTEDC, ZUNMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -277,12 +278,13 @@
                LIWMIN = 1
             END IF
             LOPT = MAX( LWMIN, N +
-     $                  N*ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 ) )
+     $                  N*ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1,
+     $                            -1 ) )
             LROPT = LRWMIN
             LIOPT = LIWMIN
          END IF
          WORK( 1 ) = LOPT
-         RWORK( 1 ) = LROPT
+         RWORK( 1 ) = DBLE( LROPT )
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -378,7 +380,7 @@
       END IF
 *
       WORK( 1 ) = LOPT
-      RWORK( 1 ) = LROPT
+      RWORK( 1 ) = DBLE( LROPT )
       IWORK( 1 ) = LIOPT
 *
       RETURN

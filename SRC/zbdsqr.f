@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZBDSQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zbdsqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbdsqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -166,7 +164,9 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension (4*N)
+*>          RWORK is DOUBLE PRECISION array, dimension (LRWORK)
+*>          LRWORK = 4*N, if NCVT = NRU = NCC = 0, and
+*>          LRWORK = 4*(N-1), otherwise
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -230,6 +230,7 @@
 *  =====================================================================
       SUBROUTINE ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
      $                   LDU, C, LDC, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -279,7 +280,8 @@
       EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARTG, DLAS2, DLASQ1, DLASV2, XERBLA, ZDROT,
+      EXTERNAL           DLARTG, DLAS2, DLASQ1, DLASV2, XERBLA,
+     $                   ZDROT,
      $                   ZDSCAL, ZLASR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,10 +362,12 @@
 *        Update singular vectors if desired
 *
          IF( NRU.GT.0 )
-     $      CALL ZLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ), RWORK( N ),
+     $      CALL ZLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  U, LDU )
          IF( NCC.GT.0 )
-     $      CALL ZLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ), RWORK( N ),
+     $      CALL ZLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  C, LDC )
       END IF
 *
@@ -487,7 +491,8 @@
      $      CALL ZDROT( NCVT, VT( M-1, 1 ), LDVT, VT( M, 1 ), LDVT,
      $                  COSR, SINR )
          IF( NRU.GT.0 )
-     $      CALL ZDROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL, SINL )
+     $      CALL ZDROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL,
+     $                  SINL )
          IF( NCC.GT.0 )
      $      CALL ZDROT( NCC, C( M-1, 1 ), LDC, C( M, 1 ), LDC, COSL,
      $                  SINL )
@@ -620,7 +625,8 @@
                CALL DLARTG( D( I )*CS, E( I ), CS, SN, R )
                IF( I.GT.LL )
      $            E( I-1 ) = OLDSN*R
-               CALL DLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL DLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL+1 ) = CS
                RWORK( I-LL+1+NM1 ) = SN
                RWORK( I-LL+1+NM12 ) = OLDCS
@@ -636,10 +642,12 @@
      $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -658,7 +666,8 @@
                CALL DLARTG( D( I )*CS, E( I-1 ), CS, SN, R )
                IF( I.LT.M )
      $            E( I ) = OLDSN*R
-               CALL DLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL DLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL ) = CS
                RWORK( I-LL+NM1 ) = -SN
                RWORK( I-LL+NM12 ) = OLDCS
@@ -671,7 +680,8 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -726,10 +736,12 @@
      $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -776,7 +788,8 @@
 *           Update singular vectors if desired
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -795,6 +808,12 @@
 *
   160 CONTINUE
       DO 170 I = 1, N
+         IF( D( I ).EQ.ZERO ) THEN
+*
+*           Avoid -ZERO
+*
+            D( I ) = ZERO
+         END IF
          IF( D( I ).LT.ZERO ) THEN
             D( I ) = -D( I )
 *
@@ -832,7 +851,8 @@
             IF( NRU.GT.0 )
      $         CALL ZSWAP( NRU, U( 1, ISUB ), 1, U( 1, N+1-I ), 1 )
             IF( NCC.GT.0 )
-     $         CALL ZSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ), LDC )
+     $         CALL ZSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ),
+     $                     LDC )
          END IF
   190 CONTINUE
       GO TO 220

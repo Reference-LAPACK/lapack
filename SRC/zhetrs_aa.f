@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETRS_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrs_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -165,7 +163,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGTSV, ZSWAP, ZTRSM, ZLACGV, ZLACPY, XERBLA
+      EXTERNAL           ZGTSV, ZSWAP, ZTRSM, ZLACGV, ZLACPY,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX
@@ -225,7 +224,8 @@
 *
 *           Compute U**H \ B -> B    [ (U**H \P**T * B) ]
 *
-            CALL ZTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL ZTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B( 2, 1 ), LDB )
          END IF
 *
@@ -235,8 +235,10 @@
 *
          CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1 )
          IF( N.GT.1 ) THEN
-             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1 )
+             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ),
+     $                    1)
+             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ),
+     $                    1 )
              CALL ZLACGV( N-1, WORK( 1 ), 1 )
          END IF
          CALL ZGTSV( N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -248,7 +250,8 @@
 *
 *           Compute U \ B -> B   [ U \ (T \ (U**H \P**T * B) ) ]
 *
-            CALL ZTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL ZTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B(2, 1), LDB)
 *
 *           Pivot, P * B  [ P * (U**H \ (T \ (U \P**T * B) )) ]
@@ -278,7 +281,8 @@
 *
 *           Compute L \ B -> B    [ (L \P**T * B) ]
 *
-            CALL ZTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ),
+            CALL ZTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2,
+     $                  1 ),
      $                  LDA, B(2, 1), LDB)
          END IF
 *
@@ -288,8 +292,10 @@
 *
          CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
-             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
+             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ),
+     $                    1)
+             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ),
+     $                    1)
              CALL ZLACGV( N-1, WORK( 2*N ), 1 )
          END IF
          CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -301,7 +307,8 @@
 *
 *           Compute L**H \ B -> B   [ L**H \ (T \ (L \P**T * B) ) ]
 *
-            CALL ZTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ),
+            CALL ZTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2,
+     $                  1 ),
      $                  LDA, B( 2, 1 ), LDB)
 *
 *           Pivot, P * B  [ P * (L**H \ (T \ (L \P**T * B) )) ]

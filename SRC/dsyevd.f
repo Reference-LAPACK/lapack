@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -172,8 +170,10 @@
 
 *>
 *  =====================================================================
-      SUBROUTINE DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
+      SUBROUTINE DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   IWORK,
      $                   LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -209,7 +209,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC, DSTERF,
+      EXTERNAL           DLACPY, DLASCL, DORMTR, DSCAL, DSTEDC,
+     $                   DSTERF,
      $                   DSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -249,7 +250,8 @@
                LWMIN = 2*N + 1
             END IF
             LOPT = MAX( LWMIN, 2*N +
-     $                  N*ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1, -1 ) )
+     $                  N*ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1,
+     $                            -1 ) )
             LIOPT = LIWMIN
          END IF
          WORK( 1 ) = LOPT

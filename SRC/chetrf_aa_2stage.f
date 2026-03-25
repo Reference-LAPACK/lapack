@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETRF_AA_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -270,7 +268,7 @@
 *
 *     Save NB
 *
-      TB( 1 ) = NB
+      TB( 1 ) = CMPLX( NB )
 *
       IF( UPPER ) THEN
 *
@@ -561,13 +559,15 @@ c               END IF
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL CGEMM( 'NoTranspose',
+     $                           'Conjugate transpose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL CGEMM( 'NoTranspose',
+     $                           'Conjugate transpose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,

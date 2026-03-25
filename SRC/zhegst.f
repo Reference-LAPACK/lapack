@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,7 +151,8 @@
       INTEGER            K, KB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHEGS2, ZHEMM, ZHER2K, ZTRMM, ZTRSM
+      EXTERNAL           XERBLA, ZHEGS2, ZHEMM, ZHER2K, ZTRMM,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -221,7 +221,8 @@
                      CALL ZHEMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB,
      $                           CONE, A( K, K+KB ), LDA )
-                     CALL ZHER2K( UPLO, 'Conjugate transpose', N-K-KB+1,
+                     CALL ZHER2K( UPLO, 'Conjugate transpose',
+     $                            N-K-KB+1,
      $                            KB, -CONE, A( K, K+KB ), LDA,
      $                            B( K, K+KB ), LDB, ONE,
      $                            A( K+KB, K+KB ), LDA )
@@ -246,7 +247,8 @@
                   CALL ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL ZTRSM( 'Right', UPLO, 'Conjugate transpose',
+                     CALL ZTRSM( 'Right', UPLO,
+     $                           'Conjugate transpose',
      $                           'Non-unit', N-K-KB+1, KB, CONE,
      $                           B( K, K ), LDB, A( K+KB, K ), LDA )
                      CALL ZHEMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
@@ -276,15 +278,18 @@
 *
 *                 Update the upper triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Non-unit',
+                  CALL ZTRMM( 'Left', UPLO, 'No transpose',
+     $                        'Non-unit',
      $                        K-1, KB, CONE, B, LDB, A( 1, K ), LDA )
-                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K,
+     $                        K ),
      $                        LDA, B( 1, K ), LDB, CONE, A( 1, K ),
      $                        LDA )
                   CALL ZHER2K( UPLO, 'No transpose', K-1, KB, CONE,
      $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE, A,
      $                         LDA )
-                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K,
+     $                        K ),
      $                        LDA, B( 1, K ), LDB, CONE, A( 1, K ),
      $                        LDA )
                   CALL ZTRMM( 'Right', UPLO, 'Conjugate transpose',
@@ -302,7 +307,8 @@
 *
 *                 Update the lower triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Non-unit',
+                  CALL ZTRMM( 'Right', UPLO, 'No transpose',
+     $                        'Non-unit',
      $                        KB, K-1, CONE, B, LDB, A( K, 1 ), LDA )
                   CALL ZHEMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, CONE, A( K, 1 ),

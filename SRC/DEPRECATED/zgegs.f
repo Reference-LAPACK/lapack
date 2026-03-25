@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEGS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgegs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgegs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -219,9 +217,9 @@
 *> \ingroup complex16GEeigen
 *
 *  =====================================================================
-      SUBROUTINE ZGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA, BETA,
-     $                  VSL, LDVSL, VSR, LDVSR, WORK, LWORK, RWORK,
-     $                  INFO )
+      SUBROUTINE ZGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA,
+     $                  BETA, VSL, LDVSL, VSR, LDVSR, WORK, LWORK,
+     $                  RWORK, INFO )
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -360,7 +358,8 @@
       END IF
 *
       IF( ILASCL ) THEN
-         CALL ZLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA, IINFO )
+         CALL ZLASCL( 'G', -1, -1, ANRM, ANRMTO, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -380,7 +379,8 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL ZLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB, IINFO )
+         CALL ZLASCL( 'G', -1, -1, BNRM, BNRMTO, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -493,12 +493,14 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL ZLASCL( 'U', -1, -1, ANRMTO, ANRM, N, N, A, LDA, IINFO )
+         CALL ZLASCL( 'U', -1, -1, ANRMTO, ANRM, N, N, A, LDA,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL ZLASCL( 'G', -1, -1, ANRMTO, ANRM, N, 1, ALPHA, N, IINFO )
+         CALL ZLASCL( 'G', -1, -1, ANRMTO, ANRM, N, 1, ALPHA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
@@ -506,12 +508,14 @@
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL ZLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB, IINFO )
+         CALL ZLASCL( 'U', -1, -1, BNRMTO, BNRM, N, N, B, LDB,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN
          END IF
-         CALL ZLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N, IINFO )
+         CALL ZLASCL( 'G', -1, -1, BNRMTO, BNRM, N, 1, BETA, N,
+     $                IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 9
             RETURN

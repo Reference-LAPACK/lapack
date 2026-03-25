@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CUNGLQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunglq.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunglq.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -124,6 +122,7 @@
 *
 *  =====================================================================
       SUBROUTINE CUNGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -212,7 +211,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CUNGLQ', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'CUNGLQ', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -253,12 +253,14 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL CLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+               CALL CLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
+     $                      I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**H to A(i+ib:m,i:n) from the right
 *
-               CALL CLARFB( 'Right', 'Conjugate transpose', 'Forward',
+               CALL CLARFB( 'Right', 'Conjugate transpose',
+     $                      'Forward',
      $                      'Rowwise', M-I-IB+1, N-I+1, IB, A( I, I ),
      $                      LDA, WORK, LDWORK, A( I+IB, I ), LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -266,7 +268,8 @@
 *
 *           Apply H**H to columns i:n of current block
 *
-            CALL CUNGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
+            CALL CUNGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
+     $                   WORK,
      $                   IINFO )
 *
 *           Set columns 1:i-1 of current block to zero

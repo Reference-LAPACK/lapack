@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHPEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -191,6 +189,7 @@
 *  =====================================================================
       SUBROUTINE CHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -224,10 +223,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               CLANHP, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, CLANHP, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, CLANHP, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPTRD, CSSCAL, CSTEDC, CUPMTR, SSCAL, SSTERF,
+      EXTERNAL           CHPTRD, CSSCAL, CSTEDC, CUPMTR, SSCAL,
+     $                   SSTERF,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -243,7 +244,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR.
+     $         LSAME( UPLO, 'U' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -269,7 +271,7 @@
             END IF
          END IF
          WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -341,10 +343,12 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL CSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL CSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                LLWRK, RWORK( INDRWK ), LLRWK, IWORK, LIWORK,
      $                INFO )
-         CALL CUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL CUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z,
+     $                LDZ,
      $                WORK( INDWRK ), IINFO )
       END IF
 *
@@ -360,7 +364,7 @@
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

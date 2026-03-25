@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGTSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtsvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -287,9 +285,11 @@
 *> \ingroup gtsvx
 *
 *  =====================================================================
-      SUBROUTINE SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+      SUBROUTINE SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF,
+     $                   DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -324,7 +324,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGTCON, SGTRFS, SGTTRF, SGTTRS, SLACPY,
+      EXTERNAL           SCOPY, SGTCON, SGTRFS, SGTTRF, SGTTRS,
+     $                   SLACPY,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -384,7 +385,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
+      CALL SGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND,
+     $             WORK,
      $             IWORK, INFO )
 *
 *     Compute the solution vectors X.
@@ -396,7 +398,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
+      CALL SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+     $             IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

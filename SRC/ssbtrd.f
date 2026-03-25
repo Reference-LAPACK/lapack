@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSBTRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbtrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbtrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -160,6 +158,7 @@
 *  =====================================================================
       SUBROUTINE SSBTRD( VECT, UPLO, N, KD, AB, LDAB, D, E, Q, LDQ,
      $                   WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,7 +187,8 @@
       REAL               TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAR2V, SLARGV, SLARTG, SLARTV, SLASET, SROT,
+      EXTERNAL           SLAR2V, SLARGV, SLARTG, SLARTV, SLASET,
+     $                   SROT,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -270,7 +270,8 @@
 *                    generate plane rotations to annihilate nonzero
 *                    elements which have been created outside the band
 *
-                     CALL SLARGV( NR, AB( 1, J1-1 ), INCA, WORK( J1 ),
+                     CALL SLARGV( NR, AB( 1, J1-1 ), INCA,
+     $                            WORK( J1 ),
      $                            KD1, D( J1 ), KD1 )
 *
 *                    apply rotations from the right
@@ -341,7 +342,8 @@
                               NRT = NR
                            END IF
                            IF( NRT.GT.0 )
-     $                        CALL SLARTV( NRT, AB( KD-L, J1+L ), INCA,
+     $                        CALL SLARTV( NRT, AB( KD-L, J1+L ),
+     $                                     INCA,
      $                                     AB( KD-L+1, J1+L ), INCA,
      $                                     D( J1 ), WORK( J1 ), KD1 )
    30                   CONTINUE
@@ -349,7 +351,8 @@
                         J1END = J1 + KD1*( NR-2 )
                         IF( J1END.GE.J1 ) THEN
                            DO 40 JIN = J1, J1END, KD1
-                              CALL SROT( KD-1, AB( KD-1, JIN+1 ), INCX,
+                              CALL SROT( KD-1, AB( KD-1, JIN+1 ),
+     $                                   INCX,
      $                                   AB( KD, JIN+1 ), INCX,
      $                                   D( JIN ), WORK( JIN ) )
    40                      CONTINUE
@@ -384,13 +387,15 @@
                            IQB = MAX( 1, J-IBL )
                            NQ = 1 + IQAEND - IQB
                            IQAEND = MIN( IQAEND+KD, IQEND )
-                           CALL SROT( NQ, Q( IQB, J-1 ), 1, Q( IQB, J ),
+                           CALL SROT( NQ, Q( IQB, J-1 ), 1, Q( IQB,
+     $                                J ),
      $                                1, D( J ), WORK( J ) )
    50                   CONTINUE
                      ELSE
 *
                         DO 60 J = J1, J2, KD1
-                           CALL SROT( N, Q( 1, J-1 ), 1, Q( 1, J ), 1,
+                           CALL SROT( N, Q( 1, J-1 ), 1, Q( 1, J ),
+     $                                1,
      $                                D( J ), WORK( J ) )
    60                   CONTINUE
                      END IF
@@ -473,7 +478,8 @@
 *
                      IF( NR.GT.2*KD-1 ) THEN
                         DO 130 L = 1, KD - 1
-                           CALL SLARTV( NR, AB( KD1-L, J1-KD1+L ), INCA,
+                           CALL SLARTV( NR, AB( KD1-L, J1-KD1+L ),
+     $                                  INCA,
      $                                  AB( KD1-L+1, J1-KD1+L ), INCA,
      $                                  D( J1 ), WORK( J1 ), KD1 )
   130                   CONTINUE
@@ -531,7 +537,8 @@
                               NRT = NR
                            END IF
                            IF( NRT.GT.0 )
-     $                        CALL SLARTV( NRT, AB( L+2, J1-1 ), INCA,
+     $                        CALL SLARTV( NRT, AB( L+2, J1-1 ),
+     $                                     INCA,
      $                                     AB( L+1, J1 ), INCA, D( J1 ),
      $                                     WORK( J1 ), KD1 )
   150                   CONTINUE
@@ -576,13 +583,15 @@
                            IQB = MAX( 1, J-IBL )
                            NQ = 1 + IQAEND - IQB
                            IQAEND = MIN( IQAEND+KD, IQEND )
-                           CALL SROT( NQ, Q( IQB, J-1 ), 1, Q( IQB, J ),
+                           CALL SROT( NQ, Q( IQB, J-1 ), 1, Q( IQB,
+     $                                J ),
      $                                1, D( J ), WORK( J ) )
   170                   CONTINUE
                      ELSE
 *
                         DO 180 J = J1, J2, KD1
-                           CALL SROT( N, Q( 1, J-1 ), 1, Q( 1, J ), 1,
+                           CALL SROT( N, Q( 1, J-1 ), 1, Q( 1, J ),
+     $                                1,
      $                                D( J ), WORK( J ) )
   180                   CONTINUE
                      END IF

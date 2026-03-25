@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -111,6 +109,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -248,7 +247,8 @@
                A( K, K ) = A( K, K ) - DDOT( K-1, WORK, 1, A( 1, K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       DDOT( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       DDOT( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                             1 )
                CALL DCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL DSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
@@ -307,9 +307,11 @@
 *
             IF( K.LT.N ) THEN
                CALL DCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -332,15 +334,19 @@
 *
             IF( K.LT.N ) THEN
                CALL DCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - DDOT( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       DDOT( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       DDOT( N-K, A( K+1, K ), 1, A( K+1,
+     $                             K-1 ),
      $                       1 )
                CALL DCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL DSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
      $                         DDOT( N-K, WORK, 1, A( K+1, K-1 ), 1 )

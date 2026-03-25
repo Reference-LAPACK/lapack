@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CUNCSD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cuncsd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cuncsd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -311,12 +309,14 @@
 *> \ingroup uncsd
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE CUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+      RECURSIVE SUBROUTINE CUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T,
+     $                             TRANS,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $                             LDV2T, WORK, LWORK, RWORK, LRWORK,
      $                             IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -360,7 +360,8 @@
       LOGICAL            LRQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CBBCSD, CLACPY, CLAPMR, CLAPMT,
+      EXTERNAL           XERBLA, CBBCSD, CLACPY, CLAPMR,
+     $                   CLAPMT,
      $                   CUNBDB, CUNGLQ, CUNGQR
 *     ..
 *     .. External Functions ..
@@ -429,7 +430,8 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL CUNCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M,
+         CALL CUNCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST,
+     $                M,
      $                Q, P, X11, LDX11, X21, LDX21, X12, LDX12, X22,
      $                LDX22, THETA, V1T, LDV1T, V2T, LDV2T, U1, LDU1,
      $                U2, LDU2, WORK, LWORK, RWORK, LRWORK, IWORK,
@@ -477,7 +479,7 @@
          LBBCSDWORKMIN = LBBCSDWORKOPT
          LRWORKOPT = IBBCSD + LBBCSDWORKOPT - 1
          LRWORKMIN = IBBCSD + LBBCSDWORKMIN - 1
-         RWORK(1) = LRWORKOPT
+         RWORK(1) = REAL( LRWORKOPT )
 *
 *        Complex workspace
 *
@@ -533,7 +535,8 @@
 *
 *     Transform to bidiagonal block form
 *
-      CALL CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21,
+      CALL CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+     $             X21,
      $             LDX21, X22, LDX22, THETA, RWORK(IPHI), WORK(ITAUP1),
      $             WORK(ITAUP2), WORK(ITAUQ1), WORK(ITAUQ2),
      $             WORK(IORBDB), LORBDBWORK, CHILDINFO )
@@ -543,7 +546,8 @@
       IF( COLMAJOR ) THEN
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL CLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGQR),
      $                   LORGQRWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -559,7 +563,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -576,7 +581,8 @@
       ELSE
          IF( WANTU1 .AND. P .GT. 0 ) THEN
             CALL CLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
-            CALL CUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ),
+            CALL CUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1),
+     $                   WORK(IORGLQ),
      $                   LORGLQWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -592,7 +598,8 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL CUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL CUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T,
+     $                   WORK(ITAUQ1),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
@@ -610,7 +617,8 @@
 *
 *     Compute the CSD of the matrix in bidiagonal-block form
 *
-      CALL CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THETA,
+      CALL CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+     $             THETA,
      $             RWORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $             LDV2T, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $             RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),

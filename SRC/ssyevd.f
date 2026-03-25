@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -170,8 +168,10 @@
 *>  Modified description of INFO. Sven, 16 Feb 05. \n
 *>
 *  =====================================================================
-      SUBROUTINE SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
+      SUBROUTINE SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+     $                   IWORK,
      $                   LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -204,10 +204,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SLAMCH,
+     $                   SLANSY, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC, SSTERF,
+      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC,
+     $                   SSTERF,
      $                   SSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -247,7 +249,8 @@
                LWMIN = 2*N + 1
             END IF
             LOPT = MAX( LWMIN, 2*N +
-     $                  N*ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 ) )
+     $                  N*ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1,
+     $                            -1 ) )
             LIOPT = LIWMIN
          END IF
          WORK( 1 ) = SROUNDUP_LWORK( LOPT )

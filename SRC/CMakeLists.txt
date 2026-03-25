@@ -2,6 +2,7 @@
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
 
+#       ALLMOD  -- Part of ALLAUX
 #       ALLAUX  -- Auxiliary routines called from all precisions
 #       SCLAUX  -- Auxiliary routines called from single precision
 #       DZLAUX  -- Auxiliary routines called from double precision
@@ -35,13 +36,16 @@
 #
 #######################################################################
 
+set(CONSTMOD la_constants.f90)
+
+set(NANMOD la_xisnan.F90)
+
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
-   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f la_xisnan.F90
+   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   la_constants.f90
    sbdsvdx.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -60,7 +64,6 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
-   la_constants.f90
    dbdsdc.f dbdsvdx.f
    dbdsqr.f ddisna.f
    disnan.f
@@ -105,7 +108,7 @@ set(SLASRC
    slaqgb.f slaqge.f slaqp2.f slaqps.f slaqp2rk.f slaqp3rk.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
-   slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f
+   slarf.f  slarf1f.f slarf1l.f slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarft_lvl2.f slarfx.f slarfy.f
    slargv.f slarmm.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
@@ -217,7 +220,7 @@ set(CLASRC
    claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqp2rk.f claqp3rk.f claqsb.f
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
-   clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f
+   clarf.f  clarf1f.f clarf1l.f clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f clarft_lvl2.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
@@ -306,7 +309,7 @@ set(DLASRC
    dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqp2rk.f dlaqp3rk.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
-   dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
+   dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarft_lvl2.f dlarfx.f dlarfy.f dlarf1f.f dlarf1l.f
    dlargv.f dlarmm.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
@@ -417,8 +420,8 @@ set(ZLASRC
    zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqp2rk.f zlaqp3rk.f zlaqsb.f
    zlaqr0.f zlaqr1.f zlaqr2.f zlaqr3.f zlaqr4.f zlaqr5.f
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
-   zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f
-   zlarfg.f zlarfgp.f zlarft.f
+   zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f zlarf1f.f zlarf1l.f
+   zlarfg.f zlarfgp.f zlarft.f zlarft_lvl2.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f90 zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
@@ -516,7 +519,70 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${LAPACKLIB} ${SOURCES})
+# Use special target for MOD files to guarantee they are built before
+# any other files that depend on them
+add_library(const_mod_file OBJECT ${CONSTMOD})
+set_target_properties(
+  const_mod_file PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
+set_target_properties(
+  mod_files PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
+target_link_libraries(${LAPACKLIB}_obj mod_files)
+set_target_properties(
+  ${LAPACKLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
+    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
+    set(BUILD_INDEX64_EXT_API OFF)
+    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
+  else()
+    cmake_minimum_required(VERSION 3.18)
+    set(SOURCES_64)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
+    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
+    foreach(F IN LISTS SOURCES_64)
+      set(FFILE "")
+      file(READ ${F} FFILE)
+      file(WRITE ${F} "#include \"lapack_64.h\"\n")
+      file(APPEND ${F} "${FFILE}")
+    endforeach()
+    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
+    set_target_properties(
+      ${LAPACKLIB}_64_obj PROPERTIES
+      POSITION_INDEPENDENT_CODE ON
+      Fortran_PREPROCESS ON
+    )
+  endif()
+endif()
+
+add_library(${LAPACKLIB}
+  $<TARGET_OBJECTS:mod_files>
+  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
+# For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
+# that CMake adds (tested CMake 4.2).
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+   set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+endif()
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
@@ -534,7 +600,7 @@ target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
 if(_is_coverage_build)
   target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB})
+  add_coverage(${LAPACKLIB}_obj)
 endif()
 
 lapack_install_library(${LAPACKLIB})

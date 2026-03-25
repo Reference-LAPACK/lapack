@@ -7,6 +7,15 @@
 #include "cblas.h"
 #include "cblas_mangling.h"
 
+/* It seems all current Fortran compilers put strlen at end.
+*  Some historical compilers put strlen after the str argument
+*  or make the str argument into a struct. */
+#define BLAS_FORTRAN_STRLEN_END
+
+#ifndef FORTRAN_STRLEN
+  #define FORTRAN_STRLEN size_t
+#endif
+
 #define  TRUE           1
 #define  PASSED         1
 #define  TEST_ROW_MJR	1
@@ -36,18 +45,22 @@ typedef struct { double real; double imag; } CBLAS_TEST_ZOMPLEX;
 #define F77_sswap 		F77_GLOBAL(sswaptest,SSWAPTEST)
 #define F77_scopy 		F77_GLOBAL(scopytest,SCOPYTEST)
 #define F77_saxpy 		F77_GLOBAL(saxpytest,SAXPYTEST)
+#define F77_saxpby 		F77_GLOBAL(saxpbytest,SAXPBYTEST)
 #define F77_isamax 		F77_GLOBAL(isamaxtest,ISAMAXTEST)
 #define F77_dswap 		F77_GLOBAL(dswaptest,DSWAPTEST)
 #define F77_dcopy 		F77_GLOBAL(dcopytest,DCOPYTEST)
 #define F77_daxpy 		F77_GLOBAL(daxpytest,DAXPYTEST)
+#define F77_daxpby 		F77_GLOBAL(daxpbytest,DAXPBYTEST)
 #define F77_idamax 		F77_GLOBAL(idamaxtest,IDAMAXTEST)
 #define F77_cswap 		F77_GLOBAL(cswaptest,CSWAPTEST)
 #define F77_ccopy 		F77_GLOBAL(ccopytest,CCOPYTEST)
 #define F77_caxpy 		F77_GLOBAL(caxpytest,CAXPYTEST)
+#define F77_caxpby 		F77_GLOBAL(caxpbytest,CAXPBYTEST)
 #define F77_icamax 		F77_GLOBAL(icamaxtest,ICAMAXTEST)
 #define F77_zswap 		F77_GLOBAL(zswaptest,ZSWAPTEST)
 #define F77_zcopy 		F77_GLOBAL(zcopytest,ZCOPYTEST)
 #define F77_zaxpy 		F77_GLOBAL(zaxpytest,ZAXPYTEST)
+#define F77_zaxpby 		F77_GLOBAL(zaxpbytest,ZAXPBYTEST)
 #define F77_izamax 		F77_GLOBAL(izamaxtest,IZAMAXTEST)
 #define F77_sdot 		F77_GLOBAL(sdottest,SDOTTEST)
 #define F77_ddot 		F77_GLOBAL(ddottest,DDOTTEST)
@@ -81,19 +94,23 @@ typedef struct { double real; double imag; } CBLAS_TEST_ZOMPLEX;
 #define F77_ssymv 		F77_GLOBAL(cssymv,CSSYMV)
 #define F77_ssbmv 		F77_GLOBAL(cssbmv,CSSBMV)
 #define F77_sspmv 		F77_GLOBAL(csspmv,CSSPMV)
+#define F77_sskewsymv F77_GLOBAL(csskewsymv,CSSKEWSYMV)
 #define F77_sger 		F77_GLOBAL(csger,CSGER)
 #define F77_ssyr 		F77_GLOBAL(cssyr,CSSYR)
 #define F77_sspr 		F77_GLOBAL(csspr,CSSPR)
 #define F77_ssyr2 		F77_GLOBAL(cssyr2,CSSYR2)
 #define F77_sspr2 		F77_GLOBAL(csspr2,CSSPR2)
+#define F77_sskewsyr2 F77_GLOBAL(csskewsyr2,CSSKEWSYR2)
 #define F77_dsymv 		F77_GLOBAL(cdsymv,CDSYMV)
 #define F77_dsbmv 		F77_GLOBAL(cdsbmv,CDSBMV)
 #define F77_dspmv 		F77_GLOBAL(cdspmv,CDSPMV)
+#define F77_dskewsymv F77_GLOBAL(cdskewsymv,CDSKEWSYMV)
 #define F77_dger 		F77_GLOBAL(cdger,CDGER)
 #define F77_dsyr 		F77_GLOBAL(cdsyr,CDSYR)
 #define F77_dspr 		F77_GLOBAL(cdspr,CDSPR)
 #define F77_dsyr2 		F77_GLOBAL(cdsyr2,CDSYR2)
 #define F77_dspr2 		F77_GLOBAL(cdspr2,CDSPR2)
+#define F77_dskewsyr2 F77_GLOBAL(cdskewsyr2,CDSKEWSYR2)
 #define F77_chemv 		F77_GLOBAL(cchemv,CCHEMV)
 #define F77_chbmv 		F77_GLOBAL(cchbmv,CCHBMV)
 #define F77_chpmv 		F77_GLOBAL(cchpmv,CCHPMV)
@@ -158,24 +175,32 @@ typedef struct { double real; double imag; } CBLAS_TEST_ZOMPLEX;
 #define F77_zherk 		F77_GLOBAL(czherk,CZHERK)
 #define F77_zher2k 		F77_GLOBAL(czher2k,CZHER2K)
 #define F77_sgemm 		F77_GLOBAL(csgemm,CSGEMM)
+#define F77_sgemmtr 		F77_GLOBAL(csgemmtr,CSGEMMTR)
 #define F77_ssymm 		F77_GLOBAL(cssymm,CSSYMM)
+#define F77_sskewsymm F77_GLOBAL(csskewsymm,CSSKEWSYMM)
 #define F77_ssyrk 		F77_GLOBAL(cssyrk,CSSYRK)
 #define F77_ssyr2k 		F77_GLOBAL(cssyr2k,CSSYR2K)
+#define F77_sskewsyr2k 	F77_GLOBAL(csskewsyr2k,CSSKEWSYR2K)
 #define F77_strmm 		F77_GLOBAL(cstrmm,CSTRMM)
 #define F77_strsm 		F77_GLOBAL(cstrsm,CSTRSM)
 #define F77_dgemm 		F77_GLOBAL(cdgemm,CDGEMM)
+#define F77_dgemmtr 		F77_GLOBAL(cdgemmtr,CDGEMMTR)
 #define F77_dsymm 		F77_GLOBAL(cdsymm,CDSYMM)
+#define F77_dskewsymm F77_GLOBAL(cdskewsymm,CDSKEWSYMM)
 #define F77_dsyrk 		F77_GLOBAL(cdsyrk,CDSYRK)
 #define F77_dsyr2k 		F77_GLOBAL(cdsyr2k,CDSYR2K)
+#define F77_dskewsyr2k 	F77_GLOBAL(cdskewsyr2k,CDSKEWSYR2K)
 #define F77_dtrmm 		F77_GLOBAL(cdtrmm,CDTRMM)
 #define F77_dtrsm 		F77_GLOBAL(cdtrsm,CDTRSM)
 #define F77_cgemm 		F77_GLOBAL(ccgemm,CCGEMM)
+#define F77_cgemmtr 		F77_GLOBAL(ccgemmtr,CCGEMMTR)
 #define F77_csymm 		F77_GLOBAL(ccsymm,CCSYMM)
 #define F77_csyrk 		F77_GLOBAL(ccsyrk,CCSYRK)
 #define F77_csyr2k 		F77_GLOBAL(ccsyr2k,CCSYR2K)
 #define F77_ctrmm 		F77_GLOBAL(cctrmm,CCTRMM)
 #define F77_ctrsm 		F77_GLOBAL(cctrsm,CCTRSM)
 #define F77_zgemm 		F77_GLOBAL(czgemm,CZGEMM)
+#define F77_zgemmtr 		F77_GLOBAL(czgemmtr,CZGEMMTR)
 #define F77_zsymm 		F77_GLOBAL(czsymm,CZSYMM)
 #define F77_zsyrk 		F77_GLOBAL(czsyrk,CZSYRK)
 #define F77_zsyr2k 		F77_GLOBAL(czsyr2k,CZSYR2K)

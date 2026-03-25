@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGBTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbtrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbtrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -141,6 +139,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -177,7 +176,8 @@
       EXTERNAL           ICAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGBTF2, CGEMM, CGERU, CLASWP, CSCAL,
+      EXTERNAL           CCOPY, CGBTF2, CGEMM, CGERU, CLASWP,
+     $                   CSCAL,
      $                   CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -325,7 +325,8 @@
 *
 *                 Compute multipliers
 *
-                  CALL CSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2, JJ ),
+                  CALL CSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2,
+     $                        JJ ),
      $                        1 )
 *
 *                 Update trailing submatrix within the band and within
@@ -394,7 +395,8 @@
 *
 *                 Update A12
 *
-                  CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL CTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J2, ONE, AB( KV+1, J ), LDAB-1,
      $                        AB( KV+1-JB, J+JB ), LDAB-1 )
 *
@@ -402,7 +404,8 @@
 *
 *                    Update A22
 *
-                     CALL CGEMM( 'No transpose', 'No transpose', I2, J2,
+                     CALL CGEMM( 'No transpose', 'No transpose', I2,
+     $                           J2,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+1, J+JB ), LDAB-1 )
@@ -412,7 +415,8 @@
 *
 *                    Update A32
 *
-                     CALL CGEMM( 'No transpose', 'No transpose', I3, J2,
+                     CALL CGEMM( 'No transpose', 'No transpose', I3,
+     $                           J2,
      $                           JB, -ONE, WORK31, LDWORK,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+KL+1-JB, J+JB ), LDAB-1 )
@@ -432,7 +436,8 @@
 *
 *                 Update A13 in the work array
 *
-                  CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+                  CALL CTRSM( 'Left', 'Lower', 'No transpose',
+     $                        'Unit',
      $                        JB, J3, ONE, AB( KV+1, J ), LDAB-1,
      $                        WORK13, LDWORK )
 *
@@ -440,7 +445,8 @@
 *
 *                    Update A23
 *
-                     CALL CGEMM( 'No transpose', 'No transpose', I2, J3,
+                     CALL CGEMM( 'No transpose', 'No transpose', I2,
+     $                           J3,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           WORK13, LDWORK, ONE, AB( 1+JB, J+KV ),
      $                           LDAB-1 )
@@ -450,7 +456,8 @@
 *
 *                    Update A33
 *
-                     CALL CGEMM( 'No transpose', 'No transpose', I3, J3,
+                     CALL CGEMM( 'No transpose', 'No transpose', I3,
+     $                           J3,
      $                           JB, -ONE, WORK31, LDWORK, WORK13,
      $                           LDWORK, ONE, AB( 1+KL, J+KV ), LDAB-1 )
                   END IF

@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for sdsdot.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine sdsdotsub(n,sb,x,incx,y,incy,dot)
+      implicit none
 c
       external sdsdot
       real sb,sdsdot,dot

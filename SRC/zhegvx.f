@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEGVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -304,6 +302,7 @@
       SUBROUTINE ZHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -338,7 +337,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHEEVX, ZHEGST, ZPOTRF, ZTRMM, ZTRSM
+      EXTERNAL           XERBLA, ZHEEVX, ZHEGST, ZPOTRF, ZTRMM,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -422,7 +422,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL ZHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL ZHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+     $             ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, RWORK, IWORK, IFAIL,
      $             INFO )
 *
@@ -443,7 +444,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -457,7 +459,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
          END IF
       END IF

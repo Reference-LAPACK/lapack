@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_GERCOND_C + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gercond_c.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gercond_c.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -137,8 +135,10 @@
 *> \ingroup la_gercond
 *
 *  =====================================================================
-      REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV, C,
+      REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
+     $                             C,
      $                             CAPPLY, INFO, WORK, RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -266,7 +266,8 @@
                CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -288,7 +289,8 @@
             END IF
 *
             IF ( NOTRANS ) THEN
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ELSE
                CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,

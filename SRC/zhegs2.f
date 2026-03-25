@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEGS2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegs2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegs2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -153,7 +152,8 @@
       COMPLEX*16         CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZDSCAL, ZHER2, ZLACGV, ZTRMV,
+      EXTERNAL           XERBLA, ZAXPY, ZDSCAL, ZHER2, ZLACGV,
+     $                   ZTRMV,
      $                   ZTRSV
 *     ..
 *     .. Intrinsic Functions ..
@@ -210,7 +210,8 @@
                   CALL ZAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
                   CALL ZLACGV( N-K, B( K, K+1 ), LDB )
-                  CALL ZTRSV( UPLO, 'Conjugate transpose', 'Non-unit',
+                  CALL ZTRSV( UPLO, 'Conjugate transpose',
+     $                        'Non-unit',
      $                        N-K, B( K+1, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
                   CALL ZLACGV( N-K, A( K, K+1 ), LDA )
@@ -231,10 +232,12 @@
                IF( K.LT.N ) THEN
                   CALL ZDSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
                   CT = -HALF*AKK
-                  CALL ZAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL ZAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL ZHER2( UPLO, N-K, -CONE, A( K+1, K ), 1,
      $                        B( K+1, K ), 1, A( K+1, K+1 ), LDA )
-                  CALL ZAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL ZAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL ZTRSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K+1, K ), 1 )
                END IF
@@ -255,7 +258,8 @@
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
                CALL ZAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL ZHER2( UPLO, K-1, CONE, A( 1, K ), 1, B( 1, K ), 1,
+               CALL ZHER2( UPLO, K-1, CONE, A( 1, K ), 1, B( 1, K ),
+     $                     1,
      $                     A, LDA )
                CALL ZAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
                CALL ZDSCAL( K-1, BKK, A( 1, K ), 1 )
@@ -272,12 +276,14 @@
                AKK = DBLE( A( K, K ) )
                BKK = DBLE( B( K, K ) )
                CALL ZLACGV( K-1, A( K, 1 ), LDA )
-               CALL ZTRMV( UPLO, 'Conjugate transpose', 'Non-unit', K-1,
+               CALL ZTRMV( UPLO, 'Conjugate transpose', 'Non-unit',
+     $                     K-1,
      $                     B, LDB, A( K, 1 ), LDA )
                CT = HALF*AKK
                CALL ZLACGV( K-1, B( K, 1 ), LDB )
                CALL ZAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
-               CALL ZHER2( UPLO, K-1, CONE, A( K, 1 ), LDA, B( K, 1 ),
+               CALL ZHER2( UPLO, K-1, CONE, A( K, 1 ), LDA, B( K,
+     $                     1 ),
      $                     LDB, A, LDA )
                CALL ZAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
                CALL ZLACGV( K-1, B( K, 1 ), LDB )

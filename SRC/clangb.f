@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLANGB + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clangb.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clangb.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -122,6 +120,7 @@
 *  =====================================================================
       REAL             FUNCTION CLANGB( NORM, N, KL, KU, AB, LDAB,
      $                 WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -201,7 +200,8 @@
             TEMP = WORK( I )
             IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
    80    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
@@ -210,7 +210,8 @@
          DO 90 J = 1, N
             L = MAX( 1, J-KU )
             K = KU + 1 - J + L
-            CALL CLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SUM )
+            CALL CLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE,
+     $                   SUM )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF

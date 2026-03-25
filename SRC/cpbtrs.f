@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPBTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbtrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbtrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -118,6 +116,7 @@
 *
 *  =====================================================================
       SUBROUTINE CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -184,12 +183,14 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
    10    CONTINUE
       ELSE
@@ -200,12 +201,14 @@
 *
 *           Solve L*X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL CTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve L**H *X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
+            CALL CTBSV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
    20    CONTINUE
       END IF

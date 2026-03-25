@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPOTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -107,6 +105,7 @@
 *
 *  =====================================================================
       SUBROUTINE CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +171,8 @@
 *
 *        Solve U**H *X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose', 'Non-unit',
+         CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+     $               'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
@@ -190,7 +190,8 @@
 *
 *        Solve L**H *X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Lower', 'Conjugate transpose', 'Non-unit',
+         CALL CTRSM( 'Left', 'Lower', 'Conjugate transpose',
+     $               'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )
       END IF
 *

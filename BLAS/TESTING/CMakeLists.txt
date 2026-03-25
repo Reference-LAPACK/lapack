@@ -15,6 +15,12 @@ macro(add_blas_test name src)
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
   endif()
+
+  # Disable constant propagation for NAG compiler to avoid issues with
+  # special values (Inf, NaN) returned by SXVALS and DXVALS.
+  if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+    target_compile_options(${name} PRIVATE "-Onopropagate")
+  endif()
 endmacro()
 
 if(BUILD_SINGLE)

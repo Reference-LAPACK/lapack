@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_spstrf_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_spstrf_work)( int matrix_layout, char uplo, lapack_int n,
                                 float* a, lapack_int lda, lapack_int* piv,
                                 lapack_int* rank, float tol, float* work )
 {
@@ -49,7 +49,7 @@ lapack_int LAPACKE_spstrf_work( int matrix_layout, char uplo, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            LAPACKE_xerbla( "LAPACKE_spstrf_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spstrf_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -59,23 +59,23 @@ lapack_int LAPACKE_spstrf_work( int matrix_layout, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_spo_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_spo_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spstrf( &uplo, &n, a_t, &lda_t, piv, rank, &tol, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_spo_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_spo_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_spstrf_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spstrf_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_spstrf_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_spstrf_work", info );
     }
     return info;
 }

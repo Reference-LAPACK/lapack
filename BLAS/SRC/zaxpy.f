@@ -85,6 +85,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

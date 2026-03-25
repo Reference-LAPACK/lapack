@@ -517,6 +517,7 @@
      $                   VL, LDVL, VR, LDVR, LRE, LDLRE, RCONDV, RCNDV1,
      $                   RCDVIN, RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1,
      $                   RESULT, WORK, NWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

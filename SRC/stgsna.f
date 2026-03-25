@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STGSNA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsna.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsna.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -378,6 +376,7 @@
       SUBROUTINE STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -416,12 +415,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLAPY2, SNRM2, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLAPY2, SNRM2,
+      REAL               SDOT, SLAMCH, SLAPY2,
+     $                   SNRM2, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SDOT, SLAMCH,
+     $                   SLAPY2, SNRM2,
      $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLACPY, SLAG2, STGEXC, STGSYL, XERBLA
+      EXTERNAL           SGEMV, SLACPY, SLAG2,
+     $                   STGEXC, STGSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -559,7 +561,8 @@
      $                SNRM2( N, VR( 1, KS+1 ), 1 ) )
                LNRM = SLAPY2( SNRM2( N, VL( 1, KS ), 1 ),
      $                SNRM2( N, VL( 1, KS+1 ), 1 ) )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -569,7 +572,8 @@
                TMPIR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHAV = TMPRR + TMPII
                UHAVI = TMPIR - TMPRI
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
@@ -591,10 +595,12 @@
 *
                RNRM = SNRM2( N, VR( 1, KS ), 1 )
                LNRM = SNRM2( N, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHAV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1,
+     $                     ZERO,
      $                     WORK, 1 )
                UHBV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                COND = SLAPY2( UHAV, UHBV )
@@ -646,7 +652,8 @@
             IFST = K
             ILST = 1
 *
-            CALL STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ), N,
+            CALL STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+     $                   N,
      $                   DUMMY, 1, DUMMY1, 1, IFST, ILST,
      $                   WORK( N*N*2+1 ), LWORK-2*N*N, IERR )
 *
@@ -672,7 +679,8 @@
                ELSE
                   I = N*N + 1
                   IZ = 2*N*N + 1
-                  CALL STGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL STGSYL( 'N', DIFDRI, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ),

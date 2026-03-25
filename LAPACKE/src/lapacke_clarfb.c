@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clarfb( int matrix_layout, char side, char trans, char direct,
+lapack_int API_SUFFIX(LAPACKE_clarfb)( int matrix_layout, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, const lapack_complex_float* v,
                            lapack_int ldv, const lapack_complex_float* t,
@@ -46,39 +46,39 @@ lapack_int LAPACKE_clarfb( int matrix_layout, char side, char trans, char direct
     lapack_logical left, col, forward;
     char uplo;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_clarfb", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarfb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        left = LAPACKE_lsame( side, 'l' );
-        col = LAPACKE_lsame( storev, 'c' );
-        forward = LAPACKE_lsame( direct, 'f' );
+        left = API_SUFFIX(LAPACKE_lsame)( side, 'l' );
+        col = API_SUFFIX(LAPACKE_lsame)( storev, 'c' );
+        forward = API_SUFFIX(LAPACKE_lsame)( direct, 'f' );
 
         nrows_v = ( col && left ) ? m : ( ( col && !left ) ? n : ( !col ? k : 1) );
         ncols_v = ( !col && left ) ? m : ( ( !col && !left ) ? n : ( col ? k : 1 ) );
         uplo = ( ( forward && col ) || !( forward || col ) ) ? 'l' : 'u';
 
         if( ( col && k > nrows_v ) || ( !col && k > ncols_v ) ) {
-            LAPACKE_xerbla( "LAPACKE_clarfb", -8 );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarfb", -8 );
             return -8;
         }
-        if( LAPACKE_ctz_nancheck( matrix_layout, direct, uplo, 'u',
+        if( API_SUFFIX(LAPACKE_ctz_nancheck)( matrix_layout, direct, uplo, 'u',
                                   nrows_v, ncols_v, v, ldv ) ) {
             return -9;
         }
-        if( LAPACKE_cge_nancheck( matrix_layout, k, k, t, ldt ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, k, k, t, ldt ) ) {
             return -11;
         }
-        if( LAPACKE_cge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, m, n, c, ldc ) ) {
             return -13;
         }
     }
 #endif
-    if( LAPACKE_lsame( side, 'l' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
         ldwork = n;
-    } else if( LAPACKE_lsame( side, 'r' ) ) {
+    } else if( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
         ldwork = m;
     } else {
         ldwork = 1;
@@ -91,13 +91,13 @@ lapack_int LAPACKE_clarfb( int matrix_layout, char side, char trans, char direct
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_clarfb_work( matrix_layout, side, trans, direct, storev, m, n,
+    info = API_SUFFIX(LAPACKE_clarfb_work)( matrix_layout, side, trans, direct, storev, m, n,
                                 k, v, ldv, t, ldt, c, ldc, work, ldwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_clarfb", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clarfb", info );
     }
     return info;
 }

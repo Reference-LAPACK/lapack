@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAQR0 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr0.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr0.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -253,6 +251,7 @@
 *  =====================================================================
       SUBROUTINE SLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -312,7 +311,8 @@
       REAL               ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLAHQR, SLANV2, SLAQR3, SLAQR4, SLAQR5
+      EXTERNAL           SLACPY, SLAHQR, SLANV2, SLAQR3, SLAQR4,
+     $                   SLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX, MIN, MOD, REAL
@@ -515,7 +515,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, LS, LD, WR, WI, H( KV, 1 ), LDH,
      $                   NHO, H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH,
      $                   WORK, LWORK )
@@ -559,7 +560,8 @@
                      BB = SS
                      CC = WILK2*SS
                      DD = AA
-                     CALL SLANV2( AA, BB, CC, DD, WR( I-1 ), WI( I-1 ),
+                     CALL SLANV2( AA, BB, CC, DD, WR( I-1 ),
+     $                            WI( I-1 ),
      $                            WR( I ), WI( I ), CS, SN )
    30             CONTINUE
                   IF( KS.EQ.KTOP ) THEN

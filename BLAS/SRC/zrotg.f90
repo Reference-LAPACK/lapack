@@ -86,6 +86,7 @@
 !
 !  =====================================================================
 subroutine ZROTG( a, b, c, s )
+   implicit none
    integer, parameter :: wp = kind(1.d0)
 !
 !  -- Reference BLAS level1 routine --

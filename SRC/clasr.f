@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLASR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -197,6 +195,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,12 +236,14 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.( LSAME( SIDE, 'L' ) .OR. LSAME( SIDE, 'R' ) ) ) THEN
+      IF( .NOT.( LSAME( SIDE, 'L' ) .OR.
+     $    LSAME( SIDE, 'R' ) ) ) THEN
          INFO = 1
       ELSE IF( .NOT.( LSAME( PIVOT, 'V' ) .OR. LSAME( PIVOT,
      $         'T' ) .OR. LSAME( PIVOT, 'B' ) ) ) THEN
          INFO = 2
-      ELSE IF( .NOT.( LSAME( DIRECT, 'F' ) .OR. LSAME( DIRECT, 'B' ) ) )
+      ELSE IF( .NOT.( LSAME( DIRECT, 'F' ) .OR.
+     $         LSAME( DIRECT, 'B' ) ) )
      $          THEN
          INFO = 3
       ELSE IF( M.LT.0 ) THEN

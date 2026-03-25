@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLA_GERCOND_X + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gercond_x.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gercond_x.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -133,6 +131,7 @@
       DOUBLE PRECISION FUNCTION ZLA_GERCOND_X( TRANS, N, A, LDA, AF,
      $                                         LDAF, IPIV, X, INFO,
      $                                         WORK, RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -247,7 +246,8 @@
                CALL ZGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL ZGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL ZGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -265,7 +265,8 @@
             END DO
 *
             IF ( NOTRANS ) THEN
-               CALL ZGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL ZGETRS( 'Conjugate transpose', N, 1, AF, LDAF,
+     $                      IPIV,
      $            WORK, N, INFO )
             ELSE
                CALL ZGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,

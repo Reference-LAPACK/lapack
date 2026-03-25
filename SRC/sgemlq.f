@@ -74,7 +74,7 @@
 *>          A is REAL array, dimension
 *>                               (LDA,M) if SIDE = 'L',
 *>                               (LDA,N) if SIDE = 'R'
-*>          Part of the data structure to represent Q as returned by DGELQ.
+*>          Part of the data structure to represent Q as returned by SGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -170,6 +170,7 @@
 *  =====================================================================
       SUBROUTINE SGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
      $                   C, LDC, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

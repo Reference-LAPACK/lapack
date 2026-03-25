@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYTRI_3X + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytri_3x.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri_3x.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -155,7 +153,9 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      SUBROUTINE SSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
+     $                      INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,7 +187,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SSYSWAPR, STRTRI, STRMM, XERBLA
+      EXTERNAL           SGEMM, SSYSWAPR, STRTRI, STRMM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MOD
@@ -431,8 +432,10 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *
@@ -627,8 +630,10 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *

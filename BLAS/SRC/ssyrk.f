@@ -166,6 +166,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGESVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -343,9 +341,11 @@
 *> \ingroup gesvx
 *
 *  =====================================================================
-      SUBROUTINE SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                   IPIV,
      $                   EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -382,7 +382,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE, SLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGECON, SGEEQU, SGERFS, SGETRF, SGETRS, SLACPY,
+      EXTERNAL           SGECON, SGEEQU, SGERFS, SGETRF, SGETRS,
+     $                   SLACPY,
      $                   SLAQGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -407,7 +408,9 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
       ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
@@ -473,7 +476,8 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL SGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQU )
+         CALL SGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+     $                INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
@@ -548,7 +552,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Compute the solution matrix X.
 *

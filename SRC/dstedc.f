@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSTEDC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstedc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstedc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -179,6 +177,7 @@
 *  =====================================================================
       SUBROUTINE DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -212,7 +211,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLAED0, DLASCL, DLASET, DLASRT,
+      EXTERNAL           DGEMM, DLACPY, DLAED0, DLASCL, DLASET,
+     $                   DLASRT,
      $                   DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -377,9 +377,11 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
                IF( ICOMPZ.EQ.1 ) THEN
@@ -398,7 +400,8 @@
 *
 *              Scale back.
 *
-               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
@@ -408,7 +411,8 @@
 *                 the length of D, we must solve the sub-problem in a
 *                 workspace and then multiply back into Z.
 *
-                  CALL DSTEQR( 'I', M, D( START ), E( START ), WORK, M,
+                  CALL DSTEQR( 'I', M, D( START ), E( START ), WORK,
+     $                         M,
      $                         WORK( M*M+1 ), INFO )
                   CALL DLACPY( 'A', N, M, Z( 1, START ), LDZ,
      $                         WORK( STOREZ ), N )

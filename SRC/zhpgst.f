@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHPGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -110,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +137,8 @@
       COMPLEX*16         CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZDSCAL, ZHPMV, ZHPR2, ZTPMV,
+      EXTERNAL           XERBLA, ZAXPY, ZDSCAL, ZHPMV, ZHPR2,
+     $                   ZTPMV,
      $                   ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
@@ -183,12 +183,14 @@
 *
                AP( JJ ) = DBLE( AP( JJ ) )
                BJJ = DBLE( BP( JJ ) )
-               CALL ZTPSV( UPLO, 'Conjugate transpose', 'Non-unit', J,
+               CALL ZTPSV( UPLO, 'Conjugate transpose', 'Non-unit',
+     $                     J,
      $                     BP, AP( J1 ), 1 )
                CALL ZHPMV( UPLO, J-1, -CONE, AP, BP( J1 ), 1, CONE,
      $                     AP( J1 ), 1 )
                CALL ZDSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-ZDOTC( J-1, AP( J1 ), 1, BP( J1 ),
+               AP( JJ ) = ( AP( JJ )-ZDOTC( J-1, AP( J1 ), 1,
+     $             BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE
@@ -263,7 +265,8 @@
                AP( JJ ) = AJJ*BJJ + ZDOTC( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
                CALL ZDSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
-               CALL ZHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ), 1,
+               CALL ZHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ),
+     $                     1,
      $                     CONE, AP( JJ+1 ), 1 )
                CALL ZTPMV( UPLO, 'Conjugate transpose', 'Non-unit',
      $                     N-J+1, BP( JJ ), AP( JJ ), 1 )

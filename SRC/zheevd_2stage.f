@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEEVD_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheevd_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevd_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -242,7 +240,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -287,7 +286,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY, ZLASCL,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY,
+     $                   ZLASCL,
      $                   ZSTEDC, ZUNMTR, ZHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -337,7 +337,7 @@
             END IF
          END IF
          WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -436,7 +436,7 @@
       END IF
 *
       WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

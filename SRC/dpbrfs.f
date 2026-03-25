@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DPBRFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbrfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbrfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -186,6 +184,7 @@
 *  =====================================================================
       SUBROUTINE DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -224,7 +223,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DPBTRS, DSBMV, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DPBTRS, DSBMV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -397,14 +397,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ),
+     $                      N,
      $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
@@ -416,7 +418,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
   120          CONTINUE
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ),
+     $                      N,
      $                      INFO )
             END IF
             GO TO 100

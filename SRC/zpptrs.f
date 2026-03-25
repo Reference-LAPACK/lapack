@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZPPTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpptrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -105,6 +103,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,7 +166,8 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  AP, B( 1, I ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
@@ -188,7 +188,8 @@
 *
 *           Solve L**H *X = Y, overwriting B with X.
 *
-            CALL ZTPSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
+            CALL ZTPSV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $                  N,
      $                  AP, B( 1, I ), 1 )
    20    CONTINUE
       END IF

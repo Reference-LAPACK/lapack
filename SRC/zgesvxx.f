@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGESVXX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesvxx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvxx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -532,11 +530,13 @@
 *> \ingroup gesvxx
 *
 *  =====================================================================
-      SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK,
      $                    INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -583,7 +583,8 @@
       DOUBLE PRECISION   DLAMCH, ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY, ZLAQGE,
+      EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY,
+     $                   ZLAQGE,
      $                   XERBLA, ZLASCL2, ZGERFSX
 *     ..
 *     .. Intrinsic Functions ..

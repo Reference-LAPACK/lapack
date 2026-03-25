@@ -72,6 +72,7 @@
 *>
 *  =====================================================================
       COMPLEX FUNCTION CLARND( IDIST, ISEED )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,7 +125,8 @@
 *
 *        real and imaginary parts each normal (0,1)
 *
-         CLARND = SQRT( -TWO*LOG( T1 ) )*EXP( CMPLX( ZERO, TWOPI*T2 ) )
+         CLARND = SQRT( -TWO*LOG( T1 ) )*
+     $            EXP( CMPLX( ZERO, TWOPI*T2 ) )
       ELSE IF( IDIST.EQ.4 ) THEN
 *
 *        uniform distribution on the unit disc abs(z) <= 1

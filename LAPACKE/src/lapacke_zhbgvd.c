@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhbgvd( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zhbgvd)( int matrix_layout, char jobz, char uplo, lapack_int n,
                            lapack_int ka, lapack_int kb,
                            lapack_complex_double* ab, lapack_int ldab,
                            lapack_complex_double* bb, lapack_int ldbb,
@@ -49,22 +49,22 @@ lapack_int LAPACKE_zhbgvd( int matrix_layout, char jobz, char uplo, lapack_int n
     double rwork_query;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zhbgvd", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbgvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zhb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_zhb_nancheck)( matrix_layout, uplo, n, ka, ab, ldab ) ) {
             return -7;
         }
-        if( LAPACKE_zhb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
+        if( API_SUFFIX(LAPACKE_zhb_nancheck)( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
             return -9;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_zhbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = API_SUFFIX(LAPACKE_zhbgvd_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, &work_query, lwork,
                                 &rwork_query, lrwork, &iwork_query, liwork );
     if( info != 0 ) {
@@ -91,7 +91,7 @@ lapack_int LAPACKE_zhbgvd( int matrix_layout, char jobz, char uplo, lapack_int n
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
+    info = API_SUFFIX(LAPACKE_zhbgvd_work)( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, work, lwork, rwork, lrwork,
                                 iwork, liwork );
     /* Release memory and exit */
@@ -102,7 +102,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zhbgvd", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhbgvd", info );
     }
     return info;
 }

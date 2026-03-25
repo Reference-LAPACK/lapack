@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlacgv_work( lapack_int n, lapack_complex_double* x,
+lapack_int API_SUFFIX(LAPACKE_zlacgv_work)( lapack_int n, lapack_complex_double* x,
                                 lapack_int incx )
 {
     lapack_int info = 0;

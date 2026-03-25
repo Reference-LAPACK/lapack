@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STRSEN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strsen.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strsen.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -309,8 +307,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, WI,
+      SUBROUTINE STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR,
+     $                   WI,
      $                   M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -350,7 +350,8 @@
       EXTERNAL           LSAME, SLANGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLACPY, STREXC, STRSYL, XERBLA
+      EXTERNAL           SLACN2, SLACPY, STREXC, STRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -471,7 +472,8 @@
                IERR = 0
                KK = K
                IF( K.NE.KS )
-     $            CALL STREXC( COMPQ, N, T, LDT, Q, LDQ, KK, KS, WORK,
+     $            CALL STREXC( COMPQ, N, T, LDT, Q, LDQ, KK, KS,
+     $                         WORK,
      $                         IERR )
                IF( IERR.EQ.1 .OR. IERR.EQ.2 ) THEN
 *
@@ -519,7 +521,8 @@
          EST = ZERO
          KASE = 0
    30    CONTINUE
-         CALL SLACN2( NN, WORK( NN+1 ), WORK, IWORK, EST, KASE, ISAVE )
+         CALL SLACN2( NN, WORK( NN+1 ), WORK, IWORK, EST, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *

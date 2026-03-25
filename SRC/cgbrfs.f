@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGBRFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbrfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbrfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -200,9 +198,11 @@
 *> \ingroup gbrfs
 *
 *  =====================================================================
-      SUBROUTINE CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -244,7 +244,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGBMV, CGBTRS, CLACN2, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGBMV, CGBTRS, CLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -314,7 +315,7 @@
       NZ = MIN( KL+KU+2, N+1 )
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -331,7 +332,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ), 1,
+         CALL CGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ),
+     $               1,
      $               CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -389,7 +391,8 @@
 *
 *           Update solution and try again.
 *
-            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK, N,
+            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL CAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
@@ -421,10 +424,11 @@
 *
          DO 90 I = 1, N
             IF( RWORK( I ).GT.SAFE2 ) THEN
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I )
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I )
             ELSE
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I ) +
-     $                      SAFE1
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I ) + SAFE1
             END IF
    90    CONTINUE
 *

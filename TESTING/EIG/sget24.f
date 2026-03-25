@@ -340,6 +340,7 @@
      $                   H, HT, WR, WI, WRT, WIT, WRTMP, WITMP, VS,
      $                   LDVS, VS1, RCDEIN, RCDVIN, NSLCT, ISLCT,
      $                   RESULT, WORK, LWORK, IWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

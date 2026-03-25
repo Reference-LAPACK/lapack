@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEQP3RK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqp3rk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqp3rk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -552,27 +550,19 @@
 *> C. H. Bischof, Math. and Comp. Sci. Div., Argonne National Lab, USA.
 *> A BLAS-3 version of the QR factorization with column pivoting.
 *> LAPACK Working Note 114
-*> \htmlonly
 *> <a href="https://www.netlib.org/lapack/lawnspdf/lawn114.pdf">https://www.netlib.org/lapack/lawnspdf/lawn114.pdf</a>
-*> \endhtmlonly
 *> and in
 *> SIAM J. Sci. Comput., 19(5):1486-1494, Sept. 1998.
-*> \htmlonly
 *> <a href="https://doi.org/10.1137/S1064827595296732">https://doi.org/10.1137/S1064827595296732</a>
-*> \endhtmlonly
 *>
 *> [2] A partial column norm updating strategy developed in 2006.
 *> Z. Drmac and Z. Bujanovic, Dept. of Math., University of Zagreb, Croatia.
 *> On the failure of rank revealing QR factorization software – a case study.
 *> LAPACK Working Note 176.
-*> \htmlonly
 *> <a href="http://www.netlib.org/lapack/lawnspdf/lawn176.pdf">http://www.netlib.org/lapack/lawnspdf/lawn176.pdf</a>
-*> \endhtmlonly
 *> and in
 *> ACM Trans. Math. Softw. 35, 2, Article 12 (July 2008), 28 pages.
-*> \htmlonly
 *> <a href="https://doi.org/10.1145/1377612.1377616">https://doi.org/10.1145/1377612.1377616</a>
-*> \endhtmlonly
 *
 *> \par Contributors:
 *  ==================
@@ -677,7 +667,7 @@
 *           Minimal workspace size in case of using only unblocked
 *           BLAS 2 code in ZLAQP2RK.
 *           1) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in ZLARF subroutine inside ZLAQP2RK to apply an
+*              in ZLARF1F subroutine inside ZLAQP2RK to apply an
 *              elementary reflector from the left.
 *           TOTAL_WORK_SIZE = 3*N + NRHS - 1
 *
@@ -693,7 +683,7 @@
 *           1) ZGEQP3RK, ZLAQP2RK, ZLAQP3RK: 2*N to store full and
 *              partial column 2-norms.
 *           2) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used
-*              in ZLARF subroutine to apply an elementary reflector
+*              in ZLARF1F subroutine to apply an elementary reflector
 *              from the left.
 *           3) ZLAQP3RK: NB*(N+NRHS) to use in the work array F that
 *              is used to apply a block reflector from
@@ -760,6 +750,7 @@
 *     for the whole original matrix stored in A(1:M,1:N).
 *
       KP1 = IDAMAX( N, RWORK( 1 ), 1 )
+      MAXC2NRM = RWORK( KP1 )
 *
 *     ==================================================================.
 *
@@ -892,7 +883,8 @@
 *        Determine when to cross over from blocked to unblocked code.
 *        (for N less than NX, unblocked code should be used).
 *
-         NX = MAX( 0, ILAENV( IXOVER, 'ZGEQP3RK', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, ILAENV( IXOVER, 'ZGEQP3RK', ' ', M, N, -1,
+     $                        -1 ) )
 *
          IF( NX.LT.MINMN ) THEN
 *

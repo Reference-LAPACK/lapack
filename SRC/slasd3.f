@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLASD3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -211,9 +209,11 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
+      SUBROUTINE SLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU,
+     $                   U2,
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -246,7 +246,8 @@
       EXTERNAL           SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLACPY, SLASCL, SLASD4, XERBLA
+      EXTERNAL           SCOPY, SGEMM, SLACPY, SLASCL, SLASD4,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -364,16 +365,19 @@
 *     Update the left singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL SGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO, U,
+         CALL SGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO,
+     $               U,
      $               LDU )
          GO TO 100
       END IF
       IF( CTOT( 1 ).GT.0 ) THEN
-         CALL SGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ), LDU2,
+         CALL SGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ),
+     $               LDU2,
      $               Q( 2, 1 ), LDQ, ZERO, U( 1, 1 ), LDU )
          IF( CTOT( 3 ).GT.0 ) THEN
             KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
-            CALL SGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
+            CALL SGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1,
+     $                  KTEMP ),
      $                  LDU2, Q( KTEMP, 1 ), LDQ, ONE, U( 1, 1 ), LDU )
          END IF
       ELSE IF( CTOT( 3 ).GT.0 ) THEN
@@ -386,7 +390,8 @@
       CALL SCOPY( K, Q( 1, 1 ), LDQ, U( NLP1, 1 ), LDU )
       KTEMP = 2 + CTOT( 1 )
       CTEMP = CTOT( 2 ) + CTOT( 3 )
-      CALL SGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ), LDU2,
+      CALL SGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ),
+     $            LDU2,
      $            Q( KTEMP, 1 ), LDQ, ZERO, U( NLP2, 1 ), LDU )
 *
 *     Generate the right singular vectors.
@@ -404,7 +409,8 @@
 *     Update the right singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL SGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2, ZERO,
+         CALL SGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2,
+     $               ZERO,
      $               VT, LDVT )
          RETURN
       END IF
@@ -413,7 +419,8 @@
      $            VT2( 1, 1 ), LDVT2, ZERO, VT( 1, 1 ), LDVT )
       KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
       IF( KTEMP.LE.LDVT2 )
-     $   CALL SGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1, KTEMP ),
+     $   CALL SGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1,
+     $               KTEMP ),
      $               LDQ, VT2( KTEMP, 1 ), LDVT2, ONE, VT( 1, 1 ),
      $               LDVT )
 *

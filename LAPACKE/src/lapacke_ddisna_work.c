@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ddisna_work( char job, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_ddisna_work)( char job, lapack_int m, lapack_int n,
                                 const double* d, double* sep )
 {
     lapack_int info = 0;

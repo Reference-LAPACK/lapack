@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLARRK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -142,6 +140,7 @@
 *  =====================================================================
       SUBROUTINE SLARRK( N, IW, GL, GU,
      $                    D, E2, PIVMIN, RELTOL, W, WERR, INFO)
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -195,8 +194,8 @@
 
       INFO = -1
 
-      LEFT = GL - FUDGE*TNORM*EPS*N - FUDGE*TWO*PIVMIN
-      RIGHT = GU + FUDGE*TNORM*EPS*N + FUDGE*TWO*PIVMIN
+      LEFT = GL - FUDGE*TNORM*EPS*REAL( N ) - FUDGE*TWO*PIVMIN
+      RIGHT = GU + FUDGE*TNORM*EPS*REAL( N ) + FUDGE*TWO*PIVMIN
       IT = 0
 
  10   CONTINUE

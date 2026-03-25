@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHPTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -106,6 +104,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,7 +222,8 @@
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
             END IF
             KSTEP = 1
          ELSE
@@ -248,15 +248,18 @@
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ),
+     $                              1 ) )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            ZDOTC( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            ZDOTC( K-1, AP( KC ), 1,
+     $                                   AP( KCNEXT ),
      $                            1 )
                CALL ZCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          DBLE( ZDOTC( K-1, WORK, 1, AP( KCNEXT ),
+     $                          DBLE( ZDOTC( K-1, WORK, 1,
+     $                                AP( KCNEXT ),
      $                          1 ) )
             END IF
             KSTEP = 2
@@ -349,7 +352,8 @@
 *
             IF( K.LT.N ) THEN
                CALL ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KC+1 ), 1 )
                AP( KC ) = AP( KC ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
@@ -357,10 +361,12 @@
      $                          ZDOTC( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL ZCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ),
+     $                     WORK,
      $                     1, ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        DBLE( ZDOTC( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                        DBLE( ZDOTC( N-K, WORK, 1,
+     $                              AP( KCNEXT+2 ),
      $                        1 ) )
             END IF
             KSTEP = 2

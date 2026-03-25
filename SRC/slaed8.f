@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED8 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed8.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed8.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -85,7 +83,7 @@
 *>          D is REAL array, dimension (N)
 *>         On entry, the eigenvalues of the two submatrices to be
 *>         combined.  On exit, the trailing (N-K) updated eigenvalues
-*>         (those which were deflated) sorted into increasing order.
+*>         (those which were deflated) sorted into decreasing order.
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -240,6 +238,7 @@
       SUBROUTINE SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
      $                   CUTPNT, Z, DLAMBDA, Q2, LDQ2, W, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INDXP, INDX, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -275,7 +274,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -370,7 +370,8 @@
          ELSE
             DO 60 J = 1, N
                PERM( J ) = INDXQ( INDX( J ) )
-               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ),
+     $                     1 )
    60       CONTINUE
             CALL SLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
      $                   LDQ )

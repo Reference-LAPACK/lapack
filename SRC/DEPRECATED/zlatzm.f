@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLATZM + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatzm.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatzm.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -148,7 +146,8 @@
 *> \ingroup latzm
 *
 *  =====================================================================
-      SUBROUTINE ZLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC, WORK )
+      SUBROUTINE ZLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC,
+     $                   WORK )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -206,8 +205,8 @@
 *        w := C1 + C2 * v
 *
          CALL ZCOPY( M, C1, 1, WORK, 1 )
-         CALL ZGEMV( 'No transpose', M, N-1, ONE, C2, LDC, V, INCV, ONE,
-     $               WORK, 1 )
+         CALL ZGEMV( 'No transpose', M, N-1, ONE, C2, LDC, V, INCV,
+     $               ONE, WORK, 1 )
 *
 *        [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**H]
 *

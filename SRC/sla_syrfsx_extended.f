@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLA_SYRFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syrfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syrfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -386,13 +384,15 @@
 *> \ingroup la_herfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
      $                                AYB, DY, Y_TAIL, RCOND, ITHRESH,
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -456,7 +456,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SSYTRS, SSYMV, BLAS_SSYMV_X,
+      EXTERNAL           SAXPY, SCOPY, SSYTRS, SSYMV,
+     $                   BLAS_SSYMV_X,
      $                   BLAS_SSYMV2_X, SLA_SYAMV, SLA_WWADDW,
      $                   SLA_LIN_BERR
       REAL               SLAMCH

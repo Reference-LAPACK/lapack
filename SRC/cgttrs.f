@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGTTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgttrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgttrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -133,8 +131,10 @@
 *> \ingroup gttrs
 *
 *  =====================================================================
-      SUBROUTINE CGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
+      SUBROUTINE CGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B,
+     $                   LDB,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -212,7 +212,8 @@
       ELSE
          DO 10 J = 1, NRHS, NB
             JB = MIN( NRHS-J+1, NB )
-            CALL CGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1, J ),
+            CALL CGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1,
+     $                   J ),
      $                   LDB )
    10    CONTINUE
       END IF

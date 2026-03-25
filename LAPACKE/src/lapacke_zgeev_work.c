@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
+lapack_int API_SUFFIX(LAPACKE_zgeev_work)( int matrix_layout, char jobvl, char jobvr,
                                lapack_int n, lapack_complex_double* a,
                                lapack_int lda, lapack_complex_double* w,
                                lapack_complex_double* vl, lapack_int ldvl,
@@ -58,17 +58,17 @@ lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zgeev_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev_work", info );
             return info;
         }
-        if( ldvl < 1 || ( LAPACKE_lsame( jobvl, 'v' ) && ldvl < n ) ) {
+        if( ldvl < 1 || ( API_SUFFIX(LAPACKE_lsame)( jobvl, 'v' ) && ldvl < n ) ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_zgeev_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev_work", info );
             return info;
         }
-        if( ldvr < 1 || ( LAPACKE_lsame( jobvr, 'v' ) && ldvr < n ) ) {
+        if( ldvr < 1 || ( API_SUFFIX(LAPACKE_lsame)( jobvr, 'v' ) && ldvr < n ) ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_zgeev_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -84,7 +84,7 @@ lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( LAPACKE_lsame( jobvl, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobvl, 'v' ) ) {
             vl_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldvl_t * MAX(1,n) );
@@ -93,7 +93,7 @@ lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
                 goto exit_level_1;
             }
         }
-        if( LAPACKE_lsame( jobvr, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobvr, 'v' ) ) {
             vr_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldvr_t * MAX(1,n) );
@@ -103,7 +103,7 @@ lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgeev( &jobvl, &jobvr, &n, a_t, &lda_t, w, vl_t, &ldvl_t, vr_t,
                       &ldvr_t, work, &lwork, rwork, &info );
@@ -111,30 +111,30 @@ lapack_int LAPACKE_zgeev_work( int matrix_layout, char jobvl, char jobvr,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
-        if( LAPACKE_lsame( jobvl, 'v' ) ) {
-            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, vl_t, ldvl_t, vl, ldvl );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        if( API_SUFFIX(LAPACKE_lsame)( jobvl, 'v' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, vl_t, ldvl_t, vl, ldvl );
         }
-        if( LAPACKE_lsame( jobvr, 'v' ) ) {
-            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, vr_t, ldvr_t, vr, ldvr );
+        if( API_SUFFIX(LAPACKE_lsame)( jobvr, 'v' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, n, vr_t, ldvr_t, vr, ldvr );
         }
         /* Release memory and exit */
-        if( LAPACKE_lsame( jobvr, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobvr, 'v' ) ) {
             LAPACKE_free( vr_t );
         }
 exit_level_2:
-        if( LAPACKE_lsame( jobvl, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobvl, 'v' ) ) {
             LAPACKE_free( vl_t );
         }
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zgeev_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zgeev_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeev_work", info );
     }
     return info;
 }

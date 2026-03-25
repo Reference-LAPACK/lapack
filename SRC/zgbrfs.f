@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGBRFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbrfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbrfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -200,9 +198,11 @@
 *> \ingroup gbrfs
 *
 *  =====================================================================
-      SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -244,7 +244,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGBMV, ZGBTRS, ZLACN2
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGBMV, ZGBTRS,
+     $                   ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -331,7 +332,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ), 1,
+         CALL ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ),
+     $               1,
      $               CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -389,7 +391,8 @@
 *
 *           Update solution and try again.
 *
-            CALL ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK, N,
+            CALL ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL ZAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )

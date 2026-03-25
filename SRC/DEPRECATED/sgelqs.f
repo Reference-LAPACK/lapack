@@ -16,7 +16,7 @@
 *       ..
 *       .. Array Arguments ..
 *       REAL               A( LDA, * ), B( LDB, * ), TAU( * ),
-*      $                   WORK( LWORK )
+*      $                   WORK( * )
 *       ..
 *
 *
@@ -128,7 +128,7 @@
 *     ..
 *     .. Array Arguments ..
       REAL               A( LDA, * ), B( LDB, * ), TAU( * ),
-     $                   WORK( LWORK )
+     $                   WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -174,18 +174,19 @@
 *
 *     Solve L*X = B(1:m,:)
 *
-      CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M, NRHS,
-     $            ONE, A, LDA, B, LDB )
+      CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M,
+     $            NRHS, ONE, A, LDA, B, LDB )
 *
 *     Set B(m+1:n,:) to zero
 *
       IF( M.LT.N )
-     $   CALL SLASET( 'Full', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
+     $   CALL SLASET( 'Full', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ),
+     $                LDB )
 *
 *     B := Q' * B
 *
-      CALL SORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, LDB,
-     $             WORK, LWORK, INFO )
+      CALL SORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B,
+     $             LDB, WORK, LWORK, INFO )
 *
       RETURN
 *

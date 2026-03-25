@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPFTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -209,6 +207,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CPFTRI( TRANSR, UPLO, N, A, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,7 +236,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CTFTRI, CLAUUM, CTRMM, CHERK
+      EXTERNAL           XERBLA, CTFTRI, CLAUUM, CTRMM,
+     $                   CHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -312,7 +312,8 @@
                CALL CLAUUM( 'L', N1, A( 0 ), N, INFO )
                CALL CHERK( 'L', 'C', N1, N2, ONE, A( N1 ), N, ONE,
      $                     A( 0 ), N )
-               CALL CTRMM( 'L', 'U', 'N', 'N', N2, N1, CONE, A( N ), N,
+               CALL CTRMM( 'L', 'U', 'N', 'N', N2, N1, CONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
                CALL CLAUUM( 'U', N2, A( N ), N, INFO )
 *
@@ -325,7 +326,8 @@
                CALL CLAUUM( 'L', N1, A( N2 ), N, INFO )
                CALL CHERK( 'L', 'N', N1, N2, ONE, A( 0 ), N, ONE,
      $                     A( N2 ), N )
-               CALL CTRMM( 'R', 'U', 'C', 'N', N1, N2, CONE, A( N1 ), N,
+               CALL CTRMM( 'R', 'U', 'C', 'N', N1, N2, CONE, A( N1 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL CLAUUM( 'U', N2, A( N1 ), N, INFO )
 *
@@ -341,9 +343,11 @@
 *              T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1)
 *
                CALL CLAUUM( 'U', N1, A( 0 ), N1, INFO )
-               CALL CHERK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1, ONE,
+               CALL CHERK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 0 ), N1 )
-               CALL CTRMM( 'R', 'L', 'N', 'N', N1, N2, CONE, A( 1 ), N1,
+               CALL CTRMM( 'R', 'L', 'N', 'N', N1, N2, CONE, A( 1 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
                CALL CLAUUM( 'L', N2, A( 1 ), N1, INFO )
 *
@@ -355,7 +359,8 @@
                CALL CLAUUM( 'U', N1, A( N2*N2 ), N2, INFO )
                CALL CHERK( 'U', 'C', N1, N2, ONE, A( 0 ), N2, ONE,
      $                     A( N2*N2 ), N2 )
-               CALL CTRMM( 'L', 'L', 'C', 'N', N2, N1, CONE, A( N1*N2 ),
+               CALL CTRMM( 'L', 'L', 'C', 'N', N2, N1, CONE,
+     $                     A( N1*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL CLAUUM( 'L', N2, A( N1*N2 ), N2, INFO )
 *
@@ -380,7 +385,8 @@
                CALL CLAUUM( 'L', K, A( 1 ), N+1, INFO )
                CALL CHERK( 'L', 'C', K, K, ONE, A( K+1 ), N+1, ONE,
      $                     A( 1 ), N+1 )
-               CALL CTRMM( 'L', 'U', 'N', 'N', K, K, CONE, A( 0 ), N+1,
+               CALL CTRMM( 'L', 'U', 'N', 'N', K, K, CONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL CLAUUM( 'U', K, A( 0 ), N+1, INFO )
 *
@@ -393,7 +399,8 @@
                CALL CLAUUM( 'L', K, A( K+1 ), N+1, INFO )
                CALL CHERK( 'L', 'N', K, K, ONE, A( 0 ), N+1, ONE,
      $                     A( K+1 ), N+1 )
-               CALL CTRMM( 'R', 'U', 'C', 'N', K, K, CONE, A( K ), N+1,
+               CALL CTRMM( 'R', 'U', 'C', 'N', K, K, CONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
                CALL CLAUUM( 'U', K, A( K ), N+1, INFO )
 *
@@ -410,7 +417,8 @@
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
                CALL CLAUUM( 'U', K, A( K ), K, INFO )
-               CALL CHERK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K, ONE,
+               CALL CHERK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( K ), K )
                CALL CTRMM( 'R', 'L', 'N', 'N', K, K, CONE, A( 0 ), K,
      $                     A( K*( K+1 ) ), K )
@@ -425,7 +433,8 @@
                CALL CLAUUM( 'U', K, A( K*( K+1 ) ), K, INFO )
                CALL CHERK( 'U', 'C', K, K, ONE, A( 0 ), K, ONE,
      $                     A( K*( K+1 ) ), K )
-               CALL CTRMM( 'L', 'L', 'C', 'N', K, K, CONE, A( K*K ), K,
+               CALL CTRMM( 'L', 'L', 'C', 'N', K, K, CONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
                CALL CLAUUM( 'L', K, A( K*K ), K, INFO )
 *

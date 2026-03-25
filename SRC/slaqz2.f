@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAQZ2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqz2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqz2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -168,7 +166,8 @@
 *> \ingroup laqz2
 *>
 *  =====================================================================
-      SUBROUTINE SLAQZ2( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
+      SUBROUTINE SLAQZ2( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA,
+     $                   B,
      $                   LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
       IMPLICIT NONE
 *
@@ -203,16 +202,19 @@
 *
          CALL SROT( IHI-ISTARTM+1, B( ISTARTM, IHI ), 1, B( ISTARTM,
      $              IHI-1 ), 1, C1, S1 )
-         CALL SROT( IHI-ISTARTM+1, B( ISTARTM, IHI-1 ), 1, B( ISTARTM,
+         CALL SROT( IHI-ISTARTM+1, B( ISTARTM, IHI-1 ), 1,
+     $              B( ISTARTM,
      $              IHI-2 ), 1, C2, S2 )
          B( IHI-1, IHI-2 ) = ZERO
          B( IHI, IHI-2 ) = ZERO
          CALL SROT( IHI-ISTARTM+1, A( ISTARTM, IHI ), 1, A( ISTARTM,
      $              IHI-1 ), 1, C1, S1 )
-         CALL SROT( IHI-ISTARTM+1, A( ISTARTM, IHI-1 ), 1, A( ISTARTM,
+         CALL SROT( IHI-ISTARTM+1, A( ISTARTM, IHI-1 ), 1,
+     $              A( ISTARTM,
      $              IHI-2 ), 1, C2, S2 )
          IF ( ILZ ) THEN
-            CALL SROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1, IHI-1-ZSTART+
+            CALL SROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1,
+     $                 IHI-1-ZSTART+
      $                 1 ), 1, C1, S1 )
             CALL SROT( NZ, Z( 1, IHI-1-ZSTART+1 ), 1, Z( 1,
      $                 IHI-2-ZSTART+1 ), 1, C2, S2 )
@@ -227,7 +229,8 @@
          CALL SROT( ISTOPM-IHI+2, B( IHI-1, IHI-1 ), LDB, B( IHI,
      $              IHI-1 ), LDB, C1, S1 )
          IF ( ILQ ) THEN
-            CALL SROT( NQ, Q( 1, IHI-1-QSTART+1 ), 1, Q( 1, IHI-QSTART+
+            CALL SROT( NQ, Q( 1, IHI-1-QSTART+1 ), 1, Q( 1,
+     $                 IHI-QSTART+
      $                 1 ), 1, C1, S1 )
          END IF
 *
@@ -239,7 +242,8 @@
          CALL SROT( IHI-ISTARTM+1, A( ISTARTM, IHI ), 1, A( ISTARTM,
      $              IHI-1 ), 1, C1, S1 )
          IF ( ILZ ) THEN
-            CALL SROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1, IHI-1-ZSTART+
+            CALL SROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1,
+     $                 IHI-1-ZSTART+
      $                 1 ), 1, C1, S1 )
          END IF
 *
@@ -275,7 +279,8 @@
          IF ( ILZ ) THEN
             CALL SROT( NZ, Z( 1, K+2-ZSTART+1 ), 1, Z( 1, K+1-ZSTART+
      $                 1 ), 1, C1, S1 )
-            CALL SROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1, K-ZSTART+1 ),
+            CALL SROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1,
+     $                 K-ZSTART+1 ),
      $                 1, C2, S2 )
          END IF
          B( K+1, K ) = ZERO

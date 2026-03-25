@@ -7,7 +7,6 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*> \htmlonly
 *> Download ZHETRD_HE2HB + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrd_he2hb.f"> 
 *> [TGZ]</a> 
@@ -15,7 +14,6 @@
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrd_he2hb.f"> 
 *> [TXT]</a>
-*> \endhtmlonly 
 *
 *  Definition:
 *  ===========
@@ -276,7 +274,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHER2K, ZHEMM, ZGEMM, ZCOPY,
+      EXTERNAL           XERBLA, ZHER2K, ZHEMM, ZGEMM,
+     $                   ZCOPY,
      $                   ZLARFT, ZGELQF, ZGEQRF, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -384,7 +383,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL ZCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL ZCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL ZLASET( 'Lower', PK, PK, ZERO, ONE, 

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSBGVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbgvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -263,13 +261,14 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          <= N: if INFO = i, then i eigenvectors failed to converge.
-*>                  Their indices are stored in IFAIL.
-*>          > N:  SPBSTF returned an error code; i.e.,
-*>                if INFO = N + i, for 1 <= i <= N, then the leading
-*>                principal minor of order i of B is not positive.
-*>                The factorization of B could not be completed and
-*>                no eigenvalues or eigenvectors were computed.
+*>          <= N:    if INFO = i, then i eigenvectors failed to converge
+*>                   in SSTEIN; their indices are stored in IFAIL.
+*>          N+1..2N: if INFO = N + i, for 1 <= i <= N, then SPBSTF
+*>                   returned an error code; the leading principal minor
+*>                   of order i of B is not positive. No eigenvalues or
+*>                   eigenvectors were computed.
+*>          > 2N:    if INFO = 2*N + i, then SSTEBZ returned
+*>                   INFO = i; see SSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -291,6 +290,7 @@
       SUBROUTINE SSBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
      $                   LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                   LDZ, WORK, IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -326,7 +326,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLACPY, SPBSTF, SSBGST, SSBTRD,
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SPBSTF, SSBGST,
+     $                   SSBTRD,
      $                   SSTEBZ, SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -462,12 +463,19 @@
       CALL SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( 1 ), IWORK( INDISP ), WORK( INDWRK ),
-     $             IWORK( INDIWO ), INFO )
+     $             IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = 2*N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 30
+      END IF
 *
       IF( WANTZ ) THEN
          CALL SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( 1 ), IWORK( INDISP ), Z, LDZ,
-     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
+     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply transformation matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by SSTEIN.

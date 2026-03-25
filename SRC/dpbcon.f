@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DPBCON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbcon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbcon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -129,6 +127,7 @@
 *  =====================================================================
       SUBROUTINE DPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,14 +222,16 @@
 *
 *           Multiply by inv(U).
 *
-            CALL DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KD, AB, LDAB, WORK, SCALEU, WORK( 2*N+1 ),
      $                   INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL DLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KD, AB, LDAB, WORK, SCALEL, WORK( 2*N+1 ),
      $                   INFO )
             NORMIN = 'Y'

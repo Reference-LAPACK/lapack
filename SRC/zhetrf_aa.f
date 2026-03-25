@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETRF_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrf_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -130,7 +128,8 @@
 *> \ingroup hetrf_aa
 *
 *  =====================================================================
-      SUBROUTINE ZHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE ZHETRF_AA( UPLO, N, A, LDA, IPIV,
+     $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,7 +163,8 @@
       EXTERNAL     LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     ZLAHEF_AA, ZGEMM, ZGEMV, ZCOPY, ZSCAL, ZSWAP, XERBLA
+      EXTERNAL     ZLAHEF_AA, ZGEMM, ZGEMV, ZCOPY, ZSCAL, ZSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    DBLE, DCONJG, MAX
@@ -438,7 +438,8 @@
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL ZGEMM( 'No transpose', 'Conjugate transpose',
+                     CALL ZGEMM( 'No transpose',
+     $                           'Conjugate transpose',
      $                           MJ, 1, JB+1,
      $                          -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,

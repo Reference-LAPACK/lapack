@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYTRS_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -222,13 +220,15 @@
             DO WHILE ( K.LE.N )
                KP = IPIV( K )
                IF( KP.NE.K )
-     $             CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $             CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ),
+     $                         LDB )
                K = K + 1
             END DO
 *
 *           Compute U**T \ B -> B    [ (U**T \P**T * B) ]
 *
-            CALL STRSM( 'L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL STRSM( 'L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B( 2, 1 ), LDB)
          END IF
 *
@@ -251,7 +251,8 @@
 *
 *           Compute U \ B -> B   [ U \ (T \ (U**T \P**T * B) ) ]
 *
-            CALL STRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL STRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B(2, 1), LDB)
 *
 *           Pivot, P * B -> B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
@@ -307,7 +308,8 @@
 *
 *           Compute L**T \ B -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-            CALL STRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ),
+            CALL STRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2,
+     $                  1 ),
      $                  LDA, B( 2, 1 ), LDB)
 *
 *           Pivot, P * B -> B  [ P * (L**T \ (T \ (L \P**T * B) )) ]

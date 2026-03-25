@@ -5,7 +5,6 @@
 ! Online html documentation available at
 !            http://www.netlib.org/lapack/explore-html/
 !
-!> \htmlonly
 !> Download DLASSQ + dependencies
 !> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlassq.f90">
 !> [TGZ]</a>
@@ -13,7 +12,6 @@
 !> [ZIP]</a>
 !> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlassq.f90">
 !> [TXT]</a>
-!> \endhtmlonly
 !
 !  Definition:
 !  ===========
@@ -125,6 +123,7 @@ subroutine DLASSQ( n, x, incx, scale, sumsq )
       only: wp=>dp, zero=>dzero, one=>done, &
             sbig=>dsbig, ssml=>dssml, tbig=>dtbig, tsml=>dtsml
    use LA_XISNAN
+   implicit none
 !
 !  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --

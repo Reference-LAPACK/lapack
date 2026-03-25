@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYTRF_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrf_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -130,7 +128,8 @@
 *> \ingroup hetrf_aa
 *
 *  =====================================================================
-      SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV,
+     $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,7 +164,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP, SGEMM,
+      EXTERNAL           SLASYF_AA, SGEMV, SSCAL, SCOPY, SSWAP,
+     $                   SGEMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

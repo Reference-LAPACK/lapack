@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNGR2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungr2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungr2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -111,6 +109,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,7 +133,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF, ZSCAL
+      EXTERNAL           XERBLA, ZLACGV, ZLARF1L, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -182,9 +181,8 @@
 *        Apply H(i)**H to A(1:m-k+i,1:n-k+i) from the right
 *
          CALL ZLACGV( N-M+II-1, A( II, 1 ), LDA )
-         A( II, N-M+II ) = ONE
-         CALL ZLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
-     $               DCONJG( TAU( I ) ), A, LDA, WORK )
+         CALL ZLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
+     $                 CONJG( TAU( I ) ), A, LDA, WORK )
          CALL ZSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
          CALL ZLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE - DCONJG( TAU( I ) )

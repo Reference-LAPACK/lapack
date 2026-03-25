@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLALS0 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clals0.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clals0.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -264,9 +262,11 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+      SUBROUTINE CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX,
+     $                   LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -296,7 +296,8 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLASCL, CSROT, CSSCAL, SGEMV,
+      EXTERNAL           CCOPY, CLACPY, CLASCL, CSROT, CSSCAL,
+     $                   SGEMV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -360,7 +361,8 @@
 *
          CALL CCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL CCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
+            CALL CCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ),
+     $                  LDBX )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
@@ -480,7 +482,8 @@
 *                    parentheses (x+y)+z. The goal is to prevent optimizing
 *                    compilers from doing x+(y+z).
 *
-                     RWORK( I ) = Z( J ) / ( SLAMC3( DSIGJ, -POLES( I+1,
+                     RWORK( I ) = Z( J ) / ( SLAMC3( DSIGJ,
+     $                      -POLES( I+1,
      $                            2 ) )-DIFR( I, 1 ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -489,7 +492,8 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      RWORK( I ) = ZERO
                   ELSE
-                     RWORK( I ) = Z( J ) / ( SLAMC3( DSIGJ, -POLES( I,
+                     RWORK( I ) = Z( J ) / ( SLAMC3( DSIGJ,
+     $                      -POLES( I,
      $                            2 ) )-DIFL( I ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -531,7 +535,8 @@
 *
          IF( SQRE.EQ.1 ) THEN
             CALL CCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL CSROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
+            CALL CSROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C,
+     $                  S )
          END IF
          IF( K.LT.MAX( M, N ) )
      $      CALL CLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB,
@@ -544,7 +549,8 @@
             CALL CCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 190 I = 2, N
-            CALL CCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
+            CALL CCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ),
+     $                  LDB )
   190    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.

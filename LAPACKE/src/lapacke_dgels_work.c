@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgels_work( int matrix_layout, char trans, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_dgels_work)( int matrix_layout, char trans, lapack_int m,
                                lapack_int n, lapack_int nrhs, double* a,
                                lapack_int lda, double* b, lapack_int ldb,
                                double* work, lapack_int lwork )
@@ -53,12 +53,12 @@ lapack_int LAPACKE_dgels_work( int matrix_layout, char trans, lapack_int m,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -79,8 +79,8 @@ lapack_int LAPACKE_dgels_work( int matrix_layout, char trans, lapack_int m,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
-        LAPACKE_dge_trans( matrix_layout, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgels( &trans, &m, &n, &nrhs, a_t, &lda_t, b_t, &ldb_t, work,
                       &lwork, &info );
@@ -88,8 +88,8 @@ lapack_int LAPACKE_dgels_work( int matrix_layout, char trans, lapack_int m,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, MAX(m,n), nrhs, b_t, ldb_t, b,
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, MAX(m,n), nrhs, b_t, ldb_t, b,
                            ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
@@ -97,11 +97,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dgels_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dgels_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgels_work", info );
     }
     return info;
 }

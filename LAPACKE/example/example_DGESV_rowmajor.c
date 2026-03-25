@@ -40,41 +40,41 @@ int main(int argc, char **argv) {
 
         /* Locals */
         lapack_int n, nrhs, lda, ldb, info;
-		int i, j;
+        int i, j;
         /* Local arrays */
-		double *A, *b;
-		lapack_int *ipiv;
+        double *A, *b;
+        lapack_int *ipiv;
 
         /* Default Value */
-	    n = 5; nrhs = 1;
+        n = 5; nrhs = 1;
 
         /* Arguments */
-	    for( i = 1; i < argc; i++ ) {
-	    	if( strcmp( argv[i], "-n" ) == 0 ) {
-		    	n  = atoi(argv[i+1]);
-			    i++;
-		    }
-			if( strcmp( argv[i], "-nrhs" ) == 0 ) {
-				nrhs  = atoi(argv[i+1]);
-				i++;
-			}
-		}
+        for( i = 1; i < argc; i++ ) {
+            if( strcmp( argv[i], "-n" ) == 0 ) {
+                n  = atoi(argv[i+1]);
+                i++;
+            }
+            if( strcmp( argv[i], "-nrhs" ) == 0 ) {
+                nrhs  = atoi(argv[i+1]);
+                i++;
+            }
+        }
 
         /* Initialization */
         lda=n, ldb=nrhs;
-		A = (double *)malloc(n*n*sizeof(double)) ;
-		if (A==NULL){ printf("error of memory allocation\n"); exit(0); }
-		b = (double *)malloc(n*nrhs*sizeof(double)) ;
-		if (b==NULL){ printf("error of memory allocation\n"); exit(0); }
-		ipiv = (lapack_int *)malloc(n*sizeof(lapack_int)) ;
-		if (ipiv==NULL){ printf("error of memory allocation\n"); exit(0); }
+        A = (double *)malloc(n*n*sizeof(double)) ;
+        if (A==NULL){ printf("error of memory allocation\n"); exit(0); }
+        b = (double *)malloc(n*nrhs*sizeof(double)) ;
+        if (b==NULL){ printf("error of memory allocation\n"); free(A); exit(0); }
+        ipiv = (lapack_int *)malloc(n*sizeof(lapack_int)) ;
+        if (ipiv==NULL){ printf("error of memory allocation\n"); free(A); free(b); exit(0); }
 
         for( i = 0; i < n; i++ ) {
                 for( j = 0; j < n; j++ ) A[i*lda+j] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
-		}
+        }
 
-		for(i=0;i<n*nrhs;i++)
-			b[i] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
+        for(i=0;i<n*nrhs;i++)
+            b[i] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
 
         /* Print Entry Matrix */
         print_matrix_rowmajor( "Entry Matrix A", n, n, A, lda );
@@ -88,12 +88,20 @@ int main(int argc, char **argv) {
                         b, ldb );
         /* Check for the exact singularity */
         if( info > 0 ) {
-                printf( "The diagonal element of the triangular factor of A,\n" );
-                printf( "U(%" LAPACK_IFMT ",%" LAPACK_IFMT ") is zero, so that A is singular;\n", info, info );
-                printf( "the solution could not be computed.\n" );
-                exit( 1 );
+            printf( "The diagonal element of the triangular factor of A,\n" );
+            printf( "U(%" LAPACK_IFMT ",%" LAPACK_IFMT ") is zero, so that A is singular;\n", info, info );
+            printf( "the solution could not be computed.\n" );
+            free(A);
+            free(b);
+            free(ipiv);
+            exit( 1 );
         }
-        if (info <0) exit( 1 );
+        if (info <0) {
+            free(A);
+            free(b);
+            free(ipiv);
+            exit( 1 );
+        }
         /* Print solution */
         print_matrix_rowmajor( "Solution", n, nrhs, b, ldb );
         /* Print details of LU factorization */
@@ -105,7 +113,6 @@ int main(int argc, char **argv) {
         free(A);
         free(b);
         free(ipiv);
-        
         exit( 0 );
 } /* End of LAPACKE_dgesv Example */
 

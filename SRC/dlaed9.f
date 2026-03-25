@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLAED9 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed9.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed9.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -151,8 +149,10 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMBDA,
+      SUBROUTINE DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO,
+     $                   DLAMBDA,
      $                   W, S, LDS, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,7 +214,8 @@
      $   RETURN
 *
       DO 20 J = KSTART, KSTOP
-         CALL DLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL DLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ),
+     $                INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *

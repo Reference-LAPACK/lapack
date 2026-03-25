@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHESVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -279,9 +277,11 @@
 *> \ingroup hesvx
 *
 *  =====================================================================
-      SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $                   B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -317,7 +317,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHECON, ZHERFS, ZHETRF, ZHETRS, ZLACPY
+      EXTERNAL           XERBLA, ZHECON, ZHERFS, ZHETRF, ZHETRS,
+     $                   ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -332,7 +333,8 @@
       LWKMIN = MAX( 1, 2*N )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -388,7 +390,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+     $             INFO )
 *
 *     Compute the solution vectors X.
 *

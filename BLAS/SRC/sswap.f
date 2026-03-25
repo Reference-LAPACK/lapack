@@ -79,6 +79,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SSWAP(N,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

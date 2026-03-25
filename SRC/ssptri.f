@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSPTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssptri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -106,6 +104,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -217,7 +216,8 @@
 *
             IF( K.GT.1 ) THEN
                CALL SCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        SDOT( K-1, WORK, 1, AP( KC ), 1 )
@@ -242,12 +242,14 @@
 *
             IF( K.GT.1 ) THEN
                CALL SCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
+               CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+     $                     AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
      $                        SDOT( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            SDOT( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            SDOT( K-1, AP( KC ), 1,
+     $                                  AP( KCNEXT ),
      $                            1 )
                CALL SCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
                CALL SSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
@@ -321,7 +323,8 @@
                CALL SCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
                CALL SSPMV( UPLO, N-K, -ONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
             END IF
             KSTEP = 1
          ELSE
@@ -343,14 +346,17 @@
 *
             IF( K.LT.N ) THEN
                CALL SCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
+               AP( KC ) = AP( KC ) - SDOT( N-K, WORK, 1, AP( KC+1 ),
+     $             1 )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
      $                          SDOT( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
                CALL SCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
+               CALL SSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
+     $                     1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
      $                        SDOT( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )

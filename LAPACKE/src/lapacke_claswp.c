@@ -32,13 +32,13 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_claswp( int matrix_layout, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_claswp)( int matrix_layout, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_int k1, lapack_int k2, const lapack_int* ipiv,
                            lapack_int incx )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_claswp", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_claswp", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -48,15 +48,15 @@ lapack_int LAPACKE_claswp( int matrix_layout, lapack_int n,
     *      Disable the check as is below, the check below was checking for NaN
     *      from lda to n since there is no (obvious) way to knowing m. This is not
     *      a good idea. We could get a lower bound of m by scanning from ipiv. Or
-    *      we could pass on the NaN check to LAPACKE_dlaswp_work. For now disable
+    *      we could pass on the NaN check to API_SUFFIX(LAPACKE_dlaswp_work). For now disable
     *      the buggy Nan check.
     *      See forum: http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4827
     *****************************************************************************/
-    /*  if( LAPACKE_cge_nancheck( matrix_layout, lda, n, a, lda ) ) {
+    /*  if( API_SUFFIX(LAPACKE_cge_nancheck)( matrix_layout, lda, n, a, lda ) ) {
     *       return -3;
     *   }
     */
     }
 #endif
-    return LAPACKE_claswp_work( matrix_layout, n, a, lda, k1, k2, ipiv, incx );
+    return API_SUFFIX(LAPACKE_claswp_work)( matrix_layout, n, a, lda, k1, k2, ipiv, incx );
 }

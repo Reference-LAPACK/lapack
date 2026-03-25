@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVD_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -216,7 +214,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                          IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -256,7 +255,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC, SSTERF,
+      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC,
+     $                   SSTERF,
      $                   SSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -302,7 +302,7 @@
                LWMIN = 2*N + 1 + LHTRD + LWTRD
             END IF
          END IF
-         WORK( 1 )  = LWMIN
+         WORK( 1 )  = REAL( LWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -391,7 +391,7 @@
       IF( ISCALE.EQ.1 )
      $   CALL SSCAL( N, ONE / SIGMA, W, 1 )
 *
-      WORK( 1 )  = LWMIN
+      WORK( 1 )  = REAL( LWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

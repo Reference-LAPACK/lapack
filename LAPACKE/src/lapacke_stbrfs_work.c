@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stbrfs_work( int matrix_layout, char uplo, char trans,
+lapack_int API_SUFFIX(LAPACKE_stbrfs_work)( int matrix_layout, char uplo, char trans,
                                 char diag, lapack_int n, lapack_int kd,
                                 lapack_int nrhs, const float* ab,
                                 lapack_int ldab, const float* b, lapack_int ldb,
@@ -57,17 +57,17 @@ lapack_int LAPACKE_stbrfs_work( int matrix_layout, char uplo, char trans,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_stbrfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stbrfs_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_stbrfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stbrfs_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -13;
-            LAPACKE_xerbla( "LAPACKE_stbrfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stbrfs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -87,10 +87,10 @@ lapack_int LAPACKE_stbrfs_work( int matrix_layout, char uplo, char trans,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_stb_trans( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
+        API_SUFFIX(LAPACKE_stb_trans)( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
                            ldab_t );
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_stbrfs( &uplo, &trans, &diag, &n, &kd, &nrhs, ab_t, &ldab_t, b_t,
                        &ldb_t, x_t, &ldx_t, ferr, berr, work, iwork, &info );
@@ -105,11 +105,11 @@ exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_stbrfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stbrfs_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_stbrfs_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stbrfs_work", info );
     }
     return info;
 }

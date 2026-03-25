@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGELQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgelqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgelqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -141,6 +139,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGELQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -251,7 +250,8 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
+     $                      I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(i+ib:m,i:n) from the right

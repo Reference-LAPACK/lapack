@@ -99,6 +99,7 @@ C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
       SUBROUTINE CPOTRF ( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

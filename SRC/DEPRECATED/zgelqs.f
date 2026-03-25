@@ -16,7 +16,7 @@
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), TAU( * ),
-*      $                   WORK( LWORK )
+*      $                   WORK( * )
 *       ..
 *
 *
@@ -128,7 +128,7 @@
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * ), B( LDB, * ), TAU( * ),
-     $                   WORK( LWORK )
+     $                   WORK( * )
 *     ..
 *
 *  =====================================================================

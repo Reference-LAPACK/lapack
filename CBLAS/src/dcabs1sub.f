@@ -3,6 +3,7 @@ c
 c     The program is a fortran wrapper for dcabs1.
 c
       subroutine dcabs1sub(z, cabs1)
+      implicit none
 c
       external dcabs1
       double complex z

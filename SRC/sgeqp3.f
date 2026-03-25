@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEQP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -148,6 +146,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,7 +172,8 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SLAQP2, SLAQPS, SORMQR, SSWAP, XERBLA
+      EXTERNAL           SGEQRF, SLAQP2, SLAQPS, SORMQR, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -252,7 +252,8 @@
          IF( NA.LT.N ) THEN
 *CC         CALL SORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
 *CC  $                   TAU, A( 1, NA+1 ), LDA, WORK, INFO )
-            CALL SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TAU,
+            CALL SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
+     $                   TAU,
      $                   A( 1, NA+1 ), LDA, WORK, LWORK, INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
          END IF
@@ -293,7 +294,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = ( LWORK-2*SN ) / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM,
+     $                         SN,
      $                    -1, -1 ) )
 *
 *

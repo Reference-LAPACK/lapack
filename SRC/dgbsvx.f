@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGBSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbsvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbsvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -366,6 +364,7 @@
       SUBROUTINE DGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
      $                   LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -402,7 +401,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANGB, DLANTB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGBCON, DGBEQU, DGBRFS, DGBTRF, DGBTRS,
+      EXTERNAL           DCOPY, DGBCON, DGBEQU, DGBRFS, DGBTRF,
+     $                   DGBTRS,
      $                   DLACPY, DLAQGB, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -427,7 +427,9 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
       ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
@@ -503,7 +505,8 @@
 *
 *           Equilibrate the matrix.
 *
-            CALL DLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+            CALL DLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND,
+     $                   COLCND,
      $                   AMAX, EQUED )
             ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
             COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
@@ -554,7 +557,8 @@
                   ANORM = MAX( ANORM, ABS( AB( I, J ) ) )
    80          CONTINUE
    90       CONTINUE
-            RPVGRW = DLANTB( 'M', 'U', 'N', INFO, MIN( INFO-1, KL+KU ),
+            RPVGRW = DLANTB( 'M', 'U', 'N', INFO, MIN( INFO-1,
+     $                       KL+KU ),
      $                       AFB( MAX( 1, KL+KU+2-INFO ), 1 ), LDAFB,
      $                       WORK )
             IF( RPVGRW.EQ.ZERO ) THEN
@@ -598,7 +602,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB, IPIV,
+      CALL DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+     $             IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHPGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -110,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +137,8 @@
       COMPLEX            CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CHPMV, CHPR2, CSSCAL, CTPMV, CTPSV,
+      EXTERNAL           CAXPY, CHPMV, CHPR2, CSSCAL, CTPMV,
+     $                   CTPSV,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -183,12 +183,14 @@
 *
                AP( JJ ) = REAL( AP( JJ ) )
                BJJ = REAL( BP( JJ ) )
-               CALL CTPSV( UPLO, 'Conjugate transpose', 'Non-unit', J,
+               CALL CTPSV( UPLO, 'Conjugate transpose', 'Non-unit',
+     $                     J,
      $                     BP, AP( J1 ), 1 )
                CALL CHPMV( UPLO, J-1, -CONE, AP, BP( J1 ), 1, CONE,
      $                     AP( J1 ), 1 )
                CALL CSSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-CDOTC( J-1, AP( J1 ), 1, BP( J1 ),
+               AP( JJ ) = ( AP( JJ )-CDOTC( J-1, AP( J1 ), 1,
+     $             BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE
@@ -263,7 +265,8 @@
                AP( JJ ) = AJJ*BJJ + CDOTC( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
                CALL CSSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
-               CALL CHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ), 1,
+               CALL CHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ),
+     $                     1,
      $                     CONE, AP( JJ+1 ), 1 )
                CALL CTPMV( UPLO, 'Conjugate transpose', 'Non-unit',
      $                     N-J+1, BP( JJ ), AP( JJ ), 1 )

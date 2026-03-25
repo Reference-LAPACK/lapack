@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssbgv_work( int matrix_layout, char jobz, char uplo,
+lapack_int API_SUFFIX(LAPACKE_ssbgv_work)( int matrix_layout, char jobz, char uplo,
                                lapack_int n, lapack_int ka, lapack_int kb,
                                float* ab, lapack_int ldab, float* bb,
                                lapack_int ldbb, float* w, float* z,
@@ -56,17 +56,17 @@ lapack_int LAPACKE_ssbgv_work( int matrix_layout, char jobz, char uplo,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_ssbgv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbgv_work", info );
             return info;
         }
         if( ldbb < n ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_ssbgv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbgv_work", info );
             return info;
         }
         if( ldz < n ) {
             info = -13;
-            LAPACKE_xerbla( "LAPACKE_ssbgv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbgv_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -80,7 +80,7 @@ lapack_int LAPACKE_ssbgv_work( int matrix_layout, char jobz, char uplo,
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
-        if( LAPACKE_lsame( jobz, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
             z_t = (float*)LAPACKE_malloc( sizeof(float) * ldz_t * MAX(1,n) );
             if( z_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
@@ -88,8 +88,8 @@ lapack_int LAPACKE_ssbgv_work( int matrix_layout, char jobz, char uplo,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_ssb_trans( matrix_layout, uplo, n, ka, ab, ldab, ab_t, ldab_t );
-        LAPACKE_ssb_trans( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
+        API_SUFFIX(LAPACKE_ssb_trans)( matrix_layout, uplo, n, ka, ab, ldab, ab_t, ldab_t );
+        API_SUFFIX(LAPACKE_ssb_trans)( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssbgv( &jobz, &uplo, &n, &ka, &kb, ab_t, &ldab_t, bb_t, &ldbb_t,
                       w, z_t, &ldz_t, work, &info );
@@ -97,15 +97,15 @@ lapack_int LAPACKE_ssbgv_work( int matrix_layout, char jobz, char uplo,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_ssb_trans( LAPACK_COL_MAJOR, uplo, n, ka, ab_t, ldab_t, ab,
+        API_SUFFIX(LAPACKE_ssb_trans)( LAPACK_COL_MAJOR, uplo, n, ka, ab_t, ldab_t, ab,
                            ldab );
-        LAPACKE_ssb_trans( LAPACK_COL_MAJOR, uplo, n, kb, bb_t, ldbb_t, bb,
+        API_SUFFIX(LAPACKE_ssb_trans)( LAPACK_COL_MAJOR, uplo, n, kb, bb_t, ldbb_t, bb,
                            ldbb );
-        if( LAPACKE_lsame( jobz, 'v' ) ) {
-            LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
+        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
+            API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, n, z_t, ldz_t, z, ldz );
         }
         /* Release memory and exit */
-        if( LAPACKE_lsame( jobz, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( jobz, 'v' ) ) {
             LAPACKE_free( z_t );
         }
 exit_level_2:
@@ -114,11 +114,11 @@ exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ssbgv_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbgv_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ssbgv_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbgv_work", info );
     }
     return info;
 }

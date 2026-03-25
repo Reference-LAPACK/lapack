@@ -196,6 +196,7 @@
 *  =====================================================================
       SUBROUTINE SGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHAR,
      $                   ALPHAI, BETA, WORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -293,7 +294,7 @@
                BCOEFR = SCALE*SALFR
                CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDB, E( 1, JVEC ),
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
             ELSE
 *
@@ -323,16 +324,16 @@
 *
                CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDB, E( 1, JVEC ),
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, BCOEFI, B, LDA, E( 1, JVEC+1 ),
+               CALL SGEMV( TRANS, N, N, BCOEFI, B, LDB, E( 1, JVEC+1 ),
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
 *
                CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC+1 ),
      $                     1, ZERO, WORK( N*JVEC+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFI, B, LDA, E( 1, JVEC ),
+               CALL SGEMV( TRANS, N, N, -BCOEFI, B, LDB, E( 1, JVEC ),
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC+1 ),
+               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDB, E( 1, JVEC+1 ),
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
             END IF
          END IF

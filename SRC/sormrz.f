@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORMRZ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormrz.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormrz.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -182,8 +180,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C,
+     $                   LDC,
      $                   WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -268,7 +268,8 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'SORMRQ', SIDE // TRANS, M, N,
+            NB = MIN( NBMAX, ILAENV( 1, 'SORMRQ', SIDE // TRANS, M,
+     $                N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -293,7 +294,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.LWKOPT ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'SORMRQ', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'SORMRQ', SIDE // TRANS, M, N,
+     $                   K,
      $              -1 ) )
          END IF
       END IF
@@ -342,7 +344,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL SLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LDA,
+            CALL SLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ),
+     $                   LDA,
      $                   TAU( I ), WORK( IWT ), LDT )
 *
             IF( LEFT ) THEN

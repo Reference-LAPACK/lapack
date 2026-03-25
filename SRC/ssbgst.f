@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSBGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbgst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,8 +152,10 @@
 *> \ingroup hbgst
 *
 *  =====================================================================
-      SUBROUTINE SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+      SUBROUTINE SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB,
+     $                   X,
      $                   LDX, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,7 +187,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGER, SLAR2V, SLARGV, SLARTG, SLARTV, SLASET,
+      EXTERNAL           SGER, SLAR2V, SLARGV, SLARTG, SLARTV,
+     $                   SLASET,
      $                   SROT, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -427,7 +428,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ), KA1,
+     $         CALL SLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ),
+     $                      KA1,
      $                      WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -651,7 +653,8 @@
 *
 *                 generate rotation to annihilate a(i-k+ka+1,i)
 *
-                  CALL SLARTG( AB( KA1-K, I ), RA1, WORK( N+I-K+KA-M ),
+                  CALL SLARTG( AB( KA1-K, I ), RA1,
+     $                         WORK( N+I-K+KA-M ),
      $                         WORK( I-K+KA-M ), RA )
 *
 *                 create nonzero element a(i-k+ka+1,i-k) outside the
@@ -687,7 +690,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( KA1, J2T-KA ), INCA, WORK( J2T-M ),
+     $         CALL SLARGV( NRT, AB( KA1, J2T-KA ), INCA,
+     $                      WORK( J2T-M ),
      $                      KA1, WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -702,7 +706,8 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, WORK( N+J2-M ), WORK( J2-M ), KA1 )
 *
             END IF
@@ -783,7 +788,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ), KA1,
+               CALL SLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ),
+     $                      KA1,
      $                      WORK( N+J2 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -797,7 +803,8 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2,
+     $                      J2 ),
      $                      INCA, WORK( N+J2 ), WORK( J2 ), KA1 )
 *
             END IF
@@ -936,7 +943,8 @@
 *
                CALL SSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB, I+1 ),
+     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB,
+     $                       I+1 ),
      $                       LDBB-1, X( 1, I+1 ), LDX )
             END IF
 *
@@ -994,7 +1002,8 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ), KA1,
+     $         CALL SLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
@@ -1094,7 +1103,8 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( 1, J1+KA ), INCA, WORK( M-KB+J1 ),
+               CALL SLARGV( NR, AB( 1, J1+KA ), INCA,
+     $                      WORK( M-KB+J1 ),
      $                      KA1, WORK( N+M-KB+J1 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
@@ -1200,7 +1210,8 @@
 *
                CALL SSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ), 1,
+     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ),
+     $                       1,
      $                       X( 1, I+1 ), LDX )
             END IF
 *
@@ -1258,14 +1269,16 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ), KA1,
+     $         CALL SLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ),
+     $                      KA1,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the right
 *
                DO 810 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, WORK( N+J1 ), WORK( J1 ), KA1 )
   810          CONTINUE
 *
@@ -1363,7 +1376,8 @@
 *              apply rotations in 2nd set from the right
 *
                DO 890 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2,
+     $                         J1-1 ),
      $                         INCA, WORK( N+M-KB+J1 ), WORK( M-KB+J1 ),
      $                         KA1 )
   890          CONTINUE

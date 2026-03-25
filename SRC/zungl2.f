@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNGL2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungl2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungl2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -110,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,7 +132,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF, ZSCAL
+      EXTERNAL           XERBLA, ZLACGV, ZLARF1F, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -182,9 +181,9 @@
          IF( I.LT.N ) THEN
             CALL ZLACGV( N-I, A( I, I+1 ), LDA )
             IF( I.LT.M ) THEN
-               A( I, I ) = ONE
-               CALL ZLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                     DCONJG( TAU( I ) ), A( I+1, I ), LDA, WORK )
+               CALL ZLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $                       CONJG( TAU( I ) ), A( I+1, I ), LDA,
+     $                       WORK )
             END IF
             CALL ZSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
             CALL ZLACGV( N-I, A( I, I+1 ), LDA )

@@ -143,6 +143,7 @@
 *
 *  =====================================================================
       SUBROUTINE SLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

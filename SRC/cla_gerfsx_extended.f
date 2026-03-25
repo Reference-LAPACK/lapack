@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_GERFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gerfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gerfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -388,12 +386,14 @@
 *> \ingroup la_gerfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $                                A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
      $                                Y_TAIL, RCOND, ITHRESH, RTHRESH,
      $                                DZ_UB, IGNORE_CWISE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -454,7 +454,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGETRS, CGEMV, BLAS_CGEMV_X,
+      EXTERNAL           CAXPY, CCOPY, CGETRS, CGEMV,
+     $                   BLAS_CGEMV_X,
      $                   BLAS_CGEMV2_X, CLA_GEAMV, CLA_WWADDW, SLAMCH,
      $                   CHLA_TRANSTYPE, CLA_LIN_BERR
       REAL               SLAMCH
@@ -513,11 +514,13 @@
                CALL CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA,
      $              Y( 1, J ), 1, (1.0E+0,0.0E+0), RES, 1)
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
-               CALL BLAS_CGEMV_X( TRANS_TYPE, N, N, (-1.0E+0,0.0E+0), A,
+               CALL BLAS_CGEMV_X( TRANS_TYPE, N, N, (-1.0E+0,0.0E+0),
+     $                            A,
      $              LDA, Y( 1, J ), 1, (1.0E+0,0.0E+0),
      $              RES, 1, PREC_TYPE )
             ELSE
-               CALL BLAS_CGEMV2_X( TRANS_TYPE, N, N, (-1.0E+0,0.0E+0),
+               CALL BLAS_CGEMV2_X( TRANS_TYPE, N, N,
+     $              (-1.0E+0,0.0E+0),
      $              A, LDA, Y(1, J), Y_TAIL, 1, (1.0E+0,0.0E+0), RES, 1,
      $              PREC_TYPE)
             END IF
@@ -673,7 +676,8 @@
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA, Y(1,J), 1,
+         CALL CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA, Y(1,J),
+     $               1,
      $        (1.0E+0,0.0E+0), RES, 1 )
 
          DO I = 1, N

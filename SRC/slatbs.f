@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLATBS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatbs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatbs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -237,8 +235,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
+      SUBROUTINE SLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB,
+     $                   X,
      $                   SCALE, CNORM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -702,7 +702,8 @@
                   ELSE
                      JLEN = MIN( KD, N-J )
                      IF( JLEN.GT.0 )
-     $                  SUMJ = SDOT( JLEN, AB( 2, J ), 1, X( J+1 ), 1 )
+     $                  SUMJ = SDOT( JLEN, AB( 2, J ), 1, X( J+1 ),
+     $                               1 )
                   END IF
                ELSE
 *

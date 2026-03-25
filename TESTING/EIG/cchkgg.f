@@ -500,6 +500,7 @@
      $                   S2, P1, P2, U, LDU, V, Q, Z, ALPHA1, BETA1,
      $                   ALPHA3, BETA3, EVECTL, EVECTR, WORK, LWORK,
      $                   RWORK, LLWORK, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

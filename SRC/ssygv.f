@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYGV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssygv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -170,8 +168,10 @@
 *> \ingroup hegv
 *
 *  =====================================================================
-      SUBROUTINE SSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE SSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                  WORK,
      $                  LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -203,7 +203,8 @@
       EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYEV, SSYGST, STRMM, STRSM, XERBLA
+      EXTERNAL           SPOTRF, SSYEV, SSYGST, STRMM, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -285,7 +286,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -299,7 +301,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF

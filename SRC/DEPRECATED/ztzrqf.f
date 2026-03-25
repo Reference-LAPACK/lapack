@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZTZRQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztzrqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztzrqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -217,14 +215,15 @@
 *
 *              Form   w = a( k ) + B*z( k )  in TAU.
 *
-               CALL ZGEMV( 'No transpose', K-1, N-M, CONE, A( 1, M1 ),
-     $                     LDA, A( K, M1 ), LDA, CONE, TAU, 1 )
+               CALL ZGEMV( 'No transpose', K-1, N-M, CONE,
+     $                     A( 1, M1 ), LDA, A( K, M1 ), LDA, CONE, TAU,
+     $                     1 )
 *
 *              Now form  a( k ) := a( k ) - conjg(tau)*w
 *              and       B      := B      - conjg(tau)*w*z( k )**H.
 *
-               CALL ZAXPY( K-1, -DCONJG( TAU( K ) ), TAU, 1, A( 1, K ),
-     $                     1 )
+               CALL ZAXPY( K-1, -DCONJG( TAU( K ) ), TAU, 1,
+     $                     A( 1, K ), 1 )
                CALL ZGERC( K-1, N-M, -DCONJG( TAU( K ) ), TAU, 1,
      $                     A( K, M1 ), LDA, A( 1, M1 ), LDA )
             END IF

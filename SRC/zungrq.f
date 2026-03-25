@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNGRQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungrq.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungrq.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,7 +220,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'ZUNGRQ', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'ZUNGRQ', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -265,7 +265,8 @@
 *
 *              Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL ZLARFB( 'Right', 'Conjugate transpose', 'Backward',
+               CALL ZLARFB( 'Right', 'Conjugate transpose',
+     $                      'Backward',
      $                      'Rowwise', II-1, N-K+I+IB-1, IB, A( II, 1 ),
      $                      LDA, WORK, LDWORK, A, LDA, WORK( IB+1 ),
      $                      LDWORK )
@@ -273,7 +274,8 @@
 *
 *           Apply H**H to columns 1:n-k+i+ib-1 of current block
 *
-            CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I ),
+            CALL ZUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
 *
 *           Set columns n-k+i+ib:n of current block to zero

@@ -17,7 +17,7 @@ F77_xerbla_base
 (char *srname, void *vinfo
 #endif
 #ifdef BLAS_FORTRAN_STRLEN_END
-, size_t len
+, FORTRAN_STRLEN len
 #endif
 )
 {

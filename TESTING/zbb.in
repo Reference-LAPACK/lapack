@@ -7,6 +7,6 @@ ZBB:  Data file for testing banded Singular Value Decomposition routines
 2                                 Number of values of NRHS
 1 2                               Values of NRHS
 20.0                              Threshold value
-F                                 Put T to test the error exits
+T                                 Put T to test the error exits
 1                                 Code to interpret the seed
 ZBB 15

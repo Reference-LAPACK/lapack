@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGTRFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtrfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtrfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -204,9 +202,11 @@
 *> \ingroup gtrfs
 *
 *  =====================================================================
-      SUBROUTINE ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+      SUBROUTINE ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+     $                   DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -247,7 +247,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGTTRS, ZLACN2, ZLAGTM
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGTTRS, ZLACN2,
+     $                   ZLAGTM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX
@@ -326,7 +327,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
+         CALL ZLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX,
+     $                ONE,
      $                WORK, N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -401,7 +403,8 @@
 *
 *           Update solution and try again.
 *
-            CALL ZGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, N,
+            CALL ZGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+     $                   N,
      $                   INFO )
             CALL ZAXPY( N, DCMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
@@ -448,7 +451,8 @@
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL ZGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL ZGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
+     $                      WORK,
      $                      N, INFO )
                DO 80 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -460,7 +464,8 @@
                DO 90 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
    90          CONTINUE
-               CALL ZGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL ZGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
+     $                      WORK,
      $                      N, INFO )
             END IF
             GO TO 70

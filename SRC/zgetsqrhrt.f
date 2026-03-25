@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGETSQRHRT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgetsqrhrt.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetsqrhrt.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -130,6 +128,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
+*>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          If MIN(M,N) = 0, LWORK >= 1, else
 *>          LWORK >= MAX( 1, LWT + LW1, MAX( LWT+N*N+LW2, LWT+N*N+N ) ),
@@ -176,7 +175,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT, WORK,
+      SUBROUTINE ZGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT,
+     $                       WORK,
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
@@ -203,7 +203,8 @@
      $                   NB1LOCAL, NB2LOCAL, NUM_ALL_ROW_BLOCKS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZLATSQR, ZUNGTSQR_ROW, ZUNHR_COL,
+      EXTERNAL           ZCOPY, ZLATSQR, ZUNGTSQR_ROW,
+     $                   ZUNHR_COL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -340,7 +341,8 @@
                A( I, J ) = -CONE * WORK( LWT+N*(J-1)+I )
             END DO
          ELSE
-            CALL ZCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ), LDA )
+            CALL ZCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ),
+     $                  LDA )
          END IF
       END DO
 *

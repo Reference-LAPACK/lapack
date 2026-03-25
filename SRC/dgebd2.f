@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEBD2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgebd2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebd2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -186,6 +184,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -202,14 +201,14 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      DOUBLE PRECISION   ZERO
+      PARAMETER          ( ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           DLARF1F, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -242,14 +241,13 @@
             CALL DLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
             D( I ) = A( I, I )
-            A( I, I ) = ONE
 *
 *           Apply H(i) to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
-     $         CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAUQ( I ),
+     $         CALL DLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $                     TAUQ( I ),
      $                     A( I, I+1 ), LDA, WORK )
-            A( I, I ) = D( I )
 *
             IF( I.LT.N ) THEN
 *
@@ -259,13 +257,11 @@
                CALL DLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) ),
      $                      LDA, TAUP( I ) )
                E( I ) = A( I, I+1 )
-               A( I, I+1 ) = ONE
 *
 *              Apply G(i) to A(i+1:m,i+1:n) from the right
 *
-               CALL DLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
+               CALL DLARF1F( 'Right', M-I, N-I, A( I, I+1 ), LDA,
      $                     TAUP( I ), A( I+1, I+1 ), LDA, WORK )
-               A( I, I+1 ) = E( I )
             ELSE
                TAUP( I ) = ZERO
             END IF
@@ -278,33 +274,32 @@
 *
 *           Generate elementary reflector G(i) to annihilate A(i,i+1:n)
 *
-            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA,
+            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ),
+     $                   LDA,
      $                   TAUP( I ) )
             D( I ) = A( I, I )
-            A( I, I ) = ONE
 *
 *           Apply G(i) to A(i+1:m,i:n) from the right
 *
             IF( I.LT.M )
-     $         CALL DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $         CALL DLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAUP( I ), A( I+1, I ), LDA, WORK )
-            A( I, I ) = D( I )
 *
             IF( I.LT.M ) THEN
 *
 *              Generate elementary reflector H(i) to annihilate
 *              A(i+2:m,i)
 *
-               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 1,
+               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ),
+     $                      1,
      $                      TAUQ( I ) )
                E( I ) = A( I+1, I )
-               A( I+1, I ) = ONE
 *
 *              Apply H(i) to A(i+1:m,i+1:n) from the left
 *
-               CALL DLARF( 'Left', M-I, N-I, A( I+1, I ), 1, TAUQ( I ),
+               CALL DLARF1F( 'Left', M-I, N-I, A( I+1, I ), 1,
+     $                     TAUQ( I ),
      $                     A( I+1, I+1 ), LDA, WORK )
-               A( I+1, I ) = E( I )
             ELSE
                TAUQ( I ) = ZERO
             END IF

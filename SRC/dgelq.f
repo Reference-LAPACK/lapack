@@ -171,6 +171,7 @@
 *  =====================================================================
       SUBROUTINE DGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

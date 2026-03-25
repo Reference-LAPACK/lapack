@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHPEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -191,6 +189,7 @@
 *  =====================================================================
       SUBROUTINE ZHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -227,7 +226,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZDSCAL, ZHPTRD, ZSTEDC,
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZDSCAL, ZHPTRD,
+     $                   ZSTEDC,
      $                   ZUPMTR
 *     ..
 *     .. Intrinsic Functions ..
@@ -243,7 +243,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR.
+     $         LSAME( UPLO, 'U' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -269,7 +270,7 @@
             END IF
          END IF
          WORK( 1 ) = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -341,10 +342,12 @@
       IF( .NOT.WANTZ ) THEN
          CALL DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), Z, LDZ,
+     $                WORK( INDWRK ),
      $                LLWRK, RWORK( INDRWK ), LLRWK, IWORK, LIWORK,
      $                INFO )
-         CALL ZUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL ZUPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z,
+     $                LDZ,
      $                WORK( INDWRK ), IINFO )
       END IF
 *
@@ -360,7 +363,7 @@
       END IF
 *
       WORK( 1 ) = LWMIN
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

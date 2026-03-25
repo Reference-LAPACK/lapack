@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgeevx( int matrix_layout, char balanc, char jobvl,
+lapack_int API_SUFFIX(LAPACKE_zgeevx)( int matrix_layout, char balanc, char jobvl,
                            char jobvr, char sense, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_complex_double* w, lapack_complex_double* vl,
@@ -47,13 +47,13 @@ lapack_int LAPACKE_zgeevx( int matrix_layout, char balanc, char jobvl,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zgeevx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
     }
@@ -65,7 +65,7 @@ lapack_int LAPACKE_zgeevx( int matrix_layout, char balanc, char jobvl,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
+    info = API_SUFFIX(LAPACKE_zgeevx_work)( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale,
                                 abnrm, rconde, rcondv, &work_query, lwork,
                                 rwork );
@@ -81,7 +81,7 @@ lapack_int LAPACKE_zgeevx( int matrix_layout, char balanc, char jobvl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
+    info = API_SUFFIX(LAPACKE_zgeevx_work)( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale,
                                 abnrm, rconde, rcondv, work, lwork, rwork );
     /* Release memory and exit */
@@ -90,7 +90,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zgeevx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgeevx", info );
     }
     return info;
 }

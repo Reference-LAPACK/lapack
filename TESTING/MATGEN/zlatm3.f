@@ -226,6 +226,7 @@
       COMPLEX*16   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                 IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                 SPARSE )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

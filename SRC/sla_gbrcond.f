@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLA_GBRCOND + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gbrcond.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gbrcond.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -163,8 +161,10 @@
 *> \ingroup la_gbrcond
 *
 *  =====================================================================
-      REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,
+      REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+     $                           LDAFB,
      $                           IPIV, CMODE, C, INFO, WORK, IWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -292,7 +292,8 @@
                CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             END IF
 *
@@ -322,7 +323,8 @@
             END IF
 
             IF ( NOTRANS ) THEN
-               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             ELSE
                CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,

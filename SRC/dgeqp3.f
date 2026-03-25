@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEQP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -148,6 +146,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,7 +172,8 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DLAQP2, DLAQPS, DORMQR, DSWAP, XERBLA
+      EXTERNAL           DGEQRF, DLAQP2, DLAQPS, DORMQR, DSWAP,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -255,7 +255,8 @@
          IF( NA.LT.N ) THEN
 *CC         CALL DORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
 *CC  $                   TAU, A( 1, NA+1 ), LDA, WORK, INFO )
-            CALL DORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TAU,
+            CALL DORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
+     $                   TAU,
      $                   A( 1, NA+1 ), LDA, WORK, LWORK, INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
          END IF
@@ -296,7 +297,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = ( LWORK-2*SN ) / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQRF', ' ', SM,
+     $                         SN,
      $                    -1, -1 ) )
 *
 *

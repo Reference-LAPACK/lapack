@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLATRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -233,8 +231,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+      SUBROUTINE DLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
+     $                   SCALE,
      $                   CNORM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -268,7 +268,8 @@
       LOGICAL            LSAME
       INTEGER            IDAMAX
       DOUBLE PRECISION   DASUM, DDOT, DLAMCH, DLANGE
-      EXTERNAL           LSAME, IDAMAX, DASUM, DDOT, DLAMCH, DLANGE
+      EXTERNAL           LSAME, IDAMAX, DASUM, DDOT, DLAMCH,
+     $                   DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DSCAL, DTRSV, XERBLA
@@ -365,8 +366,8 @@
 *              A is upper triangular.
 *
                DO J = 2, N
-                  TMAX = MAX( DLANGE( 'M', J-1, 1, A( 1, J ), 1, WORK ),
-     $                        TMAX )
+                  TMAX = MAX( DLANGE( 'M', J-1, 1, A( 1, J ), 1,
+     $                        WORK ), TMAX )
                END DO
             ELSE
 *

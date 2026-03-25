@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTZRZF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtzrzf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtzrzf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -148,6 +146,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DTZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -280,7 +279,8 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL DLARZT( 'Backward', 'Rowwise', N-M, IB, A( I, M1 ),
+               CALL DLARZT( 'Backward', 'Rowwise', N-M, IB, A( I,
+     $                      M1 ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:i-1,i:n) from the right

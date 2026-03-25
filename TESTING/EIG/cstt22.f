@@ -142,6 +142,7 @@
 *  =====================================================================
       SUBROUTINE CSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RWORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

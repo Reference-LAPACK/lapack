@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHPTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -112,6 +110,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,7 +142,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZGERU, ZLACGV, ZSWAP
+      EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZGERU, ZLACGV,
+     $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX
@@ -369,7 +369,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL ZGERU( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K, 1 ),
+               CALL ZGERU( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K,
+     $                     1 ),
      $                     LDB, B( K+2, 1 ), LDB )
                CALL ZGERU( N-K-1, NRHS, -ONE, AP( KC+N-K+2 ), 1,
      $                     B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

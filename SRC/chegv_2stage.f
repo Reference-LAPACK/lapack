@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHEGV_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegv_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegv_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -227,7 +225,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+      SUBROUTINE CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB,
+     $                         W,
      $                         WORK, LWORK, RWORK, INFO )
 *
       IMPLICIT NONE
@@ -263,7 +262,8 @@
       EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHEGST, CPOTRF, CTRMM, CTRSM,
+      EXTERNAL           XERBLA, CHEGST, CPOTRF, CTRMM,
+     $                   CTRSM,
      $                   CHEEV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -293,10 +293,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1,
+     $                         -1 )
+         IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
          LWMIN = N + LHTRD + LWTRD
          WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
 *
@@ -349,7 +353,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -363,7 +368,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF

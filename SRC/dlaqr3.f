@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLAQR3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -269,9 +267,11 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+      SUBROUTINE DLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH,
+     $                   ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
      $                   LDT, NV, WV, LDWV, WORK, LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -307,8 +307,9 @@
       EXTERNAL           DLAMCH, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEHRD, DGEMM, DLACPY, DLAHQR, DLANV2,
-     $                   DLAQR4, DLARF, DLARFG, DLASET, DORMHR, DTREXC
+      EXTERNAL           DCOPY, DGEHRD, DGEMM, DLACPY, DLAHQR,
+     $                   DLANV2,
+     $                   DLAQR4, DLARF1F, DLARFG, DLASET, DORMHR, DTREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN, SQRT
@@ -329,13 +330,15 @@
 *
 *        ==== Workspace query call to DORMHR ====
 *
-         CALL DORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+         CALL DORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V,
+     $                LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
 *        ==== Workspace query call to DLAQR4 ====
 *
-         CALL DLAQR4( .true., .true., JW, 1, JW, T, LDT, SR, SI, 1, JW,
+         CALL DLAQR4( .true., .true., JW, 1, JW, T, LDT, SR, SI, 1,
+     $                JW,
      $                V, LDV, WORK, -1, INFQR )
          LWK3 = INT( WORK( 1 ) )
 *
@@ -405,7 +408,8 @@
 *     .    here and there to keep track.) ====
 *
       CALL DLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL DCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
+      CALL DCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ),
+     $            LDT+1 )
 *
       CALL DLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
       NMIN = ILAENV( 12, 'DLAQR3', 'SV', JW, 1, JW, LWORK )
@@ -458,7 +462,8 @@
 *              .    (DTREXC can not fail in this case.) ====
 *
                IFST = NS
-               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                ILST = ILST + 1
             END IF
@@ -483,7 +488,8 @@
 *              .    ILST in case of a rare exchange failure. ====
 *
                IFST = NS
-               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                ILST = ILST + 2
             END IF
@@ -545,7 +551,8 @@
                SORTED = .false.
                IFST = I
                ILST = K
-               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
+               CALL DTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST,
+     $                      WORK,
      $                      INFO )
                IF( INFO.EQ.0 ) THEN
                   I = ILST
@@ -600,15 +607,15 @@
             CALL DCOPY( NS, V, LDV, WORK, 1 )
             BETA = WORK( 1 )
             CALL DLARFG( NS, BETA, WORK( 2 ), 1, TAU )
-            WORK( 1 ) = ONE
 *
-            CALL DLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
+            CALL DLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ),
+     $                   LDT )
 *
-            CALL DLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
+            CALL DLARF1F( 'L', NS, JW, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL DLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+            CALL DLARF1F( 'R', NS, NS, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL DLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+            CALL DLARF1F( 'R', JW, NS, WORK, 1, TAU, V, LDV,
      $                  WORK( JW+1 ) )
 *
             CALL DGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
@@ -627,7 +634,8 @@
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL DORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $      CALL DORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V,
+     $                   LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -641,7 +649,8 @@
             KLN = MIN( NV, KWTOP-KROW )
             CALL DGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL DLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
+            CALL DLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ),
+     $                   LDH )
    70    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -661,7 +670,8 @@
          IF( WANTZ ) THEN
             DO 90 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL DGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
+               CALL DGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW,
+     $                     KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
                CALL DLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )

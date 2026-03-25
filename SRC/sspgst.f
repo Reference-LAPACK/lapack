@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSPGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspgst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -110,6 +108,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,7 +134,8 @@
       REAL               AJJ, AKK, BJJ, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSCAL, SSPMV, SSPR2, STPMV, STPSV,
+      EXTERNAL           SAXPY, SSCAL, SSPMV, SSPR2, STPMV,
+     $                   STPSV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -181,7 +181,8 @@
                CALL SSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
      $                     AP( J1 ), 1 )
                CALL SSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-SDOT( J-1, AP( J1 ), 1, BP( J1 ),
+               AP( JJ ) = ( AP( JJ )-SDOT( J-1, AP( J1 ), 1,
+     $             BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE

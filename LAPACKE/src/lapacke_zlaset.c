@@ -32,14 +32,14 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlaset( int matrix_layout, char uplo, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_zlaset)( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, lapack_complex_double alpha,
                            lapack_complex_double beta, lapack_complex_double* a,
                            lapack_int lda )
 {
 
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zlaset", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlaset", -1 );
         return -1;
     }
 
@@ -52,14 +52,14 @@ lapack_int LAPACKE_zlaset( int matrix_layout, char uplo, lapack_int m,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_z_nancheck( 1, &alpha, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_z_nancheck)( 1, &alpha, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_z_nancheck( 1, &beta, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_z_nancheck)( 1, &beta, 1 ) ) {
             return -6;
         }
     }
 #endif
 
-    return LAPACKE_zlaset_work( matrix_layout, uplo, m, n, alpha, beta, a, lda );
+    return API_SUFFIX(LAPACKE_zlaset_work)( matrix_layout, uplo, m, n, alpha, beta, a, lda );
 }

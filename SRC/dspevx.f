@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSPEVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspevx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspevx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -213,8 +211,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     DSTEIN; their indices are stored in IFAIL.
+*>                > N: DSTEBZ returned INFO = INFO - N;
+*>                     see DSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -231,6 +232,7 @@
       SUBROUTINE DSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, IWORK, IFAIL,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -267,7 +269,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DOPGTR, DOPMTR, DSCAL, DSPTRD, DSTEBZ,
+      EXTERNAL           DCOPY, DOPGTR, DOPMTR, DSCAL, DSPTRD,
+     $                   DSTEBZ,
      $                   DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -287,7 +290,8 @@
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR.
+     $         LSAME( UPLO, 'U' ) ) )
      $          THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -429,17 +433,25 @@
       CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( 1 ), IWORK( INDISP ), WORK( INDWRK ),
-     $             IWORK( INDIWO ), INFO )
+     $             IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 20
+      END IF
 *
       IF( WANTZ ) THEN
          CALL DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( 1 ), IWORK( INDISP ), Z, LDZ,
-     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
+     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by DSTEIN.
 *
-         CALL DOPMTR( 'L', UPLO, 'N', N, M, AP, WORK( INDTAU ), Z, LDZ,
+         CALL DOPMTR( 'L', UPLO, 'N', N, M, AP, WORK( INDTAU ), Z,
+     $                LDZ,
      $                WORK( INDWRK ), IINFO )
       END IF
 *

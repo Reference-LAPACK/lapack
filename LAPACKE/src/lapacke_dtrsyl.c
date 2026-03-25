@@ -32,30 +32,30 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtrsyl( int matrix_layout, char trana, char tranb,
+lapack_int API_SUFFIX(LAPACKE_dtrsyl)( int matrix_layout, char trana, char tranb,
                            lapack_int isgn, lapack_int m, lapack_int n,
                            const double* a, lapack_int lda, const double* b,
                            lapack_int ldb, double* c, lapack_int ldc,
                            double* scale )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dtrsyl", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsyl", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dge_nancheck( matrix_layout, m, m, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, m, a, lda ) ) {
             return -7;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, n, b, ldb ) ) {
             return -9;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, c, ldc ) ) {
             return -11;
         }
     }
 #endif
-    return LAPACKE_dtrsyl_work( matrix_layout, trana, tranb, isgn, m, n, a, lda,
+    return API_SUFFIX(LAPACKE_dtrsyl_work)( matrix_layout, trana, tranb, isgn, m, n, a, lda,
                                 b, ldb, c, ldc, scale );
 }

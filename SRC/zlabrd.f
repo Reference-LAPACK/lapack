@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLABRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlabrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlabrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -207,8 +205,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
+      SUBROUTINE ZLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX,
+     $                   Y,
      $                   LDY )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -279,7 +279,8 @@
                CALL ZGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
      $                     A( I, 1 ), LDA, A( I, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1,
+     $                     1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
                CALL ZGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
      $                     X( I, 1 ), LDX, A( I, I ), 1, ZERO,
@@ -312,16 +313,19 @@
 *
 *              Compute X(i+1:m,i)
 *
-               CALL ZGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1 ),
+               CALL ZGEMV( 'No transpose', M-I, N-I, ONE, A( I+1,
+     $                     I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( I+1, I ), 1 )
                CALL ZGEMV( 'Conjugate transpose', N-I, I, ONE,
      $                     Y( I+1, 1 ), LDY, A( I, I+1 ), LDA, ZERO,
      $                     X( 1, I ), 1 )
                CALL ZGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               CALL ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1,
+     $                     I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1,
+     $                     1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
                CALL ZSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
                CALL ZLACGV( N-I, A( I, I+1 ), LDA )
@@ -357,16 +361,20 @@
 *
 *              Compute X(i+1:m,i)
 *
-               CALL ZGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I ),
+               CALL ZGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1,
+     $                     I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( I+1, I ), 1 )
                CALL ZGEMV( 'Conjugate transpose', N-I+1, I-1, ONE,
      $                     Y( I, 1 ), LDY, A( I, I ), LDA, ZERO,
      $                     X( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1,
+     $                     1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL ZGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I ),
+               CALL ZGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1,
+     $                     I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1,
+     $                     1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
                CALL ZSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
                CALL ZLACGV( N-I+1, A( I, I ), LDA )
@@ -374,7 +382,8 @@
 *              Update A(i+1:m,i)
 *
                CALL ZLACGV( I-1, Y( I, 1 ), LDY )
-               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1,
+     $                     1 ),
      $                     LDA, Y( I, 1 ), LDY, ONE, A( I+1, I ), 1 )
                CALL ZLACGV( I-1, Y( I, 1 ), LDY )
                CALL ZGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
@@ -396,7 +405,8 @@
                CALL ZGEMV( 'Conjugate transpose', M-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1,
+     $                     1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
                CALL ZGEMV( 'Conjugate transpose', M-I, I, ONE,
      $                     X( I+1, 1 ), LDX, A( I+1, I ), 1, ZERO,

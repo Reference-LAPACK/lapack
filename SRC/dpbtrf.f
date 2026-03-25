@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DPBTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -139,6 +137,7 @@
 *
 *  =====================================================================
       SUBROUTINE DPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +171,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DPBTF2, DPOTF2, DSYRK, DTRSM, XERBLA
+      EXTERNAL           DGEMM, DPBTF2, DPOTF2, DSYRK, DTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -299,7 +299,8 @@
 *                    Update A23
 *
                      IF( I2.GT.0 )
-     $                  CALL DGEMM( 'Transpose', 'No Transpose', I2, I3,
+     $                  CALL DGEMM( 'Transpose', 'No Transpose', I2,
+     $                              I3,
      $                              IB, -ONE, AB( KD+1-IB, I+IB ),
      $                              LDAB-1, WORK, LDWORK, ONE,
      $                              AB( 1+IB, I+KD ), LDAB-1 )
@@ -375,7 +376,8 @@
 *
 *                    Update A22
 *
-                     CALL DSYRK( 'Lower', 'No Transpose', I2, IB, -ONE,
+                     CALL DSYRK( 'Lower', 'No Transpose', I2, IB,
+     $                           -ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -399,14 +401,16 @@
 *                    Update A32
 *
                      IF( I2.GT.0 )
-     $                  CALL DGEMM( 'No transpose', 'Transpose', I3, I2,
+     $                  CALL DGEMM( 'No transpose', 'Transpose', I3,
+     $                              I2,
      $                              IB, -ONE, WORK, LDWORK,
      $                              AB( 1+IB, I ), LDAB-1, ONE,
      $                              AB( 1+KD-IB, I+IB ), LDAB-1 )
 *
 *                    Update A33
 *
-                     CALL DSYRK( 'Lower', 'No Transpose', I3, IB, -ONE,
+                     CALL DSYRK( 'Lower', 'No Transpose', I3, IB,
+     $                           -ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *

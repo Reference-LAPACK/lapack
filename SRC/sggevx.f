@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGEVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggevx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggevx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -384,10 +382,12 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
+      SUBROUTINE SGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR, ILO,
      $                   IHI, LSCALE, RSCALE, ABNRM, BBNRM, RCONDE,
      $                   RCONDV, WORK, LWORK, IWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -427,7 +427,8 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ,
+     $                   SLACPY,
      $                   SLASCL, SLASET, SORGQR, SORMQR, STGEVC, STGSNA,
      $                   XERBLA
 *     ..
@@ -435,7 +436,8 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   SLANGE, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -524,12 +526,15 @@
             END IF
             MAXWRK = MINWRK
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'SGEQRF', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'SGEQRF', ' ', N, 1, N,
+     $                                  0 ) )
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'SORMQR', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'SORMQR', ' ', N, 1, N,
+     $                                  0 ) )
             IF( ILVL ) THEN
                MAXWRK = MAX( MAXWRK, N +
-     $                       N*ILAENV( 1, 'SORGQR', ' ', N, 1, N, 0 ) )
+     $                       N*ILAENV( 1, 'SORGQR', ' ', N, 1, N,
+     $                                 0 ) )
             END IF
          END IF
          WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
@@ -591,7 +596,8 @@
 *     Permute and/or balance the matrix pair (A,B)
 *     (Workspace: need 6*N if BALANC = 'S' or 'B', 1 otherwise)
 *
-      CALL SGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL SGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+     $             RSCALE,
      $             WORK, IERR )
 *
 *     Compute ABNRM and BBNRM
@@ -776,7 +782,8 @@
 *     (Workspace: none needed)
 *
       IF( ILVL ) THEN
-         CALL SGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N, VL,
+         CALL SGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VL,
      $                LDVL, IERR )
 *
          DO 70 JC = 1, N
@@ -809,7 +816,8 @@
    70    CONTINUE
       END IF
       IF( ILVR ) THEN
-         CALL SGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N, VR,
+         CALL SGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VR,
      $                LDVR, IERR )
          DO 120 JC = 1, N
             IF( ALPHAI( JC ).LT.ZERO )
@@ -846,8 +854,10 @@
   130 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

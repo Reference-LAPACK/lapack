@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAHR2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahr2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahr2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -178,6 +176,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -224,7 +223,8 @@
 *           Update I-th column of A - Y * V**H
 *
             CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
+            CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1),
+     $                  LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
             CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
@@ -274,7 +274,8 @@
 *        Generate the elementary reflector H(I) to annihilate
 *        A(K+I+1:N,I)
 *
-         CALL ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
+         CALL ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ),
+     $                1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stfttp_work( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_stfttp_work)( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const float* arf, float* ap )
 {
     lapack_int info = 0;
@@ -59,25 +59,25 @@ lapack_int LAPACKE_stfttp_work( int matrix_layout, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_spf_trans( matrix_layout, transr, uplo, n, arf, arf_t );
+        API_SUFFIX(LAPACKE_spf_trans)( matrix_layout, transr, uplo, n, arf, arf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_stfttp( &transr, &uplo, &n, arf_t, ap_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_spp_trans( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
+        API_SUFFIX(LAPACKE_spp_trans)( LAPACK_COL_MAJOR, uplo, n, ap_t, ap );
         /* Release memory and exit */
         LAPACKE_free( arf_t );
 exit_level_1:
         LAPACKE_free( ap_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_stfttp_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stfttp_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_stfttp_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stfttp_work", info );
     }
     return info;
 }

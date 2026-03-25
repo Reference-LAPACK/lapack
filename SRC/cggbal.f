@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGGBAL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggbal.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggbal.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -174,6 +172,7 @@
 *  =====================================================================
       SUBROUTINE CGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
      $                   RSCALE, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -230,8 +229,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -346,7 +347,7 @@
 *     Permute rows M and I
 *
   160 CONTINUE
-      LSCALE( M ) = I
+      LSCALE( M ) = REAL( I )
       IF( I.EQ.M )
      $   GO TO 170
       CALL CSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
@@ -355,7 +356,7 @@
 *     Permute columns M and J
 *
   170 CONTINUE
-      RSCALE( M ) = J
+      RSCALE( M ) = REAL( J )
       IF( J.EQ.M )
      $   GO TO 180
       CALL CSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
@@ -514,8 +515,10 @@
       IF( CMAX.LT.HALF )
      $   GO TO 350
 *
-      CALL SAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 )
-      CALL SAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 )
+      CALL SAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ),
+     $            1 )
+      CALL SAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ),
+     $            1 )
 *
       PGAMMA = GAMMA
       IT = IT + 1

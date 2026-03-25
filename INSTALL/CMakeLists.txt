@@ -1,5 +1,13 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 project(TIMING Fortran)
+
+# Add the CMake directory for custom CMake modules
+set(CMAKE_MODULE_PATH "${TIMING_SOURCE_DIR}/../CMAKE" ${CMAKE_MODULE_PATH})
+
+# Check for any necessary platform specific compiler flags
+include(CheckLAPACKCompilerFlags)
+CheckLAPACKCompilerFlags()
+
 add_executable(secondtst_NONE second_NONE.f secondtst.f)
 add_executable(secondtst_EXT_ETIME second_EXT_ETIME.f secondtst.f)
 add_executable(secondtst_EXT_ETIME_ second_EXT_ETIME_.f secondtst.f)

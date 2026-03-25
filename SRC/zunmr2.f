@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNMR2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunmr2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmr2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -156,6 +154,7 @@
 *  =====================================================================
       SUBROUTINE ZUNMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,14 +177,14 @@
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, MI, NI, NQ
-      COMPLEX*16         AII, TAUI
+      COMPLEX*16         TAUI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF
+      EXTERNAL           XERBLA, ZLACGV, ZLARF1L
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -267,10 +266,8 @@
             TAUI = TAU( I )
          END IF
          CALL ZLACGV( NQ-K+I-1, A( I, 1 ), LDA )
-         AII = A( I, NQ-K+I )
-         A( I, NQ-K+I ) = ONE
-         CALL ZLARF( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC, WORK )
-         A( I, NQ-K+I ) = AII
+         CALL ZLARF1L( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC,
+     $                 WORK )
          CALL ZLACGV( NQ-K+I-1, A( I, 1 ), LDA )
    10 CONTINUE
       RETURN

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHPGVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -274,6 +272,7 @@
       SUBROUTINE ZHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
      $                   IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
      $                   IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -302,7 +301,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHPEVX, ZHPGST, ZPPTRF, ZTPMV, ZTPSV
+      EXTERNAL           XERBLA, ZHPEVX, ZHPGST, ZPPTRF, ZTPMV,
+     $                   ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -368,7 +368,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
+      CALL ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL,
+     $             M,
      $             W, Z, LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGECON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgecon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgecon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -129,6 +127,7 @@
 *  =====================================================================
       SUBROUTINE ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -236,12 +235,14 @@
 *
 *           Multiply by inv(L).
 *
-            CALL ZLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
+            CALL ZLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SL, RWORK, INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SU, RWORK( N+1 ), INFO )
          ELSE
 *
@@ -253,7 +254,8 @@
 *
 *           Multiply by inv(L**H).
 *
-            CALL ZLATRS( 'Lower', 'Conjugate transpose', 'Unit', NORMIN,
+            CALL ZLATRS( 'Lower', 'Conjugate transpose', 'Unit',
+     $                   NORMIN,
      $                   N, A, LDA, WORK, SL, RWORK, INFO )
          END IF
 *

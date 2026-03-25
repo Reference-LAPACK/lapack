@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNBDB3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunbdb3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunbdb3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -196,8 +194,10 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,10 +214,6 @@
 *
 *  ====================================================================
 *
-*     .. Parameters ..
-      COMPLEX*16         ONE
-      PARAMETER          ( ONE = (1.0D0,0.0D0) )
-*     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
@@ -225,7 +221,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV, XERBLA
+      EXTERNAL           ZLARF1F, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2
@@ -286,11 +283,10 @@
          CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          CALL ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = DBLE( X21(I,I) )
-         X21(I,I) = ONE
-         CALL ZLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X11(I,I), LDX11, WORK(ILARF) )
-         CALL ZLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
-     $               X21(I+1,I), LDX21, WORK(ILARF) )
+         CALL ZLARF1F( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X11(I,I), LDX11, WORK(ILARF) )
+         CALL ZLARF1F( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+     $                 X21(I+1,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          C = SQRT( DZNRM2( P-I+1, X11(I,I), 1 )**2
      $           + DZNRM2( M-P-I, X21(I+1,I), 1 )**2 )
@@ -301,28 +297,25 @@
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
          CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
+            CALL ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1,
+     $                    TAUP2(I) )
             PHI(I) = ATAN2( DBLE( X21(I+1,I) ), DBLE( X11(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
-            X21(I+1,I) = ONE
-            CALL ZLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1,
-     $                  DCONJG(TAUP2(I)), X21(I+1,I+1), LDX21,
-     $                  WORK(ILARF) )
+            CALL ZLARF1F( 'L', M-P-I, Q-I, X21(I+1,I), 1,
+     $                    CONJG(TAUP2(I)),
+     $                    X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
-         X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
-     $               X11(I,I+1), LDX11, WORK(ILARF) )
-*
+         CALL ZLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, CONJG(TAUP1(I)),
+     $                 X11(I,I+1), LDX11, WORK(ILARF) )
       END DO
 *
 *     Reduce the bottom-right portion of X11 to the identity matrix
 *
       DO I = M-P + 1, Q
          CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
-         X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
-     $               X11(I,I+1), LDX11, WORK(ILARF) )
+         CALL ZLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, CONJG(TAUP1(I)),
+     $                 X11(I,I+1), LDX11, WORK(ILARF) )
       END DO
 *
       RETURN

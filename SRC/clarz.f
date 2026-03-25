@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLARZ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarz.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarz.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -144,6 +142,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,7 +165,8 @@
      $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGERC, CGERU, CLACGV
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGERC, CGERU,
+     $                   CLACGV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -187,7 +187,8 @@
 *
 *           w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) )
 *
-            CALL CGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1, 1 ),
+            CALL CGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1,
+     $                  1 ),
      $                  LDC, V, INCV, ONE, WORK, 1 )
             CALL CLACGV( N, WORK, 1 )
 *
@@ -214,7 +215,8 @@
 *
 *           w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l )
 *
-            CALL CGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC,
+            CALL CGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ),
+     $                  LDC,
      $                  V, INCV, ONE, WORK, 1 )
 *
 *           C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m )

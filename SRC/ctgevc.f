@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTGEVC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgevc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgevc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -216,6 +214,7 @@
 *  =====================================================================
       SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -368,9 +367,9 @@
       SAFMIN = SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
       ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
-      SMALL = SAFMIN*N / ULP
+      SMALL = SAFMIN*REAL( N ) / ULP
       BIG = ONE / SMALL
-      BIGNUM = ONE / ( SAFMIN*N )
+      BIGNUM = ONE / ( SAFMIN*REAL( N ) )
 *
 *     Compute the 1-norm of each column of the strictly upper triangular
 *     part of A and B to check for possible overflow in the triangular
@@ -527,7 +526,8 @@
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL CGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL,
+                  CALL CGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ),
+     $                        LDVL,
      $                        WORK( JE ), 1, CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IBEG = 1

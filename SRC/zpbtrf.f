@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZPBTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpbtrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbtrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -139,6 +137,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,7 +173,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPBTF2, ZPOTF2, ZTRSM
+      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPBTF2, ZPOTF2,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -271,14 +271,16 @@
 *
 *                    Update A12
 *
-                     CALL ZTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL ZTRSM( 'Left', 'Upper',
+     $                           'Conjugate transpose',
      $                           'Non-unit', IB, I2, CONE,
      $                           AB( KD+1, I ), LDAB-1,
      $                           AB( KD+1-IB, I+IB ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL ZHERK( 'Upper', 'Conjugate transpose', I2, IB,
+                     CALL ZHERK( 'Upper', 'Conjugate transpose', I2,
+     $                           IB,
      $                           -ONE, AB( KD+1-IB, I+IB ), LDAB-1, ONE,
      $                           AB( KD+1, I+IB ), LDAB-1 )
                   END IF
@@ -295,7 +297,8 @@
 *
 *                    Update A13 (in the work array).
 *
-                     CALL ZTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL ZTRSM( 'Left', 'Upper',
+     $                           'Conjugate transpose',
      $                           'Non-unit', IB, I3, CONE,
      $                           AB( KD+1, I ), LDAB-1, WORK, LDWORK )
 *
@@ -310,7 +313,8 @@
 *
 *                    Update A33
 *
-                     CALL ZHERK( 'Upper', 'Conjugate transpose', I3, IB,
+                     CALL ZHERK( 'Upper', 'Conjugate transpose', I3,
+     $                           IB,
      $                           -ONE, WORK, LDWORK, ONE,
      $                           AB( KD+1, I+KD ), LDAB-1 )
 *
@@ -380,7 +384,8 @@
 *
 *                    Update A22
 *
-                     CALL ZHERK( 'Lower', 'No transpose', I2, IB, -ONE,
+                     CALL ZHERK( 'Lower', 'No transpose', I2, IB,
+     $                           -ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -413,7 +418,8 @@
 *
 *                    Update A33
 *
-                     CALL ZHERK( 'Lower', 'No transpose', I3, IB, -ONE,
+                     CALL ZHERK( 'Lower', 'No transpose', I3, IB,
+     $                           -ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *

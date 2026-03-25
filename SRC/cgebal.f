@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGEBAL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebal.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebal.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -162,6 +160,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -196,7 +195,8 @@
       LOGICAL            SISNAN, LSAME
       INTEGER            ICAMAX
       REAL               SLAMCH, SCNRM2
-      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH, SCNRM2
+      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH,
+     $                   SCNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CSSCAL, CSWAP
@@ -207,8 +207,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -263,10 +265,11 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( L ) = I
+                  SCALE( L ) = REAL( I )
                   IF( I.NE.L ) THEN
                      CALL CSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
-                     CALL CSWAP( N-K+1, A( I, K ), LDA, A( L, K ), LDA )
+                     CALL CSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *
@@ -299,10 +302,11 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( K ) = J
+                  SCALE( K ) = REAL( J )
                   IF( J.NE.K ) THEN
                      CALL CSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
-                     CALL CSWAP( N-K+1, A( J, K ), LDA, A( K, K ), LDA )
+                     CALL CSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *

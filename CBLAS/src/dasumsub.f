@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for dasum..
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine dasumsub(n,x,incx,asum)
+      implicit none
 c
       external dasum
       double precision dasum,asum

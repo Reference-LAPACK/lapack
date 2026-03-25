@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYTRI2X + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri2x.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2x.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -117,6 +115,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -382,8 +381,10 @@
             DO WHILE ( I .LE. N )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,
+     $                IP )
+                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,
+     $                I )
                ELSE
                  IP=-IPIV(I)
                  I=I+1
@@ -568,12 +569,16 @@
             DO WHILE ( I .GE. 1 )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP  )
-                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,
+     $                IP  )
+                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,
+     $                I )
                ELSE
                  IP=-IPIV(I)
-                 IF ( I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                 IF ( I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP, I )
+                 IF ( I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,
+     $                IP )
+                 IF ( I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP,
+     $                I )
                  I=I-1
                ENDIF
                I=I-1

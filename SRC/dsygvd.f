@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYGVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsygvd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygvd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -216,8 +214,10 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
-      SUBROUTINE DSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE DSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                   WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -245,13 +245,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      DOUBLE PRECISION   DROUNDUP_LWORK
+      EXTERNAL           LSAME, DROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DPOTRF, DSYEVD, DSYGST, DTRMM, DTRSM, XERBLA
+      EXTERNAL           DPOTRF, DSYEVD, DSYGST, DTRMM, DTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -289,7 +291,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 ) = LOPT
+         WORK( 1 ) = DROUNDUP_LWORK(LOPT)
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -322,10 +324,11 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK, LIWORK,
+      CALL DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
+     $             LIWORK,
      $             INFO )
-      LOPT = INT( MAX( DBLE( LOPT ), DBLE( WORK( 1 ) ) ) )
-      LIOPT = INT( MAX( DBLE( LIOPT ), DBLE( IWORK( 1 ) ) ) )
+      LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
+      LIOPT = MAX( LIOPT, IWORK( 1 ) )
 *
       IF( WANTZ .AND. INFO.EQ.0 ) THEN
 *
@@ -361,7 +364,7 @@
          END IF
       END IF
 *
-      WORK( 1 ) = LOPT
+      WORK( 1 ) = DROUNDUP_LWORK(LOPT)
       IWORK( 1 ) = LIOPT
 *
       RETURN

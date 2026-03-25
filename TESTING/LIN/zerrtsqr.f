@@ -73,8 +73,8 @@
       INTEGER            I, INFO, J, MB, NB
 *     ..
 *     .. Local Arrays ..
-      COMPLEX*16         A( NMAX, NMAX ), T( NMAX, NMAX ), W( NMAX ),
-     $                   C( NMAX, NMAX ), TAU(NMAX)
+      COMPLEX*16         A( NMAX, NMAX ), W( NMAX ),
+     $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZGEQR,
@@ -103,7 +103,6 @@
          DO I = 1, NMAX
             A( I, J ) = 1.D0 / DBLE( I+J )
             C( I, J ) = 1.D0 / DBLE( I+J )
-            T( I, J ) = 1.D0 / DBLE( I+J )
          END DO
          W( J ) = 0.D0
       END DO
@@ -161,8 +160,9 @@
 *
 *     ZGEMQR
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'ZGEMQR'
       NB=1
       INFOT = 1
@@ -251,8 +251,9 @@
 *
 *     ZGEMLQ
 *
-      TAU(1)=1
-      TAU(2)=1
+      DO I = 1, 5
+         TAU( I ) = 1
+      END DO
       SRNAMT = 'ZGEMLQ'
       NB=1
       INFOT = 1

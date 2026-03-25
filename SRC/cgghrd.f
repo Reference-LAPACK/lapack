@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGGHRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgghrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgghrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -199,8 +197,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE CGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -343,11 +343,13 @@
             CALL CLARTG( CTEMP, B( JROW, JROW-1 ), C, S,
      $                   B( JROW, JROW ) )
             B( JROW, JROW-1 ) = CZERO
-            CALL CROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C, S )
+            CALL CROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C,
+     $                 S )
             CALL CROT( JROW-1, B( 1, JROW ), 1, B( 1, JROW-1 ), 1, C,
      $                 S )
             IF( ILZ )
-     $         CALL CROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C, S )
+     $         CALL CROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C,
+     $                    S )
    30    CONTINUE
    40 CONTINUE
 *

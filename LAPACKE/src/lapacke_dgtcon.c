@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgtcon( char norm, lapack_int n, const double* dl,
+lapack_int API_SUFFIX(LAPACKE_dgtcon)( char norm, lapack_int n, const double* dl,
                            const double* d, const double* du, const double* du2,
                            const lapack_int* ipiv, double anorm, double* rcond )
 {
@@ -42,19 +42,19 @@ lapack_int LAPACKE_dgtcon( char norm, lapack_int n, const double* dl,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &anorm, 1 ) ) {
             return -8;
         }
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -4;
         }
-        if( LAPACKE_d_nancheck( n-1, dl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, dl, 1 ) ) {
             return -3;
         }
-        if( LAPACKE_d_nancheck( n-1, du, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, du, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_d_nancheck( n-2, du2, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-2, du2, 1 ) ) {
             return -6;
         }
     }
@@ -71,7 +71,7 @@ lapack_int LAPACKE_dgtcon( char norm, lapack_int n, const double* dl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgtcon_work( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
+    info = API_SUFFIX(LAPACKE_dgtcon_work)( norm, n, dl, d, du, du2, ipiv, anorm, rcond,
                                 work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -79,7 +79,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dgtcon", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgtcon", info );
     }
     return info;
 }

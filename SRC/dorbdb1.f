@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DORBDB1 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb1.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb1.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -198,8 +196,10 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE DORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE DORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -227,7 +227,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, XERBLA
+      EXTERNAL           DLARF1F, DLARFGP, DORBDB5, DROT,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2
@@ -285,22 +286,23 @@
          THETA(I) = ATAN2( X21(I,I), X11(I,I) )
          C = COS( THETA(I) )
          S = SIN( THETA(I) )
-         X11(I,I) = ONE
-         X21(I,I) = ONE
-         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
+         CALL DLARF1F( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,
+     $               I+1),
      $               LDX11, WORK(ILARF) )
-         CALL DLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
+         CALL DLARF1F( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
 *
          IF( I .LT. Q ) THEN
-            CALL DROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C, S )
-            CALL DLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, TAUQ1(I) )
+            CALL DROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C,
+     $                 S )
+            CALL DLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21,
+     $                    TAUQ1(I) )
             S = X21(I,I+1)
-            X21(I,I+1) = ONE
-            CALL DLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
+            CALL DLARF1F( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
-            CALL DLARF( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
-     $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
+            CALL DLARF1F( 'R', M-P-I, Q-I, X21(I,I+1), LDX21,
+     $                    TAUQ1(I), X21(I+1,I+1), LDX21,
+     $                    WORK(ILARF) )
             C = SQRT( DNRM2( P-I, X11(I+1,I+1), 1 )**2
      $          + DNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )

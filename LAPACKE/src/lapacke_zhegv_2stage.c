@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
+lapack_int API_SUFFIX(LAPACKE_zhegv_2stage)( int matrix_layout, lapack_int itype, char jobz,
                           char uplo, lapack_int n, lapack_complex_double* a,
                           lapack_int lda, lapack_complex_double* b,
                           lapack_int ldb, double* w )
@@ -43,16 +43,16 @@ lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zhegv_2stage", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegv_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zhe_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -6;
         }
-        if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_zhe_nancheck)( matrix_layout, uplo, n, b, ldb ) ) {
             return -8;
         }
     }
@@ -64,7 +64,7 @@ lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zhegv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = API_SUFFIX(LAPACKE_zhegv_2stage_work)( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, &work_query, lwork, rwork );
     if( info != 0 ) {
         goto exit_level_1;
@@ -78,7 +78,7 @@ lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhegv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = API_SUFFIX(LAPACKE_zhegv_2stage_work)( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, work, lwork, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -86,7 +86,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zhegv_2stage", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegv_2stage", info );
     }
     return info;
 }

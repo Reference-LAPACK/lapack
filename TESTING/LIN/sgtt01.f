@@ -131,6 +131,7 @@
 *  =====================================================================
       SUBROUTINE SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

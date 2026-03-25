@@ -1,10 +1,27 @@
 *> \brief \b DTRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE DTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C,
+*                           LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
+*                           INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, M, N,
+*                          LIWORK, LDSWORK
+*       DOUBLE PRECISION   SCALE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), C( LDC, * ),
+*                          SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -27,8 +44,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -161,6 +178,8 @@
 *>               A and B are unchanged).
 *> \endverbatim
 *
+*> \ingroup trsyl3
+*
 *  =====================================================================
 *  References:
 *   E. S. Quintana-Orti and R. A. Van De Geijn (2003). Formal derivation of
@@ -175,9 +194,9 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE DTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
-     $                    LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
-     $                    INFO )
+      SUBROUTINE DTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C, LDC, SCALE, IWORK, LIWORK, SWORK,
+     $                    LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
@@ -209,10 +228,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLANGE, DLAMCH, DLARMM
-      EXTERNAL           DLANGE, DLAMCH, DLARMM, ILAENV, LSAME
+      EXTERNAL           DLANGE, DLAMCH, DLARMM, ILAENV,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLASCL, DSCAL, DTRSYL, XERBLA
+      EXTERNAL           DGEMM, DLASCL, DSCAL, DTRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXPONENT, MAX, MIN
@@ -239,7 +260,6 @@
       LQUERY = ( LIWORK.EQ.-1 .OR. LDSWORK.EQ.-1 )
       IWORK( 1 ) = NBA + NBB + 2
       IF( LQUERY ) THEN
-         LDSWORK = 2
          SWORK( 1, 1 ) = MAX( NBA, NBB )
          SWORK( 2, 1 ) = 2 * NBB + NBA
       END IF
@@ -1220,7 +1240,8 @@
 *
          SCALOC = MIN( BIGNUM / SCAL, ONE / BUF )
          BUF = BUF * SCALOC
-         CALL DLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC, IWORK(1) )
+         CALL DLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC,
+     $               IWORK(1) )
       END IF
 *
 *     Combine with buffer scaling factor. SCALE will be flushed if

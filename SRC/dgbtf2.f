@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGBTF2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbtf2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbtf2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -142,6 +140,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -249,7 +248,8 @@
 *
 *              Compute multipliers.
 *
-               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 )
+               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
+     $                     1 )
 *
 *              Update trailing submatrix within the band.
 *

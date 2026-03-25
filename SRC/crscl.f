@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CRSCL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/crscl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/crscl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -81,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE CRSCL( N, A, X, INCX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,7 +164,8 @@
 *
          IF( (ABS( UR ).LT.SAFMIN).OR.(ABS( UI ).LT.SAFMIN) ) THEN
 *           This means that both alphaR and alphaI are very small.
-            CALL CSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI ), X, INCX )
+            CALL CSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI ), X,
+     $                  INCX )
             CALL CSSCAL( N, SAFMAX, X, INCX )
          ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
             IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
@@ -184,7 +184,8 @@
                      UR = (SAFMIN * AR) + AI * ( (SAFMIN * AI) / AR )
                      UI = (SAFMIN * AI) + SAFMIN * (AR * ( AR / AI ))
                   END IF
-                  CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X, INCX )
+                  CALL CSCAL( N, CMPLX( ONE / UR, -ONE / UI ), X,
+     $                        INCX )
                ELSE
                   CALL CSCAL( N, CMPLX( SAFMAX / UR, -SAFMAX / UI ),
      $                        X, INCX )

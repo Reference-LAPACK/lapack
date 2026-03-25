@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSTEVD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstevd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstevd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,6 +152,7 @@
 *  =====================================================================
       SUBROUTINE SSTEVD( JOBZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,7 +182,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, SLANST, SROUNDUP_LWORK
-      EXTERNAL           LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANST,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSTEDC, SSTERF, XERBLA
@@ -274,7 +274,8 @@
       IF( .NOT.WANTZ ) THEN
          CALL SSTERF( N, D, E, INFO )
       ELSE
-         CALL SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK, LIWORK,
+         CALL SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+     $                LIWORK,
      $                INFO )
       END IF
 *

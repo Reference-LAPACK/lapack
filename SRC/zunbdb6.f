@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNBDB6 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunbdb6.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunbdb6.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,8 +152,10 @@
 *> \ingroup unbdb6
 *
 *  =====================================================================
-      SUBROUTINE ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1,
+     $                    Q2,
      $                    LDQ2, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -238,11 +238,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
@@ -284,11 +286,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTGSYL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsyl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsyl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -289,9 +287,11 @@
 *>      July 1989, pp 745-751.
 *>
 *  =====================================================================
-      SUBROUTINE CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -333,7 +333,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASET, CSCAL, CTGSY2, XERBLA
+      EXTERNAL           CGEMM, CLACPY, CLASET, CSCAL, CTGSY2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL, SQRT
@@ -437,7 +438,8 @@
             DSCALE = ZERO
             DSUM = ONE
             PQ = M*N
-            CALL CTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
+            CALL CTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
      $                   INFO )
             IF( DSCALE.NE.ZERO ) THEN
@@ -525,7 +527,8 @@
                   IS = IWORK( I )
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
-                  CALL CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ),
+     $                         LDA,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
      $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
@@ -535,9 +538,11 @@
                   PQ = PQ + MB*NB
                   IF( SCALOC.NE.ONE ) THEN
                      DO 80 K = 1, JS - 1
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1,
+     $                              K ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1,
+     $                              K ),
      $                              1 )
    80                CONTINUE
                      DO 90 K = JS, JE
@@ -553,9 +558,11 @@
      $                              F( IE+1, K ), 1 )
   100                CONTINUE
                      DO 110 K = JE + 1, N
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1,
+     $                              K ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1,
+     $                              K ),
      $                              1 )
   110                CONTINUE
                      SCALE = SCALE*SCALOC
@@ -638,9 +645,11 @@
      $                           1 )
   160             CONTINUE
                   DO 170 K = JS, JE
-                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), C( 1,
+     $                           K ),
      $                           1 )
-                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), F( 1,
+     $                           K ),
      $                           1 )
   170             CONTINUE
                   DO 180 K = JS, JE

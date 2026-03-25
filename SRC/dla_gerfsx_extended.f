@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLA_GERFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gerfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gerfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -387,12 +385,14 @@
 *> \ingroup la_gerfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE DLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE DLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $                                A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
      $                                Y_TAIL, RCOND, ITHRESH, RTHRESH,
      $                                DZ_UB, IGNORE_CWISE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -450,7 +450,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGETRS, DGEMV, BLAS_DGEMV_X,
+      EXTERNAL           DAXPY, DCOPY, DGETRS, DGEMV,
+     $                   BLAS_DGEMV_X,
      $                   BLAS_DGEMV2_X, DLA_GEAMV, DLA_WWADDW, DLAMCH,
      $                   CHLA_TRANSTYPE, DLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
@@ -500,7 +501,8 @@
 *
             CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL DGEMV( TRANS, N, N, -1.0D+0, A, LDA, Y( 1, J ), 1,
+               CALL DGEMV( TRANS, N, N, -1.0D+0, A, LDA, Y( 1, J ),
+     $                     1,
      $              1.0D+0, RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_DGEMV_X( TRANS_TYPE, N, N, -1.0D+0, A, LDA,

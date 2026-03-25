@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stprfs_work( int matrix_layout, char uplo, char trans,
+lapack_int API_SUFFIX(LAPACKE_stprfs_work)( int matrix_layout, char uplo, char trans,
                                 char diag, lapack_int n, lapack_int nrhs,
                                 const float* ap, const float* b, lapack_int ldb,
                                 const float* x, lapack_int ldx, float* ferr,
@@ -55,12 +55,12 @@ lapack_int LAPACKE_stprfs_work( int matrix_layout, char uplo, char trans,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_stprfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_stprfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -81,9 +81,9 @@ lapack_int LAPACKE_stprfs_work( int matrix_layout, char uplo, char trans,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
-        LAPACKE_stp_trans( matrix_layout, uplo, diag, n, ap, ap_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
+        API_SUFFIX(LAPACKE_stp_trans)( matrix_layout, uplo, diag, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_stprfs( &uplo, &trans, &diag, &n, &nrhs, ap_t, b_t, &ldb_t, x_t,
                        &ldx_t, ferr, berr, work, iwork, &info );
@@ -98,11 +98,11 @@ exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_stprfs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_stprfs_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_stprfs_work", info );
     }
     return info;
 }

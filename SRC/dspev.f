@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSPEV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspev.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspev.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -127,6 +125,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -158,7 +157,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DOPGTR, DSCAL, DSPTRD, DSTEQR, DSTERF, XERBLA
+      EXTERNAL           DOPGTR, DSCAL, DSPTRD, DSTEQR, DSTERF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -172,7 +172,8 @@
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
+      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR.
+     $         LSAME( UPLO, 'L' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -226,7 +227,8 @@
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL DSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
+      CALL DSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ),
+     $             IINFO )
 *
 *     For eigenvalues only, call DSTERF.  For eigenvectors, first call
 *     DOPGTR to generate the orthogonal matrix, then call DSTEQR.
@@ -237,7 +239,8 @@
          INDWRK = INDTAU + N
          CALL DOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                WORK( INDWRK ), IINFO )
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU ),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ,
+     $                WORK( INDTAU ),
      $                INFO )
       END IF
 *

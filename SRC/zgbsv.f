@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGBSV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbsv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbsv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -158,7 +156,9 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
+      SUBROUTINE ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+     $                  INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -210,7 +210,8 @@
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB, IPIV,
+         CALL ZGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB,
+     $                IPIV,
      $                B, LDB, INFO )
       END IF
       RETURN

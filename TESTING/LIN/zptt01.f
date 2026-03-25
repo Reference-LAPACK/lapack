@@ -89,6 +89,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZPTT01( N, D, E, DF, EF, WORK, RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

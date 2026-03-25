@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEQLF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqlf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqlf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -136,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -249,7 +248,8 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL SGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
+            CALL SGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGBBRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbbrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbbrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -184,6 +182,7 @@
 *  =====================================================================
       SUBROUTINE DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -211,7 +210,8 @@
       DOUBLE PRECISION   RA, RB, RC, RS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARGV, DLARTG, DLARTV, DLASET, DROT, XERBLA
+      EXTERNAL           DLARGV, DLARTG, DLARTV, DLASET, DROT,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -230,7 +230,9 @@
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
+      IF( .NOT.WANTQ .AND.
+     $    .NOT.WANTPT .AND.
+     $    .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -327,7 +329,8 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL DLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
+     $               CALL DLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ),
+     $                            INCA,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            WORK( MN+J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -367,7 +370,8 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL DROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
+                     CALL DROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ),
+     $                          LDC,
      $                          WORK( MN+J ), WORK( J ) )
    30             CONTINUE
                END IF

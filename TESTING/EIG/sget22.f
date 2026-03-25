@@ -165,6 +165,7 @@
 *  =====================================================================
       SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
      $                   WI, WORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

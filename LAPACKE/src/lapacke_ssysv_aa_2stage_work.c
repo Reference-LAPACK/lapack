@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssysv_aa_2stage_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_ssysv_aa_2stage_work)( int matrix_layout, char uplo, lapack_int n,
                                lapack_int nrhs, float* a, lapack_int lda,
                                float* tb, lapack_int ltb, lapack_int* ipiv, 
                                lapack_int* ipiv2, float* b, lapack_int ldb,
@@ -56,17 +56,17 @@ lapack_int LAPACKE_ssysv_aa_2stage_work( int matrix_layout, char uplo, lapack_in
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_ssysv_aa_2stage_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssysv_aa_2stage_work", info );
             return info;
         }
         if( ltb < 4*n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_ssysv_aa_2stage_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssysv_aa_2stage_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_ssysv_aa_2stage_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssysv_aa_2stage_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -93,8 +93,8 @@ lapack_int LAPACKE_ssysv_aa_2stage_work( int matrix_layout, char uplo, lapack_in
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_ssy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_ssy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssysv_aa_2stage( &uplo, &n, &nrhs, a_t, &lda_t, 
         			  tb_t, &ltb, ipiv, ipiv2, b_t, &ldb_t, work,
@@ -103,8 +103,8 @@ lapack_int LAPACKE_ssysv_aa_2stage_work( int matrix_layout, char uplo, lapack_in
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_ssy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_ssy_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_2:
@@ -113,11 +113,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ssysv_aa_2stage_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssysv_aa_2stage_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ssysv_aa_2stage_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssysv_aa_2stage_work", info );
     }
     return info;
 }

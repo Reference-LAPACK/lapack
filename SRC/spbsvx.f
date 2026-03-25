@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPBSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbsvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbsvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -337,9 +335,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE SPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB,
+     $                   LDAFB,
      $                   EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -374,7 +374,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAQSB, SPBCON, SPBEQU, SPBRFS,
+      EXTERNAL           SCOPY, SLACPY, SLAQSB, SPBCON, SPBEQU,
+     $                   SPBRFS,
      $                   SPBTRF, SPBTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -397,7 +398,9 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
       ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
@@ -454,7 +457,8 @@
 *
 *           Equilibrate the matrix.
 *
-            CALL SLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
+            CALL SLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX,
+     $                   EQUED )
             RCEQU = LSAME( EQUED, 'Y' )
          END IF
       END IF
@@ -502,7 +506,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK, IWORK,
+      CALL SPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK,
+     $             IWORK,
      $             INFO )
 *
 *     Compute the solution matrix X.
@@ -513,7 +518,8 @@
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB, X,
+      CALL SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB,
+     $             X,
      $             LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original

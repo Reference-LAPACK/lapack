@@ -32,6 +32,7 @@
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DSECND( )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

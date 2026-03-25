@@ -32,21 +32,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctfttp( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_ctfttp)( int matrix_layout, char transr, char uplo,
                            lapack_int n, const lapack_complex_float* arf,
                            lapack_complex_float* ap )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ctfttp", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ctfttp", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_cpf_nancheck( n, arf ) ) {
+        if( API_SUFFIX(LAPACKE_cpf_nancheck)( n, arf ) ) {
             return -5;
         }
     }
 #endif
-    return LAPACKE_ctfttp_work( matrix_layout, transr, uplo, n, arf, ap );
+    return API_SUFFIX(LAPACKE_ctfttp_work)( matrix_layout, transr, uplo, n, arf, ap );
 }

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASD7 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd7.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd7.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -101,7 +99,7 @@
 *>         On entry D contains the singular values of the two submatrices
 *>         to be combined. On exit D contains the trailing (N-K) updated
 *>         singular values (those which were deflated) sorted into
-*>         increasing order.
+*>         decreasing order.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -273,10 +271,12 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, VL,
+      SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW,
+     $                   VL,
      $                   VLW, ALPHA, BETA, DSIGMA, IDX, IDXP, IDXQ,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   C, S, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -454,7 +454,7 @@
 *
 *        Check if singular values are close enough to allow deflation.
 *
-         IF( ABS( D( J )-D( JPREV ) ).LE.TOL ) THEN
+         IF( ( D( J )-D( JPREV ) ).LE.TOL ) THEN
 *
 *           Deflation is possible.
 *
@@ -490,7 +490,14 @@
             CALL DROT( 1, VF( JPREV ), 1, VF( J ), 1, C, S )
             CALL DROT( 1, VL( JPREV ), 1, VL( J ), 1, C, S )
             K2 = K2 - 1
-            IDXP( K2 ) = JPREV
+*
+*           Insert the deflated index in the correct position in IDXP.
+*           If J - JPREV is greater than 1, the indices in between
+*           must be shifted to preserve the correct output order.
+*
+            DO 85 JP = JPREV, J - 1
+               IDXP( K2 + J - 1 - JP ) = JP
+   85       CONTINUE
             JPREV = J
          ELSE
             K = K + 1

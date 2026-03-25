@@ -32,19 +32,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsptri( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dsptri)( int matrix_layout, char uplo, lapack_int n,
                            double* ap, const lapack_int* ipiv )
 {
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dsptri", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsptri", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dsp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_dsp_nancheck)( n, ap ) ) {
             return -4;
         }
     }
@@ -56,12 +56,12 @@ lapack_int LAPACKE_dsptri( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsptri_work( matrix_layout, uplo, n, ap, ipiv, work );
+    info = API_SUFFIX(LAPACKE_dsptri_work)( matrix_layout, uplo, n, ap, ipiv, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dsptri", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsptri", info );
     }
     return info;
 }

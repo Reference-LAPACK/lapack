@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAHEF_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahef_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahef_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -172,8 +170,8 @@
       EXTERNAL     LSAME, ILAENV, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     ZGEMM, ZGEMV, ZAXPY, ZLACGV, ZCOPY, ZSCAL, ZSWAP,
-     $             ZLASET, XERBLA
+      EXTERNAL     ZGEMM, ZGEMV, ZAXPY, ZLACGV, ZCOPY, ZSCAL,
+     $             ZSWAP, ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    DBLE, DCONJG, MAX

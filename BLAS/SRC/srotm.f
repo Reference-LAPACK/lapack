@@ -39,6 +39,9 @@
 *>      (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
 *>    SEE  SROTMG FOR A DESCRIPTION OF DATA STORAGE IN SPARAM.
 *>
+*>    IF SFLAG IS NOT ONE OF THE LISTED ABOVE, THE BEHAVIOR IS UNDEFINED.
+*>    NANS IN SFLAG MAY NOT PROPAGATE TO THE OUTPUT.
+*>
 *> \endverbatim
 *
 *  Arguments:
@@ -94,6 +97,7 @@
 *
 *  =====================================================================
       SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

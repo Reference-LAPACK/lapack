@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DHSEIN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhsein.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhsein.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -257,9 +255,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
+      SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR,
+     $                   WI,
      $                   VL, LDVL, VR, LDVR, MM, M, WORK, IFAILL,
      $                   IFAILR, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -457,7 +457,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ),
+     $                      LDH,
      $                      WKR, WKI, VL( KL, KSR ), VL( KL, KSI ),
      $                      WORK, LDWORK, WORK( N*N+N+1 ), EPS3, SMLNUM,
      $                      BIGNUM, IINFO )

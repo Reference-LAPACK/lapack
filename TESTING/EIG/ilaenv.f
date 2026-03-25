@@ -150,6 +150,7 @@
 *  =====================================================================
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
      $                 N4 )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -250,6 +251,7 @@ C        ILAENV = 0
       END
       INTEGER FUNCTION ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2,
      $                               N3, N4 )
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
       INTEGER            ISPEC, N1, N2, N3, N4
@@ -299,6 +301,7 @@ C        ILAENV = 0
 *
       END
       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
+      IMPLICIT NONE
 *
       INTEGER            INMIN, INWIN, INIBL, ISHFTS, IACC22
       PARAMETER          ( INMIN = 12, INWIN = 13, INIBL = 14,

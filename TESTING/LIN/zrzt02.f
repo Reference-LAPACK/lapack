@@ -88,6 +88,7 @@
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZRZT02( M, N, AF, LDA, TAU, WORK,
      $                 LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -1,10 +1,11 @@
 /* cblas_example2.c */
 
+#define CBLAS_API64
+#define F77_INT int64_t
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "cblas_64.h"
-#define CBLAS_API64
-#define F77_INT int64_t
 #include "cblas_f77.h"
 
 #define INVALID -1

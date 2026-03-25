@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGERFSX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfsx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfsx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -407,10 +405,12 @@
 *> \ingroup gerfsx
 *
 *  =====================================================================
-      SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -606,7 +606,8 @@
          NORM = '1'
       END IF
       ANORM = SLANGE( NORM, N, N, A, LDA, WORK )
-      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -637,13 +638,16 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           -1, C, INFO, WORK, IWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           -1, R, INFO, WORK, IWORK )
          ELSE
-            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF,
+     $                               IPIV,
      $           0, R, INFO, WORK, IWORK )
          END IF
          DO J = 1, NRHS

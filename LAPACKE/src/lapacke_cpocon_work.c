@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cpocon_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_cpocon_work)( int matrix_layout, char uplo, lapack_int n,
                                 const lapack_complex_float* a, lapack_int lda,
                                 float anorm, float* rcond,
                                 lapack_complex_float* work, float* rwork )
@@ -50,7 +50,7 @@ lapack_int LAPACKE_cpocon_work( int matrix_layout, char uplo, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -5;
-            LAPACKE_xerbla( "LAPACKE_cpocon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpocon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +61,7 @@ lapack_int LAPACKE_cpocon_work( int matrix_layout, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_cpo_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_cpo_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cpocon( &uplo, &n, a_t, &lda_t, &anorm, rcond, work, rwork,
                        &info );
@@ -72,11 +72,11 @@ lapack_int LAPACKE_cpocon_work( int matrix_layout, char uplo, lapack_int n,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_cpocon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpocon_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cpocon_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpocon_work", info );
     }
     return info;
 }

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYTRF_RK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrf_rk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrf_rk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -256,6 +254,7 @@
 *  =====================================================================
       SUBROUTINE CSYTRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
      $                      INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -426,7 +425,8 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL CLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E( K ),
+            CALL CLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+     $                      E( K ),
      $                        IPIV( K ), WORK, LDWORK, IINFO )
 
 

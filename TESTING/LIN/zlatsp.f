@@ -15,7 +15,7 @@
 *       INTEGER            N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX*16         X( * )
 *       ..
 *
@@ -81,6 +81,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZLATSP( UPLO, N, X, ISEED )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,7 +92,7 @@
       INTEGER            N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX*16         X( * )
 *     ..
 *

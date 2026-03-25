@@ -32,20 +32,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssbev( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_ssbev)( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int kd, float* ab, lapack_int ldab, float* w,
                           float* z, lapack_int ldz )
 {
     lapack_int info = 0;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ssbev", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_ssb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_ssb_nancheck)( matrix_layout, uplo, n, kd, ab, ldab ) ) {
             return -6;
         }
     }
@@ -57,13 +57,13 @@ lapack_int LAPACKE_ssbev( int matrix_layout, char jobz, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ssbev_work( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
+    info = API_SUFFIX(LAPACKE_ssbev_work)( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
                                ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_ssbev", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ssbev", info );
     }
     return info;
 }

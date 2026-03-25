@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cpftrs_work( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_cpftrs_work)( int matrix_layout, char transr, char uplo,
                                 lapack_int n, lapack_int nrhs,
                                 const lapack_complex_float* a,
                                 lapack_complex_float* b, lapack_int ldb )
@@ -51,7 +51,7 @@ lapack_int LAPACKE_cpftrs_work( int matrix_layout, char transr, char uplo,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_cpftrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpftrs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -70,26 +70,26 @@ lapack_int LAPACKE_cpftrs_work( int matrix_layout, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_cpf_trans( matrix_layout, transr, uplo, n, a, a_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_cpf_trans)( matrix_layout, transr, uplo, n, a, a_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cpftrs( &transr, &uplo, &n, &nrhs, a_t, b_t, &ldb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_cpftrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpftrs_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cpftrs_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cpftrs_work", info );
     }
     return info;
 }

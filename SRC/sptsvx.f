@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPTSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptsvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptsvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -225,6 +223,7 @@
 *  =====================================================================
       SUBROUTINE SPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -257,7 +256,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SPTCON, SPTRFS, SPTTRF, SPTTRS,
+      EXTERNAL           SCOPY, SLACPY, SPTCON, SPTRFS, SPTTRF,
+     $                   SPTTRS,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..

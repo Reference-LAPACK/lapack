@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STRTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strtrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strtrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -39,8 +37,14 @@
 *>
 *>    A * X = B  or  A**T * X = B,
 *>
-*> where A is a triangular matrix of order N, and B is an N-by-NRHS
-*> matrix.  A check is made to verify that A is nonsingular.
+*> where A is a triangular matrix of order N, and B is an N-by-NRHS matrix.
+*>
+*> This subroutine verifies that A is nonsingular, but callers should note that only exact
+*> singularity is detected. It is conceivable for one or more diagonal elements of A to be
+*> subnormally tiny numbers without this subroutine signalling an error.
+*>
+*> If a possible loss of numerical precision due to near-singular matrices is a concern, the
+*> caller should verify that A is nonsingular within some tolerance before calling this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -119,7 +123,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>          > 0: if INFO = i, the i-th diagonal element of A is zero,
+*>          > 0:  if INFO = i, the i-th diagonal element of A is exactly zero,
 *>               indicating that the matrix is singular and the solutions
 *>               X have not been computed.
 *> \endverbatim
@@ -137,6 +141,7 @@
 *  =====================================================================
       SUBROUTINE STRTRS( UPLO, TRANS, DIAG, N, NRHS, A, LDA, B, LDB,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -175,10 +180,12 @@
 *
       INFO = 0
       NOUNIT = LSAME( DIAG, 'N' )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+     $         LSAME( TRANS, 'T' ) .AND.
+     $                .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3

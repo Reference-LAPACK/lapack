@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETRI_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetri_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,6 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE CHETRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,7 +236,8 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
             END IF
             KSTEP = 1
@@ -262,15 +262,18 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         REAL( CDOTC( K-1, WORK, 1, A( 1, K+1 ),
+     $                         REAL( CDOTC( K-1, WORK, 1, A( 1,
+     $                               K+1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -383,7 +386,8 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
@@ -408,18 +412,22 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       CDOTC( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, CZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         REAL( CDOTC( N-K, WORK, 1, A( K+1, K-1 ),
+     $                         REAL( CDOTC( N-K, WORK, 1, A( K+1,
+     $                               K-1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -434,7 +442,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 90 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )
@@ -459,7 +468,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 100 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )
@@ -485,7 +495,8 @@
             IF( KP.NE.K ) THEN
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
 *
                DO 110 J = K + 1, KP - 1
                   TEMP = CONJG( A( J, K ) )

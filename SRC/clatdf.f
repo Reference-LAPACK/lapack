@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLATDF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatdf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatdf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -166,6 +164,7 @@
 *  =====================================================================
       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -200,7 +199,8 @@
       COMPLEX            WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGECON, CGESC2, CLASSQ, CLASWP,
+      EXTERNAL           CAXPY, CCOPY, CGECON, CGESC2, CLASSQ,
+     $                   CLASWP,
      $                   CSCAL
 *     ..
 *     .. External Functions ..
@@ -232,7 +232,8 @@
 *
             SPLUS = SPLUS + REAL( CDOTC( N-J, Z( J+1, J ), 1, Z( J+1,
      $              J ), 1 ) )
-            SMINU = REAL( CDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 ) )
+            SMINU = REAL( CDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ),
+     $                    1 ) )
             SPLUS = SPLUS*REAL( RHS( J ) )
             IF( SPLUS.GT.SMINU ) THEN
                RHS( J ) = BP

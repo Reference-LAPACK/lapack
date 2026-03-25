@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGETSQRHRT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetsqrhrt.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetsqrhrt.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -177,7 +175,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT, WORK,
+      SUBROUTINE DGETSQRHRT( M, N, MB1, NB1, NB2, A, LDA, T, LDT,
+     $                       WORK,
      $                       LWORK, INFO )
       IMPLICIT NONE
 *
@@ -204,7 +203,8 @@
      $                   NB1LOCAL, NB2LOCAL, NUM_ALL_ROW_BLOCKS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLATSQR, DORGTSQR_ROW, DORHR_COL,
+      EXTERNAL           DCOPY, DLATSQR, DORGTSQR_ROW,
+     $                   DORHR_COL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -341,7 +341,8 @@
                A( I, J ) = -ONE * WORK( LWT+N*(J-1)+I )
             END DO
          ELSE
-            CALL DCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ), LDA )
+            CALL DCOPY( N-I+1, WORK(LWT+N*(I-1)+I), N, A( I, I ),
+     $                  LDA )
          END IF
       END DO
 *

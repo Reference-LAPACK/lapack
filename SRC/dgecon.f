@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGECON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgecon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgecon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -129,6 +127,7 @@
 *  =====================================================================
       SUBROUTINE DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -229,18 +228,21 @@
 *
 *           Multiply by inv(L).
 *
-            CALL DLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
+            CALL DLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   A, LDA, WORK, SU, WORK( 3*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(U**T).
 *
-            CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+     $                   A,
      $                   LDA, WORK, SU, WORK( 3*N+1 ), INFO )
 *
 *           Multiply by inv(L**T).

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPBCON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbcon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbcon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -130,6 +128,7 @@
 *  =====================================================================
       SUBROUTINE CPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
      $                   RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -231,13 +230,15 @@
 *
 *           Multiply by inv(U).
 *
-            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KD, AB, LDAB, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL CLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   KD, AB, LDAB, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *

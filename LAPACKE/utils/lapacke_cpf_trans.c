@@ -36,9 +36,9 @@
  * layout or vice versa.
  */
 
-void LAPACKE_cpf_trans( int matrix_layout, char transr, char uplo,
+void API_SUFFIX(LAPACKE_cpf_trans)( int matrix_layout, char transr, char uplo,
                         lapack_int n, const lapack_complex_float *in,
                         lapack_complex_float *out )
 {
-    LAPACKE_ctf_trans( matrix_layout, transr, uplo, 'n', n, in, out );
+    API_SUFFIX(LAPACKE_ctf_trans)( matrix_layout, transr, uplo, 'n', n, in, out );
 }

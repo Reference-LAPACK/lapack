@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPFTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -217,6 +215,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -280,14 +279,18 @@
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
-         CALL CTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
+         CALL CTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A,
+     $               B,
      $               LDB )
-         CALL CTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
+         CALL CTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A,
+     $               B,
      $               LDB )
       ELSE
-         CALL CTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
+         CALL CTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A,
+     $               B,
      $               LDB )
-         CALL CTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
+         CALL CTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A,
+     $               B,
      $               LDB )
       END IF
 *

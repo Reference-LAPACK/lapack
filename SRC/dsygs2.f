@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYGS2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsygs2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygs2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -124,6 +122,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,7 +148,8 @@
       DOUBLE PRECISION   AKK, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DSCAL, DSYR2, DTRMV, DTRSV, XERBLA
+      EXTERNAL           DAXPY, DSCAL, DSYR2, DTRMV, DTRSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -221,10 +221,12 @@
                IF( K.LT.N ) THEN
                   CALL DSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
                   CT = -HALF*AKK
-                  CALL DAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL DAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL DSYR2( UPLO, N-K, -ONE, A( K+1, K ), 1,
      $                        B( K+1, K ), 1, A( K+1, K+1 ), LDA )
-                  CALL DAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
+                  CALL DAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ),
+     $                        1 )
                   CALL DTRSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K+1, K ), 1 )
                END IF
@@ -245,7 +247,8 @@
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
                CALL DAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL DSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K ), 1,
+               CALL DSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K ),
+     $                     1,
      $                     A, LDA )
                CALL DAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
                CALL DSCAL( K-1, BKK, A( 1, K ), 1 )
@@ -261,7 +264,8 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL DTRMV( UPLO, 'Transpose', 'Non-unit', K-1, B, LDB,
+               CALL DTRMV( UPLO, 'Transpose', 'Non-unit', K-1, B,
+     $                     LDB,
      $                     A( K, 1 ), LDA )
                CT = HALF*AKK
                CALL DAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )

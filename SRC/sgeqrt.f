@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEQRT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqrt.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqrt.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -138,6 +136,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -195,9 +194,11 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL SGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL SGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT,
+     $                    IINFO )
          ELSE
-            CALL SGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL SGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT,
+     $                    IINFO )
          END IF
          IF( I+IB.LE.N ) THEN
 *

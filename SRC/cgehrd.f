@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGEHRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgehrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgehrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -163,7 +161,9 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE CGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +193,8 @@
       COMPLEX            EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEHD2, CGEMM, CLAHR2, CLARFB, CTRMM,
+      EXTERNAL           CAXPY, CGEHD2, CGEMM, CLAHR2, CLARFB,
+     $                   CTRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -230,7 +231,7 @@
          IF( NH.LE.1 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI,
+            NB = MIN( NBMAX, ILAENV( 1, 'CGEHRD', ' ', N, ILO, IHI,
      $                              -1 ) )
             LWKOPT = N*NB + TSIZE
          END IF

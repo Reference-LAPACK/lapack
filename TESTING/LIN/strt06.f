@@ -118,6 +118,7 @@
 *  =====================================================================
       SUBROUTINE STRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, WORK,
      $                   RAT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CUNML2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunml2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunml2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -156,6 +154,7 @@
 *  =====================================================================
       SUBROUTINE CUNML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -171,21 +170,17 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX            ONE
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, NOTRAN
       INTEGER            I, I1, I2, I3, IC, JC, MI, NI, NQ
-      COMPLEX            AII, TAUI
+      COMPLEX            TAUI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, XERBLA
+      EXTERNAL           CLACGV, CLARF1F, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -272,11 +267,8 @@
          END IF
          IF( I.LT.NQ )
      $      CALL CLACGV( NQ-I, A( I, I+1 ), LDA )
-         AII = A( I, I )
-         A( I, I ) = ONE
-         CALL CLARF( SIDE, MI, NI, A( I, I ), LDA, TAUI, C( IC, JC ),
-     $               LDC, WORK )
-         A( I, I ) = AII
+         CALL CLARF1F( SIDE, MI, NI, A( I, I ), LDA, TAUI, C( IC,
+     $                 JC ), LDC, WORK )
          IF( I.LT.NQ )
      $      CALL CLACGV( NQ-I, A( I, I+1 ), LDA )
    10 CONTINUE

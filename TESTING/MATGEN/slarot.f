@@ -221,8 +221,10 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE SLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA,
+     $                   XLEFT,
      $                   XRIGHT )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYTRF_RK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrf_rk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf_rk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -256,6 +254,7 @@
 *  =====================================================================
       SUBROUTINE SSYTRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
      $                      INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -284,7 +283,8 @@
       EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_RK, SSYTF2_RK, SSWAP,  XERBLA
+      EXTERNAL           SLASYF_RK, SSYTF2_RK, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -426,7 +426,8 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL SLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E( K ),
+            CALL SLASYF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+     $                      E( K ),
      $                        IPIV( K ), WORK, LDWORK, IINFO )
 
 

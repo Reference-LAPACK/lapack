@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLA_GERFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gerfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gerfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -388,13 +386,15 @@
 *> \ingroup la_gerfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $                                A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES,
      $                                AYB, DY, Y_TAIL, RCOND, ITHRESH,
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -453,7 +453,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGETRS, SGEMV, BLAS_SGEMV_X,
+      EXTERNAL           SAXPY, SCOPY, SGETRS, SGEMV,
+     $                   BLAS_SGEMV_X,
      $                   BLAS_SGEMV2_X, SLA_GEAMV, SLA_WWADDW, SLAMCH,
      $                   CHLA_TRANSTYPE, SLA_LIN_BERR
       REAL               SLAMCH
@@ -665,7 +666,8 @@
 *             op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL SCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL SGEMV( TRANS, N, N, -1.0, A, LDA, Y(1,J), 1, 1.0, RES, 1 )
+         CALL SGEMV( TRANS, N, N, -1.0, A, LDA, Y(1,J), 1, 1.0, RES,
+     $               1 )
 
          DO I = 1, N
             AYB( I ) = ABS( B( I, J ) )

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLASD8 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd8.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd8.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -161,6 +159,7 @@
 *  =====================================================================
       SUBROUTINE SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
      $                   DSIGMA, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -186,7 +185,8 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, RHO, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASCL, SLASD4, SLASET, XERBLA
+      EXTERNAL           SCOPY, SLASCL, SLASD4, SLASET,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SDOT, SLAMC3, SNRM2
@@ -295,11 +295,13 @@
 *        from doing x+(y+z).
 *
          DO 60 I = 1, J - 1
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJ )-DIFLJ )
+            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ),
+     $            DSIGJ )-DIFLJ )
      $                   / ( DSIGMA( I )+DJ )
    60    CONTINUE
          DO 70 I = J + 1, K
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJP )+DIFRJ )
+            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ),
+     $            DSIGJP )+DIFRJ )
      $                   / ( DSIGMA( I )+DJ )
    70    CONTINUE
          TEMP = SNRM2( K, WORK, 1 )

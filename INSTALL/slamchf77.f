@@ -64,6 +64,7 @@
 *
 *  =====================================================================
       REAL FUNCTION SLAMCH( CMACH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -204,6 +205,7 @@
 *> \endverbatim
 *>
       SUBROUTINE SLAMC1( BETA, T, RND, IEEE1 )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -416,6 +418,7 @@
 *> \endverbatim
 *>
       SUBROUTINE SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -639,6 +642,7 @@
 *> \ingroup lamc3
 *>
       REAL FUNCTION SLAMC3( A, B )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -686,6 +690,7 @@
 *> \ingroup lamc4
 *>
       SUBROUTINE SLAMC4( EMIN, START, BASE )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -794,6 +799,7 @@
 *> \ingroup lamc5
 *>
       SUBROUTINE SLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

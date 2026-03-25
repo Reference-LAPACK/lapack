@@ -38,7 +38,7 @@ for o, a in opts:
         print("     - e is to print only the error summary")
         print("     - s is to print a short summary")
         print("     - n is to print the numbers of failing tests (turn on summary mode)")
-        print(" SECLECTION OF TESTS:")
+        print(" SELECTION OF TESTS:")
         print("     - p [s/c/d/z/x] is to indicate the PRECISION to run:")
         print("            s=single")
         print("            d=double")

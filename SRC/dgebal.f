@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEBAL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgebal.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebal.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -160,6 +158,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +192,8 @@
       LOGICAL            DISNAN, LSAME
       INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH, DNRM2
-      EXTERNAL           DISNAN, LSAME, IDAMAX, DLAMCH, DNRM2
+      EXTERNAL           DISNAN, LSAME, IDAMAX, DLAMCH,
+     $                   DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSWAP, XERBLA
@@ -204,8 +204,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -262,7 +264,8 @@
                   SCALE( L ) = I
                   IF( I.NE.L ) THEN
                      CALL DSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
-                     CALL DSWAP( N-K+1, A( I, K ), LDA, A( L, K ), LDA )
+                     CALL DSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *
@@ -297,7 +300,8 @@
                   SCALE( K ) = J
                   IF( J.NE.K ) THEN
                      CALL DSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
-                     CALL DSWAP( N-K+1, A( J, K ), LDA, A( K, K ), LDA )
+                     CALL DSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *

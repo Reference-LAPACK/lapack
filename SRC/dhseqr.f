@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DHSEQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhseqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhseqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -313,6 +311,7 @@
 *  =====================================================================
       SUBROUTINE DHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, WR, WI, Z,
      $                   LDZ, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -361,7 +360,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLAHQR, DLAQR0, DLASET, XERBLA
+      EXTERNAL           DLACPY, DLAHQR, DLAQR0, DLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -454,13 +454,15 @@
 *        ==== DLAQR0 for big matrices; DLAHQR for small ones ====
 *
          IF( N.GT.NMIN ) THEN
-            CALL DLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI, ILO,
+            CALL DLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+     $                   ILO,
      $                   IHI, Z, LDZ, WORK, LWORK, INFO )
          ELSE
 *
 *           ==== Small matrix ====
 *
-            CALL DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI, ILO,
+            CALL DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+     $                   ILO,
      $                   IHI, Z, LDZ, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -475,7 +477,8 @@
 *                 ==== Larger matrices have enough subdiagonal scratch
 *                 .    space to call DLAQR0 directly. ====
 *
-                  CALL DLAQR0( WANTT, WANTZ, N, ILO, KBOT, H, LDH, WR,
+                  CALL DLAQR0( WANTT, WANTZ, N, ILO, KBOT, H, LDH,
+     $                         WR,
      $                         WI, ILO, IHI, Z, LDZ, WORK, LWORK, INFO )
 *
                ELSE
@@ -487,9 +490,11 @@
 *
                   CALL DLACPY( 'A', N, N, H, LDH, HL, NL )
                   HL( N+1, N ) = ZERO
-                  CALL DLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1, N+1 ),
+                  CALL DLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1,
+     $                         N+1 ),
      $                         NL )
-                  CALL DLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL, WR,
+                  CALL DLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL,
+     $                         WR,
      $                         WI, ILO, IHI, Z, LDZ, WORKL, NL, INFO )
                   IF( WANTT .OR. INFO.NE.0 )
      $               CALL DLACPY( 'A', N, N, HL, NL, H, LDH )

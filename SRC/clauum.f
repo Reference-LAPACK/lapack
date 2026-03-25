@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAUUM + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clauum.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clauum.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -99,6 +97,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLAUUM( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -202,7 +201,8 @@
      $                     A( I, 1 ), LDA )
                CALL CLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL CGEMM( 'Conjugate transpose', 'No transpose', IB,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose',
+     $                        IB,
      $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
      $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
                   CALL CHERK( 'Lower', 'Conjugate transpose', IB,

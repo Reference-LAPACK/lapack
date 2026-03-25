@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETF2_RK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetf2_rk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetf2_rk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -238,6 +236,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHETF2_RK( UPLO, N, A, LDA, E, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -491,7 +490,8 @@
 *              the interchanges in columns k+1:N.
 *
                IF( K.LT.N )
-     $            CALL ZSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ), LDA )
+     $            CALL ZSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
+     $                        LDA )
 *
             END IF
 *
@@ -560,7 +560,8 @@
 *                       = A - W(k)*1/D(k)*W(k)**T
 *
                      D11 = ONE / DBLE( A( K, K ) )
-                     CALL ZHER( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL ZHER( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
 *
 *                    Store U(k) in column k
 *
@@ -579,7 +580,8 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *                       = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T
 *
-                     CALL ZHER( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL ZHER( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
                   END IF
 *
 *                 Store the superdiagonal element of D in array E
@@ -752,14 +754,16 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
+                     JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ),
+     $                                      LDA )
                      ROWMAX = CABS1( A( IMAX, JMAX ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ),
+                     ITEMP = IMAX + IZAMAX( N-IMAX, A( IMAX+1,
+     $                                      IMAX ),
      $                                     1 )
                      DTEMP = CABS1( A( ITEMP, IMAX ) )
                      IF( DTEMP.GT.ROWMAX ) THEN
@@ -855,7 +859,8 @@
             IF( KP.NE.KK ) THEN
 *              (1) Swap columnar parts
                IF( KP.LT.N )
-     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *              (2) Swap and conjugate middle parts
                DO 45 J = KK + 1, KP - 1
                   T = DCONJG( A( J, KK ) )

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
+lapack_int API_SUFFIX(LAPACKE_dgeesx)( int matrix_layout, char jobvs, char sort,
                            LAPACK_D_SELECT2 select, char sense, lapack_int n,
                            double* a, lapack_int lda, lapack_int* sdim,
                            double* wr, double* wi, double* vs, lapack_int ldvs,
@@ -47,19 +47,19 @@ lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
     lapack_int iwork_query;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dgeesx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgeesx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, n, a, lda ) ) {
             return -7;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( sort, 's' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( sort, 's' ) ) {
         bwork = (lapack_logical*)
             LAPACKE_malloc( sizeof(lapack_logical) * MAX(1,n) );
         if( bwork == NULL ) {
@@ -68,7 +68,7 @@ lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
         }
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_dgeesx_work( matrix_layout, jobvs, sort, select, sense, n, a,
+    info = API_SUFFIX(LAPACKE_dgeesx_work)( matrix_layout, jobvs, sort, select, sense, n, a,
                                 lda, sdim, wr, wi, vs, ldvs, rconde, rcondv,
                                 &work_query, lwork, &iwork_query, liwork,
                                 bwork );
@@ -78,7 +78,7 @@ lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
     liwork = iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
-    if( LAPACKE_lsame( sense, 'b' ) || LAPACKE_lsame( sense, 'v' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( sense, 'b' ) || API_SUFFIX(LAPACKE_lsame)( sense, 'v' ) ) {
         iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
     }
     else {
@@ -94,7 +94,7 @@ lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgeesx_work( matrix_layout, jobvs, sort, select, sense, n, a,
+    info = API_SUFFIX(LAPACKE_dgeesx_work)( matrix_layout, jobvs, sort, select, sense, n, a,
                                 lda, sdim, wr, wi, vs, ldvs, rconde, rcondv,
                                 work, lwork, iwork, liwork, bwork );
     /* Release memory and exit */
@@ -102,12 +102,12 @@ lapack_int LAPACKE_dgeesx( int matrix_layout, char jobvs, char sort,
 exit_level_2:
     LAPACKE_free( iwork );
 exit_level_1:
-    if( LAPACKE_lsame( sort, 's' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( sort, 's' ) ) {
         LAPACKE_free( bwork );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dgeesx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgeesx", info );
     }
     return info;
 }

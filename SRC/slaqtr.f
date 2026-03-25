@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAQTR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqtr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqtr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -160,8 +158,10 @@
 *> \ingroup laqtr
 *
 *  =====================================================================
-      SUBROUTINE SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
+      SUBROUTINE SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X,
+     $                   WORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -314,7 +314,8 @@
                      END IF
                   END IF
                   IF( J1.GT.1 ) THEN
-                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
                      K = ISAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
@@ -357,8 +358,10 @@
 *                 Update right-hand side
 *
                   IF( J1.GT.1 ) THEN
-                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
-                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
+                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X,
+     $                           1 )
                      K = ISAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
@@ -402,7 +405,8 @@
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X, 1 )
+                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X,
+     $               1 )
 *
                   XJ = ABS( X( J1 ) )
                   TJJ = ABS( T( J1, J1 ) )
@@ -532,7 +536,8 @@
                   END IF
 *
                   IF( J1.GT.1 ) THEN
-                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
                      CALL SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
 *
@@ -554,7 +559,8 @@
                   D( 2, 1 ) = X( J2 )
                   D( 1, 2 ) = X( N+J1 )
                   D( 2, 2 ) = X( N+J2 )
-                  CALL SLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1, J1 ),
+                  CALL SLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1,
+     $                         J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, -W, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -586,8 +592,10 @@
 *                 Update the right-hand side.
 *
                   IF( J1.GT.1 ) THEN
-                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
-                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X,
+     $                           1 )
+                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X,
+     $                           1 )
 *
                      CALL SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
@@ -644,7 +652,8 @@
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X, 1 )
+                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X,
+     $               1 )
                   X( N+J1 ) = X( N+J1 ) - SDOT( J1-1, T( 1, J1 ), 1,
      $                        X( N+1 ), 1 )
                   IF( J1.GT.1 ) THEN

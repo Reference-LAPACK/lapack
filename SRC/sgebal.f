@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEBAL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgebal.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgebal.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -160,6 +158,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +192,8 @@
       LOGICAL            SISNAN, LSAME
       INTEGER            ISAMAX
       REAL               SLAMCH, SNRM2
-      EXTERNAL           SISNAN, LSAME, ISAMAX, SLAMCH, SNRM2
+      EXTERNAL           SISNAN, LSAME, ISAMAX, SLAMCH,
+     $                   SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSWAP, XERBLA
@@ -204,8 +204,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND.
+     $    .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND.
+     $                .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -259,10 +261,11 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( L ) = I
+                  SCALE( L ) = REAL( I )
                   IF( I.NE.L ) THEN
                      CALL SSWAP( L, A( 1, I ), 1, A( 1, L ), 1 )
-                     CALL SSWAP( N-K+1, A( I, K ), LDA, A( L, K ), LDA )
+                     CALL SSWAP( N-K+1, A( I, K ), LDA, A( L, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *
@@ -294,10 +297,11 @@
                END DO
 *
                IF( CANSWAP ) THEN
-                  SCALE( K ) = J
+                  SCALE( K ) = REAL( J )
                   IF( J.NE.K ) THEN
                      CALL SSWAP( L, A( 1, J ), 1, A( 1, K ), 1 )
-                     CALL SSWAP( N-K+1, A( J, K ), LDA, A( K, K ), LDA )
+                     CALL SSWAP( N-K+1, A( J, K ), LDA, A( K, K ),
+     $                           LDA )
                   END IF
                   NOCONV = .TRUE.
 *

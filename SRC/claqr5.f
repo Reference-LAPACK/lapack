@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAQR5 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr5.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr5.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -251,7 +249,8 @@
 *>       ACM Trans. Math. Softw. 40, 2, Article 12 (February 2014).
 *>
 *  =====================================================================
-      SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
+      SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
+     $                   S,
      $                   H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
      $                   WV, LDWV, NH, WH, LDWH )
       IMPLICIT NONE
@@ -300,7 +299,8 @@
       COMPLEX            VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET, CTRMM
+      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET,
+     $                   CTRMM
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1

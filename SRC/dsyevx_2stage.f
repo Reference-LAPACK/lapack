@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYEVX_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyevx_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevx_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -247,8 +245,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     DSTEIN; their indices are stored in IFAIL.
+*>                > N: DSTEBZ returned INFO = INFO - N;
+*>                     see DSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -338,7 +339,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL, DSTEBZ,
+      EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL,
+     $                   DSTEBZ,
      $                   DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA,
      $                   DSYTRD_2STAGE
 *     ..
@@ -540,19 +542,27 @@
       CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
-     $             IWORK( INDIWO ), INFO )
+     $             IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 40
+      END IF
 *
       IF( WANTZ ) THEN
          CALL DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
-     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
+     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by DSTEIN.
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -117,6 +115,7 @@
 *
 *  =====================================================================
       SUBROUTINE DSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -270,7 +269,8 @@
 *           Multiply by inv(U**T(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K ),
+            CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1,
+     $                  K ),
      $                  1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
@@ -286,7 +286,8 @@
 *           Multiply by inv(U**T(K+1)), where U(K+1) is the transformation
 *           stored in columns K and K+1 of A.
 *
-            CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K ),
+            CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1,
+     $                  K ),
      $                  1, ONE, B( K, 1 ), LDB )
             CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
      $                  A( 1, K+1 ), 1, ONE, B( K+1, 1 ), LDB )
@@ -354,7 +355,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL DGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
+               CALL DGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K,
+     $                    1 ),
      $                    LDB, B( K+2, 1 ), LDB )
                CALL DGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

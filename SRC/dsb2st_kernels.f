@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSB2ST_KERNELS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsb2st_kernels.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsb2st_kernels.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -287,7 +285,8 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = ( A( DPOS-NB, J1 ) )
-                  CALL DLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
+                  CALL DLARFG( LM, CTMP, V( VPOS+1 ), 1,
+     $                         TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *
                   CALL DLARFX( 'Right', LN-1, LM, V( VPOS ),

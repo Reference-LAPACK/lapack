@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGELQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqt.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -55,7 +53,7 @@
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The block size to be used in the blocked QR.  MIN(M,N) >= MB >= 1.
+*>          The block size to be used in the blocked LQ.  MIN(M,N) >= MB >= 1.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -90,7 +88,10 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (MB*N)
+*>          WORK is COMPLEX*16 array, dimension (MB*M).
+*>          Note: A smaller workspace of MB*(M-MB) may also be sufficient, but
+*>          that is yet to be proven. MB*M is a conservative estimate and the
+*>          recommended value to use.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -116,7 +117,7 @@
 *> \verbatim
 *>
 *>  The matrix V stores the elementary reflectors H(i) in the i-th row
-*>  above the diagonal. For example, if M=5 and N=3, the matrix V is
+*>  above the diagonal. For example, if M=3 and N=5, the matrix V is
 *>
 *>               V = (  1  v1 v1 v1 v1 )
 *>                   (     1  v2 v2 v2 )
@@ -136,6 +137,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

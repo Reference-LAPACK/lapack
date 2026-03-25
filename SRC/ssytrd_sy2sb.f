@@ -7,7 +7,6 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*> \htmlonly
 *> Download SSYTRD_SY2SB + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd_sy2sb.f"> 
 *> [TGZ]</a> 
@@ -15,7 +14,6 @@
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd_sy2sb.f"> 
 *> [TXT]</a>
-*> \endhtmlonly 
 *
 *  Definition:
 *  ===========
@@ -276,7 +274,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SSYR2K, SSYMM, SGEMM, SCOPY,
+      EXTERNAL           XERBLA, SSYR2K, SSYMM, SGEMM,
+     $                   SCOPY,
      $                   SLARFT, SGELQF, SGEQRF, SLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -385,7 +384,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL SCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL SCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL SLASET( 'Lower', PK, PK, ZERO, ONE, 

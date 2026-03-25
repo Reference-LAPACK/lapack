@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGERFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -180,8 +178,10 @@
 *> \ingroup gerfs
 *
 *  =====================================================================
-      SUBROUTINE SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,7 +221,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMV, SGETRS, SLACN2, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SGETRS, SLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -279,7 +280,7 @@
       NZ = N + 1
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -384,22 +385,25 @@
 *
          DO 90 I = 1, N
             IF( WORK( I ).GT.SAFE2 ) THEN
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I )
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
             ELSE
-               WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I ) + SAFE1
+               WORK( I ) = ABS( WORK( N+I ) ) + REAL( NZ )*EPS*WORK( I )
+     $                     + SAFE1
             END IF
    90    CONTINUE
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL SGETRS( TRANST, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+               CALL SGETRS( TRANST, N, 1, AF, LDAF, IPIV,
+     $                      WORK( N+1 ),
      $                      N, INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -411,7 +415,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
+               CALL SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
+     $                      N,
      $                      INFO )
             END IF
             GO TO 100

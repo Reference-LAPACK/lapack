@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORGTR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -120,6 +118,7 @@
 *
 *  =====================================================================
       SUBROUTINE SORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -217,7 +216,8 @@
 *
 *        Generate Q(1:n-1,1:n-1)
 *
-         CALL SORGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK, IINFO )
+         CALL SORGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK,
+     $                IINFO )
 *
       ELSE
 *

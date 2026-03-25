@@ -79,6 +79,7 @@
 *>
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

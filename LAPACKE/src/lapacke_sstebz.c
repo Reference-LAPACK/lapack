@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sstebz( char range, char order, lapack_int n, float vl,
+lapack_int API_SUFFIX(LAPACKE_sstebz)( char range, char order, lapack_int n, float vl,
                            float vu, lapack_int il, lapack_int iu, float abstol,
                            const float* d, const float* e, lapack_int* m,
                            lapack_int* nsplit, float* w, lapack_int* iblock,
@@ -44,22 +44,22 @@ lapack_int LAPACKE_sstebz( char range, char order, lapack_int n, float vl,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &abstol, 1 ) ) {
             return -8;
         }
-        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n, d, 1 ) ) {
             return -9;
         }
-        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( n-1, e, 1 ) ) {
             return -10;
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vl, 1 ) ) {
                 return -4;
             }
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vu, 1 ) ) {
                 return -5;
             }
         }
@@ -77,7 +77,7 @@ lapack_int LAPACKE_sstebz( char range, char order, lapack_int n, float vl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sstebz_work( range, order, n, vl, vu, il, iu, abstol, d, e,
+    info = API_SUFFIX(LAPACKE_sstebz_work)( range, order, n, vl, vu, il, iu, abstol, d, e,
                                 m, nsplit, w, iblock, isplit, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +85,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sstebz", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sstebz", info );
     }
     return info;
 }

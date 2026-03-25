@@ -11,7 +11,7 @@
 !                        W, LDW,  S, LDS, ZWORK,  LZWORK,   &
 !                        RWORK, LRWORK, IWORK, LIWORK, INFO )
 !.....
-!     USE                   iso_fortran_env
+!     USE, INTRINSIC :: iso_fortran_env, only: real32
 !     IMPLICIT NONE
 !     INTEGER, PARAMETER :: WP = real32
 !
@@ -506,7 +506,7 @@
 !  -- Colorado Denver and NAG Ltd..                                   --
 !
 !.....
-      USE                   iso_fortran_env
+      USE, INTRINSIC :: iso_fortran_env, only: real32
       IMPLICIT NONE
       INTEGER, PARAMETER :: WP = real32
 !
@@ -741,9 +741,9 @@
       ELSE IF ( LQUERY ) THEN
 !     Return minimal and optimal workspace sizes
           IWORK(1) = IMINWR
-          RWORK(1) = MLRWRK
-          ZWORK(1) = MLWORK
-          ZWORK(2) = OLWORK
+          RWORK(1) = REAL(MLRWRK)
+          ZWORK(1) = CMPLX(MLWORK)
+          ZWORK(2) = CMPLX(OLWORK)
           RETURN
       END IF
 !............................................................
@@ -1148,4 +1148,3 @@
       RETURN
 !     ......
       END SUBROUTINE CGEDMD
-

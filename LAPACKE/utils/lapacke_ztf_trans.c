@@ -37,7 +37,7 @@
  * This functions does copy diagonal for both unit and non-unit cases.
  */
 
-void LAPACKE_ztf_trans( int matrix_layout, char transr, char uplo, char diag,
+void API_SUFFIX(LAPACKE_ztf_trans)( int matrix_layout, char transr, char uplo, char diag,
                         lapack_int n, const lapack_complex_double *in,
                         lapack_complex_double *out )
 {
@@ -47,15 +47,15 @@ void LAPACKE_ztf_trans( int matrix_layout, char transr, char uplo, char diag,
     if( in == NULL || out == NULL ) return ;
 
     rowmaj = (matrix_layout == LAPACK_ROW_MAJOR);
-    ntr    = LAPACKE_lsame( transr, 'n' );
-    lower  = LAPACKE_lsame( uplo,   'l' );
-    unit   = LAPACKE_lsame( diag,   'u' );
+    ntr    = API_SUFFIX(LAPACKE_lsame)( transr, 'n' );
+    lower  = API_SUFFIX(LAPACKE_lsame)( uplo,   'l' );
+    unit   = API_SUFFIX(LAPACKE_lsame)( diag,   'u' );
 
     if( ( !rowmaj && ( matrix_layout != LAPACK_COL_MAJOR ) ) ||
-        ( !ntr    && !LAPACKE_lsame( transr, 't' ) &&
-                     !LAPACKE_lsame( transr, 'c' ) ) ||
-        ( !lower  && !LAPACKE_lsame( uplo,   'u' ) ) ||
-        ( !unit   && !LAPACKE_lsame( diag,   'n' ) ) ) {
+        ( !ntr    && !API_SUFFIX(LAPACKE_lsame)( transr, 't' ) &&
+                     !API_SUFFIX(LAPACKE_lsame)( transr, 'c' ) ) ||
+        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo,   'u' ) ) ||
+        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag,   'n' ) ) ) {
         /* Just exit if input parameters are wrong */
         return;
     }
@@ -81,8 +81,8 @@ void LAPACKE_ztf_trans( int matrix_layout, char transr, char uplo, char diag,
 
     /* Perform conversion: */
     if( rowmaj ) {
-        LAPACKE_zge_trans( LAPACK_ROW_MAJOR, row, col, in, col, out, row );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_ROW_MAJOR, row, col, in, col, out, row );
     } else {
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, row, col, in, row, out, col );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, row, col, in, row, out, col );
     }
 }

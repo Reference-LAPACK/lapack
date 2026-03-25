@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEGV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -176,8 +174,10 @@
 *> \ingroup hegv
 *
 *  =====================================================================
-      SUBROUTINE ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+      SUBROUTINE ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+     $                  WORK,
      $                  LWORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -209,7 +209,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHEEV, ZHEGST, ZPOTRF, ZTRMM, ZTRSM
+      EXTERNAL           XERBLA, ZHEEV, ZHEGST, ZPOTRF, ZTRMM,
+     $                   ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -270,7 +271,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, INFO )
+      CALL ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+     $            INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -290,7 +292,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -304,7 +307,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG,
+     $                  ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF

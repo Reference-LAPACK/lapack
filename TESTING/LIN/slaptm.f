@@ -113,6 +113,7 @@
 *
 *  =====================================================================
       SUBROUTINE SLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHERFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zherfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zherfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -187,8 +185,10 @@
 *> \ingroup herfs
 *
 *  =====================================================================
-      SUBROUTINE ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -229,7 +229,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZHETRS, ZLACN2
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZHETRS,
+     $                   ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -302,7 +303,8 @@
 *        Compute residual R = B - A * X
 *
          CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
+         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK,
+     $               1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -409,7 +411,8 @@
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -420,7 +423,8 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             END IF
             GO TO 100
          END IF

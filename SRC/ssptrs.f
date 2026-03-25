@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSPTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssptrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -112,6 +110,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -267,7 +266,8 @@
 *           Multiply by inv(U**T(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, AP( KC ),
+            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
+     $                  AP( KC ),
      $                  1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
@@ -284,7 +284,8 @@
 *           Multiply by inv(U**T(K+1)), where U(K+1) is the transformation
 *           stored in columns K and K+1 of A.
 *
-            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, AP( KC ),
+            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
+     $                  AP( KC ),
      $                  1, ONE, B( K, 1 ), LDB )
             CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
      $                  AP( KC+K ), 1, ONE, B( K+1, 1 ), LDB )
@@ -355,7 +356,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL SGER( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K, 1 ),
+               CALL SGER( N-K-1, NRHS, -ONE, AP( KC+2 ), 1, B( K,
+     $                    1 ),
      $                    LDB, B( K+2, 1 ), LDB )
                CALL SGER( N-K-1, NRHS, -ONE, AP( KC+N-K+2 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )

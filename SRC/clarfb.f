@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLARFB + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfb.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -170,9 +168,8 @@
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
 *>  the H(i) is best illustrated by the following example with n = 5 and
-*>  k = 3. The elements equal to 1 are not stored; the corresponding
-*>  array elements are modified but restored on exit. The rest of the
-*>  array is not used.
+*>  k = 3. The triangular part of V (including its diagonal) is not
+*>  referenced.
 *>
 *>  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
 *>
@@ -192,8 +189,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,
+      SUBROUTINE CLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V,
+     $                   LDV,
      $                   T, LDT, C, LDC, WORK, LDWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -265,20 +264,23 @@
 *
 *              W := W * V1
 *
-               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit', N,
+               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
+     $                     N,
      $                     K, ONE, V, LDV, WORK, LDWORK )
                IF( M.GT.K ) THEN
 *
 *                 W := W + C2**H *V2
 *
-                  CALL CGEMM( 'Conjugate transpose', 'No transpose', N,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose',
+     $                        N,
      $                        K, M-K, ONE, C( K+1, 1 ), LDC,
      $                        V( K+1, 1 ), LDV, ONE, WORK, LDWORK )
                END IF
 *
 *              W := W * T**H  or  W * T
 *
-               CALL CTRMM( 'Right', 'Upper', TRANST, 'Non-unit', N, K,
+               CALL CTRMM( 'Right', 'Upper', TRANST, 'Non-unit', N,
+     $                     K,
      $                     ONE, T, LDT, WORK, LDWORK )
 *
 *              C := C - V * W**H
@@ -319,13 +321,15 @@
 *
 *              W := W * V1
 *
-               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit', M,
+               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
+     $                     M,
      $                     K, ONE, V, LDV, WORK, LDWORK )
                IF( N.GT.K ) THEN
 *
 *                 W := W + C2 * V2
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M, K, N-K,
+                  CALL CGEMM( 'No transpose', 'No transpose', M, K,
+     $                        N-K,
      $                        ONE, C( 1, K+1 ), LDC, V( K+1, 1 ), LDV,
      $                        ONE, WORK, LDWORK )
                END IF
@@ -341,7 +345,8 @@
 *
 *                 C2 := C2 - W * V2**H
 *
-                  CALL CGEMM( 'No transpose', 'Conjugate transpose', M,
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
+     $                        M,
      $                        N-K, K, -ONE, WORK, LDWORK, V( K+1, 1 ),
      $                        LDV, ONE, C( 1, K+1 ), LDC )
                END IF
@@ -376,26 +381,30 @@
 *              W := C2**H
 *
                DO 70 J = 1, K
-                  CALL CCOPY( N, C( M-K+J, 1 ), LDC, WORK( 1, J ), 1 )
+                  CALL CCOPY( N, C( M-K+J, 1 ), LDC, WORK( 1, J ),
+     $                        1 )
                   CALL CLACGV( N, WORK( 1, J ), 1 )
    70          CONTINUE
 *
 *              W := W * V2
 *
-               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit', N,
+               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
+     $                     N,
      $                     K, ONE, V( M-K+1, 1 ), LDV, WORK, LDWORK )
                IF( M.GT.K ) THEN
 *
 *                 W := W + C1**H * V1
 *
-                  CALL CGEMM( 'Conjugate transpose', 'No transpose', N,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose',
+     $                        N,
      $                        K, M-K, ONE, C, LDC, V, LDV, ONE, WORK,
      $                        LDWORK )
                END IF
 *
 *              W := W * T**H  or  W * T
 *
-               CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K,
+               CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N,
+     $                     K,
      $                     ONE, T, LDT, WORK, LDWORK )
 *
 *              C := C - V * W**H
@@ -438,13 +447,15 @@
 *
 *              W := W * V2
 *
-               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit', M,
+               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
+     $                     M,
      $                     K, ONE, V( N-K+1, 1 ), LDV, WORK, LDWORK )
                IF( N.GT.K ) THEN
 *
 *                 W := W + C1 * V1
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M, K, N-K,
+                  CALL CGEMM( 'No transpose', 'No transpose', M, K,
+     $                        N-K,
      $                        ONE, C, LDC, V, LDV, ONE, WORK, LDWORK )
                END IF
 *
@@ -459,7 +470,8 @@
 *
 *                 C1 := C1 - W * V1**H
 *
-                  CALL CGEMM( 'No transpose', 'Conjugate transpose', M,
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
+     $                        M,
      $                        N-K, K, -ONE, WORK, LDWORK, V, LDV, ONE,
      $                        C, LDC )
                END IF
@@ -517,7 +529,8 @@
 *
 *              W := W * T**H  or  W * T
 *
-               CALL CTRMM( 'Right', 'Upper', TRANST, 'Non-unit', N, K,
+               CALL CTRMM( 'Right', 'Upper', TRANST, 'Non-unit', N,
+     $                     K,
      $                     ONE, T, LDT, WORK, LDWORK )
 *
 *              C := C - V**H * W**H
@@ -534,7 +547,8 @@
 *
 *              W := W * V1
 *
-               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit', N,
+               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
+     $                     N,
      $                     K, ONE, V, LDV, WORK, LDWORK )
 *
 *              C1 := C1 - W**H
@@ -565,7 +579,8 @@
 *
 *                 W := W + C2 * V2**H
 *
-                  CALL CGEMM( 'No transpose', 'Conjugate transpose', M,
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
+     $                        M,
      $                        K, N-K, ONE, C( 1, K+1 ), LDC,
      $                        V( 1, K+1 ), LDV, ONE, WORK, LDWORK )
                END IF
@@ -581,14 +596,16 @@
 *
 *                 C2 := C2 - W * V2
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M, N-K, K,
+                  CALL CGEMM( 'No transpose', 'No transpose', M, N-K,
+     $                        K,
      $                        -ONE, WORK, LDWORK, V( 1, K+1 ), LDV, ONE,
      $                        C( 1, K+1 ), LDC )
                END IF
 *
 *              W := W * V1
 *
-               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit', M,
+               CALL CTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
+     $                     M,
      $                     K, ONE, V, LDV, WORK, LDWORK )
 *
 *              C1 := C1 - W
@@ -616,7 +633,8 @@
 *              W := C2**H
 *
                DO 190 J = 1, K
-                  CALL CCOPY( N, C( M-K+J, 1 ), LDC, WORK( 1, J ), 1 )
+                  CALL CCOPY( N, C( M-K+J, 1 ), LDC, WORK( 1, J ),
+     $                        1 )
                   CALL CLACGV( N, WORK( 1, J ), 1 )
   190          CONTINUE
 *
@@ -636,7 +654,8 @@
 *
 *              W := W * T**H  or  W * T
 *
-               CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K,
+               CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N,
+     $                     K,
      $                     ONE, T, LDT, WORK, LDWORK )
 *
 *              C := C - V**H * W**H
@@ -652,7 +671,8 @@
 *
 *              W := W * V2
 *
-               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit', N,
+               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
+     $                     N,
      $                     K, ONE, V( 1, M-K+1 ), LDV, WORK, LDWORK )
 *
 *              C2 := C2 - W**H
@@ -685,7 +705,8 @@
 *
 *                 W := W + C1 * V1**H
 *
-                  CALL CGEMM( 'No transpose', 'Conjugate transpose', M,
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
+     $                        M,
      $                        K, N-K, ONE, C, LDC, V, LDV, ONE, WORK,
      $                        LDWORK )
                END IF
@@ -701,13 +722,15 @@
 *
 *                 C1 := C1 - W * V1
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M, N-K, K,
+                  CALL CGEMM( 'No transpose', 'No transpose', M, N-K,
+     $                        K,
      $                        -ONE, WORK, LDWORK, V, LDV, ONE, C, LDC )
                END IF
 *
 *              W := W * V2
 *
-               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit', M,
+               CALL CTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
+     $                     M,
      $                     K, ONE, V( 1, N-K+1 ), LDV, WORK, LDWORK )
 *
 *              C1 := C1 - W

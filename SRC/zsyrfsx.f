@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZSYRFSX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyrfsx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyrfsx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -395,10 +393,12 @@
 *> \ingroup herfsx
 *
 *  =====================================================================
-      SUBROUTINE ZSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -461,7 +461,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           DLAMCH, ZLANSY, ZLA_SYRCOND_X, ZLA_SYRCOND_C
+      EXTERNAL           DLAMCH, ZLANSY, ZLA_SYRCOND_X,
+     $                   ZLA_SYRCOND_C
       DOUBLE PRECISION   DLAMCH, ZLANSY, ZLA_SYRCOND_X, ZLA_SYRCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
@@ -518,7 +519,8 @@
 *
 *     Test input parameters.
 *
-      IF ( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF ( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
@@ -604,16 +606,19 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0,
+     $                SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
       IF (N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = ZLA_SYRCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = ZLA_SYRCOND_C( UPLO, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           S, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = ZLA_SYRCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = ZLA_SYRCOND_C( UPLO, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           S, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS

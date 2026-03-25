@@ -86,11 +86,12 @@
 !> \endverbatim
 !>
 !  =====================================================================
-function DZNRM2( n, x, incx ) 
+function DZNRM2( n, x, incx )
+   implicit none
    integer, parameter :: wp = kind(1.d0)
    real(wp) :: DZNRM2
 !
-!  -- Reference BLAS level1 routine (version 3.9.1) --
+!  -- Reference BLAS level1 routine --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 !     March 2021

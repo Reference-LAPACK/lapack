@@ -36,9 +36,9 @@
  * layout or vice versa.
  */
 
-void LAPACKE_sgg_trans( int matrix_layout, lapack_int m, lapack_int n,
+void API_SUFFIX(LAPACKE_sgg_trans)( int matrix_layout, lapack_int m, lapack_int n,
                         const float* in, lapack_int ldin,
                         float* out, lapack_int ldout )
 {
-    LAPACKE_sge_trans( matrix_layout, m, n, in, ldin, out, ldout );
+    API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, m, n, in, ldin, out, ldout );
 }

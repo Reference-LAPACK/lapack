@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for scasum.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine scasumsub(n,x,incx,asum)
+      implicit none
 c
       external scasum
       real scasum,asum

@@ -1,10 +1,23 @@
 *> \brief \b CTRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE CTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C, LDC, SCALE, SWORK, LDSWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, LDSWORK, M, N
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * )
+*       REAL               SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -22,8 +35,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -151,8 +164,8 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE CTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
-     $                    LDC, SCALE, SWORK, LDSWORK, INFO )
+      SUBROUTINE CTRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C, LDC, SCALE, SWORK, LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
@@ -185,10 +198,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SLARMM
-      EXTERNAL           CLANGE, ILAENV, LSAME, SLAMCH, SLARMM
+      EXTERNAL           CLANGE, ILAENV, LSAME, SLAMCH,
+     $                   SLARMM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSSCAL, CGEMM, CLASCL, CTRSYL, XERBLA
+      EXTERNAL           CSSCAL, CGEMM, CLASCL, CTRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, EXPONENT, MAX, MIN, REAL
@@ -214,9 +229,8 @@
       INFO = 0
       LQUERY = ( LDSWORK.EQ.-1 )
       IF( LQUERY ) THEN
-         LDSWORK = 2
-         SWORK(1,1) = MAX( NBA, NBB )
-         SWORK(2,1) = 2 * NBB + NBA
+         SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+         SWORK(2,1) = REAL( 2 * NBB + NBA )
       END IF
 *
 *     Test the input arguments
@@ -1068,8 +1082,8 @@
 *        form (1/SCALE)*X if SCALE is REAL. Set SCALE to
 *        zero and give up.
 *
-         SWORK(1,1) = MAX( NBA, NBB )
-         SWORK(2,1) = 2 * NBB + NBA
+         SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+         SWORK(2,1) = REAL( 2 * NBB + NBA )
          RETURN
       END IF
 *
@@ -1132,8 +1146,8 @@
 *
 *     Restore workspace dimensions
 *
-      SWORK(1,1) = MAX( NBA, NBB )
-      SWORK(2,1) = 2 * NBB + NBA
+      SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+      SWORK(2,1) = REAL( 2 * NBB + NBA )
 *
       RETURN
 *

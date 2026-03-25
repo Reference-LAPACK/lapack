@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZTGSYL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsyl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsyl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -289,9 +287,11 @@
 *>      July 1989, pp 745-751.
 *>
 *  =====================================================================
-      SUBROUTINE ZTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE ZTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -332,7 +332,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZLACPY, ZLASET, ZSCAL, ZTGSY2
+      EXTERNAL           XERBLA, ZGEMM, ZLACPY, ZLASET, ZSCAL,
+     $                   ZTGSY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, SQRT
@@ -436,7 +437,8 @@
             DSCALE = ZERO
             DSUM = ONE
             PQ = M*N
-            CALL ZTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
+            CALL ZTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
      $                   INFO )
             IF( DSCALE.NE.ZERO ) THEN
@@ -524,7 +526,8 @@
                   IS = IWORK( I )
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
-                  CALL ZTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL ZTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ),
+     $                         LDA,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
      $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
@@ -633,9 +636,11 @@
      $            INFO = LINFO
                IF( SCALOC.NE.ONE ) THEN
                   DO 160 K = 1, JS - 1
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1,
+     $                           K ),
      $                           1 )
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1,
+     $                           K ),
      $                           1 )
   160             CONTINUE
                   DO 170 K = JS, JE
@@ -651,9 +656,11 @@
      $                           F( IE+1, K ), 1 )
   180             CONTINUE
                   DO 190 K = JE + 1, N
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1,
+     $                           K ),
      $                           1 )
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1,
+     $                           K ),
      $                           1 )
   190             CONTINUE
                   SCALE = SCALE*SCALOC

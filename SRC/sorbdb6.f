@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORBDB6 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb6.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb6.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,8 +152,10 @@
 *> \ingroup unbdb6
 *
 *  =====================================================================
-      SUBROUTINE SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1,
+     $                    Q2,
      $                    LDQ2, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,11 +237,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
@@ -262,7 +264,7 @@
          RETURN
       END IF
 *
-      IF( NORM_NEW .LE. N * EPS * NORM ) THEN
+      IF( NORM_NEW .LE. REAL( N ) * EPS * NORM ) THEN
          DO IX = 1, 1 + (M1-1)*INCX1, INCX1
            X1( IX ) = ZERO
          END DO
@@ -283,11 +285,13 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO,
+     $               WORK,
      $               1 )
       END IF
 *
-      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK,
+     $            1 )
 *
       CALL SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )

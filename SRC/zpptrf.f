@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZPPTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpptrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -116,6 +114,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZPPTRF( UPLO, N, AP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -184,7 +183,8 @@
 *           Compute elements 1:J-1 of column J.
 *
             IF( J.GT.1 )
-     $         CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $         CALL ZTPSV( 'Upper', 'Conjugate transpose',
+     $                     'Non-unit',
      $                     J-1, AP, AP( JC ), 1 )
 *
 *           Compute U(J,J) and test for non-positive-definiteness.

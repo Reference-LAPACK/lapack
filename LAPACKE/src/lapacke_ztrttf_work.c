@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztrttf_work( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_ztrttf_work)( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const lapack_complex_double* a,
                                 lapack_int lda, lapack_complex_double* arf )
 {
@@ -50,7 +50,7 @@ lapack_int LAPACKE_ztrttf_work( int matrix_layout, char transr, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_ztrttf_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrttf_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -68,25 +68,25 @@ lapack_int LAPACKE_ztrttf_work( int matrix_layout, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztrttf( &transr, &uplo, &n, a_t, &lda_t, arf_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zpf_trans( LAPACK_COL_MAJOR, transr, uplo, n, arf_t, arf );
+        API_SUFFIX(LAPACKE_zpf_trans)( LAPACK_COL_MAJOR, transr, uplo, n, arf_t, arf );
         /* Release memory and exit */
         LAPACKE_free( arf_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ztrttf_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrttf_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ztrttf_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrttf_work", info );
     }
     return info;
 }

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zungql( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zungql)( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_int k, lapack_complex_double* a,
                            lapack_int lda, const lapack_complex_double* tau )
 {
@@ -41,22 +41,22 @@ lapack_int LAPACKE_zungql( int matrix_layout, lapack_int m, lapack_int n,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zungql", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zungql", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_z_nancheck( k, tau, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_z_nancheck)( k, tau, 1 ) ) {
             return -7;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_zungql_work( matrix_layout, m, n, k, a, lda, tau, &work_query,
+    info = API_SUFFIX(LAPACKE_zungql_work)( matrix_layout, m, n, k, a, lda, tau, &work_query,
                                 lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -70,13 +70,13 @@ lapack_int LAPACKE_zungql( int matrix_layout, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zungql_work( matrix_layout, m, n, k, a, lda, tau, work,
+    info = API_SUFFIX(LAPACKE_zungql_work)( matrix_layout, m, n, k, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zungql", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zungql", info );
     }
     return info;
 }

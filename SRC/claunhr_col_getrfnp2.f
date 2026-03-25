@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAUNHR_COL_GETRFNP2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claunhr_col_getrfnp2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claunhr_col_getrfnp2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -163,7 +161,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE CLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
+      RECURSIVE SUBROUTINE CLAUNHR_COL_GETRFNP2( M, N, A, LDA, D,
+     $                                           INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
@@ -295,7 +294,8 @@
 *        Update B22, i.e. compute the Schur complement
 *        B22 := B22 - B21*B12
 *
-         CALL CGEMM( 'N', 'N', M-N1, N2, N1, -CONE, A( N1+1, 1 ), LDA,
+         CALL CGEMM( 'N', 'N', M-N1, N2, N1, -CONE, A( N1+1, 1 ),
+     $               LDA,
      $               A( 1, N1+1 ), LDA, CONE, A( N1+1, N1+1 ), LDA )
 *
 *        Factor B22, recursive call

@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 
-project(LAPACK)
+project(LAPACK C)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 12)
-set(LAPACK_PATCH_VERSION 0)
+set(LAPACK_PATCH_VERSION 1)
 set(
   LAPACK_VERSION
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
@@ -107,25 +107,21 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-# By default build standard API and extended _64 API
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
+
+# By default build extended _64 API for supported compilers only. This needs
+# CMake >= 3.18! Let's disable it by default for CMake < 3.18.
+if(CMAKE_VERSION VERSION_LESS "3.18")
+  set(INDEX64_EXT_API_DEFAULT OFF)
+else()
+  set(INDEX64_EXT_API_DEFAULT ON)
+endif()
+set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
+option(BUILD_INDEX64_EXT_API
+  "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)"
+  ${INDEX64_EXT_API_DEFAULT})
+message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 include(GNUInstallDirs)
-
-# Updated OSX RPATH settings
-# In response to CMake 3.0 generating warnings regarding policy CMP0042,
-# the OSX RPATH settings have been updated per recommendations found
-# in the CMake Wiki:
-#  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-set(CMAKE_MACOSX_RPATH ON)
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES ${CMAKE_INSTALL_FULL_LIBDIR} isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-endif()
-
 
 # Configure the warning and code coverage suppression file
 configure_file(
@@ -157,12 +153,18 @@ endif()
 # --------------------------------------------------
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
+set(LAPACK_BINARY_PATH_SUFFIX "" CACHE STRING "Path suffix appended to the install path of binaries")
+
+if(NOT "${LAPACK_BINARY_PATH_SUFFIX}" STREQUAL "" AND NOT "${LAPACK_BINARY_PATH_SUFFIX}" MATCHES "^/")
+  set(LAPACK_BINARY_PATH_SUFFIX "/${LAPACK_BINARY_PATH_SUFFIX}")
+endif()
+
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
     EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT Development
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
   )
 endmacro()
 
@@ -248,21 +250,18 @@ if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${BLAS_LINKER_FLAGS})
 endif()
 
 
 # --------------------------------------------------
 # CBLAS
 option(CBLAS "Build CBLAS" OFF)
+
+# Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
+if(CBLAS OR NOT BLAS_FOUND)
+  add_subdirectory(CBLAS/include)
+endif()
 
 if(CBLAS)
   add_subdirectory(CBLAS)
@@ -338,15 +337,7 @@ if(NOT LATESTLAPACK_FOUND)
 
   add_subdirectory(SRC)
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
 if(BUILD_TESTING)
@@ -555,7 +546,7 @@ install(FILES
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}"
   FILES_MATCHING REGEX "liblapackpp.(a|so)$"
   )
   install(
@@ -588,7 +579,7 @@ if (BLAS++)
   )
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}"
   FILES_MATCHING REGEX "libblaspp.(a|so)$"
   )
   install(
@@ -615,24 +606,21 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
     set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
-    set(DOXYGEN_PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OUTPUT_DIRECTORY DOCS)
+    set(DOXYGEN_PROJECT_LOGO DOCS/lapack.png)
     set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
     set(DOXYGEN_SOURCE_BROWSER YES)
     set(DOXYGEN_CREATE_SUBDIRS YES)
     set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
+    set(DOXYGEN_TAB_SIZE 8)
     set(DOXYGEN_EXTRACT_ALL YES)
     set(DOXYGEN_FILE_PATTERNS *.f *.f90 *.c *.h )
     set(DOXYGEN_RECURSIVE YES)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
     set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
-    set(DOXYGEN_QUIET NO)
-    set(DOXYGEN_WARNINGS YES)
     set(DOXYGEN_WARN_NO_PARAMDOC YES)
     set(DOXYGEN_WARN_LOGFILE doxygen_error)
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_MAN NO)
     set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
     # Exclude functions that are duplicated, creating conflicts.
@@ -647,46 +635,52 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     if (BUILD_HTML_DOCUMENTATION)
         set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_GENERATE_MAN NO)
         set(DOXYGEN_INLINE_SOURCES YES)
         set(DOXYGEN_CALL_GRAPH YES)
         set(DOXYGEN_CALLER_GRAPH YES)
 
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_HTML_TIMESTAMP YES)
         doxygen_add_docs(
             html
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/README.md
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
+            README.md
 
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
+        unset(DOXYGEN_HTML_OUTPUT)
+        unset(DOXYGEN_HTML_TIMESTAMP)
     endif()
     if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML NO)
         set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_MAN_LINKS YES)
         set(DOXYGEN_INLINE_SOURCES NO)
         set(DOXYGEN_CALL_GRAPH NO)
         set(DOXYGEN_CALLER_GRAPH NO)
 
+        set(DOXYGEN_MAN_LINKS YES)
         doxygen_add_docs(
             man
 
             # Doxygen INPUT =
-            ${PROJECT_SOURCE_DIR}/BLAS
-            ${PROJECT_SOURCE_DIR}/CBLAS
-            ${PROJECT_SOURCE_DIR}/SRC
-            ${PROJECT_SOURCE_DIR}/INSTALL
-            ${PROJECT_SOURCE_DIR}/TESTING
-            ${PROJECT_SOURCE_DIR}/DOCS/groups-usr.dox
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
 
             COMMENT "Generating man LAPACK documentation"
         )
+        unset(DOXYGEN_MAN_LINKS)
     endif()
 
     endif()

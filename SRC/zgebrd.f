@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEBRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgebrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgebrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -203,6 +201,7 @@
 *  =====================================================================
       SUBROUTINE ZGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -315,7 +314,8 @@
 *        the matrices X and Y which are needed to update the unreduced
 *        part of the matrix
 *
-         CALL ZLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ), E( I ),
+         CALL ZLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ),
+     $                E( I ),
      $                TAUQ( I ), TAUP( I ), WORK, LDWRKX,
      $                WORK( LDWRKX*NB+1 ), LDWRKY )
 *
@@ -326,7 +326,8 @@
      $               N-I-NB+1, NB, -ONE, A( I+NB, I ), LDA,
      $               WORK( LDWRKX*NB+NB+1 ), LDWRKY, ONE,
      $               A( I+NB, I+NB ), LDA )
-         CALL ZGEMM( 'No transpose', 'No transpose', M-I-NB+1, N-I-NB+1,
+         CALL ZGEMM( 'No transpose', 'No transpose', M-I-NB+1,
+     $               N-I-NB+1,
      $               NB, -ONE, WORK( NB+1 ), LDWRKX, A( I, I+NB ), LDA,
      $               ONE, A( I+NB, I+NB ), LDA )
 *

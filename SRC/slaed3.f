@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -174,6 +172,7 @@
 *  =====================================================================
       SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMBDA, Q2, INDX,
      $                   CTOT, W, S, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -204,7 +203,8 @@
       EXTERNAL           SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLACPY, SLAED4, SLASET, XERBLA
+      EXTERNAL           SCOPY, SGEMM, SLACPY, SLAED4, SLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -233,7 +233,8 @@
      $   RETURN
 *
       DO 20 J = 1, K
-         CALL SLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL SLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ),
+     $                INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -298,7 +299,8 @@
       CALL SLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
       IQ2 = N1*N12 + 1
       IF( N23.NE.0 ) THEN
-         CALL SGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23,
+         CALL SGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S,
+     $               N23,
      $               ZERO, Q( N1+1, 1 ), LDQ )
       ELSE
          CALL SLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
@@ -306,7 +308,8 @@
 *
       CALL SLACPY( 'A', N12, K, Q, LDQ, S, N12 )
       IF( N12.NE.0 ) THEN
-         CALL SGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO, Q,
+         CALL SGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO,
+     $               Q,
      $               LDQ )
       ELSE
          CALL SLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTREXC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrexc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrexc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -123,6 +121,7 @@
 *
 *  =====================================================================
       SUBROUTINE CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -213,9 +212,11 @@
 *        Apply transformation to the matrix T.
 *
          IF( K+2.LE.N )
-     $      CALL CROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT, CS,
+     $      CALL CROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT,
+     $                 CS,
      $                 SN )
-         CALL CROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS, CONJG( SN ) )
+         CALL CROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS,
+     $              CONJG( SN ) )
 *
          T( K, K ) = T22
          T( K+1, K+1 ) = T11

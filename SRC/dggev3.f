@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGGEV3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggev3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggev3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -225,6 +223,7 @@
       SUBROUTINE DGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR,
      $                   ALPHAI, BETA, VL, LDVL, VR, LDVR, WORK, LWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -259,8 +258,10 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLACPY,
-     $                   DLASCL, DLASET, DORGQR, DORMQR, DTGEVC, XERBLA
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL,
+     $                   DGGHD3, DLAQZ0, DLACPY,
+     $                   DLASCL, DLASET, DORGQR,
+     $                   DORMQR, DTGEVC, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -325,8 +326,8 @@
       IF( INFO.EQ.0 ) THEN
          CALL DGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
          LWKOPT = MAX( LWKMIN, 3*N+INT( WORK( 1 ) ) )
-         CALL DORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA, WORK, -1,
-     $                IERR )
+         CALL DORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA,
+     $                WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          IF( ILVL ) THEN
             CALL DORGQR( N, N, N, VL, LDVL, WORK, WORK, -1, IERR )
@@ -497,7 +498,8 @@
          ELSE
             CHTEMP = 'R'
          END IF
-         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), IERR )
          IF( IERR.NE.0 ) THEN
             INFO = N + 2
@@ -580,8 +582,10 @@
   110 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN
