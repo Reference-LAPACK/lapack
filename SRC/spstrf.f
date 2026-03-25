@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPSTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spstrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spstrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -134,10 +132,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup pstrf
 *
 *  =====================================================================
-      SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -171,7 +171,8 @@
       EXTERNAL           SLAMCH, ILAENV, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SPSTF2, SSCAL, SSWAP, SSYRK, XERBLA
+      EXTERNAL           SGEMV, SPSTF2, SSCAL, SSWAP, SSYRK,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, MAXLOC
@@ -237,7 +238,7 @@
 *     Compute stopping value if not supplied
 *
          IF( TOL.LT.ZERO ) THEN
-            SSTOP = N * SLAMCH( 'Epsilon' ) * AJJ
+            SSTOP = REAL( N ) * SLAMCH( 'Epsilon' ) * AJJ
          ELSE
             SSTOP = TOL
          END IF
@@ -313,7 +314,8 @@
 *                 Compute elements J+1:N of row J.
 *
                   IF( J.LT.N ) THEN
-                     CALL SGEMV( 'Trans', J-K, N-J, -ONE, A( K, J+1 ),
+                     CALL SGEMV( 'Trans', J-K, N-J, -ONE, A( K,
+     $                           J+1 ),
      $                           LDA, A( K, J ), 1, ONE, A( J, J+1 ),
      $                           LDA )
                      CALL SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
@@ -377,11 +379,13 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ),
+     $                           LDA )
                      IF( PVT.LT.N )
      $                  CALL SSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )
-                     CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ),
+                     CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT,
+     $                           J+1 ),
      $                           LDA )
 *
 *                    Swap dot products and PIV

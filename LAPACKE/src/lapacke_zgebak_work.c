@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgebak_work( int matrix_layout, char job, char side,
+lapack_int API_SUFFIX(LAPACKE_zgebak_work)( int matrix_layout, char job, char side,
                                 lapack_int n, lapack_int ilo, lapack_int ihi,
                                 const double* scale, lapack_int m,
                                 lapack_complex_double* v, lapack_int ldv )
@@ -50,7 +50,7 @@ lapack_int LAPACKE_zgebak_work( int matrix_layout, char job, char side,
         /* Check leading dimension(s) */
         if( ldv < m ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_zgebak_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgebak_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -61,7 +61,7 @@ lapack_int LAPACKE_zgebak_work( int matrix_layout, char job, char side,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, m, v, ldv, v_t, ldv_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, m, v, ldv, v_t, ldv_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgebak( &job, &side, &n, &ilo, &ihi, scale, &m, v_t, &ldv_t,
                        &info );
@@ -69,16 +69,16 @@ lapack_int LAPACKE_zgebak_work( int matrix_layout, char job, char side,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, m, v_t, ldv_t, v, ldv );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, m, v_t, ldv_t, v, ldv );
         /* Release memory and exit */
         LAPACKE_free( v_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zgebak_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgebak_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zgebak_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgebak_work", info );
     }
     return info;
 }

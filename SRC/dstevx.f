@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSTEVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstevx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstevx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -207,8 +205,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     DSTEIN; their indices are stored in IFAIL.
+*>                > N: DSTEBZ returned INFO = INFO - N;
+*>                     see DSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -219,11 +220,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHEReigen
+*> \ingroup stevx
 *
 *  =====================================================================
-      SUBROUTINE DSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+      SUBROUTINE DSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+     $                   ABSTOL,
      $                   M, W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -248,7 +251,7 @@
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, TEST, VALEIG, WANTZ
       CHARACTER          ORDER
-      INTEGER            I, IMAX, INDISP, INDIWO, INDWRK,
+      INTEGER            I, IINFO, IMAX, INDISP, INDIWO, INDWRK,
      $                   ISCALE, ITMP1, J, JJ, NSPLIT
       DOUBLE PRECISION   BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA, SMLNUM,
      $                   TMP1, TNRM, VLL, VUU
@@ -259,7 +262,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTEIN, DSTEQR, DSTERF,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTEIN, DSTEQR,
+     $                   DSTERF,
      $                   DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -377,7 +381,8 @@
          IF( .NOT.WANTZ ) THEN
             CALL DSTERF( N, W, WORK, INFO )
          ELSE
-            CALL DSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ), INFO )
+            CALL DSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ),
+     $                   INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
                   IFAIL( I ) = 0
@@ -401,14 +406,22 @@
       INDWRK = 1
       INDISP = 1 + N
       INDIWO = INDISP + N
-      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
+      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
+     $             M,
      $             NSPLIT, W, IWORK( 1 ), IWORK( INDISP ),
-     $             WORK( INDWRK ), IWORK( INDIWO ), INFO )
+     $             WORK( INDWRK ), IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 20
+      END IF
 *
       IF( WANTZ ) THEN
          CALL DSTEIN( N, D, E, M, W, IWORK( 1 ), IWORK( INDISP ),
      $                Z, LDZ, WORK( INDWRK ), IWORK( INDIWO ), IFAIL,
-     $                INFO )
+     $                IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.

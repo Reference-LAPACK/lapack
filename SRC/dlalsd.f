@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLALSD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlalsd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlalsd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -47,12 +45,6 @@
 *> problem; in this case a minimum norm solution is returned.
 *> The actual singular values are returned in D in ascending order.
 *>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.
 *> \endverbatim
 *
 *  Arguments:
@@ -164,7 +156,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup lalsd
 *
 *> \par Contributors:
 *  ==================
@@ -176,6 +168,7 @@
 *  =====================================================================
       SUBROUTINE DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -210,7 +203,8 @@
       EXTERNAL           IDAMAX, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG, DLASCL,
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG,
+     $                   DLASCL,
      $                   DLASDA, DLASDQ, DLASET, DLASRT, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -255,7 +249,8 @@
             CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
+     $                   INFO )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -281,7 +276,8 @@
                DO 20 J = 1, N - 1
                   CS = WORK( J*2-1 )
                   SN = WORK( J*2 )
-                  CALL DROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL DROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS,
+     $                       SN )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -305,7 +301,8 @@
       IF( N.LE.SMLSIZ ) THEN
          NWORK = 1 + N*N
          CALL DLASET( 'A', N, N, ZERO, ONE, WORK, N )
-         CALL DLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, B,
+         CALL DLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N,
+     $                B,
      $                LDB, WORK( NWORK ), INFO )
          IF( INFO.NE.0 ) THEN
             RETURN
@@ -313,14 +310,17 @@
          TOL = RCND*ABS( D( IDAMAX( N, D, 1 ) ) )
          DO 40 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ),
+     $                      LDB )
             ELSE
-               CALL DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I,
+     $                      1 ),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
    40    CONTINUE
-         CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
+         CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB,
+     $               ZERO,
      $               WORK( NWORK ), N )
          CALL DLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
 *
@@ -468,7 +468,8 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N )
+            CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ),
+     $                   N )
          ELSE
             RANK = RANK + 1
             CALL DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
@@ -492,7 +493,8 @@
      $                  WORK( VT+ST1 ), N, WORK( BXST ), N, ZERO,
      $                  B( ST, 1 ), LDB )
          ELSE
-            CALL DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ),
+     $                   N,
      $                   B( ST, 1 ), LDB, WORK( U+ST1 ), N,
      $                   WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),

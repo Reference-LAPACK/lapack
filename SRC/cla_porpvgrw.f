@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_PORPVGRW + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_porpvgrw.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_porpvgrw.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -98,10 +96,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup la_porpvgrw
 *
 *  =====================================================================
-      REAL FUNCTION CLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF, LDAF, WORK )
+      REAL FUNCTION CLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF, LDAF,
+     $                            WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,9 +140,9 @@
 *     .. Executable Statements ..
       UPPER = LSAME( 'Upper', UPLO )
 *
-*     SPOTRF will have factored only the NCOLSxNCOLS leading minor, so
-*     we restrict the growth search to that minor and use only the first
-*     2*NCOLS workspace entries.
+*     SPOTRF will have factored only the NCOLSxNCOLS leading submatrix,
+*     so we restrict the growth search to that submatrix and use only
+*     the first 2*NCOLS workspace entries.
 *
       RPVGRW = 1.0
       DO I = 1, 2*NCOLS

@@ -32,15 +32,15 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dlasrt( char id, lapack_int n, double* d )
+lapack_int API_SUFFIX(LAPACKE_dlasrt)( char id, lapack_int n, double* d )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -3;
         }
     }
 #endif
-    return LAPACKE_dlasrt_work( id, n, d );
+    return API_SUFFIX(LAPACKE_dlasrt_work)( id, n, d );
 }

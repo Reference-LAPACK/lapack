@@ -58,6 +58,7 @@
 *
 *  =====================================================================
       SUBROUTINE SERRST( PATH, NUNIT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -161,13 +162,13 @@
 *
          SRNAMT = 'SSYTD2'
          INFOT = 1
-         CALL SSYTD2( '/', 0, A, 1, D, E, TAU, W, 1, INFO )
+         CALL SSYTD2( '/', 0, A, 1, D, E, TAU, INFO )
          CALL CHKXER( 'SSYTD2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SSYTD2( 'U', -1, A, 1, D, E, TAU, W, 1, INFO )
+         CALL SSYTD2( 'U', -1, A, 1, D, E, TAU, INFO )
          CALL CHKXER( 'SSYTD2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SSYTD2( 'U', 2, A, 1, D, E, TAU, W, 1, INFO )
+         CALL SSYTD2( 'U', 2, A, 1, D, E, TAU, INFO )
          CALL CHKXER( 'SSYTD2', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
@@ -733,12 +734,12 @@
          CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 18
          CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
-     $                M, R, Z, 1, IW, Q, 26*N-1, IW( 2*N+1 ), 10*N,
+     $                M, R, Z, 1, IW, Q, 0, IW( 2*N+1 ), 10*N,
      $                INFO )
          CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 20
          CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
-     $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N-1,
+     $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 0,
      $                INFO )
          CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          NT = NT + 11

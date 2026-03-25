@@ -32,26 +32,26 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlange( int matrix_layout, char norm, lapack_int m,
+double API_SUFFIX(LAPACKE_dlange)( int matrix_layout, char norm, lapack_int m,
                            lapack_int n, const double* a, lapack_int lda )
 {
     lapack_int info = 0;
     double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dlange", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlange", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         work = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,m) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -59,14 +59,14 @@ double LAPACKE_dlange( int matrix_layout, char norm, lapack_int m,
         }
     }
     /* Call middle-level interface */
-    res = LAPACKE_dlange_work( matrix_layout, norm, m, n, a, lda, work );
+    res = API_SUFFIX(LAPACKE_dlange_work)( matrix_layout, norm, m, n, a, lda, work );
     /* Release memory and exit */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dlange", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlange", info );
     }
     return res;
 }

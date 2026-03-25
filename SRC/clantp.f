@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLANTP + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clantp.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clantp.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -118,10 +116,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lantp
 *
 *  =====================================================================
-      REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP, WORK )
+      REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP,
+     $                                  WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +172,8 @@
                DO 20 J = 1, N
                   DO 10 I = K, K + J - 2
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    10             CONTINUE
                   K = K + J
    20          CONTINUE
@@ -180,7 +181,8 @@
                DO 40 J = 1, N
                   DO 30 I = K + 1, K + N - J
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    30             CONTINUE
                   K = K + N - J + 1
    40          CONTINUE
@@ -191,7 +193,8 @@
                DO 60 J = 1, N
                   DO 50 I = K, K + J - 1
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    50             CONTINUE
                   K = K + J
    60          CONTINUE
@@ -199,7 +202,8 @@
                DO 80 J = 1, N
                   DO 70 I = K, K + N - J
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   SISNAN( SUM ) ) VALUE = SUM
    70             CONTINUE
                   K = K + N - J + 1
    80          CONTINUE
@@ -302,14 +306,15 @@
             SUM = WORK( I )
             IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
   270    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                K = 2
                DO 280 J = 2, N
                   CALL CLASSQ( J-1, AP( K ), 1, SCALE, SUM )
@@ -327,7 +332,7 @@
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
-               SUM = N
+               SUM = REAL( N )
                K = 2
                DO 300 J = 1, N - 1
                   CALL CLASSQ( N-J, AP( K ), 1, SCALE, SUM )

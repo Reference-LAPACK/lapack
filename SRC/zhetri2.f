@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETRI2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetri2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -88,16 +86,16 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N+NB+1)*(NB+3)
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)).
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          WORK is size >= (N+NB+1)*(NB+3)
+*>          If N = 0, LWORK >= 1, else LWORK >= (N+NB+1)*(NB+3).
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>           calculates:
+*>          calculates:
 *>              - the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array,
 *>              - and no error message related to LWORK is issued by XERBLA.
@@ -120,10 +118,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetri2
 *
 *  =====================================================================
       SUBROUTINE ZHETRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -159,9 +158,13 @@
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
+*
 *     Get blocksize
+*
       NBMAX = ILAENV( 1, 'ZHETRF', UPLO, N, -1, -1, -1 )
-      IF ( NBMAX .GE. N ) THEN
+      IF( N.EQ.0 ) THEN
+         MINSIZE = 1
+      ELSE IF( NBMAX.GE.N ) THEN
          MINSIZE = N
       ELSE
          MINSIZE = (N+NBMAX+1)*(NBMAX+3)
@@ -173,28 +176,29 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF (LWORK .LT. MINSIZE .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.MINSIZE .AND. .NOT.LQUERY ) THEN
          INFO = -7
       END IF
-*
-*     Quick return if possible
-*
 *
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZHETRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK(1)=MINSIZE
+         WORK( 1 ) = MINSIZE
          RETURN
       END IF
+*
+*     Quick return if possible
+*
       IF( N.EQ.0 )
      $   RETURN
 
-      IF( NBMAX .GE. N ) THEN
+      IF( NBMAX.GE.N ) THEN
          CALL ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
       ELSE
          CALL ZHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
       END IF
+*
       RETURN
 *
 *     End of ZHETRI2

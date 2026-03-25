@@ -9,7 +9,7 @@
 
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
+void API_SUFFIX(cblas_ssyrk)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                  const CBLAS_TRANSPOSE Trans, const CBLAS_INT N, const CBLAS_INT K,
                  const float alpha, const float  *A, const CBLAS_INT lda,
                  const float beta, float  *C, const CBLAS_INT ldc)
@@ -44,7 +44,7 @@ void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Uplo == CblasLower ) UL='L';
       else
       {
-         cblas_xerbla(2, "cblas_ssyrk",
+         API_SUFFIX(cblas_xerbla)(2, "cblas_ssyrk",
                        "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -56,7 +56,7 @@ void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Trans == CblasNoTrans )   TR='N';
       else
       {
-         cblas_xerbla(3, "cblas_ssyrk",
+         API_SUFFIX(cblas_xerbla)(3, "cblas_ssyrk",
                        "Illegal Trans setting, %d\n", Trans);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -77,7 +77,7 @@ void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Uplo == CblasLower ) UL='U';
       else
       {
-         cblas_xerbla(3, "cblas_ssyrk",
+         API_SUFFIX(cblas_xerbla)(3, "cblas_ssyrk",
                        "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -88,7 +88,7 @@ void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Trans == CblasNoTrans )   TR='T';
       else
       {
-         cblas_xerbla(3, "cblas_ssyrk",
+         API_SUFFIX(cblas_xerbla)(3, "cblas_ssyrk",
                        "Illegal Trans setting, %d\n", Trans);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
@@ -101,7 +101,7 @@ void cblas_ssyrk(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       #endif
 
       F77_ssyrk(F77_UL, F77_TR, &F77_N, &F77_K, &alpha, A, &F77_lda, &beta, C, &F77_ldc);
-   } else  cblas_xerbla(1, "cblas_ssyrk",
+   } else  API_SUFFIX(cblas_xerbla)(1, "cblas_ssyrk",
                      "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;

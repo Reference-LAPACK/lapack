@@ -352,6 +352,7 @@
       SUBROUTINE SDRVSG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, B, LDB, D, Z, LDZ, AB, BB, AP,
      $                   BP, WORK, NWORK, IWORK, LIWORK, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

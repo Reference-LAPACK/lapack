@@ -224,8 +224,10 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE ZLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE ZLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA,
+     $                   XLEFT,
      $                   XRIGHT )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

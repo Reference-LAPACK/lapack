@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETRI_3X + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetri_3x.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri_3x.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -142,7 +140,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetri_3x
 *
 *> \par Contributors:
 *  ==================
@@ -155,7 +153,9 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      SUBROUTINE ZHETRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
+     $                      INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -191,7 +191,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHESWAPR, ZTRTRI, ZTRMM, XERBLA
+      EXTERNAL           ZGEMM, ZHESWAPR, ZTRTRI, ZTRMM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, DBLE, MAX
@@ -436,8 +437,10 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *
@@ -632,8 +635,10 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,
+     $               IP )
+                IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,
+     $               I )
              END IF
          END DO
 *

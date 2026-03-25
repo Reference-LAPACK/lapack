@@ -129,7 +129,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16_blas_level2
+*> \ingroup her2
 *
 *> \par Further Details:
 *  =====================
@@ -147,6 +147,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

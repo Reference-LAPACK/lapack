@@ -76,7 +76,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level1
+*> \ingroup rot
 *
 *> \par Further Details:
 *  =====================
@@ -89,6 +89,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SROT(N,SX,INCX,SY,INCY,C,S)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

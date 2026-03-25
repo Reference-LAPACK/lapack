@@ -67,6 +67,7 @@
 *
 *  =====================================================================
       SUBROUTINE DERRED( PATH, NUNIT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -329,7 +330,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test DGESDD
@@ -358,7 +359,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test DGEJSV
@@ -424,7 +425,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test DGESVDX
@@ -483,7 +484,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
 *
 *        Test DGESVDQ
@@ -538,7 +539,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
       END IF
 *
@@ -549,7 +550,7 @@
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          END IF
       END IF
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLASYF_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -161,7 +159,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup lahef_rook
 *
 *> \par Contributors:
 *  ==================
@@ -181,6 +179,7 @@
 *  =====================================================================
       SUBROUTINE CLASYF_ROOK( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
      $                        INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -208,7 +207,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            DONE
-      INTEGER            IMAX, ITEMP, J, JB, JJ, JMAX, JP1, JP2, K, KK,
+      INTEGER            IMAX, ITEMP, J, JJ, JMAX, JP1, JP2, K, KK,
      $                   KW, KKW, KP, KSTEP, P, II
       REAL               ABSAKK, ALPHA, COLMAX, ROWMAX, STEMP, SFMIN
       COMPLEX            D11, D12, D21, D22, R1, T, Z
@@ -220,7 +219,7 @@
       EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMM, CGEMV, CSCAL, CSWAP
+      EXTERNAL           CCOPY, CGEMMTR, CGEMV, CSCAL, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT, AIMAG, REAL
@@ -325,7 +324,8 @@
 *
 *                 Copy column IMAX to column KW-1 of W and update it
 *
-                  CALL CCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ), 1 )
+                  CALL CCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ),
+     $                        1 )
                   CALL CCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
 *
@@ -424,7 +424,8 @@
 *              and last N-K+2 columns of W
 *
                CALL CSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
-               CALL CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW )
+               CALL CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
+     $                     LDW )
             END IF
 *
 *           Updated column KP is already stored in column KKW of W
@@ -441,7 +442,8 @@
 *              Interchange rows KK and KP in last N-KK+1 columns
 *              of A and W
 *
-               CALL CSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA )
+               CALL CSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ),
+     $                     LDA )
                CALL CSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
             END IF
@@ -522,26 +524,11 @@
 *
 *        A11 := A11 - U12*D*U12**T = A11 - U12*W**T
 *
-*        computing blocks of NB columns at a time
+*        (note that conjg(W) is actually stored)
 *
-         DO 50 J = ( ( K-1 ) / NB )*NB + 1, 1, -NB
-            JB = MIN( NB, K-J+1 )
-*
-*           Update the upper triangle of the diagonal block
-*
-            DO 40 JJ = J, J + JB - 1
-               CALL CGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
-     $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, CONE,
-     $                     A( J, JJ ), 1 )
-   40       CONTINUE
-*
-*           Update the rectangular superdiagonal block
-*
-            IF( J.GE.2 )
-     $         CALL CGEMM( 'No transpose', 'Transpose', J-1, JB,
-     $                  N-K, -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
-     $                  CONE, A( 1, J ), LDA )
-   50    CONTINUE
+         CALL CGEMMTR( 'Upper', 'No transpose', 'Transpose', K, N-K,
+     $                 -CONE, A( 1, K+1 ), LDA, W( 1, KW+1 ), LDW,
+     $                 CONE, A( 1, 1 ), LDA )
 *
 *        Put U12 in standard form by partially undoing the interchanges
 *        in columns k+1:n
@@ -651,7 +638,8 @@
 *
 *                 Copy column IMAX to column K+1 of W and update it
 *
-                  CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
+                  CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $                        1)
                   CALL CCOPY( N-IMAX+1, A( IMAX, IMAX ), 1,
      $                        W( IMAX, K+1 ), 1 )
                   IF( K.GT.1 )
@@ -671,7 +659,8 @@
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + ICAMAX( N-IMAX, W( IMAX+1, K+1 ), 1)
+                     ITEMP = IMAX + ICAMAX( N-IMAX, W( IMAX+1, K+1 ),
+     $                                      1)
                      STEMP = CABS1( W( ITEMP, K+1 ) )
                      IF( STEMP.GT.ROWMAX ) THEN
                         ROWMAX = STEMP
@@ -693,7 +682,8 @@
 *
 *                    copy column K+1 of W to column K of W
 *
-                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                      DONE = .TRUE.
 *
@@ -719,7 +709,8 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ),
+     $                           1 )
 *
                   END IF
 *
@@ -754,7 +745,8 @@
 *              Copy non-updated column KK to column KP
 *
                A( KP, K ) = A( KK, K )
-               CALL CCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ), LDA )
+               CALL CCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ),
+     $                     LDA )
                CALL CCOPY( N-KP+1, A( KP, KK ), 1, A( KP, KP ), 1 )
 *
 *              Interchange rows KK and KP in first KK columns of A and W
@@ -838,26 +830,11 @@
 *
 *        A22 := A22 - L21*D*L21**T = A22 - L21*W**T
 *
-*        computing blocks of NB columns at a time
+*        (note that conjg(W) is actually stored)
 *
-         DO 110 J = K, N, NB
-            JB = MIN( NB, N-J+1 )
-*
-*           Update the lower triangle of the diagonal block
-*
-            DO 100 JJ = J, J + JB - 1
-               CALL CGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
-     $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, CONE,
-     $                     A( JJ, JJ ), 1 )
-  100       CONTINUE
-*
-*           Update the rectangular subdiagonal block
-*
-            IF( J+JB.LE.N )
-     $         CALL CGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
-     $                    K-1, -CONE, A( J+JB, 1 ), LDA, W( J, 1 ), LDW,
-     $                    CONE, A( J+JB, J ), LDA )
-  110    CONTINUE
+         CALL CGEMMTR( 'Lower', 'No transpose', 'Transpose', N-K+1,
+     $                 K-1, -CONE, A( K, 1 ), LDA, W( K, 1 ), LDW,
+     $                 CONE, A( K, K ), LDA )
 *
 *        Put L21 in standard form by partially undoing the interchanges
 *        in columns 1:k-1

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAED8 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed8.f">
 *> [TGZ]</a>
@@ -13,12 +12,11 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed8.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
+*       SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMBDA,
 *                          Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, INFO )
 *
@@ -29,7 +27,7 @@
 *       .. Array Arguments ..
 *       INTEGER            GIVCOL( 2, * ), INDX( * ), INDXP( * ),
 *      $                   INDXQ( * ), PERM( * )
-*       REAL               D( * ), DLAMDA( * ), GIVNUM( 2, * ), W( * ),
+*       REAL               D( * ), DLAMBDA( * ), GIVNUM( 2, * ), W( * ),
 *      $                   Z( * )
 *       COMPLEX            Q( LDQ, * ), Q2( LDQ2, * )
 *       ..
@@ -122,9 +120,9 @@
 *>         destroyed during the updating process.
 *> \endverbatim
 *>
-*> \param[out] DLAMDA
+*> \param[out] DLAMBDA
 *> \verbatim
-*>          DLAMDA is REAL array, dimension (N)
+*>          DLAMBDA is REAL array, dimension (N)
 *>         Contains a copy of the first K eigenvalues which will be used
 *>         by SLAED3 to form the secular equation.
 *> \endverbatim
@@ -219,12 +217,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup laed8
 *
 *  =====================================================================
-      SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
+      SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z,
+     $                   DLAMBDA,
      $                   Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,7 +237,7 @@
 *     .. Array Arguments ..
       INTEGER            GIVCOL( 2, * ), INDX( * ), INDXP( * ),
      $                   INDXQ( * ), PERM( * )
-      REAL               D( * ), DLAMDA( * ), GIVNUM( 2, * ), W( * ),
+      REAL               D( * ), DLAMBDA( * ), GIVNUM( 2, * ), W( * ),
      $                   Z( * )
       COMPLEX            Q( LDQ, * ), Q2( LDQ2, * )
 *     ..
@@ -259,7 +259,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CSROT, SCOPY, SLAMRG, SSCAL,
+      EXTERNAL           CCOPY, CLACPY, CSROT, SCOPY, SLAMRG,
+     $                   SSCAL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -322,14 +323,14 @@
          INDXQ( I ) = INDXQ( I ) + CUTPNT
    20 CONTINUE
       DO 30 I = 1, N
-         DLAMDA( I ) = D( INDXQ( I ) )
+         DLAMBDA( I ) = D( INDXQ( I ) )
          W( I ) = Z( INDXQ( I ) )
    30 CONTINUE
       I = 1
       J = CUTPNT + 1
-      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
+      CALL SLAMRG( N1, N2, DLAMBDA, 1, 1, INDX )
       DO 40 I = 1, N
-         D( I ) = DLAMDA( INDX( I ) )
+         D( I ) = DLAMBDA( INDX( I ) )
          Z( I ) = W( INDX( I ) )
    40 CONTINUE
 *
@@ -350,7 +351,8 @@
             PERM( J ) = INDXQ( INDX( J ) )
             CALL CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
    50    CONTINUE
-         CALL CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ), LDQ )
+         CALL CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
+     $                LDQ )
          RETURN
       END IF
 *
@@ -438,7 +440,7 @@
          ELSE
             K = K + 1
             W( K ) = Z( JLAM )
-            DLAMDA( K ) = D( JLAM )
+            DLAMBDA( K ) = D( JLAM )
             INDXP( K ) = JLAM
             JLAM = J
          END IF
@@ -450,19 +452,19 @@
 *
       K = K + 1
       W( K ) = Z( JLAM )
-      DLAMDA( K ) = D( JLAM )
+      DLAMBDA( K ) = D( JLAM )
       INDXP( K ) = JLAM
 *
   100 CONTINUE
 *
-*     Sort the eigenvalues and corresponding eigenvectors into DLAMDA
+*     Sort the eigenvalues and corresponding eigenvectors into DLAMBDA
 *     and Q2 respectively.  The eigenvalues/vectors which were not
-*     deflated go into the first K slots of DLAMDA and Q2 respectively,
+*     deflated go into the first K slots of DLAMBDA and Q2 respectively,
 *     while those which were deflated go into the last N - K slots.
 *
       DO 110 J = 1, N
          JP = INDXP( J )
-         DLAMDA( J ) = D( JP )
+         DLAMBDA( J ) = D( JP )
          PERM( J ) = INDXQ( INDX( JP ) )
          CALL CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
   110 CONTINUE
@@ -471,8 +473,9 @@
 *     into the last N - K slots of D and Q respectively.
 *
       IF( K.LT.N ) THEN
-         CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
-         CALL CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1, K+1 ),
+         CALL SCOPY( N-K, DLAMBDA( K+1 ), 1, D( K+1 ), 1 )
+         CALL CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1,
+     $                K+1 ),
      $                LDQ )
       END IF
 *

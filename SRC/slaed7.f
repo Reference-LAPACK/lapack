@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED7 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed7.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed7.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -244,7 +242,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup laed7
 *
 *> \par Contributors:
 *  ==================
@@ -253,10 +251,12 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+      SUBROUTINE SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D,
+     $                   Q,
      $                   LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
      $                   PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -285,7 +285,8 @@
      $                   IQ2, IS, IW, IZ, K, LDQ2, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLAED8, SLAED9, SLAEDA, SLAMRG, XERBLA
+      EXTERNAL           SGEMM, SLAED8, SLAED9, SLAEDA, SLAMRG,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -374,7 +375,8 @@
 *     Solve Secular Equation.
 *
       IF( K.NE.0 ) THEN
-         CALL SLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA ),
+         CALL SLAED9( K, 1, K, N, D, WORK( IS ), K, RHO,
+     $                WORK( IDLMDA ),
      $                WORK( IW ), QSTORE( QPTR( CURR ) ), K, INFO )
          IF( INFO.NE.0 )
      $      GO TO 30

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGETF2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetf2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetf2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -101,10 +99,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup getf2
 *
 *  =====================================================================
       SUBROUTINE CGETF2( M, N, A, LDA, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,16 +125,14 @@
      $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
-      REAL               SFMIN
-      INTEGER            I, J, JP
+      INTEGER            J, JP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
       INTEGER            ICAMAX
-      EXTERNAL           SLAMCH, ICAMAX
+      EXTERNAL           ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGERU, CSCAL, CSWAP, XERBLA
+      EXTERNAL           CGERU, CRSCL, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -162,10 +159,6 @@
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
 *
-*     Compute machine safe minimum
-*
-      SFMIN = SLAMCH('S')
-*
       DO 10 J = 1, MIN( M, N )
 *
 *        Find pivot and test for singularity.
@@ -181,15 +174,8 @@
 *
 *           Compute elements J+1:M of J-th column.
 *
-            IF( J.LT.M ) THEN
-               IF( ABS(A( J, J )) .GE. SFMIN ) THEN
-                  CALL CSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
-               ELSE
-                  DO 20 I = 1, M-J
-                     A( J+I, J ) = A( J+I, J ) / A( J, J )
-   20             CONTINUE
-               END IF
-            END IF
+            IF( J.LT.M )
+     $         CALL CRSCL( M-J, A( J, J ), A( J+1, J ), 1 )
 *
          ELSE IF( INFO.EQ.0 ) THEN
 *

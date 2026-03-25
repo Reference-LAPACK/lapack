@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zppcon_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zppcon_work)( int matrix_layout, char uplo, lapack_int n,
                                 const lapack_complex_double* ap, double anorm,
                                 double* rcond, lapack_complex_double* work,
                                 double* rwork )
@@ -55,7 +55,7 @@ lapack_int LAPACKE_zppcon_work( int matrix_layout, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zpp_trans( matrix_layout, uplo, n, ap, ap_t );
+        API_SUFFIX(LAPACKE_zpp_trans)( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zppcon( &uplo, &n, ap_t, &anorm, rcond, work, rwork, &info );
         if( info < 0 ) {
@@ -65,11 +65,11 @@ lapack_int LAPACKE_zppcon_work( int matrix_layout, char uplo, lapack_int n,
         LAPACKE_free( ap_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zppcon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zppcon_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zppcon_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zppcon_work", info );
     }
     return info;
 }

@@ -79,8 +79,8 @@ C> \verbatim
 C>          INFO is INTEGER
 C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
-C>          > 0:  if INFO = i, the leading minor of order i is not
-C>                positive definite, and the factorization could not be
+C>          > 0:  if INFO = i, the leading principal minor of order i
+C>                is not positive, and the factorization could not be
 C>                completed.
 C> \endverbatim
 C>
@@ -99,6 +99,7 @@ C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
       SUBROUTINE DPOTRF ( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,7 +129,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DPOTF2, DSYRK, DTRSM, XERBLA
+      EXTERNAL           DGEMM, DPOTRF2, DSYRK, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -163,7 +164,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL DPOTF2( UPLO, N, A, LDA, INFO )
+         CALL DPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -179,7 +180,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL DPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL DPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -208,7 +209,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL DPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL DPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_GBRFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gbrfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gbrfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -397,16 +395,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGBcomputational
+*> \ingroup la_gbrfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL, KU,
+      SUBROUTINE CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL,
+     $                                KU,
      $                                NRHS, AB, LDAB, AFB, LDAFB, IPIV,
      $                                COLEQU, C, B, LDB, Y, LDY,
      $                                BERR_OUT, N_NORMS, ERR_BNDS_NORM,
      $                                ERR_BNDS_COMP, RES, AYB, DY,
      $                                Y_TAIL, RCOND, ITHRESH, RTHRESH,
      $                                DZ_UB, IGNORE_CWISE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -466,7 +466,8 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGBTRS, CGBMV, BLAS_CGBMV_X,
+      EXTERNAL           CAXPY, CCOPY, CGBTRS, CGBMV,
+     $                   BLAS_CGBMV_X,
      $                   BLAS_CGBMV2_X, CLA_GBAMV, CLA_WWADDW, SLAMCH,
      $                   CHLA_TRANSTYPE, CLA_LIN_BERR
       REAL               SLAMCH
@@ -537,7 +538,8 @@
 
 !        XXX: RES is no longer needed.
             CALL CCOPY( N, RES, 1, DY, 1 )
-            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, DY, N,
+            CALL CGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, DY,
+     $                   N,
      $           INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.

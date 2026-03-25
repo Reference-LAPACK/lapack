@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGERQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgerqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgerqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -114,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup gerqf
 *
 *> \par Further Details:
 *  =====================
@@ -136,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -189,7 +188,7 @@
          END IF
          WORK( 1 ) = LWKOPT
 *
-         IF ( .NOT.LQUERY ) THEN
+         IF( .NOT.LQUERY ) THEN
             IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
      $         INFO = -7
          END IF
@@ -248,7 +247,8 @@
 *           Compute the RQ factorization of the current block
 *           A(m-k+i:m-k+i+ib-1,1:n-k+i+ib-1)
 *
-            CALL DGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA, TAU( I ),
+            CALL DGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( M-K+I.GT.1 ) THEN
 *

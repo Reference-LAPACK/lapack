@@ -298,6 +298,7 @@
      $                   ALPHAR, ALPHAI, BETA, VL, VR, ILO, IHI, LSCALE,
      $                   RSCALE, S, STRU, DIF, DIFTRU, WORK, LWORK,
      $                   IWORK, LIWORK, RESULT, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -115,25 +115,35 @@ cblas_example: cblaslib blaslib
 lapacke_example: lapackelib lapacklib blaslib
 	$(MAKE) -C LAPACKE lapacke_example
 
+# doxygen 1.9.7 converts --- to &mdash; but than has a bug that
+# encodes that as &amp;mdash; on some pages. Use perl to fix it.
 .PHONY: html
 html:
-	@echo "LAPACK HTML PAGES GENERATION with Doxygen"
-	( cat DOCS/Doxyfile ; echo "OUTPUT_DIRECTORY=$(DOCSDIR)" ) | doxygen -
+	@echo "LAPACK HTML page generation with Doxygen"
+	(cat DOCS/Doxyfile; \
+	    echo "OUTPUT_DIRECTORY=$(DOCSDIR)") | doxygen -
+	grep '&amp;mdash' -r $(DOCSDIR)/explore-html -l | xargs perl -pi -e 's/&amp;mdash;/&mdash;/g'
 	@echo "=================="
-	@echo "LAPACK HTML PAGES GENERATED in DOCS/explore-html"
-	@echo "Usage: open DOCS/explore-html/index.html"
+	@echo "LAPACK HTML pages generated in $(DOCSDIR)/explore-html"
+	@echo "Usage: open $(DOCSDIR)/explore-html/index.html"
 	@echo "Online version available at http://www.netlib.org/lapack/explore-html/"
 	@echo "=================="
 
+# Use same Doxyfile for man, and override the few options that change.
 .PHONY: man
 man:
-	@echo "LAPACK MAN PAGES GENERATION with Doxygen"
-	@echo "OUTPUT_DIRECTORY=$(DOCSDIR)"
-	( cat DOCS/Doxyfile_man ; echo "OUTPUT_DIRECTORY=$(DOCSDIR)" ) | doxygen -
+	@echo "LAPACK man page generation with Doxygen"
+	(cat DOCS/Doxyfile; \
+	    echo "OUTPUT_DIRECTORY = $(DOCSDIR)"; \
+	    echo "GENERATE_HTML    = NO"; \
+	    echo "GENERATE_MAN     = YES"; \
+	    echo "CALL_GRAPH       = NO"; \
+	    echo "CALLER_GRAPH     = NO"; \
+	    echo "INLINE_SOURCES   = NO") | doxygen -
 	@echo "=================="
-	@echo "LAPACK MAN PAGES GENERATED in DOCS/man"
+	@echo "LAPACK man pages generated in DOCS/man"
 	@echo "Set your MANPATH env variable accordingly"
-	@echo "Usage: man dgetrf.f"
+	@echo "Usage: man dgetrf"
 	@echo "=================="
 
 .PHONY: clean cleanobj cleanlib cleanexe cleantest

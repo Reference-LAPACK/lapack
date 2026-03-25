@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTBCON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtbcon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtbcon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -135,11 +133,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup tbcon
 *
 *  =====================================================================
-      SUBROUTINE DTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE DTBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND,
+     $                   WORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -238,19 +238,22 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE,
+     $                ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL DLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL DLATBS( UPLO, 'No transpose', DIAG, NORMIN, N,
+     $                      KD,
      $                      AB, LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
 *              Multiply by inv(A**T).
 *
-               CALL DLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, AB,
+               CALL DLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD,
+     $                      AB,
      $                      LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             END IF
             NORMIN = 'Y'

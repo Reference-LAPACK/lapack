@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEQPF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqpf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqpf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -218,8 +216,8 @@
          MA = MIN( ITEMP, M )
          CALL SGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
          IF( MA.LT.N ) THEN
-            CALL SORM2R( 'Left', 'Transpose', M, N-MA, MA, A, LDA, TAU,
-     $                   A( 1, MA+1 ), LDA, WORK, INFO )
+            CALL SORM2R( 'Left', 'Transpose', M, N-MA, MA, A, LDA,
+     $                   TAU, A( 1, MA+1 ), LDA, WORK, INFO )
          END IF
       END IF
 *
@@ -253,7 +251,8 @@
 *           Generate elementary reflector H(i)
 *
             IF( I.LT.M ) THEN
-               CALL SLARFG( M-I+1, A( I, I ), A( I+1, I ), 1, TAU( I ) )
+               CALL SLARFG( M-I+1, A( I, I ), A( I+1, I ), 1,
+     $                      TAU( I ) )
             ELSE
                CALL SLARFG( 1, A( M, M ), A( M, M ), 1, TAU( M ) )
             END IF
@@ -264,8 +263,8 @@
 *
                AII = A( I, I )
                A( I, I ) = ONE
-               CALL SLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1, TAU( I ),
-     $                     A( I, I+1 ), LDA, WORK( 2*N+1 ) )
+               CALL SLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1,
+     $                     TAU( I ), A( I, I+1 ), LDA, WORK( 2*N+1 ) )
                A( I, I ) = AII
             END IF
 *

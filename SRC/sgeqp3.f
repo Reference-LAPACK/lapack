@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEQP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -120,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup geqp3
 *
 *> \par Further Details:
 *  =====================
@@ -148,6 +146,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,12 +172,13 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SLAQP2, SLAQPS, SORMQR, SSWAP, XERBLA
+      EXTERNAL           SGEQRF, SLAQP2, SLAQPS, SORMQR, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SNRM2
-      EXTERNAL           ILAENV, SNRM2
+      REAL               SNRM2, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SNRM2, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -205,7 +205,7 @@
             NB = ILAENV( INB, 'SGEQRF', ' ', M, N, -1, -1 )
             LWKOPT = 2*N + ( N + 1 )*NB
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( ( LWORK.LT.IWS ) .AND. .NOT.LQUERY ) THEN
             INFO = -8
@@ -252,7 +252,8 @@
          IF( NA.LT.N ) THEN
 *CC         CALL SORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
 *CC  $                   TAU, A( 1, NA+1 ), LDA, WORK, INFO )
-            CALL SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TAU,
+            CALL SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
+     $                   TAU,
      $                   A( 1, NA+1 ), LDA, WORK, LWORK, INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
          END IF
@@ -293,7 +294,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = ( LWORK-2*SN ) / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM,
+     $                         SN,
      $                    -1, -1 ) )
 *
 *
@@ -347,7 +349,7 @@
 *
       END IF
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = SROUNDUP_LWORK(IWS)
       RETURN
 *
 *     End of SGEQP3

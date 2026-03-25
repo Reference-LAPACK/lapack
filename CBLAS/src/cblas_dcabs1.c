@@ -6,7 +6,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-double cblas_dcabs1(const void *c)
+double API_SUFFIX(cblas_dcabs1)(const void *c)
 {
    double cabs1 = 0.0;
    F77_dcabs1_sub(c, &cabs1);

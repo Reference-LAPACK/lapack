@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chbtrd_work( int matrix_layout, char vect, char uplo,
+lapack_int API_SUFFIX(LAPACKE_chbtrd_work)( int matrix_layout, char vect, char uplo,
                                 lapack_int n, lapack_int kd,
                                 lapack_complex_float* ab, lapack_int ldab,
                                 float* d, float* e, lapack_complex_float* q,
@@ -54,12 +54,12 @@ lapack_int LAPACKE_chbtrd_work( int matrix_layout, char vect, char uplo,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_chbtrd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbtrd_work", info );
             return info;
         }
         if( ldq < n ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_chbtrd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbtrd_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -69,7 +69,7 @@ lapack_int LAPACKE_chbtrd_work( int matrix_layout, char vect, char uplo,
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
             q_t = (lapack_complex_float*)
                 LAPACKE_malloc( sizeof(lapack_complex_float) *
                                 ldq_t * MAX(1,n) );
@@ -79,9 +79,9 @@ lapack_int LAPACKE_chbtrd_work( int matrix_layout, char vect, char uplo,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_chb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
-            LAPACKE_cge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
+        API_SUFFIX(LAPACKE_chb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
+            API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_chbtrd( &vect, &uplo, &n, &kd, ab_t, &ldab_t, d, e, q_t, &ldq_t,
@@ -90,24 +90,24 @@ lapack_int LAPACKE_chbtrd_work( int matrix_layout, char vect, char uplo,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_chb_trans( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
+        API_SUFFIX(LAPACKE_chb_trans)( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
                            ldab );
-        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
-            LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
+        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
+            API_SUFFIX(LAPACKE_cge_trans)( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
         }
         /* Release memory and exit */
-        if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( vect, 'u' ) || API_SUFFIX(LAPACKE_lsame)( vect, 'v' ) ) {
             LAPACKE_free( q_t );
         }
 exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_chbtrd_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbtrd_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_chbtrd_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbtrd_work", info );
     }
     return info;
 }

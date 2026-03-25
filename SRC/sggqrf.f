@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGQRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggqrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggqrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -173,7 +171,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ggqrf
 *
 *> \par Further Details:
 *  =====================
@@ -212,6 +210,7 @@
 *  =====================================================================
       SUBROUTINE SGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
      $                   LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,6 +236,8 @@
 *     .. External Functions ..
       INTEGER            ILAENV
       EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -250,8 +251,9 @@
       NB2 = ILAENV( 1, 'SGERQF', ' ', N, P, -1, -1 )
       NB3 = ILAENV( 1, 'SORMQR', ' ', N, M, P, -1 )
       NB = MAX( NB1, NB2, NB3 )
-      LWKOPT = MAX( N, M, P )*NB
-      WORK( 1 ) = LWKOPT
+      LWKOPT = MAX( 1, MAX( N, M, P )*NB )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
+*
       LQUERY = ( LWORK.EQ.-1 )
       IF( N.LT.0 ) THEN
          INFO = -1
@@ -280,14 +282,17 @@
 *
 *     Update B := Q**T*B.
 *
-      CALL SORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA, TAUA,
+      CALL SORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA,
+     $             TAUA,
      $             B, LDB, WORK, LWORK, INFO )
       LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
 *
 *     RQ factorization of N-by-P matrix B: B = T*Z.
 *
       CALL SGERQF( N, P, B, LDB, TAUB, WORK, LWORK, INFO )
-      WORK( 1 ) = MAX( LOPT, INT( WORK( 1 ) ) )
+      LWKOPT = MAX( LOPT, INT( WORK( 1 ) ) )
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

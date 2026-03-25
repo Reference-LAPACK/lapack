@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGGHD3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -179,14 +177,14 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
-*> \param[in]  LWORK
+*> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of the array WORK.  LWORK >= 1.
+*>          The length of the array WORK. LWORK >= 1.
 *>          For optimum performance LWORK >= 6*N*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -211,7 +209,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup gghd3
 *
 *> \par Further Details:
 *  =====================
@@ -225,7 +223,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -263,7 +262,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT, DGEMM,
+      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT,
+     $                   DGEMM,
      $                   DGEMV, DTRMV, DLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -275,7 +275,12 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DGGHD3', ' ', N, ILO, IHI, -1 )
-      LWKOPT = MAX( 6*N*NB, 1 )
+      NH = IHI - ILO + 1
+      IF( NH.LE.1 ) THEN
+         LWKOPT = 1
+      ELSE
+         LWKOPT = 6*N*NB
+      END IF
       WORK( 1 ) = DBLE( LWKOPT )
       INITQ = LSAME( COMPQ, 'I' )
       WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
@@ -325,7 +330,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = ONE
          RETURN
@@ -383,7 +387,8 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK, NBLST )
+            CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK,
+     $                   NBLST )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
                CALL DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
@@ -580,10 +585,12 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', LEN,
+                     CALL DTRMV( 'Upper', 'Transpose', 'Non-unit',
+     $                           LEN,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL DTRMV( 'Lower', 'Transpose', 'Non-unit', NNB,
+                     CALL DTRMV( 'Lower', 'Transpose', 'Non-unit',
+     $                           NNB,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
                      CALL DGEMV( 'Transpose', NNB, LEN, ONE,
@@ -772,7 +779,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL DORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -803,7 +811,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL DORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -883,8 +892,10 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB,
+     $                Q,
      $                LDQ, Z, LDZ, IERR )
+*
       WORK( 1 ) = DBLE( LWKOPT )
 *
       RETURN

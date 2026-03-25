@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZSYTRS_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -113,7 +111,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup hetrs_rook
 *
 *> \par Contributors:
 *  ==================
@@ -133,6 +131,7 @@
 *  =====================================================================
       SUBROUTINE ZSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                        INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,7 +222,8 @@
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL ZGERU( K-1, NRHS, -CONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL ZGERU( K-1, NRHS, -CONE, A( 1, K ), 1, B( K, 1 ),
+     $                  LDB,
      $                 B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -250,7 +250,8 @@
             IF( K.GT.2 ) THEN
                CALL ZGERU( K-2, NRHS,-CONE, A( 1, K ), 1, B( K, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
-               CALL ZGERU( K-2, NRHS,-CONE, A( 1, K-1 ), 1, B( K-1, 1 ),
+               CALL ZGERU( K-2, NRHS,-CONE, A( 1, K-1 ), 1, B( K-1,
+     $                     1 ),
      $                    LDB, B( 1, 1 ), LDB )
             END IF
 *
@@ -363,7 +364,8 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL ZGERU( N-K, NRHS, -CONE, A( K+1, K ), 1, B( K, 1 ),
+     $         CALL ZGERU( N-K, NRHS, -CONE, A( K+1, K ), 1, B( K,
+     $                     1 ),
      $                    LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -388,7 +390,8 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL ZGERU( N-K-1, NRHS,-CONE, A( K+2, K ), 1, B( K, 1 ),
+               CALL ZGERU( N-K-1, NRHS,-CONE, A( K+2, K ), 1, B( K,
+     $                     1 ),
      $                    LDB, B( K+2, 1 ), LDB )
                CALL ZGERU( N-K-1, NRHS,-CONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )
@@ -433,7 +436,8 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
+     $         CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1,
+     $                     1 ),
      $                     LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
@@ -450,9 +454,11 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
+               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1,
+     $                     1 ),
      $                     LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
-               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
+               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1,
+     $                     1 ),
      $                     LDB, A( K+1, K-1 ), 1, CONE, B( K-1, 1 ),
      $                     LDB )
             END IF

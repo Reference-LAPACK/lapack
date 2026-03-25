@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtfttr_work( int matrix_layout, char transr, char uplo,
+lapack_int API_SUFFIX(LAPACKE_dtfttr_work)( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const double* arf, double* a,
                                 lapack_int lda )
 {
@@ -50,7 +50,7 @@ lapack_int LAPACKE_dtfttr_work( int matrix_layout, char transr, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_dtfttr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtfttr_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -66,25 +66,25 @@ lapack_int LAPACKE_dtfttr_work( int matrix_layout, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_dpf_trans( matrix_layout, transr, uplo, n, arf, arf_t );
+        API_SUFFIX(LAPACKE_dpf_trans)( matrix_layout, transr, uplo, n, arf, arf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtfttr( &transr, &uplo, &n, arf_t, a_t, &lda_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( arf_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dtfttr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtfttr_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dtfttr_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtfttr_work", info );
     }
     return info;
 }

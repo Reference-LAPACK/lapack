@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYEV_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyev_2stage.f">
 *> [TGZ]</a>
@@ -15,12 +14,11 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyev_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, 
+*       SUBROUTINE DSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
 *                                INFO )
 *
 *       IMPLICIT NONE
@@ -97,7 +95,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension LWORK
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -105,12 +103,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK. LWORK >= 1, when N <= 1;
-*>          otherwise  
+*>          otherwise
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + 2*N
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + 2*N
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -143,7 +141,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYeigen
+*> \ingroup heev_2stage
 *
 *> \par Further Details:
 *  =====================
@@ -161,7 +159,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -169,16 +167,16 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, 
+      SUBROUTINE DSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
      $                         INFO )
 *
       IMPLICIT NONE
@@ -215,7 +213,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DORGTR, DSCAL, DSTEQR, DSTERF,
+      EXTERNAL           DLASCL, DORGTR, DSCAL, DSTEQR,
+     $                   DSTERF,
      $                   XERBLA, DSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -241,10 +240,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                         -1 )
+         IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                         -1 )
+         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
+         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                         -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -305,7 +308,7 @@
       LLWORK  = LWORK - INDWRK + 1
 *
       CALL DSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK( INDE ),
-     $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
+     $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
 *     For eigenvalues only, call DSTERF.  For eigenvectors, first call
@@ -317,9 +320,11 @@
 *        Not available in this release, and argument checking should not
 *        let it getting here
          RETURN
-         CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ),
+     $                WORK( INDWRK ),
      $                LLWORK, IINFO )
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA,
+     $                WORK( INDTAU ),
      $                INFO )
       END IF
 *

@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-float cblas_snrm2( const CBLAS_INT N, const float *X, const CBLAS_INT incX)
+float API_SUFFIX(cblas_snrm2)( const CBLAS_INT N, const float *X, const CBLAS_INT incX)
 {
    float nrm2;
 #ifdef F77_INT

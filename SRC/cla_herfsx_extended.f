@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_HERFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_herfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_herfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -382,16 +380,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup la_herfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
      $                                AYB, DY, Y_TAIL, RCOND, ITHRESH,
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -457,7 +457,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CHETRS, CHEMV, BLAS_CHEMV_X,
+      EXTERNAL           CAXPY, CCOPY, CHETRS, CHEMV,
+     $                   BLAS_CHEMV_X,
      $                   BLAS_CHEMV2_X, CLA_HEAMV, CLA_WWADDW,
      $                   CLA_LIN_BERR
       REAL               SLAMCH
@@ -537,7 +538,8 @@
 *
             CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL CHEMV( UPLO, N, CMPLX(-1.0), A, LDA, Y( 1, J ), 1,
+               CALL CHEMV( UPLO, N, CMPLX(-1.0), A, LDA, Y( 1, J ),
+     $                     1,
      $              CMPLX(1.0), RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_CHEMV_X( UPLO2, N, CMPLX(-1.0), A, LDA,

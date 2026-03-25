@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
+lapack_int API_SUFFIX(LAPACKE_ztgevc_work)( int matrix_layout, char side, char howmny,
                                 const lapack_logical* select, lapack_int n,
                                 const lapack_complex_double* s, lapack_int lds,
                                 const lapack_complex_double* p, lapack_int ldp,
@@ -61,22 +61,22 @@ lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
         /* Check leading dimension(s) */
         if( ldp < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
         if( lds < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
         if( ldvl < mm ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
         if( ldvr < mm ) {
             info = -13;
-            LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -92,7 +92,7 @@ lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
             vl_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldvl_t * MAX(1,mm) );
@@ -101,7 +101,7 @@ lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
                 goto exit_level_2;
             }
         }
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
             vr_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
                                 ldvr_t * MAX(1,mm) );
@@ -111,15 +111,15 @@ lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, n, s, lds, s_t, lds_t );
-        LAPACKE_zge_trans( matrix_layout, n, n, p, ldp, p_t, ldp_t );
-        if( ( LAPACKE_lsame( side, 'l' ) || LAPACKE_lsame( side, 'b' ) ) &&
-            LAPACKE_lsame( howmny, 'b' ) ) {
-            LAPACKE_zge_trans( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, s, lds, s_t, lds_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, p, ldp, p_t, ldp_t );
+        if( ( API_SUFFIX(LAPACKE_lsame)( side, 'l' ) || API_SUFFIX(LAPACKE_lsame)( side, 'b' ) ) &&
+            API_SUFFIX(LAPACKE_lsame)( howmny, 'b' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
         }
-        if( ( LAPACKE_lsame( side, 'r' ) || LAPACKE_lsame( side, 'b' ) ) &&
-            LAPACKE_lsame( howmny, 'b' ) ) {
-            LAPACKE_zge_trans( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
+        if( ( API_SUFFIX(LAPACKE_lsame)( side, 'r' ) || API_SUFFIX(LAPACKE_lsame)( side, 'b' ) ) &&
+            API_SUFFIX(LAPACKE_lsame)( howmny, 'b' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ztgevc( &side, &howmny, select, &n, s_t, &lds_t, p_t, &ldp_t,
@@ -129,20 +129,20 @@ lapack_int LAPACKE_ztgevc_work( int matrix_layout, char side, char howmny,
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
-            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, mm, vl_t, ldvl_t, vl,
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, mm, vl_t, ldvl_t, vl,
                                ldvl );
         }
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
-            LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, mm, vr_t, ldvr_t, vr,
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
+            API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, mm, vr_t, ldvr_t, vr,
                                ldvr );
         }
         /* Release memory and exit */
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
             LAPACKE_free( vr_t );
         }
 exit_level_3:
-        if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( side, 'b' ) || API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ) {
             LAPACKE_free( vl_t );
         }
 exit_level_2:
@@ -151,11 +151,11 @@ exit_level_1:
         LAPACKE_free( s_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ztgevc_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
     }
     return info;
 }

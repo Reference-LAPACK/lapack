@@ -32,13 +32,13 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dlaset( int matrix_layout, char uplo, lapack_int m,
+lapack_int API_SUFFIX(LAPACKE_dlaset)( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, double alpha, double beta, double* a,
                            lapack_int lda )
 {
 
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dlaset", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlaset", -1 );
         return -1;
     }
 
@@ -49,14 +49,14 @@ lapack_int LAPACKE_dlaset( int matrix_layout, char uplo, lapack_int m,
 
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
-        if( LAPACKE_d_nancheck( 1, &alpha, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &alpha, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_d_nancheck( 1, &beta, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &beta, 1 ) ) {
             return -6;
         }
     }
 #endif
 
-    return LAPACKE_dlaset_work( matrix_layout, uplo, m, n, alpha, beta, a, lda );
+    return API_SUFFIX(LAPACKE_dlaset_work)( matrix_layout, uplo, m, n, alpha, beta, a, lda );
 }

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAQZ1 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ZLAQZ1.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ZLAQZ1.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -165,10 +163,11 @@
 *
 *> \date May 2020
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup laqz1
 *>
 *  =====================================================================
-      SUBROUTINE ZLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA, B,
+      SUBROUTINE ZLAQZ1( ILQ, ILZ, K, ISTARTM, ISTOPM, IHI, A, LDA,
+     $                   B,
      $                   LDB, NQ, QSTART, Q, LDQ, NZ, ZSTART, Z, LDZ )
       IMPLICIT NONE
 *
@@ -204,7 +203,8 @@
          CALL ZROT( IHI-ISTARTM+1, A( ISTARTM, IHI ), 1, A( ISTARTM,
      $              IHI-1 ), 1, C, S )
          IF ( ILZ ) THEN
-            CALL ZROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1, IHI-1-ZSTART+
+            CALL ZROT( NZ, Z( 1, IHI-ZSTART+1 ), 1, Z( 1,
+     $                 IHI-1-ZSTART+
      $                 1 ), 1, C, S )
          END IF
 *
@@ -220,10 +220,12 @@
          B( K+1, K ) = CZERO
          CALL ZROT( K+2-ISTARTM+1, A( ISTARTM, K+1 ), 1, A( ISTARTM,
      $              K ), 1, C, S )
-         CALL ZROT( K-ISTARTM+1, B( ISTARTM, K+1 ), 1, B( ISTARTM, K ),
+         CALL ZROT( K-ISTARTM+1, B( ISTARTM, K+1 ), 1, B( ISTARTM,
+     $              K ),
      $              1, C, S )
          IF ( ILZ ) THEN
-            CALL ZROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1, K-ZSTART+1 ),
+            CALL ZROT( NZ, Z( 1, K+1-ZSTART+1 ), 1, Z( 1,
+     $                 K-ZSTART+1 ),
      $                 1, C, S )
          END IF
 *
@@ -232,9 +234,11 @@
          CALL ZLARTG( A( K+1, K ), A( K+2, K ), C, S, TEMP )
          A( K+1, K ) = TEMP
          A( K+2, K ) = CZERO
-         CALL ZROT( ISTOPM-K, A( K+1, K+1 ), LDA, A( K+2, K+1 ), LDA, C,
+         CALL ZROT( ISTOPM-K, A( K+1, K+1 ), LDA, A( K+2, K+1 ), LDA,
+     $              C,
      $              S )
-         CALL ZROT( ISTOPM-K, B( K+1, K+1 ), LDB, B( K+2, K+1 ), LDB, C,
+         CALL ZROT( ISTOPM-K, B( K+1, K+1 ), LDB, B( K+2, K+1 ), LDB,
+     $              C,
      $              S )
          IF ( ILQ ) THEN
             CALL ZROT( NQ, Q( 1, K+1-QSTART+1 ), 1, Q( 1, K+2-QSTART+

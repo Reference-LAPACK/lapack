@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGGSVD3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggsvd3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggsvd3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -278,7 +276,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
+*>          The dimension of the array WORK. LWORK >= 1.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -328,7 +326,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsing
+*> \ingroup ggsvd3
 *
 *> \par Contributors:
 *  ==================
@@ -346,6 +344,7 @@
       SUBROUTINE DGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
      $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
      $                    WORK, LWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -423,7 +422,8 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL DGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+         CALL DGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+     $                 TOLA,
      $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, WORK,
      $                 WORK, -1, INFO )
          LWKOPT = N + INT( WORK( 1 ) )

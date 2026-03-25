@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTRSYL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrsyl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsyl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -149,11 +147,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup trsyl
 *
 *  =====================================================================
       SUBROUTINE CTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
      $                   LDC, SCALE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,7 +187,8 @@
       LOGICAL            LSAME
       REAL               CLANGE, SLAMCH
       COMPLEX            CDOTC, CDOTU, CLADIV
-      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU, CLADIV
+      EXTERNAL           LSAME, CLANGE, SLAMCH, CDOTC, CDOTU,
+     $                   CLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL, XERBLA
@@ -241,7 +241,7 @@
       BIGNUM = ONE / SMLNUM
       SMIN = MAX( SMLNUM, EPS*CLANGE( 'M', M, M, A, LDA, DUM ),
      $       EPS*CLANGE( 'M', N, N, B, LDB, DUM ) )
-      SGN = ISGN
+      SGN = REAL( ISGN )
 *
       IF( NOTRNA .AND. NOTRNB ) THEN
 *

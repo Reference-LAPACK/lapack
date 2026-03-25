@@ -104,7 +104,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup tplqt2
 *
 *> \par Further Details:
 *  =====================
@@ -159,6 +159,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

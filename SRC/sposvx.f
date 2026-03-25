@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPOSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -71,7 +69,7 @@
 *>    where U is an upper triangular matrix and L is a lower triangular
 *>    matrix.
 *>
-*> 3. If the leading i-by-i principal minor is not positive definite,
+*> 3. If the leading principal minor of order i is not positive,
 *>    then the routine returns with INFO = i. Otherwise, the factored
 *>    form of A is used to estimate the condition number of the matrix
 *>    A.  If the reciprocal of the condition number is less than machine
@@ -277,10 +275,10 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *>          > 0: if INFO = i, and i is
-*>                <= N:  the leading minor of order i of A is
-*>                       not positive definite, so the factorization
-*>                       could not be completed, and the solution has not
-*>                       been computed. RCOND = 0 is returned.
+*>                <= N:  the leading principal minor of order i of A
+*>                       is not positive, so the factorization could not
+*>                       be completed, and the solution has not been
+*>                       computed. RCOND = 0 is returned.
 *>                = N+1: U is nonsingular, but RCOND is less than machine
 *>                       precision, meaning that the matrix is singular
 *>                       to working precision.  Nevertheless, the
@@ -298,12 +296,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOsolve
+*> \ingroup posvx
 *
 *  =====================================================================
-      SUBROUTINE SPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE SPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                   EQUED,
      $                   S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -338,7 +338,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLAQSY, SPOCON, SPOEQU, SPORFS, SPOTRF,
+      EXTERNAL           SLACPY, SLAQSY, SPOCON, SPOEQU, SPORFS,
+     $                   SPOTRF,
      $                   SPOTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -360,10 +361,13 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND.
+     $    .NOT.EQUIL .AND.
+     $    .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -452,7 +456,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Compute the solution matrix X.
 *

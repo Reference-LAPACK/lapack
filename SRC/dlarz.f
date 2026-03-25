@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLARZ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarz.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarz.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -127,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup larz
 *
 *> \par Contributors:
 *  ==================
@@ -142,6 +140,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,7 +182,8 @@
 *
 *           w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l )
 *
-            CALL DGEMV( 'Transpose', L, N, ONE, C( M-L+1, 1 ), LDC, V,
+            CALL DGEMV( 'Transpose', L, N, ONE, C( M-L+1, 1 ), LDC,
+     $                  V,
      $                  INCV, ONE, WORK, 1 )
 *
 *           C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n )
@@ -209,7 +209,8 @@
 *
 *           w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l )
 *
-            CALL DGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC,
+            CALL DGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ),
+     $                  LDC,
      $                  V, INCV, ONE, WORK, 1 )
 *
 *           C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m )

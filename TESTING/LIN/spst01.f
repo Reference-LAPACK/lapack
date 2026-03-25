@@ -131,6 +131,7 @@
 *  =====================================================================
       SUBROUTINE SPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
      $                   PIV, RWORK, RESID, RANK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

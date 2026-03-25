@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLAED3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed3.f">
 *> [TGZ]</a>
@@ -13,12 +12,11 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+*       SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMBDA, Q2, INDX,
 *                          CTOT, W, S, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +25,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            CTOT( * ), INDX( * )
-*       DOUBLE PRECISION   D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
+*       DOUBLE PRECISION   D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ),
 *      $                   S( * ), W( * )
 *       ..
 *
@@ -44,12 +42,6 @@
 *> being combined by the matrix of eigenvectors of the K-by-K system
 *> which is solved here.
 *>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.
 *> \endverbatim
 *
 *  Arguments:
@@ -104,14 +96,12 @@
 *>          RHO >= 0 required.
 *> \endverbatim
 *>
-*> \param[in,out] DLAMDA
+*> \param[in] DLAMBDA
 *> \verbatim
-*>          DLAMDA is DOUBLE PRECISION array, dimension (K)
+*>          DLAMBDA is DOUBLE PRECISION array, dimension (K)
 *>          The first K elements of this array contain the old roots
 *>          of the deflated updating problem.  These are the poles
-*>          of the secular equation. May be changed on output by
-*>          having lowest order bit set to zero on Cray X-MP, Cray Y-MP,
-*>          Cray-2, or Cray C-90, as described above.
+*>          of the secular equation.
 *> \endverbatim
 *>
 *> \param[in] Q2
@@ -170,7 +160,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup laed3
 *
 *> \par Contributors:
 *  ==================
@@ -180,8 +170,9 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+      SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMBDA, Q2, INDX,
      $                   CTOT, W, S, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,7 +184,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            CTOT( * ), INDX( * )
-      DOUBLE PRECISION   D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
+      DOUBLE PRECISION   D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ),
      $                   S( * ), W( * )
 *     ..
 *
@@ -208,11 +199,12 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, DNRM2
-      EXTERNAL           DLAMC3, DNRM2
+      DOUBLE PRECISION   DNRM2
+      EXTERNAL           DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED4, DLASET, XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED4, DLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -240,29 +232,10 @@
       IF( K.EQ.0 )
      $   RETURN
 *
-*     Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can
-*     be computed with high relative accuracy (barring over/underflow).
-*     This is a problem on machines without a guard digit in
-*     add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2).
-*     The following code replaces DLAMDA(I) by 2*DLAMDA(I)-DLAMDA(I),
-*     which on any of these machines zeros out the bottommost
-*     bit of DLAMDA(I) if it is 1; this makes the subsequent
-*     subtractions DLAMDA(I)-DLAMDA(J) unproblematic when cancellation
-*     occurs. On binary machines with a guard digit (almost all
-*     machines) it does not change DLAMDA(I) at all. On hexadecimal
-*     and decimal machines with a guard digit, it slightly
-*     changes the bottommost bits of DLAMDA(I). It does not account
-*     for hexadecimal or decimal machines without guard digits
-*     (we know of none). We use a subroutine call to compute
-*     2*DLAMBDA(I) to prevent optimizing compilers from eliminating
-*     this code.
-*
-      DO 10 I = 1, K
-         DLAMDA( I ) = DLAMC3( DLAMDA( I ), DLAMDA( I ) ) - DLAMDA( I )
-   10 CONTINUE
 *
       DO 20 J = 1, K
-         CALL DLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL DLAED4( K, J, DLAMBDA, W, Q( 1, J ), RHO, D( J ),
+     $                INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -293,10 +266,10 @@
       CALL DCOPY( K, Q, LDQ+1, W, 1 )
       DO 60 J = 1, K
          DO 40 I = 1, J - 1
-            W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
+            W( I ) = W( I )*( Q( I, J )/( DLAMBDA( I )-DLAMBDA( J ) ) )
    40    CONTINUE
          DO 50 I = J + 1, K
-            W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
+            W( I ) = W( I )*( Q( I, J )/( DLAMBDA( I )-DLAMBDA( J ) ) )
    50    CONTINUE
    60 CONTINUE
       DO 70 I = 1, K
@@ -327,7 +300,8 @@
       CALL DLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
       IQ2 = N1*N12 + 1
       IF( N23.NE.0 ) THEN
-         CALL DGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23,
+         CALL DGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S,
+     $               N23,
      $               ZERO, Q( N1+1, 1 ), LDQ )
       ELSE
          CALL DLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
@@ -335,7 +309,8 @@
 *
       CALL DLACPY( 'A', N12, K, Q, LDQ, S, N12 )
       IF( N12.NE.0 ) THEN
-         CALL DGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO, Q,
+         CALL DGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO,
+     $               Q,
      $               LDQ )
       ELSE
          CALL DLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )

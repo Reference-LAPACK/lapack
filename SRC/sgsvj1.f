@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGSVJ1 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgsvj1.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgsvj1.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -223,7 +221,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup gsvj1
 *
 *> \par Contributors:
 *  ==================
@@ -233,6 +231,7 @@
 *  =====================================================================
       SUBROUTINE SGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,
      $                   EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -277,7 +276,8 @@
       EXTERNAL           ISAMAX, LSAME, SDOT, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP,
+      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM,
+     $                   SSWAP,
      $                   XERBLA
 *     ..
 *     .. Executable Statements ..
@@ -423,12 +423,15 @@
                                  ROTOK = ( SMALL*AAQQ ).LE.AAPP
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1,
+     $                                    A( 1,
      $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
      $                                  / AAPP
                               ELSE
-                                 CALL SCOPY( M, A( 1, p ), 1, WORK, 1 )
-                                 CALL SLASCL( 'G', 0, 0, AAPP, D( p ),
+                                 CALL SCOPY( M, A( 1, p ), 1, WORK,
+     $                                       1 )
+                                 CALL SLASCL( 'G', 0, 0, AAPP,
+     $                                        D( p ),
      $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = SDOT( M, WORK, 1, A( 1, q ),
      $                                  1 )*D( q ) / AAQQ
@@ -440,12 +443,15 @@
                                  ROTOK = AAQQ.LE.( AAPP / SMALL )
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1,
+     $                                    A( 1,
      $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
      $                                  / AAPP
                               ELSE
-                                 CALL SCOPY( M, A( 1, q ), 1, WORK, 1 )
-                                 CALL SLASCL( 'G', 0, 0, AAQQ, D( q ),
+                                 CALL SCOPY( M, A( 1, q ), 1, WORK,
+     $                                       1 )
+                                 CALL SLASCL( 'G', 0, 0, AAQQ,
+     $                                        D( q ),
      $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = SDOT( M, WORK, 1, A( 1, p ),
      $                                  1 )*D( p ) / AAPP
@@ -509,7 +515,8 @@
                                           FASTR( 4 ) = -T*AQOAP
                                           D( p ) = D( p )*CS
                                           D( q ) = D( q )*CS
-                                          CALL SROTM( M, A( 1, p ), 1,
+                                          CALL SROTM( M, A( 1, p ),
+     $                                                1,
      $                                                A( 1, q ), 1,
      $                                                FASTR )
                                           IF( RSVEC )CALL SROTM( MVL,
@@ -523,7 +530,8 @@
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL SAXPY( MVL, -T*AQOAP,
+                                             CALL SAXPY( MVL,
+     $                                                   -T*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
                                              CALL SAXPY( MVL,
@@ -539,11 +547,13 @@
                                           CALL SAXPY( M, T*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
-                                          CALL SAXPY( M, -CS*SN*AQOAP,
+                                          CALL SAXPY( M,
+     $                                                -CS*SN*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL SAXPY( MVL, T*APOAQ,
+                                             CALL SAXPY( MVL,
+     $                                                   T*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
                                              CALL SAXPY( MVL,
@@ -558,7 +568,8 @@
                                              CALL SAXPY( M, -T*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
-                                             CALL SAXPY( M, CS*SN*APOAQ,
+                                             CALL SAXPY( M,
+     $                                                   CS*SN*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
                                              D( p ) = D( p )*CS
@@ -599,34 +610,42 @@
 
                               ELSE
                                  IF( AAPP.GT.AAQQ ) THEN
-                                    CALL SCOPY( M, A( 1, p ), 1, WORK,
+                                    CALL SCOPY( M, A( 1, p ), 1,
+     $                                          WORK,
      $                                          1 )
-                                    CALL SLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL SLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, WORK, LDA, IERR )
-                                    CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL SLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*D( p ) / D( q )
                                     CALL SAXPY( M, TEMP1, WORK, 1,
      $                                          A( 1, q ), 1 )
-                                    CALL SLASCL( 'G', 0, 0, ONE, AAQQ,
+                                    CALL SLASCL( 'G', 0, 0, ONE,
+     $                                           AAQQ,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                         ONE-AAPQ*AAPQ ) )
                                     MXSINJ = MAX( MXSINJ, SFMIN )
                                  ELSE
-                                    CALL SCOPY( M, A( 1, q ), 1, WORK,
+                                    CALL SCOPY( M, A( 1, q ), 1,
+     $                                          WORK,
      $                                          1 )
-                                    CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
+                                    CALL SLASCL( 'G', 0, 0, AAQQ,
+     $                                           ONE,
      $                                           M, 1, WORK, LDA, IERR )
-                                    CALL SLASCL( 'G', 0, 0, AAPP, ONE,
+                                    CALL SLASCL( 'G', 0, 0, AAPP,
+     $                                           ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*D( q ) / D( p )
                                     CALL SAXPY( M, TEMP1, WORK, 1,
      $                                          A( 1, p ), 1 )
-                                    CALL SLASCL( 'G', 0, 0, ONE, AAPP,
+                                    CALL SLASCL( 'G', 0, 0, ONE,
+     $                                           AAPP,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     SVA( p ) = AAPP*SQRT( MAX( ZERO,
@@ -642,7 +661,8 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = SNRM2( M, A( 1, q ), 1 )*
+                                    SVA( q ) = SNRM2( M, A( 1, q ),
+     $                                   1 )*
      $                                         D( q )
                                  ELSE
                                     T = ZERO

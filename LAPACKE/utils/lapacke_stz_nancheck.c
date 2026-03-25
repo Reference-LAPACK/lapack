@@ -80,7 +80,7 @@
 
 *****************************************************************************/
 
-lapack_logical LAPACKE_stz_nancheck( int matrix_layout, char direct, char uplo,
+lapack_logical API_SUFFIX(LAPACKE_stz_nancheck)( int matrix_layout, char direct, char uplo,
                                      char diag, lapack_int m, lapack_int n,
                                      const float *a, lapack_int lda )
 {
@@ -89,14 +89,14 @@ lapack_logical LAPACKE_stz_nancheck( int matrix_layout, char direct, char uplo,
     if( a == NULL ) return (lapack_logical) 0;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    front  = LAPACKE_lsame( direct, 'f' );
-    lower  = LAPACKE_lsame( uplo, 'l' );
-    unit   = LAPACKE_lsame( diag, 'u' );
+    front  = API_SUFFIX(LAPACKE_lsame)( direct, 'f' );
+    lower  = API_SUFFIX(LAPACKE_lsame)( uplo, 'l' );
+    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !front  && !LAPACKE_lsame( direct, 'b' ) ) ||
-        ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
-        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
+        ( !front  && !API_SUFFIX(LAPACKE_lsame)( direct, 'b' ) ) ||
+        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) ||
+        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }
@@ -131,13 +131,13 @@ lapack_logical LAPACKE_stz_nancheck( int matrix_layout, char direct, char uplo,
 
     /* Check rectangular part */
     if( rect_offset >= 0 ) {
-        if( LAPACKE_sge_nancheck( matrix_layout, rect_m, rect_n,
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, rect_m, rect_n,
                                   &a[rect_offset], lda) ) {
             return (lapack_logical) 1;
         }
     }
 
     /* Check triangular part */
-    return LAPACKE_str_nancheck( matrix_layout, uplo, diag, tri_n,
+    return API_SUFFIX(LAPACKE_str_nancheck)( matrix_layout, uplo, diag, tri_n,
                                  &a[tri_offset], lda );
 }

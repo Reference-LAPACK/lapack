@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DPOTF2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpotf2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotf2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -89,8 +87,8 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
-*>          > 0: if INFO = k, the leading minor of order k is not
-*>               positive definite, and the factorization could not be
+*>          > 0: if INFO = k, the leading principal minor of order k
+*>               is not positive, and the factorization could not be
 *>               completed.
 *> \endverbatim
 *
@@ -102,10 +100,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doublePOcomputational
+*> \ingroup potf2
 *
 *  =====================================================================
       SUBROUTINE DPOTF2( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -208,7 +207,8 @@
 *           Compute elements J+1:N of column J.
 *
             IF( J.LT.N ) THEN
-               CALL DGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1, 1 ),
+               CALL DGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1,
+     $                     1 ),
      $                     LDA, A( J, 1 ), LDA, ONE, A( J+1, J ), 1 )
                CALL DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF

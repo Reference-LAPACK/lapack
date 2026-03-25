@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEQL2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeql2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeql2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -98,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup geql2
 *
 *> \par Further Details:
 *  =====================
@@ -120,6 +118,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,10 +139,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFG
+      EXTERNAL           XERBLA, ZLARF1L, ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -172,15 +170,13 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(1:m-k+i-1,n-k+i)
 *
-         ALPHA = A( M-K+I, N-K+I )
-         CALL ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
+         CALL ZLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
+     $                TAU( I ) )
 *
 *        Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left
 *
-         A( M-K+I, N-K+I ) = ONE
-         CALL ZLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
-     $               DCONJG( TAU( I ) ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = ALPHA
+         CALL ZLARF1L( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
+     $                 CONJG( TAU( I ) ), A, LDA, WORK )
    10 CONTINUE
       RETURN
 *

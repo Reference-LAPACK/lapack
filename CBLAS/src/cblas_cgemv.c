@@ -7,9 +7,10 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_cgemv(const CBLAS_LAYOUT layout,
+void API_SUFFIX(cblas_cgemv)(const CBLAS_LAYOUT layout,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_INT M, const CBLAS_INT N,
                  const void *alpha, const void  *A, const CBLAS_INT lda,
                  const void  *X, const CBLAS_INT incX, const void *beta,
@@ -31,17 +32,21 @@ void cblas_cgemv(const CBLAS_LAYOUT layout,
    #define F77_incY incY
 #endif
 
-   CBLAS_INT n=0, i=0, incx=incX;
+   CBLAS_INT n=0, i=0;
    const float *xx= (const float *)X;
    float ALPHA[2],BETA[2];
    CBLAS_INT tincY, tincx;
-   float *x=(float *)X, *y=(float *)Y, *st=0, *tx=0;
-   const float *stx = x;
+   float *x, *y, *st=0, *tx=0;
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
 
    CBLAS_CallFromC = 1;
+
+   memcpy(&x, &X, sizeof(float *));
+   memcpy(&y, &Y, sizeof(float *));
+
+   const float *stx = x;
 
    if (layout == CblasColMajor)
    {
@@ -50,7 +55,7 @@ void cblas_cgemv(const CBLAS_LAYOUT layout,
       else if (TransA == CblasConjTrans) TA = 'C';
       else
       {
-         cblas_xerbla(2, "cblas_cgemv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_cgemv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -126,7 +131,7 @@ void cblas_cgemv(const CBLAS_LAYOUT layout,
       }
       else
       {
-         cblas_xerbla(2, "cblas_cgemv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_cgemv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -155,7 +160,7 @@ void cblas_cgemv(const CBLAS_LAYOUT layout,
          }
       }
    }
-   else cblas_xerbla(1, "cblas_cgemv", "Illegal layout setting, %d\n", layout);
+   else API_SUFFIX(cblas_xerbla)(1, "cblas_cgemv", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

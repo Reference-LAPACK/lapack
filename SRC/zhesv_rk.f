@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHESV_RK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_rk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_rk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -205,7 +203,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEsolve
+*> \ingroup hesv_rk
 *
 *> \par Contributors:
 *  ==================
@@ -223,8 +221,10 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB, WORK,
+      SUBROUTINE ZHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
+     $                     WORK,
      $                     LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -261,7 +261,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -279,7 +280,8 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, -1, INFO )
+            CALL ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, -1,
+     $                      INFO )
             LWKOPT = INT( DBLE( WORK( 1 ) ) )
          END IF
          WORK( 1 ) = LWKOPT
@@ -301,7 +303,8 @@
 *
 *        Solve the system A*X = B with BLAS3 solver, overwriting B with X.
 *
-         CALL ZHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB, INFO )
+         CALL ZHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
+     $                  INFO )
 *
       END IF
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STGSYL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsyl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsyl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -261,7 +259,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYcomputational
+*> \ingroup tgsyl
 *
 *> \par Contributors:
 *  ==================
@@ -293,9 +291,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -331,10 +331,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASET, SSCAL, STGSY2, XERBLA
+      EXTERNAL           SGEMM, SLACPY, SLASET, SSCAL, STGSY2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -384,7 +386,7 @@
          ELSE
             LWMIN = 1
          END IF
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -20
@@ -437,7 +439,8 @@
             DSCALE = ZERO
             DSUM = ONE
             PQ = 0
-            CALL STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
+            CALL STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
      $                   IWORK, PQ, INFO )
             IF( DSCALE.NE.ZERO ) THEN
@@ -531,7 +534,8 @@
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
                   PPQQ = 0
-                  CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ),
+     $                         LDA,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
      $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
@@ -650,10 +654,12 @@
 *              Substitute R(I, J) and L(I, J) into remaining equation.
 *
                IF( J.GT.P+2 ) THEN
-                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS ),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS,
+     $                        JS ),
      $                        LDC, B( 1, JS ), LDB, ONE, F( IS, 1 ),
      $                        LDF )
-                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS ),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS,
+     $                        JS ),
      $                        LDF, E( 1, JS ), LDE, ONE, F( IS, 1 ),
      $                        LDF )
                END IF
@@ -670,7 +676,7 @@
 *
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
       RETURN
 *

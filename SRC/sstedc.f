@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSTEDC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstedc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstedc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -42,12 +40,6 @@
 *> found if SSYTRD or SSPTRD or SSBTRD has been used to reduce this
 *> matrix to tridiagonal form.
 *>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See SLAED3 for details.
 *> \endverbatim
 *
 *  Arguments:
@@ -173,7 +165,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup stedc
 *
 *> \par Contributors:
 *  ==================
@@ -185,6 +177,7 @@
 *  =====================================================================
       SUBROUTINE SSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,11 +207,13 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANST
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANST
+      REAL               SLAMCH, SLANST, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANST,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLAED0, SLASCL, SLASET, SLASRT,
+      EXTERNAL           SGEMM, SLACPY, SLAED0, SLASCL, SLASET,
+     $                   SLASRT,
      $                   SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -274,7 +269,7 @@
                LIWMIN = 3 + 5*N
             END IF
          END IF
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT. LQUERY ) THEN
@@ -383,9 +378,11 @@
 *              Scale.
 *
                ORGNRM = SLANST( 'M', M, D( START ), E( START ) )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
                IF( ICOMPZ.EQ.1 ) THEN
@@ -404,7 +401,8 @@
 *
 *              Scale back.
 *
-               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
@@ -414,7 +412,8 @@
 *                 the length of D, we must solve the sub-problem in a
 *                 workspace and then multiply back into Z.
 *
-                  CALL SSTEQR( 'I', M, D( START ), E( START ), WORK, M,
+                  CALL SSTEQR( 'I', M, D( START ), E( START ), WORK,
+     $                         M,
      $                         WORK( M*M+1 ), INFO )
                   CALL SLACPY( 'A', N, M, Z( 1, START ), LDZ,
      $                         WORK( STOREZ ), N )
@@ -469,7 +468,7 @@
       END IF
 *
    50 CONTINUE
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       RETURN

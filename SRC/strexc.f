@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STREXC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strexc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strexc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -140,11 +138,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup trexc
 *
 *  =====================================================================
       SUBROUTINE STREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -295,7 +294,8 @@
 *
 *              Swap two 1 by 1 blocks, no problems possible
 *
-               CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, NBNEXT,
+               CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1,
+     $                      NBNEXT,
      $                      WORK, INFO )
                HERE = HERE + 1
             ELSE
@@ -321,7 +321,8 @@
 *
                   CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
      $                         WORK, INFO )
-                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1, 1,
+                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1,
+     $                         1,
      $                         WORK, INFO )
                   HERE = HERE + 2
                END IF
@@ -346,7 +347,8 @@
                IF( T( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEXT,
+            CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT,
+     $                   NBNEXT,
      $                   NBF, WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -371,7 +373,8 @@
                IF( T( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEXT,
+            CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT,
+     $                   NBNEXT,
      $                   1, WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -381,7 +384,8 @@
 *
 *              Swap two 1 by 1 blocks, no problems possible
 *
-               CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBNEXT, 1,
+               CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBNEXT,
+     $                      1,
      $                      WORK, INFO )
                HERE = HERE - 1
             ELSE
@@ -394,7 +398,8 @@
 *
 *                 2 by 2 Block did not split
 *
-                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 2, 1,
+                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 2,
+     $                         1,
      $                         WORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -407,7 +412,8 @@
 *
                   CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
      $                         WORK, INFO )
-                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 1, 1,
+                  CALL SLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 1,
+     $                         1,
      $                         WORK, INFO )
                   HERE = HERE - 2
                END IF

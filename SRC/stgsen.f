@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STGSEN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsen.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsen.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -256,7 +254,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. LWORK >=  4*N+16.
-*>          If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M)).
+*>          If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M) + 1).
 *>          If IJOB = 3 or 5, LWORK >= MAX(4*N+16, 4*M*(N-M)).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -304,7 +302,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup tgsen
 *
 *> \par Further Details:
 *  =====================
@@ -445,9 +443,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
+      SUBROUTINE STGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, M, PL,
      $                   PR, DIF, WORK, LWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -486,12 +486,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLACPY, SLAG2, SLASSQ, STGEXC, STGSYL,
+      EXTERNAL           SLACN2, SLACPY, SLAG2, SLASSQ, STGEXC,
+     $                   STGSYL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -561,7 +562,7 @@
       END IF
 *
       IF( IJOB.EQ.1 .OR. IJOB.EQ.2 .OR. IJOB.EQ.4 ) THEN
-         LWMIN = MAX( 1, 4*N+16, 2*M*(N-M) )
+         LWMIN = MAX( 1, 4*N+16, 2*M*(N-M) + 1 )
          LIWMIN = MAX( 1, N+6 )
       ELSE IF( IJOB.EQ.3 .OR. IJOB.EQ.5 ) THEN
          LWMIN = MAX( 1, 4*N+16, 4*M*(N-M) )
@@ -571,7 +572,7 @@
          LIWMIN = 1
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -634,7 +635,8 @@
 *
                KK = K
                IF( K.NE.KS )
-     $            CALL STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $            CALL STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, KK, KS, WORK, LWORK, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -668,7 +670,8 @@
          I = N1 + 1
          IJB = 0
          CALL SLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 )
-         CALL SLACPY( 'Full', N1, N2, B( 1, I ), LDB, WORK( N1*N2+1 ),
+         CALL SLACPY( 'Full', N1, N2, B( 1, I ), LDB,
+     $                WORK( N1*N2+1 ),
      $                N1 )
          CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
      $                N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ), N1,
@@ -710,14 +713,16 @@
 *
 *           Frobenius norm-based Difu-estimate.
 *
-            CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
+            CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+     $                   WORK,
      $                   N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ),
      $                   N1, DSCALE, DIF( 1 ), WORK( 2*N1*N2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
 *
 *           Frobenius norm-based Difl-estimate.
 *
-            CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA, WORK,
+            CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+     $                   WORK,
      $                   N2, B( I, I ), LDB, B, LDB, WORK( N1*N2+1 ),
      $                   N2, DSCALE, DIF( 2 ), WORK( 2*N1*N2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
@@ -746,7 +751,8 @@
 *
 *                 Solve generalized Sylvester equation.
 *
-                  CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL STGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -755,7 +761,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL STGSYL( 'T', IJB, N1, N2, A, LDA, A( I, I ), LDA,
+                  CALL STGSYL( 'T', IJB, N1, N2, A, LDA, A( I, I ),
+     $                         LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
      $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -775,7 +782,8 @@
 *
 *                 Solve generalized Sylvester equation.
 *
-                  CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL STGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -784,7 +792,8 @@
 *
 *                 Solve the transposed variant.
 *
-                  CALL STGSYL( 'T', IJB, N2, N1, A( I, I ), LDA, A, LDA,
+                  CALL STGSYL( 'T', IJB, N2, N1, A( I, I ), LDA, A,
+     $                         LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
      $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( 2*N1*N2+1 ), LWORK-2*N1*N2, IWORK,
@@ -826,7 +835,8 @@
                WORK( 6 ) = B( K+1, K )
                WORK( 7 ) = B( K, K+1 )
                WORK( 8 ) = B( K+1, K+1 )
-               CALL SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA( K ),
+               CALL SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS,
+     $                     BETA( K ),
      $                     BETA( K+1 ), ALPHAR( K ), ALPHAR( K+1 ),
      $                     ALPHAI( K ) )
                ALPHAI( K+1 ) = -ALPHAI( K )
@@ -852,7 +862,7 @@
          END IF
    70 CONTINUE
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
 *
       RETURN

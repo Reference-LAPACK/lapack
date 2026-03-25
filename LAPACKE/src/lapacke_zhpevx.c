@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhpevx( int matrix_layout, char jobz, char range, char uplo,
+lapack_int API_SUFFIX(LAPACKE_zhpevx)( int matrix_layout, char jobz, char range, char uplo,
                            lapack_int n, lapack_complex_double* ap, double vl,
                            double vu, lapack_int il, lapack_int iu,
                            double abstol, lapack_int* m, double* w,
@@ -44,25 +44,25 @@ lapack_int LAPACKE_zhpevx( int matrix_layout, char jobz, char range, char uplo,
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zhpevx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhpevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_d_nancheck( 1, &abstol, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &abstol, 1 ) ) {
             return -11;
         }
-        if( LAPACKE_zhp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_zhp_nancheck)( n, ap ) ) {
             return -6;
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_d_nancheck( 1, &vl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vl, 1 ) ) {
                 return -7;
             }
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_d_nancheck( 1, &vu, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_d_nancheck)( 1, &vu, 1 ) ) {
                 return -8;
             }
         }
@@ -86,7 +86,7 @@ lapack_int LAPACKE_zhpevx( int matrix_layout, char jobz, char range, char uplo,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhpevx_work( matrix_layout, jobz, range, uplo, n, ap, vl, vu,
+    info = API_SUFFIX(LAPACKE_zhpevx_work)( matrix_layout, jobz, range, uplo, n, ap, vl, vu,
                                 il, iu, abstol, m, w, z, ldz, work, rwork,
                                 iwork, ifail );
     /* Release memory and exit */
@@ -97,7 +97,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zhpevx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhpevx", info );
     }
     return info;
 }

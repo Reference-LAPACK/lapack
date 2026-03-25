@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGSVP + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggsvp.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggsvp.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -392,8 +390,8 @@
 *
 *           Update Q := Q*Z**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU, Q,
-     $                   LDQ, WORK, INFO )
+            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU,
+     $                   Q, LDQ, WORK, INFO )
          END IF
 *
 *        Clean up B
@@ -439,8 +437,8 @@
 *
          CALL SLASET( 'Full', M, M, ZERO, ZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
-     $                   LDU )
+     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA,
+     $                   U( 2, 1 ), LDU )
          CALL SORG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
 *
@@ -460,7 +458,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ), LDA )
+     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -472,8 +471,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA, TAU,
-     $                   Q, LDQ, WORK, INFO )
+            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA,
+     $                   TAU, Q, LDQ, WORK, INFO )
          END IF
 *
 *        Clean up A
@@ -497,9 +496,9 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL SORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
-     $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
-     $                   WORK, INFO )
+            CALL SORM2R( 'Right', 'No transpose', M, M-K,
+     $                   MIN( M-K, L ), A( K+1, N-L+1 ), LDA, TAU,
+     $                   U( 1, K+1 ), LDU, WORK, INFO )
          END IF
 *
 *        Clean up

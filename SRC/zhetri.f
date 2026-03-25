@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHETRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -107,10 +105,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup hetri
 *
 *  =====================================================================
       SUBROUTINE ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,7 +222,8 @@
                CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
             END IF
             KSTEP = 1
@@ -248,15 +248,18 @@
                CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1,
+     $            A( 1,
      $                     K ), 1 ) )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       ZDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       ZDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL ZCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         DBLE( ZDOTC( K-1, WORK, 1, A( 1, K+1 ),
+     $                         DBLE( ZDOTC( K-1, WORK, 1, A( 1,
+     $                               K+1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -316,7 +319,8 @@
 *
             IF( K.LT.N ) THEN
                CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, ZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
@@ -341,18 +345,22 @@
 *
             IF( K.LT.N ) THEN
                CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, ZERO, A( K+1, K ), 1 )
                A( K, K ) = A( K, K ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       ZDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       ZDOTC( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL ZCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA,
+     $                     WORK,
      $                     1, ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         DBLE( ZDOTC( N-K, WORK, 1, A( K+1, K-1 ),
+     $                         DBLE( ZDOTC( N-K, WORK, 1, A( K+1,
+     $                               K-1 ),
      $                         1 ) )
             END IF
             KSTEP = 2

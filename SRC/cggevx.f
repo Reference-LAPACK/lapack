@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGGEVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggevx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggevx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -335,7 +333,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEeigen
+*> \ingroup ggevx
 *
 *> \par Further Details:
 *  =====================
@@ -367,10 +365,12 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
+      SUBROUTINE CGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B,
+     $                   LDB,
      $                   ALPHA, BETA, VL, LDVL, VR, LDVR, ILO, IHI,
      $                   LSCALE, RSCALE, ABNRM, BBNRM, RCONDE, RCONDV,
      $                   WORK, LWORK, RWORK, IWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -414,15 +414,17 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ,
+     $                   CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CTGSNA, CUNGQR, CUNMQR,
      $                   SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH
+      REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
@@ -513,15 +515,18 @@
             END IF
             MAXWRK = MINWRK
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'CGEQRF', ' ', N, 1, N,
+     $                                  0 ) )
             MAXWRK = MAX( MAXWRK,
-     $                    N + N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N, 0 ) )
+     $                    N + N*ILAENV( 1, 'CUNMQR', ' ', N, 1, N,
+     $                                  0 ) )
             IF( ILVL ) THEN
                MAXWRK = MAX( MAXWRK, N +
-     $                       N*ILAENV( 1, 'CUNGQR', ' ', N, 1, N, 0 ) )
+     $                       N*ILAENV( 1, 'CUNGQR', ' ', N, 1, N,
+     $                                 0 ) )
             END IF
          END IF
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
 *
          IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN
             INFO = -25
@@ -579,7 +584,8 @@
 *     Permute and/or balance the matrix pair (A,B)
 *     (Real Workspace: need 6*N if BALANC = 'S' or 'B', 1 otherwise)
 *
-      CALL CGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL CGGBAL( BALANC, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+     $             RSCALE,
      $             RWORK, IERR )
 *
 *     Compute ABNRM and BBNRM
@@ -748,7 +754,8 @@
 *     (Workspace: none needed)
 *
       IF( ILVL ) THEN
-         CALL CGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N, VL,
+         CALL CGGBAK( BALANC, 'L', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VL,
      $                LDVL, IERR )
 *
          DO 50 JC = 1, N
@@ -766,7 +773,8 @@
       END IF
 *
       IF( ILVR ) THEN
-         CALL CGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N, VR,
+         CALL CGGBAK( BALANC, 'R', N, ILO, IHI, LSCALE, RSCALE, N,
+     $                VR,
      $                LDVR, IERR )
          DO 80 JC = 1, N
             TEMP = ZERO
@@ -792,7 +800,7 @@
       IF( ILBSCL )
      $   CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
       RETURN
 *
 *     End of CGGEVX

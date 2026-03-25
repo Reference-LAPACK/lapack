@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgttrf_work( lapack_int n, lapack_complex_float* dl,
+lapack_int API_SUFFIX(LAPACKE_cgttrf_work)( lapack_int n, lapack_complex_float* dl,
                                 lapack_complex_float* d,
                                 lapack_complex_float* du,
                                 lapack_complex_float* du2, lapack_int* ipiv )

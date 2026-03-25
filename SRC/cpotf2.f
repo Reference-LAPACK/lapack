@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPOTF2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotf2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotf2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -89,8 +87,8 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
-*>          > 0: if INFO = k, the leading minor of order k is not
-*>               positive definite, and the factorization could not be
+*>          > 0: if INFO = k, the leading principal minor of order k
+*>               is not positive, and the factorization could not be
 *>               completed.
 *> \endverbatim
 *
@@ -102,10 +100,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup potf2
 *
 *  =====================================================================
       SUBROUTINE CPOTF2( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -201,7 +200,8 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( REAL( A( J, J ) ) - CDOTC( J-1, A( J, 1 ), LDA,
+            AJJ = REAL( REAL( A( J, J ) ) - CDOTC( J-1, A( J, 1 ),
+     $                  LDA,
      $            A( J, 1 ), LDA ) )
             IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
@@ -214,7 +214,8 @@
 *
             IF( J.LT.N ) THEN
                CALL CLACGV( J-1, A( J, 1 ), LDA )
-               CALL CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1 ),
+               CALL CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1,
+     $                     1 ),
      $                     LDA, A( J, 1 ), LDA, CONE, A( J+1, J ), 1 )
                CALL CLACGV( J-1, A( J, 1 ), LDA )
                CALL CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )

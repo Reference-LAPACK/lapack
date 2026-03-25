@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEESX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeesx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeesx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -272,12 +270,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEeigen
+*> \ingroup geesx
 *
 *  =====================================================================
       SUBROUTINE DGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM,
      $                   WR, WI, VS, LDVS, RCONDE, RCONDV, WORK, LWORK,
      $                   IWORK, LIWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -317,7 +316,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLACPY,
+      EXTERNAL           DCOPY, DGEBAK, DGEBAL, DGEHRD, DHSEQR,
+     $                   DLACPY,
      $                   DLASCL, DORGHR, DSWAP, DTRSEN, XERBLA
 *     ..
 *     .. External Functions ..
@@ -344,7 +344,8 @@
 *
       IF( ( .NOT.WANTVS ) .AND. ( .NOT.LSAME( JOBVS, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND.
+     $         ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .OR.
      $         ( .NOT.WANTST .AND. .NOT.WANTSN ) ) THEN
@@ -380,7 +381,8 @@
             MAXWRK = 2*N + N*ILAENV( 1, 'DGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 3*N
 *
-            CALL DHSEQR( 'S', JOBVS, N, 1, N, A, LDA, WR, WI, VS, LDVS,
+            CALL DHSEQR( 'S', JOBVS, N, 1, N, A, LDA, WR, WI, VS,
+     $                   LDVS,
      $             WORK, -1, IEVAL )
             HSWORK = INT( WORK( 1 ) )
 *
@@ -466,7 +468,8 @@
 *        Generate orthogonal matrix in VS
 *        (RWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *
-         CALL DORGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK ),
+         CALL DORGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
       END IF
 *
@@ -499,7 +502,8 @@
 *        (IWorkspace: if SENSE is 'V' or 'B', need SDIM*(N-SDIM)
 *                     otherwise, need 0 )
 *
-         CALL DTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, WR, WI,
+         CALL DTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, WR,
+     $                WI,
      $                SDIM, RCONDE, RCONDV, WORK( IWRK ), LWORK-IWRK+1,
      $                IWORK, LIWORK, ICOND )
          IF( .NOT.WANTSN )
@@ -527,7 +531,8 @@
 *        Undo balancing
 *        (RWorkspace: need N)
 *
-         CALL DGEBAK( 'P', 'R', N, ILO, IHI, WORK( IBAL ), N, VS, LDVS,
+         CALL DGEBAK( 'P', 'R', N, ILO, IHI, WORK( IBAL ), N, VS,
+     $                LDVS,
      $                IERR )
       END IF
 *
@@ -539,7 +544,8 @@
          CALL DCOPY( N, A, LDA+1, WR, 1 )
          IF( ( WANTSV .OR. WANTSB ) .AND. INFO.EQ.0 ) THEN
             DUM( 1 ) = RCONDV
-            CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, 1, 1, DUM, 1, IERR )
+            CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, 1, 1, DUM, 1,
+     $                   IERR )
             RCONDV = DUM( 1 )
          END IF
          IF( CSCALE.EQ.SMLNUM ) THEN
@@ -575,12 +581,14 @@
                      WI( I ) = ZERO
                      WI( I+1 ) = ZERO
                      IF( I.GT.1 )
-     $                  CALL DSWAP( I-1, A( 1, I ), 1, A( 1, I+1 ), 1 )
+     $                  CALL DSWAP( I-1, A( 1, I ), 1, A( 1, I+1 ),
+     $                              1 )
                      IF( N.GT.I+1 )
      $                  CALL DSWAP( N-I-1, A( I, I+2 ), LDA,
      $                              A( I+1, I+2 ), LDA )
                      IF( WANTVS ) THEN
-                       CALL DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ), 1 )
+                       CALL DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ),
+     $                             1 )
                      END IF
                      A( I, I+1 ) = A( I+1, I )
                      A( I+1, I ) = ZERO

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPOSVXX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposvxx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvxx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -88,7 +86,7 @@
 *>    where U is an upper triangular matrix and L is a lower triangular
 *>    matrix.
 *>
-*>    3. If the leading i-by-i principal minor is not positive definite,
+*>    3. If the leading principal minor of order i is not positive,
 *>    then the routine returns with INFO = i. Otherwise, the factored
 *>    form of A is used to estimate the condition number of the matrix
 *>    A (see argument RCOND).  If the reciprocal of the condition number
@@ -487,13 +485,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOsolve
+*> \ingroup posvxx
 *
 *  =====================================================================
-      SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -540,7 +540,8 @@
       REAL               SLAMCH, SLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOEQUB, SPOTRF, SPOTRS, SLACPY, SLAQSY,
+      EXTERNAL           SPOEQUB, SPOTRF, SPOTRS, SLACPY,
+     $                   SLAQSY,
      $                   XERBLA, SLASCL2, SPORFSX
 *     ..
 *     .. Intrinsic Functions ..
@@ -648,7 +649,8 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK )
+            RPVGRW = SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF,
+     $                             WORK )
             RETURN
          ENDIF
       END IF

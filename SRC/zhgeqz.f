@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHGEQZ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhgeqz.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhgeqz.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -266,7 +264,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup hgeqz
 *
 *> \par Further Details:
 *  =====================
@@ -278,9 +276,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+      SUBROUTINE ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T,
+     $                   LDT,
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
      $                   RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -579,7 +579,8 @@
                      CALL ZROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, DCONJG( S ) )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -606,12 +607,14 @@
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = CZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL ZROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
+     $                  CALL ZROT( ILASTM-JCH-1, T( JCH, JCH+2 ),
+     $                             LDT,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
                      CALL ZROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, DCONJG( S ) )
                      CTEMP = H( JCH+1, JCH )
                      CALL ZLARTG( CTEMP, H( JCH+1, JCH-1 ), C, S,
@@ -622,7 +625,8 @@
                      CALL ZROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL ZROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
+     $                  CALL ZROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ),
+     $                             1,
      $                             C, S )
    30             CONTINUE
                   GO TO 50
@@ -657,7 +661,8 @@
          CALL ZROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL ZROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
+     $      CALL ZROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C,
+     $                 S )
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA
 *
@@ -667,8 +672,10 @@
             SIGNBC = DCONJG( T( ILAST, ILAST ) / ABSB )
             T( ILAST, ILAST ) = ABSB
             IF( ILSCHR ) THEN
-               CALL ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ), 1 )
-               CALL ZSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST ),
+               CALL ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ),
+     $                     1 )
+               CALL ZSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM,
+     $                     ILAST ),
      $                     1 )
             ELSE
                CALL ZSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )

@@ -188,6 +188,7 @@
       SUBROUTINE SCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

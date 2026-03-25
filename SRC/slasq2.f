@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLASQ2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -95,7 +93,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup lasq2
 *
 *> \par Further Details:
 *  =====================
@@ -109,6 +107,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLASQ2( N, Z, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -467,7 +466,8 @@
 *
 *           While submatrix unfinished take a good dqds step.
 *
-            CALL SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
+            CALL SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX,
+     $                   NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
@@ -584,7 +584,7 @@
       Z( 2*N+2 ) = E
       Z( 2*N+3 ) = REAL( ITER )
       Z( 2*N+4 ) = REAL( NDIV ) / REAL( N**2 )
-      Z( 2*N+5 ) = HUNDRD*NFAIL / REAL( ITER )
+      Z( 2*N+5 ) = HUNDRD*REAL( NFAIL / ITER )
       RETURN
 *
 *     End of SLASQ2

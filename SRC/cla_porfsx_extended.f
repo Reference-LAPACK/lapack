@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLA_PORFSX_EXTENDED + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_porfsx_extended.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_porfsx_extended.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -374,16 +372,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexPOcomputational
+*> \ingroup la_porfsx_extended
 *
 *  =====================================================================
-      SUBROUTINE CLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE CLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A,
+     $                                LDA,
      $                                AF, LDAF, COLEQU, C, B, LDB, Y,
      $                                LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
      $                                AYB, DY, Y_TAIL, RCOND, ITHRESH,
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -448,7 +448,8 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CPOTRS, CHEMV, BLAS_CHEMV_X,
+      EXTERNAL           CAXPY, CCOPY, CPOTRS, CHEMV,
+     $                   BLAS_CHEMV_X,
      $                   BLAS_CHEMV2_X, CLA_HEAMV, CLA_WWADDW,
      $                   CLA_LIN_BERR, SLAMCH
       REAL               SLAMCH
@@ -662,7 +663,8 @@
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL CHEMV(UPLO, N, CMPLX(-1.0), A, LDA, Y(1,J), 1, CMPLX(1.0),
+         CALL CHEMV(UPLO, N, CMPLX(-1.0), A, LDA, Y(1,J), 1,
+     $               CMPLX(1.0),
      $        RES, 1)
 
          DO I = 1, N

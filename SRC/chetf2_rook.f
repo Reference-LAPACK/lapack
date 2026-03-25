@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETF2_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetf2_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetf2_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -129,7 +127,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hetf2_rook
 *
 *> \par Further Details:
 *  =====================
@@ -191,6 +189,7 @@
 *
 *  =====================================================================
       SUBROUTINE CHETF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -485,7 +484,8 @@
 *                       = A - W(k)*1/D(k)*W(k)**T
 *
                      D11 = ONE / REAL( A( K, K ) )
-                     CALL CHER( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL CHER( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
 *
 *                    Store U(k) in column k
 *
@@ -504,7 +504,8 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *                       = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T
 *
-                     CALL CHER( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL CHER( UPLO, K-1, -D11, A( 1, K ), 1, A,
+     $                          LDA )
                   END IF
                END IF
 *
@@ -651,14 +652,16 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + ICAMAX( IMAX-K, A( IMAX, K ), LDA )
+                     JMAX = K - 1 + ICAMAX( IMAX-K, A( IMAX, K ),
+     $                                      LDA )
                      ROWMAX = CABS1( A( IMAX, JMAX ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + ICAMAX( N-IMAX, A( IMAX+1, IMAX ),
+                     ITEMP = IMAX + ICAMAX( N-IMAX, A( IMAX+1,
+     $                                      IMAX ),
      $                                     1 )
                      STEMP = CABS1( A( ITEMP, IMAX ) )
                      IF( STEMP.GT.ROWMAX ) THEN
@@ -747,7 +750,8 @@
             IF( KP.NE.KK ) THEN
 *              (1) Swap columnar parts
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
+     $                        1 )
 *              (2) Swap and conjugate middle parts
                DO 45 J = KK + 1, KP - 1
                   T = CONJG( A( J, KK ) )

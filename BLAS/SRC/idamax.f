@@ -54,7 +54,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup aux_blas
+*> \ingroup iamax
 *
 *> \par Further Details:
 *  =====================
@@ -68,6 +68,7 @@
 *>
 *  =====================================================================
       INTEGER FUNCTION IDAMAX(N,DX,INCX)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

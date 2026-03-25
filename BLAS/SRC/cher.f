@@ -114,7 +114,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level2
+*> \ingroup her
 *
 *> \par Further Details:
 *  =====================
@@ -132,6 +132,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CHER(UPLO,N,ALPHA,X,INCX,A,LDA)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

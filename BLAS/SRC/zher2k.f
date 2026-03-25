@@ -174,7 +174,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16_blas_level3
+*> \ingroup her2k
 *
 *> \par Further Details:
 *  =====================
@@ -195,6 +195,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZHER2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

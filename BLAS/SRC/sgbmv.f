@@ -146,6 +146,8 @@
 *>           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.
 *>           Before entry, the incremented array Y must contain the
 *>           vector y. On exit, Y is overwritten by the updated vector y.
+*>           If either m or n is zero, then Y not referenced and the function
+*>           performs a quick return.
 *> \endverbatim
 *>
 *> \param[in] INCY
@@ -163,7 +165,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level2
+*> \ingroup gbmv
 *
 *> \par Further Details:
 *  =====================
@@ -181,7 +183,9 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE SGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,
+     +        BETA,Y,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

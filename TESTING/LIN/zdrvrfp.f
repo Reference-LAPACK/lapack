@@ -241,6 +241,7 @@
      +              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
      +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

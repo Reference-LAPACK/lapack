@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHERFSX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cherfsx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cherfsx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -391,13 +389,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup herfsx
 *
 *  =====================================================================
-      SUBROUTINE CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -459,7 +459,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           SLAMCH, CLANHE, CLA_HERCOND_X, CLA_HERCOND_C
+      EXTERNAL           SLAMCH, CLANHE, CLA_HERCOND_X,
+     $                   CLA_HERCOND_C
       REAL               SLAMCH, CLANHE, CLA_HERCOND_X, CLA_HERCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
@@ -516,7 +517,8 @@
 *
 *     Test input parameters.
 *
-      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
@@ -608,10 +610,12 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           S, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
+            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF,
+     $                                 IPIV,
      $           S, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS

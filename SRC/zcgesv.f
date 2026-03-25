@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZCGESV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcgesv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcgesv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -193,11 +191,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEsolve
+*> \ingroup gesv_mixed
 *
 *  =====================================================================
       SUBROUTINE ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -236,7 +235,8 @@
       COMPLEX*16         ZDUM
 *
 *     .. External Subroutines ..
-      EXTERNAL           CGETRS, CGETRF, CLAG2Z, XERBLA, ZAXPY, ZGEMM,
+      EXTERNAL           CGETRS, CGETRF, CLAG2Z, XERBLA, ZAXPY,
+     $                   ZGEMM,
      $                   ZLACPY, ZLAG2C, ZGETRF, ZGETRS
 *     ..
 *     .. External Functions ..
@@ -342,7 +342,8 @@
 *
       CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-      CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE, A,
+      CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+     $            A,
      $            LDA, X, LDX, ONE, WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
@@ -377,7 +378,8 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
+         CALL CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N,
+     $                IPIV,
      $                SWORK( PTSX ), N, INFO )
 *
 *        Convert SX back to double precision and update the current
@@ -393,7 +395,8 @@
 *
          CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-         CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+         CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N,
+     $               NEGONE,
      $               A, LDA, X, LDX, ONE, WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the

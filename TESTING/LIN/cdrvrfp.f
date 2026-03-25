@@ -241,6 +241,7 @@
      +              C_WORK_CLATMS, C_WORK_CPOT02,
      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

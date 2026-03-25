@@ -66,7 +66,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level1
+*> \ingroup dot
 *
 *> \par Further Details:
 *  =====================
@@ -79,6 +79,7 @@
 *>
 *  =====================================================================
       REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

@@ -34,6 +34,7 @@
 *
 *  =====================================================================
       PROGRAM CBLAT1
+      IMPLICIT NONE
 *
 *  -- Reference BLAS test routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -58,7 +59,7 @@
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 10
+      DO 20 IC = 1, 11
          ICASE = IC
          CALL HEADER
 *
@@ -71,7 +72,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5) THEN
+         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -88,6 +89,7 @@
 *
       END
       SUBROUTINE HEADER
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -95,7 +97,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(10)
+      CHARACTER*6      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -109,6 +111,8 @@
       DATA             L(8)/'CSCAL '/
       DATA             L(9)/'CSSCAL'/
       DATA             L(10)/'ICAMAX'/
+      DATA             L(11)/'CAXPBY'/
+
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
@@ -119,9 +123,11 @@
 *
       END
       SUBROUTINE CHECK1(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
-      PARAMETER         (NOUT=6)
+      REAL              THRESH
+      PARAMETER         (NOUT=6, THRESH=10.0E0)
 *     .. Scalar Arguments ..
       REAL              SFAC
 *     .. Scalars in Common ..
@@ -141,7 +147,7 @@
       INTEGER           ICAMAX
       EXTERNAL          SCASUM, SCNRM2, ICAMAX
 *     .. External Subroutines ..
-      EXTERNAL          CSCAL, CSSCAL, CTEST, ITEST1, STEST1
+      EXTERNAL          CB1NRM2, CSCAL, CSSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
       INTRINSIC         MAX
 *     .. Common blocks ..
@@ -256,6 +262,10 @@
    20       CONTINUE
             IF (ICASE.EQ.6) THEN
 *              .. SCNRM2 ..
+*              Test scaling when some entries are tiny or huge
+               CALL CB1NRM2(N,(INCX-2)*2,THRESH)
+               CALL CB1NRM2(N,INCX,THRESH)
+*              Test with hardcoded mid range entries
                CALL STEST1(SCNRM2(N,CX,INCX),STRUE2(NP1),STRUE2(NP1),
      +                     SFAC)
             ELSE IF (ICASE.EQ.7) THEN
@@ -340,6 +350,7 @@
 *
       END
       SUBROUTINE CHECK2(SFAC)
+      IMPLICIT NONE
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -349,26 +360,27 @@
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      COMPLEX           CA
+      COMPLEX           CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
 *     .. Local Arrays ..
       COMPLEX           CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
      +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
-     +                  CY(7), CY0(1), CY1(7)
+     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX           CDOTC, CDOTU
       EXTERNAL          CDOTC, CDOTU
 *     .. External Subroutines ..
-      EXTERNAL          CAXPY, CCOPY, CSWAP, CTEST
+      EXTERNAL          CAXPY, CAXPBY, CCOPY, CSWAP, CTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
       DATA              CA/(0.4E0,-0.7E0)/
+      DATA              CB/(0.7E0,-0.4E0)/
       DATA              INCXS/1, 2, -2, -1/
       DATA              INCYS/1, -2, 1, -2/
       DATA              LENS/1, 1, 2, 4, 1, 1, 3, 7/
@@ -538,6 +550,53 @@
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0),
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0),
      +                  (1.54E0,1.54E0), (1.54E0,1.54E0)/
+
+      DATA              ((CT11(I,J,1),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.1E0,-1.47E0),
+     +                  (-1.08E0,0.71E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (-1.08E0,0.71E0),
+     +                  (-0.42E0,-0.99E0), (-0.61E0,-0.85E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0)/
+      DATA              ((CT11(I,J,2),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.49E0,-0.95E0),
+     +                  (-0.9E0,0.5E0),(-0.03E0,-1.51E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.36E0,0.00E0), (-0.9E0,0.5E0),
+     +                  (-0.39E0,-0.23E0), (0.1E0,-0.5E0),
+     +                  (-0.82E0,-0.39E0), (-0.5E0,-0.3E0),
+     +                  (0.0E0,-1.62E0)/
+      DATA              ((CT11(I,J,3),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.49E0,-0.95E0),
+     +                  (-0.71E0,-0.1E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.36E0,0.00E0), (-1.07E0,1.18E0),
+     +                  (-0.42E0,-0.99E0), (-0.41E0,-1.2E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0)/
+      DATA              ((CT11(I,J,4),I=1,7),J=1,4)/(0.6E0,-0.6E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (-0.1E0,-1.47E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.1E0,-1.47E0), (-0.9E0,0.5E0),
+     +                  (-0.4E0,-0.7E0), (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0), (-0.1E0,-1.47E0),
+     +                  (-0.9E0,0.5E0),(-0.4E0,-0.7E0), (0.1E0,-0.5E0),
+     +                  (-0.82E0,-0.39E0), (-0.5E0,-0.3E0),
+     +                  (-0.2E0,-1.27E0)/
+
 *     .. Executable Statements ..
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
@@ -593,6 +652,10 @@
                CALL CSWAP(N,CX,INCX,CY,INCY)
                CALL CTEST(LENX,CX,CT10X(1,KN,KI),CSIZE3,1.0E0)
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0E0)
+            ELSE IF (ICASE.EQ.11) THEN
+*              .. CAXBPY ..
+               CALL CAXPBY(N,CA,CX,INCX,CB,CY,INCY)
+               CALL CTEST(LENY,CY,CT11(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
                STOP
@@ -606,6 +669,7 @@
 *
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
@@ -665,6 +729,7 @@
 *
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+      IMPLICIT NONE
 *     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMMODATE THE FORTRAN
@@ -693,6 +758,7 @@
 *
       END
       REAL             FUNCTION SDIFF(SA,SB)
+      IMPLICIT NONE
 *     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
@@ -706,6 +772,7 @@
 *
       END
       SUBROUTINE CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
+      IMPLICIT NONE
 *     **************************** CTEST *****************************
 *
 *     C.L. LAWSON, JPL, 1978 DEC 6
@@ -740,6 +807,7 @@
 *
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
+      IMPLICIT NONE
 *     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
@@ -781,4 +849,235 @@
 *
 *     End of ITEST1
 *
+      END
+      SUBROUTINE CB1NRM2(N,INCX,THRESH)
+      IMPLICIT NONE
+*     Compare NRM2 with a reference computation using combinations
+*     of the following values:
+*
+*     0, very small, small, ulp, 1, 1/ulp, big, very big, infinity, NaN
+*
+*     one of these values is used to initialize x(1) and x(2:N) is
+*     filled with random values from [-1,1] scaled by another of
+*     these values.
+*
+*     This routine is adapted from the test suite provided by
+*     Anderson E. (2017)
+*     Algorithm 978: Safe Scaling in the Level 1 BLAS
+*     ACM Trans Math Softw 44:1--28
+*     https://doi.org/10.1145/3061665
+*
+*     .. Scalar Arguments ..
+      INTEGER           INCX, N
+      REAL              THRESH
+*
+*  =====================================================================
+*     .. Parameters ..
+      INTEGER           NMAX, NOUT, NV
+      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      REAL              HALF, ONE, THREE, TWO, ZERO
+      PARAMETER         (HALF=0.5E+0, ONE=1.0E+0, TWO= 2.0E+0,
+     &                  THREE=3.0E+0, ZERO=0.0E+0)
+*     .. External Functions ..
+      REAL              SCNRM2
+      EXTERNAL          SCNRM2
+*     .. Intrinsic Functions ..
+      INTRINSIC         AIMAG, ABS, CMPLX, MAX, MIN, REAL, SQRT
+*     .. Model parameters ..
+      REAL              BIGNUM, SAFMAX, SAFMIN, SMLNUM, ULP
+      PARAMETER         (BIGNUM=0.1014120480E+32,
+     &                  SAFMAX=0.8507059173E+38,
+     &                  SAFMIN=0.1175494351E-37,
+     &                  SMLNUM=0.9860761315E-31,
+     &                  ULP=0.1192092896E-06)
+*     .. Local Scalars ..
+      COMPLEX           ROGUE
+      REAL              SNRM, TRAT, V0, V1, WORKSSQ, Y1, Y2,
+     &                  YMAX, YMIN, YNRM, ZNRM
+      INTEGER           I, IV, IW, IX, KS
+      LOGICAL           FIRST
+*     .. Local Arrays ..
+      COMPLEX           X(NMAX), Z(NMAX)
+      REAL              VALUES(NV), WORK(NMAX)
+*     .. Executable Statements ..
+      VALUES(1) = ZERO
+      VALUES(2) = TWO*SAFMIN
+      VALUES(3) = SMLNUM
+      VALUES(4) = ULP
+      VALUES(5) = ONE
+      VALUES(6) = ONE / ULP
+      VALUES(7) = BIGNUM
+      VALUES(8) = SAFMAX
+      VALUES(9) = SXVALS(V0,2)
+      VALUES(10) = SXVALS(V0,3)
+      ROGUE = CMPLX(1234.5678E+0,-1234.5678E+0)
+      FIRST = .TRUE.
+*
+*     Check that the arrays are large enough
+*
+      IF (N*ABS(INCX).GT.NMAX) THEN
+         WRITE (NOUT,99) "SCNRM2", NMAX, INCX, N, N*ABS(INCX)
+         RETURN
+      END IF
+*
+*     Zero-sized inputs are tested in STEST1.
+      IF (N.LE.0) THEN
+         RETURN
+      END IF
+*
+*     Generate 2*(N-1) values in (-1,1).
+*
+      KS = 2*(N-1)
+      DO I = 1, KS
+         CALL RANDOM_NUMBER(WORK(I))
+         WORK(I) = ONE - TWO*WORK(I)
+      END DO
+*
+*     Compute the sum of squares of the random values
+*     by an unscaled algorithm.
+*
+      WORKSSQ = ZERO
+      DO I = 1, KS
+         WORKSSQ = WORKSSQ + WORK(I)*WORK(I)
+      END DO
+*
+*     Construct the test vector with one known value
+*     and the rest from the random work array multiplied
+*     by a scaling factor.
+*
+      DO IV = 1, NV
+         V0 = VALUES(IV)
+         IF (ABS(V0).GT.ONE) THEN
+            V0 = V0*HALF*HALF
+         END IF
+         Z(1) = CMPLX(V0,-THREE*V0)
+         DO IW = 1, NV
+            V1 = VALUES(IW)
+            IF (ABS(V1).GT.ONE) THEN
+               V1 = (V1*HALF) / SQRT(REAL(KS+1))
+            END IF
+            DO I = 1, N-1
+               Z(I+1) = CMPLX(V1*WORK(2*I-1),V1*WORK(2*I))
+            END DO
+*
+*           Compute the expected value of the 2-norm
+*
+            Y1 = ABS(V0) * SQRT(10.0E0)
+            IF (N.GT.1) THEN
+               Y2 = ABS(V1)*SQRT(WORKSSQ)
+            ELSE
+               Y2 = ZERO
+            END IF
+            YMIN = MIN(Y1, Y2)
+            YMAX = MAX(Y1, Y2)
+*
+*           Expected value is NaN if either is NaN. The test
+*           for YMIN == YMAX avoids further computation if both
+*           are infinity.
+*
+            IF ((Y1.NE.Y1).OR.(Y2.NE.Y2)) THEN
+*              add to propagate NaN
+               YNRM = Y1 + Y2
+            ELSE IF (YMIN == YMAX) THEN
+               YNRM = SQRT(TWO)*YMAX
+            ELSE IF (YMAX == ZERO) THEN
+               YNRM = ZERO
+            ELSE
+               YNRM = YMAX*SQRT(ONE + (YMIN / YMAX)**2)
+            END IF
+*
+*           Fill the input array to SCNRM2 with steps of incx
+*
+            DO I = 1, N
+               X(I) = ROGUE
+            END DO
+            IX = 1
+            IF (INCX.LT.0) IX = 1 - (N-1)*INCX
+            DO I = 1, N
+               X(IX) = Z(I)
+               IX = IX + INCX
+            END DO
+*
+*           Call SCNRM2 to compute the 2-norm
+*
+            SNRM = SCNRM2(N,X,INCX)
+*
+*           Compare SNRM and ZNRM.  Roundoff error grows like O(n)
+*           in this implementation so we scale the test ratio accordingly.
+*
+            IF (INCX.EQ.0) THEN
+               Y1 = ABS(REAL(X(1)))
+               Y2 = ABS(AIMAG(X(1)))
+               YMIN = MIN(Y1, Y2)
+               YMAX = MAX(Y1, Y2)
+               IF ((Y1.NE.Y1).OR.(Y2.NE.Y2)) THEN
+*                 add to propagate NaN
+                  ZNRM = Y1 + Y2
+               ELSE IF (YMIN == YMAX) THEN
+                  ZNRM = SQRT(TWO)*YMAX
+               ELSE IF (YMAX == ZERO) THEN
+                  ZNRM = ZERO
+               ELSE
+                  ZNRM = YMAX * SQRT(ONE + (YMIN / YMAX)**2)
+               END IF
+               ZNRM = SQRT(REAL(n)) * ZNRM
+            ELSE
+               ZNRM = YNRM
+            END IF
+*
+*           The tests for NaN rely on the compiler not being overly
+*           aggressive and removing the statements altogether.
+            IF ((SNRM.NE.SNRM).OR.(ZNRM.NE.ZNRM)) THEN
+               IF ((SNRM.NE.SNRM).NEQV.(ZNRM.NE.ZNRM)) THEN
+                  TRAT = ONE / ULP
+               ELSE
+                  TRAT = ZERO
+               END IF
+            ELSE IF (ZNRM == ZERO) THEN
+               TRAT = SNRM / ULP
+            ELSE
+               TRAT = (ABS(SNRM-ZNRM) / ZNRM) / (TWO*REAL(N)*ULP)
+            END IF
+            IF ((TRAT.NE.TRAT).OR.(TRAT.GE.THRESH)) THEN
+               IF (FIRST) THEN
+                  FIRST = .FALSE.
+                  WRITE(NOUT,99999)
+               END IF
+               WRITE (NOUT,98) "SCNRM2", N, INCX, IV, IW, TRAT
+            END IF
+         END DO
+      END DO
+99999 FORMAT ('                                       FAIL')
+   99 FORMAT ( ' Not enough space to test ', A6, ': NMAX = ',I6,
+     + ', INCX = ',I6,/,'   N = ',I6,', must be at least ',I6 )
+   98 FORMAT( 1X, A6, ': N=', I6,', INCX=', I4, ', IV=', I2, ', IW=',
+     +  I2, ', test=', E15.8 )
+      RETURN
+      CONTAINS
+      REAL FUNCTION SXVALS(XX,K)
+      IMPLICIT NONE
+*     .. Scalar Arguments ..
+      REAL              XX
+      INTEGER           K
+*     .. Parameters ..
+      REAL              ZERO
+      PARAMETER         (ZERO=0.0E+0)
+*     .. Local Scalars ..
+      REAL              X, Y, Z
+*     .. Intrinsic Functions ..
+      INTRINSIC         HUGE
+*     .. Executable Statements ..
+      X = ZERO
+      Y = HUGE(XX)
+      Z = Y*Y
+      IF (K.EQ.1) THEN
+         X = -Z
+      ELSE IF (K.EQ.2) THEN
+         X = Z
+      ELSE IF (K.EQ.3) THEN
+         X = Z / Z
+      END IF
+      SXVALS = X
+      RETURN
+      END
       END

@@ -165,7 +165,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16_blas_level2
+*> \ingroup hbmv
 *
 *> \par Further Details:
 *  =====================
@@ -184,6 +184,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

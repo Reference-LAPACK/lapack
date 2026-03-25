@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSTEMR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstemr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstemr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -303,7 +301,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup stemr
 *
 *> \par Contributors:
 *  ==================
@@ -312,12 +310,14 @@
 *> Jim Demmel, University of California, Berkeley, USA \n
 *> Inderjit Dhillon, University of Texas, Austin, USA \n
 *> Osni Marques, LBNL/NERSC, USA \n
-*> Christof Voemel, University of California, Berkeley, USA
+*> Christof Voemel, University of California, Berkeley, USA \n
+*> Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n
 *
 *  =====================================================================
       SUBROUTINE SSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -344,7 +344,8 @@
      $                     MINRGP = 3.0E-3 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY
+      LOGICAL            ALLEIG, INDEIG, LQUERY, VALEIG, WANTZ, ZQUERY,
+     $                   LAESWAP
       INTEGER            I, IBEGIN, IEND, IFIRST, IIL, IINDBL, IINDW,
      $                   IINDWK, IINFO, IINSPL, IIU, ILAST, IN, INDD,
      $                   INDE2, INDERR, INDGP, INDGRS, INDWRK, ITMP,
@@ -357,11 +358,12 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANST
-      EXTERNAL           LSAME, SLAMCH, SLANST
+      REAL               SLAMCH, SLANST, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAE2, SLAEV2, SLARRC, SLARRE, SLARRJ,
+      EXTERNAL           SCOPY, SLAE2, SLAEV2, SLARRC, SLARRE,
+     $                   SLARRJ,
      $                   SLARRR, SLARRV, SLASRT, SSCAL, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -378,6 +380,7 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ).OR.( LIWORK.EQ.-1 ) )
       ZQUERY = ( NZC.EQ.-1 )
+      LAESWAP = .FALSE.
 
 *     SSTEMR needs WORK of size 6*N, IWORK of size 3*N.
 *     In addition, SLARRE needs WORK of size 6*N, IWORK of size 5*N.
@@ -440,7 +443,7 @@
       RMAX = MIN( SQRT( BIGNUM ), ONE / SQRT( SQRT( SAFMIN ) ) )
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
          IWORK( 1 ) = LIWMIN
 *
          IF( WANTZ .AND. ALLEIG ) THEN
@@ -455,7 +458,7 @@
             NZCMIN = 0
          ENDIF
          IF( ZQUERY .AND. INFO.EQ.0 ) THEN
-            Z( 1,1 ) = NZCMIN
+            Z( 1,1 ) = REAL( NZCMIN )
          ELSE IF( NZC.LT.NZCMIN .AND. .NOT.ZQUERY ) THEN
             INFO = -14
          END IF
@@ -500,6 +503,15 @@
          ELSE IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
             CALL SLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
          END IF
+*        D/S/LAE2 and D/S/LAEV2 outputs satisfy |R1| >= |R2|. However,
+*        the following code requires R1 >= R2. Hence, we correct
+*        the order of R1, R2, CS, SN if R1 < R2 before further processing.
+         IF( R1.LT.R2 ) THEN
+            E(2) = R1
+            R1 = R2
+            R2 = E(2)
+            LAESWAP = .TRUE.
+         ENDIF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
      $                  (R2.LE.WU)).OR.
@@ -507,8 +519,13 @@
             M = M+1
             W( M ) = R2
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               Z( 1, M ) = -SN
-               Z( 2, M ) = CS
+               IF( LAESWAP ) THEN
+                  Z( 1, M ) = CS
+                  Z( 2, M ) = SN
+               ELSE
+                  Z( 1, M ) = -SN
+                  Z( 2, M ) = CS
+               ENDIF
 *              Note: At most one of SN and CS can be zero.
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
@@ -531,8 +548,13 @@
             M = M+1
             W( M ) = R1
             IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-               Z( 1, M ) = CS
-               Z( 2, M ) = SN
+               IF( LAESWAP ) THEN
+                  Z( 1, M ) = -SN
+                  Z( 2, M ) = CS
+               ELSE
+                  Z( 1, M ) = CS
+                  Z( 2, M ) = SN
+               ENDIF
 *              Note: At most one of SN and CS can be zero.
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
@@ -760,7 +782,7 @@
       ENDIF
 *
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
       IWORK( 1 ) = LIWMIN
       RETURN
 *

@@ -168,7 +168,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level3
+*> \ingroup hemm
 *
 *> \par Further Details:
 *  =====================
@@ -186,6 +186,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -234,7 +235,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
+      IF ((.NOT.LSAME(SIDE,'L')) .AND.
+     +    (.NOT.LSAME(SIDE,'R'))) THEN
           INFO = 1
       ELSE IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
           INFO = 2

@@ -262,9 +262,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
+      SUBROUTINE DLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D,
+     $                   LDD,
      $                   E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
      $                   QBLCKB )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

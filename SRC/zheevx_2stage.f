@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHEEVX_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheevx_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevx_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -209,12 +207,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK. LWORK >= 1, when N <= 1;
-*>          otherwise  
+*>          otherwise
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 8*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + N
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + N
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -253,8 +251,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     ZSTEIN; their indices are stored in IFAIL.
+*>                > N: DSTEBZ returned INFO = INFO - N;
+*>                     see DSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -265,7 +266,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEeigen
+*> \ingroup heevx_2stage
 *
 *> \par Further Details:
 *  =====================
@@ -283,7 +284,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -291,11 +292,11 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
@@ -335,7 +336,7 @@
       CHARACTER          ORDER
       INTEGER            I, IINFO, IMAX, INDD, INDE, INDEE, INDIBL,
      $                   INDISP, INDIWK, INDRWK, INDTAU, INDWRK, ISCALE,
-     $                   ITMP1, J, JJ, LLWORK, 
+     $                   ITMP1, J, JJ, LLWORK,
      $                   NSPLIT, LWMIN, LHTRD, LWTRD, KD, IB, INDHOUS
       DOUBLE PRECISION   ABSTLL, ANRM, BIGNUM, EPS, RMAX, RMIN, SAFMIN,
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
@@ -347,7 +348,8 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA, ZDSCAL,
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTERF, XERBLA,
+     $                   ZDSCAL,
      $                   ZLACPY, ZSTEIN, ZSTEQR, ZSWAP, ZUNGTR, ZUNMTR,
      $                   ZHETRD_2STAGE
 *     ..
@@ -499,7 +501,7 @@
       LLWORK  = LWORK - INDWRK + 1
 *
       CALL ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, RWORK( INDD ),
-     $                    RWORK( INDE ), WORK( INDTAU ), 
+     $                    RWORK( INDE ), WORK( INDTAU ),
      $                    WORK( INDHOUS ), LHTRD, WORK( INDWRK ),
      $                    LLWORK, IINFO )
 *
@@ -552,17 +554,25 @@
       CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             RWORK( INDD ), RWORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), RWORK( INDRWK ),
-     $             IWORK( INDIWK ), INFO )
+     $             IWORK( INDIWK ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 40
+      END IF
 *
       IF( WANTZ ) THEN
          CALL ZSTEIN( N, RWORK( INDD ), RWORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
-     $                RWORK( INDRWK ), IWORK( INDIWK ), IFAIL, INFO )
+     $                RWORK( INDRWK ), IWORK( INDIWK ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply unitary matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by ZSTEIN.
 *
-         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL ZUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWRK ), LLWORK, IINFO )
       END IF
 *

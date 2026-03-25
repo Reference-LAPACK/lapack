@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHEGVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -280,7 +278,7 @@
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
-*>                    minor of order i of B is not positive definite.
+*>                    principal minor of order i of B is not positive.
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
@@ -293,7 +291,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEeigen
+*> \ingroup hegvx
 *
 *> \par Contributors:
 *  ==================
@@ -304,6 +302,7 @@
       SUBROUTINE CHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -335,10 +334,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHEEVX, CHEGST, CPOTRF, CTRMM, CTRSM, XERBLA
+      EXTERNAL           CHEEVX, CHEGST, CPOTRF, CTRMM, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -390,7 +391,7 @@
       IF( INFO.EQ.0 ) THEN
          NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB + 1 )*N )
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY ) THEN
             INFO = -20
@@ -422,7 +423,8 @@
 *     Transform problem to standard eigenvalue problem and solve.
 *
       CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+     $             ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, RWORK, IWORK, IFAIL,
      $             INFO )
 *
@@ -443,7 +445,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -457,14 +460,15 @@
                TRANS = 'N'
             END IF
 *
-            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
+            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE,
+     $                  B,
      $                  LDB, Z, LDZ )
          END IF
       END IF
 *
 *     Set WORK(1) to optimal complex workspace size.
 *
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
       RETURN
 *

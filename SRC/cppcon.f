@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPPCON + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cppcon.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppcon.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -111,10 +109,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup ppcon
 *
 *  =====================================================================
-      SUBROUTINE CPPCON( UPLO, N, AP, ANORM, RCOND, WORK, RWORK, INFO )
+      SUBROUTINE CPPCON( UPLO, N, AP, ANORM, RCOND, WORK, RWORK,
+     $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -211,13 +211,15 @@
 *
 *           Multiply by inv(U).
 *
-            CALL CLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   AP, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL CLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL CLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $                   N,
      $                   AP, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *

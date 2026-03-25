@@ -3,6 +3,7 @@ c
 c     The program is a fortran wrapper for scabs1.
 c
       subroutine scabs1sub(z, cabs1)
+      implicit none
 c
       external scabs1
       complex z

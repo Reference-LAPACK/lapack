@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZUNG2L + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zung2l.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zung2l.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -107,10 +105,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup ung2l
 *
 *  =====================================================================
       SUBROUTINE ZUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,7 +133,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZSCAL
+      EXTERNAL           XERBLA, ZLARF1L, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -178,8 +177,9 @@
 *        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left
 *
          A( M-N+II, II ) = ONE
-         CALL ZLARF( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ), A,
-     $               LDA, WORK )
+         CALL ZLARF1L( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ),
+     $                 A,
+     $                 LDA, WORK )
          CALL ZSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
          A( M-N+II, II ) = ONE - TAU( I )
 *

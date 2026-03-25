@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGSVP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggsvp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggsvp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -227,7 +225,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
+*>          The dimension of the array WORK. LWORK >= 1.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -250,7 +248,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ggsvp3
 *
 *> \par Further Details:
 *  =====================
@@ -301,9 +299,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQP3, SGEQR2, SGERQ2, SLACPY, SLAPMT,
+      EXTERNAL           SGEQP3, SGEQR2, SGERQ2, SLACPY,
+     $                   SLAPMT,
      $                   SLASET, SORG2R, SORM2R, SORMR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -365,7 +366,7 @@
          CALL SGEQP3( M, N, A, LDA, IWORK, TAU, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK ( 1 ) ) )
          LWKOPT = MAX( 1, LWKOPT )
-         WORK( 1 ) = REAL( LWKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -440,7 +441,8 @@
 *
 *           Update Q := Q*Z**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU, Q,
+            CALL SORMR2( 'Right', 'Transpose', N, N, L, B, LDB, TAU,
+     $                   Q,
      $                   LDQ, WORK, INFO )
          END IF
 *
@@ -487,7 +489,8 @@
 *
          CALL SLASET( 'Full', M, M, ZERO, ZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
+     $      CALL SLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2,
+     $                   1 ),
      $                   LDU )
          CALL SORG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
@@ -508,7 +511,8 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ), LDA )
+     $   CALL SLASET( 'Full', M-K, N-L, ZERO, ZERO, A( K+1, 1 ),
+     $                LDA )
 *
       IF( N-L.GT.K ) THEN
 *
@@ -520,7 +524,8 @@
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T
 *
-            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA, TAU,
+            CALL SORMR2( 'Right', 'Transpose', N, N-L, K, A, LDA,
+     $                   TAU,
      $                   Q, LDQ, WORK, INFO )
          END IF
 *
@@ -545,7 +550,8 @@
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL SORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
+            CALL SORM2R( 'Right', 'No transpose', M, M-K, MIN( M-K,
+     $                   L ),
      $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
      $                   WORK, INFO )
          END IF
@@ -560,7 +566,7 @@
 *
       END IF
 *
-      WORK( 1 ) = REAL( LWKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       RETURN
 *
 *     End of SGGSVP3

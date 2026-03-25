@@ -4,11 +4,13 @@
 #######################################################################
 
 macro(add_cblas_test output input target)
-  set(TEST_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/${input}")
+  if(NOT "${input}" STREQUAL "")
+    set(TEST_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/${input}")
+  endif()
   set(TEST_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${output}")
   set(testName "${target}")
 
-  if(EXISTS "${TEST_INPUT}")
+  if(DEFINED TEST_INPUT AND EXISTS "${TEST_INPUT}")
     add_test(NAME CBLAS-${testName} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${target}>
       -DINPUT=${TEST_INPUT}

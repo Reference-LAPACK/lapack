@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZTGSJA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsja.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsja.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -351,7 +349,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup tgsja
 *
 *> \par Further Details:
 *  =====================
@@ -376,6 +374,7 @@
       SUBROUTINE ZTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
      $                   LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
      $                   Q, LDQ, WORK, NCYCLE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -417,7 +416,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARTG, XERBLA, ZCOPY, ZDSCAL, ZLAGS2, ZLAPLL,
+      EXTERNAL           DLARTG, XERBLA, ZCOPY, ZDSCAL, ZLAGS2,
+     $                   ZLAPLL,
      $                   ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
@@ -440,9 +440,13 @@
       INFO = 0
       IF( .NOT.( INITU .OR. WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( INITV .OR. WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITV .OR.
+     $         WANTV .OR.
+     $         LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITQ .OR.
+     $         WANTQ .OR.
+     $         LSAME( JOBQ, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -512,7 +516,8 @@
 *              Update (K+I)-th and (K+J)-th rows of matrix A: U**H *A
 *
                IF( K+J.LE.M )
-     $            CALL ZROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
+     $            CALL ZROT( L, A( K+J, N-L+1 ), LDA, A( K+I,
+     $                       N-L+1 ),
      $                       LDA, CSU, DCONJG( SNU ) )
 *
 *              Update I-th and J-th rows of matrix B: V**H *B
@@ -555,10 +560,12 @@
      $                       SNU )
 *
                IF( WANTV )
-     $            CALL ZROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV )
+     $            CALL ZROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV,
+     $                       SNV )
 *
                IF( WANTQ )
-     $            CALL ZROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, CSQ,
+     $            CALL ZROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1,
+     $                       CSQ,
      $                       SNQ )
 *
    10       CONTINUE
@@ -575,7 +582,8 @@
             ERROR = ZERO
             DO 30 I = 1, MIN( L, M-K )
                CALL ZCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
-               CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 )
+               CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ),
+     $                     1 )
                CALL ZLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
                ERROR = MAX( ERROR, SSMIN )
    30       CONTINUE
@@ -618,16 +626,19 @@
      $            CALL ZDSCAL( P, -ONE, V( 1, I ), 1 )
             END IF
 *
-            CALL DLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+            CALL DLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
+     $                   ALPHA( K+I ),
      $                   RWK )
 *
             IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL ZDSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+               CALL ZDSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I,
+     $                      N-L+I ),
      $                      LDA )
             ELSE
                CALL ZDSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
      $                      LDB )
-               CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
+               CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I,
+     $                     N-L+I ),
      $                     LDA )
             END IF
 *

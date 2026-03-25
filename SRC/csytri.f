@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -107,10 +105,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetri
 *
 *  =====================================================================
       SUBROUTINE CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,7 +220,8 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -246,10 +246,12 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
@@ -308,9 +310,11 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -333,18 +337,23 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 )
+     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ),
+     $                                1 )
             END IF
             KSTEP = 2
          END IF

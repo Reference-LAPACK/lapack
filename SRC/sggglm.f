@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGGLM + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggglm.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggglm.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -61,6 +59,16 @@
 *>                  x
 *>
 *> where inv(B) denotes the inverse of B.
+*>
+*> Callers of this subroutine should note that the singularity/rank-deficiency checks
+*> implemented in this subroutine are rudimentary. The STRTRS subroutine called by this
+*> subroutine only signals a failure due to singularity if the problem is exactly singular.
+*>
+*> It is conceivable for one (or more) of the factors involved in the generalized QR
+*> factorization of the pair (A, B) to be subnormally close to singularity without this
+*> subroutine signalling an error. The solutions computed for such almost-rank-deficient
+*> problems may be less accurate due to a loss of numerical precision.
+*> 
 *> \endverbatim
 *
 *  Arguments:
@@ -159,12 +167,12 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          = 1:  the upper triangular factor R associated with A in the
-*>                generalized QR factorization of the pair (A, B) is
+*>                generalized QR factorization of the pair (A, B) is exactly
 *>                singular, so that rank(A) < M; the least squares
 *>                solution could not be computed.
 *>          = 2:  the bottom (N-M) by (N-M) part of the upper trapezoidal
 *>                factor T associated with B in the generalized QR
-*>                factorization of the pair (A, B) is singular, so that
+*>                factorization of the pair (A, B) is exactly singular, so that
 *>                rank( A B ) < N; the least squares solution could not
 *>                be computed.
 *> \endverbatim
@@ -177,11 +185,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHEReigen
+*> \ingroup ggglm
 *
 *  =====================================================================
-      SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+      SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK,
+     $                   LWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -207,12 +217,14 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SGGQRF, SORMQR, SORMRQ, STRTRS,
+      EXTERNAL           SCOPY, SGEMV, SGGQRF, SORMQR, SORMRQ,
+     $                   STRTRS,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -251,7 +263,7 @@
             LWKMIN = M + N + P
             LWKOPT = M + NP + MAX( N, P )*NB
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
             INFO = -12
@@ -325,7 +337,8 @@
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
+         CALL STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A,
+     $                LDA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -343,7 +356,7 @@
       CALL SORMRQ( 'Left', 'Transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
-      WORK( 1 ) = M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) )
+      WORK( 1 ) = REAL( M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) ) )
 *
       RETURN
 *

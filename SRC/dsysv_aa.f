@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYSV_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysv_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,11 +152,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYsolve
+*> \ingroup hesv_aa
 *
 *  =====================================================================
       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -177,7 +176,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, LWKOPT_SYTRF, LWKOPT_SYTRS
+      INTEGER            LWKMIN, LWKOPT, LWKOPT_SYTRF, LWKOPT_SYTRS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -196,7 +195,9 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      LWKMIN = MAX( 1, 2*N, 3*N-2 )
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -206,17 +207,17 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX(2*N, 3*N-2) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
 *
       IF( INFO.EQ.0 ) THEN
          CALL DSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-         LWKOPT_SYTRF = INT( WORK(1) )
+         LWKOPT_SYTRF = INT( WORK( 1 ) )
          CALL DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
-         LWKOPT_SYTRS = INT( WORK(1) )
-         LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
+         LWKOPT_SYTRS = INT( WORK( 1 ) )
+         LWKOPT = MAX( LWKMIN, LWKOPT_SYTRF, LWKOPT_SYTRS )
          WORK( 1 ) = LWKOPT
       END IF
 *

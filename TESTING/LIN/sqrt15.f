@@ -145,6 +145,7 @@
 *  =====================================================================
       SUBROUTINE SQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
      $                   RANK, NORMA, NORMB, ISEED, WORK, LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

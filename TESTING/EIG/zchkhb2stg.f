@@ -335,6 +335,7 @@
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RWORK, RESULT,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

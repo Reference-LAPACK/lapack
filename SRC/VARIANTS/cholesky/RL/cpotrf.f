@@ -24,7 +24,7 @@ C> \brief \b CPOTRF VARIANT: right looking block version of the algorithm, calli
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> CPOTRF computes the Cholesky factorization of a real Hermitian
+C> CPOTRF computes the Cholesky factorization of a complex Hermitian
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -79,8 +79,8 @@ C> \verbatim
 C>          INFO is INTEGER
 C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
-C>          > 0:  if INFO = i, the leading minor of order i is not
-C>                positive definite, and the factorization could not be
+C>          > 0:  if INFO = i, the leading principal minor of order i
+C>                is not positive, and the factorization could not be
 C>                completed.
 C> \endverbatim
 C>
@@ -99,6 +99,7 @@ C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
       SUBROUTINE CPOTRF ( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +130,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CPOTF2, CHERK, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +165,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL CPOTF2( UPLO, N, A, LDA, INFO )
+         CALL CPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +181,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL CPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -209,7 +210,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL CPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30

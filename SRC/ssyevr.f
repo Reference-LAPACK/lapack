@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -39,9 +37,16 @@
 *> \verbatim
 *>
 *> SSYEVR computes selected eigenvalues and, optionally, eigenvectors
-*> of a real symmetric matrix A.  Eigenvalues and eigenvectors can be
-*> selected by specifying either a range of values or a range of
-*> indices for the desired eigenvalues.
+*> of a real symmetric matrix A. Eigenvalues and eigenvectors can be
+*> selected by specifying either a range of values or a range of indices
+*> for the desired eigenvalues. Invocations with different choices for
+*> these parameters may result in the computation of slightly different
+*> eigenvalues and/or eigenvectors for the same matrix. The reason for
+*> this behavior is that there exists a variety of algorithms (each
+*> performing best for a particular set of options) with SSYEVR
+*> attempting to select the best based on the various parameters. In all
+*> cases, the computed values are accurate within the limits of finite
+*> precision arithmetic.
 *>
 *> SSYEVR first reduces the matrix A to tridiagonal form T with a call
 *> to SSYTRD.  Then, whenever possible, SSYEVR calls SSTEMR to compute
@@ -105,6 +110,9 @@
 *>          JOBZ is CHARACTER*1
 *>          = 'N':  Compute eigenvalues only;
 *>          = 'V':  Compute eigenvalues and eigenvectors.
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] RANGE
@@ -116,6 +124,9 @@
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
 *>          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
 *>          SSTEIN are called
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -271,7 +282,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,26*N).
+*>          The dimension of the array WORK.
+*>          If N <= 1, LWORK >= 1, else LWORK >= 26*N.
 *>          For optimal efficiency, LWORK >= (NB+6)*N,
 *>          where NB is the max of the blocksize for SSYTRD and SORMTR
 *>          returned by ILAENV.
@@ -292,7 +304,8 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
+*>          The dimension of the array IWORK.
+*>          If N <= 1, LIWORK >= 1, else LIWORK >= 10*N.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK and
@@ -317,7 +330,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYeigen
+*> \ingroup heevr
 *
 *> \par Contributors:
 *  ==================
@@ -330,9 +343,11 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE SSYEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE SSYEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -368,11 +383,13 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANSY
+      REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SLAMCH,
+     $                   SLANSY, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
+      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR,
+     $                   SSTEIN,
      $                   SSTERF, SSWAP, SSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -392,8 +409,13 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
 *
-      LWMIN = MAX( 1, 26*N )
-      LIWMIN = MAX( 1, 10*N )
+      IF( N.LE.1 ) THEN
+         LWMIN  = 1
+         LIWMIN = 1
+      ELSE
+         LWMIN  = 26*N
+         LIWMIN = 10*N
+      END IF
 *
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
@@ -428,7 +450,7 @@
          NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
          NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1, -1 ) )
          LWKOPT = MAX( ( NB+1 )*N, LWMIN )
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -575,7 +597,7 @@
             CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
             CALL SCOPY( N, WORK( INDD ), 1, WORK( INDDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -634,7 +656,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -677,7 +700,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

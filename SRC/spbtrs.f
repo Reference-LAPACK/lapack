@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPBTRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbtrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -114,10 +112,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup pbtrs
 *
 *  =====================================================================
       SUBROUTINE SPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -189,7 +188,8 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL STBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL STBSV( 'Upper', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
    10    CONTINUE
       ELSE
@@ -200,7 +200,8 @@
 *
 *           Solve L*X = B, overwriting B with X.
 *
-            CALL STBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL STBSV( 'Lower', 'No transpose', 'Non-unit', N, KD,
+     $                  AB,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve L**T *X = B, overwriting B with X.

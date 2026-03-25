@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTRSNA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrsna.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsna.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -197,7 +195,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup trsna
 *
 *> \par Further Details:
 *  =====================
@@ -243,9 +241,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -285,10 +285,12 @@
       INTEGER            ICAMAX
       REAL               SCNRM2, SLAMCH
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, ICAMAX, SCNRM2, SLAMCH, CDOTC
+      EXTERNAL           LSAME, ICAMAX, SCNRM2, SLAMCH,
+     $                   CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CLACPY, CLATRS, CSRSCL, CTREXC, XERBLA
+      EXTERNAL           CLACN2, CLACPY, CLATRS, CSRSCL, CTREXC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -397,7 +399,8 @@
 *           diagonal element to the (1,1) position.
 *
             CALL CLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
-            CALL CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IERR )
+            CALL CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1,
+     $                   IERR )
 *
 *           Form  C = T22 - lambda*I in WORK(2:N,2:N).
 *
@@ -413,7 +416,8 @@
             KASE = 0
             NORMIN = 'N'
    30       CONTINUE
-            CALL CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE )
+            CALL CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE,
+     $                   ISAVE )
 *
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN

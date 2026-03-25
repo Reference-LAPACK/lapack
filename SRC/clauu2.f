@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAUU2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clauu2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clauu2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -95,10 +93,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lauu2
 *
 *  =====================================================================
       SUBROUTINE CLAUU2( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,10 +163,12 @@
          DO 10 I = 1, N
             AII = REAL( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ), LDA,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ),
+     $            LDA,
      $                     A( I, I+1 ), LDA ) )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1,
+     $                     I+1 ),
      $                     LDA, A( I, I+1 ), LDA, CMPLX( AII ),
      $                     A( 1, I ), 1 )
                CALL CLACGV( N-I, A( I, I+1 ), LDA )
@@ -183,7 +184,8 @@
          DO 20 I = 1, N
             AII = REAL( A( I, I ) )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ), 1,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ),
+     $            1,
      $                     A( I+1, I ), 1 ) )
                CALL CLACGV( I-1, A( I, 1 ), LDA )
                CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,

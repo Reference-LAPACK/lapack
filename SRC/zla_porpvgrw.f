@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLA_PORPVGRW + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_porpvgrw.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_porpvgrw.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -99,11 +97,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16POcomputational
+*> \ingroup la_porpvgrw
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION ZLA_PORPVGRW( UPLO, NCOLS, A, LDA,
+     $                                        AF,
      $                                        LDAF, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,9 +142,9 @@
 *     .. Executable Statements ..
       UPPER = LSAME( 'Upper', UPLO )
 *
-*     DPOTRF will have factored only the NCOLSxNCOLS leading minor, so
-*     we restrict the growth search to that minor and use only the first
-*     2*NCOLS workspace entries.
+*     DPOTRF will have factored only the NCOLSxNCOLS leading submatrix,
+*     so we restrict the growth search to that submatrix and use only
+*     the first 2*NCOLS workspace entries.
 *
       RPVGRW = 1.0D+0
       DO I = 1, 2*NCOLS

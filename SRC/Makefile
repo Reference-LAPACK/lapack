@@ -119,7 +119,7 @@ SLASRC = \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \
    sgehd2.o sgehrd.o sgelq2.o sgelqf.o \
    sgels.o  sgelst.o sgelsd.o sgelss.o sgelsy.o sgeql2.o sgeqlf.o \
-   sgeqp3.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
+   sgeqp3.o sgeqp3rk.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
    sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvdx.o sgesvx.o \
    sgetc2.o sgetf2.o sgetri.o \
    sggbak.o sggbal.o sgges.o  sgges3.o sggesx.o \
@@ -134,10 +134,10 @@ SLASRC = \
    slangb.o slange.o slangt.o slanhs.o slansb.o slansp.o \
    slansy.o slantb.o slantp.o slantr.o slanv2.o \
    slapll.o slapmt.o \
-   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqsb.o slaqsp.o slaqsy.o \
+   slaqgb.o slaqge.o slaqp2.o slaqps.o slaqp2rk.o slaqp3rk.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
-   slarf.o  slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o \
+   slarf.o  slarf1f.o slarf1l.o slarfb.o slarfb_gett.o slarfg.o slarfgp.o slarft.o slarft_lvl2.o slarfx.o slarfy.o \
    slargv.o slarmm.o slarrv.o slartv.o \
    slarz.o  slarzb.o slarzt.o slaswp.o slasy2.o slasyf.o slasyf_rook.o \
    slasyf_rk.o \
@@ -191,7 +191,7 @@ SLASRC = \
    ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
    ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
    ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o \
-   sgesvdq.o
+   sgesvdq.o sgedmd.o sgedmdq.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
 
@@ -211,8 +211,8 @@ CLASRC = \
    cgbtf2.o cgbtrf.o cgbtrs.o cgebak.o cgebal.o cgebd2.o cgebrd.o \
    cgecon.o cgeequ.o cgees.o  cgeesx.o cgeev.o  cgeevx.o \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
-   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
-   cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
+   cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o \
+   cgeqp3.o cgeqp3rk.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o \
    cgesvj.o cgejsv.o cgsvj0.o cgsvj1.o \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
@@ -246,10 +246,10 @@ CLASRC = \
    clanhb.o clanhe.o \
    clanhp.o clanhs.o clanht.o clansb.o clansp.o clansy.o clantb.o \
    clantp.o clantr.o clapll.o clapmt.o clarcm.o claqgb.o claqge.o \
-   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqsb.o \
+   claqhb.o claqhe.o claqhp.o claqp2.o claqps.o claqp2rk.o claqp3rk.o claqsb.o \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
-   clarf.o  clarfb.o clarfb_gett.o clarfg.o clarft.o clarfgp.o \
+   clarf.o  clarf1f.o clarf1l.o clarfb.o clarfb_gett.o clarfg.o clarft.o clarft_lvl2.o clarfgp.o \
    clarfx.o clarfy.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
    claswp.o clasyf.o clasyf_rook.o clasyf_rk.o clasyf_aa.o \
@@ -260,7 +260,7 @@ CLASRC = \
    cppcon.o cppequ.o cpprfs.o cppsv.o  cppsvx.o cpptrf.o cpptri.o cpptrs.o \
    cptcon.o cpteqr.o cptrfs.o cptsv.o  cptsvx.o cpttrf.o cpttrs.o cptts2.o \
    crot.o   cspcon.o cspmv.o  cspr.o   csprfs.o cspsv.o \
-   cspsvx.o csptrf.o csptri.o csptrs.o csrscl.o cstedc.o \
+   cspsvx.o csptrf.o csptri.o csptrs.o csrscl.o crscl.o cstedc.o \
    cstegr.o cstein.o csteqr.o \
    csycon.o csymv.o \
    csyr.o csyrfs.o csysv.o csysvx.o csytf2.o csytrf.o csytri.o csytri2.o csytri2x.o \
@@ -295,7 +295,7 @@ CLASRC = \
    chetrd_2stage.o chetrd_he2hb.o chetrd_hb2st.o chb2st_kernels.o \
    cheevd_2stage.o cheev_2stage.o cheevx_2stage.o cheevr_2stage.o \
    chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o \
-   cgesvdq.o
+   cgesvdq.o cgedmd.o cgedmdq.o
 
 ifdef USEXBLAS
 CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
@@ -321,7 +321,7 @@ DLASRC = \
    dgebrd.o dgecon.o dgeequ.o dgees.o  dgeesx.o dgeev.o  dgeevx.o \
    dgehd2.o dgehrd.o dgelq2.o dgelqf.o \
    dgels.o  dgelst.o dgelsd.o dgelss.o dgelsy.o dgeql2.o dgeqlf.o \
-   dgeqp3.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
+   dgeqp3.o dgeqp3rk.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
    dgerq2.o dgerqf.o dgesc2.o dgesdd.o dgesv.o  dgesvd.o dgesvdx.o dgesvx.o \
    dgetc2.o dgetf2.o dgetrf.o dgetri.o \
    dgetrs.o dggbak.o dggbal.o dgges.o  dgges3.o dggesx.o \
@@ -336,10 +336,10 @@ DLASRC = \
    dlangb.o dlange.o dlangt.o dlanhs.o dlansb.o dlansp.o \
    dlansy.o dlantb.o dlantp.o dlantr.o dlanv2.o \
    dlapll.o dlapmt.o \
-   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqsb.o dlaqsp.o dlaqsy.o \
+   dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqp2rk.o dlaqp3rk.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
-   dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
+   dlarf.o  dlarfb.o dlarfb_gett.o dlarfg.o dlarfgp.o dlarft.o dlarft_lvl2.o dlarfx.o dlarfy.o dlarf1f.o dlarf1l.o\
    dlargv.o dlarmm.o dlarrv.o dlartv.o \
    dlarz.o  dlarzb.o dlarzt.o dlaswp.o dlasy2.o \
    dlasyf.o dlasyf_rook.o dlasyf_rk.o \
@@ -394,7 +394,7 @@ DLASRC = \
    dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
    dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
    dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o \
-   dgesvdq.o
+   dgesvdq.o dgedmd.o dgedmdq.o
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o \
@@ -412,7 +412,8 @@ ZLASRC = \
    zgbtf2.o zgbtrf.o zgbtrs.o zgebak.o zgebal.o zgebd2.o zgebrd.o \
    zgecon.o zgeequ.o zgees.o  zgeesx.o zgeev.o  zgeevx.o \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
-   zgels.o  zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o zgeqp3.o \
+   zgels.o zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o \
+   zgeqp3.o zgeqp3rk.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
    zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o \
    zgesvj.o zgejsv.o zgsvj0.o zgsvj1.o \
@@ -449,11 +450,11 @@ ZLASRC = \
    zlanhe.o \
    zlanhp.o zlanhs.o zlanht.o zlansb.o zlansp.o zlansy.o zlantb.o \
    zlantp.o zlantr.o zlapll.o zlapmt.o zlaqgb.o zlaqge.o \
-   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqsb.o \
+   zlaqhb.o zlaqhe.o zlaqhp.o zlaqp2.o zlaqps.o zlaqp2rk.o zlaqp3rk.o zlaqsb.o \
    zlaqr0.o zlaqr1.o zlaqr2.o zlaqr3.o zlaqr4.o zlaqr5.o \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
-   zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o \
-   zlarfg.o zlarft.o zlarfgp.o \
+   zlarcm.o zlarf.o  zlarfb.o zlarfb_gett.o zlarf1f.o zlarf1l.o \
+   zlarfg.o zlarft.o zlarft_lvl2.o zlarfgp.o \
    zlarfx.o zlarfy.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o \
    zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o zlasyf_aa.o \
@@ -464,7 +465,7 @@ ZLASRC = \
    zppcon.o zppequ.o zpprfs.o zppsv.o  zppsvx.o zpptrf.o zpptri.o zpptrs.o \
    zptcon.o zpteqr.o zptrfs.o zptsv.o  zptsvx.o zpttrf.o zpttrs.o zptts2.o \
    zrot.o   zspcon.o zspmv.o  zspr.o   zsprfs.o zspsv.o \
-   zspsvx.o zsptrf.o zsptri.o zsptrs.o zdrscl.o zstedc.o \
+   zspsvx.o zsptrf.o zsptri.o zsptrs.o zdrscl.o zrscl.o zstedc.o \
    zstegr.o zstein.o zsteqr.o \
    zsycon.o zsymv.o \
    zsyr.o zsyrfs.o zsysv.o zsysvx.o zsytf2.o zsytrf.o zsytri.o zsytri2.o zsytri2x.o \
@@ -501,7 +502,7 @@ ZLASRC = \
    zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
    zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
    zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o \
-   zgesvdq.o
+   zgesvdq.o zgedmd.o zgedmdq.o
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o \
@@ -515,18 +516,22 @@ ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o \
    zla_lin_berr.o zlarscl2.o zlascl2.o zla_wwaddw.o
 endif
 
-DEPRECSRC = DEPRECATED/cgegs.o DEPRECATED/cgegv.o DEPRECATED/cgelsx.o \
-   DEPRECATED/cgeqpf.o DEPRECATED/cggsvd.o DEPRECATED/cggsvp.o \
-   DEPRECATED/clahrd.o DEPRECATED/clatzm.o DEPRECATED/ctzrqf.o \
-   DEPRECATED/dgegs.o  DEPRECATED/dgegv.o  DEPRECATED/dgelsx.o \
-   DEPRECATED/dgeqpf.o DEPRECATED/dggsvd.o DEPRECATED/dggsvp.o \
-   DEPRECATED/dlahrd.o DEPRECATED/dlatzm.o DEPRECATED/dtzrqf.o \
-   DEPRECATED/sgegs.o  DEPRECATED/sgegv.o  DEPRECATED/sgelsx.o \
-   DEPRECATED/sgeqpf.o DEPRECATED/sggsvd.o DEPRECATED/sggsvp.o \
-   DEPRECATED/slahrd.o DEPRECATED/slatzm.o DEPRECATED/stzrqf.o \
-   DEPRECATED/zgegs.o  DEPRECATED/zgegv.o  DEPRECATED/zgelsx.o \
-   DEPRECATED/zgeqpf.o DEPRECATED/zggsvd.o DEPRECATED/zggsvp.o \
-   DEPRECATED/zlahrd.o DEPRECATED/zlatzm.o DEPRECATED/ztzrqf.o
+DEPRECSRC = DEPRECATED/cgegs.o DEPRECATED/cgegv.o DEPRECATED/cgelqs.o \
+   DEPRECATED/cgelsx.o DEPRECATED/cgeqpf.o DEPRECATED/cgeqrs.o \
+   DEPRECATED/cggsvd.o DEPRECATED/cggsvp.o DEPRECATED/clahrd.o \
+   DEPRECATED/clatzm.o DEPRECATED/ctzrqf.o \
+   DEPRECATED/dgegs.o  DEPRECATED/dgegv.o  DEPRECATED/dgelqs.o \
+   DEPRECATED/dgelsx.o DEPRECATED/dgeqpf.o DEPRECATED/dgeqrs.o \
+   DEPRECATED/dggsvd.o DEPRECATED/dggsvp.o DEPRECATED/dlahrd.o \
+   DEPRECATED/dlatzm.o DEPRECATED/dtzrqf.o \
+   DEPRECATED/sgegs.o  DEPRECATED/sgegv.o  DEPRECATED/sgelqs.o \
+   DEPRECATED/sgelsx.o DEPRECATED/sgeqpf.o DEPRECATED/sgeqrs.o \
+   DEPRECATED/sggsvd.o DEPRECATED/sggsvp.o DEPRECATED/slahrd.o \
+   DEPRECATED/slatzm.o DEPRECATED/stzrqf.o \
+   DEPRECATED/zgegs.o  DEPRECATED/zgegv.o  DEPRECATED/zgelqs.o \
+   DEPRECATED/zgelsx.o DEPRECATED/zgeqpf.o DEPRECATED/zgeqrs.o \
+   DEPRECATED/zggsvd.o DEPRECATED/zggsvp.o DEPRECATED/zlahrd.o \
+   DEPRECATED/zlatzm.o DEPRECATED/ztzrqf.o
 
 ALLOBJ = $(SLASRC) $(DLASRC) $(DSLASRC) $(CLASRC) $(ZLASRC) $(ZCLASRC) \
    $(SCLAUX) $(DZLAUX) $(ALLAUX)

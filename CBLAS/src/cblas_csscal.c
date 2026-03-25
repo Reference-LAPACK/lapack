@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_csscal( const CBLAS_INT N, const float alpha, void *X,
+void API_SUFFIX(cblas_csscal)( const CBLAS_INT N, const float alpha, void *X,
                        const CBLAS_INT incX)
 {
 #ifdef F77_INT

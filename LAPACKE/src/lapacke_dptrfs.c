@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dptrfs( int matrix_layout, lapack_int n, lapack_int nrhs,
+lapack_int API_SUFFIX(LAPACKE_dptrfs)( int matrix_layout, lapack_int n, lapack_int nrhs,
                            const double* d, const double* e, const double* df,
                            const double* ef, const double* b, lapack_int ldb,
                            double* x, lapack_int ldx, double* ferr,
@@ -41,28 +41,28 @@ lapack_int LAPACKE_dptrfs( int matrix_layout, lapack_int n, lapack_int nrhs,
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dptrfs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dptrfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -8;
         }
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -4;
         }
-        if( LAPACKE_d_nancheck( n, df, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, df, 1 ) ) {
             return -6;
         }
-        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, e, 1 ) ) {
             return -5;
         }
-        if( LAPACKE_d_nancheck( n-1, ef, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, ef, 1 ) ) {
             return -7;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, x, ldx ) ) {
             return -10;
         }
     }
@@ -74,13 +74,13 @@ lapack_int LAPACKE_dptrfs( int matrix_layout, lapack_int n, lapack_int nrhs,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dptrfs_work( matrix_layout, n, nrhs, d, e, df, ef, b, ldb, x,
+    info = API_SUFFIX(LAPACKE_dptrfs_work)( matrix_layout, n, nrhs, d, e, df, ef, b, ldb, x,
                                 ldx, ferr, berr, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dptrfs", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dptrfs", info );
     }
     return info;
 }

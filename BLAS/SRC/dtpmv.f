@@ -120,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level2
+*> \ingroup tpmv
 *
 *> \par Further Details:
 *  =====================
@@ -139,6 +139,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DTPMV(UPLO,TRANS,DIAG,N,AP,X,INCX)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level2 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -176,10 +177,12 @@
       INFO = 0
       IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
-      ELSE IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.
+      ELSE IF (.NOT.LSAME(TRANS,'N') .AND.
+     +         .NOT.LSAME(TRANS,'T') .AND.
      +         .NOT.LSAME(TRANS,'C')) THEN
           INFO = 2
-      ELSE IF (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
+      ELSE IF (.NOT.LSAME(DIAG,'U') .AND.
+     +         .NOT.LSAME(DIAG,'N')) THEN
           INFO = 3
       ELSE IF (N.LT.0) THEN
           INFO = 4

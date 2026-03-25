@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLANSB + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slansb.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansb.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -121,11 +119,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lanhb
 *
 *  =====================================================================
       REAL             FUNCTION SLANSB( NORM, UPLO, N, K, AB, LDAB,
      $                 WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,7 +182,8 @@
    30          CONTINUE
    40       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR. ( LSAME( NORM, 'O' ) ) .OR.
+      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR.
+     $         ( LSAME( NORM, 'O' ) ) .OR.
      $         ( NORM.EQ.'1' ) ) THEN
 *
 *        Find normI(A) ( = norm1(A), since A is symmetric).
@@ -219,7 +219,8 @@
                IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
   100       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
@@ -228,7 +229,8 @@
          IF( K.GT.0 ) THEN
             IF( LSAME( UPLO, 'U' ) ) THEN
                DO 110 J = 2, N
-                  CALL SLASSQ( MIN( J-1, K ), AB( MAX( K+2-J, 1 ), J ),
+                  CALL SLASSQ( MIN( J-1, K ), AB( MAX( K+2-J, 1 ),
+     $                         J ),
      $                         1, SCALE, SUM )
   110          CONTINUE
                L = K + 1

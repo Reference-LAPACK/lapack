@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-float LAPACKE_slapy2_work( float x, float y )
+float API_SUFFIX(LAPACKE_slapy2_work)( float x, float y )
 {
     float res = 0.;
     /* Call LAPACK function and adjust info */

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLAGS2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlags2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlags2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -150,11 +148,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lags2
 *
 *  =====================================================================
-      SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+      SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
+     $                   CSV,
      $                   SNV, CSQ, SNQ )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -237,17 +237,21 @@
 *           zero (1,2) elements of U**H *A and V**H *B
 *
             IF( ( ABS( UA11R )+ABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SNQ,
+               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE IF( ( ABS( VB11R )+ABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SNQ,
+               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE IF( AUA12 / ( ABS( UA11R )+ABS1( UA12 ) ).LE.AVB12 /
      $               ( ABS( VB11R )+ABS1( VB12 ) ) ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SNQ,
+               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SNQ,
+               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ,
+     $                      SNQ,
      $                      R )
             END IF
 *
@@ -273,17 +277,21 @@
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA21 )+ABS1( UA22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ,
+               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ,
+               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE IF( AUA22 / ( ABS1( UA21 )+ABS1( UA22 ) ).LE.AVB22 /
      $               ( ABS1( VB21 )+ABS1( VB22 ) ) ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ,
+               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
+     $                      SNQ,
      $                      R )
             ELSE
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ,
+               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ,
+     $                      SNQ,
      $                      R )
             END IF
 *

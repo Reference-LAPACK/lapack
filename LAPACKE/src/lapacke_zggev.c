@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zggev( int matrix_layout, char jobvl, char jobvr,
+lapack_int API_SUFFIX(LAPACKE_zggev)( int matrix_layout, char jobvl, char jobvr,
                           lapack_int n, lapack_complex_double* a,
                           lapack_int lda, lapack_complex_double* b,
                           lapack_int ldb, lapack_complex_double* alpha,
@@ -46,16 +46,16 @@ lapack_int LAPACKE_zggev( int matrix_layout, char jobvl, char jobvr,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zggev", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zggev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_zge_nancheck( matrix_layout, n, n, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, n, b, ldb ) ) {
             return -7;
         }
     }
@@ -67,7 +67,7 @@ lapack_int LAPACKE_zggev( int matrix_layout, char jobvl, char jobvr,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zggev_work( matrix_layout, jobvl, jobvr, n, a, lda, b, ldb,
+    info = API_SUFFIX(LAPACKE_zggev_work)( matrix_layout, jobvl, jobvr, n, a, lda, b, ldb,
                                alpha, beta, vl, ldvl, vr, ldvr, &work_query,
                                lwork, rwork );
     if( info != 0 ) {
@@ -82,7 +82,7 @@ lapack_int LAPACKE_zggev( int matrix_layout, char jobvl, char jobvr,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zggev_work( matrix_layout, jobvl, jobvr, n, a, lda, b, ldb,
+    info = API_SUFFIX(LAPACKE_zggev_work)( matrix_layout, jobvl, jobvr, n, a, lda, b, ldb,
                                alpha, beta, vl, ldvl, vr, ldvr, work, lwork,
                                rwork );
     /* Release memory and exit */
@@ -91,7 +91,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zggev", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zggev", info );
     }
     return info;
 }

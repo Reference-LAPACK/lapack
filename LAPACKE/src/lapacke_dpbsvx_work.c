@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dpbsvx_work( int matrix_layout, char fact, char uplo,
+lapack_int API_SUFFIX(LAPACKE_dpbsvx_work)( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int kd, lapack_int nrhs,
                                 double* ab, lapack_int ldab, double* afb,
                                 lapack_int ldafb, char* equed, double* s,
@@ -61,22 +61,22 @@ lapack_int LAPACKE_dpbsvx_work( int matrix_layout, char fact, char uplo,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
             return info;
         }
         if( ldafb < n ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -14;
-            LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -16;
-            LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -101,12 +101,12 @@ lapack_int LAPACKE_dpbsvx_work( int matrix_layout, char fact, char uplo,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_dpb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_dpb_trans( matrix_layout, uplo, n, kd, afb, ldafb, afb_t,
+        API_SUFFIX(LAPACKE_dpb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
+            API_SUFFIX(LAPACKE_dpb_trans)( matrix_layout, uplo, n, kd, afb, ldafb, afb_t,
                                ldafb_t );
         }
-        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dpbsvx( &fact, &uplo, &n, &kd, &nrhs, ab_t, &ldab_t, afb_t,
                        &ldafb_t, equed, s, b_t, &ldb_t, x_t, &ldx_t, rcond,
@@ -115,16 +115,16 @@ lapack_int LAPACKE_dpbsvx_work( int matrix_layout, char fact, char uplo,
             info = info - 1;
         }
         /* Transpose output matrices */
-        if( LAPACKE_lsame( fact, 'e' ) && LAPACKE_lsame( *equed, 'y' ) ) {
-            LAPACKE_dpb_trans( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) && API_SUFFIX(LAPACKE_lsame)( *equed, 'y' ) ) {
+            API_SUFFIX(LAPACKE_dpb_trans)( LAPACK_COL_MAJOR, uplo, n, kd, ab_t, ldab_t, ab,
                                ldab );
         }
-        if( LAPACKE_lsame( fact, 'e' ) || LAPACKE_lsame( fact, 'n' ) ) {
-            LAPACKE_dpb_trans( LAPACK_COL_MAJOR, uplo, n, kd, afb_t, ldafb_t,
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'e' ) || API_SUFFIX(LAPACKE_lsame)( fact, 'n' ) ) {
+            API_SUFFIX(LAPACKE_dpb_trans)( LAPACK_COL_MAJOR, uplo, n, kd, afb_t, ldafb_t,
                                afb, ldafb );
         }
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         /* Release memory and exit */
         LAPACKE_free( x_t );
 exit_level_3:
@@ -135,11 +135,11 @@ exit_level_1:
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dpbsvx_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbsvx_work", info );
     }
     return info;
 }

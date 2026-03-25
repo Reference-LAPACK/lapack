@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHESVXX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesvxx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesvxx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -496,13 +494,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEsolve
+*> \ingroup hesvxx
 *
 *  =====================================================================
-      SUBROUTINE ZHESVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE ZHESVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -627,7 +627,8 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL ZHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
+         CALL ZHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                 INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
@@ -646,7 +647,8 @@
 *        Compute the LDL^H or UDU^H factorization of A.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
+         CALL ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N),
+     $                INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -657,7 +659,8 @@
 *           leading rank-deficient INFO columns of A.
 *
             IF( N.GT.0 )
-     $           RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $           RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF,
+     $                                  LDAF,
      $           IPIV, RWORK )
             RETURN
          END IF
@@ -666,7 +669,8 @@
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
       IF( N.GT.0 )
-     $     RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
+     $     RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $                            IPIV,
      $     RWORK )
 *
 *     Compute the solution matrix X.

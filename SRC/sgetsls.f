@@ -22,8 +22,17 @@
 *>
 *> SGETSLS solves overdetermined or underdetermined real linear systems
 *> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
-*> factorization of A.  It is assumed that A has full rank.
+*> factorization of A.
 *>
+*> It is assumed that A has full rank, and only a rudimentary protection
+*> against rank-deficient matrices is provided. This subroutine only detects
+*> exact rank-deficiency, where a diagonal element of the triangular factor
+*> of A is exactly zero.
+*>
+*> It is conceivable for one (or more) of the diagonal elements of the triangular
+*> factor of A to be subnormally tiny numbers without this subroutine signalling
+*> an error. The solutions computed for such almost-rank-deficient matrices may
+*> be less accurate due to a loss of numerical precision.
 *>
 *>
 *> The following options are provided:
@@ -127,7 +136,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
+*>          The dimension of the array WORK. LWORK >= 1.
 *>          If LWORK = -1 or -2, then a workspace query is assumed.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
@@ -141,7 +150,7 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO =  i, the i-th diagonal element of the
-*>                triangular factor of A is zero, so that A does not have
+*>                triangular factor of A is exactly zero, so that A does not have
 *>                full rank; the least squares solution could not be
 *>                computed.
 *> \endverbatim
@@ -154,11 +163,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsolve
+*> \ingroup getsls
 *
 *  =====================================================================
       SUBROUTINE SGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
      $                    WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,15 +198,16 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      REAL               SLAMCH, SLANGE, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEQR, SGEMQR, SLASCL, SLASET,
      $                   STRTRS, XERBLA, SGELQ, SGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX, MIN, INT
+      INTRINSIC          MAX, MIN, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -226,7 +237,10 @@
 *
 *     Determine the optimum and minimum LWORK
 *
-       IF( M.GE.N ) THEN
+       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
+         WSIZEO = 1
+         WSIZEM = 1
+       ELSE IF( M.GE.N ) THEN
          CALL SGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
          LWO  = INT( WORKQ( 1 ) )
@@ -262,7 +276,7 @@
           INFO = -10
        END IF
 *
-       WORK( 1 ) = REAL( WSIZEO )
+       WORK( 1 ) = SROUNDUP_LWORK( WSIZEO )
 *
       END IF
 *
@@ -271,7 +285,7 @@
         RETURN
       END IF
       IF( LQUERY ) THEN
-        IF( LWORK.EQ.-2 ) WORK( 1 ) = REAL( WSIZEM )
+        IF( LWORK.EQ.-2 ) WORK( 1 ) = SROUNDUP_LWORK( WSIZEM )
         RETURN
       END IF
       IF( LWORK.LT.WSIZEO ) THEN
@@ -481,7 +495,7 @@
       END IF
 *
    50 CONTINUE
-      WORK( 1 ) = REAL( TSZO + LWO )
+      WORK( 1 ) = SROUNDUP_LWORK( TSZO + LWO )
       RETURN
 *
 *     End of SGETSLS

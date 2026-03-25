@@ -1,10 +1,26 @@
 *> \brief \b STRSYL3
 *
-* Definition:
-* ===========
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+*                           C, LDC, SCALE, IWORK, LIWORK, SWORK,
+*                           LDSWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, M, N,
+*                          LIWORK, LDSWORK
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
+*                          SWORK( LDSWORK, * )
+*       ..
 *
 *
-*>  \par Purpose
+*> \par Purpose:
 *  =============
 *>
 *> \verbatim
@@ -27,8 +43,8 @@
 *>  This is the block version of the algorithm.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -161,6 +177,8 @@
 *>               A and B are unchanged).
 *> \endverbatim
 *
+*> \ingroup trsyl3
+*
 *  =====================================================================
 *  References:
 *   E. S. Quintana-Orti and R. A. Van De Geijn (2003). Formal derivation of
@@ -175,9 +193,9 @@
 *   Angelika Schwarz, Umea University, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
-     $                    LDC, SCALE, IWORK, LIWORK, SWORK, LDSWORK,
-     $                    INFO )
+      SUBROUTINE STRSYL3( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB,
+     $                    C, LDC, SCALE, IWORK, LIWORK, SWORK,
+     $                    LDSWORK, INFO )
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
@@ -209,10 +227,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       REAL               SLANGE, SLAMCH, SLARMM
-      EXTERNAL           SLANGE, SLAMCH, SLARMM, ILAENV, LSAME
+      EXTERNAL           SLANGE, SLAMCH, SLARMM, ILAENV,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLASCL, SSCAL, STRSYL, XERBLA
+      EXTERNAL           SGEMM, SLASCL, SSCAL, STRSYL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXPONENT, MAX, MIN, REAL
@@ -239,9 +259,8 @@
       LQUERY = ( LIWORK.EQ.-1 .OR. LDSWORK.EQ.-1 )
       IWORK( 1 ) = NBA + NBB + 2
       IF( LQUERY ) THEN
-         LDSWORK = 2
-         SWORK( 1, 1 ) = MAX( NBA, NBB )
-         SWORK( 2, 1 ) = 2 * NBB + NBA
+         SWORK( 1, 1 ) = REAL( MAX( NBA, NBB ) )
+         SWORK( 2, 1 ) = REAL( 2 * NBB + NBA )
       END IF
 *
 *     Test the input arguments
@@ -1171,8 +1190,8 @@
 *        form (1/SCALE)*X if SCALE is REAL. Set SCALE to zero and give up.
 *
          IWORK(1) = NBA + NBB + 2
-         SWORK(1,1) = MAX( NBA, NBB )
-         SWORK(2,1) = 2 * NBB + NBA
+         SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+         SWORK(2,1) = REAL( 2 * NBB + NBA )
          RETURN
       END IF
 *
@@ -1223,7 +1242,8 @@
 *
          SCALOC = MIN( BIGNUM / SCAL, ONE / BUF )
          BUF = BUF * SCALOC
-         CALL SLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC, IWORK )
+         CALL SLASCL( 'G', -1, -1, ONE, SCALOC, M, N, C, LDC,
+     $               IWORK(1) )
       END IF
 *
 *     Combine with buffer scaling factor. SCALE will be flushed if
@@ -1234,8 +1254,8 @@
 *     Restore workspace dimensions
 *
       IWORK(1) = NBA + NBB + 2
-      SWORK(1,1) = MAX( NBA, NBB )
-      SWORK(2,1) = 2 * NBB + NBA
+      SWORK(1,1) = REAL( MAX( NBA, NBB ) )
+      SWORK(2,1) = REAL( 2 * NBB + NBA )
 *
       RETURN
 *

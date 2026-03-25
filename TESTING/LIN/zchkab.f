@@ -70,6 +70,7 @@
 *
 *  =====================================================================
       PROGRAM ZCHKAB
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -350,7 +351,7 @@
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
  9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK ZCGESV/ZCPOSV routines ',
-     $      / ' LAPACK VERSION ', I1, '.', I1, '.', I1,
+     $      / ' LAPACK VERSION ', I1, '.', I2, '.', I1,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
  9992 FORMAT( / ' Routines pass computational tests if test ratio is ',

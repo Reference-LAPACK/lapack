@@ -7,9 +7,10 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zhpr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
+void API_SUFFIX(cblas_zhpr2)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                       const CBLAS_INT N,const void *alpha, const void *X,
                       const CBLAS_INT incX,const void *Y, const CBLAS_INT incY, void *Ap)
 
@@ -24,17 +25,23 @@ void cblas_zhpr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 #ifdef F77_INT
    F77_INT F77_N=N,  F77_incX=incX, F77_incY=incY;
 #else
+   CBLAS_INT incx = incX, incy = incY;
    #define F77_N N
    #define F77_incX incx
    #define F77_incY incy
 #endif
-   CBLAS_INT n, i, j, incx=incX, incy=incY;
-   double *x=(double *)X, *xx=(double *)X, *y=(double *)Y,
-         *yy=(double *)Y, *stx, *sty;
+   CBLAS_INT n, i, j;
+   double *x, *xx, *y,
+         *yy, *stx, *sty;
 
    extern int CBLAS_CallFromC;
    extern int RowMajorStrg;
    RowMajorStrg = 0;
+
+   memcpy(&x,&X,sizeof(double*));
+   memcpy(&xx,&X,sizeof(double*));
+   memcpy(&y,&Y,sizeof(double*));
+   memcpy(&yy,&Y,sizeof(double*));
 
    CBLAS_CallFromC = 1;
    if (layout == CblasColMajor)
@@ -43,7 +50,7 @@ void cblas_zhpr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasUpper) UL = 'U';
       else
       {
-         cblas_xerbla(2, "cblas_zhpr2","Illegal Uplo setting, %d\n",Uplo );
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zhpr2","Illegal Uplo setting, %d\n",Uplo );
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -61,7 +68,7 @@ void cblas_zhpr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasLower) UL = 'U';
       else
       {
-         cblas_xerbla(2, "cblas_zhpr2","Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zhpr2","Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -128,14 +135,15 @@ void cblas_zhpr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 
       }  else
       {
-         x = (double *) X;
-         y = (void  *) Y;
+
+        memcpy(&x,&X,sizeof(double*));
+        memcpy(&y,&Y,sizeof(double*));
       }
       F77_zhpr2(F77_UL, &F77_N, alpha, y, &F77_incY, x, &F77_incX, Ap);
    }
    else
    {
-      cblas_xerbla(1, "cblas_zhpr2","Illegal layout setting, %d\n", layout);
+      API_SUFFIX(cblas_xerbla)(1, "cblas_zhpr2","Illegal layout setting, %d\n", layout);
       CBLAS_CallFromC = 0;
       RowMajorStrg = 0;
       return;

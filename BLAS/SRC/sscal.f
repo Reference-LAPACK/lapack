@@ -62,7 +62,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup single_blas_level1
+*> \ingroup scal
 *
 *> \par Further Details:
 *  =====================
@@ -76,6 +76,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SSCAL(N,SA,SX,INCX)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

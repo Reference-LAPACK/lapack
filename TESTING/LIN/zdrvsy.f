@@ -150,6 +150,7 @@
       SUBROUTINE ZDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

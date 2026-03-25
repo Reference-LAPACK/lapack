@@ -44,10 +44,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup ilaver
 *
 *  =====================================================================
       SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -58,8 +59,8 @@
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *  =====================================================================
       VERS_MAJOR = 3
-      VERS_MINOR = 11
-      VERS_PATCH = 0
+      VERS_MINOR = 12
+      VERS_PATCH = 1
 *  =====================================================================
 *
       RETURN

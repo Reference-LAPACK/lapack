@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAQPS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqps.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqps.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -150,7 +148,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup laqps
 *
 *> \par Contributors:
 *  ==================
@@ -168,13 +166,13 @@
 *>
 *> LAPACK Working Note 176
 *
-*> \htmlonly
 *> <a href="http://www.netlib.org/lapack/lawnspdf/lawn176.pdf">[PDF]</a>
-*> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+      SUBROUTINE SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU,
+     $                   VN1,
      $                   VN2, AUXV, F, LDF )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -241,14 +239,16 @@
 *        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**T.
 *
          IF( K.GT.1 ) THEN
-            CALL SGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK, 1 ),
+            CALL SGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK,
+     $                  1 ),
      $                  LDA, F( K, 1 ), LDF, ONE, A( RK, K ), 1 )
          END IF
 *
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL SLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL SLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1,
+     $                   TAU( K ) )
          ELSE
             CALL SLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
@@ -277,7 +277,8 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL SGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK, 1 ),
+            CALL SGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK,
+     $                  1 ),
      $                  LDA, A( RK, K ), 1, ZERO, AUXV( 1 ), 1 )
 *
             CALL SGEMV( 'No transpose', N, K-1, ONE, F( 1, 1 ), LDF,
@@ -288,7 +289,8 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T.
 *
          IF( K.LT.N ) THEN
-            CALL SGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ), LDF,
+            CALL SGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ),
+     $                  LDF,
      $                  A( RK, 1 ), LDA, ONE, A( RK, K+1 ), LDA )
          END IF
 *
@@ -328,7 +330,8 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**T.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL SGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB, -ONE,
+         CALL SGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB,
+     $               -ONE,
      $               A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF, ONE,
      $               A( RK+1, KB+1 ), LDA )
       END IF

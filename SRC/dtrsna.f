@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTRSNA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsna.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsna.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -213,7 +211,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup trsna
 *
 *> \par Further Details:
 *  =====================
@@ -259,9 +257,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                   VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, IWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -300,7 +300,8 @@
       EXTERNAL           LSAME, DDOT, DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DLACPY, DLAQTR, DTREXC, XERBLA
+      EXTERNAL           DLACN2, DLACPY, DLAQTR, DTREXC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -440,10 +441,12 @@
 *              Complex eigenvalue.
 *
                PROD1 = DDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-               PROD1 = PROD1 + DDOT( N, VR( 1, KS+1 ), 1, VL( 1, KS+1 ),
+               PROD1 = PROD1 + DDOT( N, VR( 1, KS+1 ), 1, VL( 1,
+     $                               KS+1 ),
      $                 1 )
                PROD2 = DDOT( N, VL( 1, KS ), 1, VR( 1, KS+1 ), 1 )
-               PROD2 = PROD2 - DDOT( N, VL( 1, KS+1 ), 1, VR( 1, KS ),
+               PROD2 = PROD2 - DDOT( N, VL( 1, KS+1 ), 1, VR( 1,
+     $                               KS ),
      $                 1 )
                RNRM = DLAPY2( DNRM2( N, VR( 1, KS ), 1 ),
      $                DNRM2( N, VR( 1, KS+1 ), 1 ) )
@@ -466,7 +469,8 @@
             CALL DLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
             IFST = K
             ILST = 1
-            CALL DTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST, ILST,
+            CALL DTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST,
+     $                   ILST,
      $                   WORK( 1, N+1 ), IERR )
 *
             IF( IERR.EQ.1 .OR. IERR.EQ.2 ) THEN
@@ -534,7 +538,8 @@
                EST = ZERO
                KASE = 0
    50          CONTINUE
-               CALL DLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ), IWORK,
+               CALL DLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ),
+     $                      IWORK,
      $                      EST, KASE, ISAVE )
                IF( KASE.NE.0 ) THEN
                   IF( KASE.EQ.1 ) THEN
@@ -542,7 +547,8 @@
 *
 *                       Real eigenvalue: solve C**T*x = scale*c.
 *
-                        CALL DLAQTR( .TRUE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL DLAQTR( .TRUE., .TRUE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -551,7 +557,8 @@
 *                       Complex eigenvalue: solve
 *                       C**T*(p+iq) = scale*(c+id) in real arithmetic.
 *
-                        CALL DLAQTR( .TRUE., .FALSE., N-1, WORK( 2, 2 ),
+                        CALL DLAQTR( .TRUE., .FALSE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, WORK( 1, N+1 ), MU, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -561,7 +568,8 @@
 *
 *                       Real eigenvalue: solve C*x = scale*c.
 *
-                        CALL DLAQTR( .FALSE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL DLAQTR( .FALSE., .TRUE., N-1, WORK( 2,
+     $                               2 ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )

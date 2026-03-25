@@ -159,7 +159,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level3
+*> \ingroup trsm
 *
 *> \par Further Details:
 *  =====================
@@ -178,6 +178,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -234,7 +235,8 @@
      +         (.NOT.LSAME(TRANSA,'T')) .AND.
      +         (.NOT.LSAME(TRANSA,'C'))) THEN
           INFO = 3
-      ELSE IF ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
+      ELSE IF ((.NOT.LSAME(DIAG,'U')) .AND.
+     +         (.NOT.LSAME(DIAG,'N'))) THEN
           INFO = 4
       ELSE IF (M.LT.0) THEN
           INFO = 5

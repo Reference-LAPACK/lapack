@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGELQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -93,7 +91,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,M).
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M, otherwise.
 *>          For optimum performance LWORK >= M*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -118,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup gelqf
 *
 *> \par Further Details:
 *  =====================
@@ -140,6 +139,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZGELQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,9 +174,8 @@
 *     Test the input arguments
 *
       INFO = 0
+      K = MIN( M, N )
       NB = ILAENV( 1, 'ZGELQF', ' ', M, N, -1, -1 )
-      LWKOPT = M*NB
-      WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -184,19 +183,25 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -4
-      ELSE IF( LWORK.LT.MAX( 1, M ) .AND. .NOT.LQUERY ) THEN
-         INFO = -7
+      ELSE IF( .NOT.LQUERY ) THEN
+         IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
+     $      INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZGELQF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
+         IF( K.EQ.0 ) THEN
+            LWKOPT = 1
+         ELSE
+            LWKOPT = M*NB
+         END IF
+         WORK( 1 ) = LWKOPT
          RETURN
       END IF
 *
 *     Quick return if possible
 *
-      K = MIN( M, N )
       IF( K.EQ.0 ) THEN
          WORK( 1 ) = 1
          RETURN
@@ -245,7 +250,8 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL ZLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+               CALL ZLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
+     $                      I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(i+ib:m,i:n) from the right

@@ -15,7 +15,7 @@
 *       INTEGER            LDX, N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX            X( LDX, * )
 *       ..
 *
@@ -86,6 +86,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLATSY( UPLO, N, X, LDX, ISEED )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -96,7 +97,7 @@
       INTEGER            LDX, N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX            X( LDX, * )
 *     ..
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASD3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -43,13 +41,6 @@
 *> equation, as defined by the values in D and Z.  It makes the
 *> appropriate calls to DLASD4 and then updates the singular
 *> vectors by matrix multiplication.
-*>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.
 *>
 *> DLASD3 is called from DLASD1.
 *> \endverbatim
@@ -103,7 +94,7 @@
 *>         The leading dimension of the array Q.  LDQ >= K.
 *> \endverbatim
 *>
-*> \param[in,out] DSIGMA
+*> \param[in] DSIGMA
 *> \verbatim
 *>          DSIGMA is DOUBLE PRECISION array, dimension(K)
 *>         The first K elements of this array contain the old roots
@@ -209,7 +200,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasd3
 *
 *> \par Contributors:
 *  ==================
@@ -218,9 +209,11 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
+      SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU,
+     $                   U2,
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -249,11 +242,12 @@
       DOUBLE PRECISION   RHO, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, DNRM2
-      EXTERNAL           DLAMC3, DNRM2
+      DOUBLE PRECISION   DNRM2
+      EXTERNAL           DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLASCL, DLASD4, XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLASCL, DLASD4,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -309,27 +303,6 @@
          END IF
          RETURN
       END IF
-*
-*     Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can
-*     be computed with high relative accuracy (barring over/underflow).
-*     This is a problem on machines without a guard digit in
-*     add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2).
-*     The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I),
-*     which on any of these machines zeros out the bottommost
-*     bit of DSIGMA(I) if it is 1; this makes the subsequent
-*     subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation
-*     occurs. On binary machines with a guard digit (almost all
-*     machines) it does not change DSIGMA(I) at all. On hexadecimal
-*     and decimal machines with a guard digit, it slightly
-*     changes the bottommost bits of DSIGMA(I). It does not account
-*     for hexadecimal or decimal machines without guard digits
-*     (we know of none). We use a subroutine call to compute
-*     2*DSIGMA(I) to prevent optimizing compilers from eliminating
-*     this code.
-*
-      DO 20 I = 1, K
-         DSIGMA( I ) = DLAMC3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I )
-   20 CONTINUE
 *
 *     Keep a copy of Z.
 *
@@ -392,16 +365,19 @@
 *     Update the left singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO, U,
+         CALL DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO,
+     $               U,
      $               LDU )
          GO TO 100
       END IF
       IF( CTOT( 1 ).GT.0 ) THEN
-         CALL DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ), LDU2,
+         CALL DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ),
+     $               LDU2,
      $               Q( 2, 1 ), LDQ, ZERO, U( 1, 1 ), LDU )
          IF( CTOT( 3 ).GT.0 ) THEN
             KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
-            CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
+            CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1,
+     $                  KTEMP ),
      $                  LDU2, Q( KTEMP, 1 ), LDQ, ONE, U( 1, 1 ), LDU )
          END IF
       ELSE IF( CTOT( 3 ).GT.0 ) THEN
@@ -414,7 +390,8 @@
       CALL DCOPY( K, Q( 1, 1 ), LDQ, U( NLP1, 1 ), LDU )
       KTEMP = 2 + CTOT( 1 )
       CTEMP = CTOT( 2 ) + CTOT( 3 )
-      CALL DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ), LDU2,
+      CALL DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ),
+     $            LDU2,
      $            Q( KTEMP, 1 ), LDQ, ZERO, U( NLP2, 1 ), LDU )
 *
 *     Generate the right singular vectors.
@@ -432,7 +409,8 @@
 *     Update the right singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2, ZERO,
+         CALL DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2,
+     $               ZERO,
      $               VT, LDVT )
          RETURN
       END IF
@@ -441,7 +419,8 @@
      $            VT2( 1, 1 ), LDVT2, ZERO, VT( 1, 1 ), LDVT )
       KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
       IF( KTEMP.LE.LDVT2 )
-     $   CALL DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1, KTEMP ),
+     $   CALL DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1,
+     $               KTEMP ),
      $               LDQ, VT2( KTEMP, 1 ), LDVT2, ONE, VT( 1, 1 ),
      $               LDVT )
 *

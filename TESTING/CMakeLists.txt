@@ -1,3 +1,9 @@
+enable_language(Fortran)
+
+# Check for any necessary platform specific compiler flags
+include(CheckLAPACKCompilerFlags)
+CheckLAPACKCompilerFlags()
+
 if(MSVC_VERSION)
 #  string(REPLACE "/STACK:10000000" "/STACK:900000000000000000"
 #    CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
@@ -9,7 +15,7 @@ add_subdirectory(EIG)
 
 
 # Only run this test if python 3 is found
-if(PYTHON_EXECUTABLE)
+if(PYTHON_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
   message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt)")
   file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
   add_test(
@@ -32,7 +38,7 @@ function(add_lapack_test output input target)
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
 
-    if(PYTHON_EXECUTABLE)
+    if(PYTHON_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
       set_property(
         TEST LAPACK_Test_Summary
         APPEND PROPERTY DEPENDS LAPACK-${testName}
@@ -47,9 +53,7 @@ add_lapack_test(stest.out stest.in xlintsts)
 # ======== SINGLE RFP LIN TESTS ========================
 add_lapack_test(stest_rfp.out stest_rfp.in xlintstrfs)
 #
-#
 # ======== SINGLE EIG TESTS ===========================
-#
 add_lapack_test(snep.out nep.in xeigtsts)
 add_lapack_test(ssep.out sep.in xeigtsts)
 add_lapack_test(sse2.out se2.in xeigtsts)
@@ -70,6 +74,9 @@ add_lapack_test(sgqr.out gqr.in xeigtsts)
 add_lapack_test(sgsv.out gsv.in xeigtsts)
 add_lapack_test(scsd.out csd.in xeigtsts)
 add_lapack_test(slse.out lse.in xeigtsts)
+#
+# ======== SINGLE DMD EIG TESTS ===========================
+add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
 endif()
 
 if(BUILD_DOUBLE)
@@ -101,6 +108,9 @@ add_lapack_test(dgqr.out gqr.in xeigtstd)
 add_lapack_test(dgsv.out gsv.in xeigtstd)
 add_lapack_test(dcsd.out csd.in xeigtstd)
 add_lapack_test(dlse.out lse.in xeigtstd)
+#
+# ======== DOUBLE DMD EIG TESTS ===========================
+add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
 endif()
 
 if(BUILD_COMPLEX)
@@ -130,6 +140,9 @@ add_lapack_test(cgqr.out gqr.in xeigtstc)
 add_lapack_test(cgsv.out gsv.in xeigtstc)
 add_lapack_test(ccsd.out csd.in xeigtstc)
 add_lapack_test(clse.out lse.in xeigtstc)
+#
+# ======== COMPLEX DMD EIG TESTS ===========================
+add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
 endif()
 
 if(BUILD_COMPLEX16)
@@ -161,6 +174,12 @@ add_lapack_test(zgqr.out gqr.in xeigtstz)
 add_lapack_test(zgsv.out gsv.in xeigtstz)
 add_lapack_test(zcsd.out csd.in xeigtstz)
 add_lapack_test(zlse.out lse.in xeigtstz)
+#
+# ======== COMPLEX16 DMD EIG TESTS ===========================
+add_lapack_test(zdmd.out zdmd.in xdmdeigtstz)
+#
+# ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
+add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
 endif()
 
 

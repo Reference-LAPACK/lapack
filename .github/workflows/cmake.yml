@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-    - try-github-actions
+    - try-github-actions-for-windows
     paths:
     - .github/workflows/cmake.yml
     - '**CMakeLists.txt'
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ macos-latest, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
         fflags: [
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
@@ -72,26 +72,28 @@ jobs:
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
-    - name: Use GCC-11 on MacOS
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
+    - name: Use GCC-14 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
       run: >
-        cmake -B build
-        -D CMAKE_C_COMPILER="gcc-11"
-        -D CMAKE_Fortran_COMPILER="gfortran-11"
+        cmake -B build -G Ninja
+        -D CMAKE_C_COMPILER="gcc-14"
+        -D CMAKE_Fortran_COMPILER="gfortran-14"
         -D USE_FLAT_NAMESPACE:BOOL=ON
 
-    # - name: Use Unix Makefiles on Windows
-    #   if: ${{ matrix.os == 'windows-latest' }}
-    #   run: >
-    #     cmake -B build
-    #     -G "Unix Makefiles"
-    #     -D CMAKE_C_FLAGS="${{env.CFLAGS}} -Wl,--stack=1000000000"
+    - name: Special flags for Windows
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_EXE_LINKER_FLAGS="-Wl,--stack=2097152"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
-        cmake -B build
+        cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
@@ -101,27 +103,19 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=ON
 
     - name: Build
-      working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: |
-        ctest -D ExperimentalStart
-        ctest -D ExperimentalConfigure
-        ctest -D ExperimentalBuild -j2
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
-      if: ${{ contains( matrix.fflags, 'openmp' ) }}
-      run: |
-        ctest -D ExperimentalTest --schedule-random -j1 --output-on-failure --timeout 100
-        ctest -D ExperimentalSubmit
+      if: ${{ contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
+      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j1 --output-on-failure --timeout 100
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      if: ${{ !contains( matrix.fflags, 'openmp' ) }}
-      run: |
-        ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure --timeout 100
-        ctest -D ExperimentalSubmit
+      if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
+      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
 
     - name: Install
       run: cmake --build build --target install -j2
@@ -136,11 +130,14 @@ jobs:
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
-        cmake -B build
+        cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
@@ -157,3 +154,87 @@ jobs:
         echo "Coverage"
         cmake --build build --target coverage
         bash <(curl -s https://codecov.io/bash) -X gcov
+
+  test-install-cblas-lapacke-without-fortran-compiler:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
+    - name: Install basics
+      run: |
+        sudo apt update
+        sudo apt install -y cmake liblapack-dev libblas-dev
+        sudo apt purge gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D USE_OPTIMIZED_LAPACK:BOOL=ON
+        -D BUILD_TESTING:BOOL=OFF
+        -D LAPACKE_WITH_TMG:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  memory-check:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_TYPE: Debug
+
+    steps:
+
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+    
+    - name: Install APT packages
+      run: |
+        sudo apt update
+        sudo apt install -y cmake valgrind gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+        -D LAPACK_TESTING_USE_PYTHON:BOOL=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: |
+        ctest -C ${{env.BUILD_TYPE}} --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out
+        cat memcheck.out
+        if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
+          exit 0
+        else
+          for f in Testing/Temporary/MemoryChecker.*.log; do
+            if tail -n 1 $f | grep -q "ERROR SUMMARY: 0 errors"; then
+              tail -n 1 $f
+              continue
+            else
+              echo "Memory check failed in $f"
+              cat $f
+              exit 1
+            fi
+          done
+          exit 0
+        fi

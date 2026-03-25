@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETD2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetd2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetd2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -122,7 +120,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hetd2
 *
 *> \par Further Details:
 *  =====================
@@ -172,6 +170,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -255,7 +254,8 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL CHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
+               CALL CHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1,
+     $                     ZERO,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
@@ -304,14 +304,16 @@
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, A( I+1, I ),
+               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, A( I+1,
+     $                                   I ),
      $                 1 )
                CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
+               CALL CHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ),
+     $                     1,
      $                     A( I+1, I+1 ), LDA )
 *
             ELSE

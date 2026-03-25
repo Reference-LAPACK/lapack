@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zpbcon_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zpbcon_work)( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, const lapack_complex_double* ab,
                                 lapack_int ldab, double anorm, double* rcond,
                                 lapack_complex_double* work, double* rwork )
@@ -51,7 +51,7 @@ lapack_int LAPACKE_zpbcon_work( int matrix_layout, char uplo, lapack_int n,
         /* Check leading dimension(s) */
         if( ldab < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zpbcon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbcon_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -62,7 +62,7 @@ lapack_int LAPACKE_zpbcon_work( int matrix_layout, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zpb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        API_SUFFIX(LAPACKE_zpb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zpbcon( &uplo, &n, &kd, ab_t, &ldab_t, &anorm, rcond, work,
                        rwork, &info );
@@ -73,11 +73,11 @@ lapack_int LAPACKE_zpbcon_work( int matrix_layout, char uplo, lapack_int n,
         LAPACKE_free( ab_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zpbcon_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbcon_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zpbcon_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zpbcon_work", info );
     }
     return info;
 }

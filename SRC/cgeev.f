@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGEEV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeev.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeev.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -172,12 +170,13 @@
 *
 *  @generated from zgeev.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
-*> \ingroup complexGEeigen
+*> \ingroup geev
 *
 *  =====================================================================
-      SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
+      SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR,
+     $                  LDVR,
      $                  WORK, LWORK, RWORK, INFO )
-      implicit none
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,15 +187,15 @@
       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL   RWORK( * )
-      COMPLEX         A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+      REAL               RWORK( * )
+      COMPLEX            A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   W( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL   ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
@@ -204,22 +203,27 @@
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, IRWORK, ITAU,
      $                   IWRK, K, LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL   ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
-      COMPLEX         TMP
+      REAL               ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
+      COMPLEX            TMP
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
-      REAL   DUM( 1 )
+      REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CSSCAL, CGEBAK, CGEBAL, CGEHRD,
-     $                   CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3, CUNGHR
+      EXTERNAL           XERBLA, CSSCAL, CGEBAK,
+     $                   CGEBAL, CGEHRD, CHSEQR,
+     $                   CLACPY, CLASCL, CSCAL,
+     $                   CTREVC3, CUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       INTEGER            ISAMAX, ILAENV
-      REAL   SLAMCH, SCNRM2, CLANGE
-      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SCNRM2, CLANGE
+      REAL               SLAMCH, SCNRM2, CLANGE,
+     $                   SROUNDUP_LWORK
+      EXTERNAL           LSAME, ISAMAX, ILAENV,
+     $                   SLAMCH, SCNRM2, CLANGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, CMPLX, CONJG, AIMAG, MAX, SQRT
@@ -234,7 +238,8 @@
       WANTVR = LSAME( JOBVR, 'V' )
       IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND.
+     $         ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -265,7 +270,8 @@
             MAXWRK = N + N*ILAENV( 1, 'CGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 2*N
             IF( WANTVL ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                CALL CTREVC3( 'L', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
@@ -275,7 +281,8 @@
                CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VL, LDVL,
      $                      WORK, -1, INFO )
             ELSE IF( WANTVR ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1,
+     $                       'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                CALL CTREVC3( 'R', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
@@ -291,7 +298,7 @@
             HSWORK = INT( WORK(1) )
             MAXWRK = MAX( MAXWRK, HSWORK, MINWRK )
          END IF
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
 *
          IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN
             INFO = -12
@@ -328,6 +335,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( SISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'CGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL CLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
@@ -360,7 +371,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
+         CALL CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
@@ -392,7 +404,8 @@
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
+         CALL CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ),
+     $                WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
@@ -426,7 +439,8 @@
 *        (RWorkspace: need 2*N)
 *
          IRWORK = IBAL + N
-         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
+     $                 LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1,
      $                 RWORK( IRWORK ), N, IERR )
       END IF
@@ -437,7 +451,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL, LDVL,
+         CALL CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL,
+     $                LDVL,
      $                IERR )
 *
 *        Normalize left eigenvectors and make largest component real
@@ -462,7 +477,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR, LDVR,
+         CALL CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR,
+     $                LDVR,
      $                IERR )
 *
 *        Normalize right eigenvectors and make largest component real
@@ -485,14 +501,16 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, W( INFO+1 ),
+         CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
+     $                W( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.GT.0 ) THEN
-            CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N, IERR )
+            CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N,
+     $                   IERR )
          END IF
       END IF
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
       RETURN
 *
 *     End of CGEEV

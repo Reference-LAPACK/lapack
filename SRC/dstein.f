@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSTEIN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstein.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstein.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -166,11 +164,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup stein
 *
 *  =====================================================================
       SUBROUTINE DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
      $                   IWORK, IFAIL, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -210,7 +209,8 @@
       EXTERNAL           IDAMAX, DDOT, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLAGTF, DLAGTS, DLARNV, DSCAL,
+      EXTERNAL           DAXPY, DCOPY, DLAGTF, DLAGTS, DLARNV,
+     $                   DSCAL,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -354,7 +354,8 @@
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
+            CALL DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ,
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -375,7 +376,8 @@
 *
 *           Solve the system LU = Pb.
 *
-            CALL DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
+            CALL DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ),
+     $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *
@@ -388,7 +390,8 @@
      $         GPIND = J
             IF( GPIND.NE.J ) THEN
                DO 80 I = GPIND, J - 1
-                  ZTR = -DDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1, I ),
+                  ZTR = -DDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1,
+     $                         I ),
      $                  1 )
                   CALL DAXPY( BLKSIZ, ZTR, Z( B1, I ), 1,
      $                        WORK( INDRV1+1 ), 1 )

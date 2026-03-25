@@ -33,7 +33,7 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_dtr_nancheck( int matrix_layout, char uplo, char diag,
+lapack_logical API_SUFFIX(LAPACKE_dtr_nancheck)( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const double *a,
                                       lapack_int lda )
@@ -44,12 +44,12 @@ lapack_logical LAPACKE_dtr_nancheck( int matrix_layout, char uplo, char diag,
     if( a == NULL ) return (lapack_logical) 0;
 
     colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
-    lower  = LAPACKE_lsame( uplo, 'l' );
-    unit   = LAPACKE_lsame( diag, 'u' );
+    lower  = API_SUFFIX(LAPACKE_lsame)( uplo, 'l' );
+    unit   = API_SUFFIX(LAPACKE_lsame)( diag, 'u' );
 
     if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
-        ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
-        ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
+        ( !lower  && !API_SUFFIX(LAPACKE_lsame)( uplo, 'u' ) ) ||
+        ( !unit   && !API_SUFFIX(LAPACKE_lsame)( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
         return (lapack_logical) 0;
     }

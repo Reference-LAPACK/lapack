@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZPORFSX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zporfsx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zporfsx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -383,13 +381,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16POcomputational
+*> \ingroup porfsx
 *
 *  =====================================================================
-      SUBROUTINE ZPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+      SUBROUTINE ZPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S,
+     $                    B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -451,7 +451,8 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
+      EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X,
+     $                   ZLA_PORCOND_C
       DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
@@ -508,7 +509,8 @@
 *
 *     Test input parameters.
 *
-      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND.
+     $     .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
       ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
@@ -594,7 +596,8 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0,
+     $                SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).

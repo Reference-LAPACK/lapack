@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLARZB + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzb.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzb.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -164,7 +162,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup larzb
 *
 *> \par Contributors:
 *  ==================
@@ -180,6 +178,7 @@
 *  =====================================================================
       SUBROUTINE CLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
      $                   LDV, T, LDT, C, LDC, WORK, LDWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -257,7 +256,8 @@
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
-         CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
+         CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H
@@ -272,7 +272,8 @@
 *                            V( 1:k, 1:l )**H * W( 1:n, 1:k )**H
 *
          IF( L.GT.0 )
-     $      CALL CGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
+     $      CALL CGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V,
+     $                  LDV,
      $                  WORK, LDWORK, ONE, C( M-L+1, 1 ), LDC )
 *
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
@@ -298,7 +299,8 @@
          DO 50 J = 1, K
             CALL CLACGV( K-J+1, T( J, J ), 1 )
    50    CONTINUE
-         CALL CTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
+         CALL CTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE,
+     $               T,
      $               LDT, WORK, LDWORK )
          DO 60 J = 1, K
             CALL CLACGV( K-J+1, T( J, J ), 1 )
@@ -319,7 +321,8 @@
             CALL CLACGV( K, V( 1, J ), 1 )
    90    CONTINUE
          IF( L.GT.0 )
-     $      CALL CGEMM( 'No transpose', 'No transpose', M, L, K, -ONE,
+     $      CALL CGEMM( 'No transpose', 'No transpose', M, L, K,
+     $                  -ONE,
      $                  WORK, LDWORK, V, LDV, ONE, C( 1, N-L+1 ), LDC )
          DO 100 J = 1, L
             CALL CLACGV( K, V( 1, J ), 1 )

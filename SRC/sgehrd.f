@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGEHRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgehrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgehrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -89,7 +87,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (LWORK)
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -120,7 +118,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup gehrd
 *
 *> \par Further Details:
 *  =====================
@@ -163,7 +161,9 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK,
+     $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,7 +173,7 @@
       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL              A( LDA, * ), TAU( * ), WORK( * )
+      REAL               A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -182,7 +182,7 @@
       INTEGER            NBMAX, LDT, TSIZE
       PARAMETER          ( NBMAX = 64, LDT = NBMAX+1,
      $                     TSIZE = LDT*NBMAX )
-      REAL              ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0,
      $                     ONE = 1.0E+0 )
 *     ..
@@ -190,10 +190,11 @@
       LOGICAL            LQUERY
       INTEGER            I, IB, IINFO, IWT, J, LDWORK, LWKOPT, NB,
      $                   NBMIN, NH, NX
-      REAL              EI
+      REAL               EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SGEHD2, SGEMM, SLAHR2, SLARFB, STRMM,
+      EXTERNAL           SAXPY, SGEHD2, SGEMM, SLAHR2, SLARFB,
+     $                   STRMM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -201,7 +202,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -221,13 +223,19 @@
          INFO = -8
       END IF
 *
+      NH = IHI - ILO + 1
       IF( INFO.EQ.0 ) THEN
 *
 *       Compute the workspace requirements
 *
-         NB = MIN( NBMAX, ILAENV( 1, 'SGEHRD', ' ', N, ILO, IHI, -1 ) )
-         LWKOPT = N*NB + TSIZE
-         WORK( 1 ) = LWKOPT
+         IF( NH.LE.1 ) THEN
+            LWKOPT = 1
+         ELSE
+            NB = MIN( NBMAX, ILAENV( 1, 'SGEHRD', ' ', N, ILO, IHI,
+     $                              -1 ) )
+            LWKOPT = N*NB + TSIZE
+         ENDIF
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -248,7 +256,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = 1
          RETURN
@@ -268,7 +275,7 @@
 *
 *           Determine if workspace is large enough for blocked code
 *
-            IF( LWORK.LT.N*NB+TSIZE ) THEN
+            IF( LWORK.LT.LWKOPT ) THEN
 *
 *              Not enough workspace to use optimal NB:  determine the
 *              minimum value of NB, and reduce NB or force use of
@@ -344,7 +351,8 @@
 *     Use unblocked code to reduce the rest of the matrix
 *
       CALL SGEHD2( N, I, IHI, A, LDA, TAU, WORK, IINFO )
-      WORK( 1 ) = LWKOPT
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

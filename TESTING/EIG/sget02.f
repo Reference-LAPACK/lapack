@@ -132,6 +132,7 @@
 *  =====================================================================
       SUBROUTINE SGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSPSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspsvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspsvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -248,7 +246,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERsolve
+*> \ingroup hpsvx
 *
 *> \par Further Details:
 *  =====================
@@ -271,8 +269,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+      SUBROUTINE DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB,
+     $                   X,
      $                   LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -305,7 +305,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DSPCON, DSPRFS, DSPTRF, DSPTRS,
+      EXTERNAL           DCOPY, DLACPY, DSPCON, DSPRFS, DSPTRF,
+     $                   DSPTRS,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -319,7 +320,8 @@
       NOFACT = LSAME( FACT, 'N' )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -357,7 +359,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL DSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, IWORK,
+     $             INFO )
 *
 *     Compute the solution vectors X.
 *
@@ -367,7 +370,8 @@
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR,
+      CALL DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+     $             FERR,
      $             BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.

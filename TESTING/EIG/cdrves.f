@@ -375,6 +375,7 @@
       SUBROUTINE CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, HT, W, WT, VS, LDVS, RESULT,
      $                   WORK, NWORK, RWORK, IWORK, BWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

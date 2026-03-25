@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ILAENV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -132,7 +130,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup ilaenv
 *
 *> \par Further Details:
 *  =====================
@@ -159,6 +157,7 @@
 *>
 *  =====================================================================
       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -355,6 +354,12 @@
             ELSE
                NB = 64
             END IF
+         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+            IF( SNAME ) THEN
+               NB = 32
+            ELSE
+               NB = 32
+            END IF
          END IF
       ELSE IF( C2.EQ.'PO' ) THEN
          IF( C3.EQ.'TRF' ) THEN
@@ -541,7 +546,14 @@
             ELSE
                NBMIN = 2
             END IF
+         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+            IF( SNAME ) THEN
+               NBMIN = 2
+            ELSE
+               NBMIN = 2
+            END IF
          END IF
+
       ELSE IF( C2.EQ.'SY' ) THEN
          IF( C3.EQ.'TRF' ) THEN
             IF( SNAME ) THEN
@@ -618,6 +630,12 @@
             ELSE
                NX = 128
             END IF
+         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+            IF( SNAME ) THEN
+               NX = 128
+            ELSE
+               NX = 128
+            END IF
          END IF
       ELSE IF( C2.EQ.'SY' ) THEN
          IF( SNAME .AND. C3.EQ.'TRD' ) THEN
@@ -647,6 +665,10 @@
          NX = 128
          IF( C3.EQ.'HD3' ) THEN
             NX = 128
+         END IF
+      ELSE IF( C2.EQ.'LA' ) THEN
+         IF( C3.EQ.'RFT' ) THEN
+            NX = 64
          END IF
       END IF
       ILAENV = NX

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPFTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spftri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spftri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -97,7 +95,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup pftri
 *
 *> \par Further Details:
 *  =====================
@@ -188,6 +186,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SPFTRI( TRANSR, UPLO, N, A, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -215,7 +214,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, STFTRI, SLAUUM, STRMM, SSYRK
+      EXTERNAL           XERBLA, STFTRI, SLAUUM, STRMM,
+     $                   SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -290,7 +290,8 @@
                CALL SLAUUM( 'L', N1, A( 0 ), N, INFO )
                CALL SSYRK( 'L', 'T', N1, N2, ONE, A( N1 ), N, ONE,
      $                     A( 0 ), N )
-               CALL STRMM( 'L', 'U', 'N', 'N', N2, N1, ONE, A( N ), N,
+               CALL STRMM( 'L', 'U', 'N', 'N', N2, N1, ONE, A( N ),
+     $                     N,
      $                     A( N1 ), N )
                CALL SLAUUM( 'U', N2, A( N ), N, INFO )
 *
@@ -303,7 +304,8 @@
                CALL SLAUUM( 'L', N1, A( N2 ), N, INFO )
                CALL SSYRK( 'L', 'N', N1, N2, ONE, A( 0 ), N, ONE,
      $                     A( N2 ), N )
-               CALL STRMM( 'R', 'U', 'T', 'N', N1, N2, ONE, A( N1 ), N,
+               CALL STRMM( 'R', 'U', 'T', 'N', N1, N2, ONE, A( N1 ),
+     $                     N,
      $                     A( 0 ), N )
                CALL SLAUUM( 'U', N2, A( N1 ), N, INFO )
 *
@@ -319,9 +321,11 @@
 *              T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1)
 *
                CALL SLAUUM( 'U', N1, A( 0 ), N1, INFO )
-               CALL SSYRK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1, ONE,
+               CALL SSYRK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1,
+     $                     ONE,
      $                     A( 0 ), N1 )
-               CALL STRMM( 'R', 'L', 'N', 'N', N1, N2, ONE, A( 1 ), N1,
+               CALL STRMM( 'R', 'L', 'N', 'N', N1, N2, ONE, A( 1 ),
+     $                     N1,
      $                     A( N1*N1 ), N1 )
                CALL SLAUUM( 'L', N2, A( 1 ), N1, INFO )
 *
@@ -333,7 +337,8 @@
                CALL SLAUUM( 'U', N1, A( N2*N2 ), N2, INFO )
                CALL SSYRK( 'U', 'T', N1, N2, ONE, A( 0 ), N2, ONE,
      $                     A( N2*N2 ), N2 )
-               CALL STRMM( 'L', 'L', 'T', 'N', N2, N1, ONE, A( N1*N2 ),
+               CALL STRMM( 'L', 'L', 'T', 'N', N2, N1, ONE,
+     $                     A( N1*N2 ),
      $                     N2, A( 0 ), N2 )
                CALL SLAUUM( 'L', N2, A( N1*N2 ), N2, INFO )
 *
@@ -358,7 +363,8 @@
                CALL SLAUUM( 'L', K, A( 1 ), N+1, INFO )
                CALL SSYRK( 'L', 'T', K, K, ONE, A( K+1 ), N+1, ONE,
      $                     A( 1 ), N+1 )
-               CALL STRMM( 'L', 'U', 'N', 'N', K, K, ONE, A( 0 ), N+1,
+               CALL STRMM( 'L', 'U', 'N', 'N', K, K, ONE, A( 0 ),
+     $                     N+1,
      $                     A( K+1 ), N+1 )
                CALL SLAUUM( 'U', K, A( 0 ), N+1, INFO )
 *
@@ -371,7 +377,8 @@
                CALL SLAUUM( 'L', K, A( K+1 ), N+1, INFO )
                CALL SSYRK( 'L', 'N', K, K, ONE, A( 0 ), N+1, ONE,
      $                     A( K+1 ), N+1 )
-               CALL STRMM( 'R', 'U', 'T', 'N', K, K, ONE, A( K ), N+1,
+               CALL STRMM( 'R', 'U', 'T', 'N', K, K, ONE, A( K ),
+     $                     N+1,
      $                     A( 0 ), N+1 )
                CALL SLAUUM( 'U', K, A( K ), N+1, INFO )
 *
@@ -388,7 +395,8 @@
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
                CALL SLAUUM( 'U', K, A( K ), K, INFO )
-               CALL SSYRK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K, ONE,
+               CALL SSYRK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K,
+     $                     ONE,
      $                     A( K ), K )
                CALL STRMM( 'R', 'L', 'N', 'N', K, K, ONE, A( 0 ), K,
      $                     A( K*( K+1 ) ), K )
@@ -403,7 +411,8 @@
                CALL SLAUUM( 'U', K, A( K*( K+1 ) ), K, INFO )
                CALL SSYRK( 'U', 'T', K, K, ONE, A( 0 ), K, ONE,
      $                     A( K*( K+1 ) ), K )
-               CALL STRMM( 'L', 'L', 'T', 'N', K, K, ONE, A( K*K ), K,
+               CALL STRMM( 'L', 'L', 'T', 'N', K, K, ONE, A( K*K ),
+     $                     K,
      $                     A( 0 ), K )
                CALL SLAUUM( 'L', K, A( K*K ), K, INFO )
 *

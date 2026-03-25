@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SHSEQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/shseqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shseqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -233,7 +231,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup hseqr
 *
 *> \par Contributors:
 *  ==================
@@ -313,6 +311,7 @@
 *  =====================================================================
       SUBROUTINE SHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, WR, WI, Z,
      $                   LDZ, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -358,10 +357,12 @@
 *     .. External Functions ..
       INTEGER            ILAENV
       LOGICAL            LSAME
-      EXTERNAL           ILAENV, LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLAHQR, SLAQR0, SLASET, XERBLA
+      EXTERNAL           SLACPY, SLAHQR, SLAQR0, SLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -373,7 +374,7 @@
       WANTT = LSAME( JOB, 'S' )
       INITZ = LSAME( COMPZ, 'I' )
       WANTZ = INITZ .OR. LSAME( COMPZ, 'V' )
-      WORK( 1 ) = REAL( MAX( 1, N ) )
+      WORK( 1 ) = SROUNDUP_LWORK( MAX( 1, N ) )
       LQUERY = LWORK.EQ.-1
 *
       INFO = 0
@@ -454,13 +455,15 @@
 *        ==== SLAQR0 for big matrices; SLAHQR for small ones ====
 *
          IF( N.GT.NMIN ) THEN
-            CALL SLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI, ILO,
+            CALL SLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+     $                   ILO,
      $                   IHI, Z, LDZ, WORK, LWORK, INFO )
          ELSE
 *
 *           ==== Small matrix ====
 *
-            CALL SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI, ILO,
+            CALL SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+     $                   ILO,
      $                   IHI, Z, LDZ, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -475,7 +478,8 @@
 *                 ==== Larger matrices have enough subdiagonal scratch
 *                 .    space to call SLAQR0 directly. ====
 *
-                  CALL SLAQR0( WANTT, WANTZ, N, ILO, KBOT, H, LDH, WR,
+                  CALL SLAQR0( WANTT, WANTZ, N, ILO, KBOT, H, LDH,
+     $                         WR,
      $                         WI, ILO, IHI, Z, LDZ, WORK, LWORK, INFO )
 *
                ELSE
@@ -487,9 +491,11 @@
 *
                   CALL SLACPY( 'A', N, N, H, LDH, HL, NL )
                   HL( N+1, N ) = ZERO
-                  CALL SLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1, N+1 ),
+                  CALL SLASET( 'A', NL, NL-N, ZERO, ZERO, HL( 1,
+     $                         N+1 ),
      $                         NL )
-                  CALL SLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL, WR,
+                  CALL SLAQR0( WANTT, WANTZ, NL, ILO, KBOT, HL, NL,
+     $                         WR,
      $                         WI, ILO, IHI, Z, LDZ, WORKL, NL, INFO )
                   IF( WANTT .OR. INFO.NE.0 )
      $               CALL SLACPY( 'A', N, N, HL, NL, H, LDH )

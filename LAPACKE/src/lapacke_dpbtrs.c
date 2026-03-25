@@ -32,25 +32,25 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dpbtrs( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dpbtrs)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int kd, lapack_int nrhs, const double* ab,
                            lapack_int ldab, double* b, lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dpbtrs", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dpbtrs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dpb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_dpb_nancheck)( matrix_layout, uplo, n, kd, ab, ldab ) ) {
             return -6;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -8;
         }
     }
 #endif
-    return LAPACKE_dpbtrs_work( matrix_layout, uplo, n, kd, nrhs, ab, ldab, b,
+    return API_SUFFIX(LAPACKE_dpbtrs_work)( matrix_layout, uplo, n, kd, nrhs, ab, ldab, b,
                                 ldb );
 }

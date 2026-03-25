@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGHD3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgghd3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghd3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -179,14 +177,14 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (LWORK)
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
-*> \param[in]  LWORK
+*> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of the array WORK.  LWORK >= 1.
+*>          The length of the array WORK. LWORK >= 1.
 *>          For optimum performance LWORK >= 6*N*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -211,7 +209,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup gghd3
 *
 *> \par Further Details:
 *  =====================
@@ -225,7 +223,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE SGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB,
+     $                   Q,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine --
@@ -260,14 +259,16 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGGHRD, SLARTG, SLASET, SORM22, SROT, SGEMM,
+      EXTERNAL           SGGHRD, SLARTG, SLASET, SORM22, SROT,
+     $                   SGEMM,
      $                   SGEMV, STRMV, SLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -275,8 +276,13 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'SGGHD3', ' ', N, ILO, IHI, -1 )
-      LWKOPT = MAX( 6*N*NB, 1 )
-      WORK( 1 ) = REAL( LWKOPT )
+      NH = IHI - ILO + 1
+      IF( NH.LE.1 ) THEN
+         LWKOPT = 1
+      ELSE
+         LWKOPT = 6*N*NB
+      END IF
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       INITQ = LSAME( COMPQ, 'I' )
       WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
       INITZ = LSAME( COMPZ, 'I' )
@@ -325,7 +331,6 @@
 *
 *     Quick return if possible
 *
-      NH = IHI - ILO + 1
       IF( NH.LE.1 ) THEN
          WORK( 1 ) = ONE
          RETURN
@@ -383,7 +388,8 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL SLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK, NBLST )
+            CALL SLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK,
+     $                   NBLST )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
                CALL SLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
@@ -580,10 +586,12 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL STRMV( 'Upper', 'Transpose', 'Non-unit', LEN,
+                     CALL STRMV( 'Upper', 'Transpose', 'Non-unit',
+     $                           LEN,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL STRMV( 'Lower', 'Transpose', 'Non-unit', NNB,
+                     CALL STRMV( 'Lower', 'Transpose', 'Non-unit',
+     $                           NNB,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
                      CALL SGEMV( 'Transpose', NNB, LEN, ONE,
@@ -772,7 +780,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL SORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL SORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -803,7 +812,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL SORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL SORM22( 'Right', 'No Transpose', TOP,
+     $                            2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -883,9 +893,11 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL SGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL SGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB,
+     $                Q,
      $                LDQ, Z, LDZ, IERR )
-      WORK( 1 ) = REAL( LWKOPT )
+*
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

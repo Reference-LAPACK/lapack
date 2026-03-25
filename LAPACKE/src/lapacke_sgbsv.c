@@ -32,26 +32,26 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgbsv( int matrix_layout, lapack_int n, lapack_int kl,
+lapack_int API_SUFFIX(LAPACKE_sgbsv)( int matrix_layout, lapack_int n, lapack_int kl,
                           lapack_int ku, lapack_int nrhs, float* ab,
                           lapack_int ldab, lapack_int* ipiv, float* b,
                           lapack_int ldb )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sgbsv", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgbsv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_sgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
+        if( API_SUFFIX(LAPACKE_sgb_nancheck)( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
             return -6;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -9;
         }
     }
 #endif
-    return LAPACKE_sgbsv_work( matrix_layout, n, kl, ku, nrhs, ab, ldab, ipiv, b,
+    return API_SUFFIX(LAPACKE_sgbsv_work)( matrix_layout, n, kl, ku, nrhs, ab, ldab, ipiv, b,
                                ldb );
 }

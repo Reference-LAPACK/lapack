@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLATRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -140,7 +138,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup latrd
 *
 *> \par Further Details:
 *  =====================
@@ -196,6 +194,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,7 +222,8 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZGEMV, ZHEMV, ZLACGV, ZLARFG, ZSCAL
+      EXTERNAL           ZAXPY, ZGEMV, ZHEMV, ZLACGV, ZLARFG,
+     $                   ZSCAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -256,7 +256,8 @@
      $                     LDA, W( I, IW+1 ), LDW, ONE, A( 1, I ), 1 )
                CALL ZLACGV( N-I, W( I, IW+1 ), LDW )
                CALL ZLACGV( N-I, A( I, I+1 ), LDA )
-               CALL ZGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 ),
+               CALL ZGEMV( 'No transpose', I, N-I, -ONE, W( 1,
+     $                     IW+1 ),
      $                     LDW, A( I, I+1 ), LDA, ONE, A( 1, I ), 1 )
                CALL ZLACGV( N-I, A( I, I+1 ), LDA )
                A( I, I ) = DBLE( A( I, I ) )
@@ -332,17 +333,20 @@
                CALL ZGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     W( I+1, 1 ), LDW, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1,
+     $                     1 ),
      $                     LDA, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
                CALL ZGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 ),
+               CALL ZGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1,
+     $                     1 ),
      $                     LDW, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
                CALL ZSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
                ALPHA = -HALF*TAU( I )*ZDOTC( N-I, W( I+1, I ), 1,
      $                 A( I+1, I ), 1 )
-               CALL ZAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1 )
+               CALL ZAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ),
+     $                     1 )
             END IF
 *
    20    CONTINUE

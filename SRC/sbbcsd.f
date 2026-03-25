@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SBBCSD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sbbcsd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbbcsd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -322,13 +320,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup bbcsd
 *
 *  =====================================================================
-      SUBROUTINE SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+      SUBROUTINE SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P,
+     $                   Q,
      $                   THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
      $                   V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
      $                   B22D, B22E, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -372,7 +372,8 @@
      $                   UNFL, X1, X2, Y1, Y2
 *
 *     .. External Subroutines ..
-      EXTERNAL           SLASR, SSCAL, SSWAP, SLARTGP, SLARTGS, SLAS2,
+      EXTERNAL           SLASR, SSCAL, SSWAP, SLARTGP, SLARTGS,
+     $                   SLAS2,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -417,7 +418,7 @@
 *
       IF( INFO .EQ. 0 .AND. Q .EQ. 0 ) THEN
          LWORKMIN = 1
-         WORK(1) = LWORKMIN
+         WORK(1) = REAL( LWORKMIN )
          RETURN
       END IF
 *
@@ -434,7 +435,7 @@
          IV2TSN = IV2TCS + Q
          LWORKOPT = IV2TSN + Q - 1
          LWORKMIN = LWORKOPT
-         WORK(1) = LWORKOPT
+         WORK(1) = REAL( LWORKOPT )
          IF( LWORK .LT. LWORKMIN .AND. .NOT. LQUERY ) THEN
             INFO = -28
          END IF
@@ -453,7 +454,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       TOLMUL = MAX( TEN, MIN( HUNDRED, EPS**MEIGHTH ) )
       TOL = TOLMUL*EPS
-      THRESH = MAX( TOL, MAXITR*Q*Q*UNFL )
+      THRESH = MAX( TOL, REAL( MAXITR*Q*Q )*UNFL )
 *
 *     Test for negligible sines or cosines
 *
@@ -559,9 +560,11 @@
 *
 *           Compute shifts for B11 and B21 and use the lesser
 *
-            CALL SLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX), SIGMA11,
+            CALL SLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX),
+     $                  SIGMA11,
      $                  DUMMY )
-            CALL SLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX), SIGMA21,
+            CALL SLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX),
+     $                  SIGMA21,
      $                  DUMMY )
 *
             IF( SIGMA11 .LE. SIGMA21 ) THEN
@@ -697,7 +700,8 @@
 *           chasing by applying the original shift again.
 *
             IF( .NOT. RESTART11 .AND. .NOT. RESTART21 ) THEN
-               CALL SLARTGP( X2, X1, WORK(IV1TSN+I-1), WORK(IV1TCS+I-1),
+               CALL SLARTGP( X2, X1, WORK(IV1TSN+I-1),
+     $                       WORK(IV1TCS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART11 .AND. RESTART21 ) THEN
                CALL SLARTGP( B11BULGE, B11E(I-1), WORK(IV1TSN+I-1),
@@ -724,10 +728,12 @@
                CALL SLARTGP( B22BULGE, B22D(I-1), WORK(IV2TSN+I-1-1),
      $                       WORK(IV2TCS+I-1-1), R )
             ELSE IF( NU .LT. MU ) THEN
-               CALL SLARTGS( B12E(I-1), B12D(I), NU, WORK(IV2TCS+I-1-1),
+               CALL SLARTGS( B12E(I-1), B12D(I), NU,
+     $                       WORK(IV2TCS+I-1-1),
      $                       WORK(IV2TSN+I-1-1) )
             ELSE
-               CALL SLARTGS( B22E(I-1), B22D(I), MU, WORK(IV2TCS+I-1-1),
+               CALL SLARTGS( B22E(I-1), B22D(I), MU,
+     $                       WORK(IV2TCS+I-1-1),
      $                       WORK(IV2TSN+I-1-1) )
             END IF
 *
@@ -780,7 +786,8 @@
 *           chasing by applying the original shift again.
 *
             IF( .NOT. RESTART11 .AND. .NOT. RESTART12 ) THEN
-               CALL SLARTGP( X2, X1, WORK(IU1SN+I-1), WORK(IU1CS+I-1),
+               CALL SLARTGP( X2, X1, WORK(IU1SN+I-1),
+     $                       WORK(IU1CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART11 .AND. RESTART12 ) THEN
                CALL SLARTGP( B11BULGE, B11D(I), WORK(IU1SN+I-1),
@@ -796,7 +803,8 @@
      $                       WORK(IU1SN+I-1) )
             END IF
             IF( .NOT. RESTART21 .AND. .NOT. RESTART22 ) THEN
-               CALL SLARTGP( Y2, Y1, WORK(IU2SN+I-1), WORK(IU2CS+I-1),
+               CALL SLARTGP( Y2, Y1, WORK(IU2SN+I-1),
+     $                       WORK(IU2CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART21 .AND. RESTART22 ) THEN
                CALL SLARTGP( B21BULGE, B21D(I), WORK(IU2SN+I-1),
@@ -805,7 +813,7 @@
                CALL SLARTGP( B22BULGE, B22E(I-1), WORK(IU2SN+I-1),
      $                       WORK(IU2CS+I-1), R )
             ELSE IF( NU .LT. MU ) THEN
-               CALL SLARTGS( B21E(I), B21E(I+1), NU, WORK(IU2CS+I-1),
+               CALL SLARTGS( B21E(I), B21D(I+1), NU, WORK(IU2CS+I-1),
      $                       WORK(IU2SN+I-1) )
             ELSE
                CALL SLARTGS( B22D(I), B22E(I), MU, WORK(IU2CS+I-1),
@@ -862,10 +870,12 @@
             CALL SLARTGP( Y2, Y1, WORK(IV2TSN+IMAX-1-1),
      $                    WORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( .NOT. RESTART12 .AND. RESTART22 ) THEN
-            CALL SLARTGP( B12BULGE, B12D(IMAX-1), WORK(IV2TSN+IMAX-1-1),
+            CALL SLARTGP( B12BULGE, B12D(IMAX-1),
+     $                    WORK(IV2TSN+IMAX-1-1),
      $                    WORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( RESTART12 .AND. .NOT. RESTART22 ) THEN
-            CALL SLARTGP( B22BULGE, B22D(IMAX-1), WORK(IV2TSN+IMAX-1-1),
+            CALL SLARTGP( B22BULGE, B22D(IMAX-1),
+     $                    WORK(IV2TSN+IMAX-1-1),
      $                    WORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( NU .LT. MU ) THEN
             CALL SLARTGS( B12E(IMAX-1), B12D(IMAX), NU,
@@ -1052,7 +1062,8 @@
                IF( WANTU2 )
      $            CALL SSWAP( M-P, U2(1,I), 1, U2(1,MINI), 1 )
                IF( WANTV1T )
-     $            CALL SSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1), LDV1T )
+     $            CALL SSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1),
+     $                        LDV1T )
                IF( WANTV2T )
      $            CALL SSWAP( M-Q, V2T(I,1), LDV2T, V2T(MINI,1),
      $               LDV2T )

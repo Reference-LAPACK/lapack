@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGGLSE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgglse.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgglse.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -52,6 +50,16 @@
 *> matrices (B, A) given by
 *>
 *>    B = (0 R)*Q,   A = Z*T*Q.
+*>
+*> Callers of this subroutine should note that the singularity/rank-deficiency checks
+*> implemented in this subroutine are rudimentary. The DTRTRS subroutine called by this
+*> subroutine only signals a failure due to singularity if the problem is exactly singular.
+*>
+*> It is conceivable for one (or more) of the factors involved in the generalized RQ
+*> factorization of the pair (B, A) to be subnormally close to singularity without this
+*> subroutine signalling an error. The solutions computed for such almost-rank-deficient
+*> problems may be less accurate due to a loss of numerical precision.
+*> 
 *> \endverbatim
 *
 *  Arguments:
@@ -153,12 +161,12 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          = 1:  the upper triangular factor R associated with B in the
-*>                generalized RQ factorization of the pair (B, A) is
+*>                generalized RQ factorization of the pair (B, A) is exactly
 *>                singular, so that rank(B) < P; the least squares
 *>                solution could not be computed.
 *>          = 2:  the (N-P) by (N-P) part of the upper trapezoidal factor
 *>                T associated with A in the generalized RQ factorization
-*>                of the pair (B, A) is singular, so that
+*>                of the pair (B, A) is exactly singular, so that
 *>                rank( (A) ) < N; the least squares solution could not
 *>                    ( (B) )
 *>                be computed.
@@ -172,11 +180,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERsolve
+*> \ingroup gglse
 *
 *  =====================================================================
-      SUBROUTINE DGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+      SUBROUTINE DGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK,
+     $                   LWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -202,7 +212,8 @@
      $                   NB4, NR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DGGRQF, DORMQR, DORMRQ,
+      EXTERNAL           DAXPY, DCOPY, DGEMV, DGGRQF, DORMQR,
+     $                   DORMRQ,
      $                   DTRMV, DTRTRS, XERBLA
 *     ..
 *     .. External Functions ..
@@ -281,7 +292,8 @@
 *     Update c = Z**T *c = ( c1 ) N-P
 *                          ( c2 ) M+P-N
 *
-      CALL DORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA, WORK( P+1 ),
+      CALL DORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA,
+     $             WORK( P+1 ),
      $             C, MAX( 1, M ), WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
@@ -302,7 +314,8 @@
 *
 *        Update c1
 *
-         CALL DGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ), LDA,
+         CALL DGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ),
+     $               LDA,
      $               D, 1, ONE, C, 1 )
       END IF
 *
@@ -327,7 +340,8 @@
       IF( M.LT.N ) THEN
          NR = M + P - N
          IF( NR.GT.0 )
-     $      CALL DGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1, M+1 ),
+     $      CALL DGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1,
+     $                  M+1 ),
      $                  LDA, D( NR+1 ), 1, ONE, C( N-P+1 ), 1 )
       ELSE
          NR = P
@@ -340,7 +354,8 @@
 *
 *     Backward transformation x = Q**T*x
 *
-      CALL DORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ), X,
+      CALL DORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ),
+     $             X,
      $             N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
       WORK( 1 ) = P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *

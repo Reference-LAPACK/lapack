@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGERQ2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgerq2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgerq2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -98,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup gerq2
 *
 *> \par Further Details:
 *  =====================
@@ -120,6 +118,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,10 +139,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           DLARF1L, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,11 +175,8 @@
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
-         AII = A( M-K+I, N-K+I )
-         A( M-K+I, N-K+I ) = ONE
-         CALL DLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+         CALL DLARF1L( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
      $               TAU( I ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = AII
    10 CONTINUE
       RETURN
 *

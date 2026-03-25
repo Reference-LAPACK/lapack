@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLANV2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlanv2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlanv2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -109,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup lanv2
 *
 *> \par Further Details:
 *  =====================
@@ -124,6 +122,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +143,7 @@
 *     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   AA, BB, BCMAX, BCMIS, CC, CS1, DD, EPS, P, SAB,
-     $                   SAC, SCALE, SIGMA, SN1, TAU, TEMP, Z, SAFMIN, 
+     $                   SAC, SCALE, SIGMA, SN1, TAU, TEMP, Z, SAFMIN,
      $                   SAFMN2, SAFMX2
       INTEGER            COUNT
 *     ..
@@ -249,9 +248,13 @@
 *           Compute [ A  B ] = [ CS  SN ] [ AA  BB ]
 *                   [ C  D ]   [-SN  CS ] [ CC  DD ]
 *
+*           Note: Some of the multiplications are wrapped in parentheses to
+*                 prevent compilers from using FMA instructions. See
+*                 https://github.com/Reference-LAPACK/lapack/issues/1031.
+*
             A = AA*CS + CC*SN
-            B = BB*CS + DD*SN
-            C = -AA*SN + CC*CS
+            B = ( BB*CS ) + ( DD*SN )
+            C = -( AA*SN ) + ( CC*CS )
             D = -BB*SN + DD*CS
 *
             TEMP = HALF*( A+D )

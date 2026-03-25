@@ -7,7 +7,6 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*> \htmlonly
 *> Download CHETRD_HE2HB + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd_he2hb.f"> 
 *> [TGZ]</a> 
@@ -15,7 +14,6 @@
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd_he2hb.f"> 
 *> [TXT]</a>
-*> \endhtmlonly 
 *
 *  Definition:
 *  ===========
@@ -123,8 +121,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (LWORK)
-*>          On exit, if INFO = 0, or if LWORK=-1, 
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, or if LWORK = -1,
 *>          WORK(1) returns the size of LWORK.
 *> \endverbatim
 *>
@@ -132,7 +130,9 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK which should be calculated
-*>          by a workspace query. LWORK = MAX(1, LWORK_QUERY)
+*>          by a workspace query.
+*>          If N <= KD+1, LWORK >= 1, else LWORK = MAX(1, LWORK_QUERY).
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -158,7 +158,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hetrd_he2hb
 *
 *> \par Further Details:
 *  =====================
@@ -274,7 +274,8 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM, CCOPY,
+      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM,
+     $                   CCOPY,
      $                   CLARFT, CGELQF, CGEQRF, CLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -283,7 +284,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE 
-      EXTERNAL           LSAME, ILAENV2STAGE
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV2STAGE, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -293,8 +295,12 @@
       INFO   = 0
       UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      LWMIN  = ILAENV2STAGE( 4, 'CHETRD_HE2HB', '', N, KD, -1, -1 )
-      
+      IF( N.LE.KD+1 ) THEN
+         LWMIN = 1
+      ELSE
+         LWMIN = ILAENV2STAGE( 4, 'CHETRD_HE2HB', '', N, KD, -1, -1 )
+      END IF
+*
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -313,7 +319,7 @@
          CALL XERBLA( 'CHETRD_HE2HB', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
          RETURN
       END IF
 *
@@ -378,7 +384,8 @@
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+                CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ),
+     $                      LDAB-1 )
    20        CONTINUE
 *                
              CALL CLASET( 'Lower', PK, PK, ZERO, ONE, 
@@ -506,7 +513,7 @@
 
       END IF
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       RETURN
 *
 *     End of CHETRD_HE2HB

@@ -91,10 +91,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level1
+*> \ingroup rot
 *
 *  =====================================================================
       SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

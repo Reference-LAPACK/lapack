@@ -99,7 +99,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
+*>          The dimension of the array WORK. LWORK >= 1.
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
@@ -168,9 +168,12 @@
 *>
 *> \endverbatim
 *>
+*> \ingroup geqr
+*>
 *  =====================================================================
       SUBROUTINE SGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,11 +191,13 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, LMINWS, MINT, MINW
-      INTEGER            MB, NB, MINTSZ, NBLCKS
+      INTEGER            MB, NB, MINTSZ, NBLCKS, LWMIN, LWREQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLATSQR, SGEQRT, XERBLA
@@ -244,8 +249,10 @@
 *
 *     Determine if the workspace size satisfies minimal size
 *
+      LWMIN = MAX( 1, N )
+      LWREQ = MAX( 1, N*NB )
       LMINWS = .FALSE.
-      IF( ( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) .OR. LWORK.LT.NB*N )
+      IF( ( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) .OR. LWORK.LT.LWREQ )
      $    .AND. ( LWORK.GE.N ) .AND. ( TSIZE.GE.MINTSZ )
      $    .AND. ( .NOT.LQUERY ) ) THEN
         IF( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) ) THEN
@@ -253,7 +260,7 @@
           NB = 1
           MB = M
         END IF
-        IF( LWORK.LT.NB*N ) THEN
+        IF( LWORK.LT.LWREQ ) THEN
           LMINWS = .TRUE.
           NB = 1
         END IF
@@ -268,23 +275,23 @@
       ELSE IF( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 )
      $   .AND. ( .NOT.LQUERY ) .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -6
-      ELSE IF( ( LWORK.LT.MAX( 1, N*NB ) ) .AND. ( .NOT.LQUERY )
+      ELSE IF( ( LWORK.LT.LWREQ ) .AND. ( .NOT.LQUERY )
      $   .AND. ( .NOT.LMINWS ) ) THEN
         INFO = -8
       END IF
 *
       IF( INFO.EQ.0 ) THEN
         IF( MINT ) THEN
-          T( 1 ) = MINTSZ
+          T( 1 ) = REAL( MINTSZ )
         ELSE
-          T( 1 ) = NB*N*NBLCKS + 5
+          T( 1 ) = REAL( NB*N*NBLCKS + 5 )
         END IF
-        T( 2 ) = MB
-        T( 3 ) = NB
+        T( 2 ) = REAL( MB )
+        T( 3 ) = REAL( NB )
         IF( MINW ) THEN
-          WORK( 1 ) = MAX( 1, N )
+          WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
         ELSE
-          WORK( 1 ) = MAX( 1, NB*N )
+          WORK( 1 ) = SROUNDUP_LWORK( LWREQ )
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
@@ -309,7 +316,7 @@
      $                LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = MAX( 1, NB*N )
+      WORK( 1 ) = SROUNDUP_LWORK( LWREQ )
 *
       RETURN
 *

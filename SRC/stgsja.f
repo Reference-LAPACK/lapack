@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STGSJA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsja.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsja.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -350,7 +348,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup tgsja
 *
 *> \par Further Details:
 *  =====================
@@ -375,6 +373,7 @@
       SUBROUTINE STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
      $                   LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
      $                   Q, LDQ, WORK, NCYCLE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -412,7 +411,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGS2, SLAPLL, SLARTG, SLASET, SROT,
+      EXTERNAL           SCOPY, SLAGS2, SLAPLL, SLARTG, SLASET,
+     $                   SROT,
      $                   SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -435,9 +435,13 @@
       INFO = 0
       IF( .NOT.( INITU .OR. WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( INITV .OR. WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITV .OR.
+     $         WANTV .OR.
+     $         LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITQ .OR.
+     $         WANTQ .OR.
+     $         LSAME( JOBQ, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -507,7 +511,8 @@
 *              Update (K+I)-th and (K+J)-th rows of matrix A: U**T *A
 *
                IF( K+J.LE.M )
-     $            CALL SROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
+     $            CALL SROT( L, A( K+J, N-L+1 ), LDA, A( K+I,
+     $                       N-L+1 ),
      $                       LDA, CSU, SNU )
 *
 *              Update I-th and J-th rows of matrix B: V**T *B
@@ -541,10 +546,12 @@
      $                       SNU )
 *
                IF( WANTV )
-     $            CALL SROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV )
+     $            CALL SROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV,
+     $                       SNV )
 *
                IF( WANTQ )
-     $            CALL SROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, CSQ,
+     $            CALL SROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1,
+     $                       CSQ,
      $                       SNQ )
 *
    10       CONTINUE
@@ -561,7 +568,8 @@
             ERROR = ZERO
             DO 30 I = 1, MIN( L, M-K )
                CALL SCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
-               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 )
+               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ),
+     $                     1 )
                CALL SLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
                ERROR = MAX( ERROR, SSMIN )
    30       CONTINUE
@@ -606,16 +614,19 @@
      $            CALL SSCAL( P, -ONE, V( 1, I ), 1 )
             END IF
 *
-            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ),
+     $                   ALPHA( K+I ),
      $                   RWK )
 *
             IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+               CALL SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I,
+     $                     N-L+I ),
      $                     LDA )
             ELSE
                CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
      $                     LDB )
-               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
+               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I,
+     $                     N-L+I ),
      $                     LDA )
             END IF
 *

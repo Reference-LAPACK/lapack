@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLALSA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slalsa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slalsa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -250,7 +248,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup lalsa
 *
 *> \par Contributors:
 *  ==================
@@ -260,10 +258,12 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+      SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX,
+     $                   U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -295,7 +295,8 @@
      $                   NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLALS0, SLASDT, XERBLA
+      EXTERNAL           SCOPY, SGEMM, SLALS0, SLASDT,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -402,7 +403,8 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
+            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ),
+     $                   LDBX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -447,7 +449,8 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
+            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ),
+     $                   LDB,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -475,9 +478,11 @@
          END IF
          NLF = IC - NL
          NRF = IC + 1
-         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ),
+     $               LDU,
      $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
-         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ),
+     $               LDU,
      $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
    80 CONTINUE
 *

@@ -33,10 +33,10 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_csy_nancheck( int matrix_layout, char uplo,
+lapack_logical API_SUFFIX(LAPACKE_csy_nancheck)( int matrix_layout, char uplo,
                                       lapack_int n,
                                       const lapack_complex_float *a,
                                       lapack_int lda )
 {
-    return LAPACKE_ctr_nancheck( matrix_layout, uplo, 'n', n, a, lda );
+    return API_SUFFIX(LAPACKE_ctr_nancheck)( matrix_layout, uplo, 'n', n, a, lda );
 }

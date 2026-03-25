@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DBDSDC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dbdsdc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -44,13 +42,6 @@
 *> U and VT are orthogonal matrices of left and right singular vectors,
 *> respectively. DBDSDC can be used to compute all singular values,
 *> and optionally, singular vectors or singular vectors in compact form.
-*>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See DLASD3 for details.
 *>
 *> The code currently calls DLASDQ if singular values only are desired.
 *> However, it can be slightly modified to compute singular values
@@ -191,7 +182,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup bdsdc
 *
 *> \par Contributors:
 *  ==================
@@ -200,8 +191,10 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,
+      SUBROUTINE DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q,
+     $                   IQ,
      $                   WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -240,7 +233,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLARTG, DLASCL, DLASD0, DLASDA, DLASDQ,
+      EXTERNAL           DCOPY, DLARTG, DLASCL, DLASD0, DLASDA,
+     $                   DLASDQ,
      $                   DLASET, DLASR, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -347,14 +341,17 @@
          IF( ICOMPQ.EQ.2 ) THEN
             CALL DLASET( 'A', N, N, ZERO, ONE, U, LDU )
             CALL DLASET( 'A', N, N, ZERO, ONE, VT, LDVT )
-            CALL DLASDQ( 'U', 0, N, N, N, 0, D, E, VT, LDVT, U, LDU, U,
+            CALL DLASDQ( 'U', 0, N, N, N, 0, D, E, VT, LDVT, U, LDU,
+     $                   U,
      $                   LDU, WORK( WSTART ), INFO )
          ELSE IF( ICOMPQ.EQ.1 ) THEN
             IU = 1
             IVT = IU + N
-            CALL DLASET( 'A', N, N, ZERO, ONE, Q( IU+( QSTART-1 )*N ),
+            CALL DLASET( 'A', N, N, ZERO, ONE,
+     $                   Q( IU+( QSTART-1 )*N ),
      $                   N )
-            CALL DLASET( 'A', N, N, ZERO, ONE, Q( IVT+( QSTART-1 )*N ),
+            CALL DLASET( 'A', N, N, ZERO, ONE,
+     $                   Q( IVT+( QSTART-1 )*N ),
      $                   N )
             CALL DLASDQ( 'U', 0, N, N, N, 0, D, E,
      $                   Q( IVT+( QSTART-1 )*N ), N,
@@ -512,7 +509,8 @@
 *     which rotated B to be upper bidiagonal
 *
       IF( ( IUPLO.EQ.2 ) .AND. ( ICOMPQ.EQ.2 ) )
-     $   CALL DLASR( 'L', 'V', 'B', N, N, WORK( 1 ), WORK( N ), U, LDU )
+     $   CALL DLASR( 'L', 'V', 'B', N, N, WORK( 1 ), WORK( N ), U,
+     $               LDU )
 *
       RETURN
 *

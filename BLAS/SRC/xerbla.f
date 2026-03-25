@@ -53,10 +53,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup aux_blas
+*> \ingroup xerbla
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

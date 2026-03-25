@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORHR_COL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorhr_col.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorhr_col.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -241,7 +239,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleOTHERcomputational
+*> \ingroup unhr_col
 *
 *> \par Contributors:
 *  ==================
@@ -280,7 +278,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAORHR_COL_GETRFNP, SSCAL, STRSM,
+      EXTERNAL           SCOPY, SLAORHR_COL_GETRFNP, SSCAL,
+     $                   STRSM,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -419,7 +418,7 @@
 *
          JBTEMP2 = JB - 2
          DO J = JB, JB+JNB-2
-            DO I = J-JBTEMP2, NB
+            DO I = J-JBTEMP2, MIN( NB, N )
                T( I, J ) = ZERO
             END DO
          END DO

@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for ddot.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine ddotsub(n,x,incx,y,incy,dot)
+      implicit none
 c
       external ddot
       double precision ddot

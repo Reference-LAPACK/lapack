@@ -88,6 +88,7 @@
 *
 *  =====================================================================
       SUBROUTINE SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

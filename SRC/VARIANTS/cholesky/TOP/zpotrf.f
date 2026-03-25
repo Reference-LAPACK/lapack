@@ -24,7 +24,7 @@ C> \brief \b ZPOTRF VARIANT: top-looking block version of the algorithm, calling
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> ZPOTRF computes the Cholesky factorization of a real symmetric
+C> ZPOTRF computes the Cholesky factorization of a complex Hermitian
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -55,7 +55,7 @@ C>
 C> \param[in,out] A
 C> \verbatim
 C>          A is COMPLEX*16 array, dimension (LDA,N)
-C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+C>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
 C>          N-by-N upper triangular part of A contains the upper
 C>          triangular part of the matrix A, and the strictly lower
 C>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -79,8 +79,8 @@ C> \verbatim
 C>          INFO is INTEGER
 C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
-C>          > 0:  if INFO = i, the leading minor of order i is not
-C>                positive definite, and the factorization could not be
+C>          > 0:  if INFO = i, the leading principal minor of order i
+C>                is not positive, and the factorization could not be
 C>                completed.
 C> \endverbatim
 C>
@@ -99,6 +99,7 @@ C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
       SUBROUTINE ZPOTRF ( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +130,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZPOTF2, ZHERK, ZTRSM, XERBLA
+      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +165,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL ZPOTF2( UPLO, N, A, LDA, INFO )
+         CALL ZPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -189,7 +190,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL ZPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL ZPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
@@ -216,7 +217,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL ZPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL ZPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 

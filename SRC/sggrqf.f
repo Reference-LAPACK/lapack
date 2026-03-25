@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGGRQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggrqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggrqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -172,7 +170,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup ggrqf
 *
 *> \par Further Details:
 *  =====================
@@ -211,6 +209,7 @@
 *  =====================================================================
       SUBROUTINE SGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
      $                   LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -235,7 +234,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -249,8 +249,8 @@
       NB2 = ILAENV( 1, 'SGEQRF', ' ', P, N, -1, -1 )
       NB3 = ILAENV( 1, 'SORMRQ', ' ', M, N, P, -1 )
       NB = MAX( NB1, NB2, NB3 )
-      LWKOPT = MAX( N, M, P)*NB
-      WORK( 1 ) = LWKOPT
+      LWKOPT = MAX( 1, MAX( N, M, P )*NB )
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -287,7 +287,8 @@
 *     QR factorization of P-by-N matrix B: B = Z*T
 *
       CALL SGEQRF( P, N, B, LDB, TAUB, WORK, LWORK, INFO )
-      WORK( 1 ) = MAX( LOPT, INT( WORK( 1 ) ) )
+      LWKOPT = MAX( LOPT, INT( WORK( 1 ) ) )
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

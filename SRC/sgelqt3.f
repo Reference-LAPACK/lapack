@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup gelqt3
 *
 *> \par Further Details:
 *  =====================
@@ -113,6 +113,7 @@
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE SGELQT3( M, N, A, LDA, T, LDT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -158,7 +159,8 @@
 *
 *        Compute Householder transform when M=1
 *
-         CALL SLARFG( N, A, A( 1, MIN( 2, N ) ), LDA, T )
+         CALL SLARFG( N, A( 1, 1 ), A( 1, MIN( 2, N ) ), LDA,
+     &                T( 1, 1 ) )
 *
       ELSE
 *

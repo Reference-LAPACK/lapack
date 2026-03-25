@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGETRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgetrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgetrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -114,10 +112,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup getrs
 *
 *  =====================================================================
       SUBROUTINE SGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -189,7 +188,8 @@
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL STRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS,
+         CALL STRSM( 'Left', 'Lower', 'No transpose', 'Unit', N,
+     $               NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
@@ -202,12 +202,14 @@
 *
 *        Solve U**T *X = B, overwriting B with X.
 *
-         CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRHS,
+         CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N,
+     $               NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, overwriting B with X.
 *
-         CALL STRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS, ONE,
+         CALL STRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS,
+     $               ONE,
      $               A, LDA, B, LDB )
 *
 *        Apply row interchanges to the solution vectors.

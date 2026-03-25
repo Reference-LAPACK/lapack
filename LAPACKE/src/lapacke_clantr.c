@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-float LAPACKE_clantr( int matrix_layout, char norm, char uplo, char diag,
+float API_SUFFIX(LAPACKE_clantr)( int matrix_layout, char norm, char uplo, char diag,
                       lapack_int m, lapack_int n, const lapack_complex_float* a,
                       lapack_int lda )
 {
@@ -40,19 +40,19 @@ float LAPACKE_clantr( int matrix_layout, char norm, char uplo, char diag,
     float res = 0.;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_clantr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clantr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_ctz_nancheck( matrix_layout, 'f', uplo, diag, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_ctz_nancheck)( matrix_layout, 'f', uplo, diag, m, n, a, lda ) ) {
             return -7;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,MAX(m,n)) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -60,15 +60,15 @@ float LAPACKE_clantr( int matrix_layout, char norm, char uplo, char diag,
         }
     }
     /* Call middle-level interface */
-    res = LAPACKE_clantr_work( matrix_layout, norm, uplo, diag, m, n, a, lda,
+    res = API_SUFFIX(LAPACKE_clantr_work)( matrix_layout, norm, uplo, diag, m, n, a, lda,
                                 work );
     /* Release memory and exit */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_clantr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clantr", info );
     }
     return res;
 }

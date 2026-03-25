@@ -159,6 +159,7 @@
 *  =====================================================================
       SUBROUTINE ZGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
      $                   WORK, RWORK, RESULT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -257,7 +258,7 @@
          END IF
          CALL ZGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
      $               CZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-         CALL ZGEMV( TRANS, N, N, -BCOEFF, B, LDA, E( 1, JVEC ), 1,
+         CALL ZGEMV( TRANS, N, N, -BCOEFF, B, LDB, E( 1, JVEC ), 1,
      $               CONE, WORK( N*( JVEC-1 )+1 ), 1 )
    10 CONTINUE
 *

@@ -164,6 +164,7 @@
       SUBROUTINE DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLANGT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlangt.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlangt.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -99,10 +97,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup langt
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANGT( NORM, N, DL, D, DU )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,11 +145,13 @@
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
-            IF( ANORM.LT.ABS( DL( I ) ) .OR. DISNAN( ABS( DL( I ) ) ) )
+            IF( ANORM.LT.ABS( DL( I ) ) .OR.
+     $          DISNAN( ABS( DL( I ) ) ) )
      $           ANORM = ABS(DL(I))
             IF( ANORM.LT.ABS( D( I ) ) .OR. DISNAN( ABS( D( I ) ) ) )
      $           ANORM = ABS(D(I))
-            IF( ANORM.LT.ABS( DU( I ) ) .OR. DISNAN (ABS( DU( I ) ) ) )
+            IF( ANORM.LT.ABS( DU( I ) ) .OR.
+     $          DISNAN (ABS( DU( I ) ) ) )
      $           ANORM = ABS(DU(I))
    10    CONTINUE
       ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' ) THEN
@@ -183,7 +184,8 @@
                IF( ANORM .LT. TEMP .OR. DISNAN( TEMP ) ) ANORM = TEMP
    30       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *

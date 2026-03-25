@@ -61,10 +61,11 @@
 *> \author NAG Ltd.
 *
 
-*> \ingroup auxOTHERauxiliary
+*> \ingroup lamch
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,7 +156,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC1
 *> \details
 *> \b Purpose:
@@ -188,7 +188,8 @@
 *>          'round to nearest' style.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc1
 *>
 *> \details \b Further \b Details
 *> \verbatim
@@ -205,6 +206,7 @@
 *> \endverbatim
 *>
       SUBROUTINE DLAMC1( BETA, T, RND, IEEE1 )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -349,7 +351,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC2
 *> \details
 *> \b Purpose:
@@ -358,7 +359,8 @@
 *> list.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \ingroup auxOTHERauxiliary
+*>
+*> \ingroup lamc2
 *>
 *> \param[out] BETA
 *> \verbatim
@@ -416,6 +418,7 @@
 *>  W. Kahan of the University of California at Berkeley.
 *> \endverbatim
       SUBROUTINE DLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -620,7 +623,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC3
 *> \details
 *> \b Purpose:
@@ -636,8 +638,11 @@
 *> \verbatim
 *>          The values A and B.
 *> \endverbatim
-
+*>
+*> \ingroup lamc3
+*>
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -658,7 +663,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC4
 *> \details
 *> \b Purpose:
@@ -683,7 +687,10 @@
 *>          The base of the machine.
 *> \endverbatim
 *>
+*> \ingroup lamc4
+*>
       SUBROUTINE DLAMC4( EMIN, START, BASE )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -744,7 +751,6 @@
       END
 *
 ************************************************************************
-*
 *> \brief \b DLAMC5
 *> \details
 *> \b Purpose:
@@ -789,7 +795,10 @@
 *>          The largest machine floating-point number.
 *> \endverbatim
 *>
+*> \ingroup lamc5
+*>
       SUBROUTINE DLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

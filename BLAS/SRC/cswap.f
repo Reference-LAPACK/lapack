@@ -65,7 +65,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex_blas_level1
+*> \ingroup swap
 *
 *> \par Further Details:
 *  =====================
@@ -78,6 +78,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CSWAP(N,CX,INCX,CY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

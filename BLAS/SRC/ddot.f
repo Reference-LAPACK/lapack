@@ -66,7 +66,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level1
+*> \ingroup dot
 *
 *> \par Further Details:
 *  =====================
@@ -79,6 +79,7 @@
 *>
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

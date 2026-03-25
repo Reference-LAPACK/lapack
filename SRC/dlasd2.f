@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASD2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -88,7 +86,7 @@
 *>         On entry D contains the singular values of the two submatrices
 *>         to be combined.  On exit D contains the trailing (N-K) updated
 *>         singular values (those which were deflated) sorted into
-*>         increasing order.
+*>         decreasing order.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -219,7 +217,7 @@
 *>          IDXQ is INTEGER array, dimension(N)
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that entries in
-*>         the first hlaf of this permutation must first be moved one
+*>         the first half of this permutation must first be moved one
 *>         position backward; and entries in the second half
 *>         must first have NL+1 added to their values.
 *> \endverbatim
@@ -254,7 +252,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasd2
 *
 *> \par Contributors:
 *  ==================
@@ -263,9 +261,11 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, VT,
+      SUBROUTINE DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU,
+     $                   VT,
      $                   LDVT, DSIGMA, U2, LDU2, VT2, LDVT2, IDXP, IDX,
      $                   IDXC, IDXQ, COLTYP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -303,7 +303,8 @@
       EXTERNAL           DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DLAMRG, DLASET, DROT, XERBLA
+      EXTERNAL           DCOPY, DLACPY, DLAMRG, DLASET, DROT,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -451,7 +452,7 @@
 *
 *        Check if singular values are close enough to allow deflation.
 *
-         IF( ABS( D( J )-D( JPREV ) ).LE.TOL ) THEN
+         IF( ( D( J )-D( JPREV ) ).LE.TOL ) THEN
 *
 *           Deflation is possible.
 *
@@ -479,14 +480,22 @@
                IDXJ = IDXJ - 1
             END IF
             CALL DROT( N, U( 1, IDXJP ), 1, U( 1, IDXJ ), 1, C, S )
-            CALL DROT( M, VT( IDXJP, 1 ), LDVT, VT( IDXJ, 1 ), LDVT, C,
+            CALL DROT( M, VT( IDXJP, 1 ), LDVT, VT( IDXJ, 1 ), LDVT,
+     $                 C,
      $                 S )
             IF( COLTYP( J ).NE.COLTYP( JPREV ) ) THEN
                COLTYP( J ) = 3
             END IF
             COLTYP( JPREV ) = 4
             K2 = K2 - 1
-            IDXP( K2 ) = JPREV
+*
+*           Insert the deflated index in the correct position in IDXP.
+*           If J - JPREV is greater than 1, the indices in between
+*           must be shifted to preserve the correct output order.
+*
+            DO 105 JP = JPREV, J - 1
+               IDXP( K2 + J - 1 - JP ) = JP
+  105       CONTINUE
             JPREV = J
          ELSE
             K = K + 1
@@ -614,7 +623,8 @@
          CALL DCOPY( N-K, DSIGMA( K+1 ), 1, D( K+1 ), 1 )
          CALL DLACPY( 'A', N, N-K, U2( 1, K+1 ), LDU2, U( 1, K+1 ),
      $                LDU )
-         CALL DLACPY( 'A', N-K, M, VT2( K+1, 1 ), LDVT2, VT( K+1, 1 ),
+         CALL DLACPY( 'A', N-K, M, VT2( K+1, 1 ), LDVT2, VT( K+1,
+     $                1 ),
      $                LDVT )
       END IF
 *

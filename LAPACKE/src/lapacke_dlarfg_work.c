@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dlarfg_work( lapack_int n, double* alpha, double* x,
+lapack_int API_SUFFIX(LAPACKE_dlarfg_work)( lapack_int n, double* alpha, double* x,
                                 lapack_int incx, double* tau )
 {
     lapack_int info = 0;

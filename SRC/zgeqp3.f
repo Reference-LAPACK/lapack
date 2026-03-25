@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGEQP3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqp3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqp3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -127,7 +125,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup geqp3
 *
 *> \par Further Details:
 *  =====================
@@ -156,6 +154,7 @@
 *  =====================================================================
       SUBROUTINE ZGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -182,7 +181,8 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQRF, ZLAQP2, ZLAQPS, ZSWAP, ZUNMQR
+      EXTERNAL           XERBLA, ZGEQRF, ZLAQP2, ZLAQPS, ZSWAP,
+     $                   ZUNMQR
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -265,7 +265,8 @@
 *CC         CALL ZUNM2R( 'Left', 'Conjugate Transpose', M, N-NA,
 *CC  $                   NA, A, LDA, TAU, A( 1, NA+1 ), LDA, WORK,
 *CC  $                   INFO )
-            CALL ZUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA, A,
+            CALL ZUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA,
+     $                   A,
      $                   LDA, TAU, A( 1, NA+1 ), LDA, WORK, LWORK,
      $                   INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
@@ -307,7 +308,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = LWORK / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'ZGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'ZGEQRF', ' ', SM,
+     $                         SN,
      $                    -1, -1 ) )
 *
 *

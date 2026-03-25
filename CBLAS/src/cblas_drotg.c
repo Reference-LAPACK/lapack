@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_drotg(  double *a, double *b, double *c, double *s)
+void API_SUFFIX(cblas_drotg)(  double *a, double *b, double *c, double *s)
 {
    F77_drotg(a,b,c,s);
 }

@@ -32,28 +32,28 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_checon_3( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_checon_3)( int matrix_layout, char uplo, lapack_int n,
                            const lapack_complex_float* a, lapack_int lda,
                            const lapack_complex_float* e,
                            const lapack_int* ipiv, float anorm, float* rcond )
 {
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
-    lapack_int e_start = LAPACKE_lsame( uplo, 'U' ) ? 1 : 0;
+    lapack_int e_start = API_SUFFIX(LAPACKE_lsame)( uplo, 'U' ) ? 1 : 0;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_checon_3", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_checon_3", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_che_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_che_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -4;
         }
-        if( LAPACKE_c_nancheck( n-1, e + e_start, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_c_nancheck)( n-1, e + e_start, 1 ) ) {
             return -6;
         }
-        if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &anorm, 1 ) ) {
             return -8;
         }
     }
@@ -66,13 +66,13 @@ lapack_int LAPACKE_checon_3( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_checon_3_work( matrix_layout, uplo, n, a, lda, e, ipiv, anorm,
+    info = API_SUFFIX(LAPACKE_checon_3_work)( matrix_layout, uplo, n, a, lda, e, ipiv, anorm,
                                 rcond, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_checon_3", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_checon_3", info );
     }
     return info;
 }

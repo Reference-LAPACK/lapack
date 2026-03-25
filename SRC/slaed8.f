@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED8 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed8.f">
 *> [TGZ]</a>
@@ -13,13 +12,12 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed8.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
-*                          CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
+*                          CUTPNT, Z, DLAMBDA, Q2, LDQ2, W, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, INDXP, INDX, INFO )
 *
 *       .. Scalar Arguments ..
@@ -30,7 +28,7 @@
 *       .. Array Arguments ..
 *       INTEGER            GIVCOL( 2, * ), INDX( * ), INDXP( * ),
 *      $                   INDXQ( * ), PERM( * )
-*       REAL               D( * ), DLAMDA( * ), GIVNUM( 2, * ),
+*       REAL               D( * ), DLAMBDA( * ), GIVNUM( 2, * ),
 *      $                   Q( LDQ, * ), Q2( LDQ2, * ), W( * ), Z( * )
 *       ..
 *
@@ -85,7 +83,7 @@
 *>          D is REAL array, dimension (N)
 *>         On entry, the eigenvalues of the two submatrices to be
 *>         combined.  On exit, the trailing (N-K) updated eigenvalues
-*>         (those which were deflated) sorted into increasing order.
+*>         (those which were deflated) sorted into decreasing order.
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -141,9 +139,9 @@
 *>         process.
 *> \endverbatim
 *>
-*> \param[out] DLAMDA
+*> \param[out] DLAMBDA
 *> \verbatim
-*>          DLAMDA is REAL array, dimension (N)
+*>          DLAMBDA is REAL array, dimension (N)
 *>         A copy of the first K eigenvalues which will be used by
 *>         SLAED3 to form the secular equation.
 *> \endverbatim
@@ -228,7 +226,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup laed8
 *
 *> \par Contributors:
 *  ==================
@@ -238,8 +236,9 @@
 *
 *  =====================================================================
       SUBROUTINE SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
-     $                   CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
+     $                   CUTPNT, Z, DLAMBDA, Q2, LDQ2, W, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INDXP, INDX, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -253,7 +252,7 @@
 *     .. Array Arguments ..
       INTEGER            GIVCOL( 2, * ), INDX( * ), INDXP( * ),
      $                   INDXQ( * ), PERM( * )
-      REAL               D( * ), DLAMDA( * ), GIVNUM( 2, * ),
+      REAL               D( * ), DLAMBDA( * ), GIVNUM( 2, * ),
      $                   Q( LDQ, * ), Q2( LDQ2, * ), W( * ), Z( * )
 *     ..
 *
@@ -275,7 +274,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -339,14 +339,14 @@
          INDXQ( I ) = INDXQ( I ) + CUTPNT
    20 CONTINUE
       DO 30 I = 1, N
-         DLAMDA( I ) = D( INDXQ( I ) )
+         DLAMBDA( I ) = D( INDXQ( I ) )
          W( I ) = Z( INDXQ( I ) )
    30 CONTINUE
       I = 1
       J = CUTPNT + 1
-      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
+      CALL SLAMRG( N1, N2, DLAMBDA, 1, 1, INDX )
       DO 40 I = 1, N
-         D( I ) = DLAMDA( INDX( I ) )
+         D( I ) = DLAMBDA( INDX( I ) )
          Z( I ) = W( INDX( I ) )
    40 CONTINUE
 *
@@ -370,7 +370,8 @@
          ELSE
             DO 60 J = 1, N
                PERM( J ) = INDXQ( INDX( J ) )
-               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ),
+     $                     1 )
    60       CONTINUE
             CALL SLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
      $                   LDQ )
@@ -464,7 +465,7 @@
          ELSE
             K = K + 1
             W( K ) = Z( JLAM )
-            DLAMDA( K ) = D( JLAM )
+            DLAMBDA( K ) = D( JLAM )
             INDXP( K ) = JLAM
             JLAM = J
          END IF
@@ -476,26 +477,26 @@
 *
       K = K + 1
       W( K ) = Z( JLAM )
-      DLAMDA( K ) = D( JLAM )
+      DLAMBDA( K ) = D( JLAM )
       INDXP( K ) = JLAM
 *
   110 CONTINUE
 *
-*     Sort the eigenvalues and corresponding eigenvectors into DLAMDA
+*     Sort the eigenvalues and corresponding eigenvectors into DLAMBDA
 *     and Q2 respectively.  The eigenvalues/vectors which were not
-*     deflated go into the first K slots of DLAMDA and Q2 respectively,
+*     deflated go into the first K slots of DLAMBDA and Q2 respectively,
 *     while those which were deflated go into the last N - K slots.
 *
       IF( ICOMPQ.EQ.0 ) THEN
          DO 120 J = 1, N
             JP = INDXP( J )
-            DLAMDA( J ) = D( JP )
+            DLAMBDA( J ) = D( JP )
             PERM( J ) = INDXQ( INDX( JP ) )
   120    CONTINUE
       ELSE
          DO 130 J = 1, N
             JP = INDXP( J )
-            DLAMDA( J ) = D( JP )
+            DLAMBDA( J ) = D( JP )
             PERM( J ) = INDXQ( INDX( JP ) )
             CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
   130    CONTINUE
@@ -506,9 +507,9 @@
 *
       IF( K.LT.N ) THEN
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL SCOPY( N-K, DLAMBDA( K+1 ), 1, D( K+1 ), 1 )
          ELSE
-            CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL SCOPY( N-K, DLAMBDA( K+1 ), 1, D( K+1 ), 1 )
             CALL SLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2,
      $                   Q( 1, K+1 ), LDQ )
          END IF

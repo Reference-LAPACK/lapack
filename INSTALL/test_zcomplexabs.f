@@ -59,7 +59,8 @@
 *     ..
 *     .. Local Variables ..
       integer           i, min, Max, m, subnormalTreatedAs0,
-     $                  caseAFails, caseBFails, caseCFails, caseDFails
+     $                  caseAFails, caseBFails, caseCFails, caseDFails,
+     $                  caseEFails, caseFFails, nFailingTests, nTests
       double precision  X( N ), R, answerC,
      $                  answerD, aInf, aNaN, relDiff, b,
      $                  eps, blueMin, blueMax, Xj, stepX(N), limX(N)
@@ -77,6 +78,10 @@
       caseBFails = 0
       caseCFails = 0
       caseDFails = 0
+      caseEFails = 0
+      caseFFails = 0
+      nFailingTests = 0
+      nTests = 0
 *
 *     .. Initialize machine constants ..
       min = MINEXPONENT(0.0d0)
@@ -156,6 +161,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y = DCMPLX( Xj, 0.0d0 )
                 R = ABS( Y )
                 if( R .ne. Xj ) then
@@ -180,6 +186,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y = DCMPLX( 0.0d0, Xj )
                 R = ABS( Y )
                 if( R .ne. Xj ) then
@@ -209,6 +216,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 answerC = fiveFourth * Xj
                 Y = DCMPLX( threeFourth * Xj, Xj )
                 R = ABS( Y )
@@ -247,6 +255,7 @@
                         print *, "!! [d] fl( subnormal ) may be 0"
                     endif
                 else
+                    nTests = nTests + 1
                     Y = DCMPLX( oneHalf * Xj, oneHalf * Xj )
                     R = ABS( Y )
                     relDiff = ABS(R-answerD)/answerD
@@ -267,26 +276,41 @@
 *
 *     Test (e) Infs
       do 50 i = 1, nInf
+        nTests = nTests + 1
         Y = cInf(i)
         R = ABS( Y )
         if( .not.(R .gt. HUGE(0.0d0)) ) then
+            caseEFails = caseEFails + 1
             WRITE( *, FMT = 9997 ) 'i',i, Y, R
         endif
   50  continue
 *
 *     Test (f) NaNs
       do 60 i = 1, nNaN
+        nTests = nTests + 1
         Y = cNaN(i)
         R = ABS( Y )
         if( R .eq. R ) then
+            caseFFails = caseFFails + 1
             WRITE( *, FMT = 9998 ) 'n',i, Y, R
         endif
   60  continue
 *
+*     If any test fails, displays a message
+      nFailingTests = caseAFails + caseBFails + caseCFails + caseDFails
+     $                + caseEFails + caseFFails
+      if( nFailingTests .gt. 0 ) then
+         print *, "# ", nTests-nFailingTests, " tests out of ", nTests,
+     $            " pass for ABS(a+b*I),", nFailingTests, " tests fail."
+      else
+         print *, "# All tests pass for ABS(a+b*I)"
+      endif
+*
 *     If anything was written to stderr, print the message
       if( (caseAFails .gt. 0) .or. (caseBFails .gt. 0) .or.
-     $    (caseCFails .gt. 0) .or. (caseDFails .gt. 0) )
-     $      print *, "# Please check the failed ABS(a+b*I) in [stderr]"
+     $    (caseCFails .gt. 0) .or. (caseDFails .gt. 0) ) then
+         print *, "# Please check the failed ABS(a+b*I) in [stderr]"
+      endif
 *
 *     .. Formats ..
  9997 FORMAT( '[',A1,I1, '] ABS(', (ES8.1,SP,ES8.1,"*I"), ' ) = ',

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGGEV3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggev3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggev3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -188,7 +186,9 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER
+*>          LWORK is INTEGER.
+*>          The dimension of the array WORK. LWORK >= MAX(1,8*N).
+*>          For good performance, LWORK should generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -217,12 +217,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEeigen
+*> \ingroup ggev3
 *
 *  =====================================================================
       SUBROUTINE DGGEV3( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR,
      $                   ALPHAI, BETA, VL, LDVL, VR, LDVR, WORK, LWORK,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -248,7 +249,8 @@
       LOGICAL            ILASCL, ILBSCL, ILV, ILVL, ILVR, LQUERY
       CHARACTER          CHTEMP
       INTEGER            ICOLS, IERR, IHI, IJOBVL, IJOBVR, ILEFT, ILO,
-     $                   IN, IRIGHT, IROWS, ITAU, IWRK, JC, JR, LWKOPT
+     $                   IN, IRIGHT, IROWS, ITAU, IWRK, JC, JR, LWKOPT,
+     $                   LWKMIN
       DOUBLE PRECISION   ANRM, ANRMTO, BIGNUM, BNRM, BNRMTO, EPS,
      $                   SMLNUM, TEMP
 *     ..
@@ -256,8 +258,10 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLACPY,
-     $                   DLASCL, DLASET, DORGQR, DORMQR, DTGEVC, XERBLA
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL,
+     $                   DGGHD3, DLAQZ0, DLACPY,
+     $                   DLASCL, DLASET, DORGQR,
+     $                   DORMQR, DTGEVC, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -298,6 +302,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
+      LWKMIN = MAX( 1, 8*N )
       IF( IJOBVL.LE.0 ) THEN
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
@@ -312,7 +317,7 @@
          INFO = -12
       ELSE IF( LDVR.LT.1 .OR. ( ILVR .AND. LDVR.LT.N ) ) THEN
          INFO = -14
-      ELSE IF( LWORK.LT.MAX( 1, 8*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -16
       END IF
 *
@@ -320,13 +325,13 @@
 *
       IF( INFO.EQ.0 ) THEN
          CALL DGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
-         LWKOPT = MAX(1, 8*N, 3*N+INT( WORK( 1 ) ) )
-         CALL DORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA, WORK, -1,
-     $                IERR )
-         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( LWKMIN, 3*N+INT( WORK( 1 ) ) )
+         CALL DORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA,
+     $                WORK, -1, IERR )
+         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          IF( ILVL ) THEN
             CALL DORGQR( N, N, N, VL, LDVL, WORK, WORK, -1, IERR )
-            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          END IF
          IF( ILV ) THEN
             CALL DGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB, VL,
@@ -335,18 +340,21 @@
             CALL DLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, 0, IERR )
-            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK( 1 ) ) )
          ELSE
             CALL DGGHD3( 'N', 'N', N, 1, N, A, LDA, B, LDB, VL, LDVL,
      $                   VR, LDVR, WORK, -1, IERR )
-            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
             CALL DLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, 0, IERR )
-            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
+            LWKOPT = MAX( LWKOPT, 2*N+INT( WORK( 1 ) ) )
          END IF
-
-         WORK( 1 ) = LWKOPT
+         IF( N.EQ.0 ) THEN
+            WORK( 1 ) = 1
+         ELSE
+            WORK( 1 ) = LWKOPT
+         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -490,7 +498,8 @@
          ELSE
             CHTEMP = 'R'
          END IF
-         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL,
+     $                LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), IERR )
          IF( IERR.NE.0 ) THEN
             INFO = N + 2
@@ -573,8 +582,10 @@
   110 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
-         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+     $                IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+     $                IERR )
       END IF
 *
       IF( ILBSCL ) THEN

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clag2z_work( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_clag2z_work)( int matrix_layout, lapack_int m, lapack_int n,
                                 const lapack_complex_float* sa, lapack_int ldsa,
                                 lapack_complex_double* a, lapack_int lda )
 {
@@ -51,12 +51,12 @@ lapack_int LAPACKE_clag2z_work( int matrix_layout, lapack_int m, lapack_int n,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_clag2z_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clag2z_work", info );
             return info;
         }
         if( ldsa < n ) {
             info = -5;
-            LAPACKE_xerbla( "LAPACKE_clag2z_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clag2z_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -73,25 +73,25 @@ lapack_int LAPACKE_clag2z_work( int matrix_layout, lapack_int m, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_layout, m, n, sa, ldsa, sa_t, ldsa_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, sa, ldsa, sa_t, ldsa_t );
         /* Call LAPACK function and adjust info */
         LAPACK_clag2z( &m, &n, sa_t, &ldsa_t, a_t, &lda_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_1:
         LAPACKE_free( sa_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_clag2z_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clag2z_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_clag2z_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clag2z_work", info );
     }
     return info;
 }

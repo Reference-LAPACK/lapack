@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHEEVR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheevr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -41,9 +39,16 @@
 *> \verbatim
 *>
 *> CHEEVR computes selected eigenvalues and, optionally, eigenvectors
-*> of a complex Hermitian matrix A.  Eigenvalues and eigenvectors can
-*> be selected by specifying either a range of values or a range of
-*> indices for the desired eigenvalues.
+*> of a complex Hermitian matrix A. Eigenvalues and eigenvectors can be
+*> selected by specifying either a range of values or a range of indices
+*> for the desired eigenvalues. Invocations with different choices for
+*> these parameters may result in the computation of slightly different
+*> eigenvalues and/or eigenvectors for the same matrix. The reason for
+*> this behavior is that there exists a variety of algorithms (each
+*> performing best for a particular set of options) with CHEEVR
+*> attempting to select the best based on the various parameters. In all
+*> cases, the computed values are accurate within the limits of finite
+*> precision arithmetic.
 *>
 *> CHEEVR first reduces the matrix A to tridiagonal form T with a call
 *> to CHETRD.  Then, whenever possible, CHEEVR calls CSTEMR to compute
@@ -107,6 +112,9 @@
 *>          JOBZ is CHARACTER*1
 *>          = 'N':  Compute eigenvalues only;
 *>          = 'V':  Compute eigenvalues and eigenvectors.
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] RANGE
@@ -118,6 +126,9 @@
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
 *>          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
 *>          CSTEIN are called
+*>
+*>          This parameter influences the choice of the algorithm and
+*>          may alter the computed values.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -242,6 +253,7 @@
 *>          Note: the user must ensure that at least max(1,M) columns are
 *>          supplied in the array Z; if RANGE = 'V', the exact value of M
 *>          is not known in advance and an upper bound must be used.
+*>          Supplying N columns is always safe.
 *> \endverbatim
 *>
 *> \param[in] LDZ
@@ -272,7 +284,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of the array WORK.  LWORK >= max(1,2*N).
+*>          The length of the array WORK.
+*>          If N <= 1, LWORK >= 1, else LWORK >= 2*N.
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
 *>          where NB is the max of the blocksize for CHETRD and for
 *>          CUNMTR as returned by ILAENV.
@@ -294,7 +307,8 @@
 *> \param[in] LRWORK
 *> \verbatim
 *>          LRWORK is INTEGER
-*>          The length of the array RWORK.  LRWORK >= max(1,24*N).
+*>          The length of the array RWORK.
+*>          If N <= 1, LRWORK >= 1, else LRWORK >= 24*N.
 *>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -313,7 +327,8 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
+*>          The dimension of the array IWORK.
+*>          If N <= 1, LIWORK >= 1, else LIWORK >= 10*N.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
@@ -338,7 +353,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEeigen
+*> \ingroup heevr
 *
 *> \par Contributors:
 *  ==================
@@ -351,9 +366,11 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $                   IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -392,11 +409,13 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               CLANSY, SLAMCH
-      EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH
+      REAL               CLANSY, SLAMCH, SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP, CUNMTR,
+      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP,
+     $                   CUNMTR,
      $                   SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -417,9 +436,15 @@
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 ) .OR.
      $         ( LIWORK.EQ.-1 ) )
 *
-      LRWMIN = MAX( 1, 24*N )
-      LIWMIN = MAX( 1, 10*N )
-      LWMIN = MAX( 1, 2*N )
+      IF( N.LE.1 ) THEN
+         LWMIN  = 1
+         LRWMIN = 1
+         LIWMIN = 1
+      ELSE
+         LWMIN  = 2*N
+         LRWMIN = 24*N
+         LIWMIN = 10*N
+      END IF
 *
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
@@ -454,8 +479,8 @@
          NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
          NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1, -1, -1 ) )
          LWKOPT = MAX( ( NB+1 )*N, LWMIN )
-         WORK( 1 ) = LWKOPT
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = SROUNDUP_LWORK( LWKOPT )
+         RWORK( 1 ) = SROUNDUP_LWORK( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -483,7 +508,7 @@
       END IF
 *
       IF( N.EQ.1 ) THEN
-         WORK( 1 ) = 2
+         WORK( 1 ) = 1
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
             W( 1 ) = REAL( A( 1, 1 ) )
@@ -611,7 +636,7 @@
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -667,7 +692,8 @@
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -710,8 +736,8 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWKOPT
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = SROUNDUP_LWORK( LWKOPT )
+      RWORK( 1 ) = SROUNDUP_LWORK( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

@@ -12,7 +12,7 @@
 !
 !> \date May 2016
 !
-!> \ingroup OTHERauxiliary
+!> \ingroup la_constants
 !
 !> \par Contributors:
 !  ==================
@@ -42,7 +42,7 @@ module LA_CONSTANTS
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 
-!  Standard constants for 
+!  Standard constants for
    integer, parameter :: sp = kind(1.e0)
 
    real(sp), parameter :: szero = 0.0_sp
@@ -78,14 +78,14 @@ module LA_CONSTANTS
    real(sp), parameter :: stbig = real(radix(0._sp), sp)**floor( &
        (maxexponent(0._sp) - digits(0._sp) + 1) * 0.5_sp)
 !  ssml >= 1/s, where s was defined in https://doi.org/10.1145/355769.355771
-!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly 
+!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly
    real(sp), parameter :: sssml = real(radix(0._sp), sp)**( - floor( &
        (minexponent(0._sp) - digits(0._sp)) * 0.5_sp))
 !  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771
    real(sp), parameter :: ssbig = real(radix(0._sp), sp)**( - ceiling( &
        (maxexponent(0._sp) + digits(0._sp) - 1) * 0.5_sp))
 
-!  Standard constants for 
+!  Standard constants for
    integer, parameter :: dp = kind(1.d0)
 
    real(dp), parameter :: dzero = 0.0_dp
@@ -121,7 +121,7 @@ module LA_CONSTANTS
    real(dp), parameter :: dtbig = real(radix(0._dp), dp)**floor( &
        (maxexponent(0._dp) - digits(0._dp) + 1) * 0.5_dp)
 !  ssml >= 1/s, where s was defined in https://doi.org/10.1145/355769.355771
-!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly 
+!  The correction was added in https://doi.org/10.1145/3061665 to scale denormalized numbers correctly
    real(dp), parameter :: dssml = real(radix(0._dp), dp)**( - floor( &
        (minexponent(0._dp) - digits(0._dp)) * 0.5_dp))
 !  sbig = 1/S, where S was defined in https://doi.org/10.1145/355769.355771

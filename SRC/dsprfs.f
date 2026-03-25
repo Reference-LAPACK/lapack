@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSPRFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsprfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsprfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -171,11 +169,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup hprfs
 *
 *  =====================================================================
-      SUBROUTINE DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+      SUBROUTINE DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+     $                   LDX,
      $                   FERR, BERR, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,7 +214,8 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DSPMV, DSPTRS, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DSPMV, DSPTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -277,7 +278,8 @@
 *        Compute residual R = B - A * X
 *
          CALL DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL DSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE, WORK( N+1 ),
+         CALL DSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE,
+     $               WORK( N+1 ),
      $               1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -346,7 +348,8 @@
 *
 *           Update solution and try again.
 *
-            CALL DSPTRS( UPLO, N, 1, AFP, IPIV, WORK( N+1 ), N, INFO )
+            CALL DSPTRS( UPLO, N, 1, AFP, IPIV, WORK( N+1 ), N,
+     $                   INFO )
             CALL DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
@@ -385,7 +388,8 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK,
+     $                FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN

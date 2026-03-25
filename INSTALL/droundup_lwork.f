@@ -44,7 +44,7 @@
 *
 *> \author Weslley Pereira, University of Colorado Denver, USA
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup roundup_lwork
 *
 *> \par Further Details:
 *  =====================
@@ -56,6 +56,7 @@
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DROUNDUP_LWORK( LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -76,7 +77,8 @@
 *
       IF( INT( DROUNDUP_LWORK ) .LT. LWORK ) THEN
 *         Force round up of LWORK
-          DROUNDUP_LWORK = DROUNDUP_LWORK * ( 1.0D+0 + EPSILON(0.0D+0) )
+          DROUNDUP_LWORK = DROUNDUP_LWORK *
+     $                     ( 1.0D+0 + EPSILON(0.0D+0) )
       ENDIF
 *
       RETURN

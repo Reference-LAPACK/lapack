@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLANTB + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlantb.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlantb.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -133,11 +131,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERauxiliary
+*> \ingroup lantb
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANTB( NORM, UPLO, DIAG, N, K, AB,
      $                 LDAB, WORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,14 +186,16 @@
                DO 20 J = 1, N
                   DO 10 I = MAX( K+2-J, 1 ), K
                      SUM = ABS( AB( I, J ) )
-                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   DISNAN( SUM ) ) VALUE = SUM
    10             CONTINUE
    20          CONTINUE
             ELSE
                DO 40 J = 1, N
                   DO 30 I = 2, MIN( N+1-J, K+1 )
                      SUM = ABS( AB( I, J ) )
-                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   DISNAN( SUM ) ) VALUE = SUM
    30             CONTINUE
    40          CONTINUE
             END IF
@@ -204,14 +205,16 @@
                DO 60 J = 1, N
                   DO 50 I = MAX( K+2-J, 1 ), K + 1
                      SUM = ABS( AB( I, J ) )
-                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   DISNAN( SUM ) ) VALUE = SUM
    50             CONTINUE
    60          CONTINUE
             ELSE
                DO 80 J = 1, N
                   DO 70 I = 1, MIN( N+1-J, K+1 )
                      SUM = ABS( AB( I, J ) )
-                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR.
+     $                   DISNAN( SUM ) ) VALUE = SUM
    70             CONTINUE
    80          CONTINUE
             END IF
@@ -307,7 +310,8 @@
             SUM = WORK( I )
             IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   270    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR.
+     $         ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
@@ -326,7 +330,8 @@
                SCALE = ZERO
                SUM = ONE
                DO 290 J = 1, N
-                  CALL ZLASSQ( MIN( J, K+1 ), AB( MAX( K+2-J, 1 ), J ),
+                  CALL ZLASSQ( MIN( J, K+1 ), AB( MAX( K+2-J, 1 ),
+     $                         J ),
      $                         1, SCALE, SUM )
   290          CONTINUE
             END IF
@@ -336,7 +341,8 @@
                SUM = N
                IF( K.GT.0 ) THEN
                   DO 300 J = 1, N - 1
-                     CALL ZLASSQ( MIN( N-J, K ), AB( 2, J ), 1, SCALE,
+                     CALL ZLASSQ( MIN( N-J, K ), AB( 2, J ), 1,
+     $                            SCALE,
      $                            SUM )
   300             CONTINUE
                END IF
@@ -344,7 +350,8 @@
                SCALE = ZERO
                SUM = ONE
                DO 310 J = 1, N
-                  CALL ZLASSQ( MIN( N-J+1, K+1 ), AB( 1, J ), 1, SCALE,
+                  CALL ZLASSQ( MIN( N-J+1, K+1 ), AB( 1, J ), 1,
+     $                         SCALE,
      $                         SUM )
   310          CONTINUE
             END IF

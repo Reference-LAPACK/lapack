@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CPPTRI + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptri.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptri.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -86,10 +84,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup pptri
 *
 *  =====================================================================
       SUBROUTINE CPPTRI( UPLO, N, AP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,9 +171,11 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = REAL( CDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 ) )
+            AP( JJ ) = REAL( CDOTC( N-J+1, AP( JJ ), 1, AP( JJ ),
+     $          1 ) )
             IF( J.LT.N )
-     $         CALL CTPMV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $         CALL CTPMV( 'Lower', 'Conjugate transpose',
+     $                     'Non-unit',
      $                     N-J, AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE

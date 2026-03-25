@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAS2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slas2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slas2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -78,7 +76,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup las2
 *
 *> \par Further Details:
 *  =====================
@@ -93,9 +91,7 @@
 *>  infinite.
 *>
 *>  Overflow will not occur unless the largest singular value itself
-*>  overflows, or is within a few ulps of overflow. (On machines with
-*>  partial overflow, like the Cray, overflow may occur if the largest
-*>  singular value is within a factor of 2 of overflow.)
+*>  overflows, or is within a few ulps of overflow.
 *>
 *>  Underflow is harmless if underflow is gradual. Otherwise, results
 *>  may correspond to a matrix modified by perturbations of size near
@@ -104,6 +100,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAS2( F, G, H, SSMIN, SSMAX )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

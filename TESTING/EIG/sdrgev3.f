@@ -405,6 +405,7 @@
      $                    NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, QE, LDQE,
      $                    ALPHAR, ALPHAI, BETA, ALPHR1, ALPHI1, BETA1,
      $                    WORK, LWORK, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

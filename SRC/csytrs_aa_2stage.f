@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYTRS_AA_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrs_aa_2stage.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs_aa_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -131,7 +129,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetrs_aa_2stage
 *
 *  =====================================================================
       SUBROUTINE CSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
@@ -215,7 +213,8 @@
 *
 *           Compute (U**T \ B) -> B    [ (U**T \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL CTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1,
+     $                  NB+1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
@@ -228,7 +227,8 @@
 *
 *           Compute (U \ B) -> B   [ U \ (T \ (U**T \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL CTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1,
+     $                  NB+1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B -> B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
@@ -249,7 +249,8 @@
 *
 *           Compute (L \ B) -> B    [ (L \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL CTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1,
+     $                  1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
@@ -262,7 +263,8 @@
 *
 *           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL CTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1,
+     $                  1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B -> B  [ P * (L**T \ (T \ (L \P**T * B) )) ]

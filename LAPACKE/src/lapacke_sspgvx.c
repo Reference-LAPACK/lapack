@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sspgvx( int matrix_layout, lapack_int itype, char jobz,
+lapack_int API_SUFFIX(LAPACKE_sspgvx)( int matrix_layout, lapack_int itype, char jobz,
                            char range, char uplo, lapack_int n, float* ap,
                            float* bp, float vl, float vu, lapack_int il,
                            lapack_int iu, float abstol, lapack_int* m, float* w,
@@ -42,28 +42,28 @@ lapack_int LAPACKE_sspgvx( int matrix_layout, lapack_int itype, char jobz,
     lapack_int* iwork = NULL;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sspgvx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sspgvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &abstol, 1 ) ) {
             return -13;
         }
-        if( LAPACKE_ssp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_ssp_nancheck)( n, ap ) ) {
             return -7;
         }
-        if( LAPACKE_ssp_nancheck( n, bp ) ) {
+        if( API_SUFFIX(LAPACKE_ssp_nancheck)( n, bp ) ) {
             return -8;
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vl, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vl, 1 ) ) {
                 return -9;
             }
         }
-        if( LAPACKE_lsame( range, 'v' ) ) {
-            if( LAPACKE_s_nancheck( 1, &vu, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( range, 'v' ) ) {
+            if( API_SUFFIX(LAPACKE_s_nancheck)( 1, &vu, 1 ) ) {
                 return -10;
             }
         }
@@ -81,7 +81,7 @@ lapack_int LAPACKE_sspgvx( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sspgvx_work( matrix_layout, itype, jobz, range, uplo, n, ap,
+    info = API_SUFFIX(LAPACKE_sspgvx_work)( matrix_layout, itype, jobz, range, uplo, n, ap,
                                 bp, vl, vu, il, iu, abstol, m, w, z, ldz, work,
                                 iwork, ifail );
     /* Release memory and exit */
@@ -90,7 +90,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sspgvx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sspgvx", info );
     }
     return info;
 }

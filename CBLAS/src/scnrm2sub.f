@@ -4,6 +4,7 @@ c     The program is a fortran wrapper for scnrm2.
 c     Witten by Keita Teranishi.  2/11/1998
 c
       subroutine scnrm2sub(n,x,incx,nrm2)
+      implicit none
 c
       external scnrm2
       real scnrm2,nrm2

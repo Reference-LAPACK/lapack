@@ -79,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE SGET32( RMAX, LMAX, NINFO, KNT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

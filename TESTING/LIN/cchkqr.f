@@ -198,6 +198,7 @@
       SUBROUTINE CCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -244,7 +245,7 @@
       EXTERNAL           CGENND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRQR, CGEQRS, CGET02,
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRQR, CGELS, CGET02,
      $                   CLACPY, CLARHS, CLATB4, CLATMS, CQRT01,
      $                   CQRT01P, CQRT02, CQRT03, XLAENV
 *     ..
@@ -388,7 +389,7 @@
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
                         NT = NT + 4
 *
-*                       If M>=N and K=N, call CGEQRS to solve a system
+*                       If M>=N and K=N, call CGELS to solve a system
 *                       with NRHS right hand sides and compute the
 *                       residual.
 *
@@ -405,14 +406,20 @@
 *
                            CALL CLACPY( 'Full', M, NRHS, B, LDA, X,
      $                                  LDA )
-                           SRNAMT = 'CGEQRS'
-                           CALL CGEQRS( M, N, NRHS, AF, LDA, TAU, X,
-     $                                  LDA, WORK, LWORK, INFO )
 *
-*                          Check error code from CGEQRS.
+*                          Reset AF to the original matrix. CGELS
+*                          factors the matrix before solving the system.
+*
+                           CALL CLACPY( 'Full', M, N, A, LDA, AF, LDA )
+*
+                           SRNAMT = 'CGELS'
+                           CALL CGELS( 'No transpose', M, N, NRHS, AF,
+     $                                 LDA, X, LDA, WORK, LWORK, INFO )
+*
+*                          Check error code from CGELS.
 *
                            IF( INFO.NE.0 )
-     $                        CALL ALAERH( PATH, 'CGEQRS', INFO, 0, ' ',
+     $                        CALL ALAERH( PATH, 'CGELS', INFO, 0, 'N',
      $                                     M, N, NRHS, -1, NB, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *

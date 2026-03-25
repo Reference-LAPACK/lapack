@@ -149,6 +149,7 @@ C> \endverbatim
 C>
 *  =====================================================================
       SUBROUTINE DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,12 +173,12 @@ C>
       EXTERNAL           DGEQR2, DLARFB, DLARFT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          CEILING, MAX, MIN, REAL
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SCEIL
-      EXTERNAL           ILAENV, SCEIL
+      DOUBLE PRECISION   DROUNDUP_LWORK
+      EXTERNAL           ILAENV, DROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 
@@ -205,13 +206,13 @@ C>
 *
 *     So here 4 x 4 is the last T stored in the workspace
 *
-      NT = K-SCEIL(REAL(K-NX)/REAL(NB))*NB
+      NT = K-CEILING(REAL(K-NX)/REAL(NB))*NB
 
 *
 *     optimal workspace = space for dlarfb + space for normal T's + space for the last T
 *
       LLWORK = MAX (MAX((N-M)*K, (N-M)*NB), MAX(K*NB, NB*NB))
-      LLWORK = SCEIL(REAL(LLWORK)/REAL(NB))
+      LLWORK = CEILING(REAL(LLWORK)/REAL(NB))
 
       IF( K.EQ.0 ) THEN
 
@@ -226,13 +227,13 @@ C>
 *         Optimal workspace for dlarfb = MAX(1,N)*NT
 *
           LWKOPT = (LBWORK+LLWORK)*NB
-          WORK( 1 ) = (LWKOPT+NT*NT)
+          WORK( 1 ) = DROUNDUP_LWORK(LWKOPT+NT*NT)
 
       ELSE
 
-          LBWORK = SCEIL(REAL(K)/REAL(NB))*NB
+          LBWORK = CEILING(REAL(K)/REAL(NB))*NB
           LWKOPT = (LBWORK+LLWORK-NB)*NB
-          WORK( 1 ) = LWKOPT
+          WORK( 1 ) = DROUNDUP_LWORK(LWKOPT)
 
       END IF
 
@@ -414,7 +415,7 @@ C>
 
       END IF
 
-      WORK( 1 ) = IWS
+      WORK( 1 ) = DROUNDUP_LWORK(IWS)
       RETURN
 *
 *     End of DGEQRF

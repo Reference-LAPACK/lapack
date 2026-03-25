@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSYSVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -275,12 +273,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYsolve
+*> \ingroup hesvx
 *
 *  =====================================================================
-      SUBROUTINE DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $                   B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -305,7 +305,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, NOFACT
-      INTEGER            LWKOPT, NB
+      INTEGER            LWKMIN, LWKOPT, NB
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
@@ -315,7 +315,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DSYCON, DSYRFS, DSYTRF, DSYTRS, XERBLA
+      EXTERNAL           DLACPY, DSYCON, DSYRFS, DSYTRF, DSYTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -327,9 +328,11 @@
       INFO = 0
       NOFACT = LSAME( FACT, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
+      LWKMIN = MAX( 1, 3*N )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -344,12 +347,12 @@
          INFO = -11
       ELSE IF( LDX.LT.MAX( 1, N ) ) THEN
          INFO = -13
-      ELSE IF( LWORK.LT.MAX( 1, 3*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -18
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         LWKOPT = MAX( 1, 3*N )
+         LWKOPT = LWKMIN
          IF( NOFACT ) THEN
             NB = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
             LWKOPT = MAX( LWKOPT, N*NB )
@@ -385,7 +388,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, IWORK,
+      CALL DSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+     $             IWORK,
      $             INFO )
 *
 *     Compute the solution vectors X.

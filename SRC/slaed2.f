@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed2.f">
 *> [TGZ]</a>
@@ -13,12 +12,11 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
+*       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA, W,
 *                          Q2, INDX, INDXC, INDXP, COLTYP, INFO )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +26,7 @@
 *       .. Array Arguments ..
 *       INTEGER            COLTYP( * ), INDX( * ), INDXC( * ), INDXP( * ),
 *      $                   INDXQ( * )
-*       REAL               D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
+*       REAL               D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ),
 *      $                   W( * ), Z( * )
 *       ..
 *
@@ -75,7 +73,7 @@
 *>         On entry, D contains the eigenvalues of the two submatrices to
 *>         be combined.
 *>         On exit, D contains the trailing (N-K) updated eigenvalues
-*>         (those which were deflated) sorted into increasing order.
+*>         (those which were deflated) sorted into decreasing order.
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -123,9 +121,9 @@
 *>         process.
 *> \endverbatim
 *>
-*> \param[out] DLAMDA
+*> \param[out] DLAMBDA
 *> \verbatim
-*>          DLAMDA is REAL array, dimension (N)
+*>          DLAMBDA is REAL array, dimension (N)
 *>         A copy of the first K eigenvalues which will be used by
 *>         SLAED3 to form the secular equation.
 *> \endverbatim
@@ -148,7 +146,7 @@
 *> \param[out] INDX
 *> \verbatim
 *>          INDX is INTEGER array, dimension (N)
-*>         The permutation used to sort the contents of DLAMDA into
+*>         The permutation used to sort the contents of DLAMBDA into
 *>         ascending order.
 *> \endverbatim
 *>
@@ -197,7 +195,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup laed2
 *
 *> \par Contributors:
 *  ==================
@@ -207,8 +205,10 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
+      SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA,
+     $                   W,
      $                   Q2, INDX, INDXC, INDXP, COLTYP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,7 +221,7 @@
 *     .. Array Arguments ..
       INTEGER            COLTYP( * ), INDX( * ), INDXC( * ), INDXP( * ),
      $                   INDXQ( * )
-      REAL               D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
+      REAL               D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ),
      $                   W( * ), Z( * )
 *     ..
 *
@@ -246,7 +246,8 @@
       EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -300,9 +301,9 @@
 *     re-integrate the deflated parts from the last pass
 *
       DO 20 I = 1, N
-         DLAMDA( I ) = D( INDXQ( I ) )
+         DLAMBDA( I ) = D( INDXQ( I ) )
    20 CONTINUE
-      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDXC )
+      CALL SLAMRG( N1, N2, DLAMBDA, 1, 1, INDXC )
       DO 30 I = 1, N
          INDX( I ) = INDXQ( INDXC( I ) )
    30 CONTINUE
@@ -324,11 +325,11 @@
          DO 40 J = 1, N
             I = INDX( J )
             CALL SCOPY( N, Q( 1, I ), 1, Q2( IQ2 ), 1 )
-            DLAMDA( J ) = D( I )
+            DLAMBDA( J ) = D( I )
             IQ2 = IQ2 + N
    40    CONTINUE
          CALL SLACPY( 'A', N, N, Q2, N, Q, LDQ )
-         CALL SCOPY( N, DLAMDA, 1, D, 1 )
+         CALL SCOPY( N, DLAMBDA, 1, D, 1 )
          GO TO 190
       END IF
 *
@@ -421,7 +422,7 @@
             PJ = NJ
          ELSE
             K = K + 1
-            DLAMDA( K ) = D( PJ )
+            DLAMBDA( K ) = D( PJ )
             W( K ) = Z( PJ )
             INDXP( K ) = PJ
             PJ = NJ
@@ -433,7 +434,7 @@
 *     Record the last eigenvalue.
 *
       K = K + 1
-      DLAMDA( K ) = D( PJ )
+      DLAMBDA( K ) = D( PJ )
       W( K ) = Z( PJ )
       INDXP( K ) = PJ
 *
@@ -470,9 +471,9 @@
          PSM( CT ) = PSM( CT ) + 1
   130 CONTINUE
 *
-*     Sort the eigenvalues and corresponding eigenvectors into DLAMDA
+*     Sort the eigenvalues and corresponding eigenvectors into DLAMBDA
 *     and Q2 respectively.  The eigenvalues/vectors which were not
-*     deflated go into the first K slots of DLAMDA and Q2 respectively,
+*     deflated go into the first K slots of DLAMBDA and Q2 respectively,
 *     while those which were deflated go into the last N - K slots.
 *
       I = 1

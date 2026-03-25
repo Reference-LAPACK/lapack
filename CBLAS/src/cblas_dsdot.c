@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-double  cblas_dsdot( const CBLAS_INT N, const float *X,
+double  API_SUFFIX(cblas_dsdot)( const CBLAS_INT N, const float *X,
                       const CBLAS_INT incX, const float *Y, const CBLAS_INT incY)
 {
    double dot;

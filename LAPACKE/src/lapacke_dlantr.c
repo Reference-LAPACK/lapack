@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlantr( int matrix_layout, char norm, char uplo, char diag,
+double API_SUFFIX(LAPACKE_dlantr)( int matrix_layout, char norm, char uplo, char diag,
                            lapack_int m, lapack_int n, const double* a,
                            lapack_int lda )
 {
@@ -40,19 +40,19 @@ double LAPACKE_dlantr( int matrix_layout, char norm, char uplo, char diag,
     double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dlantr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlantr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dtz_nancheck( matrix_layout, 'f', uplo, diag, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dtz_nancheck)( matrix_layout, 'f', uplo, diag, m, n, a, lda ) ) {
             return -7;
         }
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         work = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,MAX(m,n)) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -60,15 +60,15 @@ double LAPACKE_dlantr( int matrix_layout, char norm, char uplo, char diag,
         }
     }
     /* Call middle-level interface */
-    res = LAPACKE_dlantr_work( matrix_layout, norm, uplo, diag, m, n, a, lda,
+    res = API_SUFFIX(LAPACKE_dlantr_work)( matrix_layout, norm, uplo, diag, m, n, a, lda,
                                 work );
     /* Release memory and exit */
-    if( LAPACKE_lsame( norm, 'i' ) ) {
+    if( API_SUFFIX(LAPACKE_lsame)( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dlantr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dlantr", info );
     }
     return res;
 }

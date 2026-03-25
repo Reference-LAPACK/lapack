@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASDQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdq.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdq.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -197,7 +195,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasdq
 *
 *> \par Contributors:
 *  ==================
@@ -206,8 +204,10 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDVT,
+      SUBROUTINE DLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT,
+     $                   LDVT,
      $                   U, LDU, C, LDC, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -234,7 +234,8 @@
       DOUBLE PRECISION   CS, R, SMIN, SN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSQR, DLARTG, DLASR, DSWAP, XERBLA
+      EXTERNAL           DBDSQR, DLARTG, DLASR, DSWAP,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -395,7 +396,8 @@
             D( ISUB ) = D( I )
             D( I ) = SMIN
             IF( NCVT.GT.0 )
-     $         CALL DSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ), LDVT )
+     $         CALL DSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ),
+     $                     LDVT )
             IF( NRU.GT.0 )
      $         CALL DSWAP( NRU, U( 1, ISUB ), 1, U( 1, I ), 1 )
             IF( NCC.GT.0 )

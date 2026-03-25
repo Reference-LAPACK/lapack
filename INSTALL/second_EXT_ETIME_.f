@@ -28,10 +28,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup second
 *
 *  =====================================================================
       REAL FUNCTION SECOND( )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

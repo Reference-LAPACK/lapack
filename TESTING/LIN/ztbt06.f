@@ -123,6 +123,7 @@
 *  =====================================================================
       SUBROUTINE ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
      $                   RWORK, RAT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -290,6 +290,7 @@
       SUBROUTINE DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
      $                   THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
      $                   LWORK, RESULT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -38,6 +38,7 @@
 *
 *  =====================================================================
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -61,7 +62,7 @@
       RETURN
 *
  9999 FORMAT( ' *** Illegal value of parameter number ', I2,
-     $      ' not detected by ', A6, ' ***' )
+     $      ' not detected by ', A, ' ***' )
 *
 *     End of CHKXER
 *

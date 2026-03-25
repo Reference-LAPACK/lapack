@@ -95,6 +95,7 @@
 *
 *  =====================================================================
       REAL             FUNCTION SQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -157,9 +158,9 @@
       CALL SORM2R( 'Left', 'Transpose', M, M, K, A, LDA, TAU, WORK, M,
      $             WORK( M*M+1 ), INFO )
 *
-      DO 10 J = 1, M
+      DO J = 1, M
          WORK( ( J-1 )*M+J ) = WORK( ( J-1 )*M+J ) - ONE
-   10 CONTINUE
+      END DO
 *
       SQRT11 = SLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
      $         ( REAL( M )*SLAMCH( 'Epsilon' ) )

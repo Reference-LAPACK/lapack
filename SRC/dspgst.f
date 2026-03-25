@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSPGST + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspgst.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgst.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -106,10 +104,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup hpgst
 *
 *  =====================================================================
       SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,7 +134,8 @@
       DOUBLE PRECISION   AJJ, AKK, BJJ, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DSCAL, DSPMV, DSPR2, DTPMV, DTPSV,
+      EXTERNAL           DAXPY, DSCAL, DSPMV, DSPR2, DTPMV,
+     $                   DTPSV,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -181,7 +181,8 @@
                CALL DSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
      $                     AP( J1 ), 1 )
                CALL DSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-DDOT( J-1, AP( J1 ), 1, BP( J1 ),
+               AP( JJ ) = ( AP( JJ )-DDOT( J-1, AP( J1 ), 1,
+     $             BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE

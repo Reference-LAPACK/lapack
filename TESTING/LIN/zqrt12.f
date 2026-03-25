@@ -28,7 +28,7 @@
 *> ZQRT12 computes the singular values `svlues' of the upper trapezoid
 *> of A(1:M,1:N) and returns the ratio
 *>
-*>      || s - svlues||/(||svlues||*eps*max(M,N))
+*>      || svlues - s||/(||s||*eps*max(M,N))
 *> \endverbatim
 *
 *  Arguments:
@@ -94,6 +94,7 @@
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZQRT12( M, N, A, LDA, S, WORK, LWORK,
      $                 RWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,11 +155,11 @@
 *
       CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK,
      $             M )
-      DO 20 J = 1, N
-         DO 10 I = 1, MIN( J, M )
+      DO J = 1, N
+         DO I = 1, MIN( J, M )
             WORK( ( J-1 )*M+I ) = A( I, J )
-   10    CONTINUE
-   20 CONTINUE
+         END DO
+      END DO
 *
 *     Get machine parameters
 *
@@ -207,9 +208,9 @@
 *
       ELSE
 *
-         DO 30 I = 1, MN
+         DO I = 1, MN
             RWORK( I ) = ZERO
-   30    CONTINUE
+         END DO
       END IF
 *
 *     Compare s and singular values of work
@@ -217,6 +218,7 @@
       CALL DAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
       ZQRT12 = DASUM( MN, RWORK( 1 ), 1 ) /
      $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+*
       IF( NRMSVL.NE.ZERO )
      $   ZQRT12 = ZQRT12 / NRMSVL
 *

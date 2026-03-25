@@ -2,6 +2,7 @@
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
 
+#       ALLMOD  -- Part of ALLAUX
 #       ALLAUX  -- Auxiliary routines called from all precisions
 #       SCLAUX  -- Auxiliary routines called from single precision
 #       DZLAUX  -- Auxiliary routines called from double precision
@@ -35,13 +36,16 @@
 #
 #######################################################################
 
+set(CONSTMOD la_constants.f90)
+
+set(NANMOD la_xisnan.F90)
+
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
-   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f la_xisnan.F90
+   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   la_constants.f90
    sbdsvdx.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -60,7 +64,6 @@ set(SCLAUX
    ${SECOND_SRC})
 
 set(DZLAUX
-   la_constants.f90
    dbdsdc.f dbdsvdx.f
    dbdsqr.f ddisna.f
    disnan.f
@@ -87,7 +90,7 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f
    sgels.f  sgelst.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
-   sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
+   sgeqp3.f sgeqp3rk.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
    sgetri.f
    sggbak.f sggbal.f
@@ -102,10 +105,10 @@ set(SLASRC
    slangb.f slange.f slangt.f slanhs.f slansb.f slansp.f
    slansy.f slantb.f slantp.f slantr.f slanv2.f
    slapll.f slapmt.f
-   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
+   slaqgb.f slaqge.f slaqp2.f slaqps.f slaqp2rk.f slaqp3rk.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
-   slarf.f  slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f
+   slarf.f  slarf1f.f slarf1l.f slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarft_lvl2.f slarfx.f slarfy.f
    slargv.f slarmm.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
@@ -158,7 +161,7 @@ set(SLASRC
    ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.F ssb2st_kernels.f
    ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
    ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f
-   sgesvdq.f)
+   sgesvdq.f sgedmd.f90 sgedmdq.f90)
 
 set(DSLASRC
     sgetrf.f sgetrf2.f sgetrs.f sisnan.f slaisnan.f slaswp.f spotrf.f spotrf2.f
@@ -177,7 +180,8 @@ set(CLASRC
    cgbtf2.f cgbtrf.f cgbtrs.f cgebak.f cgebal.f cgebd2.f cgebrd.f
    cgecon.f cgeequ.f cgees.f  cgeesx.f cgeev.f  cgeevx.f
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f
-   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f
+   cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f
+   cgeqp3.f cgeqp3rk.f
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
    cgesvj.f cgejsv.f cgsvj0.f cgsvj1.f
@@ -213,10 +217,10 @@ set(CLASRC
    clanhb.f clanhe.f
    clanhp.f clanhs.f clanht.f clansb.f clansp.f clansy.f clantb.f
    clantp.f clantr.f clapll.f clapmt.f clarcm.f claqgb.f claqge.f
-   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqsb.f
+   claqhb.f claqhe.f claqhp.f claqp2.f claqps.f claqp2rk.f claqp3rk.f claqsb.f
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
-   clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f
+   clarf.f  clarf1f.f clarf1l.f clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f clarft_lvl2.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
@@ -227,7 +231,7 @@ set(CLASRC
    cppcon.f cppequ.f cpprfs.f cppsv.f  cppsvx.f cpptrf.f cpptri.f cpptrs.f
    cptcon.f cpteqr.f cptrfs.f cptsv.f  cptsvx.f cpttrf.f cpttrs.f cptts2.f
    crot.f   cspcon.f cspmv.f  cspr.f   csprfs.f cspsv.f
-   cspsvx.f csptrf.f csptri.f csptrs.f csrscl.f cstedc.f
+   cspsvx.f csptrf.f csptri.f csptrs.f csrscl.f crscl.f cstedc.f
    cstegr.f cstein.f csteqr.f csycon.f csymv.f
    csyr.f   csyrfs.f csysv.f  csysvx.f csytf2.f csytrf.f csytri.f
    csytri2.f csytri2x.f csyswapr.f
@@ -262,7 +266,7 @@ set(CLASRC
    chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.F chb2st_kernels.f
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f
-   cgesvdq.f)
+   cgesvdq.f cgedmd.f90 cgedmdq.f90)
 
 set(CXLASRC cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
    cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f
@@ -287,7 +291,7 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
    dgels.f  dgelst.f dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f
-   dgeqp3.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
+   dgeqp3.f dgeqp3rk.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
@@ -302,10 +306,10 @@ set(DLASRC
    dlangb.f dlange.f dlangt.f dlanhs.f dlansb.f dlansp.f
    dlansy.f dlantb.f dlantp.f dlantr.f dlanv2.f
    dlapll.f dlapmt.f
-   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqsb.f dlaqsp.f dlaqsy.f
+   dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqp2rk.f dlaqp3rk.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
-   dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
+   dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarft_lvl2.f dlarfx.f dlarfy.f dlarf1f.f dlarf1l.f
    dlargv.f dlarmm.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
@@ -360,7 +364,7 @@ set(DLASRC
    dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.F dsb2st_kernels.f
    dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
    dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f
-   dgesvdq.f)
+   dgesvdq.f dgedmd.f90 dgedmdq.f90)
 
 set(DXLASRC dgesvxx.f dgerfsx.f dla_gerfsx_extended.f dla_geamv.f
    dla_gercond.f dla_gerpvgrw.f dsysvxx.f dsyrfsx.f
@@ -375,7 +379,8 @@ set(ZLASRC
    zgbtf2.f zgbtrf.f zgbtrs.f zgebak.f zgebal.f zgebd2.f zgebrd.f
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f
-   zgels.f  zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f
+   zgels.f zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f
+   zgeqp3.f zgeqp3rk.f
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
    zgesvj.f zgejsv.f zgsvj0.f zgsvj1.f
@@ -412,11 +417,11 @@ set(ZLASRC
    zlanhe.f
    zlanhp.f zlanhs.f zlanht.f zlansb.f zlansp.f zlansy.f zlantb.f
    zlantp.f zlantr.f zlapll.f zlapmt.f zlaqgb.f zlaqge.f
-   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqsb.f
+   zlaqhb.f zlaqhe.f zlaqhp.f zlaqp2.f zlaqps.f zlaqp2rk.f zlaqp3rk.f zlaqsb.f
    zlaqr0.f zlaqr1.f zlaqr2.f zlaqr3.f zlaqr4.f zlaqr5.f
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
-   zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f
-   zlarfg.f zlarfgp.f zlarft.f
+   zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f zlarf1f.f zlarf1l.f
+   zlarfg.f zlarfgp.f zlarft.f zlarft_lvl2.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f90 zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
@@ -427,7 +432,7 @@ set(ZLASRC
    zppcon.f zppequ.f zpprfs.f zppsv.f  zppsvx.f zpptrf.f zpptri.f zpptrs.f
    zptcon.f zpteqr.f zptrfs.f zptsv.f  zptsvx.f zpttrf.f zpttrs.f zptts2.f
    zrot.f   zspcon.f zspmv.f  zspr.f   zsprfs.f zspsv.f
-   zspsvx.f zsptrf.f zsptri.f zsptrs.f zdrscl.f zstedc.f
+   zspsvx.f zsptrf.f zsptri.f zsptrs.f zdrscl.f zrscl.f zstedc.f
    zstegr.f zstein.f zsteqr.f zsycon.f zsymv.f
    zsyr.f   zsyrfs.f zsysv.f  zsysvx.f zsytf2.f zsytrf.f zsytri.f
    zsytri2.f zsytri2x.f zsyswapr.f
@@ -464,7 +469,7 @@ set(ZLASRC
    zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f
-   zgesvdq.f)
+   zgesvdq.f zgedmd.f90 zgedmdq.f90)
 
 set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f
@@ -477,17 +482,17 @@ set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
 if(BUILD_DEPRECATED)
-  list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
-    DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
+  list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f DEPRECATED/sgelqs.f
+    DEPRECATED/sgelsx.f DEPRECATED/sgeqpf.f DEPRECATED/sgeqrs.f DEPRECATED/sggsvd.f
     DEPRECATED/sggsvp.f DEPRECATED/slahrd.f DEPRECATED/slatzm.f DEPRECATED/stzrqf.f)
-  list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
-    DEPRECATED/dgeqpf.f DEPRECATED/dgelsx.f DEPRECATED/dggsvd.f
+  list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f DEPRECATED/dgelqs.f
+    DEPRECATED/dgelsx.f DEPRECATED/dgeqpf.f DEPRECATED/dgeqrs.f DEPRECATED/dggsvd.f
     DEPRECATED/dggsvp.f DEPRECATED/dlahrd.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f)
-  list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
-    DEPRECATED/cgeqpf.f DEPRECATED/cgelsx.f DEPRECATED/cggsvd.f
+  list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f DEPRECATED/cgelqs.f
+    DEPRECATED/cgelsx.f DEPRECATED/cgeqpf.f DEPRECATED/cgeqrs.f DEPRECATED/cggsvd.f
     DEPRECATED/cggsvp.f DEPRECATED/clahrd.f DEPRECATED/clatzm.f DEPRECATED/ctzrqf.f)
-  list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
-    DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
+  list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f DEPRECATED/zgelqs.f
+    DEPRECATED/zgelsx.f DEPRECATED/zgeqpf.f DEPRECATED/zgeqrs.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
 endif()
 
@@ -514,7 +519,70 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${LAPACKLIB} ${SOURCES})
+# Use special target for MOD files to guarantee they are built before
+# any other files that depend on them
+add_library(const_mod_file OBJECT ${CONSTMOD})
+set_target_properties(
+  const_mod_file PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
+set_target_properties(
+  mod_files PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
+target_link_libraries(${LAPACKLIB}_obj mod_files)
+set_target_properties(
+  ${LAPACKLIB}_obj PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  Fortran_PREPROCESS ON
+  )
+
+if(BUILD_INDEX64_EXT_API)
+  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
+    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
+    set(BUILD_INDEX64_EXT_API OFF)
+    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
+  else()
+    cmake_minimum_required(VERSION 3.18)
+    set(SOURCES_64)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
+    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
+    foreach(F IN LISTS SOURCES_64)
+      set(FFILE "")
+      file(READ ${F} FFILE)
+      file(WRITE ${F} "#include \"lapack_64.h\"\n")
+      file(APPEND ${F} "${FFILE}")
+    endforeach()
+    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
+    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
+    set_target_properties(
+      ${LAPACKLIB}_64_obj PROPERTIES
+      POSITION_INDEPENDENT_CODE ON
+      Fortran_PREPROCESS ON
+    )
+  endif()
+endif()
+
+add_library(${LAPACKLIB}
+  $<TARGET_OBJECTS:mod_files>
+  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
+# For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
+# that CMake adds (tested CMake 4.2).
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+   set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+endif()
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
@@ -532,7 +600,7 @@ target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
 if(_is_coverage_build)
   target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB})
+  add_coverage(${LAPACKLIB}_obj)
 endif()
 
 lapack_install_library(${LAPACKLIB})

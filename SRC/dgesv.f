@@ -1,3 +1,5 @@
+*> \addtogroup gesv
+*>
 *> \brief <b> DGESV computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
@@ -5,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGESV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesv.f">
 *> [TGZ]</a>
@@ -13,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -115,10 +115,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsolve
+*> \ingroup gesv
 *
 *  =====================================================================
       SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

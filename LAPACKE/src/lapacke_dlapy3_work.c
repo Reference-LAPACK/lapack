@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_dlapy3_work( double x, double y, double z )
+double API_SUFFIX(LAPACKE_dlapy3_work)( double x, double y, double z )
 {
     double res = 0.;
     /* Call LAPACK function and adjust info */

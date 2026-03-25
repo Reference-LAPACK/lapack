@@ -9,7 +9,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zdotu_sub( const CBLAS_INT N, const void *X, const CBLAS_INT incX,
+void API_SUFFIX(cblas_zdotu_sub)( const CBLAS_INT N, const void *X, const CBLAS_INT incX,
                       const void *Y, const CBLAS_INT incY, void *dotu)
 {
 #ifdef F77_INT

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DSFRK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsfrk.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsfrk.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -158,11 +156,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup hfrk
 *
 *  =====================================================================
-      SUBROUTINE DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+      SUBROUTINE DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA,
+     $                  BETA,
      $                  C )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -282,9 +282,11 @@
 *
                   CALL DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                ELSE
@@ -293,9 +295,11 @@
 *
                   CALL DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1,
+     $                        N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                END IF
@@ -310,7 +314,8 @@
 *
                   CALL DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA,
+                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ),
+     $                        LDA,
      $                        BETA, C( N1+1 ), N )
                   CALL DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N2, 1 ), LDA, BETA, C( 1 ), N )
@@ -321,7 +326,8 @@
 *
                   CALL DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ), LDA,
+                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ),
+     $                        LDA,
      $                        BETA, C( N1+1 ), N )
                   CALL DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N2 ), LDA, BETA, C( 1 ), N )
@@ -344,7 +350,8 @@
 *
                   CALL DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 2 ), N1 )
                   CALL DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N1+1, 1 ), LDA, BETA,
@@ -356,7 +363,8 @@
 *
                   CALL DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( 2 ), N1 )
                   CALL DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N1+1 ), LDA, BETA,
@@ -374,9 +382,11 @@
 *
                   CALL DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ),
+     $                        LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                ELSE
@@ -385,9 +395,11 @@
 *
                   CALL DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ),
+     $                        LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1,
+     $                        N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                END IF
@@ -414,9 +426,11 @@
 *
                   CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -426,9 +440,11 @@
 *
                   CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1,
+     $                        NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -444,7 +460,8 @@
 *
                   CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( NK+1 ), N+1 )
                   CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA, C( 1 ),
@@ -456,7 +473,8 @@
 *
                   CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( NK+1 ), N+1 )
                   CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA, C( 1 ),
@@ -480,7 +498,8 @@
 *
                   CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), NK )
                   CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA,
@@ -492,7 +511,8 @@
 *
                   CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( 1 ), NK )
                   CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA,
@@ -510,9 +530,11 @@
 *
                   CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ),
+     $                        LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1,
+     $                        1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                ELSE
@@ -521,9 +543,11 @@
 *
                   CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ),
+     $                        LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1,
+     $                        NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                END IF

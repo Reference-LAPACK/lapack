@@ -152,6 +152,7 @@
      $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -400,9 +401,9 @@
 *                    Factor the matrix and solve the system using CHESV_AA.
 *
                      SRNAMT = 'CHESV_AA_2STAGE '
-                     LWORK = MIN(N*NB, 3*NMAX*NMAX)
+                     LWORK = MIN( MAX( 1, N*NB ), 3*NMAX*NMAX)
                      CALL CHESV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
-     $                                 AINV, (3*NB+1)*N, 
+     $                                 AINV, MAX( 1, (3*NB+1)*N ),
      $                                 IWORK, IWORK( 1+N ),
      $                                 X, LDA, WORK, LWORK, INFO )
 *

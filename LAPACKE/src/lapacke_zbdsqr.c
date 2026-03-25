@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zbdsqr( int matrix_layout, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_zbdsqr)( int matrix_layout, char uplo, lapack_int n,
                            lapack_int ncvt, lapack_int nru, lapack_int ncc,
                            double* d, double* e, lapack_complex_double* vt,
                            lapack_int ldvt, lapack_complex_double* u,
@@ -42,30 +42,30 @@ lapack_int LAPACKE_zbdsqr( int matrix_layout, char uplo, lapack_int n,
     lapack_int info = 0;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zbdsqr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zbdsqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( ncc != 0 ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, ncc, c, ldc ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, ncc, c, ldc ) ) {
                 return -13;
             }
         }
-        if( LAPACKE_d_nancheck( n, d, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n, d, 1 ) ) {
             return -7;
         }
-        if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_d_nancheck)( n-1, e, 1 ) ) {
             return -8;
         }
         if( nru != 0 ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, nru, n, u, ldu ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, nru, n, u, ldu ) ) {
                 return -11;
             }
         }
         if( ncvt != 0 ) {
-            if( LAPACKE_zge_nancheck( matrix_layout, n, ncvt, vt, ldvt ) ) {
+            if( API_SUFFIX(LAPACKE_zge_nancheck)( matrix_layout, n, ncvt, vt, ldvt ) ) {
                 return -9;
             }
         }
@@ -78,13 +78,13 @@ lapack_int LAPACKE_zbdsqr( int matrix_layout, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zbdsqr_work( matrix_layout, uplo, n, ncvt, nru, ncc, d, e, vt,
+    info = API_SUFFIX(LAPACKE_zbdsqr_work)( matrix_layout, uplo, n, ncvt, nru, ncc, d, e, vt,
                                 ldvt, u, ldu, c, ldc, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zbdsqr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zbdsqr", info );
     }
     return info;
 }

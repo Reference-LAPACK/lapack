@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsytrf_rook( int matrix_layout, char uplo, lapack_int n, double* a,
+lapack_int API_SUFFIX(LAPACKE_dsytrf_rook)( int matrix_layout, char uplo, lapack_int n, double* a,
                            lapack_int lda, lapack_int* ipiv )
 {
     lapack_int info = 0;
@@ -40,19 +40,19 @@ lapack_int LAPACKE_dsytrf_rook( int matrix_layout, char uplo, lapack_int n, doub
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dsytrf_rook", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrf_rook", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dsy_nancheck)( matrix_layout, uplo, n, a, lda ) ) {
             return -4;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dsytrf_rook_work( matrix_layout, uplo, n, a, lda, ipiv,
+    info = API_SUFFIX(LAPACKE_dsytrf_rook_work)( matrix_layout, uplo, n, a, lda, ipiv,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -65,13 +65,13 @@ lapack_int LAPACKE_dsytrf_rook( int matrix_layout, char uplo, lapack_int n, doub
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsytrf_rook_work( matrix_layout, uplo, n, a, lda, ipiv, work,
+    info = API_SUFFIX(LAPACKE_dsytrf_rook_work)( matrix_layout, uplo, n, a, lda, ipiv, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dsytrf_rook", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dsytrf_rook", info );
     }
     return info;
 }

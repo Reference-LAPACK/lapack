@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLASDA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasda.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasda.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -258,7 +256,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup lasda
 *
 *> \par Contributors:
 *  ==================
@@ -267,9 +265,11 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
+      SUBROUTINE DLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT,
+     $                   K,
      $                   DIFL, DIFR, Z, POLES, GIVPTR, GIVCOL, LDGCOL,
      $                   PERM, GIVNUM, C, S, WORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -301,7 +301,8 @@
       DOUBLE PRECISION   ALPHA, BETA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLASD6, DLASDQ, DLASDT, DLASET, XERBLA
+      EXTERNAL           DCOPY, DLASD6, DLASDQ, DLASDT, DLASET,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -333,10 +334,12 @@
 *
       IF( N.LE.SMLSIZ ) THEN
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL DLASDQ( 'U', SQRE, N, 0, 0, 0, D, E, VT, LDU, U, LDU,
+            CALL DLASDQ( 'U', SQRE, N, 0, 0, 0, D, E, VT, LDU, U,
+     $                   LDU,
      $                   U, LDU, WORK, INFO )
          ELSE
-            CALL DLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDU, U, LDU,
+            CALL DLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDU, U,
+     $                   LDU,
      $                   U, LDU, WORK, INFO )
          END IF
          RETURN
@@ -397,7 +400,8 @@
             CALL DCOPY( NLP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
          ELSE
             CALL DLASET( 'A', NL, NL, ZERO, ONE, U( NLF, 1 ), LDU )
-            CALL DLASET( 'A', NLP1, NLP1, ZERO, ONE, VT( NLF, 1 ), LDU )
+            CALL DLASET( 'A', NLP1, NLP1, ZERO, ONE, VT( NLF, 1 ),
+     $                   LDU )
             CALL DLASDQ( 'U', SQREI, NL, NLP1, NL, NCC, D( NLF ),
      $                   E( NLF ), VT( NLF, 1 ), LDU, U( NLF, 1 ), LDU,
      $                   U( NLF, 1 ), LDU, WORK( NWORK1 ), INFO )
@@ -431,7 +435,8 @@
             CALL DCOPY( NRP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
          ELSE
             CALL DLASET( 'A', NR, NR, ZERO, ONE, U( NRF, 1 ), LDU )
-            CALL DLASET( 'A', NRP1, NRP1, ZERO, ONE, VT( NRF, 1 ), LDU )
+            CALL DLASET( 'A', NRP1, NRP1, ZERO, ONE, VT( NRF, 1 ),
+     $                   LDU )
             CALL DLASDQ( 'U', SQREI, NR, NRP1, NR, NCC, D( NRF ),
      $                   E( NRF ), VT( NRF, 1 ), LDU, U( NRF, 1 ), LDU,
      $                   U( NRF, 1 ), LDU, WORK( NWORK1 ), INFO )

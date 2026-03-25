@@ -98,7 +98,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.
+*>          The dimension of the array WORK. LWORK >= 1.
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
@@ -166,9 +166,12 @@
 *>  the LQ factorization.
 *> \endverbatim
 *>
+*> \ingroup gelq
+*>
 *  =====================================================================
       SUBROUTINE CGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -190,7 +193,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGELQT, CLASWLQ, XERBLA
@@ -285,16 +289,16 @@
 *
       IF( INFO.EQ.0 ) THEN
         IF( MINT ) THEN
-          T( 1 ) = MINTSZ
+          T( 1 ) = CMPLX( MINTSZ )
         ELSE
-          T( 1 ) = MB*M*NBLCKS + 5
+          T( 1 ) = CMPLX( MB*M*NBLCKS + 5 )
         END IF
-        T( 2 ) = MB
-        T( 3 ) = NB
+        T( 2 ) = CMPLX( MB )
+        T( 3 ) = CMPLX( NB )
         IF( MINW ) THEN
-          WORK( 1 ) = LWMIN
+          WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
         ELSE
-          WORK( 1 ) = LWREQ
+          WORK( 1 ) = SROUNDUP_LWORK( LWREQ )
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
@@ -319,7 +323,7 @@
      $                LWORK, INFO )
       END IF
 *
-      WORK( 1 ) = LWREQ
+      WORK( 1 ) = SROUNDUP_LWORK( LWREQ )
 *
       RETURN
 *

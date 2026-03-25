@@ -70,6 +70,7 @@
 *>
 *  =====================================================================
       REAL             FUNCTION SLARND( IDIST, ISEED )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

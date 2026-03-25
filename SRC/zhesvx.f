@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHESVX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesvx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesvx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -234,8 +232,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= max(1,2*N), and for best
-*>          performance, when FACT = 'N', LWORK >= max(1,2*N,N*NB), where
+*>          The length of WORK.  LWORK >= MAX(1,2*N), and for best
+*>          performance, when FACT = 'N', LWORK >= MAX(1,2*N,N*NB), where
 *>          NB is the optimal blocksize for ZHETRF.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -276,12 +274,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEsolve
+*> \ingroup hesvx
 *
 *  =====================================================================
-      SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $                   B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -307,7 +307,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, NOFACT
-      INTEGER            LWKOPT, NB
+      INTEGER            LWKOPT, LWKMIN, NB
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
@@ -317,7 +317,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHECON, ZHERFS, ZHETRF, ZHETRS, ZLACPY
+      EXTERNAL           XERBLA, ZHECON, ZHERFS, ZHETRF, ZHETRS,
+     $                   ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -329,9 +330,11 @@
       INFO = 0
       NOFACT = LSAME( FACT, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
+      LWKMIN = MAX( 1, 2*N )
       IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -346,12 +349,12 @@
          INFO = -11
       ELSE IF( LDX.LT.MAX( 1, N ) ) THEN
          INFO = -13
-      ELSE IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -18
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         LWKOPT = MAX( 1, 2*N )
+         LWKOPT = LWKMIN
          IF( NOFACT ) THEN
             NB = ILAENV( 1, 'ZHETRF', UPLO, N, -1, -1, -1 )
             LWKOPT = MAX( LWKOPT, N*NB )
@@ -387,7 +390,8 @@
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+     $             INFO )
 *
 *     Compute the solution vectors X.
 *

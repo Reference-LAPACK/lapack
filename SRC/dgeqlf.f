@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGEQLF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqlf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqlf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -88,7 +86,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise.
 *>          For optimum performance LWORK >= N*NB, where NB is the
 *>          optimal blocksize.
 *>
@@ -113,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup geqlf
 *
 *> \par Further Details:
 *  =====================
@@ -135,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,8 +188,9 @@
          END IF
          WORK( 1 ) = LWKOPT
 *
-         IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN
-            INFO = -7
+         IF( .NOT.LQUERY ) THEN
+            IF( LWORK.LE.0 .OR. ( M.GT.0 .AND. LWORK.LT.MAX( 1, N ) ) )
+     $         INFO = -7
          END IF
       END IF
 *
@@ -246,7 +247,8 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
+            CALL DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *

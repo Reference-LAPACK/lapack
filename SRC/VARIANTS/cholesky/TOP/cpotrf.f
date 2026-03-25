@@ -24,7 +24,7 @@ C> \brief \b CPOTRF VARIANT: top-looking block version of the algorithm, calling
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> CPOTRF computes the Cholesky factorization of a real symmetric
+C> CPOTRF computes the Cholesky factorization of a complex Hermitian
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -55,7 +55,7 @@ C>
 C> \param[in,out] A
 C> \verbatim
 C>          A is COMPLEX array, dimension (LDA,N)
-C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+C>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
 C>          N-by-N upper triangular part of A contains the upper
 C>          triangular part of the matrix A, and the strictly lower
 C>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -79,8 +79,8 @@ C> \verbatim
 C>          INFO is INTEGER
 C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
-C>          > 0:  if INFO = i, the leading minor of order i is not
-C>                positive definite, and the factorization could not be
+C>          > 0:  if INFO = i, the leading principal minor of order i
+C>                is not positive, and the factorization could not be
 C>                completed.
 C> \endverbatim
 C>
@@ -99,6 +99,7 @@ C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
       SUBROUTINE CPOTRF ( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +130,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CPOTF2, CHERK, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +165,7 @@ C> \ingroup variantsPOcomputational
 *
 *        Use unblocked code.
 *
-         CALL CPOTF2( UPLO, N, A, LDA, INFO )
+         CALL CPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -189,7 +190,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL CPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
@@ -216,7 +217,7 @@ C> \ingroup variantsPOcomputational
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL CPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 

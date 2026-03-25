@@ -96,7 +96,7 @@
 !
 !> \date December 2021
 !
-!> \ingroup OTHERauxiliary
+!> \ingroup lartg
 !
 !> \par Further Details:
 !  =====================
@@ -116,6 +116,7 @@ subroutine ZLARTG( f, g, c, s, r )
    use LA_CONSTANTS, &
    only: wp=>dp, zero=>dzero, one=>done, two=>dtwo, czero=>zzero, &
          safmin=>dsafmin, safmax=>dsafmax
+   implicit none
 !
 !  -- LAPACK auxiliary routine --
 !  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -195,7 +196,7 @@ subroutine ZLARTG( f, g, c, s, r )
          f2 = ABSSQ( f )
          g2 = ABSSQ( g )
          h2 = f2 + g2
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )
@@ -251,7 +252,7 @@ subroutine ZLARTG( f, g, c, s, r )
             f2 = ABSSQ( fs )
             h2 = f2 + g2
          end if
-         ! safmin <= f2 <= h2 <= safmax 
+         ! safmin <= f2 <= h2 <= safmax
          if( f2 >= h2 * safmin ) then
             ! safmin <= f2/h2 <= 1, and h2/f2 is finite
             c = sqrt( f2 / h2 )

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SPOTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spotrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -87,8 +85,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, the leading minor of order i is not
-*>                positive definite, and the factorization could not be
+*>          > 0:  if INFO = i, the leading principal minor of order i
+*>                is not positive, and the factorization could not be
 *>                completed.
 *> \endverbatim
 *
@@ -100,10 +98,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realPOcomputational
+*> \ingroup potrf
 *
 *  =====================================================================
       SUBROUTINE SPOTRF( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,7 +132,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SPOTRF2, SSYRK, STRSM, XERBLA
+      EXTERNAL           SGEMM, SPOTRF2, SSYRK, STRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -192,10 +192,12 @@
 *
 *                 Compute the current block row.
 *
-                  CALL SGEMM( 'Transpose', 'No transpose', JB, N-J-JB+1,
+                  CALL SGEMM( 'Transpose', 'No transpose', JB,
+     $                        N-J-JB+1,
      $                        J-1, -ONE, A( 1, J ), LDA, A( 1, J+JB ),
      $                        LDA, ONE, A( J, J+JB ), LDA )
-                  CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit',
+                  CALL STRSM( 'Left', 'Upper', 'Transpose',
+     $                        'Non-unit',
      $                        JB, N-J-JB+1, ONE, A( J, J ), LDA,
      $                        A( J, J+JB ), LDA )
                END IF
@@ -220,10 +222,12 @@
 *
 *                 Compute the current block column.
 *
-                  CALL SGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
+                  CALL SGEMM( 'No transpose', 'Transpose', N-J-JB+1,
+     $                        JB,
      $                        J-1, -ONE, A( J+JB, 1 ), LDA, A( J, 1 ),
      $                        LDA, ONE, A( J+JB, J ), LDA )
-                  CALL STRSM( 'Right', 'Lower', 'Transpose', 'Non-unit',
+                  CALL STRSM( 'Right', 'Lower', 'Transpose',
+     $                        'Non-unit',
      $                        N-J-JB+1, JB, ONE, A( J, J ), LDA,
      $                        A( J+JB, J ), LDA )
                END IF

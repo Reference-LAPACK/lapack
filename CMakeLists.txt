@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.13)
 
-project(LAPACK Fortran C)
+project(LAPACK C)
 
 set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 11)
-set(LAPACK_PATCH_VERSION 0)
+set(LAPACK_MINOR_VERSION 12)
+set(LAPACK_PATCH_VERSION 1)
 set(
   LAPACK_VERSION
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
@@ -43,6 +43,14 @@ message(STATUS "${_msg}: ${_is_coverage_build}")
 if(_is_coverage_build)
   message(STATUS "Adding coverage")
   find_package(codecov)
+endif()
+
+# Use valgrind if it is found
+option( LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON )
+find_program( MEMORYCHECK_COMMAND valgrind )
+if( MEMORYCHECK_COMMAND )
+  message( STATUS "Found valgrind: ${MEMORYCHECK_COMMAND}" )
+  set( MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=all --track-origins=yes" )
 endif()
 
 # By default test Fortran compiler complex abs and complex division
@@ -100,22 +108,20 @@ else()
   set(TMGLIB "tmglib")
 endif()
 
-include(GNUInstallDirs)
-
-# Updated OSX RPATH settings
-# In response to CMake 3.0 generating warnings regarding policy CMP0042,
-# the OSX RPATH settings have been updated per recommendations found
-# in the CMake Wiki:
-#  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-set(CMAKE_MACOSX_RPATH ON)
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES ${CMAKE_INSTALL_FULL_LIBDIR} isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
-  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# By default build extended _64 API for supported compilers only. This needs
+# CMake >= 3.18! Let's disable it by default for CMake < 3.18.
+if(CMAKE_VERSION VERSION_LESS "3.18")
+  set(INDEX64_EXT_API_DEFAULT OFF)
+else()
+  set(INDEX64_EXT_API_DEFAULT ON)
 endif()
+set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
+option(BUILD_INDEX64_EXT_API
+  "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)"
+  ${INDEX64_EXT_API_DEFAULT})
+message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
+include(GNUInstallDirs)
 
 # Configure the warning and code coverage suppression file
 configure_file(
@@ -126,90 +132,6 @@ configure_file(
 
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
-
-# Check if recursive flag exists
-include(CheckFortranCompilerFlag)
-if(CMAKE_Fortran_COMPILER_ID STREQUAL Flang)
-  check_fortran_compiler_flag("-Mrecursive" _MrecursiveFlag)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
-  check_fortran_compiler_flag("-frecursive" _frecursiveFlag)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-  check_fortran_compiler_flag("-recursive" _recursiveFlag)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-  check_fortran_compiler_flag("-qrecur" _qrecurFlag)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL NAG)
-  check_fortran_compiler_flag("-recursive" _recursiveFlag)
-else()
-  message(WARNING "Fortran local arrays should be allocated on the stack."
-    " Please use a compiler which guarantees that feature."
-    " See https://github.com/Reference-LAPACK/lapack/pull/188 and references therein.")
-endif()
-
-# Add recursive flag
-if(_MrecursiveFlag)
-  string(REGEX MATCH "-Mrecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
-  if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mrecursive"
-      CACHE STRING "Recursive flag must be set" FORCE)
-  endif()
-elseif(_frecursiveFlag)
-  string(REGEX MATCH "-frecursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
-  if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -frecursive"
-      CACHE STRING "Recursive flag must be set" FORCE)
-  endif()
-elseif(_recursiveFlag)
-  string(REGEX MATCH "-recursive" output_test <string> "${CMAKE_Fortran_FLAGS}")
-  if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -recursive"
-      CACHE STRING "Recursive flag must be set" FORCE)
-  endif()
-elseif(_qrecurFlag)
-  string(REGEX MATCH "-qrecur" output_test <string> "${CMAKE_Fortran_FLAGS}")
-  if(NOT output_test)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qrecur"
-      CACHE STRING "Recursive flag must be set" FORCE)
-  endif()
-endif()
-
-if(UNIX)
-  if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
-  endif()
-  if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict")
-  endif()
-# Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
-# This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
-  string(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
-endif()
-
-if(CMAKE_Fortran_COMPILER_ID STREQUAL Compaq)
-  if(WIN32)
-    if(CMAKE_GENERATOR STREQUAL "NMake Makefiles")
-      get_filename_component(CMAKE_Fortran_COMPILER_CMDNAM ${CMAKE_Fortran_COMPILER} NAME_WE)
-      message(STATUS "Using Compaq Fortran compiler with command name ${CMAKE_Fortran_COMPILER_CMDNAM}")
-      set(cmd ${CMAKE_Fortran_COMPILER_CMDNAM})
-      string(TOLOWER "${cmd}" cmdlc)
-      if(cmdlc STREQUAL "df")
-        message(STATUS "Assume the Compaq Visual Fortran Compiler is being used")
-        set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 1)
-        set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_INCLUDES 1)
-        #This is a workaround that is needed to avoid forward-slashes in the
-        #filenames listed in response files from incorrectly being interpreted as
-        #introducing compiler command options
-        if(${BUILD_SHARED_LIBS})
-          message(FATAL_ERROR "Making of shared libraries with CVF has not been tested.")
-        endif()
-        set(str "NMake version 9 or later should be used. NMake version 6.0 which is\n")
-        set(str "${str}   included with the CVF distribution fails to build Lapack because\n")
-        set(str "${str}   the number of source files exceeds the limit for NMake v6.0\n")
-        message(STATUS ${str})
-        set(CMAKE_Fortran_LINK_EXECUTABLE "LINK /out:<TARGET> <LINK_FLAGS> <LINK_LIBRARIES> <OBJECTS>")
-      endif()
-    endif()
-  endif()
-endif()
 
 # Add option to enable flat namespace for symbol resolution on macOS
 if(APPLE)
@@ -231,12 +153,18 @@ endif()
 # --------------------------------------------------
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
+set(LAPACK_BINARY_PATH_SUFFIX "" CACHE STRING "Path suffix appended to the install path of binaries")
+
+if(NOT "${LAPACK_BINARY_PATH_SUFFIX}" STREQUAL "" AND NOT "${LAPACK_BINARY_PATH_SUFFIX}" MATCHES "^/")
+  set(LAPACK_BINARY_PATH_SUFFIX "/${LAPACK_BINARY_PATH_SUFFIX}")
+endif()
+
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
     EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT Development
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
   )
 endmacro()
 
@@ -268,26 +196,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 
-# --------------------------------------------------
-# Check for any necessary platform specific compiler flags
-include(CheckLAPACKCompilerFlags)
-CheckLAPACKCompilerFlags()
-
-# --------------------------------------------------
-# Check second function
-
-include(CheckTimeFunction)
-set(TIME_FUNC NONE)
-CHECK_TIME_FUNCTION(NONE TIME_FUNC)
-CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
-CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
-CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
-CHECK_TIME_FUNCTION(INT_ETIME TIME_FUNC)
-message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
-
-set(SECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
-set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-
 # deprecated LAPACK and LAPACKE routines
 option(BUILD_DEPRECATED "Build deprecated routines" OFF)
 message(STATUS "Build deprecated routines: ${BUILD_DEPRECATED}")
@@ -317,6 +225,7 @@ option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library inste
 
 # Check the usage of the user provided BLAS libraries
 if(BLAS_LIBRARIES)
+  enable_language(Fortran)
   include(CheckFortranFunctionExists)
   set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
   CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
@@ -341,21 +250,18 @@ if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set(BLAS_LIBRARIES ${BLASLIB})
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${BLAS_LINKER_FLAGS})
 endif()
 
 
 # --------------------------------------------------
 # CBLAS
 option(CBLAS "Build CBLAS" OFF)
+
+# Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
+if(CBLAS OR NOT BLAS_FOUND)
+  add_subdirectory(CBLAS/include)
+endif()
 
 if(CBLAS)
   add_subdirectory(CBLAS)
@@ -380,18 +286,27 @@ endif()
 
 # Check the usage of the user provided or automatically found LAPACK libraries
 if(LAPACK_LIBRARIES)
-  include(CheckFortranFunctionExists)
-  set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-  # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
-  unset(CMAKE_REQUIRED_LIBRARIES)
-  if(LATESTLAPACK_FOUND)
-    message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+  include(CheckLanguage)
+  check_language(Fortran)
+  if(CMAKE_Fortran_COMPILER)
+    enable_language(Fortran)
+    include(CheckFortranFunctionExists)
+    set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
+    # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
+    CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(LATESTLAPACK_FOUND)
+      message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+    else()
+      message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
+      message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
+      message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
+      message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
+    endif()
   else()
-    message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
-    message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
-    message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
-    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
+    message(STATUS "--> LAPACK supplied by user is ${LAPACK_LIBRARIES}.")
+    message(STATUS "--> CMake couldn't find a Fortran compiler, so it cannot check if the provided LAPACK library works.")
+    set(LATESTLAPACK_FOUND TRUE)
   endif()
 endif()
 
@@ -399,17 +314,30 @@ endif()
 if(NOT LATESTLAPACK_FOUND)
   message(STATUS "Using supplied NETLIB LAPACK implementation")
   set(LAPACK_LIBRARIES ${LAPACKLIB})
+
+  enable_language(Fortran)
+
+  # Check for any necessary platform specific compiler flags
+  include(CheckLAPACKCompilerFlags)
+  CheckLAPACKCompilerFlags()
+
+  # Check second function
+  include(CheckTimeFunction)
+  set(TIME_FUNC NONE)
+  CHECK_TIME_FUNCTION(NONE TIME_FUNC)
+  CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
+  CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
+  CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
+  CHECK_TIME_FUNCTION(INT_ETIME TIME_FUNC)
+
+  # Set second function
+  message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
+  set(SECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
+  set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
+
   add_subdirectory(SRC)
 else()
-  set(CMAKE_EXE_LINKER_FLAGS
-    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for executables" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS
-    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for modules" FORCE)
-  set(CMAKE_SHARED_LINKER_FLAGS
-    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
-    CACHE STRING "Linker flags for shared libs" FORCE)
+  add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
 if(BUILD_TESTING)
@@ -431,9 +359,11 @@ endif()
 # Cache export target
 set(LAPACK_INSTALL_EXPORT_NAME_CACHE ${LAPACK_INSTALL_EXPORT_NAME})
 if(BUILD_TESTING OR LAPACKE_WITH_TMG)
+  enable_language(Fortran)
   if(LATESTLAPACK_FOUND AND LAPACKE_WITH_TMG)
     set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
     # Check if dlatms (part of tmg) is found
+    include(CheckFortranFunctionExists)
     CHECK_FORTRAN_FUNCTION_EXISTS("dlatms" LAPACK_WITH_TMGLIB_FOUND)
     unset(CMAKE_REQUIRED_LIBRARIES)
     if(NOT LAPACK_WITH_TMGLIB_FOUND)
@@ -447,6 +377,12 @@ endif()
 # Reset export target
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
 unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
+
+
+#-------------------------------------
+# LAPACKE
+# Include lapack.h and lapacke_mangling.h even if LAPACKE is not built
+add_subdirectory(LAPACKE/include)
 
 if(LAPACKE)
   add_subdirectory(LAPACKE)
@@ -613,7 +549,7 @@ install(FILES
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}"
   FILES_MATCHING REGEX "liblapackpp.(a|so)$"
   )
   install(
@@ -646,7 +582,7 @@ if (BLAS++)
   )
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}"
   FILES_MATCHING REGEX "libblaspp.(a|so)$"
   )
   install(
@@ -673,50 +609,81 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
 
     set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
     set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DOCS)
-    set(PROJECT_LOGO ${CMAKE_CURRENT_SOURCE_DIR}/DOCS/lapack.png)
+    set(DOXYGEN_OUTPUT_DIRECTORY DOCS)
+    set(DOXYGEN_PROJECT_LOGO DOCS/lapack.png)
     set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
     set(DOXYGEN_SOURCE_BROWSER YES)
-    set(DISTRIBUTE_GROUP_DOC YES)
     set(DOXYGEN_CREATE_SUBDIRS YES)
     set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
+    set(DOXYGEN_TAB_SIZE 8)
     set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_FILE_PATTERNS "*.f;*.c;*.h")
+    set(DOXYGEN_FILE_PATTERNS *.f *.f90 *.c *.h )
     set(DOXYGEN_RECURSIVE YES)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
-    set(DOXYGEN_QUIET YES)
-    set(DOXYGEN_WARNINGS NO)
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_MAN NO)
+    set(DOXYGEN_WARN_NO_PARAMDOC YES)
+    set(DOXYGEN_WARN_LOGFILE doxygen_error)
+    set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
 
+    # Exclude functions that are duplicated, creating conflicts.
+    set(DOXYGEN_EXCLUDE .git
+                        .github
+                        SRC/VARIANTS
+                        BLAS/SRC/lsame.f
+                        BLAS/SRC/xerbla.f
+                        BLAS/SRC/xerbla_array.f
+                        INSTALL/slamchf77.f
+                        INSTALL/dlamchf77.f )
 
     if (BUILD_HTML_DOCUMENTATION)
         set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_GENERATE_MAN NO)
         set(DOXYGEN_INLINE_SOURCES YES)
         set(DOXYGEN_CALL_GRAPH YES)
         set(DOXYGEN_CALLER_GRAPH YES)
 
+        set(DOXYGEN_HTML_OUTPUT explore-html)
+        set(DOXYGEN_HTML_TIMESTAMP YES)
         doxygen_add_docs(
             html
-            ${PROJECT_SOURCE_DIR}
+
+            # Doxygen INPUT =
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
+            README.md
+
             COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
         )
+        unset(DOXYGEN_HTML_OUTPUT)
+        unset(DOXYGEN_HTML_TIMESTAMP)
     endif()
     if (BUILD_MAN_DOCUMENTATION)
+        set(DOXYGEN_GENERATE_HTML NO)
         set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_EXCLUDE SRC/VARIANTS)
-        set(DOXYGEN_MAN_LINKS YES)
         set(DOXYGEN_INLINE_SOURCES NO)
         set(DOXYGEN_CALL_GRAPH NO)
         set(DOXYGEN_CALLER_GRAPH NO)
 
+        set(DOXYGEN_MAN_LINKS YES)
         doxygen_add_docs(
             man
-            ${PROJECT_SOURCE_DIR}
+
+            # Doxygen INPUT =
+            BLAS
+            CBLAS
+            SRC
+            INSTALL
+            TESTING
+            DOCS/groups-usr.dox
+
             COMMENT "Generating man LAPACK documentation"
         )
+        unset(DOXYGEN_MAN_LINKS)
     endif()
 
     endif()

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CUNMBR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunmbr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmbr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -189,11 +187,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup unmbr
 *
 *  =====================================================================
       SUBROUTINE CUNMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
      $                   LDC, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -218,7 +217,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CUNMLQ, CUNMQR, XERBLA
@@ -271,18 +271,22 @@
          IF( M.GT.0 .AND. N.GT.0 ) THEN
             IF( APPLYQ ) THEN
                IF( LEFT ) THEN
-                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M-1, N, M-1,
+                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M-1, N,
+     $                         M-1,
      $                         -1 )
                ELSE
-                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N-1, N-1,
+                  NB = ILAENV( 1, 'CUNMQR', SIDE // TRANS, M, N-1,
+     $                         N-1,
      $                         -1 )
                END IF
             ELSE
                IF( LEFT ) THEN
-                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M-1, N, M-1,
+                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M-1, N,
+     $                         M-1,
      $                         -1 )
                ELSE
-                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M, N-1, N-1,
+                  NB = ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M, N-1,
+     $                         N-1,
      $                         -1 )
                END IF
             END IF
@@ -290,7 +294,7 @@
          ELSE
             LWKOPT = 1
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -330,7 +334,8 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL CUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+            CALL CUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA,
+     $                   TAU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE
@@ -367,7 +372,7 @@
      $                   TAU, C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       END IF
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       RETURN
 *
 *     End of CUNMBR

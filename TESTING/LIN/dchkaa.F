@@ -63,6 +63,7 @@
 *> DLQ    8               List types on next line if 0 < NTYPES <  8
 *> DQL    8               List types on next line if 0 < NTYPES <  8
 *> DQP    6               List types on next line if 0 < NTYPES <  6
+*> DQK    19              List types on next line if 0 < NTYPES <  19
 *> DTZ    3               List types on next line if 0 < NTYPES <  3
 *> DLS    6               List types on next line if 0 < NTYPES <  6
 *> DEQ
@@ -149,12 +150,12 @@
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
-      DOUBLE PRECISION   E( NMAX ), S( 2*NMAX )
 *     ..
 *     .. Allocatable Arrays ..
       INTEGER AllocateStatus
-      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: RWORK
-      DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE :: A, B, WORK      
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: RWORK, S
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: E
+      DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE :: A, B, WORK
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -164,13 +165,13 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKORHR_COL, DCHKPB, DCHKPO, DCHKPS, DCHKPP,
-     $                   DCHKPT, DCHKQ3, DCHKQL, DCHKQR, DCHKRQ, DCHKSP,
-     $                   DCHKSY, DCHKSY_ROOK, DCHKSY_RK, DCHKSY_AA,
-     $                   DCHKTB, DCHKTP, DCHKTR, DCHKTZ, DDRVGB, DDRVGE,
-     $                   DDRVGT, DDRVLS, DDRVPB, DDRVPO, DDRVPP, DDRVPT,
-     $                   DDRVSP, DDRVSY, DDRVSY_ROOK, DDRVSY_RK,
-     $                   DDRVSY_AA, ILAVER, DCHKLQTP, DCHKQRT, DCHKQRTP,
-     $                   DCHKLQT,DCHKTSQR
+     $                   DCHKPT, DCHKQ3, DCHKQP3RK, DCHKQL, DCHKQR,
+     $                   DCHKRQ, DCHKSP, DCHKSY, DCHKSY_ROOK, DCHKSY_RK,
+     $                   DCHKSY_AA, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
+     $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
+     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
+     $                   DDRVSY_RK, DDRVSY_AA, ILAVER, DCHKLQTP, DCHKQRT,
+     $                   DCHKQRTP, DCHKLQT,DCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -196,6 +197,10 @@
       ALLOCATE ( B( NMAX*MAXRHS, 4 ), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
       ALLOCATE ( WORK( NMAX, 3*NMAX+MAXRHS+30 ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( E( NMAX ), STAT = AllocateStatus )
+      IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
+      ALLOCATE ( S( 2*NMAX ), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
       ALLOCATE ( RWORK( 5*NMAX+2*MAXRHS ), STAT = AllocateStatus )
       IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
@@ -919,9 +924,26 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
-     $                   THRESH, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
-     $                   B( 1, 3 ), WORK, IWORK, NOUT )
+            CALL DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL,
+     $                   NXVAL, THRESH, A( 1, 1 ), A( 1, 2 ),
+     $                   B( 1, 1 ), B( 1, 3 ), WORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QK' ) ) THEN
+*
+*        QK: truncated QR factorization with pivoting
+*
+         NTYPES = 19
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKQP3RK( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL,
+     $                      NNB, NBVAL, NXVAL, THRESH, A( 1, 1 ),
+     $                      A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), B( 1, 4 ),
+     $                      WORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
@@ -1054,6 +1076,8 @@
 *
       DEALLOCATE (A, STAT = AllocateStatus)
       DEALLOCATE (B, STAT = AllocateStatus)
+      DEALLOCATE (E, STAT = AllocateStatus)
+      DEALLOCATE (S, STAT = AllocateStatus)
       DEALLOCATE (WORK, STAT = AllocateStatus)
       DEALLOCATE (RWORK,  STAT = AllocateStatus)
 *
@@ -1065,7 +1089,7 @@
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
  9994 FORMAT( ' Tests of the DOUBLE PRECISION LAPACK routines ',
-     $      / ' LAPACK VERSION ', I1, '.', I1, '.', I1,
+     $      / ' LAPACK VERSION ', I1, '.', I2, '.', I1,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
  9992 FORMAT( / ' Routines pass computational tests if test ratio is ',

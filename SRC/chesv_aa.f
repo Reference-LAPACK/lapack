@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHESV_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -154,11 +152,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEsolve
+*> \ingroup hesv_aa
 *
 *  =====================================================================
       SUBROUTINE CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -177,12 +176,13 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, LWKOPT_HETRF, LWKOPT_HETRS
+      INTEGER            LWKMIN, LWKOPT, LWKOPT_HETRF, LWKOPT_HETRS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CHETRF_AA, CHETRS_AA
@@ -196,7 +196,9 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      LWKMIN = MAX( 1, 2*N, 3*N-2 )
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $    .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -206,18 +208,18 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX( 2*N, 3*N-2 ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
 *
       IF( INFO.EQ.0 ) THEN
          CALL CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-         LWKOPT_HETRF = INT( WORK(1) )
+         LWKOPT_HETRF = INT( WORK( 1 ) )
          CALL CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
-         LWKOPT_HETRS = INT( WORK(1) )
-         LWKOPT = MAX( LWKOPT_HETRF, LWKOPT_HETRS )
-         WORK( 1 ) = LWKOPT
+         LWKOPT_HETRS = INT( WORK( 1 ) )
+         LWKOPT = MAX( LWKMIN, LWKOPT_HETRF, LWKOPT_HETRS )
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -239,7 +241,7 @@
 *
       END IF
 *
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
       RETURN
 *

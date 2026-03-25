@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZHESV_AA_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_aa_2stage.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_aa_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -100,14 +98,14 @@
 *>
 *> \param[out] TB
 *> \verbatim
-*>          TB is COMPLEX*16 array, dimension (LTB)
+*>          TB is COMPLEX*16 array, dimension (MAX(1,LTB)).
 *>          On exit, details of the LU factorization of the band matrix.
 *> \endverbatim
 *>
 *> \param[in] LTB
 *> \verbatim
 *>          LTB is INTEGER
-*>          The size of the array TB. LTB >= 4*N, internally
+*>          The size of the array TB. LTB >= MAX(1,4*N), internally
 *>          used to select NB such that LTB >= (3*NB+1)*N.
 *>
 *>          If LTB = -1, then a workspace query is assumed; the
@@ -147,14 +145,15 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 workspace of size LWORK
+*>          WORK is COMPLEX*16 workspace of size (MAX(1,LWORK)).
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The size of WORK. LWORK >= N, internally used to select NB
-*>          such that LWORK >= N*NB.
+*>          The size of WORK. LWORK >= MAX(1,N), internally used to
+*>          select NB such that LWORK >= N*NB.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the WORK array,
@@ -178,7 +177,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16HEsolve
+*> \ingroup hesv_aa_2stage
 *
 *  =====================================================================
       SUBROUTINE ZHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
@@ -208,7 +207,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            LWKOPT
+      INTEGER            LWKOPT, LWKMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -216,7 +215,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF_AA_2STAGE, ZHETRS_AA_2STAGE
+      EXTERNAL           XERBLA, ZHETRF_AA_2STAGE,
+     $                   ZHETRS_AA_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -229,6 +229,7 @@
       UPPER = LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
+      LWKMIN = MAX( 1, N )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -237,18 +238,19 @@
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -5
-      ELSE IF( LTB.LT.( 4*N ) .AND. .NOT.TQUERY ) THEN
+      ELSE IF( LTB.LT.MAX( 1, 4*N ) .AND. .NOT.TQUERY ) THEN
          INFO = -7
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -11
-      ELSE IF( LWORK.LT.N .AND. .NOT.WQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.WQUERY ) THEN
          INFO = -13
       END IF
 *
       IF( INFO.EQ.0 ) THEN
          CALL ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
-         LWKOPT = INT( WORK(1) )
+         LWKOPT = MAX( LWKMIN, INT( WORK( 1 ) ) )
+         WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN

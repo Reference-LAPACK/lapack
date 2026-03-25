@@ -147,6 +147,7 @@
 *  =====================================================================
       SUBROUTINE CPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
      $                   FERR, BERR, RESLTS )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

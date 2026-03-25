@@ -61,7 +61,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16_blas_level1
+*> \ingroup scal
 *
 *> \par Further Details:
 *  =====================
@@ -75,6 +75,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZDSCAL(N,DA,ZX,INCX)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

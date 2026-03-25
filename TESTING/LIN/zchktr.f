@@ -160,6 +160,7 @@
       SUBROUTINE ZCHKTR( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                   THRESH, TSTERR, NMAX, A, AINV, B, X, XACT,
      $                   WORK, RWORK, NOUT )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -201,7 +202,8 @@
 *     .. Local Arrays ..
       CHARACTER          TRANSS( NTRAN ), UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      DOUBLE PRECISION   RESULT( NTESTS ), SCALE3( 2 )
+      DOUBLE PRECISION   RESULT( NTESTS ), RWORK2( 2*NMAX ),
+     $                   SCALE3( 2 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -544,8 +546,8 @@
                   CALL ZCOPY( N, X, 1, B( N+1 ), 1 )
                   CALL ZDSCAL( N, BIGNUM, B( N+1 ), 1 )
                   CALL ZLATRS3( UPLO, TRANS, DIAG, 'N', N, 2, A, LDA,
-     $                          B, MAX(1, N), SCALE3, RWORK, WORK, NMAX,
-     $                          INFO )
+     $                          B, MAX(1, N), SCALE3, RWORK, RWORK2,
+     $                          2*NMAX, INFO )
 *
 *                 Check error code from ZLATRS3.
 *

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHSEIN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chsein.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chsein.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -226,7 +224,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup hsein
 *
 *> \par Further Details:
 *  =====================
@@ -239,9 +237,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
+      SUBROUTINE CHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W,
+     $                   VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, IFAILL,
      $                   IFAILR, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -343,7 +343,7 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
 *
       LDWORK = N
 *
@@ -396,7 +396,8 @@
 *              Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it
 *              has not ben computed before.
 *
-               HNORM = CLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK )
+               HNORM = CLANHS( 'I', KR-KL+1, H( KL, KL ), LDH,
+     $                         RWORK )
                IF( SISNAN( HNORM ) ) THEN
                   INFO = -6
                   RETURN
@@ -425,7 +426,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL CLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL CLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ),
+     $                      LDH,
      $                      WK, VL( KL, KS ), WORK, LDWORK, RWORK, EPS3,
      $                      SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
@@ -442,7 +444,8 @@
 *
 *              Compute right eigenvector.
 *
-               CALL CLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1, KS ),
+               CALL CLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1,
+     $                      KS ),
      $                      WORK, LDWORK, RWORK, EPS3, SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
                   INFO = INFO + 1

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYSVXX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysvxx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysvxx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -499,13 +497,15 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYsolve
+*> \ingroup hesvxx
 *
 *  =====================================================================
-      SUBROUTINE CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF,
+     $                    IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -630,7 +630,8 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL CSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
+         CALL CSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK,
+     $                 INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
@@ -650,7 +651,8 @@
 *        Compute the LDL^T or UDU^T factorization of A.
 *
          CALL CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL CSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
+         CALL CSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N),
+     $                INFO )
 *
 *        Return if INFO is non-zero.
 *

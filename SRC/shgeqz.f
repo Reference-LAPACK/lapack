@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SHGEQZ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/shgeqz.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shgeqz.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -282,7 +280,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup hgeqz
 *
 *> \par Further Details:
 *  =====================
@@ -298,9 +296,11 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+      SUBROUTINE SHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T,
+     $                   LDT,
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                   LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -346,11 +346,14 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANHS, SLAPY2, SLAPY3
-      EXTERNAL           LSAME, SLAMCH, SLANHS, SLAPY2, SLAPY3
+      REAL               SLAMCH, SLANHS, SLAPY2,
+     $                   SLAPY3, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANHS,
+     $                   SLAPY2, SLAPY3, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAG2, SLARFG, SLARTG, SLASET, SLASV2, SROT,
+      EXTERNAL           SLAG2, SLARFG, SLARTG, SLASET, SLASV2,
+     $                   SROT,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -399,7 +402,7 @@
 *     Check Argument Values
 *
       INFO = 0
-      WORK( 1 ) = MAX( 1, N )
+      WORK( 1 ) = REAL( MAX( 1, N ) )
       LQUERY = ( LWORK.EQ.-1 )
       IF( ISCHUR.EQ.0 ) THEN
          INFO = -1
@@ -597,7 +600,8 @@
                      CALL SROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL SROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL SROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, S )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -624,12 +628,14 @@
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = ZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL SROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
+     $                  CALL SROT( ILASTM-JCH-1, T( JCH, JCH+2 ),
+     $                             LDT,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
                      CALL SROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL SROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL SROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
+     $                             1,
      $                             C, S )
                      TEMP = H( JCH+1, JCH )
                      CALL SLARTG( TEMP, H( JCH+1, JCH-1 ), C, S,
@@ -640,7 +646,8 @@
                      CALL SROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL SROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
+     $                  CALL SROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ),
+     $                             1,
      $                             C, S )
    50             CONTINUE
                   GO TO 70
@@ -675,7 +682,8 @@
          CALL SROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL SROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
+     $      CALL SROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C,
+     $                 S )
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI,
 *                              and BETA
@@ -907,10 +915,12 @@
      $                    T( IFRSTM, ILAST ), 1, CR, SR )
 *
             IF( ILQ )
-     $         CALL SROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1, CL,
+     $         CALL SROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1,
+     $                    CL,
      $                    SL )
             IF( ILZ )
-     $         CALL SROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1, CR,
+     $         CALL SROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1,
+     $                    CR,
      $                    SR )
 *
             T( ILAST-1, ILAST-1 ) = B11
@@ -1364,7 +1374,7 @@
 *     Exit (other than argument error) -- return optimal workspace size
 *
   420 CONTINUE
-      WORK( 1 ) = REAL( N )
+      WORK( 1 ) = SROUNDUP_LWORK( N )
       RETURN
 *
 *     End of SHGEQZ

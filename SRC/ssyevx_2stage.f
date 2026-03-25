@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVX_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevx_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevx_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -208,12 +206,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK. LWORK >= 1, when N <= 1;
-*>          otherwise  
+*>          otherwise
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 8*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + 3*N
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + 3*N
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -247,8 +245,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     SSTEIN; their indices are stored in IFAIL.
+*>                > N: SSTEBZ returned INFO = INFO - N;
+*>                     see SSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -259,7 +260,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYeigen
+*> \ingroup heevx_2stage
 *
 *> \par Further Details:
 *  =====================
@@ -277,7 +278,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -285,11 +286,11 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
@@ -334,11 +335,13 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV2STAGE
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE
+      REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE,
+     $                   SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL, SSTEBZ,
+      EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL,
+     $                   SSTEBZ,
      $                   SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA,
      $                   SSYTRD_2STAGE
 *     ..
@@ -388,7 +391,7 @@
       IF( INFO.EQ.0 ) THEN
          IF( N.LE.1 ) THEN
             LWMIN = 1
-            WORK( 1 ) = LWMIN
+            WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
          ELSE
             KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ,
      $                            N, -1, -1, -1 )
@@ -399,7 +402,7 @@
             LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = MAX( 8*N, 3*N + LHTRD + LWTRD )
-            WORK( 1 )  = LWMIN
+            WORK( 1 )  = REAL( LWMIN )
          END IF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )
@@ -487,7 +490,7 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ), 
+      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ),
      $                    WORK( INDE ), WORK( INDTAU ), WORK( INDHOUS ),
      $                    LHTRD, WORK( INDWRK ), LLWORK, IINFO )
 *
@@ -540,19 +543,27 @@
       CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
-     $             IWORK( INDIWO ), INFO )
+     $             IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 40
+      END IF
 *
       IF( WANTZ ) THEN
          CALL SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
-     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
+     $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
 *        form to eigenvectors returned by SSTEIN.
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -600,7 +611,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
 *
       RETURN
 *

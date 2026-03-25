@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CTGSY2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsy2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsy2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -244,7 +242,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYauxiliary
+*> \ingroup tgsy2
 *
 *> \par Contributors:
 *  ==================
@@ -253,9 +251,11 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC,
+     $                   D,
      $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
      $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -293,7 +293,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGESC2, CGETC2, CSCAL, CLATDF, XERBLA
+      EXTERNAL           CAXPY, CGESC2, CGETC2, CSCAL, CLATDF,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, CONJG, MAX
@@ -369,9 +370,11 @@
                   CALL CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 10 K = 1, N
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1,
+     $                              K ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1,
+     $                              K ),
      $                              1 )
    10                CONTINUE
                      SCALE = SCALE*SCALOC
@@ -390,8 +393,10 @@
 *
                IF( I.GT.1 ) THEN
                   ALPHA = -RHS( 1 )
-                  CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 )
-                  CALL CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 )
+                  CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ),
+     $                        1 )
+                  CALL CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ),
+     $                        1 )
                END IF
                IF( J.LT.N ) THEN
                   CALL CAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,

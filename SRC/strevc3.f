@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download STREVC3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strevc3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strevc3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -215,7 +213,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup trevc3
 *
 *> \par Further Details:
 *  =====================
@@ -274,7 +272,8 @@
       EXTERNAL           LSAME, ISAMAX, ILAENV, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL, XERBLA,
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL,
+     $                   XERBLA,
      $                   SLACPY, SGEMM, SLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -298,8 +297,8 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'STREVC', SIDE // HOWMNY, N, -1, -1, -1 )
-      MAXWRK = N + 2*N*NB
-      WORK(1) = MAXWRK
+      MAXWRK = MAX( 1, N + 2*N*NB )
+      WORK( 1 ) = REAL( MAXWRK )
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
@@ -382,7 +381,7 @@
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       ULP = SLAMCH( 'Precision' )
-      SMLNUM = UNFL*( N / ULP )
+      SMLNUM = UNFL*( REAL( N ) / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
 *     Compute 1-norm of each column of strictly upper triangular
@@ -489,7 +488,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
@@ -556,7 +556,8 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL SCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1 )
+                  CALL SCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ),
+     $                        1 )
 *
                   II = ISAMAX( KI, VR( 1, IS ), 1 )
                   REMAX = ONE / ABS( VR( II, IS ) )
@@ -635,7 +636,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+(IV-1)*N ), N,
      $                            WR, WI, X, 2, SCALE, XNORM, IERR )
 *
@@ -653,8 +655,10 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
-                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ),
+     $                              1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ),
+     $                              1 )
                      END IF
                      WORK( J+(IV-1)*N ) = X( 1, 1 )
                      WORK( J+(IV  )*N ) = X( 1, 2 )
@@ -693,8 +697,10 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
-                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ),
+     $                              1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ),
+     $                              1 )
                      END IF
                      WORK( J-1+(IV-1)*N ) = X( 1, 1 )
                      WORK( J  +(IV-1)*N ) = X( 2, 1 )
@@ -719,8 +725,10 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL SCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1), 1 )
-                  CALL SCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ), 1 )
+                  CALL SCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1),
+     $                        1 )
+                  CALL SCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ),
+     $                        1 )
 *
                   EMAX = ZERO
                   DO 100 K = 1, KI
@@ -747,8 +755,10 @@
      $                           WORK( 1  + (IV)*N ), 1,
      $                           WORK( KI + (IV)*N ), VR( 1, KI ), 1 )
                   ELSE
-                     CALL SSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1), 1)
-                     CALL SSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ), 1)
+                     CALL SSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1),
+     $                           1)
+                     CALL SSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ),
+     $                           1)
                   END IF
 *
                   EMAX = ZERO
@@ -927,14 +937,16 @@
 *
 *                    Solve [ T(J,J) - WR ]**T * X = WORK
 *
-                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
+     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ),
+     $                              1 )
                      WORK( J+IV*N ) = X( 1, 1 )
                      VMAX = MAX( ABS( WORK( J+IV*N ) ), VMAX )
                      VCRIT = BIGNUM / VMAX
@@ -959,7 +971,8 @@
      $                                      WORK( KI+1+IV*N ), 1 )
 *
                      WORK( J+1+IV*N ) = WORK( J+1+IV*N ) -
-     $                                  SDOT( J-KI-1, T( KI+1, J+1 ), 1,
+     $                                  SDOT( J-KI-1, T( KI+1, J+1 ),
+     $                                        1,
      $                                        WORK( KI+1+IV*N ), 1 )
 *
 *                    Solve
@@ -973,7 +986,8 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
+     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ),
+     $                              1 )
                      WORK( J  +IV*N ) = X( 1, 1 )
                      WORK( J+1+IV*N ) = X( 2, 1 )
 *
@@ -1079,30 +1093,37 @@
 *
                      IF( WORK( J ).GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
-                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N),
+     $                              1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N),
+     $                              1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+(IV  )*N ) = WORK( J+(IV)*N ) -
-     $                                  SDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                  SDOT( J-KI-2, T( KI+2, J ),
+     $                                        1,
      $                                        WORK( KI+2+(IV)*N ), 1 )
                      WORK( J+(IV+1)*N ) = WORK( J+(IV+1)*N ) -
-     $                                  SDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                  SDOT( J-KI-2, T( KI+2, J ),
+     $                                        1,
      $                                        WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve [ T(J,J)-(WR-i*WI) ]*(X11+i*X12)= WK+I*WK2
 *
-                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J,
+     $                            J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
-                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
+     $                              1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
+     $                              1)
                      END IF
                      WORK( J+(IV  )*N ) = X( 1, 1 )
                      WORK( J+(IV+1)*N ) = X( 1, 2 )
@@ -1120,8 +1141,10 @@
                      BETA = MAX( WORK( J ), WORK( J+1 ) )
                      IF( BETA.GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
-                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N),
+     $                              1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N),
+     $                              1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
@@ -1135,11 +1158,13 @@
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
                      WORK( J+1+(IV  )*N ) = WORK( J+1+(IV)*N ) -
-     $                                SDOT( J-KI-2, T( KI+2, J+1 ), 1,
+     $                                SDOT( J-KI-2, T( KI+2, J+1 ),
+     $                                      1,
      $                                      WORK( KI+2+(IV)*N ), 1 )
 *
                      WORK( J+1+(IV+1)*N ) = WORK( J+1+(IV+1)*N ) -
-     $                                SDOT( J-KI-2, T( KI+2, J+1 ), 1,
+     $                                SDOT( J-KI-2, T( KI+2, J+1 ),
+     $                                      1,
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve 2-by-2 complex linear equation
@@ -1153,8 +1178,10 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
-                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
+     $                              1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
+     $                              1)
                      END IF
                      WORK( J  +(IV  )*N ) = X( 1, 1 )
                      WORK( J  +(IV+1)*N ) = X( 1, 2 )
@@ -1207,8 +1234,10 @@
      $                           WORK( KI+1 + (IV+1)*N ),
      $                           VL( 1, KI+1 ), 1 )
                   ELSE
-                     CALL SSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ), 1)
-                     CALL SSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1), 1)
+                     CALL SSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ),
+     $                           1)
+                     CALL SSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1),
+     $                           1)
                   END IF
 *
                   EMAX = ZERO

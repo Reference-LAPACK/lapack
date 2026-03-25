@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sormbr( int matrix_layout, char vect, char side, char trans,
+lapack_int API_SUFFIX(LAPACKE_sormbr)( int matrix_layout, char vect, char side, char trans,
                            lapack_int m, lapack_int n, lapack_int k,
                            const float* a, lapack_int lda, const float* tau,
                            float* c, lapack_int ldc )
@@ -43,28 +43,28 @@ lapack_int LAPACKE_sormbr( int matrix_layout, char vect, char side, char trans,
     float work_query;
     lapack_int nq, ar, ac;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_sormbr", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        nq = LAPACKE_lsame( side, 'l' ) ? m : n;
-        ar = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
-        ac = LAPACKE_lsame( vect, 'q' ) ? MIN(nq,k) : nq;
-        if( LAPACKE_sge_nancheck( matrix_layout, ar, ac, a, lda ) ) {
+        nq = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
+        ar = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? nq : MIN(nq,k);
+        ac = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? MIN(nq,k) : nq;
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, ar, ac, a, lda ) ) {
             return -8;
         }
-        if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
+        if( API_SUFFIX(LAPACKE_sge_nancheck)( matrix_layout, m, n, c, ldc ) ) {
             return -11;
         }
-        if( LAPACKE_s_nancheck( MIN(nq,k), tau, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_s_nancheck)( MIN(nq,k), tau, 1 ) ) {
             return -10;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_sormbr_work( matrix_layout, vect, side, trans, m, n, k, a,
+    info = API_SUFFIX(LAPACKE_sormbr_work)( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -77,13 +77,13 @@ lapack_int LAPACKE_sormbr( int matrix_layout, char vect, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sormbr_work( matrix_layout, vect, side, trans, m, n, k, a,
+    info = API_SUFFIX(LAPACKE_sormbr_work)( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_sormbr", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr", info );
     }
     return info;
 }

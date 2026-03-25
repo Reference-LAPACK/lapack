@@ -111,6 +111,7 @@
 *  =====================================================================
       SUBROUTINE CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
      +                    LDA, S_WORK_CLANGE )
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

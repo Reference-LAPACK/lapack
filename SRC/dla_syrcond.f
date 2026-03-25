@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLA_SYRCOND + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_syrcond.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_syrcond.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -139,12 +137,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup la_hercond
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF,
+      DOUBLE PRECISION FUNCTION DLA_SYRCOND( UPLO, N, A, LDA, AF,
+     $                                       LDAF,
      $                                       IPIV, CMODE, C, INFO, WORK,
      $                                       IWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -282,9 +282,11 @@
             END DO
 
             IF ( UP ) THEN
-               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ELSE
-               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -313,9 +315,11 @@
             END IF
 
             IF ( UP ) THEN
-               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ELSE
-               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N,
+     $                      INFO )
             ENDIF
 *
 *           Multiply by R.

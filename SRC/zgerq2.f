@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGERQ2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgerq2.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgerq2.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -98,7 +96,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GEcomputational
+*> \ingroup gerq2
 *
 *> \par Further Details:
 *  =====================
@@ -120,6 +118,7 @@
 *>
 *  =====================================================================
       SUBROUTINE ZGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,10 +139,9 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, K
-      COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF, ZLARFG
+      EXTERNAL           XERBLA, ZLACGV, ZLARF1L, ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -173,15 +171,13 @@
 *        A(m-k+i,1:n-k+i-1)
 *
          CALL ZLACGV( N-K+I, A( M-K+I, 1 ), LDA )
-         ALPHA = A( M-K+I, N-K+I )
-         CALL ZLARFG( N-K+I, ALPHA, A( M-K+I, 1 ), LDA, TAU( I ) )
+         CALL ZLARFG( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
+     $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
-         A( M-K+I, N-K+I ) = ONE
-         CALL ZLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
-     $               TAU( I ), A, LDA, WORK )
-         A( M-K+I, N-K+I ) = ALPHA
+         CALL ZLARF1L( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+     $                 TAU( I ), A, LDA, WORK )
          CALL ZLACGV( N-K+I-1, A( M-K+I, 1 ), LDA )
    10 CONTINUE
       RETURN

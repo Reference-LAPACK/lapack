@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAED4 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed4.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed4.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -132,7 +130,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup laed4
 *
 *> \par Contributors:
 *  ==================
@@ -142,6 +140,7 @@
 *>
 *  =====================================================================
       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -169,8 +168,8 @@
       LOGICAL            ORGATI, SWTCH, SWTCH3
       INTEGER            II, IIM1, IIP1, IP1, ITER, J, NITER
       REAL               A, B, C, DEL, DLTLB, DLTUB, DPHI, DPSI, DW,
-     $                   EPS, ERRETM, ETA, MIDPT, PHI, PREW, PSI,
-     $                   RHOINV, TAU, TEMP, TEMP1, W
+     $                   EPS, ERRETM, ETA, ETA1, ETA2, MIDPT, PHI,
+     $                   PREW, PSI, RHOINV, TAU, TEMP, TEMP1, W
 *     ..
 *     .. Local Arrays ..
       REAL               ZZ( 3 )
@@ -183,7 +182,7 @@
       EXTERNAL           SLAED5, SLAED6
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, SQRT
+      INTRINSIC          ABS, MAX, MIN, SIGN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -350,10 +349,23 @@
      $      ETA = -W / ( DPSI+DPHI )
          TEMP = TAU + ETA
          IF( TEMP.GT.DLTUB .OR. TEMP.LT.DLTLB ) THEN
+            ETA1 = -W / ( DPSI+DPHI )
+            TEMP = TAU + ETA1
             IF( W.LT.ZERO ) THEN
-               ETA = ( DLTUB-TAU ) / TWO
+               ETA2 = ( DLTUB-TAU ) / TWO
             ELSE
-               ETA = ( DLTLB-TAU ) / TWO
+               ETA2 = ( DLTLB-TAU ) / TWO
+            END IF
+            IF ( DLTLB.LE.TEMP .AND. TEMP.LE.DLTUB ) THEN
+*
+*                 If Newton step is within boundaries,
+*                 use the geometric mean of the distance
+*                 and keep the direction (sign).
+*
+               ETA = SIGN(ONE, ETA1) *
+     $               SQRT( ABS( ETA1 ) ) * SQRT( ABS( ETA2 ) )
+            ELSE
+               ETA = ETA2
             END IF
          END IF
          DO 50 J = 1, N
@@ -832,7 +844,8 @@
                      ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
                   END IF
                END IF
-               CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
+               CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W,
+     $                      ETA,
      $                      INFO )
                IF( INFO.NE.0 )
      $            GO TO 250
@@ -848,10 +861,23 @@
      $         ETA = -W / DW
             TEMP = TAU + ETA
             IF( TEMP.GT.DLTUB .OR. TEMP.LT.DLTLB ) THEN
+               ETA1 = -W / DW
+               TEMP = TAU + ETA1
                IF( W.LT.ZERO ) THEN
-                  ETA = ( DLTUB-TAU ) / TWO
+                  ETA2 = ( DLTUB-TAU ) / TWO
                ELSE
-                  ETA = ( DLTLB-TAU ) / TWO
+                  ETA2 = ( DLTLB-TAU ) / TWO
+               END IF
+               IF ( DLTLB.LE.TEMP .AND. TEMP.LE.DLTUB ) THEN
+*
+*                 If Newton step is within boundaries,
+*                 use the geometric mean of the distance
+*                 and keep the direction (sign).
+*
+                  ETA = SIGN( ONE, ETA1 ) *
+     $                  SQRT( ABS( ETA1 ) ) * SQRT( ABS( ETA2 ) )
+               ELSE
+                  ETA = ETA2
                END IF
             END IF
 *

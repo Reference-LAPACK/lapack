@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SGESVDQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvdq.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvdq.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -406,14 +404,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEsing
+*> \ingroup gesvdq
 *
 *  =====================================================================
       SUBROUTINE SGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,
      $                    S, U, LDU, V, LDV, NUMRANK, IWORK, LIWORK,
      $                    WORK, LWORK, RWORK, LRWORK, INFO )
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
-      IMPLICIT    NONE
       CHARACTER   JOBA, JOBP, JOBR, JOBU, JOBV
       INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LIWORK, LWORK, LRWORK,
      $            INFO
@@ -445,9 +443,9 @@
       REAL        RDUMMY(1)
 *     ..
 *     .. External Subroutines (BLAS, LAPACK)
-      EXTERNAL    SGELQF, SGEQP3, SGEQRF, SGESVD, SLACPY, SLAPMT,
-     $            SLASCL, SLASET, SLASWP, SSCAL,  SPOCON, SORMLQ,
-     $            SORMQR, XERBLA
+      EXTERNAL    SGELQF, SGEQP3, SGEQRF, SGESVD, SLACPY,
+     $            SLAPMT, SLASCL, SLASET, SLASWP, SSCAL,
+     $            SPOCON, SORMLQ, SORMQR, XERBLA
 *     ..
 *     .. External Functions (BLAS, LAPACK)
       LOGICAL    LSAME
@@ -678,10 +676,12 @@
                    IF ( WNTVA ) THEN
                        CALL SGEQRF(N,N/2,U,LDU,RDUMMY,RDUMMY,-1,IERR)
                        LWRK_SGEQRF = INT( RDUMMY(1) )
-                       CALL SGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,LDU,
+                       CALL SGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,
+     $                              LDU,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_SGESVD2 = INT( RDUMMY(1) )
-                       CALL SORMQR( 'R', 'C', N, N, N/2, U, LDU, RDUMMY,
+                       CALL SORMQR( 'R', 'C', N, N, N/2, U, LDU,
+     $                              RDUMMY,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_SORMQR2 = INT( RDUMMY(1) )
                        OPTWRK2 = MAX( LWRK_SGEQP3, N/2+LWRK_SGEQRF,
@@ -700,10 +700,12 @@
                    IF ( WNTVA ) THEN
                       CALL SGELQF(N/2,N,U,LDU,RDUMMY,RDUMMY,-1,IERR)
                       LWRK_SGELQF = INT( RDUMMY(1) )
-                      CALL SGESVD( 'S','O', N/2,N/2, V, LDV, S, U, LDU,
+                      CALL SGESVD( 'S','O', N/2,N/2, V, LDV, S, U,
+     $                             LDU,
      $                     V, LDV, RDUMMY, -1, IERR )
                       LWRK_SGESVD2 = INT( RDUMMY(1) )
-                      CALL SORMLQ( 'R', 'N', N, N, N/2, U, LDU, RDUMMY,
+                      CALL SORMLQ( 'R', 'N', N, N, N/2, U, LDU,
+     $                             RDUMMY,
      $                     V, LDV, RDUMMY,-1,IERR )
                       LWRK_SORMLQ = INT( RDUMMY(1) )
                       OPTWRK2 = MAX( LWRK_SGEQP3, N/2+LWRK_SGELQF,
@@ -733,9 +735,9 @@
 *     Return optimal workspace
 *
           IWORK(1) = IMINWRK
-          WORK(1) = OPTWRK
-          WORK(2) = MINWRK
-          RWORK(1) = RMINWRK
+          WORK(1) = REAL( OPTWRK )
+          WORK(2) = REAL( MINWRK )
+          RWORK(1) = REAL( RMINWRK )
           RETURN
       END IF
 *
@@ -803,7 +805,8 @@
             IF ( RWORK(1) .GT. BIG / SQRT(REAL(M)) ) THEN
 *               .. to prevent overflow in the QR factorization, scale the
 *               matrix by 1/sqrt(M) if too large entry detected
-                CALL SLASCL('G',0,0,SQRT(REAL(M)),ONE, M,N, A,LDA, IERR)
+                CALL SLASCL('G',0,0,SQRT(REAL(M)),ONE, M,N, A,LDA,
+     $                       IERR)
                 ASCALED = .TRUE.
             END IF
             CALL SLASWP( N, A, LDA, 1, M-1, IWORK(N+1), 1 )
@@ -825,7 +828,8 @@
           IF ( RTMP .GT. BIG / SQRT(REAL(M)) ) THEN
 *             .. to prevent overflow in the QR factorization, scale the
 *             matrix by 1/sqrt(M) if too large entry detected
-              CALL SLASCL('G',0,0, SQRT(REAL(M)),ONE, M,N, A,LDA, IERR)
+              CALL SLASCL('G',0,0, SQRT(REAL(M)),ONE, M,N, A,LDA,
+     $                     IERR)
               ASCALED = .TRUE.
           END IF
       END IF
@@ -993,7 +997,8 @@
 *            .. copy R into [U] and overwrite [U] with the left singular vectors
              CALL SLACPY( 'U', NR, N, A, LDA, U, LDU )
              IF ( NR .GT. 1 )
-     $         CALL SLASET( 'L', NR-1, NR-1, ZERO, ZERO, U(2,1), LDU )
+     $         CALL SLASET( 'L', NR-1, NR-1, ZERO, ZERO, U(2,1),
+     $                      LDU )
 *            .. the right singular vectors not computed, the NR left singular
 *            vectors overwrite [U](1:NR,1:NR)
                 CALL SGESVD( 'O', 'N', NR, N, U, LDU, S, U, LDU,
@@ -1084,7 +1089,8 @@
 *            .. copy R into V and overwrite V with the right singular vectors
              CALL SLACPY( 'U', NR, N, A, LDA, V, LDV )
              IF ( NR .GT. 1 )
-     $         CALL SLASET( 'L', NR-1, NR-1, ZERO, ZERO, V(2,1), LDV )
+     $         CALL SLASET( 'L', NR-1, NR-1, ZERO, ZERO, V(2,1),
+     $                      LDV )
 *            .. the right singular vectors overwrite V, the NR left singular
 *            vectors stored in U(1:NR,1:NR)
              IF ( WNTVR .OR. ( NR .EQ. N ) ) THEN
@@ -1156,9 +1162,11 @@
  1117           CONTINUE
 *
                 IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL SLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1), LDU)
+                  CALL SLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1209,7 +1217,8 @@
                    IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL SLASET('A',M-N,N,ZERO,ZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL SLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),LDU)
+                        CALL SLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),
+     $                               LDU)
                         CALL SLASET('A',M-N,N1-N,ZERO,ONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1236,7 +1245,8 @@
      $                 V,LDV, WORK(N+NR+1),LWORK-N-NR, INFO )
                   CALL SLASET('A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV)
                   CALL SLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
-                  CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV)
+                  CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV)
                   CALL SORMQR('R','C', N, N, NR, U(1,NR+1), LDU,
      $                 WORK(N+1),V,LDV,WORK(N+NR+1),LWORK-N-NR,IERR)
                   CALL SLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1245,7 +1255,8 @@
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
                      CALL SLASET('A',M-NR,NR,ZERO,ZERO,U(NR+1,1),LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1),LDU)
                      END IF
@@ -1271,9 +1282,11 @@
 *               .. assemble the left singular vector matrix U of dimensions
 *              (M x NR) or (M x N) or (M x M).
                IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
-                  CALL SLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1), LDU)
+                  CALL SLASET('A', M-NR,NR, ZERO,ZERO, U(NR+1,1),
+     $                         LDU)
                   IF ( NR .LT. N1 ) THEN
-                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                   END IF
@@ -1307,7 +1320,8 @@
                   IF ( ( N .LT. M ) .AND. .NOT.(WNTUF)) THEN
                       CALL SLASET('A',M-N,N,ZERO,ZERO,U(N+1,1),LDU)
                       IF ( N .LT. N1 ) THEN
-                        CALL SLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),LDU)
+                        CALL SLASET('A',N,N1-N,ZERO,ZERO,U(1,N+1),
+     $                               LDU)
                         CALL SLASET( 'A',M-N,N1-N,ZERO,ONE,
      $                       U(N+1,N+1), LDU )
                       END IF
@@ -1325,7 +1339,8 @@
      $                 V, LDV, WORK(N+NR+1), LWORK-N-NR, INFO )
                   CALL SLASET('A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV)
                   CALL SLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
-                  CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV)
+                  CALL SLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
+     $                         LDV)
                   CALL SORMLQ('R','N',N,N,NR,U(NR+1,1),LDU,WORK(N+1),
      $                 V, LDV, WORK(N+NR+1),LWORK-N-NR,IERR)
                   CALL SLAPMT( .FALSE., N, N, V, LDV, IWORK )
@@ -1334,7 +1349,8 @@
                   IF ( ( NR .LT. M ) .AND. .NOT.(WNTUF)) THEN
                      CALL SLASET('A',M-NR,NR,ZERO,ZERO,U(NR+1,1),LDU)
                      IF ( NR .LT. N1 ) THEN
-                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),LDU)
+                     CALL SLASET('A',NR,N1-NR,ZERO,ZERO,U(1,NR+1),
+     $                            LDU)
                      CALL SLASET( 'A',M-NR,N1-NR,ZERO,ONE,
      $                    U(NR+1,NR+1), LDU )
                      END IF
@@ -1367,13 +1383,14 @@
 *
 *     .. if numerical rank deficiency is detected, the truncated
 *     singular values are set to zero.
-      IF ( NR .LT. N ) CALL SLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1), N )
+      IF ( NR .LT. N ) CALL SLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1),
+     $     N )
 *     .. undo scaling; this may cause overflow in the largest singular
 *     values.
       IF ( ASCALED )
      $   CALL SLASCL( 'G',0,0, ONE,SQRT(REAL(M)), NR,1, S, N, IERR )
       IF ( CONDA ) RWORK(1) = SCONDA
-      RWORK(2) = p - NR
+      RWORK(2) = REAL( p - NR )
 *     .. p-NR is the number of singular values that are computed as
 *     exact zeros in SGESVD() applied to the (possibly truncated)
 *     full row rank triangular (trapezoidal) factor of A.

@@ -148,7 +148,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level3
+*> \ingroup herk
 *
 *> \par Further Details:
 *  =====================
@@ -166,6 +166,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level3 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

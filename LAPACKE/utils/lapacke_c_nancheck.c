@@ -33,7 +33,7 @@
 
 /* Check a vector for NaN entries. */
 
-lapack_logical LAPACKE_c_nancheck( lapack_int n,
+lapack_logical API_SUFFIX(LAPACKE_c_nancheck)( lapack_int n,
                                     const lapack_complex_float *x,
                                     lapack_int incx )
 {

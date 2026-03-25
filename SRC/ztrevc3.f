@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZTREVC3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrevc3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrevc3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -222,7 +220,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup trevc3
 *
 *> \par Further Details:
 *  =====================
@@ -239,7 +237,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE ZTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+     $                    VR,
      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
       IMPLICIT NONE
 *
@@ -279,10 +278,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV, IZAMAX
       DOUBLE PRECISION   DLAMCH, DZASUM
-      EXTERNAL           LSAME, ILAENV, IZAMAX, DLAMCH, DZASUM
+      EXTERNAL           LSAME, ILAENV, IZAMAX, DLAMCH,
+     $                   DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV, ZLATRS,
+      EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV,
+     $                   ZLATRS,
      $                   ZGEMM, ZLASET, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
@@ -321,9 +322,9 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'ZTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
-      MAXWRK = N + 2*N*NB
+      MAXWRK = MAX( 1, N + 2*N*NB )
       WORK(1) = MAXWRK
-      RWORK(1) = N
+      RWORK(1) = MAX( 1, N )
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 )
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
@@ -542,7 +543,8 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+               CALL ZLATRS( 'Upper', 'Conjugate transpose',
+     $                      'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 + IV*N ), SCALE, RWORK, INFO )
                WORK( KI + IV*N ) = SCALE
@@ -553,7 +555,8 @@
             IF( .NOT.OVER ) THEN
 *              ------------------------------
 *              no back-transform: copy x to VL and normalize.
-               CALL ZCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS), 1 )
+               CALL ZCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS),
+     $                     1 )
 *
                II = IZAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                REMAX = ONE / CABS1( VL( II, IS ) )
@@ -567,7 +570,8 @@
 *              ------------------------------
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.LT.N )
-     $            CALL ZGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ), LDVL,
+     $            CALL ZGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ),
+     $                        LDVL,
      $                        WORK( KI+1 + IV*N ), 1, DCMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *

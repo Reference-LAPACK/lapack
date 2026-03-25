@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHPTRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chptrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -112,7 +110,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup hptrd
 *
 *> \par Further Details:
 *  =====================
@@ -148,6 +146,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -276,19 +275,22 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
+               CALL CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ),
+     $                     1,
      $                     ZERO, TAU( I ), 1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, AP( II+1 ),
+               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1,
+     $                                   AP( II+1 ),
      $                 1 )
                CALL CAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
+               CALL CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ),
+     $                     1,
      $                     AP( I1I1 ) )
 *
             END IF

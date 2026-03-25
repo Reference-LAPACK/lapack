@@ -75,7 +75,9 @@
 *     .. Local Variables ..
       integer           i, min, Max, m,
      $                  subnormalTreatedAs0, caseAFails, caseBFails,
-     $                  caseCFails, caseDFails, caseEFails, caseFFails
+     $                  caseCFails, caseDFails, caseEFails, caseFFails,
+     $                  caseInfFails, caseNaNFails, nFailingTests,
+     $                  nTests
       double precision  X( N ), aInf, aNaN, b,
      $                  eps, blueMin, blueMax, OV, Xj, stepX(N), limX(N)
       double complex    Y, Y2, R, cInf( nInf ), cNaN( nNaN )
@@ -94,6 +96,10 @@
       caseDFails = 0
       caseEFails = 0
       caseFFails = 0
+      caseInfFails = 0
+      caseNaNFails = 0
+      nFailingTests = 0
+      nTests = 0
 *
 *     .. Initialize machine constants ..
       min = MINEXPONENT(0.0d0)
@@ -174,6 +180,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y = DCMPLX( Xj, 0.0d0 )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
@@ -199,6 +206,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y = DCMPLX( 0.0d0, Xj )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
@@ -224,6 +232,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y = DCMPLX( Xj, Xj )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
@@ -249,6 +258,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y  = DCMPLX( 0.0d0, Xj )
                 Y2 = DCMPLX( Xj, 0.0d0 )
                 R = Y / Y2
@@ -275,6 +285,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y  = DCMPLX( 0.0d0, Xj )
                 Y2 = DCMPLX( Xj, 0.0d0 )
                 R = Y2 / Y
@@ -301,6 +312,7 @@
             endif
         else
             do while( Xj .ne. limX(i) )
+                nTests = nTests + 1
                 Y  = DCMPLX( Xj, Xj )
                 R = Y / DCONJG( Y )
                 if( R .ne. DCMPLX(0.0D0,1.0D0) ) then
@@ -318,37 +330,56 @@
 *
 *     Test (g) Infs
       do 70 i = 1, nInf
+          nTests = nTests + 3
           Y = cInf(i)
           R = czero / Y
           if( (R .ne. czero) .and. (R .eq. R) ) then
+              caseInfFails = caseInfFails + 1
               WRITE( *, FMT = 9998 ) 'ia',i, czero, Y, R, 'NaN and 0'
           endif
           R = cone / Y
           if( (R .ne. czero) .and. (R .eq. R) ) then
+              caseInfFails = caseInfFails + 1
               WRITE( *, FMT = 9998 ) 'ib',i, cone, Y, R, 'NaN and 0'
           endif
           R = Y / Y
           if( R .eq. R ) then
+              caseInfFails = caseInfFails + 1
               WRITE( *, FMT = 9998 ) 'ic',i, Y, Y, R, 'NaN'
           endif
   70  continue
 *
 *     Test (h) NaNs
       do 80 i = 1, nNaN
+          nTests = nTests + 3
           Y = cNaN(i)
           R = czero / Y
           if( R .eq. R ) then
+              caseNaNFails = caseNaNFails + 1
               WRITE( *, FMT = 9998 ) 'na',i, czero, Y, R, 'NaN'
           endif
           R = cone / Y
           if( R .eq. R ) then
+              caseNaNFails = caseNaNFails + 1
               WRITE( *, FMT = 9998 ) 'nb',i, cone, Y, R, 'NaN'
           endif
           R = Y / Y
           if( R .eq. R ) then
+              caseNaNFails = caseNaNFails + 1
               WRITE( *, FMT = 9998 ) 'nc',i, Y, Y, R, 'NaN'
           endif
   80  continue
+*
+*     If any test fails, displays a message
+      nFailingTests = caseAFails + caseBFails + caseCFails + caseDFails
+     $                + caseEFails + caseFFails + caseInfFails
+     $                + caseNaNFails
+      if( nFailingTests .gt. 0 ) then
+         print *, "# ", nTests-nFailingTests, " tests out of ", nTests,
+     $            " pass for complex division,", nFailingTests," fail."
+      else
+         print *, "# All tests pass for complex division."
+      endif
 *
 *     If anything was written to stderr, print the message
       if( (caseAFails .gt. 0) .or. (caseBFails .gt. 0) .or.

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLA_GBRCOND + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gbrcond.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gbrcond.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -161,12 +159,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGBcomputational
+*> \ingroup la_gbrcond
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
+      DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB,
+     $                                       LDAB,
      $                                       AFB, LDAFB, IPIV, CMODE, C,
      $                                       INFO, WORK, IWORK )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -294,7 +294,8 @@
                CALL DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             END IF
 *
@@ -324,7 +325,8 @@
             END IF
 
             IF ( NOTRANS ) THEN
-               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB,
+     $                      IPIV,
      $              WORK, N, INFO )
             ELSE
                CALL DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,

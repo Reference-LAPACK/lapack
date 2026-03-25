@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZLALSA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -250,7 +248,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup lalsa
 *
 *> \par Contributors:
 *  ==================
@@ -260,10 +258,12 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+      SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX,
+     $                   U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -294,7 +294,8 @@
      $                   NDIMR, NL, NLF, NLP1, NLVL, NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLASDT, XERBLA, ZCOPY, ZLALS0
+      EXTERNAL           DGEMM, DLASDT, XERBLA, ZCOPY,
+     $                   ZLALS0
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, DIMAG
@@ -473,7 +474,8 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
+            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ),
+     $                   LDBX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -518,7 +520,8 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
+            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ),
+     $                   LDB,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -560,7 +563,8 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
   200       CONTINUE
   210    CONTINUE
-         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ),
+     $               LDU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO, RWORK( 1 ),
      $               NLP1 )
          J = NLP1*NRHS*2
@@ -570,7 +574,8 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
   220       CONTINUE
   230    CONTINUE
-         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ),
+     $               LDU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO,
      $               RWORK( 1+NLP1*NRHS ), NLP1 )
          JREAL = 0
@@ -597,7 +602,8 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
   260       CONTINUE
   270    CONTINUE
-         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ),
+     $               LDU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO, RWORK( 1 ),
      $               NRP1 )
          J = NRP1*NRHS*2
@@ -607,7 +613,8 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
   280       CONTINUE
   290    CONTINUE
-         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ),
+     $               LDU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO,
      $               RWORK( 1+NRP1*NRHS ), NRP1 )
          JREAL = 0

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGERFS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgerfs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgerfs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -178,11 +176,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup gerfs
 *
 *  =====================================================================
-      SUBROUTINE CGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE CGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $                   LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -229,7 +229,8 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGETRS, CLACN2, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGETRS, CLACN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -290,7 +291,7 @@
       NZ = N + 1
       EPS = SLAMCH( 'Epsilon' )
       SAFMIN = SLAMCH( 'Safe minimum' )
-      SAFE1 = NZ*SAFMIN
+      SAFE1 = REAL( NZ )*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
 *     Do for each right hand side
@@ -307,7 +308,8 @@
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
          CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK,
+         CALL CGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
+     $               WORK,
      $               1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -394,10 +396,11 @@
 *
          DO 90 I = 1, N
             IF( RWORK( I ).GT.SAFE2 ) THEN
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I )
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I )
             ELSE
-               RWORK( I ) = CABS1( WORK( I ) ) + NZ*EPS*RWORK( I ) +
-     $                      SAFE1
+               RWORK( I ) = CABS1( WORK( I ) ) + REAL( NZ )*
+     $                      EPS*RWORK( I ) + SAFE1
             END IF
    90    CONTINUE
 *

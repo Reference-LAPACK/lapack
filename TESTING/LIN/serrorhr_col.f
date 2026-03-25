@@ -49,7 +49,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singlr_lin
+*> \ingroup single_lin
 *
 *  =====================================================================
       SUBROUTINE SERRORHR_COL( PATH, NUNIT )

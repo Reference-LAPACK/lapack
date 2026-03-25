@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTRSYL + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsyl.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsyl.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -156,11 +154,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup trsyl
 *
 *  =====================================================================
       SUBROUTINE DTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
      $                   LDC, SCALE, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -591,7 +590,8 @@
                   SUMR = DDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL DLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL DLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -775,7 +775,8 @@
      $                   B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL DLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL DLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -968,7 +969,8 @@
      $                   B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL DLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL DLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1,
+     $                         K1 ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )

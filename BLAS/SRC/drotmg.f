@@ -83,10 +83,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup double_blas_level1
+*> \ingroup rotmg
 *
 *  =====================================================================
       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+      IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

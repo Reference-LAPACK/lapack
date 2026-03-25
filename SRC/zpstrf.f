@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZPSTRF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpstrf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstrf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -135,10 +133,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup pstrf
 *
 *  =====================================================================
-      SUBROUTINE ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK,
+     $                   INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,7 +176,8 @@
       EXTERNAL           DLAMCH, ILAENV, LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZGEMV, ZHERK, ZLACGV, ZPSTF2, ZSWAP,
+      EXTERNAL           ZDSCAL, ZGEMV, ZHERK, ZLACGV, ZPSTF2,
+     $                   ZSWAP,
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -323,7 +324,8 @@
 *
                   IF( J.LT.N ) THEN
                      CALL ZLACGV( J-1, A( 1, J ), 1 )
-                     CALL ZGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 ),
+                     CALL ZGEMV( 'Trans', J-K, N-J, -CONE, A( K,
+     $                           J+1 ),
      $                           LDA, A( K, J ), 1, CONE, A( J, J+1 ),
      $                           LDA )
                      CALL ZLACGV( J-1, A( 1, J ), 1 )
@@ -390,7 +392,8 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ),
+     $                           LDA )
                      IF( PVT.LT.N )
      $                  CALL ZSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )

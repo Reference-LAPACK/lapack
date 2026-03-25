@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sormbr_work( int matrix_layout, char vect, char side,
+lapack_int API_SUFFIX(LAPACKE_sormbr_work)( int matrix_layout, char vect, char side,
                                 char trans, lapack_int m, lapack_int n,
                                 lapack_int k, const float* a, lapack_int lda,
                                 const float* tau, float* c, lapack_int ldc,
@@ -47,9 +47,9 @@ lapack_int LAPACKE_sormbr_work( int matrix_layout, char vect, char side,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int nq = LAPACKE_lsame( side, 'l' ) ? m : n;
-        lapack_int ar = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
-        lapack_int ac = LAPACKE_lsame( vect, 'q' ) ? MIN(nq,k) : nq;
+        lapack_int nq = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
+        lapack_int ar = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? nq : MIN(nq,k);
+        lapack_int ac = API_SUFFIX(LAPACKE_lsame)( vect, 'q' ) ? MIN(nq,k) : nq;
         lapack_int lda_t = MAX(1,ar);
         lapack_int ldc_t = MAX(1,m);
         float *a_t = NULL;
@@ -57,12 +57,12 @@ lapack_int LAPACKE_sormbr_work( int matrix_layout, char vect, char side,
         /* Check leading dimension(s) */
         if( lda < ac ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_sormbr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_sormbr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -83,8 +83,8 @@ lapack_int LAPACKE_sormbr_work( int matrix_layout, char vect, char side,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, ar, ac, a, lda, a_t, lda_t );
-        LAPACKE_sge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, ar, ac, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sormbr( &vect, &side, &trans, &m, &n, &k, a_t, &lda_t, tau, c_t,
                        &ldc_t, work, &lwork, &info );
@@ -92,18 +92,18 @@ lapack_int LAPACKE_sormbr_work( int matrix_layout, char vect, char side,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_sormbr_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_sormbr_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sormbr_work", info );
     }
     return info;
 }

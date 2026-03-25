@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTGEXC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgexc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgexc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -195,7 +193,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup tgexc
 *
 *> \par Contributors:
 *  ==================
@@ -217,6 +215,7 @@
 *  =====================================================================
       SUBROUTINE DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, IFST, ILST, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -381,7 +380,8 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $                      Z,
      $                      LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -399,7 +399,8 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, NBNEXT, WORK, LWORK,
      $                         INFO )
                   IF( INFO.NE.0 ) THEN
@@ -411,14 +412,16 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE + 1
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -484,7 +487,8 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+     $                      Z,
      $                      LDZ, HERE, NBNEXT, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -501,7 +505,8 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE-1, 2, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -512,14 +517,16 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE - 1
-                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q,
+     $                         LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE

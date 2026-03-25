@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgelq( int matrix_layout, lapack_int m, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dgelq)( int matrix_layout, lapack_int m, lapack_int n,
                           double* a, lapack_int lda,
                           double* t, lapack_int tsize )
 {
@@ -41,19 +41,19 @@ lapack_int LAPACKE_dgelq( int matrix_layout, lapack_int m, lapack_int n,
     double* work = NULL;
     double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dgelq", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgelq", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, a, lda ) ) {
             return -4;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dgelq_work( matrix_layout, m, n, a, lda, t, tsize, &work_query,
+    info = API_SUFFIX(LAPACKE_dgelq_work)( matrix_layout, m, n, a, lda, t, tsize, &work_query,
                                lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -69,12 +69,12 @@ lapack_int LAPACKE_dgelq( int matrix_layout, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgelq_work( matrix_layout, m, n, a, lda, t, tsize, work, lwork );
+    info = API_SUFFIX(LAPACKE_dgelq_work)( matrix_layout, m, n, a, lda, t, tsize, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dgelq", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgelq", info );
     }
     return info;
 }

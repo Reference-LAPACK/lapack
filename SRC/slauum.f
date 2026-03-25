@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLAUUM + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slauum.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slauum.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -95,10 +93,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup lauum
 *
 *  =====================================================================
       SUBROUTINE SLAUUM( UPLO, N, A, LDA, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -194,14 +193,16 @@
 *
             DO 20 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
-               CALL STRMM( 'Left', 'Lower', 'Transpose', 'Non-unit', IB,
+               CALL STRMM( 'Left', 'Lower', 'Transpose', 'Non-unit',
+     $                     IB,
      $                     I-1, ONE, A( I, I ), LDA, A( I, 1 ), LDA )
                CALL SLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
                   CALL SGEMM( 'Transpose', 'No transpose', IB, I-1,
      $                        N-I-IB+1, ONE, A( I+IB, I ), LDA,
      $                        A( I+IB, 1 ), LDA, ONE, A( I, 1 ), LDA )
-                  CALL SSYRK( 'Lower', 'Transpose', IB, N-I-IB+1, ONE,
+                  CALL SSYRK( 'Lower', 'Transpose', IB, N-I-IB+1,
+     $                        ONE,
      $                        A( I+IB, I ), LDA, ONE, A( I, I ), LDA )
                END IF
    20       CONTINUE

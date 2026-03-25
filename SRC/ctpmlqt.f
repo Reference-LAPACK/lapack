@@ -158,7 +158,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup tpmlqt
 *
 *> \par Further Details:
 *  =====================
@@ -194,8 +194,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
+      SUBROUTINE CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T,
+     $                    LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

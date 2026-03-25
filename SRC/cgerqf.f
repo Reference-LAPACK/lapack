@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGERQF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgerqf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgerqf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -114,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup gerqf
 *
 *> \par Further Details:
 *  =====================
@@ -136,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,7 +162,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -187,7 +187,7 @@
             NB = ILAENV( 1, 'CGERQF', ' ', M, N, -1, -1 )
             LWKOPT = M*NB
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF ( .NOT.LQUERY ) THEN
             IF( LWORK.LE.0 .OR. ( N.GT.0 .AND. LWORK.LT.MAX( 1, M ) ) )
@@ -248,7 +248,8 @@
 *           Compute the RQ factorization of the current block
 *           A(m-k+i:m-k+i+ib-1,1:n-k+i+ib-1)
 *
-            CALL CGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA, TAU( I ),
+            CALL CGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( M-K+I.GT.1 ) THEN
 *
@@ -278,7 +279,7 @@
       IF( MU.GT.0 .AND. NU.GT.0 )
      $   CALL CGERQ2( MU, NU, A, LDA, TAU, WORK, IINFO )
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = SROUNDUP_LWORK(IWS)
       RETURN
 *
 *     End of CGERQF

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLA_GEAMV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_geamv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_geamv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -146,6 +144,8 @@
 *>           Before entry with BETA non-zero, the incremented array Y
 *>           must contain the vector y. On exit, Y is overwritten by the
 *>           updated vector y.
+*>           If either m or n is zero, then Y not referenced and the function
+*>           performs a quick return.
 *> \endverbatim
 *>
 *> \param[in] INCY
@@ -166,11 +166,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realGEcomputational
+*> \ingroup la_geamv
 *
 *  =====================================================================
-      SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+      SUBROUTINE SLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX,
+     $                      BETA,
      $                      Y, INCY )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

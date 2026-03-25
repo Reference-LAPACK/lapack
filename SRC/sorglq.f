@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORGLQ + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorglq.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorglq.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -120,10 +118,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup unglq
 *
 *  =====================================================================
       SUBROUTINE SORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,7 +154,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -164,7 +164,7 @@
       INFO = 0
       NB = ILAENV( 1, 'SORGLQ', ' ', M, N, K, -1 )
       LWKOPT = MAX( 1, M )*NB
-      WORK( 1 ) = LWKOPT
+      WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -211,7 +211,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'SORGLQ', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'SORGLQ', ' ', M, N, K,
+     $                      -1 ) )
             END IF
          END IF
       END IF
@@ -252,12 +253,14 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL SLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
+               CALL SLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I,
+     $                      I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(i+ib:m,i:n) from the right
 *
-               CALL SLARFB( 'Right', 'Transpose', 'Forward', 'Rowwise',
+               CALL SLARFB( 'Right', 'Transpose', 'Forward',
+     $                      'Rowwise',
      $                      M-I-IB+1, N-I+1, IB, A( I, I ), LDA, WORK,
      $                      LDWORK, A( I+IB, I ), LDA, WORK( IB+1 ),
      $                      LDWORK )
@@ -265,7 +268,8 @@
 *
 *           Apply H**T to columns i:n of current block
 *
-            CALL SORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
+            CALL SORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ),
+     $                   WORK,
      $                   IINFO )
 *
 *           Set columns 1:i-1 of current block to zero
@@ -278,7 +282,7 @@
    50    CONTINUE
       END IF
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = SROUNDUP_LWORK(IWS)
       RETURN
 *
 *     End of SORGLQ

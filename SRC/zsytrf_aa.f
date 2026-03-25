@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZSYTRF_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrf_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrf_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -125,7 +123,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup hetrf_aa
 *
 *  =====================================================================
       SUBROUTINE ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
@@ -162,7 +160,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASYF_AA, ZGEMM, ZGEMV, ZSCAL, ZCOPY,
+      EXTERNAL           ZLASYF_AA, ZGEMM, ZGEMV, ZSCAL,
+     $                   ZCOPY,
      $                   ZSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..

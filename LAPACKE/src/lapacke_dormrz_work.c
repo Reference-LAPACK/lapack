@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dormrz_work( int matrix_layout, char side, char trans,
+lapack_int API_SUFFIX(LAPACKE_dormrz_work)( int matrix_layout, char side, char trans,
                                 lapack_int m, lapack_int n, lapack_int k,
                                 lapack_int l, const double* a, lapack_int lda,
                                 const double* tau, double* c, lapack_int ldc,
@@ -54,12 +54,12 @@ lapack_int LAPACKE_dormrz_work( int matrix_layout, char side, char trans,
         /* Check leading dimension(s) */
         if( lda < m ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_dormrz_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dormrz_work", info );
             return info;
         }
         if( ldc < n ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_dormrz_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dormrz_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
@@ -80,8 +80,8 @@ lapack_int LAPACKE_dormrz_work( int matrix_layout, char side, char trans,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_layout, k, m, a, lda, a_t, lda_t );
-        LAPACKE_dge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, k, m, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_dge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dormrz( &side, &trans, &m, &n, &k, &l, a_t, &lda_t, tau, c_t,
                        &ldc_t, work, &lwork, &info );
@@ -89,18 +89,18 @@ lapack_int LAPACKE_dormrz_work( int matrix_layout, char side, char trans,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
+        API_SUFFIX(LAPACKE_dge_trans)( LAPACK_COL_MAJOR, m, n, c_t, ldc_t, c, ldc );
         /* Release memory and exit */
         LAPACKE_free( c_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dormrz_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dormrz_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dormrz_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dormrz_work", info );
     }
     return info;
 }

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CLAHQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -171,7 +169,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERauxiliary
+*> \ingroup lahqr
 *
 *> \par Contributors:
 *  ==================
@@ -284,10 +282,12 @@
             SC = CONJG( SC ) / ABS( SC )
             H( I, I-1 ) = ABS( H( I, I-1 ) )
             CALL CSCAL( JHI-I+1, SC, H( I, I ), LDH )
-            CALL CSCAL( MIN( JHI, I+1 )-JLO+1, CONJG( SC ), H( JLO, I ),
+            CALL CSCAL( MIN( JHI, I+1 )-JLO+1, CONJG( SC ), H( JLO,
+     $                  I ),
      $                  1 )
             IF( WANTZ )
-     $         CALL CSCAL( IHIZ-ILOZ+1, CONJG( SC ), Z( ILOZ, I ), 1 )
+     $         CALL CSCAL( IHIZ-ILOZ+1, CONJG( SC ), Z( ILOZ, I ),
+     $                     1 )
          END IF
    20 CONTINUE
 *
@@ -526,7 +526,8 @@
      $                  CALL CSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
                      CALL CSCAL( J-I1, CONJG( TEMP ), H( I1, J ), 1 )
                      IF( WANTZ ) THEN
-                        CALL CSCAL( NZ, CONJG( TEMP ), Z( ILOZ, J ), 1 )
+                        CALL CSCAL( NZ, CONJG( TEMP ), Z( ILOZ, J ),
+     $                              1 )
                      END IF
                   END IF
   110          CONTINUE

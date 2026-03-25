@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLATDF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatdf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatdf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -133,7 +131,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup latdf
 *
 *> \par Further Details:
 *  =====================
@@ -168,6 +166,7 @@
 *  =====================================================================
       SUBROUTINE DLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,7 +198,8 @@
       DOUBLE PRECISION   WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGECON, DGESC2, DLASSQ, DLASWP,
+      EXTERNAL           DAXPY, DCOPY, DGECON, DGESC2, DLASSQ,
+     $                   DLASWP,
      $                   DSCAL
 *     ..
 *     .. External Functions ..
@@ -229,7 +229,8 @@
 *           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and
 *           SMIN computed more efficiently than in BSOLVE [1].
 *
-            SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 )
+            SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ),
+     $                            1 )
             SMINU = DDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
             SPLUS = SPLUS*RHS( J )
             IF( SPLUS.GT.SMINU ) THEN

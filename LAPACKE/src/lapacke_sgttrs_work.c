@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgttrs_work( int matrix_layout, char trans, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_sgttrs_work)( int matrix_layout, char trans, lapack_int n,
                                 lapack_int nrhs, const float* dl,
                                 const float* d, const float* du,
                                 const float* du2, const lapack_int* ipiv,
@@ -52,7 +52,7 @@ lapack_int LAPACKE_sgttrs_work( int matrix_layout, char trans, lapack_int n,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -11;
-            LAPACKE_xerbla( "LAPACKE_sgttrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgttrs_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -62,7 +62,7 @@ lapack_int LAPACKE_sgttrs_work( int matrix_layout, char trans, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgttrs( &trans, &n, &nrhs, dl, d, du, du2, ipiv, b_t, &ldb_t,
                        &info );
@@ -70,16 +70,16 @@ lapack_int LAPACKE_sgttrs_work( int matrix_layout, char trans, lapack_int n,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_sgttrs_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgttrs_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_sgttrs_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_sgttrs_work", info );
     }
     return info;
 }

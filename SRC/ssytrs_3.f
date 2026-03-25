@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYTRS_3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -142,7 +140,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup singleSYcomputational
+*> \ingroup hetrs_3
 *
 *> \par Contributors:
 *  ==================
@@ -162,6 +160,7 @@
 *  ====================================================================
       SUBROUTINE SSYTRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
      $                     INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -246,7 +245,8 @@
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL STRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
@@ -272,7 +272,8 @@
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (D \ (U \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'U', 'T', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'U', 'T', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (U**T \ (D \ (U \P**T * B) )) ]
 *
@@ -313,7 +314,8 @@
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL STRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
@@ -339,7 +341,8 @@
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (D \ (L \P**T * B) ) ]
 *
-         CALL STRSM('L', 'L', 'T', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL STRSM('L', 'L', 'T', 'U', N, NRHS, ONE, A, LDA, B,
+     $               LDB )
 *
 *        P * B  [ P * (L**T \ (D \ (L \P**T * B) )) ]
 *

@@ -38,7 +38,7 @@ for o, a in opts:
         print("     - e is to print only the error summary")
         print("     - s is to print a short summary")
         print("     - n is to print the numbers of failing tests (turn on summary mode)")
-        print(" SECLECTION OF TESTS:")
+        print(" SELECTION OF TESTS:")
         print("     - p [s/c/d/z/x] is to indicate the PRECISION to run:")
         print("            s=single")
         print("            d=double")
@@ -136,7 +136,7 @@ def run_summary_test( f, cmdline, short_summary):
         for line in pipe.readlines():
             f.write(str(line))
             words_in_line=line.split()
-            if (line.find("run")!=-1):
+            if (line.find("run)")!=-1):
 #                  print line
                 whereisrun=words_in_line.index("run)")
                 nb_test_run+=int(words_in_line[whereisrun-2])
@@ -199,6 +199,8 @@ elif test=='mixed':
     range_prec=[1,3]
 elif test=='rfp':
     range_test=[18]
+elif test=='dmd':
+    range_test=[20]
 elif test=='eig':
     range_test=list(range(16))
 else:
@@ -227,19 +229,19 @@ for dtype in range_prec:
     letter+"gd",letter+"sb",letter+"sg",
     letter+"bb","glm","gqr",
     "gsv","csd","lse",
-    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp"),
+    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
     ("Nonsymmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Problem-2-stage", "Singular-Value-Decomposition",
     "Eigen-Condition","Nonsymmetric-Eigenvalue","Nonsymmetric-Generalized-Eigenvalue-Problem",
     "Nonsymmetric-Generalized-Eigenvalue-Problem-driver", "Symmetric-Eigenvalue-Problem", "Symmetric-Eigenvalue-Generalized-Problem",
     "Banded-Singular-Value-Decomposition-routines", "Generalized-Linear-Regression-Model-routines", "Generalized-QR-and-RQ-factorization-routines",
     "Generalized-Singular-Value-Decomposition-routines", "CS-Decomposition-routines", "Constrained-Linear-Least-Squares-routines",
-    "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines"),
+    "Linear-Equation-routines", "Mixed-Precision-linear-equation-routines","RFP-linear-equation-routines","Dynamic-Mode-Decomposition"),
     (letter+"nep", letter+"sep", letter+"se2", letter+"svd",
     letter+"ec",letter+"ed",letter+"gg",
     letter+"gd",letter+"sb",letter+"sg",
     letter+"bb",letter+"glm",letter+"gqr",
     letter+"gsv",letter+"csd",letter+"lse",
-    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp"),
+    letter+"test", letter+dtypes[0][dtype-1]+"test",letter+"test_rfp",letter+"dmd"),
     )
 
 
@@ -260,6 +262,9 @@ for dtype in range_prec:
             elif dtest==18:
                 # PROTO LIN TESTS
                 cmdbase="xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
+            elif dtest==20:
+                # DMD EIG TESTS
+                cmdbase="xdmdeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             else:
                 # EIG TESTS
                 cmdbase="xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"

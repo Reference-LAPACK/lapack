@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHETRS_AA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aa.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aa.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -105,7 +103,13 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= max(1,3*N-2).
+*>          The dimension of the array WORK.
+*>          If MIN(N,NRHS) = 0, LWORK >= 1, else LWORK >= 3*N-2.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the minimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -123,7 +127,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEcomputational
+*> \ingroup hetrs_aa
 *
 *  =====================================================================
       SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
@@ -151,23 +155,31 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER
-      INTEGER            K, KP, LWKOPT
+      INTEGER            K, KP, LWKMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MIN, MAX
 *     ..
 *     .. Executable Statements ..
 *
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
+      IF( MIN( N, NRHS ).EQ.0 ) THEN
+         LWKMIN = 1
+      ELSE
+         LWKMIN = 3*N-2
+      END IF
+*
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -178,21 +190,20 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX( 1, 3*N-2 ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CHETRS_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         LWKOPT = (3*N-2)
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK( LWKMIN )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( N.EQ.0 .OR. NRHS.EQ.0 )
+      IF( MIN( N, NRHS ).EQ.0 )
      $   RETURN
 *
       IF( UPPER ) THEN
@@ -215,7 +226,8 @@
 *
 *           Compute U**H \ B -> B    [ (U**H \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B( 2, 1 ), LDB)
          END IF
 *
@@ -225,8 +237,10 @@
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
+             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ),
+     $                    1)
+             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ),
+     $                    1)
              CALL CLACGV( N-1, WORK( 1 ), 1 )
          END IF
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -238,7 +252,8 @@
 *
 *           Compute U \ B -> B   [ U \ (T \ (U**H \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
+            CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1,
+     $                  2 ),
      $                  LDA, B(2, 1), LDB)
 *
 *           Pivot, P * B  -> B [ P * (U \ (T \ (U**H \P**T * B) )) ]
@@ -282,8 +297,10 @@
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1 )
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
+             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ),
+     $                    1 )
+             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ),
+     $                    1)
              CALL CLACGV( N-1, WORK( 2*N ), 1 )
          END IF
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
@@ -295,7 +312,8 @@
 *
 *           Compute (L**H \ B) -> B   [ L**H \ (T \ (L \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ),
+            CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2,
+     $                  1 ),
      $                  LDA, B( 2, 1 ), LDB )
 *
 *           Pivot, P * B -> B  [ P * (L**H \ (T \ (L \P**T * B) )) ]

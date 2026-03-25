@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dppsvx( int matrix_layout, char fact, char uplo, lapack_int n,
+lapack_int API_SUFFIX(LAPACKE_dppsvx)( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, double* ap, double* afp,
                            char* equed, double* s, double* b, lapack_int ldb,
                            double* x, lapack_int ldx, double* rcond,
@@ -42,25 +42,25 @@ lapack_int LAPACKE_dppsvx( int matrix_layout, char fact, char uplo, lapack_int n
     lapack_int* iwork = NULL;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dppsvx", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        if( LAPACKE_lsame( fact, 'f' ) ) {
-            if( LAPACKE_dpp_nancheck( n, afp ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
+            if( API_SUFFIX(LAPACKE_dpp_nancheck)( n, afp ) ) {
                 return -7;
             }
         }
-        if( LAPACKE_dpp_nancheck( n, ap ) ) {
+        if( API_SUFFIX(LAPACKE_dpp_nancheck)( n, ap ) ) {
             return -6;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
+        if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, n, nrhs, b, ldb ) ) {
             return -10;
         }
-        if( LAPACKE_lsame( fact, 'f' ) && LAPACKE_lsame( *equed, 'y' ) ) {
-            if( LAPACKE_d_nancheck( n, s, 1 ) ) {
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) && API_SUFFIX(LAPACKE_lsame)( *equed, 'y' ) ) {
+            if( API_SUFFIX(LAPACKE_d_nancheck)( n, s, 1 ) ) {
                 return -9;
             }
         }
@@ -78,7 +78,7 @@ lapack_int LAPACKE_dppsvx( int matrix_layout, char fact, char uplo, lapack_int n
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dppsvx_work( matrix_layout, fact, uplo, n, nrhs, ap, afp,
+    info = API_SUFFIX(LAPACKE_dppsvx_work)( matrix_layout, fact, uplo, n, nrhs, ap, afp,
                                 equed, s, b, ldb, x, ldx, rcond, ferr, berr,
                                 work, iwork );
     /* Release memory and exit */
@@ -87,7 +87,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dppsvx", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dppsvx", info );
     }
     return info;
 }

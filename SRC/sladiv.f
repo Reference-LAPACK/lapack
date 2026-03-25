@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLADIV + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sladiv.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sladiv.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -84,10 +82,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 *
 *  =====================================================================
       SUBROUTINE SLADIV( A, B, C, D, P, Q )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -170,10 +169,11 @@
 *
       END
 
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 
 
       SUBROUTINE SLADIV1( A, B, C, D, P, Q )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -210,7 +210,7 @@
 *
       END
 
-*> \ingroup realOTHERauxiliary
+*> \ingroup ladiv
 
       REAL FUNCTION SLADIV2( A, B, C, D, R, T )
 *

@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CHEEVD_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheevd_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevd_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -46,12 +44,6 @@
 *> the reduction to tridiagonal.  If eigenvectors are desired, it uses a
 *> divide and conquer algorithm.
 *>
-*> The divide and conquer algorithm makes very mild assumptions about
-*> floating point arithmetic. It will work on machines with a guard
-*> digit in add/subtract, or on those binary machines without guard
-*> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
-*> Cray-2. It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.
 *> \endverbatim
 *
 *  Arguments:
@@ -119,8 +111,8 @@
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + N+1
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + N+1
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -202,7 +194,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexHEeigen
+*> \ingroup heevd_2stage
 *
 *> \par Further Details:
 *  =====================
@@ -231,7 +223,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -239,16 +231,17 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE CHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $                          LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -293,7 +286,8 @@
       EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY, CLASCL,
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CLACPY,
+     $                   CLASCL,
      $                   CSTEDC, CUNMTR, CHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -342,8 +336,8 @@
                LIWMIN = 1
             END IF
          END IF
-         WORK( 1 )  = LWMIN
-         RWORK( 1 ) = LRWMIN
+         WORK( 1 )  = CMPLX( LWMIN )
+         RWORK( 1 ) = REAL( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -410,7 +404,7 @@
       LLWRK2  = LWORK - INDWK2 + 1
 *
       CALL CHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, RWORK( INDE ),
-     $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
+     $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
 *     For eigenvalues only, call SSTERF.  For eigenvectors, first call
@@ -441,8 +435,8 @@
          CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
-      WORK( 1 )  = LWMIN
-      RWORK( 1 ) = LRWMIN
+      WORK( 1 )  = CMPLX( LWMIN )
+      RWORK( 1 ) = REAL( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

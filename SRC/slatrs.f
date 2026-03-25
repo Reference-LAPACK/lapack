@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SLATRS + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatrs.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatrs.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -158,7 +156,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realOTHERauxiliary
+*> \ingroup latrs
 *
 *> \par Further Details:
 *  =====================
@@ -233,8 +231,10 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+      SUBROUTINE SLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X,
+     $                   SCALE,
      $                   CNORM, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -261,11 +261,15 @@
       REAL               BIGNUM, GROW, REC, SMLNUM, SUMJ, TJJ, TJJS,
      $                   TMAX, TSCAL, USCAL, XBND, XJ, XMAX
 *     ..
+*     .. Local Arrays ..
+      REAL               WORK(1)
+*     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
       REAL               SASUM, SDOT, SLAMCH, SLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
+      EXTERNAL           LSAME, ISAMAX, SASUM, SDOT, SLAMCH,
+     $                   SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SSCAL, STRSV, XERBLA
@@ -362,8 +366,8 @@
 *              A is upper triangular.
 *
                DO J = 2, N
-                  TMAX = MAX( SLANGE( 'M', J-1, 1, A( 1, J ), 1, SUMJ ),
-     $                        TMAX )
+                  TMAX = MAX( SLANGE( 'M', J-1, 1, A( 1, J ), 1,
+     $                        WORK ), TMAX )
                END DO
             ELSE
 *
@@ -371,7 +375,7 @@
 *
                DO J = 1, N - 1
                   TMAX = MAX( SLANGE( 'M', N-J, 1, A( J+1, J ), 1,
-     $                        SUMJ ), TMAX )
+     $                        WORK ), TMAX )
                END DO
             END IF
 *

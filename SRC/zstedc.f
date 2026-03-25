@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZSTEDC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zstedc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstedc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -43,12 +41,6 @@
 *> be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this
 *> matrix to tridiagonal form.
 *>
-*> This code makes very mild assumptions about floating point
-*> arithmetic. It will work on machines with a guard digit in
-*> add/subtract, or on those binary machines without guard digits
-*> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
-*> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See DLAED3 for details.
 *> \endverbatim
 *
 *  Arguments:
@@ -198,7 +190,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup stedc
 *
 *> \par Contributors:
 *  ==================
@@ -209,6 +201,7 @@
 *  =====================================================================
       SUBROUTINE ZSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -243,7 +236,8 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DLASET, DSTEDC, DSTEQR, DSTERF, XERBLA,
+      EXTERNAL           DLASCL, DLASET, DSTEDC, DSTEQR, DSTERF,
+     $                   XERBLA,
      $                   ZLACPY, ZLACRM, ZLAED0, ZSTEQR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
@@ -302,7 +296,7 @@
             LIWMIN = 3 + 5*N
          END IF
          WORK( 1 ) = LWMIN
-         RWORK( 1 ) = LRWMIN
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -414,12 +408,15 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $                      M,
      $                      INFO )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
+     $                      E( START ),
      $                      M-1, INFO )
 *
-               CALL ZLAED0( N, M, D( START ), E( START ), Z( 1, START ),
+               CALL ZLAED0( N, M, D( START ), E( START ), Z( 1,
+     $                      START ),
      $                      LDZ, WORK, N, RWORK, IWORK, INFO )
                IF( INFO.GT.0 ) THEN
                   INFO = ( INFO / ( M+1 )+START-1 )*( N+1 ) +
@@ -429,13 +426,15 @@
 *
 *              Scale back.
 *
-               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $                      M,
      $                      INFO )
 *
             ELSE
                CALL DSTEQR( 'I', M, D( START ), E( START ), RWORK, M,
      $                      RWORK( M*M+1 ), INFO )
-               CALL ZLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK, N,
+               CALL ZLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK,
+     $                      N,
      $                      RWORK( M*M+1 ) )
                CALL ZLACPY( 'A', N, M, WORK, N, Z( 1, START ), LDZ )
                IF( INFO.GT.0 ) THEN
@@ -473,7 +472,7 @@
 *
    70 CONTINUE
       WORK( 1 ) = LWMIN
-      RWORK( 1 ) = LRWMIN
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

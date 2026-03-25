@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DLARFGP + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfgp.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfgp.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -97,10 +95,11 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleOTHERauxiliary
+*> \ingroup larfgp
 *
 *  =====================================================================
       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
+      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -122,7 +121,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
-      DOUBLE PRECISION   BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
+      DOUBLE PRECISION   BETA, BIGNUM, EPS, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
@@ -141,11 +140,12 @@
          RETURN
       END IF
 *
+      EPS = DLAMCH( 'Precision' )
       XNORM = DNRM2( N-1, X, INCX )
 *
-      IF( XNORM.EQ.ZERO ) THEN
+      IF( XNORM.LE.EPS*ABS(ALPHA) ) THEN
 *
-*        H  =  [+/-1, 0; I], sign chosen so ALPHA >= 0
+*        H  =  [+/-1, 0; I], sign chosen so ALPHA >= 0.
 *
          IF( ALPHA.GE.ZERO ) THEN
 *           When TAU.eq.ZERO, the vector is special-cased to be

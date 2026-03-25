@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CBDSQR + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cbdsqr.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cbdsqr.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -166,7 +164,9 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (4*N)
+*>          RWORK is REAL array, dimension (LRWORK)
+*>          LRWORK = 4*N, if NCVT = NRU = NCC = 0, and
+*>          LRWORK = 4*(N-1), otherwise
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -204,6 +204,17 @@
 *>          algorithm through its inner loop. The algorithms stops
 *>          (and so fails to converge) if the number of passes
 *>          through the inner loop exceeds MAXITR*N**2.
+*>
+*> \endverbatim
+*
+*> \par Note:
+*  ===========
+*>
+*> \verbatim
+*>  Bug report from Cezary Dendek.
+*>  On November 3rd 2023, the INTEGER variable MAXIT = MAXITR*N**2 is
+*>  removed since it can overflow pretty easily (for N larger or equal
+*>  than 18,919). We instead use MAXITDIVN = MAXITR*N.
 *> \endverbatim
 *
 *  Authors:
@@ -214,11 +225,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup bdsqr
 *
 *  =====================================================================
       SUBROUTINE CBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
      $                   LDU, C, LDC, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -255,11 +267,11 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LOWER, ROTATE
-      INTEGER            I, IDIR, ISUB, ITER, J, LL, LLL, M, MAXIT, NM1,
-     $                   NM12, NM13, OLDLL, OLDM
+      INTEGER            I, IDIR, ISUB, ITER, ITERDIVN, J, LL, LLL, M,
+     $                   MAXITDIVN, NM1, NM12, NM13, OLDLL, OLDM
       REAL               ABSE, ABSS, COSL, COSR, CS, EPS, F, G, H, MU,
      $                   OLDCS, OLDSN, R, SHIFT, SIGMN, SIGMX, SINL,
-     $                   SINR, SLL, SMAX, SMIN, SMINL, SMINOA,
+     $                   SINR, SLL, SMAX, SMIN, SMINOA,
      $                   SN, THRESH, TOL, TOLMUL, UNFL
 *     ..
 *     .. External Functions ..
@@ -268,7 +280,8 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASR, CSROT, CSSCAL, CSWAP, SLARTG, SLAS2,
+      EXTERNAL           CLASR, CSROT, CSSCAL, CSWAP, SLARTG,
+     $                   SLAS2,
      $                   SLASQ1, SLASV2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -349,10 +362,12 @@
 *        Update singular vectors if desired
 *
          IF( NRU.GT.0 )
-     $      CALL CLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ), RWORK( N ),
+     $      CALL CLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  U, LDU )
          IF( NCC.GT.0 )
-     $      CALL CLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ), RWORK( N ),
+     $      CALL CLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ),
+     $                  RWORK( N ),
      $                  C, LDC )
       END IF
 *
@@ -372,7 +387,7 @@
       DO 30 I = 1, N - 1
          SMAX = MAX( SMAX, ABS( E( I ) ) )
    30 CONTINUE
-      SMINL = ZERO
+      SMIN = ZERO
       IF( TOL.GE.ZERO ) THEN
 *
 *        Relative accuracy desired
@@ -389,20 +404,23 @@
    40    CONTINUE
    50    CONTINUE
          SMINOA = SMINOA / SQRT( REAL( N ) )
-         THRESH = MAX( TOL*SMINOA, MAXITR*N*N*UNFL )
+         THRESH = MAX( TOL*SMINOA,
+     $                 REAL(MAXITR)*(REAL(N)*(REAL(N)*UNFL)) )
       ELSE
 *
 *        Absolute accuracy desired
 *
-         THRESH = MAX( ABS( TOL )*SMAX, MAXITR*N*N*UNFL )
+         THRESH = MAX( ABS( TOL )*SMAX,
+     $                 REAL(MAXITR)*(REAL(N)*(REAL(N)*UNFL)) )
       END IF
 *
 *     Prepare for main iteration loop for the singular values
 *     (MAXIT is the maximum number of passes through the inner
 *     loop permitted before nonconvergence signalled.)
 *
-      MAXIT = MAXITR*N*N
-      ITER = 0
+      MAXITDIVN = MAXITR*N
+      ITERDIVN = 0
+      ITER = -1
       OLDLL = -1
       OLDM = -1
 *
@@ -418,15 +436,18 @@
 *
       IF( M.LE.1 )
      $   GO TO 160
-      IF( ITER.GT.MAXIT )
-     $   GO TO 200
+      IF( ITER.GE.N ) THEN
+         ITER = ITER - N
+         ITERDIVN = ITERDIVN + 1
+         IF( ITERDIVN.GE.MAXITDIVN )
+     $      GO TO 200
+      END IF
 *
 *     Find diagonal block of matrix to work on
 *
       IF( TOL.LT.ZERO .AND. ABS( D( M ) ).LE.THRESH )
      $   D( M ) = ZERO
       SMAX = ABS( D( M ) )
-      SMIN = SMAX
       DO 70 LLL = 1, M - 1
          LL = M - LLL
          ABSS = ABS( D( LL ) )
@@ -435,7 +456,6 @@
      $      D( LL ) = ZERO
          IF( ABSE.LE.THRESH )
      $      GO TO 80
-         SMIN = MIN( SMIN, ABSS )
          SMAX = MAX( SMAX, ABSS, ABSE )
    70 CONTINUE
       LL = 0
@@ -473,7 +493,8 @@
      $      CALL CSROT( NCVT, VT( M-1, 1 ), LDVT, VT( M, 1 ), LDVT,
      $                  COSR, SINR )
          IF( NRU.GT.0 )
-     $      CALL CSROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL, SINL )
+     $      CALL CSROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL,
+     $                  SINL )
          IF( NCC.GT.0 )
      $      CALL CSROT( NCC, C( M-1, 1 ), LDC, C( M, 1 ), LDC, COSL,
      $                  SINL )
@@ -517,14 +538,14 @@
 *           apply convergence criterion forward
 *
             MU = ABS( D( LL ) )
-            SMINL = MU
+            SMIN = MU
             DO 100 LLL = LL, M - 1
                IF( ABS( E( LLL ) ).LE.TOL*MU ) THEN
                   E( LLL ) = ZERO
                   GO TO 60
                END IF
                MU = ABS( D( LLL+1 ) )*( MU / ( MU+ABS( E( LLL ) ) ) )
-               SMINL = MIN( SMINL, MU )
+               SMIN = MIN( SMIN, MU )
   100       CONTINUE
          END IF
 *
@@ -545,14 +566,14 @@
 *           apply convergence criterion backward
 *
             MU = ABS( D( M ) )
-            SMINL = MU
+            SMIN = MU
             DO 110 LLL = M - 1, LL, -1
                IF( ABS( E( LLL ) ).LE.TOL*MU ) THEN
                   E( LLL ) = ZERO
                   GO TO 60
                END IF
                MU = ABS( D( LLL ) )*( MU / ( MU+ABS( E( LLL ) ) ) )
-               SMINL = MIN( SMINL, MU )
+               SMIN = MIN( SMIN, MU )
   110       CONTINUE
          END IF
       END IF
@@ -562,7 +583,7 @@
 *     Compute shift.  First, test if shifting would ruin relative
 *     accuracy, and if so set the shift to zero.
 *
-      IF( TOL.GE.ZERO .AND. N*TOL*( SMINL / SMAX ).LE.
+      IF( TOL.GE.ZERO .AND. REAL( N )*TOL*( SMIN / SMAX ).LE.
      $    MAX( EPS, HNDRTH*TOL ) ) THEN
 *
 *        Use a zero shift to avoid loss of relative accuracy
@@ -606,7 +627,8 @@
                CALL SLARTG( D( I )*CS, E( I ), CS, SN, R )
                IF( I.GT.LL )
      $            E( I-1 ) = OLDSN*R
-               CALL SLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL SLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL+1 ) = CS
                RWORK( I-LL+1+NM1 ) = SN
                RWORK( I-LL+1+NM12 ) = OLDCS
@@ -622,10 +644,12 @@
      $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -644,7 +668,8 @@
                CALL SLARTG( D( I )*CS, E( I-1 ), CS, SN, R )
                IF( I.LT.M )
      $            E( I ) = OLDSN*R
-               CALL SLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL SLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN,
+     $                      D( I ) )
                RWORK( I-LL ) = CS
                RWORK( I-LL+NM1 ) = -SN
                RWORK( I-LL+NM12 ) = OLDCS
@@ -657,7 +682,8 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL CLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -712,10 +738,12 @@
      $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL CLASR( 'R', 'V', 'F', NRU, M-LL+1,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'F', M-LL+1, NCC,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -762,7 +790,8 @@
 *           Update singular vectors if desired
 *
             IF( NCVT.GT.0 )
-     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL CLASR( 'L', 'V', 'B', M-LL+1, NCVT,
+     $                     RWORK( NM12+1 ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
      $         CALL CLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
@@ -781,6 +810,12 @@
 *
   160 CONTINUE
       DO 170 I = 1, N
+         IF( D( I ).EQ.ZERO ) THEN
+*
+*           Avoid -ZERO
+*
+            D( I ) = ZERO
+         END IF
          IF( D( I ).LT.ZERO ) THEN
             D( I ) = -D( I )
 *
@@ -818,7 +853,8 @@
             IF( NRU.GT.0 )
      $         CALL CSWAP( NRU, U( 1, ISUB ), 1, U( 1, N+1-I ), 1 )
             IF( NCC.GT.0 )
-     $         CALL CSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ), LDC )
+     $         CALL CSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ),
+     $                     LDC )
          END IF
   190 CONTINUE
       GO TO 220

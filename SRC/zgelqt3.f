@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGELQT3 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqt3.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -100,7 +98,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup gelqt3
 *
 *> \par Further Details:
 *  =====================
@@ -128,6 +126,7 @@
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE ZGELQT3( M, N, A, LDA, T, LDT, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,7 +173,8 @@
 *
 *        Compute Householder transform when M=1
 *
-         CALL ZLARFG( N, A, A( 1, MIN( 2, N ) ), LDA, T )
+         CALL ZLARFG( N, A( 1, 1 ), A( 1, MIN( 2, N ) ), LDA,
+     &                T( 1, 1 ) )
          T(1,1)=CONJG(T(1,1))
 *
       ELSE

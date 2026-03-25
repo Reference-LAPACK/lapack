@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhegst_work( int matrix_layout, lapack_int itype, char uplo,
+lapack_int API_SUFFIX(LAPACKE_zhegst_work)( int matrix_layout, lapack_int itype, char uplo,
                                 lapack_int n, lapack_complex_double* a,
                                 lapack_int lda, const lapack_complex_double* b,
                                 lapack_int ldb )
@@ -52,12 +52,12 @@ lapack_int LAPACKE_zhegst_work( int matrix_layout, lapack_int itype, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zhegst_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegst_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -8;
-            LAPACKE_xerbla( "LAPACKE_zhegst_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegst_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -74,26 +74,26 @@ lapack_int LAPACKE_zhegst_work( int matrix_layout, lapack_int itype, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_zhe_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_zge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_zhe_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zhegst( &itype, &uplo, &n, a_t, &lda_t, b_t, &ldb_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zhe_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zhe_trans)( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zhegst_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegst_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zhegst_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zhegst_work", info );
     }
     return info;
 }

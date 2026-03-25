@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DGESVDX + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesvdx.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesvdx.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -254,12 +252,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEsing
+*> \ingroup gesvdx
 *
 *  =====================================================================
       SUBROUTINE DGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -294,7 +293,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSVDX, DGEBRD, DGELQF, DGEQRF, DLACPY,
+      EXTERNAL           DBDSVDX, DGEBRD, DGELQF, DGEQRF,
+     $                   DLACPY,
      $                   DLASCL, DLASET, DORMBR, DORMLQ, DORMQR,
      $                   DCOPY, XERBLA
 *     ..
@@ -384,7 +384,8 @@
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
@@ -419,7 +420,8 @@
                   MINWRK = MAX(N*(N*2+19),4*N+M)
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0,
+     $                         0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
@@ -541,8 +543,10 @@
             ITAUP = ITAUQ + N
             ITEMP = ITAUP + N
             CALL DLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
-            CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ), N )
-            CALL DGEBRD( N, N, WORK( IQRF ), N, WORK( ID ), WORK( IE ),
+            CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ),
+     $                   N )
+            CALL DGEBRD( N, N, WORK( IQRF ), N, WORK( ID ),
+     $                   WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -551,7 +555,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -563,7 +568,8 @@
                   CALL DCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL DLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL DLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ),
+     $                      LDU )
 *
 *              Call DORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -620,7 +626,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -632,7 +639,8 @@
                   CALL DCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL DLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL DLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ),
+     $                      LDU )
 *
 *              Call DORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -689,8 +697,10 @@
             ITAUP = ITAUQ + M
             ITEMP = ITAUP + M
             CALL DLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
-            CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ), M )
-            CALL DGEBRD( M, M, WORK( ILQF ), M, WORK( ID ), WORK( IE ),
+            CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ),
+     $                   M )
+            CALL DGEBRD( M, M, WORK( ILQF ), M, WORK( ID ),
+     $                   WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -699,7 +709,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL DBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -728,7 +739,8 @@
                   CALL DCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ),
+     $                      LDVT)
 *
 *              Call DORMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
@@ -768,7 +780,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL DBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL DBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ),
+     $                    WORK( IE ),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -797,7 +810,8 @@
                   CALL DCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ),
+     $                      LDVT)
 *
 *              Call DORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)

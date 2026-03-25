@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SORGTSQR_ROW + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtsqr_row.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtsqr_row.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -144,6 +142,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
+*>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          LWORK >= NBLOCAL * MAX(NBLOCAL,(N-NBLOCAL)),
 *>          where NBLOCAL=MIN(NB,N).
@@ -169,7 +168,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup sigleOTHERcomputational
+*> \ingroup ungtsqr_row
 *
 *> \par Contributors:
 *  ==================
@@ -213,11 +212,15 @@
 *     .. Local Arrays ..
       REAL               DUMMY( 1, 1 )
 *     ..
+*     .. External Functions ..
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           SLARFB_GETT, SLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX, MIN
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -255,14 +258,14 @@
          CALL XERBLA( 'SORGTSQR_ROW', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = REAL( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = REAL( LWORKOPT )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
          RETURN
       END IF
 *
@@ -371,7 +374,7 @@
 *
       END DO
 *
-      WORK( 1 ) = REAL( LWORKOPT )
+      WORK( 1 ) = SROUNDUP_LWORK( LWORKOPT )
       RETURN
 *
 *     End of SORGTSQR_ROW

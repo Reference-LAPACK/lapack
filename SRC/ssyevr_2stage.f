@@ -7,7 +7,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download SSYEVR_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevr_2stage.f">
 *> [TGZ]</a>
@@ -15,7 +14,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevr_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -263,7 +261,7 @@
 *>          indicating the nonzero elements in Z. The i-th eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
 *>          ISUPPZ( 2*i ). This is an output of SSTEMR (tridiagonal
-*>          matrix). The support of the eigenvectors of A is typically 
+*>          matrix). The support of the eigenvectors of A is typically
 *>          1:N because of the orthogonal transformations applied by SORMTR.
 *>          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *> \endverbatim
@@ -277,12 +275,13 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  
+*>          The dimension of the array WORK.
+*>          If N <= 1,               LWORK must be at least 1.
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
 *>                                   LWORK = MAX(1, 26*N, dimension) where
 *>                                   dimension = max(stage1,stage2) + (KD+1)*N + 5*N
-*>                                             = N*KD + N*max(KD+1,FACTOPTNB) 
-*>                                               + max(2*KD*KD, KD*NTHREADS) 
+*>                                             = N*KD + N*max(KD+1,FACTOPTNB)
+*>                                               + max(2*KD*KD, KD*NTHREADS)
 *>                                               + (KD+1)*N + 5*N
 *>                                   where KD is the blocking size of the reduction,
 *>                                   FACTOPTNB is the blocking used by the QR or LQ
@@ -300,13 +299,14 @@
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, dimension (MAX(1,LIWORK))
-*>          On exit, if INFO = 0, IWORK(1) returns the optimal LWORK.
+*>          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
 *> \endverbatim
 *>
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
+*>          The dimension of the array IWORK.
+*>          If N <= 1, LIWORK >= 1, else LIWORK >= 10*N.
 *>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
@@ -330,7 +330,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup realSYeigen
+*> \ingroup heevr_2stage
 *
 *> \par Contributors:
 *  ==================
@@ -358,7 +358,7 @@
 *>  http://doi.acm.org/10.1145/2063384.2063394
 *>
 *>  A. Haidar, J. Kurzak, P. Luszczek, 2013.
-*>  An improved parallel singular value algorithm and its implementation 
+*>  An improved parallel singular value algorithm and its implementation
 *>  for multicore hardware, In Proceedings of 2013 International Conference
 *>  for High Performance Computing, Networking, Storage and Analysis (SC '13).
 *>  Denver, Colorado, USA, 2013.
@@ -366,11 +366,11 @@
 *>  http://doi.acm.org/10.1145/2503210.2503292
 *>
 *>  A. Haidar, R. Solca, S. Tomov, T. Schulthess and J. Dongarra.
-*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure 
+*>  A novel hybrid CPU-GPU generalized eigensolver for electronic structure
 *>  calculations based on fine-grained memory aware tasks.
 *>  International Journal of High Performance Computing Applications.
 *>  Volume 28 Issue 2, Pages 196-209, May 2014.
-*>  http://hpc.sagepub.com/content/28/2/196 
+*>  http://hpc.sagepub.com/content/28/2/196
 *>
 *> \endverbatim
 *
@@ -416,11 +416,14 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV, ILAENV2STAGE
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV, ILAENV2STAGE
+      REAL               SLAMCH, SLANSY, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SLAMCH, SLANSY,
+     $                   SROUNDUP_LWORK, ILAENV,
+     $                   ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR, SSTEIN,
+      EXTERNAL           SCOPY, SORMTR, SSCAL, SSTEBZ, SSTEMR,
+     $                   SSTEIN,
      $                   SSTERF, SSWAP, SSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -440,12 +443,22 @@
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWMIN  = MAX( 26*N, 5*N + LHTRD + LWTRD )
-      LIWMIN = MAX( 1, 10*N )
+      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1,
+     $                      -1 )
+      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1,
+     $                      -1 )
+      LHTRD  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                      -1 )
+      LWTRD  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB,
+     $                      -1 )
+*
+      IF( N.LE.1 ) THEN
+         LWMIN  = 1
+         LIWMIN = 1
+      ELSE
+         LWMIN  = MAX( 26*N, 5*N + LHTRD + LWTRD )
+         LIWMIN = 10*N
+      END IF
 *
       INFO = 0
       IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
@@ -484,7 +497,7 @@
 *         NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
 *         NB = MAX( NB, ILAENV( 1, 'SORMTR', UPLO, N, -1, -1, -1 ) )
 *         LWKOPT = MAX( ( NB+1 )*N, LWMIN )
-         WORK( 1 ) = LWMIN
+         WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
          IWORK( 1 ) = LIWMIN
       END IF
 *
@@ -504,7 +517,7 @@
       END IF
 *
       IF( N.EQ.1 ) THEN
-         WORK( 1 ) = 26
+         WORK( 1 ) = 1
          IF( ALLEIG .OR. INDEIG ) THEN
             M = 1
             W( 1 ) = A( 1, 1 )
@@ -608,7 +621,7 @@
 *     Call SSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
 *
 *
-      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ), 
+      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ),
      $                    WORK( INDE ), WORK( INDTAU ), WORK( INDHOUS ),
      $                    LHTRD, WORK( INDWK ), LLWORK, IINFO )
 *
@@ -630,7 +643,7 @@
             CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
             CALL SCOPY( N, WORK( INDD ), 1, WORK( INDDD ), 1 )
 *
-            IF (ABSTOL .LE. TWO*N*EPS) THEN
+            IF (ABSTOL .LE. TWO*REAL( N )*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
@@ -689,7 +702,8 @@
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL SORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ),
+     $                Z,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -732,7 +746,7 @@
 *
 *     Set WORK(1) to optimal workspace size.
 *
-      WORK( 1 ) = LWMIN
+      WORK( 1 )  = SROUNDUP_LWORK( LWMIN )
       IWORK( 1 ) = LIWMIN
 *
       RETURN

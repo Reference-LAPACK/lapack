@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CGEQLF + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqlf.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqlf.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -88,7 +86,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          The dimension of the array WORK.
+*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise.
 *>          For optimum performance LWORK >= N*NB, where NB is
 *>          the optimal blocksize.
 *>
@@ -113,7 +112,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexGEcomputational
+*> \ingroup geqlf
 *
 *> \par Further Details:
 *  =====================
@@ -135,6 +134,7 @@
 *>
 *  =====================================================================
       SUBROUTINE CGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. Executable Statements ..
 *
@@ -186,10 +187,11 @@
             NB = ILAENV( 1, 'CGEQLF', ' ', M, N, -1, -1 )
             LWKOPT = N*NB
          END IF
-         WORK( 1 ) = LWKOPT
+         WORK( 1 ) = SROUNDUP_LWORK( LWKOPT )
 *
-         IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN
-            INFO = -7
+         IF( .NOT.LQUERY ) THEN
+            IF( LWORK.LE.0 .OR. ( M.GT.0 .AND. LWORK.LT.MAX( 1, N ) ) )
+     $         INFO = -7
          END IF
       END IF
 *
@@ -246,7 +248,8 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL CGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
+            CALL CGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA,
+     $                   TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *
@@ -258,7 +261,8 @@
 *
 *              Apply H**H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL CLARFB( 'Left', 'Conjugate transpose', 'Backward',
+               CALL CLARFB( 'Left', 'Conjugate transpose',
+     $                      'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
      $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -276,7 +280,7 @@
       IF( MU.GT.0 .AND. NU.GT.0 )
      $   CALL CGEQL2( MU, NU, A, LDA, TAU, WORK, IINFO )
 *
-      WORK( 1 ) = IWS
+      WORK( 1 ) = SROUNDUP_LWORK( IWS )
       RETURN
 *
 *     End of CGEQLF

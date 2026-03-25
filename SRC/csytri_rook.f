@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYTRI_ROOK + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri_rook.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -107,7 +105,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetri_rook
 *
 *> \par Contributors:
 *  ==================
@@ -126,6 +124,7 @@
 *
 *  =====================================================================
       SUBROUTINE CSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -236,7 +235,8 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -261,10 +261,12 @@
                CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1,
+     $            K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ),
+     $                              1 )
                CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
                CALL CSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K+1 ), 1 )
@@ -283,7 +285,8 @@
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
      $             CALL CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ),
+     $                     LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -297,7 +300,8 @@
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
      $            CALL CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ),
+     $                     LDA )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -312,7 +316,8 @@
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
      $            CALL CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+               CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ),
+     $                     LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -350,9 +355,11 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     CZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -375,18 +382,23 @@
 *
             IF( K.LT.N ) THEN
                CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     CZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1,
+     $            K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1,
+     $                              K-1 ),
      $                       1 )
                CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL CSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
+     $                     1,
      $                     CZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 )
+     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ),
+     $                                1 )
             END IF
             KSTEP = 2
          END IF
@@ -399,8 +411,10 @@
             KP = IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
+               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ),
+     $                     LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -413,8 +427,10 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
+               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ),
+     $                     LDA )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -428,8 +444,10 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ),
+     $                        1 )
+               CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ),
+     $                     LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP

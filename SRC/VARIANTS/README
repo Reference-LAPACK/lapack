@@ -23,6 +23,7 @@ This directory contains several variants of LAPACK routines in single/double/com
 	- [sdcz]geqrf with QR Left Looking Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/qr/LL
 	- [sdcz]potrf with Cholesky Right Looking Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/cholesky/RL
 	- [sdcz]potrf with Cholesky Top Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/cholesky/TOP
+	- [sdcz]larft using a Left Looking Level 2 BLAS version algorithm - Directory: SRC/VARIANTS/larft/LL-LVL2
 
 References:For a more detailed description please refer to
 	- [1] Toledo, S. 1997. Locality of Reference in LU Decomposition with Partial Pivoting. SIAM J. Matrix Anal. Appl. 18, 4 (Oct. 1997),
@@ -44,6 +45,7 @@ Corresponding libraries created in SRC/VARIANTS:
 	- QR Left Looking : qrll.a
 	- Cholesky Right Looking : cholrl.a
 	- Cholesky Top : choltop.a
+	- LARFT Level 2: larftl2.a
 
 
 ===========

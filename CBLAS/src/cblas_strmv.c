@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
+void API_SUFFIX(cblas_strmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
                  const CBLAS_TRANSPOSE TransA, const CBLAS_DIAG Diag,
                  const CBLAS_INT N, const float  *A, const CBLAS_INT lda,
                  float  *X, const CBLAS_INT incX)
@@ -42,7 +42,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasLower) UL = 'L';
       else
       {
-         cblas_xerbla(2, "cblas_strmv","Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_strmv","Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -52,7 +52,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (TransA == CblasConjTrans) TA = 'C';
       else
       {
-         cblas_xerbla(3, "cblas_strmv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(3, "cblas_strmv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -61,7 +61,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Diag == CblasNonUnit) DI = 'N';
       else
       {
-         cblas_xerbla(4, "cblas_strmv","Illegal Diag setting, %d\n", Diag);
+         API_SUFFIX(cblas_xerbla)(4, "cblas_strmv","Illegal Diag setting, %d\n", Diag);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -81,7 +81,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Uplo == CblasLower) UL = 'U';
       else
       {
-         cblas_xerbla(2, "cblas_strmv","Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_strmv","Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -92,7 +92,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (TransA == CblasConjTrans) TA = 'N';
       else
       {
-         cblas_xerbla(3, "cblas_strmv","Illegal TransA setting, %d\n", TransA);
+         API_SUFFIX(cblas_xerbla)(3, "cblas_strmv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -102,7 +102,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Diag == CblasNonUnit) DI = 'N';
       else
       {
-         cblas_xerbla(4, "cblas_strmv","Illegal Diag setting, %d\n", Diag);
+         API_SUFFIX(cblas_xerbla)(4, "cblas_strmv","Illegal Diag setting, %d\n", Diag);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
@@ -115,7 +115,7 @@ void cblas_strmv(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       F77_strmv( F77_UL, F77_TA, F77_DI, &F77_N, A, &F77_lda, X,
                       &F77_incX);
    }
-   else cblas_xerbla(1, "cblas_strmv", "Illegal layout setting, %d\n", layout);
+   else API_SUFFIX(cblas_xerbla)(1, "cblas_strmv", "Illegal layout setting, %d\n", layout);
    CBLAS_CallFromC = 0;
    RowMajorStrg = 0;
    return;

@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download CSYTRF_AA_2STAGE + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrf_aa_2stage.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrf_aa_2stage.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -152,7 +150,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complexSYcomputational
+*> \ingroup hetrf_aa_2stage
 *
 *  =====================================================================
       SUBROUTINE CSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
@@ -188,10 +186,12 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      REAL               SROUNDUP_LWORK
+      EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGBTRF, CGEMM, CGETRF, CLACPY,  
+      EXTERNAL           CCOPY, CGBTRF, CGEMM, CGETRF,
+     $                   CLACPY,
      $                   CLASET, CTRSM, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -227,10 +227,10 @@
       NB = ILAENV( 1, 'CSYTRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
       IF( INFO.EQ.0 ) THEN
          IF( TQUERY ) THEN
-            TB( 1 ) = (3*NB+1)*N
+            TB( 1 ) = CMPLX( (3*NB+1)*N )
          END IF
          IF( WQUERY ) THEN
-            WORK( 1 ) = N*NB
+            WORK( 1 ) = SROUNDUP_LWORK(N*NB)
          END IF
       END IF
       IF( TQUERY .OR. WQUERY ) THEN
@@ -267,7 +267,7 @@
 *
 *     Save NB
 *
-      TB( 1 ) = NB
+      TB( 1 ) = CMPLX( NB )
 *
       IF( UPPER ) THEN
 *

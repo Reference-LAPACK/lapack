@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZGBBRD + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbbrd.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbbrd.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -185,11 +183,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16GBcomputational
+*> \ingroup gbbrd
 *
 *  =====================================================================
       SUBROUTINE ZGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, RWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,7 +221,8 @@
       COMPLEX*16         RA, RB, RS, T
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARGV, ZLARTG, ZLARTV, ZLASET, ZROT,
+      EXTERNAL           XERBLA, ZLARGV, ZLARTG, ZLARTV, ZLASET,
+     $                   ZROT,
      $                   ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
@@ -242,7 +242,9 @@
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
+      IF( .NOT.WANTQ .AND.
+     $    .NOT.WANTPT .AND.
+     $    .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -338,7 +340,8 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL ZLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
+     $               CALL ZLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ),
+     $                            INCA,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            RWORK( J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -377,7 +380,8 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL ZROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
+                     CALL ZROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ),
+     $                          LDC,
      $                          RWORK( J ), WORK( J ) )
    30             CONTINUE
                END IF

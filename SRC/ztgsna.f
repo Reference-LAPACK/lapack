@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download ZTGSNA + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsna.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsna.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -213,7 +211,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup tgsna
 *
 *> \par Further Details:
 *  =====================
@@ -308,6 +306,7 @@
       SUBROUTINE ZTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -345,10 +344,12 @@
       LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH, DLAPY2, DZNRM2
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2, ZDOTC
+      EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2,
+     $                   ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMV, ZLACPY, ZTGEXC, ZTGSYL
+      EXTERNAL           XERBLA, ZGEMV, ZLACPY, ZTGEXC,
+     $                   ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -464,7 +465,8 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) ) )
+               DIF( KS ) = DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1,
+     $              1 ) ) )
             ELSE
 *
 *              Estimate the reciprocal condition number of the k-th
@@ -478,7 +480,8 @@
                IFST = K
                ILST = 1
 *
-               CALL ZTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+               CALL ZTGEXC( .FALSE., .FALSE., N, WORK, N,
+     $                      WORK( N*N+1 ),
      $                      N, DUMMY, 1, DUMMY1, 1, IFST, ILST, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -497,7 +500,8 @@
                   N1 = 1
                   N2 = N - N1
                   I = N*N + 1
-                  CALL ZTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL ZTGSYL( 'N', IDIFJB, N2, N1,
+     $                         WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ), DUMMY,

@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zspsvx_work( int matrix_layout, char fact, char uplo,
+lapack_int API_SUFFIX(LAPACKE_zspsvx_work)( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int nrhs,
                                 const lapack_complex_double* ap,
                                 lapack_complex_double* afp, lapack_int* ipiv,
@@ -59,12 +59,12 @@ lapack_int LAPACKE_zspsvx_work( int matrix_layout, char fact, char uplo,
         /* Check leading dimension(s) */
         if( ldb < nrhs ) {
             info = -10;
-            LAPACKE_xerbla( "LAPACKE_zspsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zspsvx_work", info );
             return info;
         }
         if( ldx < nrhs ) {
             info = -12;
-            LAPACKE_xerbla( "LAPACKE_zspsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zspsvx_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -97,10 +97,10 @@ lapack_int LAPACKE_zspsvx_work( int matrix_layout, char fact, char uplo,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_zsp_trans( matrix_layout, uplo, n, ap, ap_t );
-        if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_zsp_trans( matrix_layout, uplo, n, afp, afp_t );
+        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_zsp_trans)( matrix_layout, uplo, n, ap, ap_t );
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'f' ) ) {
+            API_SUFFIX(LAPACKE_zsp_trans)( matrix_layout, uplo, n, afp, afp_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_zspsvx( &fact, &uplo, &n, &nrhs, ap_t, afp_t, ipiv, b_t, &ldb_t,
@@ -109,9 +109,9 @@ lapack_int LAPACKE_zspsvx_work( int matrix_layout, char fact, char uplo,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
-        if( LAPACKE_lsame( fact, 'n' ) ) {
-            LAPACKE_zsp_trans( LAPACK_COL_MAJOR, uplo, n, afp_t, afp );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
+        if( API_SUFFIX(LAPACKE_lsame)( fact, 'n' ) ) {
+            API_SUFFIX(LAPACKE_zsp_trans)( LAPACK_COL_MAJOR, uplo, n, afp_t, afp );
         }
         /* Release memory and exit */
         LAPACKE_free( afp_t );
@@ -123,11 +123,11 @@ exit_level_1:
         LAPACKE_free( b_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zspsvx_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zspsvx_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zspsvx_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zspsvx_work", info );
     }
     return info;
 }

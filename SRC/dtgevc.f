@@ -5,7 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> \htmlonly
 *> Download DTGEVC + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgevc.f">
 *> [TGZ]</a>
@@ -13,7 +12,6 @@
 *> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgevc.f">
 *> [TXT]</a>
-*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -228,7 +226,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup tgevc
 *
 *> \par Further Details:
 *  =====================
@@ -292,6 +290,7 @@
 *  =====================================================================
       SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, INFO )
+      IMPLICIT NONE
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -337,7 +336,8 @@
       EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLACPY, DLAG2, DLALN2, XERBLA
+      EXTERNAL           DGEMV, DLACPY, DLAG2, DLALN2,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -764,7 +764,8 @@
 *              Solve  ( a A - b B )  y = SUM(,)
 *              with scaling and perturbation of the denominator
 *
-               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), LDS,
+               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ),
+     $                      LDS,
      $                      BDIAG( 1 ), BDIAG( 2 ), SUM, 2, BCOEFR,
      $                      BCOEFI, WORK( 2*N+J ), N, SCALE, TEMP,
      $                      IINFO )
@@ -790,11 +791,13 @@
      $                        WORK( ( JW+2 )*N+JE ), 1, ZERO,
      $                        WORK( ( JW+4 )*N+1 ), 1 )
   170          CONTINUE
-               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE ),
+               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1,
+     $                      JE ),
      $                      LDVL )
                IBEG = 1
             ELSE
-               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG ),
+               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1,
+     $                      IEIG ),
      $                      LDVL )
                IBEG = JE
             END IF
@@ -953,7 +956,8 @@
 *
 *              Complex eigenvalue
 *
-               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP,
+               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ),
+     $                     LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                IF( BCOEFI.EQ.ZERO ) THEN

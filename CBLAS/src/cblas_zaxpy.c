@@ -8,7 +8,7 @@
  */
 #include "cblas.h"
 #include "cblas_f77.h"
-void cblas_zaxpy( const CBLAS_INT N, const void *alpha, const void *X,
+void API_SUFFIX(cblas_zaxpy)( const CBLAS_INT N, const void *alpha, const void *X,
                        const CBLAS_INT incX, void *Y, const CBLAS_INT incY)
 {
 #ifdef F77_INT
