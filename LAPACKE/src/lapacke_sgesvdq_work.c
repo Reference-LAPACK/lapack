@@ -109,7 +109,7 @@ lapack_int API_SUFFIX(LAPACKE_sgesvdq_work)( int matrix_layout, char joba, char 
         }
 
         /* Query optimal working array(s) size if requested */
-        if ( ( liwork == -1 ) || ( lcwork == -1 ) || ( lrwork == -1 ) ) {
+        if ( ( liwork == -1 ) || ( lwork == -1 ) || ( lrwork == -1 ) ) {
             LAPACK_sgesvdq( &joba, &jobp, &jobr, &jobu, &jobv, &m, &n, a, &lda_t,
                              s, u, &ldu_t, v, &ldv_t, numrank, iwork, &liwork,
                              work, &lwork, rwork, &lrwork, &info );
