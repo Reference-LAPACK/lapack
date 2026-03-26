@@ -239,7 +239,7 @@
 *
 *     Quick return if possible.
 *
-      IF( MINMNM.EQ.0 ) RETURN
+      IF( MINMN.EQ.0 ) RETURN
 *
       NFXD = NFXD - 1
 *
