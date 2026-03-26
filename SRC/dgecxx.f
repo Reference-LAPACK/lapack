@@ -209,18 +209,22 @@
 *>                         
 *>          = 'C': the routine returns:
 *>                 (1) the column permutation matrix P
-*>                     in the array JPIV.
-*>                 (2) the factor C explicitly in the array C.
+*>                     in the array JPIV. (The first K elements are
+*>                     indicies of the selected columns from
+*>                     the matrix A.)
+*>                 (2) the M-by-K factor C explicitly in the array C.
 *>                 (slower option, more memory space)                          
 *>
 *>          = 'X': the routine returns:
 *>                 (1) the column permutation matrix P in
-*>                     the array JPIV.
-*>                 (2) the factor C explicitly in the array C.
-*>                 (3) the factor X explicitly in the array X.
-*>                 (4) the factor R and the Householder vectors
-*>                     of the QR factorization of the factor C
-*>                     in the array QRC.
+*>                     the array JPIV. (The first K elements are
+*>                     indicies of the selected columns from
+*>      the matrix A.)
+*>                 (2) the M-by-K factor C explicitly in the array C.
+*>                 (3) the K-by-N factor X explicitly in the array X.
+*>                 (4) the K-by-K upper triangular factor R and
+*>                     the Householder vectors of the QR factorization
+*>                     of the factor C in the array QRC.
 *>                     ( The factor R may be useful for checking 
 *>                       the factor C for singularity, in which case
 *>                       R will have a zero on the diagonal, and
@@ -737,6 +741,35 @@
 *>              LWORK >= max( 1, min(M,N)+N,
 *>                               min(1,MINMNFREE)*(3*N_free-1) )
 *>          where MINMNFREE = min( M_free, N_free ).
+*>         
+*>          NOTE: The decision, whether the routine uses unblocked
+*>          BLAS 2 or blocked BLAS 3 code is based not only on the
+*>          dimension LWORK of the availbale workspace WORK, but
+*>          also on:
+*>            1) the optimal block size NB, the crossover point NX 
+*>               returned by ILAENV for the routine DGEQRF
+*>               in comparison to min(M,N_sel). (For
+*>               min(M_sub, N_sel) <= NX or min(M_sub, N_sel) <= NB,
+*>               unblocked code is used in DGEQRF.)
+*>            2) the optimal block size NB returned by ILAENV for 
+*>               the routine DORMQR in comparison to N_sel. (For
+*>               N_sel <= NB, unblocked code should is used in
+*>               DORMQR.)
+*>            3) the optimal block size NB, the crossover point NX 
+*>               returned by ILAENV for the routine DGEQRP3RK
+*>               in comparison to min(M,N_sel). (For
+*>               min(M_sub, N_free, KMAXFREE) <= NX
+*>               or min(M_sub, N_free, KMAXFREE) <= NB, unblocked code
+*>               is used in DGEQRP3RK.)
+*>           4a) the optimal block size NB, the crossover point NX 
+*>               returned by ILAENV for the routine DGEQRF
+*>               in comparison to min(M,K). (For min(M,K) <= NX
+*>               or min(M,K) <= NB, unblocked code is used in
+*>               DGEQRF inside DGELS.)
+*>           4b) the optimal block size NB returned by ILAENV for 
+*>               the routine DORMQR in comparison to N. (For
+*>               N <= NB, unblocked code should is used in
+*>               DORMQR inside DGELS.)
 *> \endverbatim
 *>
 *> \param[out] IWORK
