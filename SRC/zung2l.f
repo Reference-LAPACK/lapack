@@ -1,9 +1,17 @@
-*> \brief \b ZUNG2L generates all or part of the orthogonal matrix Q from a QL factorization determined by sgeqlf (unblocked algorithm).
+*> \brief \b ZUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by zgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download ZUNG2L + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zung2l.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zung2l.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zung2l.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -23,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2L generates an m by n complex matrix Q with orthonormal columns,
+*> ZUNG2L generates an m-by-n complex matrix Q with orthonormal columns,
 *> which is defined as the last n columns of a product of k elementary
 *> reflectors of order m
 *>
@@ -61,7 +69,7 @@
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
 *>          returned by ZGEQLF in the last k columns of its array
 *>          argument A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +127,7 @@
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
-     $                     ZERO = (0.0D+0, 0.0D+0) )
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, L

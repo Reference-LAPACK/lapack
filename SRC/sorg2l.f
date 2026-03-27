@@ -5,6 +5,14 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
+*> Download SORG2L + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorg2l.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorg2l.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorg2l.f">
+*> [TXT]</a>
+*
 *  Definition:
 *  ===========
 *
@@ -118,7 +126,7 @@
 *
 *     .. Parameters ..
       REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, L

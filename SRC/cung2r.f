@@ -1,9 +1,17 @@
-*> \brief \b CUNG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by cgeqrf (unblocked algorithm).
+*> \brief \b CUNG2R generates all or part of the unitary matrix Q from a QR factorization determined by cgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download CUNG2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cung2r.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cung2r.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cung2r.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
