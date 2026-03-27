@@ -646,7 +646,7 @@
 *>          If FACT = 'C' or 'X': 
 *>             If USESD = 'N', the array dimension is (LDC,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
-*>                        the array dimension is (LDC,min(M_sub,N_sub)).
+*>                    the array dimension is (LDC,min(M_sub,N_sub)).
 *>
 *>             If K = 0, the array is not used.  
 *>             If K > 0, the array C stores the M-by-K factor C.
@@ -667,9 +667,9 @@
 *>                       the array dimension is >= (1,1).
 *>          If FACT = 'X':
 *>             If USESD = 'N',
-*>                       the array dimension is (LDQRC,min(M,N)).
+*>                    the array dimension is (LDQRC,min(M,N)).
 *>             If USESD = 'C' or 'R' or 'A',
-*>                       the array dimension is (LDC,min(M_sub,N_sub)).
+*>                    the array dimension is (LDQRC,min(M_sub,N_sub)).
 *>
 *>             If K = 0, the array is not used.
 *>             If K > 0, QRC(1:M_sub,1:K) stores two components from
@@ -702,8 +702,8 @@
 *> \verbatim
 *>          LDX is INTEGER
 *>          The leading dimension of the array X.
-*>          If FACT = 'P' or 'C', LDQRC >= 1.
-*>          If FACT = 'X', LDQRC >= max(1,M).
+*>          If FACT = 'P' or 'C', LDX >= 1.
+*>          If FACT = 'X', LDX >= max(1,M).
 *> \endverbatim
 *>
 *> \param[out] WORK
