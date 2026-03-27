@@ -1,9 +1,17 @@
-*> \brief \b ZUNGR2 generates all or part of the orthogonal matrix Q from an RQ factorization determined by sgerqf (unblocked algorithm).
+*> \brief \b ZUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by zgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download ZUNGR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungr2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungr2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungr2.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -23,11 +31,11 @@
 *>
 *> \verbatim
 *>
-*> ZUNGR2 generates an m by n complex matrix Q with orthonormal rows,
+*> ZUNGR2 generates an m-by-n complex matrix Q with orthonormal rows,
 *> which is defined as the last m rows of a product of k elementary
 *> reflectors of order n
 *>
-*>       Q  =  H(1) H(2) . . . H(k)
+*>       Q  =  H(1)**H H(2)**H . . . H(k)**H
 *>
 *> as returned by ZGERQF.
 *> \endverbatim
@@ -61,7 +69,7 @@
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
 *>          returned by ZGERQF in the last k rows of its array argument
 *>          A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +127,7 @@
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
-     $                     ZERO = (0.0D+0, 0.0D+0) )
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
@@ -128,7 +136,7 @@
       EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *

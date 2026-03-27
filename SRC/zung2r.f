@@ -1,9 +1,17 @@
-*> \brief \b ZUNG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by zgeqrf (unblocked algorithm).
+*> \brief \b ZUNG2R generates all or part of the unitary matrix Q from a QR factorization determined by zgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download ZUNG2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zung2r.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zung2r.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zung2r.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -23,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2R generates an m by n complex matrix Q with orthonormal columns,
+*> ZUNG2R generates an m-by-n complex matrix Q with orthonormal columns,
 *> which is defined as the first n columns of a product of k elementary
 *> reflectors of order m
 *>
@@ -119,7 +127,7 @@
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
-     $                     ZERO = (0.0D+0, 0.0D+0) )
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J

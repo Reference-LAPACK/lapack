@@ -1,9 +1,17 @@
-*> \brief \b ZUNGL2
+*> \brief \b ZUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by zgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download ZUNGL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungl2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungl2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungl2.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -23,11 +31,11 @@
 *>
 *> \verbatim
 *>
-*> ZUNGL2 generates an m by n complex matrix Q with orthonormal rows,
+*> ZUNGL2 generates an m-by-n complex matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
-*>       Q  =  H(k) . . . H(2) H(1)
+*>       Q  =  H(k)**H . . . H(2)**H H(1)**H
 *>
 *> as returned by ZGELQF.
 *> \endverbatim
@@ -118,7 +126,7 @@
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
-     $                     ZERO = (0.0D+0, 0.0D+0) )
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
@@ -127,7 +135,7 @@
       EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, CONJG
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *

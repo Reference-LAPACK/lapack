@@ -1,9 +1,17 @@
-*> \brief \b CUNGR2 generates all or part of the orthogonal matrix Q from an RQ factorization determined by sgerqf (unblocked algorithm).
+*> \brief \b CUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by cgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download CUNGR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungr2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungr2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungr2.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -14,7 +22,7 @@
 *       INTEGER            INFO, K, LDA, M, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
+*       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *
 *
@@ -23,11 +31,11 @@
 *>
 *> \verbatim
 *>
-*> CUNGR2 generates an m by n complex matrix Q with orthonormal rows,
+*> CUNGR2 generates an m-by-n complex matrix Q with orthonormal rows,
 *> which is defined as the last m rows of a product of k elementary
 *> reflectors of order n
 *>
-*>       Q  =  H(1) H(2) . . . H(k)
+*>       Q  =  H(1)**H H(2)**H . . . H(k)**H
 *>
 *> as returned by CGERQF.
 *> \endverbatim
@@ -61,7 +69,7 @@
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
 *>          returned by CGERQF in the last k rows of its array argument
 *>          A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -111,15 +119,15 @@
       INTEGER            INFO, K, LDA, M, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
+      COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX         ONE, ZERO
+      COMPLEX            ONE, ZERO
       PARAMETER          ( ONE = (1.0E+0, 0.0E+0),
-     $                     ZERO = (0.0E+0, 0.0E+0) )
+     $                   ZERO = (0.0E+0, 0.0E+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
@@ -128,7 +136,7 @@
       EXTERNAL           CLARF0C2, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *

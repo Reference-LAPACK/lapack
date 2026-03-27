@@ -1,9 +1,17 @@
-*> \brief \b CUNGL2
+*> \brief \b CUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by cgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
+*
+*> Download CUNGL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungl2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungl2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungl2.f">
+*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -14,7 +22,7 @@
 *       INTEGER            INFO, K, LDA, M, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
+*       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *
 *
@@ -23,11 +31,11 @@
 *>
 *> \verbatim
 *>
-*> CUNGL2 generates an m by n complex matrix Q with orthonormal rows,
+*> CUNGL2 generates an m-by-n complex matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
-*>       Q  =  H(k) . . . H(2) H(1)
+*>       Q  =  H(k)**H . . . H(2)**H H(1)**H
 *>
 *> as returned by CGELQF.
 *> \endverbatim
@@ -110,15 +118,15 @@
       INTEGER            INFO, K, LDA, M, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
+      COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX         ONE, ZERO
+      COMPLEX            ONE, ZERO
       PARAMETER          ( ONE = (1.0E+0, 0.0E+0),
-     $                     ZERO = (0.0E+0, 0.0E+0) )
+     $                   ZERO = (0.0E+0, 0.0E+0) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
@@ -127,7 +135,7 @@
       EXTERNAL           CLARF0C2, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, CONJG
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
