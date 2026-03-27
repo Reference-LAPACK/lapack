@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download SORGR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgr2.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgr2.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgr2.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -87,7 +79,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (M)
+*>          WORK is REAL array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,13 +118,13 @@
 *
 *     .. Parameters ..
       REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, II, J, L
+      INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF1L, SSCAL, XERBLA
+      EXTERNAL           SLARF0C2, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,39 +150,43 @@
 *
 *     Quick return if possible
 *
-      IF( M.LE.0 )
-     $   RETURN
+*     Note that if N=0, then M must also be 0, so it's sufficient to only test
+*     M=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-      IF( K.LT.M ) THEN
-*
-*        Initialise rows 1:m-k to rows of the unit matrix
-*
-         DO 20 J = 1, N
-            DO 10 L = 1, M - K
-               A( L, J ) = ZERO
-   10       CONTINUE
-            IF( J.GT.N-M .AND. J.LE.N-K )
-     $         A( M-N+J, J ) = ONE
-   20    CONTINUE
+      IF( M.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL SLASET('All', M, N, ZERO, ZERO, A, LDA)
+         DO I = N-M+1, N-K
+            A(M-N+I,I) = ONE
+         END DO
+         RETURN
       END IF
 *
-      DO 40 I = 1, K
-         II = M - K + I
+*     Apply H(1) to the assumed identity matrix from the right
 *
-*        Apply H(i) to A(1:m-k+i,1:n-k+i) from the right
+      CALL SLARF0C2('Identity', 'Right', 'Backward', 'Rowwise',
+     $      M-K, N-K+1, TAU(1), A(M-K+1, 1), LDA, A, LDA)
 *
-         A( II, N-M+II ) = ONE
-         CALL SLARF1L( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
-     $                 TAU( I ), A, LDA, WORK )
-         CALL SSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
-         A( II, N-M+II ) = ONE - TAU( I )
+*     Apply H(1) to v_1
 *
-*        Set A(m-k+i,n-k+i+1:n) to zero
+      CALL SSCAL(N-K, -TAU(1), A(M-K+1, 1), LDA)
+      A( M-K+1, N-K+1) = ONE - TAU(1)
+      IF( K.GT.1 ) THEN
+         DO I = 2, K
 *
-         DO 30 L = N - M + II + 1, N
-            A( II, L ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+*           Apply H(i) to A from the right
+*
+            CALL SLARF0C2('General', 'Right', 'Backward', 'Rowwise',
+     $            M-K+I-1, N-K+I, TAU(I), A(M-K+I, 1), LDA, A, LDA)
+*
+*           Apply H(i) to v_i
+*
+            CALL SSCAL(N-K+I-1, -TAU(I), A(M-K+I, 1), LDA)
+            A( M-K+I, N-K+I) = ONE - TAU(I)
+         END DO
+      END IF
       RETURN
 *
 *     End of SORGR2

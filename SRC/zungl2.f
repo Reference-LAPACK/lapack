@@ -1,17 +1,9 @@
-*> \brief \b ZUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by cgelqf (unblocked algorithm).
+*> \brief \b ZUNGL2
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
-*
-*> Download ZUNGL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungl2.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungl2.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungl2.f">
-*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -31,11 +23,11 @@
 *>
 *> \verbatim
 *>
-*> ZUNGL2 generates an m-by-n complex matrix Q with orthonormal rows,
+*> ZUNGL2 generates an m by n complex matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
-*>       Q  =  H(k)**H . . . H(2)**H H(1)**H
+*>       Q  =  H(k) . . . H(2) H(1)
 *>
 *> as returned by ZGELQF.
 *> \endverbatim
@@ -68,7 +60,7 @@
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
 *>          by ZGELQF in the first k rows of its array argument A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -86,7 +78,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (M)
+*>          WORK is COMPLEX*16 array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -125,17 +117,17 @@
 *
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
+      PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
+     $                     ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, J, L
+      INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF1F, ZSCAL
+      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX
+      INTRINSIC          MAX, CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -158,44 +150,41 @@
 *
 *     Quick return if possible
 *
-      IF( M.LE.0 )
-     $   RETURN
+*     Note that if N=0, then M must also be 0, so it's sufficient to only test
+*     M=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-      IF( K.LT.M ) THEN
-*
-*        Initialise rows k+1:m to rows of the unit matrix
-*
-         DO 20 J = 1, N
-            DO 10 L = K + 1, M
-               A( L, J ) = ZERO
-   10       CONTINUE
-            IF( J.GT.K .AND. J.LE.M )
-     $         A( J, J ) = ONE
-   20    CONTINUE
+      IF( M.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL ZLASET('All', M, N, ZERO, ONE, A, LDA)
+         RETURN
       END IF
 *
-      DO 40 I = K, 1, -1
+*     Apply the first (kth) reflector to the assumed identity matrix from
+*     the right. Note that if m=k, we do nothing
 *
-*        Apply H(i)**H to A(i:m,i:n) from the right
+      CALL ZLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+     $   M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
 *
-         IF( I.LT.N ) THEN
-            CALL ZLACGV( N-I, A( I, I+1 ), LDA )
-            IF( I.LT.M ) THEN
-               CALL ZLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                       CONJG( TAU( I ) ), A( I+1, I ), LDA,
-     $                       WORK )
-            END IF
-            CALL ZSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
-            CALL ZLACGV( N-I, A( I, I+1 ), LDA )
-         END IF
-         A( I, I ) = ONE - DCONJG( TAU( I ) )
+*     Now we compute the 1st non-zero row of H, which is given by
+*     A(k,k:n) = (e_k - tau*v_k)'
+*     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
-*        Set A(i,1:i-1) to zero
+      A(K,K) = ONE - CONJG(TAU(K))
+      CALL ZSCAL(N-K, -CONJG(TAU(K)), A(K,K+1), LDA)
+      IF( K.GT.1 ) THEN
+         DO I = K-1, 1, -1
+            CALL ZLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+     $         M-I, N-I+1, CONJG(TAU(I)), A(I,I+1), LDA, A(I+1,I), LDA)
 *
-         DO 30 L = 1, I - 1
-            A( I, L ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+*           A(i,i:n) = (e_i - tau*v_i)'
+*           Analagous to orglk for n=1 (but T is not used as it is a scalar)
+*
+            A(I,I) = ONE - CONJG(TAU(I))
+            CALL ZSCAL(N-I, -CONJG(TAU(I)), A(I,I+1), LDA)
+         END DO
+      END IF
       RETURN
 *
 *     End of ZUNGL2
