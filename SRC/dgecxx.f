@@ -746,30 +746,32 @@
 *>          BLAS 2 or blocked BLAS 3 code is based not only on the
 *>          dimension LWORK of the availbale workspace WORK, but
 *>          also on:
-*>            1) the optimal block size NB, the crossover point NX 
+*>           1a) colum preselection stage using DGEQRF:
+*>               the optimal block size NB, the crossover point NX 
 *>               returned by ILAENV for the routine DGEQRF
-*>               in comparison to min(M,N_sel). (For
-*>               min(M_sub, N_sel) <= NX or min(M_sub, N_sel) <= NB,
-*>               unblocked code is used in DGEQRF.)
-*>            2) the optimal block size NB returned by ILAENV for 
+*>               in comparison to N_sel. (For N_sel <= NX 
+*>               or N_sel <= NB, unblocked code is used in DGEQRF.)
+*>           1b) column preselection stage using DORMQR:
+*>               the optimal block size NB returned by ILAENV for 
 *>               the routine DORMQR in comparison to N_sel. (For
-*>               N_sel <= NB, unblocked code should is used in
-*>               DORMQR.)
-*>            3) the optimal block size NB, the crossover point NX 
+*>               N_sel <= NB, unblocked code is used in DORMQR.)
+*>            2) column selection stage via criteria using DGEQRP3RK:
+*>               the optimal block size NB, the crossover point NX 
 *>               returned by ILAENV for the routine DGEQRP3RK
 *>               in comparison to min(M,N_sel). (For
 *>               min(M_sub, N_free, KMAXFREE) <= NX
 *>               or min(M_sub, N_free, KMAXFREE) <= NB, unblocked code
-*>               is used in DGEQRP3RK.)
-*>           4a) the optimal block size NB, the crossover point NX 
+*>               is used in DGEQRP3RK.)           
+*>           3a) computation of the factor X using DGEQRF in DGELS:
+*>               the optimal block size NB, the crossover point NX 
 *>               returned by ILAENV for the routine DGEQRF
-*>               in comparison to min(M,K). (For min(M,K) <= NX
-*>               or min(M,K) <= NB, unblocked code is used in
-*>               DGEQRF inside DGELS.)
-*>           4b) the optimal block size NB returned by ILAENV for 
+*>               in comparison to K. (For K <= NX or K <= NB,
+*>               unblocked code is used in DGEQRF inside DGELS.)
+*>           3b) computation of the factor X using DORMQR in DGELS:
+*>               the optimal block size NB returned by ILAENV for 
 *>               the routine DORMQR in comparison to N. (For
-*>               N <= NB, unblocked code should is used in
-*>               DORMQR inside DGELS.)
+*>               N <= NB, unblocked code is used in DORMQR
+*>               inside DGELS.)
 *> \endverbatim
 *>
 *> \param[out] IWORK
