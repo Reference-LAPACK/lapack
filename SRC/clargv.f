@@ -155,7 +155,7 @@
      $                   SQRT
 *     ..
 *     .. Statement Functions ..
-      REAL               ABS1, ABSSQ
+      REAL               CABSMAX, ABSSQ
 *     ..
 *     .. Save statement ..
 *     SAVE               FIRST, SAFMX2, SAFMIN, SAFMN2
@@ -164,7 +164,7 @@
 *     DATA               FIRST / .TRUE. /
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( FF ) = MAX( ABS( REAL( FF ) ), ABS( AIMAG( FF ) ) )
+      CABSMAX( FF ) = MAX( ABS( REAL( FF ) ), ABS( AIMAG( FF ) ) )
       ABSSQ( FF ) = REAL( FF )**2 + AIMAG( FF )**2
 *     ..
 *     .. Executable Statements ..
@@ -186,7 +186,7 @@
 *
 *        Use identical algorithm as in CLARTG
 *
-         SCALE = MAX( ABS1( F ), ABS1( G ) )
+         SCALE = MAX( CABSMAX( F ), CABSMAX( G ) )
          FS = F
          GS = G
          COUNT = 0
@@ -242,7 +242,7 @@
             CS = F2S / G2S
 *           Make sure abs(FF) = 1
 *           Do complex/real division explicitly with 2 real divisions
-            IF( ABS1( F ).GT.ONE ) THEN
+            IF( CABSMAX( F ).GT.ONE ) THEN
                D = SLAPY2( REAL( F ), AIMAG( F ) )
                FF = CMPLX( REAL( F ) / D, AIMAG( F ) / D )
             ELSE
