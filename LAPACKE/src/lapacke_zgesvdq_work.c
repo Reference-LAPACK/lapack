@@ -115,22 +115,24 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        a_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lda_t * MAX(1,n) );
-        if( a_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
-        }
+        if ( ( m > 0 ) && ( n > 0 ) ){
+            a_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lda_t * MAX(1,n) );
+            if( a_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_0;
+            }
 
-        u_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldu_t * MAX(1,ncols_u) );
-        if( u_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_1;
-        }
+            u_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldu_t * MAX(1,ncols_u) );
+            if( u_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_1;
+            }
 
-        v_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldv_t * MAX(1,ncols_v) );
-        if( v_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_2;
+            v_t = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * ldv_t * MAX(1,ncols_v) );
+            if( v_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_2;
+            }
         }
 
         /* Transpose input matrices */
@@ -169,11 +171,11 @@ lapack_int API_SUFFIX(LAPACKE_zgesvdq_work)( int matrix_layout, char joba, char 
         }
 
         /* Release memory and exit */
-        LAPACKE_free( v_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( v_t );
 exit_level_2:
-        LAPACKE_free( u_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( u_t );
 exit_level_1:
-        LAPACKE_free( a_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgesvdq_work", info );

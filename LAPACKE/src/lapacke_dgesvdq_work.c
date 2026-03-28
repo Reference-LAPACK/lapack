@@ -117,22 +117,24 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdq_work)( int matrix_layout, char joba, char 
         }
 
         /* Allocate memory for temporary array(s) */
-        a_t = (double*)LAPACKE_malloc( sizeof(double) * lda_t * MAX(1,n) );
-        if( a_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
-        }
+        if ( ( m > 0 ) && ( n > 0 ) ){
+            a_t = (double*)LAPACKE_malloc( sizeof(double) * lda_t * MAX(1,n) );
+            if( a_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_0;
+            }
 
-        u_t = (double*)LAPACKE_malloc( sizeof(double) * ldu_t * MAX(1,ncols_u) );
-        if( u_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_1;
-        }
+            u_t = (double*)LAPACKE_malloc( sizeof(double) * ldu_t * MAX(1,ncols_u) );
+            if( u_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_1;
+            }
 
-        v_t = (double*)LAPACKE_malloc( sizeof(double) * ldv_t * MAX(1,ncols_v) );
-        if( v_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_2;
+            v_t = (double*)LAPACKE_malloc( sizeof(double) * ldv_t * MAX(1,ncols_v) );
+            if( v_t == NULL ) {
+                info = LAPACK_TRANSPOSE_MEMORY_ERROR;
+                goto exit_level_2;
+            }
         }
 
         /* Transpose input matrices */
@@ -171,11 +173,11 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdq_work)( int matrix_layout, char joba, char 
         }
 
         /* Release memory and exit */
-        LAPACKE_free( v_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( v_t );
 exit_level_2:
-        LAPACKE_free( u_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( u_t );
 exit_level_1:
-        LAPACKE_free( a_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dgesvdq_work", info );
