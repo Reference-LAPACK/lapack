@@ -186,10 +186,10 @@
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG
 *     ..
 *     .. Statement Functions ..
-      DOUBLE PRECISION   ABS1
+      DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( T ) = ABS( DBLE( T ) ) + ABS( DIMAG( T ) )
+      CABS1( T ) = ABS( DBLE( T ) ) + ABS( DIMAG( T ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -231,21 +231,21 @@
             VB11R = CSR*B1
             VB12 = CSR*B2 + D1*SNR*B3
 *
-            AUA12 = ABS( CSL )*ABS1( A2 ) + ABS( SNL )*ABS( A3 )
-            AVB12 = ABS( CSR )*ABS1( B2 ) + ABS( SNR )*ABS( B3 )
+            AUA12 = ABS( CSL )*CABS1( A2 ) + ABS( SNL )*ABS( A3 )
+            AVB12 = ABS( CSR )*CABS1( B2 ) + ABS( SNR )*ABS( B3 )
 *
 *           zero (1,2) elements of U**H *A and V**H *B
 *
-            IF( ( ABS( UA11R )+ABS1( UA12 ) ).EQ.ZERO ) THEN
+            IF( ( ABS( UA11R )+CABS1( UA12 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ,
      $                      SNQ,
      $                      R )
-            ELSE IF( ( ABS( VB11R )+ABS1( VB12 ) ).EQ.ZERO ) THEN
+            ELSE IF( ( ABS( VB11R )+CABS1( VB12 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
      $                      SNQ,
      $                      R )
-            ELSE IF( AUA12 / ( ABS( UA11R )+ABS1( UA12 ) ).LE.AVB12 /
-     $               ( ABS( VB11R )+ABS1( VB12 ) ) ) THEN
+            ELSE IF( AUA12 / ( ABS( UA11R )+CABS1( UA12 ) ).LE.AVB12 /
+     $               ( ABS( VB11R )+CABS1( VB12 ) ) ) THEN
                CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
      $                      SNQ,
      $                      R )
@@ -271,21 +271,21 @@
             VB21 = -DCONJG( D1 )*SNR*B1
             VB22 = -DCONJG( D1 )*SNR*B2 + CSR*B3
 *
-            AUA22 = ABS( SNL )*ABS1( A2 ) + ABS( CSL )*ABS( A3 )
-            AVB22 = ABS( SNR )*ABS1( B2 ) + ABS( CSR )*ABS( B3 )
+            AUA22 = ABS( SNL )*CABS1( A2 ) + ABS( CSL )*ABS( A3 )
+            AVB22 = ABS( SNR )*CABS1( B2 ) + ABS( CSR )*ABS( B3 )
 *
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
-            IF( ( ABS1( UA21 )+ABS1( UA22 ) ).EQ.ZERO ) THEN
+            IF( ( CABS1( UA21 )+CABS1( UA22 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ,
      $                      SNQ,
      $                      R )
-            ELSE IF( ( ABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
+            ELSE IF( ( CABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
      $                      SNQ,
      $                      R )
-            ELSE IF( AUA22 / ( ABS1( UA21 )+ABS1( UA22 ) ).LE.AVB22 /
-     $               ( ABS1( VB21 )+ABS1( VB22 ) ) ) THEN
+            ELSE IF( AUA22 / ( CABS1( UA21 )+CABS1( UA22 ) ).LE.AVB22 /
+     $               ( CABS1( VB21 )+CABS1( VB22 ) ) ) THEN
                CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
      $                      SNQ,
      $                      R )
@@ -340,17 +340,17 @@
             VB21 = -D1*SNL*B1 + CSL*B2
             VB22R = CSL*B3
 *
-            AUA21 = ABS( SNR )*ABS( A1 ) + ABS( CSR )*ABS1( A2 )
-            AVB21 = ABS( SNL )*ABS( B1 ) + ABS( CSL )*ABS1( B2 )
+            AUA21 = ABS( SNR )*ABS( A1 ) + ABS( CSR )*CABS1( A2 )
+            AVB21 = ABS( SNL )*ABS( B1 ) + ABS( CSL )*CABS1( B2 )
 *
 *           zero (2,1) elements of U**H *A and V**H *B.
 *
-            IF( ( ABS1( UA21 )+ABS( UA22R ) ).EQ.ZERO ) THEN
+            IF( ( CABS1( UA21 )+ABS( UA22R ) ).EQ.ZERO ) THEN
                CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
-            ELSE IF( ( ABS1( VB21 )+ABS( VB22R ) ).EQ.ZERO ) THEN
+            ELSE IF( ( CABS1( VB21 )+ABS( VB22R ) ).EQ.ZERO ) THEN
                CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
-            ELSE IF( AUA21 / ( ABS1( UA21 )+ABS( UA22R ) ).LE.AVB21 /
-     $               ( ABS1( VB21 )+ABS( VB22R ) ) ) THEN
+            ELSE IF( AUA21 / ( CABS1( UA21 )+ABS( UA22R ) ).LE.AVB21 /
+     $               ( CABS1( VB21 )+ABS( VB22R ) ) ) THEN
                CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
             ELSE
                CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
@@ -372,17 +372,17 @@
             VB11 = CSL*B1 + DCONJG( D1 )*SNL*B2
             VB12 = DCONJG( D1 )*SNL*B3
 *
-            AUA11 = ABS( CSR )*ABS( A1 ) + ABS( SNR )*ABS1( A2 )
-            AVB11 = ABS( CSL )*ABS( B1 ) + ABS( SNL )*ABS1( B2 )
+            AUA11 = ABS( CSR )*ABS( A1 ) + ABS( SNR )*CABS1( A2 )
+            AVB11 = ABS( CSL )*ABS( B1 ) + ABS( SNL )*CABS1( B2 )
 *
 *           zero (1,1) elements of U**H *A and V**H *B, and then swap.
 *
-            IF( ( ABS1( UA11 )+ABS1( UA12 ) ).EQ.ZERO ) THEN
+            IF( ( CABS1( UA11 )+CABS1( UA12 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( VB12, VB11, CSQ, SNQ, R )
-            ELSE IF( ( ABS1( VB11 )+ABS1( VB12 ) ).EQ.ZERO ) THEN
+            ELSE IF( ( CABS1( VB11 )+CABS1( VB12 ) ).EQ.ZERO ) THEN
                CALL ZLARTG( UA12, UA11, CSQ, SNQ, R )
-            ELSE IF( AUA11 / ( ABS1( UA11 )+ABS1( UA12 ) ).LE.AVB11 /
-     $               ( ABS1( VB11 )+ABS1( VB12 ) ) ) THEN
+            ELSE IF( AUA11 / ( CABS1( UA11 )+CABS1( UA12 ) ).LE.AVB11 /
+     $               ( CABS1( VB11 )+CABS1( VB12 ) ) ) THEN
                CALL ZLARTG( UA12, UA11, CSQ, SNQ, R )
             ELSE
                CALL ZLARTG( VB12, VB11, CSQ, SNQ, R )

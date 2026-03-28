@@ -330,10 +330,10 @@
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, INT, MAX
 *     ..
 *     .. Statement Functions ..
-      DOUBLE PRECISION   ABS1
+      DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -590,7 +590,7 @@
             DO 30 JC = 1, N
                TEMP = ZERO
                DO 10 JR = 1, N
-                  TEMP = MAX( TEMP, ABS1( VL( JR, JC ) ) )
+                  TEMP = MAX( TEMP, CABS1( VL( JR, JC ) ) )
    10          CONTINUE
                IF( TEMP.LT.SAFMIN )
      $            GO TO 30
@@ -610,7 +610,7 @@
             DO 60 JC = 1, N
                TEMP = ZERO
                DO 40 JR = 1, N
-                  TEMP = MAX( TEMP, ABS1( VR( JR, JC ) ) )
+                  TEMP = MAX( TEMP, CABS1( VR( JR, JC ) ) )
    40          CONTINUE
                IF( TEMP.LT.SAFMIN )
      $            GO TO 60
