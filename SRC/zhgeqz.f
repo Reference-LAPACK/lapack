@@ -333,10 +333,10 @@
      $                   SQRT
 *     ..
 *     .. Statement Functions ..
-      DOUBLE PRECISION   ABS1
+      DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -516,9 +516,9 @@
          IF( ILAST.EQ.ILO ) THEN
             GO TO 60
          ELSE
-            IF( ABS1( H( ILAST, ILAST-1 ) ).LE.MAX( SAFMIN, ULP*( 
-     $         ABS1( H( ILAST, ILAST ) ) + ABS1( H( ILAST-1, ILAST-1 ) 
-     $         ) ) ) ) THEN
+            IF( CABS1( H( ILAST, ILAST-1 ) ).LE.MAX( SAFMIN, 
+     $         ULP*( CABS1( H( ILAST, ILAST ) )
+     $         + CABS1( H( ILAST-1, ILAST-1 ) ) ) ) ) THEN
                H( ILAST, ILAST-1 ) = CZERO
                GO TO 60
             END IF
@@ -538,8 +538,8 @@
             IF( J.EQ.ILO ) THEN
                ILAZRO = .TRUE.
             ELSE
-               IF( ABS1( H( J, J-1 ) ).LE.MAX( SAFMIN, ULP*( 
-     $            ABS1( H( J, J ) ) + ABS1( H( J-1, J-1 ) ) 
+               IF( CABS1( H( J, J-1 ) ).LE.MAX( SAFMIN, ULP*(
+     $            CABS1( H( J, J ) ) + CABS1( H( J-1, J-1 ) )
      $            ) ) ) THEN
                   H( J, J-1 ) = CZERO
                   ILAZRO = .TRUE.
@@ -557,8 +557,8 @@
 *
                ILAZR2 = .FALSE.
                IF( .NOT.ILAZRO ) THEN
-                  IF( ABS1( H( J, J-1 ) )*( ASCALE*ABS1( H( J+1,
-     $                J ) ) ).LE.ABS1( H( J, J ) )*( ASCALE*ATOL ) )
+                  IF( CABS1( H( J, J-1 ) )*( ASCALE*CABS1( H( J+1,
+     $                J ) ) ).LE.CABS1( H( J, J ) )*( ASCALE*ATOL ) )
      $                ILAZR2 = .TRUE.
                END IF
 *
@@ -585,7 +585,7 @@
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
                      ILAZR2 = .FALSE.
-                     IF( ABS1( T( JCH+1, JCH+1 ) ).GE.BTOL ) THEN
+                     IF( CABS1( T( JCH+1, JCH+1 ) ).GE.BTOL ) THEN
                         IF( JCH+1.GE.ILAST ) THEN
                            GO TO 60
                         ELSE
@@ -746,11 +746,11 @@
 *
             SHIFT = ABI22
             CTEMP = SQRT( ABI12 )*SQRT( AD21 )
-            TEMP = ABS1( CTEMP )
+            TEMP = CABS1( CTEMP )
             IF( CTEMP.NE.ZERO ) THEN
                X = HALF*( AD11-SHIFT )
-               TEMP2 = ABS1( X )
-               TEMP = MAX( TEMP, ABS1( X ) )
+               TEMP2 = CABS1( X )
+               TEMP = MAX( TEMP, CABS1( X ) )
                Y = TEMP*SQRT( ( X / TEMP )**2+( CTEMP / TEMP )**2 )
                IF( TEMP2.GT.ZERO ) THEN
                   IF( DBLE( X / TEMP2 )*DBLE( Y )+
@@ -763,7 +763,7 @@
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
             IF( ( IITER / 20 )*20.EQ.IITER .AND. 
-     $         BSCALE*ABS1(T( ILAST, ILAST )).GT.SAFMIN ) THEN
+     $         BSCALE*CABS1(T( ILAST, ILAST )).GT.SAFMIN ) THEN
                ESHIFT = ESHIFT + ( ASCALE*H( ILAST,
      $            ILAST ) )/( BSCALE*T( ILAST, ILAST ) )
             ELSE
@@ -778,14 +778,14 @@
          DO 80 J = ILAST - 1, IFIRST + 1, -1
             ISTART = J
             CTEMP = ASCALE*H( J, J ) - SHIFT*( BSCALE*T( J, J ) )
-            TEMP = ABS1( CTEMP )
-            TEMP2 = ASCALE*ABS1( H( J+1, J ) )
+            TEMP = CABS1( CTEMP )
+            TEMP2 = ASCALE*CABS1( H( J+1, J ) )
             TEMPR = MAX( TEMP, TEMP2 )
             IF( TEMPR.LT.ONE .AND. TEMPR.NE.ZERO ) THEN
                TEMP = TEMP / TEMPR
                TEMP2 = TEMP2 / TEMPR
             END IF
-            IF( ABS1( H( J, J-1 ) )*TEMP2.LE.TEMP*ATOL )
+            IF( CABS1( H( J, J-1 ) )*TEMP2.LE.TEMP*ATOL )
      $         GO TO 90
    80    CONTINUE
 *

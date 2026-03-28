@@ -2520,9 +2520,9 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL, SQRT
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     .. Statement Function definitions ..
-      ABS1( CL ) = ABS( REAL( CL ) ) + ABS( AIMAG( CL ) )
+      CABS1( CL ) = ABS( REAL( CL ) ) + ABS( AIMAG( CL ) )
 *     .. Executable Statements ..
       TRANA = TRANSA.EQ.'T'.OR.TRANSA.EQ.'C'
       TRANB = TRANSB.EQ.'T'.OR.TRANSB.EQ.'C'
@@ -2543,7 +2543,8 @@
             DO 30 K = 1, KK
                DO 20 I = 1, M
                   CT( I ) = CT( I ) + A( I, K )*B( K, J )
-                  G( I ) = G( I ) + ABS1( A( I, K ) )*ABS1( B( K, J ) )
+                  G( I ) = G( I )
+     $            + CABS1( A( I, K ) )*CABS1( B( K, J ) )
    20          CONTINUE
    30       CONTINUE
          ELSE IF( TRANA.AND..NOT.TRANB )THEN
@@ -2551,16 +2552,16 @@
                DO 50 K = 1, KK
                   DO 40 I = 1, M
                      CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( K, J )
-                     G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                        ABS1( B( K, J ) )
+                     G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                        CABS1( B( K, J ) )
    40             CONTINUE
    50          CONTINUE
             ELSE
                DO 70 K = 1, KK
                   DO 60 I = 1, M
                      CT( I ) = CT( I ) + A( K, I )*B( K, J )
-                     G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                        ABS1( B( K, J ) )
+                     G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                        CABS1( B( K, J ) )
    60             CONTINUE
    70          CONTINUE
             END IF
@@ -2569,16 +2570,16 @@
                DO 90 K = 1, KK
                   DO 80 I = 1, M
                      CT( I ) = CT( I ) + A( I, K )*CONJG( B( J, K ) )
-                     G( I ) = G( I ) + ABS1( A( I, K ) )*
-     $                        ABS1( B( J, K ) )
+                     G( I ) = G( I ) + CABS1( A( I, K ) )*
+     $                        CABS1( B( J, K ) )
    80             CONTINUE
    90          CONTINUE
             ELSE
                DO 110 K = 1, KK
                   DO 100 I = 1, M
                      CT( I ) = CT( I ) + A( I, K )*B( J, K )
-                     G( I ) = G( I ) + ABS1( A( I, K ) )*
-     $                        ABS1( B( J, K ) )
+                     G( I ) = G( I ) + CABS1( A( I, K ) )*
+     $                        CABS1( B( J, K ) )
   100             CONTINUE
   110          CONTINUE
             END IF
@@ -2589,16 +2590,16 @@
                      DO 120 I = 1, M
                         CT( I ) = CT( I ) + CONJG( A( K, I ) )*
      $                            CONJG( B( J, K ) )
-                        G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                        G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   120                CONTINUE
   130             CONTINUE
                ELSE
                   DO 150 K = 1, KK
                      DO 140 I = 1, M
                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( J, K )
-                       G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                       G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   140                CONTINUE
   150             CONTINUE
                END IF
@@ -2607,16 +2608,16 @@
                   DO 170 K = 1, KK
                      DO 160 I = 1, M
                        CT( I ) = CT( I ) + A( K, I )*CONJG( B( J, K ) )
-                       G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                       G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   160                CONTINUE
   170             CONTINUE
                ELSE
                   DO 190 K = 1, KK
                      DO 180 I = 1, M
                         CT( I ) = CT( I ) + A( K, I )*B( J, K )
-                        G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                        G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   180                CONTINUE
   190             CONTINUE
                END IF
@@ -2624,15 +2625,15 @@
          END IF
          DO 200 I = 1, M
             CT( I ) = ALPHA*CT( I ) + BETA*C( I, J )
-            G( I ) = ABS1( ALPHA )*G( I ) +
-     $               ABS1( BETA )*ABS1( C( I, J ) )
+            G( I ) = CABS1( ALPHA )*G( I ) +
+     $               CABS1( BETA )*CABS1( C( I, J ) )
   200    CONTINUE
 *
 *        Compute the error ratio for this result.
 *
          ERR = ZERO
          DO 210 I = 1, M
-            ERRI = ABS1( CT( I ) - CC( I, J ) )/EPS
+            ERRI = CABS1( CT( I ) - CC( I, J ) )/EPS
             IF( G( I ).NE.RZERO )
      $         ERRI = ERRI/G( I )
             ERR = MAX( ERR, ERRI )
@@ -3229,9 +3230,9 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL, SQRT
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     .. Statement Function definitions ..
-      ABS1( CL ) = ABS( REAL( CL ) ) + ABS( AIMAG( CL ) )
+      CABS1( CL ) = ABS( REAL( CL ) ) + ABS( AIMAG( CL ) )
 *     .. Executable Statements ..
 
       UPPER = UPLO.EQ.'U'
@@ -3264,7 +3265,8 @@
             DO 30 K = 1, KK
                DO 20 I = ISTART, ISTOP
                   CT( I ) = CT( I ) + A( I, K )*B( K, J )
-                  G( I ) = G( I ) + ABS1( A( I, K ) )*ABS1( B( K, J ) )
+                  G( I ) = G( I )
+     $            + CABS1( A( I, K ) )*CABS1( B( K, J ) )
    20          CONTINUE
    30       CONTINUE
          ELSE IF( TRANA.AND..NOT.TRANB )THEN
@@ -3272,16 +3274,16 @@
                DO 50 K = 1, KK
                   DO 40 I =  ISTART, ISTOP
                      CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( K, J )
-                     G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                        ABS1( B( K, J ) )
+                     G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                        CABS1( B( K, J ) )
    40             CONTINUE
    50          CONTINUE
             ELSE
                DO 70 K = 1, KK
                   DO 60 I = ISTART, ISTOP
                      CT( I ) = CT( I ) + A( K, I )*B( K, J )
-                     G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                        ABS1( B( K, J ) )
+                     G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                        CABS1( B( K, J ) )
    60             CONTINUE
    70          CONTINUE
             END IF
@@ -3290,16 +3292,16 @@
                DO 90 K = 1, KK
                   DO 80 I =  ISTART, ISTOP
                      CT( I ) = CT( I ) + A( I, K )*CONJG( B( J, K ) )
-                     G( I ) = G( I ) + ABS1( A( I, K ) )*
-     $                        ABS1( B( J, K ) )
+                     G( I ) = G( I ) + CABS1( A( I, K ) )*
+     $                        CABS1( B( J, K ) )
    80             CONTINUE
    90          CONTINUE
             ELSE
                DO 110 K = 1, KK
                   DO 100 I = ISTART, ISTOP
                      CT( I ) = CT( I ) + A( I, K )*B( J, K )
-                     G( I ) = G( I ) + ABS1( A( I, K ) )*
-     $                        ABS1( B( J, K ) )
+                     G( I ) = G( I ) + CABS1( A( I, K ) )*
+     $                        CABS1( B( J, K ) )
   100             CONTINUE
   110          CONTINUE
             END IF
@@ -3310,16 +3312,16 @@
                      DO 120 I = ISTART, ISTOP
                         CT( I ) = CT( I ) + CONJG( A( K, I ) )*
      $                            CONJG( B( J, K ) )
-                        G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                        G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   120                CONTINUE
   130             CONTINUE
                ELSE
                   DO 150 K = 1, KK
                      DO 140 I =  ISTART, ISTOP
                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( J, K )
-                       G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                       G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   140                CONTINUE
   150             CONTINUE
                END IF
@@ -3328,16 +3330,16 @@
                   DO 170 K = 1, KK
                      DO 160 I =  ISTART, ISTOP
                        CT( I ) = CT( I ) + A( K, I )*CONJG( B( J, K ) )
-                       G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                       G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   160                CONTINUE
   170             CONTINUE
                ELSE
                   DO 190 K = 1, KK
                      DO 180 I =  ISTART, ISTOP
                         CT( I ) = CT( I ) + A( K, I )*B( J, K )
-                        G( I ) = G( I ) + ABS1( A( K, I ) )*
-     $                           ABS1( B( J, K ) )
+                        G( I ) = G( I ) + CABS1( A( K, I ) )*
+     $                           CABS1( B( J, K ) )
   180                CONTINUE
   190             CONTINUE
                END IF
@@ -3345,15 +3347,15 @@
          END IF
          DO 200 I =  ISTART, ISTOP
             CT( I ) = ALPHA*CT( I ) + BETA*C( I, J )
-            G( I ) = ABS1( ALPHA )*G( I ) +
-     $               ABS1( BETA )*ABS1( C( I, J ) )
+            G( I ) = CABS1( ALPHA )*G( I ) +
+     $               CABS1( BETA )*CABS1( C( I, J ) )
   200    CONTINUE
 *
 *        Compute the error ratio for this result.
 *
          ERR = ZERO
          DO 210 I =  ISTART, ISTOP
-            ERRI = ABS1( CT( I ) - CC( I, J ) )/EPS
+            ERRI = CABS1( CT( I ) - CC( I, J ) )/EPS
             IF( G( I ).NE.RZERO )
      $         ERRI = ERRI/G( I )
             ERR = MAX( ERR, ERRI )

@@ -202,10 +202,10 @@
       INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL
 *     ..
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
+      CABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -240,14 +240,15 @@
       DO 10 JVEC = 1, N
          ALPHAI = ALPHA( JVEC )
          BETAI = BETA( JVEC )
-         ABMAX = MAX( ABS1( ALPHAI ), ABS1( BETAI ) )
-         IF( ABS1( ALPHAI ).GT.ALFMAX .OR. ABS1( BETAI ).GT.BETMAX .OR.
+         ABMAX = MAX( CABS1( ALPHAI ), CABS1( BETAI ) )
+         IF( CABS1( ALPHAI ).GT.ALFMAX .OR. CABS1( BETAI ).GT.BETMAX
+     $   .OR.
      $       ABMAX.LT.ONE ) THEN
             SCALE = ONE / MAX( ABMAX, SAFMIN )
             ALPHAI = SCALE*ALPHAI
             BETAI = SCALE*BETAI
          END IF
-         SCALE = ONE / MAX( ABS1( ALPHAI )*BNORM, ABS1( BETAI )*ANORM,
+         SCALE = ONE / MAX( CABS1( ALPHAI )*BNORM, CABS1( BETAI )*ANORM,
      $           SAFMIN )
          ACOEFF = SCALE*BETAI
          BCOEFF = SCALE*ALPHAI
@@ -273,7 +274,7 @@
       DO 30 JVEC = 1, N
          TEMP1 = ZERO
          DO 20 J = 1, N
-            TEMP1 = MAX( TEMP1, ABS1( E( J, JVEC ) ) )
+            TEMP1 = MAX( TEMP1, CABS1( E( J, JVEC ) ) )
    20    CONTINUE
          ENRMER = MAX( ENRMER, ABS( TEMP1-ONE ) )
    30 CONTINUE

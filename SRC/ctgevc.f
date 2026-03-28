@@ -264,10 +264,10 @@
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
 *     ..
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
+      CABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -375,19 +375,19 @@
 *     part of A and B to check for possible overflow in the triangular
 *     solver.
 *
-      ANORM = ABS1( S( 1, 1 ) )
-      BNORM = ABS1( P( 1, 1 ) )
+      ANORM = CABS1( S( 1, 1 ) )
+      BNORM = CABS1( P( 1, 1 ) )
       RWORK( 1 ) = ZERO
       RWORK( N+1 ) = ZERO
       DO 40 J = 2, N
          RWORK( J ) = ZERO
          RWORK( N+J ) = ZERO
          DO 30 I = 1, J - 1
-            RWORK( J ) = RWORK( J ) + ABS1( S( I, J ) )
-            RWORK( N+J ) = RWORK( N+J ) + ABS1( P( I, J ) )
+            RWORK( J ) = RWORK( J ) + CABS1( S( I, J ) )
+            RWORK( N+J ) = RWORK( N+J ) + CABS1( P( I, J ) )
    30    CONTINUE
-         ANORM = MAX( ANORM, RWORK( J )+ABS1( S( J, J ) ) )
-         BNORM = MAX( BNORM, RWORK( N+J )+ABS1( P( J, J ) ) )
+         ANORM = MAX( ANORM, RWORK( J )+CABS1( S( J, J ) ) )
+         BNORM = MAX( BNORM, RWORK( N+J )+CABS1( P( J, J ) ) )
    40 CONTINUE
 *
       ASCALE = ONE / MAX( ANORM, SAFMIN )
@@ -409,7 +409,7 @@
             IF( ILCOMP ) THEN
                IEIG = IEIG + 1
 *
-               IF( ABS1( S( JE, JE ) ).LE.SAFMIN .AND.
+               IF( CABS1( S( JE, JE ) ).LE.SAFMIN .AND.
      $             ABS( REAL( P( JE, JE ) ) ).LE.SAFMIN ) THEN
 *
 *                 Singular matrix pencil -- return unit eigenvector
@@ -426,7 +426,7 @@
 *                   H
 *                 y  ( a A - b B ) = 0
 *
-               TEMP = ONE / MAX( ABS1( S( JE, JE ) )*ASCALE,
+               TEMP = ONE / MAX( CABS1( S( JE, JE ) )*ASCALE,
      $                ABS( REAL( P( JE, JE ) ) )*BSCALE, SAFMIN )
                SALPHA = ( TEMP*S( JE, JE ) )*ASCALE
                SBETA = ( TEMP*REAL( P( JE, JE ) ) )*BSCALE
@@ -436,19 +436,19 @@
 *              Scale to avoid underflow
 *
                LSA = ABS( SBETA ).GE.SAFMIN .AND. ABS( ACOEFF ).LT.SMALL
-               LSB = ABS1( SALPHA ).GE.SAFMIN .AND. ABS1( BCOEFF ).LT.
+               LSB = CABS1( SALPHA ).GE.SAFMIN .AND. CABS1( BCOEFF ).LT.
      $               SMALL
 *
                SCALE = ONE
                IF( LSA )
      $            SCALE = ( SMALL / ABS( SBETA ) )*MIN( ANORM, BIG )
                IF( LSB )
-     $            SCALE = MAX( SCALE, ( SMALL / ABS1( SALPHA ) )*
+     $            SCALE = MAX( SCALE, ( SMALL / CABS1( SALPHA ) )*
      $                    MIN( BNORM, BIG ) )
                IF( LSA .OR. LSB ) THEN
                   SCALE = MIN( SCALE, ONE /
      $                    ( SAFMIN*MAX( ONE, ABS( ACOEFF ),
-     $                    ABS1( BCOEFF ) ) ) )
+     $                    CABS1( BCOEFF ) ) ) )
                   IF( LSA ) THEN
                      ACOEFF = ASCALE*( SCALE*SBETA )
                   ELSE
@@ -462,7 +462,7 @@
                END IF
 *
                ACOEFA = ABS( ACOEFF )
-               BCOEFA = ABS1( BCOEFF )
+               BCOEFA = CABS1( BCOEFF )
                XMAX = ONE
                DO 60 JR = 1, N
                   WORK( JR ) = CZERO
@@ -506,12 +506,12 @@
 *                 with scaling and perturbation of the denominator
 *
                   D = CONJG( ACOEFF*S( J, J )-BCOEFF*P( J, J ) )
-                  IF( ABS1( D ).LE.DMIN )
+                  IF( CABS1( D ).LE.DMIN )
      $               D = CMPLX( DMIN )
 *
-                  IF( ABS1( D ).LT.ONE ) THEN
-                     IF( ABS1( SUM ).GE.BIGNUM*ABS1( D ) ) THEN
-                        TEMP = ONE / ABS1( SUM )
+                  IF( CABS1( D ).LT.ONE ) THEN
+                     IF( CABS1( SUM ).GE.BIGNUM*CABS1( D ) ) THEN
+                        TEMP = ONE / CABS1( SUM )
                         DO 90 JR = JE, J - 1
                            WORK( JR ) = TEMP*WORK( JR )
    90                   CONTINUE
@@ -520,7 +520,7 @@
                      END IF
                   END IF
                   WORK( J ) = CLADIV( -SUM, D )
-                  XMAX = MAX( XMAX, ABS1( WORK( J ) ) )
+                  XMAX = MAX( XMAX, CABS1( WORK( J ) ) )
   100          CONTINUE
 *
 *              Back transform eigenvector if HOWMNY='B'.
@@ -540,7 +540,7 @@
 *
                XMAX = ZERO
                DO 110 JR = IBEG, N
-                  XMAX = MAX( XMAX, ABS1( WORK( ( ISRC-1 )*N+JR ) ) )
+                  XMAX = MAX( XMAX, CABS1( WORK( ( ISRC-1 )*N+JR ) ) )
   110          CONTINUE
 *
                IF( XMAX.GT.SAFMIN ) THEN
@@ -576,7 +576,7 @@
             IF( ILCOMP ) THEN
                IEIG = IEIG - 1
 *
-               IF( ABS1( S( JE, JE ) ).LE.SAFMIN .AND.
+               IF( CABS1( S( JE, JE ) ).LE.SAFMIN .AND.
      $             ABS( REAL( P( JE, JE ) ) ).LE.SAFMIN ) THEN
 *
 *                 Singular matrix pencil -- return unit eigenvector
@@ -593,7 +593,7 @@
 *
 *              ( a A - b B ) x  = 0
 *
-               TEMP = ONE / MAX( ABS1( S( JE, JE ) )*ASCALE,
+               TEMP = ONE / MAX( CABS1( S( JE, JE ) )*ASCALE,
      $                ABS( REAL( P( JE, JE ) ) )*BSCALE, SAFMIN )
                SALPHA = ( TEMP*S( JE, JE ) )*ASCALE
                SBETA = ( TEMP*REAL( P( JE, JE ) ) )*BSCALE
@@ -603,19 +603,19 @@
 *              Scale to avoid underflow
 *
                LSA = ABS( SBETA ).GE.SAFMIN .AND. ABS( ACOEFF ).LT.SMALL
-               LSB = ABS1( SALPHA ).GE.SAFMIN .AND. ABS1( BCOEFF ).LT.
+               LSB = CABS1( SALPHA ).GE.SAFMIN .AND. CABS1( BCOEFF ).LT.
      $               SMALL
 *
                SCALE = ONE
                IF( LSA )
      $            SCALE = ( SMALL / ABS( SBETA ) )*MIN( ANORM, BIG )
                IF( LSB )
-     $            SCALE = MAX( SCALE, ( SMALL / ABS1( SALPHA ) )*
+     $            SCALE = MAX( SCALE, ( SMALL / CABS1( SALPHA ) )*
      $                    MIN( BNORM, BIG ) )
                IF( LSA .OR. LSB ) THEN
                   SCALE = MIN( SCALE, ONE /
      $                    ( SAFMIN*MAX( ONE, ABS( ACOEFF ),
-     $                    ABS1( BCOEFF ) ) ) )
+     $                    CABS1( BCOEFF ) ) ) )
                   IF( LSA ) THEN
                      ACOEFF = ASCALE*( SCALE*SBETA )
                   ELSE
@@ -629,7 +629,7 @@
                END IF
 *
                ACOEFA = ABS( ACOEFF )
-               BCOEFA = ABS1( BCOEFF )
+               BCOEFA = CABS1( BCOEFF )
                XMAX = ONE
                DO 160 JR = 1, N
                   WORK( JR ) = CZERO
@@ -653,12 +653,12 @@
 *                 with scaling and perturbation of the denominator
 *
                   D = ACOEFF*S( J, J ) - BCOEFF*P( J, J )
-                  IF( ABS1( D ).LE.DMIN )
+                  IF( CABS1( D ).LE.DMIN )
      $               D = CMPLX( DMIN )
 *
-                  IF( ABS1( D ).LT.ONE ) THEN
-                     IF( ABS1( WORK( J ) ).GE.BIGNUM*ABS1( D ) ) THEN
-                        TEMP = ONE / ABS1( WORK( J ) )
+                  IF( CABS1( D ).LT.ONE ) THEN
+                     IF( CABS1( WORK( J ) ).GE.BIGNUM*CABS1( D ) ) THEN
+                        TEMP = ONE / CABS1( WORK( J ) )
                         DO 180 JR = 1, JE
                            WORK( JR ) = TEMP*WORK( JR )
   180                   CONTINUE
@@ -671,8 +671,8 @@
 *
 *                    w = w + x(j)*(a S(*,j) - b P(*,j) ) with scaling
 *
-                     IF( ABS1( WORK( J ) ).GT.ONE ) THEN
-                        TEMP = ONE / ABS1( WORK( J ) )
+                     IF( CABS1( WORK( J ) ).GT.ONE ) THEN
+                        TEMP = ONE / CABS1( WORK( J ) )
                         IF( ACOEFA*RWORK( J )+BCOEFA*RWORK( N+J ).GE.
      $                      BIGNUM*TEMP ) THEN
                            DO 190 JR = 1, JE
@@ -706,7 +706,7 @@
 *
                XMAX = ZERO
                DO 220 JR = 1, IEND
-                  XMAX = MAX( XMAX, ABS1( WORK( ( ISRC-1 )*N+JR ) ) )
+                  XMAX = MAX( XMAX, CABS1( WORK( ( ISRC-1 )*N+JR ) ) )
   220          CONTINUE
 *
                IF( XMAX.GT.SAFMIN ) THEN
