@@ -60,7 +60,7 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdq_work)( int matrix_layout, char joba, char 
            nrows_u = m;
            ncols_u = m;
         }
-        if( API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
+        else if( API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ||
                 API_SUFFIX(LAPACKE_lsame)( jobu, 'u' ) ||
                 API_SUFFIX(LAPACKE_lsame)( jobu, 'r' ) ) {
            nrows_u = m;
