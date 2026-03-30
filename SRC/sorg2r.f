@@ -172,15 +172,19 @@
 *     Apply the first (kth) reflector to the assumed identity matrix from
 *     the left. Note that if n=k, we do nothing
 *
-      CALL SLARF0C2('Identity', 'Left', 'Forward', 'Columnwise',
-     $   M-K+1, N-K, TAU(K), A(K+1,K), 1, A(K,K+1), LDA)
+      IF( N.GT.K ) THEN
+         CALL SLARF0C2('Identity', 'Left', 'Forward', 'Columnwise',
+     $      M-K+1, N-K, TAU(K), A(K+1,K), 1, A(K,K+1), LDA)
+      END IF
 *
 *     Now we compute the 1st non-zero column of H, which is given by
 *     A(k:m,k) = e_k - tau*v_k
 *     Analagous to orgkr for n=1 (but T is not used as it is a scalar)
 *
       A(K,K) = ONE - TAU(K)
-      CALL SSCAL(M-K, -TAU(K), A(K+1,K), 1)
+      IF( M.GT.K ) THEN
+         CALL SSCAL(M-K, -TAU(K), A(K+1,K), 1)
+      END IF
 *
 *     Now we apply columns 1:k-1 of V to A
 *
