@@ -172,15 +172,19 @@
 *     Apply the first (kth) reflector to the assumed identity matrix from
 *     the right. Note that if m=k, we do nothing
 *
-      CALL ZLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
-     $   M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
+      IF( M.GT.K ) THEN
+         CALL ZLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+     $      M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
+      END IF
 *
 *     Now we compute the 1st non-zero row of H, which is given by
 *     A(k,k:n) = (e_k - tau*v_k)'
 *     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
       A(K,K) = ONE - CONJG(TAU(K))
-      CALL ZSCAL(N-K, -CONJG(TAU(K)), A(K,K+1), LDA)
+      IF( N.GT.K ) THEN
+         CALL ZSCAL(N-K, -CONJG(TAU(K)), A(K,K+1), LDA)
+      END IF
       IF( K.GT.1 ) THEN
          DO I = K-1, 1, -1
             CALL ZLARF0C2('General', 'Right', 'Forward', 'Rowwise',

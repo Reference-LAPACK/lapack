@@ -181,9 +181,6 @@
 *
       CALL DSCAL(M-K, -TAU(1), A(1, N-K+1), 1)
       A(M-K+1,N-K+1) = ONE - TAU(1)
-      DO L = M - K + 1 + 1, M
-         A( L, N-K+1 ) = ZERO
-      END DO
       IF( K.GT.1 ) THEN
          DO J = 2, K
 *
@@ -197,9 +194,6 @@
 *
             CALL DSCAL(M-K+J-1, -TAU(J), A(1,N-K+J), 1)
             A(M-K+J,N-K+J) = ONE - TAU(J)
-            DO L = M - K + J + 1, M
-               A( L, N-K+J ) = ZERO
-            END DO
          END DO
       END IF
       RETURN
