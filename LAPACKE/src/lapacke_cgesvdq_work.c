@@ -172,11 +172,11 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdq_work)( int matrix_layout, char joba, char 
         }
 
         /* Release memory and exit */
-        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( v_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) { LAPACKE_free( v_t ); v_t = NULL; }
 exit_level_2:
-        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( u_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) { LAPACKE_free( u_t ); u_t = NULL; }
 exit_level_1:
-        if ( ( m > 0 ) && ( n > 0 ) ) LAPACKE_free( a_t );
+        if ( ( m > 0 ) && ( n > 0 ) ) { LAPACKE_free( a_t ); a_t = NULL; }
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvdq_work", info );
