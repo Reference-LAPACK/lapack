@@ -695,7 +695,8 @@
 *>          If FACT = 'X': 
 *>                       The array dimension is (LDX,N).
 *>             If K = 0, the array is not used.
-*>             If K > 0, the array X stores the K-by-N factor X.
+*>             If K > 0, the array X stores the K-by-N factor X,
+*>                       where K<=N.
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -703,7 +704,7 @@
 *>          LDX is INTEGER
 *>          The leading dimension of the array X.
 *>          If FACT = 'P' or 'C', LDX >= 1.
-*>          If FACT = 'X', LDX >= max(1,M).
+*>          If FACT = 'X', LDX >= max(1,min(M,N)).
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -906,6 +907,7 @@
       NSUB = N
       MFREE = MSUB
       NFREE = NSUB
+      MINMN = MIN( M, N )
 *              
       LQUERY = ( LWORK.EQ.-1 )
       LIQUERY = ( LIWORK.EQ.-1 )
@@ -981,7 +983,7 @@
      $      .OR. ( .NOT.RETURNX .AND. LDQRC.LT.1 ) ) THEN    
             INFO = -22
 *        This is a check for LDX                   
-         ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, M ) )
+         ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, MINMN ) )
      $      .OR. ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN     
             INFO = -24
          END IF
@@ -1002,7 +1004,6 @@
 *     unblocked code.
 *
       IF( INFO.EQ.0 ) THEN
-         MINMN = MIN( M, N )
          IF( MINMN.EQ.0 ) THEN
             LWKMIN = 1
             LWKOPT = 1
