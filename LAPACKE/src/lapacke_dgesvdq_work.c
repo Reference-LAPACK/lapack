@@ -74,6 +74,7 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdq_work)( int matrix_layout, char joba, char 
            ncols_u = 1;
         }
 
+        /* in the case joba == 'e', v_t is used as a workspace */
         if( API_SUFFIX(LAPACKE_lsame)( jobv, 'a' ) ||
                 API_SUFFIX(LAPACKE_lsame)( jobv, 'v' ) ||
                 API_SUFFIX(LAPACKE_lsame)( jobv, 'r' ) ||
