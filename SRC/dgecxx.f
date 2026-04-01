@@ -210,7 +210,7 @@
 *>          = 'C': the routine returns:
 *>                 (1) the column permutation matrix P
 *>                     in the array JPIV. (The first K elements are
-*>                     indicies of the selected columns from
+*>                     indices of the selected columns from
 *>                     the matrix A.)
 *>                 (2) the M-by-K factor C explicitly in the array C.
 *>                 (slower option, more memory space)                          
@@ -218,7 +218,7 @@
 *>          = 'X': the routine returns:
 *>                 (1) the column permutation matrix P in
 *>                     the array JPIV. (The first K elements are
-*>                     indicies of the selected columns from
+*>                     indices of the selected columns from
 *>      the matrix A.)
 *>                 (2) the M-by-K factor C explicitly in the array C.
 *>                 (3) the K-by-N factor X explicitly in the array X.
@@ -726,13 +726,13 @@
 *>          For good performance, LWORK should generally be larger, and
 *>          the user should query the routine for the optimal LWORK.
 *>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the optimal size of the WORK and IWORK arrays,
 *>          returns these values as the first entry of the WORK and IWORK 
 *>          arrays respectively, and no error message related to LWORK
 *>          is issued by XERBLA.
 *>
-*>          Exact minimal workspcae requirements.
+*>          Exact minimal workspace requirements.
 *>          For USESD = 'N' or 'R' and for all FACT: 
 *>              LWORK >= max( 1, 3*N - 1 )
 *>          For USESD = 'C' or 'A':
@@ -802,7 +802,7 @@
 *>          arrays respectively, and no error message related to LIWORK
 *>          is issued by XERBLA.
 *>
-*>          Exact minimal workspcae requirements.
+*>          Exact minimal workspace requirements.
 *>          For USESD = 'N' or 'R':                      
 *>            a) If FACT = 'P': 
 *>              LIWORK >= max( 1, N-1 )
@@ -933,7 +933,7 @@
 *        cannot be larger than MSUB, which is the number of rows 
 *        without MDESEL deselected rows. When the number of
 *        preselected columns NSEL is larger than MSUB,
-*        the factorizationof all preselected NSEL columns cannot be 
+*        the factorization of all preselected NSEL columns cannot be 
 *        completed. MSUB also will be used for LDX argument check
 *        later.
 *
@@ -951,7 +951,7 @@
          IF( USE_SEL_DESEL_COLS ) THEN
 *
 *           Count the number of preselected columns NSEL and the
-*           number of preselected and freecolumns NSUB = N - NDESEL.
+*           number of preselected and free columns NSUB = N - NDESEL.
 *
             DO J = 1, N
                IF( SEL_DESEL_COLS( J ).EQ.1 ) NSEL = NSEL + 1
@@ -1000,7 +1000,7 @@
 *           (1) LQUERY = .TRUE.,
 *           (2) LIQUERY = .TRUE.,
 *           (3) when the routine exits.
-*     Here, LWKMIN and LIWKMIN are the miminum workspaces required for
+*     Here, LWKMIN and LIWKMIN are the minimum workspaces required for
 *     unblocked code.
 *
       IF( INFO.EQ.0 ) THEN
@@ -1011,12 +1011,12 @@
             LIWKOPT = 1
          ELSE
 *
-*           Real minimum workspace computation.
-*           a) LWKMIN = MAX(1, NSUB) for column 2-norm computation           
+*           (Real_wk_part_a) Real minimum workspace computation.
+*           LWKMIN = MAX(1, NSUB) for column 2-norm computation           
 *          
             LWKMIN = MAX( 1, NSUB )
 *               
-*           aa) Initial integer minimum workspace
+*           (Int_wk_part_1) Integer minimum workspace computation.
 *               
             LIWKMIN = 1
 *
@@ -1028,8 +1028,8 @@
 *
             IF( NSEL.GT.0 ) THEN
 *                  
-*              Real minimum workspace computation.
-*              b) LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
+*              (Real_wk_part_b) Real minimum workspace computation.
+*              LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
 *              We can skip counting this workspace as 
 *              LWKMIN = MAX( LWKMIN, NSEL ), since NSEL <= NSUB.                  
 *
@@ -1043,8 +1043,8 @@
 *
                IF( NFREE.GT.0 ) THEN                  
 *
-*                 Real minimum workspace computation.
-*                 c) NOTE: minimum workspace requirement for DORMQR 
+*                 (Real_wk_part_c) Real minimum workspace computation.
+*                 NOTE: minimum workspace requirement for DORMQR 
 *                 LWKMIN = MAX(1, NFREE) is smaller than
 *                 LWKMIN = 3*NFREE-1 for DGEQP3RK and it is
 *                 smaller than NSUB. We can skip counting this 
@@ -1065,8 +1065,8 @@
 
             IF ( MINMNFREE.NE.0 ) THEN
 *                  
-*              Real minimum workspace computation.
-*              d) LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.            
+*              (Real_wk_part_d) Real minimum workspace computation.
+*              LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.            
 *            
                LWKMIN = MAX( LWKMIN, 3*NFREE - 1 )
 *
@@ -1079,15 +1079,15 @@
      $                        WORK, -1, IWORK, IINFO )
                LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *
-*              Integer minimum workspace compuation. 
-*              bb) LIWKMIN =  NFREE-1 for the call of DGEQP3RK.
+*              (Int_wk_part_2) Integer minimum workspace computation. 
+*              LIWKMIN =  NFREE-1 for the call of DGEQP3RK.
 *
                LIWKMIN = MAX( LIWKMIN, NFREE-1 )
 *
                IF( NSEL.NE.0 ) THEN 
 *                  
-*                 Integer minimum workspace compuation.
-*                 cc) NFREE is for DGEQP3RK and NFREE-1 for JPIV ajustment.
+*                 (Int_wk_part_3) Integer minimum workspace computation.
+*                 NFREE is for DGEQP3RK and NFREE-1 for JPIV adjustment.
 *                                      
                   LIWKMIN = MAX( LIWKMIN, NFREE + NFREE-1 )
                END IF
@@ -1096,9 +1096,9 @@
 *
             IF( RETURNC ) THEN
 *
-*              Integer minimum workspace compuation. 
-*              dd) LIWKMIN = N for applying the interchanges for
-*              the columns in the matrix C.
+*              Integer minimum workspace computation. 
+*              (Int_wk_part_3) LIWKMIN = N for applying the interchanges
+*              for the columns in the matrix C.
 *                  
                LIWKMIN = MAX( LIWKMIN, N ) 
             END IF
@@ -1108,9 +1108,9 @@
 *                                  
             IF( RETURNX ) THEN
 *
-*              Real minimum workspace computation.
-*              e) LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
-*                        = max( 1, MINMN + N ) for the call of DGELS.
+*              (Real_wk_part_d) Real minimum workspace computation.
+*              LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
+*                     = max( 1, MINMN + N ) for the call of DGELS.
 *                    
                LWKMIN = MAX( LWKMIN, MINMN + N ) 
 *
@@ -1158,7 +1158,7 @@
          CALL DLACPY( 'F', M, N, A, LDA, C, LDC )
       END IF
 *
-*     If we need to return factor X, copy the original unctouched matrix
+*     If we need to return factor X, copy the original untouched matrix
 *     A into the array X.
 *
       IF( RETURNX ) THEN
@@ -1172,13 +1172,13 @@
 *     ==================================================================
 *
 *     I is the index of DESEL_ROWS array and row I of the matrix A.
-*     MSUB is the number of included rows, i.e rows of the matrix A without
+*     MSUB is the number of included rows, i.e. rows of the matrix A without
 *      deselected rows.
 *     (For each position I, we check if this position is an included row.
 *     If it is an included row, we increment MSUB, which is also a pointer
 *     to the last included row, otherwise we do not change MSUB pointer.
 *     Also, if it is an included row, we move this row from the larger 
-*     (or same) I index into samaller (or same) MSUB index. This way
+*     (or same) I index into smaller (or same) MSUB index. This way
 *     we move all the included rows to the larger index block preserving
 *     included row order. The deselected rows will be at the bottom of the
 *     matrix A.)
@@ -1338,7 +1338,7 @@
 *           Case (a): MSUB < NSEL.
 * 
 *              This is handled at the argument check stage in the
-*              begining of the routine. When the number of preselected
+*              beginning of the routine. When the number of preselected
 *              columns is larger than MSUB, hence the factorization of
 *              all NSEL columns cannot be completed. Return from the 
 *              routine with the error of COL_SEL_DESEL parameter.
@@ -1346,7 +1346,7 @@
 *           Case (b): MSUB = NSEL.
 *           Case (c-1): MSUB > NSEL and NSEL = NSUB.
 *
-*              For cases (b) and (c-1), ther will be no residual
+*              For cases (b) and (c-1), there will be no residual
 *              submatrix  after factorization of NSEL columns 
 *              at step K = NSEL: 
 *              A_sub_resid(NSEL) = A(NSEL+1:MSUB, NSEL+1:NSUB).
@@ -1393,7 +1393,7 @@
          USETOL = .FALSE.
 *
 *        Adjust ABSTOL only if nonnegative. Negative value means disabled.
-*        We need to keep negtive value for later use in criterion
+*        We need to keep negative value for later use in criterion
 *        check.
 *
          IF( ABSTOL.GE.ZERO ) THEN
@@ -1402,8 +1402,8 @@
             USETOL = .TRUE.
          END IF
 *
-*        Ajust RELTOL only if nonnegative. Negative value means disabled.
-*        We need to keep negtive value for later use in criterion
+*        Adjust RELTOL only if nonnegative. Negative value means disabled.
+*        We need to keep negative value for later use in criterion
 *        check.
 *
          IF( RELTOL.GE.ZERO ) THEN
@@ -1416,11 +1416,11 @@
 *        Disable RELTOLFREE when calling DGEQP3RK for free columns 
 *        factorization, since DGEQP3RK expects RELTOLFREE with respect
 *        to the residual matrix A_sub_resid(NSEL), not the whole
-*        original marix A. We can use RELTOL criterion by passing it
+*        original matrix A. We can use RELTOL criterion by passing it
 *        to ABSTOLFREE as RELTOL*MAXC2NRM. We need to make sure that
 *        the negative values of ABSTOL and RELTOL are propagated
 *        to ABSTOLFREE and RELTOLFREE, since negative values means
-*        that the criterionis is disabled.
+*        that the criterion is disabled.
 *
          IF( USETOL ) THEN
             ABSTOLFREE = MAX( ABSTOL, RELTOL * MAXC2NRM )
@@ -1443,7 +1443,7 @@
      $                  RELMAXC2NRMKFREE, JPIV( NSEL+1 ),
      $                  TAU( NSEL+1 ), WORK, LWORK, IWORK, IINFO ) 
 *
-*        Ajust JPIV
+*        Adjust JPIV
 *
          IF( NSEL.NE.0 ) THEN
             DO J = 1, NFREE, 1
@@ -1495,7 +1495,7 @@
 *        Apply interchanges to columns 1:K in the matrix C in place,
 *        which stores the original matrix A.
 *        IWORK(1:N) is used to keep track of original column indices,
-*        when swaping columns.
+*        when swapping columns.
 *
          DO J = 1, N, 1
             IWORK( J ) = J
@@ -1526,8 +1526,8 @@
 *        We need to use C and A to compute X = pseudoinv(C) * A, as
 *        the Linear Least Squares problem C*X = A. We use LLS routine
 *        that uses QR factorization. For that purpose, we store
-*        the matrix C into the arrray QRC, and the matrix A was copied
-*        into the array X at the begining of the routine.  
+*        the matrix C into the array QRC, and the matrix A was copied
+*        into the array X at the beginning of the routine.  
 *
          CALL DLACPY( 'F', M, K, C, LDC, QRC, LDQRC )
 *
