@@ -704,7 +704,8 @@
 *>                   rows comtains the elements whose sum of
 *>                   squres isthe residual sum of squares for
 *>                   the solution in each column of the least
-*>                   squares problem C*X = A for the unknown X).
+*>                   squares problem
+*>                   min|| A - C*X||_F for the unknown X.
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -832,7 +833,7 @@
 *>               triangular R factor of the QR factorization of 
 *>               the matrix C is zero. Consequently, C does not have
 *>               full rank, and X cannot be computed as the least
-*>               squares solution to C*X = A.
+*>               squares solution to the overdetermined system C*X = A.
 *>               (R is stored in the array QRC.)
 *> \endverbatim
 *
@@ -1559,10 +1560,11 @@
       IF( RETURNX .AND. K.GT.0 ) THEN
 *
 *        We need to use C and A to compute X = pseudoinv(C) * A, as
-*        the Linear Least Squares problem C*X = A. We use LLS routine
-*        that uses QR factorization. For that purpose, we store
-*        the matrix C into the array QRC, and the matrix A was copied
-*        into the array X at the beginning of the routine.  
+*        the linear least squares solution to the overdetermined system
+*        C*X = A. We use LLS routin that uses the QR factorization. For 
+*        that purpose, we store the matrix C into the array QRC.
+*        The matrix A was copied into the array X at the beginning
+*        of the routine.  
 *
          CALL DLACPY( 'F', M, K, C, LDC, QRC, LDQRC )
 *
