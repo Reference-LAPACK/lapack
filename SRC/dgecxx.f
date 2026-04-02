@@ -692,11 +692,19 @@
 *>          X is DOUBLE PRECISION array.
 *>          If FACT = 'P' or 'C': The array is not used,
 *>                       the array dimension is >= (1,1).
-*>          If FACT = 'X': 
-*>                       The array dimension is (LDX,N).
-*>             If K = 0, the array is not used.
-*>             If K > 0, the array X stores the K-by-N factor X,
-*>                       where K<=N.
+*>
+*>          If FACT = 'X': The array dimension is (LDX,N).
+*>            1) If K = 0:
+*>                the array X contains a copy of
+*>                the original M-by-N matrix A.
+*>            2) If K > 0:
+*>                a) rows (1:K) of B contain 
+*>                   the K-by-N factor X, where K <= N.
+*>                b) rows (K+1:M) of B. Each column of these
+*>                   rows comtains the elements whose sum of
+*>                   squres isthe residual sum of squares for
+*>                   the solution in each column of the least
+*>                   squares problem C*X = A for the unknown X).
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -704,7 +712,7 @@
 *>          LDX is INTEGER
 *>          The leading dimension of the array X.
 *>          If FACT = 'P' or 'C', LDX >= 1.
-*>          If FACT = 'X', LDX >= max(1,min(M,N)).
+*>          If FACT = 'X', LDX >= max(1,M).
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -875,8 +883,8 @@
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
       INTEGER            I, J, NSUB, MFREE, MSUB, NSEL, JDESEL,
      $                   ITEMP, IINFO, KFREE, KMAXLS, KP0, 
-     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP, JJ,
-     $                   JP_DRAIN, JP_SOURCE, MRESID, NRESID, MINMN,
+     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP,
+     $                   MRESID, NRESID, MINMN,
      $                   MINMNFREE, MDESEL, NDESEL, NFREE
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
      $                   RELTOLFREE, RELMAXC2NRMKFREE, SAFMIN
@@ -983,7 +991,7 @@
      $      .OR. ( .NOT.RETURNX .AND. LDQRC.LT.1 ) ) THEN    
             INFO = -22
 *        This is a check for LDX                   
-         ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, MINMN ) )
+         ELSE IF( ( RETURNX .AND. LDX.LT.MAX( 1, M ) )
      $      .OR. ( .NOT.RETURNX .AND. LDX.LT.1 ) ) THEN     
             INFO = -24
          END IF
@@ -1521,36 +1529,24 @@
 *      
          DO J = 1, K, 1
 *
-*           JP_SOURCE is the index of the original column that
+*           JPIV( J ) is the index of the original column that
 *           should be placed in the index J.
 *
-*           JP_DRAIN is the index of the original column that is 
+*           IWORK( J )is the index of the original column that is 
 *           currently in the index J in C after previous column
 *           interchanges.
 *             
-            JP_SOURCE = JPIV( J )
-            JP_DRAIN = IWORK( J )
-            IF( JP_DRAIN.NE.JP_SOURCE ) THEN
+            IF( IWORK( J ).NE.JPIV( J ) ) THEN
 *
-*              Find the index JP of IWORK(J+1:N) at which IWORK(JP) has 
-*              the same value  as JP_SOURCE.
-*               
-               DO JJ = J+1, N, 1
-                  IF( IWORK( JJ ).EQ.JP_SOURCE ) THEN
-                     JP = JJ
-                  END IF
-               END DO
+*              Swap the current column J with the column JP in C, and 
+*              swap the same columns in IWORK to keep track of
+*              the original column indices. 
 *
-*              Swap current column J with the column JP in C, and swap 
-*              the same columns in IWORK to keep track of the original
-*              column indices. 
-*              
-               IF( J.NE.JP ) THEN
-                  CALL DSWAP( M, C( 1, J ), 1, C( 1, JP ), 1 )
-                  ITEMP = IWORK( J )
-                  IWORK( J ) = IWORK( JP )
-                  IWORK( JP ) = ITEMP
-               END IF
+               JP = IWORK( JPIV( J ) )               
+               CALL DSWAP( M, C( 1, J ), 1, C( 1, JP ), 1 )
+               ITEMP = IWORK( J )
+               IWORK( J ) = IWORK( JP )
+               IWORK( JP ) = ITEMP
             END IF  
          END DO 
 *
