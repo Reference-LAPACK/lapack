@@ -30,7 +30,7 @@
 *       CHARACTER           FACT, USESD
 *       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
 *      $                    LDX, LIWORK, LWORK, M, N
-*       DOUBLE PRECISION    ABSTOL,  MAXC2NRMK, RELTOL, 
+*       DOUBLE PRECISION    ABSTOL, MAXC2NRMK, RELTOL, 
 *      $                    RELMAXC2NRMK, FNRMK
 *       ..
 *       .. Array Arguments ..      
@@ -875,9 +875,9 @@
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
       INTEGER            I, J, NSUB, MFREE, MSUB, NSEL, JDESEL,
      $                   ITEMP, IINFO, KFREE, KMAXLS, KP0, 
-     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP, JJ, JPW,
-     $                   MRESID, NRESID, MINMN, MINMNFREE, MDESEL,
-     $                   NDESEL, NFREE
+     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP, JJ,
+     $                   JP_DRAIN, JP_SOURCE, MRESID, NRESID, MINMN,
+     $                   MINMNFREE, MDESEL, NDESEL, NFREE
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
      $                   RELTOLFREE, RELMAXC2NRMKFREE, SAFMIN
 
@@ -1484,42 +1484,81 @@
       ELSE        
          FNRMK = ZERO                
       END IF
-* 
 *      
 *     ==================================================================
 *
-*     Construct matrix C.
+*     Return the matrix C.
 *   
       IF( RETURNC .AND. K.GT.0 ) THEN
 *
-*        Apply interchanges to columns 1:K in the matrix C in place,
-*        which stores the original matrix A.
-*        IWORK(1:N) is used to keep track of original column indices,
-*        when swapping columns.
+*        Apply interchanges to columns 1:K in the M-by-N array C in place,
+*        which already stores the original M-by-N matrix A. The matrix A
+*        was copied into the array C at the beginning of the routine, 
+*        if RETURNC = .TRUE..
 *
+*        The first K columns of C should be the same as the first 
+*        K columns of A*P, i.e. (A*P)(1:M,1:K) = C(1:M,1:K)
+*
+*        JPIV(1:N) contains final desired interchanges of the colums
+*        in the array C. This means, the column J in C afther all column 
+*        interchanges was the column JPIV(J) in C before the column
+*        interchanges. 
+*         
+*        We use IWORK(1:N) to store the original column indices,
+*        when interchanging columns in C at each step. IWORK(1:K) should
+*        be the same as JPIV(1:K) after all column interchanges.
+
+*        Initialize IWORK(1:N) to 1:N, which are the original column
+*        indices.
+*       
          DO J = 1, N, 1
             IWORK( J ) = J
          END DO
+*
+*        Loop over the columns J = (1:K) in C.
+*        At each step, we want to swap the desired original column JPIV(J)
+*        into position J.
+*      
          DO J = 1, K, 1
-            JP = JPIV( J )
-            IF( J.NE.JP ) THEN
-               DO JJ = J, N, 1
-                  IF( JP.EQ.IWORK( JJ ) ) THEN
-                     JPW = JJ
+*
+*           JP_SOURCE is the index of the original column that
+*           should be placed in the index J.
+*
+*           JP_DRAIN is the index of the original column that is 
+*           currently in the index J in C after previous column
+*           interchanges.
+*             
+            JP_SOURCE = JPIV( J )
+            JP_DRAIN = IWORK( J )
+            IF( JP_DRAIN.NE.JP_SOURCE ) THEN
+*
+*              Find the index JP of IWORK(J+1:N) at which IWORK(JP) has 
+*              the same value  as JP_SOURCE.
+*               
+               DO JJ = J+1, N, 1
+                  IF( IWORK( JJ ).EQ.JP_SOURCE ) THEN
+                     JP = JJ
                   END IF
                END DO
-               IF( J.NE.JPW ) THEN
-                  CALL DSWAP( M, C( 1, J ), 1, C( 1, JPW ), 1 )
+*
+*              Swap current column J with the column JP in C, and swap 
+*              the same columns in IWORK to keep track of the original
+*              column indices. 
+*              
+               IF( J.NE.JP ) THEN
+                  CALL DSWAP( M, C( 1, J ), 1, C( 1, JP ), 1 )
                   ITEMP = IWORK( J )
-                  IWORK( J ) = IWORK( JPW )
-                  IWORK( JPW ) = ITEMP
+                  IWORK( J ) = IWORK( JP )
+                  IWORK( JP ) = ITEMP
                END IF
             END IF  
          END DO 
 *
       END IF
 *
-*     Return matrix X.
+*     ==================================================================      
+*
+*     Return the matrix X.
 *
       IF( RETURNX .AND. K.GT.0 ) THEN
 *
