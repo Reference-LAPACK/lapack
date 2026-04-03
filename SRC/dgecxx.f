@@ -695,17 +695,17 @@
 *>
 *>          If FACT = 'X': The array dimension is (LDX,N).
 *>            1) If K = 0:
-*>                the array X contains a copy of
+*>                the M-by-N array X contains a copy of
 *>                the original M-by-N matrix A.
 *>            2) If K > 0:
-*>                a) rows (1:K) of B contain 
+*>                a) rows (1:K) of the M-by-N array X contain 
 *>                   the K-by-N factor X, where K <= N.
-*>                b) rows (K+1:M) of B. Each column of these
-*>                   rows comtains the elements whose sum of
-*>                   squres isthe residual sum of squares for
-*>                   the solution in each column of the least
-*>                   squares problem
-*>                   min|| A - C*X||_F for the unknown X.
+*>                b) rows (K+1:M) of the M-by-N array X.
+*>                   Each column of these rows comtains the elements
+*>                   whose sum of squares is the residual sum of
+*>                   squares for the solution in each column of
+*>                   the least squares problem.
+*>                   min|| A - C*X ||_F for the unknown X.
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -1531,10 +1531,10 @@
          DO J = 1, K, 1
 *
 *           JPIV( J ) is the index of the original column that
-*           should be placed in the index J.
+*           should be placed in the column index J in C
 *
 *           IWORK( J )is the index of the original column that is 
-*           currently in the index J in C after previous column
+*           currently in the column index J in C after previous column
 *           interchanges.
 *             
             IF( IWORK( J ).NE.JPIV( J ) ) THEN
