@@ -728,7 +728,7 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>
-*>          Minimal LWORK workspace requirement.
+*>          Minimal LWORK workspace general requirement.
 *>          LWORK >= max( 1, 3*N - 1 ) would be sufficient for all values
 *>          of FACT and USESD flags.
 *>
@@ -797,7 +797,8 @@
 *>          The dimension of the array IWORK.
 *>
 *>          Minimal LIWORK workspace general requirement.
-*>          For all FACT and USESD flags, LIWORK >= max( 1, 2*N )
+*>          LIWORK >= max( 1, 2*N ) would be sufficient for all values
+*>          of FACT and USESD flags.
 *>
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
@@ -810,15 +811,15 @@
 *>
 *>          Exact minimal workspace requirements.
 *>          For USESD = 'N' or 'R':                      
-*>            a) If FACT = 'P': 
-*>              LIWORK >= max( 1, N-1 )
-*>            b) If FACT = 'C' or 'X':
-*>              LIWORK >= max( 1, 2N )
+*>           a) If FACT = 'P': 
+*>            LIWORK >= max( 1, N-1 )
+*>           b) If FACT = 'C' or 'X':
+*>            LIWORK >= max( 1, 2N )
 *>          For USESD = 'C' or 'A':
-*>            a) If FACT = 'P':
-*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
-*>            b) If FACT = 'C' or 'X':
-*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, 2*N )
+*>           a) If FACT = 'P':
+*>            LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
+*>           b) If FACT = 'C' or 'X':
+*>            LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, 2*N )
 *> \endverbatim
 *>
 *> \param[out] INFO
