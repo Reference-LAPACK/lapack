@@ -794,13 +794,10 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array LIWORK.
+*>          The dimension of the array IWORK.
 *>
-*>          Minimal LIWORK workspace requirement.
-*>          For USESD = 'N' or 'R': LIWORK >= max( 1, N )
-*>            for all FACT flags.
-*>          For USESD = 'C' or 'A': LIWORK >= max( 1, 2N - 1 ) 
-*>            for all FACT flags.
+*>          Minimal LIWORK workspace general requirement.
+*>          For all FACT and USESD flags, LIWORK >= max( 1, 2*N )
 *>
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
@@ -816,12 +813,12 @@
 *>            a) If FACT = 'P': 
 *>              LIWORK >= max( 1, N-1 )
 *>            b) If FACT = 'C' or 'X':
-*>              LIWORK >= max( 1, N )
+*>              LIWORK >= max( 1, 2N )
 *>          For USESD = 'C' or 'A':
 *>            a) If FACT = 'P':
 *>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
 *>            b) If FACT = 'C' or 'X':
-*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, N )
+*>              LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, 2*N )
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -882,9 +879,9 @@
 *     .. Local Scalars ..
       LOGICAL            LIQUERY, LQUERY, RETURNC, RETURNX,
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
-      INTEGER            I, J, NSUB, MFREE, MSUB, NSEL, JDESEL,
+      INTEGER            I, IP, J, JP, NSUB, MFREE, MSUB, NSEL, JDESEL,
      $                   ITEMP, IINFO, KFREE, KMAXLS, KP0, 
-     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT, JP,
+     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT,
      $                   MRESID, NRESID, MINMN,
      $                   MINMNFREE, MDESEL, NDESEL, NFREE
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
@@ -1106,10 +1103,10 @@
             IF( RETURNC ) THEN
 *
 *              Integer minimum workspace computation. 
-*              (Int_wk_part_3) LIWKMIN = N for applying the interchanges
+*              (Int_wk_part_3) LIWKMIN = 2*N for applying the interchanges
 *              for the columns in the matrix C.
 *                  
-               LIWKMIN = MAX( LIWKMIN, N ) 
+               LIWKMIN = MAX( LIWKMIN, 2*N ) 
             END IF
             LIWKOPT = LIWKMIN 
 *
@@ -1500,55 +1497,84 @@
 *   
       IF( RETURNC .AND. K.GT.0 ) THEN
 *
-*        Apply interchanges to columns 1:K in the M-by-N array C in place,
-*        which already stores the original M-by-N matrix A. The matrix A
-*        was copied into the array C at the beginning of the routine, 
-*        if RETURNC = .TRUE..
-*
-*        The first K columns of C should be the same as the first 
-*        K columns of A*P, i.e. (A*P)(1:M,1:K) = C(1:M,1:K)
-*
-*        JPIV(1:N) contains final desired interchanges of the colums
-*        in the array C. This means, the column J in C afther all column 
-*        interchanges was the column JPIV(J) in C before the column
-*        interchanges. 
-*         
-*        We use IWORK(1:N) to store the original column indices,
-*        when interchanging columns in C at each step. IWORK(1:K) should
-*        be the same as JPIV(1:K) after all column interchanges.
+*        The M-by-N matrix A was copied into the array C at the
+*        beginning of the routine, if RETURNC = .TRUE..
 
-*        Initialize IWORK(1:N) to 1:N, which are the original column
-*        indices.
+*        Apply the column permutaition matrix P stored in JPIV(1:K)
+*        to the columns 1:K in the M-by-N array C in place.
+*        After column interchanges, the first K columns of C should
+*        be the same as the first K columns of A*P, i.e.
+*        (A*P)(1:M,1:K) = C(1:M,1:K).
+*
+*        Index I is the original column index in the
+*        array C before interchanges.
+*        J is the current column index of the original column I at
+*        each step of interchanges.
+*
+*        Auxiliary array IWORK(1:N) stores the inverse P_inv(J)
+*        of the current column permutation matrix P(J) at each
+*        column interchange step J.
+*        C_prev  = P_inv(J) * C_next.
+*        Each IWORK(I) contains J corresponding to I
+*        Initialize IWORK(1:N) as (1:N).
+*
+         DO I = 1, N, 1
+            IWORK( I ) = I
+         END DO 
+*
+*        Auxiliary array IWORK(N+1:2N) stores the current column 
+*        permutation matrix P_(J) at each column interchange step J.
+*        P(J): C_prev * P_(J) = C_next.
+*        Each IWORK(N+J) contains I corresponding to J.
+*        Initialize IWORK(N+1:2*N) as (1:N).
 *       
          DO J = 1, N, 1
-            IWORK( J ) = J
+            IWORK( N + J ) = J
          END DO
 *
-*        Loop over the columns J = (1:K) in C.
-*        At each step, we want to swap the desired original column JPIV(J)
-*        into position J.
+*        Loop over the columns J = ( 1:min( K, N-1 ) ) in C.
 *      
-         DO J = 1, K, 1
+         DO J = 1, min( K, N-1 ), 1
 *
-*           JPIV( J ) is the index of the original column that
-*           should be placed in the column index J in C
+*           IP is the original pivot column, i.e. is the original
+*           column that should be placed in the current column index
+*           J in the array C.
 *
-*           IWORK( J )is the index of the original column that is 
-*           currently in the column index J in C after previous column
-*           interchanges.
+            IP = JPIV( J )
+*            
+*           I is the original column that is 
+*           currently in the column index J in the array C after
+*           previous column interchanges.
+*
+            I = IWORK( N+J )
 *             
-            IF( IWORK( J ).NE.JPIV( J ) ) THEN
+            IF( I.NE.IP ) THEN
 *
-*              Swap the current column J with the column JP in C, and 
-*              swap the same columns in IWORK to keep track of
-*              the original column indices. 
+*              JP is the current index of the original pivot
+*              column IP in the array C after previous column
+*              interchanges.
 *
-               JP = IWORK( JPIV( J ) )               
+               JP = IWORK( IP )
+
+*              Swap the original pivot column IP = JPIV( J ),
+*              at the current pivot index JP = IWORK( IP ) into 
+*              index J.
+*
                CALL DSWAP( M, C( 1, J ), 1, C( 1, JP ), 1 )
-               ITEMP = IWORK( J )
-               IWORK( J ) = IWORK( JP )
-               IWORK( JP ) = ITEMP
-            END IF  
+*
+*              Update the array IWORK(1:N) for the original column 
+*              I that was swaped with IP.
+*
+               IWORK( I ) = IWORK( IP )
+*
+*              Update the array IWORK(N+1:2*N) for the current column 
+*              index JP that was swaped with the current column
+*              index J.
+*
+               IWORK( N + JP ) = IWORK( N + J )                                
+*
+            END IF
+*              
          END DO 
 *
       END IF
