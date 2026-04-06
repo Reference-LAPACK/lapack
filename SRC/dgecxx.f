@@ -814,12 +814,12 @@
 *>           a) If FACT = 'P': 
 *>            LIWORK >= max( 1, N-1 )
 *>           b) If FACT = 'C' or 'X':
-*>            LIWORK >= max( 1, 2N )
+*>            LIWORK >= max( 1, 2*N )
 *>          For USESD = 'C' or 'A':
 *>           a) If FACT = 'P':
 *>            LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free )
 *>           b) If FACT = 'C' or 'X':
-*>            LIWORK >= max( 1, (N_free-1) + min(1,N_sel)*N_free, 2*N )
+*>            LIWORK >= max( 1, 2*N )
 *> \endverbatim
 *>
 *> \param[out] INFO
