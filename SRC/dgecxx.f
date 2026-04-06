@@ -1500,7 +1500,7 @@
 *        The M-by-N matrix A was copied into the array C at the
 *        beginning of the routine, if RETURNC = .TRUE..
 
-*        Apply the column permutaition matrix P stored in JPIV(1:K)
+*        Apply the column permutation matrix P stored in JPIV(1:K)
 *        to the columns 1:K in the M-by-N array C in place.
 *        After column interchanges, the first K columns of C should
 *        be the same as the first K columns of A*P, i.e.
@@ -1513,9 +1513,9 @@
 *
 *        Auxiliary array IWORK(1:N) stores the inverse P_inv(J)
 *        of the current column permutation matrix P(J) at each
-*        column interchange step J.
+*        column interchange step J only for index JJ >= J:N.
 *        C_prev  = P_inv(J) * C_next.
-*        Each IWORK(I) contains J corresponding to I
+*        Each IWORK(I) contains JJ corresponding to I
 *        Initialize IWORK(1:N) as (1:N).
 *
          DO I = 1, N, 1
@@ -1523,9 +1523,10 @@
          END DO 
 *
 *        Auxiliary array IWORK(N+1:2N) stores the current column 
-*        permutation matrix P_(J) at each column interchange step J.
-*        P(J): C_prev * P_(J) = C_next.
-*        Each IWORK(N+J) contains I corresponding to J.
+*        permutation matrix P_(J) at each column interchange step J
+*        only for index JJ >= J:N
+*        C_prev * P_(J) = C_next.
+*        Each IWORK(N+JJ) contains I corresponding to JJ.
 *        Initialize IWORK(N+1:2*N) as (1:N).
 *       
          DO J = 1, N, 1
