@@ -543,7 +543,7 @@
 *>          (K is the factorization rank).
 *>          0 <= K <= min( M_sub, N_sel+KMAXFREE, N_sub ).
 *>
-*>          If K = 0, the arrays A, TAU were not modified.
+*>          If K = 0, the arrays A and TAU were not modified.
 *> \endverbatim
 *>
 *> \param[out] MAXC2NRMK
@@ -641,15 +641,22 @@
 *> \param[out] C
 *> \verbatim
 *>          C is DOUBLE PRECISION array.
+*>
 *>          If FACT = 'P':
 *>             the array is not used, the array dimension >= (1,1).
-*>          If FACT = 'C' or 'X': 
-*>             If USESD = 'N', the array dimension is (LDC,min(M,N)).
-*>             If USESD = 'C' or 'R' or 'A',
-*>                    the array dimension is (LDC,min(M_sub,N_sub)).
 *>
-*>             If K = 0, the array is not used.  
-*>             If K > 0, the array C stores the M-by-K factor C.
+*>          If FACT = 'C' or 'X': 
+*>             the array dimension is (LDC,N).
+*>             If K = 0:
+*>                the M-by-N array X contains a copy of
+*>                the original M-by-N matrix A. 
+*>             If K > 0: 
+*>              a) columns (1:K) of the array C contain 
+*>                 the M-by-K factor C (the selected columns
+*>                 from the original matrix A).
+*>              b) columns (K+1:N) of the array C contain
+*>                 the deselected columns from the original
+*>                 matrix A.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -663,16 +670,14 @@
 *> \param[out] QRC
 *> \verbatim
 *>          QRC is DOUBLE PRECISION array.
+*>
 *>          If FACT = 'P' or 'C': The array is not used, 
-*>                       the array dimension is >= (1,1).
-*>          If FACT = 'X':
-*>             If USESD = 'N',
-*>                    the array dimension is (LDQRC,min(M,N)).
-*>             If USESD = 'C' or 'R' or 'A',
-*>                    the array dimension is (LDQRC,min(M_sub,N_sub)).
+*>                         the array dimension is >= (1,1).
+*>
+*>          If FACT = 'X': the array dimension is (LDQRC,min(M,N)).
 *>
 *>             If K = 0, the array is not used.
-*>             If K > 0, QRC(1:M_sub,1:K) stores two components from
+*>             If K > 0, QRC(1:M,1:K) stores two components from
 *>             the QR factorization of the factor C. The K-by-K
 *>             factor R is stored in the upper triangle. 
 *>             The Householder vectors are stored in the lower
@@ -1505,7 +1510,8 @@
 *        to the columns 1:K in the M-by-N array C in place.
 *        After column interchanges, the first K columns of C should
 *        be the same as the first K columns of A*P, i.e.
-*        (A*P)(1:M,1:K) = C(1:M,1:K).
+*        (A*P)(1:M,1:K) = C(1:M,1:K). The complexity of this algorithm
+*        is min(K,N-1). 
 *
 *        Index I is the original column index in the
 *        array C before interchanges.
@@ -1514,7 +1520,8 @@
 *
 *        Auxiliary array IWORK(1:N) stores the inverse P_inv(J)
 *        of the current column permutation matrix P(J) at each
-*        column interchange step J only for index JJ >= J:N.
+*        column interchange step J only for the array
+*        values >= J:N.
 *        C_prev  = P_inv(J) * C_next.
 *        Each IWORK(I) contains JJ corresponding to I
 *        Initialize IWORK(1:N) as (1:N).
@@ -1525,7 +1532,7 @@
 *
 *        Auxiliary array IWORK(N+1:2N) stores the current column 
 *        permutation matrix P_(J) at each column interchange step J
-*        only for index JJ >= J:N
+*        only for the array index >= J:N.
 *        C_prev * P_(J) = C_next.
 *        Each IWORK(N+JJ) contains I corresponding to JJ.
 *        Initialize IWORK(N+1:2*N) as (1:N).
@@ -1536,7 +1543,7 @@
 *
 *        Loop over the columns J = ( 1:min( K, N-1 ) ) in C.
 *      
-         DO J = 1, min( K, N-1 ), 1
+         DO J = 1, MIN( K, N-1 ), 1
 *
 *           IP is the original pivot column, i.e. is the original
 *           column that should be placed in the current column index
