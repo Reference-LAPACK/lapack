@@ -86,7 +86,7 @@
 !.....external subroutines (BLAS and LAPACK)
       EXTERNAL DAXPY,  DGEEV, DGEMM, DGEMV, DLACPY, DLASCL
       EXTERNAL ZGEEV,  ZGEMV, ZLASCL
-      EXTERNAL ZLARNV, ZLATMR
+      EXTERNAL ZLARNV, ZLATMR, XLAENV
       EXTERNAL ZAXPY,  ZGEMM
 !.....external subroutines DMD package, part 1
 !     subroutines under test
@@ -112,6 +112,8 @@
                           ! be performed with xGEDMDQ.
       WANTQ = 'Q'
       WANTR = 'R'
+      ! Initialize the divide-and-conquer cutoff used by xGESDD/xBDSDC.
+      CALL XLAENV( 9, 25 )
 !.................................................................................
 
       EPS = DLAMCH( 'P' )  ! machine precision DP

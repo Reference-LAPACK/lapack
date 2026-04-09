@@ -82,7 +82,7 @@
       LOGICAL :: TEST_QRDMD
 
 !..... external subroutines (BLAS and LAPACK)
-      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL
+      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV
 !.....external subroutines DMD package
 !     subroutines under test
       EXTERNAL CGEDMD, CGEDMDQ
@@ -112,6 +112,8 @@
 
       WANTQ = 'Q'
       WANTR = 'R'
+      ! Initialize the divide-and-conquer cutoff used by xGESDD/xBDSDC.
+      CALL XLAENV( 9, 25 )
 !.................................................................................
 
       EPS = SLAMCH( 'P' )  ! machine precision WP
