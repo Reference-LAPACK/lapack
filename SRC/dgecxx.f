@@ -840,6 +840,16 @@
 *>               (R is stored in the array QRC.)
 *> \endverbatim
 *
+*> \par Contributors:
+*  ==================
+*>
+*> \verbatim
+*>
+*>  April 2026, Igor Kozachenko, James Demmel,
+*>              EECS Department,
+*>              University of California, Berkeley, USA.
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *
