@@ -931,15 +931,17 @@
       NFREE = NSUB
       MINMN = MIN( M, N )
 *
-      LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1)
+      LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       RETURNX = LSAME( FACT, 'X' )
       RETURNC = LSAME( FACT, 'C' ) .OR. RETURNX
 *
-      USE_DESEL_ROWS = LSAME( USESD, 'R' ) .OR. LSAME( USESD, 'A' )
-      USE_SEL_DESEL_COLS = LSAME( USESD, 'C') .OR. LSAME( USESD, 'A' )
+      USE_DESEL_ROWS = LSAME( USESD, 'R' )
+     $                 .OR. LSAME( USESD, 'A' )
+      USE_SEL_DESEL_COLS = LSAME( USESD, 'C' )
+     $                 .OR. LSAME( USESD, 'A' )
 *
-      IF ( .NOT.(RETURNC .OR. LSAME( FACT, 'P') ) ) THEN
+      IF( .NOT.( RETURNC .OR. LSAME( FACT, 'P') ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( USE_DESEL_ROWS .OR. USE_SEL_DESEL_COLS
      $       .OR. LSAME( USESD, 'N' ) ) ) THEN
