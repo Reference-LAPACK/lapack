@@ -147,8 +147,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E0, ZERO = 0.0E0 )
+      REAL               ZERO, ONE, TWO
+      PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0, TWO = 2.0E0 )
       INTEGER            MAX_ITER
       PARAMETER          ( MAX_ITER = 100 )
 *     ..
@@ -231,14 +231,14 @@
          END DO
       END IF
       DO J = 1, N
-         S( J ) = 1.0E0 / S( J )
+         S( J ) = ONE / S( J )
       END DO
 
-      TOL = ONE / SQRT( 2.0E0 * REAL( N ) )
+      TOL = ONE / SQRT( TWO * REAL( N ) )
 
       DO ITER = 1, MAX_ITER
-         SCALE = 0.0E0
-         SUMSQ = 0.0E0
+         SCALE = ZERO
+         SUMSQ = ZERO
 *        beta = |A|s
          DO I = 1, N
             WORK( I ) = ZERO
@@ -262,13 +262,13 @@
          END IF
 
 *        avg = s^T beta / n
-         AVG = 0.0E0
+         AVG = ZERO
          DO I = 1, N
             AVG = AVG + REAL( S( I )*WORK( I ) )
          END DO
          AVG = AVG / REAL( N )
 
-         STD = 0.0E0
+         STD = ZERO
          DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
