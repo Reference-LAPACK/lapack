@@ -351,10 +351,9 @@
 *     .. Parameters ..
       INTEGER            MAXITR
       PARAMETER          ( MAXITR = 6 )
-      DOUBLE PRECISION   HUNDRED, MEIGHTH, ONE, TEN, TWO, ZERO
+      DOUBLE PRECISION   HUNDRED, MEIGHTH, ZERO, ONE, TEN
       PARAMETER          ( HUNDRED = 100.0D0, MEIGHTH = -0.125D0,
-     $                     ONE = 1.0D0, TEN = 10.0D0, TWO = 2.0D0,
-     $                     ZERO = 0.0D0 )
+     $                     ZERO = 0.0D0, ONE = 1.0D0, TEN = 10.0D0 )
       DOUBLE PRECISION   NEGONE
       PARAMETER          ( NEGONE = -1.0D0 )
       DOUBLE PRECISION   PIOVER2
