@@ -112,7 +112,7 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = ONE / DBLE( I+J )
    10    CONTINUE
    20 CONTINUE
       OK = .TRUE.
