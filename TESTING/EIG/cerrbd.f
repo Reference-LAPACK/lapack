@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 4, LW = NMAX )
+      REAL               ONE
+      PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
@@ -108,7 +110,7 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1. / REAL( I+J )
+            A( I, J ) = ONE / REAL( I+J )
    10    CONTINUE
    20 CONTINUE
       OK = .TRUE.
