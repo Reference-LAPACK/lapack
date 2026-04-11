@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX
       PARAMETER          ( NMAX = 2 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, INFO, J
@@ -101,11 +103,11 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.0 / FLOAT( I+J )
-            C( I, J ) = 1.0 / FLOAT( I+J )
-            T( I, J ) = 1.0 / FLOAT( I+J )
+            A( I, J ) = ONE / FLOAT( I+J )
+            C( I, J ) = ONE / FLOAT( I+J )
+            T( I, J ) = ONE / FLOAT( I+J )
          END DO
-         W( J ) = 0.0
+         W( J ) = ZERO
       END DO
       OK = .TRUE.
 *
