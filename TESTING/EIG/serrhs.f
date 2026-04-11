@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 3, LW = ( NMAX+2 )*( NMAX+2 )+NMAX )
+      REAL               ONE
+      PARAMETER          ( ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
