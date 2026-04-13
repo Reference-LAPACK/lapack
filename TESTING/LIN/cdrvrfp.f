@@ -276,8 +276,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 4 )
 *     ..

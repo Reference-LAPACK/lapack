@@ -138,8 +138,10 @@
 *     ..
 *     .. Parameters ..
       COMPLEX            ZERO, ONE
+      REAL               TWO
       PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ) ,
      +                     ONE  = ( 1.0E+0, 0.0E+0 ) )
+      PARAMETER          ( TWO  = 2.0E+0 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 1 )
 *     ..
@@ -287,7 +289,7 @@
                                     DO J = 1, NA
                                        DO I = 1, J
                                           A( I, J ) = A( I, J ) /
-     +                                            ( 2.0 * A( J, J ) )
+     +                                            ( TWO * A( J, J ) )
                                        END DO
                                     END DO
                                  END IF
@@ -310,7 +312,7 @@
                                     DO I = 1, NA
                                        DO J = 1, I
                                           A( I, J ) = A( I, J ) /
-     +                                            ( 2.0 * A( I, I ) )
+     +                                            ( TWO * A( I, I ) )
                                        END DO
                                     END DO
                                  END IF
