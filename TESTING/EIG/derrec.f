@@ -68,8 +68,8 @@
 *
 *     .. Parameters ..
       INTEGER            NMAX
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( NMAX = 4, ONE = 1.0D0, ZERO = 0.0D0 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( NMAX = 4, ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IFST, ILST, INFO, J, M, NT
