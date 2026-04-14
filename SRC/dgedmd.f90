@@ -115,6 +115,8 @@
 !>    'Y' :: The data snapshots matrices X and Y are multiplied
 !>           by a diagonal matrix D so that Y*D has unit
 !>           nonzero columns (in the Euclidean 2-norm)
+!>           If all columns of Y are zero, the procedure returns
+!>           with INFO = -10.
 !>    'N' :: No data scaling.
 !>    \endverbatim
 !.....
@@ -501,7 +503,8 @@
 !>    \verbatim
 !>    INFO (output) INTEGER
 !>    -i < 0 :: On entry, the i-th argument had an
-!>              illegal value
+!>              illegal value. If JOBS == 'Y' and all columns
+!>              of Y are zero, INFO = -10.
 !>       = 0 :: Successful return.
 !>       = 1 :: Void input. Quick exit (M=0 or N=0).
 !>       = 2 :: The SVD computation of X did not converge.
@@ -854,6 +857,7 @@
           ! The columns of Y will be normalized.
           ! To prevent overflows, the column norms of Y are
           ! carefully computed using DLASSQ.
+          K = 0
           DO i = 1, N
             !WORK(i) = DNRM2( M, Y(1,i), 1 )
             SSUM  = ONE
@@ -889,8 +893,17 @@
                END IF
             ELSE
                WORK(i) = ZERO
+               K = K + 1
             END IF
          END DO
+         IF ( K == N ) THEN
+         ! All columns of Y are zero. Return error code -10.
+         ! (the 10th input variable had an illegal value)
+         K = 0
+         INFO = -10
+         CALL XERBLA('DGEDMD',-INFO)
+         RETURN
+         END IF
          DO i = 1, N
 !           Now, apply the same scaling to the columns of X.
             IF ( WORK(i) >  ZERO ) THEN
