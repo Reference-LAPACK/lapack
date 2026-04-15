@@ -111,22 +111,22 @@ endmacro()
 
 if(BUILD_SINGLE)
 add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
-add_eig_executable(xdmdeigtsts ${SDMDEIGTST})
+add_eig_executable(xdmdeigtsts ${SDMDEIGTST} ${AEIGTST})
 endif()
 
 if(BUILD_COMPLEX)
 add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
-add_eig_executable(xdmdeigtstc ${CDMDEIGTST})
+add_eig_executable(xdmdeigtstc ${CDMDEIGTST} ${AEIGTST})
 endif()
 
 
 if(BUILD_DOUBLE)
 add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
-add_eig_executable(xdmdeigtstd ${DDMDEIGTST})
+add_eig_executable(xdmdeigtstd ${DDMDEIGTST} ${AEIGTST})
 endif()
 
 if(BUILD_COMPLEX16)
 add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST})
-add_eig_executable(xdmdeigtstz ${ZDMDEIGTST})
+add_eig_executable(xdmdeigtstz ${ZDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_wq_zrwork test_wq_rwork.f)
 endif()
