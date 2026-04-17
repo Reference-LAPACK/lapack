@@ -20,7 +20,6 @@ install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
 #  - conda config --set auto_update_conda false
   - conda install -c conda-forge --yes --quiet flang flang-rt_win-64 jom cmake python ninja
-  - where python3.exe
   - dir "C:\Program Files (x86)\Microsoft Visual Studio"
   - call "C:\Program Files (x86)\Microsoft Visual Studio\15.5\VC\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
