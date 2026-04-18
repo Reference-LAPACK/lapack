@@ -118,7 +118,7 @@
 !>           by a diagonal matrix D so that Y*D has unit
 !>           nonzero columns (in the Euclidean 2-norm)
 !>           If all columns of Y are zero, the procedure returns
-!>           with INFO = -10.
+!>           with INFO = 5.
 !>    'N' :: No data scaling.
 !>    \endverbatim
 !.....
@@ -469,8 +469,7 @@
 !>    \verbatim
 !>    INFO (output) INTEGER
 !>    -i < 0 :: On entry, the i-th argument had an
-!>              illegal value. If JOBS == 'Y' and all columns
-!>              of Y are zero, INFO = -10.
+!>              illegal value.
 !>       = 0 :: Successful return.
 !>       = 1 :: Void input. Quick exit (M=0 or N=0).
 !>       = 2 :: The SVD computation of X did not converge.
@@ -485,6 +484,10 @@
 !>              to zero if JOBS=='C'. The computation proceeds
 !>              with original or modified data and warning
 !>              flag is set with INFO=4.
+!>       = 5 :: If JOBS == 'Y' and all columns of Y are zero,
+!>              the procedure returns early with K = 0. This is
+!>              reported as a degenerate input diagnostic, not
+!>              as an illegal argument.
 !>    \endverbatim
 !
 !  Authors:
@@ -876,11 +879,9 @@
             END IF
          END DO
          IF ( K == N ) THEN
-         ! All columns of Y are zero. Return error code -10.
-         ! (the 10th input variable had an illegal value)
+         ! All columns of Y are zero. Return diagnostic code 5.
          K = 0
-         INFO = -10
-         CALL XERBLA('ZGEDMD',-INFO)
+         INFO = 5
          RETURN
          END IF
          DO i = 1, N
