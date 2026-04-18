@@ -75,7 +75,8 @@
       INTEGER :: i, iJOBREF, iJOBZ, iSCALE, INFO, j,     &
                  NFAIL, NFAIL_AU, NFAIL_F_QR, NFAIL_REZ,     &
                  NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL, NFAILQ_TOTAL,  &
-                 NFAIL_Z_XV,  MODE, MODEL, MODER, WHTSVD
+                 NFAIL_Z_XV, NFAIL_INFO, NFAILQ_INFO, MODE, &
+                 MODEL, MODER, WHTSVD
       INTEGER :: iNRNK, iWHTSVD,  K_traj, LWMINOPT
       CHARACTER :: GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
                    SCALE, RESIDS, WANTQ, WANTR
@@ -123,6 +124,8 @@
       NFAIL_Z_XV = 0
       NFAIL_F_QR = 0
       NFAIL_AU   = 0
+      NFAIL_INFO = 0
+      NFAILQ_INFO = 0
       NFAIL_SVDIFF = 0
       NFAIL_TOTAL  = 0
       NFAILQ_TOTAL = 0
@@ -272,6 +275,63 @@
 
       DEALLOCATE( CEIGSA )
 !........................................................................
+
+      IF ( K_traj == 1 .AND. MODE == 1 ) THEN
+      X(1:M,1:N) = X0(1:M,1:N)
+      Y(1:M,1:N) = CZERO
+      CALL CGEDMD( 'Y', 'N', 'N', 'N', 1, M, N, X, LDX, Y, &
+                LDY, -1, TOL, K, CEIGS, Z, LDZ, RES,       &
+                AU, LDAU, W, LDW, S, LDS, CDUMMY, -1,      &
+                WDUMMY, -1, IDUMMY, -1, INFO )
+      LCWORK = INT(CDUMMY(1))
+      ALLOCATE(CWORK(LCWORK))
+      LIWORK = IDUMMY(1)
+      ALLOCATE(IWORK(LIWORK))
+      LWORK = INT(WDUMMY(1))
+      ALLOCATE(WORK(LWORK))
+      K = -1
+      CALL CGEDMD( 'Y', 'N', 'N', 'N', 1, M, N, X, LDX, Y, &
+                   LDY, -1, TOL, K, CEIGS, Z, LDZ, RES,    &
+                   AU, LDAU, W, LDW, S, LDS, CWORK,        &
+                   LCWORK, WORK, LWORK, IWORK, LIWORK,     &
+                   INFO )
+      IF ( INFO /= 5 .OR. K /= 0 ) THEN
+          WRITE(*,*) 'CGEDMD all-zero Y diagnostic test FAILED.'
+          WRITE(*,*) 'Expected INFO = 5 and K = 0, got ', INFO, K
+          NFAIL_INFO = NFAIL_INFO + 1
+      END IF
+      DEALLOCATE(WORK)
+      DEALLOCATE(IWORK)
+      DEALLOCATE(CWORK)
+
+      F(1:M,1:N+1) = CZERO
+      F(1:M,1) = X0(1:M,1)
+      CALL CGEDMDQ( 'Y', 'N', 'N', WANTQ, WANTR, 'N', 1,   &
+                    M, N+1, F, LDF, X, LDX, Y, LDY, -1,   &
+                    TOL, KQ, CEIGS, Z, LDZ, RES, AU,      &
+                    LDAU, W, LDW, S, LDS, CDUMMY, -1,     &
+                    WDUMMY, -1, IDUMMY, -1, INFO )
+      LCWORK = INT(CDUMMY(1))
+      ALLOCATE(CWORK(LCWORK))
+      LIWORK = IDUMMY(1)
+      ALLOCATE(IWORK(LIWORK))
+      LWORK = INT(WDUMMY(1))
+      ALLOCATE(WORK(LWORK))
+      KQ = -1
+      CALL CGEDMDQ( 'Y', 'N', 'N', WANTQ, WANTR, 'N', 1,   &
+                    M, N+1, F, LDF, X, LDX, Y, LDY, -1,   &
+                    TOL, KQ, CEIGS, Z, LDZ, RES, AU,      &
+                    LDAU, W, LDW, S, LDS, CWORK, LCWORK,  &
+                    WORK, LWORK, IWORK, LIWORK, INFO )
+      IF ( INFO /= 5 .OR. KQ /= 0 ) THEN
+          WRITE(*,*) 'CGEDMDQ all-zero Y diagnostic test FAILED.'
+          WRITE(*,*) 'Expected INFO = 5 and K = 0, got ', INFO, KQ
+          NFAILQ_INFO = NFAILQ_INFO + 1
+      END IF
+      DEALLOCATE(WORK)
+      DEALLOCATE(IWORK)
+      DEALLOCATE(CWORK)
+      END IF
 
       DO iJOBZ = 1, 4
 
@@ -666,6 +726,14 @@
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
       END IF
+
+      IF ( NFAIL_INFO == 0 ) THEN
+        WRITE(*,*) '>>>> All-zero Y diagnostic test PASSED.'
+      ELSE
+        WRITE(*,*) 'All-zero Y diagnostic test FAILED ', &
+                   NFAIL_INFO, ' time(s)'
+        NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_INFO
+      END IF
       IF ( NFAIL_TOTAL == 0 ) THEN
         WRITE(*,*) '>>>> CGEDMD :: ALL TESTS PASSED.'
       ELSE
@@ -706,6 +774,14 @@
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
+      END IF
+
+      IF ( NFAILQ_INFO == 0 ) THEN
+        WRITE(*,*) '>>>> All-zero Y diagnostic test PASSED.'
+      ELSE
+        WRITE(*,*) 'All-zero Y diagnostic test FAILED ', &
+                   NFAILQ_INFO, ' time(s)'
+        NFAILQ_TOTAL = NFAILQ_TOTAL + NFAILQ_INFO
       END IF
 
       IF ( NFAILQ_TOTAL == 0 ) THEN

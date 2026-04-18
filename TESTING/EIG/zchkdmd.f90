@@ -76,7 +76,8 @@
       INTEGER :: i, iJOBREF, iJOBZ, iSCALE, INFO, j,     &
                  NFAIL, NFAIL_AU, NFAIL_F_QR, NFAIL_REZ,     &
                  NFAIL_REZQ, NFAIL_SVDIFF, NFAIL_TOTAL, NFAILQ_TOTAL,  &
-                 NFAIL_Z_XV,  MODE, MODEL, MODER, WHTSVD,     &
+                 NFAIL_Z_XV, NFAIL_INFO, NFAILQ_INFO, MODE, &
+                 MODEL, MODER, WHTSVD,     &
                  WHTSVDsp
       INTEGER :: iNRNK, iWHTSVD,  K_TRAJ, LWMINOPT
       CHARACTER :: GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
@@ -123,6 +124,8 @@
       NFAIL_Z_XV = 0
       NFAIL_F_QR = 0
       NFAIL_AU   = 0
+      NFAIL_INFO = 0
+      NFAILQ_INFO = 0
       NFAIL_SVDIFF = 0
       NFAIL_TOTAL  = 0
       NFAILQ_TOTAL = 0
@@ -276,6 +279,65 @@
 
       DEALLOCATE( ZEIGSA )
 !........................................................................
+
+      IF ( K_TRAJ == 1 .AND. MODE == 1 ) THEN
+      ZX(1:M,1:N) = ZX0(1:M,1:N)
+      ZY(1:M,1:N) = ZZERO
+      CALL ZGEDMD( 'Y', 'N', 'N', 'N', 1, M, N, ZX, LDX,   &
+                   ZY, LDY, -1, TOL, K, ZEIGS, ZZ, LDZ,    &
+                   RES, ZAU, LDAU, ZW, LDW, ZS, LDS,       &
+                   ZDUMMY, -1, WDUMMY, -1, IDUMMY, -1,     &
+                   INFO )
+      LZWORK = INT(ZDUMMY(1))
+      ALLOCATE(ZWORK(LZWORK))
+      LIWORK = IDUMMY(1)
+      ALLOCATE(IWORK(LIWORK))
+      LWORK = INT(WDUMMY(1))
+      ALLOCATE(WORK(LWORK))
+      K = -1
+      CALL ZGEDMD( 'Y', 'N', 'N', 'N', 1, M, N, ZX, LDX,   &
+                   ZY, LDY, -1, TOL, K, ZEIGS, ZZ, LDZ,    &
+                   RES, ZAU, LDAU, ZW, LDW, ZS, LDS,       &
+                   ZWORK, LZWORK, WORK, LWORK, IWORK,      &
+                   LIWORK, INFO )
+      IF ( INFO /= 5 .OR. K /= 0 ) THEN
+          WRITE(*,*) 'ZGEDMD all-zero Y diagnostic test FAILED.'
+          WRITE(*,*) 'Expected INFO = 5 and K = 0, got ', INFO, K
+          NFAIL_INFO = NFAIL_INFO + 1
+      END IF
+      DEALLOCATE(WORK)
+      DEALLOCATE(IWORK)
+      DEALLOCATE(ZWORK)
+
+      ZF(1:M,1:N+1) = ZZERO
+      ZF(1:M,1) = ZX0(1:M,1)
+      CALL ZGEDMDQ( 'Y', 'N', 'N', WANTQ, WANTR, 'N', 1,   &
+                    M, N+1, ZF, LDF, ZX, LDX, ZY, LDY,     &
+                    -1, TOL, KQ, ZEIGS, ZZ, LDZ, RES,      &
+                    ZAU, LDAU, ZW, LDW, ZS, LDS, ZDUMMY,   &
+                    -1, WDUMMY, -1, IDUMMY, -1, INFO )
+      LZWORK = INT(ZDUMMY(1))
+      ALLOCATE(ZWORK(LZWORK))
+      LIWORK = IDUMMY(1)
+      ALLOCATE(IWORK(LIWORK))
+      LWORK = INT(WDUMMY(1))
+      ALLOCATE(WORK(LWORK))
+      KQ = -1
+      CALL ZGEDMDQ( 'Y', 'N', 'N', WANTQ, WANTR, 'N', 1,   &
+                    M, N+1, ZF, LDF, ZX, LDX, ZY, LDY,     &
+                    -1, TOL, KQ, ZEIGS, ZZ, LDZ, RES,      &
+                    ZAU, LDAU, ZW, LDW, ZS, LDS, ZWORK,    &
+                    LZWORK, WORK, LWORK, IWORK, LIWORK,    &
+                    INFO )
+      IF ( INFO /= 5 .OR. KQ /= 0 ) THEN
+          WRITE(*,*) 'ZGEDMDQ all-zero Y diagnostic test FAILED.'
+          WRITE(*,*) 'Expected INFO = 5 and K = 0, got ', INFO, KQ
+          NFAILQ_INFO = NFAILQ_INFO + 1
+      END IF
+      DEALLOCATE(WORK)
+      DEALLOCATE(IWORK)
+      DEALLOCATE(ZWORK)
+      END IF
 
       DO iJOBZ = 1, 4
 
@@ -678,12 +740,20 @@
       END IF
 
       IF ( NFAIL_REZ == 0 ) THEN
-        WRITE(*,*) '>>>> Residual computation test PASSED.'
+          WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
         WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZ, 'time(s)'
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZ
-        WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
-        NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
+          WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
+          NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
+      END IF
+
+      IF ( NFAIL_INFO == 0 ) THEN
+          WRITE(*,*) '>>>> All-zero Y diagnostic test PASSED.'
+      ELSE
+          WRITE(*,*) 'All-zero Y diagnostic test FAILED ', &
+                     NFAIL_INFO, ' time(s)'
+          NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_INFO
       END IF
 
       IF ( NFAIL_TOTAL == 0 ) THEN
@@ -728,6 +798,14 @@
           WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
           WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
           NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
+      END IF
+
+      IF ( NFAILQ_INFO == 0 ) THEN
+          WRITE(*,*) '>>>> All-zero Y diagnostic test PASSED.'
+      ELSE
+          WRITE(*,*) 'All-zero Y diagnostic test FAILED ', &
+                     NFAILQ_INFO, ' time(s)'
+          NFAILQ_TOTAL = NFAILQ_TOTAL + NFAILQ_INFO
       END IF
 
       IF ( NFAILQ_TOTAL == 0 ) THEN
