@@ -296,8 +296,12 @@
      $                   VSR( LDVSR, * ), WORK( * )
 *     ..
 *     .. Function Arguments ..
-      LOGICAL            SELCTG
-      EXTERNAL           SELCTG
+      INTERFACE
+        LOGICAL FUNCTION SELCTG_PROC_TYPE(ALPHAR, ALPHAI, BETA) BIND(C)
+          DOUBLE PRECISION ALPHAR, ALPHAI, BETA
+        END FUNCTION SELCTG_PROC_TYPE
+      END INTERFACE
+      PROCEDURE(SELCTG_PROC_TYPE) :: SELCTG
 *     ..
 *
 *  =====================================================================
