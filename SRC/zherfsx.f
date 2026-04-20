@@ -461,7 +461,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANHE, ZLA_HERCOND_X,
      $                   ZLA_HERCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_HERCOND_X, ZLA_HERCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_HERCOND_X,
+     $                   ZLA_HERCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..

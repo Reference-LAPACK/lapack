@@ -453,7 +453,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           SLAMCH, CLANHE, CLA_PORCOND_X,
      $                   CLA_PORCOND_C
-      REAL               SLAMCH, CLANHE, CLA_PORCOND_X, CLA_PORCOND_C
+      REAL               SLAMCH, CLANHE, CLA_PORCOND_X,
+     $                   CLA_PORCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..
