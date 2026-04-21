@@ -291,7 +291,7 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
    dgels.f  dgelst.f dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f
-   dgeqp3.f dgeqp3rk.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
+   dgeqp3.f dgeqp3rk.f dgecxx.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
@@ -546,11 +546,13 @@ set_target_properties(
 if(BUILD_INDEX64_EXT_API)
   if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
     message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
+    message(STATUS "    (The value of INDEX64_EXT_API_COMPILERS is: ${INDEX64_EXT_API_COMPILERS})")
     # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
     set(BUILD_INDEX64_EXT_API OFF)
     set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
   else()
     cmake_minimum_required(VERSION 3.18)
+    message(STATUS "Build Index-64 API as extended API with _64 suffix.")
     set(SOURCES_64)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
     file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
