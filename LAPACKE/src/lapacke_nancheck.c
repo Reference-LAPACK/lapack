@@ -33,6 +33,7 @@
 #include "lapacke_utils.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 static int nancheck_flag = -1;
 
@@ -42,11 +43,11 @@ void LAPACKE_set_nancheck( int flag )
 }
 
 typedef struct {
-  int found;
-  char *value;
-} _lapacke_env_var;
+    int found;
+    char *value;
+} lapacke_env_var;
 
-static inline const _lapacke_env_var LAPACKE_getenv(const char *var_name)
+static inline lapacke_env_var LAPACKE_getenv(const char *var_name)
 {
     size_t var_length = 0;
 
@@ -54,12 +55,12 @@ static inline const _lapacke_env_var LAPACKE_getenv(const char *var_name)
 #if defined(_WIN32)
     errno_t result = getenv_s( &var_length, NULL, 0, var_name );
     if ( result != 0 || var_length == 0 ) {
-        return (_lapacke_env_var){ 0, NULL };
+        return (lapacke_env_var){ 0, NULL };
     }
 #else
     const char *env = getenv( var_name );
     if ( env == NULL ) {
-        return (_lapacke_env_var){ 0, NULL };
+        return (lapacke_env_var){ 0, NULL };
     }
     var_length = strlen( env ) + 1;
 #endif
@@ -67,7 +68,7 @@ static inline const _lapacke_env_var LAPACKE_getenv(const char *var_name)
     /* Allocate memory for the environment variable value */
     char *value = (char *)LAPACKE_malloc( var_length );
     if ( value == NULL ) {
-        return (_lapacke_env_var){ 0, NULL };
+        return (lapacke_env_var){ 0, NULL };
     }
 
     /* Get the value of the environment variable */
@@ -75,16 +76,16 @@ static inline const _lapacke_env_var LAPACKE_getenv(const char *var_name)
     result = getenv_s( &var_length, value, var_length, var_name );
     if ( result != 0 ) {
         LAPACKE_free( value );
-        return (_lapacke_env_var){ 0, NULL };
+        return (lapacke_env_var){ 0, NULL };
     }
 #else
     memcpy( value, env, var_length );
 #endif
 
-    return (_lapacke_env_var){ 1, value };
+    return (lapacke_env_var){ 1, value };
 }
 
-static inline void LAPACKE_freenv(_lapacke_env_var *var)
+static inline void LAPACKE_freenv(lapacke_env_var *var)
 {
     if ( var->found && var->value != NULL ) {
         LAPACKE_free( var->value );
@@ -100,7 +101,7 @@ int LAPACKE_get_nancheck( )
     }
 
     /* Check environment variable, once and only once */
-    _lapacke_env_var lapacke_nancheck = LAPACKE_getenv( "LAPACKE_NANCHECK" );
+    lapacke_env_var lapacke_nancheck = LAPACKE_getenv( "LAPACKE_NANCHECK" );
     if ( !lapacke_nancheck.found ) {
         /* By default, NaN checking is enabled */
         nancheck_flag = 1;
