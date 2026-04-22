@@ -26,43 +26,45 @@ macro(add_cblas_test output input target)
   endif()
 endmacro()
 
+macro(configure_cblas_test_target target test_sources)
+  add_executable(${target} ${test_sources})
+
+  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
+    target_compile_definitions(${target} PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
+  endif()
+
+  if(WIN32 AND BUILD_SHARED_LIBS)
+    target_compile_definitions(${target} PRIVATE CBLAS_DLL_IMPORTS)
+  endif()
+
+  target_link_libraries(${target} PRIVATE ${CBLASLIB})
+  target_include_directories(${target} PRIVATE ${LAPACK_BINARY_DIR}/test_include)
+endmacro()
 
 # Object files for single precision real
-set(STESTL1O c_sblas1.c)
-set(STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
-set(STESTL3O c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
+set(STESTL1O c_sblat1.f c_sblas1.c)
+set(STESTL2O c_sblat2.f c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
+set(STESTL3O c_sblat3.f c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for double precision real
-set(DTESTL1O c_dblas1.c)
-set(DTESTL2O c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
-set(DTESTL3O c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
+set(DTESTL1O c_dblat1.f c_dblas1.c)
+set(DTESTL2O c_dblat2.f c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
+set(DTESTL3O c_dblat3.f c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for single precision complex
 set(CTESTL1O c_cblat1.f c_cblas1.c)
-set(CTESTL2O c_cblas2.c c_c2chke.c auxiliary.c c_xerbla.c)
-set(CTESTL3O c_cblas3.c c_c3chke.c auxiliary.c c_xerbla.c)
+set(CTESTL2O c_cblat2.f c_cblas2.c c_c2chke.c auxiliary.c c_xerbla.c)
+set(CTESTL3O c_cblat3.f c_cblas3.c c_c3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for double precision complex
-set(ZTESTL1O c_zblas1.c)
-set(ZTESTL2O c_zblas2.c c_z2chke.c auxiliary.c c_xerbla.c)
-set(ZTESTL3O c_zblas3.c c_z3chke.c auxiliary.c c_xerbla.c)
-
-
+set(ZTESTL1O c_zblat1.f c_zblas1.c)
+set(ZTESTL2O c_zblat2.f c_zblas2.c c_z2chke.c auxiliary.c c_xerbla.c)
+set(ZTESTL3O c_zblat3.f c_zblas3.c c_z3chke.c auxiliary.c c_xerbla.c)
 
 if(BUILD_SINGLE)
-  add_executable(xscblat1 c_sblat1.f ${STESTL1O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xscblat2 c_sblat2.f ${STESTL2O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xscblat3 c_sblat3.f ${STESTL3O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xscblat1 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xscblat2 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xscblat3 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-  endif()
-
-  target_link_libraries(xscblat1 ${CBLASLIB})
-  target_link_libraries(xscblat2 ${CBLASLIB})
-  target_link_libraries(xscblat3 ${CBLASLIB})
+  configure_cblas_test_target(xscblat1 "${STESTL1O}")
+  configure_cblas_test_target(xscblat2 "${STESTL2O}")
+  configure_cblas_test_target(xscblat3 "${STESTL3O}")
 
   add_cblas_test(stest1.out ""   xscblat1)
   add_cblas_test(stest2.out sin2 xscblat2)
@@ -70,19 +72,9 @@ if(BUILD_SINGLE)
 endif()
 
 if(BUILD_DOUBLE)
-  add_executable(xdcblat1 c_dblat1.f ${DTESTL1O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xdcblat2 c_dblat2.f ${DTESTL2O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xdcblat3 c_dblat3.f ${DTESTL3O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xdcblat1 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xdcblat2 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xdcblat3 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-  endif()
-
-  target_link_libraries(xdcblat1 ${CBLASLIB})
-  target_link_libraries(xdcblat2 ${CBLASLIB})
-  target_link_libraries(xdcblat3 ${CBLASLIB})
+  configure_cblas_test_target(xdcblat1 "${DTESTL1O}")
+  configure_cblas_test_target(xdcblat2 "${DTESTL2O}")
+  configure_cblas_test_target(xdcblat3 "${DTESTL3O}")
 
   add_cblas_test(dtest1.out ""   xdcblat1)
   add_cblas_test(dtest2.out din2 xdcblat2)
@@ -90,19 +82,9 @@ if(BUILD_DOUBLE)
 endif()
 
 if(BUILD_COMPLEX)
-  add_executable(xccblat1 c_cblat1.f ${CTESTL1O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xccblat2 c_cblat2.f ${CTESTL2O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xccblat3 c_cblat3.f ${CTESTL3O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xccblat1 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xccblat2 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xccblat3 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-  endif()
-
-  target_link_libraries(xccblat1 ${CBLASLIB} ${BLAS_LIBRARIES})
-  target_link_libraries(xccblat2 ${CBLASLIB})
-  target_link_libraries(xccblat3 ${CBLASLIB})
+  configure_cblas_test_target(xccblat1 "${CTESTL1O}")
+  configure_cblas_test_target(xccblat2 "${CTESTL2O}")
+  configure_cblas_test_target(xccblat3 "${CTESTL3O}")
 
   add_cblas_test(ctest1.out ""   xccblat1)
   add_cblas_test(ctest2.out cin2 xccblat2)
@@ -110,19 +92,9 @@ if(BUILD_COMPLEX)
 endif()
 
 if(BUILD_COMPLEX16)
-  add_executable(xzcblat1 c_zblat1.f ${ZTESTL1O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xzcblat2 c_zblat2.f ${ZTESTL2O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-  add_executable(xzcblat3 c_zblat3.f ${ZTESTL3O} ${LAPACK_BINARY_DIR}/test_include/cblas_test.h)
-
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xzcblat1 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xzcblat2 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(xzcblat3 PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
-  endif()
-
-  target_link_libraries(xzcblat1 ${CBLASLIB})
-  target_link_libraries(xzcblat2 ${CBLASLIB})
-  target_link_libraries(xzcblat3 ${CBLASLIB})
+  configure_cblas_test_target(xzcblat1 "${ZTESTL1O}")
+  configure_cblas_test_target(xzcblat2 "${ZTESTL2O}")
+  configure_cblas_test_target(xzcblat3 "${ZTESTL3O}")
 
   add_cblas_test(ztest1.out ""   xzcblat1)
   add_cblas_test(ztest2.out zin2 xzcblat2)
