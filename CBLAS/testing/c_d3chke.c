@@ -39,7 +39,6 @@ void F77_d3chke(char *rout
           C[2] = {0.0,0.0},
           ALPHA=0.0, BETA=0.0;
    extern CBLAS_INT cblas_info, cblas_lerr, cblas_ok;
-   extern int RowMajorStrg;
    extern char *cblas_rout;
 
 #ifndef HAS_ATTRIBUTE_WEAK_SUPPORT

@@ -41,7 +41,6 @@ void F77_z2chke(char *rout
           BETA[2]  = {0.0,0.0},
           RALPHA = 0.0;
    extern CBLAS_INT cblas_info, cblas_lerr, cblas_ok;
-   extern int RowMajorStrg;
    extern char *cblas_rout;
 
 #ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
