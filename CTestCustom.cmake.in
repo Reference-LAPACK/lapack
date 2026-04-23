@@ -47,9 +47,9 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
 )
 
 # Only run post test if suitable python interpreter was found
-set(Python3_EXECUTABLE @Python3_EXECUTABLE@)
+set(Python3_EXECUTABLE "@Python3_EXECUTABLE@")
 set(LAPACK_TESTING_USE_PYTHON  @LAPACK_TESTING_USE_PYTHON@)
 if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-  set(CTEST_CUSTOM_POST_TEST "${Python3_EXECUTABLE} ./lapack_testing.py -s -d TESTING")
+  set(CTEST_CUSTOM_POST_TEST "\"${Python3_EXECUTABLE}\" ./lapack_testing.py -s -d TESTING")
 endif()
 
