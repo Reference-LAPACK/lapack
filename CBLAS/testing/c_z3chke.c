@@ -47,6 +47,13 @@ void F77_z3chke(char *rout
    cblas_lerr = PASSED ;
 
 #ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
+   #ifdef CBLAS_DLL_IMPORTS
+   // Since Windows does not support weak symbols, and the trick below doesn't
+   // work for shared libraries on Windows, we skip the xerbla tests here.
+   printf("***** WARNING: Skipping xerbla tests since weak symbols are not supported on Windows *****\n");
+   return;
+   #endif
+
    if (link_xerbla) /* call these first to link */
    {
       cblas_xerbla(cblas_info,cblas_rout,"");
