@@ -43,7 +43,7 @@ lapack_complex_double lapack_make_complex_double( double re, double im ) {
     z = re + im * I;
 #elif defined(LAPACK_COMPLEX_CPP)
     z = std::complex<double>(re,im);
-#elif _MSC_VER
+#elif defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
     z = _Cbuild(re, im);
 #else /* C99 is default */
     z = re + im*I;
