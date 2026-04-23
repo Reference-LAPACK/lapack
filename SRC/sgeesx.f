@@ -295,7 +295,7 @@
 *     ..
 *     .. Function Arguments ..
       INTERFACE
-        LOGICAL FUNCTION SELECT_PROC_TYPE(WR, WI) BIND(C)
+        LOGICAL FUNCTION SELECT_PROC_TYPE(WR, WI)
           REAL WR, WI
         END FUNCTION SELECT_PROC_TYPE
       END INTERFACE

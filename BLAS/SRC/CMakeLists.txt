@@ -129,7 +129,7 @@ if(BUILD_INDEX64_EXT_API)
   set_target_properties(${BLASLIB}_64_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
   #Add _64 suffix to all Fortran functions via macros
   foreach(F IN LISTS SOURCES_64_F)
-    if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+    if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" OR CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
       set_source_files_properties(${F} PROPERTIES COMPILE_FLAGS "-fpp")
     else()
       set_source_files_properties(${F} PROPERTIES COMPILE_FLAGS "-cpp")

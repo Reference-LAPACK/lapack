@@ -47,7 +47,8 @@
 #else
 #include <complex>
 #endif
-#if _MSC_VER
+
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
 #define lapack_complex_float    _Fcomplex
 #else
 #define lapack_complex_float    float _Complex
@@ -69,7 +70,8 @@
 #else
 #include <complex>
 #endif
-#if _MSC_VER
+
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
 #define lapack_complex_double   _Dcomplex
 #else
 #define lapack_complex_double   double _Complex
