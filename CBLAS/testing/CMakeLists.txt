@@ -38,7 +38,6 @@ macro(configure_cblas_test_target target test_sources)
   endif()
 
   target_link_libraries(${target} PRIVATE ${CBLASLIB})
-  target_include_directories(${target} PRIVATE ${LAPACK_BINARY_DIR}/test_include)
 endmacro()
 
 # Object files for single precision real
