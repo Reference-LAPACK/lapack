@@ -243,14 +243,10 @@
 *
 *        Compute the workspace requirements
 *
-         IF( M.EQ.0 .OR. N.EQ.0 .OR. K.EQ.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M,
-     $                N,
-     $                               K, -1 ) )
-            LWKOPT = NW*NB + TSIZE
-         END IF
+        NB = MIN( NBMAX, ILAENV( 1, 'CUNMLQ', SIDE // TRANS, M, N,
+     $             K,
+     $        -1 ) )
+         LWKOPT = NW*NB + TSIZE
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       END IF
 *
@@ -264,6 +260,7 @@
 *     Quick return if possible
 *
       IF( M.EQ.0 .OR. N.EQ.0 .OR. K.EQ.0 ) THEN
+         WORK( 1 ) = 1
          RETURN
       END IF
 *
