@@ -118,7 +118,6 @@ endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 add_library(${CBLASLIB}_obj OBJECT ${SOURCES})
-set_target_properties(${CBLASLIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if(HAS_ATTRIBUTE_WEAK_SUPPORT)
   target_compile_definitions(${CBLASLIB}_obj PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
 endif()
@@ -141,7 +140,6 @@ if(BUILD_INDEX64_EXT_API)
   add_library(${CBLASLIB}_64_cobj OBJECT ${SOURCES_64_C})
   add_library(${CBLASLIB}_64_fobj OBJECT ${SOURCES_64_F})
   set_target_properties(${CBLASLIB}_64_cobj ${CBLASLIB}_64_fobj PROPERTIES
-          POSITION_INDEPENDENT_CODE ON
           Fortran_PREPROCESS ON
           LINKER_LANGUAGE C)
   target_compile_options(${CBLASLIB}_64_cobj PRIVATE -DWeirdNEC -DCBLAS_API64)
@@ -173,7 +171,6 @@ set_target_properties(
   LINKER_LANGUAGE C
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
-  POSITION_INDEPENDENT_CODE ON
   )
 
 target_include_directories(${CBLASLIB} PUBLIC

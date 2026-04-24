@@ -524,14 +524,12 @@ list(REMOVE_DUPLICATES SOURCES)
 add_library(const_mod_file OBJECT ${CONSTMOD})
 set_target_properties(
   const_mod_file PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
   Fortran_PREPROCESS ON
   )
 
 add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(
   mod_files PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
   Fortran_PREPROCESS ON
   )
 
@@ -539,7 +537,6 @@ add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
 target_link_libraries(${LAPACKLIB}_obj mod_files)
 set_target_properties(
   ${LAPACKLIB}_obj PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
   Fortran_PREPROCESS ON
   )
 
@@ -568,7 +565,6 @@ if(BUILD_INDEX64_EXT_API)
     target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
     set_target_properties(
       ${LAPACKLIB}_64_obj PROPERTIES
-      POSITION_INDEPENDENT_CODE ON
       Fortran_PREPROCESS ON
     )
   endif()

@@ -50,7 +50,6 @@ list(REMOVE_DUPLICATES SOURCES)
 add_library(${TMGLIB}_obj OBJECT ${SOURCES})
 set_target_properties(
   ${TMGLIB}_obj PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
   Fortran_PREPROCESS ON
   )
 
@@ -77,7 +76,6 @@ if(BUILD_INDEX64_EXT_API)
     target_compile_options(${TMGLIB}_64_obj PRIVATE "${FOPT_ILP64}" -DMATGEN_64)
     set_target_properties(
     ${TMGLIB}_64_obj PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
     Fortran_PREPROCESS ON
   )
   endif()

@@ -20,7 +20,10 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
 # Export all symbols on Windows when building shared libraries
-SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
+# Enable position independent code for all targets by default
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)

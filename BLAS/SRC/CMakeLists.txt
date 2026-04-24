@@ -116,7 +116,6 @@ endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 add_library(${BLASLIB}_obj OBJECT ${SOURCES})
-set_target_properties(${BLASLIB}_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(BUILD_INDEX64_EXT_API)
   set(SOURCES_64_F)
@@ -126,7 +125,6 @@ if(BUILD_INDEX64_EXT_API)
   file(GLOB SOURCES_64_F ${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_obj/*.f*)
   add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64_F})
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
-  set_target_properties(${BLASLIB}_64_obj PROPERTIES POSITION_INDEPENDENT_CODE ON)
   #Add _64 suffix to all Fortran functions via macros
   foreach(F IN LISTS SOURCES_64_F)
     if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" OR CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
@@ -164,7 +162,6 @@ set_target_properties(
   ${BLASLIB} PROPERTIES
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
-  POSITION_INDEPENDENT_CODE ON
   )
 lapack_install_library(${BLASLIB})
 
