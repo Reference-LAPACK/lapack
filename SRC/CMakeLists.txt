@@ -527,9 +527,11 @@ set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
 add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
 
-add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
-target_link_libraries(${LAPACKLIB}_obj mod_files)
-set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+if(BUILD_DEFAULT_API)
+  add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
+  target_link_libraries(${LAPACKLIB}_obj mod_files)
+  set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+endif()
 
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
@@ -543,7 +545,7 @@ endif()
 
 add_library(${LAPACKLIB}
   $<TARGET_OBJECTS:mod_files>
-  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_obj>>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
 
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
