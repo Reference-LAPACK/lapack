@@ -1,4 +1,4 @@
-*> \brief \b ZUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by cgeqlf (unblocked algorithm).
+*> \brief \b ZUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by zgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2L generates an m by n complex matrix Q with orthonormal columns,
+*> ZUNG2L generates an m-by-n complex matrix Q with orthonormal columns,
 *> which is defined as the last n columns of a product of k elementary
 *> reflectors of order m
 *>
@@ -87,7 +87,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N)
+*>          WORK is COMPLEX*16 array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,14 +126,14 @@
 *
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
+      PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, II, J, L
+      INTEGER            J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF1L, ZSCAL
+      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,36 +159,44 @@
 *
 *     Quick return if possible
 *
-      IF( N.LE.0 )
-     $   RETURN
+*     Note that if M=0, then N must also be 0, so it's sufficient to only test
+*     N=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-*     Initialise columns 1:n-k to columns of the unit matrix
+      IF( N.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL ZLASET('ALL', M, N, ZERO, ZERO, A, LDA)
+         DO J = 1, N
+            A(M-N+J,J) = ONE
+         END DO
+         RETURN
+      END IF
 *
-      DO 20 J = 1, N - K
-         DO 10 L = 1, M
-            A( L, J ) = ZERO
-   10    CONTINUE
-         A( M-N+J, J ) = ONE
-   20 CONTINUE
+*     Apply H(1) to the assumed identity matrix from the left
 *
-      DO 40 I = 1, K
-         II = N - K + I
+      CALL ZLARF0C2('Identity', 'Left', 'Backward', 'Columnwise',
+     $      M-K+1, N-K, TAU(1), A(1, N-K+1), 1, A, LDA)
 *
-*        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left
+*     Apply H(1) to v_1
 *
-         A( M-N+II, II ) = ONE
-         CALL ZLARF1L( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ),
-     $                 A,
-     $                 LDA, WORK )
-         CALL ZSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
-         A( M-N+II, II ) = ONE - TAU( I )
+      CALL ZSCAL(M-K, -TAU(1), A(1, N-K+1), 1)
+      A(M-K+1,N-K+1) = ONE - TAU(1)
+      IF( K.GT.1 ) THEN
+         DO J = 2, K
 *
-*        Set A(m-k+i+1:m,n-k+i) to zero
+*           Apply H(j) to the leading n-k+j-1 columns of Q from the left
 *
-         DO 30 L = M - N + II + 1, M
-            A( L, II ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+            CALL ZLARF0C2('General', 'Left', 'Backward',
+     $         'Columnwise', M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1,
+     $         A, LDA)
+*
+*           Apply H(j) to v_j
+*
+            CALL ZSCAL(M-K+J-1, -TAU(J), A(1,N-K+J), 1)
+            A(M-K+J,N-K+J) = ONE - TAU(J)
+         END DO
+      END IF
       RETURN
 *
 *     End of ZUNG2L

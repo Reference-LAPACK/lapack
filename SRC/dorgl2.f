@@ -86,7 +86,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (M)
+*>          WORK is DOUBLE PRECISION array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -128,10 +128,10 @@
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, J, L
+      INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF1F, DSCAL, XERBLA
+      EXTERNAL           DLARF0C2, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -157,41 +157,45 @@
 *
 *     Quick return if possible
 *
-      IF( M.LE.0 )
-     $   RETURN
+*     Note that if N=0, then M must also be 0, so it's sufficient to only test
+*     M=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-      IF( K.LT.M ) THEN
-*
-*        Initialise rows k+1:m to rows of the unit matrix
-*
-         DO 20 J = 1, N
-            DO 10 L = K + 1, M
-               A( L, J ) = ZERO
-   10       CONTINUE
-            IF( J.GT.K .AND. J.LE.M )
-     $         A( J, J ) = ONE
-   20    CONTINUE
+      IF( M.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL DLASET('All', M, N, ZERO, ONE, A, LDA)
+         RETURN
       END IF
 *
-      DO 40 I = K, 1, -1
+*     Apply the first (kth) reflector to the assumed identity matrix from
+*     the right. Note that if m=k, we do nothing
 *
-*        Apply H(i) to A(i:m,i:n) from the right
+      IF( M.GT.K ) THEN
+         CALL DLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+     $      M-K, N-K+1, TAU(K), A(K,K+1), LDA, A(K+1,K), LDA)
+      END IF
 *
-         IF( I.LT.N ) THEN
-            IF( I.LT.M ) THEN
-               CALL DLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                     TAU( I ), A( I+1, I ), LDA, WORK )
-            END IF
-            CALL DSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
-         END IF
-         A( I, I ) = ONE - TAU( I )
+*     Now we compute the 1st non-zero row of H, which is given by
+*     A(k,k:n) = (e_k - tau*v_k)'
+*     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
-*        Set A(i,1:i-1) to zero
+      A(K,K) = ONE - TAU(K)
+      IF( N.GT.K ) THEN
+         CALL DSCAL(N-K, -TAU(K), A(K,K+1), LDA)
+      END IF
+      IF( K.GT.1 ) THEN
+         DO I = K-1, 1, -1
+            CALL DLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+     $         M-I, N-I+1, TAU(I), A(I,I+1), LDA, A(I+1,I), LDA)
 *
-         DO 30 L = 1, I - 1
-            A( I, L ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+*           A(i,i:n) = (e_i - tau*v_i)'
+*           Analagous to orglk for n=1 (but T is not used as it is a scalar)
+*
+            A(I,I) = ONE - TAU(I)
+            CALL DSCAL(N-I, -TAU(I), A(I,I+1), LDA)
+         END DO
+      END IF
       RETURN
 *
 *     End of DORGL2

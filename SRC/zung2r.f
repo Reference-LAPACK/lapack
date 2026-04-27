@@ -1,4 +1,4 @@
-*> \brief \b ZUNG2R
+*> \brief \b ZUNG2R generates all or part of the unitary matrix Q from a QR factorization determined by zgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2R generates an m by n complex matrix Q with orthonormal columns,
+*> ZUNG2R generates an m-by-n complex matrix Q with orthonormal columns,
 *> which is defined as the first n columns of a product of k elementary
 *> reflectors of order m
 *>
@@ -69,7 +69,7 @@
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
 *>          returned by ZGEQRF in the first k columns of its array
 *>          argument A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -87,7 +87,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N)
+*>          WORK is COMPLEX*16 array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,14 +126,14 @@
 *
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
+      PARAMETER          ( ONE = (1.0D+0, 0.0D+0),
+     $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, J, L
+      INTEGER            J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF1F, ZSCAL
+      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,36 +159,49 @@
 *
 *     Quick return if possible
 *
-      IF( N.LE.0 )
-     $   RETURN
+*     Note that if M=0, then N must also be 0, so it's sufficient to only test
+*     N=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-*     Initialise columns k+1:n to columns of the unit matrix
+      IF( N.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL ZLASET('All', M, N, ZERO, ONE, A, LDA)
+         RETURN
+      END IF
 *
-      DO 20 J = K + 1, N
-         DO 10 L = 1, M
-            A( L, J ) = ZERO
-   10    CONTINUE
-         A( J, J ) = ONE
-   20 CONTINUE
+*     Apply the first (kth) reflector to the assumed identity matrix from
+*     the left. Note that if n=k, we do nothing
 *
-      DO 40 I = K, 1, -1
+      IF( N.GT.K ) THEN
+         CALL ZLARF0C2('Identity', 'Left', 'Forward', 'Columnwise',
+     $      M-K+1, N-K, TAU(K), A(K+1,K), 1, A(K,K+1), LDA)
+      END IF
 *
-*        Apply H(i) to A(i:m,i:n) from the left
+*     Now we compute the 1st non-zero column of H, which is given by
+*     A(k:m,k) = e_k - tau*v_k
+*     Analagous to orgkr for n=1 (but T is not used as it is a scalar)
 *
-         IF( I.LT.N ) THEN
-            CALL ZLARF1F( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
-     $                    A( I, I+1 ), LDA, WORK )
-         END IF
-         IF( I.LT.M )
-     $      CALL ZSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )
-         A( I, I ) = ONE - TAU( I )
+      A(K,K) = ONE - TAU(K)
+      IF( M.GT.K ) THEN
+         CALL ZSCAL(M-K, -TAU(K), A(K+1,K), 1)
+      END IF
 *
-*        Set A(1:i-1,i) to zero
+*     Now we apply columns 1:k-1 of V to A
 *
-         DO 30 L = 1, I - 1
-            A( L, I ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+      IF( K.GT.1 ) THEN
+         DO J = K-1, 1, -1
+           CALL ZLARF0C2('General', 'Left', 'Forward',
+     $       'Columnwise',  M-J+1, N-J, TAU(J), A(J+1,J), 1,
+     $       A(J,J+1), LDA)
+*
+*          A(i:m,i) = e_i - tau*v_i
+*          Analagous to orgkr for n=1 (but T is not used as it is a scalar)
+*
+           A(J,J) = ONE - TAU(J)
+           CALL ZSCAL(M-J, -TAU(J), A(J+1,J), 1)
+         END DO
+      END IF
       RETURN
 *
 *     End of ZUNG2R
