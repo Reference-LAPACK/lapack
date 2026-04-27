@@ -68,8 +68,8 @@
 *
 *     .. Parameters ..
       INTEGER            NMAX
-      REAL               ONE, ZERO
-      PARAMETER          ( NMAX = 4, ONE = 1.0E0, ZERO = 0.0E0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( NMAX = 4, ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IFST, ILST, INFO, J, M, NT

@@ -139,7 +139,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      LOGICAL            LSAME
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZPTTS2
@@ -152,8 +153,8 @@
 *     Test the input arguments.
 *
       INFO = 0
-      UPPER = ( UPLO.EQ.'U' .OR. UPLO.EQ.'u' )
-      IF( .NOT.UPPER .AND. .NOT.( UPLO.EQ.'L' .OR. UPLO.EQ.'l' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
