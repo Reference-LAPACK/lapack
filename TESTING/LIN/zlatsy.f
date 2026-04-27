@@ -114,7 +114,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZLARND
-      EXTERNAL           ZLARND
+      LOGICAL            LSAME
+      EXTERNAL           ZLARND, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -129,7 +130,7 @@
 *
 *     UPLO = 'U':  Upper triangular storage
 *
-      IF( UPLO.EQ.'U' ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Fill the upper triangle of the matrix with zeros.
 *
