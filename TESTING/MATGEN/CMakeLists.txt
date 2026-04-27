@@ -47,12 +47,14 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${TMGLIB}_obj OBJECT ${SOURCES})
-set_target_properties(${TMGLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+if(BUILD_DEFAULT_API)
+  add_library(${TMGLIB}_obj OBJECT ${SOURCES})
+  set_target_properties(${TMGLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+endif()
 
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
-  generate_64bit_suffixed_sources( ${TMGLIB} SOURCES SOURCES_64)
+  generate_64bit_suffixed_sources(${TMGLIB} SOURCES SOURCES_64)
 
   add_library(${TMGLIB}_64_obj OBJECT ${SOURCES_64})
   target_compile_options(${TMGLIB}_64_obj PRIVATE "${FOPT_ILP64}")
@@ -60,7 +62,7 @@ if(BUILD_INDEX64_EXT_API)
 endif()
 
 add_library(${TMGLIB}
-  $<TARGET_OBJECTS:${TMGLIB}_obj>
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${TMGLIB}_obj>>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${TMGLIB}_64_obj>>)
 
 set_target_properties(

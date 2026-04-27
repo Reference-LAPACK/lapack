@@ -1,7 +1,10 @@
 # This Makefile compiles the CBLAS routines
 
+# Sources that are shared accross all APIs
+set(COMMON_SOURCES cblas_globals.c)
+
 # Error handling routines for level 2 & 3
-set(ERRHAND cblas_globals.c cblas_xerbla.c xerbla.c)
+set(ERRHAND cblas_xerbla.c xerbla.c)
 
 #
 #
@@ -132,23 +135,21 @@ endif()
 list(REMOVE_DUPLICATES SOURCES_C)
 list(REMOVE_DUPLICATES SOURCES_F)
 
-add_library(${CBLASLIB}_obj OBJECT ${SOURCES_C} ${SOURCES_F})
-if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-  target_compile_definitions(${CBLASLIB}_obj PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:HAS_ATTRIBUTE_WEAK_SUPPORT>")
+if(BUILD_DEFAULT_API)
+  add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES} ${SOURCES_C} ${SOURCES_F})
+  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
+    target_compile_definitions(${CBLASLIB}_obj PRIVATE
+      "$<$<COMPILE_LANGUAGE:C>:HAS_ATTRIBUTE_WEAK_SUPPORT>")
+  endif()
+else()
+  add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES})
 endif()
 
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
-
-  # Define list of C files for 64bit interface
-  set(SOURCES_64_C ${SOURCES_C})
-  list(REMOVE_ITEM SOURCES_64_C cblas_globals.c)
-
-  # Generate list of Fortran files for 64bit interface
   generate_64bit_suffixed_sources(${CBLASLIB} SOURCES_F SOURCES_64_F)
 
-  add_library(${CBLASLIB}_64_obj OBJECT ${SOURCES_64_C} ${SOURCES_64_F})
+  add_library(${CBLASLIB}_64_obj OBJECT ${SOURCES_C} ${SOURCES_64_F})
   target_compile_definitions(${CBLASLIB}_64_obj PRIVATE
     "$<$<COMPILE_LANGUAGE:C>:WeirdNEC>" "$<$<COMPILE_LANGUAGE:C>:CBLAS_API64>")
   target_compile_options(${CBLASLIB}_64_obj PRIVATE

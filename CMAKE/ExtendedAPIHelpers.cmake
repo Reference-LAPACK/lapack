@@ -27,8 +27,6 @@ function(generate_64bit_suffixed_sources target source_list generated_sources)
       continue()
     endif()
 
-    message("${EXTENDED_API_GENERATOR}")
-
     add_custom_command(
       OUTPUT "${output_file}"
       COMMAND

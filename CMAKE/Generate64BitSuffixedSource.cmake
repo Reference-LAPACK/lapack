@@ -73,46 +73,46 @@ function(_normalize_fortran_statement_fragment line result)
   set(${result} "${fragment}" PARENT_SCOPE)
 endfunction()
 
-# Create one logical Fortran statement by appending all continuation lines.
-function(_collect_logical_fortran_line line_list_name start_index logical_line next_index)
-  list(GET ${line_list_name} ${start_index} current_line)
-  _normalize_fortran_statement_fragment("${current_line}" merged_line)
-
-  list(LENGTH ${line_list_name} raw_line_count)
-  set(last_line "${current_line}")
-  math(EXPR current_index "${start_index} + 1")
-
-  while(current_index LESS raw_line_count)
-    list(GET ${line_list_name} ${current_index} continuation_line)
-    _is_fortran_comment_line("${continuation_line}" continuation_is_comment)
-    if(continuation_is_comment)
-      break()
-    endif()
-
-    # Check for continuation based on the form of the Fortran source
-    if(_rewrite_source_is_free_form)
-      if("${last_line}" MATCHES "&[ \t]*$" OR "${continuation_line}" MATCHES "^[ \t]*&")
-        _normalize_fortran_statement_fragment("${continuation_line}" continuation_fragment)
-      else()
-        break()
-      endif()
+# Pop one physical source line from a newline-delimited string. Do not use a
+# CMake list here: source comments may contain unmatched brackets, which changes
+# how list semicolons are interpreted.
+macro(_pop_source_line remaining_source line result)
+  if("${${remaining_source}}" STREQUAL "")
+    set(${line} "")
+    set(${result} FALSE)
+  else()
+    string(FIND "${${remaining_source}}" "\n" _source_line_newline_index)
+    if(_source_line_newline_index EQUAL -1)
+      set(${line} "${${remaining_source}}")
+      set(${remaining_source} "")
     else()
-      _is_fixed_form_continuation_line("${continuation_line}" is_fixed_form_continuation)
-      if(is_fixed_form_continuation)
-        _normalize_fortran_statement_fragment("${continuation_line}" continuation_fragment)
-      else()
-        break()
-      endif()
+      string(SUBSTRING "${${remaining_source}}" 0
+        ${_source_line_newline_index} ${line})
+      math(EXPR _source_line_next_index
+        "${_source_line_newline_index} + 1")
+      string(SUBSTRING "${${remaining_source}}"
+        ${_source_line_next_index} -1 ${remaining_source})
     endif()
+    set(${result} TRUE)
+  endif()
+endmacro()
 
-    string(APPEND merged_line " ${continuation_fragment}")
-    set(last_line "${continuation_line}")
-    math(EXPR current_index "${current_index} + 1")
-  endwhile()
-
-  set(${logical_line} "${merged_line}" PARENT_SCOPE)
-  set(${next_index} ${current_index} PARENT_SCOPE)
-endfunction()
+# Peek at the next physical line without consuming it.
+macro(_peek_source_line remaining_source line result)
+  if("${${remaining_source}}" STREQUAL "")
+    set(${line} "")
+    set(${result} FALSE)
+  else()
+    string(FIND "${${remaining_source}}" "\n" _source_line_newline_index)
+    if(_source_line_newline_index EQUAL -1)
+      set(${line} "${${remaining_source}}")
+    else()
+      string(SUBSTRING "${${remaining_source}}" 0
+        ${_source_line_newline_index} ${line})
+    endif()
+    set(${result} TRUE)
+  endif()
+endmacro()
 
 # Extract function/subroutine names from one logical Fortran statement.
 function(_extract_symbols statement_text result)
@@ -120,8 +120,9 @@ function(_extract_symbols statement_text result)
 
   if("${statement_text}" MATCHES "(external|EXTERNAL)")
     string(REGEX REPLACE
-      "^[a-zA-Z0-9_ *]*(external|EXTERNAL)[ ]*" ""
+      "^.*(external|EXTERNAL)[ \t]*(::)?[ \t]*" ""
       external_names "${statement_text}")
+    string(REGEX REPLACE "^[ \t]*::[ \t]*" "" external_names "${external_names}")
     string(REPLACE "," ";" external_names "${external_names}")
     foreach(external_name IN LISTS external_names)
       string(STRIP "${external_name}" external_name)
@@ -143,6 +144,110 @@ function(_extract_symbols statement_text result)
   set(${result} ${symbols} PARENT_SCOPE)
 endfunction()
 
+# Find a safe fixed-form split point at or before the 72-column limit.
+function(_find_fixed_form_split line result)
+  set(split_pos -1)
+  set(space_pos -1)
+  set(index 71)
+
+  while(index GREATER 6)
+    string(SUBSTRING "${line}" ${index} 1 current_char)
+    if(current_char STREQUAL ",")
+      math(EXPR split_pos "${index} + 1")
+      break()
+    elseif(space_pos LESS 0 AND current_char MATCHES "[ \t]")
+      set(space_pos ${index})
+    endif()
+    math(EXPR index "${index} - 1")
+  endwhile()
+
+  if(split_pos LESS 0 AND NOT space_pos LESS 0)
+    set(split_pos ${space_pos})
+  endif()
+
+  set(${result} ${split_pos} PARENT_SCOPE)
+endfunction()
+
+# Wrap one fixed-form physical line so generated sources remain valid with the
+# standard 72-column statement field.
+function(_wrap_fixed_form_line line result)
+  _is_fortran_comment_line("${line}" is_comment_line)
+  if(is_comment_line OR "${line}" MATCHES "^#")
+    set(${result} "${line}" PARENT_SCOPE)
+    return()
+  endif()
+
+  set(wrapped_line "")
+  set(current_line "${line}")
+
+  while(TRUE)
+    string(LENGTH "${current_line}" line_length)
+    if(NOT line_length GREATER 72)
+      if(wrapped_line STREQUAL "")
+        set(wrapped_line "${current_line}")
+      else()
+        string(APPEND wrapped_line "\n${current_line}")
+      endif()
+      break()
+    endif()
+
+    _find_fixed_form_split("${current_line}" split_pos)
+    if(NOT split_pos GREATER 6)
+      if(wrapped_line STREQUAL "")
+        set(wrapped_line "${current_line}")
+      else()
+        string(APPEND wrapped_line "\n${current_line}")
+      endif()
+      break()
+    endif()
+
+    string(SUBSTRING "${current_line}" 0 ${split_pos} line_head)
+    string(SUBSTRING "${current_line}" ${split_pos} -1 line_tail)
+    string(STRIP "${line_tail}" line_tail)
+
+    if(wrapped_line STREQUAL "")
+      set(wrapped_line "${line_head}")
+    else()
+      string(APPEND wrapped_line "\n${line_head}")
+    endif()
+
+    set(current_line "     $ ${line_tail}")
+  endwhile()
+
+  set(${result} "${wrapped_line}" PARENT_SCOPE)
+endfunction()
+
+function(_wrap_fixed_form_source source_text result)
+  if(_rewrite_source_is_free_form)
+    set(${result} "${source_text}" PARENT_SCOPE)
+    return()
+  endif()
+
+  string(REPLACE "\r\n" "\n" remaining_source "${source_text}")
+  string(REPLACE "\r" "\n" remaining_source "${remaining_source}")
+  set(wrapped_source "")
+
+  while(TRUE)
+    string(FIND "${remaining_source}" "\n" newline_index)
+    if(newline_index EQUAL -1)
+      if(NOT remaining_source STREQUAL "")
+        _wrap_fixed_form_line("${remaining_source}" wrapped_line)
+        string(APPEND wrapped_source "${wrapped_line}")
+      endif()
+      break()
+    endif()
+
+    string(SUBSTRING "${remaining_source}" 0 ${newline_index} source_line)
+    math(EXPR next_index "${newline_index} + 1")
+    string(SUBSTRING "${remaining_source}" ${next_index} -1 remaining_source)
+
+    _wrap_fixed_form_line("${source_line}" wrapped_line)
+    string(APPEND wrapped_source "${wrapped_line}\n")
+  endwhile()
+
+  set(${result} "${wrapped_source}" PARENT_SCOPE)
+endfunction()
+
 get_filename_component(output_dir "${OUTPUT_FILE}" DIRECTORY)
 file(MAKE_DIRECTORY "${output_dir}")
 
@@ -150,26 +255,67 @@ file(READ "${INPUT_FILE}" source_content)
 set(rewritten_content "${source_content}")
 
 # Extract symbol names from the source file
-file(STRINGS "${INPUT_FILE}" raw_lines)
+string(REPLACE "\r\n" "\n" symbol_scan_source "${source_content}")
+string(REPLACE "\r" "\n" symbol_scan_source "${symbol_scan_source}")
 set(symbol_names)
-list(LENGTH raw_lines raw_line_count)
-set(line_index 0)
-while(line_index LESS raw_line_count)
-  list(GET raw_lines ${line_index} current_line)
+
+while(TRUE)
+  _pop_source_line(symbol_scan_source current_line has_line)
+  if(NOT has_line)
+    break()
+  endif()
+
   _is_fortran_comment_line("${current_line}" is_comment_line)
   if(is_comment_line)
-    math(EXPR line_index "${line_index} + 1")
     continue()
   endif()
 
-  _collect_logical_fortran_line(raw_lines ${line_index} logical_line next_index)
+  _normalize_fortran_statement_fragment("${current_line}" logical_line)
+  set(last_line "${current_line}")
+
+  while(TRUE)
+    _peek_source_line(symbol_scan_source continuation_line has_line)
+    if(NOT has_line)
+      break()
+    endif()
+
+    _is_fortran_comment_line("${continuation_line}" continuation_is_comment)
+    if(continuation_is_comment)
+      break()
+    endif()
+
+    set(consume_continuation FALSE)
+    if(_rewrite_source_is_free_form)
+      if("${last_line}" MATCHES "&[ \t]*$" OR
+          "${continuation_line}" MATCHES "^[ \t]*&")
+        set(consume_continuation TRUE)
+      endif()
+    else()
+      _is_fixed_form_continuation_line("${continuation_line}"
+        is_fixed_form_continuation)
+      if(is_fixed_form_continuation)
+        set(consume_continuation TRUE)
+      endif()
+    endif()
+
+    if(NOT consume_continuation)
+      break()
+    endif()
+
+    _pop_source_line(symbol_scan_source continuation_line has_line)
+    _normalize_fortran_statement_fragment("${continuation_line}"
+      continuation_fragment)
+    string(APPEND logical_line " ${continuation_fragment}")
+    set(last_line "${continuation_line}")
+  endwhile()
+
   _extract_symbols("${logical_line}" symbols)
   if(symbols)
     list(APPEND symbol_names ${symbols})
   endif()
-  set(line_index ${next_index})
 endwhile()
 list(REMOVE_DUPLICATES symbol_names)
+list(REMOVE_ITEM symbol_names ETIME etime ETIME_ etime_)
 
 # Replace symbol names with their suffixed versions in the source content
 foreach(symbol_name IN LISTS symbol_names)
@@ -186,6 +332,8 @@ foreach(symbol_name IN LISTS symbol_names)
     )
   endforeach()
 endforeach()
+
+_wrap_fixed_form_source("${rewritten_content}" rewritten_content)
 
 if(EXISTS "${OUTPUT_FILE}")
   file(READ "${OUTPUT_FILE}" existing_output)

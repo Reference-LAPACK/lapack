@@ -117,7 +117,9 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-add_library(${BLASLIB}_obj OBJECT ${SOURCES})
+if(BUILD_DEFAULT_API)
+  add_library(${BLASLIB}_obj OBJECT ${SOURCES})
+endif()
 
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
@@ -128,7 +130,7 @@ if(BUILD_INDEX64_EXT_API)
 endif()
 
 add_library(${BLASLIB}
-  $<TARGET_OBJECTS:${BLASLIB}_obj>
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${BLASLIB}_obj>>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>)
 
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
