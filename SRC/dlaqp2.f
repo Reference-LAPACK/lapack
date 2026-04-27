@@ -168,7 +168,7 @@
       DOUBLE PRECISION   TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF1F, DLARFG, DSWAP
+      EXTERNAL           DLARF, DLARF1F, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT

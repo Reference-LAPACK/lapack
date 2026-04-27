@@ -275,7 +275,7 @@
      $                   CLANGE, SLARMM, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLATRS, CSSCAL, XERBLA
+      EXTERNAL           CGEMM, CLATRS, CSSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
