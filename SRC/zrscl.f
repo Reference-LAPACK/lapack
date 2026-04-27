@@ -108,7 +108,7 @@
       EXTERNAL           DLAMCH, ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, ZDSCAL, ZDRSCL
+      EXTERNAL           DSCAL, ZDSCAL, ZDRSCL, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS

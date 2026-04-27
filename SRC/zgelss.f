@@ -214,7 +214,8 @@
       EXTERNAL           DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY,
      $                   ZDRSCL,
      $                   ZGEBRD, ZGELQF, ZGEMM, ZGEMV, ZGEQRF, ZLACPY,
-     $                   ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ
+     $                   ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ,
+     $                   ZUNMQR
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV

@@ -176,7 +176,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, XERBLA
+      EXTERNAL           DLARF, DLARF1L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

@@ -84,6 +84,7 @@
 *     ..
 *     .. External Subroutines ..
       DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT

@@ -230,9 +230,8 @@
       LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DLANGE, DLAPY2, DNRM2
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DLANGE,
-     $                   DLAPY2,
-     $                   DNRM2
+      EXTERNAL           LSAME, DISNAN, IDAMAX, ILAENV,
+     $                   DLAMCH, DLANGE, DLAPY2, DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
