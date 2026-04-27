@@ -463,7 +463,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANSY, ZLA_SYRCOND_X,
      $                   ZLA_SYRCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANSY, ZLA_SYRCOND_X, ZLA_SYRCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANSY, ZLA_SYRCOND_X,
+     $                   ZLA_SYRCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..

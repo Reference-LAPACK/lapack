@@ -453,7 +453,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X,
      $                   ZLA_PORCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_PORCOND_X,
+     $                   ZLA_PORCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..
