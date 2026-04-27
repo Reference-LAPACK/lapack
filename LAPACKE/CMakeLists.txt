@@ -70,21 +70,20 @@ add_library(${LAPACKELIB}_obj OBJECT ${SOURCES})
 
 if(BUILD_INDEX64_EXT_API)
   # 64bit Integer Extended Interface
-  set(SOURCES_64_C)
-  list(APPEND SOURCES_64_C ${SOURCES})
-  list(REMOVE_ITEM SOURCES_64_C src/lapacke_nancheck.c)
-  list(REMOVE_ITEM SOURCES_64_C utils/lapacke_make_complex_float.c)
-  list(REMOVE_ITEM SOURCES_64_C utils/lapacke_make_complex_double.c)
-  add_library(${LAPACKELIB}_64_obj OBJECT ${SOURCES_64_C})
-  target_compile_options(${LAPACKELIB}_64_obj PRIVATE
-          -DLAPACK_ILP64
-          -DLAPACKE_API64
-          -DWeirdNEC
-          -DCBLAS_API64)
+  set(SOURCES_64 ${SOURCES})
+  list(REMOVE_ITEM SOURCES_64
+    src/lapacke_nancheck.c
+    utils/lapacke_make_complex_float.c
+    utils/lapacke_make_complex_double.c)
+
+  add_library(${LAPACKELIB}_64_obj OBJECT ${SOURCES_64})
+  target_compile_definitions(${LAPACKELIB}_64_obj PRIVATE
+    LAPACK_ILP64 LAPACKE_API64 WeirdNEC CBLAS_API64)
 endif()
 
-add_library(${LAPACKELIB} $<TARGET_OBJECTS:${LAPACKELIB}_obj>
-        $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKELIB}_64_obj>>)
+add_library(${LAPACKELIB}
+  $<TARGET_OBJECTS:${LAPACKELIB}_obj>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKELIB}_64_obj>>)
 
 set_target_properties(
   ${LAPACKELIB} PROPERTIES

@@ -522,62 +522,34 @@ list(REMOVE_DUPLICATES SOURCES)
 # Use special target for MOD files to guarantee they are built before
 # any other files that depend on them
 add_library(const_mod_file OBJECT ${CONSTMOD})
-set_target_properties(
-  const_mod_file PROPERTIES
-  Fortran_PREPROCESS ON
-  )
+set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
 
 add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
-set_target_properties(
-  mod_files PROPERTIES
-  Fortran_PREPROCESS ON
-  )
+set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
 
 add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
 target_link_libraries(${LAPACKLIB}_obj mod_files)
-set_target_properties(
-  ${LAPACKLIB}_obj PROPERTIES
-  Fortran_PREPROCESS ON
-  )
+set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
 
 if(BUILD_INDEX64_EXT_API)
-  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
-    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
-    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
-    set(BUILD_INDEX64_EXT_API OFF)
-    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
-  else()
-    cmake_minimum_required(VERSION 3.18)
-    set(SOURCES_64)
-    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
-    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
-    foreach(F IN LISTS SOURCES_64)
-      set(FFILE "")
-      file(READ ${F} FFILE)
-      file(WRITE ${F} "#include \"lapack_64.h\"\n")
-      file(APPEND ${F} "${FFILE}")
-    endforeach()
-    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
-    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
-    set_target_properties(
-      ${LAPACKLIB}_64_obj PROPERTIES
-      Fortran_PREPROCESS ON
-    )
-  endif()
+  include(ExtendedAPIHelpers)
+  generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
+
+  add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+  target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+  target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
 endif()
 
 add_library(${LAPACKLIB}
   $<TARGET_OBJECTS:mod_files>
   $<TARGET_OBJECTS:${LAPACKLIB}_obj>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
+
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
 # that CMake adds (tested CMake 4.2).
-if (CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
-   set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+  set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
 endif()
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
@@ -585,8 +557,10 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 
-if( TEST_FORTRAN_COMPILER )
-  add_dependencies( ${LAPACKLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
+if(TEST_FORTRAN_COMPILER)
+  add_dependencies(${LAPACKLIB}
+    run_test_zcomplexabs run_test_zcomplexdiv
+    run_test_zcomplexmult run_test_zminMax)
 endif()
 
 if(USE_XBLAS)
