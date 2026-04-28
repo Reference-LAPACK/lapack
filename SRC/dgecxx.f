@@ -1208,21 +1208,29 @@
 *
 *     ==================================================================
 *     Permute the deselected rows to the bottom of the matrix A.
-*     1) The order of free rows is preserved.
-*     2) The order of deselected rows is not preserved.
+*     1) The initial order of included rows in their block is preserved.
+*     2) The initial order of deselected rows in their block is not
+*        preserved.
 *     ==================================================================
 *
-*     I is the index of DESEL_ROWS array and row I of the matrix A.
-*     MSUB is the number of included rows, i.e. rows of the matrix A without
-*      deselected rows.
-*     (For each position I, we check if this position is an included row.
-*     If it is an included row, we increment MSUB, which is also a pointer
-*     to the last included row, otherwise we do not change MSUB pointer.
-*     Also, if it is an included row, we move this row from the larger
-*     (or same) I index into smaller (or same) MSUB index. This way
-*     we move all the included rows to the larger index block preserving
-*     included row order. The deselected rows will be at the bottom of the
-*     matrix A.)
+*     I is an index of DESEL_ROWS array and a row index of
+*     the matrix A. MSUB is the number of processed included rows, which
+*     is also an index pointer to the last included row in the matrix A.
+*     We can think of I as a row source index, and MSUB as a destination
+*     index for moving an included row in the matrix A.
+*
+*     ( We start with MSUB = 0. We loop over index I in (1:M), and
+*     for each position I in DESEL_ROWS  array, we check if the row at
+*     the position I in the matrix A is an included row (not -1 value).
+*     If it is an included row, we increment MSUB pointer, otherwise
+*     we do not change MSUB index pointer. Then, we bring this included
+*     row from the index I in the matrix A into smaller (or same)
+*     MSUB index in the matrix A.  If I = MSUB, then the included row
+*     is already in place. Due to row swap, the deselected row
+*     at MSUB index will move into I index in the matrix A. In this way,
+*     we move all the included rows to the top matrix block preserving
+*     their initial order within the included block. The initial order
+*     of deselected rows will not be preserved withi n their block.
 *
       IF( USE_DESEL_ROWS ) THEN
 *
@@ -1243,9 +1251,12 @@
 *
                IF( I.NE.MSUB ) THEN
 *
-*                 Here, we swap A(I,1:N) into A(MSUB,1:N)
+*                 Here, we swap A(I,1:N) into A(MSUB,1:N).
 *
                   CALL DSWAP( N, A( I, 1 ), LDA, A( MSUB, 1 ), LDA )
+*
+*                 Save the nterchange.
+*
                   IPIV( I ) = IPIV( MSUB )
                   IPIV( MSUB ) = I
                   ITEMP = DESEL_ROWS( I )
