@@ -1171,6 +1171,21 @@
 *
 *     ==================================================================
 *
+*     Quick return if possible for M=0 or N=0.
+*     There is no matrix A(1:M,1:N).
+*
+      IF( MINMN.EQ.0 ) THEN
+         K = 0
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
+         FNRMK = ZERO
+         WORK( 1 ) = DBLE( LWKOPT )
+         IWORK( 1 ) = LIWKOPT
+         RETURN
+      END IF
+*
+*     ==================================================================
+*
       K = 0
 *
 *     If we need to return factor C, copy the original untouched matrix
@@ -1249,6 +1264,19 @@
          END DO
       END IF
 *
+*     Quick return if possible for MSUB = 0.
+*     There is no matrix A_sub(1:MSUB,1:NSUB).
+*
+      IF( MSUB.EQ.0 ) THEN
+         K = 0
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
+         FNRMK = ZERO
+         WORK( 1 ) = DBLE( LWKOPT )
+         IWORK( 1 ) = LIWKOPT
+         RETURN
+      END IF
+*
 *     ==================================================================
 *     Permute the pseselected columns to the left and deselected
 *     columns to the right of the matrix A.
@@ -1292,7 +1320,7 @@
          END DO
 *
 *        Column deselection.
-*        JDEEL the pointer to the last
+*        JDESEL the pointer to the last
 *        deselected column counting right-to-left.
 *
          JDESEL = N+1
@@ -1330,7 +1358,20 @@
          DO J = 1, N, 1
             JPIV( J ) = J
          END DO
-
+*
+      END IF
+*
+*     Quick return if possible for NSUB = 0.
+*     There is no matrix A_sub(1:MSUB,1:NSUB).
+*
+      IF( NSUB.EQ.0 ) THEN
+         K = 0
+         MAXC2NRMK = ZERO
+         RELMAXC2NRMK = ZERO
+         FNRMK = ZERO
+         WORK( 1 ) = DBLE( LWKOPT )
+         IWORK( 1 ) = LIWKOPT
+         RETURN
       END IF
 *
 *     ==================================================================
@@ -1348,6 +1389,7 @@
       KP0 = IDAMAX( NSUB, WORK( 1 ), 1 )
       MAXC2NRM = WORK( KP0 )
 *
+*     ==================================================================
 *     Process preselected columns
 *
 *     Compute the QR factorization of NSEL preselected columns (1:NSEL)
