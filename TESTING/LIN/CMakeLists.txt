@@ -110,8 +110,8 @@ endif()
 set(DLINTST dchkaa.F
    dchkeq.f dchkgb.f dchkge.f dchkgt.f
    dchklq.f dchkpb.f dchkpo.f dchkps.f dchkpp.f
-   dchkpt.f dchkq3.f dchkqp3rk.f dchkql.f dchkqr.f dchkrq.f
-   dchksp.f dchksy.f dchksy_rook.f dchksy_rk.f 
+   dchkpt.f dchkq3.f dchkqp3rk.f dchkcxx.f dchkql.f dchkqr.f 
+   dchkrq.f dchksp.f dchksy.f dchksy_rook.f dchksy_rk.f 
    dchksy_aa.f dchksy_aa_2stage.f
    dchktb.f dchktp.f dchktr.f
    dchktz.f
@@ -142,7 +142,8 @@ set(DLINTST dchkaa.F
    dqrt04.f dqrt05.f dchkqrt.f derrqrt.f dchkqrtp.f derrqrtp.f
    dchklq.f dchklqt.f dchklqtp.f dchktsqr.f
    derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f
-   dchkorhr_col.f derrorhr_col.f dorhr_col01.f dorhr_col02.f)
+   dchkorhr_col.f derrorhr_col.f dorhr_col01.f dorhr_col02.f
+   derrcxx.f)
 
 if(USE_XBLAS)
   list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f

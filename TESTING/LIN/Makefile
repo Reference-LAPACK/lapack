@@ -137,8 +137,8 @@ endif
 DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
-   dchkpt.o dchkq3.o dchkqp3rk.o dchkql.o dchkqr.o dchkrq.o \
-   dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
+   dchkpt.o dchkq3.o dchkqp3rk.o dchkcxx.o dchkql.o dchkqr.o \
+   dchkrq.o dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
    dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
@@ -167,7 +167,8 @@ DLINTST = dchkaa.o \
    dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o \
    dchklq.o dchklqt.o dchklqtp.o dchktsqr.o \
    derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o \
-   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o
+   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o \
+   derrcxx.o
 
 ifdef USEXBLAS
 DLINTST += ddrvgbx.o ddrvgex.o ddrvsyx.o ddrvpox.o \
