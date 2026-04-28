@@ -23,21 +23,22 @@
 *      $                   KMAXFREE, ABSTOL, RELTOL, A, LDA,
 *      $                   K, MAXC2NRMK, RELMAXC2NRMK, FNRMK,
 *      $                   IPIV, JPIV, TAU, C, LDC, QRC, LDQRC,
-*      $                   X, LDX,  WORK, LWORK, IWORK, LIWORK, INFO )
+*      $                   X, LDX, WORK, LWORK, IWORK, LIWORK, INFO )
 *       IMPLICIT NONE
 *
-*       .. Scalar Arguments ..
+*      .. Scalar Arguments ..
 *       CHARACTER           FACT, USESD
 *       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
 *      $                    LDX, LIWORK, LWORK, M, N
 *       DOUBLE PRECISION    ABSTOL, MAXC2NRMK, RELTOL,
 *      $                    RELMAXC2NRMK, FNRMK
-*       ..
-*       .. Array Arguments ..
+*      ..
+*      .. Array Arguments ..
 *       INTEGER             DESEL_ROWS( * ), IPIV( * ), IWORK( * ),
 *      $                    JPIV( * ), SEL_DESEL_COLS( * )
 *       DOUBLE PRECISION    A( LDA, * ), C( LDC, * ), QRC( LDQRC, * ),
 *      $                    TAU( * ), WORK( * ), X( LDX, *)
+*      ..
 *
 *
 *> \par Purpose:
@@ -219,7 +220,7 @@
 *>                 (1) the column permutation matrix P in
 *>                     the array JPIV. (The first K elements are
 *>                     indices of the selected columns from
-*>      the matrix A.)
+*>                     the matrix A.)
 *>                 (2) the M-by-K factor C explicitly in the array C.
 *>                 (3) the K-by-N factor X explicitly in the array X.
 *>                 (4) the K-by-K upper triangular factor R and
@@ -840,6 +841,14 @@
 *>               (R is stored in the array QRC.)
 *> \endverbatim
 *
+*  Authors:
+*  ========
+*
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
+*
 *> \par Contributors:
 *  ==================
 *>
@@ -849,14 +858,6 @@
 *>              EECS Department,
 *>              University of California, Berkeley, USA.
 *> \endverbatim
-*
-*  Authors:
-*  ========
-*
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
 *
 *> \ingroup gecxx
 *
@@ -877,7 +878,7 @@
       CHARACTER           FACT, USESD
       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
      $                    LDX, LIWORK, LWORK, M, N
-      DOUBLE PRECISION    ABSTOL,  MAXC2NRMK, RELTOL,
+      DOUBLE PRECISION    ABSTOL, MAXC2NRMK, RELTOL,
      $                    RELMAXC2NRMK, FNRMK
 *     ..
 *     .. Array Arguments ..
@@ -885,6 +886,8 @@
      $                    JPIV( * ), SEL_DESEL_COLS( * )
       DOUBLE PRECISION    A( LDA, * ), C( LDC, * ), QRC( LDQRC, * ),
      $                    TAU( * ), WORK( * ), X( LDX, *)
+*     ..
+*
 *  =====================================================================
 *
 *     .. Parameters ..
