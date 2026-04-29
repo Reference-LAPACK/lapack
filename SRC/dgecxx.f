@@ -660,10 +660,10 @@
 *>          If FACT = 'P':
 *>             the array is not used, the array dimension >= (1,1).
 *>
-*>          If FACT = 'C' or 'X':
+*>          If FACT = 'C':
 *>             the array dimension is (LDC,N).
 *>             If K = 0:
-*>                the M-by-N array X contains a copy of
+*>                the M-by-N array C contains a copy of
 *>                the original M-by-N matrix A.
 *>             If K > 0:
 *>              a) columns (1:K) of the array C contain
@@ -672,6 +672,17 @@
 *>              b) columns (K+1:N) of the array C contain
 *>                 the deselected columns from the original
 *>                 matrix A.
+*>
+*>          If FACT = 'X':
+*>             the array dimension is (LDC,N).
+*>             If K = 0:
+*>                the M-by-N array C is not used.
+*>             If K > 0:
+*>              a) columns (1:K) of the array C contain
+*>                 the M-by-K factor C (the selected columns
+*>                 from the original matrix A).
+*>              b) columns (K+1:N) of the array C are
+*>                 not used.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -921,8 +932,8 @@
      $                   RELTOLFREE, RELMAXC2NRMKFREE, SAFMIN
 
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DGELS, DGEQP3RK, DGEQRF, DORMQR,
-     $                   DSWAP, XERBLA
+      EXTERNAL           DCOPY, DGELS, DGEQP3RK, DGEQRF, DORMQR,
+     $                   DSWAP, DLACPY, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN, LSAME
@@ -1207,18 +1218,21 @@
 *
       K = 0
 *
-*     If we need to return factor C, copy the original untouched matrix
-*     A into the array C.
-*
-      IF( RETURNC ) THEN
-         CALL DLACPY( 'F', M, N, A, LDA, C, LDC )
-      END IF
-*
 *     If we need to return factor X, copy the original untouched matrix
 *     A into the array X.
 *
       IF( RETURNX ) THEN
          CALL DLACPY( 'F', M, N, A, LDA, X, LDX )
+      END IF
+*
+*     If we need to return the factor C, copy the original matrix A
+*     into the array C, only if do not return the factor X. In this
+*     case, we need to choose the columns of the matrix A in the array C
+*     in place, otherwise we can copy the columns of the matrix A from
+*     the array X.
+*
+      IF( RETURNC .AND. .NOT. RETURNX ) THEN
+         CALL DLACPY( 'F', M, N, A, LDA, C, LDC )
       END IF
 *
 *     ==================================================================
@@ -1560,8 +1574,25 @@
 *
       IF( RETURNC .AND. K.GT.0 ) THEN
 *
-*        The M-by-N matrix A was copied into the array C at the
-*        beginning of the routine, if RETURNC = .TRUE..
+      IF( RETURNX ) THEN
+*
+*        Copy the selected K columns of the original matrix A (that was
+*        saved into the array X) into the array C according to
+*        the pivot array JPIV. If we return X, then the matrix A is
+*        saved in the array X, and it is faster to copy into C than
+*        doing column permutation in place, as it is the ELSE case.
+*
+         DO J = 1, K, 1
+            CALL DCOPY( M, X( 1, JPIV( J ) ), 1, C( 1, J ), 1 )
+         END DO
+*
+      ELSE
+*
+*        Swap the columns of the original matrix A copied into
+*        the array C in place.
+*
+*        The original M-by-N matrix A was copied into the array C at
+*        the beginning of the routine, if RETURNC = .TRUE..
 
 *        Apply the column permutation matrix P stored in JPIV(1:K)
 *        to the columns 1:K in the M-by-N array C in place.
@@ -1642,6 +1673,12 @@
             END IF
 *
          END DO
+*
+*     End of ELSE( RETURNX )
+*
+      END IF
+*
+*     End of IF( RETURNC .AND. K.GT.0 )
 *
       END IF
 *
