@@ -169,8 +169,8 @@
 *> of selected columns would be K = N_sel. Otherwise, the factorization
 *> routine finds a new column to select with the maximum column 2-norm
 *> in the residual A(N_sel+1:M_sub,N_sel+1:N_sub), and swaps that
-*> column with the first column of A(1:M,N_sel+1:N_sub). Then the routine
-*> checks if the stopping criteria are met in the next residual
+*> column with the first column of A(1:M,N_sel+1:N_sub). Then the
+*> routine checks if the stopping criteria are met in the next residual
 *> A(N_sel+2:M_sub,N_sel+2:N_sub), and so on.
 *>
 *> Computation of the matrix factors.
@@ -268,13 +268,14 @@
 *>          The number of columns of the matrix A.  N >= 0.
 *> \endverbatim
 *>
-*> \param[in] DESEL_ROWS
+*> \param[in,out] DESEL_ROWS
 *> \verbatim
 *>          DESEL_ROWS is INTEGER array, dimension (M)
 *>          DESEL_ROWS is only accessed if USESD = 'R' or 'A'.
 *>          This is a row deselection mask array that separates
 *>          the rows of matrix A into 2 sets.
 *>
+*>          On entry:
 *>          a) If DESEL_ROWS(i) = -1, the i-th row of the matrix A is
 *>             deselected by the user, i.e. chosen to be excluded from
 *>             the column selection algorithm (in both preselection and
@@ -289,15 +290,22 @@
 *>             the algorithm will use to select columns.
 *>             After the permutation, this set will be at the top
 *>             of the matrix A.
+*>
+*>           On exit:
+*>             DESEL_ROWS will be permutted according to IPIV(i),
+*>             so that, if IPIV(i) = k, then the entry i of DESEL_ROWS
+*>             on exit was the entry k of DESEL_ROWS on entry.
+*>
 *> \endverbatim
 *>
-*> \param[in] SEL_DESEL_COLS
+*> \param[in,out] SEL_DESEL_COLS
 *> \verbatim
 *>          SEL_DESEL_COLS is INTEGER array, dimension (N)
 *>          SEL_DESEL_COLS is only accessed if USESD = 'C' or 'A'.
 *>          This is a column preselection-deselection mask array that
 *>          separates the columns of matrix A into 3 sets.
 *>
+*>          On entry:
 *>          a) If SEL_DESEL_COLS(j) = +1, the j-th column of the matrix
 *>             A is preselected by the user to be included
 *>             in the factor C and will be permuted to the left side
@@ -312,9 +320,15 @@
 *>
 *>          c) If SEL_DESEL_COLS(j) is not equal to 1 and not equal
 *>             to -1, the j-th column of A is a free column and will be
-*>             used by the column selection algorithm to determine if this
-*>             column will be selected. This defines a set of
+*>             used by the column selection algorithm to determine if
+*>             this column will be selected. This defines a set of
 *>             columns of size N_free = N - N_sel - N_desel.
+*>
+*>           On exit:
+*>             SEL_DESEL_COLS will be permutted according to JPIV(j),
+*>             so that, if JPIV(j) = k, then the entry j
+*>             of SEL_DESEL_COLS on exit was the entry k
+*>             of SEL_DESEL_COLS on entry.
 *>
 *>          NOTE: An error returned as INFO = -6 means that the number
 *>          of preselected N_sel columns is larger than M_sub.
@@ -612,7 +626,7 @@
 *>          IPIV is INTEGER array, dimension (M)
 *>          Row permutation indices due to row deselection,
 *>          for 1 <= i <= M.
-*>          If IPIV(i)= k, then the row i of A_sub was
+*>          If IPIV(i) = k, then the row i of A was
 *>          the row k of A.
 *> \endverbatim
 *>
@@ -620,7 +634,7 @@
 *> \verbatim
 *>          JPIV is INTEGER array, dimension (N)
 *>          Column permutation indices, for 1 <= j <= N.
-*>          If JPIV(j)= k, then the column j of A*P (and of A_sub) was
+*>          If JPIV(j)= k, then the column j of A*P was
 *>          the column k of A.
 *>
 *>          The first K elements of the array JPIV contain
@@ -1020,8 +1034,8 @@
 *
 *       a) Test the input workspace size LWORK and LIWORK for the
 *          minimum size requirement LWKMIN and LIWKMIN respectively.
-*       b) Determine the optimal workspace sizes LWKOPT and LIWKOPT to be
-*          returned  in WORK( 1 ) and IWORK( 1 ) respectively,
+*       b) Determine the optimal workspace sizes LWKOPT and LIWKOPT to
+*          be returned in WORK( 1 ) and IWORK( 1 ) respectively,
 *          if INFO >= 0 in cases:
 *           (1) LQUERY = .TRUE.,
 *           (2) when the routine exits.
@@ -1122,7 +1136,8 @@
             IF( RETURNC ) THEN
 *
 *              Integer minimum workspace computation.
-*              (Int_wk_part_3) LIWKMIN = 2*N for applying the interchanges
+*              (Int_wk_part_3) LIWKMIN = 2*N for applying the
+*              interchanges
 *              for the columns in the matrix C.
 *
                LIWKMIN = MAX( LIWKMIN, 2*N )
@@ -1259,9 +1274,8 @@
 *
                   IPIV( I ) = IPIV( MSUB )
                   IPIV( MSUB ) = I
-                  ITEMP = DESEL_ROWS( I )
-                  DESEL_ROWS( I ) = DESEL_ROWS( MSUB )
-                  DESEL_ROWS( MSUB ) = ITEMP
+                  DESEL_ROWS( MSUB ) = DESEL_ROWS( I )
+                  DESEL_ROWS( I ) = -1
                END IF
             END IF
 *
@@ -1272,7 +1286,8 @@
 *        We do not use the row deselection DESEL_ROWS array.
 *        Initialize the row pivot array IPIV.
 *        NOTE: MSUB=M has default value,
-*        which is set at the beginning of the routine, before argument checks.
+*        which is set at the beginning of the routine, before argument
+*        checks.
 *
          DO I = 1, M, 1
             IPIV( I ) = I
@@ -1293,8 +1308,8 @@
       IF( USE_SEL_DESEL_COLS ) THEN
 *
 *        Column selection.
-*        NSEL is the number of selected columns, also the pointer to the last
-*        selected column.
+*        NSEL is the number of selected columns, also the pointer to
+*        the last selected column.
 *
          NSEL = 0
          DO J = 1, N, 1
@@ -1302,7 +1317,7 @@
 *           Initialize column pivot array JPIV.
             JPIV( J ) = J
 *
-            IF( SEL_DESEL_COLS(J).EQ.1 ) THEN
+            IF( SEL_DESEL_COLS( J ).EQ.1 ) THEN
                NSEL = NSEL + 1
 *
 *              This is the check whether the selected column is
@@ -1355,7 +1370,8 @@
 *        SEL_DESEL_COLS array.
 *        Initialize column pivot array JPIV.
 *        NOTE: NSUB=N has default value,
-*        which is set at the beginning of the routine, before argument checks.
+*        which is set at the beginning of the routine, before argument
+*        checks.
 *
          DO J = 1, N, 1
             JPIV( J ) = J
@@ -1637,7 +1653,7 @@
 *
 *        We need to use C and A to compute X = pseudoinv(C) * A, as
 *        the linear least squares solution to the overdetermined system
-*        C*X = A. We use LLS routin that uses the QR factorization. For
+*        C*X = A. We use LLS routine that uses the QR factorization. For
 *        that purpose, we store the matrix C into the array QRC.
 *        The matrix A was copied into the array X at the beginning
 *        of the routine.
