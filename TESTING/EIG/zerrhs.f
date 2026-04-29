@@ -86,8 +86,9 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZGEBAK, ZGEBAL, ZGEHRD, ZHSEIN, ZHSEQR,
-     $                   ZUNGHR, ZUNMHR, ZTREVC, ZTREVC3
+      EXTERNAL           CHKXER, ZGEBAK, ZGEBAL, ZGEHD2, ZGEHRD,
+     $                   ZHSEIN, ZHSEQR, ZUNGHR, ZUNMHR, ZTREVC,
+     $                   ZTREVC3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE

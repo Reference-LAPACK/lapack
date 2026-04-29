@@ -176,7 +176,7 @@
       EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY
+      EXTERNAL           SCOPY, SGEMV, SGGGLM, SLACPY
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

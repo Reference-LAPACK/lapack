@@ -174,7 +174,7 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGGLSE, SLACPY, SGET02
+      EXTERNAL           SCOPY, SGGLSE, SLACPY, SGET02
 *     ..
 *     .. Executable Statements ..
 *

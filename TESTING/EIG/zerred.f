@@ -100,7 +100,7 @@
      $                   VT( NMAX, NMAX ), W( 10*NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGESVJ,
+      EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGEJSV,
      $                   ZGESDD, ZGESVD, ZGESVDX, ZGESVDQ
 *     ..
 *     .. External Functions ..

@@ -377,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLASET, DLASUM, DLATMR, DLATMS, DSBT21,
-     $                   DSBTRD, XERBLA, DSYTRD_SB2ST, DSTEQR
+     $                   DSBTRD, XERBLA, DSYTRD_SB2ST, DSTEQR, DCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT

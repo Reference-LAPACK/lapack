@@ -437,7 +437,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, ZGET51, ZGET54, ZGGES3, ZLACPY,
-     $                   ZLARFG, ZLASET, ZLATM4, ZUNM2R
+     $                   ZLARFG, ZLASET, ZLATM4, ZUNM2R, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SIGN

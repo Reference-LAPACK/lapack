@@ -1109,7 +1109,8 @@
      $                   CDRVSG, CDRVST, CDRVSX, CDRVVX, CERRBD,
      $                   CERRED, CERRGG, CERRHS, CERRST, ILAVER, XLAENV,
      $                   CDRGES3, CDRGEV3, 
-     $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG
+     $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG,
+     $                   CDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
