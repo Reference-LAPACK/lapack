@@ -92,7 +92,7 @@
 !     subroutines under test
       EXTERNAL ZGEDMD, ZGEDMDQ
 !.....external functions (BLAS and LAPACK)
-      EXTERNAL         DLAMCH,  DZNRM2
+      EXTERNAL         DLAMCH,  DZNRM2, ZLANGE
       REAL(KIND=WP) :: DLAMCH,  DZNRM2
       REAL(KIND=WP) ::          ZLANGE
       EXTERNAL IZAMAX

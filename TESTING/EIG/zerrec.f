@@ -83,7 +83,8 @@
      $                   C( NMAX, NMAX ), WORK( LW ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZTREXC, ZTRSEN, ZTRSNA, ZTRSYL
+      EXTERNAL           CHKXER, ZTREXC, ZTRSEN, ZTRSNA, ZTRSYL,
+     $                   ZTRSYL3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

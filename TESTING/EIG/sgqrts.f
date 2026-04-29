@@ -207,7 +207,7 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASET, SORGQR,
+      EXTERNAL           SGEMM, SGGQRF, SLACPY, SLASET, SORGQR,
      $                   SORGRQ, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
