@@ -1202,20 +1202,17 @@
 *     Quick return if possible for:
 *     a)  M = 0 or N = 0. There is no matrix A(1:M,1:N).
 *     b)  MSUB = 0 or NSUB = 0. There is no matrix A_sub(1:MSUB,1:NSUB).
+*     NOTE: min( M, N) = 0 implies min( MSUB, NSUB) = 0.
 *     We need to return correct values for all scalar output parameters,
 *     including WORK(1) and IWORK(1), which is set above.
 *
-      IF( MIN( MINMN , MIN( MSUB, NSUB ) ).EQ.0 ) THEN
+      IF( MIN( MSUB, NSUB ).EQ.0 ) THEN
          K = 0
          MAXC2NRMK = ZERO
          RELMAXC2NRMK = ZERO
          FNRMK = ZERO
          RETURN
       END IF
-*
-*     Quick return if possible for;
-*
-
 *
 *     ==================================================================
 *
