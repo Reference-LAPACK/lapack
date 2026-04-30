@@ -1213,6 +1213,10 @@
          RETURN
       END IF
 *
+*     Quick return if possible for;
+*
+
+*
 *     ==================================================================
 *
       K = 0
@@ -1451,7 +1455,7 @@
      $                   LWORK, IINFO )
          END IF
 *
-         K = NSEL
+         K = K + NSEL
 *
 *        End of IF(NSEL.GT.0)
 *
@@ -1541,7 +1545,7 @@
 *           submatrix A_sub. We do not use RELMAXC2NRMKFREE
 *           returned from DGEQP3RK.
 *
-         K = NSEL + KFREE
+         K = K + KFREE
          MAXC2NRMK =  MAXC2NRMKFREE
          RELMAXC2NRMK =  MAXC2NRMK / MAXC2NRM
 *
