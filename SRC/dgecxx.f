@@ -103,7 +103,7 @@
 *> effectively running on the submatrix A_sub = A(1:M_sub,1:N_sub) of
 *> the matrix A after the permutations described above. Here M_sub is
 *> the number of rows of the matrix A minus the number of deselected
-*> rows M_desel, i.e. M_sub = M - M_desel, and  N_sub is the number
+*> rows M_desel, i.e. M_sub = M - M_desel, and N_sub is the number
 *> of columns of the matrix A minus the number of deselected columns
 *> N_desel, i.e. N_sub = N - N_desel.
 *>
@@ -147,7 +147,7 @@
 *>
 *> To perform a full-rank factorization of the matrix A_sub, use
 *> selection criteria that satisfy N_sel + KMAXFREE >= min(M_sub,N_sub)
-*> and  ABSTOL < 0.0 and RELTOL < 0.0.
+*> and ABSTOL < 0.0 and RELTOL < 0.0.
 *>
 *> If the user wishes to verify that the columns of the matrix C are
 *> sufficiently linearly independent for their intended use, the user
@@ -292,7 +292,7 @@
 *>             of the matrix A.
 *>
 *>           On exit:
-*>             DESEL_ROWS will be permutted according to IPIV(i),
+*>             DESEL_ROWS will be permuted according to IPIV(i),
 *>             so that, if IPIV(i) = k, then the entry i of DESEL_ROWS
 *>             on exit was the entry k of DESEL_ROWS on entry.
 *>
@@ -325,7 +325,7 @@
 *>             columns of size N_free = N - N_sel - N_desel.
 *>
 *>           On exit:
-*>             SEL_DESEL_COLS will be permutted according to JPIV(j),
+*>             SEL_DESEL_COLS will be permuted according to JPIV(j),
 *>             so that, if JPIV(j) = k, then the entry j
 *>             of SEL_DESEL_COLS on exit was the entry k
 *>             of SEL_DESEL_COLS on entry.
@@ -732,7 +732,7 @@
 *>                a) rows (1:K) of the M-by-N array X contain
 *>                   the K-by-N factor X, where K <= N.
 *>                b) rows (K+1:M) of the M-by-N array X.
-*>                   Each column of these rows comtains the elements
+*>                   Each column of these rows contains the elements
 *>                   whose sum of squares is the residual sum of
 *>                   squares for the solution in each column of
 *>                   the least squares problem.
@@ -785,9 +785,9 @@
 *>
 *>          NOTE: The decision, whether the routine uses unblocked
 *>          BLAS 2 or blocked BLAS 3 code is based not only on the
-*>          dimension LWORK of the availbale workspace WORK, but
+*>          dimension LWORK of the available workspace WORK, but
 *>          also on:
-*>           1a) colum preselection stage using DGEQRF:
+*>           1a) column preselection stage using DGEQRF:
 *>               the optimal block size NB, the crossover point NX
 *>               returned by ILAENV for the routine DGEQRF
 *>               in comparison to N_sel. (For N_sel <= NX
@@ -837,7 +837,7 @@
 *>          If LIWORK = -1 or LWORK =-1 then a workspace query is assumed.
 *>          The routine only calculates the optimal size of the WORK and
 *>          IWORK arrays, returns these values as the first entry of
-*>          the WORK and IWORK  arrays respectively, and no error message
+*>          the WORK and IWORK arrays respectively, and no error message
 *>          related to LIWORK is issued by XERBLA.
 *>
 *>          Exact minimal workspace requirements.
@@ -1148,8 +1148,7 @@
 *
 *              Integer minimum workspace computation.
 *              (Int_wk_part_3) LIWKMIN = 2*N for applying the
-*              interchanges
-*              for the columns in the matrix C.
+*              interchanges for the columns in the matrix C.
 *
                LIWKMIN = MAX( LIWKMIN, 2*N )
             END IF
@@ -1200,7 +1199,7 @@
 *
 *     ==================================================================
 *
-*     Quick return if possible for
+*     Quick return if possible for:
 *     a)  M = 0 or N = 0. There is no matrix A(1:M,1:N).
 *     b)  MSUB = 0 or NSUB = 0. There is no matrix A_sub(1:MSUB,1:NSUB).
 *     We need to return correct values for all scalar output parameters,
@@ -1259,7 +1258,7 @@
 *     at MSUB index will move into I index in the matrix A. In this way,
 *     we move all the included rows to the top matrix block preserving
 *     their initial order within the included block. The initial order
-*     of deselected rows will not be preserved withi n their block.
+*     of deselected rows will not be preserved within their block.
 *
       IF( USE_DESEL_ROWS ) THEN
 *
@@ -1284,7 +1283,7 @@
 *
                   CALL DSWAP( N, A( I, 1 ), LDA, A( MSUB, 1 ), LDA )
 *
-*                 Save the nterchange.
+*                 Save the interchange.
 *
                   IPIV( I ) = IPIV( MSUB )
                   IPIV( MSUB ) = I
@@ -1309,7 +1308,7 @@
       END IF
 *
 *     ==================================================================
-*     Permute the pseselected columns to the left and deselected
+*     Permute the preselected columns to the left and deselected
 *     columns to the right of the matrix A.
 *     1) The order of preselected columns is preserved.
 *     2) The order of free columns is not preserved.
@@ -1660,12 +1659,12 @@
                CALL DSWAP( M, C( 1, J ), 1, C( 1, JP ), 1 )
 *
 *              Update the array IWORK(1:N) for the original column
-*              I that was swaped with IP.
+*              I that was swapped with IP.
 *
                IWORK( I ) = IWORK( IP )
 *
 *              Update the array IWORK(N+1:2*N) for the current column
-*              index JP that was swaped with the current column
+*              index JP that was swapped with the current column
 *              index J.
 *
                IWORK( N + JP ) = IWORK( N + J )
