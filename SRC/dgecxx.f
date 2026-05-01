@@ -649,11 +649,11 @@
 *>          TAU is DOUBLE PRECISION array, dimension (min(M_sub,N_sub))
 *>          The scalar factors of the elementary reflectors.
 *>
+*>          If K = 0, all elements TAU(1:min(M_sub,N_sub)) are set
+*>             to zero.
 *>          If 0 < K <= min(M_sub,N_sub):
 *>             only the elements TAU(1:K) may be modified,
 *>             the elements TAU(K+1:min(M_sub,N_sub)) are set to zero.
-*>          If K = 0, all elements TAU(1:min(M_sub,N_sub)) are set
-*>             to zero.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -1207,7 +1207,7 @@
 *     b)  MSUB = 0 or NSUB = 0. There is no matrix A_sub(1:MSUB,1:NSUB).
 *     NOTE: min( M, N) = 0 implies min( MSUB, NSUB) = 0.
 *     We need to return correct values for all scalar output parameters,
-*     including WORK(1) and IWORK(1), which is set above.
+*     (including WORK(1) and IWORK(1), which are set above).
 *
       IF( MIN( MSUB, NSUB ).EQ.0 ) THEN
          K = 0
