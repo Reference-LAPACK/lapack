@@ -231,7 +231,9 @@
          END IF
          IF( E(1).LT.ZERO ) THEN
             E(1) = -E(1)
-            CALL DSWAP( N, Z( 1, 1 ), 1, Z( 1, 2 ), 1 )
+            IF( ICOMPZ.NE.0 ) THEN
+               CALL DSWAP( N, Z( 1, 1 ), 1, Z( 1, 2 ), 1 )
+            END IF
          END IF
          RETURN
       END IF
