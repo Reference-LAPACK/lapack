@@ -539,8 +539,8 @@
       DOUBLE PRECISION   DUM( 1 ), DUMMA( 1 ), RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND, DSXT1
-      EXTERNAL           DLAMCH, DLARND, DSXT1
+      DOUBLE PRECISION   DLAMCH, DLARND
+      EXTERNAL           DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01,

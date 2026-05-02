@@ -1103,14 +1103,12 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKBB, CCHKBD, CCHKBK, CCHKBL, CCHKEC,
-     $                   CCHKGG, CCHKGK, CCHKGL, CCHKHB, CCHKHS, CCHKST,
-     $                   CCKCSD, CCKGLM, CCKGQR, CCKGSV, CCKLSE, CDRGES,
-     $                   CDRGEV, CDRGSX, CDRGVX, CDRVBD, CDRVES, CDRVEV,
-     $                   CDRVSG, CDRVST, CDRVSX, CDRVVX, CERRBD,
-     $                   CERRED, CERRGG, CERRHS, CERRST, ILAVER, XLAENV,
-     $                   CDRGES3, CDRGEV3, 
-     $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG,
-     $                   CDRVSG2STG
+     $                   CCHKGG, CCHKGK, CCHKGL, CCHKHS, CCHKST, CCKCSD,
+     $                   CCKGLM, CCKGQR, CCKGSV, CCKLSE, CDRGES, CDRGEV,
+     $                   CDRGSX, CDRGVX, CDRVBD, CDRVES, CDRVEV, CDRVST,
+     $                   CDRVSX, CDRVVX, CERRBD, CERRED, CERRGG, CERRHS,
+     $                   CERRST, ILAVER, XLAENV, CDRGES3, CDRGEV3,
+     $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG, CDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
