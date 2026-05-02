@@ -132,7 +132,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARF1L, DSCAL, XERBLA
+      EXTERNAL           DLARF1L, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

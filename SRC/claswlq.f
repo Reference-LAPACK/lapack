@@ -187,10 +187,8 @@
       INTEGER            I, II, KK, CTR, MINMN, LWMIN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
       REAL               SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           CGELQT, CTPLQT, XERBLA

@@ -298,8 +298,7 @@
       EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CSSCAL, CGEMM, CGEMMTR, CGEMV,
-     $                   CLACGV, CSWAP
+      EXTERNAL           CCOPY, CSSCAL, CGEMMTR, CGEMV, CLACGV, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, AIMAG, MAX, MIN, REAL, SQRT

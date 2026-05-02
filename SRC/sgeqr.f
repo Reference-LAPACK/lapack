@@ -194,8 +194,6 @@
       INTEGER            MB, NB, MINTSZ, NBLCKS, LWMIN, LWREQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
       REAL               SROUNDUP_LWORK
       EXTERNAL           SROUNDUP_LWORK
 *     ..

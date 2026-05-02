@@ -179,8 +179,8 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK, IPARMQ, IPARAM2STAGE
-      EXTERNAL           IEEECK, IPARMQ, IPARAM2STAGE
+      INTEGER            IEEECK, IPARMQ
+      EXTERNAL           IEEECK, IPARMQ
 *     ..
 *     .. Executable Statements ..
 *

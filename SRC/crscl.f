@@ -105,8 +105,7 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      COMPLEX            CLADIV
-      EXTERNAL           SLAMCH, CLADIV
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSCAL, CSSCAL, CSRSCL

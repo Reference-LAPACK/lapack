@@ -185,10 +185,6 @@
       LOGICAL            LQUERY
       INTEGER            I, II, KK, CTR, MINMN, LWMIN
 *     ..
-*     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
-*     ..
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           ZGELQT, ZTPLQT, XERBLA
 *     ..

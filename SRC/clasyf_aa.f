@@ -166,13 +166,11 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ICAMAX, ILAENV
-      EXTERNAL           LSAME, ILAENV, ICAMAX
+      INTEGER            ICAMAX
+      EXTERNAL           LSAME, ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEMV, CSCAL, CCOPY, CSWAP,
-     $                   CLASET,
-     $                   XERBLA
+      EXTERNAL           CAXPY, CGEMV, CSCAL, CCOPY, CSWAP, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
