@@ -154,10 +154,8 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SASUM, SCASUM, SLAMCH, CLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SCASUM, SLAMCH, CLANGE
+      REAL               SCASUM, SLAMCH, CLANGE
+      EXTERNAL           SCASUM, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM

@@ -154,10 +154,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DZASUM, DLAMCH, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, DASUM, DZASUM, DLAMCH, ZLANGE
+      DOUBLE PRECISION   DZASUM, DLAMCH, ZLANGE
+      EXTERNAL           DZASUM, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM

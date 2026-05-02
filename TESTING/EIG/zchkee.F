@@ -1103,14 +1103,12 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, XLAENV, ZCHKBB, ZCHKBD, ZCHKBK, ZCHKBL,
-     $                   ZCHKEC, ZCHKGG, ZCHKGK, ZCHKGL, ZCHKHB, ZCHKHS,
-     $                   ZCHKST, ZCKCSD, ZCKGLM, ZCKGQR, ZCKGSV, ZCKLSE,
-     $                   ZDRGES, ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES,
-     $                   ZDRVEV, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
-     $                   ZERRBD, ZERRED, ZERRGG, ZERRHS, ZERRST, ILAVER,
-     $                   ZDRGES3, ZDRGEV3,
-     $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG,
-     $                   ZDRVSG2STG
+     $                   ZCHKEC, ZCHKGG, ZCHKGK, ZCHKGL, ZCHKHS, ZCHKST,
+     $                   ZCKCSD, ZCKGLM, ZCKGQR, ZCKGSV, ZCKLSE, ZDRGES,
+     $                   ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES, ZDRVEV,
+     $                   ZDRVST, ZDRVSX, ZDRVVX, ZERRBD, ZERRED, ZERRGG,
+     $                   ZERRHS, ZERRST, ILAVER, ZDRGES3, ZDRGEV3,
+     $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG, ZDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
