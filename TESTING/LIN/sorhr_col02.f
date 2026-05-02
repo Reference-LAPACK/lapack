@@ -154,8 +154,8 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLARNV, SLASET, SGETSQRHRT,
-     $                   SSCAL, SGEMM, SGEMQRT, SSYRK
+      EXTERNAL           SLACPY, SLARNV, SLASET, SGETSQRHRT, SGEMM,
+     $                   SGEMQRT, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, REAL, MAX, MIN

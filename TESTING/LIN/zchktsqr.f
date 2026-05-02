@@ -129,8 +129,7 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRTSQR,
-     $                   ZTSQR01, XLAENV
+      EXTERNAL           ALAHD, ALASUM, ZERRTSQR, ZTSQR01, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

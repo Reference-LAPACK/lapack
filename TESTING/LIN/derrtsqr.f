@@ -77,7 +77,7 @@
      $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DGEQR,
+      EXTERNAL           ALAESM, CHKXER, DGEQR, DLATSQR, DLASWLQ,
      $                   DGEMQR, DGELQ, DGEMLQ
 *     ..
 *     .. Scalars in Common ..

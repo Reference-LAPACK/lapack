@@ -216,8 +216,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
      $                   SLARHS, SLATB4, SLATMS, SPOT02, SPOT03, SPOT05,
-     $                   SSYCON, SSYCONV, SSYRFS, SSYT01, SSYTRF,
-     $                   SSYTRI2, SSYTRS, SSYTRS2, XLAENV
+     $                   SSYCON, SSYRFS, SSYT01, SSYTRF, SSYTRI2,
+     $                   SSYTRS, SSYTRS2, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

@@ -199,9 +199,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX, CGET04,
-     $                   CLACPY, CLARHS, CLASET, CLATB4, CLATMS, CLATSY,
-     $                   CPOT05, CSYSV_ROOK, CSYT01_ROOK, CSYT02,
-     $                   CSYTRF_ROOK, CSYTRI_ROOK
+     $                   CLACPY, CLARHS, CLATB4, CLATMS, CLATSY,
+     $                   CSYSV_ROOK, CSYT01_ROOK, CSYT02, CSYTRF_ROOK,
+     $                   CSYTRI_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

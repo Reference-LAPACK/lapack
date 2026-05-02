@@ -179,7 +179,8 @@
      $                   ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
      $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
      $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
-     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
+     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR,
+     $                   ZCHKHE_AA_2STAGE, ZCHKSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

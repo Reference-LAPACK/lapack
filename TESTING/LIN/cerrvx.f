@@ -88,7 +88,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGBSV, CGBSVX, CGESV, CGESVX, CGTSV, CGTSVX,
-     $                   CHESV, CHESV_RK, CHESV_ROOK, CHESVX, CHKXER,
+     $                   CHESV, CHESV_AA, CHESV_AA_2STAGE, CHESV_RK,
+     $                   CHESV_ROOK, CHESVX, CHKXER,
      $                   CHPSV, CHPSVX, CPBSV, CPBSVX, CPOSV, CPOSVX,
      $                   CPPSV, CPPSVX, CPTSV, CPTSVX, CSPSV, CSPSVX,
      $                   CSYSV, CSYSV_AA, CSYSV_RK, CSYSV_ROOK,

@@ -215,9 +215,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CLACPY, CLARHS,
-     $                   CLATB4, CLATMS, CSYT02, CSYT01, 
-     $                   CSYTRF_AA_2STAGE, CSYTRS_AA_2STAGE,
-     $                   XLAENV
+     $                   CLATB4, CLATMS, CSYT02, CSYTRF_AA_2STAGE,
+     $                   CSYTRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

@@ -154,7 +154,7 @@
       EXTERNAL           LSAME, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SLAVSY, SSWAP, STRMM, SLACPY
+      EXTERNAL           SLASET, SSWAP, STRMM, SLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL

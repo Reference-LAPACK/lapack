@@ -107,7 +107,11 @@
       REAL     SLAMCH
       REAL     CLANGE, CLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+      EXTERNAL SLAMCH, CLANGE, CLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL CLARNV, CLACPY, CGELQT, CLASET, CGEMLQT, CGEMM,
+     $         CHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

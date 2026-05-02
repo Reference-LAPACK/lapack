@@ -252,7 +252,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASVM, DAXPY, ZERRLS, ZGELS,
      $                   ZGELSD, ZGELSS, ZGELST, ZGELSY, ZGEMM,
      $                   ZGETSLS, ZLACPY, ZLARNV, ZQRT13, ZQRT15,
-     $                   ZQRT16, ZDSCAL, XLAENV
+     $                   ZQRT16, ZDSCAL, ZSCAL, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, INT, SQRT
