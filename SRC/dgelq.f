@@ -191,10 +191,6 @@
       LOGICAL            LQUERY, LMINWS, MINT, MINW
       INTEGER            MB, NB, MINTSZ, NBLCKS, LWMIN, LWOPT, LWREQ
 *     ..
-*     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
-*     ..
 *     .. External Subroutines ..
       EXTERNAL           DGELQT, DLASWLQ, XERBLA
 *     ..

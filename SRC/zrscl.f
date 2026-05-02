@@ -104,11 +104,10 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      COMPLEX*16         ZLADIV
-      EXTERNAL           DLAMCH, ZLADIV
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, ZDSCAL, ZDRSCL, ZSCAL
+      EXTERNAL           ZDSCAL, ZDRSCL, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
