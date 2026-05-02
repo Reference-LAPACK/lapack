@@ -154,8 +154,8 @@
       EXTERNAL           DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLARNV, DLASET, DGETSQRHRT,
-     $                   DSCAL, DGEMM, DGEMQRT, DSYRK
+      EXTERNAL           DLACPY, DLARNV, DLASET, DGETSQRHRT, DGEMM,
+     $                   DGEMQRT, DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, DBLE, MAX, MIN

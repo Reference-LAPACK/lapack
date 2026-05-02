@@ -195,15 +195,10 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      DOUBLE PRECISION   DLANSY, SGET06
-      EXTERNAL           DLANSY, SGET06
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, DERRVX,
-     $                   DGET04, DLACPY, DLARHS, DLATB4, DLATMS,
-     $                   DSYSV_AA_2STAGE, DPOT02,
-     $                   DSYTRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, DERRVX, DLACPY,
+     $                   DLARHS, DLATB4, DLATMS, DSYSV_AA_2STAGE,
+     $                   DPOT02
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

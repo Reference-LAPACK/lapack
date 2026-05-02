@@ -109,7 +109,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, SDRVRFP, SDRVRF1, SDRVRF2, SDRVRF3,
-     +                   SDRVRF4
+     +                   SDRVRF4, SERRRFP
 *     ..
 *     .. Executable Statements ..
 *

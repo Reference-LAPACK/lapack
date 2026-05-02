@@ -88,11 +88,12 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGBSV, ZGBSVX, ZGESV, ZGESVX, ZGTSV,
-     $                   ZGTSVX, ZHESV, ZHESV_RK, ZHESV_ROOK, ZHESVX,
-     $                   ZHPSV, ZHPSVX, ZPBSV, ZPBSVX, ZPOSV, ZPOSVX,
-     $                   ZPPSV, ZPPSVX, ZPTSV, ZPTSVX, ZSPSV, ZSPSVX,
-     $                   ZSYSV, ZSYSV_AA, ZSYSV_RK, ZSYSV_ROOK,
-     $                   ZSYSVX, ZHESV_AA_2STAGE
+     $                   ZGTSVX, ZHESV, ZHESV_AA, ZHESV_RK,
+     $                   ZHESV_ROOK, ZHESVX, ZHPSV, ZHPSVX, ZPBSV,
+     $                   ZPBSVX, ZPOSV, ZPOSVX, ZPPSV, ZPPSVX, ZPTSV,
+     $                   ZPTSVX, ZSPSV, ZSPSVX, ZSYSV, ZSYSV_AA,
+     $                   ZSYSV_RK, ZSYSV_ROOK, ZSYSVX,
+     $                   ZHESV_AA_2STAGE, ZSYSV_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

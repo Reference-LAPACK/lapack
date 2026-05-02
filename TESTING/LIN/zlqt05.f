@@ -113,7 +113,11 @@
       DOUBLE PRECISION DLAMCH
       DOUBLE PRECISION ZLANGE, ZLANSY
       LOGICAL  LSAME
-      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME
+      EXTERNAL DLAMCH, ZLANGE, ZLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL ZLASET, ZLARNV, ZLACPY, ZTPLQT, ZGEMLQT, ZGEMM,
+     $         ZHERK, ZTPMLQT
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

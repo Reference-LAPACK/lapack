@@ -200,9 +200,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
-     $                   ZLACPY, ZLARHS, ZLASET, ZLATB4, ZLATMS, ZLATSY,
-     $                   ZPOT05, ZSYSV_ROOK, ZSYT01_ROOK, ZSYT02,
-     $                   ZSYTRF_ROOK, ZSYTRI_ROOK
+     $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLATSY,
+     $                   ZSYSV_ROOK, ZSYT01_ROOK, ZSYT02, ZSYTRF_ROOK,
+     $                   ZSYTRI_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

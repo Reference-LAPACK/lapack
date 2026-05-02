@@ -198,10 +198,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGET04, SLACPY,
-     $                   SLARHS, SLASET, SLATB4, SLATMS, SPOT02, SPOT05,
-     $                   SSYSV_ROOK, SSYT01_ROOK, SSYTRF_ROOK,
-     $                   SSYTRI_ROOK,
-     $                   XLAENV
+     $                   SLARHS, SLATB4, SLATMS, SPOT02, SSYSV_ROOK,
+     $                   SSYT01_ROOK, SSYTRF_ROOK, SSYTRI_ROOK, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

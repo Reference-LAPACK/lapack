@@ -114,8 +114,7 @@
 *     .. External Functions ..
       REAL SLAMCH
       REAL SLANGE, SLANSY
-      LOGICAL  LSAME
-      EXTERNAL SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

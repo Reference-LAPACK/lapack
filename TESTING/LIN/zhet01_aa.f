@@ -157,7 +157,7 @@
       EXTERNAL           LSAME, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASET, ZLAVHE
+      EXTERNAL           ZLASET, ZSWAP, ZTRMM, ZLACPY, ZLACGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE

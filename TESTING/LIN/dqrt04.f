@@ -100,10 +100,12 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL DGEMM, DLACPY, DLARNV, DGEMQRT, DLASET, DGEQRT, DSYRK
+*     ..
 *     .. External Functions ..
       DOUBLE PRECISION DLAMCH, DLANGE, DLANSY
-      LOGICAL  LSAME
-      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME
+      EXTERNAL DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
