@@ -5,7 +5,7 @@
 #include "cblas.h"
 #include "cblas_test.h"
 
-void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
+void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form, ...)
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
    extern CBLAS_INT link_xerbla;
@@ -117,7 +117,7 @@ void F77_xerbla(char *srname, void *vinfo
    srname = F2C_STR(F77_srname, XerblaStrLen);
 #endif
 
-   /* See the comment in cblas_xerbla() above */
+   /* See the comment in API_SUFFIX(cblas_xerbla)() above */
    if (link_xerbla)
    {
       link_xerbla = 0;
@@ -133,5 +133,5 @@ void F77_xerbla(char *srname, void *vinfo
    /* We increment *info by 1 since the CBLAS interface adds one more
     * argument to all level 2 and 3 routines.
     */
-   cblas_xerbla(*info+1,rout,"");
+   API_SUFFIX(cblas_xerbla)(*info+1,rout,"");
 }

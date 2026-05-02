@@ -74,7 +74,7 @@ void F77_zgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zgemm( CblasRowMajor, transa, transb, *m, *n, *k, alpha, A, LDA,
+     API_SUFFIX(cblas_zgemm)( CblasRowMajor, transa, transb, *m, *n, *k, alpha, A, LDA,
                   B, LDB, beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ ) {
@@ -86,10 +86,10 @@ void F77_zgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zgemm( CblasColMajor, transa, transb, *m, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zgemm)( CblasColMajor, transa, transb, *m, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
   else
-     cblas_zgemm( UNDEFINED, transa, transb, *m, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zgemm)( UNDEFINED, transa, transb, *m, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
 }
 
@@ -154,7 +154,7 @@ void F77_zgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
               C[i*LDC+j].real=c[j*(*ldc)+i].real;
               C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
           }
-      cblas_zgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
+      API_SUFFIX(cblas_zgemmtr)( CblasRowMajor, uplo, transa, transb, *n, *k, alpha, A, LDA,
               B, LDB, beta, C, LDC );
       for( j=0; j<*n; j++ )
           for( i=0; i<*n; i++ ) {
@@ -166,10 +166,10 @@ void F77_zgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
       free(C);
   }
   else if (*layout == TEST_COL_MJR)
-      cblas_zgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
+      API_SUFFIX(cblas_zgemmtr)( CblasColMajor, uplo, transa, transb, *n, *k, alpha, a, *lda,
               b, *ldb, beta, c, *ldc );
   else
-      cblas_zgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
+      API_SUFFIX(cblas_zgemmtr)( UNDEFINED, uplo, transa, transb, *n, *k, alpha, a, *lda,
               b, *ldb, beta, c, *ldc );
 }
 
@@ -224,7 +224,7 @@ void F77_zhemm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zhemm( CblasRowMajor, side, uplo, *m, *n, alpha, A, LDA, B, LDB,
+     API_SUFFIX(cblas_zhemm)( CblasRowMajor, side, uplo, *m, *n, alpha, A, LDA, B, LDB,
                   beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ ) {
@@ -236,10 +236,10 @@ void F77_zhemm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zhemm( CblasColMajor, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_zhemm)( CblasColMajor, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
                   beta, c, *ldc );
   else
-     cblas_zhemm( UNDEFINED, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_zhemm)( UNDEFINED, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
                   beta, c, *ldc );
 }
 void F77_zsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_INT *n,
@@ -284,7 +284,7 @@ void F77_zsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_zsymm( CblasRowMajor, side, uplo, *m, *n, alpha, A, LDA, B, LDB,
+     API_SUFFIX(cblas_zsymm)( CblasRowMajor, side, uplo, *m, *n, alpha, A, LDA, B, LDB,
                   beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -294,10 +294,10 @@ void F77_zsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zsymm( CblasColMajor, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_zsymm)( CblasColMajor, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
                   beta, c, *ldc );
   else
-     cblas_zsymm( UNDEFINED, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_zsymm)( UNDEFINED, side, uplo, *m, *n, alpha, a, *lda, b, *ldb,
                   beta, c, *ldc );
 }
 
@@ -343,7 +343,7 @@ void F77_zherk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zherk(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA, *beta,
+     API_SUFFIX(cblas_zherk)(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA, *beta,
 	         C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -354,10 +354,10 @@ void F77_zherk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zherk(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
+     API_SUFFIX(cblas_zherk)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
   else
-     cblas_zherk(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
+     API_SUFFIX(cblas_zherk)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
 }
 
@@ -403,7 +403,7 @@ void F77_zsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zsyrk(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA, beta,
+     API_SUFFIX(cblas_zsyrk)(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA, beta,
 	         C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -414,10 +414,10 @@ void F77_zsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zsyrk(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda, beta,
+     API_SUFFIX(cblas_zsyrk)(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda, beta,
 	         c, *ldc );
   else
-     cblas_zsyrk(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda, beta,
+     API_SUFFIX(cblas_zsyrk)(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda, beta,
 	         c, *ldc );
 }
 void F77_zher2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
@@ -470,7 +470,7 @@ void F77_zher2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zher2k(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA,
+     API_SUFFIX(cblas_zher2k)(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA,
 		  B, LDB, *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -482,10 +482,10 @@ void F77_zher2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zher2k(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zher2k)(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
   else
-     cblas_zher2k(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zher2k)(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_zsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
@@ -538,7 +538,7 @@ void F77_zsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
            C[i*LDC+j].real=c[j*(*ldc)+i].real;
            C[i*LDC+j].imag=c[j*(*ldc)+i].imag;
         }
-     cblas_zsyr2k(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA,
+     API_SUFFIX(cblas_zsyr2k)(CblasRowMajor, uplo, trans, *n, *k, alpha, A, LDA,
 		  B, LDB, beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -550,10 +550,10 @@ void F77_zsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_zsyr2k(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zsyr2k)(CblasColMajor, uplo, trans, *n, *k, alpha, a, *lda,
 		   b, *ldb, beta, c, *ldc );
   else
-     cblas_zsyr2k(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda,
+     API_SUFFIX(cblas_zsyr2k)(UNDEFINED, uplo, trans, *n, *k, alpha, a, *lda,
 		   b, *ldb, beta, c, *ldc );
 }
 void F77_ztrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
@@ -601,7 +601,7 @@ void F77_ztrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
            B[i*LDB+j].real=b[j*(*ldb)+i].real;
            B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
         }
-     cblas_ztrmm(CblasRowMajor, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrmm)(CblasRowMajor, side, uplo, trans, diag, *m, *n, alpha,
 		 A, LDA, B, LDB );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ ) {
@@ -612,10 +612,10 @@ void F77_ztrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      free(B);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ztrmm(CblasColMajor, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrmm)(CblasColMajor, side, uplo, trans, diag, *m, *n, alpha,
 		   a, *lda, b, *ldb);
   else
-     cblas_ztrmm(UNDEFINED, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrmm)(UNDEFINED, side, uplo, trans, diag, *m, *n, alpha,
 		   a, *lda, b, *ldb);
 }
 
@@ -664,7 +664,7 @@ void F77_ztrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
            B[i*LDB+j].real=b[j*(*ldb)+i].real;
            B[i*LDB+j].imag=b[j*(*ldb)+i].imag;
         }
-     cblas_ztrsm(CblasRowMajor, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrsm)(CblasRowMajor, side, uplo, trans, diag, *m, *n, alpha,
 		 A, LDA, B, LDB );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ ) {
@@ -675,9 +675,9 @@ void F77_ztrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      free(B);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ztrsm(CblasColMajor, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrsm)(CblasColMajor, side, uplo, trans, diag, *m, *n, alpha,
 		   a, *lda, b, *ldb);
   else
-     cblas_ztrsm(UNDEFINED, side, uplo, trans, diag, *m, *n, alpha,
+     API_SUFFIX(cblas_ztrsm)(UNDEFINED, side, uplo, trans, diag, *m, *n, alpha,
 		   a, *lda, b, *ldb);
 }
