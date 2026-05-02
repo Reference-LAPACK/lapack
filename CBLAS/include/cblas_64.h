@@ -109,7 +109,7 @@ void cblas_zcopy_64(const int64_t N, const void *X, const int64_t incX,
                  void *Y, const int64_t incY);
 void cblas_zaxpy_64(const int64_t N, const void *alpha, const void *X,
                  const int64_t incX, void *Y, const int64_t incY);
-void cblas_zaxbpy_64(const int64_t N, const void *alpha, const void *X,
+void cblas_zaxpby_64(const int64_t N, const void *alpha, const void *X,
                  const int64_t incX, const void *beta, void *Y, const int64_t incY);
 
 
