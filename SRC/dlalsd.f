@@ -200,7 +200,8 @@
 *     .. External Functions ..
       INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH, DLANST
-      EXTERNAL           IDAMAX, DLAMCH, DLANST
+      LOGICAL            LSAME
+      EXTERNAL           IDAMAX, DLAMCH, DLANST, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG,
@@ -258,7 +259,7 @@
 *
 *     Rotate the matrix if it is lower bidiagonal.
 *
-      IF( UPLO.EQ.'L' ) THEN
+      IF( LSAME( UPLO, 'L' ) ) THEN
          DO 10 I = 1, N - 1
             CALL DLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R

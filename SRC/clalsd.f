@@ -212,7 +212,8 @@
 *     .. External Functions ..
       INTEGER            ISAMAX
       REAL               SLAMCH, SLANST
-      EXTERNAL           ISAMAX, SLAMCH, SLANST
+      LOGICAL            LSAME
+      EXTERNAL           ISAMAX, SLAMCH, SLANST, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET,
@@ -271,7 +272,7 @@
 *
 *     Rotate the matrix if it is lower bidiagonal.
 *
-      IF( UPLO.EQ.'L' ) THEN
+      IF( LSAME( UPLO, 'L' ) ) THEN
          DO 10 I = 1, N - 1
             CALL SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
