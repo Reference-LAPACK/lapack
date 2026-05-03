@@ -291,7 +291,7 @@
 *
 *        Lower triangular matrix
 *
-         DO 50 J = 1, N
+         DO 50 J = 1, MIN( M, N )
             DO 40 I = J, M
                A( I, J ) = A( I, J )*MUL
    40       CONTINUE
