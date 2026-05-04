@@ -30,7 +30,7 @@ set(SEIGTST schkee.F
    schkbb.f schkbd.f schkbk.f schkbl.f schkec.f
    schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schkst2stg.f schksb2stg.f
    sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
-   sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f
+   sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f sdrgev4.f
    sdrvbd.f sdrves.f sdrvev.f sdrvsg.f sdrvsg2stg.f
    sdrvst.f sdrvst2stg.f sdrvsx.f sdrvvx.f
    serrbd.f serrec.f serred.f serrgg.f serrhs.f serrst.f
@@ -49,7 +49,7 @@ set(CEIGTST cchkee.F
    cchkbb.f cchkbd.f cchkbk.f cchkbl.f cchkec.f
    cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f cchkst2stg.f cchkhb2stg.f
    cckcsd.f cckglm.f cckgqr.f cckgsv.f ccklse.f ccsdts.f
-   cdrges.f cdrgev.f cdrges3.f cdrgev3.f cdrgsx.f cdrgvx.f
+   cdrges.f cdrgev.f cdrges3.f cdrgev3.f cdrgsx.f cdrgvx.f cdrgev4.f
    cdrvbd.f cdrves.f cdrvev.f cdrvsg.f cdrvsg2stg.f
    cdrvst.f cdrvst2stg.f cdrvsx.f cdrvvx.f
    cerrbd.f cerrec.f cerred.f cerrgg.f cerrhs.f cerrst.f
@@ -71,7 +71,7 @@ set(DEIGTST dchkee.F
    dchkbb.f dchkbd.f dchkbk.f dchkbl.f dchkec.f
    dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f dchkst2stg.f dchksb2stg.f
    dckcsd.f dckglm.f dckgqr.f dckgsv.f dcklse.f dcsdts.f
-   ddrges.f ddrgev.f ddrges3.f ddrgev3.f ddrgsx.f ddrgvx.f
+   ddrges.f ddrgev.f ddrges3.f ddrgev3.f ddrgsx.f ddrgvx.f ddrgev4.f
    ddrvbd.f ddrves.f ddrvev.f ddrvsg.f ddrvsg2stg.f
    ddrvst.f ddrvst2stg.f ddrvsx.f ddrvvx.f
    derrbd.f derrec.f derred.f derrgg.f derrhs.f derrst.f
@@ -90,7 +90,7 @@ set(ZEIGTST zchkee.F
    zchkbb.f zchkbd.f zchkbk.f zchkbl.f zchkec.f
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f zchkst2stg.f zchkhb2stg.f
    zckcsd.f zckglm.f zckgqr.f zckgsv.f zcklse.f zcsdts.f
-   zdrges.f zdrgev.f zdrges3.f zdrgev3.f zdrgsx.f zdrgvx.f
+   zdrges.f zdrgev.f zdrges3.f zdrgev3.f zdrgsx.f zdrgvx.f zdrgev4.f
    zdrvbd.f zdrves.f zdrvev.f zdrvsg.f zdrvsg2stg.f
    zdrvst.f zdrvst2stg.f zdrvsx.f zdrvvx.f
    zerrbd.f zerrec.f zerred.f zerrgg.f zerrhs.f zerrst.f
