@@ -308,7 +308,7 @@
 *     .. External Functions ..
       EXTERNAL          ZDOTCTEST, ZDOTUTEST
 *     .. External Subroutines ..
-      EXTERNAL          ZAXPYTEST, ZCOPYTEST, ZSWAPTEST, CTEST
+      EXTERNAL          ZAXPYTEST, ZCOPYTEST, ZSWAPTEST, CTEST,
      +                  ZAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
