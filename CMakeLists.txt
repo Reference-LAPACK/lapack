@@ -94,6 +94,10 @@ endif()
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+message(STATUS "Build shared libraries: ${BUILD_SHARED_LIBS}")
+
+option(BUILD_DEFAULT_API "Build default API. Disable and combine with -DBUILD_INDEX64_EXT_API=ON to build only extended API" ON)
+message(STATUS "Build default API: ${BUILD_DEFAULT_API}")
 
 # By default build index32 library
 option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
@@ -112,9 +116,7 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-
-option(BUILD_DEFAULT_API "Build default API. Disable and combine with -DBUILD_INDEX64_EXT_API=ON to build only extended API" ON)
-message(STATUS "Build default API: ${BUILD_DEFAULT_API}")
+message(STATUS "Build default API with 64-bit integers: ${BUILD_INDEX64}")
 
 # By default build extended _64 API for supported compilers only.
 option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
