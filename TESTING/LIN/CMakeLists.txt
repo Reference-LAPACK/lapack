@@ -254,11 +254,16 @@ function(add_lin_executable name)
 
   if(BUILD_INDEX64_EXT_API)
     include(ExtendedAPIHelpers)
-    generate_64bit_suffixed_sources(${name}_64 sources sources_64)
+    generate_64bit_suffixed_sources(${name} sources sources_64)
 
     add_executable(${name}_64 ${sources_64})
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+
+    # Add depedency to the global codegen target. Since we reuse the same
+    # generated source file for multiple tests, the generation could be
+    # triggered by multiple targets when building in parallel.
+    add_dependencies(${name}_64 64bit_codegen)
   endif()
 endfunction()
 

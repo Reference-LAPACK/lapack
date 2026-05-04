@@ -22,7 +22,7 @@ function(_add_blas_test name src test_input)
 endfunction()
 
 function(add_blas_test name source)
-  get_filename_component(baseNAME ${input_src} NAME_WE)
+  get_filename_component(baseNAME ${source} NAME_WE)
   set(test_input "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
 
   if(BUILD_DEFAULT_API)
@@ -31,7 +31,7 @@ function(add_blas_test name source)
 
   if(BUILD_INDEX64_EXT_API)
     include(ExtendedAPIHelpers)
-    generate_64bit_suffixed_sources(${name}_64 source source_64)
+    generate_64bit_suffixed_sources(${name} source source_64)
 
     # Create 64-bit version of test input if it exists, replacing output
     # file names with their 64-bit counterparts
