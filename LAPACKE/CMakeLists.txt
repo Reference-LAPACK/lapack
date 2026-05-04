@@ -94,10 +94,6 @@ target_include_directories(${LAPACKELIB} PUBLIC
     $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-if(WIN32 AND NOT UNIX)
-  target_compile_definitions(${LAPACKELIB} PUBLIC HAVE_LAPACK_CONFIG_H LAPACK_COMPLEX_STRUCTURE)
-  message(STATUS "Windows BUILD")
-endif()
 
 if(LAPACKE_WITH_TMG)
   target_link_libraries(${LAPACKELIB} PRIVATE ${TMGLIB})
