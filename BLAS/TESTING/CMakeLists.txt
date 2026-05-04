@@ -31,7 +31,7 @@ function(add_blas_test name source)
 
   if(BUILD_INDEX64_EXT_API)
     include(ExtendedAPIHelpers)
-    generate_64bit_suffixed_sources(${name} source source_64)
+    generate_64bit_suffixed_sources(${name} source source_64 NO_STRING_REPLACEMENTS)
 
     # Create 64-bit version of test input if it exists, replacing output
     # file names with their 64-bit counterparts

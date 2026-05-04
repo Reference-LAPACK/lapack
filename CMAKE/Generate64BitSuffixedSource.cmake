@@ -6,6 +6,10 @@ if(NOT DEFINED OUTPUT_FILE)
   message(FATAL_ERROR "OUTPUT_FILE must be set")
 endif()
 
+if(NOT DEFINED REPLACE_IN_STRINGS)
+  set(REPLACE_IN_STRINGS ON)
+endif()
+
 # Check whether the input file is fixed or free form based on its extension.
 get_filename_component(input_extension "${INPUT_FILE}" LAST_EXT)
 string(TOLOWER "${input_extension}" input_extension_lower)
@@ -217,6 +221,8 @@ function(_wrap_fixed_form_line line result)
   set(${result} "${wrapped_line}" PARENT_SCOPE)
 endfunction()
 
+# Wrap fixed-form Fortran source code to ensure it remains valid with
+# the standard 72-column statement field.
 function(_wrap_fixed_form_source source_text result)
   if(_rewrite_source_is_free_form)
     set(${result} "${source_text}" PARENT_SCOPE)
@@ -246,6 +252,65 @@ function(_wrap_fixed_form_source source_text result)
   endwhile()
 
   set(${result} "${wrapped_source}" PARENT_SCOPE)
+endfunction()
+
+# Protect string literals in the source content by replacing them with
+# placeholders, and save the original literals in variables for later restoration.
+function(_protect_fortran_string_literals input_text result count_result)
+  set(output_text "")
+  set(remaining_source "${input_text}")
+  set(literal_count 0)
+  set(string_literal_regex "'([^']|'')*'|\"([^\"]|\"\")*\"")
+
+  while(NOT remaining_source STREQUAL "")
+    string(FIND "${remaining_source}" "\n" newline_index)
+    if(newline_index EQUAL -1)
+      set(current_line "${remaining_source}")
+      set(remaining_source "")
+      set(has_newline FALSE)
+    else()
+      string(SUBSTRING "${remaining_source}" 0 ${newline_index} current_line)
+      math(EXPR next_index "${newline_index} + 1")
+      string(SUBSTRING "${remaining_source}" ${next_index} -1
+        remaining_source)
+      set(has_newline TRUE)
+    endif()
+
+    string(REGEX MATCHALL "${string_literal_regex}" string_literals
+      "${current_line}")
+    foreach(string_literal IN LISTS string_literals)
+      set(placeholder "@@LAPACK_64_STRING_LITERAL_${literal_count}@@")
+      string(REPLACE "${string_literal}" "${placeholder}" current_line
+        "${current_line}")
+      set(protected_string_literal_${literal_count} "${string_literal}"
+        PARENT_SCOPE)
+      math(EXPR literal_count "${literal_count} + 1")
+    endforeach()
+
+    string(APPEND output_text "${current_line}")
+    if(has_newline)
+      string(APPEND output_text "\n")
+    endif()
+  endwhile()
+
+  set(${result} "${output_text}" PARENT_SCOPE)
+  set(${count_result} "${literal_count}" PARENT_SCOPE)
+endfunction()
+
+# Restore string literals in the rewritten source content by replacing the
+# placeholders with the original literals saved from the input content.
+function(_restore_fortran_string_literals input_text literal_count result)
+  set(output_text "${input_text}")
+  if(literal_count GREATER 0)
+    math(EXPR last_literal_index "${literal_count} - 1")
+    foreach(index RANGE 0 ${last_literal_index})
+      set(placeholder "@@LAPACK_64_STRING_LITERAL_${index}@@")
+      string(REPLACE "${placeholder}" "${protected_string_literal_${index}}"
+        output_text "${output_text}")
+    endforeach()
+  endif()
+
+  set(${result} "${output_text}" PARENT_SCOPE)
 endfunction()
 
 get_filename_component(output_dir "${OUTPUT_FILE}" DIRECTORY)
@@ -317,21 +382,31 @@ endwhile()
 list(REMOVE_DUPLICATES symbol_names)
 list(REMOVE_ITEM symbol_names ETIME etime ETIME_ etime_)
 
+# If string literals should not be modified, protect them before performing replacements
+if(NOT REPLACE_IN_STRINGS)
+  _protect_fortran_string_literals(
+    "${rewritten_content}" rewritten_content protected_string_literal_count)
+endif()
+
 # Replace symbol names with their suffixed versions in the source content
 foreach(symbol_name IN LISTS symbol_names)
   set(symbol_variants "${symbol_name}")
   string(TOLOWER "${symbol_name}" symbol_lower)
   string(TOUPPER "${symbol_name}" symbol_upper)
   foreach(symbol_variant "${symbol_lower}" "${symbol_upper}")
-    string(
-      REGEX REPLACE
-      "(^|[^A-Za-z0-9_])${symbol_variant}([^A-Za-z0-9_]|$)"
-      "\\1${symbol_variant}_64\\2"
-      rewritten_content
-      "${rewritten_content}"
-    )
+    set(match_regex "(^|[^A-Za-z0-9_])${symbol_variant}([^A-Za-z0-9_]|$)")
+    set(replacement "\\1${symbol_variant}_64\\2")
+    string(REGEX REPLACE
+      "${match_regex}" "${replacement}"
+      rewritten_content "${rewritten_content}")
   endforeach()
 endforeach()
+
+# Restore string literals if they were protected
+if(NOT REPLACE_IN_STRINGS)
+  _restore_fortran_string_literals(
+    "${rewritten_content}" "${protected_string_literal_count}" rewritten_content)
+endif()
 
 _wrap_fixed_form_source("${rewritten_content}" rewritten_content)
 
