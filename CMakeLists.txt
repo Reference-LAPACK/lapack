@@ -116,11 +116,17 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
-message(STATUS "Build default API with 64-bit integers: ${BUILD_INDEX64}")
+message(STATUS "Build default API as Index-64: ${BUILD_INDEX64}")
 
-# By default build extended _64 API for supported compilers only.
+# By default build extended _64 API
 option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
+
+if(BUILD_INDEX64_EXT_API AND BUILD_INDEX64)
+  message(WARNING
+    "Building Index-64 API redundantly as extended API and default API."
+    "Consider disabling one of them (BUILD_INDEX64_EXT_API / BUILD_INDEX64).")
+endif()
 
 include(GNUInstallDirs)
 
