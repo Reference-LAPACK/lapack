@@ -165,15 +165,16 @@
       EXTERNAL           LSAME, LSAMEN, DLAMCH, DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
-     $                   DCHKORHR_COL, DCHKPB, DCHKPO, DCHKPS, DCHKPP,
-     $                   DCHKPT, DCHKQ3, DCHKQP3RK, DCHKQL, DCHKQR,
-     $                   DCHKRQ, DCHKSP, DCHKSY, DCHKSY_ROOK, DCHKSY_RK,
-     $                   DCHKSY_AA, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
-     $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
-     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
-     $                   DDRVSY_RK, DDRVSY_AA, ILAVER, DCHKLQTP,
-     $                   DCHKQRT, DCHKQRTP, DCHKLQT,DCHKTSQR
+      EXTERNAL           ALAREQ, DCHKCXX, DCHKEQ, DCHKGB, DCHKGE,
+     $                   DCHKGT, DCHKLQ, DCHKORHR_COL, DCHKPB, DCHKPO,
+     $                   DCHKPS, DCHKPP, DCHKPT, DCHKQ3, DCHKQP3RK,
+     $                   DCHKQL, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
+     $                   DCHKSY_ROOK, DCHKSY_RK, DCHKSY_AA, DCHKTB,
+     $                   DCHKTP, DCHKTR, DCHKTZ, DDRVGB, DDRVGE, DDRVGT,
+     $                   DDRVLS, DDRVPB, DDRVPO, DDRVPP, DDRVPT, DDRVSP,
+     $                   DDRVSY, DDRVSY_ROOK, DDRVSY_RK, DDRVSY_AA,
+     $                   ILAVER, DCHKLQTP, DCHKQRT, DCHKQRTP, DCHKLQT,
+     $                   DCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
