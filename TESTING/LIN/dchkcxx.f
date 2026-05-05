@@ -18,16 +18,12 @@
 *     $                    WORK, IWORK, NOUT )
 *      IMPLICIT NONE
 *
-*  -- LAPACK test routine --
-*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*
-*     .. Scalar Arguments ..
+*      .. Scalar Arguments ..
 *      LOGICAL            TSTERR
 *      INTEGER            NM, NN, NNB, NOUT
 *      DOUBLE PRECISION   THRESH
-*     ..
-*     .. Array Arguments ..
+*      ..
+*      .. Array Arguments ..
 *      LOGICAL            DOTYPE( * )
 *      INTEGER            IWORK( * ), NBVAL( * ), MVAL( * ), NVAL( * ),
 *     $                   NXVAL( * ),
@@ -309,13 +305,11 @@
 *     .. Local Scalars ..
       CHARACTER          DIST, TYPE, FACT, USESD
       CHARACTER*3        PATH
-      INTEGER            I, IHIGH, ILOW, IM, IMAT, IN, INC_ZERO,
-     $                   INB, IND_OFFSET_GEN,
-     $                   IND_IN, IND_OUT, INS, INFO,
-     $                   ISTEP, J, J_INC, J_FIRST_NZ, JB_ZERO,
-     $                   K, KL, KMAXFREE, KU, LDA, LDC, LDQRC, LDX,
-     $                   LIWORK,LWORK, LWKTST,
-     $                   LWORK_MQR, M, MINMN, MINMNB_GEN, MODE, N,
+      INTEGER            I, IM, IMAT, IN, INB, IND_OFFSET_GEN,
+     $                   IND_IN, IND_OUT, INFO, J, J_INC, J_FIRST_NZ,
+     $                   JB_ZERO, K, KL, KMAXFREE, KU, LDA, LDC,
+     $                   LDQRC, LDX, LIWORK,LWORK, LWKTST,
+     $                   M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NBMAX_ORMQR, NB_ZERO, NERRS, NFAIL,
      $                   NB_GEN, NRUN, NX, T
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
@@ -323,11 +317,10 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      DOUBLE PRECISION   RESULT( NTESTS ), RDUMMY( 1 )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DQPT01, DQRT11, DQRT12, DLANGE,
-     $                   DLAPY2
+      DOUBLE PRECISION   DLAMCH, DQPT01, DQRT11, DQRT12, DLANGE
       EXTERNAL           DLAMCH, DQPT01, DQRT11, DQRT12, DLANGE
 *     ..
 *     .. External Subroutines ..
