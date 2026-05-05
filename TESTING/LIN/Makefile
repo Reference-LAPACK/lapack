@@ -45,7 +45,7 @@ DZLNTST = dlaord.o
 SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
-   schkpt.o schkq3.o schkqp3rk.o schkql.o schkqr.o schkrq.o \
+   schkpt.o schkq3.o schkqp3rk.o schkcxx.o schkql.o schkqr.o schkrq.o \
    schksp.o schksy.o schksy_rook.o schksy_rk.o  \
    schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
    schktz.o \
@@ -74,7 +74,8 @@ SLINTST = schkaa.o \
    sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o \
    schklqt.o schklqtp.o schktsqr.o \
    serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o \
-   schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o
+   schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o \
+   serrcxx.o
 
 ifdef USEXBLAS
 SLINTST += sdrvgbx.o sdrvgex.o sdrvsyx.o sdrvpox.o \
@@ -137,8 +138,8 @@ endif
 DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
-   dchkpt.o dchkq3.o dchkqp3rk.o dchkql.o dchkqr.o dchkrq.o \
-   dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
+   dchkpt.o dchkq3.o dchkqp3rk.o dchkcxx.o dchkql.o dchkqr.o \
+   dchkrq.o dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
    dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
@@ -167,7 +168,8 @@ DLINTST = dchkaa.o \
    dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o \
    dchklq.o dchklqt.o dchklqtp.o dchktsqr.o \
    derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o \
-   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o
+   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o \
+   derrcxx.o
 
 ifdef USEXBLAS
 DLINTST += ddrvgbx.o ddrvgex.o ddrvsyx.o ddrvpox.o \
