@@ -172,8 +172,8 @@
      $                   DCHKSY_AA, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
      $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
      $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
-     $                   DDRVSY_RK, DDRVSY_AA, ILAVER, DCHKLQTP, DCHKQRT,
-     $                   DCHKQRTP, DCHKLQT,DCHKTSQR
+     $                   DDRVSY_RK, DDRVSY_AA, ILAVER, DCHKLQTP,
+     $                   DCHKQRT, DCHKQRTP, DCHKLQT,DCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
