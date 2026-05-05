@@ -866,12 +866,13 @@
 *                 ===============
 *                 This test is only for the factorizations with the
 *                 rank greater than 0.
-*                 For J=1:K, the J-th column of C should be element-wize
+*                 For J=1:K, the J-th column of C should be elementwise
 *                 equal (including NaN and Inf)
 *                 to the JPIV(J)-th column of A.
 *
                   RESULT( 5 ) = ZERO
-                  IF(.FALsE.) THEN
+*                 Disable for now, incomplete test.
+                  IF(.FALSE.) THEN
                   DO J = 1, K, 1
                      DO I = 1, M, 1
                         IF( .NOT. (C( (J-1)*LDC+I )
