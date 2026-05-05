@@ -119,7 +119,7 @@ SLASRC = \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \
    sgehd2.o sgehrd.o sgelq2.o sgelqf.o \
    sgels.o  sgelst.o sgelsd.o sgelss.o sgelsy.o sgeql2.o sgeqlf.o \
-   sgeqp3.o sgeqp3rk.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
+   sgeqp3.o sgeqp3rk.o sgecxx.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
    sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvdx.o sgesvx.o \
    sgetc2.o sgetf2.o sgetri.o \
    sggbak.o sggbal.o sgges.o  sgges3.o sggesx.o \

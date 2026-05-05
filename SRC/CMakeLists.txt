@@ -90,7 +90,7 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f
    sgels.f  sgelst.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
-   sgeqp3.f sgeqp3rk.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
+   sgeqp3.f sgeqp3rk.f sgecxx.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
    sgetri.f
    sggbak.f sggbal.f
