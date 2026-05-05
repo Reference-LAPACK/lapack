@@ -30,8 +30,8 @@
 *       CHARACTER           FACT, USESD
 *       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
 *      $                    LDX, LIWORK, LWORK, M, N
-*       DOUBLE PRECISION    ABSTOL, MAXC2NRMK, RELTOL,
-*      $                    RELMAXC2NRMK, FNRMK
+*       DOUBLE PRECISION    ABSTOL, FNRMK, MAXC2NRMK,
+*      $                    RELMAXC2NRMK, RELTOL
 *      ..
 *      .. Array Arguments ..
 *       INTEGER             DESEL_ROWS( * ), IPIV( * ), IWORK( * ),
@@ -906,8 +906,8 @@
       CHARACTER           FACT, USESD
       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
      $                    LDX, LIWORK, LWORK, M, N
-      DOUBLE PRECISION    ABSTOL, MAXC2NRMK, RELTOL,
-     $                    RELMAXC2NRMK, FNRMK
+      DOUBLE PRECISION    ABSTOL, FNRMK, MAXC2NRMK,
+     $                    RELMAXC2NRMK, RELTOL
 *     ..
 *     .. Array Arguments ..
       INTEGER             DESEL_ROWS( * ), IPIV( * ), IWORK( * ),
@@ -926,17 +926,17 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, RETURNC, RETURNX,
      $                   USE_DESEL_ROWS, USE_SEL_DESEL_COLS, USETOL
-      INTEGER            I, IP, J, JP, NSUB, MFREE, MSUB, NSEL, JDESEL,
-     $                   ITEMP, IINFO, KFREE, KMAXLS, KP0,
-     $                   LIWKMIN, LWKMIN, LIWKOPT, LWKOPT,
-     $                   MRESID, NRESID, MINMN,
-     $                   MINMNFREE, MDESEL, NDESEL, NFREE
+      INTEGER            I, IP, IINFO, ITEMP, J, JDESEL, JP, KFREE,
+     $                   KMAXLS, KP0, LIWKMIN, LIWKOPT, LWKMIN,
+     $                   LWKOPT, MFREE, MDESEL, MINMN, MINMNFREE,
+     $                   MRESID, MSUB, NFREE, NDESEL, NRESID, NSEL,
+     $                   NSUB
       DOUBLE PRECISION   ABSTOLFREE, EPS, MAXC2NRM, MAXC2NRMKFREE,
      $                   RELTOLFREE, RELMAXC2NRMKFREE, SAFMIN
 
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGELS, DGEQP3RK, DGEQRF, DORMQR,
-     $                   DSWAP, DLACPY, XERBLA
+      EXTERNAL           DCOPY, DGELS, DGEQP3RK, DGEQRF, DLACPY,
+     $                   DORMQR, DSWAP, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN, LSAME
