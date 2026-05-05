@@ -870,7 +870,7 @@
 *                 equal (including NaN and Inf)
 *                 to the JPIV(J)-th column of A.
 *
-                  RESULT( 5 ) = 0.0D+0
+                  RESULT( 5 ) = ZERO
                   IF(.FALsE.) THEN
                   DO J = 1, K, 1
                      DO I = 1, M, 1
