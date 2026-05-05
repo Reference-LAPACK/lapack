@@ -324,12 +324,12 @@
       EXTERNAL           DLAMCH, DQPT01, DQRT11, DQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DAXPY, DERRCXX,
-     $                   DGEQP3RK, DLACPY, DLAORD, DLASET, DLATB4,
-     $                   DLATMS, DORMQR, DSWAP, ICOPY, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRCXX,
+     $                   DGECXX, DLACPY, DLAORD, DLASET, DLATB4,
+     $                   DLATMS, DSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, MAX, MIN, MOD
+      INTRINSIC          ABS, MAX, MIN, MOD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
