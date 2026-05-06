@@ -5,6 +5,7 @@
 #ifndef CBLAS_TEST_H
 #define CBLAS_TEST_H
 #include "cblas.h"
+#include "cblas_globals.h"
 #include "cblas_mangling.h"
 
 /* It seems all current Fortran compilers put strlen at end.

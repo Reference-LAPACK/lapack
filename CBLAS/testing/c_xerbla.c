@@ -9,7 +9,6 @@ void cblas_xerbla(CBLAS_INT info, const char *rout, const char *form, ...)
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
    extern CBLAS_INT link_xerbla;
-   extern int RowMajorStrg;
    extern char *cblas_rout;
 
    /* Initially, c__3chke may call this routine with
