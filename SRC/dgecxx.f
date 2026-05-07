@@ -1064,24 +1064,22 @@
             LIWKOPT = 1
          ELSE
 *
-*           (Real_wk_part_a) Real minimum workspace computation.
+*           (Real_wk_part_1) Real minimum and optimal workspace
+*           computation.
 *           LWKMIN = MAX(1, NSUB) for column 2-norm computation
 *
             LWKMIN = MAX( 1, NSUB )
+            LWKOPT = LWKMIN
 *
 *           (Int_wk_part_1) Integer minimum workspace computation.
 *
             LIWKMIN = 1
 *
-*           Optimal workspace for column 2-norm computation.
-*
-            LWKOPT = LWKMIN
-*
 *           Call of DGEQRF.
 *
             IF( NSEL.GT.0 ) THEN
 *
-*              (Real_wk_part_b) Real minimum workspace computation.
+*              (Real_wk_part_2) Real minimum workspace computation.
 *              LWKMIN = MAX(1, NSEL) for the call of DGEQRF.
 *              We can skip counting this workspace as
 *              LWKMIN = MAX( LWKMIN, NSEL ), since NSEL <= NSUB.
@@ -1096,12 +1094,12 @@
 *
                IF( NFREE.GT.0 ) THEN
 *
-*                 (Real_wk_part_c) Real minimum workspace computation.
+*                 (Real_wk_part_3) Real minimum workspace computation.
 *                 NOTE: minimum workspace requirement for DORMQR
-*                 LWKMIN = MAX(1, NFREE) is smaller than
-*                 LWKMIN = 3*NFREE-1 for DGEQP3RK and it is
-*                 smaller than NSUB. We can skip counting this
-*                 workspace as LWKMIN = MAX( LWKMIN, NFREE ).
+*                 LWKMIN = MAX(1, NFREE) is smaller than NSUB
+*                 and it is smaller than LWKMIN = 3*NFREE-1 for
+*                 DGEQP3RK. We can skip counting this workspace as
+*                 as LWKMIN = MAX( LWKMIN, NFREE ).
 *
 *                 Query for optimal workspace size for DORMQR.
 *
@@ -1115,10 +1113,9 @@
 *
 *           Call of DGEQP3RK.
 *
-
             IF ( MINMNFREE.NE.0 ) THEN
 *
-*              (Real_wk_part_d) Real minimum workspace computation.
+*              (Real_wk_part_4) Real minimum workspace computation.
 *              LWKMIN = MAX(1, 3*NFREE-1) for the call of DGEQP3RK.
 *
                LWKMIN = MAX( LWKMIN, 3*NFREE - 1 )
@@ -1150,18 +1147,21 @@
             IF( RETURNC ) THEN
 *
 *              Integer minimum workspace computation.
-*              (Int_wk_part_3) LIWKMIN = 2*N for applying the
+*              (Int_wk_part_4) LIWKMIN = 2*N for applying the
 *              interchanges for the columns in the matrix C.
 *
                LIWKMIN = MAX( LIWKMIN, 2*N )
             END IF
+*
+*           Integer optimal workspace computation.
+*
             LIWKOPT = LIWKMIN
 *
 *           Call of DGELS.
 *
             IF( RETURNX ) THEN
 *
-*              (Real_wk_part_d) Real minimum workspace computation.
+*              (Real_wk_part_5) Real minimum workspace computation.
 *              LWKMIN = max( 1, MINMN + max( MINMN, N ) ) =
 *                     = max( 1, MINMN + N ) for the call of DGELS.
 *
