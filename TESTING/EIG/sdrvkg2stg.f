@@ -43,6 +43,10 @@
 *>              eigenvectors of a real skew-symmetric-definite generalized
 *>              eigenproblem.
 *>
+*>              SKYGVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric-definite generalized
+*>              eigenproblem using a divide and conquer algorithm.
+*>
 *>      When SDRVKG2STG is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix A of the given type will be
@@ -377,7 +381,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
-     $                   SLATMS, SKYGV, SSYGVX, SKGT01, XERBLA
+     $                   SLATMS, SKYGV, SSYGVX, SKYGVD, SKGT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -668,6 +672,32 @@
 *
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'SKYGV(V,' // UPLO //
+     $                  ')', IINFO, N, JTYPE, IOLDSD
+                     INFO = ABS( IINFO )
+                     IF( IINFO.LT.0 ) THEN
+                        RETURN
+                     ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+*
+*                 Do Test
+*
+                  CALL SKGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+     $                         LDZ, D, WORK, RESULT( NTEST ) )
+*
+*                 Test SKYGVD
+*
+                  NTEST = NTEST + 1
+*
+                  CALL SLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+*
+                  CALL SKYGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
+     $                         WORK, NWORK, IWORK, LIWORK, IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9999 )'SKYGVD(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN

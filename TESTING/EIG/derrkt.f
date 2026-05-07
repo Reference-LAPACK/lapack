@@ -86,7 +86,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DKTEQR, DKYEV, DKTEV, DKYTRD,
-     $                   DKTEBZ, DKTEIN, DKYEVX, DKTEVX
+     $                   DKTEBZ, DKTEIN, DKYEVX, DKTEVX, DKTEDC,
+     $                   DKTEVD, DKYEVD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -345,6 +346,99 @@
          CALL DKTEVX( 'V', 'A', 2, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
          CALL CHKXER( 'DKTEVX', INFOT, NOUT, LERR, OK )
+         NT = NT + 10
+*
+*        DKTEDC
+*
+         SRNAMT = 'DKTEDC'
+         INFOT = 1
+         CALL DKTEDC( '/', 0, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKTEDC( 'N', -1, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DKTEDC( 'V', 2, E, Z, 1, W, 23, IW, 28, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEDC( 'N', 1, E, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEDC( 'I', 2, E, Z, 2, W, 0, IW, 12, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKTEDC( 'V', 2, E, Z, 2, W, 0, IW, 28, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DKTEDC( 'N', 1, E, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DKTEDC( 'I', 2, E, Z, 2, W, 19, IW, 0, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DKTEDC( 'V', 2, E, Z, 2, W, 23, IW, 0, INFO )
+         CALL CHKXER( 'DKTEDC', INFOT, NOUT, LERR, OK )
+         NT = NT + 9
+*
+*        DKTEVD
+*
+         SRNAMT = 'DKTEVD'
+         INFOT = 1
+         CALL DKTEVD( '/', 0, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKTEVD( 'N', -1, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DKTEVD( 'V', 2, D, E, Z, 1, W, 19, IW, 12, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKTEVD( 'N', 1, D, E, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKTEVD( 'V', 2, D, E, Z, 2, W, 4, IW, 12, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKTEVD( 'N', 0, D, E, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKTEVD( 'V', 2, D, E, Z, 2, W, 19, IW, 7, INFO )
+         CALL CHKXER( 'DKTEVD', INFOT, NOUT, LERR, OK )
+         NT = NT + 7
+*
+*        DKYEVD
+*
+         SRNAMT = 'DKYEVD'
+         INFOT = 1
+         CALL DKYEVD( '/', 'U', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYEVD( 'N', '/', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKYEVD( 'N', 'U', -1, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DKYEVD( 'N', 'U', 2, A, 1, X, W, 3, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYEVD( 'N', 'U', 1, A, 1, X, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYEVD( 'N', 'U', 2, A, 2, X, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYEVD( 'V', 'U', 2, A, 2, X, W, 10, IW, 12, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYEVD( 'N', 'U', 1, A, 1, X, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYEVD( 'N', 'U', 2, A, 2, X, W, 5, IW, 0, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYEVD( 'V', 'U', 2, A, 2, X, W, 27, IW, 7, INFO )
+         CALL CHKXER( 'DKYEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 10
       END IF
 *

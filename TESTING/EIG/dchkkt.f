@@ -58,6 +58,13 @@
 *>    DKTEIN computes Y, the eigenvectors of S, given the
 *>    eigenvalues.
 *>
+*>    DKTEDC factors S as Z D1 Z' , where Z is the orthogonal
+*>    matrix of eigenvectors and D1 is a diagonal matrix with
+*>    the eigenvalues on the diagonal ('I' option). It may also
+*>    update an input orthogonal matrix, usually the output
+*>    from SSYTRD/SORGTR ('V' option). It may also just compute
+*>    eigenvalues ('N' option).
+*>
 *> When DCHKKT is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
@@ -114,16 +121,16 @@
 *>
 *> (21)    | I - Y Y' | / ( n ulp )          DKTEBZ, DKTEIN
 *>
-*> (22)    | S - Z D Z' | / ( |S| n ulp )    SSTEDC('I')
+*> (22)    | S - Z D Z' | / ( |S| n ulp )    DKTEDC('I')
 *>
-*> (23)    | I - ZZ' | / ( n ulp )           SSTEDC('I')
+*> (23)    | I - ZZ' | / ( n ulp )           DKTEDC('I')
 *>
-*> (24)    | S - Z D Z' | / ( |S| n ulp )    SSTEDC('V')
+*> (24)    | S - Z D Z' | / ( |S| n ulp )    DKTEDC('V')
 *>
-*> (25)    | I - ZZ' | / ( n ulp )           SSTEDC('V')
+*> (25)    | I - ZZ' | / ( n ulp )           DKTEDC('V')
 *>
-*> (26)    | D1 - D2 | / ( |D1| ulp )           SSTEDC('V') and
-*>                                              SSTEDC('N')
+*> (26)    | D1 - D2 | / ( |D1| ulp )           DKTEDC('V') and
+*>                                              DKTEDC('N')
 *>
 *> Test 27 is disabled at the moment because SSTEMR does not
 *> guarantee high relatvie accuracy.
@@ -382,7 +389,7 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by DKTEBZ.
 *> \endverbatim
 *>
 *> \param[out] WA2
@@ -391,7 +398,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by DKTEBZ.
 *>          Choose random values for IL and IU, and ask for the
 *>          IL-th through IU-th eigenvalues.
 *> \endverbatim
@@ -402,7 +409,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by SSTEBZ.
+*>          as computed by DKTEBZ.
 *>          Determine the values VL and VU of the IL-th and IU-th
 *>          eigenvalues and ask for all eigenvalues in this range.
 *> \endverbatim
@@ -413,7 +420,7 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different options.
-*>          as computed by SSTEBZ.
+*>          as computed by DKTEBZ.
 *> \endverbatim
 *>
 *> \param[out] U
@@ -621,7 +628,8 @@
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLABAD, DLACPY, DLASET, DLASUM, DLATMR,
      $                   DLATMS, DORGTR, DKTEBZ, DKTEIN, DKTEQR,
-     $                   DKTT21, DKTT22, DKYT21, DKYTRD, XERBLA
+     $                   DKTT21, DKTT22, DKYT21, DKYTRD, DKTEDC, 
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, DBLE,
@@ -1277,6 +1285,106 @@
 *
             CALL DKTT21( N, 1, SD, SE, DUMMA, WA1, Z, LDU, WORK,
      $                   RESULT( 12 ) )
+*
+*           Call DKTEDC(I) to compute D1 and Z, do tests.
+*
+*           Compute D1 and Z
+*
+            CALL DCOPY( N, SD, 1, D1, 1 )
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, SE, 1, WORK, 1 )
+            CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 14
+            CALL DKTEDC( 'I', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'DKTEDC(I)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 14 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Tests 14 and 15
+*
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, WORK, 1, D1, 1 )
+            CALL DKTT21( N, 1, SD, SE, DUMMA, D1, Z, LDU, WORK,
+     $                   RESULT( 14 ) )
+*
+*           Call DKTEDC(V) to compute D1 and Z, do tests.
+*
+*           Compute D1 and Z
+*
+            CALL DCOPY( N, SD, 1, D1, 1 )
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, SE, 1, WORK, 1 )
+            CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 16
+            CALL DKTEDC( 'V', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'DKTEDC(V)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 16 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Tests 16 and 17
+*
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, WORK, 1, D1, 1 )
+            CALL DKTT21( N, 1, SD, SE, DUMMA, D1, Z, LDU, WORK,
+     $                   RESULT( 16 ) )
+*
+*           Call DKTEDC(N) to compute D2, do tests.
+*
+*           Compute D2
+*
+            CALL DCOPY( N, SD, 1, D2, 1 )
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, SE, 1, WORK, 1 )
+            CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 18
+            CALL DKTEDC( 'N', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'DKTEDC(N)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 18 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Test 18
+*
+            IF( N.GT.0 )
+     $         CALL DCOPY( N-1, WORK, 1, D2, 1 )
+            TEMP1 = ZERO
+            TEMP2 = ZERO
+*
+            DO 210 J = 1, N-1
+               TEMP1 = MAX( TEMP1, ABS( D1( J ) ), ABS( D2( J ) ) )
+               TEMP2 = MAX( TEMP2, ABS( D1( J )-D2( J ) ) )
+  210       CONTINUE
+*
+            RESULT( 18 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
   280       CONTINUE
             NTESTT = NTESTT + NTEST

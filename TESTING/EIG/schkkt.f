@@ -58,6 +58,13 @@
 *>    SKTEIN computes Y, the eigenvectors of S, given the
 *>    eigenvalues.
 *>
+*>    SKTEDC factors S as Z D1 Z' , where Z is the orthogonal
+*>    matrix of eigenvectors and D1 is a diagonal matrix with
+*>    the eigenvalues on the diagonal ('I' option). It may also
+*>    update an input orthogonal matrix, usually the output
+*>    from SSYTRD/SORGTR ('V' option). It may also just compute
+*>    eigenvalues ('N' option).
+*>
 *> When SCHKKT is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
@@ -114,16 +121,16 @@
 *>
 *> (21)    | I - Y Y' | / ( n ulp )          SKTEBZ, SKTEIN
 *>
-*> (22)    | S - Z D Z' | / ( |S| n ulp )    SSTEDC('I')
+*> (22)    | S - Z D Z' | / ( |S| n ulp )    SKTEDC('I')
 *>
-*> (23)    | I - ZZ' | / ( n ulp )           SSTEDC('I')
+*> (23)    | I - ZZ' | / ( n ulp )           SKTEDC('I')
 *>
-*> (24)    | S - Z D Z' | / ( |S| n ulp )    SSTEDC('V')
+*> (24)    | S - Z D Z' | / ( |S| n ulp )    SKTEDC('V')
 *>
-*> (25)    | I - ZZ' | / ( n ulp )           SSTEDC('V')
+*> (25)    | I - ZZ' | / ( n ulp )           SKTEDC('V')
 *>
-*> (26)    | D1 - D2 | / ( |D1| ulp )           SSTEDC('V') and
-*>                                              SSTEDC('N')
+*> (26)    | D1 - D2 | / ( |D1| ulp )           SKTEDC('V') and
+*>                                              SKTEDC('N')
 *>
 *> Test 27 is disabled at the moment because SSTEMR does not
 *> guarantee high relatvie accuracy.
@@ -621,7 +628,8 @@
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLABAD, SLACPY, SLASET, SLASUM, SLATMR,
      $                   SLATMS, SORGTR, SKTEBZ, SKTEIN, SKTEQR, 
-     $                   SKTT21, SKTT22, SKYT21, SKYTRD, XERBLA
+     $                   SKTT21, SKTT22, SKYT21, SKYTRD, SKTEDC,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, REAL, SQRT
@@ -1276,6 +1284,106 @@
 *
             CALL SKTT21( N, 1, SD, SE, DUMMA, WA1, Z, LDU, WORK,
      $                   RESULT( 12 ) )
+*
+*           Call SKTEDC(I) to compute D1 and Z, do tests.
+*
+*           Compute D1 and Z
+*
+            CALL SCOPY( N, SD, 1, D1, 1 )
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, SE, 1, WORK, 1 )
+            CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 14
+            CALL SKTEDC( 'I', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEDC(I)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 14 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Tests 14 and 15
+*
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, WORK, 1, D1, 1 )
+            CALL SKTT21( N, 1, SD, SE, DUMMA, D1, Z, LDU, WORK,
+     $                   RESULT( 14 ) )
+*
+*           Call SKTEDC(V) to compute D1 and Z, do tests.
+*
+*           Compute D1 and Z
+*
+            CALL SCOPY( N, SD, 1, D1, 1 )
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, SE, 1, WORK, 1 )
+            CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 16
+            CALL SKTEDC( 'V', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEDC(V)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 16 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Tests 16 and 17
+*
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, WORK, 1, D1, 1 )
+            CALL SKTT21( N, 1, SD, SE, DUMMA, D1, Z, LDU, WORK,
+     $                   RESULT( 16 ) )
+*
+*           Call SKTEDC(N) to compute D2, do tests.
+*
+*           Compute D2
+*
+            CALL SCOPY( N, SD, 1, D2, 1 )
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, SE, 1, WORK, 1 )
+            CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+*
+            NTEST = 18
+            CALL SKTEDC( 'N', N, WORK, Z, LDU, WORK( N+1 ), LWEDC-N,
+     $                   IWORK, LIWEDC, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SKTEDC(N)', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 18 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+*           Do Test 18
+*
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, WORK, 1, D2, 1 )
+            TEMP1 = ZERO
+            TEMP2 = ZERO
+*
+            DO 210 J = 1, N-1
+               TEMP1 = MAX( TEMP1, ABS( D1( J ) ), ABS( D2( J ) ) )
+               TEMP2 = MAX( TEMP2, ABS( D1( J )-D2( J ) ) )
+  210       CONTINUE
+*
+            RESULT( 18 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
   280       CONTINUE
             NTESTT = NTESTT + NTEST

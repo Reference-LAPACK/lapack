@@ -47,6 +47,10 @@
 *>              SKYEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real skew-symmetric matrix.
 *>
+*>              SKYEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix using
+*>              a divide and conquer algorithm.
+*>
 *>      When SDRVKT is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix will be generated and used
@@ -311,9 +315,9 @@
 *>    13= | A - U S U' | / ( |A| n ulp )        SKTEVX('V','V', ... )
 *>    14= | I - U U' | / ( n ulp )              SKTEVX('V','V', ... )
 *>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKTEVX('N','V', ... )
-*>    16= | A - U S U' | / ( |A| n ulp )        SSTEVD('V', ... )
-*>    17= | I - U U' | / ( n ulp )              SSTEVD('V', ... )
-*>    18= |D(with Z) - EVEIGS| / (|D| ulp)      SSTEVD('N', ... )
+*>    16= | A - U S U' | / ( |A| n ulp )        SKTEVD('V', ... )
+*>    17= | I - U U' | / ( n ulp )              SKTEVD('V', ... )
+*>    18= |D(with Z) - EVEIGS| / (|D| ulp)      SKTEVD('N', ... )
 *>    19= | A - U S U' | / ( |A| n ulp )        SSTEVR('V','I', ... )
 *>    20= | I - U U' | / ( n ulp )              SSTEVR('V','I', ... )
 *>    21= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVR('N','I', ... )
@@ -357,9 +361,9 @@
 *>    58= | A - U S U' | / ( |A| n ulp )        SSBEVX('L','V','V', ... )
 *>    59= | I - U U' | / ( n ulp )              SSBEVX('L','V','V', ... )
 *>    60= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVX('L','N','V', ... )
-*>    61= | A - U S U' | / ( |A| n ulp )        SSYEVD('L','V', ... )
-*>    62= | I - U U' | / ( n ulp )              SSYEVD('L','V', ... )
-*>    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVD('L','N', ... )
+*>    61= | A - U S U' | / ( |A| n ulp )        SKYEVD('L','V', ... )
+*>    62= | I - U U' | / ( n ulp )              SKYEVD('L','V', ... )
+*>    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    SKYEVD('L','N', ... )
 *>    64= | A - U S U' | / ( |A| n ulp )        SSPEVD('L','V', ... )
 *>    65= | I - U U' | / ( n ulp )              SSPEVD('L','V', ... )
 *>    66= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVD('L','N', ... )
@@ -471,7 +475,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SLABAD, SLACPY, SLAFTS, SLASET, SLATMR,
      $                   SLATMS, SKTEV, SKTEVX, SKTT21, SKTT22, SKYEV,
-     $                   SKYEVX, SKYT21, SKYT22, XERBLA
+     $                   SKYEVX, SKTEVD, SKYEVD, SKYT21, SKYT22, XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -1058,12 +1062,80 @@ c           LIWEDC = 12
 *
   440          CONTINUE
 *
+               NTEST = 13
+               DO 450 I = 1, N
+                  D1( I ) = REAL( A( I, I ) )
+  450          CONTINUE
+               DO 460 I = 1, N - 1
+                  D2( I ) = REAL( A( I+1, I ) )
+  460          CONTINUE
+               SRNAMT = 'SKTEVD'
+               CALL SKTEVD( 'V', N, D1, D2, Z, LDU, WORK, LWEDC, IWORK,
+     $                      LIWEDC, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVD(V)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 13 ) = ULPINV
+                     RESULT( 14 ) = ULPINV
+                     RESULT( 15 ) = ULPINV
+                     GO TO 510
+                  END IF
+               END IF
+*
+*              Do tests 13 and 14.
+*
+               DO 470 I = 1, N
+                  D3( I ) = REAL( A( I, I ) )
+  470          CONTINUE
+               DO 480 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  480          CONTINUE
+               CALL SKTT21( N, 1, D3, D4, D2, D1, Z, LDU, WORK,
+     $                      RESULT( 13 ) )
+*
+               NTEST = 15
+               DO 490 I = 1, N - 1
+                  D4( I ) = REAL( A( I+1, I ) )
+  490          CONTINUE
+               SRNAMT = 'SKTEVD'
+               CALL SKTEVD( 'N', N, D3, D4, Z, LDU, WORK, LWEDC, IWORK,
+     $                      LIWEDC, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKTEVD(N)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( 15 ) = ULPINV
+                     GO TO 510
+                  END IF
+               END IF
+*
+*              Do test 15.
+*
+               TEMP1 = ZERO
+               TEMP2 = ZERO
+               DO 500 J = 1, N
+                  TEMP1 = MAX( TEMP1, ABS( EVEIGS( J ) ),
+     $                    ABS( D3( J ) ) )
+                  TEMP2 = MAX( TEMP2, ABS( EVEIGS( J )-D3( J ) ) )
+  500          CONTINUE
+               RESULT( 15 ) = TEMP2 / MAX( UNFL,
+     $                        ULP*MAX( TEMP1, TEMP2 ) )
+*
+  510          CONTINUE
+*
             ELSE
 *
-               DO 640 I = 1, 12
+               DO 640 I = 1, 15
                   RESULT( I ) = ZERO
   640          CONTINUE
-               NTEST = 12
+               NTEST = 15
             END IF
 *
 *           Perform remaining tests storing upper or lower triangular
@@ -1347,6 +1419,64 @@ c           LIWEDC = 12
                CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
   700          CONTINUE
+*
+*              7)      Call SKYEVD
+*
+               CALL SLACPY( ' ', N, N, A, LDA, V, LDU )
+*
+               NTEST = NTEST + 1
+               SRNAMT = 'SKYEVD'
+               CALL SKYEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
+     $                      IWORK, LIWEDC, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVD(V,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     RESULT( NTEST+1 ) = ULPINV
+                     RESULT( NTEST+2 ) = ULPINV
+                     GO TO 720
+                  END IF
+               END IF
+*
+*              Do tests 61 and 62 (or +54)
+*
+               CALL SKYT21( 1, UPLO, N, 1, V, LDU, D2, D1, A, LDU, Z,
+     $                      LDU, TAU, WORK, RESULT( NTEST ) )
+*
+               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+*
+               NTEST = NTEST + 2
+               SRNAMT = 'SKYEVD'
+               CALL SKYEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
+     $                      IWORK, LIWEDC, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SKYEVD(N,' // UPLO //
+     $               ')', IINFO, N, JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) THEN
+                     RETURN
+                  ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 720
+                  END IF
+               END IF
+*
+*              Do test 63 (or +54)
+*
+               TEMP1 = ZERO
+               TEMP2 = ZERO
+               DO 710 J = 1, N
+                  TEMP1 = MAX( TEMP1, ABS( D1( J ) ), ABS( D3( J ) ) )
+                  TEMP2 = MAX( TEMP2, ABS( D1( J )-D3( J ) ) )
+ 710           CONTINUE
+               RESULT( NTEST ) = TEMP2 / MAX( UNFL,
+     $                           ULP*MAX( TEMP1, TEMP2 ) )
+*
+ 720           CONTINUE
 *
 *
  1720       CONTINUE

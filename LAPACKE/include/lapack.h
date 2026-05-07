@@ -16565,6 +16565,44 @@ void LAPACK_zstedc_base(
     #define LAPACK_zstedc(...) LAPACK_zstedc_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dktedc_base LAPACK_GLOBAL_SUFFIX(dktedc,DKTEDC)
+void LAPACK_dktedc_base(
+    char const* compz,
+    lapack_int const* n,
+    double* E,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dktedc(...) LAPACK_dktedc_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_dktedc(...) LAPACK_dktedc_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_sktedc_base LAPACK_GLOBAL_SUFFIX(sktedc,SKTEDC)
+void LAPACK_sktedc_base(
+    char const* compz,
+    lapack_int const* n,
+    float* E,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_sktedc(...) LAPACK_sktedc_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_sktedc(...) LAPACK_sktedc_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_cstegr_base LAPACK_GLOBAL_SUFFIX(cstegr,CSTEGR)
 void LAPACK_cstegr_base(
     char const* jobz, char const* range,
@@ -17081,6 +17119,46 @@ void LAPACK_dstevr_base(
     #define LAPACK_dstevr(...) LAPACK_dstevr_base(__VA_ARGS__, 1, 1)
 #else
     #define LAPACK_dstevr(...) LAPACK_dstevr_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dktevd_base LAPACK_GLOBAL_SUFFIX(dktevd,DKTEVD)
+void LAPACK_dktevd_base(
+    char const* jobz,
+    lapack_int const* n,
+    double* D,
+    double* E,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dktevd(...) LAPACK_dktevd_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_dktevd(...) LAPACK_dktevd_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_sktevd_base LAPACK_GLOBAL_SUFFIX(sktevd,SKTEVD)
+void LAPACK_sktevd_base(
+    char const* jobz,
+    lapack_int const* n,
+    float* D,
+    float* E,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_sktevd(...) LAPACK_sktevd_base(__VA_ARGS__, 1)
+#else
+    #define LAPACK_sktevd(...) LAPACK_sktevd_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_sstevr_base LAPACK_GLOBAL_SUFFIX(sstevr,SSTEVR)
@@ -17729,6 +17807,44 @@ void LAPACK_ssyevd_base(
     #define LAPACK_ssyevd(...) LAPACK_ssyevd_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dkyevd_base LAPACK_GLOBAL_SUFFIX(dkyevd,DKYEVD)
+void LAPACK_dkyevd_base(
+    char const* jobz, char const* uplo,
+    lapack_int const* n,
+    double* A, lapack_int const* lda,
+    double* W,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkyevd(...) LAPACK_dkyevd_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dkyevd(...) LAPACK_dkyevd_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skyevd_base LAPACK_GLOBAL_SUFFIX(skyevd,SKYEVD)
+void LAPACK_skyevd_base(
+    char const* jobz, char const* uplo,
+    lapack_int const* n,
+    float* A, lapack_int const* lda,
+    float* W,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skyevd(...) LAPACK_skyevd_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_skyevd(...) LAPACK_skyevd_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_dsyevd_2stage_base LAPACK_GLOBAL_SUFFIX(dsyevd_2stage,DSYEVD_2STAGE)
 void LAPACK_dsyevd_2stage_base(
     char const* jobz, char const* uplo,
@@ -18217,6 +18333,46 @@ void LAPACK_ssygvd_base(
     #define LAPACK_ssygvd(...) LAPACK_ssygvd_base(__VA_ARGS__, 1, 1)
 #else
     #define LAPACK_ssygvd(...) LAPACK_ssygvd_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_dkygvd_base LAPACK_GLOBAL_SUFFIX(dkygvd,DKYGVD)
+void LAPACK_dkygvd_base(
+    lapack_int const* itype, char const* jobz, char const* uplo,
+    lapack_int const* n,
+    double* A, lapack_int const* lda,
+    double* B, lapack_int const* ldb,
+    double* W,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dkygvd(...) LAPACK_dkygvd_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_dkygvd(...) LAPACK_dkygvd_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_skygvd_base LAPACK_GLOBAL_SUFFIX(skygvd,SKYGVD)
+void LAPACK_skygvd_base(
+    lapack_int const* itype, char const* jobz, char const* uplo,
+    lapack_int const* n,
+    float* A, lapack_int const* lda,
+    float* B, lapack_int const* ldb,
+    float* W,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_skygvd(...) LAPACK_skygvd_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_skygvd(...) LAPACK_skygvd_base(__VA_ARGS__)
 #endif
 
 #define LAPACK_dsygvx_base LAPACK_GLOBAL_SUFFIX(dsygvx,DSYGVX)
