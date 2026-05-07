@@ -380,7 +380,7 @@ set(ZLASRC
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f
    zgels.f zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f
-   zgeqp3.f zgeqp3rk.f
+   zgeqp3.f zgeqp3rk.f zgecxx.f
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
    zgesvj.f zgejsv.f zgsvj0.f zgsvj1.f

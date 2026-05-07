@@ -413,7 +413,7 @@ ZLASRC = \
    zgecon.o zgeequ.o zgees.o  zgeesx.o zgeev.o  zgeevx.o \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
    zgels.o zgelst.o zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o \
-   zgeqp3.o zgeqp3rk.o \
+   zgeqp3.o zgeqp3rk.o zgecxx.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
    zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o \
    zgesvj.o zgejsv.o zgsvj0.o zgsvj1.o \
