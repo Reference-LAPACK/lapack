@@ -752,7 +752,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)).
+*>          WORK is DOUBLE PRECISION array, dimension (max(1,LWORK)).
 *>
 *>          On exit, if INFO >= 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
@@ -820,7 +820,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (MAX(1,LIWORK)).
+*>          IWORK is INTEGER array, dimension (max(1,LIWORK)).
 *>
 *>          On exit, if INFO >= 0, IWORK(1) returns the optimal LIWORK.
 *> \endverbatim
