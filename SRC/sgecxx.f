@@ -763,17 +763,17 @@
 *>          The dimension of the array WORK.
 *>
 *>          Minimal LWORK workspace general requirement.
-*>          LWORK >= max( 1, 3*N - 1 ) would be sufficient for all values
-*>          of FACT and USESD flags.
+*>          LWORK >= max( 1, 3*N - 1 ) would be sufficient for all
+*>          values of FACT and USESD flags.
 *>
 *>          For good performance, LWORK should generally be larger, and
 *>          the user should query the routine for the optimal LWORK.
 *>
-*>          If LWORK = -1 or LIWORK =-1 then a workspace query is assumed.
-*>          The routine only calculates the optimal size of the WORK and
-*>          IWORK arrays, returns these values as the first entry of
-*>          the WORK and IWORK  arrays respectively, and no error message
-*>          related to LWORK is issued by XERBLA.
+*>          If LWORK = -1 or LIWORK =-1 then a workspace query is
+*>          assumed. The routine only calculates the optimal size of
+*>          the WORK and IWORK arrays, returns these values as the
+*>          first entry of the WORK and IWORK  arrays respectively, and
+*>          no error message related to LWORK is issued by XERBLA.
 *>
 *>          Exact minimal workspace requirements.
 *>          For USESD = 'N' or 'R' and for all FACT:
@@ -837,11 +837,11 @@
 *>          The optimal LIWORK is the same as the minimal LIWORK.
 *>          The user can still query the routine for the optimal LIWORK.
 *>
-*>          If LIWORK = -1 or LWORK =-1 then a workspace query is assumed.
-*>          The routine only calculates the optimal size of the WORK and
-*>          IWORK arrays, returns these values as the first entry of
-*>          the WORK and IWORK arrays respectively, and no error message
-*>          related to LIWORK is issued by XERBLA.
+*>          If LWORK = -1 or LIWORK =-1 then a workspace query is
+*>          assumed. The routine only calculates the optimal size of
+*>          the WORK and IWORK arrays, returns these values as the first
+*>          entry of the WORK and IWORK arrays respectively, and no
+*>          error message related to LIWORK is issued by XERBLA.
 *>
 *>          Exact minimal workspace requirements.
 *>          For USESD = 'N' or 'R':
