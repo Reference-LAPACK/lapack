@@ -434,7 +434,8 @@
                      DO I = II, K-2
                         E(I) = E(I+1)
                         IF( ICOMPZ.GT.0 ) THEN
-                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ), 1 )
+                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ),
+     $                                 1 )
                         END IF
                      END DO
                      E(K-1) = ZERO
@@ -444,7 +445,8 @@
                      DO I = II, K-1
                         E(I) = E(I+1)
                         IF( ICOMPZ.GT.0 ) THEN
-                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ), 1 )
+                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ),
+     $                                 1 )
                         END IF
                      END DO
                      IF( ICOMPZ.GT.0 ) THEN
@@ -457,7 +459,8 @@
                      DO I = II, K-1
                         E(I) = E(I+1)
                         IF( ICOMPZ.GT.0 ) THEN
-                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ), 1 )
+                           CALL DSWAP( N, Z( 1, I ), 1, Z( 1, I+1 ),
+     $                                 1 )
                         END IF
                      END DO
                      IF( ICOMPZ.GT.0 ) THEN
