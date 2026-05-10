@@ -240,6 +240,7 @@
      $   RETURN
 *
       IF( N.EQ.1 ) THEN
+         D(1) = ZERO
          IF( WANTZ )
      $      Z( 1, 1 ) = ONE
          RETURN
