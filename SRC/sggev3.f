@@ -330,18 +330,22 @@
          CALL SORMQR( 'L', 'T', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
          LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
-         CALL SGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA,
-     $                B, LDB, VL, LDVL,
-     $                VR, LDVR, WORK, -1, IERR )
-         LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
          IF( ILVL ) THEN
             CALL SORGQR( N, N, N, VL, LDVL, WORK, WORK, -1, IERR )
+            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
+         END IF
+         IF( ILV ) THEN
+            CALL SGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB, VL,
+     $                   LDVL, VR, LDVR, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
             CALL SLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, 0, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT( WORK( 1 ) ) )
          ELSE
+            CALL SGGHD3( 'N', 'N', N, 1, N, A, LDA, B, LDB, VL, LDVL,
+     $                   VR, LDVR, WORK, -1, IERR )
+            LWKOPT = MAX( LWKOPT, 3*N+INT( WORK( 1 ) ) )
             CALL SLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, 0, IERR )

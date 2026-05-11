@@ -1706,7 +1706,7 @@
             CALL SLASET('U', NR-1, NR-1, ZERO, ZERO, U(1,2), LDU )
          END IF
 
-         CALL SGESVJ( 'L', 'U', 'V', NR, NR, U, LDU, SVA,
+         CALL SGESVJ( 'G', 'U', 'V', NR, NR, U, LDU, SVA,
      $        N, V, LDV, WORK(2*N+N*NR+1), LWORK-2*N-N*NR, INFO )
          SCALEM  = WORK(2*N+N*NR+1)
          NUMRANK = NINT(WORK(2*N+N*NR+2))

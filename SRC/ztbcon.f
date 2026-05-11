@@ -195,7 +195,7 @@
 *
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      ONENRM = LSAME( NORM, '1' ) .OR. LSAME( NORM, 'O' )
       NOUNIT = LSAME( DIAG, 'N' )
 *
       IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN

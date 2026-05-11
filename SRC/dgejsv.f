@@ -1170,7 +1170,7 @@
      $                   LDV )
 *
             CALL DGESVJ( 'Lower', 'U','N', NR, NR, V,LDV, SVA, NR, U,
-     $                  LDU, WORK(N+1), LWORK, INFO )
+     $                  LDU, WORK(N+1), LWORK-N, INFO )
             SCALEM  = WORK(N+1)
             NUMRANK = IDNINT(WORK(N+2))
             IF ( NR .LT. N ) THEN

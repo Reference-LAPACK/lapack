@@ -512,10 +512,10 @@
 *
          IF( LWORK .LT. LWORKMIN
      $       .AND. .NOT. ( LQUERY .OR. LRQUERY ) ) THEN
-            INFO = -22
+            INFO = -28
          ELSE IF( LRWORK .LT. LRWORKMIN
      $            .AND. .NOT. ( LQUERY .OR. LRQUERY ) ) THEN
-            INFO = -24
+            INFO = -30
          ELSE
             LORGQRWORK = LWORK - IORGQR + 1
             LORGLQWORK = LWORK - IORGLQ + 1

@@ -447,10 +447,10 @@
          WORK( 1 ) = REAL( LWORKREQ )
          RETURN
       ELSE IF ( LWORK .LT. LWORKREQ ) THEN
-         INFO = -19
+         INFO = -18
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAQZ0', INFO )
+         CALL XERBLA( 'CLAQZ0', -INFO )
          RETURN
       END IF
 *

@@ -368,7 +368,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to ZLA_HERFSX_EXTENDED had an illegal
+*>       < 0:  if INFO = -i, the ith argument to ZLA_SYRFSX_EXTENDED had an illegal
 *>             value
 *> \endverbatim
 *
@@ -492,7 +492,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLA_HERFSX_EXTENDED', -INFO )
+         CALL XERBLA( 'ZLA_SYRFSX_EXTENDED', -INFO )
          RETURN
       END IF
       EPS = DLAMCH( 'Epsilon' )

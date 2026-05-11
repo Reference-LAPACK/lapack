@@ -70,8 +70,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 3, LW = 6*NMAX )
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
@@ -129,8 +129,8 @@
          B( I, I ) = ONE
    30 CONTINUE
       OK = .TRUE.
-      TOLA = 1.0D0
-      TOLB = 1.0D0
+      TOLA = ONE
+      TOLB = ONE
       IFST = 1
       ILST = 1
       NT = 0
