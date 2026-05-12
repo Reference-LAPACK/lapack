@@ -2929,7 +2929,7 @@
          IF( LDC.GT.NMAX )
      $      GO TO 100
          LCC = LDC*N
-         NULL = N.LE.0.
+         NULL = N.LE.0
 *
          DO 90 IK = 1, NIDIM
             K = IDIM( IK )
