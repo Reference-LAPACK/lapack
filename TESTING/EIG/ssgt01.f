@@ -202,8 +202,8 @@
          CALL SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, -ONE,
      $               WORK, N )
 *
-         RESULT( 1 ) = ( SLANGE( '1', N, M, WORK, N, WORK ) / ANORM ) /
-     $                 ( N*ULP )
+         RESULT( 1 ) = ( SLANGE( '1', N, M, WORK, N, WORK ) /
+     $                   ANORM ) / ( REAL( N )*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
@@ -217,8 +217,8 @@
          CALL SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, WORK, N, -ONE, Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
-     $                 ( N*ULP )
+         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) /
+     $                   ANORM ) / ( REAL( N )*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -232,8 +232,8 @@
          CALL SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, WORK, N, -ONE, Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
-     $                 ( N*ULP )
+         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) /
+     $                   ANORM ) / ( REAL( N )*ULP )
       END IF
 *
       RETURN

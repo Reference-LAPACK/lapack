@@ -673,7 +673,7 @@
 *                    Compare S
 *
                      DIF = ZERO
-                     DIV = MAX( MNMIN*ULP*S( 1 ), UNFL )
+                     DIV = MAX( REAL( MNMIN )*ULP*S( 1 ), UNFL )
                      DO 60 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV
@@ -785,7 +785,7 @@
 *                 Compare S
 *
                   DIF = ZERO
-                  DIV = MAX( MNMIN*ULP*S( 1 ), UNFL )
+                  DIV = MAX( REAL( MNMIN )*ULP*S( 1 ), UNFL )
                   DO 100 I = 1, MNMIN - 1
                      IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                  DIF = ULPINV
@@ -1054,7 +1054,7 @@
 *                    Compare S
 *
                      DIF = ZERO
-                     DIV = MAX( MNMIN*ULP*S( 1 ), UNFL )
+                     DIV = MAX( REAL( MNMIN )*ULP*S( 1 ), UNFL )
                      DO 190 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV
@@ -1075,8 +1075,8 @@
                   IL = 1
                   IU = MAX( 1, MNMIN )
                ELSE
-                  IL = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-                  IU = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
