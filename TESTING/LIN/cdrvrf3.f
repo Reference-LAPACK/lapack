@@ -372,7 +372,7 @@
      +                                            S_WORK_CLANGE )
 *
                               RESULT( 1 ) = RESULT( 1 ) / SQRT( EPS )
-     +                                    / MAX ( MAX( M, N ), 1 )
+     +                                    / REAL( MAX( M, N, 1 ) )
 *
                               IF( RESULT( 1 ).GE.THRESH ) THEN
                                  IF( NFAIL.EQ.0 ) THEN

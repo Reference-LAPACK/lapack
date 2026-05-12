@@ -241,11 +241,11 @@
                DO 10 I = MAX( 1, KD+2-J ), KD
                   AB( I, J ) = ZERO
    10          CONTINUE
-               AB( KD+1, J ) = J
+               AB( KD+1, J ) = CMPLX( REAL( J ) )
    20       CONTINUE
          ELSE
             DO 40 J = 1, N
-               AB( 1, J ) = J
+               AB( 1, J ) = CMPLX( REAL( J ) )
                DO 30 I = 2, MIN( KD+1, N-J+1 )
                   AB( I, J ) = ZERO
    30          CONTINUE
