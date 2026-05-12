@@ -120,7 +120,6 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION   TSTRAT(NTESTS), RINV(NMAX), PARAMS(NPARAMS),
      $                   S(NMAX),R(NMAX),C(NMAX),RWORK(3*NMAX),
-     $                   DIFF(NMAX, NMAX),
      $                   ERRBND_N(NMAX*3), ERRBND_C(NMAX*3)
       INTEGER            IPIV(NMAX)
       COMPLEX*16         A(NMAX,NMAX),INVHILB(NMAX,NMAX),X(NMAX,NMAX),
@@ -253,13 +252,6 @@
                WRITE (*, FMT=8000) C2, N, INFO, ORCOND, RCOND
             END IF
          END IF
-
-*        Calculating the difference between Z**SVXX's X and the true X.
-         DO I = 1,N
-            DO J =1,NRHS
-               DIFF(I,J) = X(I,J) - INVHILB(I,J)
-            END DO
-         END DO
 
 *        Calculating the RCOND
          RNORM = 0
