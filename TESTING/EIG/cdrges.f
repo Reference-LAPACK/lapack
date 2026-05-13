@@ -514,7 +514,7 @@
      $        ILAENV( 1, 'CUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'CUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( NMAX+NMAX*NB, 3*NMAX*NMAX )
-         WORK( 1 ) = REAL( MAXWRK )
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -874,7 +874,7 @@
 *
       CALL ALASVM( 'CGS', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = REAL( MAXWRK )
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *
