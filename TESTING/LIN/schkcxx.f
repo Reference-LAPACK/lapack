@@ -221,19 +221,27 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array,
-*>               dimension is maximum of the following:
-*>             (1) ((MMAX + 6) * max(MMAX,NMAX))
-*>                 for matrix generation and test routines
-*>             (2) max( 2*NMAX + NBMAX*( NMAX + 1 ),
-*>                      NMAX*min(NBMAX_ORMQR,NBMAX) + (NBMAX_ORMQR+1)*NBMAX_ORMQR ) )
-*>                      where NBMAX_ORMQR=64 is harwiredi in DORMQR.
-*>                for SGECXX optimal WORK size.
+*>          WORK is DOUBLE PRECISION array,
+*>               dimension is the maximum of the following:
+*>             (1) (MMAX + 6) * max(MMAX,NMAX) for matrix generation and test routines.
+*>                 This is an upper bound for:
+*>                 a) for DLATMS: 3*max(M,N)
+*>                 b) for DQRT12: max( M*N + 4*min(M,N) + max(M,N),
+*>                                     M*N + 2*min(M,N) + 4*N )
+*>                 c) for DQPT01: M*N + N
+*>                 d) for DQRT11: M*M + M
 *>
-*>          Assuming NBMAX = NMAX, the expressions become:
-*>             (1) 3*NMAX + NMAX*NMAX
+*>
+*>             (2) max( NMAX*NBMAX,
+*>                      2*NMAX + NBMAX*( NMAX + 1 ),
+*>                      NMAX*min(NBMAX_ORMQR,NBMAX) + (NBMAX_ORMQR+1)*NBMAX_ORMQR ),
+*>                      min(MMAX,NMAX) + NMAX*NBMAX )
+*>                 where NBMAX_ORMQR=64 is hardwired in DORMQR,
+*>                 for DGECXX optimal WORK size.
+*>
+*>          Assuming MMAX = NMAX, and NBMAX = NMAX, the expressions become:
+*>             (1) NMAX*NMAX + 6*NMAX
 *>             (2) NMAX * min(64,NMAX) + 4160
-*>
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -381,10 +389,21 @@
             MINMN = MIN( M, N )
             LDX = MAX( 1, N )
 *
-*           Set work for testing routines.
+*           1) NOTE: for matrix generation routine SLATMS, the workspace length
+*           LWKTMS = 3*MAX( M, N ).  LWKTMS not used in the code.
 *
-            LWKTST = MAX( 1, M*MAX( M, N )+4*MINMN+MAX( M, N ),
+*           2) Set workspace length for testing routines.
+*             a) for SQRT12
+            LWKTST = MAX( 1, M*N + 4*MINMN + MAX( M, N ),
      $                   M*N + 2*MINMN + 4*N )
+*
+*             b) for SQPT01
+*
+            LWKTST = MAX( LWKTST, M*N + N )
+*
+*             c) for SQRT11
+*
+            LWKTST = MAX( LWKTST, M*M + M )
 *
             DO IMAT = 1, NTYPES
 *
@@ -757,12 +776,30 @@
 *
 *                 Compute the QR factorization with pivoting of A
 *
+*                 Determine LWORK
+*
 *                 NBMAX_ORMQR is hardwired in DORMQR as NBMAX = 64.
 *
                   NBMAX_ORMQR = 64
-                  LWORK = MAX( 1,
-     $                         2*N + NB*( N + 1 ),
-     $              N*min(NBMAX_ORMQR,NB)+(NBMAX_ORMQR+1)*NBMAX_ORMQR )
+*
+*                 a) For SGEQRF inside SGECXX
+*
+                  LWORK = MAX( 1, N*NB )
+*
+*                 b) For SORMQR inside SGECXX
+*
+                  LWORK = MAX( LWORK,
+     $             N*min(NBMAX_ORMQR,NB)+(NBMAX_ORMQR+1)*NBMAX_ORMQR )
+*
+*                 c) For SGEQP3RK inside SGECXX
+*
+                  LWORK = MAX( LWORK, 2*N + NB*( N + 1 ) )
+*
+*                 d) For SGELS inside SGECXX
+*
+                  LWORK = MAX( LWORK, MIN(M,N) + N*NB )
+*
+*                 Determine LIWORK
 *
                   LIWORK = MAX( 1, 2*N )
 *
