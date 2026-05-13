@@ -123,13 +123,6 @@ message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDE
 
 include(GNUInstallDirs)
 
-# Configure the warning and code coverage suppression file
-configure_file(
-  "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
-  "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
-  @ONLY
-)
-
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
@@ -186,6 +179,13 @@ if(BUILD_TESTING)
   else()
     message(STATUS "${_msg} - not found (skipping summary tests)")
   endif()
+
+  # Configure the warning and code coverage suppression file
+  configure_file(
+    "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
+    "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
+    @ONLY
+  )
 endif()
 
 # --------------------------------------------------
