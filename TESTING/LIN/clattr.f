@@ -229,11 +229,11 @@
                DO 10 I = 1, J - 1
                   A( I, J ) = ZERO
    10          CONTINUE
-               A( J, J ) = J
+               A( J, J ) = CMPLX( REAL( J ) )
    20       CONTINUE
          ELSE
             DO 40 J = 1, N
-               A( J, J ) = J
+               A( J, J ) = CMPLX( REAL( J ) )
                DO 30 I = J + 1, N
                   A( I, J ) = ZERO
    30          CONTINUE
@@ -252,11 +252,11 @@
                DO 50 I = 1, J - 1
                   A( I, J ) = ZERO
    50          CONTINUE
-               A( J, J ) = J
+               A( J, J ) = CMPLX( REAL( J ) )
    60       CONTINUE
          ELSE
             DO 80 J = 1, N
-               A( J, J ) = J
+               A( J, J ) = CMPLX( REAL( J ) )
                DO 70 I = J + 1, N
                   A( I, J ) = ZERO
    70          CONTINUE
@@ -343,7 +343,7 @@
 *
          X = SQRT( CNDNUM ) - 1 / SQRT( CNDNUM )
          IF( N.GT.2 ) THEN
-            Y = SQRT( 2. / ( N-2 ) )*X
+            Y = SQRT( 2. / REAL( N-2 ) )*X
          ELSE
             Y = ZERO
          END IF

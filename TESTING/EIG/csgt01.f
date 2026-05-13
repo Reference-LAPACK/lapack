@@ -213,7 +213,7 @@
      $               WORK, N )
 *
          RESULT( 1 ) = ( CLANGE( '1', N, M, WORK, N, RWORK ) / ANORM ) /
-     $                 ( N*ULP )
+     $                 ( REAL( N )*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
@@ -228,7 +228,7 @@
      $               Z, LDZ )
 *
          RESULT( 1 ) = ( CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
-     $                 ( N*ULP )
+     $                 ( REAL( N )*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -243,7 +243,7 @@
      $               Z, LDZ )
 *
          RESULT( 1 ) = ( CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
-     $                 ( N*ULP )
+     $                 ( REAL( N )*ULP )
       END IF
 *
       RETURN

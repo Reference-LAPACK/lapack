@@ -798,7 +798,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -1285,8 +1285,8 @@
 *
 *              Do test 17
 *
-               TEMP2 = TWO*( TWO*N-ONE )*ULP*( ONE+EIGHT*HALF**2 ) /
-     $                 ( ONE-HALF )**4
+               TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
+     $                 ( ONE+EIGHT*HALF**2 ) / ( ONE-HALF )**4
 *
                TEMP1 = ZERO
                DO 190 J = 1, N
@@ -1587,8 +1587,8 @@
 *
 *              Do test 27
 *
-                  TEMP2 = TWO*( TWO*N-ONE )*ULP*( ONE+EIGHT*HALF**2 ) /
-     $                    ( ONE-HALF )**4
+                  TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
+     $                    ( ONE+EIGHT*HALF**2 ) / ( ONE-HALF )**4
 *
                   TEMP1 = ZERO
                   DO 220 J = 1, N
@@ -1629,7 +1629,7 @@
 *
 *                 Do test 28
 *
-                     TEMP2 = TWO*( TWO*N-ONE )*ULP*
+                     TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
      $                       ( ONE+EIGHT*HALF**2 ) / ( ONE-HALF )**4
 *
                      TEMP1 = ZERO
