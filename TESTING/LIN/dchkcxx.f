@@ -221,29 +221,29 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array,
-*>               dimension is the maximum of the following two expressions:
-*>           (1) Optimal workspace dimension for matrix generation and test routines.
-*>               (MMAX + 6) * max(MMAX,NMAX)
-*>               This is an upper bound for:
+*>          WORK is DOUBLE PRECISION array.
+*>          Dimension is the maximum of the following two expressions:
+*>          (1) Optimal complex workspace dimension for matrix generation
+*>              and test routines.
+*>              (MMAX + 6) * max(MMAX,NMAX)
+*>              This is an upper bound for:
 *>                a) DLATMS: 3*max(M,N)
 *>                b) DQRT12: max( M*N + 4*min(M,N) + max(M,N),
 *>                                M*N + 2*min(M,N) + 4*N )
 *>                c) DQPT01: M*N + N
 *>                d) DQRT11: M*M + M
 *>
+*>          (2) Optimal workspace dimension for DGECXX.
+*>              max( NMAX*NBMAX,                      \\ for DGEQRF inside
+*>                   NMAX*min(NBMAX_ORMQR,NBMAX)      \\ for DORMQR inside
+*>                   + (NBMAX_ORMQR+1)*NBMAX_ORMQR ),
+*>                   2*NMAX + NBMAX*( NMAX + 1 ),     \\ for DGEQP3RK inside
+*>                   min(MMAX,NMAX) + NMAX*NBMAX ),   \\ for DGELS inside
+*>              where NBMAX_ORMQR=64 is hardwired in DORMQR.
 *>
-*>           (2) Optimal workspace dimension for DGECXX.
-*>               max( NMAX*NBMAX,                      \\ for DGEQRF inside
-*>                    NMAX*min(NBMAX_ORMQR,NBMAX)      \\ for DORMQR inside
-*>                    + (NBMAX_ORMQR+1)*NBMAX_ORMQR ),
-*>                    2*NMAX + NBMAX*( NMAX + 1 ),     \\ for DGEQP3RK inside
-*>                    min(MMAX,NMAX) + NMAX*NBMAX )    \\ for DGELS inside
-*>                where NBMAX_ORMQR=64 is hardwired in DORMQR.
-*>
-*>         Assuming MMAX = NMAX, and NBMAX = NMAX, the expressions become:
-*>           (1) NMAX*NMAX + 6*NMAX
-*>           (2) NMAX * min(64,NMAX) + 4160
+*>          Assuming MMAX = NMAX, and NBMAX = NMAX, the expressions become:
+*>          (1) NMAX*NMAX + 6*NMAX
+*>          (2) NMAX * min(64,NMAX) + 4160
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -318,7 +318,7 @@
       INTEGER            I, IM, IMAT, IN, INB, IND_OFFSET_GEN,
      $                   IND_IN, IND_OUT, INFO, J, J_INC, J_FIRST_NZ,
      $                   JB_ZERO, K, KL, KMAXFREE, KU, LDA, LDC,
-     $                   LDQRC, LDX, LIWORK,LWORK, LWKTST,
+     $                   LDQRC, LDX, LIWORK, LWORK, LWKTST,
      $                   M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NBMAX_ORMQR, NB_ZERO, NERRS, NFAIL,
      $                   NB_GEN, NRUN, NX, T
@@ -791,7 +791,7 @@
 *                 b) For DORMQR inside DGECXX
 *
                   LWORK = MAX( LWORK,
-     $             N*min(NBMAX_ORMQR,NB)+(NBMAX_ORMQR+1)*NBMAX_ORMQR )
+     $             N*MIN(NBMAX_ORMQR,NB)+(NBMAX_ORMQR+1)*NBMAX_ORMQR )
 *
 *                 c) For DGEQP3RK inside DGECXX
 *
