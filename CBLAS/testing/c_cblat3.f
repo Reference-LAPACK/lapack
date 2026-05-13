@@ -86,8 +86,8 @@
       LOGICAL            LCE
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
-      EXTERNAL         CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHK6,
-     $                 CC3CHKE, CMMCH
+      EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4,
+     $                   CCHK5, CCHK6, CC3CHKE, CMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..

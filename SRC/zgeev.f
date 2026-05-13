@@ -211,9 +211,9 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL, ZGEHRD,
-     $                   ZHSEQR,
-     $                   ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZUNGHR
+      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL,
+     $                   ZGEHRD, ZHSEQR, ZLACPY, ZLASCL,
+     $                   ZSCAL, ZTREVC3, ZUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN

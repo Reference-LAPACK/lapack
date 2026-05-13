@@ -222,9 +222,9 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLACPY,
-     $                   DLARTG,
-     $                   DLASCL, DORGHR, DROT, DSCAL, DTREVC3, XERBLA
+      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR,
+     $                   DLACPY, DLARTG, DLASCL, DORGHR,
+     $                   DROT, DSCAL, DTREVC3, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN

@@ -188,7 +188,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          CTRMM,CGEMM,CLACPY,CLARFT_LVL2
+      EXTERNAL          CTRMM, CGEMM, CLACPY, CLARFT_LVL2
 *
 *     .. External Functions..
 *

@@ -87,8 +87,8 @@
       LOGICAL            LZE
       EXTERNAL           DDIFF, LZE
 *     .. External Subroutines ..
-      EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5, ZCHK6,
-     $                   CZ3CHKE, ZMMCH
+      EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4,
+     $                   ZCHK5, ZCHK6, CZ3CHKE, ZMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..

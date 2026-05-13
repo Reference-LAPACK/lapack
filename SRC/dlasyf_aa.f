@@ -170,7 +170,8 @@
       EXTERNAL           LSAME, IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DAXPY, DCOPY, DSWAP, DSCAL, DLASET
+      EXTERNAL           DGEMV, DAXPY, DCOPY,
+     $                   DSWAP, DSCAL, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
