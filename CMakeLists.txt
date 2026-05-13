@@ -278,7 +278,8 @@ endif()
 
 option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if(USE_XBLAS)
-  find_library(XBLAS_LIBRARY NAMES xblas)
+  find_library(XBLAS_LIBRARY NAMES xblas REQUIRED)
+  message(STATUS "Looking for XBLAS library: ${XBLAS_LIBRARY}")
 endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)

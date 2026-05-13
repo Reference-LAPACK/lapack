@@ -42,14 +42,16 @@ set(SLINTST
   serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f
   schkorhr_col.f serrorhr_col.f sorhr_col01.f sorhr_col02.f)
 
+set(SLINTST_NO_XBLAS
+  sdrvgb.f sdrvge.f sdrvsy.f sdrvpo.f
+  serrvx.f serrge.f serrsy.f serrpo.f)
+
 if(USE_XBLAS)
-  list(APPEND SLINTST
+  set(SXLINTST
     sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
     serrvxx.f serrgex.f serrsyx.f serrpox.f sebchvxx.f)
 else()
-  list(APPEND SLINTST
-    sdrvgb.f sdrvge.f sdrvsy.f sdrvpo.f
-    serrvx.f serrge.f serrsy.f serrpo.f)
+  set(SXLINTST ${SLINTST_NO_XBLAS})
 endif()
 
 set(CLINTST
@@ -99,14 +101,16 @@ set(CLINTST
   cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f
   cchkunhr_col.f cerrunhr_col.f cunhr_col01.f cunhr_col02.f)
 
+set(CLINTST_NO_XBLAS
+  cdrvgb.f cdrvge.f cdrvhe.f cdrvsy.f cdrvpo.f
+  cerrvx.f cerrge.f cerrhe.f cerrsy.f cerrpo.f)
+
 if(USE_XBLAS)
-  list(APPEND CLINTST
+  set(CXLINTST
     cdrvgbx.f cdrvgex.f cdrvhex.f cdrvsyx.f cdrvpox.f
     cerrvxx.f cerrgex.f cerrhex.f cerrsyx.f cerrpox.f cebchvxx.f)
 else()
-  list(APPEND CLINTST
-    cdrvgb.f cdrvge.f cdrvhe.f cdrvsy.f cdrvpo.f
-    cerrvx.f cerrge.f cerrhe.f cerrsy.f cerrpo.f)
+  set(CXLINTST ${CLINTST_NO_XBLAS})
 endif()
 
 set(DLINTST
@@ -146,13 +150,16 @@ set(DLINTST
   derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f
   dchkorhr_col.f derrorhr_col.f dorhr_col01.f dorhr_col02.f)
 
+set(DLINTST_NO_XBLAS
+  ddrvgb.f ddrvge.f ddrvsy.f ddrvpo.f
+  derrvx.f derrge.f derrsy.f derrpo.f)
+
 if(USE_XBLAS)
-  list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f
-                      derrvxx.f derrgex.f derrsyx.f derrpox.f
-                      debchvxx.f)
+  set(DXLINTST
+    ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f
+    derrvxx.f derrgex.f derrsyx.f derrpox.f debchvxx.f)
 else()
-  list(APPEND DLINTST ddrvgb.f ddrvge.f ddrvsy.f ddrvpo.f
-                      derrvx.f derrge.f derrsy.f derrpo.f)
+  set(DXLINTST ${DLINTST_NO_XBLAS})
 endif()
 
 set(ZLINTST
@@ -202,14 +209,16 @@ set(ZLINTST
   zerrlqt.f zerrlqtp.f zerrtsqr.f ztsqr01.f zlqt04.f zlqt05.f
   zchkunhr_col.f zerrunhr_col.f zunhr_col01.f zunhr_col02.f)
 
+set(ZLINTST_NO_XBLAS
+  zdrvgb.f zdrvge.f zdrvhe.f zdrvsy.f zdrvpo.f
+  zerrvx.f zerrge.f zerrhe.f zerrsy.f zerrpo.f)
+
 if(USE_XBLAS)
-  list(APPEND ZLINTST
+  set(ZXLINTST
     zdrvgbx.f zdrvgex.f zdrvhex.f zdrvsyx.f zdrvpox.f
     zerrvxx.f zerrgex.f zerrhex.f zerrsyx.f zerrpox.f zebchvxx.f)
 else()
-  list(APPEND ZLINTST
-    zdrvgb.f zdrvge.f zdrvhe.f zdrvsy.f zdrvpo.f
-    zerrvx.f zerrge.f zerrhe.f zerrsy.f zerrpo.f)
+  set(ZXLINTST ${ZLINTST_NO_XBLAS})
 endif()
 
 set(DSLINTST
@@ -245,7 +254,9 @@ set(ZLINTSTRFP
   chkxer.f xerbla.f alaerh.f aladhd.f alahd.f alasvm.f)
 
 function(add_lin_executable name)
-  set(sources ${ARGN})
+  cmake_parse_arguments(PARSE_ARGV 1 LIN "" "" "SOURCES;DEFAULT_API;EXT_API")
+  set(sources ${LIN_SOURCES} ${LIN_DEFAULT_API})
+  set(ext_sources ${LIN_SOURCES} ${LIN_EXT_API})
 
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
@@ -254,9 +265,9 @@ function(add_lin_executable name)
 
   if(BUILD_INDEX64_EXT_API)
     include(ExtendedAPIHelpers)
-    generate_64bit_suffixed_sources(${name} sources sources_64)
+    generate_64bit_suffixed_sources(${name} ext_sources ext_sources_64)
 
-    add_executable(${name}_64 ${sources_64})
+    add_executable(${name}_64 ${ext_sources_64})
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
@@ -268,29 +279,41 @@ function(add_lin_executable name)
 endfunction()
 
 if(BUILD_SINGLE)
-  add_lin_executable(xlintsts ${ALINTST} ${SLINTST} ${SCLNTST})
-  add_lin_executable(xlintstrfs ${SLINTSTRFP})
+  add_lin_executable(xlintsts
+    SOURCES ${ALINTST} ${SLINTST} ${SCLNTST}
+    DEFAULT_API ${SXLINTST}
+    EXT_API ${SLINTST_NO_XBLAS})
+  add_lin_executable(xlintstrfs SOURCES ${SLINTSTRFP})
 endif()
 
 if(BUILD_DOUBLE)
-  add_lin_executable(xlintstd ${ALINTST} ${DLINTST} ${DZLNTST})
-  add_lin_executable(xlintstrfd ${DLINTSTRFP})
+  add_lin_executable(xlintstd
+    SOURCES ${ALINTST} ${DLINTST} ${DZLNTST}
+    DEFAULT_API ${DXLINTST}
+    EXT_API ${DLINTST_NO_XBLAS})
+  add_lin_executable(xlintstrfd SOURCES ${DLINTSTRFP})
 endif()
 
 if(BUILD_SINGLE AND BUILD_DOUBLE)
-  add_lin_executable(xlintstds ${DSLINTST})
+  add_lin_executable(xlintstds SOURCES ${DSLINTST})
 endif()
 
 if(BUILD_COMPLEX)
-  add_lin_executable(xlintstc ${ALINTST} ${CLINTST} ${SCLNTST})
-  add_lin_executable(xlintstrfc ${CLINTSTRFP})
+  add_lin_executable(xlintstc
+    SOURCES ${ALINTST} ${CLINTST} ${SCLNTST}
+    DEFAULT_API ${CXLINTST}
+    EXT_API ${CLINTST_NO_XBLAS})
+  add_lin_executable(xlintstrfc SOURCES ${CLINTSTRFP})
 endif()
 
 if(BUILD_COMPLEX16)
-  add_lin_executable(xlintstz ${ALINTST} ${ZLINTST} ${DZLNTST})
-  add_lin_executable(xlintstrfz ${ZLINTSTRFP})
+  add_lin_executable(xlintstz
+    SOURCES ${ALINTST} ${ZLINTST} ${DZLNTST}
+    DEFAULT_API ${ZXLINTST}
+    EXT_API ${ZLINTST_NO_XBLAS})
+  add_lin_executable(xlintstrfz SOURCES ${ZLINTSTRFP})
 endif()
 
 if(BUILD_COMPLEX AND BUILD_COMPLEX16)
-  add_lin_executable(xlintstzc ${ZCLINTST})
+  add_lin_executable(xlintstzc SOURCES ${ZCLINTST})
 endif()
