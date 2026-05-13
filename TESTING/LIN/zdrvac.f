@@ -189,7 +189,7 @@
       INTEGER            ITER, KASE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ZLACPY, ZLAIPD,
+      EXTERNAL           ALAERH, ALAHD, ZLACPY, ZLAIPD,
      $                   ZLARHS, ZLATB4, ZLATMS,
      $                   ZPOT06, ZCPOSV
 *     ..

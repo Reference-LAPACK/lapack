@@ -165,7 +165,7 @@
       EXTERNAL           DLAMCH, ZLARND, ZLANGE, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZTRTTF, ZGEQRF, ZGEQLF, ZTFSM, ZTRSM
+      EXTERNAL           ZTRTTF, ZGEQRF, ZGELQF, ZTFSM, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

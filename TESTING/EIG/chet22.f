@@ -192,7 +192,7 @@
       EXTERNAL           CLANHE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHEMM
+      EXTERNAL           CGEMM, CHEMM, CUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL

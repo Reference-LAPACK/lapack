@@ -174,7 +174,7 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGLSE, CLACPY, CGET02
+      EXTERNAL           CCOPY, CGGLSE, CLACPY, CGET02
 *     ..
 *     .. Executable Statements ..
 *

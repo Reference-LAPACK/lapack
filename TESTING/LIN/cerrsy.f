@@ -90,7 +90,8 @@
      $                   CSYTF2, CSYTF2_RK, CSYTF2_ROOK, CSYTRF,
      $                   CSYTRF_RK, CSYTRF_ROOK, CSYTRI, CSYTRI_3,
      $                   CSYTRI_3X, CSYTRI_ROOK, CSYTRI2, CSYTRI2X,
-     $                   CSYTRS, CSYTRS_3, CSYTRS_ROOK
+     $                   CSYTRS, CSYTRS_3, CSYTRS_ROOK, CSYTRF_AA,
+     $                   CSYTRS_AA, CSYTRF_AA_2STAGE, CSYTRS_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

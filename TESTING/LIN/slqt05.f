@@ -108,8 +108,11 @@
 *     ..
 *     .. External Functions ..
       REAL        SLAMCH, SLANGE, SLANSY
-      LOGICAL     LSAME
-      EXTERNAL    SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL    SLAMCH, SLANGE, SLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL    SLASET, SLARNV, SLACPY, STPLQT, SGEMLQT, SGEMM,
+     $            SSYRK, STPMLQT
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

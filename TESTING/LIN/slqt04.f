@@ -102,8 +102,10 @@
 *     ..
 *     .. External Functions ..
       REAL SLAMCH, SLANGE, SLANSY
-      LOGICAL  LSAME
-      EXTERNAL SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL SLAMCH, SLANGE, SLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL SLARNV, SLACPY, SGELQT, SLASET, SGEMLQT, SGEMM, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

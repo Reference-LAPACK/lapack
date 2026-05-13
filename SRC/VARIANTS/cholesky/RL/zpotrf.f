@@ -130,7 +130,7 @@ C> \ingroup variantsPOcomputational
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2, ZTRSM
+      EXTERNAL           XERBLA, ZHERK, ZPOTRF2, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

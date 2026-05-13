@@ -117,8 +117,11 @@
 *     .. External Functions ..
       DOUBLE PRECISION DLAMCH, DLANGE, DLANSY
       LOGICAL  LSAME
-      INTEGER ILAENV
-      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME, ILAENV
+      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL DLARNV, DLACPY, DGELQ, DGEMLQ, DLASET, DGEMM,
+     $         DSYRK, DGEQR, DGEMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

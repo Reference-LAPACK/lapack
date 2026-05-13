@@ -77,8 +77,8 @@
      $                   C( NMAX, NMAX ), TAU( 5 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, CGEQR,
-     $                   CGEMQR, CGELQ, CGEMLQ
+      EXTERNAL           ALAESM, CHKXER, CGEQR, CGEMQR, CGELQ,
+     $                   CGEMLQ, CLATSQR, CLASWLQ
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

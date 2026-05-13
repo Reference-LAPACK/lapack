@@ -166,12 +166,12 @@
 *     ..
 *     .. External Functions ..
       LOGICAL      LSAME
-      INTEGER      IZAMAX, ILAENV
-      EXTERNAL     LSAME, ILAENV, IZAMAX
+      INTEGER      IZAMAX
+      EXTERNAL     LSAME, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     ZGEMV, ZAXPY, ZLACGV, ZCOPY, ZSCAL,
-     $             ZSWAP, ZLASET, XERBLA
+      EXTERNAL     ZGEMV, ZAXPY, ZLACGV, ZCOPY,
+     $             ZSCAL, ZSWAP, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    DBLE, DCONJG, MAX

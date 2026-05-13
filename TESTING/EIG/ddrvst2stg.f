@@ -503,14 +503,13 @@
       EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLACPY, DLAFTS, DLASET, DLATMR,
-     $                   DLATMS, DSBEV, DSBEVD, DSBEVX, DSPEV, DSPEVD,
-     $                   DSPEVX, DSTEV, DSTEVD, DSTEVR, DSTEVX, DSTT21,
-     $                   DSTT22, DSYEV, DSYEVD, DSYEVR, DSYEVX, DSYT21,
+      EXTERNAL           ALASVM, DLACPY, DLAFTS, DLASET, DLATMR, DLATMS,
+     $                   DSBEV, DSBEVD, DSBEVX, DSPEV, DSPEVD, DSPEVX,
+     $                   DSTEV, DSTEVD, DSTEVR, DSTEVX, DSTT21, DSTT22,
+     $                   DSYEV, DSYEVD, DSYEVR, DSYEVX, DSYT21,
      $                   DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
      $                   DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
-     $                   DSBEVX_2STAGE, DSYTRD_2STAGE, DSYTRD_SY2SB, 
-     $                   DSYTRD_SB2ST, DSYT22, XERBLA
+     $                   DSBEVX_2STAGE, DSYT22, XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT

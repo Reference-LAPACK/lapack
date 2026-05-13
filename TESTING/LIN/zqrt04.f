@@ -102,11 +102,14 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL ZGEMM, ZLACPY, ZLARNV, ZGEMQRT, ZLASET, ZGEQRT, ZHERK
+*     ..
 *     .. External Functions ..
       DOUBLE PRECISION DLAMCH
       DOUBLE PRECISION ZLANGE, ZLANSY
       LOGICAL  LSAME
-      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME
+      EXTERNAL DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

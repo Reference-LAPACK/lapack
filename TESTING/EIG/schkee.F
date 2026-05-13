@@ -1106,12 +1106,11 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, SCHKBB, SCHKBD, SCHKBK, SCHKBL, SCHKEC,
-     $                   SCHKGG, SCHKGK, SCHKGL, SCHKHS, SCHKSB, SCHKST,
-     $                   SCKCSD, SCKGLM, SCKGQR, SCKGSV, SCKLSE, SDRGES,
-     $                   SDRGEV, SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV,
-     $                   SDRVSG, SDRVST, SDRVSX, SDRVVX, SERRBD,
-     $                   SERRED, SERRGG, SERRHS, SERRST, ILAVER, XLAENV,
-     $                   SDRGES3, SDRGEV3, 
+     $                   SCHKGG, SCHKGK, SCHKGL, SCHKHS, SCHKST, SCKCSD,
+     $                   SCKGLM, SCKGQR, SCKGSV, SCKLSE, SDRGES, SDRGEV,
+     $                   SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV, SDRVST,
+     $                   SDRVSX, SDRVVX, SERRBD, SERRED, SERRGG, SERRHS,
+     $                   SERRST, ILAVER, XLAENV, SDRGES3, SDRGEV3,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..

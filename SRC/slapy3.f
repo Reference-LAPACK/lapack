@@ -84,6 +84,7 @@
 *     ..
 *     .. External Subroutines ..
       REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT

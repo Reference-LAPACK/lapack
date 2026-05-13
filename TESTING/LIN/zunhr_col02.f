@@ -158,8 +158,8 @@
       EXTERNAL           DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACPY, ZLARNV, ZLASET, ZGETSQRHRT,
-     $                   ZSCAL, ZGEMM, ZGEMQRT, ZHERK
+      EXTERNAL           ZLACPY, ZLARNV, ZLASET, ZGETSQRHRT, ZGEMM,
+     $                   ZGEMQRT, ZHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, DBLE, MAX, MIN

@@ -206,7 +206,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX, CGET04,
      $                   CLACPY, CLARHS, CLATB4, CLATMS, CHESV_RK,
-     $                   CHET01_3, CPOT02, CHETRF_RK, CHETRI_3
+     $                   CHET01_3, CPOT02, CHETRF_RK, CSYTRI_3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

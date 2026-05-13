@@ -90,7 +90,9 @@
      $                   ZSYTF2, ZSYTF2_RK, ZSYTF2_ROOK, ZSYTRF,
      $                   ZSYTRF_RK, ZSYTRF_ROOK, ZSYTRI, ZSYTRI_3,
      $                   ZSYTRI_3X, ZSYTRI_ROOK, ZSYTRI2, ZSYTRI2X,
-     $                   ZSYTRS, ZSYTRS_3, ZSYTRS_ROOK
+     $                   ZSYTRS, ZSYTRS_3, ZSYTRS_ROOK, ZSYTRF_AA,
+     $                   ZSYTRS_AA, ZSYTRF_AA_2STAGE,
+     $                   ZSYTRS_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
