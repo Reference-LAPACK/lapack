@@ -223,7 +223,7 @@
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array,
 *>               dimension is the maximum of the following two expressions:
-*>           (1) Optimal 2orkspace dimension for matrix generation and test routines.
+*>           (1) Optimal workspace dimension for matrix generation and test routines.
 *>               (MMAX + 6) * max(MMAX,NMAX)
 *>               This is an upper bound for:
 *>                a) DLATMS: 3*max(M,N)
@@ -233,7 +233,7 @@
 *>                d) DQRT11: M*M + M
 *>
 *>
-*>           (2) Optimal Workspace dimension for DGECXX.
+*>           (2) Optimal workspace dimension for DGECXX.
 *>               max( NMAX*NBMAX,                      \\ for DGEQRF inside
 *>                    NMAX*min(NBMAX_ORMQR,NBMAX)      \\ for DORMQR inside
 *>                    + (NBMAX_ORMQR+1)*NBMAX_ORMQR ),
@@ -241,9 +241,9 @@
 *>                    min(MMAX,NMAX) + NMAX*NBMAX )    \\ for DGELS inside
 *>                where NBMAX_ORMQR=64 is hardwired in DORMQR.
 *>
-*>          Assuming MMAX = NMAX, and NBMAX = NMAX, the expressions become:
-*>             (1) NMAX*NMAX + 6*NMAX
-*>             (2) NMAX * min(64,NMAX) + 4160
+*>         Assuming MMAX = NMAX, and NBMAX = NMAX, the expressions become:
+*>           (1) NMAX*NMAX + 6*NMAX
+*>           (2) NMAX * min(64,NMAX) + 4160
 *> \endverbatim
 *>
 *> \param[out] IWORK
