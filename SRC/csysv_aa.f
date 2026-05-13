@@ -180,9 +180,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
       REAL               SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
+      EXTERNAL           LSAME, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CSYTRF_AA, CSYTRS_AA

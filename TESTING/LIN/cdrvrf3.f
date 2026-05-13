@@ -165,7 +165,7 @@
       EXTERNAL           SLAMCH, CLARND, CLANGE, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRTTF, CGEQRF, CGEQLF, CTFSM, CTRSM
+      EXTERNAL           CTRTTF, CGEQRF, CGELQF, CTFSM, CTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

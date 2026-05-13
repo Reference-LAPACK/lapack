@@ -184,6 +184,7 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DLASSQ, XERBLA

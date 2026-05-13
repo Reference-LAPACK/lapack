@@ -188,10 +188,6 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY
       INTEGER            I, II, KK, CTR, MINMN, LWMIN
-*     ..
-*     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           DGEQRT, DTPQRT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..

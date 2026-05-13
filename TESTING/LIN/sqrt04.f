@@ -106,8 +106,7 @@
 *     .. External Functions ..
       REAL SLAMCH
       REAL SLANGE, SLANSY
-      LOGICAL  LSAME
-      EXTERNAL SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

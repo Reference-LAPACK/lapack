@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.18)
 
 project(LAPACK C)
 
@@ -10,6 +10,8 @@ set(
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
+set(CMAKE_C_STANDARD 99)
+
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
 set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -18,7 +20,10 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
 # Export all symbols on Windows when building shared libraries
-SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
+# Enable position independent code for all targets by default
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -89,6 +94,10 @@ endif()
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+message(STATUS "Build shared libraries: ${BUILD_SHARED_LIBS}")
+
+option(BUILD_DEFAULT_API "Build default API. Disable and combine with -DBUILD_INDEX64_EXT_API=ON to build only extended API" ON)
+message(STATUS "Build default API: ${BUILD_DEFAULT_API}")
 
 # By default build index32 library
 option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
@@ -107,19 +116,17 @@ else()
   set(LAPACKELIB "lapacke")
   set(TMGLIB "tmglib")
 endif()
+message(STATUS "Build default API as Index-64: ${BUILD_INDEX64}")
 
-# By default build extended _64 API for supported compilers only. This needs
-# CMake >= 3.18! Let's disable it by default for CMake < 3.18.
-if(CMAKE_VERSION VERSION_LESS "3.18")
-  set(INDEX64_EXT_API_DEFAULT OFF)
-else()
-  set(INDEX64_EXT_API_DEFAULT ON)
-endif()
-set(INDEX64_EXT_API_COMPILERS "Intel|GNU")
-option(BUILD_INDEX64_EXT_API
-  "Build Index-64 API as extended API with _64 suffix (needs CMake >= 3.18)"
-  ${INDEX64_EXT_API_DEFAULT})
+# By default build extended _64 API
+option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
+
+if(BUILD_INDEX64_EXT_API AND BUILD_INDEX64)
+  message(WARNING
+    "Building Index-64 API redundantly as extended API and default API."
+    "Consider disabling one of them (BUILD_INDEX64_EXT_API / BUILD_INDEX64).")
+endif()
 
 include(GNUInstallDirs)
 
@@ -271,7 +278,8 @@ endif()
 
 option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if(USE_XBLAS)
-  find_library(XBLAS_LIBRARY NAMES xblas)
+  find_library(XBLAS_LIBRARY NAMES xblas REQUIRED)
+  message(STATUS "Looking for XBLAS library: ${XBLAS_LIBRARY}")
 endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)

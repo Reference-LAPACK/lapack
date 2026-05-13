@@ -186,13 +186,8 @@
 *     .. Local Variables ..
       INTEGER            ITER, KASE
 *     ..
-*     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, DLACPY,
-     $                   DLARHS, DLASET, DLATB4, DLATMS,
+      EXTERNAL           ALAERH, ALAHD, DLACPY, DLARHS, DLATB4, DLATMS,
      $                   DPOT06, DSPOSV
 *     ..
 *     .. Intrinsic Functions ..

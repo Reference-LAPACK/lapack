@@ -159,7 +159,7 @@
 *> For more details of the overall algorithm, see the description of
 *> Sequential TSQR in Section 2.2 of [1].
 *>
-*> [1] “Communication-Optimal Parallel and Sequential QR and LU Factorizations,”
+*> [1] “Communication-Optimal Parallel and Sequential QR and LU Factorizations,�
 *>     J. Demmel, L. Grigori, M. Hoemmen, J. Langou,
 *>     SIAM J. Sci. Comput, vol. 34, no. 1, 2012
 *> \endverbatim
@@ -190,9 +190,8 @@
       INTEGER            I, II, KK, CTR, LWMIN, MINMN
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
       REAL               SROUNDUP_LWORK
-      EXTERNAL           LSAME, SROUNDUP_LWORK
+      EXTERNAL           SROUNDUP_LWORK
 *     ..
 *     .. EXTERNAL SUBROUTINES ..
       EXTERNAL           CGEQRT, CTPQRT, XERBLA

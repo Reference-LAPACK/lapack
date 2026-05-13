@@ -377,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLASET, SLASUM, SLATMR, SLATMS, SSBT21,
-     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR
+     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR, SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT

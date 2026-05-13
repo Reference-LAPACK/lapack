@@ -150,10 +150,8 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
       REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH, SLANGE
+      EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM

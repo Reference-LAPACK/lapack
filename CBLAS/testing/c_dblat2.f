@@ -881,7 +881,8 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DMAKE, DMVCH, CDSBMV, CDSPMV, CDSYMV, CDSKEWSYMV
+      EXTERNAL           DMAKE, DMVCH, CDSBMV, CDSPMV, CDSYMV,
+     $                   CDSKEWSYMV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -1641,7 +1642,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DMAKE, DMVCH
+      EXTERNAL           CDGER, DMAKE, DMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..

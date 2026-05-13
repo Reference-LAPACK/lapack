@@ -113,7 +113,11 @@
       REAL SLAMCH
       REAL CLANGE, CLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+      EXTERNAL SLAMCH, CLANGE, CLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL CLASET, CLARNV, CLACPY, CTPLQT, CGEMLQT, CGEMM,
+     $         CHERK, CTPMLQT
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

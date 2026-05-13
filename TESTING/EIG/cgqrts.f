@@ -210,7 +210,7 @@
       EXTERNAL           SLAMCH, CLANGE, CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASET, CUNGQR,
+      EXTERNAL           CGEMM, CGGQRF, CLACPY, CLASET, CUNGQR,
      $                   CUNGRQ, CHERK
 *     ..
 *     .. Intrinsic Functions ..

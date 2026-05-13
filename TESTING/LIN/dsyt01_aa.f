@@ -154,7 +154,7 @@
       EXTERNAL           LSAME, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DLAVSY
+      EXTERNAL           DLASET, DSWAP, DTRMM, DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE

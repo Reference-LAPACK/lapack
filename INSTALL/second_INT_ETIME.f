@@ -47,7 +47,6 @@
       REAL               TARRAY( 2 )
 *     ..
 *     .. Intrinsic Functions ..
-      REAL               ETIME
       INTRINSIC          ETIME
 *     ..
 *     .. Executable Statements ..

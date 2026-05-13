@@ -160,7 +160,7 @@
       EXTERNAL           SLAMCH, SLANGE, SLARND, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           STRTTF, SGEQRF, SGEQLF, STFSM, STRSM
+      EXTERNAL           STRTTF, SGEQRF, SGELQF, STFSM, STRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

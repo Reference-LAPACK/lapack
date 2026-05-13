@@ -150,10 +150,8 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
       DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH, DLANGE
+      EXTERNAL           DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM
