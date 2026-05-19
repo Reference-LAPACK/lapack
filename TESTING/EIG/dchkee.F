@@ -1111,7 +1111,7 @@
      $                   DDRGEV, DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV,
      $                   DDRVSG, DDRVST, DDRVSX, DDRVVX, DERRBD,
      $                   DERRED, DERRGG, DERRHS, DERRST, ILAVER, XLAENV,
-     $                   DDRGES3, DDRGEV3, 
+     $                   DDRGES3, DDRGEV3, DDRGEV4,
      $                   DCHKST2STG, DDRVST2STG, DCHKSB2STG, DDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -2290,6 +2290,17 @@
      $                    WORK, LWORK, RESULT, INFO )
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9980 )'DDRGEV3', INFO
+*
+*     New Blocked version
+*
+            CALL DDRGEV4( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
+     $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
+     $                    A( 1, 9 ), NMAX, D( 1, 1 ), D( 1, 2 ),
+     $                    D( 1, 3 ), D( 1, 4 ), D( 1, 5 ), D( 1, 6 ),
+     $                    WORK, LWORK, IWORK, RESULT, INFO )
+            IF( INFO.NE.0 )
+     $         WRITE( NOUT, FMT = 9980 )'DDRGEV4', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10

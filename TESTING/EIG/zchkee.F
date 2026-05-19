@@ -1108,7 +1108,7 @@
      $                   ZDRGES, ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES,
      $                   ZDRVEV, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
      $                   ZERRBD, ZERRED, ZERRGG, ZERRHS, ZERRST, ILAVER,
-     $                   ZDRGES3, ZDRGEV3, 
+     $                   ZDRGES3, ZDRGEV3, ZDRGEV4,
      $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -2291,6 +2291,18 @@
      $                    RESULT, INFO )
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9980 )'ZDRGEV3', INFO
+*
+* New Blocked version
+*
+            CALL XLAENV(16,2)
+            CALL ZDRGEV4( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
+     $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
+     $                    A( 1, 9 ), NMAX, DC( 1, 1 ), DC( 1, 2 ),
+     $                    DC( 1, 3 ), DC( 1, 4 ), WORK, LWORK, RWORK,
+     $                    IWORK, RESULT, INFO )
+            IF( INFO.NE.0 )
+     $         WRITE( NOUT, FMT = 9980 )'ZDRGEV4', INFO     
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10

@@ -1111,7 +1111,7 @@
      $                   SDRGEV, SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV,
      $                   SDRVSG, SDRVST, SDRVSX, SDRVVX, SERRBD,
      $                   SERRED, SERRGG, SERRHS, SERRST, ILAVER, XLAENV,
-     $                   SDRGES3, SDRGEV3, 
+     $                   SDRGES3, SDRGEV3, SDRGEV4,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -2293,6 +2293,19 @@
      $                    WORK, LWORK, RESULT, INFO )
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9980 )'SDRGEV3', INFO
+
+*
+* New Blocked version
+*
+            CALL SDRGEV4( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
+     $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
+     $                    A( 1, 9 ), NMAX, D( 1, 1 ), D( 1, 2 ),
+     $                    D( 1, 3 ), D( 1, 4 ), D( 1, 5 ), D( 1, 6 ),
+     $                    WORK, LWORK, IWORK, RESULT, INFO )
+            IF( INFO.NE.0 )
+     $         WRITE( NOUT, FMT = 9980 )'SDRGEV4', INFO
+
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
