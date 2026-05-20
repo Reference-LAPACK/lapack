@@ -59,8 +59,8 @@
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *  =====================================================================
       VERS_MAJOR = 3
-      VERS_MINOR = 12
-      VERS_PATCH = 1
+      VERS_MINOR = 13
+      VERS_PATCH = 0
 *  =====================================================================
 *
       RETURN
