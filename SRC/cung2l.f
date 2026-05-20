@@ -22,7 +22,7 @@
 *       INTEGER            INFO, K, LDA, M, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
+*       COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *
 *
@@ -69,7 +69,7 @@
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
 *>          returned by CGEQLF in the last k columns of its array
 *>          argument A.
-*>          On exit, the m-by-n matrix Q.
+*>          On exit, the m by n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -87,7 +87,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (N)
+*>          WORK is COMPLEX array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -119,21 +119,21 @@
       INTEGER            INFO, K, LDA, M, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
+      COMPLEX         A( LDA, * ), TAU( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX            ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ),
-     $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
+      COMPLEX         ONE, ZERO
+      PARAMETER          ( ONE = (1.0E+0, 0.0E+0),
+     $                     ZERO = (0.0E+0, 0.0E+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, II, J, L
+      INTEGER            J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF1L, CSCAL, XERBLA
+      EXTERNAL           CLARF0C2, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,35 +159,44 @@
 *
 *     Quick return if possible
 *
-      IF( N.LE.0 )
-     $   RETURN
+*     Note that if M=0, then N must also be 0, so it's sufficient to only test
+*     N=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-*     Initialise columns 1:n-k to columns of the unit matrix
+      IF( N.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL CLASET('ALL', M, N, ZERO, ZERO, A, LDA)
+         DO J = 1, N
+            A(M-N+J,J) = ONE
+         END DO
+         RETURN
+      END IF
 *
-      DO 20 J = 1, N - K
-         DO 10 L = 1, M
-            A( L, J ) = ZERO
-   10    CONTINUE
-         A( M-N+J, J ) = ONE
-   20 CONTINUE
+*     Apply H(1) to the assumed identity matrix from the left
 *
-      DO 40 I = 1, K
-         II = N - K + I
+      CALL CLARF0C2('Identity', 'Left', 'Backward', 'Columnwise',
+     $      M-K+1, N-K, TAU(1), A(1, N-K+1), 1, A, LDA)
 *
-*        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left
+*     Apply H(1) to v_1
 *
-         A( M-N+II, II ) = ONE
-         CALL CLARF1L( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ),
-     $                 A, LDA, WORK )
-         CALL CSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
-         A( M-N+II, II ) = ONE - TAU( I )
+      CALL CSCAL(M-K, -TAU(1), A(1, N-K+1), 1)
+      A(M-K+1,N-K+1) = ONE - TAU(1)
+      IF( K.GT.1 ) THEN
+         DO J = 2, K
 *
-*        Set A(m-k+i+1:m,n-k+i) to zero
+*           Apply H(j) to the leading n-k+j-1 columns of Q from the left
 *
-         DO 30 L = M - N + II + 1, M
-            A( L, II ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+            CALL CLARF0C2('General', 'Left', 'Backward',
+     $         'Columnwise', M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1,
+     $         A, LDA)
+*
+*           Apply H(j) to v_j
+*
+            CALL CSCAL(M-K+J-1, -TAU(J), A(1,N-K+J), 1)
+            A(M-K+J,N-K+J) = ONE - TAU(J)
+         END DO
+      END IF
       RETURN
 *
 *     End of CUNG2L
