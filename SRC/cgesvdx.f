@@ -846,13 +846,14 @@
 *
 *     Undo scaling if necessary
 *
-      IF( ISCL.EQ.1 ) THEN
-         IF( ANRM.GT.BIGNUM )
-     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
+      IF( ISCL.EQ.1 .AND. NS.GT.0 ) THEN
+        IF( ANRM.GT.BIGNUM ) THEN
+            CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, NS, 1,
      $                   S, MINMN, INFO )
-         IF( ANRM.LT.SMLNUM )
-     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
+        ELSE IF( ANRM.LT.SMLNUM ) THEN
+            CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, NS, 1,
      $                   S, MINMN, INFO )
+        ENDIF
       END IF
 *
 *     Return optimal workspace in WORK(1)
