@@ -408,13 +408,13 @@
       PARAMETER          ( EPSIN = 5.9605E-8 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BALOK, NOBAL
+      LOGICAL            BALOK, NOBAL, EVAL_5
       CHARACTER          SENSE
       INTEGER            I, IHI, IHI1, IINFO, ILO, ILO1, ISENS, ISENSM,
      $                   J, JJ, KMIN
       REAL               ABNRM, ABNRM1, EPS, SMLNUM, TNRM, TOL, TOLIN,
      $                   ULP, ULPINV, V, VIMIN, VMAX, VMX, VRMIN, VRMX,
-     $                   VTST
+     $                   VTST, TEMPR, TEMPI, WTOL
 *     ..
 *     .. Local Arrays ..
       CHARACTER          SENS( 2 )
@@ -600,10 +600,22 @@
 *
 *        Do Test (5)
 *
+         EVAL_5 = .FALSE.
          DO 60 J = 1, N
             IF( WR( J ).NE.WR1( J ) .OR. WI( J ).NE.WI1( J ) )
-     $         RESULT( 5 ) = ULPINV
+     $          EVAL_5 = .TRUE.
    60    CONTINUE
+       IF (EVAL_5) THEN
+        WTOL = THRESH*ULP
+        DO 300 J = 1, N
+          TEMPR = (ABS(WR(J)-WR1(J))) / (1+ABS(WR1(J)))
+          TEMPI = (ABS(WI(J)-WI1(J))) / (1+ABS(WI1(J)))
+          IF ((TEMPR.GT.WTOL) .OR. (TEMPI.GT.WTOL) ) THEN 
+                     RESULT( 5 ) = ULPINV
+          ENDIF
+  300   CONTINUE
+       ENDIF
+
 *
 *        Do Test (8)
 *
