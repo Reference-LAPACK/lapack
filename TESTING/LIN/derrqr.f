@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX
       PARAMETER          ( NMAX = 2 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, INFO, J
@@ -102,12 +104,12 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
-            AF( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = ONE / DBLE( I+J )
+            AF( I, J ) = ONE / DBLE( I+J )
    10    CONTINUE
-         B( J ) = 0.D0
-         W( J ) = 0.D0
-         X( J ) = 0.D0
+         B( J ) = ZERO
+         W( J ) = ZERO
+         X( J ) = ZERO
    20 CONTINUE
       OK = .TRUE.
 *
