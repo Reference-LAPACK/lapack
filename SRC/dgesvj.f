@@ -365,7 +365,7 @@
      $                   BIGTHETA, CS, CTOL, EPSLN, LARGE, MXAAPQ,
      $                   MXSINJ, ROOTBIG, ROOTEPS, ROOTSFMIN, ROOTTOL,
      $                   SKL, SFMIN, SMALL, SN, T, TEMP1, THETA,
-     $                   THSIGN, TOL
+     $                   THSIGN, TOL, TBIG
       INTEGER            BLSKIP, EMPTSW, i, ibr, IERR, igl, IJBLSK, ir1,
      $                   ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
      $                   N4, NBL, NOTROT, p, PSKIPPED, q, ROWSKIP,
@@ -441,8 +441,6 @@
       ELSE IF( ( RSVEC .AND. ( LDV.LT.N ) ) .OR.
      $         ( APPLV .AND. ( LDV.LT.MV ) ) ) THEN
          INFO = -11
-      ELSE IF( UCTOL .AND. ( WORK( 1 ).LT.ONE ) ) THEN
-         INFO = -12
       ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
       ELSE
@@ -471,7 +469,12 @@
 *
       IF( UCTOL ) THEN
 *        ... user controlled
-         CTOL = WORK( 1 )
+         IF( WORK( 1 ).LE.ONE )  THEN
+            INFO = -12
+            RETURN
+         ELSE
+            CTOL = WORK( 1 )
+         ENDIF
       ELSE
 *        ... default
          IF( LSVEC .OR. RSVEC .OR. APPLV ) THEN
@@ -538,7 +541,9 @@
                RETURN
             END IF
             AAQQ = DSQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT. TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -563,7 +568,9 @@
                RETURN
             END IF
             AAQQ = DSQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT.TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -588,7 +595,9 @@
                RETURN
             END IF
             AAQQ = DSQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT.TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -1601,7 +1610,9 @@
 *
       IF( LSVEC .OR. UCTOL ) THEN
          DO 1998 p = 1, N2
-            CALL DSCAL( M, WORK( p ) / SVA( p ), A( 1, p ), 1 )
+            TEMP1 = ONE
+            IF( SVA(p).GT.ZERO ) TEMP1 = ONE/SVA(p)
+            CALL DSCAL( M, WORK( p )*TEMP1, A( 1, p ), 1 )
  1998    CONTINUE
       END IF
 *
@@ -1621,9 +1632,14 @@
       END IF
 *
 *     Undo scaling, if necessary (and possible).
-      IF( ( ( SKL.GT.ONE ) .AND. ( SVA( 1 ).LT.( BIG / SKL) ) )
-     $    .OR. ( ( SKL.LT.ONE ) .AND. ( SVA( MAX( N2, 1 ) ) .GT.
-     $    ( SFMIN / SKL) ) ) ) THEN
+      NOSCALE = .FALSE.
+      IF ( SKL.GT.ONE ) THEN
+          IF( SVA( 1 ).LT.( BIG / SKL ) ) NOSCALE = .TRUE.
+      ELSE IF( SKL.LT.ONE ) THEN
+          IF ( SVA( MAX( N2, 1 ) ) .GT.
+     $      ( SFMIN / SKL ) )  NOSCALE = .TRUE.
+      ENDIF
+      IF( NOSCALE ) THEN
          DO 2400 p = 1, N
             SVA( P ) = SKL*SVA( P )
  2400    CONTINUE

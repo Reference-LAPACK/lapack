@@ -496,7 +496,7 @@
 *     .. Local Scalars ..
       DOUBLE PRECISION AAPP, AAQQ, AATMAX, AATMIN, BIG, BIG1, COND_OK,
      $        CONDR1, CONDR2, ENTRA,  ENTRAT, EPSLN,  MAXPRJ, SCALEM,
-     $        SCONDA, SFMIN,  SMALL,  TEMP1,  USCAL1, USCAL2, XSC
+     $        SCONDA, SFMIN,  SMALL,  TEMP1,  USCAL1, USCAL2, XSC, TBIG
       INTEGER IERR,   N1,     NR,     NUMRANK,        p, q,   WARNING
       LOGICAL ALMORT, DEFR,   ERREST, GOSCAL, JRACC,  KILL,   LSVEC,
      $        L2ABER, L2KILL, L2PERT, L2RANK, L2TRAN,
@@ -628,7 +628,9 @@
             RETURN
          END IF
          AAQQ = DSQRT(AAQQ)
-         IF ( ( AAPP .LT. (BIG / AAQQ) ) .AND. NOSCAL  ) THEN
+         TBIG = BIG
+         IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+         IF ( ( AAPP .LT. TBIG ) .AND. NOSCAL  ) THEN
             SVA(p)  = AAPP * AAQQ
          ELSE
             NOSCAL  = .FALSE.
@@ -701,7 +703,10 @@
          IF ( RSVEC ) THEN
              V(1,1) = ONE
          END IF
-         IF ( SVA(1) .LT. (BIG*SCALEM) ) THEN
+         TBIG = BIG
+         IF ( SCALEM .EQ. ZERO ) SCALEM = ONE
+         IF ( SCALEM .LT. ONE) TBIG = BIG*SCALEM
+         IF ( SVA(1) .LT. TBIG ) THEN
             SVA(1)  = SVA(1) / SCALEM
             SCALEM  = ONE
          END IF
