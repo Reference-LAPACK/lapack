@@ -68,7 +68,7 @@
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
 *>          by CGELQF in the first k rows of its array argument A.
-*>          On exit, the m by n matrix Q.
+*>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -86,7 +86,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (M)
+*>          WORK is COMPLEX array. No longer referenced
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -125,14 +125,14 @@
 *
 *     .. Parameters ..
       COMPLEX            ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ),
-     $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
+      PARAMETER          ( ONE = (1.0E+0, 0.0E+0),
+     $                   ZERO = (0.0E+0, 0.0E+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, J, L
+      INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF1F, CSCAL, XERBLA
+      EXTERNAL           CLARF0C2, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -158,44 +158,45 @@
 *
 *     Quick return if possible
 *
-      IF( M.LE.0 )
-     $   RETURN
+*     Note that if N=0, then M must also be 0, so it's sufficient to only test
+*     M=0. If we have 0 reflectors, then we define the matrix Q to be the
+*     m\times n `identity'
 *
-      IF( K.LT.M ) THEN
-*
-*        Initialise rows k+1:m to rows of the unit matrix
-*
-         DO 20 J = 1, N
-            DO 10 L = K + 1, M
-               A( L, J ) = ZERO
-   10       CONTINUE
-            IF( J.GT.K .AND. J.LE.M )
-     $         A( J, J ) = ONE
-   20    CONTINUE
+      IF( M.LE.0 ) THEN
+         RETURN
+      ELSE IF( K.LE.0 ) THEN
+         CALL CLASET('All', M, N, ZERO, ONE, A, LDA)
+         RETURN
       END IF
 *
-      DO 40 I = K, 1, -1
+*     Apply the first (kth) reflector to the assumed identity matrix from
+*     the right. Note that if m=k, we do nothing
 *
-*        Apply H(i)**H to A(i:m,i:n) from the right
+      IF( M.GT.K ) THEN
+         CALL CLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+     $      M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
+      END IF
 *
-         IF( I.LT.N ) THEN
-            CALL CLACGV( N-I, A( I, I+1 ), LDA )
-            IF( I.LT.M ) THEN
-               CALL CLARF1F( 'Right', M-I, N-I+1, A( I, I ), LDA,
-     $                       CONJG( TAU( I ) ), A( I+1, I ), LDA,
-     $                       WORK )
-            END IF
-            CALL CSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
-            CALL CLACGV( N-I, A( I, I+1 ), LDA )
-         END IF
-         A( I, I ) = ONE - CONJG( TAU( I ) )
+*     Now we compute the 1st non-zero row of H, which is given by
+*     A(k,k:n) = (e_k - tau*v_k)'
+*     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
-*        Set A(i,1:i-1,i) to zero
+      A(K,K) = ONE - CONJG(TAU(K))
+      IF( N.GT.K ) THEN
+         CALL CSCAL(N-K, -CONJG(TAU(K)), A(K,K+1), LDA)
+      END IF
+      IF( K.GT.1 ) THEN
+         DO I = K-1, 1, -1
+            CALL CLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+     $         M-I, N-I+1, CONJG(TAU(I)), A(I,I+1), LDA, A(I+1,I), LDA)
 *
-         DO 30 L = 1, I - 1
-            A( I, L ) = ZERO
-   30    CONTINUE
-   40 CONTINUE
+*           A(i,i:n) = (e_i - tau*v_i)'
+*           Analagous to orglk for n=1 (but T is not used as it is a scalar)
+*
+            A(I,I) = ONE - CONJG(TAU(I))
+            CALL CSCAL(N-I, -CONJG(TAU(I)), A(I,I+1), LDA)
+         END DO
+      END IF
       RETURN
 *
 *     End of CUNGL2
