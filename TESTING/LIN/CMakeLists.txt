@@ -11,12 +11,12 @@ set(SLINTST schkaa.F
    schklq.f schkpb.f schkpo.f schkps.f schkpp.f
    schkpt.f schkq3.f schkqp3rk.f schkql.f schkqr.f schkrq.f
    schksp.f schksy.f schkky.f schksy_rook.f schksy_rk.f 
-   schksy_aa.f schksy_aa_2stage.f 
+   schksy_aa.f schkky_aa.f schksy_aa_2stage.f 
    schktb.f schktp.f schktr.f
    schktz.f
    sdrvgt.f sdrvls.f sdrvpb.f
    sdrvpp.f sdrvpt.f sdrvsp.f sdrvsy_rook.f sdrvsy_rk.f 
-   sdrvsy_aa.f sdrvsy_aa_2stage.f
+   sdrvsy_aa.f sdrvky_aa.f sdrvsy_aa_2stage.f
    serrgt.f serrlq.f serrls.f
    serrps.f serrql.f serrqp.f serrqr.f
    serrrq.f serrtr.f serrtz.f
@@ -33,7 +33,7 @@ set(SLINTST schkaa.F
    sqrt13.f sqrt14.f sqrt15.f sqrt16.f sqrt17.f
    srqt01.f srqt02.f srqt03.f srzt01.f srzt02.f
    sspt01.f ssyt01.f skyt01.f ssyt01_rook.f ssyt01_3.f 
-   ssyt01_aa.f
+   ssyt01_aa.f skyt01_aa.f
    stbt02.f stbt03.f stbt05.f stbt06.f stpt01.f
    stpt02.f stpt03.f stpt05.f stpt06.f strt01.f
    strt02.f strt03.f strt05.f strt06.f
@@ -112,12 +112,12 @@ set(DLINTST dchkaa.F
    dchklq.f dchkpb.f dchkpo.f dchkps.f dchkpp.f
    dchkpt.f dchkq3.f dchkqp3rk.f dchkql.f dchkqr.f dchkrq.f
    dchksp.f dchksy.f dchkky.f dchksy_rook.f dchksy_rk.f 
-   dchksy_aa.f dchksy_aa_2stage.f
+   dchksy_aa.f dchkky_aa.f dchksy_aa_2stage.f
    dchktb.f dchktp.f dchktr.f
    dchktz.f
    ddrvgt.f ddrvls.f ddrvpb.f
    ddrvpp.f ddrvpt.f ddrvsp.f ddrvsy_rook.f ddrvsy_rk.f 
-   ddrvsy_aa.f ddrvsy_aa_2stage.f
+   ddrvsy_aa.f ddrvky_aa.f ddrvsy_aa_2stage.f
    derrgt.f derrlq.f derrls.f
    derrps.f derrql.f derrqp.f derrqr.f
    derrrq.f derrtr.f derrtz.f
@@ -134,7 +134,7 @@ set(DLINTST dchkaa.F
    dqrt13.f dqrt14.f dqrt15.f dqrt16.f dqrt17.f
    drqt01.f drqt02.f drqt03.f drzt01.f drzt02.f
    dspt01.f dsyt01.f dkyt01.f dsyt01_rook.f dsyt01_3.f
-   dsyt01_aa.f
+   dsyt01_aa.f dkyt01_aa.f
    dtbt02.f dtbt03.f dtbt05.f dtbt06.f dtpt01.f
    dtpt02.f dtpt03.f dtpt05.f dtpt06.f dtrt01.f
    dtrt02.f dtrt03.f dtrt05.f dtrt06.f

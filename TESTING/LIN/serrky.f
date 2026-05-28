@@ -86,7 +86,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SKYTRI2X, SKYTF2,
-     $                   SKYTRF, SKYTRI, SKYTRS, SKYTRI2
+     $                   SKYTRF, SKYTRF_AA, SKYTRI, SKYTRS,
+     $                   SKYTRS_AA, SKYTRI2
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -222,6 +223,57 @@
          CALL SKYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
          CALL CHKXER( 'SKYTRS', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'KA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a skew-symmetric indefinite matrix with Aasen's algorithm.
+*
+*        SKYTRF_AA
+*
+         SRNAMT = 'SKYTRF_AA'
+         INFOT = 1
+         CALL SKYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'SKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'SKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SKYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'SKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'SKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SKYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'SKYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        SKYTRS_AA
+*
+         SRNAMT = 'SKYTRS_AA'
+         INFOT = 1
+         CALL SKYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SKYTRS_AA( 'U', 3, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SKYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SKYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SKYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SKYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SKYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'SKYTRS_AA', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.

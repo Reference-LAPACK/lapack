@@ -47,11 +47,11 @@ SLINTST = schkaa.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkqp3rk.o schkql.o schkqr.o schkrq.o \
    schksp.o schksy.o schkky.o schksy_rook.o schksy_rk.o  \
-   schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
+   schksy_aa.o schkky_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
    sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o \
-   sdrvsy_aa.o sdrvsy_aa_2stage.o \
+   sdrvsy_aa.o sdrvky_aa.o sdrvsy_aa_2stage.o \
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
@@ -67,7 +67,7 @@ SLINTST = schkaa.o \
    sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o \
    sqrt13.o sqrt14.o sqrt15.o sqrt16.o sqrt17.o \
    srqt01.o srqt02.o srqt03.o srzt01.o srzt02.o \
-   sspt01.o ssyt01.o skyt01.o ssyt01_rook.o ssyt01_3.o ssyt01_aa.o \
+   sspt01.o ssyt01.o skyt01.o ssyt01_rook.o ssyt01_3.o ssyt01_aa.o skyt01_aa.o \
    stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o \
    stpt02.o stpt03.o stpt05.o stpt06.o strt01.o \
    strt02.o strt03.o strt05.o strt06.o \
@@ -139,11 +139,11 @@ DLINTST = dchkaa.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
    dchkpt.o dchkq3.o dchkqp3rk.o dchkql.o dchkqr.o dchkrq.o \
    dchksp.o dchksy.o dchkky.o dchksy_rook.o dchksy_rk.o  \
-   dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
+   dchksy_aa.o dchkky_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
    ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_rk.o \
-   ddrvsy_aa.o ddrvsy_aa_2stage.o \
+   ddrvsy_aa.o ddrvky_aa.o ddrvsy_aa_2stage.o \
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
@@ -159,7 +159,7 @@ DLINTST = dchkaa.o \
    dqrt01.o dqrt01p.o dqrt02.o dqrt03.o dqrt11.o dqrt12.o \
    dqrt13.o dqrt14.o dqrt15.o dqrt16.o dqrt17.o \
    drqt01.o drqt02.o drqt03.o drzt01.o drzt02.o \
-   dspt01.o dsyt01.o dkyt01.o dsyt01_rook.o dsyt01_3.o dsyt01_aa.o \
+   dspt01.o dsyt01.o dkyt01.o dsyt01_rook.o dsyt01_3.o dsyt01_aa.o dkyt01_aa.o \
    dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o \
    dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o \
    dtrt02.o dtrt03.o dtrt05.o dtrt06.o \

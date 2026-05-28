@@ -1123,6 +1123,8 @@ lapacke_dkysv.c
 lapacke_dkysv_work.c
 lapacke_dsysv_aa.c
 lapacke_dsysv_aa_work.c
+lapacke_dkysv_aa.c
+lapacke_dkysv_aa_work.c
 lapacke_dsysv_aa_2stage.c
 lapacke_dsysv_aa_2stage_work.c
 lapacke_dsysv_rk.c
@@ -1147,6 +1149,8 @@ lapacke_dkytrf.c
 lapacke_dkytrf_work.c
 lapacke_dsytrf_aa.c
 lapacke_dsytrf_aa_work.c
+lapacke_dkytrf_aa.c
+lapacke_dkytrf_aa_work.c
 lapacke_dsytrf_aa_2stage.c
 lapacke_dsytrf_aa_2stage_work.c
 lapacke_dsytrf_rk.c
@@ -1179,6 +1183,8 @@ lapacke_dsytrs_3.c
 lapacke_dsytrs_3_work.c
 lapacke_dsytrs_aa.c
 lapacke_dsytrs_aa_work.c
+lapacke_dkytrs_aa.c
+lapacke_dkytrs_aa_work.c
 lapacke_dsytrs_aa_2stage.c
 lapacke_dsytrs_aa_2stage_work.c
 lapacke_dsytrs_rook.c
@@ -1760,6 +1766,8 @@ lapacke_skysv.c
 lapacke_skysv_work.c
 lapacke_ssysv_aa.c
 lapacke_ssysv_aa_work.c
+lapacke_skysv_aa.c
+lapacke_skysv_aa_work.c
 lapacke_ssysv_aa_2stage.c
 lapacke_ssysv_aa_2stage_work.c
 lapacke_ssysv_rk.c
@@ -1784,6 +1792,8 @@ lapacke_skytrf.c
 lapacke_skytrf_work.c
 lapacke_ssytrf_aa.c
 lapacke_ssytrf_aa_work.c
+lapacke_skytrf_aa.c
+lapacke_skytrf_aa_work.c
 lapacke_ssytrf_aa_2stage.c
 lapacke_ssytrf_aa_2stage_work.c
 lapacke_ssytrf_rk.c
@@ -1816,6 +1826,8 @@ lapacke_ssytrs_3.c
 lapacke_ssytrs_3_work.c
 lapacke_ssytrs_aa.c
 lapacke_ssytrs_aa_work.c
+lapacke_skytrs_aa.c
+lapacke_skytrs_aa_work.c
 lapacke_ssytrs_aa_2stage.c
 lapacke_ssytrs_aa_2stage_work.c
 lapacke_ssytrs_rook.c

@@ -86,7 +86,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DKYTRI2X, DKYTF2,
-     $                   DKYTRF, DKYTRI, DKYTRS, DKYTRI2
+     $                   DKYTRF, DKYTRF_AA, DKYTRI, DKYTRS,
+     $                   DKYTRS_AA, DKYTRI2
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -222,6 +223,57 @@
          CALL DKYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
          CALL CHKXER( 'DKYTRS', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'KA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a skew-symmetric indefinite matrix with Aasen's algorithm.
+*
+*        DKYTRF_AA
+*
+         SRNAMT = 'DKYTRF_AA'
+         INFOT = 1
+         CALL DKYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DKYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'DKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'DKYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DKYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'DKYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        DKYTRS_AA
+*
+         SRNAMT = 'DKYTRS_AA'
+         INFOT = 1
+         CALL DKYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DKYTRS_AA( 'U', 3, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DKYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DKYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DKYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DKYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'DKYTRS_AA', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
