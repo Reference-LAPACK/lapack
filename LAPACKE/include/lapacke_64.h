@@ -12235,6 +12235,12 @@ int64_t LAPACKE_zsytrf_aa_work_64( int matrix_layout, char uplo, int64_t n,
                                 lapack_complex_double* a, int64_t lda,
                                 int64_t* ipiv, lapack_complex_double* work,
                                 int64_t lwork );
+int64_t LAPACKE_skytrf_aa_work_64( int matrix_layout, char uplo, int64_t n,
+                                float* a, int64_t lda, int64_t* ipiv,
+                                float* work, int64_t lwork );
+int64_t LAPACKE_dkytrf_aa_work_64( int matrix_layout, char uplo, int64_t n,
+                                double* a, int64_t lda, int64_t* ipiv,
+                                double* work, int64_t lwork );
 int64_t LAPACKE_chetrf_aa_work_64( int matrix_layout, char uplo, int64_t n,
                                 lapack_complex_float* a, int64_t lda,
                                 int64_t* ipiv, lapack_complex_float* work,
