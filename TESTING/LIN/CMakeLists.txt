@@ -160,8 +160,8 @@ set(ZLINTST zchkaa.F
    zchkhe.f zchkhe_rook.f zchkhe_rk.f
    zchkhe_aa.f zchkhe_aa_2stage.f
    zchkhp.f zchklq.f zchkpb.f
-   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkqp3rk.f zchkql.f
-   zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f
+   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkqp3rk.f zchkcxx.f
+   zchkql.f zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f
    zchksy_aa.f  zchksy_aa_2stage.f
    zchktb.f
    zchktp.f zchktr.f zchktz.f
@@ -200,7 +200,8 @@ set(ZLINTST zchkaa.F
    zqrt04.f zqrt05.f zchkqrt.f zerrqrt.f zchkqrtp.f zerrqrtp.f
    zchklqt.f zchklqtp.f zchktsqr.f
    zerrlqt.f zerrlqtp.f zerrtsqr.f ztsqr01.f zlqt04.f zlqt05.f
-   zchkunhr_col.f zerrunhr_col.f zunhr_col01.f zunhr_col02.f)
+   zchkunhr_col.f zerrunhr_col.f zunhr_col01.f zunhr_col02.f
+   zerrcxx.f)
 
 if(USE_XBLAS)
   list(APPEND ZLINTST zdrvgbx.f zdrvgex.f zdrvhex.f zdrvsyx.f zdrvpox.f

@@ -184,7 +184,7 @@ ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
    zchkhe.o zchkhe_rook.o zchkhe_rk.o zchkhe_aa.o zchkhe_aa_2stage.o \
    zchkhp.o zchklq.o zchkpb.o \
-   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkqp3rk.o zchkql.o \
+   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkqp3rk.o zchkcxx.o zchkql.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchksy_rk.o \
    zchksy_aa.o zchksy_aa_2stage.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
@@ -217,7 +217,8 @@ ZLINTST = zchkaa.o \
    zqrt04.o zqrt05.o zchkqrt.o zerrqrt.o zchkqrtp.o zerrqrtp.o \
    zchklqt.o zchklqtp.o zchktsqr.o \
    zerrlqt.o zerrlqtp.o zerrtsqr.o ztsqr01.o zlqt04.o zlqt05.o \
-   zchkunhr_col.o zerrunhr_col.o zunhr_col01.o zunhr_col02.o
+   zchkunhr_col.o zerrunhr_col.o zunhr_col01.o zunhr_col02.o \
+   zerrcxx.o
 
 ifdef USEXBLAS
 ZLINTST += zdrvgbx.o zdrvgex.o zdrvhex.o zdrvsyx.o zdrvpox.o \
