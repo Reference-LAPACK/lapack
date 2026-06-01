@@ -787,9 +787,11 @@
 *>              LWORK >= max( 1, min(M,N) + N )
 *>          For USESD = 'C' or 'A':
 *>            a) If FACT = 'P' or 'C':
-*>              LWORK >= max( 1, N_sel, N_free )
+*>              LWORK >= max( 1, min(1,N_sel)*max(N_sel,N_free),
+*>                            min(1,MINMNFREE)*(N_free-1) )
 *>            b) If FACT = 'X':
 *>              LWORK >= max( 1, min(M,N) + N )
+*>          where MINMNFREE = min( M_free, N_free ).
 *>
 *>          NOTE: The decision, whether the routine uses unblocked
 *>          BLAS 2 or blocked BLAS 3 code is based not only on the
@@ -853,7 +855,7 @@
 *>          For USESD = 'N' or 'R' and all FACT,
 *>                              LRWORK >= max( 1, 2*N )
 *>          For USESD = 'C' or 'A' and all FACT,
-*>                              LRWORK >= max( 1, max(N_sub,2*N_free) )
+*>                              LRWORK >= max( 1, max(N_sub, 2*N_free) )
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -1150,7 +1152,7 @@
 *
 *                 Query for optimal workspace size for ZUNMQR.
 *
-                  CALL ZUNMQR( 'L', 'T', MSUB, NFREE,
+                  CALL ZUNMQR( 'L', 'C', MSUB, NFREE,
      $               NSEL, A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
      $               -1, IINFO )
                   LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
@@ -1230,6 +1232,7 @@
                LWKOPT = MAX( LWKOPT, INT( WORK(1) ) )
 *
             END IF
+
 *
 *           End of ELSE for IF( MINMN.EQ.0 )
 *
@@ -1507,7 +1510,7 @@
 *
 *           This is only for case (c-2) ('L' = Left, 'T' = Transpose)
 *
-            CALL ZUNMQR( 'L', 'T', MSUB, NFREE, NSEL,
+            CALL ZUNMQR( 'L', 'C', MSUB, NFREE, NSEL,
      $                   A, LDA, TAU, A( 1, NSEL+1 ), LDA, WORK,
      $                   LWORK, IINFO )
          END IF
