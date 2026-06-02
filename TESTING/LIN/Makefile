@@ -52,7 +52,7 @@ SLINTST = schkaa.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
    sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o \
    sdrvsy_aa.o sdrvsy_aa_2stage.o \
-   serrgt.o serrlq.o serrls.o \
+   serrcxx.o serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
    sgbt01.o sgbt02.o sgbt05.o sgeqls.o \
@@ -74,8 +74,7 @@ SLINTST = schkaa.o \
    sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o \
    schklqt.o schklqtp.o schktsqr.o \
    serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o \
-   schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o \
-   serrcxx.o
+   schkorhr_col.o serrorhr_col.o sorhr_col01.o sorhr_col02.o
 
 ifdef USEXBLAS
 SLINTST += sdrvgbx.o sdrvgex.o sdrvsyx.o sdrvpox.o \
@@ -90,7 +89,7 @@ CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
    cchkhe.o cchkhe_rook.o cchkhe_rk.o  \
    cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o \
-   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkqp3rk.o cchkql.o \
+   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkqp3rk.o cchkcxx.o cchkql.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o \
    cchksy_aa.o cchksy_aa_2stage.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
@@ -98,7 +97,7 @@ CLINTST = cchkaa.o \
    cdrvhe_aa_2stage.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
    cdrvsp.o cdrvsy_rook.o cdrvsy_rk.o cdrvsy_aa.o cdrvsy_aa_2stage.o \
-   cerrgt.o cerrlq.o \
+   cerrcxx.o cerrgt.o cerrlq.o \
    cerrls.o cerrps.o cerrql.o cerrqp.o \
    cerrqr.o cerrrq.o cerrtr.o cerrtz.o \
    cgbt01.o cgbt02.o cgbt05.o cgeqls.o \
@@ -145,7 +144,7 @@ DLINTST = dchkaa.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
    ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_rk.o \
    ddrvsy_aa.o ddrvsy_aa_2stage.o \
-   derrgt.o derrlq.o derrls.o \
+   derrcxx.o derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
    dgbt01.o dgbt02.o dgbt05.o dgeqls.o \
@@ -168,8 +167,7 @@ DLINTST = dchkaa.o \
    dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o \
    dchklq.o dchklqt.o dchklqtp.o dchktsqr.o \
    derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o \
-   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o \
-   derrcxx.o
+   dchkorhr_col.o derrorhr_col.o dorhr_col01.o dorhr_col02.o
 
 ifdef USEXBLAS
 DLINTST += ddrvgbx.o ddrvgex.o ddrvsyx.o ddrvpox.o \
@@ -191,7 +189,7 @@ ZLINTST = zchkaa.o \
    zdrvgt.o zdrvhe_rook.o zdrvhe_rk.o zdrvhe_aa.o zdrvhe_aa_2stage.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
    zdrvsp.o zdrvsy_rook.o zdrvsy_rk.o zdrvsy_aa.o zdrvsy_aa_2stage.o \
-   zerrgt.o zerrlq.o \
+   zerrcxx.o zerrgt.o zerrlq.o \
    zerrls.o zerrps.o zerrql.o zerrqp.o \
    zerrqr.o zerrrq.o zerrtr.o zerrtz.o \
    zgbt01.o zgbt02.o zgbt05.o zgeqls.o \
@@ -217,8 +215,7 @@ ZLINTST = zchkaa.o \
    zqrt04.o zqrt05.o zchkqrt.o zerrqrt.o zchkqrtp.o zerrqrtp.o \
    zchklqt.o zchklqtp.o zchktsqr.o \
    zerrlqt.o zerrlqtp.o zerrtsqr.o ztsqr01.o zlqt04.o zlqt05.o \
-   zchkunhr_col.o zerrunhr_col.o zunhr_col01.o zunhr_col02.o \
-   zerrcxx.o
+   zchkunhr_col.o zerrunhr_col.o zunhr_col01.o zunhr_col02.o
 
 ifdef USEXBLAS
 ZLINTST += zdrvgbx.o zdrvgex.o zdrvhex.o zdrvsyx.o zdrvpox.o \
