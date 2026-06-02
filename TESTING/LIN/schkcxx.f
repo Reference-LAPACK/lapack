@@ -883,7 +883,7 @@
 *
 *                 The test returns the ratio:
 *
-*                 Returns 1.0D+100 if abs(R(j+1,j+1)) > abs(R(j,j)),
+*                 Returns 1.0E+38 if abs(R(j+1,j+1)) > abs(R(j,j)),
 *                 j=1:K-1
 *
                   IF( MIN(K, MINMN).GT.1 ) THEN
