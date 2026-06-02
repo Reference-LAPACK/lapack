@@ -354,8 +354,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM,
-     $                   ZGECXX, ZLACPY, DLAORD, ZLASET, ZLATB4,
-     $                   ZLATMS, ZSWAP, ICOPY, XLAENV
+     $                   ZERRCXX, ZGECXX, ZLACPY, DLAORD, ZLASET,
+     $                   ZLATB4, ZLATMS, ZSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, MOD
