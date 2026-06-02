@@ -353,8 +353,8 @@
       EXTERNAL           DLAMCH, ZQPT01, ZQRT11, ZQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM,
-     $                   ZERRCXX, ZGECXX, ZLACPY, DLAORD, ZLASET,
+      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRCXX,
+     $                   ZGECXX, ZLACPY, DLAORD, ZLASET,
      $                   ZLATB4, ZLATMS, ZSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..

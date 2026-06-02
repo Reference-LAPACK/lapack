@@ -353,8 +353,8 @@
       EXTERNAL           SLAMCH, CQPT01, CQRT11, CQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM,
-     $                   CERRCXX, CGECXX, CLACPY, SLAORD, CLASET,
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRCXX,
+     $                   CGECXX, CLACPY, SLAORD, CLASET,
      $                   CLATB4, CLATMS, CSWAP, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
