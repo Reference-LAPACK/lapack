@@ -212,7 +212,7 @@ CLASRC = \
    cgecon.o cgeequ.o cgees.o  cgeesx.o cgeev.o  cgeevx.o \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
    cgels.o  cgelst.o cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o \
-   cgeqp3.o cgeqp3rk.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
+   cgeqp3.o cgeqp3rk.o cgecxx.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o \
    cgesvj.o cgejsv.o cgsvj0.o cgsvj1.o \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
