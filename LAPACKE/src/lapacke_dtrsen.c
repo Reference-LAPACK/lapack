@@ -97,9 +97,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen)( int matrix_layout, char job, char compq,
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_1:
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
-        LAPACKE_free( iwork );
-    }
+    LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen", info );
