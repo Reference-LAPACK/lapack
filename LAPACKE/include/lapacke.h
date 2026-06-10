@@ -4153,14 +4153,14 @@ lapack_int LAPACKE_ctgexc( int matrix_layout, lapack_logical wantq,
                            lapack_complex_float* b, lapack_int ldb,
                            lapack_complex_float* q, lapack_int ldq,
                            lapack_complex_float* z, lapack_int ldz,
-                           lapack_int ifst, lapack_int ilst );
+                           lapack_int ifst, lapack_int* ilst );
 lapack_int LAPACKE_ztgexc( int matrix_layout, lapack_logical wantq,
                            lapack_logical wantz, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_complex_double* b, lapack_int ldb,
                            lapack_complex_double* q, lapack_int ldq,
                            lapack_complex_double* z, lapack_int ldz,
-                           lapack_int ifst, lapack_int ilst );
+                           lapack_int ifst, lapack_int* ilst );
 
 lapack_int LAPACKE_stgsen( int matrix_layout, lapack_int ijob,
                            lapack_logical wantq, lapack_logical wantz,
@@ -9933,14 +9933,14 @@ lapack_int LAPACKE_ctgexc_work( int matrix_layout, lapack_logical wantq,
                                 lapack_complex_float* b, lapack_int ldb,
                                 lapack_complex_float* q, lapack_int ldq,
                                 lapack_complex_float* z, lapack_int ldz,
-                                lapack_int ifst, lapack_int ilst );
+                                lapack_int ifst, lapack_int* ilst );
 lapack_int LAPACKE_ztgexc_work( int matrix_layout, lapack_logical wantq,
                                 lapack_logical wantz, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_complex_double* b, lapack_int ldb,
                                 lapack_complex_double* q, lapack_int ldq,
                                 lapack_complex_double* z, lapack_int ldz,
-                                lapack_int ifst, lapack_int ilst );
+                                lapack_int ifst, lapack_int* ilst );
 
 lapack_int LAPACKE_stgsen_work( int matrix_layout, lapack_int ijob,
                                 lapack_logical wantq, lapack_logical wantz,
