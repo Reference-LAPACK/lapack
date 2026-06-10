@@ -194,7 +194,7 @@
      $      VMUL = ONE
          CALL DLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
-*        Compute Schur form
+*        Compute upper Hessenberg form of matrix
 *
          CALL DGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
@@ -210,7 +210,7 @@
          CALL DORGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
 *
-*        Compute Schur form
+*        Compute eigenvalues and the Schur form T
 *
          CALL DHSEQR( 'S', 'V', N, 1, N, T, LDT, WR, WI, Q, LDT, WORK,
      $                LWORK, INFO )
