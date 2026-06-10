@@ -73,8 +73,14 @@ void API_SUFFIX(cblas_ctrmm)(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
 
       if( Diag == CblasUnit ) DI='U';
       else if ( Diag == CblasNonUnit ) DI='N';
-      else API_SUFFIX(cblas_xerbla)(5, "cblas_ctrmm",
+      else
+      {
+         API_SUFFIX(cblas_xerbla)(5, "cblas_ctrmm",
                        "Illegal Diag setting, %d\n", Diag);
+         CBLAS_CallFromC = 0;
+         RowMajorStrg = 0;
+         return;
+      }
 
       #ifdef F77_CHAR
          F77_UL = C2F_CHAR(&UL);
