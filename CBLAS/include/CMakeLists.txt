@@ -17,8 +17,6 @@ if(CBLAS)
   install(FILES ${CBLAS_INCLUDE}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT Development)
-
-  file(COPY cblas_test.h DESTINATION ${LAPACK_BINARY_DIR}/test_include)
 endif()
 
 # Create a header file for CBLAS routine mangling (cblas_mangling.h)

@@ -27,17 +27,6 @@ void F77_saxpby(const CBLAS_INT *N, const float *alpha, const float *X,
    return;
 }
 
-
-float F77_scasum(const CBLAS_INT *N, void *X, const CBLAS_INT *incX)
-{
-   return cblas_scasum(*N, X, *incX);
-}
-
-float F77_scnrm2(const CBLAS_INT *N, const void *X, const CBLAS_INT *incX)
-{
-   return cblas_scnrm2(*N, X, *incX);
-}
-
 void F77_scopy(const CBLAS_INT *N, const float *X, const CBLAS_INT *incX,
                     float *Y, const CBLAS_INT *incY)
 {
