@@ -304,8 +304,8 @@
       DOUBLE PRECISION   VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLAQR1, DLARFG, DLASET,
-     $                   DTRMM
+      EXTERNAL           DGEMM, DLACPY, DLAQR1,
+     $                   DLARFG, DLASET
 *     ..
 *     .. Executable Statements ..
 *

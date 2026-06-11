@@ -264,13 +264,13 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE, SLARMM
+      REAL               SLAMCH, SLANGE, SLARMM,
+     $                   SROUNDUP_LWORK
       EXTERNAL           ILAENV, LSAME, SLAMCH, SLANGE,
-     $                   SLARMM
+     $                   SLARMM, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
-      REAL               SROUNDUP_LWORK
-      EXTERNAL           SLATRS, SSCAL, SROUNDUP_LWORK, XERBLA
+      EXTERNAL           SGEMM, SLATRS, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN

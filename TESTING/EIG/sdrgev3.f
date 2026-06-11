@@ -457,7 +457,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGET52, SGGEV3, SLACPY, SLARFG, SLASET,
-     $                   SLATM4, SORM2R, XERBLA
+     $                   SLATM4, SORM2R, XERBLA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN

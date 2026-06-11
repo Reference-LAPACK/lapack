@@ -109,11 +109,14 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL ZGEMM, ZLARNV, ZTPMQRT, ZTPQRT, ZGEMQRT, ZHERK,
+     $         ZLACPY, ZLASET
+*     ..
 *     .. External Functions ..
       DOUBLE PRECISION DLAMCH
       DOUBLE PRECISION ZLANGE, ZLANSY
-      LOGICAL  LSAME
-      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME
+      EXTERNAL DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

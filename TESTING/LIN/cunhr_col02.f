@@ -158,8 +158,8 @@
       EXTERNAL           SLAMCH, CLANGE, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLARNV, CLASET, CGETSQRHRT,
-     $                   CSCAL, CGEMM, CGEMQRT, CHERK
+      EXTERNAL           CLACPY, CLARNV, CLASET, CGETSQRHRT, CGEMM,
+     $                   CGEMQRT, CHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CEILING, REAL, MAX, MIN

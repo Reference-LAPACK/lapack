@@ -261,7 +261,7 @@
       EXTERNAL           SGEQRF, SGGBAK, SGGBAL,
      $                   SGGHD3, SLAQZ0, SLACPY,
      $                   SLASCL, SLASET, SORGQR,
-     $                   SORMQR, STGEVC
+     $                   SORMQR, STGEVC, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

@@ -633,7 +633,6 @@ SUBROUTINE DGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
 !
 !     External subroutines (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~~~~
-      EXTERNAL      DGEMM
       EXTERNAL      DGEDMD, DGEQRF, DLACPY, DLASET, DORGQR, &
                     DORMQR, XERBLA
 !

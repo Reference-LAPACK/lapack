@@ -221,7 +221,7 @@
       INTEGER            ISAMAX, ILAENV
       REAL               SLAMCH, SCNRM2, CLANGE,
      $                   SROUNDUP_LWORK
-      EXTERNAL           LSAME, ISAMAX, ILAENV,
+      EXTERNAL           LSAME, SISNAN, ISAMAX, ILAENV,
      $                   SLAMCH, SCNRM2, CLANGE,
      $                   SROUNDUP_LWORK
 *     ..

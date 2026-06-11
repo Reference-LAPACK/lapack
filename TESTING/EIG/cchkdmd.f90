@@ -82,7 +82,8 @@
       LOGICAL :: TEST_QRDMD
 
 !..... external subroutines (BLAS and LAPACK)
-      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV
+      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV, &
+               CLARNV, CLATMR
 !.....external subroutines DMD package
 !     subroutines under test
       EXTERNAL CGEDMD, CGEDMDQ

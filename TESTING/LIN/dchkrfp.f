@@ -110,7 +110,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, DDRVRFP, DDRVRF1, DDRVRF2, DDRVRF3,
-     +                   DDRVRF4
+     +                   DDRVRF4, DERRRFP
 *     ..
 *     .. Executable Statements ..
 *

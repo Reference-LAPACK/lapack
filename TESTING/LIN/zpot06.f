@@ -155,10 +155,9 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
       INTEGER            IZAMAX
       DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, IZAMAX, DLAMCH, ZLANSY
+      EXTERNAL           IZAMAX, DLAMCH, ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHEMM

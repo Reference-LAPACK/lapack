@@ -1641,7 +1641,7 @@
       LOGICAL            LDE, LDERES
       EXTERNAL           LDE, LDERES
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DMAKE, DMVCH
+      EXTERNAL           CDGER, DMAKE, DMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..

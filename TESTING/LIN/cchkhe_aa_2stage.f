@@ -217,10 +217,9 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, 
-     $                   CLARHS, CLATB4, CLATMS, CPOT02, 
-     $                   CHETRF_AA_2STAGE, 
-     $                   CHETRS_AA_2STAGE, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY,
+     $                   CLAIPD, CLARHS, CLATB4, CLATMS, CPOT02,
+     $                   CHETRF_AA_2STAGE, CHETRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

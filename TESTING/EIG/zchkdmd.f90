@@ -84,7 +84,6 @@
       LOGICAL :: TEST_QRDMD
 
 !.....external subroutines (BLAS and LAPACK)
-      EXTERNAL DAXPY,  DGEEV, DGEMM, DGEMV, DLACPY, DLASCL
       EXTERNAL ZGEEV,  ZGEMV, ZLASCL
       EXTERNAL ZLARNV, ZLATMR, XLAENV
       EXTERNAL ZAXPY,  ZGEMM
@@ -92,7 +91,7 @@
 !     subroutines under test
       EXTERNAL ZGEDMD, ZGEDMDQ
 !.....external functions (BLAS and LAPACK)
-      EXTERNAL         DLAMCH,  DZNRM2
+      EXTERNAL         DLAMCH,  DZNRM2, ZLANGE
       REAL(KIND=WP) :: DLAMCH,  DZNRM2
       REAL(KIND=WP) ::          ZLANGE
       EXTERNAL IZAMAX

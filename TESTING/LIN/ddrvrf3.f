@@ -160,7 +160,7 @@
       EXTERNAL           DLAMCH, DLANGE, DLARND, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DTRTTF, DGEQRF, DGEQLF, DTFSM, DTRSM
+      EXTERNAL           DTRTTF, DGEQRF, DGELQF, DTFSM, DTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

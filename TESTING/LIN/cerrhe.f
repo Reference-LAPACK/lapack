@@ -86,8 +86,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHECON, CSYCON_3, CHECON_ROOK, CHERFS,
-     $                   CHETF2, CHETF2_RK, CHETF2_ROOK, CHETRF_AA, 
+      EXTERNAL           ALAESM, CHECON, CHECON_3, CHECON_ROOK, CHERFS,
+     $                   CHETF2, CHETF2_RK, CHETF2_ROOK, CHETRF_AA,
      $                   CHETRF, CHETRF_RK, CHETRF_ROOK, CHETRI,
      $                   CHETRI_3, CHETRI_3X, CHETRI_ROOK, CHETRI2,
      $                   CHETRI2X, CHETRS, CHETRS_3, CHETRS_ROOK,

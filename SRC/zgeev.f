@@ -211,16 +211,16 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL, ZGEHRD,
-     $                   ZHSEQR,
-     $                   ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZUNGHR
+      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL,
+     $                   ZGEHRD, ZHSEQR, ZLACPY, ZLASCL,
+     $                   ZSCAL, ZTREVC3, ZUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DZNRM2, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2,
-     $                   ZLANGE
+      EXTERNAL           LSAME, DISNAN, IDAMAX, ILAENV,
+     $                   DLAMCH, DZNRM2, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, CONJG, AIMAG, MAX, SQRT

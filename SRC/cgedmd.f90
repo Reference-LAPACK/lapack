@@ -558,8 +558,8 @@
 !     External functions (BLAS and LAPACK)
 !     ~~~~~~~~~~~~~~~~~
       REAL(KIND=WP) CLANGE, SLAMCH, SCNRM2
-      EXTERNAL      CLANGE, SLAMCH, SCNRM2, ICAMAX
-      INTEGER                               ICAMAX
+      EXTERNAL      SLAMCH, SCNRM2, ICAMAX
+      INTEGER                       ICAMAX
       LOGICAL       SISNAN, LSAME
       EXTERNAL      SISNAN, LSAME
 !

@@ -388,8 +388,9 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASUM, XERBLA, CHBT21, CHBTRD, CLACPY, CLASET,
-     $                   CLATMR, CLATMS, CHETRD_HB2ST, CSTEQR
+      EXTERNAL           SCOPY, SLASET, SLASUM, XERBLA, CHBT21,
+     $                   CHBTRD, CLACPY, CLASET, CLATMR, CLATMS,
+     $                   CHETRD_HB2ST, CSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CONJG, MAX, MIN, SQRT

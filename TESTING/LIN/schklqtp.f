@@ -129,7 +129,7 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, SERRLQTP, SLQT05
+      EXTERNAL           ALAHD, ALASUM, SERRLQTP, SLQT05
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

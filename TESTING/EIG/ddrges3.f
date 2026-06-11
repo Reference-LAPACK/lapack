@@ -453,7 +453,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGET51, DGET53, DGET54, DGGES3, DLACPY,
-     $                   DLARFG, DLASET, DLATM4, DORM2R, XERBLA
+     $                   DLARFG, DLASET, DLATM4, DORM2R, XERBLA,
+     $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN

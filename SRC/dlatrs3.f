@@ -270,7 +270,7 @@
      $                   LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLATRS, DSCAL, XERBLA
+      EXTERNAL           DGEMM, DLATRS, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
