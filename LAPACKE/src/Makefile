@@ -1862,6 +1862,8 @@ lapacke_zgebrd.o \
 lapacke_zgebrd_work.o \
 lapacke_zgecon.o \
 lapacke_zgecon_work.o \
+lapacke_zgecxx.o \
+lapacke_zgecxx_work.o \
 lapacke_zgeequ.o \
 lapacke_zgeequ_work.o \
 lapacke_zgeequb.o \

@@ -1820,6 +1820,8 @@ lapacke_zgebrd.c
 lapacke_zgebrd_work.c
 lapacke_zgecon.c
 lapacke_zgecon_work.c
+lapacke_zgecxx.c
+lapacke_zgecxx_work.c
 lapacke_zgeequ.c
 lapacke_zgeequ_work.c
 lapacke_zgeequb.c
