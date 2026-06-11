@@ -463,6 +463,16 @@ lapack_int LAPACKE_zgecon( int matrix_layout, char norm, lapack_int n,
                            const lapack_complex_double* a, lapack_int lda,
                            double anorm, double* rcond );
 
+lapack_int LAPACKE_dgecxx( int matrix_layout,
+                           char fact, char usesd, lapack_int m, lapack_int n,
+                           lapack_int* desel_rows, lapack_int* sel_desel_cols,
+                           lapack_int  kmaxfree, double abstol, double reltol,
+                           double* a, lapack_int lda, lapack_int* k,
+                           double* maxc2nrmk, double* relmaxc2nrmk, double* fnrmk,
+                           lapack_int* ipiv, lapack_int* jpiv, double* tau,
+                           double* c, lapack_int ldc, double* qrc, lapack_int ldqrc,
+                           double* x, lapack_int ldx );
+
 lapack_int LAPACKE_sgeequ( int matrix_layout, lapack_int m, lapack_int n,
                            const float* a, lapack_int lda, float* r, float* c,
                            float* rowcnd, float* colcnd, float* amax );
@@ -5190,6 +5200,17 @@ lapack_int LAPACKE_zgecon_work( int matrix_layout, char norm, lapack_int n,
                                 double anorm, double* rcond,
                                 lapack_complex_double* work, double* rwork );
 
+lapack_int LAPACKE_dgecxx_work( int matrix_layout, char fact, char usesd,
+                                lapack_int m, lapack_int n,
+                                lapack_int* desel_rows, lapack_int* sel_desel_cols,
+                                lapack_int  kmaxfree, double abstol, double reltol,
+                                double* a, lapack_int lda, lapack_int* k,
+                                double* maxc2nrmk, double* relmaxc2nrmk, double* fnrmk,
+                                lapack_int* ipiv, lapack_int* jpiv, double* tau,
+                                double* c, lapack_int ldc, double* qrc, lapack_int ldqrc,
+                                double* x, lapack_int ldx, double* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+
 lapack_int LAPACKE_sgeequ_work( int matrix_layout, lapack_int m, lapack_int n,
                                 const float* a, lapack_int lda, float* r,
                                 float* c, float* rowcnd, float* colcnd,
@@ -5772,7 +5793,7 @@ lapack_int LAPACKE_zgedmd_work( int matrix_layout, char jobs, char jobz,
 				lapack_int m, lapack_int n,
 				lapack_complex_double* x, lapack_int ldx,
 				lapack_complex_double* y, lapack_int ldy,
-				lapack_int nrnk, double* tol, lapack_int k, 
+				lapack_int nrnk, double* tol, lapack_int k,
 				lapack_complex_double* eigs,
                                 lapack_complex_double* z, lapack_int ldz,
                                 double* res,

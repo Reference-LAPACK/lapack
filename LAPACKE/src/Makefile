@@ -704,6 +704,8 @@ lapacke_dgebrd.o \
 lapacke_dgebrd_work.o \
 lapacke_dgecon.o \
 lapacke_dgecon_work.o \
+lapacke_dgecxx.o \
+lapacke_dgecxx_work.o \
 lapacke_dgeequ.o \
 lapacke_dgeequ_work.o \
 lapacke_dgeequb.o \

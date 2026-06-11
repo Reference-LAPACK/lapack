@@ -657,6 +657,8 @@ lapacke_dgebrd.c
 lapacke_dgebrd_work.c
 lapacke_dgecon.c
 lapacke_dgecon_work.c
+lapacke_dgecxx.c
+lapacke_dgecxx_work.c
 lapacke_dgeequ.c
 lapacke_dgeequ_work.c
 lapacke_dgeequb.c
