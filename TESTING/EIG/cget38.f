@@ -194,7 +194,7 @@
      $      VMUL = ONE
          CALL CLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
-*        Compute Schur form
+*        Compute upper Hessenberg form of matrix
 *
          CALL CGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
@@ -210,7 +210,7 @@
          CALL CUNGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
 *
-*        Compute Schur form
+*        Compute eigenvalues and the Schur form T
 *
          DO 50 J = 1, N - 2
             DO 40 I = J + 2, N

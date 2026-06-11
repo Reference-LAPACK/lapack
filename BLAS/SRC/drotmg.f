@@ -193,54 +193,48 @@
             END IF
          END IF
 
+*     Normalize flag to -ONE so all H elements are explicit
+*
+           IF( DFLAG.EQ.ZERO ) THEN
+              DH11 = ONE
+              DH22 = ONE
+              DFLAG = -ONE
+           ELSE IF( DFLAG.EQ.ONE ) THEN
+              DH21 = -ONE
+              DH12 = ONE
+              DFLAG = -ONE
+           END IF
+*
 *     PROCEDURE..SCALE-CHECK
-         IF (DD1.NE.ZERO) THEN
-            DO WHILE ((DD1.LE.RGAMSQ) .OR. (DD1.GE.GAMSQ))
-               IF (DFLAG.EQ.ZERO) THEN
-                  DH11 = ONE
-                  DH22 = ONE
-                  DFLAG = -ONE
-               ELSE
-                  DH21 = -ONE
-                  DH12 = ONE
-                  DFLAG = -ONE
-               END IF
-               IF (DD1.LE.RGAMSQ) THEN
-                  DD1 = DD1*GAM**2
-                  DX1 = DX1/GAM
-                  DH11 = DH11/GAM
-                  DH12 = DH12/GAM
-               ELSE
-                  DD1 = DD1/GAM**2
-                  DX1 = DX1*GAM
-                  DH11 = DH11*GAM
-                  DH12 = DH12*GAM
-               END IF
-            ENDDO
-         END IF
+          IF (DD1.NE.ZERO) THEN
+             DO WHILE ((DD1.LE.RGAMSQ) .OR. (DD1.GE.GAMSQ))
+                 IF (DD1.LE.RGAMSQ) THEN
+                    DD1 = DD1*GAM**2
+                    DX1 = DX1/GAM
+                    DH11 = DH11/GAM
+                    DH12 = DH12/GAM
+                 ELSE
+                    DD1 = DD1/GAM**2
+                    DX1 = DX1*GAM
+                    DH11 = DH11*GAM
+                    DH12 = DH12*GAM
+                 END IF
+              ENDDO
+           END IF
 
-         IF (DD2.NE.ZERO) THEN
-            DO WHILE ( (DABS(DD2).LE.RGAMSQ) .OR. (DABS(DD2).GE.GAMSQ) )
-               IF (DFLAG.EQ.ZERO) THEN
-                  DH11 = ONE
-                  DH22 = ONE
-                  DFLAG = -ONE
-               ELSE
-                  DH21 = -ONE
-                  DH12 = ONE
-                  DFLAG = -ONE
-               END IF
-               IF (DABS(DD2).LE.RGAMSQ) THEN
-                  DD2 = DD2*GAM**2
-                  DH21 = DH21/GAM
-                  DH22 = DH22/GAM
-               ELSE
-                  DD2 = DD2/GAM**2
-                  DH21 = DH21*GAM
-                  DH22 = DH22*GAM
-               END IF
-            END DO
-         END IF
+          IF (DD2.NE.ZERO) THEN
+             DO WHILE ((DABS(DD2).LE.RGAMSQ) .OR. (DABS(DD2).GE.GAMSQ))
+                IF (DABS(DD2).LE.RGAMSQ) THEN
+                   DD2 = DD2*GAM**2
+                   DH21 = DH21/GAM
+                   DH22 = DH22/GAM
+                ELSE
+                   DD2 = DD2/GAM**2
+                   DH21 = DH21*GAM
+                   DH22 = DH22*GAM
+                END IF
+             END DO
+          END IF
 
       END IF
 
