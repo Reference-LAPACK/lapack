@@ -29,6 +29,8 @@ lapacke_cgebrd.c
 lapacke_cgebrd_work.c
 lapacke_cgecon.c
 lapacke_cgecon_work.c
+lapacke_cgecxx.c
+lapacke_cgecxx_work.c
 lapacke_cgeequ.c
 lapacke_cgeequ_work.c
 lapacke_cgeequb.c

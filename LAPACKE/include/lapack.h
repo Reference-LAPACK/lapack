@@ -1570,6 +1570,42 @@ void LAPACK_zgecon_base(
     #define LAPACK_zgecon(...) LAPACK_zgecon_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_cgecxx_base LAPACK_GLOBAL_SUFFIX(cgecxx,CGECXX)
+void LAPACK_cgecxx_base(
+    char const* fact,
+    char const* usesd,
+    lapack_int const* m,
+    lapack_int const* n,
+    lapack_int const* SESEL_ROWS,
+    lapack_int const* SEL_DESEL_COLS,
+    lapack_int const* kmaxfree,
+    float const* abstol,
+    float const* reltol,
+    lapack_complex_float* A, lapack_int const* lda,
+    lapack_int* k,
+    float* maxc2nrmk,
+    float* relmaxc2nrmk,
+    float* fnrmk,
+    lapack_int* IPIV,
+    lapack_int* JPIV,
+    lapack_complex_float* TAU,
+    lapack_complex_float* C, lapack_int const* ldc,
+    lapack_complex_float* QRC, lapack_int const* ldqrc,
+    lapack_complex_float* X, lapack_int const* ldx,
+    lapack_complex_float* work, lapack_int const* lwork,
+    float* rwork, lapack_int const* lrwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_cgecxx(...) LAPACK_cgecxx_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_cgecxx(...) LAPACK_cgecxx_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_dgecxx_base LAPACK_GLOBAL_SUFFIX(dgecxx,DGECXX)
 void LAPACK_dgecxx_base(
     char const* fact,

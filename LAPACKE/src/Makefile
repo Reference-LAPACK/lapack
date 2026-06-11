@@ -76,6 +76,8 @@ lapacke_cgebrd.o \
 lapacke_cgebrd_work.o \
 lapacke_cgecon.o \
 lapacke_cgecon_work.o \
+lapacke_cgecxx.o \
+lapacke_cgecxx_work.o \
 lapacke_cgeequ.o \
 lapacke_cgeequ_work.o \
 lapacke_cgeequb.o \
