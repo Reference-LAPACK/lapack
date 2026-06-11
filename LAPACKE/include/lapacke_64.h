@@ -429,6 +429,15 @@ int64_t LAPACKE_zgecon_64( int matrix_layout, char norm, int64_t n,
                            const lapack_complex_double* a, int64_t lda,
                            double anorm, double* rcond );
 
+int64_t LAPACKE_sgecxx_64( int matrix_layout,
+                           char fact, char usesd, int64_t m, int64_t n,
+                           int64_t* desel_rows, int64_t* sel_desel_cols,
+                           int64_t  kmaxfree, float abstol, float reltol,
+                           float* a, int64_t lda, int64_t* k,
+                           float* maxc2nrmk, float* relmaxc2nrmk, float* fnrmk,
+                           int64_t* ipiv, int64_t* jpiv, float* tau,
+                           float* c, int64_t ldc, float* qrc, int64_t ldqrc,
+                           float* x, int64_t ldx );
 int64_t LAPACKE_dgecxx_64( int matrix_layout,
                            char fact, char usesd, int64_t m, int64_t n,
                            int64_t* desel_rows, int64_t* sel_desel_cols,
@@ -5166,6 +5175,16 @@ int64_t LAPACKE_zgecon_work_64( int matrix_layout, char norm, int64_t n,
                                 double anorm, double* rcond,
                                 lapack_complex_double* work, double* rwork );
 
+int64_t LAPACKE_sgecxx_work_64( int matrix_layout, char fact, char usesd,
+                                int64_t m, int64_t n,
+                                int64_t* desel_rows, int64_t* sel_desel_cols,
+                                int64_t  kmaxfree, float abstol, float reltol,
+                                float* a, int64_t lda, int64_t* k,
+                                float* maxc2nrmk, float* relmaxc2nrmk, float* fnrmk,
+                                int64_t* ipiv, int64_t* jpiv, float* tau,
+                                float* c, int64_t ldc, float* qrc, int64_t ldqrc,
+                                float* x, int64_t ldx, float* work, int64_t lwork,
+                                int64_t* iwork, int64_t liwork );
 int64_t LAPACKE_dgecxx_work_64( int matrix_layout, char fact, char usesd,
                                 int64_t m, int64_t n,
                                 int64_t* desel_rows, int64_t* sel_desel_cols,

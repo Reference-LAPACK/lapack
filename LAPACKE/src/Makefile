@@ -1286,6 +1286,8 @@ lapacke_sgebrd.o \
 lapacke_sgebrd_work.o \
 lapacke_sgecon.o \
 lapacke_sgecon_work.o \
+lapacke_sgecxx.o \
+lapacke_sgecxx_work.o \
 lapacke_sgeequ.o \
 lapacke_sgeequ_work.o \
 lapacke_sgeequb.o \

@@ -463,6 +463,15 @@ lapack_int LAPACKE_zgecon( int matrix_layout, char norm, lapack_int n,
                            const lapack_complex_double* a, lapack_int lda,
                            double anorm, double* rcond );
 
+lapack_int LAPACKE_sgecxx( int matrix_layout,
+                           char fact, char usesd, lapack_int m, lapack_int n,
+                           lapack_int* desel_rows, lapack_int* sel_desel_cols,
+                           lapack_int  kmaxfree, float abstol, float reltol,
+                           float* a, lapack_int lda, lapack_int* k,
+                           float* maxc2nrmk, float* relmaxc2nrmk, float* fnrmk,
+                           lapack_int* ipiv, lapack_int* jpiv, float* tau,
+                           float* c, lapack_int ldc, float* qrc, lapack_int ldqrc,
+                           float* x, lapack_int ldx );
 lapack_int LAPACKE_dgecxx( int matrix_layout,
                            char fact, char usesd, lapack_int m, lapack_int n,
                            lapack_int* desel_rows, lapack_int* sel_desel_cols,
@@ -5200,6 +5209,16 @@ lapack_int LAPACKE_zgecon_work( int matrix_layout, char norm, lapack_int n,
                                 double anorm, double* rcond,
                                 lapack_complex_double* work, double* rwork );
 
+lapack_int LAPACKE_sgecxx_work( int matrix_layout, char fact, char usesd,
+                                lapack_int m, lapack_int n,
+                                lapack_int* desel_rows, lapack_int* sel_desel_cols,
+                                lapack_int  kmaxfree, float abstol, float reltol,
+                                float* a, lapack_int lda, lapack_int* k,
+                                float* maxc2nrmk, float* relmaxc2nrmk, float* fnrmk,
+                                lapack_int* ipiv, lapack_int* jpiv, float* tau,
+                                float* c, lapack_int ldc, float* qrc, lapack_int ldqrc,
+                                float* x, lapack_int ldx, float* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
 lapack_int LAPACKE_dgecxx_work( int matrix_layout, char fact, char usesd,
                                 lapack_int m, lapack_int n,
                                 lapack_int* desel_rows, lapack_int* sel_desel_cols,

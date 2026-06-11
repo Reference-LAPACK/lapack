@@ -1244,6 +1244,8 @@ lapacke_sgebrd.c
 lapacke_sgebrd_work.c
 lapacke_sgecon.c
 lapacke_sgecon_work.c
+lapacke_sgecxx.c
+lapacke_sgecxx_work.c
 lapacke_sgeequ.c
 lapacke_sgeequ_work.c
 lapacke_sgeequb.c
