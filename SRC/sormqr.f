@@ -245,7 +245,7 @@
          NB = MIN( NBMAX, ILAENV( 1, 'SORMQR', SIDE // TRANS, M, N,
      $             K,
      $        -1 ) )
-         LWKOPT = NW*NB + TSIZE
+          LWKOPT = NW*NB + LDT*NB
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
       END IF
 *
@@ -267,7 +267,7 @@
       LDWORK = NW
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.LWKOPT ) THEN
-            NB = (LWORK-TSIZE) / LDWORK
+             NB = LWORK / (LDWORK + LDT)
             NBMIN = MAX( 2, ILAENV( 2, 'SORMQR', SIDE // TRANS, M, N,
      $                   K,
      $              -1 ) )
