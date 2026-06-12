@@ -102,27 +102,27 @@ lapack_logical API_SUFFIX(LAPACKE_stz_nancheck)( int matrix_layout, char direct,
     }
 
     /* Initial offsets and sizes of triangular and rectangular parts */
-    lapack_int tri_offset = 0;
+    int64_t tri_offset = 0;
     lapack_int tri_n = MIN(m,n);
-    lapack_int rect_offset = -1;
+    int64_t rect_offset = -1;
     lapack_int rect_m = ( m > n ) ? m - n : m;
     lapack_int rect_n = ( n > m ) ? n - m : n;
 
     /* Fix offsets depending on the shape of the matrix */
     if( front ) {
         if( lower && m > n ) {
-            rect_offset = tri_n * ( !colmaj ? lda : 1 );
+            rect_offset = (int64_t)tri_n * ( !colmaj ? lda : 1 );
         } else if( !lower && n > m ) {
-            rect_offset = tri_n * ( colmaj ? lda : 1 );
+            rect_offset = (int64_t)tri_n * ( colmaj ? lda : 1 );
         }
     } else {
         if( m > n ) {
-            tri_offset = rect_m * ( !colmaj ? lda : 1 );
+            tri_offset = (int64_t)rect_m * ( !colmaj ? lda : 1 );
             if( !lower ) {
                 rect_offset = 0;
             }
         } else if( n > m ) {
-            tri_offset = rect_n * ( colmaj ? lda : 1 );
+            tri_offset = (int64_t)rect_n * ( colmaj ? lda : 1 );
             if( lower ) {
                 rect_offset = 0;
             }
