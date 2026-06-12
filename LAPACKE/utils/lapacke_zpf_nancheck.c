@@ -40,6 +40,6 @@
 lapack_logical API_SUFFIX(LAPACKE_zpf_nancheck)( lapack_int n,
                                       const lapack_complex_double *a )
 {
-    lapack_int len = n*(n+1)/2;
+    lapack_int len = (lapack_int)(((size_t)n*(n+1))/2);
     return API_SUFFIX(LAPACKE_z_nancheck)( len, a, 1 );
 }
