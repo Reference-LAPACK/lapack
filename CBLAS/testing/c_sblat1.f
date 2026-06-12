@@ -272,7 +272,7 @@
       REAL              SDOTTEST
       EXTERNAL          SDOTTEST
 *     .. External Subroutines ..
-      EXTERNAL          SAXPYTEST, SCOPYTEST, SSWAPTEST, STEST, STEST1
+      EXTERNAL          SAXPYTEST, SCOPYTEST, SSWAPTEST, STEST, STEST1,
      +                  SAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN

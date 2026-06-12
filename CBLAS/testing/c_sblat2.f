@@ -881,7 +881,8 @@
       LOGICAL            LSE, LSERES
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           SMAKE, SMVCH, CSSBMV, CSSPMV, CSSYMV, CSSKEWSYMV
+      EXTERNAL           SMAKE, SMVCH, CSSBMV, CSSPMV, CSSYMV,
+     $                   CSSKEWSYMV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..

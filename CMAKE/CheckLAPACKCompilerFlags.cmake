@@ -81,8 +81,24 @@ macro(CheckLAPACKCompilerFlags)
     set(FPE_EXIT_FLAG "[-/]fpe(-all=|)0")
 
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
-    if(UNIX)
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:SHELL:-fp-model strict>")
+    if(WIN32)
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/fp:strict>")
+    else()
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fp-model=strict>")
+    endif()
+
+    # disable: The Intel(R) Fortran Compiler Classic (ifort) is deprecated
+    if(CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+      if(WIN32)
+        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
+        add_link_options("$<$<LINK_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
+
+        # Bad preprocessor line bogus warning
+        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:5117>")
+      else()
+        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-diag-disable:10448>")
+        add_link_options("$<$<LINK_LANGUAGE:Fortran>:-diag-disable:10448>")
+      endif()
     endif()
 
   # SunPro F95
@@ -201,10 +217,31 @@ macro(CheckLAPACKCompilerFlags)
       endif()
     endif()
 
+
+
   else()
     message(WARNING "Fortran local arrays should be allocated on the stack."
       " Please use a compiler which guarantees that feature."
       " See https://github.com/Reference-LAPACK/lapack/pull/188 and references therein.")
+  endif()
+
+  if(CMAKE_C_COMPILER_ID MATCHES "Intel")
+    if(WIN32)
+      add_compile_options("$<$<COMPILE_LANGUAGE:C>:/fp:strict>")
+    else()
+      add_compile_options("$<$<COMPILE_LANGUAGE:C>:-fp-model=strict>")
+    endif()
+
+    # disable: The Intel(R) C++ Compiler Classic (ICC) is deprecated
+    if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
+      if(WIN32)
+        add_compile_options("$<$<COMPILE_LANGUAGE:C>:/Qdiag-disable:10441>")
+        add_link_options("$<$<LINK_LANGUAGE:C>:/Qdiag-disable:10441>")
+      else()
+        add_compile_options("$<$<COMPILE_LANGUAGE:C>:-diag-disable:10441>")
+        add_link_options("$<$<LINK_LANGUAGE:C>:-diag-disable:10441>")
+      endif()
+    endif()
   endif()
 
   if("${CMAKE_Fortran_FLAGS_RELEASE}" MATCHES "O[3-9]")

@@ -168,8 +168,8 @@
      $                   SCHKSY_AA, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
      $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
      $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
-     $                   SDRVSY_RK, SDRVSY_AA, ILAVER, SCHKLQTP, SCHKQRT,
-     $                   SCHKQRTP, SCHKLQT, SCHKTSQR
+     $                   SDRVSY_RK, SDRVSY_AA, ILAVER, SCHKLQTP,
+     $                   SCHKQRT, SCHKQRTP, SCHKLQT, SCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
