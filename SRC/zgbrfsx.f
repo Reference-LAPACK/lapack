@@ -498,7 +498,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANGB, ZLA_GBRCOND_X,
      $                   ZLA_GBRCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANGB, ZLA_GBRCOND_X, ZLA_GBRCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANGB, ZLA_GBRCOND_X,
+     $                   ZLA_GBRCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
 *     ..

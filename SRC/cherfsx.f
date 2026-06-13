@@ -461,7 +461,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           SLAMCH, CLANHE, CLA_HERCOND_X,
      $                   CLA_HERCOND_C
-      REAL               SLAMCH, CLANHE, CLA_HERCOND_X, CLA_HERCOND_C
+      REAL               SLAMCH, CLANHE, CLA_HERCOND_X,
+     $                   CLA_HERCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..
