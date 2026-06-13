@@ -102,6 +102,8 @@
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
+*>          For an empty matrix (MIN(M,N) = 0), the workspace query
+*>          returns LWORK >= 1.
 *> \endverbatim
 *>
 *> \param[out] INFO
