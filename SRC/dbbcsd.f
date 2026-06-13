@@ -616,7 +616,9 @@
 *
 *        Chase the bulges in B11(IMIN+1,IMIN) and B21(IMIN+1,IMIN)
 *
-         IF( B11D(IMIN)**2+B11BULGE**2 .GT. THRESH**2 ) THEN
+          IF( B11D(IMIN)**2+B11BULGE**2 .GT.
+     $        (THRESH*MAX( ABS(B11D(IMIN)),
+     $        ABS(B11D(IMIN+1)), UNFL ))**2 ) THEN
             CALL DLARTGP( B11BULGE, B11D(IMIN), WORK(IU1SN+IMIN-1),
      $                    WORK(IU1CS+IMIN-1), R )
          ELSE IF( MU .LE. NU ) THEN
@@ -626,7 +628,9 @@
             CALL DLARTGS( B12D( IMIN ), B12E( IMIN ), NU,
      $                    WORK(IU1CS+IMIN-1), WORK(IU1SN+IMIN-1) )
          END IF
-         IF( B21D(IMIN)**2+B21BULGE**2 .GT. THRESH**2 ) THEN
+           IF( B21D(IMIN)**2+B21BULGE**2 .GT.
+     $        (THRESH*MAX( ABS(B21D(IMIN)),
+     $        ABS(B21D(IMIN+1)), UNFL ))**2 ) THEN
             CALL DLARTGP( B21BULGE, B21D(IMIN), WORK(IU2SN+IMIN-1),
      $                    WORK(IU2CS+IMIN-1), R )
          ELSE IF( NU .LT. MU ) THEN
@@ -690,10 +694,18 @@
 *           Determine if there are bulges to chase or if a new direct
 *           summand has been reached
 *
-            RESTART11 = B11E(I-1)**2 + B11BULGE**2 .LE. THRESH**2
-            RESTART21 = B21E(I-1)**2 + B21BULGE**2 .LE. THRESH**2
-            RESTART12 = B12D(I-1)**2 + B12BULGE**2 .LE. THRESH**2
-            RESTART22 = B22D(I-1)**2 + B22BULGE**2 .LE. THRESH**2
+            RESTART11 = B11E(I-1)**2 + B11BULGE**2 .LE.
+     $                  (THRESH*MAX( ABS(B11D(I-1)), ABS(B11D(I)),
+     $                  UNFL ))**2
+            RESTART21 = B21E(I-1)**2 + B21BULGE**2 .LE.
+     $                  (THRESH*MAX( ABS(B21D(I-1)), ABS(B21D(I)),
+     $                  UNFL ))**2
+            RESTART12 = B12D(I-1)**2 + B12BULGE**2 .LE.
+     $                  (THRESH*MAX( ABS(B12E(I-1)), ABS(B12D(I)),
+     $                  UNFL ))**2
+            RESTART22 = B22D(I-1)**2 + B22BULGE**2 .LE.
+     $                  (THRESH*MAX( ABS(B22E(I-1)), ABS(B22D(I)),
+     $                  UNFL ))**2
 *
 *           If possible, chase bulges from B11(I-1,I+1), B12(I-1,I),
 *           B21(I-1,I+1), and B22(I-1,I). If necessary, restart bulge-
@@ -776,10 +788,18 @@
 *           Determine if there are bulges to chase or if a new direct
 *           summand has been reached
 *
-            RESTART11 =   B11D(I)**2 + B11BULGE**2 .LE. THRESH**2
-            RESTART12 = B12E(I-1)**2 + B12BULGE**2 .LE. THRESH**2
-            RESTART21 =   B21D(I)**2 + B21BULGE**2 .LE. THRESH**2
-            RESTART22 = B22E(I-1)**2 + B22BULGE**2 .LE. THRESH**2
+            RESTART11 =   B11D(I)**2 + B11BULGE**2 .LE.
+     $                    (THRESH*MAX( ABS(B11E(I)), ABS(B11D(I+1)),
+     $                    UNFL ))**2
+            RESTART12 = B12E(I-1)**2 + B12BULGE**2 .LE.
+     $                    (THRESH*MAX( ABS(B12D(I)), ABS(B12E(I)),
+     $                    UNFL ))**2
+            RESTART21 =   B21D(I)**2 + B21BULGE**2 .LE.
+     $                    (THRESH*MAX( ABS(B21E(I)), ABS(B21D(I+1)),
+     $                    UNFL ))**2
+            RESTART22 = B22E(I-1)**2 + B22BULGE**2 .LE.
+     $                    (THRESH*MAX( ABS(B22D(I)), ABS(B22E(I)),
+     $                    UNFL ))**2
 *
 *           If possible, chase bulges from B11(I+1,I), B12(I+1,I-1),
 *           B21(I+1,I), and B22(I+1,I-1). If necessary, restart bulge-
@@ -863,8 +883,10 @@
 *
 *        Chase bulges from B12(IMAX-1,IMAX) and B22(IMAX-1,IMAX)
 *
-         RESTART12 = B12D(IMAX-1)**2 + B12BULGE**2 .LE. THRESH**2
-         RESTART22 = B22D(IMAX-1)**2 + B22BULGE**2 .LE. THRESH**2
+          RESTART12 = B12D(IMAX-1)**2 + B12BULGE**2 .LE.
+     $                (THRESH*MAX( ABS(B12E(IMAX-1)), UNFL ))**2
+          RESTART22 = B22D(IMAX-1)**2 + B22BULGE**2 .LE.
+     $                (THRESH*MAX( ABS(B22E(IMAX-1)), UNFL ))**2
 *
          IF( .NOT. RESTART12 .AND. .NOT. RESTART22 ) THEN
             CALL DLARTGP( Y2, Y1, WORK(IV2TSN+IMAX-1-1),
