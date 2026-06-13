@@ -92,10 +92,9 @@
 *>   UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : CHEEVR_2STAGE calls CSTEMR when the full spectrum is requested
-*> on machines which conform to the ieee-754 floating point standard.
-*> CHEEVR_2STAGE calls SSTEBZ and CSTEIN on non-ieee machines and
-*> when partial spectrum requests are made.
+*> Note 1 : CHEEVR_2STAGE calls CSTEMR when possible (i.e., on machines
+*> which conform to the ieee-754 floating point standard). CHEEVR_2STAGE
+*> calls SSTEBZ and CSTEIN on non-ieee machines.
 *>
 *> Normal execution of CSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
@@ -662,20 +661,22 @@
      $                    WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWK ), LLWORK, IINFO )
 *
-*     If all eigenvalues are desired
-*     then call SSTERF or CSTEMR and CUNMTR.
+*     On IEEE-754 compliant machines, call SSTERF or CSTEMR and CUNMTR.
 *
-      TEST = .FALSE.
-      IF( INDEIG ) THEN
-         IF( IL.EQ.1 .AND. IU.EQ.N ) THEN
-            TEST = .TRUE.
-         END IF
-      END IF
-      IF( ( ALLEIG.OR.TEST ) .AND. ( IEEEOK.EQ.1 ) ) THEN
+      IF( IEEEOK.EQ.1 ) THEN
          IF( .NOT.WANTZ ) THEN
-            CALL SCOPY( N, RWORK( INDRD ), 1, W, 1 )
-            CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
-            CALL SSTERF( N, W, RWORK( INDREE ), INFO )
+            IF( ALLEIG .OR. ( INDEIG .AND. IL.EQ.1 .AND. IU.EQ.N ) )
+     $      THEN
+               CALL SCOPY( N, RWORK( INDRD ), 1, W, 1 )
+                CALL SCOPY( N-1, RWORK( INDRE ), 1,
+     $                      RWORK( INDREE ), 1 )
+                CALL SSTERF( N, W, RWORK( INDREE ), INFO )
+               IF( INFO.EQ.0 ) THEN
+                  M = N
+                  GO TO 30
+               END IF
+               INFO = 0
+            END IF
          ELSE
             CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
@@ -685,7 +686,7 @@
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL CSTEMR( JOBZ, 'A', N, RWORK( INDRDD ),
+            CALL CSTEMR( JOBZ, RANGE, N, RWORK( INDRDD ),
      $                   RWORK( INDREE ), VL, VU, IL, IU, M, W,
      $                   Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   RWORK( INDRWK ), LLRWORK,
@@ -701,14 +702,11 @@
      $                      WORK( INDTAU ), Z, LDZ, WORK( INDWKN ),
      $                      LLWRKN, IINFO )
             END IF
+            IF( INFO.EQ.0 ) THEN
+               GO TO 30
+            END IF
+            INFO = 0
          END IF
-*
-*
-         IF( INFO.EQ.0 ) THEN
-            M = N
-            GO TO 30
-         END IF
-         INFO = 0
       END IF
 *
 *     Otherwise, call SSTEBZ and, if eigenvectors are desired, CSTEIN.
