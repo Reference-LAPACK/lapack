@@ -150,7 +150,7 @@
 *
 *     The value of EPS works best when TOL .GE. 10.
 *
-      EPS = TOL*MAX( N / 10, 1 )*EPS
+      EPS = TOL*REAL( MAX( N / 10, 1 ) )*EPS
 *
 *     TPNT points to singular value at right endpoint of interval
 *     BPNT points to singular value at left  endpoint of interval

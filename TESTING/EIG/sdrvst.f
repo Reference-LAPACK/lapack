@@ -660,7 +660,7 @@ c           LIWEDC = 12
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -724,7 +724,7 @@ c           LIWEDC = 12
 *
 *              Symmetric banded, eigenvalues specified
 *
-               IHBW = INT( ( N-1 )*SLARND( 1, ISEED3 ) )
+               IHBW = INT( REAL( N-1 )*SLARND( 1, ISEED3 ) )
                CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, IHBW, IHBW, 'Z', U, LDU, WORK( N+1 ),
      $                      IINFO )
@@ -759,8 +759,8 @@ c           LIWEDC = 12
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N-1 )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

@@ -379,7 +379,7 @@
          MAXWRK = NMAX*( 1+ILAENV( 1, 'CGEQRF', ' ', NMAX, 1, NMAX,
      $            0 ) )
          MAXWRK = MAX( MAXWRK, 2*NMAX*( NMAX+1 ) )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -699,7 +699,7 @@
 *
       CALL ALASVM( 'CXV', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *

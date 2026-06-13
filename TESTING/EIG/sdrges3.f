@@ -522,7 +522,7 @@
      $        ILAENV( 1, 'SORMQR', 'LT', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'SORGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( 10*( NMAX+1 ), 2*NMAX+NMAX*NB, 3*NMAX*NMAX )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -937,7 +937,7 @@
 *
       CALL ALASVM( 'SGS', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

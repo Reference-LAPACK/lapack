@@ -137,7 +137,7 @@
 *     Quick return if possible
 *
       MN = MIN( M, N )
-      IF( MN.LE.ZERO )
+      IF( MN.LE.0 )
      $   RETURN
 *
       NRMSVL = SNRM2( MN, S, 1 )

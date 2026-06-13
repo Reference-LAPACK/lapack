@@ -659,7 +659,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
