@@ -314,7 +314,6 @@
      $                            Z( 4*I0+PP+3 ) )
             Z( 4*N0-PP ) = MIN( Z( 4*N0-PP ), Z( 4*I0-PP ),
      $                          Z( 4*I0-PP+4 ) )
-            QMAX = MAX( QMAX, Z( 4*I0+PP-3 ), Z( 4*I0+PP+1 ) )
             DMIN = -ZERO
          END IF
       END IF
