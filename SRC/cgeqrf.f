@@ -180,6 +180,14 @@
 *
       K = MIN( M, N )
       INFO = 0
+*
+*     Quick return if possible
+*
+      IF( K.EQ.0 ) THEN
+         WORK( 1 ) = 1
+         RETURN
+      END IF
+*
       NB = ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
@@ -196,19 +204,8 @@
          CALL XERBLA( 'CGEQRF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         IF( K.EQ.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            LWKOPT = N*NB
-         END IF
+         LWKOPT = N*NB
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
-         RETURN
-      END IF
-*
-*     Quick return if possible
-*
-      IF( K.EQ.0 ) THEN
-         WORK( 1 ) = 1
          RETURN
       END IF
 *
