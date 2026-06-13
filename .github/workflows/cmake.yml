@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
         fflags: [
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
@@ -71,9 +71,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Use GCC-14 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
