@@ -92,10 +92,9 @@
 *>   UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : ZHEEVR_2STAGE calls ZSTEMR when the full spectrum is requested
-*> on machines which conform to the ieee-754 floating point standard.
-*> ZHEEVR_2STAGE calls DSTEBZ and ZSTEIN on non-ieee machines and
-*> when partial spectrum requests are made.
+*> Note 1 : ZHEEVR_2STAGE calls ZSTEMR when possible (i.e., on machines
+*> which conform to the ieee-754 floating point standard). ZHEEVR_2STAGE
+*> calls DSTEBZ and ZSTEIN on non-ieee machines.
 *>
 *> Normal execution of ZSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
@@ -662,20 +661,22 @@
      $                    WORK( INDHOUS ), LHTRD,
      $                    WORK( INDWK ), LLWORK, IINFO )
 *
-*     If all eigenvalues are desired
-*     then call DSTERF or ZSTEMR and ZUNMTR.
+*     On IEEE-754 compliant machines, call DSTERF or ZSTEMR and ZUNMTR.
 *
-      TEST = .FALSE.
-      IF( INDEIG ) THEN
-         IF( IL.EQ.1 .AND. IU.EQ.N ) THEN
-            TEST = .TRUE.
-         END IF
-      END IF
-      IF( ( ALLEIG.OR.TEST ) .AND. ( IEEEOK.EQ.1 ) ) THEN
+      IF( IEEEOK.EQ.1 ) THEN
          IF( .NOT.WANTZ ) THEN
-            CALL DCOPY( N, RWORK( INDRD ), 1, W, 1 )
-            CALL DCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
-            CALL DSTERF( N, W, RWORK( INDREE ), INFO )
+            IF( ALLEIG .OR. ( INDEIG .AND. IL.EQ.1 .AND. IU.EQ.N ) )
+     $      THEN
+               CALL DCOPY( N, RWORK( INDRD ), 1, W, 1 )
+                CALL DCOPY( N-1, RWORK( INDRE ), 1,
+     $                      RWORK( INDREE ), 1 )
+                CALL DSTERF( N, W, RWORK( INDREE ), INFO )
+               IF( INFO.EQ.0 ) THEN
+                  M = N
+                  GO TO 30
+               END IF
+               INFO = 0
+            END IF
          ELSE
             CALL DCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
             CALL DCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
@@ -685,7 +686,7 @@
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL ZSTEMR( JOBZ, 'A', N, RWORK( INDRDD ),
+            CALL ZSTEMR( JOBZ, RANGE, N, RWORK( INDRDD ),
      $                   RWORK( INDREE ), VL, VU, IL, IU, M, W,
      $                   Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   RWORK( INDRWK ), LLRWORK,
@@ -701,14 +702,11 @@
      $                      WORK( INDTAU ), Z, LDZ, WORK( INDWKN ),
      $                      LLWRKN, IINFO )
             END IF
+            IF( INFO.EQ.0 ) THEN
+               GO TO 30
+            END IF
+            INFO = 0
          END IF
-*
-*
-         IF( INFO.EQ.0 ) THEN
-            M = N
-            GO TO 30
-         END IF
-         INFO = 0
       END IF
 *
 *     Otherwise, call DSTEBZ and, if eigenvectors are desired, ZSTEIN.
