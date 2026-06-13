@@ -206,8 +206,8 @@
       COMPLEX            CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
      $                   CONE = ( 1.0E+0, 0.0E+0 ) )
-      REAL               TWENTY
-      PARAMETER          ( TWENTY = 2.0E+1 )
+      REAL               HUNDRED
+      PARAMETER          ( HUNDRED = 1.0E+2 )
       INTEGER            LDST
       PARAMETER          ( LDST = 2 )
       LOGICAL            WANDS
@@ -273,9 +273,11 @@
 *     on 04/01/10.
 *     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
 *     Jim Demmel and Guillaume Revy. See forum post 1783.
+*     Then from TWENTY to HUNDRED on 03/20/26.
+*     "Bug" reported by Heiko Weichelt and Bobby Cheng from MathWorks.
 *
-      THRESHA = MAX( TWENTY*EPS*SA, SMLNUM )
-      THRESHB = MAX( TWENTY*EPS*SB, SMLNUM )
+       THRESHA = MAX( HUNDRED*EPS*SA, SMLNUM )
+       THRESHB = MAX( HUNDRED*EPS*SB, SMLNUM )
 *
 *     Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks
 *     using Givens rotations and perform the swap tentatively.

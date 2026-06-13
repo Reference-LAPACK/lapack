@@ -238,8 +238,8 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
-      DOUBLE PRECISION   TWENTY
-      PARAMETER          ( TWENTY = 2.0D+01 )
+      DOUBLE PRECISION   HUNDRED
+      PARAMETER          ( HUNDRED = 1.0D+02 )
       INTEGER            LDST
       PARAMETER          ( LDST = 4 )
       LOGICAL            WANDS
@@ -322,9 +322,11 @@
 *     on 04/01/10.
 *     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
 *     Jim Demmel and Guillaume Revy. See forum post 1783.
+*     Then from TWENTY to HUNDRED on 03/20/26.
+*     "Bug" reported by Heiko Weichelt and Bobby Cheng from MathWorks.
 *
-      THRESHA = MAX( TWENTY*EPS*DNORMA, SMLNUM )
-      THRESHB = MAX( TWENTY*EPS*DNORMB, SMLNUM )
+       THRESHA = MAX( HUNDRED*EPS*DNORMA, SMLNUM )
+       THRESHB = MAX( HUNDRED*EPS*DNORMB, SMLNUM )
 *
       IF( M.EQ.2 ) THEN
 *
