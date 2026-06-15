@@ -1108,7 +1108,7 @@
      $                   CDRGEV, CDRGSX, CDRGVX, CDRVBD, CDRVES, CDRVEV,
      $                   CDRVSG, CDRVST, CDRVSX, CDRVVX, CERRBD,
      $                   CERRED, CERRGG, CERRHS, CERRST, ILAVER, XLAENV,
-     $                   CDRGES3, CDRGEV3, 
+     $                   CDRGES3, CDRGEV3, CDRGEV4,
      $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -2293,6 +2293,18 @@
      $                    RESULT, INFO )
             IF( INFO.NE.0 )
      $           WRITE( NOUT, FMT = 9980 )'CDRGEV3', INFO
+*
+* New Blocked version
+*
+            CALL XLAENV(16,2)
+            CALL CDRGEV4( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
+     $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
+     $                    A( 1, 9 ), NMAX, DC( 1, 1 ), DC( 1, 2 ),
+     $                    DC( 1, 3 ), DC( 1, 4 ), WORK, LWORK, RWORK,
+     $                    IWORK, RESULT, INFO )
+            IF( INFO.NE.0 )
+     $           WRITE( NOUT, FMT = 9980 )'CDRGEV4', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
