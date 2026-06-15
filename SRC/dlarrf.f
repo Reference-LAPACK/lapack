@@ -465,7 +465,7 @@
       ELSE
 *        None of the representations investigated satisfied our
 *        criteria. Take the best one we found.
-         IF((SMLGROWTH.LT.FAIL).OR.NOFAIL) THEN
+         IF((SMLGROWTH.LT.FAIL*SPDIAM).OR.NOFAIL) THEN
             LSIGMA = BESTSHIFT
             RSIGMA = BESTSHIFT
             FORCER = .TRUE.
