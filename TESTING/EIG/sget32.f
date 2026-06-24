@@ -149,7 +149,7 @@
       DO 230 ITRANL = 0, 1
          DO 220 ITRANR = 0, 1
             DO 210 ISGN = -1, 1, 2
-               SGN = ISGN
+               SGN = REAL( ISGN )
                LTRANL = ITRANL.EQ.1
                LTRANR = ITRANR.EQ.1
 *
@@ -200,13 +200,13 @@
                            DO 40 IB2 = 1, 3
                               B( 1, 1 ) = VAL( IB1 )
                               B( 2, 1 ) = -FOUR*VAL( IB2 )
-                              TL( 1, 1 ) = ITVAL( 1, 1, ITL )*
+                              TL( 1, 1 ) = REAL( ITVAL( 1, 1, ITL ) )*
      $                                     VAL( ITLSCL )
-                              TL( 2, 1 ) = ITVAL( 2, 1, ITL )*
+                              TL( 2, 1 ) = REAL( ITVAL( 2, 1, ITL ) )*
      $                                     VAL( ITLSCL )
-                              TL( 1, 2 ) = ITVAL( 1, 2, ITL )*
+                              TL( 1, 2 ) = REAL( ITVAL( 1, 2, ITL ) )*
      $                                     VAL( ITLSCL )
-                              TL( 2, 2 ) = ITVAL( 2, 2, ITL )*
+                              TL( 2, 2 ) = REAL( ITVAL( 2, 2, ITL ) )*
      $                                     VAL( ITLSCL )
                               TR( 1, 1 ) = VAL( ITR )
                               KNT = KNT + 1
@@ -259,13 +259,13 @@
                            DO 90 IB2 = 1, 3
                               B( 1, 1 ) = VAL( IB1 )
                               B( 1, 2 ) = -TWO*VAL( IB2 )
-                              TR( 1, 1 ) = ITVAL( 1, 1, ITR )*
+                              TR( 1, 1 ) = REAL( ITVAL( 1, 1, ITR ) )*
      $                                     VAL( ITRSCL )
-                              TR( 2, 1 ) = ITVAL( 2, 1, ITR )*
+                              TR( 2, 1 ) = REAL( ITVAL( 2, 1, ITR ) )*
      $                                     VAL( ITRSCL )
-                              TR( 1, 2 ) = ITVAL( 1, 2, ITR )*
+                              TR( 1, 2 ) = REAL( ITVAL( 1, 2, ITR ) )*
      $                                     VAL( ITRSCL )
-                              TR( 2, 2 ) = ITVAL( 2, 2, ITR )*
+                              TR( 2, 2 ) = REAL( ITVAL( 2, 2, ITR ) )*
      $                                     VAL( ITRSCL )
                               TL( 1, 1 ) = VAL( ITL )
                               KNT = KNT + 1
@@ -325,22 +325,30 @@
                                     B( 2, 2 ) = EIGHT*
      $                                          MIN( VAL( IB1 ), VAL
      $                                          ( IB2 ), VAL( IB3 ) )
-                                    TR( 1, 1 ) = ITVAL( 1, 1, ITR )*
-     $                                           VAL( ITRSCL )
-                                    TR( 2, 1 ) = ITVAL( 2, 1, ITR )*
-     $                                           VAL( ITRSCL )
-                                    TR( 1, 2 ) = ITVAL( 1, 2, ITR )*
-     $                                           VAL( ITRSCL )
-                                    TR( 2, 2 ) = ITVAL( 2, 2, ITR )*
-     $                                           VAL( ITRSCL )
-                                    TL( 1, 1 ) = ITVAL( 1, 1, ITL )*
-     $                                           VAL( ITLSCL )
-                                    TL( 2, 1 ) = ITVAL( 2, 1, ITL )*
-     $                                           VAL( ITLSCL )
-                                    TL( 1, 2 ) = ITVAL( 1, 2, ITL )*
-     $                                           VAL( ITLSCL )
-                                    TL( 2, 2 ) = ITVAL( 2, 2, ITL )*
-     $                                           VAL( ITLSCL )
+                                    TR( 1, 1 ) =
+     $                                 REAL( ITVAL( 1, 1, ITR ) )*
+     $                                 VAL( ITRSCL )
+                                    TR( 2, 1 ) =
+     $                                 REAL( ITVAL( 2, 1, ITR ) )*
+     $                                 VAL( ITRSCL )
+                                    TR( 1, 2 ) =
+     $                                 REAL( ITVAL( 1, 2, ITR ) )*
+     $                                 VAL( ITRSCL )
+                                    TR( 2, 2 ) =
+     $                                 REAL( ITVAL( 2, 2, ITR ) )*
+     $                                 VAL( ITRSCL )
+                                    TL( 1, 1 ) =
+     $                                 REAL( ITVAL( 1, 1, ITL ) )*
+     $                                 VAL( ITLSCL )
+                                    TL( 2, 1 ) =
+     $                                 REAL( ITVAL( 2, 1, ITL ) )*
+     $                                 VAL( ITLSCL )
+                                    TL( 1, 2 ) =
+     $                                 REAL( ITVAL( 1, 2, ITL ) )*
+     $                                 VAL( ITLSCL )
+                                    TL( 2, 2 ) =
+     $                                 REAL( ITVAL( 2, 2, ITL ) )*
+     $                                 VAL( ITLSCL )
                                     KNT = KNT + 1
                                     CALL SLASY2( LTRANL, LTRANR, ISGN,
      $                                           N1, N2, TL, 2, TR, 2,

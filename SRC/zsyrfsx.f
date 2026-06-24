@@ -477,7 +477,7 @@
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0D+0 ) THEN
             PARAMS( LA_LINRX_ITREF_I ) = ITREF_DEFAULT
          ELSE
-            REF_TYPE = PARAMS( LA_LINRX_ITREF_I )
+            REF_TYPE = INT( PARAMS( LA_LINRX_ITREF_I ) )
          END IF
       END IF
 *

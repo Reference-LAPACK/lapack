@@ -2755,7 +2755,7 @@
          IC = 0
          GO TO 10
       END IF
-      ZBEG = DCMPLX( ( I - 500 )/1001.0, ( J - 500 )/1001.0 )
+      ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
       RETURN
 *
 *     End of ZBEG.

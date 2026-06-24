@@ -221,14 +221,15 @@
       N = MIN( 32, NMAX )
       DO 100 J = 1, N
          DO 90 I = 1, N
-            AB( I, J ) = MAX( I - J + 1, 0 )
+            AB( I, J ) = REAL( MAX( I - J + 1, 0 ) )
    90    CONTINUE
-         AB( J, NMAX + 1 ) = J
-         AB( 1, NMAX + J ) = J
+         AB( J, NMAX + 1 ) = REAL( J )
+         AB( 1, NMAX + J ) = REAL( J )
          C( J, 1 ) = ZERO
   100 CONTINUE
       DO 110 J = 1, N
-         CC( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
+         CC( J ) = REAL( J*( ( J + 1 )*J )/2 -
+     $                   ( ( J + 1 )*J*( J - 1 ) )/3 )
   110 CONTINUE
 *     CC holds the exact result. On exit from CMMCH CT holds
 *     the result computed by CMMCH.
@@ -252,12 +253,12 @@
          STOP
       END IF
       DO 120 J = 1, N
-         AB( J, NMAX + 1 ) = N - J + 1
-         AB( 1, NMAX + J ) = N - J + 1
+         AB( J, NMAX + 1 ) = REAL( N - J + 1 )
+         AB( 1, NMAX + J ) = REAL( N - J + 1 )
   120 CONTINUE
       DO 130 J = 1, N
-         CC( N - J + 1 ) = J*( ( J + 1 )*J )/2 -
-     $                     ( ( J + 1 )*J*( J - 1 ) )/3
+         CC( N - J + 1 ) = REAL( J*( ( J + 1 )*J )/2 -
+     $                           ( ( J + 1 )*J*( J - 1 ) )/3 )
   130 CONTINUE
       TRANSA = 'C'
       TRANSB = 'N'
@@ -2823,7 +2824,7 @@
          IC = 0
          GO TO 10
       END IF
-      CBEG = CMPLX( ( I - 500 )/1001.0, ( J - 500 )/1001.0 )
+      CBEG = CMPLX( REAL( I - 500 )/1001.0, REAL( J - 500 )/1001.0 )
       RETURN
 *
 *     End of CBEG.
@@ -2928,7 +2929,7 @@
          IF( LDC.GT.NMAX )
      $      GO TO 100
          LCC = LDC*N
-         NULL = N.LE.0.
+         NULL = N.LE.0
 *
          DO 90 IK = 1, NIDIM
             K = IDIM( IK )

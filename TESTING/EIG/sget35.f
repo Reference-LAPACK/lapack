@@ -173,7 +173,8 @@
                                  TNRM = ZERO
                                  DO 20 I = 1, M
                                     DO 10 J = 1, M
-                                       A( I, J ) = IVAL( I, J, IMA )
+                                       A( I, J ) =
+     $                                    REAL( IVAL( I, J, IMA ) )
                                        IF( ABS( I-J ).LE.1 ) THEN
                                           A( I, J ) = A( I, J )*
      $                                                VM1( IMLDA1 )
@@ -189,7 +190,8 @@
    20                            CONTINUE
                                  DO 40 I = 1, N
                                     DO 30 J = 1, N
-                                       B( I, J ) = IVAL( I, J, IMB )
+                                       B( I, J ) =
+     $                                    REAL( IVAL( I, J, IMB ) )
                                        IF( ABS( I-J ).LE.1 ) THEN
                                           B( I, J ) = B( I, J )*
      $                                                VM1( IMLDB1 )
