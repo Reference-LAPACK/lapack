@@ -213,7 +213,6 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY, SLAED0, SLASCL, SLASET,
-     $                   SLASRT,
      $                   SSTEQR, SSTERF, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -438,33 +437,25 @@
 *
 *        endwhile
 *
-         IF( ICOMPZ.EQ.0 ) THEN
 *
-*          Use Quick Sort
+*        Use Selection Sort to minimize swaps of eigenvectors
 *
-           CALL SLASRT( 'I', N, D, INFO )
-*
-         ELSE
-*
-*          Use Selection Sort to minimize swaps of eigenvectors
-*
-           DO 40 II = 2, N
-              I = II - 1
-              K = I
-              P = D( I )
-              DO 30 J = II, N
-                 IF( D( J ).LT.P ) THEN
-                    K = J
-                    P = D( J )
-                 END IF
+          DO 40 II = 2, N
+             I = II - 1
+             K = I
+             P = D( I )
+             DO 30 J = II, N
+                IF( D( J ).LT.P ) THEN
+                   K = J
+                   P = D( J )
+                END IF
    30         CONTINUE
-              IF( K.NE.I ) THEN
-                 D( K ) = D( I )
-                 D( I ) = P
-                 CALL SSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
-              END IF
+             IF( K.NE.I ) THEN
+                D( K ) = D( I )
+                D( I ) = P
+                CALL SSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+             END IF
    40      CONTINUE
-         END IF
       END IF
 *
    50 CONTINUE
