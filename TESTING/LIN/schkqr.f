@@ -247,7 +247,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRQR, SGELS, SGET02,
      $                   SLACPY, SLARHS, SLATB4, SLATMS, SQRT01,
-     $                   SQRT01P, SQRT02, SQRT03, XLAENV
+     $                   SQRT01P, SQRT02, SQRT03, SGEQRF, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -374,16 +374,18 @@
                          NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
-*                       Test SORGQR, using factorization
-*                       returned by SQRT01
+*                       Test SORGQR
+*
+                        CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+                        CALL SGEQRF( M, N, AF, LDA, TAU, WORK, LWORK,
+     $                               INFO )
 *
                         CALL SQRT02( M, N, K, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test SORMQR, using factorization returned
-*                       by SQRT01
+*                       Test SORMQR
 *
                         CALL SQRT03( M, N, K, AF, AC, AR, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
