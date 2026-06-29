@@ -1111,7 +1111,7 @@
      $                   SDRGEV, SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV,
      $                   SDRVSG, SDRVST, SDRVSX, SDRVVX, SERRBD,
      $                   SERRED, SERRGG, SERRHS, SERRST, ILAVER, XLAENV,
-     $                   SDRGES3, SDRGEV3, 
+     $                   SDRGES3, SDRGEV3, SLARRV, SCOPY,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -1884,6 +1884,52 @@
             CALL OMP_SET_NUM_THREADS(N_THREADS)
 #endif
          END IF
+*
+*        Test if SLARRV returns INFO=0 and do not modify the output when
+*           (N.LE.0).OR.(M.LE.0)
+*
+*        These tests are related to the fix:
+*        https://github.com/Reference-LAPACK/lapack/pull/625
+*
+*        Test M = 0 on SLARRV:
+*
+         WRITE( NOUT, FMT = 9958 )'M'
+         CALL SCOPY( 8, A, 1, WORK, 1 )
+         IWORK(1) = 100
+         CALL SLARRV( 1, 1.0E0, 1.0E0, A(1,1), A(2,1),
+     $                1.0E0, IWORK(2), 0,
+     $                1, 0, 1.0E0, 1.0E0, 1.0E0,
+     $                A(3,1), A(4,1), A(5,1), IWORK(2),
+     $                IWORK(2), A(6,1), A(8,1), 5,
+     $                IWORK(2), A(9,1), IWORK(2), INFO )
+         IF( INFO.NE.0 ) THEN
+            WRITE( NOUT, FMT = 9959 )INFO, 'M'
+         ELSE
+            DO K = 1, 8
+               IF( A(K,1) .NE. WORK(K) ) THEN
+                  WRITE( NOUT, FMT = 9958 )'M'
+               END IF
+            END DO
+         END IF
+*
+*        Test N = 0 on SLARRV:
+*
+         CALL SCOPY( 1, A, 1, WORK, 1 )
+         IWORK(1) = 100
+         CALL SLARRV( 0, 1.0E0, 1.0E0, A, A,
+     $                1.0E0, IWORK(2), 1,
+     $                1, 0, 1.0E0, 1.0E0, 1.0E0,
+     $                A, A, A, IWORK(2),
+     $                IWORK(2), A, A(1,1), 5,
+     $                IWORK(2), A(2,1), IWORK(2), INFO )
+         IF( INFO.NE.0 ) THEN
+            WRITE( NOUT, FMT = 9959 )INFO, 'N'
+         ELSE
+            IF( A(1,1) .NE. WORK(1) ) THEN
+               WRITE( NOUT, FMT = 9958 )'N'
+            END IF
+         END IF
+*
          DO 290 I = 1, NPARMS
             CALL XLAENV( 1, NBVAL( I ) )
             CALL XLAENV( 2, NBMIN( I ) )
@@ -2534,6 +2580,9 @@
      $      ', INWIN =', I4, ', INIBL =', I4, ', ISHFTS =', I4,
      $      ', IACC22 =', I4)
  9960 FORMAT( / ' Tests of the CS Decomposition routines' )
+ 9959 FORMAT( ' SLARRV returned INFO ', I4, ' WHEN ', A, ' = 0' )
+ 9958 FORMAT( ' SLARRV returned INFO 0 but modified the input WHEN '
+     $      , A, ' = 0' )
 *
 *     End of SCHKEE
 *
