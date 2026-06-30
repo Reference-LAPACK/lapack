@@ -355,7 +355,7 @@
       IMAX = IDAMAX( N, Z, 1 )
       JMAX = IDAMAX( N, D, 1 )
       EPS = DLAMCH( 'Epsilon' )
-      TOL = EIGHT*EPS*ABS( D( JMAX ) )
+      TOL = EIGHT*EIGHT*EPS*ABS( D( JMAX ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
 *     except to reorganize Q so that its columns correspond with the
