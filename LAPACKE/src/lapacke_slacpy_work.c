@@ -41,10 +41,7 @@ lapack_int API_SUFFIX(LAPACKE_slacpy_work)( int matrix_layout, char uplo, lapack
         /* Call LAPACK function and adjust info */
         LAPACK_slacpy( &uplo, &m, &n, a, &lda, b, &ldb );
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int lda_t = MAX(1,m);
-        lapack_int ldb_t = MAX(1,m);
-        float* a_t = NULL;
-        float* b_t = NULL;
+        char uplo_t = uplo;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
@@ -56,32 +53,27 @@ lapack_int API_SUFFIX(LAPACKE_slacpy_work)( int matrix_layout, char uplo, lapack
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slacpy_work", info );
             return info;
         }
-        /* Allocate memory for temporary array(s) */
-        a_t = (float*)LAPACKE_malloc( sizeof(float) * lda_t * MAX(1,n) );
-        if( a_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_0;
+        /* Fix (issue #729): the previous code transposed the FULL m-by-n
+         * matrix through temporary buffers, which (a) read the uninitialized
+         * complementary region of the destination temporary and (b) wrote it
+         * back over the part of B that `uplo` requires to stay untouched,
+         * corrupting the caller's data and reading uninitialized memory. A
+         * row-major m-by-n matrix with leading dimension lda is bit-identical
+         * to a column-major n-by-m matrix (its transpose). Copying triangle
+         * `uplo` of the row-major matrix therefore equals copying the OPPOSITE
+         * triangle of that transpose, so swap U<->L and the m/n extents and
+         * call the Fortran kernel directly on a and b. This copies exactly the
+         * requested triangle and never touches the complementary region -- no
+         * full-matrix transpose, no temporary allocation, no uninitialized
+         * reads. uplo values other than 'U'/'L' (e.g. 'A'/'a', a full copy)
+         * are layout-agnostic and pass through unchanged. */
+        if( uplo == 'U' || uplo == 'u' ) {
+            uplo_t = 'L';
+        } else if( uplo == 'L' || uplo == 'l' ) {
+            uplo_t = 'U';
         }
-        b_t = (float*)LAPACKE_malloc( sizeof(float) * ldb_t * MAX(1,n) );
-        if( b_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_1;
-        }
-        /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( matrix_layout, m, n, a, lda, a_t, lda_t );
-        /* Call LAPACK function and adjust info */
-        LAPACK_slacpy( &uplo, &m, &n, a_t, &lda_t, b_t, &ldb_t );
+        LAPACK_slacpy( &uplo_t, &n, &m, a, &lda, b, &ldb );
         info = 0;  /* LAPACK call is ok! */
-        /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_sge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
-        /* Release memory and exit */
-        LAPACKE_free( b_t );
-exit_level_1:
-        LAPACKE_free( a_t );
-exit_level_0:
-        if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slacpy_work", info );
-        }
     } else {
         info = -1;
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_slacpy_work", info );
