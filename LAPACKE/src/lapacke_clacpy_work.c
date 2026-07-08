@@ -54,20 +54,6 @@ lapack_int API_SUFFIX(LAPACKE_clacpy_work)( int matrix_layout, char uplo, lapack
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_clacpy_work", info );
             return info;
         }
-        /* Fix (issue #729): the previous code transposed the FULL m-by-n
-         * matrix through temporary buffers, which (a) read the uninitialized
-         * complementary region of the destination temporary and (b) wrote it
-         * back over the part of B that `uplo` requires to stay untouched,
-         * corrupting the caller's data and reading uninitialized memory. A
-         * row-major m-by-n matrix with leading dimension lda is bit-identical
-         * to a column-major n-by-m matrix (its transpose). Copying triangle
-         * `uplo` of the row-major matrix therefore equals copying the OPPOSITE
-         * triangle of that transpose, so swap U<->L and the m/n extents and
-         * call the Fortran kernel directly on a and b. This copies exactly the
-         * requested triangle and never touches the complementary region -- no
-         * full-matrix transpose, no temporary allocation, no uninitialized
-         * reads. uplo values other than 'U'/'L' (e.g. 'A'/'a', a full copy)
-         * are layout-agnostic and pass through unchanged. */
         if( uplo == 'U' || uplo == 'u' ) {
             uplo_t = 'L';
         } else if( uplo == 'L' || uplo == 'l' ) {
