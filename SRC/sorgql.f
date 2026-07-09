@@ -95,8 +95,6 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. LWORK >= max(1,N).
-*>          For optimum performance LWORK >= N*NB, where NB is the
-*>          optimal blocksize.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -137,18 +135,15 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, IINFO, IWS, J, KK, L, LDWORK, LWKOPT,
-     $                   NB, NBMIN, NX
+      INTEGER            I, IB, IINFO, IWS, KK, LWKOPT, NB,
+     $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB, SLARFT, SORG2L, XERBLA
+      EXTERNAL           SLARFB0C2, SLARFT, SORG2L,
+     $                   SORGKL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -163,6 +158,7 @@
 *     Test the input arguments
 *
       INFO = 0
+      NB = ILAENV( 1, 'SORGQL', ' ', M, N, K, -1 )
       LQUERY = ( LWORK.EQ.-1 )
       IF( M.LT.0 ) THEN
          INFO = -1
@@ -175,12 +171,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         IF( N.EQ.0 ) THEN
-            LWKOPT = 1
-         ELSE
-            NB = ILAENV( 1, 'SORGQL', ' ', M, N, K, -1 )
-            LWKOPT = N*NB
-         END IF
+         LWKOPT = MAX(1,N)
          WORK( 1 ) = SROUNDUP_LWORK(LWKOPT)
 *
          IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN
@@ -202,88 +193,74 @@
       END IF
 *
       NBMIN = 2
-      NX = 0
+      NX = MAX(0, ILAENV(3, 'SORGQL', ' ', M, N, K, -1))
       IWS = N
-      IF( NB.GT.1 .AND. NB.LT.K ) THEN
-*
-*        Determine when to cross over from blocked to unblocked code.
-*
-         NX = MAX( 0, ILAENV( 3, 'SORGQL', ' ', M, N, K, -1 ) )
-         IF( NX.LT.K ) THEN
-*
-*           Determine if workspace is large enough for blocked code.
-*
-            LDWORK = N
-            IWS = LDWORK*NB
-            IF( LWORK.LT.IWS ) THEN
-*
-*              Not enough workspace to use optimal NB:  reduce NB and
-*              determine the minimum value of NB.
-*
-               NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'SORGQL', ' ', M, N, K,
-     $                      -1 ) )
-            END IF
-         END IF
-      END IF
 *
       IF( NB.GE.NBMIN .AND. NB.LT.K .AND. NX.LT.K ) THEN
 *
-*        Use blocked code after the first block.
-*        The last kk columns are handled by the block method.
+*        We want to use the blocking method as long as our matrix is big enough
 *
-         KK = MIN( K, ( ( K-NX+NB-1 ) / NB )*NB )
-*
-*        Set A(m-kk+1:m,1:n-kk) to zero.
-*
-         DO 20 J = 1, N - KK
-            DO 10 I = M - KK + 1, M
-               A( I, J ) = ZERO
-   10       CONTINUE
-   20    CONTINUE
+         KK = K
       ELSE
          KK = 0
       END IF
 *
-*     Use unblocked code for the first or only block.
+*     Possibly bail to the unblocked code.
 *
-      CALL SORG2L( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      IF( KK.EQ.0 ) THEN
+         CALL SORG2L( M, N, K, A, LDA, TAU, WORK, IINFO )
+      END IF
 *
       IF( KK.GT.0 ) THEN
 *
-*        Use blocked code
+*        Factor the first block assuming that our first application
+*        will be on the Identity matrix
 *
-         DO 50 I = K - KK + 1, K, NB
-            IB = MIN( NB, K-I+1 )
-            IF( N-K+I.GT.1 ) THEN
+         I = 1
+         IB = NB
 *
-*              Form the triangular factor of the block reflector
-*              H = H(i+ib-1) . . . H(i+1) H(i)
+*        Form the triangular factor of the block reflector
+*        H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL SLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
-     $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
+         CALL SLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
+     $                  A( 1, N-K+I ), LDA, TAU( I ),
+     $                  A( M-K+I, N-K+I ), LDA)
 *
-*              Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
+*        Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL SLARFB( 'Left', 'No transpose', 'Backward',
-     $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
-     $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
-     $                      WORK( IB+1 ), LDWORK )
-            END IF
+         CALL SLARFB0C2(.TRUE., 'Left', 'No Transpose', 'Backward', 
+     $         'Columnwise', M-K+I+IB-1, N-K+I-1, IB, A(1, N-K+I), 
+     $         LDA, A( M-K+I, N-K+I ), LDA, A, LDA)
+*
+*        Apply H to rows 1:m-k+i+ib-1 of current block
+*
+         CALL SORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
+
+*        Use blocked code on the remaining blocks if there are any.
+*
+         DO I = NB+1, K, NB
+*
+*           The last block may be less than size NB
+*
+            IB = MIN(NB, K-I+1)
+*
+*           Form the triangular factor of the block reflector
+*           H = H(i+ib-1) . . . H(i+1) H(i)
+*
+            CALL SLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
+     $                  A( 1, N-K+I ), LDA, TAU( I ), 
+     $                  A( M-K+I, N-K+I ), LDA )
+*
+*           Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
+*
+            CALL SLARFB0C2(.FALSE., 'Left', 'No Transpose',
+     $            'Backward', 'Columnwise', M-K+I+IB-1, N-K+I-1, IB, 
+     $            A(1, N-K+I), LDA, A( M-K+I, N-K+I ), LDA, A, LDA)
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL SORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
-     $                   TAU( I ), WORK, IINFO )
-*
-*           Set rows m-k+i+ib:m of current block to zero
-*
-            DO 40 J = N - K + I, N - K + I + IB - 1
-               DO 30 L = M - K + I + IB, M
-                  A( L, J ) = ZERO
-   30          CONTINUE
-   40       CONTINUE
-   50    CONTINUE
+            CALL SORGKL( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA)
+         END DO
       END IF
 *
       WORK( 1 ) = SROUNDUP_LWORK(IWS)
