@@ -238,7 +238,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRLQ, DGELS, DGET02,
      $                   DLACPY, DLARHS, DLATB4, DLATMS, DLQT01, DLQT02,
-     $                   DLQT03, XLAENV
+     $                   DLQT03, DGELQF, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -356,8 +356,11 @@
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.LE.N ) THEN
 *
-*                       Test DORGLQ, using factorization
-*                       returned by DLQT01
+*                       Test DORGLQ
+*
+                        CALL DLACPY( 'Full', M, N, A, LDA, AF, LDA )
+                        CALL DGELQF( M, N, AF, LDA, TAU, WORK, LWORK,
+     $                               INFO )
 *
                         CALL DLQT02( M, N, K, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
@@ -367,8 +370,7 @@
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test DORMLQ, using factorization returned
-*                       by DLQT01
+*                       Test DORMLQ
 *
                         CALL DLQT03( M, N, K, AF, AC, AL, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
