@@ -276,27 +276,23 @@
               IF (UPPER) THEN
                   DO 50 J = 1,N
                       DO 40 K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              DO 30 I = 1,K - 1
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
-   30                         CONTINUE
-                              IF (NOUNIT) TEMP = TEMP*A(K,K)
-                              B(K,J) = TEMP
-                          END IF
+                          TEMP = ALPHA*B(K,J)
+                          DO 30 I = 1,K - 1
+                              B(I,J) = B(I,J) + TEMP*A(I,K)
+   30                     CONTINUE
+                          IF (NOUNIT) TEMP = TEMP*A(K,K)
+                          B(K,J) = TEMP
    40                 CONTINUE
    50             CONTINUE
               ELSE
                   DO 80 J = 1,N
                       DO 70 K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*B(K,J)
-                              B(K,J) = TEMP
-                              IF (NOUNIT) B(K,J) = B(K,J)*A(K,K)
-                              DO 60 I = K + 1,M
-                                  B(I,J) = B(I,J) + TEMP*A(I,K)
-   60                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*B(K,J)
+                          B(K,J) = TEMP
+                          IF (NOUNIT) B(K,J) = B(K,J)*A(K,K)
+                          DO 60 I = K + 1,M
+                              B(I,J) = B(I,J) + TEMP*A(I,K)
+   60                     CONTINUE
    70                 CONTINUE
    80             CONTINUE
               END IF
