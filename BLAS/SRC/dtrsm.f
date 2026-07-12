@@ -377,9 +377,8 @@
   270                     CONTINUE
                       END IF
                       DO 290 J = 1,K - 1
-                          TEMP = A(J,K)
                           DO 280 I = 1,M
-                              B(I,J) = B(I,J) - TEMP*B(I,K)
+                              B(I,J) = B(I,J) - A(J,K)*B(I,K)
   280                     CONTINUE
   290                 CONTINUE
                       DO 300 I = 1,M
@@ -394,9 +393,8 @@
   320                     CONTINUE
                       END IF
                       DO 340 J = K + 1,N
-                          TEMP = A(J,K)
                           DO 330 I = 1,M
-                              B(I,J) = B(I,J) - TEMP*B(I,K)
+                              B(I,J) = B(I,J) - A(J,K)*B(I,K)
   330                     CONTINUE
   340                 CONTINUE
                       DO 350 I = 1,M
