@@ -276,31 +276,27 @@
 *
               IF (UPPER) THEN
                   DO 60 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 30 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-   30                     CONTINUE
-                      END IF
-                       DO 50 K = M,1,-1
-                           IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                           DO 40 I = 1,K - 1
-                               B(I,J) = B(I,J) - B(K,J)*A(I,K)
+                      DO 30 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+   30                 CONTINUE
+                      DO 50 K = M,1,-1
+                          IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
+                          DO 40 I = 1,K - 1
+                              B(I,J) = B(I,J) - B(K,J)*A(I,K)
    40                     CONTINUE
    50                 CONTINUE
    60             CONTINUE
-               ELSE
-                   DO 100 J = 1,N
-                       IF (ALPHA.NE.ONE) THEN
-                           DO 70 I = 1,M
-                               B(I,J) = ALPHA*B(I,J)
-   70                     CONTINUE
-                       END IF
-                       DO 90 K = 1,M
-                           IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                           DO 80 I = K + 1,M
-                               B(I,J) = B(I,J) - B(K,J)*A(I,K)
+              ELSE
+                  DO 100 J = 1,N
+                      DO 70 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+   70                 CONTINUE
+                      DO 90 K = 1,M
+                          IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
+                          DO 80 I = K + 1,M
+                              B(I,J) = B(I,J) - B(K,J)*A(I,K)
    80                     CONTINUE
-   90                 CONTINUE
+   90                CONTINUE
   100             CONTINUE
               END IF
           ELSE
@@ -338,11 +334,9 @@
 *
               IF (UPPER) THEN
                   DO 210 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 170 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  170                     CONTINUE
-                      END IF
+                      DO 170 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  170                 CONTINUE
                       DO 190 K = 1,J - 1
                           IF (A(K,J).NE.ZERO) THEN
                               DO 180 I = 1,M
@@ -359,11 +353,9 @@
   210             CONTINUE
               ELSE
                   DO 260 J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 220 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  220                     CONTINUE
-                      END IF
+                      DO 220 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  220                 CONTINUE
                       DO 240 K = J + 1,N
                           IF (A(K,J).NE.ZERO) THEN
                               DO 230 I = 1,M
@@ -399,11 +391,9 @@
   280                         CONTINUE
                           END IF
   290                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 300 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  300                     CONTINUE
-                      END IF
+                      DO 300 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  300                 CONTINUE
   310             CONTINUE
               ELSE
                   DO 360 K = 1,N
@@ -421,11 +411,9 @@
   330                         CONTINUE
                           END IF
   340                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 350 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  350                     CONTINUE
-                      END IF
+                      DO 350 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  350                 CONTINUE
   360             CONTINUE
               END IF
           END IF

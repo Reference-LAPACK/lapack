@@ -278,11 +278,9 @@
 *
               IF (UPPER) THEN
                   DO 60 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 30 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-   30                     CONTINUE
-                      END IF
+                       DO 30 I = 1,M
+                           B(I,J) = ALPHA*B(I,J)
+   30                  CONTINUE
                        DO 50 K = M,1,-1
                            IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
                            DO 40 I = 1,K - 1
@@ -292,11 +290,9 @@
    60             CONTINUE
                ELSE
                    DO 100 J = 1,N
-                       IF (ALPHA.NE.ONE) THEN
-                           DO 70 I = 1,M
-                               B(I,J) = ALPHA*B(I,J)
-   70                     CONTINUE
-                       END IF
+                       DO 70 I = 1,M
+                           B(I,J) = ALPHA*B(I,J)
+   70                  CONTINUE
                        DO 90 K = 1,M
                            IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
                            DO 80 I = K + 1,M
@@ -355,11 +351,9 @@
 *
               IF (UPPER) THEN
                   DO 230 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 190 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  190                     CONTINUE
-                      END IF
+                      DO 190 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  190                 CONTINUE
                       DO 210 K = 1,J - 1
                           IF (A(K,J).NE.ZERO) THEN
                               DO 200 I = 1,M
@@ -376,11 +370,9 @@
   230             CONTINUE
               ELSE
                   DO 280 J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 240 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  240                     CONTINUE
-                      END IF
+                      DO 240 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  240                 CONTINUE
                       DO 260 K = J + 1,N
                           IF (A(K,J).NE.ZERO) THEN
                               DO 250 I = 1,M
@@ -425,11 +417,9 @@
   300                         CONTINUE
                           END IF
   310                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 320 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  320                     CONTINUE
-                      END IF
+                      DO 320 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  320                 CONTINUE
   330             CONTINUE
               ELSE
                   DO 380 K = 1,N
@@ -455,11 +445,9 @@
   350                         CONTINUE
                           END IF
   360                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 370 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  370                     CONTINUE
-                      END IF
+                      DO 370 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  370                 CONTINUE
   380             CONTINUE
               END IF
           END IF
