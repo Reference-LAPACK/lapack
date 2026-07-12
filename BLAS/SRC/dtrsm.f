@@ -211,8 +211,8 @@
       LOGICAL LSIDE,NOUNIT,UPPER
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION ONE,ZERO
-      PARAMETER (ONE=1.0D+0,ZERO=0.0D+0)
+      DOUBLE PRECISION ZERO
+      PARAMETER (ZERO=0.0D+0)
 *     ..
 *
 *     Test the input parameters.
@@ -343,9 +343,8 @@
   180                     CONTINUE
   190                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 200 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   200                     CONTINUE
                       END IF
   210             CONTINUE
@@ -360,9 +359,8 @@
   230                     CONTINUE
   240                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 250 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   250                     CONTINUE
                       END IF
   260             CONTINUE
@@ -374,9 +372,8 @@
               IF (UPPER) THEN
                   DO 310 K = N,1,-1
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
                           DO 270 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
+                              B(I,K) = B(I,K)/A(K,K)
   270                     CONTINUE
                       END IF
                       DO 290 J = 1,K - 1
@@ -392,9 +389,8 @@
               ELSE
                   DO 360 K = 1,N
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(K,K)
                           DO 320 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
+                              B(I,K) = B(I,K)/A(K,K)
   320                     CONTINUE
                       END IF
                       DO 340 J = K + 1,N

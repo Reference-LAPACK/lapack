@@ -210,8 +210,6 @@
       LOGICAL LSIDE,NOCONJ,NOUNIT,UPPER
 *     ..
 *     .. Parameters ..
-      COMPLEX ONE
-      PARAMETER (ONE= (1.0E+0,0.0E+0))
       COMPLEX ZERO
       PARAMETER (ZERO= (0.0E+0,0.0E+0))
 *     ..
@@ -360,9 +358,8 @@
   200                     CONTINUE
   210                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 220 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   220                     CONTINUE
                       END IF
   230             CONTINUE
@@ -377,9 +374,8 @@
   250                     CONTINUE
   260                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 270 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   270                     CONTINUE
                       END IF
   280             CONTINUE
@@ -393,13 +389,14 @@
                   DO 330 K = N,1,-1
                       IF (NOUNIT) THEN
                           IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
+                              DO 290 I = 1,M
+                                  B(I,K) = B(I,K)/A(K,K)
+  290                         CONTINUE
                           ELSE
-                              TEMP = ONE/CONJG(A(K,K))
+                              DO 390 I = 1,M
+                                  B(I,K) = B(I,K)/CONJG(A(K,K))
+  390                         CONTINUE
                           END IF
-                          DO 290 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
-  290                     CONTINUE
                       END IF
                       DO 310 J = 1,K - 1
                           IF (NOCONJ) THEN
@@ -419,13 +416,14 @@
                   DO 380 K = 1,N
                       IF (NOUNIT) THEN
                           IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
+                              DO 340 I = 1,M
+                                  B(I,K) = B(I,K)/A(K,K)
+  340                         CONTINUE
                           ELSE
-                              TEMP = ONE/CONJG(A(K,K))
+                              DO 400 I = 1,M
+                                  B(I,K) = B(I,K)/CONJG(A(K,K))
+  400                         CONTINUE
                           END IF
-                          DO 340 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
-  340                     CONTINUE
                       END IF
                       DO 360 J = K + 1,N
                           IF (NOCONJ) THEN
