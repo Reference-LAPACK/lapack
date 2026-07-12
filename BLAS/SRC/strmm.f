@@ -334,12 +334,10 @@
                           B(I,J) = TEMP*B(I,J)
   150                 CONTINUE
                       DO 170 K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              DO 160 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  160                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(K,J)
+                          DO 160 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  160                     CONTINUE
   170                 CONTINUE
   180             CONTINUE
               ELSE
@@ -350,12 +348,10 @@
                           B(I,J) = TEMP*B(I,J)
   190                 CONTINUE
                       DO 210 K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              DO 200 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  200                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(K,J)
+                          DO 200 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  200                     CONTINUE
   210                 CONTINUE
   220             CONTINUE
               END IF
@@ -366,12 +362,10 @@
               IF (UPPER) THEN
                   DO 260 K = 1,N
                       DO 240 J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              DO 230 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  230                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(J,K)
+                          DO 230 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  230                     CONTINUE
   240                 CONTINUE
                       TEMP = ALPHA
                       IF (NOUNIT) TEMP = TEMP*A(K,K)
@@ -384,12 +378,10 @@
               ELSE
                   DO 300 K = N,1,-1
                       DO 280 J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = ALPHA*A(J,K)
-                              DO 270 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  270                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(J,K)
+                          DO 270 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  270                     CONTINUE
   280                 CONTINUE
                       TEMP = ALPHA
                       IF (NOUNIT) TEMP = TEMP*A(K,K)

@@ -351,12 +351,10 @@
                           B(I,J) = TEMP*B(I,J)
   170                 CONTINUE
                       DO 190 K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              DO 180 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  180                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(K,J)
+                          DO 180 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  180                     CONTINUE
   190                 CONTINUE
   200             CONTINUE
               ELSE
@@ -367,12 +365,10 @@
                           B(I,J) = TEMP*B(I,J)
   210                 CONTINUE
                       DO 230 K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              TEMP = ALPHA*A(K,J)
-                              DO 220 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  220                         CONTINUE
-                          END IF
+                          TEMP = ALPHA*A(K,J)
+                          DO 220 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  220                     CONTINUE
   230                 CONTINUE
   240             CONTINUE
               END IF
@@ -383,16 +379,14 @@
               IF (UPPER) THEN
                   DO 280 K = 1,N
                       DO 260 J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = ALPHA*A(J,K)
-                              ELSE
-                                  TEMP = ALPHA*DCONJG(A(J,K))
-                              END IF
-                              DO 250 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  250                         CONTINUE
+                          IF (NOCONJ) THEN
+                              TEMP = ALPHA*A(J,K)
+                          ELSE
+                              TEMP = ALPHA*DCONJG(A(J,K))
                           END IF
+                          DO 250 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  250                     CONTINUE
   260                 CONTINUE
                       TEMP = ALPHA
                       IF (NOUNIT) THEN
@@ -411,16 +405,14 @@
               ELSE
                   DO 320 K = N,1,-1
                       DO 300 J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = ALPHA*A(J,K)
-                              ELSE
-                                  TEMP = ALPHA*DCONJG(A(J,K))
-                              END IF
-                              DO 290 I = 1,M
-                                  B(I,J) = B(I,J) + TEMP*B(I,K)
-  290                         CONTINUE
+                          IF (NOCONJ) THEN
+                              TEMP = ALPHA*A(J,K)
+                          ELSE
+                              TEMP = ALPHA*DCONJG(A(J,K))
                           END IF
+                          DO 290 I = 1,M
+                              B(I,J) = B(I,J) + TEMP*B(I,K)
+  290                     CONTINUE
   300                 CONTINUE
                       TEMP = ALPHA
                       IF (NOUNIT) THEN
