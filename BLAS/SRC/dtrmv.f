@@ -159,10 +159,6 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
 *     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION TEMP
@@ -229,53 +225,45 @@
           IF (LSAME(UPLO,'U')) THEN
               IF (INCX.EQ.1) THEN
                   DO 20 J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO 10 I = 1,J - 1
-                              X(I) = X(I) + TEMP*A(I,J)
-   10                     CONTINUE
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
-                      END IF
+                      TEMP = X(J)
+                      DO 10 I = 1,J - 1
+                          X(I) = X(I) + TEMP*A(I,J)
+   10                 CONTINUE
+                      IF (NOUNIT) X(J) = X(J)*A(J,J)
    20             CONTINUE
               ELSE
                   JX = KX
                   DO 40 J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO 30 I = 1,J - 1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX + INCX
-   30                     CONTINUE
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
-                      END IF
+                      TEMP = X(JX)
+                      IX = KX
+                      DO 30 I = 1,J - 1
+                          X(IX) = X(IX) + TEMP*A(I,J)
+                          IX = IX + INCX
+   30                 CONTINUE
+                      IF (NOUNIT) X(JX) = X(JX)*A(J,J)
                       JX = JX + INCX
    40             CONTINUE
               END IF
           ELSE
               IF (INCX.EQ.1) THEN
                   DO 60 J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          DO 50 I = N,J + 1,-1
-                              X(I) = X(I) + TEMP*A(I,J)
-   50                     CONTINUE
-                          IF (NOUNIT) X(J) = X(J)*A(J,J)
-                      END IF
+                      TEMP = X(J)
+                      DO 50 I = N,J + 1,-1
+                          X(I) = X(I) + TEMP*A(I,J)
+   50                 CONTINUE
+                      IF (NOUNIT) X(J) = X(J)*A(J,J)
    60             CONTINUE
               ELSE
                   KX = KX + (N-1)*INCX
                   JX = KX
                   DO 80 J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          DO 70 I = N,J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(I,J)
-                              IX = IX - INCX
-   70                     CONTINUE
-                          IF (NOUNIT) X(JX) = X(JX)*A(J,J)
-                      END IF
+                      TEMP = X(JX)
+                      IX = KX
+                      DO 70 I = N,J + 1,-1
+                          X(IX) = X(IX) + TEMP*A(I,J)
+                          IX = IX - INCX
+   70                 CONTINUE
+                      IF (NOUNIT) X(JX) = X(JX)*A(J,J)
                       JX = JX - INCX
    80             CONTINUE
               END IF
