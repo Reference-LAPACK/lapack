@@ -338,11 +338,9 @@
                           B(I,J) = ALPHA*B(I,J)
   170                 CONTINUE
                       DO 190 K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO 180 I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
-  180                         CONTINUE
-                          END IF
+                          DO 180 I = 1,M
+                              B(I,J) = B(I,J) - A(K,J)*B(I,K)
+  180                     CONTINUE
   190                 CONTINUE
                       IF (NOUNIT) THEN
                           TEMP = ONE/A(J,J)
@@ -357,11 +355,9 @@
                           B(I,J) = ALPHA*B(I,J)
   220                 CONTINUE
                       DO 240 K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO 230 I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
-  230                         CONTINUE
-                          END IF
+                          DO 230 I = 1,M
+                              B(I,J) = B(I,J) - A(K,J)*B(I,K)
+  230                     CONTINUE
   240                 CONTINUE
                       IF (NOUNIT) THEN
                           TEMP = ONE/A(J,J)
@@ -384,12 +380,10 @@
   270                     CONTINUE
                       END IF
                       DO 290 J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              DO 280 I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
-  280                         CONTINUE
-                          END IF
+                          TEMP = A(J,K)
+                          DO 280 I = 1,M
+                              B(I,J) = B(I,J) - TEMP*B(I,K)
+  280                     CONTINUE
   290                 CONTINUE
                       DO 300 I = 1,M
                           B(I,K) = ALPHA*B(I,K)
@@ -404,12 +398,10 @@
   320                     CONTINUE
                       END IF
                       DO 340 J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              TEMP = A(J,K)
-                              DO 330 I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
-  330                         CONTINUE
-                          END IF
+                          TEMP = A(J,K)
+                          DO 330 I = 1,M
+                              B(I,J) = B(I,J) - TEMP*B(I,K)
+  330                     CONTINUE
   340                 CONTINUE
                       DO 350 I = 1,M
                           B(I,K) = ALPHA*B(I,K)
