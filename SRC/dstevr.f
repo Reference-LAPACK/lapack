@@ -67,9 +67,10 @@
 *> UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : DSTEVR calls DSTEMR when possible (i.e., on machines
-*> which conform to the ieee-754 floating point standard). DSTEVR
-*> calls DSTEBZ and DSTEIN on non-ieee machines.
+*> Note 1 : DSTEVR calls DSTEMR when the full spectrum is requested
+*> on machines which conform to the ieee-754 floating point standard.
+*> DSTEVR calls DSTEBZ and DSTEIN on non-ieee machines and
+*> when partial spectrum requests are made.
 *>
 *> Normal execution of DSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
@@ -483,35 +484,34 @@
 *     try DSTEBZ.
 *
 *
-      IF( IEEEOK.EQ.1 ) THEN
+      TEST = .FALSE.
+      IF( INDEIG ) THEN
+         IF( IL.EQ.1 .AND. IU.EQ.N ) THEN
+            TEST = .TRUE.
+         END IF
+      END IF
+      IF( ( ALLEIG .OR. TEST ) .AND. IEEEOK.EQ.1 ) THEN
+         CALL DCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
          IF( .NOT.WANTZ ) THEN
-            IF( ALLEIG .OR. ( INDEIG .AND. IL.EQ.1 .AND. IU.EQ.N ) )
-     $      THEN
-               CALL DCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
-               CALL DCOPY( N, D, 1, W, 1 )
-               CALL DSTERF( N, W, WORK, INFO )
-               IF( INFO.EQ.0 ) THEN
-                  M = N
-                  GO TO 10
-               END IF
-               INFO = 0
-            END IF
+            CALL DCOPY( N, D, 1, W, 1 )
+            CALL DSTERF( N, W, WORK, INFO )
          ELSE
-            CALL DCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
             CALL DCOPY( N, D, 1, WORK( N+1 ), 1 )
             IF (ABSTOL .LE. TWO*N*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL DSTEMR( JOBZ, RANGE, N, WORK( N+1 ), WORK, VL, VU,
-     $                   IL, IU, M, W, Z, LDZ, N, ISUPPZ, TRYRAC,
+            CALL DSTEMR( JOBZ, 'A', N, WORK( N+1 ), WORK, VL, VU, IL,
+     $                   IU, M, W, Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   WORK( 2*N+1 ), LWORK-2*N, IWORK, LIWORK, INFO )
-            IF( INFO.EQ.0 ) THEN
-               GO TO 10
-            END IF
-            INFO = 0
+*
          END IF
+         IF( INFO.EQ.0 ) THEN
+            M = N
+            GO TO 10
+         END IF
+         INFO = 0
       END IF
 *
 *     Otherwise, call DSTEBZ and, if eigenvectors are desired, DSTEIN.
