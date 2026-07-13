@@ -198,10 +198,6 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      COMPLEX ZERO
-      PARAMETER (ZERO= (0.0E+0,0.0E+0))
 *     ..
 *     .. Local Scalars ..
       COMPLEX TEMP
@@ -272,28 +268,24 @@
               KPLUS1 = K + 1
               IF (INCX.EQ.1) THEN
                   DO 20 J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = KPLUS1 - J
-                          DO 10 I = MAX(1,J-K),J - 1
-                              X(I) = X(I) + TEMP*A(L+I,J)
-   10                     CONTINUE
-                          IF (NOUNIT) X(J) = X(J)*A(KPLUS1,J)
-                      END IF
+                      TEMP = X(J)
+                      L = KPLUS1 - J
+                      DO 10 I = MAX(1,J-K),J - 1
+                          X(I) = X(I) + TEMP*A(L+I,J)
+   10                 CONTINUE
+                      IF (NOUNIT) X(J) = X(J)*A(KPLUS1,J)
    20             CONTINUE
               ELSE
                   JX = KX
                   DO 40 J = 1,N
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = KPLUS1 - J
-                          DO 30 I = MAX(1,J-K),J - 1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX + INCX
-   30                     CONTINUE
-                          IF (NOUNIT) X(JX) = X(JX)*A(KPLUS1,J)
-                      END IF
+                      TEMP = X(JX)
+                      IX = KX
+                      L = KPLUS1 - J
+                      DO 30 I = MAX(1,J-K),J - 1
+                          X(IX) = X(IX) + TEMP*A(L+I,J)
+                          IX = IX + INCX
+   30                 CONTINUE
+                      IF (NOUNIT) X(JX) = X(JX)*A(KPLUS1,J)
                       JX = JX + INCX
                       IF (J.GT.K) KX = KX + INCX
    40             CONTINUE
@@ -301,29 +293,25 @@
           ELSE
               IF (INCX.EQ.1) THEN
                   DO 60 J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          TEMP = X(J)
-                          L = 1 - J
-                          DO 50 I = MIN(N,J+K),J + 1,-1
-                              X(I) = X(I) + TEMP*A(L+I,J)
-   50                     CONTINUE
-                          IF (NOUNIT) X(J) = X(J)*A(1,J)
-                      END IF
+                      TEMP = X(J)
+                      L = 1 - J
+                      DO 50 I = MIN(N,J+K),J + 1,-1
+                          X(I) = X(I) + TEMP*A(L+I,J)
+   50                 CONTINUE
+                      IF (NOUNIT) X(J) = X(J)*A(1,J)
    60             CONTINUE
               ELSE
                   KX = KX + (N-1)*INCX
                   JX = KX
                   DO 80 J = N,1,-1
-                      IF (X(JX).NE.ZERO) THEN
-                          TEMP = X(JX)
-                          IX = KX
-                          L = 1 - J
-                          DO 70 I = MIN(N,J+K),J + 1,-1
-                              X(IX) = X(IX) + TEMP*A(L+I,J)
-                              IX = IX - INCX
-   70                     CONTINUE
-                          IF (NOUNIT) X(JX) = X(JX)*A(1,J)
-                      END IF
+                      TEMP = X(JX)
+                      IX = KX
+                      L = 1 - J
+                      DO 70 I = MIN(N,J+K),J + 1,-1
+                          X(IX) = X(IX) + TEMP*A(L+I,J)
+                          IX = IX - INCX
+   70                 CONTINUE
+                      IF (NOUNIT) X(JX) = X(JX)*A(1,J)
                       JX = JX - INCX
                       IF ((N-J).GE.K) KX = KX - INCX
    80             CONTINUE
