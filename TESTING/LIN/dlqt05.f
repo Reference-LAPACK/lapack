@@ -109,8 +109,11 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION DLAMCH, DLANGE, DLANSY
-      LOGICAL  LSAME
-      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME
+      EXTERNAL DLAMCH, DLANGE, DLANSY
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL DLASET, DLARNV, DLACPY, DTPLQT, DGEMLQT, DGEMM,
+     $         DSYRK, DTPMLQT
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

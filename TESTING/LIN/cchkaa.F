@@ -177,7 +177,10 @@
      $                   CDRVHE_ROOK, CDRVHE_RK, CDRVHE_AA, CDRVHP,
      $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
      $                   CDRVSY, CDRVSY_ROOK, CDRVSY_RK, CDRVSY_AA,
-     $                   ILAVER, CCHKQRT, CCHKQRTP
+     $                   ILAVER, CCHKQRT, CCHKQRTP,
+     $                   CCHKLQT, CCHKLQTP, CCHKTSQR,
+     $                   CCHKHE_AA_2STAGE, CDRVHE_AA_2STAGE,
+     $                   CCHKSY_AA_2STAGE, CDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

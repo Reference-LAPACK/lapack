@@ -184,6 +184,7 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMV, SLASSQ, XERBLA

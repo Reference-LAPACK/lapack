@@ -118,7 +118,11 @@
       REAL     SLAMCH, CLANGE, CLANSY
       LOGICAL  LSAME
       INTEGER  ILAENV
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME, ILAENV
+      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL CLARNV, CLACPY, CGELQ, CGEMLQ, CLASET, CGEMM,
+     $         CHERK, CGEQR, CGEMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

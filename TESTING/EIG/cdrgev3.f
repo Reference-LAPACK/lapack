@@ -453,7 +453,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET52, CGGEV3, CLACPY, CLARFG, CLASET,
-     $                   CLATM4, CUNM2R, XERBLA
+     $                   CLATM4, CUNM2R, XERBLA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN

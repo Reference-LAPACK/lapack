@@ -118,7 +118,11 @@
       REAL     SLAMCH, SLANGE, SLANSY
       LOGICAL  LSAME
       INTEGER  ILAENV
-      EXTERNAL SLAMCH, SLARNV, SLANGE, SLANSY, LSAME, ILAENV
+      EXTERNAL SLAMCH, SLARNV, SLANGE, SLANSY, LSAME
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL SLACPY, SGELQ, SGEMLQ, SLASET, SGEMM, SSYRK,
+     $         SGEQR, SGEMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

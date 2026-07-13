@@ -195,15 +195,10 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       REAL               RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      REAL               SLANSY, SGET06
-      EXTERNAL           SLANSY, SGET06
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, SERRVX,
-     $                   SLACPY, SLARHS, SLATB4, SLATMS,
-     $                   SSYSV_AA_2STAGE, SSYT01_AA, SPOT02,
-     $                   SSYTRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, SERRVX, SLACPY,
+     $                   SLARHS, SLATB4, SLATMS, SSYSV_AA_2STAGE,
+     $                   SPOT02
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

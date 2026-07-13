@@ -117,7 +117,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAEXC
+      EXTERNAL           SCOPY, SHST01, SLAEXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SIGN, SQRT

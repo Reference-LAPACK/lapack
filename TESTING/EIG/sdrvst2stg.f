@@ -503,14 +503,13 @@
       EXTERNAL           SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SLACPY, SLAFTS, SLASET, SLATMR,
-     $                   SLATMS, SSBEV, SSBEVD, SSBEVX, SSPEV, SSPEVD,
-     $                   SSPEVX, SSTEV, SSTEVD, SSTEVR, SSTEVX, SSTT21,
-     $                   SSTT22, SSYEV, SSYEVD, SSYEVR, SSYEVX, SSYT21,
+      EXTERNAL           ALASVM, SLACPY, SLAFTS, SLASET, SLATMR, SLATMS,
+     $                   SSBEV, SSBEVD, SSBEVX, SSPEV, SSPEVD, SSPEVX,
+     $                   SSTEV, SSTEVD, SSTEVR, SSTEVX, SSTT21, SSTT22,
+     $                   SSYEV, SSYEVD, SSYEVR, SSYEVX, SSYT21,
      $                   SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
      $                   SSYEV_2STAGE, SSBEV_2STAGE, SSBEVD_2STAGE,
-     $                   SSBEVX_2STAGE, SSYTRD_2STAGE, SSYTRD_SY2SB, 
-     $                   SSYTRD_SB2ST, SSYT22, XERBLA
+     $                   SSBEVX_2STAGE, SSYT22, XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT

@@ -299,8 +299,8 @@
       COMPLEX*16         VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZLACPY, ZLAQR1, ZLARFG, ZLASET,
-     $                   ZTRMM
+      EXTERNAL           ZGEMM, ZLACPY, ZLAQR1,
+     $                   ZLARFG, ZLASET
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1

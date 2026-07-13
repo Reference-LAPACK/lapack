@@ -130,7 +130,7 @@
 *     .. External Functions ..
       LOGICAL            DISNAN
       DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      EXTERNAL           DISNAN, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLATMR, DLACPY, DGEMM, DTRSYL, DTRSYL3

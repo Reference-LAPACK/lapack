@@ -215,9 +215,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRSY, ZLACPY, ZLARHS,
-     $                   ZLATB4, ZLATMS, ZSYT02, ZSYT01, 
-     $                   ZSYTRF_AA_2STAGE, ZSYTRS_AA_2STAGE,
-     $                   XLAENV
+     $                   ZLATB4, ZLATMS, ZSYT02, ZSYTRF_AA_2STAGE,
+     $                   ZSYTRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

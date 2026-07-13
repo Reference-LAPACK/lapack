@@ -169,7 +169,8 @@
      $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
      $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
      $                   SDRVSY_RK, SDRVSY_AA, ILAVER, SCHKLQTP,
-     $                   SCHKQRT, SCHKQRTP, SCHKLQT, SCHKTSQR
+     $                   SCHKQRT, SCHKQRTP, SCHKLQT, SCHKTSQR,
+     $                   SCHKSY_AA_2STAGE, SDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
