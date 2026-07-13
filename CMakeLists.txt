@@ -10,6 +10,8 @@ set(
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
+set(CMAKE_C_STANDARD 99)
+
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
 set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -123,13 +125,6 @@ message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDE
 
 include(GNUInstallDirs)
 
-# Configure the warning and code coverage suppression file
-configure_file(
-  "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
-  "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
-  @ONLY
-)
-
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
@@ -186,6 +181,13 @@ if(BUILD_TESTING)
   else()
     message(STATUS "${_msg} - not found (skipping summary tests)")
   endif()
+
+  # Configure the warning and code coverage suppression file
+  configure_file(
+    "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
+    "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
+    @ONLY
+  )
 endif()
 
 # --------------------------------------------------

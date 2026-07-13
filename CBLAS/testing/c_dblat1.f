@@ -273,7 +273,7 @@
       EXTERNAL          DDOTTEST
       DOUBLE PRECISION  DDOTTEST
 *     .. External Subroutines ..
-      EXTERNAL          DAXPYTEST, DCOPYTEST, DSWAPTEST, STEST, STEST1
+      EXTERNAL          DAXPYTEST, DCOPYTEST, DSWAPTEST, STEST, STEST1,
      +                  DAXPBYTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN

@@ -540,7 +540,7 @@
 !     Local scalars
 !     ~~~~~~~~~~~~~
       REAL(KIND=WP) :: OFL,   ROOTSC, SCALE,  SMALL,    &
-                       SSUM,  XSCL1,  XSCL2
+                       SSUM,  XSCL1,  XSCL2, TBIG
       INTEGER       ::  i,  j,  IMINWR,  INFO1, INFO2,  &
                         LWRKEV, LWRSDD, LWRSVD, LWRSVJ, &
                         LWRSVQ, MLWORK, MWRKEV, MWRSDD, &
@@ -771,7 +771,9 @@
             END IF
             IF ( (SCALE /= ZERO) .AND. (SSUM /= ZERO) ) THEN
                ROOTSC = SQRT(SSUM)
-               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN
+               TBIG = OFL
+               IF ( ROOTSC .GT. ONE ) TBIG = OFL / ROOTSC
+               IF ( SCALE .GE. TBIG ) THEN
 !                 Norm of X(:,i) overflows. First, X(:,i)
 !                 is scaled by
 !                 ( ONE / ROOTSC ) / SCALE = 1/||X(:,i)||_2.
@@ -845,7 +847,9 @@
             END IF
             IF ( SCALE /= ZERO  .AND. (SSUM /= ZERO) ) THEN
                ROOTSC = SQRT(SSUM)
-               IF ( SCALE .GE. (OFL / ROOTSC) ) THEN
+               TBIG = OFL
+               IF ( ROOTSC .GT. ONE ) TBIG = OFL / ROOTSC
+               IF ( SCALE .GE. TBIG ) THEN
 !                 Norm of Y(:,i) overflows. First, Y(:,i)
 !                 is scaled by
 !                 ( ONE / ROOTSC ) / SCALE = 1/||Y(:,i)||_2.

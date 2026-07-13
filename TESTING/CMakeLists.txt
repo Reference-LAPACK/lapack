@@ -15,13 +15,13 @@ add_subdirectory(EIG)
 
 
 # Only run this test if python 3 is found
-if(PYTHON_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
+if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
   message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt)")
   file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
   add_test(
     NAME LAPACK_Test_Summary
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-    COMMAND ${PYTHON_EXECUTABLE} "lapack_testing.py"
+    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
     )
 endif()
 
@@ -38,7 +38,7 @@ function(add_lapack_test output input target)
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
 
-    if(PYTHON_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
+    if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
       set_property(
         TEST LAPACK_Test_Summary
         APPEND PROPERTY DEPENDS LAPACK-${testName}

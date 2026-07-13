@@ -151,7 +151,7 @@ lapack_logical API_SUFFIX(LAPACKE_ztf_nancheck)( int matrix_layout, char transr,
         }
     } else {
         /* Non-unit case - just check whole array for NaNs. */
-        len = n*(n+1)/2;
+        len = (lapack_int)(((size_t)n*(n+1))/2);
         return API_SUFFIX(LAPACKE_zge_nancheck)( LAPACK_COL_MAJOR, len, 1, a, len );
     }
 }

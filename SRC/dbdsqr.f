@@ -181,7 +181,7 @@
 *>                     iterations (in inner while loop)
 *>                = 3, termination criterion of outer while loop not met
 *>                     (program created more than N unreduced blocks)
-*>             else NCVT = NRU = NCC = 0,
+*>             else,
 *>                   the algorithm did not converge; D and E contain the
 *>                   elements of a bidiagonal matrix which is orthogonally
 *>                   similar to the input matrix B;  if INFO = i, i
@@ -338,9 +338,10 @@
       IF( .NOT.ROTATE ) THEN
          CALL DLASQ1( N, D, E, WORK, INFO )
 *
-*     If INFO equals 2, dqds didn't finish, try to finish
+*     If the dqds algorithm failed, try to finish with
+*     the standard QR algorithm
 *
-         IF( INFO .NE. 2 ) RETURN
+         IF( INFO .EQ. 0 ) RETURN
          INFO = 0
       END IF
 *

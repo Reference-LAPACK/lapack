@@ -68,14 +68,14 @@ lapack_logical API_SUFFIX(LAPACKE_ctr_nancheck)( int matrix_layout, char uplo, c
     if( ( colmaj || lower ) && !( colmaj && lower ) ) {
         for( j = st; j < n; j++ ) {
             for( i = 0; i < MIN( j+1-st, lda ); i++ ) {
-                if( LAPACK_CISNAN( a[i+j*lda] ) )
+                if( LAPACK_CISNAN( a[i+(size_t)j*lda] ) )
                     return (lapack_logical) 1;
             }
         }
     } else {
         for( j = 0; j < n-st; j++ ) {
             for( i = j+st; i < MIN( n, lda ); i++ ) {
-                if( LAPACK_CISNAN( a[i+j*lda] ) )
+                if( LAPACK_CISNAN( a[i+(size_t)j*lda] ) )
                     return (lapack_logical) 1;
             }
         }

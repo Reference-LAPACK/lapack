@@ -182,6 +182,11 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILASLR(M, LASTV, C, LDC)
          END IF
+!     Set index for V. If INCV < 0, then I points to the end of V. 
+!     For INCV > 0, set I = 1
+         IF( INCV.GT.0 ) THEN
+            I = 1
+         END IF
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
 !     case is needed at this level.
@@ -193,13 +198,14 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-            CALL SGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V,
+            CALL SGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V(I),
      $                  INCV,
      $           ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T
 *
-            CALL SGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
+            CALL SGER( LASTV, LASTC, -TAU, V(I), INCV, WORK, 1, C,
+     $                 LDC )
          END IF
       ELSE
 *
@@ -210,11 +216,12 @@
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
             CALL SGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
-     $           V, INCV, ZERO, WORK, 1 )
+     $           V(I), INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T
 *
-            CALL SGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
+            CALL SGER( LASTC, LASTV, -TAU, WORK, 1, V(I), INCV, C,
+     $                 LDC )
          END IF
       END IF
       RETURN
