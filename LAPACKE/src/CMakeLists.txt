@@ -29,6 +29,8 @@ lapacke_cgebrd.c
 lapacke_cgebrd_work.c
 lapacke_cgecon.c
 lapacke_cgecon_work.c
+lapacke_cgecxx.c
+lapacke_cgecxx_work.c
 lapacke_cgeequ.c
 lapacke_cgeequ_work.c
 lapacke_cgeequb.c
@@ -659,6 +661,8 @@ lapacke_dgebrd.c
 lapacke_dgebrd_work.c
 lapacke_dgecon.c
 lapacke_dgecon_work.c
+lapacke_dgecxx.c
+lapacke_dgecxx_work.c
 lapacke_dgeequ.c
 lapacke_dgeequ_work.c
 lapacke_dgeequb.c
@@ -1244,6 +1248,8 @@ lapacke_sgebrd.c
 lapacke_sgebrd_work.c
 lapacke_sgecon.c
 lapacke_sgecon_work.c
+lapacke_sgecxx.c
+lapacke_sgecxx_work.c
 lapacke_sgeequ.c
 lapacke_sgeequ_work.c
 lapacke_sgeequb.c
@@ -1818,6 +1824,8 @@ lapacke_zgebrd.c
 lapacke_zgebrd_work.c
 lapacke_zgecon.c
 lapacke_zgecon_work.c
+lapacke_zgecxx.c
+lapacke_zgecxx_work.c
 lapacke_zgeequ.c
 lapacke_zgeequ_work.c
 lapacke_zgeequb.c
