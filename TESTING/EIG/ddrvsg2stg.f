@@ -989,7 +989,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   CALL DSPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'DSPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1035,7 +1035,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
                   VU = ANORM
                   CALL DSPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'DSPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1079,7 +1079,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   CALL DSPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'DSPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD

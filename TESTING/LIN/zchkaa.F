@@ -169,20 +169,20 @@
       EXTERNAL           LSAME, LSAMEN, DLAMCH, DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, ZCHKCXX, ZCHKEQ, ZCHKGB, ZCHKGE,
-     $                   ZCHKGT, ZCHKHE, ZCHKHE_ROOK, ZCHKHE_RK,
-     $                   ZCHKHE_AA, ZCHKHP, ZCHKLQ, ZCHKUNHR_COL,
-     $                   ZCHKPB, ZCHKPO, ZCHKPS, ZCHKPP, ZCHKPT,
-     $                   ZCHKQ3, ZCHKQP3RK, ZCHKQL, ZCHKQR, ZCHKRQ,
-     $                   ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKSY_RK,
-     $                   ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ,
-     $                   ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE, ZDRVHE_ROOK,
-     $                   ZDRVHE_RK, ZDRVHE_AA, ZDRVHE_AA_2STAGE,
-     $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP,
-     $                   ZDRVPT, ZDRVSP, ZDRVSY, ZDRVSY_ROOK,
-     $                   ZDRVSY_RK, ZDRVSY_AA, ZDRVSY_AA_2STAGE,
-     $                   ILAVER, ZCHKQRT, ZCHKQRTP, ZCHKLQT, ZCHKLQTP,
-     $                   ZCHKTSQR
+      EXTERNAL           ALAREQ, ZCHKCXX, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
+     $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
+     $                   ZCHKLQ, ZCHKUNHR_COL, ZCHKPB, ZCHKPO, ZCHKPS,
+     $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQP3RK, ZCHKQL,
+     $                   ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY, ZCHKSY_ROOK,
+     $                   ZCHKSY_RK, ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR,
+     $                   ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE,
+     $                   ZDRVHE_ROOK, ZDRVHE_RK, ZDRVHE_AA,
+     $                   ZDRVHE_AA_2STAGE, ZDRVHP, ZDRVLS, ZDRVPB,
+     $                   ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
+     $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
+     $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
+     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR,
+     $                   ZCHKHE_AA_2STAGE, ZCHKSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

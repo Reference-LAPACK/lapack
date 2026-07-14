@@ -17,7 +17,7 @@ void API_SUFFIX(cblas_dgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 {
     char TA, TB, UL;
 #ifdef F77_CHAR
-    F77_CHAR F77_TA, F77_TB. F77_UL;
+    F77_CHAR F77_TA, F77_TB, F77_UL;
 #else
 #define F77_TA &TA
 #define F77_TB &TB

@@ -248,6 +248,11 @@
             JPVT( J ) = J
          END IF
    10 CONTINUE
+*
+*     Quick return if possible.
+*
+      IF( MINMN.EQ.0 ) RETURN
+*
       NFXD = NFXD - 1
 *
 *     Factorize fixed columns

@@ -421,7 +421,7 @@
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -24
+         INFO = -22
       END IF
 *
 *     Compute workspace

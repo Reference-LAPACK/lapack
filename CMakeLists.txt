@@ -10,6 +10,8 @@ set(
   ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
   )
 
+set(CMAKE_C_STANDARD 99)
+
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
 set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -123,13 +125,6 @@ message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDE
 
 include(GNUInstallDirs)
 
-# Configure the warning and code coverage suppression file
-configure_file(
-  "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
-  "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
-  @ONLY
-)
-
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
@@ -179,14 +174,20 @@ message(STATUS "Build tests: ${BUILD_TESTING}")
 if(BUILD_TESTING)
   set(_msg "Looking for Python3 needed for summary tests")
   message(STATUS "${_msg}")
-  # find_package(PythonInterp 3) cannot be used because /usr/bin/python may be
-  # a Python2 interpreter.
-  find_program(PYTHON_EXECUTABLE python3)
-  if(PYTHON_EXECUTABLE)
-    message(STATUS "${_msg} - found")
+  set(Python3_FIND_STRATEGY LOCATION)
+  find_package(Python3 COMPONENTS Interpreter)
+  if(Python3_Interpreter_FOUND )
+    message(STATUS "${_msg} - found: ${Python3_VERSION}")
   else()
     message(STATUS "${_msg} - not found (skipping summary tests)")
   endif()
+
+  # Configure the warning and code coverage suppression file
+  configure_file(
+    "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
+    "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
+    @ONLY
+  )
 endif()
 
 # --------------------------------------------------
@@ -482,7 +483,10 @@ endif()
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
+  add_library(LAPACK::LAPACK ALIAS ${LAPACKLIB})
   install(EXPORT ${LAPACKLIB}-targets
+    FILE ${LAPACKLIB}-targets.cmake
+    NAMESPACE LAPACK::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
     COMPONENT Development
     )

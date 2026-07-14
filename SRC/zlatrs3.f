@@ -274,7 +274,7 @@
      $                   DLARMM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLATRS, ZDSCAL, XERBLA
+      EXTERNAL           ZGEMM, ZLATRS, ZDSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN

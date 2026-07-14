@@ -188,7 +188,7 @@
       SUBROUTINE DGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL,
      $                  VR,
      $                  LDVR, WORK, LWORK, INFO )
-      implicit none
+      IMPLICIT NONE
 *
 *  -- LAPACK driver routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,17 +222,16 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLACPY,
-     $                   DLARTG,
-     $                   DLASCL, DORGHR, DROT, DSCAL, DTREVC3, XERBLA
+      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR,
+     $                   DLACPY, DLARTG, DLASCL, DORGHR,
+     $                   DROT, DSCAL, DTREVC3, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DLANGE, DLAPY2, DNRM2
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DLANGE,
-     $                   DLAPY2,
-     $                   DNRM2
+      EXTERNAL           LSAME, DISNAN, IDAMAX, ILAENV,
+     $                   DLAMCH, DLANGE, DLAPY2, DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -353,6 +352,10 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
+      ELSE IF( DISNAN( ANRM ) ) THEN
+         INFO = -4
+         CALL XERBLA( 'DGEEV ', -INFO )
+         RETURN
       END IF
       IF( SCALEA )
      $   CALL DLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
@@ -517,7 +520,7 @@
 *     Undo scaling if necessary
 *
    50 CONTINUE
-      IF( SCALEA ) THEN
+      IF( SCALEA .AND. INFO.GE.0 ) THEN
          CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
      $                WR( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )

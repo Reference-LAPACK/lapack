@@ -80,12 +80,12 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdq)( int matrix_layout, char joba, char jobp,
     cwork = (lapack_complex_float*)LAPACKE_malloc( sizeof(lapack_complex_float) * lcwork );
     if( cwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_1;
     }
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_2;
     }
     /* Call middle-level interface */
     info = API_SUFFIX(LAPACKE_cgesvdq_work)( matrix_layout, joba, jobp, jobr, jobu, jobv,
@@ -93,9 +93,11 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdq)( int matrix_layout, char joba, char jobp,
                                  iwork, liwork, cwork, lcwork, rwork, lrwork );
 
     /* Release memory and exit */
-    LAPACKE_free( iwork );
-    LAPACKE_free( cwork );
     LAPACKE_free( rwork );
+exit_level_2:
+    LAPACKE_free( cwork );
+exit_level_1:
+    LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvdq", info );

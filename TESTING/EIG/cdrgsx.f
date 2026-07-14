@@ -409,10 +409,10 @@
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
 *     ..
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
+      CABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -583,12 +583,12 @@
 *
                   DO 10 J = 1, MPLUSN
                      ILABAD = .FALSE.
-                     TEMP2 = ( ABS1( ALPHA( J )-AI( J, J ) ) /
-     $                       MAX( SMLNUM, ABS1( ALPHA( J ) ),
-     $                       ABS1( AI( J, J ) ) )+
-     $                       ABS1( BETA( J )-BI( J, J ) ) /
-     $                       MAX( SMLNUM, ABS1( BETA( J ) ),
-     $                       ABS1( BI( J, J ) ) ) ) / ULP
+                     TEMP2 = ( CABS1( ALPHA( J )-AI( J, J ) ) /
+     $                       MAX( SMLNUM, CABS1( ALPHA( J ) ),
+     $                       CABS1( AI( J, J ) ) )+
+     $                       CABS1( BETA( J )-BI( J, J ) ) /
+     $                       MAX( SMLNUM, CABS1( BETA( J ) ),
+     $                       CABS1( BI( J, J ) ) ) ) / ULP
                      IF( J.LT.MPLUSN ) THEN
                         IF( AI( J+1, J ).NE.ZERO ) THEN
                            ILABAD = .TRUE.
@@ -776,10 +776,12 @@
 *
       DO 110 J = 1, MPLUSN
          ILABAD = .FALSE.
-         TEMP2 = ( ABS1( ALPHA( J )-AI( J, J ) ) /
-     $           MAX( SMLNUM, ABS1( ALPHA( J ) ), ABS1( AI( J, J ) ) )+
-     $           ABS1( BETA( J )-BI( J, J ) ) /
-     $           MAX( SMLNUM, ABS1( BETA( J ) ), ABS1( BI( J, J ) ) ) )
+         TEMP2 = ( CABS1( ALPHA( J )-AI( J, J ) ) /
+     $           MAX( SMLNUM, CABS1( ALPHA( J ) ),
+     $           CABS1( AI( J, J ) ) )+
+     $           CABS1( BETA( J )-BI( J, J ) ) /
+     $           MAX( SMLNUM, CABS1( BETA( J ) ),
+     $           CABS1( BI( J, J ) ) ) )
      $            / ULP
          IF( J.LT.MPLUSN ) THEN
             IF( AI( J+1, J ).NE.ZERO ) THEN

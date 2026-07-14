@@ -159,10 +159,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
-*     ..
 *     .. Local Scalars ..
       INTEGER            I
 *     ..

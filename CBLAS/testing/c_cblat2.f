@@ -2504,9 +2504,9 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL, SQRT
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     .. Statement Function definitions ..
-      ABS1( C ) = ABS( REAL( C ) ) + ABS( AIMAG( C ) )
+      CABS1( C ) = ABS( REAL( C ) ) + ABS( AIMAG( C ) )
 *     .. Executable Statements ..
       TRAN = TRANS.EQ.'T'
       CTRAN = TRANS.EQ.'C'
@@ -2543,24 +2543,25 @@
          IF( TRAN )THEN
             DO 10 J = 1, NL
                YT( IY ) = YT( IY ) + A( J, I )*X( JX )
-               G( IY ) = G( IY ) + ABS1( A( J, I ) )*ABS1( X( JX ) )
+               G( IY ) = G( IY ) + CABS1( A( J, I ) )*CABS1( X( JX ) )
                JX = JX + INCXL
    10       CONTINUE
          ELSE IF( CTRAN )THEN
             DO 20 J = 1, NL
                YT( IY ) = YT( IY ) + CONJG( A( J, I ) )*X( JX )
-               G( IY ) = G( IY ) + ABS1( A( J, I ) )*ABS1( X( JX ) )
+               G( IY ) = G( IY ) + CABS1( A( J, I ) )*CABS1( X( JX ) )
                JX = JX + INCXL
    20       CONTINUE
          ELSE
             DO 30 J = 1, NL
                YT( IY ) = YT( IY ) + A( I, J )*X( JX )
-               G( IY ) = G( IY ) + ABS1( A( I, J ) )*ABS1( X( JX ) )
+               G( IY ) = G( IY ) + CABS1( A( I, J ) )*CABS1( X( JX ) )
                JX = JX + INCXL
    30       CONTINUE
          END IF
          YT( IY ) = ALPHA*YT( IY ) + BETA*Y( IY )
-         G( IY ) = ABS1( ALPHA )*G( IY ) + ABS1( BETA )*ABS1( Y( IY ) )
+         G( IY ) = CABS1( ALPHA )*G( IY )
+     $   + CABS1( BETA )*CABS1( Y( IY ) )
          IY = IY + INCYL
    40 CONTINUE
 *

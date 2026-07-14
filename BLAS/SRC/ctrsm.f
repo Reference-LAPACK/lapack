@@ -210,8 +210,6 @@
       LOGICAL LSIDE,NOCONJ,NOUNIT,UPPER
 *     ..
 *     .. Parameters ..
-      COMPLEX ONE
-      PARAMETER (ONE= (1.0E+0,0.0E+0))
       COMPLEX ZERO
       PARAMETER (ZERO= (0.0E+0,0.0E+0))
 *     ..
@@ -278,34 +276,26 @@
 *
               IF (UPPER) THEN
                   DO 60 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 30 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-   30                     CONTINUE
-                      END IF
-                      DO 50 K = M,1,-1
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO 40 I = 1,K - 1
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
-   40                         CONTINUE
-                          END IF
+                       DO 30 I = 1,M
+                           B(I,J) = ALPHA*B(I,J)
+   30                  CONTINUE
+                       DO 50 K = M,1,-1
+                           IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
+                           DO 40 I = 1,K - 1
+                               B(I,J) = B(I,J) - B(K,J)*A(I,K)
+   40                     CONTINUE
    50                 CONTINUE
    60             CONTINUE
-              ELSE
-                  DO 100 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 70 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-   70                     CONTINUE
-                      END IF
-                      DO 90 K = 1,M
-                          IF (B(K,J).NE.ZERO) THEN
-                              IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
-                              DO 80 I = K + 1,M
-                                  B(I,J) = B(I,J) - B(K,J)*A(I,K)
-   80                         CONTINUE
-                          END IF
+               ELSE
+                   DO 100 J = 1,N
+                       DO 70 I = 1,M
+                           B(I,J) = ALPHA*B(I,J)
+   70                  CONTINUE
+                       DO 90 K = 1,M
+                           IF (NOUNIT) B(K,J) = B(K,J)/A(K,K)
+                           DO 80 I = K + 1,M
+                               B(I,J) = B(I,J) - B(K,J)*A(I,K)
+   80                     CONTINUE
    90                 CONTINUE
   100             CONTINUE
               END IF
@@ -359,43 +349,33 @@
 *
               IF (UPPER) THEN
                   DO 230 J = 1,N
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 190 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  190                     CONTINUE
-                      END IF
+                      DO 190 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  190                 CONTINUE
                       DO 210 K = 1,J - 1
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO 200 I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
-  200                         CONTINUE
-                          END IF
+                          DO 200 I = 1,M
+                              B(I,J) = B(I,J) - A(K,J)*B(I,K)
+  200                     CONTINUE
   210                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 220 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   220                     CONTINUE
                       END IF
   230             CONTINUE
               ELSE
                   DO 280 J = N,1,-1
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 240 I = 1,M
-                              B(I,J) = ALPHA*B(I,J)
-  240                     CONTINUE
-                      END IF
+                      DO 240 I = 1,M
+                          B(I,J) = ALPHA*B(I,J)
+  240                 CONTINUE
                       DO 260 K = J + 1,N
-                          IF (A(K,J).NE.ZERO) THEN
-                              DO 250 I = 1,M
-                                  B(I,J) = B(I,J) - A(K,J)*B(I,K)
-  250                         CONTINUE
-                          END IF
+                          DO 250 I = 1,M
+                              B(I,J) = B(I,J) - A(K,J)*B(I,K)
+  250                     CONTINUE
   260                 CONTINUE
                       IF (NOUNIT) THEN
-                          TEMP = ONE/A(J,J)
                           DO 270 I = 1,M
-                              B(I,J) = TEMP*B(I,J)
+                              B(I,J) = B(I,J)/A(J,J)
   270                     CONTINUE
                       END IF
   280             CONTINUE
@@ -409,61 +389,55 @@
                   DO 330 K = N,1,-1
                       IF (NOUNIT) THEN
                           IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
+                              DO 290 I = 1,M
+                                  B(I,K) = B(I,K)/A(K,K)
+  290                         CONTINUE
                           ELSE
-                              TEMP = ONE/CONJG(A(K,K))
+                              DO 390 I = 1,M
+                                  B(I,K) = B(I,K)/CONJG(A(K,K))
+  390                         CONTINUE
                           END IF
-                          DO 290 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
-  290                     CONTINUE
                       END IF
                       DO 310 J = 1,K - 1
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = A(J,K)
-                              ELSE
-                                  TEMP = CONJG(A(J,K))
-                              END IF
-                              DO 300 I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
-  300                         CONTINUE
+                          IF (NOCONJ) THEN
+                              TEMP = A(J,K)
+                          ELSE
+                              TEMP = CONJG(A(J,K))
                           END IF
+                          DO 300 I = 1,M
+                              B(I,J) = B(I,J) - TEMP*B(I,K)
+  300                     CONTINUE
   310                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 320 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  320                     CONTINUE
-                      END IF
+                      DO 320 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  320                 CONTINUE
   330             CONTINUE
               ELSE
                   DO 380 K = 1,N
                       IF (NOUNIT) THEN
                           IF (NOCONJ) THEN
-                              TEMP = ONE/A(K,K)
+                              DO 340 I = 1,M
+                                  B(I,K) = B(I,K)/A(K,K)
+  340                         CONTINUE
                           ELSE
-                              TEMP = ONE/CONJG(A(K,K))
+                              DO 400 I = 1,M
+                                  B(I,K) = B(I,K)/CONJG(A(K,K))
+  400                         CONTINUE
                           END IF
-                          DO 340 I = 1,M
-                              B(I,K) = TEMP*B(I,K)
-  340                     CONTINUE
                       END IF
                       DO 360 J = K + 1,N
-                          IF (A(J,K).NE.ZERO) THEN
-                              IF (NOCONJ) THEN
-                                  TEMP = A(J,K)
-                              ELSE
-                                  TEMP = CONJG(A(J,K))
-                              END IF
-                              DO 350 I = 1,M
-                                  B(I,J) = B(I,J) - TEMP*B(I,K)
-  350                         CONTINUE
+                          IF (NOCONJ) THEN
+                              TEMP = A(J,K)
+                          ELSE
+                              TEMP = CONJG(A(J,K))
                           END IF
+                          DO 350 I = 1,M
+                              B(I,J) = B(I,J) - TEMP*B(I,K)
+  350                     CONTINUE
   360                 CONTINUE
-                      IF (ALPHA.NE.ONE) THEN
-                          DO 370 I = 1,M
-                              B(I,K) = ALPHA*B(I,K)
-  370                     CONTINUE
-                      END IF
+                      DO 370 I = 1,M
+                          B(I,K) = ALPHA*B(I,K)
+  370                 CONTINUE
   380             CONTINUE
               END IF
           END IF

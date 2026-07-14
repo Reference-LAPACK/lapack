@@ -990,7 +990,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   CALL SSPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1036,7 +1036,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
                   VU = ANORM
                   CALL SSPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
@@ -1080,7 +1080,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   CALL SSPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
-     $                         IWORK( N+1 ), IWORK, INFO )
+     $                         IWORK( N+1 ), IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD

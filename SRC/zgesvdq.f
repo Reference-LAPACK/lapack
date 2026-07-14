@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> ZCGESVDQ computes the singular value decomposition (SVD) of a complex
+*> ZGESVDQ computes the singular value decomposition (SVD) of a complex
 *> M-by-N matrix A, where M >= N. The SVD of A is written as
 *>                                    [++]   [xx]   [x0]   [xx]
 *>              A = U * SIGMA * V^*,  [++] = [xx] * [ox] * [xx]
@@ -90,7 +90,7 @@
 *>          the adjoint R**H of the computed triangular factor R. This involves
 *>          some extra data movement (matrix transpositions). Useful for
 *>          experiments, research and development.
-*>          = 'N' The triangular factor R is given as input to CGESVD. This may be
+*>          = 'N' The triangular factor R is given as input to ZGESVD. This may be
 *>          preferred as it involves less data movement.
 *> \endverbatim
 *>
@@ -204,7 +204,7 @@
 *>          revealing QR factorization, following the strategy specified by the
 *>          value of JOBA. If JOBV = 'R' and JOBU = 'R', only NUMRANK
 *>          leading singular values and vectors are then requested in the call
-*>          of CGESVD. The final value of NUMRANK might be further reduced if
+*>          of ZGESVD. The final value of NUMRANK might be further reduced if
 *>          some singular values are computed as zeros.
 *> \endverbatim
 *>
@@ -356,10 +356,10 @@
 *>   nested DO loops should be replaced with calls to an optimized subroutine.
 *>   2. This code scales A by 1/SQRT(M) if the largest ABS(A(i,j)) could cause
 *>   column norm overflow. This is the minial precaution and it is left to the
-*>   SVD routine (CGESVD) to do its own preemptive scaling if potential over-
+*>   SVD routine (ZGESVD) to do its own preemptive scaling if potential over-
 *>   or underflows are detected. To avoid repeated scanning of the array A,
 *>   an optimal implementation would do all necessary scaling before calling
-*>   CGESVD and the scaling in CGESVD can be switched off.
+*>   ZGESVD and the scaling in ZGESVD can be switched off.
 *>   3. Other comments related to code optimization are given in comments in the
 *>   code, enclosed in [[double brackets]].
 *> \endverbatim

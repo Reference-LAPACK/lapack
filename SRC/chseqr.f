@@ -342,8 +342,7 @@
 *     .. External Functions ..
       INTEGER            ILAENV
       LOGICAL            LSAME
-      REAL               SROUNDUP_LWORK
-      EXTERNAL           ILAENV, LSAME, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLACPY, CLAHQR, CLAQR0, CLASET,

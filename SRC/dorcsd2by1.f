@@ -267,6 +267,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DBBCSD, DCOPY, DLACPY, DLAPMR, DLAPMT,
+     $                   DLASET,
      $                   DORBDB1,
      $                   DORBDB2, DORBDB3, DORBDB4, DORGLQ, DORGQR,
      $                   XERBLA
@@ -488,6 +489,36 @@
       END IF
       LORGQR = LWORK-IORGQR+1
       LORGLQ = LWORK-IORGLQ+1
+*
+      IF( R .EQ. 0 ) THEN
+*
+*        R = 0: C and S are empty. Handle the trivial CSD directly.
+*
+         IF( Q .EQ. 0 ) THEN
+            IF( WANTU1 .AND. P .GT. 0 )
+     $         CALL DLASET( 'A', P, P, ZERO, ONE, U1, LDU1 )
+            IF( WANTU2 .AND. M-P .GT. 0 )
+     $         CALL DLASET( 'A', M-P, M-P, ZERO, ONE, U2, LDU2 )
+            RETURN
+         END IF
+*
+         IF( P .EQ. 0 .AND. M .EQ. Q ) THEN
+            IF( WANTU2 )
+     $         CALL DLACPY( 'A', M-P, Q, X21, LDX21, U2, LDU2 )
+            IF( WANTV1T )
+     $         CALL DLASET( 'A', Q, Q, ZERO, ONE, V1T, LDV1T )
+            RETURN
+         END IF
+*
+         IF( P .EQ. M .AND. M .EQ. Q ) THEN
+            IF( WANTU1 )
+     $         CALL DLACPY( 'A', P, Q, X11, LDX11, U1, LDU1 )
+            IF( WANTV1T )
+     $         CALL DLASET( 'A', Q, Q, ZERO, ONE, V1T, LDV1T )
+            RETURN
+         END IF
+*
+      END IF
 *
 *     Handle four cases separately: R = Q, R = P, R = M-P, and R = M-Q,
 *     in which R = MIN(P,M-P,Q,M-Q)

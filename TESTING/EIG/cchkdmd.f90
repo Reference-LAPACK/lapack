@@ -82,7 +82,8 @@
       LOGICAL :: TEST_QRDMD
 
 !..... external subroutines (BLAS and LAPACK)
-      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL
+      EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV, &
+               CLARNV, CLATMR
 !.....external subroutines DMD package
 !     subroutines under test
       EXTERNAL CGEDMD, CGEDMDQ
@@ -112,6 +113,8 @@
 
       WANTQ = 'Q'
       WANTR = 'R'
+      ! Initialize the divide-and-conquer cutoff used by xGESDD/xBDSDC.
+      CALL XLAENV( 9, 25 )
 !.................................................................................
 
       EPS = SLAMCH( 'P' )  ! machine precision WP
@@ -194,7 +197,7 @@
 !.............
 
       DO K_traj = 1, 2
-      !  Number of intial conditions in the simulation/trajectories (1 or 2)
+      !  Number of initial conditions in the simulation/trajectories (1 or 2)
 
       COND   = 1.0D4
       CMAX   = (1.0D1,1.0D1)
@@ -243,7 +246,7 @@
 
       IF ( K_traj == 2 ) THEN
           ! generate data as two trajectories
-          ! with two inital conditions
+          ! with two initial conditions
           CALL CLARNV(2, ISEED, M, F(1,1) )
           DO i = 1, N/2
              CALL CGEMV( 'N', M, M, CONE, A, LDA, F(1,i), 1,  &
@@ -452,7 +455,7 @@
           CALL CGEMM( 'N', 'N', M, K, M, CONE, A, LDA, Z, LDZ, CZERO, Y1, LDY )
           ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
           ! of the invariant subspaces that correspond to complex conjugate
-          ! pairs of eigencalues. (See the description of Z in CGEDMD,)
+          ! pairs of eigenvalues. (See the description of Z in CGEDMD,)
 
           DO i=1, K
                 ! have a real eigenvalue with real eigenvector
@@ -525,7 +528,7 @@
           END IF
           SINGVQX(1:N) =WORK(1:N)
 
-          !..... ZGEDMDQ check point
+          !..... CGEDMDQ check point
 
           TMP = ZERO
           DO i = 1, MIN(K, KQ)
@@ -556,16 +559,16 @@
                 NFAIL_F_QR = NFAIL_F_QR + 1
              END IF
           END IF
-          !..... ZGEDMDQ checkpoint
-                 !..... ZGEDMDQ checkpoint
+          !..... CGEDMDQ checkpoint
+                 !..... CGEDMDQ checkpoint
           IF ( LSAME(RESIDS, 'R') ) THEN
-              ! Compare the residuals returned by ZGEDMDQ with the
+              ! Compare the residuals returned by CGEDMDQ with the
               ! explicitly computed residuals using the matrix A.
               ! Compute explicitly Y1 = A*Z
               CALL CGEMM( 'N', 'N', M, KQ, M, CONE, A, LDA, Z, LDZ, CZERO, Y1, LDY )
               ! ... and then A*Z(:,i) - LAMBDA(i)*Z(:,i), using the real forms
               ! of the invariant subspaces that correspond to complex conjugate
-              ! pairs of eigencalues. (See the description of Z in ZGEDMDQ)
+              ! pairs of eigenvalues. (See the description of Z in CGEDMDQ)
               DO i = 1, KQ
                     ! have a real eigenvalue with real eigenvector
                     CALL CAXPY( M, -CEIGS(i), Z(1,i), 1, Y1(1,i), 1 )
@@ -659,9 +662,9 @@
 
 
       IF ( NFAIL_REZ == 0 ) THEN
-         WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+         WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-        WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZ, 'time(s)'
+        WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZ, 'time(s)'
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZ
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
@@ -683,7 +686,7 @@
         WRITE(*,*) '>>>> CGEDMD and CGEDMDQ computed singular &
            &values test PASSED.'
       ELSE
-        WRITE(*,*) 'ZGEDMD and ZGEDMDQ discrepancies in &
+        WRITE(*,*) 'CGEDMD and CGEDMDQ discrepancies in &
             &the singular values unacceptable ', &
             NFAIL_SVDIFF, ' times. Test FAILED.'
         WRITE(*,*) 'The maximal discrepancy in the singular values (relative to the norm) was ', SVDIFF
@@ -700,9 +703,9 @@
       END IF
 
       IF ( NFAIL_REZQ == 0 ) THEN
-        WRITE(*,*) '>>>> Rezidual computation test PASSED.'
+        WRITE(*,*) '>>>> Residual computation test PASSED.'
       ELSE
-        WRITE(*,*) 'Rezidual computation test FAILED ', NFAIL_REZQ, 'time(s)'
+        WRITE(*,*) 'Residual computation test FAILED ', NFAIL_REZQ, 'time(s)'
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ

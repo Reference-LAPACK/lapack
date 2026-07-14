@@ -169,18 +169,21 @@
       EXTERNAL           LSAME, LSAMEN, SECOND, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, CCHKCXX, CCHKEQ, CCHKGB, CCHKGE,
-     $                   CCHKGT, CCHKHE, CCHKHE_ROOK, CCHKHE_RK,
-     $                   CCHKHE_AA, CCHKHP, CCHKLQ, CCHKUNHR_COL,
-     $                   CCHKPB, CCHKPO, CCHKPS, CCHKPP, CCHKPT,
-     $                   CCHKQ3, CCHKQP3RK, CCHKQL, CCHKQR, CCHKRQ,
-     $                   CCHKSP, CCHKSY, CCHKSY_ROOK, CCHKSY_RK,
-     $                   CCHKSY_AA, CCHKTB, CCHKTP, CCHKTR, CCHKTZ,
-     $                   CDRVGB, CDRVGE, CDRVGT, CDRVHE, CDRVHE_ROOK,
-     $                   CDRVHE_RK, CDRVHE_AA, CDRVHP, CDRVLS, CDRVPB,
-     $                   CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY,
-     $                   CDRVSY_ROOK, CDRVSY_RK, CDRVSY_AA, ILAVER,
-     $                   CCHKQRT, CCHKQRTP
+      EXTERNAL           ALAREQ, CCHKCXX, 
+     $                   CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
+     $                   CCHKHE_ROOK, CCHKHE_RK, CCHKHE_AA, CCHKHP,
+     $                   CCHKLQ, CCHKUNHR_COL, CCHKPB, CCHKPO, CCHKPS,
+     $                   CCHKPP, CCHKPT, CCHKQ3, CCHKQP3RK, CCHKQL,
+     $                   CCHKQR, CCHKRQ, CCHKSP, CCHKSY, CCHKSY_ROOK,
+     $                   CCHKSY_RK, CCHKSY_AA, CCHKTB, CCHKTP, CCHKTR,
+     $                   CCHKTZ, CDRVGB, CDRVGE, CDRVGT, CDRVHE,
+     $                   CDRVHE_ROOK, CDRVHE_RK, CDRVHE_AA, CDRVHP,
+     $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
+     $                   CDRVSY, CDRVSY_ROOK, CDRVSY_RK, CDRVSY_AA,
+     $                   ILAVER, CCHKQRT, CCHKQRTP,
+     $                   CCHKLQT, CCHKLQTP, CCHKTSQR,
+     $                   CCHKHE_AA_2STAGE, CDRVHE_AA_2STAGE,
+     $                   CCHKSY_AA_2STAGE, CDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

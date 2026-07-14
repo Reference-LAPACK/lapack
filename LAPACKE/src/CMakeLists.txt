@@ -425,6 +425,8 @@ lapacke_cpttrf.c
 lapacke_cpttrf_work.c
 lapacke_cpttrs.c
 lapacke_cpttrs_work.c
+lapacke_crot.c
+lapacke_crot_work.c
 lapacke_cspcon.c
 lapacke_cspcon_work.c
 lapacke_csprfs.c
@@ -2218,6 +2220,8 @@ lapacke_zpttrf.c
 lapacke_zpttrf_work.c
 lapacke_zpttrs.c
 lapacke_zpttrs_work.c
+lapacke_zrot.c
+lapacke_zrot_work.c
 lapacke_zspcon.c
 lapacke_zspcon_work.c
 lapacke_zsprfs.c

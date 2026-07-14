@@ -166,13 +166,12 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            IDAMAX, ILAENV
-      EXTERNAL           LSAME, ILAENV, IDAMAX
+      INTEGER            IDAMAX
+      EXTERNAL           LSAME, IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DAXPY, DCOPY, DSWAP, DSCAL,
-     $                   DLASET,
-     $                   XERBLA
+      EXTERNAL           DGEMV, DAXPY, DCOPY,
+     $                   DSWAP, DSCAL, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

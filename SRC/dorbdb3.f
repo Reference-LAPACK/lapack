@@ -214,10 +214,6 @@
 *
 *  ====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D0 )
-*     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   C, S
       INTEGER            CHILDINFO, I, ILARF, IORBDB5, LLARF, LORBDB5,
@@ -280,7 +276,7 @@
       DO I = 1, M-P
 *
          IF( I .GT. 1 ) THEN
-            CALL DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C,
+            CALL DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX21, C,
      $                 S )
          END IF
 *

@@ -195,15 +195,10 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       REAL               RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      REAL               CLANHE, SGET06
-      EXTERNAL           CLANHE, SGET06
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX,
-     $                   CGET04, CLACPY, CLARHS, CLATB4, CLATMS,
-     $                   CHESV_AA_2STAGE, CPOT02,
-     $                   CHETRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX, CLACPY,
+     $                   CLARHS, CLATB4, CLATMS, CHESV_AA_2STAGE,
+     $                   CPOT02
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

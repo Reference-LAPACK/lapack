@@ -69,8 +69,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 4, LW = NMAX*( NMAX+2 ) )
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D0, ZERO = 0.0D0 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IFST, ILST, INFO, J, M, NT
@@ -83,7 +83,8 @@
      $                   C( NMAX, NMAX ), WORK( LW ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZTREXC, ZTRSEN, ZTRSNA, ZTRSYL
+      EXTERNAL           CHKXER, ZTREXC, ZTRSEN, ZTRSNA, ZTRSYL,
+     $                   ZTRSYL3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

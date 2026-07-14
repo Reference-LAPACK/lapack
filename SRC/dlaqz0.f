@@ -471,7 +471,7 @@
          INFO = -19
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAQZ0', INFO )
+         CALL XERBLA( 'DLAQZ0', -INFO )
          RETURN
       END IF
 *

@@ -480,7 +480,7 @@
          WORK(1) = REAL( MAX(LWORKOPT,LWORKMIN) )
 *
          IF( LWORK .LT. LWORKMIN .AND. .NOT. LQUERY ) THEN
-            INFO = -22
+            INFO = -28
          ELSE
             LORGQRWORK = LWORK - IORGQR + 1
             LORGLQWORK = LWORK - IORGLQ + 1

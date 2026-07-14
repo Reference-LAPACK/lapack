@@ -162,10 +162,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX*16         ONE
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ) )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            FORWRD, LEFT, NOTRAN, UPPER
       INTEGER            I, I1, I2, I3, IC, II, JC, MI, NI, NQ
@@ -176,7 +172,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF1, ZLARF1F
+      EXTERNAL           XERBLA, ZLARF1L, ZLARF1F
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX

@@ -225,6 +225,52 @@ void F77_s2chke(char *rout
       cblas_ssymv(CblasRowMajor, CblasUpper, 0,
                   ALPHA, A, 1, X, 1, BETA, Y, 0 );
       chkxer();
+   } else if (strncmp( sf,"cblas_sskewsymv",15)==0) {
+      cblas_rout = "cblas_sskewsymv";
+      cblas_info = 1; RowMajorStrg = FALSE;
+      cblas_sskewsymv(INVALID, CblasUpper, 0,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 2; RowMajorStrg = FALSE;
+      cblas_sskewsymv(CblasColMajor, INVALID, 0,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 3; RowMajorStrg = FALSE;
+      cblas_sskewsymv(CblasColMajor, CblasUpper, INVALID,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 6; RowMajorStrg = FALSE;
+      cblas_sskewsymv(CblasColMajor, CblasUpper, 2,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 8; RowMajorStrg = FALSE;
+      cblas_sskewsymv(CblasColMajor, CblasUpper, 0,
+                  ALPHA, A, 1, X, 0, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 11; RowMajorStrg = FALSE;
+      cblas_sskewsymv(CblasColMajor, CblasUpper, 0,
+                  ALPHA, A, 1, X, 1, BETA, Y, 0 );
+      chkxer();
+      cblas_info = 2; RowMajorStrg = TRUE;
+      cblas_sskewsymv(CblasRowMajor, INVALID, 0,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 3; RowMajorStrg = TRUE;
+      cblas_sskewsymv(CblasRowMajor, CblasUpper, INVALID,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 6; RowMajorStrg = TRUE;
+      cblas_sskewsymv(CblasRowMajor, CblasUpper, 2,
+                  ALPHA, A, 1, X, 1, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 8; RowMajorStrg = TRUE;
+      cblas_sskewsymv(CblasRowMajor, CblasUpper, 0,
+                  ALPHA, A, 1, X, 0, BETA, Y, 1 );
+      chkxer();
+      cblas_info = 11; RowMajorStrg = TRUE;
+      cblas_sskewsymv(CblasRowMajor, CblasUpper, 0,
+                  ALPHA, A, 1, X, 1, BETA, Y, 0 );
+      chkxer();
    } else if (strncmp( sf,"cblas_ssbmv",11)==0) {
       cblas_rout = "cblas_ssbmv";
       cblas_info = 1; RowMajorStrg = FALSE;
@@ -711,6 +757,41 @@ void F77_s2chke(char *rout
       cblas_info = 10; RowMajorStrg = TRUE;
       cblas_ssyr2(CblasRowMajor, CblasUpper, 2, ALPHA, X, 1, Y, 1, A, 1 );
       chkxer();
+   } else if (strncmp( sf,"cblas_sskewsyr2",15)==0) {
+      cblas_rout = "cblas_sskewsyr2";
+      cblas_info = 1; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(INVALID, CblasUpper, 0, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 2; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(CblasColMajor, INVALID, 0, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 3; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(CblasColMajor, CblasUpper, INVALID, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 6; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(CblasColMajor, CblasUpper, 0, ALPHA, X, 0, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 8; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(CblasColMajor, CblasUpper, 0, ALPHA, X, 1, Y, 0, A, 1 );
+      chkxer();
+      cblas_info = 10; RowMajorStrg = FALSE;
+      cblas_sskewsyr2(CblasColMajor, CblasUpper, 2, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 2; RowMajorStrg = TRUE;
+      cblas_sskewsyr2(CblasRowMajor, INVALID, 0, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 3; RowMajorStrg = TRUE;
+      cblas_sskewsyr2(CblasRowMajor, CblasUpper, INVALID, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 6; RowMajorStrg = TRUE;
+      cblas_sskewsyr2(CblasRowMajor, CblasUpper, 0, ALPHA, X, 0, Y, 1, A, 1 );
+      chkxer();
+      cblas_info = 8; RowMajorStrg = TRUE;
+      cblas_sskewsyr2(CblasRowMajor, CblasUpper, 0, ALPHA, X, 1, Y, 0, A, 1 );
+      chkxer();
+      cblas_info = 10; RowMajorStrg = TRUE;
+      cblas_sskewsyr2(CblasRowMajor, CblasUpper, 2, ALPHA, X, 1, Y, 1, A, 1 );
+      chkxer();
    } else if (strncmp( sf,"cblas_sspr2",11)==0) {
       cblas_rout = "cblas_sspr2";
       cblas_info = 1; RowMajorStrg = FALSE;
@@ -794,7 +875,7 @@ void F77_s2chke(char *rout
       chkxer();
    }
    if (cblas_ok == TRUE)
-       printf(" %-12s PASSED THE TESTS OF ERROR-EXITS\n", cblas_rout);
+       printf(" %-16s PASSED THE TESTS OF ERROR-EXITS\n", cblas_rout);
    else
        printf("******* %s FAILED THE TESTS OF ERROR-EXITS *******\n",cblas_rout);
 }

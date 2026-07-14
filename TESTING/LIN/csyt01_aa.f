@@ -157,7 +157,7 @@
       EXTERNAL           LSAME, SLAMCH, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CLAVSY
+      EXTERNAL           CLASET, CSWAP, CTRMM, CLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL

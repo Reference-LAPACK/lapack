@@ -285,7 +285,7 @@
          WORK( 1 ) = CMPLX( LWORKREQ )
          RETURN
       ELSE IF ( LWORK .LT. LWORKREQ ) THEN
-         INFO = -26
+         INFO = -25
       END IF
 
       IF( INFO.NE.0 ) THEN

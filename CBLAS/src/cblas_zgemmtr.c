@@ -91,7 +91,7 @@ void API_SUFFIX(cblas_zgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
         if ( Uplo == CblasUpper ) UL = 'L';
         else if (Uplo == CblasLower) UL= 'U';
         else {
-            API_SUFFIX(cblas_xerbla)(2, "cblas_cgemmtr", "Illegal Uplo setting, %d\n", Uplo);
+            API_SUFFIX(cblas_xerbla)(2, "cblas_zgemmtr", "Illegal Uplo setting, %d\n", Uplo);
             CBLAS_CallFromC = 0;
             RowMajorStrg = 0;
             return;
@@ -102,7 +102,7 @@ void API_SUFFIX(cblas_zgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
         else if ( TransA == CblasNoTrans )   TB='N';
         else
         {
-            API_SUFFIX(cblas_xerbla)(3, "zblas_cgemmtr", "Illegal TransA setting, %d\n", TransA);
+            API_SUFFIX(cblas_xerbla)(3, "cblas_zgemmtr", "Illegal TransA setting, %d\n", TransA);
             CBLAS_CallFromC = 0;
             RowMajorStrg = 0;
             return;
@@ -112,7 +112,7 @@ void API_SUFFIX(cblas_zgemmtr)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
         else if ( TransB == CblasNoTrans )   TA='N';
         else
         {
-            API_SUFFIX(cblas_xerbla)(4, "zblas_cgemmtr", "Illegal TransB setting, %d\n", TransB);
+            API_SUFFIX(cblas_xerbla)(4, "cblas_zgemmtr", "Illegal TransB setting, %d\n", TransB);
             CBLAS_CallFromC = 0;
             RowMajorStrg = 0;
             return;

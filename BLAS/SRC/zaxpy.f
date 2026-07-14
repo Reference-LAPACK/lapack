@@ -103,13 +103,16 @@
 *
 *     .. Local Scalars ..
       INTEGER I,IX,IY
+      COMPLEX*16 ZDUM
 *     ..
-*     .. External Functions ..
-      DOUBLE PRECISION DCABS1
-      EXTERNAL DCABS1
+*     .. Statement Functions ..
+      DOUBLE PRECISION CABS1
+*     ..
+*     .. Statement Function definitions ..
+      CABS1(ZDUM) = ABS(DBLE(ZDUM)) + ABS(DIMAG(ZDUM))
 *     ..
       IF (N.LE.0) RETURN
-      IF (DCABS1(ZA).EQ.0.0d0) RETURN
+      IF (CABS1(ZA).EQ.0.0D+0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

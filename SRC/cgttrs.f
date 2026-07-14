@@ -157,7 +157,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      LOGICAL            LSAME
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGTTS2, XERBLA
@@ -168,9 +169,9 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOTRAN = ( TRANS.EQ.'N' .OR. TRANS.EQ.'n' )
-      IF( .NOT.NOTRAN .AND. .NOT.( TRANS.EQ.'T' .OR. TRANS.EQ.
-     $    't' ) .AND. .NOT.( TRANS.EQ.'C' .OR. TRANS.EQ.'c' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND.
+     $    .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -193,7 +194,7 @@
 *
       IF( NOTRAN ) THEN
          ITRANS = 0
-      ELSE IF( TRANS.EQ.'T' .OR. TRANS.EQ.'t' ) THEN
+      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
          ITRANS = 1
       ELSE
          ITRANS = 2

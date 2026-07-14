@@ -180,7 +180,7 @@
       EXTERNAL           SCASUM, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY
+      EXTERNAL           CCOPY, CGEMV, CGGGLM, CLACPY
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

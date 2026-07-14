@@ -290,7 +290,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          WORK( 1 ) = LWMIN
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = DBLE( LRWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -387,7 +387,7 @@
       END IF
 *
       WORK( 1 ) = LWMIN
-      RWORK( 1 ) = REAL( LRWMIN )
+      RWORK( 1 ) = DBLE( LRWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *

@@ -253,7 +253,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASVM, CERRLS, CGELS, CGELSD,
      $                   CGELSS, CGELST, CGELSY, CGEMM, CGETSLS, CLACPY,
      $                   CLARNV, CQRT13, CQRT15, CQRT16, CSSCAL,
-     $                   SAXPY, XLAENV
+     $                   CSCAL, SAXPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, INT, REAL, SQRT

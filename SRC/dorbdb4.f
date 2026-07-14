@@ -237,8 +237,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, DSCAL,
-     $                   XERBLA
+      EXTERNAL           DLARF1F, DLARFGP, DORBDB5,
+     $                   DROT, DSCAL, XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2
@@ -278,7 +278,7 @@
          LWORKMIN = LWORKOPT
          WORK(1) = LWORKOPT
          IF( LWORK .LT. LWORKMIN .AND. .NOT.LQUERY ) THEN
-           INFO = -14
+           INFO = -15
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN

@@ -230,7 +230,6 @@
       INFO = 0
       LQUERY = ( LDSWORK.EQ.-1 )
       IF( LQUERY ) THEN
-         LDSWORK = 2
          SWORK(1,1) = MAX( NBA, NBB )
          SWORK(2,1) = 2 * NBB + NBA
       END IF

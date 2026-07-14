@@ -99,7 +99,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the input matrix A. 1/DLAMCH('E') > M >= 0.
+*>          The number of rows of the input matrix A. 1/DLAMCH('E') >= M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -215,7 +215,7 @@
 *>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= M+N, otherwise.
 *>
 *>          If on entry LWORK = -1, then a workspace query is assumed and
-*>          no computation is done; CWORK(1) is set to the minial (and optimal)
+*>          no computation is done; CWORK(1) is set to the minimal (and optimal)
 *>          length of CWORK.
 *> \endverbatim
 *>
@@ -256,7 +256,7 @@
 *>         LRWORK >= 1, if MIN(M,N) = 0, and LRWORK >= MAX(6,N), otherwise.
 *>
 *>         If on entry LRWORK = -1, then a workspace query is assumed and
-*>         no computation is done; RWORK(1) is set to the minial (and optimal)
+*>         no computation is done; RWORK(1) is set to the minimal (and optimal)
 *>         length of RWORK.
 *> \endverbatim
 *>
@@ -381,7 +381,7 @@
      $                   BIGTHETA, CS, CTOL, EPSLN, MXAAPQ,
      $                   MXSINJ, ROOTBIG, ROOTEPS, ROOTSFMIN, ROOTTOL,
      $                   SKL, SFMIN, SMALL, SN, T, TEMP1, THETA, THSIGN,
-     $                   TOL
+     $                   TOL, TBIG
       INTEGER            BLSKIP, EMPTSW, i, ibr, IERR, igl, IJBLSK, ir1,
      $                   ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
      $                   N4, NBL, NOTROT, p, PSKIPPED, q, ROWSKIP,
@@ -458,8 +458,6 @@
       ELSE IF( ( RSVEC .AND. ( LDV.LT.N ) ) .OR.
      $          ( APPLV .AND. ( LDV.LT.MV ) ) ) THEN
          INFO = -11
-      ELSE IF( UCTOL .AND. ( RWORK( 1 ).LE.ONE ) ) THEN
-         INFO = -12
       ELSE IF( LWORK.LT.LWMIN .AND. ( .NOT.LQUERY ) ) THEN
          INFO = -13
       ELSE IF( LRWORK.LT.LRWMIN .AND. ( .NOT.LQUERY ) ) THEN
@@ -474,7 +472,7 @@
          RETURN
       ELSE IF( LQUERY ) THEN
          CWORK( 1 ) = LWMIN
-         RWORK( 1 ) = REAL( LRWMIN )
+         RWORK( 1 ) = DBLE( LRWMIN )
          RETURN
       END IF
 *
@@ -491,7 +489,12 @@
 *
       IF( UCTOL ) THEN
 *        ... user controlled
-         CTOL = RWORK( 1 )
+         IF( RWORK( 1 ).LE.ONE )  THEN
+            INFO = -12
+            RETURN
+         ELSE
+            CTOL = RWORK( 1 )
+         ENDIF
       ELSE
 *        ... default
          IF( LSVEC .OR. RSVEC .OR. APPLV ) THEN
@@ -558,7 +561,9 @@
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT. TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -583,7 +588,9 @@
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT.TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -608,7 +615,9 @@
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
-            IF( ( AAPP.LT.( BIG / AAQQ ) ) .AND. NOSCALE ) THEN
+            TBIG = BIG
+            IF( AAQQ.GT.ONE ) TBIG = BIG / AAQQ
+            IF( ( AAPP.LT.TBIG ) .AND. NOSCALE ) THEN
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
@@ -1422,9 +1431,10 @@
 *
       IF( LSVEC .OR. UCTOL ) THEN
          DO 1998 p = 1, N4
+            TEMP1 = ONE
+            IF( SVA(p).GT.ZERO ) TEMP1 = SVA(p)
 *            CALL ZDSCAL( M, ONE / SVA( p ), A( 1, p ), 1 )
-            CALL ZLASCL( 'G',0,0, SVA(p), ONE, M, 1, A(1,p), M,
-     $                   IERR )
+            CALL ZLASCL( 'G',0,0, TEMP1, ONE, M, 1, A(1,p), M, IERR )
  1998    CONTINUE
       END IF
 *
@@ -1438,9 +1448,14 @@
       END IF
 *
 *     Undo scaling, if necessary (and possible).
-      IF( ( ( SKL.GT.ONE ) .AND. ( SVA( 1 ).LT.( BIG / SKL ) ) )
-     $    .OR. ( ( SKL.LT.ONE ) .AND. ( SVA( MAX( N2, 1 ) ) .GT.
-     $    ( SFMIN / SKL ) ) ) ) THEN
+      NOSCALE = .FALSE.
+      IF ( SKL.GT.ONE ) THEN
+          IF( SVA( 1 ).LT.( BIG / SKL ) ) NOSCALE = .TRUE.
+      ELSE IF( SKL.LT.ONE ) THEN
+          IF ( SVA( MAX( N2, 1 ) ) .GT.
+     $      ( SFMIN / SKL ) )  NOSCALE = .TRUE.
+      ENDIF
+      IF( NOSCALE ) THEN
          DO 2400 p = 1, N
             SVA( p ) = SKL*SVA( p )
  2400    CONTINUE

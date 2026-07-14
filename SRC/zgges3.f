@@ -283,8 +283,12 @@
      $                   WORK( * )
 *     ..
 *     .. Function Arguments ..
-      LOGICAL            SELCTG
-      EXTERNAL           SELCTG
+      INTERFACE
+        LOGICAL FUNCTION SELCTG_PROC_TYPE(ALPHA,BETA)
+          COMPLEX*16 ALPHA, BETA
+        END FUNCTION SELCTG_PROC_TYPE
+      END INTERFACE
+      PROCEDURE(SELCTG_PROC_TYPE) :: SELCTG
 *     ..
 *
 *  =====================================================================

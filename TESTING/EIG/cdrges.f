@@ -442,10 +442,10 @@
       INTRINSIC          ABS, AIMAG, CONJG, MAX, MIN, REAL, SIGN
 *     ..
 *     .. Statement Functions ..
-      REAL               ABS1
+      REAL               CABS1
 *     ..
 *     .. Statement Function definitions ..
-      ABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
+      CABS1( X ) = ABS( REAL( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Data statements ..
       DATA               KCLASS / 15*1, 10*2, 1*3 /
@@ -785,10 +785,10 @@
 *
                DO 130 J = 1, N
                   ILABAD = .FALSE.
-                  TEMP2 = ( ABS1( ALPHA( J )-S( J, J ) ) /
-     $                    MAX( SAFMIN, ABS1( ALPHA( J ) ), ABS1( S( J,
-     $                    J ) ) )+ABS1( BETA( J )-T( J, J ) ) /
-     $                    MAX( SAFMIN, ABS1( BETA( J ) ), ABS1( T( J,
+                  TEMP2 = ( CABS1( ALPHA( J )-S( J, J ) ) /
+     $                    MAX( SAFMIN, CABS1( ALPHA( J ) ), CABS1( S( J,
+     $                    J ) ) )+CABS1( BETA( J )-T( J, J ) ) /
+     $                    MAX( SAFMIN, CABS1( BETA( J ) ), CABS1( T( J,
      $                    J ) ) ) ) / ULP
 *
                   IF( J.LT.N ) THEN

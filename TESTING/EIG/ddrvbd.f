@@ -421,7 +421,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DBDT01, DGEJSV, DGESDD, DGESVD,
      $                   DGESVDQ, DGESVDX, DGESVJ, DLACPY, DLASET,
-     $                   DLATMS, DORT01, DORT03, XERBLA
+     $                   DLATMS, DBDT05, DORT01, DORT03, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN

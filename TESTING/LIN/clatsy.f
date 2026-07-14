@@ -15,7 +15,7 @@
 *       INTEGER            LDX, N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX            X( LDX, * )
 *       ..
 *
@@ -97,7 +97,7 @@
       INTEGER            LDX, N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX            X( LDX, * )
 *     ..
 *
@@ -114,7 +114,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX            CLARND
-      EXTERNAL           CLARND
+      LOGICAL            LSAME
+      EXTERNAL           CLARND, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -129,7 +130,7 @@
 *
 *     UPLO = 'U':  Upper triangular storage
 *
-      IF( UPLO.EQ.'U' ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Fill the upper triangle of the matrix with zeros.
 *

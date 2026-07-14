@@ -268,7 +268,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      DOUBLE PRECISION   DROUNDUP_LWORK
+      EXTERNAL           LSAME, DROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZHEEVD, ZHEGST, ZPOTRF, ZTRMM,
@@ -317,8 +318,8 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 ) = LOPT
-         RWORK( 1 ) = REAL( LROPT )
+         WORK( 1 ) = DROUNDUP_LWORK(LOPT)
+         RWORK( 1 ) = DROUNDUP_LWORK(LROPT)
          IWORK( 1 ) = LIOPT
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -356,9 +357,9 @@
       CALL ZHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
      $             LRWORK,
      $             IWORK, LIWORK, INFO )
-      LOPT = INT( MAX( DBLE( LOPT ), DBLE( WORK( 1 ) ) ) )
-      LROPT = INT( MAX( DBLE( LROPT ), DBLE( RWORK( 1 ) ) ) )
-      LIOPT = INT( MAX( DBLE( LIOPT ), DBLE( IWORK( 1 ) ) ) )
+      LOPT = MAX( LOPT, INT( DBLE( WORK( 1 ) ) ) )
+      LROPT = MAX( LROPT, INT( RWORK( 1 ) ) )
+      LIOPT = MAX( LIOPT, IWORK( 1 ) )
 *
       IF( WANTZ .AND. INFO.EQ.0 ) THEN
 *
@@ -394,8 +395,8 @@
          END IF
       END IF
 *
-      WORK( 1 ) = LOPT
-      RWORK( 1 ) = REAL( LROPT )
+      WORK( 1 ) = DROUNDUP_LWORK(LOPT)
+      RWORK( 1 ) = DROUNDUP_LWORK(LROPT)
       IWORK( 1 ) = LIOPT
 *
       RETURN

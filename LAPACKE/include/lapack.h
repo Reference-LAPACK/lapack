@@ -47,7 +47,8 @@
 #else
 #include <complex>
 #endif
-#if _MSC_VER
+
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
 #define lapack_complex_float    _Fcomplex
 #else
 #define lapack_complex_float    float _Complex
@@ -69,7 +70,8 @@
 #else
 #include <complex>
 #endif
-#if _MSC_VER
+
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
 #define lapack_complex_double   _Dcomplex
 #else
 #define lapack_complex_double   double _Complex
@@ -15122,6 +15124,22 @@ void LAPACK_zpttrs_base(
 #else
     #define LAPACK_zpttrs(...) LAPACK_zpttrs_base(__VA_ARGS__)
 #endif
+
+#define LAPACK_crot LAPACK_GLOBAL_SUFFIX(crot,CROT)
+void LAPACK_crot(
+    lapack_int const* n,
+    lapack_complex_float* CX, lapack_int const* incx,
+    lapack_complex_float* CY, lapack_int const* incy,
+    float const* c,
+    lapack_complex_float const* s );
+
+#define LAPACK_zrot LAPACK_GLOBAL_SUFFIX(zrot,ZROT)
+void LAPACK_zrot(
+    lapack_int const* n,
+    lapack_complex_double* CX, lapack_int const* incx,
+    lapack_complex_double* CY, lapack_int const* incy,
+    double const* c,
+    lapack_complex_double const* s );
 
 #define LAPACK_dsbev_base LAPACK_GLOBAL_SUFFIX(dsbev,DSBEV)
 void LAPACK_dsbev_base(

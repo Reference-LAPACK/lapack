@@ -190,8 +190,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZCOPY, ZGBTRF, ZGEMM,
-     $                   ZGETRF,
-     $                   ZLACPY, ZLASET, ZLASWP, ZTRSM, ZSWAP 
+     $                   ZGETRF, ZLACPY, ZLASET, ZTRSM,
+     $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX

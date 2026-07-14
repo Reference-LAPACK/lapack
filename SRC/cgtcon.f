@@ -181,7 +181,7 @@
 *     Test the input arguments.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      ONENRM = LSAME( NORM, '1' ) .OR. LSAME( NORM, 'O' )
       IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN

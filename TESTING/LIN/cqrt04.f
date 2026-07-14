@@ -102,11 +102,15 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL CGEMM, CLACPY, CLARNV, CGEMQRT, CLASET, CGEQRT,
+     $         CHERK
+*     ..
 *     .. External Functions ..
       REAL SLAMCH
       REAL CLANGE, CLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+      EXTERNAL SLAMCH, CLANGE, CLANSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN

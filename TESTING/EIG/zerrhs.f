@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 3, LW = NMAX*NMAX )
+      DOUBLE PRECISION   ONE
+      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
@@ -86,8 +88,9 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZGEBAK, ZGEBAL, ZGEHRD, ZHSEIN, ZHSEQR,
-     $                   ZUNGHR, ZUNMHR, ZTREVC, ZTREVC3
+      EXTERNAL           CHKXER, ZGEBAK, ZGEBAL, ZGEHD2, ZGEHRD,
+     $                   ZHSEIN, ZHSEQR, ZUNGHR, ZUNMHR, ZTREVC,
+     $                   ZTREVC3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -111,7 +114,7 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = ONE / DBLE( I+J )
    10    CONTINUE
          SEL( J ) = .TRUE.
    20 CONTINUE

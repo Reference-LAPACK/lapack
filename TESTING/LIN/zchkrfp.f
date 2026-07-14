@@ -111,7 +111,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, ZDRVRFP, ZDRVRF1, ZDRVRF2, ZDRVRF3,
-     +                   ZDRVRF4
+     +                   ZDRVRF4, ZERRRFP
 *     ..
 *     .. Executable Statements ..
 *

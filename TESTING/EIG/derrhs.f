@@ -68,6 +68,8 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 3, LW = ( NMAX+2 )*( NMAX+2 )+NMAX )
+      DOUBLE PRECISION   ONE
+      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
@@ -111,7 +113,7 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = ONE / DBLE( I+J )
    10    CONTINUE
          WI( J ) = DBLE( J )
          SEL( J ) = .TRUE.

@@ -4,7 +4,8 @@ DGS               Data for the Real Nonsymmetric Schur Form Driver
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
 .TRUE.            Put T to test the error exits
-0                 Code to interpret the seed
+2                 Code to interpret the seed
+1234 5678 9012 3456
 DGS 26            Test all 26 matrix types
 DGV               Data for the Real Nonsymmetric Eigenvalue Problem Driver
 6                 Number of matrix dimensions

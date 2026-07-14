@@ -163,16 +163,17 @@
       EXTERNAL           LSAME, LSAMEN, SECOND, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, SCHKCXX, SCHKEQ, SCHKGB, SCHKGE,
-     $                   SCHKGT, SCHKLQ, SCHKORHR_COL, SCHKPB, SCHKPO,
-     $                   SCHKPS, SCHKPP, SCHKPT, SCHKQ3, SCHKQP3RK,
-     $                   SCHKQL, SCHKQR, SCHKRQ, SCHKSP, SCHKSY,
-     $                   SCHKSY_ROOK, SCHKSY_RK, SCHKSY_AA, SCHKTB,
-     $                   SCHKTP, SCHKTR, SCHKTZ, SDRVGB, SDRVGE, SDRVGT,
-     $                   SDRVLS, SDRVPB, SDRVPO, SDRVPP, SDRVPT, SDRVSP,
-     $                   SDRVSY, SDRVSY_ROOK, SDRVSY_RK, SDRVSY_AA,
-     $                   ILAVER, SCHKLQTP, SCHKQRT, SCHKQRTP, SCHKLQT,
-     $                   SCHKTSQR
+      EXTERNAL           ALAREQ, SCHKCXX, 
+     $                   SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
+     $                   SCHKORHR_COL, SCHKPB, SCHKPO, SCHKPS, SCHKPP,
+     $                   SCHKPT, SCHKQ3, SCHKQP3RK, SCHKQL, SCHKQR,
+     $                   SCHKRQ, SCHKSP, SCHKSY, SCHKSY_ROOK, SCHKSY_RK,
+     $                   SCHKSY_AA, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
+     $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
+     $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
+     $                   SDRVSY_RK, SDRVSY_AA, ILAVER, SCHKLQTP,
+     $                   SCHKQRT, SCHKQRTP, SCHKLQT, SCHKTSQR,
+     $                   SCHKSY_AA_2STAGE, SDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

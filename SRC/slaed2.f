@@ -73,7 +73,7 @@
 *>         On entry, D contains the eigenvalues of the two submatrices to
 *>         be combined.
 *>         On exit, D contains the trailing (N-K) updated eigenvalues
-*>         (those which were deflated) sorted into increasing order.
+*>         (those which were deflated) sorted into decreasing order.
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -313,7 +313,7 @@
       IMAX = ISAMAX( N, Z, 1 )
       JMAX = ISAMAX( N, D, 1 )
       EPS = SLAMCH( 'Epsilon' )
-      TOL = EIGHT*EPS*MAX( ABS( D( JMAX ) ), ABS( Z( IMAX ) ) )
+      TOL = EIGHT*EIGHT*EPS*MAX( ABS( D( JMAX ) ), ABS( Z( IMAX ) ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
 *     except to reorganize Q so that its columns correspond with the

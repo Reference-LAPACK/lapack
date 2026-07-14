@@ -297,8 +297,12 @@
      $                   VSR( LDVSR, * ), WORK( * )
 *     ..
 *     .. Function Arguments ..
-      LOGICAL            SELCTG
-      EXTERNAL           SELCTG
+      INTERFACE
+        LOGICAL FUNCTION SELCTG_PROC_TYPE(ALPHAR, ALPHAI, BETA)
+          REAL ALPHAR, ALPHAI, BETA
+        END FUNCTION SELCTG_PROC_TYPE
+      END INTERFACE
+      PROCEDURE(SELCTG_PROC_TYPE) :: SELCTG
 *     ..
 *
 *  =====================================================================
@@ -323,7 +327,7 @@
 *     .. External Subroutines ..
       EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ,
      $                   SLACPY,
-     $                   SLASCL, SLASET, SORGQR, SORMQR, STGSEN
+     $                   SLASCL, SLASET, SORGQR, SORMQR, STGSEN, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

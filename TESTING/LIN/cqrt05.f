@@ -109,11 +109,15 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL CGEMM, CLARNV, CTPMQRT, CTPQRT, CGEMQRT, CHERK,
+     $         CLACPY, CLASET
+*     ..
 *     .. External Functions ..
       REAL SLAMCH
       REAL CLANGE, CLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+      EXTERNAL SLAMCH, CLANGE, CLANSY
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /

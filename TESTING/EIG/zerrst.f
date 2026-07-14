@@ -99,7 +99,8 @@
      $                   ZUNGTR, ZUNMTR, ZUPGTR, ZUPMTR, ZHETD2,
      $                   ZHEEVD_2STAGE, ZHEEVR_2STAGE, ZHEEVX_2STAGE,
      $                   ZHEEV_2STAGE, ZHBEV_2STAGE, ZHBEVD_2STAGE,
-     $                   ZHBEVX_2STAGE, ZHETRD_2STAGE
+     $                   ZHBEVX_2STAGE, ZHETRD_2STAGE,
+     $                   ZHETRD_HE2HB, ZHETRD_HB2ST
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

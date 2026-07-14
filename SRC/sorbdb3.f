@@ -277,7 +277,7 @@
       DO I = 1, M-P
 *
          IF( I .GT. 1 ) THEN
-            CALL SROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C,
+            CALL SROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX21, C,
      $                 S )
          END IF
 *

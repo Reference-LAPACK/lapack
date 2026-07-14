@@ -88,16 +88,18 @@
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*>          For an empty matrix (MIN(M,N) = 0), the workspace query
+*>          returns WORK(1) = 1.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise.
+*>          Minimum workspace size required: 
+*>          If MIN(M,N) = 0, then LWORK >= 1, else LWORK >= N.
 *>          For optimum performance LWORK >= N*NB, where NB is
 *>          the optimal blocksize.
-*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

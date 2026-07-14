@@ -15,7 +15,7 @@
 *       INTEGER            N
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            ISEED( * )
+*       INTEGER            ISEED( 4 )
 *       COMPLEX*16         X( * )
 *       ..
 *
@@ -92,7 +92,7 @@
       INTEGER            N
 *     ..
 *     .. Array Arguments ..
-      INTEGER            ISEED( * )
+      INTEGER            ISEED( 4 )
       COMPLEX*16         X( * )
 *     ..
 *
@@ -109,7 +109,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZLARND
-      EXTERNAL           ZLARND
+      LOGICAL            LSAME
+      EXTERNAL           ZLARND, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -130,7 +131,7 @@
 *
 *     UPLO = 'U':  Upper triangular storage
 *
-      IF( UPLO.EQ.'U' ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          N5 = N / 5
          N5 = N - 5*N5 + 1
 *

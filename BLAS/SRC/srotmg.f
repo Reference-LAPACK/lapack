@@ -24,15 +24,19 @@
 *> \verbatim
 *>
 *>    CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-*>    THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*>    SY2)**T.
-*>    WITH SPARAM(1)=SFLAG, H HAS ONE OF THE FOLLOWING FORMS..
+*>    THE SECOND COMPONENT OF THE 2-VECTOR  
+*>         (SQRT(SD1)*SX1,SQRT(SD2)*SY2)**T
+*>    WITH SPARAM(1)=SFLAG.
 *>
-*>    SFLAG=-1.E0     SFLAG=0.E0        SFLAG=1.E0     SFLAG=-2.E0
+*>    H HAS ONE OF THE FOLLOWING FORMS:
+*>
+*>      SFLAG=-1.E0     SFLAG=0.E0      SFLAG=1.E0      SFLAG=-2.E0
 *>
 *>      (SH11  SH12)    (1.E0  SH12)    (SH11  1.E0)    (1.E0  0.E0)
 *>    H=(          )    (          )    (          )    (          )
 *>      (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
-*>    LOCATIONS 2-4 OF SPARAM CONTAIN SH11,SH21,SH12, AND SH22
+*>
+*>    LOCATIONS 2-4 OF SPARAM CONTAIN SH11, SH21, SH12, AND SH22
 *>    RESPECTIVELY. (VALUES OF 1.E0, -1.E0, OR 0.E0 IMPLIED BY THE
 *>    VALUE OF SPARAM(1) ARE NOT STORED IN SPARAM.)
 *>
@@ -189,54 +193,48 @@
             END IF
          END IF
 
+*     Normalize flag to -ONE so all H elements are explicit
+*
+           IF( SFLAG.EQ.ZERO ) THEN
+              SH11 = ONE
+              SH22 = ONE
+              SFLAG = -ONE
+           ELSE IF( SFLAG.EQ.ONE ) THEN
+              SH21 = -ONE
+              SH12 = ONE
+              SFLAG = -ONE
+           END IF
+*
 *     PROCEDURE..SCALE-CHECK
-         IF (SD1.NE.ZERO) THEN
-            DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
-               IF (SFLAG.EQ.ZERO) THEN
-                  SH11 = ONE
-                  SH22 = ONE
-                  SFLAG = -ONE
-               ELSE
-                  SH21 = -ONE
-                  SH12 = ONE
-                  SFLAG = -ONE
-               END IF
-               IF (SD1.LE.RGAMSQ) THEN
-                  SD1 = SD1*GAM**2
-                  SX1 = SX1/GAM
-                  SH11 = SH11/GAM
-                  SH12 = SH12/GAM
-               ELSE
-                  SD1 = SD1/GAM**2
-                  SX1 = SX1*GAM
-                  SH11 = SH11*GAM
-                  SH12 = SH12*GAM
-               END IF
-            ENDDO
-         END IF
+          IF (SD1.NE.ZERO) THEN
+             DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
+                 IF (SD1.LE.RGAMSQ) THEN
+                    SD1 = SD1*GAM**2
+                    SX1 = SX1/GAM
+                    SH11 = SH11/GAM
+                    SH12 = SH12/GAM
+                 ELSE
+                    SD1 = SD1/GAM**2
+                    SX1 = SX1*GAM
+                    SH11 = SH11*GAM
+                    SH12 = SH12*GAM
+                 END IF
+              ENDDO
+           END IF
 
-         IF (SD2.NE.ZERO) THEN
-            DO WHILE ( (ABS(SD2).LE.RGAMSQ) .OR. (ABS(SD2).GE.GAMSQ) )
-               IF (SFLAG.EQ.ZERO) THEN
-                  SH11 = ONE
-                  SH22 = ONE
-                  SFLAG = -ONE
-               ELSE
-                  SH21 = -ONE
-                  SH12 = ONE
-                  SFLAG = -ONE
-               END IF
-               IF (ABS(SD2).LE.RGAMSQ) THEN
-                  SD2 = SD2*GAM**2
-                  SH21 = SH21/GAM
-                  SH22 = SH22/GAM
-               ELSE
-                  SD2 = SD2/GAM**2
-                  SH21 = SH21*GAM
-                  SH22 = SH22*GAM
-               END IF
-            END DO
-         END IF
+           IF (SD2.NE.ZERO) THEN
+              DO WHILE ( (ABS(SD2).LE.RGAMSQ) .OR. (ABS(SD2).GE.GAMSQ) )
+                 IF (ABS(SD2).LE.RGAMSQ) THEN
+                    SD2 = SD2*GAM**2
+                    SH21 = SH21/GAM
+                    SH22 = SH22/GAM
+                 ELSE
+                    SD2 = SD2/GAM**2
+                    SH21 = SH21*GAM
+                    SH22 = SH22*GAM
+                 END IF
+              END DO
+           END IF
 
       END IF
 

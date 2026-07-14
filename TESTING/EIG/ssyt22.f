@@ -184,7 +184,7 @@
       EXTERNAL           SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SSYMM
+      EXTERNAL           SGEMM, SORT01, SSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL

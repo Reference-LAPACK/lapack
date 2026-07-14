@@ -279,7 +279,7 @@
          LWORKMIN = LWORKOPT
          WORK(1) = REAL( LWORKOPT )
          IF( LWORK .LT. LWORKMIN .AND. .NOT.LQUERY ) THEN
-           INFO = -14
+           INFO = -15
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN

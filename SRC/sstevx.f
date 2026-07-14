@@ -205,8 +205,11 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*>                Their indices are stored in array IFAIL.
+*>          > 0:  if INFO = i, and i is:
+*>                <= N: then i eigenvectors failed to converge in
+*>                     SSTEIN; their indices are stored in IFAIL.
+*>                > N: SSTEBZ returned INFO = INFO - N;
+*>                     see SSTEBZ for details.
 *> \endverbatim
 *
 *  Authors:
@@ -248,7 +251,7 @@
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, TEST, VALEIG, WANTZ
       CHARACTER          ORDER
-      INTEGER            I, IMAX, INDISP, INDIWO, INDWRK,
+      INTEGER            I, IINFO, IMAX, INDISP, INDIWO, INDWRK,
      $                   ISCALE, ITMP1, J, JJ, NSPLIT
       REAL               BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA, SMLNUM,
      $                   TMP1, TNRM, VLL, VUU
@@ -406,12 +409,19 @@
       CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
      $             M,
      $             NSPLIT, W, IWORK( 1 ), IWORK( INDISP ),
-     $             WORK( INDWRK ), IWORK( INDIWO ), INFO )
+     $             WORK( INDWRK ), IWORK( INDIWO ), IINFO )
+      IF( IINFO.NE.0 ) THEN
+         INFO = N + IINFO
+         IF( IINFO.NE.1 )
+     $      GO TO 20
+      END IF
 *
       IF( WANTZ ) THEN
          CALL SSTEIN( N, D, E, M, W, IWORK( 1 ), IWORK( INDISP ),
      $                Z, LDZ, WORK( INDWRK ), IWORK( INDIWO ), IFAIL,
-     $                INFO )
+     $                IINFO )
+         IF( IINFO.NE.0 .AND. INFO.EQ.0 )
+     $      INFO = IINFO
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.

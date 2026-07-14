@@ -129,8 +129,7 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRTSQR,
-     $                   CTSQR01, XLAENV
+      EXTERNAL           ALAHD, ALASUM, CERRTSQR, CTSQR01, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

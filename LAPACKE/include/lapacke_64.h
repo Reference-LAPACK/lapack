@@ -3331,6 +3331,15 @@ int64_t LAPACKE_zpttrs_64( int matrix_layout, char uplo, int64_t n,
                            const lapack_complex_double* e,
                            lapack_complex_double* b, int64_t ldb );
 
+int64_t LAPACKE_crot_64( int64_t n,
+                         lapack_complex_float* cx, int64_t incx,
+                         lapack_complex_float* cy, int64_t incy,
+                         float c, lapack_complex_float s );
+int64_t LAPACKE_zrot_64( int64_t n,
+                         lapack_complex_double* cx, int64_t incx,
+                         lapack_complex_double* cy, int64_t incy,
+                         double c, lapack_complex_double s );
+
 int64_t LAPACKE_ssbev_64( int matrix_layout, char jobz, char uplo, int64_t n,
                           int64_t kd, float* ab, int64_t ldab, float* w,
                           float* z, int64_t ldz );
@@ -4149,14 +4158,14 @@ int64_t LAPACKE_ctgexc_64( int matrix_layout, lapack_logical wantq,
                            lapack_complex_float* b, int64_t ldb,
                            lapack_complex_float* q, int64_t ldq,
                            lapack_complex_float* z, int64_t ldz,
-                           int64_t ifst, int64_t ilst );
+                           int64_t ifst, int64_t* ilst );
 int64_t LAPACKE_ztgexc_64( int matrix_layout, lapack_logical wantq,
                            lapack_logical wantz, int64_t n,
                            lapack_complex_double* a, int64_t lda,
                            lapack_complex_double* b, int64_t ldb,
                            lapack_complex_double* q, int64_t ldq,
                            lapack_complex_double* z, int64_t ldz,
-                           int64_t ifst, int64_t ilst );
+                           int64_t ifst, int64_t* ilst );
 
 int64_t LAPACKE_stgsen_64( int matrix_layout, int64_t ijob,
                            lapack_logical wantq, lapack_logical wantz,
@@ -8937,6 +8946,15 @@ int64_t LAPACKE_zpttrs_work_64( int matrix_layout, char uplo, int64_t n,
                                 const lapack_complex_double* e,
                                 lapack_complex_double* b, int64_t ldb );
 
+int64_t LAPACKE_crot_work_64( int64_t n,
+                              lapack_complex_float* cx, int64_t incx,
+                              lapack_complex_float* cy, int64_t incy,
+                              float c, lapack_complex_float s );
+int64_t LAPACKE_zrot_work_64( int64_t n,
+                              lapack_complex_double* cx, int64_t incx,
+                              lapack_complex_double* cy, int64_t incy,
+                              double c, lapack_complex_double s );
+
 int64_t LAPACKE_ssbev_work_64( int matrix_layout, char jobz, char uplo,
                                int64_t n, int64_t kd, float* ab,
                                int64_t ldab, float* w, float* z,
@@ -9968,14 +9986,14 @@ int64_t LAPACKE_ctgexc_work_64( int matrix_layout, lapack_logical wantq,
                                 lapack_complex_float* b, int64_t ldb,
                                 lapack_complex_float* q, int64_t ldq,
                                 lapack_complex_float* z, int64_t ldz,
-                                int64_t ifst, int64_t ilst );
+                                int64_t ifst, int64_t* ilst );
 int64_t LAPACKE_ztgexc_work_64( int matrix_layout, lapack_logical wantq,
                                 lapack_logical wantz, int64_t n,
                                 lapack_complex_double* a, int64_t lda,
                                 lapack_complex_double* b, int64_t ldb,
                                 lapack_complex_double* q, int64_t ldq,
                                 lapack_complex_double* z, int64_t ldz,
-                                int64_t ifst, int64_t ilst );
+                                int64_t ifst, int64_t* ilst );
 
 int64_t LAPACKE_stgsen_work_64( int matrix_layout, int64_t ijob,
                                 lapack_logical wantq, lapack_logical wantz,

@@ -73,13 +73,15 @@ This section contains the list of the currently available CBLAS interfaces.
   ```
   SGEMV SGBMV SGER  SSBMV SSPMV SSPR
   SSPR2 SSYMV SSYR  SSYR2 STBMV STBSV
-  STPMV STPSV STRMV STRSV
+  STPMV STPSV STRMV STRSV SSKEWSYMV
+  SSKEWSYR2
   ```
 * Double Precision Real:
   ```
   DGEMV DGBMV DGER  DSBMV DSPMV DSPR
   DSPR2 DSYMV DSYR  DSYR2 DTBMV DTBSV
-  DTPMV DTPSV DTRMV DTRSV
+  DTPMV DTPSV DTRMV DTRSV DSKEWSYMV
+  DSKEWSYR2
   ```
 * Single Precision Complex:
   ```
@@ -97,10 +99,12 @@ This section contains the list of the currently available CBLAS interfaces.
 * Single Precision Real:
   ```
   SGEMM SSYMM SSYRK SSERK2K STRMM STRSM
+  SSKEWSYMM SSKEWSYR2K
   ```
 * Double Precision Real:
   ```
   DGEMM DSYMM DSYRK DSERK2K DTRMM DTRSM
+  DSKEWSYMM DSKEWSYR2K
   ```
 * Single Precision Complex:
   ```

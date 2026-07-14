@@ -120,7 +120,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DHST01, DLACPY, DLASET, DTGEXC
+      EXTERNAL           DGET51, DLACPY, DLASET, DTGEXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
