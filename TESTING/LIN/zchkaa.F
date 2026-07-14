@@ -169,7 +169,8 @@
       EXTERNAL           LSAME, LSAMEN, DLAMCH, DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, ZCHKCXX, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
+      EXTERNAL           ALAREQ, ZCHKCXX,
+     $                   ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
      $                   ZCHKLQ, ZCHKUNHR_COL, ZCHKPB, ZCHKPO, ZCHKPS,
      $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQP3RK, ZCHKQL,
