@@ -475,7 +475,8 @@
       EXTERNAL           LSAME, ILATRANS, ILAPREC
       EXTERNAL           DLAMCH, ZLANGE, ZLA_GERCOND_X,
      $                   ZLA_GERCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLA_GERCOND_X, ZLA_GERCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLA_GERCOND_X,
+     $                   ZLA_GERCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
 *     ..

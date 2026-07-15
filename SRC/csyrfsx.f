@@ -463,7 +463,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           SLAMCH, CLANSY, CLA_SYRCOND_X,
      $                   CLA_SYRCOND_C
-      REAL               SLAMCH, CLANSY, CLA_SYRCOND_X, CLA_SYRCOND_C
+      REAL               SLAMCH, CLANSY, CLA_SYRCOND_X,
+     $                   CLA_SYRCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..
