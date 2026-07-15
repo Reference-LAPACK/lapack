@@ -218,10 +218,10 @@
       ALLOCATE( AU(LDAU,N) )
       ALLOCATE( S(N,N) )
 
-      TOL  = M*EPS
+      TOL  = REAL( M, KIND=WP )*EPS
       ! This mimics O(M*N)*EPS bound for accumulated roundoff error.
       ! The factor 10 is somewhat arbitrary.
-      TOL2 = 10*M*N*EPS
+      TOL2 = 10.0_WP*REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS
 
 !.............
 
@@ -398,7 +398,7 @@
           END DO
           TMP_ZXW = MAX(TMP_ZXW, TMP )
 
-          IF ( TMP_ZXW > 10*M*EPS ) THEN
+          IF ( TMP_ZXW > 10.0_WP*REAL( M, KIND=WP )*EPS ) THEN
               NFAIL_Z_XV = NFAIL_Z_XV + 1
           END IF
 
@@ -571,7 +571,7 @@
                                    SINGVX(1) )
           END DO
           SVDIFF = MAX( SVDIFF, TMP )
-          IF ( TMP > M*N*EPS ) THEN
+          IF ( TMP > REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS ) THEN
              NFAIL_SVDIFF = NFAIL_SVDIFF + 1
           END IF
 

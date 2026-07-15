@@ -527,7 +527,7 @@
          MAXWRK = 7*NMAX + NMAX*ILAENV( 1, 'SGEQRF', ' ', NMAX, 1, NMAX,
      $            0 )
          MAXWRK = MAX( MAXWRK, NMAX*( NMAX+1 ) )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -564,7 +564,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -916,7 +916,7 @@
 *
       CALL ALASVM( 'SGV', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

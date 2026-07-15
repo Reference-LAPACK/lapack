@@ -191,8 +191,8 @@
       ALLOCATE( SINGVX(N) )
       ALLOCATE( SINGVQX(N) )
 
-      TOL  = 10*M*EPS
-      TOL2 = 10*M*N*EPS
+      TOL  = 10.0_WP*REAL( M, KIND=WP )*EPS
+      TOL2 = 10.0_WP*REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS
 
 !.............
 

@@ -489,7 +489,7 @@
                GO TO 70
 *
    60          CONTINUE
-               ANORM = RTUNFL*N*ULPINV
+               ANORM = RTUNFL*REAL( N )*ULPINV
                GO TO 70
 *
    70          CONTINUE

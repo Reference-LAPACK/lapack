@@ -302,7 +302,7 @@
       ANORM = CLANGE( '1', M, N, A, M, RWORK )
       RESID = CLANGE( '1', M, N, R, M, RWORK )
       IF( ANORM.GT.ZERO ) THEN
-         RESULT( 1 ) = RESID / ( EPS * MAX( 1, M ) * ANORM )
+         RESULT( 1 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) * ANORM )
       ELSE
          RESULT( 1 ) = ZERO
       END IF
@@ -313,7 +313,7 @@
       CALL CLASET( 'Full', M, M, CZERO, CONE, R, M )
       CALL CHERK( 'U', 'C', M, M, REAL(-CONE), Q, M, REAL(CONE), R, M )
       RESID = CLANSY( '1', 'Upper', M, R, M, RWORK )
-      RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
+      RESULT( 2 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) )
 *
 *     Generate random m-by-n matrix C
 *
@@ -335,7 +335,7 @@
       CALL CGEMM( 'N', 'N', M, N, M, -CONE, Q, M, C, M, CONE, CF, M )
       RESID = CLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 3 ) = RESID / ( EPS * MAX( 1, M ) * CNORM )
+         RESULT( 3 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) * CNORM )
       ELSE
          RESULT( 3 ) = ZERO
       END IF
@@ -356,7 +356,7 @@
       CALL CGEMM( 'C', 'N', M, N, M, -CONE, Q, M, C, M, CONE, CF, M )
       RESID = CLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 4 ) = RESID / ( EPS * MAX( 1, M ) * CNORM )
+         RESULT( 4 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) * CNORM )
       ELSE
          RESULT( 4 ) = ZERO
       END IF
@@ -381,7 +381,7 @@
       CALL CGEMM( 'N', 'N', N, M, M, -CONE, D, N, Q, M, CONE, DF, N )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
       IF( DNORM.GT.ZERO ) THEN
-         RESULT( 5 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
+         RESULT( 5 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) * DNORM )
       ELSE
          RESULT( 5 ) = ZERO
       END IF
@@ -402,7 +402,7 @@
       CALL CGEMM( 'N', 'C', N, M, M, -CONE, D, N, Q, M, CONE, DF, N )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
       IF( DNORM.GT.ZERO ) THEN
-         RESULT( 6 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
+         RESULT( 6 ) = RESID / ( EPS * REAL( MAX( 1, M ) ) * DNORM )
       ELSE
          RESULT( 6 ) = ZERO
       END IF

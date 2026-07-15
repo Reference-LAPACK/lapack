@@ -229,12 +229,14 @@
       WNORM = SLANSY( '1', UPLO, M, WORK( NNP1 ), N, WORK( 1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
-         RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
+         RESULT( 1 ) = ( WNORM / ANORM ) / ( REAL( M )*ULP )
       ELSE
          IF( ANORM.LT.ONE ) THEN
-            RESULT( 1 ) = ( MIN( WNORM, M*ANORM ) / ANORM ) / ( M*ULP )
+            RESULT( 1 ) = ( MIN( WNORM, REAL( M )*ANORM ) / ANORM ) / 
+     $                    ( REAL( M )*ULP )
          ELSE
-            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( M ) ) / ( M*ULP )
+            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( M ) ) /
+     $                    ( REAL( M )*ULP )
          END IF
       END IF
 *

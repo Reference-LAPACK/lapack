@@ -463,7 +463,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
          MAXWRK = MAX( MAXWRK, MINWRK )
 *
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -958,7 +958,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
       CALL ALASVM( 'SGX', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

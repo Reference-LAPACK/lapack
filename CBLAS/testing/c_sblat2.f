@@ -279,13 +279,14 @@
       N = MIN( 32, NMAX )
       DO 120 J = 1, N
          DO 110 I = 1, N
-            A( I, J ) = MAX( I - J + 1, 0 )
+            A( I, J ) = REAL( MAX( I - J + 1, 0 ) )
   110    CONTINUE
-         X( J ) = J
+         X( J ) = REAL( J )
          Y( J ) = ZERO
   120 CONTINUE
       DO 130 J = 1, N
-         YY( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
+         YY( J ) = REAL( J*( ( J + 1 )*J )/2 -
+     $                   ( ( J + 1 )*J*( J - 1 ) )/3 )
   130 CONTINUE
 *     YY holds the exact result. On exit from SMVCH YT holds
 *     the result computed by SMVCH.
