@@ -113,7 +113,7 @@
       IF (N.LE.0) RETURN
 
 *     Scale if SA.EQ.0
-      IF (SA.EQ.0.0E0 .AND. SB.NE.0.0E0 .AND. INCY.GT.0) THEN
+      IF (SA.EQ.0.0E0 .AND. INCY.GT.0) THEN
           CALL SSCAL(N, SB, SY, INCY)
           RETURN
       END IF

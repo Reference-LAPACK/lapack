@@ -113,7 +113,7 @@
       IF (N.LE.0) RETURN
 
 *     Scale if DA.EQ.0
-      IF (DA.EQ.0.0D0 .AND. DB.NE.0.0D0 .AND. INCY.GT.0) THEN
+      IF (DA.EQ.0.0D0 .AND. INCY.GT.0) THEN
           CALL DSCAL(N, DB, DY, INCY)
           RETURN
       END IF
