@@ -111,13 +111,13 @@
       INTRINSIC MOD
 *     ..
       IF (N.LE.0) RETURN
-
-*     Scale if DA.EQ.0
+*
+*     Scale if DA is zero - (note that SCAL does not handle INCY.LE.0)
       IF (DA.EQ.0.0D0 .AND. INCY.GT.0) THEN
           CALL DSCAL(N, DB, DY, INCY)
           RETURN
       END IF
-
+*
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
