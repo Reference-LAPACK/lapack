@@ -110,7 +110,7 @@
       IF (N.LE.0) RETURN
 
 *     Scale if ZA .EQ. 0
-      IF ( ZA.EQ.(0.0D0,0.0D0) .AND. ZB.NE.(0.0D0,0.0D0)) THEN
+      IF ( ZA.EQ.(0.0D0,0.0D0) .AND. ZB.NE.(0.0D0,0.0D0) .AND. INCY.GT.0) THEN
         CALL ZSCAL(N, ZB, ZY, INCY)
         RETURN
       END IF
@@ -140,6 +140,6 @@
 *
       RETURN
 *
-*     End of ZAXBPY
+*     End of ZAXPBY
 *
       END
