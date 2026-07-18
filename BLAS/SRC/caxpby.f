@@ -110,7 +110,7 @@
       IF (N.LE.0) RETURN
 
       IF (CA .EQ. (0.0,0.0) .AND. CB.NE.(0.0,0.0) .AND. INCY.GT.0) THEN
-         CALL CSCAL(N,CB, CY, INCY)
+         CALL CSCAL(N, CB, CY, INCY)
          RETURN
       END IF
 
