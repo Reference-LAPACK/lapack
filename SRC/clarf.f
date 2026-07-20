@@ -187,6 +187,11 @@
 !     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILACLR(M, LASTV, C, LDC)
          END IF
+!     Set index for V. If INCV < 0, then I points to the end of V. 
+!     For INCV > 0, set I = 1
+         IF( INCV.GT.0 ) THEN
+            I = 1
+         END IF
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
 !     case is needed at this level.
@@ -199,11 +204,11 @@
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1)
 *
             CALL CGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
-     $           C, LDC, V, INCV, ZERO, WORK, 1 )
+     $           C, LDC, V(I), INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H
 *
-            CALL CGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C,
+            CALL CGERC( LASTV, LASTC, -TAU, V(I), INCV, WORK, 1, C,
      $                  LDC )
          END IF
       ELSE
@@ -215,11 +220,11 @@
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
             CALL CGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
-     $           V, INCV, ZERO, WORK, 1 )
+     $           V(I), INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H
 *
-            CALL CGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C,
+            CALL CGERC( LASTC, LASTV, -TAU, WORK, 1, V(I), INCV, C,
      $                  LDC )
          END IF
       END IF

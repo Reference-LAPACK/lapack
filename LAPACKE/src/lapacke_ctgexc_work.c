@@ -38,13 +38,13 @@ lapack_int API_SUFFIX(LAPACKE_ctgexc_work)( int matrix_layout, lapack_logical wa
                                 lapack_complex_float* b, lapack_int ldb,
                                 lapack_complex_float* q, lapack_int ldq,
                                 lapack_complex_float* z, lapack_int ldz,
-                                lapack_int ifst, lapack_int ilst )
+                                lapack_int ifst, lapack_int* ilst )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ctgexc( &wantq, &wantz, &n, a, &lda, b, &ldb, q, &ldq, z, &ldz,
-                       &ifst, &ilst, &info );
+                       &ifst, ilst, &info );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -120,7 +120,7 @@ lapack_int API_SUFFIX(LAPACKE_ctgexc_work)( int matrix_layout, lapack_logical wa
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ctgexc( &wantq, &wantz, &n, a_t, &lda_t, b_t, &ldb_t, q_t,
-                       &ldq_t, z_t, &ldz_t, &ifst, &ilst, &info );
+                       &ldq_t, z_t, &ldz_t, &ifst, ilst, &info );
         if( info < 0 ) {
             info = info - 1;
         }

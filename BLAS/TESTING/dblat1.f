@@ -172,7 +172,7 @@
      E          4.D10, 2.D-2, 1.D-5, 10.D0,
      F          2.D-10, 4.D-2, 1.D5, 10.D0,
      G          2.D10, 4.D-2, 1.D-5, 10.D0,
-     H          4.D0, -2.D0, 8.D0, 4.D0    /
+     H          4.D-9, 2.D-9, 2.D0, 1.D0/
 *    TRUE RESULTS FOR MODIFIED GIVENS
       DATA DTRUE/0.D0,0.D0, 1.3D0, .2D0, 0.D0,0.D0,0.D0, .5D0, 0.D0,
      A           0.D0,0.D0, 4.5D0, 4.2D0, 1.D0, .5D0, 0.D0,0.D0,0.D0,
@@ -207,8 +207,15 @@
       DTRUE(9,7) = 1.D4 / D12
       DTRUE(1,8) = DTRUE(1,7)
       DTRUE(2,8) = 2.D10 / (1.5D0 * D12 * D12)
-      DTRUE(1,9) = 32.D0 / 7.D0
-      DTRUE(2,9) = -16.D0 / 7.D0
+      DTRUE(1,9) = 5.9652323555555560D-02
+      DTRUE(2,9) = 2.9826161777777780D-02
+      DTRUE(3,9) = 5.4931640625000000D-04
+      DTRUE(4,9) = 1.D0
+      DTRUE(5,9) = -1.D0
+      DTRUE(6,9) = 2.4414062500000000D-04
+      DTRUE(7,9) = -1.2207031250000000D-04
+      DTRUE(8,9) = 6.1035156250000000D-05
+      DTRUE(9,9) = 2.4414062500000000D-04
 *     .. Executable Statements ..
 *
 *     Compute true values which cannot be prestored
@@ -218,7 +225,7 @@
       DBTRUE(3) = -1.0D0/0.6D0
       DBTRUE(5) = 1.0D0/0.6D0
 *
-      DO 20 K = 1, 8
+      DO 20 K = 1, 9
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN

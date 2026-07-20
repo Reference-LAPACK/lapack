@@ -78,7 +78,7 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdx)( int matrix_layout, char jobu, char jobvt
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_2;
     }
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(12*MIN(m,n))) );
     if( iwork == NULL ) {

@@ -261,7 +261,7 @@
 *     number of additions in each row.
 *
       SAFE1 = SLAMCH( 'Safe minimum' )
-      SAFE1 = (N+1)*SAFE1
+      SAFE1 = REAL( N+1 )*SAFE1
 *
 *     Form  y := alpha*abs(A)*abs(x) + beta*abs(y).
 *

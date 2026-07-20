@@ -38,7 +38,7 @@ lapack_int API_SUFFIX(LAPACKE_ztgexc)( int matrix_layout, lapack_logical wantq,
                            lapack_complex_double* b, lapack_int ldb,
                            lapack_complex_double* q, lapack_int ldq,
                            lapack_complex_double* z, lapack_int ldz,
-                           lapack_int ifst, lapack_int ilst )
+                           lapack_int ifst, lapack_int* ilst )
 {
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgexc", -1 );

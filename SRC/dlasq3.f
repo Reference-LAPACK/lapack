@@ -89,7 +89,7 @@
 *>         Lower order part of SIGMA
 *> \endverbatim
 *>
-*> \param[in] QMAX
+*> \param[in,out] QMAX
 *> \verbatim
 *>          QMAX is DOUBLE PRECISION
 *>         Maximum value of q.

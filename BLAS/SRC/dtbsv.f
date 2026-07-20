@@ -201,10 +201,6 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      DOUBLE PRECISION ZERO
-      PARAMETER (ZERO=0.0D+0)
 *     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION TEMP
@@ -274,59 +270,51 @@
               KPLUS1 = K + 1
               IF (INCX.EQ.1) THEN
                   DO 20 J = N,1,-1
-                      IF (X(J).NE.ZERO) THEN
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(KPLUS1,J)
-                          TEMP = X(J)
-                          DO 10 I = J - 1,MAX(1,J-K),-1
-                              X(I) = X(I) - TEMP*A(L+I,J)
-   10                     CONTINUE
-                      END IF
+                      L = KPLUS1 - J
+                      IF (NOUNIT) X(J) = X(J)/A(KPLUS1,J)
+                      TEMP = X(J)
+                      DO 10 I = J - 1,MAX(1,J-K),-1
+                          X(I) = X(I) - TEMP*A(L+I,J)
+   10                 CONTINUE
    20             CONTINUE
               ELSE
                   KX = KX + (N-1)*INCX
                   JX = KX
                   DO 40 J = N,1,-1
                       KX = KX - INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = KPLUS1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(KPLUS1,J)
-                          TEMP = X(JX)
-                          DO 30 I = J - 1,MAX(1,J-K),-1
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX - INCX
-   30                     CONTINUE
-                      END IF
+                      IX = KX
+                      L = KPLUS1 - J
+                      IF (NOUNIT) X(JX) = X(JX)/A(KPLUS1,J)
+                      TEMP = X(JX)
+                      DO 30 I = J - 1,MAX(1,J-K),-1
+                          X(IX) = X(IX) - TEMP*A(L+I,J)
+                          IX = IX - INCX
+   30                 CONTINUE
                       JX = JX - INCX
    40             CONTINUE
               END IF
           ELSE
               IF (INCX.EQ.1) THEN
                   DO 60 J = 1,N
-                      IF (X(J).NE.ZERO) THEN
-                          L = 1 - J
-                          IF (NOUNIT) X(J) = X(J)/A(1,J)
-                          TEMP = X(J)
-                          DO 50 I = J + 1,MIN(N,J+K)
-                              X(I) = X(I) - TEMP*A(L+I,J)
-   50                     CONTINUE
-                      END IF
+                      L = 1 - J
+                      IF (NOUNIT) X(J) = X(J)/A(1,J)
+                      TEMP = X(J)
+                      DO 50 I = J + 1,MIN(N,J+K)
+                          X(I) = X(I) - TEMP*A(L+I,J)
+   50                 CONTINUE
    60             CONTINUE
               ELSE
                   JX = KX
                   DO 80 J = 1,N
                       KX = KX + INCX
-                      IF (X(JX).NE.ZERO) THEN
-                          IX = KX
-                          L = 1 - J
-                          IF (NOUNIT) X(JX) = X(JX)/A(1,J)
-                          TEMP = X(JX)
-                          DO 70 I = J + 1,MIN(N,J+K)
-                              X(IX) = X(IX) - TEMP*A(L+I,J)
-                              IX = IX + INCX
-   70                     CONTINUE
-                      END IF
+                      IX = KX
+                      L = 1 - J
+                      IF (NOUNIT) X(JX) = X(JX)/A(1,J)
+                      TEMP = X(JX)
+                      DO 70 I = J + 1,MIN(N,J+K)
+                          X(IX) = X(IX) - TEMP*A(L+I,J)
+                          IX = IX + INCX
+   70                 CONTINUE
                       JX = JX + INCX
    80             CONTINUE
               END IF

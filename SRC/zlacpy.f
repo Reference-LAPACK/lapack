@@ -134,7 +134,7 @@
    20    CONTINUE
 *
       ELSE IF( LSAME( UPLO, 'L' ) ) THEN
-         DO 40 J = 1, N
+         DO 40 J = 1, MIN( M, N )
             DO 30 I = J, M
                B( I, J ) = A( I, J )
    30       CONTINUE

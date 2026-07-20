@@ -193,7 +193,7 @@
    10             CONTINUE
    20          CONTINUE
             ELSE
-               DO 40 J = 1, N
+               DO 40 J = 1, MIN( M, N )
                   DO 30 I = J + 1, M
                      SUM = ABS( A( I, J ) )
                      IF( VALUE .LT. SUM .OR.
@@ -212,7 +212,7 @@
    50             CONTINUE
    60          CONTINUE
             ELSE
-               DO 80 J = 1, N
+               DO 80 J = 1, MIN( M, N )
                   DO 70 I = J, M
                      SUM = ABS( A( I, J ) )
                      IF( VALUE .LT. SUM .OR.
@@ -243,7 +243,7 @@
                IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   110       CONTINUE
          ELSE
-            DO 140 J = 1, N
+            DO 140 J = 1, MIN( M, N )
                IF( UDIAG ) THEN
                   SUM = ONE
                   DO 120 I = J + 1, M
@@ -290,7 +290,7 @@
                DO 220 I = N + 1, M
                   WORK( I ) = ZERO
   220          CONTINUE
-               DO 240 J = 1, N
+               DO 240 J = 1, MIN( M, N )
                   DO 230 I = J + 1, M
                      WORK( I ) = WORK( I ) + ABS( A( I, J ) )
   230             CONTINUE
@@ -299,7 +299,7 @@
                DO 250 I = 1, M
                   WORK( I ) = ZERO
   250          CONTINUE
-               DO 270 J = 1, N
+               DO 270 J = 1, MIN( M, N )
                   DO 260 I = J, M
                      WORK( I ) = WORK( I ) + ABS( A( I, J ) )
   260             CONTINUE
@@ -336,14 +336,14 @@
             IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
                SUM = MIN( M, N )
-               DO 310 J = 1, N
+               DO 310 J = 1, MIN( M, N )
                   CALL ZLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
      $                         SUM )
   310          CONTINUE
             ELSE
                SCALE = ZERO
                SUM = ONE
-               DO 320 J = 1, N
+               DO 320 J = 1, MIN( M, N )
                   CALL ZLASSQ( M-J+1, A( J, J ), 1, SCALE, SUM )
   320          CONTINUE
             END IF

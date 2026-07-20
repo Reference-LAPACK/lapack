@@ -42,8 +42,8 @@ lapack_logical API_SUFFIX(LAPACKE_c_nancheck)( lapack_int n,
     if( incx == 0 ) return (lapack_logical) LAPACK_CISNAN( x[0] );
     inc = ( incx > 0 ) ? incx : -incx ;
 
-    for( i = 0; i < n*inc; i+=inc ) {
-        if( LAPACK_CISNAN( x[i] ) )
+    for( i = 0; i < n; i++ ) {
+        if( LAPACK_CISNAN( x[(size_t)i*inc] ) )
             return (lapack_logical) 1;
     }
     return (lapack_logical) 0;

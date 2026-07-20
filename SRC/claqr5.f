@@ -299,7 +299,8 @@
       COMPLEX            VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET
+      EXTERNAL           CGEMM, CLACPY, CLAQR1,
+     $                   CLARFG, CLASET
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1

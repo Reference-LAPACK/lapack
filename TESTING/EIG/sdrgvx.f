@@ -382,7 +382,7 @@
          MAXWRK = 6*NMAX + NMAX*ILAENV( 1, 'SGEQRF', ' ', NMAX, 1, NMAX,
      $            0 )
          MAXWRK = MAX( MAXWRK, 2*NMAX*NMAX+12*NMAX+16 )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -704,7 +704,7 @@
 *
       CALL ALASVM( 'SXV', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

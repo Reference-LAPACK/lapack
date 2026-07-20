@@ -237,7 +237,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF1F, DLARFGP, DORBDB5, DROT, DSCAL, XERBLA
+      EXTERNAL           DLARF1F, DLARFGP, DORBDB5,
+     $                   DROT, DSCAL, XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DNRM2

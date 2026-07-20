@@ -211,11 +211,11 @@
       COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY,
-     $                   ZDRSCL,
-     $                   ZGEBRD, ZGELQF, ZGEMM, ZGEMV, ZGEQRF, ZLACPY,
-     $                   ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ,
-     $                   ZUNMQR
+      EXTERNAL           DLASCL, DLASET, XERBLA, ZBDSQR,
+     $                   ZCOPY, ZDRSCL, ZGEBRD, ZGELQF,
+     $                   ZGEMM, ZGEMV, ZGEQRF, ZLACPY,
+     $                   ZLASCL, ZLASET, ZUNGBR, ZUNMBR,
+     $                   ZUNMLQ, ZUNMQR
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV

@@ -1033,6 +1033,8 @@
                ELSE
                   TRAT = ZERO
                END IF
+            ELSE IF (SNRM == ZNRM) THEN
+               TRAT = ZERO
             ELSE IF (ZNRM == ZERO) THEN
                TRAT = SNRM / ULP
             ELSE

@@ -126,7 +126,7 @@
       REAL               SAFE1
 *     ..
 *     .. Statement Functions ..
-      COMPLEX            CABS1
+      REAL               CABS1
 *     ..
 *     .. Statement Function Definitions ..
       CABS1( CDUM ) = ABS( REAL( CDUM ) ) + ABS( AIMAG( CDUM ) )
@@ -138,7 +138,7 @@
 *     to compute AYB.
 *
       SAFE1 = SLAMCH( 'Safe minimum' )
-      SAFE1 = (NZ+1)*SAFE1
+      SAFE1 = REAL( NZ+1 )*SAFE1
 
       DO J = 1, NRHS
          BERR(J) = 0.0

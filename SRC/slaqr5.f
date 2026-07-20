@@ -304,7 +304,8 @@
       REAL               VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLAQR1, SLARFG, SLASET
+      EXTERNAL           SGEMM, SLACPY, SLAQR1,
+     $                   SLARFG, SLASET
 *     ..
 *     .. Executable Statements ..
 *

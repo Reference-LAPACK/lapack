@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
         fflags: [
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
@@ -71,9 +71,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Use GCC-14 on MacOS
       if: ${{ matrix.os == 'macos-latest' }}
@@ -90,7 +87,8 @@ jobs:
         -D CMAKE_EXE_LINKER_FLAGS="-Wl,--stack=2097152"
 
     - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using
+      # a single-configuration generator such as make or Ninja.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B build -G Ninja
@@ -105,7 +103,7 @@ jobs:
     - name: Build
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: cmake --build build --config ${{env.BUILD_TYPE}}
+      run: cmake --build build
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
@@ -118,6 +116,8 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
 
     - name: Install
+      # Since we use a single configuration generator, Ninja, there is no need to provide
+      # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: cmake --build build --target install -j2
 
   test-extended-api-only:
@@ -160,10 +160,13 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
 
   coverage:
+
     runs-on: ubuntu-latest
+
     env:
       BUILD_TYPE: Coverage
       FFLAGS: "-fopenmp"
+
     steps:
 
     - name: Checkout LAPACK
@@ -173,7 +176,8 @@ jobs:
       uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using
+      # a single-configuration generator such as make or Ninja.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B build -G Ninja
@@ -186,17 +190,27 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=ON
 
     - name: Install
+      # Since we use a single configuration generator, Ninja, there is no need to provide
+      # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: cmake --build build --target install -j2
 
     - name: Coverage
+      # Since we use a single configuration generator, Ninja, there is no need to provide
+      # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: |
         echo "Coverage"
         cmake --build build --target coverage
         bash <(curl -s https://codecov.io/bash) -X gcov
 
   test-install-cblas-lapacke-without-fortran-compiler:
+
     runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+
     steps:
+
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
@@ -210,9 +224,12 @@ jobs:
         sudo apt purge gfortran
 
     - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using
+      # a single-configuration generator such as make or Ninja.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B build -G Ninja
-        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
         -D LAPACKE:BOOL=ON
@@ -223,10 +240,14 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=ON
 
     - name: Install
+      # Since we use a single configuration generator, Ninja, there is no need to provide
+      # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: cmake --build build --target install -j2
 
   memory-check:
+
     runs-on: ubuntu-latest
+
     env:
       BUILD_TYPE: Debug
 
@@ -244,6 +265,9 @@ jobs:
         sudo apt install -y cmake valgrind gfortran
 
     - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using
+      # a single-configuration generator such as make or Ninja.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -255,7 +279,9 @@ jobs:
         -D LAPACK_TESTING_USE_PYTHON:BOOL=OFF
 
     - name: Build
-      run: cmake --build build --config ${{env.BUILD_TYPE}}
+      # Since we use a single configuration generator, Ninja, there is no need to provide
+      # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
+      run: cmake --build build
 
     - name: Test
       working-directory: ${{github.workspace}}/build

@@ -527,7 +527,7 @@
      $        ILAENV( 1, 'CUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'CUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( 2*NMAX, NMAX*( NB+1 ), NMAX*( NMAX+1 ) )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
@@ -564,7 +564,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -780,8 +780,14 @@
             END IF
 *
             DO 120 J = 1, N
-               IF( ALPHA( J ).NE.ALPHA1( J ) .OR. BETA( J ).NE.
-     $             BETA1( J ) )RESULT( 5 ) = ULPINV
+               RESULT( 5 ) = MAX( RESULT( 5 ),
+     $             ABS( ALPHA( J ) - ALPHA1( J ) )
+     $             / MAX( ABS( ALPHA( J ) ), ABS( ALPHA1( J ) ),
+     $                    SAFMIN ) )
+               RESULT( 5 ) = MAX( RESULT( 5 ),
+     $             ABS( BETA( J ) - BETA1( J ) )
+     $             / MAX( ABS( BETA( J ) ), ABS( BETA1( J ) ),
+     $                    SAFMIN ) )
   120       CONTINUE
 *
 *           Do test (6): Compute eigenvalues and left eigenvectors,
@@ -800,8 +806,14 @@
             END IF
 *
             DO 130 J = 1, N
-               IF( ALPHA( J ).NE.ALPHA1( J ) .OR. BETA( J ).NE.
-     $             BETA1( J ) )RESULT( 6 ) = ULPINV
+               RESULT( 6 ) = MAX( RESULT( 6 ),
+     $             ABS( ALPHA( J ) - ALPHA1( J ) )
+     $             / MAX( ABS( ALPHA( J ) ), ABS( ALPHA1( J ) ),
+     $                    SAFMIN ) )
+               RESULT( 6 ) = MAX( RESULT( 6 ),
+     $             ABS( BETA( J ) - BETA1( J ) )
+     $             / MAX( ABS( BETA( J ) ), ABS( BETA1( J ) ),
+     $                    SAFMIN ) )
   130       CONTINUE
 *
             DO 150 J = 1, N
@@ -827,8 +839,14 @@
             END IF
 *
             DO 160 J = 1, N
-               IF( ALPHA( J ).NE.ALPHA1( J ) .OR. BETA( J ).NE.
-     $             BETA1( J ) )RESULT( 7 ) = ULPINV
+               RESULT( 7 ) = MAX( RESULT( 7 ),
+     $             ABS( ALPHA( J ) - ALPHA1( J ) )
+     $             / MAX( ABS( ALPHA( J ) ), ABS( ALPHA1( J ) ),
+     $                    SAFMIN ) )
+               RESULT( 7 ) = MAX( RESULT( 7 ),
+     $             ABS( BETA( J ) - BETA1( J ) )
+     $             / MAX( ABS( BETA( J ) ), ABS( BETA1( J ) ),
+     $                    SAFMIN ) )
   160       CONTINUE
 *
             DO 180 J = 1, N
@@ -884,7 +902,7 @@
 *
       CALL ALASVM( 'CGV', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *

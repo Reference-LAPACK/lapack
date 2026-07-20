@@ -170,7 +170,8 @@
       EXTERNAL     LSAME, ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     CLACGV, CGEMV, CSCAL, CAXPY, CCOPY, CSWAP, CLASET
+      EXTERNAL     CLACGV, CGEMV, CSCAL, CAXPY,
+     $             CCOPY, CSWAP, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    REAL, CONJG, MAX

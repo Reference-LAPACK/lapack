@@ -55,7 +55,7 @@ lapack_int API_SUFFIX(LAPACKE_zgedmdq)( int matrix_layout, char jobs, char jobz,
     lapack_complex_double zwork_query;
     lapack_int iwork_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgedmdq", -1 );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zgedmdq", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK

@@ -642,7 +642,7 @@
          M = MVAL( JSIZE )
          N = NVAL( JSIZE )
          MNMIN = MIN( M, N )
-         AMNINV = ONE / MAX( M, N, 1 )
+         AMNINV = ONE / REAL( MAX( M, N, 1 ) )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -699,7 +699,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*MAX( M, N )*ULPINV
+            ANORM = RTUNFL*REAL( MAX( M, N ) )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -1261,8 +1261,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL

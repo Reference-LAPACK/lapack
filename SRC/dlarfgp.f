@@ -220,7 +220,12 @@
 *
 *           This is the general case.
 *
-            CALL DSCAL( N-1, ONE / ALPHA, X, INCX )
+            IF( ABS( ALPHA ).LT.SMLNUM ) THEN
+               CALL DSCAL( N-1, ONE / SMLNUM, X, INCX )
+               CALL DSCAL( N-1, SMLNUM / ALPHA, X, INCX )
+            ELSE
+               CALL DSCAL( N-1, ONE / ALPHA, X, INCX )
+            END IF
 *
          END IF
 *

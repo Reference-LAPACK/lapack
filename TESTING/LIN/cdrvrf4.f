@@ -312,7 +312,7 @@
                         RESULT(1) = RESULT(1)
      +                              / MAX( ABS( ALPHA ) * NORMA * NORMA
      +                                   + ABS( BETA ) * NORMC, ONE )
-     +                              / MAX( N , 1 ) / EPS
+     +                              / REAL( MAX( N, 1 ) ) / EPS
 *
                         IF( RESULT(1).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 ) THEN

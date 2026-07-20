@@ -50,16 +50,26 @@ lapack_int API_SUFFIX(LAPACKE_ztprfb_work)( int matrix_layout, char side, char t
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int lda_t = MAX(1,k);
+        lapack_int nrowsA, ncolsA, nrowsV;
+        if( API_SUFFIX(LAPACKE_lsame)(side, 'l') ) {
+            nrowsA = k; ncolsA = n; nrowsV = m;
+        } else if( API_SUFFIX(LAPACKE_lsame)(side, 'r') ) {
+            nrowsA = m; ncolsA = k; nrowsV = n;
+        } else {
+            info = -2;
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
+            return info;
+        }
+        lapack_int lda_t = MAX(1,nrowsA);
         lapack_int ldb_t = MAX(1,m);
         lapack_int ldt_t = MAX(1,ldt);
-        lapack_int ldv_t = MAX(1,ldv);
+        lapack_int ldv_t = MAX(1,nrowsV);
         lapack_complex_double* v_t = NULL;
         lapack_complex_double* t_t = NULL;
         lapack_complex_double* a_t = NULL;
         lapack_complex_double* b_t = NULL;
         /* Check leading dimension(s) */
-        if( lda < m ) {
+        if( lda < ncolsA ) {
             info = -15;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
             return info;
@@ -74,10 +84,18 @@ lapack_int API_SUFFIX(LAPACKE_ztprfb_work)( int matrix_layout, char side, char t
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
             return info;
         }
-        if( ldv < k ) {
-            info = -11;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
-            return info;
+        if( API_SUFFIX(LAPACKE_lsame)(storev, 'c') ) {
+            if( ldv < nrowsV ) {
+                info = -11;
+                API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
+                return info;
+            }
+        } else {
+            if( ldv < k ) {
+                info = -11;
+                API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztprfb_work", info );
+                return info;
+            }
         }
         /* Allocate memory for temporary array(s) */
         v_t = (lapack_complex_double*)
@@ -93,7 +111,7 @@ lapack_int API_SUFFIX(LAPACKE_ztprfb_work)( int matrix_layout, char side, char t
             goto exit_level_1;
         }
         a_t = (lapack_complex_double*)
-            LAPACKE_malloc( sizeof(lapack_complex_double) * lda_t * MAX(1,m) );
+            LAPACKE_malloc( sizeof(lapack_complex_double) * lda_t * MAX(1,ncolsA) );
         if( a_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_2;
@@ -105,17 +123,17 @@ lapack_int API_SUFFIX(LAPACKE_ztprfb_work)( int matrix_layout, char side, char t
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, ldv, k, v, ldv, v_t, ldv_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, ldt, k, t, ldt, t_t, ldt_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, k, m, a, lda, a_t, lda_t );
-        API_SUFFIX(LAPACKE_zge_trans)( matrix_layout, m, n, b, ldb, b_t, ldb_t );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_ROW_MAJOR, nrowsV, k, v, ldv, v_t, ldv_t );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_ROW_MAJOR, ldt, k, t, ldt, t_t, ldt_t );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_ROW_MAJOR, nrowsA, ncolsA, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_ROW_MAJOR, m, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztprfb( &side, &trans, &direct, &storev, &m, &n, &k, &l, v_t,
                        &ldv_t, t_t, &ldt_t, a_t, &lda_t, b_t, &ldb_t, work,
                        &ldwork );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
-        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, k, m, a_t, lda_t, a, lda );
+        API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, nrowsA, ncolsA, a_t, lda_t, a, lda );
         API_SUFFIX(LAPACKE_zge_trans)( LAPACK_COL_MAJOR, m, n, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );

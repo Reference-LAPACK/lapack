@@ -276,9 +276,9 @@
             LWKOPT = 1
          ELSE
             NB1 = ILAENV( 1, 'SGEQRF', ' ', M, N, -1, -1 )
-            NB2 = ILAENV( 1, 'SGERQF', ' ', M, N, -1, -1 )
+            NB2 = ILAENV( 1, 'STZRZF', ' ', M, N, -1, -1 )
             NB3 = ILAENV( 1, 'SORMQR', ' ', M, N, NRHS, -1 )
-            NB4 = ILAENV( 1, 'SORMRQ', ' ', M, N, NRHS, -1 )
+            NB4 = ILAENV( 1, 'SORMRZ', ' ', M, N, NRHS, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = MN + MAX( 2*MN, N + 1, MN + NRHS )
             LWKOPT = MAX( LWKMIN,

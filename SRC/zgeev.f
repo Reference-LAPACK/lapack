@@ -211,9 +211,9 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL, ZGEHRD,
-     $                   ZHSEQR,
-     $                   ZLACPY, ZLASCL, ZSCAL, ZTREVC3, ZUNGHR
+      EXTERNAL           XERBLA, ZDSCAL, ZGEBAK, ZGEBAL,
+     $                   ZGEHRD, ZHSEQR, ZLACPY, ZLASCL,
+     $                   ZSCAL, ZTREVC3, ZUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
@@ -497,7 +497,7 @@
 *     Undo scaling if necessary
 *
    50 CONTINUE
-      IF( SCALEA ) THEN
+      IF( SCALEA .AND. INFO.GE.0 ) THEN
          CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
      $                W( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )

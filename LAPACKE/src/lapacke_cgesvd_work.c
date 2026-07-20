@@ -69,15 +69,19 @@ lapack_int API_SUFFIX(LAPACKE_cgesvd_work)( int matrix_layout, char jobu, char j
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvd_work", info );
             return info;
         }
-        if( ldu < ncols_u ) {
-            info = -10;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvd_work", info );
-            return info;
+        if( API_SUFFIX(LAPACKE_lsame)( jobu, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobu, 's' ) ) {
+            if( ldu < ncols_u ) {
+                info = -10;
+                API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvd_work", info );
+                return info;
+            }
         }
-        if( ldvt < ncols_vt ) {
-            info = -12;
-            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvd_work", info );
-            return info;
+        if( API_SUFFIX(LAPACKE_lsame)( jobvt, 'a' ) || API_SUFFIX(LAPACKE_lsame)( jobvt, 's' ) ) {
+            if( ldvt < ncols_vt ) {
+                info = -12;
+                API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvd_work", info );
+                return info;
+            }
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {

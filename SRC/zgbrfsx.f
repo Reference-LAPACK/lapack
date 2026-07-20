@@ -498,7 +498,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANGB, ZLA_GBRCOND_X,
      $                   ZLA_GBRCOND_C
-      DOUBLE PRECISION   DLAMCH, ZLANGB, ZLA_GBRCOND_X, ZLA_GBRCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANGB, ZLA_GBRCOND_X,
+     $                   ZLA_GBRCOND_C
       LOGICAL            LSAME
       INTEGER            ILATRANS, ILAPREC
 *     ..
@@ -513,7 +514,7 @@
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0D+0 ) THEN
             PARAMS( LA_LINRX_ITREF_I ) = ITREF_DEFAULT
          ELSE
-            REF_TYPE = PARAMS( LA_LINRX_ITREF_I )
+            REF_TYPE = INT( PARAMS( LA_LINRX_ITREF_I ) )
          END IF
       END IF
 *

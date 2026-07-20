@@ -153,12 +153,14 @@
       ANORM = MAX( CLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
 *
       IF( ANORM.GT.WNORM ) THEN
-         RESULT = ( WNORM / ANORM ) / ( M*EPS )
+         RESULT = ( WNORM / ANORM ) / ( REAL( M )*EPS )
       ELSE
          IF( ANORM.LT.ONE ) THEN
-            RESULT = ( MIN( WNORM, M*ANORM ) / ANORM ) / ( M*EPS )
+            RESULT = ( MIN( WNORM, REAL( M )*ANORM ) / ANORM ) /
+     $               ( REAL( M )*EPS )
          ELSE
-            RESULT = MIN( WNORM / ANORM, REAL( M ) ) / ( M*EPS )
+            RESULT = MIN( WNORM / ANORM, REAL( M ) ) /
+     $               ( REAL( M )*EPS )
          END IF
       END IF
 *

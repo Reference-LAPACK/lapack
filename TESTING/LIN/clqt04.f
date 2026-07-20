@@ -159,7 +159,7 @@
       ANORM = CLANGE( '1', M, N, A, M, RWORK )
       RESID = CLANGE( '1', M, N, L, LL, RWORK )
       IF( ANORM.GT.ZERO ) THEN
-         RESULT( 1 ) = RESID / (EPS*MAX(1,M)*ANORM)
+         RESULT( 1 ) = RESID / (EPS*REAL( MAX(1,M) )*ANORM)
       ELSE
          RESULT( 1 ) = ZERO
       END IF
@@ -169,7 +169,7 @@
       CALL CLASET( 'Full', N, N, CZERO, ONE, L, LL )
       CALL CHERK( 'U', 'C', N, N, REAL(-ONE), Q, N, REAL(ONE), L, LL)
       RESID = CLANSY( '1', 'Upper', N, L, LL, RWORK )
-      RESULT( 2 ) = RESID / (EPS*MAX(1,N))
+      RESULT( 2 ) = RESID / (EPS*REAL( MAX(1,N) ))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
@@ -189,7 +189,7 @@
       CALL CGEMM( 'N', 'N', N, M, N, -ONE, Q, N, D, N, ONE, DF, N )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
       IF( DNORM.GT.ZERO ) THEN
-         RESULT( 3 ) = RESID / (EPS*MAX(1,M)*DNORM)
+         RESULT( 3 ) = RESID / (EPS*REAL( MAX(1,M) )*DNORM)
       ELSE
          RESULT( 3 ) = ZERO
       END IF
@@ -208,7 +208,7 @@
       CALL CGEMM( 'C', 'N', N, M, N, -ONE, Q, N, D, N, ONE, DF, N )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
       IF( DNORM.GT.ZERO ) THEN
-         RESULT( 4 ) = RESID / (EPS*MAX(1,M)*DNORM)
+         RESULT( 4 ) = RESID / (EPS*REAL( MAX(1,M) )*DNORM)
       ELSE
          RESULT( 4 ) = ZERO
       END IF
@@ -231,7 +231,7 @@
       CALL CGEMM( 'N', 'N', M, N, N, -ONE, C, M, Q, N, ONE, CF, M )
       RESID = CLANGE( '1', N, M, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 5 ) = RESID / (EPS*MAX(1,M)*DNORM)
+         RESULT( 5 ) = RESID / (EPS*REAL( MAX(1,M) )*DNORM)
       ELSE
          RESULT( 5 ) = ZERO
       END IF
@@ -250,7 +250,7 @@
       CALL CGEMM( 'N', 'C', M, N, N, -ONE, C, M, Q, N, ONE, CF, M )
       RESID = CLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 6 ) = RESID / (EPS*MAX(1,M)*DNORM)
+         RESULT( 6 ) = RESID / (EPS*REAL( MAX(1,M) )*DNORM)
       ELSE
          RESULT( 6 ) = ZERO
       END IF
@@ -261,4 +261,3 @@
 *
       RETURN
       END
-

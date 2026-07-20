@@ -222,9 +222,9 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLACPY,
-     $                   DLARTG,
-     $                   DLASCL, DORGHR, DROT, DSCAL, DTREVC3, XERBLA
+      EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR,
+     $                   DLACPY, DLARTG, DLASCL, DORGHR,
+     $                   DROT, DSCAL, DTREVC3, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
@@ -520,7 +520,7 @@
 *     Undo scaling if necessary
 *
    50 CONTINUE
-      IF( SCALEA ) THEN
+      IF( SCALEA .AND. INFO.GE.0 ) THEN
          CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1,
      $                WR( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
