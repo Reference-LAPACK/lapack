@@ -209,6 +209,14 @@ else()
                       zerrvx.f zerrge.f zerrhe.f zerrsy.f zerrpo.f)
 endif()
 
+# Disable constant propagation for NAG compiler to avoid issues with
+# creating NaN values in the CXX error-exit tests.
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+  set_source_files_properties(
+    serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f
+    PROPERTIES COMPILE_OPTIONS "-Onopropagate")
+endif()
+
 set(DSLINTST dchkab.f
 	ddrvab.f ddrvac.f derrab.f derrac.f dget08.f
 	alaerh.f alahd.f  aladhd.f alareq.f
