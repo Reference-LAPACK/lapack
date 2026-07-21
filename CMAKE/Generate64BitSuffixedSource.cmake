@@ -14,14 +14,14 @@ endif()
 get_filename_component(input_extension "${INPUT_FILE}" LAST_EXT)
 string(TOLOWER "${input_extension}" input_extension_lower)
 if(input_extension_lower MATCHES "^\\.f(90|95|03|08)$")
-  set(_rewrite_source_is_free_form TRUE)
+  set(_source_is_free_form TRUE)
 else()
-  set(_rewrite_source_is_free_form FALSE)
+  set(_source_is_free_form FALSE)
 endif()
 
 # Check if line is a comment line based on the form of the Fortran source.
 function(_is_fortran_comment_line line result)
-  if(_rewrite_source_is_free_form)
+  if(_source_is_free_form)
     if("${line}" MATCHES "^[ \t]*!")
       set(${result} TRUE PARENT_SCOPE)
     else()
@@ -36,7 +36,7 @@ endfunction()
 
 # Check if the line is a fixed-form continuation line.
 function(_is_fixed_form_continuation_line line result)
-  if(_rewrite_source_is_free_form)
+  if(_source_is_free_form)
     set(${result} FALSE PARENT_SCOPE)
     return()
   endif()
@@ -64,7 +64,7 @@ endfunction()
 
 # Remove leading and trailing continuation characters and whitespace
 function(_normalize_fortran_statement_fragment line result)
-  if(_rewrite_source_is_free_form)
+  if(_source_is_free_form)
     string(REGEX REPLACE "^[ \t]*&[ \t]*" "" fragment "${line}")
     string(REGEX REPLACE "[ \t]*&[ \t]*$" "" fragment "${fragment}")
   else()
@@ -224,7 +224,7 @@ endfunction()
 # Wrap fixed-form Fortran source code to ensure it remains valid with
 # the standard 72-column statement field.
 function(_wrap_fixed_form_source source_text result)
-  if(_rewrite_source_is_free_form)
+  if(_source_is_free_form)
     set(${result} "${source_text}" PARENT_SCOPE)
     return()
   endif()
@@ -350,7 +350,7 @@ while(1)
     endif()
 
     set(consume_continuation FALSE)
-    if(_rewrite_source_is_free_form)
+    if(_source_is_free_form)
       if("${last_line}" MATCHES "&[ \t]*$" OR
           "${continuation_line}" MATCHES "^[ \t]*&")
         set(consume_continuation TRUE)
