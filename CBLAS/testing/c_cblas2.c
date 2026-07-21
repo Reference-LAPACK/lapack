@@ -30,15 +30,15 @@ void F77_cgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n,
            A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
            A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
         }
-     cblas_cgemv( CblasRowMajor, trans, *m, *n, alpha, A, LDA, x, *incx,
+     API_SUFFIX(cblas_cgemv)( CblasRowMajor, trans, *m, *n, alpha, A, LDA, x, *incx,
 	    beta, y, *incy );
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cgemv( CblasColMajor, trans,
+     API_SUFFIX(cblas_cgemv)( CblasColMajor, trans,
                   *m, *n, alpha, a, *lda, x, *incx, beta, y, *incy );
   else
-     cblas_cgemv( UNDEFINED, trans,
+     API_SUFFIX(cblas_cgemv)( UNDEFINED, trans,
                   *m, *n, alpha, a, *lda, x, *incx, beta, y, *incy );
 }
 
@@ -81,15 +81,15 @@ void F77_cgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLA
            A[ LDA*j+irow ].imag=a[ (*lda)*(j-jcol)+i ].imag;
         }
      }
-     cblas_cgbmv( CblasRowMajor, trans, *m, *n, *kl, *ku, alpha, A, LDA, x,
+     API_SUFFIX(cblas_cgbmv)( CblasRowMajor, trans, *m, *n, *kl, *ku, alpha, A, LDA, x,
 		  *incx, beta, y, *incy );
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cgbmv( CblasColMajor, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
+     API_SUFFIX(cblas_cgbmv)( CblasColMajor, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
 		  *incx, beta, y, *incy );
   else
-     cblas_cgbmv( UNDEFINED, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
+     API_SUFFIX(cblas_cgbmv)( UNDEFINED, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
 		  *incx, beta, y, *incy );
 }
 
@@ -108,7 +108,7 @@ void F77_cgeru(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
            A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
            A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
      }
-     cblas_cgeru( CblasRowMajor, *m, *n, alpha, x, *incx, y, *incy, A, LDA );
+     API_SUFFIX(cblas_cgeru)( CblasRowMajor, *m, *n, alpha, x, *incx, y, *incy, A, LDA );
      for( i=0; i<*m; i++ )
         for( j=0; j<*n; j++ ){
            a[ (*lda)*j+i ].real=A[ LDA*i+j ].real;
@@ -117,9 +117,9 @@ void F77_cgeru(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cgeru( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgeru)( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
   else
-     cblas_cgeru( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgeru)( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
 void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -136,7 +136,7 @@ void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
            A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
            A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
         }
-     cblas_cgerc( CblasRowMajor, *m, *n, alpha, x, *incx, y, *incy, A, LDA );
+     API_SUFFIX(cblas_cgerc)( CblasRowMajor, *m, *n, alpha, x, *incx, y, *incy, A, LDA );
      for( i=0; i<*m; i++ )
         for( j=0; j<*n; j++ ){
            a[ (*lda)*j+i ].real=A[ LDA*i+j ].real;
@@ -145,9 +145,9 @@ void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cgerc( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgerc)( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
   else
-     cblas_cgerc( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgerc)( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
 void F77_chemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -172,15 +172,15 @@ void F77_chemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
            A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
            A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
      }
-     cblas_chemv( CblasRowMajor, uplo, *n, alpha, A, LDA, x, *incx,
+     API_SUFFIX(cblas_chemv)( CblasRowMajor, uplo, *n, alpha, A, LDA, x, *incx,
 	    beta, y, *incy );
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_chemv( CblasColMajor, uplo, *n, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chemv)( CblasColMajor, uplo, *n, alpha, a, *lda, x, *incx,
 	   beta, y, *incy );
   else
-     cblas_chemv( UNDEFINED, uplo, *n, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chemv)( UNDEFINED, uplo, *n, alpha, a, *lda, x, *incx,
 	   beta, y, *incy );
 }
 
@@ -202,7 +202,7 @@ CBLAS_INT i,irow,j,jcol,LDA;
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_chbmv(CblasRowMajor, UNDEFINED, *n, *k, alpha, a, *lda, x,
+        API_SUFFIX(cblas_chbmv)(CblasRowMajor, UNDEFINED, *n, *k, alpha, a, *lda, x,
 		 *incx, beta, y, *incy );
      else {
         LDA = *k+2;
@@ -239,16 +239,16 @@ CBLAS_INT i,irow,j,jcol,LDA;
               }
            }
         }
-        cblas_chbmv( CblasRowMajor, uplo, *n, *k, alpha, A, LDA, x, *incx,
+        API_SUFFIX(cblas_chbmv)( CblasRowMajor, uplo, *n, *k, alpha, A, LDA, x, *incx,
        		     beta, y, *incy );
         free(A);
       }
    }
    else if (*layout == TEST_COL_MJR)
-     cblas_chbmv(CblasColMajor, uplo, *n, *k, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chbmv)(CblasColMajor, uplo, *n, *k, alpha, a, *lda, x, *incx,
                  beta, y, *incy );
    else
-     cblas_chbmv(UNDEFINED, uplo, *n, *k, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chbmv)(UNDEFINED, uplo, *n, *k, alpha, a, *lda, x, *incx,
                  beta, y, *incy );
 }
 
@@ -267,7 +267,7 @@ void F77_chpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
   get_uplo_type(uplow,&uplo);
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_chpmv(CblasRowMajor, UNDEFINED, *n, alpha, ap, x, *incx,
+        API_SUFFIX(cblas_chpmv)(CblasRowMajor, UNDEFINED, *n, alpha, ap, x, *incx,
 	         beta, y, *incy);
      else {
         LDA = *n;
@@ -298,17 +298,17 @@ void F77_chpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
 	         AP[ k ].imag=A[ LDA*i+j ].imag;
               }
         }
-        cblas_chpmv( CblasRowMajor, uplo, *n, alpha, AP, x, *incx, beta, y,
+        API_SUFFIX(cblas_chpmv)( CblasRowMajor, uplo, *n, alpha, AP, x, *incx, beta, y,
                      *incy );
         free(A);
         free(AP);
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_chpmv( CblasColMajor, uplo, *n, alpha, ap, x, *incx, beta, y,
+     API_SUFFIX(cblas_chpmv)( CblasColMajor, uplo, *n, alpha, ap, x, *incx, beta, y,
                   *incy );
   else
-     cblas_chpmv( UNDEFINED, uplo, *n, alpha, ap, x, *incx, beta, y,
+     API_SUFFIX(cblas_chpmv)( UNDEFINED, uplo, *n, alpha, ap, x, *incx, beta, y,
                   *incy );
 }
 
@@ -331,7 +331,7 @@ void F77_ctbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_ctbmv(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda,
+        API_SUFFIX(cblas_ctbmv)(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda,
 	x, *incx);
      else {
         LDA = *k+2;
@@ -368,15 +368,15 @@ void F77_ctbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
              }
           }
         }
-        cblas_ctbmv(CblasRowMajor, uplo, trans, diag, *n, *k, A, LDA, x,
+        API_SUFFIX(cblas_ctbmv)(CblasRowMajor, uplo, trans, diag, *n, *k, A, LDA, x,
 		    *incx);
         free(A);
      }
    }
    else if (*layout == TEST_COL_MJR)
-     cblas_ctbmv(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbmv)(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
    else
-     cblas_ctbmv(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbmv)(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
 void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -399,7 +399,7 @@ void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_ctbsv(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda, x,
+        API_SUFFIX(cblas_ctbsv)(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda, x,
 	         *incx);
      else {
         LDA = *k+2;
@@ -436,15 +436,15 @@ void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
               }
            }
         }
-        cblas_ctbsv(CblasRowMajor, uplo, trans, diag, *n, *k, A, LDA,
+        API_SUFFIX(cblas_ctbsv)(CblasRowMajor, uplo, trans, diag, *n, *k, A, LDA,
 		    x, *incx);
         free(A);
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ctbsv(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbsv)(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
   else
-     cblas_ctbsv(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbsv)(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
 void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -465,7 +465,7 @@ void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_ctpmv( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
+        API_SUFFIX(cblas_ctpmv)( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
      else {
         LDA = *n;
         A=(CBLAS_TEST_COMPLEX*)malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX));
@@ -495,15 +495,15 @@ void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 	         AP[ k ].imag=A[ LDA*i+j ].imag;
               }
         }
-        cblas_ctpmv( CblasRowMajor, uplo, trans, diag, *n, AP, x, *incx );
+        API_SUFFIX(cblas_ctpmv)( CblasRowMajor, uplo, trans, diag, *n, AP, x, *incx );
         free(A);
         free(AP);
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ctpmv( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpmv)( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
   else
-     cblas_ctpmv( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpmv)( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
 }
 
 void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -524,7 +524,7 @@ void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_ctpsv( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
+        API_SUFFIX(cblas_ctpsv)( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
      else {
         LDA = *n;
         A=(CBLAS_TEST_COMPLEX*)malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX));
@@ -554,15 +554,15 @@ void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 	         AP[ k ].imag=A[ LDA*i+j ].imag;
               }
         }
-        cblas_ctpsv( CblasRowMajor, uplo, trans, diag, *n, AP, x, *incx );
+        API_SUFFIX(cblas_ctpsv)( CblasRowMajor, uplo, trans, diag, *n, AP, x, *incx );
         free(A);
         free(AP);
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ctpsv( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpsv)( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
   else
-     cblas_ctpsv( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpsv)( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
 }
 
 void F77_ctrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -590,13 +590,13 @@ void F77_ctrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 	  A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
           A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
        }
-     cblas_ctrmv(CblasRowMajor, uplo, trans, diag, *n, A, LDA, x, *incx);
+     API_SUFFIX(cblas_ctrmv)(CblasRowMajor, uplo, trans, diag, *n, A, LDA, x, *incx);
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ctrmv(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctrmv)(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx);
   else
-     cblas_ctrmv(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctrmv)(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx);
 }
 void F77_ctrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
        CBLAS_INT *n, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
@@ -623,13 +623,13 @@ void F77_ctrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
            A[ LDA*i+j ].real=a[ (*lda)*j+i ].real;
 	   A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
 	}
-     cblas_ctrsv(CblasRowMajor, uplo, trans, diag, *n, A, LDA, x, *incx );
+     API_SUFFIX(cblas_ctrsv)(CblasRowMajor, uplo, trans, diag, *n, A, LDA, x, *incx );
      free(A);
    }
    else if (*layout == TEST_COL_MJR)
-     cblas_ctrsv(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx );
+     API_SUFFIX(cblas_ctrsv)(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx );
    else
-     cblas_ctrsv(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx );
+     API_SUFFIX(cblas_ctrsv)(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx );
 }
 
 void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
@@ -646,7 +646,7 @@ void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_chpr(CblasRowMajor, UNDEFINED, *n, *alpha, x, *incx, ap );
+        API_SUFFIX(cblas_chpr)(CblasRowMajor, UNDEFINED, *n, *alpha, x, *incx, ap );
      else {
         LDA = *n;
         A = (CBLAS_TEST_COMPLEX* )malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX ) );
@@ -676,7 +676,7 @@ void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
                  AP[ k ].imag=A[ LDA*i+j ].imag;
               }
         }
-        cblas_chpr(CblasRowMajor, uplo, *n, *alpha, x, *incx, AP );
+        API_SUFFIX(cblas_chpr)(CblasRowMajor, uplo, *n, *alpha, x, *incx, AP );
         if (uplo == CblasUpper) {
            for( i=0, k=0; i<*n; i++ )
               for( j=i; j<*n; j++, k++ ){
@@ -706,9 +706,9 @@ void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_chpr(CblasColMajor, uplo, *n, *alpha, x, *incx, ap );
+     API_SUFFIX(cblas_chpr)(CblasColMajor, uplo, *n, *alpha, x, *incx, ap );
   else
-     cblas_chpr(UNDEFINED, uplo, *n, *alpha, x, *incx, ap );
+     API_SUFFIX(cblas_chpr)(UNDEFINED, uplo, *n, *alpha, x, *incx, ap );
 }
 
 void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -726,7 +726,7 @@ void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        cblas_chpr2( CblasRowMajor, UNDEFINED, *n, alpha, x, *incx, y,
+        API_SUFFIX(cblas_chpr2)( CblasRowMajor, UNDEFINED, *n, alpha, x, *incx, y,
 		     *incy, ap );
      else {
         LDA = *n;
@@ -757,7 +757,7 @@ void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
 	         AP[ k ].imag=A[ LDA*i+j ].imag;
 	      }
         }
-        cblas_chpr2( CblasRowMajor, uplo, *n, alpha, x, *incx, y, *incy, AP );
+        API_SUFFIX(cblas_chpr2)( CblasRowMajor, uplo, *n, alpha, x, *incx, y, *incy, AP );
         if (uplo == CblasUpper) {
            for( i=0, k=0; i<*n; i++ )
               for( j=i; j<*n; j++, k++ ) {
@@ -787,9 +787,9 @@ void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
      }
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_chpr2( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, ap );
+     API_SUFFIX(cblas_chpr2)( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, ap );
   else
-     cblas_chpr2( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, ap );
+     API_SUFFIX(cblas_chpr2)( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, ap );
 }
 
 void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
@@ -814,7 +814,7 @@ void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
           A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
        }
 
-     cblas_cher(CblasRowMajor, uplo, *n, *alpha, x, *incx, A, LDA );
+     API_SUFFIX(cblas_cher)(CblasRowMajor, uplo, *n, *alpha, x, *incx, A, LDA );
      for( i=0; i<*n; i++ )
        for( j=0; j<*n; j++ ) {
 	  a[ (*lda)*j+i ].real=A[ LDA*i+j ].real;
@@ -823,9 +823,9 @@ void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cher( CblasColMajor, uplo, *n, *alpha, x, *incx, a, *lda );
+     API_SUFFIX(cblas_cher)( CblasColMajor, uplo, *n, *alpha, x, *incx, a, *lda );
   else
-     cblas_cher( UNDEFINED, uplo, *n, *alpha, x, *incx, a, *lda );
+     API_SUFFIX(cblas_cher)( UNDEFINED, uplo, *n, *alpha, x, *incx, a, *lda );
 }
 
 void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -852,7 +852,7 @@ void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
           A[ LDA*i+j ].imag=a[ (*lda)*j+i ].imag;
        }
 
-     cblas_cher2(CblasRowMajor, uplo, *n, alpha, x, *incx, y, *incy, A, LDA );
+     API_SUFFIX(cblas_cher2)(CblasRowMajor, uplo, *n, alpha, x, *incx, y, *incy, A, LDA );
      for( i=0; i<*n; i++ )
        for( j=0; j<*n; j++ ) {
 	  a[ (*lda)*j+i ].real=A[ LDA*i+j ].real;
@@ -861,7 +861,7 @@ void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
      free(A);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_cher2( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
+     API_SUFFIX(cblas_cher2)( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
   else
-     cblas_cher2( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
+     API_SUFFIX(cblas_cher2)( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
 }

@@ -25,7 +25,7 @@ if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
     )
 endif()
 
-function(add_lapack_test output input target)
+function(_add_lapack_test output input target)
   set(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
   string(REPLACE "." "_" input_name ${input})
@@ -47,151 +47,167 @@ function(add_lapack_test output input target)
   endif()
 endfunction()
 
+function(add_lapack_test output input target)
+  if(BUILD_DEFAULT_API)
+    _add_lapack_test(${output} ${input} ${target})
+  endif()
+
+  if(BUILD_INDEX64_EXT_API)
+    get_filename_component(output_name "${output}" NAME_WE)
+    get_filename_component(output_ext "${output}" EXT)
+    _add_lapack_test("${output_name}_64${output_ext}" ${input} ${target}_64)
+  endif()
+endfunction()
+
 if(BUILD_SINGLE)
-add_lapack_test(stest.out stest.in xlintsts)
-#
-# ======== SINGLE RFP LIN TESTS ========================
-add_lapack_test(stest_rfp.out stest_rfp.in xlintstrfs)
-#
-# ======== SINGLE EIG TESTS ===========================
-add_lapack_test(snep.out nep.in xeigtsts)
-add_lapack_test(ssep.out sep.in xeigtsts)
-add_lapack_test(sse2.out se2.in xeigtsts)
-add_lapack_test(ssvd.out svd.in xeigtsts)
-add_lapack_test(sec.out sec.in xeigtsts)
-add_lapack_test(sed.out sed.in xeigtsts)
-add_lapack_test(sgg.out sgg.in xeigtsts)
-add_lapack_test(sgd.out sgd.in xeigtsts)
-add_lapack_test(ssb.out ssb.in xeigtsts)
-add_lapack_test(ssg.out ssg.in xeigtsts)
-add_lapack_test(sbal.out sbal.in xeigtsts)
-add_lapack_test(sbak.out sbak.in xeigtsts)
-add_lapack_test(sgbal.out sgbal.in xeigtsts)
-add_lapack_test(sgbak.out sgbak.in xeigtsts)
-add_lapack_test(sbb.out sbb.in xeigtsts)
-add_lapack_test(sglm.out glm.in xeigtsts)
-add_lapack_test(sgqr.out gqr.in xeigtsts)
-add_lapack_test(sgsv.out gsv.in xeigtsts)
-add_lapack_test(scsd.out csd.in xeigtsts)
-add_lapack_test(slse.out lse.in xeigtsts)
-#
-# ======== SINGLE DMD EIG TESTS ===========================
-add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
+  # ======== SINGLE LIN TESTS ===========================
+  add_lapack_test(stest.out stest.in xlintsts)
+
+  # ======== SINGLE RFP LIN TESTS ========================
+  add_lapack_test(stest_rfp.out stest_rfp.in xlintstrfs)
+
+  # ======== SINGLE EIG TESTS ===========================
+  add_lapack_test(snep.out nep.in xeigtsts)
+  add_lapack_test(ssep.out sep.in xeigtsts)
+  add_lapack_test(sse2.out se2.in xeigtsts)
+  add_lapack_test(ssvd.out svd.in xeigtsts)
+  add_lapack_test(sec.out sec.in xeigtsts)
+  add_lapack_test(sed.out sed.in xeigtsts)
+  add_lapack_test(sgg.out sgg.in xeigtsts)
+  add_lapack_test(sgd.out sgd.in xeigtsts)
+  add_lapack_test(ssb.out ssb.in xeigtsts)
+  add_lapack_test(ssg.out ssg.in xeigtsts)
+  add_lapack_test(sbal.out sbal.in xeigtsts)
+  add_lapack_test(sbak.out sbak.in xeigtsts)
+  add_lapack_test(sgbal.out sgbal.in xeigtsts)
+  add_lapack_test(sgbak.out sgbak.in xeigtsts)
+  add_lapack_test(sbb.out sbb.in xeigtsts)
+  add_lapack_test(sglm.out glm.in xeigtsts)
+  add_lapack_test(sgqr.out gqr.in xeigtsts)
+  add_lapack_test(sgsv.out gsv.in xeigtsts)
+  add_lapack_test(scsd.out csd.in xeigtsts)
+  add_lapack_test(slse.out lse.in xeigtsts)
+
+  # ======== SINGLE DMD EIG TESTS ===========================
+  add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
 endif()
 
 if(BUILD_DOUBLE)
-#
-# ======== DOUBLE LIN TESTS ===========================
-add_lapack_test(dtest.out dtest.in xlintstd)
-#
-# ======== DOUBLE RFP LIN TESTS ========================
-add_lapack_test(dtest_rfp.out dtest_rfp.in xlintstrfd)
-#
-# ======== DOUBLE EIG TESTS ===========================
-add_lapack_test(dnep.out nep.in xeigtstd)
-add_lapack_test(dsep.out sep.in xeigtstd)
-add_lapack_test(dse2.out se2.in xeigtstd)
-add_lapack_test(dsvd.out svd.in xeigtstd)
-add_lapack_test(dec.out dec.in xeigtstd)
-add_lapack_test(ded.out ded.in xeigtstd)
-add_lapack_test(dgg.out dgg.in xeigtstd)
-add_lapack_test(dgd.out dgd.in xeigtstd)
-add_lapack_test(dsb.out dsb.in xeigtstd)
-add_lapack_test(dsg.out dsg.in xeigtstd)
-add_lapack_test(dbal.out dbal.in xeigtstd)
-add_lapack_test(dbak.out dbak.in xeigtstd)
-add_lapack_test(dgbal.out dgbal.in xeigtstd)
-add_lapack_test(dgbak.out dgbak.in xeigtstd)
-add_lapack_test(dbb.out dbb.in xeigtstd)
-add_lapack_test(dglm.out glm.in xeigtstd)
-add_lapack_test(dgqr.out gqr.in xeigtstd)
-add_lapack_test(dgsv.out gsv.in xeigtstd)
-add_lapack_test(dcsd.out csd.in xeigtstd)
-add_lapack_test(dlse.out lse.in xeigtstd)
-#
-# ======== DOUBLE DMD EIG TESTS ===========================
-add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
+  # ======== DOUBLE LIN TESTS ===========================
+  add_lapack_test(dtest.out dtest.in xlintstd)
+
+  # ======== DOUBLE RFP LIN TESTS ========================
+  add_lapack_test(dtest_rfp.out dtest_rfp.in xlintstrfd)
+
+  # ======== DOUBLE EIG TESTS ===========================
+  add_lapack_test(dnep.out nep.in xeigtstd)
+  add_lapack_test(dsep.out sep.in xeigtstd)
+  add_lapack_test(dse2.out se2.in xeigtstd)
+  add_lapack_test(dsvd.out svd.in xeigtstd)
+  add_lapack_test(dec.out dec.in xeigtstd)
+  add_lapack_test(ded.out ded.in xeigtstd)
+  add_lapack_test(dgg.out dgg.in xeigtstd)
+  add_lapack_test(dgd.out dgd.in xeigtstd)
+  add_lapack_test(dsb.out dsb.in xeigtstd)
+  add_lapack_test(dsg.out dsg.in xeigtstd)
+  add_lapack_test(dbal.out dbal.in xeigtstd)
+  add_lapack_test(dbak.out dbak.in xeigtstd)
+  add_lapack_test(dgbal.out dgbal.in xeigtstd)
+  add_lapack_test(dgbak.out dgbak.in xeigtstd)
+  add_lapack_test(dbb.out dbb.in xeigtstd)
+  add_lapack_test(dglm.out glm.in xeigtstd)
+  add_lapack_test(dgqr.out gqr.in xeigtstd)
+  add_lapack_test(dgsv.out gsv.in xeigtstd)
+  add_lapack_test(dcsd.out csd.in xeigtstd)
+  add_lapack_test(dlse.out lse.in xeigtstd)
+
+  # ======== DOUBLE DMD EIG TESTS ===========================
+  add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
 endif()
 
 if(BUILD_COMPLEX)
-add_lapack_test(ctest.out ctest.in xlintstc)
-#
-# ======== COMPLEX RFP LIN TESTS ========================
-add_lapack_test(ctest_rfp.out ctest_rfp.in xlintstrfc)
-#
-# ======== COMPLEX EIG TESTS ===========================
-add_lapack_test(cnep.out nep.in xeigtstc)
-add_lapack_test(csep.out sep.in xeigtstc)
-add_lapack_test(cse2.out se2.in xeigtstc)
-add_lapack_test(csvd.out svd.in xeigtstc)
-add_lapack_test(cec.out cec.in xeigtstc)
-add_lapack_test(ced.out ced.in xeigtstc)
-add_lapack_test(cgg.out cgg.in xeigtstc)
-add_lapack_test(cgd.out cgd.in xeigtstc)
-add_lapack_test(csb.out csb.in xeigtstc)
-add_lapack_test(csg.out csg.in xeigtstc)
-add_lapack_test(cbal.out cbal.in xeigtstc)
-add_lapack_test(cbak.out cbak.in xeigtstc)
-add_lapack_test(cgbal.out cgbal.in xeigtstc)
-add_lapack_test(cgbak.out cgbak.in xeigtstc)
-add_lapack_test(cbb.out cbb.in xeigtstc)
-add_lapack_test(cglm.out glm.in xeigtstc)
-add_lapack_test(cgqr.out gqr.in xeigtstc)
-add_lapack_test(cgsv.out gsv.in xeigtstc)
-add_lapack_test(ccsd.out csd.in xeigtstc)
-add_lapack_test(clse.out lse.in xeigtstc)
-#
-# ======== COMPLEX DMD EIG TESTS ===========================
-add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
+  # ======== COMPLEX LIN TESTS ========================
+  add_lapack_test(ctest.out ctest.in xlintstc)
+
+  # ======== COMPLEX RFP LIN TESTS ========================
+  add_lapack_test(ctest_rfp.out ctest_rfp.in xlintstrfc)
+
+  # ======== COMPLEX EIG TESTS ===========================
+  add_lapack_test(cnep.out nep.in xeigtstc)
+  add_lapack_test(csep.out sep.in xeigtstc)
+  add_lapack_test(cse2.out se2.in xeigtstc)
+  add_lapack_test(csvd.out svd.in xeigtstc)
+  add_lapack_test(cec.out cec.in xeigtstc)
+  add_lapack_test(ced.out ced.in xeigtstc)
+  add_lapack_test(cgg.out cgg.in xeigtstc)
+  add_lapack_test(cgd.out cgd.in xeigtstc)
+  add_lapack_test(csb.out csb.in xeigtstc)
+  add_lapack_test(csg.out csg.in xeigtstc)
+  add_lapack_test(cbal.out cbal.in xeigtstc)
+  add_lapack_test(cbak.out cbak.in xeigtstc)
+  add_lapack_test(cgbal.out cgbal.in xeigtstc)
+  add_lapack_test(cgbak.out cgbak.in xeigtstc)
+  add_lapack_test(cbb.out cbb.in xeigtstc)
+  add_lapack_test(cglm.out glm.in xeigtstc)
+  add_lapack_test(cgqr.out gqr.in xeigtstc)
+  add_lapack_test(cgsv.out gsv.in xeigtstc)
+  add_lapack_test(ccsd.out csd.in xeigtstc)
+  add_lapack_test(clse.out lse.in xeigtstc)
+
+  # ======== COMPLEX DMD EIG TESTS ===========================
+  add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
 endif()
 
 if(BUILD_COMPLEX16)
-#
-# ======== COMPLEX16 LIN TESTS ========================
-add_lapack_test(ztest.out ztest.in xlintstz)
-#
-# ======== COMPLEX16 RFP LIN TESTS ========================
-add_lapack_test(ztest_rfp.out ztest_rfp.in xlintstrfz)
-#
-# ======== COMPLEX16 EIG TESTS ===========================
-add_lapack_test(znep.out nep.in xeigtstz)
-add_lapack_test(zsep.out sep.in xeigtstz)
-add_lapack_test(zse2.out se2.in xeigtstz)
-add_lapack_test(zsvd.out svd.in xeigtstz)
-add_lapack_test(zec.out zec.in xeigtstz)
-add_lapack_test(zed.out zed.in xeigtstz)
-add_lapack_test(zgg.out zgg.in xeigtstz)
-add_lapack_test(zgd.out zgd.in xeigtstz)
-add_lapack_test(zsb.out zsb.in xeigtstz)
-add_lapack_test(zsg.out zsg.in xeigtstz)
-add_lapack_test(zbal.out zbal.in xeigtstz)
-add_lapack_test(zbak.out zbak.in xeigtstz)
-add_lapack_test(zgbal.out zgbal.in xeigtstz)
-add_lapack_test(zgbak.out zgbak.in xeigtstz)
-add_lapack_test(zbb.out zbb.in xeigtstz)
-add_lapack_test(zglm.out glm.in xeigtstz)
-add_lapack_test(zgqr.out gqr.in xeigtstz)
-add_lapack_test(zgsv.out gsv.in xeigtstz)
-add_lapack_test(zcsd.out csd.in xeigtstz)
-add_lapack_test(zlse.out lse.in xeigtstz)
-#
-# ======== COMPLEX16 DMD EIG TESTS ===========================
-add_lapack_test(zdmd.out zdmd.in xdmdeigtstz)
-#
-# ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
-add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
+
+  # ======== COMPLEX16 LIN TESTS ========================
+  add_lapack_test(ztest.out ztest.in xlintstz)
+
+  # ======== COMPLEX16 RFP LIN TESTS ========================
+  add_lapack_test(ztest_rfp.out ztest_rfp.in xlintstrfz)
+
+  # ======== COMPLEX16 EIG TESTS ===========================
+  add_lapack_test(znep.out nep.in xeigtstz)
+  add_lapack_test(zsep.out sep.in xeigtstz)
+  add_lapack_test(zse2.out se2.in xeigtstz)
+  add_lapack_test(zsvd.out svd.in xeigtstz)
+  add_lapack_test(zec.out zec.in xeigtstz)
+  add_lapack_test(zed.out zed.in xeigtstz)
+  add_lapack_test(zgg.out zgg.in xeigtstz)
+  add_lapack_test(zgd.out zgd.in xeigtstz)
+  add_lapack_test(zsb.out zsb.in xeigtstz)
+  add_lapack_test(zsg.out zsg.in xeigtstz)
+  add_lapack_test(zbal.out zbal.in xeigtstz)
+  add_lapack_test(zbak.out zbak.in xeigtstz)
+  add_lapack_test(zgbal.out zgbal.in xeigtstz)
+  add_lapack_test(zgbak.out zgbak.in xeigtstz)
+  add_lapack_test(zbb.out zbb.in xeigtstz)
+  add_lapack_test(zglm.out glm.in xeigtstz)
+  add_lapack_test(zgqr.out gqr.in xeigtstz)
+  add_lapack_test(zgsv.out gsv.in xeigtstz)
+  add_lapack_test(zcsd.out csd.in xeigtstz)
+  add_lapack_test(zlse.out lse.in xeigtstz)
+
+  # ======== COMPLEX16 DMD EIG TESTS ===========================
+  add_lapack_test(zdmd.out zdmd.in xdmdeigtstz)
+
+  # ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_wq_zrwork_64 COMMAND $<TARGET_FILE:test_wq_zrwork_64>)
+  endif()
 endif()
 
 
 if(BUILD_SINGLE AND BUILD_DOUBLE)
-#
-# ======== SINGLE-DOUBLE PROTO LIN TESTS ==============
+  # ======== SINGLE-DOUBLE PROTO LIN TESTS ==============
   add_lapack_test(dstest.out dstest.in xlintstds)
 endif()
 
 
 if(BUILD_COMPLEX AND BUILD_COMPLEX16)
-#
-# ======== COMPLEX-COMPLEX16 LIN TESTS ========================
+  # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
   add_lapack_test(zctest.out zctest.in xlintstzc)
 endif()

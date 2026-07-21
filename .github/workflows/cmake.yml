@@ -120,6 +120,45 @@ jobs:
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: cmake --build build --target install -j2
 
+  test-extended-api-only:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+
+    strategy:
+      fail-fast: true
+      matrix:
+        shared_libs: [ OFF, ON ]
+
+    steps:
+
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        -D BUILD_SHARED_LIBS:BOOL=${{matrix.shared_libs}}
+        -D BUILD_DEFAULT_API:BOOL=OFF
+        -D BUILD_INDEX64_EXT_API:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
+
   coverage:
 
     runs-on: ubuntu-latest

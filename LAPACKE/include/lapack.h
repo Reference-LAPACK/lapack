@@ -144,18 +144,6 @@ typedef lapack_logical (*LAPACK_Z_SELECT1) ( const lapack_complex_double* );
 typedef lapack_logical (*LAPACK_Z_SELECT2)
     ( const lapack_complex_double*, const lapack_complex_double* );
 
-#define LAPACK_lsame_base LAPACK_GLOBAL(lsame,LSAME)
-lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb
-#ifdef LAPACK_FORTRAN_STRLEN_END
-    , FORTRAN_STRLEN, FORTRAN_STRLEN
-#endif
-);
-#ifdef LAPACK_FORTRAN_STRLEN_END
-    #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__, 1, 1)
-#else
-    #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__)
-#endif
-
 /*
  * Integer specific API
  */
@@ -169,7 +157,17 @@ lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb
 #define LAPACK_GLOBAL_SUFFIX(a,b) LAPACK_GLOBAL(a,b)
 #endif
 
-
+#define LAPACK_lsame_base LAPACK_GLOBAL_SUFFIX(lsame,LSAME)
+lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__, 1, 1)
+#else
+    #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__)
+#endif
 
 /*----------------------------------------------------------------------------*/
 /* This is in alphabetical order (ignoring leading precision). */

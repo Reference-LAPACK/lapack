@@ -1207,8 +1207,10 @@ lapacke_dtzrzf.c
 lapacke_dtzrzf_work.c
 )
 
-set(SOURCES
+set(COMMON_SOURCES
 lapacke_nancheck.c
+)
+set(SOURCES
 lapacke_ilaver.c
 )
 set(SOURCES_SINGLE

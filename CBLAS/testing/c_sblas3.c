@@ -58,7 +58,7 @@ void F77_sgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_sgemm( CblasRowMajor, transa, transb, *m, *n, *k, *alpha, A, LDA,
+     API_SUFFIX(cblas_sgemm)( CblasRowMajor, transa, transb, *m, *n, *k, *alpha, A, LDA,
                   B, LDB, *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -68,10 +68,10 @@ void F77_sgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_sgemm( CblasColMajor, transa, transb, *m, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sgemm)( CblasColMajor, transa, transb, *m, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
   else
-     cblas_sgemm( UNDEFINED, transa, transb, *m, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sgemm)( UNDEFINED, transa, transb, *m, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
 }
 
@@ -130,7 +130,7 @@ void F77_sgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
         for( i=0; i<*n; i++ ) {
            C[i*LDC+j]=c[j*(*ldc)+i];
         }
-     cblas_sgemmtr( CblasRowMajor, uplo, transa, transb, *n, *k, *alpha, A, LDA,
+     API_SUFFIX(cblas_sgemmtr)( CblasRowMajor, uplo, transa, transb, *n, *k, *alpha, A, LDA,
                   B, LDB, *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ ) {
@@ -141,10 +141,10 @@ void F77_sgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_sgemmtr( CblasColMajor, uplo, transa, transb, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sgemmtr)( CblasColMajor, uplo, transa, transb, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
   else
-     cblas_sgemmtr( UNDEFINED, uplo, transa, transb, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sgemmtr)( UNDEFINED, uplo, transa, transb, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
 }
 
@@ -191,7 +191,7 @@ void F77_ssymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_ssymm( CblasRowMajor, side, uplo, *m, *n, *alpha, A, LDA, B, LDB,
+     API_SUFFIX(cblas_ssymm)( CblasRowMajor, side, uplo, *m, *n, *alpha, A, LDA, B, LDB,
                   *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -201,10 +201,10 @@ void F77_ssymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ssymm( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_ssymm)( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
   else
-     cblas_ssymm( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_ssymm)( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
 }
 
@@ -249,7 +249,7 @@ void F77_sskewsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBL
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_sskewsymm( CblasRowMajor, side, uplo, *m, *n, *alpha, A, LDA, B, LDB,
+     API_SUFFIX(cblas_sskewsymm)( CblasRowMajor, side, uplo, *m, *n, *alpha, A, LDA, B, LDB,
                   *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -259,10 +259,10 @@ void F77_sskewsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBL
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_sskewsymm( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_sskewsymm)( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
   else
-     cblas_sskewsymm( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_sskewsymm)( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
 }
 
@@ -302,7 +302,7 @@ void F77_ssyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
      for( i=0; i<*n; i++ )
         for( j=0; j<*n; j++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_ssyrk(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA, *beta,
+     API_SUFFIX(cblas_ssyrk)(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA, *beta,
 	         C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ )
@@ -311,10 +311,10 @@ void F77_ssyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ssyrk(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
+     API_SUFFIX(cblas_ssyrk)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
   else
-     cblas_ssyrk(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
+     API_SUFFIX(cblas_ssyrk)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
 }
 
@@ -361,7 +361,7 @@ void F77_ssyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
      for( i=0; i<*n; i++ )
         for( j=0; j<*n; j++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_ssyr2k(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA,
+     API_SUFFIX(cblas_ssyr2k)(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA,
 		  B, LDB, *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ )
@@ -371,10 +371,10 @@ void F77_ssyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_ssyr2k(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_ssyr2k)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
   else
-     cblas_ssyr2k(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_ssyr2k)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_sskewsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
@@ -420,7 +420,7 @@ void F77_sskewsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, 
      for( i=0; i<*n; i++ )
         for( j=0; j<*n; j++ )
            C[i*LDC+j]=c[j*(*ldc)+i];
-     cblas_sskewsyr2k(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA,
+     API_SUFFIX(cblas_sskewsyr2k)(CblasRowMajor, uplo, trans, *n, *k, *alpha, A, LDA,
 		  B, LDB, *beta, C, LDC );
      for( j=0; j<*n; j++ )
         for( i=0; i<*n; i++ )
@@ -430,10 +430,10 @@ void F77_sskewsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, 
      free(C);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_sskewsyr2k(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sskewsyr2k)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
   else
-     cblas_sskewsyr2k(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_sskewsyr2k)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_strmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
@@ -475,7 +475,7 @@ void F77_strmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      for( i=0; i<*m; i++ )
         for( j=0; j<*n; j++ )
            B[i*LDB+j]=b[j*(*ldb)+i];
-     cblas_strmm(CblasRowMajor, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strmm)(CblasRowMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		 A, LDA, B, LDB );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -484,10 +484,10 @@ void F77_strmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      free(B);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_strmm(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strmm)(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
   else
-     cblas_strmm(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strmm)(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
 }
 
@@ -530,7 +530,7 @@ void F77_strsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      for( i=0; i<*m; i++ )
         for( j=0; j<*n; j++ )
            B[i*LDB+j]=b[j*(*ldb)+i];
-     cblas_strsm(CblasRowMajor, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strsm)(CblasRowMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		 A, LDA, B, LDB );
      for( j=0; j<*n; j++ )
         for( i=0; i<*m; i++ )
@@ -539,9 +539,9 @@ void F77_strsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      free(B);
   }
   else if (*layout == TEST_COL_MJR)
-     cblas_strsm(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strsm)(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
   else
-     cblas_strsm(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_strsm)(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
 }
