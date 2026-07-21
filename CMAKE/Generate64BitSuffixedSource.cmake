@@ -390,10 +390,9 @@ endif()
 
 # Replace symbol names with their suffixed versions in the source content
 foreach(symbol_name IN LISTS symbol_names)
-  set(symbol_variants "${symbol_name}")
   string(TOLOWER "${symbol_name}" symbol_lower)
   string(TOUPPER "${symbol_name}" symbol_upper)
-  foreach(symbol_variant "${symbol_lower}" "${symbol_upper}")
+  foreach(symbol_variant "${symbol_name}" "${symbol_lower}" "${symbol_upper}")
     set(match_regex "(^|[^A-Za-z0-9_])${symbol_variant}([^A-Za-z0-9_]|$)")
     set(replacement "\\1${symbol_variant}_64\\2")
     string(REGEX REPLACE

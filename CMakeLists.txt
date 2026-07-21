@@ -124,7 +124,7 @@ message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDE
 
 if(BUILD_INDEX64_EXT_API AND BUILD_INDEX64)
   message(WARNING
-    "Building Index-64 API redundantly as extended API and default API."
+    "Building Index-64 API redundantly as extended API and default API. "
     "Consider disabling one of them (BUILD_INDEX64_EXT_API / BUILD_INDEX64).")
 endif()
 

@@ -1,6 +1,6 @@
 # This Makefile compiles the CBLAS routines
 
-# Sources that are shared accross all APIs
+# Sources that are shared across all APIs
 set(COMMON_SOURCES cblas_globals.c)
 
 # Error handling routines for level 2 & 3
