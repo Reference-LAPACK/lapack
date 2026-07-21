@@ -20,15 +20,15 @@ function(generate_64bit_suffixed_sources target source_list generated_sources)
   set(new_generated_source_files)
   set(generated_source_files)
 
-  foreach(source IN LISTS ${source_list})
-    get_filename_component(source_abs "${source}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-    get_filename_component(source_name "${source}" NAME_WLE)
-    get_filename_component(source_ext "${source}" EXT)
+  foreach(_source IN LISTS ${source_list})
+    get_filename_component(source_abs "${_source}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+    get_filename_component(source_name "${_source}" NAME_WLE)
+    get_filename_component(source_ext "${_source}" EXT)
     set(output_file "${destination}/${source_name}_64${source_ext}")
 
     set(_fortran_extensions ".f" ".F" ".f90" ".F90")
     if(NOT source_ext IN_LIST _fortran_extensions)
-      message(WARNING "Skipping non-Fortran source '${source}' for target '${target}'")
+      message(WARNING "Skipping non-Fortran source '${_source}' for target '${target}'")
       continue()
     endif()
 
@@ -50,7 +50,7 @@ function(generate_64bit_suffixed_sources target source_list generated_sources)
         DEPENDS
           "${source_abs}"
           "${EXTENDED_API_GENERATOR}"
-        COMMENT "Generating 64-bit extended API source for ${source}"
+        COMMENT "Generating 64-bit extended API source for ${_source}"
         VERBATIM)
 
       list(APPEND new_generated_source_files "${output_file}")
