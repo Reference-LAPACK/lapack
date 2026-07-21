@@ -66,14 +66,14 @@ function(add_cblas_test target output input f_source)
 endfunction()
 
 # Object files for single precision real
-set(STESTL1O c_sblat1.f c_sblas1.c)
-set(STESTL2O c_sblat2.f c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
-set(STESTL3O c_sblat3.f c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
+set(STESTL1O c_sblas1.c)
+set(STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
+set(STESTL3O c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for double precision real
-set(DTESTL1O c_dblat1.f c_dblas1.c)
-set(DTESTL2O c_dblat2.f c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
-set(DTESTL3O c_dblat3.f c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
+set(DTESTL1O c_dblas1.c)
+set(DTESTL2O c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
+set(DTESTL3O c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for single precision complex
 set(CTESTL1O c_cblas1.c)
