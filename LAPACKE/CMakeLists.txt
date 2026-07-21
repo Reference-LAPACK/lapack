@@ -3,7 +3,7 @@ enable_language(C)
 
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
 
-include_directories(include ${LAPACK_BINARY_DIR}/include)
+include_directories(${LAPACK_BINARY_DIR}/include include)
 add_subdirectory(src)
 add_subdirectory(utils)
 

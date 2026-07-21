@@ -221,11 +221,19 @@ else()
   set(ZXLINTST ${ZLINTST_NO_XBLAS})
 endif()
 
-set(DSLINTST
-  dchkab.f ddrvab.f ddrvac.f derrab.f derrac.f dget08.f
-  alaerh.f alahd.f aladhd.f alareq.f
-  chkxer.f dlarhs.f dlatb4.f xerbla.f
-  dget02.f dpot06.f)
+# Disable constant propagation for NAG compiler to avoid issues with
+# creating NaN values in the CXX error-exit tests.
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+  set_source_files_properties(
+    serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f
+    PROPERTIES COMPILE_OPTIONS "-Onopropagate")
+endif()
+
+set(DSLINTST dchkab.f
+	ddrvab.f ddrvac.f derrab.f derrac.f dget08.f
+	alaerh.f alahd.f  aladhd.f alareq.f
+	chkxer.f dlarhs.f dlatb4.f xerbla.f
+	dget02.f dpot06.f)
 
 set(ZCLINTST
   zchkab.f zdrvab.f zdrvac.f zerrab.f zerrac.f zget08.f
