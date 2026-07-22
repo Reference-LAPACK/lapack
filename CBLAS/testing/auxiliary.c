@@ -12,7 +12,7 @@ void get_transpose_type(char *type, CBLAS_TRANSPOSE *trans) {
         *trans = CblasTrans;
   else if( (strncmp( type,"c",1 )==0)||(strncmp( type,"C",1 )==0) )
         *trans = CblasConjTrans;
-  else *trans = UNDEFINED;
+  else *trans = INVALID_TRANSPOSE;
 }
 
 void get_uplo_type(char *type, CBLAS_UPLO *uplo) {
@@ -20,19 +20,19 @@ void get_uplo_type(char *type, CBLAS_UPLO *uplo) {
         *uplo = CblasUpper;
   else if( (strncmp( type,"l",1 )==0)||(strncmp( type,"L",1 )==0) )
         *uplo = CblasLower;
-  else *uplo = UNDEFINED;
+  else *uplo = INVALID_UPLO;
 }
 void get_diag_type(char *type, CBLAS_DIAG *diag) {
   if( (strncmp( type,"u",1 )==0)||(strncmp( type,"U",1 )==0) )
         *diag = CblasUnit;
   else if( (strncmp( type,"n",1 )==0)||(strncmp( type,"N",1 )==0) )
         *diag = CblasNonUnit;
-  else *diag = UNDEFINED;
+  else *diag = INVALID_DIAG;
 }
 void get_side_type(char *type, CBLAS_SIDE *side) {
   if( (strncmp( type,"l",1 )==0)||(strncmp( type,"L",1 )==0) )
         *side = CblasLeft;
   else if( (strncmp( type,"r",1 )==0)||(strncmp( type,"R",1 )==0) )
         *side = CblasRight;
-  else *side = UNDEFINED;
+  else *side = INVALID_SIDE;
 }

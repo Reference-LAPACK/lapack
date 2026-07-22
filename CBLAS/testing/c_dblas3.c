@@ -9,7 +9,6 @@
 #include "cblas_test.h"
 #define  TEST_COL_MJR	0
 #define  TEST_ROW_MJR	1
-#define  UNDEFINED     -1
 
 void F77_dgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CBLAS_INT *n,
               CBLAS_INT *k, double *alpha, double *a, CBLAS_INT *lda, double *b, CBLAS_INT *ldb,
@@ -74,7 +73,7 @@ void F77_dgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CB
      API_SUFFIX(cblas_dgemm)( CblasColMajor, transa, transb, *m, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
   else
-     API_SUFFIX(cblas_dgemm)( UNDEFINED, transa, transb, *m, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_dgemm)( INVALID_LAYOUT, transa, transb, *m, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
 }
 
@@ -148,7 +147,7 @@ void F77_dgemmtr(CBLAS_INT *layout, char *uplop, char *transpa, char *transpb, C
                   b, *ldb, *beta, c, *ldc );
   }
   else
-     API_SUFFIX(cblas_dgemmtr)( UNDEFINED, uplo, transa, transb, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, uplo, transa, transb, *n, *k, *alpha, a, *lda,
                   b, *ldb, *beta, c, *ldc );
 }
 
@@ -210,7 +209,7 @@ void F77_dsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBLAS_I
      API_SUFFIX(cblas_dsymm)( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
   else
-     API_SUFFIX(cblas_dsymm)( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_dsymm)( INVALID_LAYOUT, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
 }
 
@@ -268,7 +267,7 @@ void F77_dskewsymm(CBLAS_INT *layout, char *rtlf, char *uplow, CBLAS_INT *m, CBL
      API_SUFFIX(cblas_dskewsymm)( CblasColMajor, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
   else
-     API_SUFFIX(cblas_dskewsymm)( UNDEFINED, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
+     API_SUFFIX(cblas_dskewsymm)( INVALID_LAYOUT, side, uplo, *m, *n, *alpha, a, *lda, b, *ldb,
                   *beta, c, *ldc );
 }
 
@@ -320,7 +319,7 @@ void F77_dsyrk(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS
      API_SUFFIX(cblas_dsyrk)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
   else
-     API_SUFFIX(cblas_dsyrk)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
+     API_SUFFIX(cblas_dsyrk)(INVALID_LAYOUT, uplo, trans, *n, *k, *alpha, a, *lda, *beta,
 	         c, *ldc );
 }
 
@@ -380,7 +379,7 @@ void F77_dsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLA
      API_SUFFIX(cblas_dsyr2k)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
   else
-     API_SUFFIX(cblas_dsyr2k)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_dsyr2k)(INVALID_LAYOUT, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_dskewsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, CBLAS_INT *k,
@@ -439,7 +438,7 @@ void F77_dskewsyr2k(CBLAS_INT *layout, char *uplow, char *transp, CBLAS_INT *n, 
      API_SUFFIX(cblas_dskewsyr2k)(CblasColMajor, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
   else
-     API_SUFFIX(cblas_dskewsyr2k)(UNDEFINED, uplo, trans, *n, *k, *alpha, a, *lda,
+     API_SUFFIX(cblas_dskewsyr2k)(INVALID_LAYOUT, uplo, trans, *n, *k, *alpha, a, *lda,
 		   b, *ldb, *beta, c, *ldc );
 }
 void F77_dtrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *diagn,
@@ -493,7 +492,7 @@ void F77_dtrmm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      API_SUFFIX(cblas_dtrmm)(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
   else
-     API_SUFFIX(cblas_dtrmm)(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_dtrmm)(INVALID_LAYOUT, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
 }
 
@@ -548,6 +547,6 @@ void F77_dtrsm(CBLAS_INT *layout, char *rtlf, char *uplow, char *transp, char *d
      API_SUFFIX(cblas_dtrsm)(CblasColMajor, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
   else
-     API_SUFFIX(cblas_dtrsm)(UNDEFINED, side, uplo, trans, diag, *m, *n, *alpha,
+     API_SUFFIX(cblas_dtrsm)(INVALID_LAYOUT, side, uplo, trans, diag, *m, *n, *alpha,
 		   a, *lda, b, *ldb);
 }

@@ -35,7 +35,7 @@ void F77_sgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, floa
      API_SUFFIX(cblas_sgemv)( CblasColMajor, trans,
 		  *m, *n, *alpha, a, *lda, x, *incx, *beta, y, *incy );
   else
-     API_SUFFIX(cblas_sgemv)( UNDEFINED, trans,
+     API_SUFFIX(cblas_sgemv)( INVALID_LAYOUT, trans,
 		  *m, *n, *alpha, a, *lda, x, *incx, *beta, y, *incy );
 }
 
@@ -92,7 +92,7 @@ void F77_strmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_strmv)(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx);
   else {
-     API_SUFFIX(cblas_strmv)(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx);
+     API_SUFFIX(cblas_strmv)(INVALID_LAYOUT, uplo, trans, diag, *n, a, *lda, x, *incx);
   }
 }
 

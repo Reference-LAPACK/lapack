@@ -22,16 +22,24 @@
   #define FORTRAN_STRLEN size_t
 #endif
 
-#define  TRUE           1
-#define  PASSED         1
-#define  TEST_ROW_MJR	1
+#define TRUE         1
+#define PASSED       1
+#define TEST_ROW_MJR 1
 
-#define  FALSE          0
-#define  FAILED         0
-#define  TEST_COL_MJR	0
+#define FALSE        0
+#define FAILED       0
+#define TEST_COL_MJR 0
 
-#define  INVALID       -1
-#define  UNDEFINED     -1
+#define INVALID           ((CBLAS_INT)-1)
+
+/* Zero is outside the range of every CBLAS enum.  Keep the enum sentinels
+ * explicitly typed so that compilers do not diagnose an implicit conversion
+ * from the signed integer sentinel above. */
+#define INVALID_LAYOUT    ((CBLAS_LAYOUT)0)
+#define INVALID_TRANSPOSE ((CBLAS_TRANSPOSE)0)
+#define INVALID_UPLO      ((CBLAS_UPLO)0)
+#define INVALID_DIAG      ((CBLAS_DIAG)0)
+#define INVALID_SIDE      ((CBLAS_SIDE)0)
 
 typedef struct { float real; float imag; } CBLAS_TEST_COMPLEX;
 typedef struct { double real; double imag; } CBLAS_TEST_ZOMPLEX;
