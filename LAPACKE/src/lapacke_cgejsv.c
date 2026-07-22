@@ -160,7 +160,7 @@ lapack_int API_SUFFIX(LAPACKE_cgejsv)( int matrix_layout, char joba, char jobu, 
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_3;
+        goto exit_level_2;
     }
     /* Call middle-level interface */
     info = API_SUFFIX(LAPACKE_cgejsv_work)( matrix_layout, joba, jobu, jobv, jobr, jobt,
@@ -174,10 +174,9 @@ lapack_int API_SUFFIX(LAPACKE_cgejsv)( int matrix_layout, char joba, char jobu, 
         istat[i] = iwork[i];
     }
     /* Release memory and exit */
-exit_level_3:
-    LAPACKE_free( cwork );
-exit_level_2:
     LAPACKE_free( rwork );
+exit_level_2:
+    LAPACKE_free( cwork );
 exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
