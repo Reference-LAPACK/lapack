@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include "cblas.h"
 #include "cblas_test.h"
-#define  TEST_COL_MJR	0
-#define  TEST_ROW_MJR	1
 
 void F77_cgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CBLAS_INT *n,
      CBLAS_INT *k, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda,

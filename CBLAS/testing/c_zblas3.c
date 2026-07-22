@@ -8,8 +8,6 @@
 #include <stdio.h>
 #include "cblas.h"
 #include "cblas_test.h"
-#define  TEST_COL_MJR	0
-#define  TEST_ROW_MJR	1
 
 void F77_zgemm(CBLAS_INT *layout, char *transpa, char *transpb, CBLAS_INT *m, CBLAS_INT *n,
      CBLAS_INT *k, CBLAS_TEST_ZOMPLEX *alpha, CBLAS_TEST_ZOMPLEX *a, CBLAS_INT *lda,
