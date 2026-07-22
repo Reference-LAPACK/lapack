@@ -275,6 +275,18 @@ function(add_lin_executable name)
     include(ExtendedAPIHelpers)
     generate_64bit_suffixed_sources(${name} ext_sources ext_sources_64)
 
+    # Disable constant propagation for NAG compiler to avoid issues with
+    # creating NaN values in the CXX error-exit tests.
+    if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+      foreach(source IN LISTS ext_sources_64)
+        get_filename_component(source_name "${source}" NAME)
+        if(source_name MATCHES "^[scdz]errcxx_64\\.f$")
+          set_source_files_properties(
+            "${source}" PROPERTIES COMPILE_OPTIONS "-Onopropagate")
+        endif()
+      endforeach()
+    endif()
+
     add_executable(${name}_64 ${ext_sources_64})
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
