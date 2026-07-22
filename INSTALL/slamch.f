@@ -82,7 +82,7 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      REAL               RND, EPS, SFMIN, SMALL, RMACH
+      REAL               RND, EPS, SFMIN, SMALL, HUGEVAL, RMACH
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -109,8 +109,9 @@
          RMACH = EPS
       ELSE IF( LSAME( CMACH, 'S' ) ) THEN
          SFMIN = TINY(ZERO)
-         SMALL = ONE / HUGE(ZERO)
-         IF( SMALL.GE.SFMIN ) THEN
+         HUGEVAL = HUGE(ZERO)
+         IF( HUGEVAL*SFMIN.LE.ONE ) THEN
+            SMALL = ONE / HUGEVAL
 *
 *           Use SMALL plus a bit, to avoid the possibility of rounding
 *           causing overflow when computing  1/sfmin.
@@ -129,7 +130,7 @@
       ELSE IF( LSAME( CMACH, 'M' ) ) THEN
          RMACH = MINEXPONENT(ZERO)
       ELSE IF( LSAME( CMACH, 'U' ) ) THEN
-         RMACH = tiny(zero)
+         RMACH = TINY(ZERO)
       ELSE IF( LSAME( CMACH, 'L' ) ) THEN
          RMACH = MAXEXPONENT(ZERO)
       ELSE IF( LSAME( CMACH, 'O' ) ) THEN
