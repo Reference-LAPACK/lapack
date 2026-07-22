@@ -64,63 +64,63 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dgemmtr"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasUpper, CblasNoTrans, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasUpper, CblasNoTrans, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasUpper, CblasNoTrans, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasUpper, CblasNoTrans, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasUpper,CblasTrans, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasUpper,CblasTrans, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasUpper, CblasTrans, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasUpper, CblasTrans, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasLower, CblasNoTrans, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasLower, CblasNoTrans, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasLower, CblasNoTrans, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasLower, CblasNoTrans, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasLower,CblasTrans, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasLower,CblasTrans, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemmtr)( INVALID, CblasLower, CblasTrans, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( INVALID_LAYOUT, CblasLower, CblasTrans, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
 
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  INVALID, CblasNoTrans, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  INVALID_UPLO, CblasNoTrans, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  INVALID, CblasNoTrans, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  INVALID_UPLO, CblasNoTrans, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
 
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  CblasUpper, INVALID, CblasNoTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  CblasUpper, INVALID_TRANSPOSE, CblasNoTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  CblasUpper, INVALID, CblasTrans, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor,  CblasUpper, INVALID_TRANSPOSE, CblasTrans, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
 
       cblas_info = 4; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor, CblasUpper,  CblasNoTrans, INVALID, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor, CblasUpper,  CblasNoTrans, INVALID_TRANSPOSE, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemmtr)( CblasColMajor, CblasUpper, CblasTrans, INVALID, 0, 0,
+      API_SUFFIX(cblas_dgemmtr)( CblasColMajor, CblasUpper, CblasTrans, INVALID_TRANSPOSE, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
 
@@ -294,35 +294,35 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dgemm"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemm)( INVALID,  CblasNoTrans, CblasNoTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( INVALID_LAYOUT,  CblasNoTrans, CblasNoTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemm)( INVALID,  CblasNoTrans, CblasTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( INVALID_LAYOUT,  CblasNoTrans, CblasTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemm)( INVALID,  CblasTrans, CblasNoTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( INVALID_LAYOUT,  CblasTrans, CblasNoTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 1;
-      API_SUFFIX(cblas_dgemm)( INVALID,  CblasTrans, CblasTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( INVALID_LAYOUT,  CblasTrans, CblasTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemm)( CblasColMajor,  INVALID, CblasNoTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( CblasColMajor,  INVALID_TRANSPOSE, CblasNoTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemm)( CblasColMajor,  INVALID, CblasTrans, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( CblasColMajor,  INVALID_TRANSPOSE, CblasTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemm)( CblasColMajor,  CblasNoTrans, INVALID, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( CblasColMajor,  CblasNoTrans, INVALID_TRANSPOSE, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dgemm)( CblasColMajor,  CblasTrans, INVALID, 0, 0, 0,
+      API_SUFFIX(cblas_dgemm)( CblasColMajor,  CblasTrans, INVALID_TRANSPOSE, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
@@ -522,15 +522,15 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dsymm"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dsymm)( INVALID,  CblasRight, CblasLower, 0, 0,
+      API_SUFFIX(cblas_dsymm)( INVALID_LAYOUT,  CblasRight, CblasLower, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsymm)( CblasColMajor,  INVALID, CblasUpper, 0, 0,
+      API_SUFFIX(cblas_dsymm)( CblasColMajor,  INVALID_SIDE, CblasUpper, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsymm)( CblasColMajor,  CblasLeft, INVALID, 0, 0,
+      API_SUFFIX(cblas_dsymm)( CblasColMajor,  CblasLeft, INVALID_UPLO, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
@@ -698,15 +698,15 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dskewsymm"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dskewsymm)( INVALID,  CblasRight, CblasLower, 0, 0,
+      API_SUFFIX(cblas_dskewsymm)( INVALID_LAYOUT,  CblasRight, CblasLower, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dskewsymm)( CblasColMajor,  INVALID, CblasUpper, 0, 0,
+      API_SUFFIX(cblas_dskewsymm)( CblasColMajor,  INVALID_SIDE, CblasUpper, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dskewsymm)( CblasColMajor,  CblasLeft, INVALID, 0, 0,
+      API_SUFFIX(cblas_dskewsymm)( CblasColMajor,  CblasLeft, INVALID_UPLO, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
@@ -874,24 +874,24 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dtrmm"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dtrmm)( INVALID,  CblasLeft, CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dtrmm)( INVALID_LAYOUT,  CblasLeft, CblasUpper, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  INVALID, CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  INVALID_SIDE, CblasUpper, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, INVALID, CblasNoTrans,
+      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, INVALID_UPLO, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, CblasUpper, INVALID,
+      API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, CblasUpper, INVALID_TRANSPOSE,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 5; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, CblasUpper, CblasNoTrans,
-                   INVALID, 0, 0, ALPHA, A, 1, B, 1 );
+                   INVALID_DIAG, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 6; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_dtrmm)( CblasColMajor,  CblasLeft, CblasUpper, CblasNoTrans,
@@ -1154,24 +1154,24 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dtrsm"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dtrsm)( INVALID,  CblasLeft, CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dtrsm)( INVALID_LAYOUT,  CblasLeft, CblasUpper, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  INVALID, CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  INVALID_SIDE, CblasUpper, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, INVALID, CblasNoTrans,
+      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, INVALID_UPLO, CblasNoTrans,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, CblasUpper, INVALID,
+      API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, CblasUpper, INVALID_TRANSPOSE,
                    CblasNonUnit, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 5; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, CblasUpper, CblasNoTrans,
-                   INVALID, 0, 0, ALPHA, A, 1, B, 1 );
+                   INVALID_DIAG, 0, 0, ALPHA, A, 1, B, 1 );
       chkxer();
       cblas_info = 6; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_dtrsm)( CblasColMajor,  CblasLeft, CblasUpper, CblasNoTrans,
@@ -1435,15 +1435,15 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dsyrk"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dsyrk)( INVALID,  CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dsyrk)( INVALID_LAYOUT,  CblasUpper, CblasNoTrans,
                    0, 0, ALPHA, A, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsyrk)( CblasColMajor,  INVALID, CblasNoTrans,
+      API_SUFFIX(cblas_dsyrk)( CblasColMajor,  INVALID_UPLO, CblasNoTrans,
                    0, 0, ALPHA, A, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsyrk)( CblasColMajor,  CblasUpper, INVALID,
+      API_SUFFIX(cblas_dsyrk)( CblasColMajor,  CblasUpper, INVALID_TRANSPOSE,
                    0, 0, ALPHA, A, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
@@ -1547,15 +1547,15 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dsyr2k"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dsyr2k)( INVALID,  CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dsyr2k)( INVALID_LAYOUT,  CblasUpper, CblasNoTrans,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsyr2k)( CblasColMajor,  INVALID, CblasNoTrans,
+      API_SUFFIX(cblas_dsyr2k)( CblasColMajor,  INVALID_UPLO, CblasNoTrans,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dsyr2k)( CblasColMajor,  CblasUpper, INVALID,
+      API_SUFFIX(cblas_dsyr2k)( CblasColMajor,  CblasUpper, INVALID_TRANSPOSE,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;
@@ -1690,15 +1690,15 @@ void F77_d3chke(char *rout
       cblas_rout = "cblas_dskewsyr2k"   ;
 
       cblas_info = 1;
-      API_SUFFIX(cblas_dskewsyr2k)( INVALID,  CblasUpper, CblasNoTrans,
+      API_SUFFIX(cblas_dskewsyr2k)( INVALID_LAYOUT,  CblasUpper, CblasNoTrans,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dskewsyr2k)( CblasColMajor,  INVALID, CblasNoTrans,
+      API_SUFFIX(cblas_dskewsyr2k)( CblasColMajor,  INVALID_UPLO, CblasNoTrans,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dskewsyr2k)( CblasColMajor,  CblasUpper, INVALID,
+      API_SUFFIX(cblas_dskewsyr2k)( CblasColMajor,  CblasUpper, INVALID_TRANSPOSE,
                     0, 0, ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
       cblas_info = 4; RowMajorStrg = FALSE;

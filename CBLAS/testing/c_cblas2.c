@@ -38,7 +38,7 @@ void F77_cgemv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n,
      API_SUFFIX(cblas_cgemv)( CblasColMajor, trans,
                   *m, *n, alpha, a, *lda, x, *incx, beta, y, *incy );
   else
-     API_SUFFIX(cblas_cgemv)( UNDEFINED, trans,
+     API_SUFFIX(cblas_cgemv)( INVALID_LAYOUT, trans,
                   *m, *n, alpha, a, *lda, x, *incx, beta, y, *incy );
 }
 
@@ -89,7 +89,7 @@ void F77_cgbmv(CBLAS_INT *layout, char *transp, CBLAS_INT *m, CBLAS_INT *n, CBLA
      API_SUFFIX(cblas_cgbmv)( CblasColMajor, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
 		  *incx, beta, y, *incy );
   else
-     API_SUFFIX(cblas_cgbmv)( UNDEFINED, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
+     API_SUFFIX(cblas_cgbmv)( INVALID_LAYOUT, trans, *m, *n, *kl, *ku, alpha, a, *lda, x,
 		  *incx, beta, y, *incy );
 }
 
@@ -119,7 +119,7 @@ void F77_cgeru(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_cgeru)( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
   else
-     API_SUFFIX(cblas_cgeru)( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgeru)( INVALID_LAYOUT, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
 void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -147,7 +147,7 @@ void F77_cgerc(CBLAS_INT *layout, CBLAS_INT *m, CBLAS_INT *n, CBLAS_TEST_COMPLEX
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_cgerc)( CblasColMajor, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
   else
-     API_SUFFIX(cblas_cgerc)( UNDEFINED, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
+     API_SUFFIX(cblas_cgerc)( INVALID_LAYOUT, *m, *n, alpha, x, *incx, y, *incy, a, *lda );
 }
 
 void F77_chemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -180,7 +180,7 @@ void F77_chemv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
      API_SUFFIX(cblas_chemv)( CblasColMajor, uplo, *n, alpha, a, *lda, x, *incx,
 	   beta, y, *incy );
   else
-     API_SUFFIX(cblas_chemv)( UNDEFINED, uplo, *n, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chemv)( INVALID_LAYOUT, uplo, *n, alpha, a, *lda, x, *incx,
 	   beta, y, *incy );
 }
 
@@ -202,7 +202,7 @@ CBLAS_INT i,irow,j,jcol,LDA;
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_chbmv)(CblasRowMajor, UNDEFINED, *n, *k, alpha, a, *lda, x,
+        API_SUFFIX(cblas_chbmv)(CblasRowMajor, INVALID_UPLO, *n, *k, alpha, a, *lda, x,
 		 *incx, beta, y, *incy );
      else {
         LDA = *k+2;
@@ -248,7 +248,7 @@ CBLAS_INT i,irow,j,jcol,LDA;
      API_SUFFIX(cblas_chbmv)(CblasColMajor, uplo, *n, *k, alpha, a, *lda, x, *incx,
                  beta, y, *incy );
    else
-     API_SUFFIX(cblas_chbmv)(UNDEFINED, uplo, *n, *k, alpha, a, *lda, x, *incx,
+     API_SUFFIX(cblas_chbmv)(INVALID_LAYOUT, uplo, *n, *k, alpha, a, *lda, x, *incx,
                  beta, y, *incy );
 }
 
@@ -267,7 +267,7 @@ void F77_chpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
   get_uplo_type(uplow,&uplo);
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_chpmv)(CblasRowMajor, UNDEFINED, *n, alpha, ap, x, *incx,
+        API_SUFFIX(cblas_chpmv)(CblasRowMajor, INVALID_UPLO, *n, alpha, ap, x, *incx,
 	         beta, y, *incy);
      else {
         LDA = *n;
@@ -308,7 +308,7 @@ void F77_chpmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
      API_SUFFIX(cblas_chpmv)( CblasColMajor, uplo, *n, alpha, ap, x, *incx, beta, y,
                   *incy );
   else
-     API_SUFFIX(cblas_chpmv)( UNDEFINED, uplo, *n, alpha, ap, x, *incx, beta, y,
+     API_SUFFIX(cblas_chpmv)( INVALID_LAYOUT, uplo, *n, alpha, ap, x, *incx, beta, y,
                   *incy );
 }
 
@@ -331,7 +331,7 @@ void F77_ctbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_ctbmv)(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda,
+        API_SUFFIX(cblas_ctbmv)(CblasRowMajor, INVALID_UPLO, trans, diag, *n, *k, a, *lda,
 	x, *incx);
      else {
         LDA = *k+2;
@@ -376,7 +376,7 @@ void F77_ctbmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
    else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctbmv)(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
    else
-     API_SUFFIX(cblas_ctbmv)(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbmv)(INVALID_LAYOUT, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
 void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -399,7 +399,7 @@ void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_ctbsv)(CblasRowMajor, UNDEFINED, trans, diag, *n, *k, a, *lda, x,
+        API_SUFFIX(cblas_ctbsv)(CblasRowMajor, INVALID_UPLO, trans, diag, *n, *k, a, *lda, x,
 	         *incx);
      else {
         LDA = *k+2;
@@ -444,7 +444,7 @@ void F77_ctbsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctbsv)(CblasColMajor, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
   else
-     API_SUFFIX(cblas_ctbsv)(UNDEFINED, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctbsv)(INVALID_LAYOUT, uplo, trans, diag, *n, *k, a, *lda, x, *incx);
 }
 
 void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -465,7 +465,7 @@ void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_ctpmv)( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
+        API_SUFFIX(cblas_ctpmv)( CblasRowMajor, INVALID_UPLO, trans, diag, *n, ap, x, *incx );
      else {
         LDA = *n;
         A=(CBLAS_TEST_COMPLEX*)malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX));
@@ -503,7 +503,7 @@ void F77_ctpmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctpmv)( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
   else
-     API_SUFFIX(cblas_ctpmv)( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpmv)( INVALID_LAYOUT, uplo, trans, diag, *n, ap, x, *incx );
 }
 
 void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -524,7 +524,7 @@ void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_ctpsv)( CblasRowMajor, UNDEFINED, trans, diag, *n, ap, x, *incx );
+        API_SUFFIX(cblas_ctpsv)( CblasRowMajor, INVALID_UPLO, trans, diag, *n, ap, x, *incx );
      else {
         LDA = *n;
         A=(CBLAS_TEST_COMPLEX*)malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX));
@@ -562,7 +562,7 @@ void F77_ctpsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctpsv)( CblasColMajor, uplo, trans, diag, *n, ap, x, *incx );
   else
-     API_SUFFIX(cblas_ctpsv)( UNDEFINED, uplo, trans, diag, *n, ap, x, *incx );
+     API_SUFFIX(cblas_ctpsv)( INVALID_LAYOUT, uplo, trans, diag, *n, ap, x, *incx );
 }
 
 void F77_ctrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
@@ -596,7 +596,7 @@ void F77_ctrmv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctrmv)(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx);
   else
-     API_SUFFIX(cblas_ctrmv)(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx);
+     API_SUFFIX(cblas_ctrmv)(INVALID_LAYOUT, uplo, trans, diag, *n, a, *lda, x, *incx);
 }
 void F77_ctrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
        CBLAS_INT *n, CBLAS_TEST_COMPLEX *a, CBLAS_INT *lda, CBLAS_TEST_COMPLEX *x,
@@ -629,7 +629,7 @@ void F77_ctrsv(CBLAS_INT *layout, char *uplow, char *transp, char *diagn,
    else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_ctrsv)(CblasColMajor, uplo, trans, diag, *n, a, *lda, x, *incx );
    else
-     API_SUFFIX(cblas_ctrsv)(UNDEFINED, uplo, trans, diag, *n, a, *lda, x, *incx );
+     API_SUFFIX(cblas_ctrsv)(INVALID_LAYOUT, uplo, trans, diag, *n, a, *lda, x, *incx );
 }
 
 void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
@@ -646,7 +646,7 @@ void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_chpr)(CblasRowMajor, UNDEFINED, *n, *alpha, x, *incx, ap );
+        API_SUFFIX(cblas_chpr)(CblasRowMajor, INVALID_UPLO, *n, *alpha, x, *incx, ap );
      else {
         LDA = *n;
         A = (CBLAS_TEST_COMPLEX* )malloc(LDA*LDA*sizeof(CBLAS_TEST_COMPLEX ) );
@@ -708,7 +708,7 @@ void F77_chpr(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_chpr)(CblasColMajor, uplo, *n, *alpha, x, *incx, ap );
   else
-     API_SUFFIX(cblas_chpr)(UNDEFINED, uplo, *n, *alpha, x, *incx, ap );
+     API_SUFFIX(cblas_chpr)(INVALID_LAYOUT, uplo, *n, *alpha, x, *incx, ap );
 }
 
 void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -726,7 +726,7 @@ void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
 
   if (*layout == TEST_ROW_MJR) {
      if (uplo != CblasUpper && uplo != CblasLower )
-        API_SUFFIX(cblas_chpr2)( CblasRowMajor, UNDEFINED, *n, alpha, x, *incx, y,
+        API_SUFFIX(cblas_chpr2)( CblasRowMajor, INVALID_UPLO, *n, alpha, x, *incx, y,
 		     *incy, ap );
      else {
         LDA = *n;
@@ -789,7 +789,7 @@ void F77_chpr2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_chpr2)( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, ap );
   else
-     API_SUFFIX(cblas_chpr2)( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, ap );
+     API_SUFFIX(cblas_chpr2)( INVALID_LAYOUT, uplo, *n, alpha, x, *incx, y, *incy, ap );
 }
 
 void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
@@ -825,7 +825,7 @@ void F77_cher(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha,
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_cher)( CblasColMajor, uplo, *n, *alpha, x, *incx, a, *lda );
   else
-     API_SUFFIX(cblas_cher)( UNDEFINED, uplo, *n, *alpha, x, *incx, a, *lda );
+     API_SUFFIX(cblas_cher)( INVALID_LAYOUT, uplo, *n, *alpha, x, *incx, a, *lda );
 }
 
 void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX *alpha,
@@ -863,5 +863,5 @@ void F77_cher2(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_TEST_COMPLEX 
   else if (*layout == TEST_COL_MJR)
      API_SUFFIX(cblas_cher2)( CblasColMajor, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
   else
-     API_SUFFIX(cblas_cher2)( UNDEFINED, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
+     API_SUFFIX(cblas_cher2)( INVALID_LAYOUT, uplo, *n, alpha, x, *incx, y, *incy, a, *lda);
 }
