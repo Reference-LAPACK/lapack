@@ -261,8 +261,8 @@
      $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEQR2, SGERQ2, SLACPY, SLAGV2,
@@ -510,19 +510,9 @@
 *        Compute F-norm(S21) and F-norm(T21) for the raw Sylvester
 *        result before the QR/RQ cleanup.
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 25 I = 1, N2
-            CALL SLASSQ( N1, S( N2+1, I ), 1, DSCALE, DSUM )
-   25    CONTINUE
-         BQRA21 = DSCALE*SQRT( DSUM )
+         BQRA21 = SLANGE( 'F', N1, N2, S( N2+1, 1 ), LDST, WORK )
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 26 I = 1, N2
-            CALL SLASSQ( N1, T( N2+1, I ), 1, DSCALE, DSUM )
-   26    CONTINUE
-         BQRB21 = DSCALE*SQRT( DSUM )
+         BQRB21 = SLANGE( 'F', N1, N2, T( N2+1, 1 ), LDST, WORK )
 *
          RAWACC = BQRA21.LE.THRESHA .AND. BQRB21.LE.THRESHB
 *
@@ -550,12 +540,7 @@
 *
 *        Compute F-norm(S21) in BRQA21. (T21 is 0.)
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 30 I = 1, N2
-            CALL SLASSQ( N1, S( N2+1, I ), 1, DSCALE, DSUM )
-   30    CONTINUE
-         BRQA21 = DSCALE*SQRT( DSUM )
+         BRQA21 = SLANGE( 'F', N1, N2, S( N2+1, 1 ), LDST, WORK )
 *
 *        Triangularize the B-part by a QR factorization.
 *        Apply transformation (from right) to A-part, giving S.
@@ -574,12 +559,7 @@
 *
 *        Compute F-norm(S21) in BQRA21. (T21 is 0.)
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 40 I = 1, N2
-            CALL SLASSQ( N1, SCPY( N2+1, I ), 1, DSCALE, DSUM )
-   40    CONTINUE
-         BQRA21 = DSCALE*SQRT( DSUM )
+         BQRA21 = SLANGE( 'F', N1, N2, SCPY( N2+1, 1 ), LDST, WORK )
 *
 *        Decide which method to use.
 *          Weak stability test:
