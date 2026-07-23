@@ -1,6 +1,17 @@
 message(STATUS "LAPACKE enabled")
 enable_language(C)
 
+# IntelLLVM expands CMake's response file and rewrites all linker inputs onto
+# one line. Large shared LAPACKE builds then exceed link.exe's per-line limit.
+# Pass the original response file through and keep compiler-specific library
+# flags on the driver command line.
+if(WIN32 AND BUILD_SHARED_LIBS
+    AND CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
+    AND CMAKE_GENERATOR MATCHES "^Ninja")
+  set(CMAKE_C_RESPONSE_FILE_LINK_FLAG "/Qoption,link,@")
+  set(CMAKE_C_USE_RESPONSE_FILE_FOR_LIBRARIES OFF)
+endif()
+
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
 
 include_directories(${LAPACK_BINARY_DIR}/include include)
