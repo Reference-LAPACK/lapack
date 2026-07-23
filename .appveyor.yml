@@ -15,6 +15,11 @@ environment:
   global:
     CONDA_INSTALL_LOCN: C:\\Miniconda37-x64
     CTEST_OUTPUT_ON_FAILURE: 1
+  matrix:
+  - BUILD_DEFAULT_API: "ON"
+    BUILD_INDEX64_EXT_API: "OFF"
+  - BUILD_DEFAULT_API: "OFF"
+    BUILD_INDEX64_EXT_API: "ON"
 
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
@@ -27,7 +32,7 @@ install:
 before_build:
   - ps: if (-Not (Test-Path .\build)) { mkdir build }
   - cd build
-  - cmake -G "Ninja" -DCMAKE_Fortran_COMPILER=flang -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
+  - cmake -G "Ninja" -DCMAKE_Fortran_COMPILER=flang -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCBLAS=ON -DLAPACKE=ON -DLAPACKE_WITH_TMG=ON -DBUILD_DEFAULT_API=%BUILD_DEFAULT_API% -DBUILD_INDEX64_EXT_API=%BUILD_INDEX64_EXT_API% ..
 #  - cmake -G "NMake Makefiles JOM" -DCMAKE_Fortran_COMPILER=flang -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
 
 build_script:
