@@ -81,6 +81,20 @@ EIG_BALANCE_SETS: "Tuple[Tuple[str, str], ...]" = (
     ("gbak", "Generalized Balancing Backtransformation"),
 )
 
+# Linear equation test sets: (family, name stem, executable prefix,
+# description).  Names and executables are built from the precision
+# letter plus the stem, e.g. stest.in/stest.out/xlintsts; the mixed
+# precision sets use the letter of both precisions (dstest, xlintstds)
+# and exist only for the precisions in MIXED_PARTNER.
+LIN_SETS: "Tuple[Tuple[str, str, str, str], ...]" = (
+    ("lin", "test", "xlintst", "Linear Equation routines"),
+    ("mixed", "test", "xlintst", "Mixed Precision linear equation routines"),
+    ("rfp", "test_rfp", "xlintstrf", "RFP linear equation routines"),
+)
+
+# All test families, in reporting order per precision.
+ALL_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
+
 # API suffixes that may exist: default API and index-64 extended API.
 KNOWN_SUFFIXES: "Tuple[str, ...]" = ("", "_64")
 
@@ -242,40 +256,23 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         parser=PARSER_BALANCE,
                     )
                 )
-        if "lin" in families:
+        for family, stem, executable_prefix, description in LIN_SETS:
+            if family not in families:
+                continue
+            if family == "mixed":
+                if letter not in MIXED_PARTNER:
+                    continue
+                letters_part = letter + MIXED_PARTNER[letter]
+            else:
+                letters_part = letter
             cases.append(
                 TestCase(
                     precision=letter,
-                    family="lin",
-                    description="Linear Equation routines",
-                    input_name=letter + "test.in",
-                    output_name=letter + "test.out",
-                    executable="xlintst" + letter,
-                    parser=PARSER_STANDARD,
-                )
-            )
-        if "mixed" in families and letter in MIXED_PARTNER:
-            partner = MIXED_PARTNER[letter]
-            cases.append(
-                TestCase(
-                    precision=letter,
-                    family="mixed",
-                    description="Mixed Precision linear equation routines",
-                    input_name=letter + partner + "test.in",
-                    output_name=letter + partner + "test.out",
-                    executable="xlintst" + letter + partner,
-                    parser=PARSER_STANDARD,
-                )
-            )
-        if "rfp" in families:
-            cases.append(
-                TestCase(
-                    precision=letter,
-                    family="rfp",
-                    description="RFP linear equation routines",
-                    input_name=letter + "test_rfp.in",
-                    output_name=letter + "test_rfp.out",
-                    executable="xlintstrf" + letter,
+                    family=family,
+                    description=description,
+                    input_name=letters_part + stem + ".in",
+                    output_name=letters_part + stem + ".out",
+                    executable=executable_prefix + letters_part,
                     parser=PARSER_STANDARD,
                 )
             )
@@ -443,7 +440,7 @@ def find_unrecognized_outputs(test_dir: Path) -> "List[str]":
     Returns:
         The unrecognized file names, sorted alphabetically.
     """
-    all_cases = build_test_cases("sdcz", ["lin", "eig", "mixed", "rfp", "dmd"])
+    all_cases = build_test_cases("sdcz", ALL_FAMILIES)
     known = {
         case.suffixed_output(suffix) for case in all_cases for suffix in KNOWN_SUFFIXES
     }
@@ -749,7 +746,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "-t",
         "--test",
-        choices=["lin", "eig", "mixed", "rfp", "dmd", "all"],
+        choices=list(ALL_FAMILIES) + ["all"],
         default="all",
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
@@ -819,9 +816,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                 file=sys.stderr,
             )
         letters = "dz"
-    families = (
-        ["lin", "eig", "mixed", "rfp", "dmd"] if args.test == "all" else [args.test]
-    )
+    families = list(ALL_FAMILIES) if args.test == "all" else [args.test]
     cases = build_test_cases(letters, families)
     if not cases:
         print(
