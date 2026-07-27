@@ -1,0 +1,24 @@
+# Python tooling configuration for the repository's Python scripts
+# (currently only lapack_testing.py). This file intentionally has no
+# [project]/[build-system] tables: the repository is not a Python package.
+
+[tool.black]
+target-version = ["py37"]
+
+[tool.ty.environment]
+python-version = "3.7"
+
+[tool.ty.src]
+include = ["lapack_testing.py"]
+
+[tool.basedpyright]
+pythonVersion = "3.7"
+typeCheckingMode = "strict"
+include = ["lapack_testing.py"]
+
+[tool.pydocstyle]
+convention = "google"
+
+[tool.interrogate]
+fail-under = 100
+verbose = 1

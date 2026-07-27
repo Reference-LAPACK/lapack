@@ -21,7 +21,7 @@ if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
   add_test(
     NAME LAPACK_Test_Summary
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
+    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py" "--fail-if-empty" "--fail-on-unrecognized"
     )
 endif()
 
