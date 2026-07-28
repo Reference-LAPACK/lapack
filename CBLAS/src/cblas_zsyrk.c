@@ -82,7 +82,6 @@ void API_SUFFIX(cblas_zsyrk)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
          return;
       }
       if( Trans == CblasTrans) TR ='N';
-      else if ( Trans == CblasConjTrans ) TR='N';
       else if ( Trans == CblasNoTrans )   TR='T';
       else
       {
