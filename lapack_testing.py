@@ -7,6 +7,9 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
+Results are reported per library, each in its own summary section, so
+that more than one test suite can be summarized side by side.
+
 When index-64 extended API outputs (``*_64.out``, produced by CMake
 builds with ``BUILD_INDEX64_EXT_API=ON``) are present, they are analyzed
 as well and reported in a separate "extended API" section so that the
@@ -92,8 +95,21 @@ LIN_SETS: "Tuple[Tuple[str, str, str, str], ...]" = (
     ("rfp", "test_rfp", "xlintstrf", "RFP linear equation routines"),
 )
 
+# Libraries, in reporting order.  Each has its own testing directory and
+# its own section in the summary table.
+LIBRARY_LAPACK = "LAPACK"
+LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK,)
+
+# LAPACK test families, in reporting order per precision.
+LAPACK_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
+
 # All test families, in reporting order per precision.
-ALL_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
+ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES
+
+# Which library each family belongs to.
+FAMILY_LIBRARY: "Dict[str, str]" = {
+    family: LIBRARY_LAPACK for family in LAPACK_FAMILIES
+}
 
 # API suffixes that may exist: default API and index-64 extended API.
 KNOWN_SUFFIXES: "Tuple[str, ...]" = ("", "_64")
@@ -180,7 +196,7 @@ class FileReport:
 
 @dataclass(frozen=True)
 class TestCase:
-    """One LAPACK test driver invocation and its expected output file."""
+    """One test driver invocation and its expected output file."""
 
     precision: str
     family: str
@@ -189,6 +205,7 @@ class TestCase:
     output_name: str
     executable: str
     parser: str
+    library: str = LIBRARY_LAPACK
 
     def suffixed_output(self, suffix: str) -> str:
         """Return the output file name for an API suffix.
@@ -410,8 +427,8 @@ def parse_lines(parser: str, lines: "Sequence[str]") -> FileReport:
     """Parse test output lines with the parser kind of a test case.
 
     Args:
-        parser: One of ``PARSER_STANDARD``, ``PARSER_BALANCE`` and
-            ``PARSER_DMD``.
+        parser: One of ``PARSER_STANDARD``, ``PARSER_BALANCE``,
+            and ``PARSER_DMD``.
         lines: The lines of the output file.
 
     Returns:
@@ -424,37 +441,49 @@ def parse_lines(parser: str, lines: "Sequence[str]") -> FileReport:
     return parse_standard(lines)
 
 
-def find_unrecognized_outputs(test_dir: Path) -> "List[str]":
-    """Find ``.out`` files in the test directory this script cannot analyze.
+def find_unrecognized_outputs(directories: "Dict[str, Path]") -> "List[str]":
+    """Find ``.out`` files in the test directories this script cannot analyze.
 
-    A file is unrecognized if its name matches no known test case in any
-    precision, family or API variant — typically a test that was added to
-    the harness without extending this script's test tables, or a renamed
-    output such as those of ``make variants_testing``.  The current
-    ``-p``/``-t`` selection is deliberately ignored: a deselected file is
-    not an unrecognized one.
+    A file is unrecognized if its name matches no known test case of the
+    library that owns its directory, in any precision, family or API
+    variant — typically a test that was added to the harness without
+    extending this script's test tables, or a renamed output such as
+    those of ``make variants_testing``.  The current ``-p``/``-t``
+    selection is deliberately ignored: a deselected file is not an
+    unrecognized one.
 
     Args:
-        test_dir: The directory containing the ``.out`` files.
+        directories: The existing testing directory of each library.
 
     Returns:
-        The unrecognized file names, sorted alphabetically.
+        The unrecognized file names, prefixed by their directory when
+        more than one directory was scanned, sorted alphabetically.
     """
     all_cases = build_test_cases("sdcz", ALL_FAMILIES)
-    known = {
-        case.suffixed_output(suffix) for case in all_cases for suffix in KNOWN_SUFFIXES
-    }
-    return sorted(
-        path.name for path in test_dir.glob("*.out") if path.name not in known
-    )
+    unrecognized: "List[str]" = []
+    for library, directory in directories.items():
+        known = {
+            case.suffixed_output(suffix)
+            for case in all_cases
+            if case.library == library
+            for suffix in KNOWN_SUFFIXES
+        }
+        known.add(RESULTS_FILENAME)
+        for path in directory.glob("*.out"):
+            if path.name in known:
+                continue
+            unrecognized.append(
+                path.name if len(directories) == 1 else str(directory / path.name)
+            )
+    return sorted(unrecognized)
 
 
-def discover_suffixes(test_dir: Path, cases: "Sequence[TestCase]") -> "List[str]":
-    """Detect which API variants have output files in the test directory.
+def discover_suffixes(cases: "Sequence[TestCase]", directory: Path) -> "List[str]":
+    """Detect which API variants have output files in a testing directory.
 
     Args:
-        test_dir: The directory containing the ``.out`` files.
-        cases: The selected test cases.
+        cases: The selected test cases of one library.
+        directory: That library's testing directory.
 
     Returns:
         The suffixes (out of ``""`` and ``"_64"``) for which at least one
@@ -463,7 +492,7 @@ def discover_suffixes(test_dir: Path, cases: "Sequence[TestCase]") -> "List[str]
     suffixes = [
         suffix
         for suffix in KNOWN_SUFFIXES
-        if any((test_dir / case.suffixed_output(suffix)).is_file() for case in cases)
+        if any((directory / case.suffixed_output(suffix)).is_file() for case in cases)
     ]
     return suffixes or [""]
 
@@ -618,18 +647,20 @@ def format_summary_row(label: str, counts: Counts) -> str:
     )
 
 
-def section_title(suffix: str) -> str:
-    """Return the human-readable name of an API section.
+def section_title(library: str, suffix: str) -> str:
+    """Return the human-readable name of a library/API section.
 
     Args:
+        library: The library name, e.g. ``"BLAS"``.
         suffix: The API suffix, either ``""`` or ``"_64"``.
 
     Returns:
-        The section name used in headings and messages.
+        The section name used in headings and messages, e.g.
+        ``"BLAS: Extended API (_64)"``.
     """
     if suffix:
-        return "Extended API ({})".format(suffix)
-    return "Default API"
+        return "{}: Extended API ({})".format(library, suffix)
+    return "{}: Default API".format(library)
 
 
 def section_heading(title: str) -> str:
@@ -690,8 +721,9 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         description="Analyze the .out files produced by the LAPACK test "
         "suite and print a summary of the test results.",
         epilog="By default all precisions and all test families are "
-        "analyzed, and both the default API and extended API (_64) "
-        "outputs are summarized when present.",
+        "analyzed, each library is reported in its own section, and both "
+        "the default API and extended API (_64) outputs are summarized "
+        "when present.",
     )
     parser.add_argument(
         "-d",
@@ -746,11 +778,12 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "-t",
         "--test",
-        choices=list(ALL_FAMILIES) + ["all"],
+        choices=list(ALL_FAMILIES) + ["lapack", "all"],
         default="all",
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
-        "rfp=RFP format, dmd=dynamic mode decomposition, all (default)",
+        "rfp=RFP format, dmd=dynamic mode decomposition, "
+        "lapack=all LAPACK families, all (default)",
     )
     parser.add_argument(
         "--suffix",
@@ -766,7 +799,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         action="store_true",
         help="exit with a nonzero status if any test failure or error was "
         "found, a test driver could not be run, or unrecognized .out files "
-        "were present in the testing directory",
+        "were present in a testing directory",
     )
     parser.add_argument(
         "--fail-if-empty",
@@ -777,7 +810,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "--fail-on-unrecognized",
         action="store_true",
         help="exit with a nonzero status if .out files not known to this "
-        "script were present in the testing directory",
+        "script were present in a testing directory",
     )
     return parser.parse_args(argv)
 
@@ -805,6 +838,10 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
+    # One testing directory per library; more are added as further test
+    # suites are taught to this script.
+    directories: "Dict[str, Path]" = {LIBRARY_LAPACK: test_dir}
+
     letters = "sdcz" if args.prec == "x" else args.prec
     if args.test == "mixed":
         # The mixed-precision drivers exist only for d (ds) and z (zc);
@@ -816,7 +853,14 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                 file=sys.stderr,
             )
         letters = "dz"
-    families = list(ALL_FAMILIES) if args.test == "all" else [args.test]
+    if args.test == "all":
+        families = list(ALL_FAMILIES)
+    elif args.test == "lapack":
+        families = list(LAPACK_FAMILIES)
+    else:
+        families = [args.test]
+    # Drop the families of libraries that were not built.
+    families = [family for family in families if FAMILY_LIBRARY[family] in directories]
     cases = build_test_cases(letters, families)
     if not cases:
         print(
@@ -827,16 +871,27 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
+    forced_suffixes: "Optional[List[str]]" = None
     if args.suffix is not None:
-        suffixes: "List[str]" = []
+        forced_suffixes = []
         for choice in args.suffix:
             suffix = "" if choice == "none" else "_64"
-            if suffix not in suffixes:
-                suffixes.append(suffix)
+            if suffix not in forced_suffixes:
+                forced_suffixes.append(suffix)
     elif args.run:
-        suffixes = [""]
-    else:
-        suffixes = discover_suffixes(test_dir, cases)
+        forced_suffixes = [""]
+
+    # One (library, API) pair per summary section, in reporting order.
+    sections: "List[Tuple[str, str]]" = []
+    for library in LIBRARIES:
+        library_cases = [case for case in cases if case.library == library]
+        if not library_cases:
+            continue
+        suffixes = forced_suffixes
+        if suffixes is None:
+            suffixes = discover_suffixes(library_cases, directories[library])
+        for suffix in suffixes:
+            sections.append((library, suffix))
 
     results_path = test_dir / RESULTS_FILENAME
     try:
@@ -867,18 +922,24 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     missing_files = 0
     run_failures = 0
 
-    for suffix in suffixes:
-        if len(suffixes) > 1 or suffix:
-            summary += "\n" + section_heading(section_title(suffix)) + "\n"
+    for library, suffix in sections:
+        directory = directories[library]
+        title = section_title(library, suffix)
+        if len(sections) > 1 or suffix:
+            summary += "\n" + section_heading(title) + "\n"
             if not short_summary:
                 print(" ")
-                print(section_heading(section_title(suffix)))
+                print(section_heading(title))
         summary += SUMMARY_HEADER + "\n"
         summary += SUMMARY_RULE + "\n"
         section_total = Counts()
 
         for letter, precision_name in PRECISIONS:
-            precision_cases = [case for case in cases if case.precision == letter]
+            precision_cases = [
+                case
+                for case in cases
+                if case.precision == letter and case.library == library
+            ]
             if not precision_cases:
                 continue
             precision_total = Counts()
@@ -893,7 +954,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         end=" ",
                     )
                 if args.run:
-                    error_message = run_test_case(case, suffix, test_dir, args.bin)
+                    error_message = run_test_case(case, suffix, directory, args.bin)
                     if error_message is not None:
                         run_failures += 1
                         print(
@@ -901,20 +962,27 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                                 case.suffixed_executable(suffix), error_message
                             )
                         )
-                lines = read_output_file(test_dir / output_name)
+                lines = read_output_file(directory / output_name)
                 if lines is None:
                     missing_files += 1
                     if not short_summary:
                         print(
-                            "---- WARNING: please check that you have the LAPACK "
-                            "output {}!".format(output_name)
+                            "---- WARNING: please check that you have the {} "
+                            "output {}!".format(library, output_name)
                         )
                         print(
                             "---- WARNING: with the option -r, we can run the "
-                            "LAPACK testing for you"
+                            "testing for you"
                         )
                     continue
-                log.record(output_name, lines)
+                log.record(
+                    (
+                        output_name
+                        if library == LIBRARY_LAPACK
+                        else str(directory / output_name)
+                    ),
+                    lines,
+                )
                 report = parse_lines(case.parser, lines)
                 precision_total.add(report.counts)
 
@@ -975,12 +1043,15 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             file=sys.stderr,
         )
 
-    unrecognized = find_unrecognized_outputs(test_dir)
+    unrecognized = find_unrecognized_outputs(directories)
     if unrecognized:
         print(
             "lapack_testing.py: {} .out file(s) in {} are not known to this "
             "script and were NOT analyzed (new tests must be added to the "
-            "test tables in this script):".format(len(unrecognized), test_dir),
+            "test tables in this script):".format(
+                len(unrecognized),
+                ", ".join(str(directory) for directory in directories.values()),
+            ),
             file=sys.stderr,
         )
         for name in unrecognized:
