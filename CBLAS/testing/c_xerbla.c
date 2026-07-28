@@ -45,8 +45,8 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
 
    if (info != cblas_info) {
       printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT
-             " INSTEAD OF %d in %s *******\n",
-             info, (int)cblas_info, rout);
+             " INSTEAD OF %" CBLAS_IFMT " in %s *******\n",
+             info, cblas_info, rout);
       cblas_lerr = PASSED;
       cblas_ok = FALSE;
    } else {
