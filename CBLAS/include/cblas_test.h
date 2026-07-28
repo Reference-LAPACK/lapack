@@ -22,6 +22,20 @@
   #define FORTRAN_STRLEN size_t
 #endif
 
+#ifndef F77_INT
+#ifdef WeirdNEC
+  #define F77_INT int64_t
+#else
+  #define F77_INT int32_t
+#endif
+#endif
+
+#ifdef  F77_CHAR
+  #define FCHAR F77_CHAR
+#else
+  #define FCHAR char *
+#endif
+
 #define TRUE         1
 #define PASSED       1
 #define TEST_ROW_MJR 1
