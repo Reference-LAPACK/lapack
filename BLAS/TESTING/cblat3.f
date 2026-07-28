@@ -2074,6 +2074,7 @@
       INTEGER            ISNUM, NOUT
       CHARACTER*7        SRNAMT
 *     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
 *     .. Parameters ..
@@ -2089,6 +2090,7 @@
      $                   CSYR2K, CSYRK, CTRMM, CTRSM, CGEMMTR
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
 *     .. Executable Statements ..
 *     OK is set to .FALSE. by the special version of XERBLA or by CHKXER
 *     if anything is wrong.
@@ -2096,6 +2098,11 @@
 *     LERR is set to .TRUE. by the special version of XERBLA each time
 *     it is called, and is then tested and re-set by CHKXER.
       LERR = .FALSE.
+*     NXRUN and NXFAIL count the error-exit tests of this routine;
+*     NXBAD is set by XERBLA when it is called wrongly.
+      NXRUN = 0
+      NXFAIL = 0
+      NXBAD = 0
 *
 *     Initialize ALPHA, BETA, RALPHA, and RBETA.
 *
@@ -3180,11 +3187,14 @@
       ELSE
          WRITE( NOUT, FMT = 9998 )SRNAMT
       END IF
+      WRITE( NOUT, FMT = 9979 )SRNAMT, NXRUN, NXFAIL
       RETURN
 *
  9999 FORMAT( ' ', A7, ' PASSED THE TESTS OF ERROR-EXITS' )
  9998 FORMAT( ' ******* ', A7, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
+ 9979 FORMAT( ' ', A7, ' ERROR-EXIT TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of CCHKE
 *
@@ -3688,11 +3698,20 @@
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
       CHARACTER*7        SRNAMT
+*     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
+*     .. Common blocks ..
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
 *     .. Executable Statements ..
+      NXRUN = NXRUN + 1
       IF( .NOT.LERR )THEN
          WRITE( NOUT, FMT = 9999 )INFOT, SRNAMT
          OK = .FALSE.
+         NXFAIL = NXFAIL + 1
+      ELSE IF( NXBAD.NE.0 )THEN
+         NXFAIL = NXFAIL + 1
       END IF
+      NXBAD = 0
       LERR = .FALSE.
       RETURN
 *
@@ -3725,11 +3744,13 @@
       INTEGER            INFO
       CHARACTER*(*)      SRNAME
 *     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
       CHARACTER*7        SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
       COMMON             /SRNAMC/SRNAMT
 *     .. Locals ..
       INTEGER            SRLEN
@@ -3742,11 +3763,13 @@
             WRITE( NOUT, FMT = 9997 )INFO
          END IF
          OK = .FALSE.
+         NXBAD = 1
       END IF
       SRLEN = MIN(LEN_TRIM(SRNAME), LEN_TRIM(SRNAMT))
       IF( SRNAME(1:SRLEN).NE.SRNAMT(1:SRLEN) )THEN
          WRITE( NOUT, FMT = 9998 )SRNAME, SRNAMT
          OK = .FALSE.
+         NXBAD = 1
       END IF
       RETURN
 *
