@@ -1,15 +1,22 @@
-function(_add_blas_test name src test_input)
+function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
   target_link_libraries(${name} ${BLASLIB})
   if(EXISTS "${test_input}")
+    # The Level 2 and 3 testers open their own summary file, whose name
+    # they read from the first line of the input file, so the harness
+    # must not also redirect stdout onto it.
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>
       -DINPUT=${test_input}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
   else()
+    # The Level 1 testers read no input and write to stdout, so capture
+    # it here. This matches what BLAS/TESTING/Makefile's run target does
+    # (./xblat1s > sblat1.out) and is what lapack_testing.py reads.
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>
+      -DOUTPUT=${test_output}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
   endif()
@@ -26,7 +33,8 @@ function(add_blas_test name source)
   set(test_input "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
 
   if(BUILD_DEFAULT_API)
-    _add_blas_test(${name} ${source} "${test_input}")
+    _add_blas_test(${name} ${source} "${test_input}"
+      "${CMAKE_CURRENT_BINARY_DIR}/${baseNAME}.out")
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -43,7 +51,8 @@ function(add_blas_test name source)
       file(WRITE "${test_input_64}" "${test_input_content}")
     endif()
 
-    _add_blas_test(${name}_64 "${source_64}" "${test_input_64}")
+    _add_blas_test(${name}_64 "${source_64}" "${test_input_64}"
+      "${CMAKE_CURRENT_BINARY_DIR}/${baseNAME}_64.out")
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
   endif()
 endfunction()
