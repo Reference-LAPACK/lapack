@@ -870,14 +870,14 @@ void F77_d2chke(char *rout
       cblas_info = 6; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_dspr)(CblasColMajor, CblasUpper, 0, ALPHA, X, 0, A );
       chkxer();
-      cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dspr)(CblasColMajor, INVALID_UPLO, 0, ALPHA, X, 1, A );
+      cblas_info = 2; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_dspr)(CblasRowMajor, INVALID_UPLO, 0, ALPHA, X, 1, A );
       chkxer();
-      cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dspr)(CblasColMajor, CblasUpper, INVALID, ALPHA, X, 1, A );
+      cblas_info = 3; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_dspr)(CblasRowMajor, CblasUpper, INVALID, ALPHA, X, 1, A );
       chkxer();
-      cblas_info = 6; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_dspr)(CblasColMajor, CblasUpper, 0, ALPHA, X, 0, A );
+      cblas_info = 6; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_dspr)(CblasRowMajor, CblasUpper, 0, ALPHA, X, 0, A );
       chkxer();
    }
    if (cblas_ok == TRUE)

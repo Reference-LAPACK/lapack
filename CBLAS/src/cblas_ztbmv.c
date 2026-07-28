@@ -124,7 +124,7 @@ void API_SUFFIX(cblas_ztbmv)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if (Diag == CblasNonUnit) DI = 'N';
       else
       {
-         API_SUFFIX(cblas_xerbla)(4, "cblas_ztbmv","Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(4, "cblas_ztbmv","Illegal Diag setting, %d\n", Diag);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;

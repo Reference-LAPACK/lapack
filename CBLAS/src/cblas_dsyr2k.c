@@ -78,7 +78,7 @@ void API_SUFFIX(cblas_dsyr2k)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Uplo == CblasLower ) UL='U';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_dsyr2k","Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_dsyr2k","Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;

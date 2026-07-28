@@ -826,14 +826,14 @@ void F77_z2chke(char *rout
       cblas_info = 6; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_zhpr)(CblasColMajor, CblasUpper, 0, RALPHA, X, 0, A );
       chkxer();
-      cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_zhpr)(CblasColMajor, INVALID_UPLO, 0, RALPHA, X, 1, A );
+      cblas_info = 2; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_zhpr)(CblasRowMajor, INVALID_UPLO, 0, RALPHA, X, 1, A );
       chkxer();
-      cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_zhpr)(CblasColMajor, CblasUpper, INVALID, RALPHA, X, 1, A );
+      cblas_info = 3; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_zhpr)(CblasRowMajor, CblasUpper, INVALID, RALPHA, X, 1, A );
       chkxer();
-      cblas_info = 6; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_zhpr)(CblasColMajor, CblasUpper, 0, RALPHA, X, 0, A );
+      cblas_info = 6; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_zhpr)(CblasRowMajor, CblasUpper, 0, RALPHA, X, 0, A );
       chkxer();
    }
    if (cblas_ok == TRUE)
