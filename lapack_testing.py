@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarize (and optionally run) the LAPACK and BLAS test suites.
+"""Summarize (and optionally run) the LAPACK, BLAS and CBLAS test suites.
 
 This script analyzes the ``.out`` files written by the LAPACK testing
 drivers (``xlintst*``, ``xeigtst*`` and ``xdmdeigtst*``) and prints a
@@ -7,9 +7,10 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The BLAS (``xblat[123]?``) test drivers are analyzed too, from their own
-testing directory, and are reported in their own summary section.  Those
-drivers report their test counts in lines of the form::
+The BLAS (``xblat[123]?``) and CBLAS (``x?cblat[123]``) test drivers are
+analyzed too, from their own testing directories, and are reported in
+their own summary sections.  Those drivers report their test counts in
+lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
      SGEMV      ERROR-EXIT TESTS:           6 RUN,        0 FAILED
@@ -107,8 +108,8 @@ LIN_SETS: "Tuple[Tuple[str, str, str, str], ...]" = (
     ("rfp", "test_rfp", "xlintstrf", "RFP linear equation routines"),
 )
 
-# BLAS test sets, one per BLAS level: (level, description).  The Level 1
-# drivers read no input file and write to standard output.
+# BLAS and CBLAS test sets, one per BLAS level: (level, description).
+# The Level 1 drivers read no input file and write to standard output.
 BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
     (1, "Level 1 BLAS routines"),
     (2, "Level 2 BLAS routines"),
@@ -119,17 +120,19 @@ BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
 # its own section in the summary table.
 LIBRARY_LAPACK = "LAPACK"
 LIBRARY_BLAS = "BLAS"
-LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS)
+LIBRARY_CBLAS = "CBLAS"
+LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS, LIBRARY_CBLAS)
 
 # LAPACK test families, in reporting order per precision.
 LAPACK_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
 
 # All test families, in reporting order per precision.
-ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas",)
+ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas", "cblas")
 
 # Which library each family belongs to.
 FAMILY_LIBRARY: "Dict[str, str]" = dict(
-    [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES] + [("blas", LIBRARY_BLAS)]
+    [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES]
+    + [("blas", LIBRARY_BLAS), ("cblas", LIBRARY_CBLAS)]
 )
 
 # API suffixes that may exist: default API and index-64 extended API.
@@ -162,20 +165,25 @@ RE_LARGEST_ERROR = re.compile(r"(?:value|ratio) of largest test error\s*=\s*(\S+
 # aggregate lines such as "SGEDMD :: ALL TESTS PASSED." from matching.
 RE_DMD_VERDICT = re.compile(r"\btest\s+(PASSED|FAILED)\b", re.IGNORECASE)
 
-# Test counts reported by the BLAS drivers, e.g.
+# Test counts reported by the BLAS/CBLAS drivers, e.g.
 #   " SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED"
+#   " cblas_sgemv      ROW-MAJOR    COMPUTATIONAL TESTS:  3456 RUN, ..."
 # The routine name field width differs per driver, so never match on
 # column positions.
 RE_BLAS_COUNTS = re.compile(
-    r"^\s*\S+\s+(COMPUTATIONAL|ERROR-EXIT) TESTS:" r"\s*(\d+) RUN,\s*(\d+) FAILED\s*$"
+    r"^\s*\S+\s+(?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?"
+    r"(COMPUTATIONAL|ERROR-EXIT) TESTS:\s*(\d+) RUN,\s*(\d+) FAILED\s*$"
 )
 
 # Per-routine verdicts.  These are only counted when the driver did not
 # report counts (output from a build without the counting instrumentation).
 RE_BLAS_PASSED = re.compile(
-    r"^\s*\S+\s+PASSED THE (?:COMPUTATIONAL TESTS|TESTS OF ERROR-EXITS)\b"
+    r"^\s*\S+\s+PASSED THE (?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?"
+    r"(?:COMPUTATIONAL TESTS|TESTS OF ERROR-EXITS)\b"
 )
-RE_BLAS_SUSPECT = re.compile(r"\bCOMPLETED THE COMPUTATIONAL TESTS\b")
+RE_BLAS_SUSPECT = re.compile(
+    r"\bCOMPLETED THE (?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?COMPUTATIONAL TESTS\b"
+)
 RE_BLAS_FAILED_COMPUTATIONAL = re.compile(r"\bFAILED ON CALL NUMBER:")
 RE_BLAS_FAILED_ERROR_EXIT = re.compile(r"\bFAILED THE TESTS OF ERROR-EXITS\b")
 
@@ -426,6 +434,25 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         redirect_stdout=level == 1,
                     )
                 )
+        if "cblas" in families:
+            for level, description in BLAS_LEVELS:
+                # The CBLAS inputs carry no output file name, so the same
+                # input serves both APIs and the harness does the
+                # redirection for every level.
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="cblas",
+                        description="C interface to " + description,
+                        input_name=(
+                            None if level == 1 else "{}in{}".format(letter, level)
+                        ),
+                        output_name="{}test{}.out".format(letter, level),
+                        executable="x{}cblat{}".format(letter, level),
+                        parser=PARSER_BLAS1 if level == 1 else PARSER_BLAS23,
+                        library=LIBRARY_CBLAS,
+                    )
+                )
     return cases
 
 
@@ -545,7 +572,7 @@ def parse_dmd(lines: "Sequence[str]") -> FileReport:
 
 
 def parse_blas(lines: "Sequence[str]", level_one: bool) -> FileReport:
-    """Parse a BLAS test output file.
+    """Parse a BLAS or CBLAS test output file.
 
     Test counts come from the ``... TESTS: n RUN, m FAILED`` lines the
     drivers report per routine: computational failures are numerical
@@ -752,6 +779,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
             Path("TESTING") / "LIN",
             Path("TESTING") / "EIG",
             Path("BLAS") / "TESTING",
+            Path("CBLAS") / "testing",
         ]
     for directory in directories:
         for filename in (name, name + ".exe"):
@@ -764,6 +792,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
 SOURCE_INPUT_DIRS: "Dict[str, str]" = {
     LIBRARY_LAPACK: "TESTING",
     LIBRARY_BLAS: "BLAS/TESTING",
+    LIBRARY_CBLAS: "CBLAS/testing",
 }
 
 
@@ -983,8 +1012,8 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         The parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Analyze the .out files produced by the LAPACK and "
-        "BLAS test suites and print a summary of the test results.",
+        description="Analyze the .out files produced by the LAPACK, BLAS "
+        "and CBLAS test suites and print a summary of the test results.",
         epilog="By default all precisions and all test families are "
         "analyzed, each library is reported in its own section, and both "
         "the default API and extended API (_64) outputs are summarized "
@@ -1004,12 +1033,18 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "skipped without warning if it does not exist (default: %(default)s)",
     )
     parser.add_argument(
+        "--cblas-dir",
+        default=str(Path("CBLAS") / "testing"),
+        help="directory containing the CBLAS testing output (.out) files; "
+        "skipped without warning if it does not exist (default: %(default)s)",
+    )
+    parser.add_argument(
         "-b",
         "--bin",
         default=None,
         help="directory containing the test drivers for --run; by default "
-        "bin, bin/Release, bin/Debug, TESTING/LIN, TESTING/EIG and "
-        "BLAS/TESTING are probed",
+        "bin, bin/Release, bin/Debug, TESTING/LIN, TESTING/EIG, "
+        "BLAS/TESTING and CBLAS/testing are probed",
     )
     parser.add_argument(
         "-r",
@@ -1054,7 +1089,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
         "rfp=RFP format, dmd=dynamic mode decomposition, blas=BLAS, "
-        "lapack=all LAPACK families, all (default)",
+        "cblas=CBLAS, lapack=all LAPACK families, all (default)",
     )
     parser.add_argument(
         "--suffix",
@@ -1087,7 +1122,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
 
 
 def main(argv: "Optional[Sequence[str]]" = None) -> int:
-    """Run the LAPACK and BLAS test summary tool.
+    """Run the LAPACK, BLAS and CBLAS test summary tool.
 
     Args:
         argv: The command line arguments, or None to use ``sys.argv``.
@@ -1109,12 +1144,15 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
-    # The BLAS tests are absent from builds that use an optimized BLAS, so
-    # a missing directory is normal and is skipped silently.  An
-    # explicitly selected library that has no directory is a usage error,
-    # though.
+    # The BLAS tests are absent from builds that use an optimized BLAS,
+    # and CBLAS is off by default, so a missing directory is normal and
+    # is skipped silently.  An explicitly selected library that has no
+    # directory is a usage error, though.
     directories: "Dict[str, Path]" = {LIBRARY_LAPACK: test_dir}
-    for library, option in ((LIBRARY_BLAS, args.blas_dir),):
+    for library, option in (
+        (LIBRARY_BLAS, args.blas_dir),
+        (LIBRARY_CBLAS, args.cblas_dir),
+    ):
         directory = Path(option)
         if directory.is_dir():
             directories[library] = directory
