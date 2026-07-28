@@ -9,6 +9,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
    extern CBLAS_INT link_xerbla;
+   extern CBLAS_INT cblas_xbad;
    extern char *cblas_rout;
 
    /* Initially, c__3chke may call this routine with
@@ -21,6 +22,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form
    if (cblas_rout != NULL && strcmp(cblas_rout, rout) != 0){
       printf("***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n", rout, cblas_rout);
       cblas_ok = FALSE;
+      cblas_xbad = 1;
    }
 
    if (RowMajorStrg)
