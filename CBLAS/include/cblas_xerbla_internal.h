@@ -9,8 +9,16 @@
 
 // Keep a bit of headroom for possible future CBLAS routines
 #define CBLAS_XERBLA_MAX_ROUTINE_NAME 32u
+#define CBLAS_XERBLA_API64_SUFFIX "_64"
+#ifdef CBLAS_API64
+#define CBLAS_XERBLA_API_SUFFIX CBLAS_XERBLA_API64_SUFFIX
+#else
+#define CBLAS_XERBLA_API_SUFFIX ""
+#endif
+
 #define CBLAS_XERBLA_ROUT_BUFFER_SIZE                                          \
-   (sizeof("cblas_") - 1 + CBLAS_XERBLA_MAX_ROUTINE_NAME + 1)
+   ((sizeof("cblas_") - 1) + CBLAS_XERBLA_MAX_ROUTINE_NAME +                   \
+    (sizeof(CBLAS_XERBLA_API_SUFFIX) - 1) + 1)
 
 /**
  * \brief Length of a Fortran-style name with trailing blanks removed.
@@ -54,16 +62,16 @@ static inline size_t cblas_xerbla_trimmed_length(const char *name,
 static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
                                           const char *name, size_t name_len)
 {
-
    if (rout_size == 0) return;
 
    name_len = cblas_xerbla_trimmed_length(name, name_len);
 
-#ifdef CBLAS_API64
-   if (name_len >= 3 && name[name_len - 3] == '_' &&
-       name[name_len - 2] == '6' && name[name_len - 1] == '4')
-      name_len -= 3;
-#endif
+   static const char suffix[] = CBLAS_XERBLA_API_SUFFIX;
+   size_t suffix_len = sizeof(suffix) - 1;
+   if (suffix_len > 0 && name_len >= suffix_len &&
+       strncmp(name + name_len - suffix_len, suffix, suffix_len) == 0) {
+      name_len -= suffix_len;
+   }
 
    if (name_len > CBLAS_XERBLA_MAX_ROUTINE_NAME) {
       name_len = CBLAS_XERBLA_MAX_ROUTINE_NAME;
@@ -77,6 +85,49 @@ static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
    }
    for (size_t i = 0; i < name_len && rout_len + 1 < rout_size; i++) {
       rout[rout_len++] = (char)tolower((unsigned char)name[i]);
+   }
+
+   rout[rout_len] = '\0';
+}
+
+/**
+ * \brief Copy a routine name as it should be reported to the user.
+ *
+ * Appends the extended API suffix, so that a 64-bit build names
+ * cblas_dgemm_64() rather than cblas_dgemm() in its diagnostics. A name that
+ * already carries the suffix is copied unchanged, which keeps the call
+ * idempotent whatever the caller passes. The result is always NUL terminated
+ * and is truncated rather than allowed to overflow \p rout.
+ *
+ * \param[out] rout       Destination buffer, normally of size
+ *                        CBLAS_XERBLA_ROUT_BUFFER_SIZE.
+ * \param[in]  rout_size  Size of \p rout in bytes.
+ * \param[in]  name       Routine name, e.g. "cblas_dgemm", or NULL.
+ */
+static inline void cblas_xerbla_apply_api_suffix(char *rout, size_t rout_size,
+                                                 const char *name)
+{
+   if (rout_size == 0) return;
+
+   if (name == NULL) {
+      rout[0] = '\0';
+      return;
+   }
+
+   static const char suffix[] = CBLAS_XERBLA_API_SUFFIX;
+   size_t suffix_len = sizeof(suffix) - 1;
+   size_t name_len = strlen(name);
+   if (suffix_len > 0 && name_len >= suffix_len &&
+       strcmp(name + name_len - suffix_len, suffix) == 0) {
+      suffix_len = 0;
+   }
+
+   size_t rout_len = 0;
+   for (size_t i = 0; i < name_len && rout_len + 1 < rout_size; i++) {
+      rout[rout_len++] = name[i];
+   }
+   for (size_t i = 0; i < suffix_len && rout_len + 1 < rout_size; i++) {
+      rout[rout_len++] = suffix[i];
    }
 
    rout[rout_len] = '\0';
@@ -111,17 +162,26 @@ static inline const char *cblas_xerbla_operation(const char *rout)
 /**
  * \brief Test an operation name for equality.
  *
- * The comparison is exact, so "gemm" does not also match "gemmtr".
+ * The comparison is exact, so "gemm" does not also match "gemmtr". A trailing
+ * extended API suffix is tolerated, so that a name arriving already suffixed
+ * still selects the right remapping rather than silently selecting none.
  *
  * \param[in] operation  Result of cblas_xerbla_operation(), or NULL.
  * \param[in] expected   Operation name to match.
  *
- * \return Nonzero when \p operation equals \p expected.
+ * \return Nonzero when \p operation equals \p expected, ignoring any trailing
+ *         extended API suffix.
  */
 static inline int cblas_xerbla_operation_is(const char *operation,
                                             const char *expected)
 {
-   return operation != NULL && strcmp(operation, expected) == 0;
+   if (operation == NULL) return 0;
+
+   size_t expected_len = strlen(expected);
+   if (strncmp(operation, expected, expected_len) != 0) return 0;
+
+   return operation[expected_len] == '\0' ||
+          strcmp(operation + expected_len, CBLAS_XERBLA_API64_SUFFIX) == 0;
 }
 
 /**

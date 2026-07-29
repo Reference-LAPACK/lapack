@@ -26,8 +26,11 @@ void CBLAS_WEAK_SYMBOL API_SUFFIX(cblas_xerbla)(CBLAS_INT info,
 
    info = cblas_xerbla_map_info(info, rout, RowMajorStrg);
    if (info) {
+      char reported[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+      cblas_xerbla_apply_api_suffix(reported, sizeof(reported), rout);
+
       fprintf(stderr, "Parameter %" CBLAS_IFMT " to routine %s was incorrect\n",
-              info, rout);
+              info, reported);
    }
 
    va_list argptr;

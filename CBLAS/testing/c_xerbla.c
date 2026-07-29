@@ -34,10 +34,16 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
     */
    if (link_xerbla) return;
 
-   if (cblas_rout != NULL && strcmp(cblas_rout, rout) != 0) {
+   /* The name is checked and reported as the user would see it, suffix and
+    * all, while the remapping below keys off the unsuffixed \p rout.
+    */
+   char reported[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+   cblas_xerbla_apply_api_suffix(reported, sizeof(reported), rout);
+
+   if (cblas_rout != NULL && strcmp(cblas_rout, reported) != 0) {
       printf(
          "***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n",
-         rout, cblas_rout);
+         reported, cblas_rout);
       cblas_ok = FALSE;
    }
 
@@ -46,7 +52,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
    if (info != cblas_info) {
       printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT
              " INSTEAD OF %" CBLAS_IFMT " in %s *******\n",
-             info, cblas_info, rout);
+             info, cblas_info, reported);
       cblas_lerr = PASSED;
       cblas_ok = FALSE;
    } else {
@@ -65,8 +71,8 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
  */
 void F77_xerbla(FCHAR F77_srname, void *vinfo
 #ifdef BLAS_FORTRAN_STRLEN_END
-   ,
-   FORTRAN_STRLEN len
+                ,
+                FORTRAN_STRLEN len
 #endif
 )
 {
