@@ -1,5 +1,9 @@
 # ignore objects and archives, anywhere in the tree.
 *.[oa]
+*.so
+*.dll
+*.dylib
+*.pdb
 
 # test in INSTALL
 INSTALL/test*
