@@ -2,18 +2,12 @@ function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
   target_link_libraries(${name} ${BLASLIB})
   if(EXISTS "${test_input}")
-    # The Level 2 and 3 testers open their own summary file, whose name
-    # they read from the first line of the input file, so the harness
-    # must not also redirect stdout onto it.
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>
       -DINPUT=${test_input}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
   else()
-    # The Level 1 testers read no input and write to stdout, so capture
-    # it here. This matches what BLAS/TESTING/Makefile's run target does
-    # (./xblat1s > sblat1.out) and is what lapack_testing.py reads.
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>
       -DOUTPUT=${test_output}
