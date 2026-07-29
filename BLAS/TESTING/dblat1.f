@@ -47,7 +47,7 @@
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
       INTEGER          NTESTS, NFAILS
-      CHARACTER*6     SUBNAM
+      CHARACTER*6      SUBNAM
       INTEGER          ICASE, INCX, INCY, N
       LOGICAL          PASS
 *     .. Local Scalars ..
@@ -108,7 +108,7 @@
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
-      CHARACTER*6     SUBNAM
+      CHARACTER*6      SUBNAM
       INTEGER          ICASE, INCX, INCY, N
       LOGICAL          PASS
 *     .. Local Arrays ..
