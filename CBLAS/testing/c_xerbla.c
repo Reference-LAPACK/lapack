@@ -83,22 +83,20 @@ void F77_xerbla(FCHAR F77_srname, void *vinfo
       return;
    }
 
-   size_t srname_len;
 #ifdef BLAS_FORTRAN_STRLEN_END
-   srname_len = len > 0 ? (size_t)len : 0;
+   const size_t srname_len = len > 0 ? (size_t)len : 0;
 #else
-   srname_len = 6;
+   const size_t srname_len = 6;
 #endif
 
-   char *srname;
 #ifdef F77_CHAR
-   srname = F2C_STR(F77_srname, srname_len);
+   const char *srname = F2C_STR(F77_srname, srname_len);
 #else
-   srname = F77_srname;
+   const char *srname = F77_srname;
 #endif
 
-   F77_INT *info = (F77_INT *)vinfo;
-   CBLAS_INT cblas_info = (CBLAS_INT)*info;
+   const F77_INT *info = (const F77_INT *)vinfo;
+   const CBLAS_INT cblas_info = (CBLAS_INT)*info;
 
    char rout[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
    cblas_xerbla_make_rout(rout, sizeof(rout), srname, srname_len);

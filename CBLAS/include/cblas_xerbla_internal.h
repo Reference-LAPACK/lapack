@@ -9,6 +9,7 @@
 
 // Keep a bit of headroom for possible future CBLAS routines
 #define CBLAS_XERBLA_MAX_ROUTINE_NAME 32u
+#define CBLAS_XERBLA_API_PREFIX "cblas_"
 #define CBLAS_XERBLA_API64_SUFFIX "_64"
 #ifdef CBLAS_API64
 #define CBLAS_XERBLA_API_SUFFIX CBLAS_XERBLA_API64_SUFFIX
@@ -17,7 +18,7 @@
 #endif
 
 #define CBLAS_XERBLA_ROUT_BUFFER_SIZE                                          \
-   ((sizeof("cblas_") - 1) + CBLAS_XERBLA_MAX_ROUTINE_NAME +                   \
+   ((sizeof(CBLAS_XERBLA_API_PREFIX) - 1) + CBLAS_XERBLA_MAX_ROUTINE_NAME +    \
     (sizeof(CBLAS_XERBLA_API_SUFFIX) - 1) + 1)
 
 /**
@@ -30,7 +31,7 @@
  *         \p name is NULL.
  */
 static inline size_t cblas_xerbla_trimmed_length(const char *name,
-                                                 size_t name_len)
+                                                 const size_t name_len)
 {
    if (name == NULL) return 0;
 
@@ -59,7 +60,7 @@ static inline size_t cblas_xerbla_trimmed_length(const char *name,
  *                        terminated.
  * \param[in]  name_len   Number of characters available in \p name.
  */
-static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
+static inline void cblas_xerbla_make_rout(char *rout, const size_t rout_size,
                                           const char *name, size_t name_len)
 {
    if (rout_size == 0) return;
@@ -67,7 +68,7 @@ static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
    name_len = cblas_xerbla_trimmed_length(name, name_len);
 
    static const char suffix[] = CBLAS_XERBLA_API_SUFFIX;
-   size_t suffix_len = sizeof(suffix) - 1;
+   const size_t suffix_len = sizeof(suffix) - 1;
    if (suffix_len > 0 && name_len >= suffix_len &&
        strncmp(name + name_len - suffix_len, suffix, suffix_len) == 0) {
       name_len -= suffix_len;
@@ -77,8 +78,8 @@ static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
       name_len = CBLAS_XERBLA_MAX_ROUTINE_NAME;
    }
 
-   static const char prefix[] = "cblas_";
-   size_t prefix_len = sizeof(prefix) - 1;
+   static const char prefix[] = CBLAS_XERBLA_API_PREFIX;
+   const size_t prefix_len = sizeof(prefix) - 1;
    size_t rout_len = 0;
    for (size_t i = 0; i < prefix_len && rout_len + 1 < rout_size; i++) {
       rout[rout_len++] = prefix[i];
@@ -104,7 +105,8 @@ static inline void cblas_xerbla_make_rout(char *rout, size_t rout_size,
  * \param[in]  rout_size  Size of \p rout in bytes.
  * \param[in]  name       Routine name, e.g. "cblas_dgemm", or NULL.
  */
-static inline void cblas_xerbla_apply_api_suffix(char *rout, size_t rout_size,
+static inline void cblas_xerbla_apply_api_suffix(char *rout,
+                                                 const size_t rout_size,
                                                  const char *name)
 {
    if (rout_size == 0) return;
@@ -116,7 +118,7 @@ static inline void cblas_xerbla_apply_api_suffix(char *rout, size_t rout_size,
 
    static const char suffix[] = CBLAS_XERBLA_API_SUFFIX;
    size_t suffix_len = sizeof(suffix) - 1;
-   size_t name_len = strlen(name);
+   const size_t name_len = strlen(name);
    if (suffix_len > 0 && name_len >= suffix_len &&
        strcmp(name + name_len - suffix_len, suffix) == 0) {
       suffix_len = 0;
@@ -148,8 +150,10 @@ static inline const char *cblas_xerbla_operation(const char *rout)
 {
    if (rout == NULL) return NULL;
 
-   if (strncmp(rout, "cblas_", sizeof("cblas_") - 1) == 0) {
-      rout += sizeof("cblas_") - 1;
+   static const char prefix[] = CBLAS_XERBLA_API_PREFIX;
+   const size_t prefix_len = sizeof(prefix) - 1;
+   if (strncmp(rout, prefix, prefix_len) == 0) {
+      rout += prefix_len;
    }
    if ((rout[0] == 's' || rout[0] == 'd' || rout[0] == 'c' || rout[0] == 'z') &&
        rout[1] != '\0') {
@@ -177,7 +181,7 @@ static inline int cblas_xerbla_operation_is(const char *operation,
 {
    if (operation == NULL) return 0;
 
-   size_t expected_len = strlen(expected);
+   const size_t expected_len = strlen(expected);
    if (strncmp(operation, expected, expected_len) != 0) return 0;
 
    return operation[expected_len] == '\0' ||
@@ -199,11 +203,11 @@ static inline int cblas_xerbla_operation_is(const char *operation,
  * \return The corresponding CBLAS argument number.
  */
 static inline CBLAS_INT cblas_xerbla_map_info(CBLAS_INT info, const char *rout,
-                                              int row_major)
+                                              const int row_major)
 {
    if (!row_major) return info;
 
-   const char *operation = cblas_xerbla_operation(rout);
+   const char *const operation = cblas_xerbla_operation(rout);
    if (cblas_xerbla_operation_is(operation, "gemmtr")) {
 
       if (info == 11) info = 9;
