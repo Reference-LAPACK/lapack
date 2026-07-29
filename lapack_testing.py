@@ -22,7 +22,9 @@ not report counts is still summarized, by counting one test per verdict.
 When index-64 extended API outputs (``*_64.out``, produced by CMake
 builds with ``BUILD_INDEX64_EXT_API=ON``) are present, they are analyzed
 as well and reported in a separate "extended API" section so that the
-default-API totals remain comparable across builds.
+default-API totals remain comparable across builds.  With
+``--merge-apis`` a library whose two API variants report the same errors
+is summarized in one combined section instead.
 
 Examples:
     ./lapack_testing.py -n
@@ -277,6 +279,31 @@ class FileReport:
 
     counts: Counts = field(default_factory=Counts)
     notable_lines: "List[str]" = field(default_factory=list)
+
+
+@dataclass
+class SectionResult:
+    """Accumulated counts of one library/API section of the summary."""
+
+    # Per-precision rows of the summary table, in reporting order.
+    precisions: "List[Tuple[str, Counts]]" = field(default_factory=list)
+    total: Counts = field(default_factory=Counts)
+    # Counts per output file, keyed by the API-independent output name.
+    # Used to compare one API variant against another; a file that was
+    # missing has no entry, so a partial run never compares equal.
+    case_counts: "Dict[str, Counts]" = field(default_factory=dict)
+
+    def error_map(self) -> "Dict[str, Tuple[int, int, int]]":
+        """Return the per-file error counts, ignoring the run counts.
+
+        Returns:
+            The (numerical, illegal, info) triple of every analyzed
+            output file, keyed by its API-independent name.
+        """
+        return {
+            name: (counts.numerical, counts.illegal, counts.info)
+            for name, counts in self.case_counts.items()
+        }
 
 
 @dataclass(frozen=True)
@@ -941,20 +968,37 @@ def format_summary_row(label: str, counts: Counts) -> str:
     )
 
 
-def section_title(library: str, suffix: str) -> str:
-    """Return the human-readable name of a library/API section.
+def api_name(suffix: str) -> str:
+    """Return the human-readable name of one API variant.
 
     Args:
-        library: The library name, e.g. ``"BLAS"``.
         suffix: The API suffix, either ``""`` or ``"_64"``.
 
     Returns:
-        The section name used in headings and messages, e.g.
-        ``"BLAS: Extended API (_64)"``.
+        The API name, e.g. ``"Extended API (_64)"``.
     """
     if suffix:
-        return "{}: Extended API ({})".format(library, suffix)
-    return "{}: Default API".format(library)
+        return "Extended API ({})".format(suffix)
+    return "Default API"
+
+
+def section_title(library: str, suffixes: "Sequence[str]") -> str:
+    """Return the human-readable name of a summary section.
+
+    Args:
+        library: The library name, e.g. ``"BLAS"``.
+        suffixes: The API suffixes the section covers.  More than one
+            means the section reports them together in a single table.
+
+    Returns:
+        The section name used in headings and messages, e.g.
+        ``"BLAS: Extended API (_64)"`` for one API variant, or
+        ``"BLAS: Default API and Extended API (_64)"`` for two.
+    """
+    names = [api_name(suffix) for suffix in suffixes]
+    if len(names) == 1:
+        return "{}: {}".format(library, names[0])
+    return "{}: {} and {}".format(library, ", ".join(names[:-1]), names[-1])
 
 
 def section_heading(title: str) -> str:
@@ -1101,6 +1145,14 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "whichever variants have output files)",
     )
     parser.add_argument(
+        "--merge-apis",
+        action="store_true",
+        help="when a library was analyzed for both the default and the "
+        "extended API and both report the same errors, summarize them in a "
+        "single section instead of one per API; affects only the summary "
+        "table, not the detailed output or the exit status",
+    )
+    parser.add_argument(
         "--fail-on-error",
         action="store_true",
         help="exit with a nonzero status if any test failure or error was "
@@ -1245,17 +1297,19 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     missing_files = 0
     run_failures = 0
 
+    # Counts are collected per (library, API) section first and rendered
+    # afterwards, so that --merge-apis can decide to report two API
+    # variants in one table.  The detailed output below stays per section.
+    results: "Dict[Tuple[str, str], SectionResult]" = {}
+
     for library, suffix in sections:
         directory = directories[library]
-        title = section_title(library, suffix)
         if len(sections) > 1 or suffix:
-            summary += "\n" + section_heading(title) + "\n"
             if not short_summary:
                 print(" ")
-                print(section_heading(title))
-        summary += SUMMARY_HEADER + "\n"
-        summary += SUMMARY_RULE + "\n"
-        section_total = Counts()
+                print(section_heading(section_title(library, [suffix])))
+        result = SectionResult()
+        results[(library, suffix)] = result
 
         for letter, precision_name in PRECISIONS:
             precision_cases = [
@@ -1308,6 +1362,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                 )
                 report = parse_lines(case.parser, lines)
                 precision_total.add(report.counts)
+                result.case_counts[case.output_name] = report.counts
 
                 if not short_summary:
                     if not just_errors:
@@ -1338,16 +1393,62 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         print("")
                 sys.stdout.flush()
 
-            summary += format_summary_row(precision_name, precision_total) + "\n"
-            section_total.add(precision_total)
+            result.precisions.append((precision_name, precision_total))
+            result.total.add(precision_total)
 
-        if args.prec == "x":
-            summary += (
-                "\n" + format_summary_row("--> ALL PRECISIONS", section_total) + "\n"
-            )
-        grand_total.add(section_total)
+        grand_total.add(result.total)
 
     log.close()
+
+    # Group the sections for rendering, collapsing a library's API
+    # variants into one table when --merge-apis is given and their errors
+    # agree.  A missing output file leaves no entry to compare, so a
+    # partial run never collapses.
+    rendered: "List[Tuple[str, List[str], SectionResult]]" = []
+    for library in LIBRARIES:
+        library_suffixes = [
+            suffix for section_library, suffix in sections if section_library == library
+        ]
+        if not library_suffixes:
+            continue
+        first = results[(library, library_suffixes[0])]
+        if (
+            args.merge_apis
+            and len(library_suffixes) > 1
+            and all(
+                results[(library, suffix)].error_map() == first.error_map()
+                for suffix in library_suffixes[1:]
+            )
+        ):
+            rendered.append((library, library_suffixes, first))
+            continue
+        for suffix in library_suffixes:
+            rendered.append((library, [suffix], results[(library, suffix)]))
+
+    for library, shown_suffixes, result in rendered:
+        if len(rendered) > 1 or shown_suffixes != [""]:
+            summary += (
+                "\n" + section_heading(section_title(library, shown_suffixes)) + "\n"
+            )
+        summary += SUMMARY_HEADER + "\n"
+        summary += SUMMARY_RULE + "\n"
+        for precision_name, precision_total in result.precisions:
+            summary += format_summary_row(precision_name, precision_total) + "\n"
+        if args.prec == "x":
+            summary += (
+                "\n" + format_summary_row("--> ALL PRECISIONS", result.total) + "\n"
+            )
+        if len(shown_suffixes) > 1 and any(
+            results[(library, suffix)].case_counts[name].runs != counts.runs
+            for suffix in shown_suffixes[1:]
+            for name, counts in result.case_counts.items()
+        ):
+            # The errors agree, which is what the sections were collapsed
+            # on, but the run counts do not; say which one is shown.
+            summary += SUMMARY_INDENT + (
+                "test counts differ between the APIs; those shown are the "
+                "{}'s\n".format(api_name(shown_suffixes[0]))
+            )
 
     if args.number:
         print(grand_total.numerical)
