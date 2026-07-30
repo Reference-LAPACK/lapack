@@ -85,8 +85,7 @@ void API_SUFFIX(cblas_cher2k)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
          RowMajorStrg = 0;
          return;
       }
-      if( Trans == CblasTrans) TR ='N';
-      else if ( Trans == CblasConjTrans ) TR='N';
+      if( Trans == CblasConjTrans ) TR='N';
       else if ( Trans == CblasNoTrans )   TR='C';
       else
       {

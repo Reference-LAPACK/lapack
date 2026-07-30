@@ -25,7 +25,7 @@ void chkxer(void) {
    extern char *cblas_rout;
    cblas_xtests++;
    if (cblas_lerr == 1 ) {
-      printf("***** ILLEGAL VALUE OF PARAMETER NUMBER %d NOT DETECTED BY %s *****\n", (int) cblas_info, cblas_rout);
+      printf("***** ILLEGAL VALUE OF PARAMETER NUMBER %" CBLAS_IFMT " NOT DETECTED BY %s *****\n", cblas_info, cblas_rout);
       cblas_ok = 0 ;
       cblas_xfails++;
    } else if (cblas_xbad) {
@@ -835,14 +835,14 @@ void F77_c2chke(char *rout
       cblas_info = 6; RowMajorStrg = FALSE;
       API_SUFFIX(cblas_chpr)(CblasColMajor, CblasUpper, 0, RALPHA, X, 0, A );
       chkxer();
-      cblas_info = 2; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_chpr)(CblasColMajor, INVALID_UPLO, 0, RALPHA, X, 1, A );
+      cblas_info = 2; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_chpr)(CblasRowMajor, INVALID_UPLO, 0, RALPHA, X, 1, A );
       chkxer();
-      cblas_info = 3; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_chpr)(CblasColMajor, CblasUpper, INVALID, RALPHA, X, 1, A );
+      cblas_info = 3; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_chpr)(CblasRowMajor, CblasUpper, INVALID, RALPHA, X, 1, A );
       chkxer();
-      cblas_info = 6; RowMajorStrg = FALSE;
-      API_SUFFIX(cblas_chpr)(CblasColMajor, CblasUpper, 0, RALPHA, X, 0, A );
+      cblas_info = 6; RowMajorStrg = TRUE;
+      API_SUFFIX(cblas_chpr)(CblasRowMajor, CblasUpper, 0, RALPHA, X, 0, A );
       chkxer();
    }
    if (cblas_ok == TRUE)
