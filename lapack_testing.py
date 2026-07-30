@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
-"""Summarize (and optionally run) the LAPACK Fortran test suite.
+"""Summarize (and optionally run) the LAPACK and BLAS test suites.
 
 This script analyzes the ``.out`` files written by the LAPACK testing
 drivers (``xlintst*``, ``xeigtst*`` and ``xdmdeigtst*``) and prints a
 summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
+
+The BLAS (``xblat[123]?``) test drivers are analyzed too, from their own
+testing directory, and are reported in their own summary section.  Those
+drivers report their test counts in lines of the form::
+
+     SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
+     SGEMV      ERROR-EXIT TESTS:           6 RUN,        0 FAILED
+
+Computational failures are counted as numerical errors and error-exit
+failures as other errors.  Output produced by a build whose drivers do
+not report counts is still summarized, by counting one test per verdict.
 
 When index-64 extended API outputs (``*_64.out``, produced by CMake
 builds with ``BUILD_INDEX64_EXT_API=ON``) are present, they are analyzed
@@ -22,6 +33,9 @@ Examples:
     ./lapack_testing.py -n -p s -t eig
         Print the numbers of failures in REAL precision by analyzing only
         the eigenproblem test output.
+
+    ./lapack_testing.py -t blas
+        Summarize only the BLAS test output.
 """
 
 from __future__ import annotations
@@ -29,6 +43,7 @@ from __future__ import annotations
 import argparse
 import io
 import math
+import os
 import re
 import subprocess
 import sys
@@ -92,8 +107,30 @@ LIN_SETS: "Tuple[Tuple[str, str, str, str], ...]" = (
     ("rfp", "test_rfp", "xlintstrf", "RFP linear equation routines"),
 )
 
+# BLAS test sets, one per BLAS level: (level, description).  The Level 1
+# drivers read no input file and write to standard output.
+BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
+    (1, "Level 1 BLAS routines"),
+    (2, "Level 2 BLAS routines"),
+    (3, "Level 3 BLAS routines"),
+)
+
+# Libraries, in reporting order.  Each has its own testing directory and
+# its own section in the summary table.
+LIBRARY_LAPACK = "LAPACK"
+LIBRARY_BLAS = "BLAS"
+LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS)
+
+# LAPACK test families, in reporting order per precision.
+LAPACK_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
+
 # All test families, in reporting order per precision.
-ALL_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
+ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas",)
+
+# Which library each family belongs to.
+FAMILY_LIBRARY: "Dict[str, str]" = dict(
+    [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES] + [("blas", LIBRARY_BLAS)]
+)
 
 # API suffixes that may exist: default API and index-64 extended API.
 KNOWN_SUFFIXES: "Tuple[str, ...]" = ("", "_64")
@@ -125,10 +162,66 @@ RE_LARGEST_ERROR = re.compile(r"(?:value|ratio) of largest test error\s*=\s*(\S+
 # aggregate lines such as "SGEDMD :: ALL TESTS PASSED." from matching.
 RE_DMD_VERDICT = re.compile(r"\btest\s+(PASSED|FAILED)\b", re.IGNORECASE)
 
+# Test counts reported by the BLAS drivers, e.g.
+#   " SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED"
+# The routine name field width differs per driver, so never match on
+# column positions.
+RE_BLAS_COUNTS = re.compile(
+    r"^\s*\S+\s+(COMPUTATIONAL|ERROR-EXIT) TESTS:" r"\s*(\d+) RUN,\s*(\d+) FAILED\s*$"
+)
+
+# Per-routine verdicts.  These are only counted when the driver did not
+# report counts (output from a build without the counting instrumentation).
+RE_BLAS_PASSED = re.compile(
+    r"^\s*\S+\s+PASSED THE (?:COMPUTATIONAL TESTS|TESTS OF ERROR-EXITS)\b"
+)
+RE_BLAS_SUSPECT = re.compile(r"\bCOMPLETED THE COMPUTATIONAL TESTS\b")
+RE_BLAS_FAILED_COMPUTATIONAL = re.compile(r"\bFAILED ON CALL NUMBER:")
+RE_BLAS_FAILED_ERROR_EXIT = re.compile(r"\bFAILED THE TESTS OF ERROR-EXITS\b")
+
+# Driver-level breakage that the per-routine counts cannot express: the
+# run was abandoned, misconfigured, or never reached its footer.
+RE_BLAS_ABANDONED = re.compile(r"\*{5,7} (?:FATAL ERROR - )?TESTS ABANDONED \*{5,7}")
+RE_BLAS_NOT_RECOGNIZED = re.compile(r"^\s*SUBPROGRAM NAME .* NOT RECOGNIZED")
+RE_BLAS_DOT_PRODUCTS = re.compile(r"^\s*ERROR IN [SDCZ]M[VM]T?CH\b")
+RE_BLAS_INTERNAL = re.compile(r"Shouldn't be here in CHECK")
+RE_BLAS_INPUT_ERROR = re.compile(
+    r"^\s*(?:NUMBER OF VALUES OF |VALUE OF [NK] IS LESS THAN"
+    r"|ABSOLUTE VALUE OF INCX OR INCY )"
+)
+
+# Detail lines that sit behind a verdict which is already counted.  They
+# are worth showing but must not be counted: the ``cblat2_64.out`` fixture
+# has 91 of them behind just 17 failing routines.
+RE_BLAS_DETAIL = re.compile(
+    r"XERBLA WAS CALLED WITH"
+    r"|ILLEGAL VALUE OF PARAMETER NUMBER"
+    r"|FATAL ERROR - COMPUTED RESULT IS LESS THAN HALF ACCURATE"
+    r"|FATAL ERROR - PARAMETER NUMBER"
+    r"|FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL"
+    r"|BUT WITH MAXIMUM TEST RATIO"
+    r"|WARNING: Skipping xerbla tests"
+)
+RE_BLAS_NOT_TESTED = re.compile(r"^\s*\S+\s+WAS NOT TESTED\s*$")
+
+# Level 2/3 footer.  Note this is printed even when routines failed, so
+# it means "not truncated", not "passed"; its absence means the driver
+# died part way through.
+RE_BLAS_END_OF_TESTS = re.compile(r"^\s*END OF TESTS\s*$")
+
+# Level 1 drivers have no counts of their own in an uninstrumented build
+# and no footer at all; one "Test of subprogram number" block is one
+# subprogram, followed by either a PASS line or FAIL detail.
+RE_BLAS_L1_CASE = re.compile(r"^\s*Test of subprogram number\s*\d+")
+RE_BLAS_L1_PASS = re.compile(r"^\s*-{5} PASS -{5}\s*$")
+RE_BLAS_L1_FAIL = re.compile(r"^\s*FAIL\s*$")
+
 # Parser kinds, used by TestCase.parser.
 PARSER_STANDARD = "standard"
 PARSER_BALANCE = "balance"
 PARSER_DMD = "dmd"
+PARSER_BLAS1 = "blas1"
+PARSER_BLAS23 = "blas23"
 
 
 @dataclass
@@ -180,15 +273,24 @@ class FileReport:
 
 @dataclass(frozen=True)
 class TestCase:
-    """One LAPACK test driver invocation and its expected output file."""
+    """One test driver invocation and its expected output file."""
 
     precision: str
     family: str
     description: str
-    input_name: str
+    input_name: "Optional[str]"
     output_name: str
     executable: str
     parser: str
+    library: str = LIBRARY_LAPACK
+    # True when the API suffix also applies to the input file name.  The
+    # BLAS Level 2/3 inputs name the output file on their first line, so
+    # the _64 run needs the generated _64 input; every other driver takes
+    # the same input for both APIs.
+    input_suffixed: bool = False
+    # False when the driver opens its own output file, so the harness must
+    # not also redirect standard output onto it.
+    redirect_stdout: bool = True
 
     def suffixed_output(self, suffix: str) -> str:
         """Return the output file name for an API suffix.
@@ -202,6 +304,21 @@ class TestCase:
         """
         stem = self.output_name[: -len(".out")]
         return "{}{}.out".format(stem, suffix)
+
+    def suffixed_input(self, suffix: str) -> "Optional[str]":
+        """Return the input file name for an API suffix.
+
+        Args:
+            suffix: The API suffix, either ``""`` or ``"_64"``.
+
+        Returns:
+            The input file name, or None for the drivers that read no
+            input at all.
+        """
+        if self.input_name is None or not self.input_suffixed or not suffix:
+            return self.input_name
+        stem, _, extension = self.input_name.rpartition(".")
+        return "{}{}.{}".format(stem, suffix, extension)
 
     def suffixed_executable(self, suffix: str) -> str:
         """Return the test driver name for an API suffix.
@@ -288,6 +405,27 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                     parser=PARSER_DMD,
                 )
             )
+        if "blas" in families:
+            for level, description in BLAS_LEVELS:
+                # Level 1 reads no input; Level 2/3 read e.g. sblat2.in,
+                # whose first line names the output file, so the _64 run
+                # needs the generated sblat2_64.in.
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="blas",
+                        description=description,
+                        input_name=(
+                            None if level == 1 else "{}blat{}.in".format(letter, level)
+                        ),
+                        output_name="{}blat{}.out".format(letter, level),
+                        executable="xblat{}{}".format(level, letter),
+                        parser=PARSER_BLAS1 if level == 1 else PARSER_BLAS23,
+                        library=LIBRARY_BLAS,
+                        input_suffixed=level != 1,
+                        redirect_stdout=level == 1,
+                    )
+                )
     return cases
 
 
@@ -406,12 +544,121 @@ def parse_dmd(lines: "Sequence[str]") -> FileReport:
     return report
 
 
+def parse_blas(lines: "Sequence[str]", level_one: bool) -> FileReport:
+    """Parse a BLAS test output file.
+
+    Test counts come from the ``... TESTS: n RUN, m FAILED`` lines the
+    drivers report per routine: computational failures are numerical
+    errors, error-exit failures are other errors.  Output from a build
+    whose drivers do not report counts is still summarized, by falling
+    back to one test per verdict.
+
+    The drivers exit with status 0 even when they abandon the run, and
+    print ``END OF TESTS`` even when routines failed, so breakage is
+    detected from the text: an abandoned or misconfigured run, and a
+    Level 2/3 file that never reached its footer, each count as one other
+    error.
+
+    Args:
+        lines: The lines of the output file.
+        level_one: True for the Level 1 drivers, which have no footer.
+
+    Returns:
+        The counts and the notable (error) lines of the file.
+    """
+    report = FileReport()
+    reported_counts = False
+    saw_footer = False
+    abandoned = False
+    # Verdict tallies, used only if the driver reported no counts.
+    verdicts = Counts()
+    cases = 0
+    case_failed = False
+
+    for line in lines:
+        match = RE_BLAS_COUNTS.match(line)
+        if match:
+            reported_counts = True
+            report.counts.runs += int(match.group(2))
+            failures = int(match.group(3))
+            if match.group(1) == "COMPUTATIONAL":
+                report.counts.numerical += failures
+            else:
+                report.counts.illegal += failures
+            continue
+
+        if RE_BLAS_END_OF_TESTS.match(line):
+            saw_footer = True
+            continue
+
+        # Driver-level breakage, which no per-routine count can express.
+        if (
+            RE_BLAS_ABANDONED.search(line)
+            or RE_BLAS_NOT_RECOGNIZED.match(line)
+            or RE_BLAS_DOT_PRODUCTS.match(line)
+            or RE_BLAS_INTERNAL.search(line)
+            or RE_BLAS_INPUT_ERROR.match(line)
+        ):
+            abandoned = True
+            report.counts.info += 1
+            report.notable_lines.append(line)
+            continue
+
+        if RE_BLAS_FAILED_ERROR_EXIT.search(line):
+            verdicts.runs += 1
+            verdicts.illegal += 1
+            report.notable_lines.append(line)
+            continue
+        if RE_BLAS_FAILED_COMPUTATIONAL.search(line):
+            verdicts.runs += 1
+            verdicts.numerical += 1
+            report.notable_lines.append(line)
+            continue
+        if RE_BLAS_SUSPECT.search(line):
+            verdicts.runs += 1
+            verdicts.numerical += 1
+            report.notable_lines.append(line)
+            continue
+        if RE_BLAS_PASSED.match(line):
+            verdicts.runs += 1
+            continue
+
+        if RE_BLAS_DETAIL.search(line) or RE_BLAS_NOT_TESTED.match(line):
+            report.notable_lines.append(line)
+            continue
+
+        if level_one:
+            if RE_BLAS_L1_CASE.match(line):
+                cases += 1
+                case_failed = False
+                continue
+            # A NRM2 stress failure prints FAIL without clearing PASS, so
+            # a case can report both; treat any FAIL as a failure.
+            if RE_BLAS_L1_FAIL.match(line) and not case_failed:
+                case_failed = True
+                verdicts.numerical += 1
+                report.notable_lines.append(line)
+
+    if not reported_counts:
+        if level_one:
+            verdicts.runs += cases
+        report.counts.add(verdicts)
+
+    # A run that reported why it stopped has already been counted.
+    if not level_one and not saw_footer and not abandoned:
+        report.counts.info += 1
+        report.notable_lines.append(
+            "output ends without 'END OF TESTS': the driver did not finish\n"
+        )
+    return report
+
+
 def parse_lines(parser: str, lines: "Sequence[str]") -> FileReport:
     """Parse test output lines with the parser kind of a test case.
 
     Args:
-        parser: One of ``PARSER_STANDARD``, ``PARSER_BALANCE`` and
-            ``PARSER_DMD``.
+        parser: One of ``PARSER_STANDARD``, ``PARSER_BALANCE``,
+            ``PARSER_DMD``, ``PARSER_BLAS1`` and ``PARSER_BLAS23``.
         lines: The lines of the output file.
 
     Returns:
@@ -421,40 +668,54 @@ def parse_lines(parser: str, lines: "Sequence[str]") -> FileReport:
         return parse_balance(lines)
     if parser == PARSER_DMD:
         return parse_dmd(lines)
+    if parser in (PARSER_BLAS1, PARSER_BLAS23):
+        return parse_blas(lines, level_one=parser == PARSER_BLAS1)
     return parse_standard(lines)
 
 
-def find_unrecognized_outputs(test_dir: Path) -> "List[str]":
-    """Find ``.out`` files in the test directory this script cannot analyze.
+def find_unrecognized_outputs(directories: "Dict[str, Path]") -> "List[str]":
+    """Find ``.out`` files in the test directories this script cannot analyze.
 
-    A file is unrecognized if its name matches no known test case in any
-    precision, family or API variant — typically a test that was added to
-    the harness without extending this script's test tables, or a renamed
-    output such as those of ``make variants_testing``.  The current
-    ``-p``/``-t`` selection is deliberately ignored: a deselected file is
-    not an unrecognized one.
+    A file is unrecognized if its name matches no known test case of the
+    library that owns its directory, in any precision, family or API
+    variant — typically a test that was added to the harness without
+    extending this script's test tables, or a renamed output such as
+    those of ``make variants_testing``.  The current ``-p``/``-t``
+    selection is deliberately ignored: a deselected file is not an
+    unrecognized one.
 
     Args:
-        test_dir: The directory containing the ``.out`` files.
+        directories: The existing testing directory of each library.
 
     Returns:
-        The unrecognized file names, sorted alphabetically.
+        The unrecognized file names, prefixed by their directory when
+        more than one directory was scanned, sorted alphabetically.
     """
     all_cases = build_test_cases("sdcz", ALL_FAMILIES)
-    known = {
-        case.suffixed_output(suffix) for case in all_cases for suffix in KNOWN_SUFFIXES
-    }
-    return sorted(
-        path.name for path in test_dir.glob("*.out") if path.name not in known
-    )
+    unrecognized: "List[str]" = []
+    for library, directory in directories.items():
+        known = {
+            case.suffixed_output(suffix)
+            for case in all_cases
+            if case.library == library
+            for suffix in KNOWN_SUFFIXES
+        }
+        known.add(RESULTS_FILENAME)
+        for path in directory.glob("*.out"):
+            if path.name in known:
+                continue
+            unrecognized.append(
+                path.name if len(directories) == 1 else str(directory / path.name)
+            )
+    return sorted(unrecognized)
 
 
-def discover_suffixes(test_dir: Path, cases: "Sequence[TestCase]") -> "List[str]":
-    """Detect which API variants have output files in the test directory.
+def discover_suffixes(cases: "Sequence[TestCase]", directory: Path) -> "List[str]":
+    """Detect which API variants have output files in a testing directory.
 
     Args:
-        test_dir: The directory containing the ``.out`` files.
-        cases: The selected test cases.
+        cases: The selected test cases of one library.
+        directory: That library's testing directory.
 
     Returns:
         The suffixes (out of ``""`` and ``"_64"``) for which at least one
@@ -463,7 +724,7 @@ def discover_suffixes(test_dir: Path, cases: "Sequence[TestCase]") -> "List[str]
     suffixes = [
         suffix
         for suffix in KNOWN_SUFFIXES
-        if any((test_dir / case.suffixed_output(suffix)).is_file() for case in cases)
+        if any((directory / case.suffixed_output(suffix)).is_file() for case in cases)
     ]
     return suffixes or [""]
 
@@ -490,6 +751,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
             Path("bin") / "Debug",
             Path("TESTING") / "LIN",
             Path("TESTING") / "EIG",
+            Path("BLAS") / "TESTING",
         ]
     for directory in directories:
         for filename in (name, name + ".exe"):
@@ -499,10 +761,16 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
     return None
 
 
+SOURCE_INPUT_DIRS: "Dict[str, str]" = {
+    LIBRARY_LAPACK: "TESTING",
+    LIBRARY_BLAS: "BLAS/TESTING",
+}
+
+
 def run_test_case(
     case: TestCase, suffix: str, test_dir: Path, bin_dir: "Optional[str]"
 ) -> "Optional[str]":
-    """Run one test driver, redirecting its output to the ``.out`` file.
+    """Run one test driver, capturing its output in the ``.out`` file.
 
     Args:
         case: The test case to run.
@@ -520,22 +788,46 @@ def run_test_case(
     executable = find_executable(executable_name, bin_dir)
     if executable is None:
         return "executable {} not found".format(executable_name)
-    input_path = test_dir / case.input_name
-    if not input_path.is_file():
-        # CMake build trees hold only the .out files; the .in files
-        # live next to this script in the source tree.
-        source_input = Path(__file__).resolve().parent / "TESTING" / case.input_name
-        if source_input.is_file():
-            input_path = source_input
-        else:
-            return "input file {} not found".format(input_path)
+
+    input_name = case.suffixed_input(suffix)
+    input_path: "Optional[Path]" = None
+    if input_name is not None:
+        input_path = test_dir / input_name
+        if not input_path.is_file():
+            # CMake build trees hold only the .out files; the .in files
+            # live in the source tree next to this script.  The _64 input
+            # of a BLAS Level 2/3 driver is generated into the build tree
+            # and has no source-tree counterpart.
+            source_input = (
+                Path(__file__).resolve().parent
+                / SOURCE_INPUT_DIRS[case.library]
+                / input_name
+            )
+            if source_input.is_file():
+                input_path = source_input
+            elif case.input_suffixed and suffix:
+                # Falling back to the default-API input would make the
+                # driver overwrite the default-API output file.
+                return (
+                    "input file {} not found (needed to keep the {} output "
+                    "separate)".format(input_path, suffix)
+                )
+            else:
+                return "input file {} not found".format(input_path)
+
     output_path = test_dir / case.suffixed_output(suffix)
     # Write to a temporary file first so that a driver that cannot even
-    # start does not clobber the results of an earlier run.
+    # start does not clobber the results of an earlier run.  Drivers that
+    # open their own output file (the BLAS Level 2/3 testers, which take
+    # its name from the first line of their input) write it directly.
     temporary_path = output_path.with_name(output_path.name + ".tmp")
     try:
-        with open(str(input_path), "rb") as stdin, open(
-            str(temporary_path), "wb"
+        with (
+            open(str(input_path), "rb")
+            if input_path is not None
+            else open(os.devnull, "rb")
+        ) as stdin, open(
+            str(temporary_path) if case.redirect_stdout else os.devnull, "wb"
         ) as stdout:
             process = subprocess.run(
                 [str(executable)],
@@ -545,12 +837,14 @@ def run_test_case(
                 cwd=str(test_dir),
             )
     except OSError as error:
-        try:
-            temporary_path.unlink()
-        except OSError:
-            pass
+        if case.redirect_stdout:
+            try:
+                temporary_path.unlink()
+            except OSError:
+                pass
         return "{} could not be run: {}".format(executable_name, error)
-    temporary_path.replace(output_path)
+    if case.redirect_stdout:
+        temporary_path.replace(output_path)
     if process.returncode != 0:
         return "{} exited with status {}".format(executable_name, process.returncode)
     return None
@@ -618,18 +912,20 @@ def format_summary_row(label: str, counts: Counts) -> str:
     )
 
 
-def section_title(suffix: str) -> str:
-    """Return the human-readable name of an API section.
+def section_title(library: str, suffix: str) -> str:
+    """Return the human-readable name of a library/API section.
 
     Args:
+        library: The library name, e.g. ``"BLAS"``.
         suffix: The API suffix, either ``""`` or ``"_64"``.
 
     Returns:
-        The section name used in headings and messages.
+        The section name used in headings and messages, e.g.
+        ``"BLAS: Extended API (_64)"``.
     """
     if suffix:
-        return "Extended API ({})".format(suffix)
-    return "Default API"
+        return "{}: Extended API ({})".format(library, suffix)
+    return "{}: Default API".format(library)
 
 
 def section_heading(title: str) -> str:
@@ -687,11 +983,12 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         The parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Analyze the .out files produced by the LAPACK test "
-        "suite and print a summary of the test results.",
+        description="Analyze the .out files produced by the LAPACK and "
+        "BLAS test suites and print a summary of the test results.",
         epilog="By default all precisions and all test families are "
-        "analyzed, and both the default API and extended API (_64) "
-        "outputs are summarized when present.",
+        "analyzed, each library is reported in its own section, and both "
+        "the default API and extended API (_64) outputs are summarized "
+        "when present.",
     )
     parser.add_argument(
         "-d",
@@ -701,12 +998,18 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "(default: %(default)s)",
     )
     parser.add_argument(
+        "--blas-dir",
+        default=str(Path("BLAS") / "TESTING"),
+        help="directory containing the BLAS testing output (.out) files; "
+        "skipped without warning if it does not exist (default: %(default)s)",
+    )
+    parser.add_argument(
         "-b",
         "--bin",
         default=None,
-        help="directory containing the LAPACK test drivers for --run; by "
-        "default bin, bin/Release, bin/Debug, TESTING/LIN and TESTING/EIG "
-        "are probed",
+        help="directory containing the test drivers for --run; by default "
+        "bin, bin/Release, bin/Debug, TESTING/LIN, TESTING/EIG and "
+        "BLAS/TESTING are probed",
     )
     parser.add_argument(
         "-r",
@@ -746,11 +1049,12 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "-t",
         "--test",
-        choices=list(ALL_FAMILIES) + ["all"],
+        choices=list(ALL_FAMILIES) + ["lapack", "all"],
         default="all",
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
-        "rfp=RFP format, dmd=dynamic mode decomposition, all (default)",
+        "rfp=RFP format, dmd=dynamic mode decomposition, blas=BLAS, "
+        "lapack=all LAPACK families, all (default)",
     )
     parser.add_argument(
         "--suffix",
@@ -766,7 +1070,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         action="store_true",
         help="exit with a nonzero status if any test failure or error was "
         "found, a test driver could not be run, or unrecognized .out files "
-        "were present in the testing directory",
+        "were present in a testing directory",
     )
     parser.add_argument(
         "--fail-if-empty",
@@ -777,13 +1081,13 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "--fail-on-unrecognized",
         action="store_true",
         help="exit with a nonzero status if .out files not known to this "
-        "script were present in the testing directory",
+        "script were present in a testing directory",
     )
     return parser.parse_args(argv)
 
 
 def main(argv: "Optional[Sequence[str]]" = None) -> int:
-    """Run the LAPACK test summary tool.
+    """Run the LAPACK and BLAS test summary tool.
 
     Args:
         argv: The command line arguments, or None to use ``sys.argv``.
@@ -805,6 +1109,24 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
+    # The BLAS tests are absent from builds that use an optimized BLAS, so
+    # a missing directory is normal and is skipped silently.  An
+    # explicitly selected library that has no directory is a usage error,
+    # though.
+    directories: "Dict[str, Path]" = {LIBRARY_LAPACK: test_dir}
+    for library, option in ((LIBRARY_BLAS, args.blas_dir),):
+        directory = Path(option)
+        if directory.is_dir():
+            directories[library] = directory
+        elif FAMILY_LIBRARY.get(args.test) == library:
+            print(
+                "lapack_testing.py: {} testing directory {} not found".format(
+                    library, directory
+                ),
+                file=sys.stderr,
+            )
+            return 2
+
     letters = "sdcz" if args.prec == "x" else args.prec
     if args.test == "mixed":
         # The mixed-precision drivers exist only for d (ds) and z (zc);
@@ -816,7 +1138,14 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                 file=sys.stderr,
             )
         letters = "dz"
-    families = list(ALL_FAMILIES) if args.test == "all" else [args.test]
+    if args.test == "all":
+        families = list(ALL_FAMILIES)
+    elif args.test == "lapack":
+        families = list(LAPACK_FAMILIES)
+    else:
+        families = [args.test]
+    # Drop the families of libraries that were not built.
+    families = [family for family in families if FAMILY_LIBRARY[family] in directories]
     cases = build_test_cases(letters, families)
     if not cases:
         print(
@@ -827,16 +1156,27 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
+    forced_suffixes: "Optional[List[str]]" = None
     if args.suffix is not None:
-        suffixes: "List[str]" = []
+        forced_suffixes = []
         for choice in args.suffix:
             suffix = "" if choice == "none" else "_64"
-            if suffix not in suffixes:
-                suffixes.append(suffix)
+            if suffix not in forced_suffixes:
+                forced_suffixes.append(suffix)
     elif args.run:
-        suffixes = [""]
-    else:
-        suffixes = discover_suffixes(test_dir, cases)
+        forced_suffixes = [""]
+
+    # One (library, API) pair per summary section, in reporting order.
+    sections: "List[Tuple[str, str]]" = []
+    for library in LIBRARIES:
+        library_cases = [case for case in cases if case.library == library]
+        if not library_cases:
+            continue
+        suffixes = forced_suffixes
+        if suffixes is None:
+            suffixes = discover_suffixes(library_cases, directories[library])
+        for suffix in suffixes:
+            sections.append((library, suffix))
 
     results_path = test_dir / RESULTS_FILENAME
     try:
@@ -867,18 +1207,24 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     missing_files = 0
     run_failures = 0
 
-    for suffix in suffixes:
-        if len(suffixes) > 1 or suffix:
-            summary += "\n" + section_heading(section_title(suffix)) + "\n"
+    for library, suffix in sections:
+        directory = directories[library]
+        title = section_title(library, suffix)
+        if len(sections) > 1 or suffix:
+            summary += "\n" + section_heading(title) + "\n"
             if not short_summary:
                 print(" ")
-                print(section_heading(section_title(suffix)))
+                print(section_heading(title))
         summary += SUMMARY_HEADER + "\n"
         summary += SUMMARY_RULE + "\n"
         section_total = Counts()
 
         for letter, precision_name in PRECISIONS:
-            precision_cases = [case for case in cases if case.precision == letter]
+            precision_cases = [
+                case
+                for case in cases
+                if case.precision == letter and case.library == library
+            ]
             if not precision_cases:
                 continue
             precision_total = Counts()
@@ -893,7 +1239,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         end=" ",
                     )
                 if args.run:
-                    error_message = run_test_case(case, suffix, test_dir, args.bin)
+                    error_message = run_test_case(case, suffix, directory, args.bin)
                     if error_message is not None:
                         run_failures += 1
                         print(
@@ -901,20 +1247,27 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                                 case.suffixed_executable(suffix), error_message
                             )
                         )
-                lines = read_output_file(test_dir / output_name)
+                lines = read_output_file(directory / output_name)
                 if lines is None:
                     missing_files += 1
                     if not short_summary:
                         print(
-                            "---- WARNING: please check that you have the LAPACK "
-                            "output {}!".format(output_name)
+                            "---- WARNING: please check that you have the {} "
+                            "output {}!".format(library, output_name)
                         )
                         print(
                             "---- WARNING: with the option -r, we can run the "
-                            "LAPACK testing for you"
+                            "testing for you"
                         )
                     continue
-                log.record(output_name, lines)
+                log.record(
+                    (
+                        output_name
+                        if library == LIBRARY_LAPACK
+                        else str(directory / output_name)
+                    ),
+                    lines,
+                )
                 report = parse_lines(case.parser, lines)
                 precision_total.add(report.counts)
 
@@ -975,12 +1328,15 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             file=sys.stderr,
         )
 
-    unrecognized = find_unrecognized_outputs(test_dir)
+    unrecognized = find_unrecognized_outputs(directories)
     if unrecognized:
         print(
             "lapack_testing.py: {} .out file(s) in {} are not known to this "
             "script and were NOT analyzed (new tests must be added to the "
-            "test tables in this script):".format(len(unrecognized), test_dir),
+            "test tables in this script):".format(
+                len(unrecognized),
+                ", ".join(str(directory) for directory in directories.values()),
+            ),
             file=sys.stderr,
         )
         for name in unrecognized:

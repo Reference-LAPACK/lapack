@@ -466,6 +466,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC ), KB( NKB )
 *     .. Local Scalars ..
       REAL               ALPHA, ALS, BETA, BLS, ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IB, IC, IKU, IM, IN, INCX, INCXS, INCY,
      $                   INCYS, IX, IY, KL, KLS, KU, KUS, LAA, LDA,
      $                   LDAS, LX, LY, M, ML, MS, N, NARGS, NC, ND, NK,
@@ -502,6 +503,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 120 IN = 1, NIDIM
          N = IDIM( IN )
@@ -643,6 +646,8 @@
                               IF( .NOT.OK )THEN
                                  WRITE( NOUT, FMT = 9993 )
                                  FATAL = .TRUE.
+                                 NTESTS = NTESTS + 1
+                                 NFAILS = NFAILS + 1
                                  GO TO 130
                               END IF
 *
@@ -696,6 +701,8 @@
    40                         CONTINUE
                               IF( .NOT.SAME )THEN
                                  FATAL = .TRUE.
+                                 NTESTS = NTESTS + 1
+                                 NFAILS = NFAILS + 1
                                  GO TO 130
                               END IF
 *
@@ -708,6 +715,9 @@
      $                                       INCY, YT, G, YY, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
                                  ERRMAX = MAX( ERRMAX, ERR )
+                                 NTESTS = NTESTS + 1
+                                 IF( ERR.GE.THRESH )
+     $                              NFAILS = NFAILS + 1
 *                                If got really bad answer, report and
 *                                return.
                                  IF( FATAL )
@@ -759,6 +769,8 @@
       IF( .NOT.LSE( YS, YY, LY ) )THEN
          WRITE( NOUT, FMT = 9998 )NARGS - 1
          FATAL = .TRUE.
+         NTESTS = NTESTS + 1
+         NFAILS = NFAILS + 1
          GO TO 130
       END IF
 *
@@ -782,6 +794,7 @@
       END IF
 *
   140 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -799,6 +812,8 @@
      $      ')         .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK1
 *
@@ -836,6 +851,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC ), KB( NKB )
 *     .. Local Scalars ..
       REAL               ALPHA, ALS, BETA, BLS, ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IB, IC, IK, IN, INCX, INCXS, INCY,
      $                   INCYS, IX, IY, K, KS, LAA, LDA, LDAS, LX, LY,
      $                   N, NARGS, NC, NK, NS
@@ -876,6 +892,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 110 IN = 1, NIDIM
          N = IDIM( IN )
@@ -1014,6 +1032,8 @@
                            IF( .NOT.OK )THEN
                               WRITE( NOUT, FMT = 9992 )
                               FATAL = .TRUE.
+                              NTESTS = NTESTS + 1
+                              NFAILS = NFAILS + 1
                               GO TO 120
                            END IF
 *
@@ -1076,6 +1096,8 @@
    40                      CONTINUE
                            IF( .NOT.SAME )THEN
                               FATAL = .TRUE.
+                              NTESTS = NTESTS + 1
+                              NFAILS = NFAILS + 1
                               GO TO 120
                            END IF
 *
@@ -1088,6 +1110,9 @@
      $                                    YY, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
                               ERRMAX = MAX( ERRMAX, ERR )
+                              NTESTS = NTESTS + 1
+                              IF( ERR.GE.THRESH )
+     $                           NFAILS = NFAILS + 1
 *                             If got really bad answer, report and
 *                             return.
                               IF( FATAL )
@@ -1134,6 +1159,7 @@
       END IF
 *
   130 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -1154,6 +1180,8 @@
      $       '  .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK2
 *
@@ -1187,6 +1215,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC ), KB( NKB )
 *     .. Local Scalars ..
       REAL               ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, ICD, ICT, ICU, IK, IN, INCX, INCXS, IX, K,
      $                   KS, LAA, LDA, LDAS, LX, N, NARGS, NC, NK, NS
       LOGICAL            BANDED, FULL, NULL, PACKED, RESET, SAME
@@ -1226,6 +1255,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *     Set up zero vector for SMVCH.
       DO 10 I = 1, NMAX
          Z( I ) = ZERO
@@ -1372,6 +1403,8 @@
                         IF( .NOT.OK )THEN
                            WRITE( NOUT, FMT = 9992 )
                            FATAL = .TRUE.
+                           NTESTS = NTESTS + 1
+                           NFAILS = NFAILS + 1
                            GO TO 120
                         END IF
 *
@@ -1424,6 +1457,8 @@
    40                   CONTINUE
                         IF( .NOT.SAME )THEN
                            FATAL = .TRUE.
+                           NTESTS = NTESTS + 1
+                           NFAILS = NFAILS + 1
                            GO TO 120
                         END IF
 *
@@ -1452,6 +1487,9 @@
      $                                    .FALSE. )
                            END IF
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 120
@@ -1494,6 +1532,7 @@
       END IF
 *
   130 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -1512,6 +1551,8 @@
      $      I3, ', X,', I2, ')                     .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK3
 *
@@ -1547,6 +1588,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC )
 *     .. Local Scalars ..
       REAL               ALPHA, ALS, ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IM, IN, INCX, INCXS, INCY, INCYS, IX,
      $                   IY, J, LAA, LDA, LDAS, LX, LY, M, MS, N, NARGS,
      $                   NC, ND, NS
@@ -1573,6 +1615,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 120 IN = 1, NIDIM
          N = IDIM( IN )
@@ -1666,6 +1710,8 @@
                      IF( .NOT.OK )THEN
                         WRITE( NOUT, FMT = 9993 )
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 140
                      END IF
 *
@@ -1696,6 +1742,8 @@
    40                CONTINUE
                      IF( .NOT.SAME )THEN
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 140
                      END IF
 *
@@ -1723,6 +1771,9 @@
      $                                 AA( 1 + ( J - 1 )*LDA ), EPS,
      $                                 ERR, FATAL, NOUT, .TRUE. )
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 130
@@ -1759,6 +1810,7 @@
       WRITE( NOUT, FMT = 9994 )NC, SNAME, M, N, ALPHA, INCX, INCY, LDA
 *
   150 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -1774,6 +1826,8 @@
      $      ', Y,', I2, ', A,', I3, ')                  .' )
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK4
 *
@@ -1809,6 +1863,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC )
 *     .. Local Scalars ..
       REAL               ALPHA, ALS, ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IC, IN, INCX, INCXS, IX, J, JA, JJ, LAA,
      $                   LDA, LDAS, LJ, LX, N, NARGS, NC, NS
       LOGICAL            FULL, NULL, PACKED, RESET, SAME, UPPER
@@ -1844,6 +1899,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 100 IN = 1, NIDIM
          N = IDIM( IN )
@@ -1927,6 +1984,8 @@
                   IF( .NOT.OK )THEN
                      WRITE( NOUT, FMT = 9992 )
                      FATAL = .TRUE.
+                     NTESTS = NTESTS + 1
+                     NFAILS = NFAILS + 1
                      GO TO 120
                   END IF
 *
@@ -1957,6 +2016,8 @@
    30             CONTINUE
                   IF( .NOT.SAME )THEN
                      FATAL = .TRUE.
+                     NTESTS = NTESTS + 1
+                     NFAILS = NFAILS + 1
                      GO TO 120
                   END IF
 *
@@ -1997,6 +2058,9 @@
                            JA = JA + LJ
                         END IF
                         ERRMAX = MAX( ERRMAX, ERR )
+                        NTESTS = NTESTS + 1
+                        IF( ERR.GE.THRESH )
+     $                     NFAILS = NFAILS + 1
 *                       If got really bad answer, report and return.
                         IF( FATAL )
      $                     GO TO 110
@@ -2036,6 +2100,7 @@
       END IF
 *
   130 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -2053,6 +2118,8 @@
      $      ',', I2, ', A,', I3, ')                        .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK5
 *
@@ -2088,6 +2155,7 @@
       INTEGER            IDIM( NIDIM ), INC( NINC )
 *     .. Local Scalars ..
       REAL               ALPHA, ALS, ERR, ERRMAX, TRANSL
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IC, IN, INCX, INCXS, INCY, INCYS, IX,
      $                   IY, J, JA, JJ, LAA, LDA, LDAS, LJ, LX, LY, N,
      $                   NARGS, NC, NS
@@ -2126,6 +2194,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 140 IN = 1, NIDIM
          N = IDIM( IN )
@@ -2238,6 +2308,8 @@
                      IF( .NOT.OK )THEN
                         WRITE( NOUT, FMT = 9992 )
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 160
                      END IF
 *
@@ -2270,6 +2342,8 @@
    40                CONTINUE
                      IF( .NOT.SAME )THEN
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 160
                      END IF
 *
@@ -2334,6 +2408,9 @@
                               JA = JA + LJ
                            END IF
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 150
@@ -2376,6 +2453,7 @@
       END IF
 *
   170 CONTINUE
+      WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CAL',
@@ -2393,6 +2471,8 @@
      $      ',', I2, ', Y,', I2, ', A,', I3, ')                  .' )
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A10, ' COMPUTATIONAL TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHK6
 *
@@ -2414,6 +2494,7 @@
       INTEGER            ISNUM, NOUT
       CHARACTER*10       SRNAMT
 *     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
 *     .. Local Scalars ..
@@ -2426,6 +2507,7 @@
      $                   STPSV, STRMV, STRSV
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
 *     .. Executable Statements ..
 *     OK is set to .FALSE. by the special version of XERBLA or by CHKXER
 *     if anything is wrong.
@@ -2433,6 +2515,11 @@
 *     LERR is set to .TRUE. by the special version of XERBLA each time
 *     it is called, and is then tested and re-set by CHKXER.
       LERR = .FALSE.
+*     NXRUN and NXFAIL count the error-exit tests of this routine;
+*     NXBAD is set by XERBLA when it is called wrongly.
+      NXRUN = 0
+      NXFAIL = 0
+      NXBAD = 0
       GO TO ( 10, 20, 30, 40, 50, 60, 70, 80,
      $        90, 100, 110, 120, 130, 140, 150,
      $        160, 170, 180 )ISNUM
@@ -2747,11 +2834,14 @@
       ELSE
          WRITE( NOUT, FMT = 9998 )SRNAMT
       END IF
+      WRITE( NOUT, FMT = 9979 )SRNAMT, NXRUN, NXFAIL
       RETURN
 *
  9999 FORMAT( ' ', A10, ' PASSED THE TESTS OF ERROR-EXITS' )
  9998 FORMAT( ' ******* ', A10, ' FAILED THE TESTS OF ERROR-EXITS ****',
      $      '***' )
+ 9979 FORMAT( ' ', A10, ' ERROR-EXIT TESTS:', I9, ' RUN,', I9,
+     $      ' FAILED' )
 *
 *     End of SCHKE
 *
@@ -3233,11 +3323,20 @@
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
       CHARACTER*10       SRNAMT
+*     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
+*     .. Common blocks ..
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
 *     .. Executable Statements ..
+      NXRUN = NXRUN + 1
       IF( .NOT.LERR )THEN
          WRITE( NOUT, FMT = 9999 )INFOT, SRNAMT
          OK = .FALSE.
+         NXFAIL = NXFAIL + 1
+      ELSE IF( NXBAD.NE.0 )THEN
+         NXFAIL = NXFAIL + 1
       END IF
+      NXBAD = 0
       LERR = .FALSE.
       RETURN
 *
@@ -3303,11 +3402,13 @@
       INTEGER            INFO
       CHARACTER*(*)      SRNAME
 *     .. Scalars in Common ..
+      INTEGER            NXRUN, NXFAIL, NXBAD
       INTEGER            INFOT, NOUT
       LOGICAL            LERR, OK
       CHARACTER*10       SRNAMT
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
+      COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
       COMMON             /SRNAMC/SRNAMT
 *     .. Locals ..
       INTEGER            SRLEN
@@ -3320,11 +3421,13 @@
             WRITE( NOUT, FMT = 9997 )INFO
          END IF
          OK = .FALSE.
+         NXBAD = 1
       END IF
       SRLEN = MIN(LEN_TRIM(SRNAME), LEN_TRIM(SRNAMT))
       IF( SRNAME(1:SRLEN).NE.SRNAMT(1:SRLEN) )THEN
          WRITE( NOUT, FMT = 9998 )SRNAME, SRNAMT
          OK = .FALSE.
+         NXBAD = 1
       END IF
       RETURN
 *
