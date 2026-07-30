@@ -1,15 +1,31 @@
-#include <stdio.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
+
 #include "cblas.h"
 #include "cblas_test.h"
+#include "cblas_xerbla_internal.h"
 
-void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form, ...)
+/**
+ * \brief Test-harness stand-in for the CBLAS error handler.
+ *
+ * Rather than terminating, checks the reported routine name and argument
+ * number against the values the calling tester put in cblas_rout and
+ * cblas_info, and records the outcome in cblas_ok and cblas_lerr.
+ *
+ * \param[in] info  CBLAS argument number reported by the caller.
+ * \param[in] rout  Routine name, e.g. "cblas_dgemm".
+ * \param[in] form  Unused; kept so the signature matches the library's.
+ */
+void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
+                              const char *form, ...)
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
    extern CBLAS_INT link_xerbla;
    extern char *cblas_rout;
+
+   (void)form;
 
    /* Initially, c__3chke may call this routine with
     * global variable link_xerbla=1, and F77_xerbla will set link_xerbla=0.
@@ -18,120 +34,75 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form
     */
    if (link_xerbla) return;
 
-   if (cblas_rout != NULL && strcmp(cblas_rout, rout) != 0){
-      printf("***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n", rout, cblas_rout);
+   /* The name is checked and reported as the user would see it, suffix and
+    * all, while the remapping below keys off the unsuffixed \p rout.
+    */
+   char reported[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+   cblas_xerbla_apply_api_suffix(reported, sizeof(reported), rout);
+
+   if (cblas_rout != NULL && strcmp(cblas_rout, reported) != 0) {
+      printf(
+         "***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n",
+         reported, cblas_rout);
       cblas_ok = FALSE;
    }
 
-   if (RowMajorStrg)
-   {
-      /* To properly check leading dimension problems in cblas__gemm, we
-       * need to do the following trick. When cblas__gemm is called with
-       * CblasRowMajor, the arguments A and B switch places in the call to
-       * f77__gemm. Thus when we test for bad leading dimension problems
-       * for A and B, lda is in position 11 instead of 9, and ldb is in
-       * position 9 instead of 11.
-       */
-      if (strstr(rout,"gemm") != 0 && strstr(rout, "gemmtr") == 0)
-      {
-         if      (info == 5 ) info =  4;
-         else if (info == 4 ) info =  5;
-         else if (info == 11) info =  9;
-         else if (info == 9 ) info = 11;
-      } else if (strstr(rout, "gemmtr") != 0)
-      {
-         if (info == 11) info =  9;
-         else if (info == 9 ) info = 11;
-      }
+   info = cblas_xerbla_map_info(info, rout, RowMajorStrg);
 
-      else if (strstr(rout,"symm") != 0 || strstr(rout,"skewsymm") != 0 || strstr(rout,"hemm") != 0)
-      {
-         if      (info == 5 ) info =  4;
-         else if (info == 4 ) info =  5;
-      }
-      else if (strstr(rout,"trmm") != 0 || strstr(rout,"trsm") != 0)
-      {
-         if      (info == 7 ) info =  6;
-         else if (info == 6 ) info =  7;
-      }
-      else if (strstr(rout,"gemv") != 0)
-      {
-         if      (info == 4)  info = 3;
-         else if (info == 3)  info = 4;
-      }
-      else if (strstr(rout,"gbmv") != 0)
-      {
-         if      (info == 4)  info = 3;
-         else if (info == 3)  info = 4;
-         else if (info == 6)  info = 5;
-         else if (info == 5)  info = 6;
-      }
-      else if (strstr(rout,"ger") != 0)
-      {
-         if      (info == 3) info = 2;
-         else if (info == 2) info = 3;
-         else if (info == 8) info = 6;
-         else if (info == 6) info = 8;
-      }
-      else if ( ( strstr(rout,"her2") != 0 || strstr(rout,"hpr2") != 0 )
-               && strstr(rout,"her2k") == 0 )
-      {
-         if      (info == 8) info = 6;
-         else if (info == 6) info = 8;
-      }
-   }
-
-   if (info != cblas_info){
-      printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT " INSTEAD OF %d in %s *******\n",info, (int) cblas_info, rout);
+   if (info != cblas_info) {
+      printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT
+             " INSTEAD OF %" CBLAS_IFMT " in %s *******\n",
+             info, cblas_info, reported);
       cblas_lerr = PASSED;
       cblas_ok = FALSE;
-   } else cblas_lerr = FAILED;
+   } else {
+      cblas_lerr = FAILED;
+   }
 }
 
-#ifdef F77_Char
-void F77_xerbla(F77_Char F77_srname, void *vinfo
-#else
-void F77_xerbla(char *srname, void *vinfo
-#endif
+/**
+ * \brief Test-harness XERBLA that redirects Fortran errors to cblas_xerbla().
+ *
+ * \param[in] F77_srname  Routine name reported by the Fortran BLAS, blank
+ *                        padded and not NUL terminated.
+ * \param[in] vinfo       Pointer to the Fortran argument number.
+ * \param[in] len         Hidden Fortran length of \p F77_srname, on
+ *                        compilers that pass string lengths at the end.
+ */
+void F77_xerbla(FCHAR F77_srname, void *vinfo
 #ifdef BLAS_FORTRAN_STRLEN_END
-, FORTRAN_STRLEN srname_len
+                ,
+                FORTRAN_STRLEN len
 #endif
 )
 {
-#ifdef F77_Char
-   char *srname;
-#endif
-
-   char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0', '\0', '\0', '\0', '\0', '\0'};
-
-#ifdef F77_Integer
-   F77_Integer *info=vinfo;
-   F77_Integer i;
-   extern F77_Integer link_xerbla;
-#else
-   CBLAS_INT *info=vinfo;
-   CBLAS_INT i;
-   extern CBLAS_INT link_xerbla;
-#endif
-#ifdef F77_Char
-   srname = F2C_STR(F77_srname, XerblaStrLen);
-#endif
-
    /* See the comment in API_SUFFIX(cblas_xerbla)() above */
-   if (link_xerbla)
-   {
+   extern CBLAS_INT link_xerbla;
+   if (link_xerbla) {
       link_xerbla = 0;
       return;
    }
-#ifndef BLAS_FORTRAN_STRLEN_END
-   const int srname_len = 6;
+
+#ifdef BLAS_FORTRAN_STRLEN_END
+   const size_t srname_len = len > 0 ? (size_t)len : 0;
+#else
+   const size_t srname_len = 6;
 #endif
 
-   for(i=0;  i  < srname_len; i++) rout[i+6] = tolower(srname[i]);
-   for(i=16; i >= 9; i--) if (rout[i] == ' ') rout[i] = '\0';
+#ifdef F77_CHAR
+   const char *srname = F2C_STR(F77_srname, srname_len);
+#else
+   const char *srname = F77_srname;
+#endif
+
+   const F77_INT *info = (const F77_INT *)vinfo;
+   const CBLAS_INT cblas_info = (CBLAS_INT)*info;
+
+   char rout[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+   cblas_xerbla_make_rout(rout, sizeof(rout), srname, srname_len);
 
    /* We increment *info by 1 since the CBLAS interface adds one more
     * argument to all level 2 and 3 routines.
     */
-   API_SUFFIX(cblas_xerbla)(*info+1,rout,"");
+   API_SUFFIX(cblas_xerbla)(cblas_info + 1, rout, "");
 }
