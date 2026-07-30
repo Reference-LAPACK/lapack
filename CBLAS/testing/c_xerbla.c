@@ -36,15 +36,20 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
    if (link_xerbla) return;
 
    /* The name is checked and reported as the user would see it, suffix and
-    * all, while the remapping below keys off the unsuffixed \p rout.
+    * all, while the remapping below keys off the unsuffixed \p rout. The
+    * expected name goes through the same normalisation, since the testers
+    * spell it without the extended API suffix.
     */
    char reported[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
    cblas_xerbla_apply_api_suffix(reported, sizeof(reported), rout);
 
-   if (cblas_rout != NULL && strcmp(cblas_rout, reported) != 0) {
+   char expected[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+   cblas_xerbla_apply_api_suffix(expected, sizeof(expected), cblas_rout);
+
+   if (cblas_rout != NULL && strcmp(expected, reported) != 0) {
       printf(
          "***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n",
-         reported, cblas_rout);
+         reported, expected);
       cblas_ok = FALSE;
       cblas_xbad = 1;
    }
