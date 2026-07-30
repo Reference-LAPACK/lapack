@@ -500,6 +500,7 @@
 *     .. Local Scalars ..
       COMPLEX*16         ALPHA, ALS, BETA, BLS, TRANSL
       DOUBLE PRECISION   ERR, ERRMAX
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IB, IC, IKU, IM, IN, INCX, INCXS, INCY,
      $                   INCYS, IX, IY, KL, KLS, KU, KUS, LAA, LDA,
      $                   LDAS, LX, LY, M, ML, MS, N, NARGS, NC, ND, NK,
@@ -537,6 +538,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 120 IN = 1, NIDIM
          N = IDIM( IN )
@@ -685,6 +688,8 @@
                               IF( .NOT.OK )THEN
                                  WRITE( NOUT, FMT = 9993 )
                                  FATAL = .TRUE.
+                                 NTESTS = NTESTS + 1
+                                 NFAILS = NFAILS + 1
                                  GO TO 130
                               END IF
 *
@@ -739,6 +744,8 @@
    40                         CONTINUE
                               IF( .NOT.SAME )THEN
                                  FATAL = .TRUE.
+                                 NTESTS = NTESTS + 1
+                                 NFAILS = NFAILS + 1
                                  GO TO 130
                               END IF
 *
@@ -751,6 +758,9 @@
      $                                       INCY, YT, G, YY, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
                                  ERRMAX = MAX( ERRMAX, ERR )
+                                 NTESTS = NTESTS + 1
+                                 IF( ERR.GE.THRESH )
+     $                              NFAILS = NFAILS + 1
 *                                If got really bad answer, report and
 *                                return.
                                  IF( FATAL )
@@ -781,9 +791,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 140
 *
@@ -798,8 +810,22 @@
       END IF
 *
   140 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -816,6 +842,10 @@
      $       F4.1, ',', F4.1, '), Y,', I2, ') .' )
  9993 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of ZCHK1.
 *
@@ -859,6 +889,7 @@
 *     .. Local Scalars ..
       COMPLEX*16         ALPHA, ALS, BETA, BLS, TRANSL
       DOUBLE PRECISION   ERR, ERRMAX
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IB, IC, IK, IN, INCX, INCXS, INCY,
      $                   INCYS, IX, IY, K, KS, LAA, LDA, LDAS, LX, LY,
      $                   N, NARGS, NC, NK, NS
@@ -898,6 +929,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 110 IN = 1, NIDIM
          N = IDIM( IN )
@@ -1035,6 +1068,8 @@
                            IF( .NOT.OK )THEN
                               WRITE( NOUT, FMT = 9992 )
                               FATAL = .TRUE.
+                              NTESTS = NTESTS + 1
+                              NFAILS = NFAILS + 1
                               GO TO 120
                            END IF
 *
@@ -1097,6 +1132,8 @@
    40                      CONTINUE
                            IF( .NOT.SAME )THEN
                               FATAL = .TRUE.
+                              NTESTS = NTESTS + 1
+                              NFAILS = NFAILS + 1
                               GO TO 120
                            END IF
 *
@@ -1109,6 +1146,9 @@
      $                                    YY, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
                               ERRMAX = MAX( ERRMAX, ERR )
+                              NTESTS = NTESTS + 1
+                              IF( ERR.GE.THRESH )
+     $                           NFAILS = NFAILS + 1
 *                             If got really bad answer, report and
 *                             return.
                               IF( FATAL )
@@ -1135,9 +1175,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 130
 *
@@ -1155,8 +1197,22 @@
       END IF
 *
   130 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -1176,6 +1232,10 @@
      $     F4.1, '), ', 'Y,', I2, ') .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of CZHK2.
 *
@@ -1217,6 +1277,7 @@
 *     .. Local Scalars ..
       COMPLEX*16         TRANSL
       DOUBLE PRECISION   ERR, ERRMAX
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, ICD, ICT, ICU, IK, IN, INCX, INCXS, IX, K,
      $                   KS, LAA, LDA, LDAS, LX, N, NARGS, NC, NK, NS
       LOGICAL            BANDED, FULL, NULL, PACKED, RESET, SAME
@@ -1257,6 +1318,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *     Set up zero vector for ZMVCH.
       DO 10 I = 1, NMAX
          Z( I ) = ZERO
@@ -1420,6 +1483,8 @@
                         IF( .NOT.OK )THEN
                            WRITE( NOUT, FMT = 9992 )
                            FATAL = .TRUE.
+                           NTESTS = NTESTS + 1
+                           NFAILS = NFAILS + 1
                            GO TO 120
                         END IF
 *
@@ -1472,6 +1537,8 @@
    40                   CONTINUE
                         IF( .NOT.SAME )THEN
                            FATAL = .TRUE.
+                           NTESTS = NTESTS + 1
+                           NFAILS = NFAILS + 1
                            GO TO 120
                         END IF
 *
@@ -1500,6 +1567,9 @@
      $                                    .FALSE. )
                            END IF
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 120
@@ -1523,9 +1593,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 130
 *
@@ -1543,8 +1615,22 @@
       END IF
 *
   130 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -1561,6 +1647,10 @@
      $      I3, ', X,', I2, ') .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of ZCHK3.
 *
@@ -1605,6 +1695,7 @@
 *     .. Local Scalars ..
       COMPLEX*16         ALPHA, ALS, TRANSL
       DOUBLE PRECISION   ERR, ERRMAX
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IM, IN, INCX, INCXS, INCY, INCYS, IX,
      $                  IY, J, LAA, LDA, LDAS, LX, LY, M, MS, N, NARGS,
      $                   NC, ND, NS
@@ -1632,6 +1723,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 120 IN = 1, NIDIM
          N = IDIM( IN )
@@ -1732,6 +1825,8 @@
                      IF( .NOT.OK )THEN
                         WRITE( NOUT, FMT = 9993 )
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 140
                      END IF
 *
@@ -1762,6 +1857,8 @@
    40                CONTINUE
                      IF( .NOT.SAME )THEN
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 140
                      END IF
 *
@@ -1791,6 +1888,9 @@
      $                                 AA( 1 + ( J - 1 )*LDA ), EPS,
      $                                 ERR, FATAL, NOUT, .TRUE. )
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 130
@@ -1813,9 +1913,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 150
 *
@@ -1827,8 +1929,22 @@
       WRITE( NOUT, FMT = 9994 )NC, SNAME, M, N, ALPHA, INCX, INCY, LDA
 *
   150 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -1842,6 +1958,10 @@
      $     '), X,', I2, ', Y,', I2, ', A,', I3, ') .' )
  9993 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of ZCHK4.
 *
@@ -1886,6 +2006,7 @@
 *     .. Local Scalars ..
       COMPLEX*16         ALPHA, TRANSL
       DOUBLE PRECISION   ERR, ERRMAX, RALPHA, RALS
+      INTEGER            NTESTS, NFAILS
       INTEGER           I, IA, IC, IN, INCX, INCXS, IX, J, JA, JJ, LAA,
      $                   LDA, LDAS, LJ, LX, N, NARGS, NC, NS
       LOGICAL            FULL, NULL, PACKED, RESET, SAME, UPPER
@@ -1922,6 +2043,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 100 IN = 1, NIDIM
          N = IDIM( IN )
@@ -2013,6 +2136,8 @@
                   IF( .NOT.OK )THEN
                      WRITE( NOUT, FMT = 9992 )
                      FATAL = .TRUE.
+                     NTESTS = NTESTS + 1
+                     NFAILS = NFAILS + 1
                      GO TO 120
                   END IF
 *
@@ -2043,6 +2168,8 @@
    30             CONTINUE
                   IF( .NOT.SAME )THEN
                      FATAL = .TRUE.
+                     NTESTS = NTESTS + 1
+                     NFAILS = NFAILS + 1
                      GO TO 120
                   END IF
 *
@@ -2083,6 +2210,9 @@
                            JA = JA + LJ
                         END IF
                         ERRMAX = MAX( ERRMAX, ERR )
+                        NTESTS = NTESTS + 1
+                        IF( ERR.GE.THRESH )
+     $                     NFAILS = NFAILS + 1
 *                       If got really bad answer, report and return.
                         IF( FATAL )
      $                     GO TO 110
@@ -2104,9 +2234,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 130
 *
@@ -2122,8 +2254,22 @@
       END IF
 *
   130 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -2139,6 +2285,10 @@
      $     I2, ', A,', I3, ') .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of CZHK5.
 *
@@ -2183,6 +2333,7 @@
 *     .. Local Scalars ..
       COMPLEX*16            ALPHA, ALS, TRANSL
       DOUBLE PRECISION               ERR, ERRMAX
+      INTEGER            NTESTS, NFAILS
       INTEGER            I, IA, IC, IN, INCX, INCXS, INCY, INCYS, IX,
      $                   IY, J, JA, JJ, LAA, LDA, LDAS, LJ, LX, LY, N,
      $                   NARGS, NC, NS
@@ -2220,6 +2371,8 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
+      NTESTS = 0
+      NFAILS = 0
 *
       DO 140 IN = 1, NIDIM
          N = IDIM( IN )
@@ -2329,6 +2482,8 @@
                      IF( .NOT.OK )THEN
                         WRITE( NOUT, FMT = 9992 )
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 160
                      END IF
 *
@@ -2361,6 +2516,8 @@
    40                CONTINUE
                      IF( .NOT.SAME )THEN
                         FATAL = .TRUE.
+                        NTESTS = NTESTS + 1
+                        NFAILS = NFAILS + 1
                         GO TO 160
                      END IF
 *
@@ -2411,6 +2568,9 @@
                               JA = JA + LJ
                            END IF
                            ERRMAX = MAX( ERRMAX, ERR )
+                           NTESTS = NTESTS + 1
+                           IF( ERR.GE.THRESH )
+     $                        NFAILS = NFAILS + 1
 *                          If got really bad answer, report and return.
                            IF( FATAL )
      $                        GO TO 150
@@ -2434,9 +2594,11 @@
 *     Report result.
 *
       IF( ERRMAX.LT.THRESH )THEN
-         WRITE( NOUT, FMT = 9999 )SNAME, NC
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10000 )SNAME, NC
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10001 )SNAME, NC
       ELSE
-         WRITE( NOUT, FMT = 9997 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.0 )WRITE( NOUT, FMT = 10002 )SNAME, NC, ERRMAX
+         IF( IORDER.EQ.1 )WRITE( NOUT, FMT = 10003 )SNAME, NC, ERRMAX
       END IF
       GO TO 170
 *
@@ -2453,8 +2615,22 @@
       END IF
 *
   170 CONTINUE
+      IF( IORDER.EQ.0 )
+     $   WRITE( NOUT, FMT = 9979 )SNAME, NTESTS, NFAILS
+      IF( IORDER.EQ.1 )
+     $   WRITE( NOUT, FMT = 9978 )SNAME, NTESTS, NFAILS
       RETURN
 *
+10000 FORMAT( ' ', A12,' PASSED THE COLUMN-MAJOR COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10001 FORMAT( ' ', A12,' PASSED THE ROW-MAJOR    COMPUTATIONAL TESTS',
+     $ ' (', I6, ' CALL', 'S)' )
+10002 FORMAT( ' ', A12,' COMPLETED THE COLUMN-MAJOR COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
+10003 FORMAT( ' ', A12,' COMPLETED THE ROW-MAJOR    COMPUTATIONAL ',
+     $ 'TESTS (', I6, ' CALLS)', /' ******* BUT WITH MAXIMUM TEST ',
+     $ 'RATIO ', F8.2, ' - SUSPECT *******' )
  9999 FORMAT(' ',A12, ' PASSED THE COMPUTATIONAL TESTS (', I6, ' CALL',
      $      'S)' )
  9998 FORMAT(' ******* FATAL ERROR - PARAMETER NUMBER ', I2, ' WAS CH',
@@ -2470,6 +2646,10 @@
      $     F4.1, '), X,', I2, ', Y,', I2, ', A,', I3, ') .' )
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
+ 9979 FORMAT( ' ', A12,' COLUMN-MAJOR COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
+ 9978 FORMAT( ' ', A12,' ROW-MAJOR    COMPUTATIONAL TESTS:', I9,
+     $      ' RUN,', I9, ' FAILED' )
 *
 *     End of ZCHK6.
 *

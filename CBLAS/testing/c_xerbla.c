@@ -23,6 +23,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
    extern CBLAS_INT link_xerbla;
+   extern CBLAS_INT cblas_xbad;
    extern char *cblas_rout;
 
    (void)form;
@@ -45,6 +46,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
          "***** XERBLA WAS CALLED WITH SRNAME = <%s> INSTEAD OF <%s> *******\n",
          reported, cblas_rout);
       cblas_ok = FALSE;
+      cblas_xbad = 1;
    }
 
    info = cblas_xerbla_map_info(info, rout, RowMajorStrg);

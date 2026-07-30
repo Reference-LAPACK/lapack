@@ -5,6 +5,7 @@
 
 CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
 CBLAS_INT link_xerbla=TRUE;
+CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
 char *cblas_rout;
 
 #ifdef F77_Char
@@ -20,11 +21,17 @@ void F77_xerbla(char *srname, void *vinfo
 void chkxer(void) {
    extern CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
    extern CBLAS_INT link_xerbla;
+   extern CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
    extern char *cblas_rout;
+   cblas_xtests++;
    if (cblas_lerr == 1 ) {
       printf("***** ILLEGAL VALUE OF PARAMETER NUMBER %" CBLAS_IFMT " NOT DETECTED BY %s *****\n", cblas_info, cblas_rout);
       cblas_ok = 0 ;
+      cblas_xfails++;
+   } else if (cblas_xbad) {
+      cblas_xfails++;
    }
+   cblas_xbad = 0;
    cblas_lerr = 1 ;
 }
 
@@ -45,6 +52,9 @@ void  F77_c3chke(char *  rout
 
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;
+   cblas_xtests = 0;
+   cblas_xfails = 0;
+   cblas_xbad = 0;
 
 #ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
    #ifdef CBLAS_DLL_IMPORTS
@@ -2213,4 +2223,6 @@ void  F77_c3chke(char *  rout
        printf(" %-13s PASSED THE TESTS OF ERROR-EXITS\n", cblas_rout);
    else
        printf("***** %s FAILED THE TESTS OF ERROR-EXITS *******\n",cblas_rout);
+   printf(" %-13s ERROR-EXIT TESTS:%9d RUN,%9d FAILED\n",
+          cblas_rout, (int) cblas_xtests, (int) cblas_xfails);
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarize (and optionally run) the LAPACK and BLAS test suites.
+"""Summarize (and optionally run) the LAPACK, BLAS and CBLAS test suites.
 
 This script analyzes the ``.out`` files written by the LAPACK testing
 drivers (``xlintst*``, ``xeigtst*`` and ``xdmdeigtst*``) and prints a
@@ -7,9 +7,10 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The BLAS (``xblat[123]?``) test drivers are analyzed too, from their own
-testing directory, and are reported in their own summary section.  Those
-drivers report their test counts in lines of the form::
+The BLAS (``xblat[123]?``) and CBLAS (``x?cblat[123]``) test drivers are
+analyzed too, from their own testing directories, and are reported in
+their own summary sections.  Those drivers report their test counts in
+lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
      SGEMV      ERROR-EXIT TESTS:           6 RUN,        0 FAILED
@@ -21,7 +22,9 @@ not report counts is still summarized, by counting one test per verdict.
 When index-64 extended API outputs (``*_64.out``, produced by CMake
 builds with ``BUILD_INDEX64_EXT_API=ON``) are present, they are analyzed
 as well and reported in a separate "extended API" section so that the
-default-API totals remain comparable across builds.
+default-API totals remain comparable across builds.  With
+``--merge-apis`` a library whose two API variants report the same errors
+is summarized in one combined section instead.
 
 Examples:
     ./lapack_testing.py -n
@@ -36,6 +39,10 @@ Examples:
 
     ./lapack_testing.py -t blas
         Summarize only the BLAS test output.
+
+    ./lapack_testing.py -s --junit-xml results.xml
+        Print only the summary table and also write a JUnit XML report
+        of the analyzed output files, e.g. for GitLab CI test reports.
 """
 
 from __future__ import annotations
@@ -47,6 +54,8 @@ import os
 import re
 import subprocess
 import sys
+import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -61,6 +70,9 @@ PRECISIONS: "Tuple[Tuple[str, str], ...]" = (
     ("c", "COMPLEX"),
     ("z", "COMPLEX16"),
 )
+
+# Summary table label of each precision letter, e.g. "s" -> "REAL".
+PRECISION_NAMES: "Dict[str, str]" = dict(PRECISIONS)
 
 # Second precision letter of the mixed-precision linear equation tests.
 MIXED_PARTNER: "Dict[str, str]" = {"d": "s", "z": "c"}
@@ -107,8 +119,8 @@ LIN_SETS: "Tuple[Tuple[str, str, str, str], ...]" = (
     ("rfp", "test_rfp", "xlintstrf", "RFP linear equation routines"),
 )
 
-# BLAS test sets, one per BLAS level: (level, description).  The Level 1
-# drivers read no input file and write to standard output.
+# BLAS and CBLAS test sets, one per BLAS level: (level, description).
+# The Level 1 drivers read no input file and write to standard output.
 BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
     (1, "Level 1 BLAS routines"),
     (2, "Level 2 BLAS routines"),
@@ -119,17 +131,19 @@ BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
 # its own section in the summary table.
 LIBRARY_LAPACK = "LAPACK"
 LIBRARY_BLAS = "BLAS"
-LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS)
+LIBRARY_CBLAS = "CBLAS"
+LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS, LIBRARY_CBLAS)
 
 # LAPACK test families, in reporting order per precision.
 LAPACK_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
 
 # All test families, in reporting order per precision.
-ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas",)
+ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas", "cblas")
 
 # Which library each family belongs to.
 FAMILY_LIBRARY: "Dict[str, str]" = dict(
-    [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES] + [("blas", LIBRARY_BLAS)]
+    [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES]
+    + [("blas", LIBRARY_BLAS), ("cblas", LIBRARY_CBLAS)]
 )
 
 # API suffixes that may exist: default API and index-64 extended API.
@@ -162,20 +176,25 @@ RE_LARGEST_ERROR = re.compile(r"(?:value|ratio) of largest test error\s*=\s*(\S+
 # aggregate lines such as "SGEDMD :: ALL TESTS PASSED." from matching.
 RE_DMD_VERDICT = re.compile(r"\btest\s+(PASSED|FAILED)\b", re.IGNORECASE)
 
-# Test counts reported by the BLAS drivers, e.g.
+# Test counts reported by the BLAS/CBLAS drivers, e.g.
 #   " SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED"
+#   " cblas_sgemv      ROW-MAJOR    COMPUTATIONAL TESTS:  3456 RUN, ..."
 # The routine name field width differs per driver, so never match on
 # column positions.
 RE_BLAS_COUNTS = re.compile(
-    r"^\s*\S+\s+(COMPUTATIONAL|ERROR-EXIT) TESTS:" r"\s*(\d+) RUN,\s*(\d+) FAILED\s*$"
+    r"^\s*\S+\s+(?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?"
+    r"(COMPUTATIONAL|ERROR-EXIT) TESTS:\s*(\d+) RUN,\s*(\d+) FAILED\s*$"
 )
 
 # Per-routine verdicts.  These are only counted when the driver did not
 # report counts (output from a build without the counting instrumentation).
 RE_BLAS_PASSED = re.compile(
-    r"^\s*\S+\s+PASSED THE (?:COMPUTATIONAL TESTS|TESTS OF ERROR-EXITS)\b"
+    r"^\s*\S+\s+PASSED THE (?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?"
+    r"(?:COMPUTATIONAL TESTS|TESTS OF ERROR-EXITS)\b"
 )
-RE_BLAS_SUSPECT = re.compile(r"\bCOMPLETED THE COMPUTATIONAL TESTS\b")
+RE_BLAS_SUSPECT = re.compile(
+    r"\bCOMPLETED THE (?:(?:COLUMN-MAJOR|ROW-MAJOR)\s+)?COMPUTATIONAL TESTS\b"
+)
 RE_BLAS_FAILED_COMPUTATIONAL = re.compile(r"\bFAILED ON CALL NUMBER:")
 RE_BLAS_FAILED_ERROR_EXIT = re.compile(r"\bFAILED THE TESTS OF ERROR-EXITS\b")
 
@@ -271,6 +290,31 @@ class FileReport:
     notable_lines: "List[str]" = field(default_factory=list)
 
 
+@dataclass
+class SectionResult:
+    """Accumulated counts of one library/API section of the summary."""
+
+    # Per-precision rows of the summary table, in reporting order.
+    precisions: "List[Tuple[str, Counts]]" = field(default_factory=list)
+    total: Counts = field(default_factory=Counts)
+    # Counts per output file, keyed by the API-independent output name.
+    # Used to compare one API variant against another; a file that was
+    # missing has no entry, so a partial run never compares equal.
+    case_counts: "Dict[str, Counts]" = field(default_factory=dict)
+
+    def error_map(self) -> "Dict[str, Tuple[int, int, int]]":
+        """Return the per-file error counts, ignoring the run counts.
+
+        Returns:
+            The (numerical, illegal, info) triple of every analyzed
+            output file, keyed by its API-independent name.
+        """
+        return {
+            name: (counts.numerical, counts.illegal, counts.info)
+            for name, counts in self.case_counts.items()
+        }
+
+
 @dataclass(frozen=True)
 class TestCase:
     """One test driver invocation and its expected output file."""
@@ -330,6 +374,24 @@ class TestCase:
             The executable name, e.g. ``xeigtsts_64``.
         """
         return self.executable + suffix
+
+
+@dataclass
+class CaseOutcome:
+    """Analysis outcome of one test case in one API variant.
+
+    Collected in analysis order for the JUnit XML report: the parsing
+    result of the output file (or None when the file was missing), the
+    error message of a driver run that failed under ``--run`` or of an
+    output file that could not be read, and the wall-clock duration of
+    the driver run when ``--run`` was given.
+    """
+
+    case: TestCase
+    suffix: str
+    run_error: "Optional[str]" = None
+    report: "Optional[FileReport]" = None
+    duration: "Optional[float]" = None
 
 
 def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]":
@@ -424,6 +486,25 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         library=LIBRARY_BLAS,
                         input_suffixed=level != 1,
                         redirect_stdout=level == 1,
+                    )
+                )
+        if "cblas" in families:
+            for level, description in BLAS_LEVELS:
+                # The CBLAS inputs carry no output file name, so the same
+                # input serves both APIs and the harness does the
+                # redirection for every level.
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="cblas",
+                        description="C interface to " + description,
+                        input_name=(
+                            None if level == 1 else "{}in{}".format(letter, level)
+                        ),
+                        output_name="{}test{}.out".format(letter, level),
+                        executable="x{}cblat{}".format(letter, level),
+                        parser=PARSER_BLAS1 if level == 1 else PARSER_BLAS23,
+                        library=LIBRARY_CBLAS,
                     )
                 )
     return cases
@@ -545,7 +626,7 @@ def parse_dmd(lines: "Sequence[str]") -> FileReport:
 
 
 def parse_blas(lines: "Sequence[str]", level_one: bool) -> FileReport:
-    """Parse a BLAS test output file.
+    """Parse a BLAS or CBLAS test output file.
 
     Test counts come from the ``... TESTS: n RUN, m FAILED`` lines the
     drivers report per routine: computational failures are numerical
@@ -752,6 +833,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
             Path("TESTING") / "LIN",
             Path("TESTING") / "EIG",
             Path("BLAS") / "TESTING",
+            Path("CBLAS") / "testing",
         ]
     for directory in directories:
         for filename in (name, name + ".exe"):
@@ -764,6 +846,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
 SOURCE_INPUT_DIRS: "Dict[str, str]" = {
     LIBRARY_LAPACK: "TESTING",
     LIBRARY_BLAS: "BLAS/TESTING",
+    LIBRARY_CBLAS: "CBLAS/testing",
 }
 
 
@@ -912,20 +995,37 @@ def format_summary_row(label: str, counts: Counts) -> str:
     )
 
 
-def section_title(library: str, suffix: str) -> str:
-    """Return the human-readable name of a library/API section.
+def api_name(suffix: str) -> str:
+    """Return the human-readable name of one API variant.
 
     Args:
-        library: The library name, e.g. ``"BLAS"``.
         suffix: The API suffix, either ``""`` or ``"_64"``.
 
     Returns:
-        The section name used in headings and messages, e.g.
-        ``"BLAS: Extended API (_64)"``.
+        The API name, e.g. ``"Extended API (_64)"``.
     """
     if suffix:
-        return "{}: Extended API ({})".format(library, suffix)
-    return "{}: Default API".format(library)
+        return "Extended API ({})".format(suffix)
+    return "Default API"
+
+
+def section_title(library: str, suffixes: "Sequence[str]") -> str:
+    """Return the human-readable name of a summary section.
+
+    Args:
+        library: The library name, e.g. ``"BLAS"``.
+        suffixes: The API suffixes the section covers.  More than one
+            means the section reports them together in a single table.
+
+    Returns:
+        The section name used in headings and messages, e.g.
+        ``"BLAS: Extended API (_64)"`` for one API variant, or
+        ``"BLAS: Default API and Extended API (_64)"`` for two.
+    """
+    names = [api_name(suffix) for suffix in suffixes]
+    if len(names) == 1:
+        return "{}: {}".format(library, names[0])
+    return "{}: {} and {}".format(library, ", ".join(names[:-1]), names[-1])
 
 
 def section_heading(title: str) -> str:
@@ -973,6 +1073,258 @@ class SummaryLog:
             self._handle.close()
 
 
+# Characters that must not appear in XML 1.0 text (the complement of its
+# Char production).  Fortran test output can contain control characters,
+# which would make consumers reject the whole report.
+RE_XML_FORBIDDEN = re.compile("[^\t\n\r\x20-\ud7ff\ue000-\ufffd\U00010000-\U0010ffff]")
+
+# Cap on the text of one JUnit failure/error element.  GitLab CI shows
+# the text in the test details; an abandoned BLAS run can log megabytes.
+JUNIT_TEXT_LIMIT = 16 * 1024
+
+
+def sanitize_xml_text(text: str) -> str:
+    """Replace characters that must not appear in XML 1.0 text.
+
+    Args:
+        text: The text to sanitize.
+
+    Returns:
+        The text with each forbidden character replaced by U+FFFD, the
+        same replacement character used when decoding the output files.
+    """
+    return RE_XML_FORBIDDEN.sub("\ufffd", text)
+
+
+def counts_message(counts: Counts) -> str:
+    """Format the one-line counts summary of an analyzed output file.
+
+    Args:
+        counts: The counts of the file.
+
+    Returns:
+        A summary such as ``"17 numerical error(s), 2 other error(s)
+        (illegal: 2, info: 0), 1298 test(s) run"``.
+    """
+    parts: "List[str]" = []
+    if counts.numerical:
+        parts.append("{} numerical error(s)".format(counts.numerical))
+    if counts.other:
+        parts.append(
+            "{} other error(s) (illegal: {}, info: {})".format(
+                counts.other, counts.illegal, counts.info
+            )
+        )
+    parts.append("{} test(s) run".format(counts.runs))
+    return ", ".join(parts)
+
+
+def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
+    """Build the JUnit ``<testcase>`` element of one analyzed test case.
+
+    The element carries at most one status child: an ``<error>`` when
+    the driver could not be run under ``--run`` or the output file
+    could not be read, a ``<skipped>`` when the output file was
+    missing, a ``<failure>`` for numerical errors,
+    an ``<error>`` for other (illegal value / INFO) errors, and none
+    when everything passed.  GitLab CI displays the element text of the
+    status child and ignores its ``message`` attribute, so the text
+    always carries the full story: the message first, then the notable
+    lines of the output file.
+
+    Args:
+        outcome: The analysis outcome of the test case.
+
+    Returns:
+        The ``<testcase>`` element.
+    """
+    case = outcome.case
+    element = ET.Element(
+        "testcase",
+        {
+            "classname": "{}{}.{}".format(case.library, outcome.suffix, case.family),
+            "name": "{} ({} {})".format(
+                case.suffixed_output(outcome.suffix),
+                PRECISION_NAMES[case.precision],
+                case.description,
+            ),
+        },
+    )
+    if case.input_name is not None:
+        # The source-tree input file, as a repository-relative path.
+        element.set(
+            "file", "{}/{}".format(SOURCE_INPUT_DIRS[case.library], case.input_name)
+        )
+    report = outcome.report
+    if report is not None:
+        element.set("assertions", str(report.counts.runs))
+    if outcome.duration is not None:
+        element.set("time", "{:.3f}".format(outcome.duration))
+
+    details: "List[str]" = []
+    if outcome.run_error is not None:
+        status = "error"
+        message = outcome.run_error
+        if report is not None:
+            details.append(counts_message(report.counts))
+    elif report is None:
+        status = "skipped"
+        message = "expected output file {} was missing".format(
+            case.suffixed_output(outcome.suffix)
+        )
+    elif report.counts.errors > 0:
+        status = "failure" if report.counts.numerical > 0 else "error"
+        message = counts_message(report.counts)
+    else:
+        return element
+    if report is not None:
+        details.extend(line.rstrip("\n") for line in report.notable_lines)
+
+    child = ET.SubElement(element, status)
+    child.set("message", sanitize_xml_text(message))
+    text = "\n".join([message] + details)
+    if len(text) > JUNIT_TEXT_LIMIT:
+        text = text[:JUNIT_TEXT_LIMIT] + "\n... [output truncated]"
+    child.text = sanitize_xml_text(text)
+    return element
+
+
+def build_junit_tree(
+    outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+) -> "ET.ElementTree":
+    """Build the JUnit XML document for the analyzed test cases.
+
+    The document holds one ``<testsuite>`` per (library, API) section,
+    in analysis order, with one ``<testcase>`` per output file.  Output
+    files this script does not recognize are reported as one extra
+    failing test case in a synthetic ``lapack_testing.py`` suite, so
+    that the report does not look clean while ``--fail-on-unrecognized``
+    fails the run.
+
+    Args:
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+
+    Returns:
+        The document; its root is a ``<testsuites>`` element.
+    """
+    root = ET.Element("testsuites", {"name": "lapack_testing"})
+    grouped: "Dict[Tuple[str, str], List[CaseOutcome]]" = {}
+    for outcome in outcomes:
+        grouped.setdefault((outcome.case.library, outcome.suffix), []).append(outcome)
+
+    total_tests = 0
+    total_failures = 0
+    total_errors = 0
+    total_skipped = 0
+    for (library, suffix), suite_outcomes in grouped.items():
+        suite = ET.SubElement(
+            root, "testsuite", {"name": section_title(library, [suffix])}
+        )
+        failures = 0
+        errors = 0
+        skipped = 0
+        suite_time = 0.0
+        timed = False
+        for outcome in suite_outcomes:
+            element = junit_testcase(outcome)
+            suite.append(element)
+            if element.find("failure") is not None:
+                failures += 1
+            elif element.find("error") is not None:
+                errors += 1
+            elif element.find("skipped") is not None:
+                skipped += 1
+            if outcome.duration is not None:
+                suite_time += outcome.duration
+                timed = True
+        suite.set("tests", str(len(suite_outcomes)))
+        suite.set("failures", str(failures))
+        suite.set("errors", str(errors))
+        suite.set("skipped", str(skipped))
+        if timed:
+            suite.set("time", "{:.3f}".format(suite_time))
+        total_tests += len(suite_outcomes)
+        total_failures += failures
+        total_errors += errors
+        total_skipped += skipped
+
+    if unrecognized:
+        message = (
+            "{} .out file(s) in the testing directories are not known to "
+            "this script and were not analyzed".format(len(unrecognized))
+        )
+        suite = ET.SubElement(
+            root,
+            "testsuite",
+            {
+                "name": "lapack_testing.py",
+                "tests": "1",
+                "failures": "1",
+                "errors": "0",
+                "skipped": "0",
+            },
+        )
+        testcase = ET.SubElement(
+            suite,
+            "testcase",
+            {"classname": "lapack_testing", "name": "unrecognized .out files"},
+        )
+        failure = ET.SubElement(testcase, "failure")
+        failure.set("message", sanitize_xml_text(message))
+        failure.text = sanitize_xml_text("\n".join([message] + list(unrecognized)))
+        total_tests += 1
+        total_failures += 1
+
+    root.set("tests", str(total_tests))
+    root.set("failures", str(total_failures))
+    root.set("errors", str(total_errors))
+    root.set("skipped", str(total_skipped))
+    return ET.ElementTree(root)
+
+
+def write_junit_xml(
+    path: Path, outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+) -> "Optional[str]":
+    """Write the JUnit XML report requested via ``--junit-xml``.
+
+    The file is written atomically: first to a temporary file next to
+    the target, which is renamed over it only when complete, so an
+    aborted run does not leave a truncated report behind.
+
+    Args:
+        path: The target path of the report; missing parent directories
+            are created.
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+
+    Returns:
+        An error message if the report could not be written, otherwise
+        None.
+    """
+    # Path.with_name below would raise ValueError for such a path.
+    if not path.name:
+        return "cannot write {}: the path has no file name".format(path)
+    tree = build_junit_tree(outcomes, unrecognized)
+    # ET.indent is Python 3.9+; without it the report is one long line,
+    # which every consumer accepts just the same.
+    indent = getattr(ET, "indent", None)
+    if indent is not None:
+        indent(tree)
+    temporary_path = path.with_name(path.name + ".tmp")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tree.write(str(temporary_path), encoding="UTF-8", xml_declaration=True)
+        temporary_path.replace(path)
+    except OSError as error:
+        try:
+            temporary_path.unlink()
+        except OSError:
+            pass
+        return "cannot write {}: {}".format(path, error)
+    return None
+
+
 def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     """Parse the command line arguments.
 
@@ -983,8 +1335,8 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         The parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Analyze the .out files produced by the LAPACK and "
-        "BLAS test suites and print a summary of the test results.",
+        description="Analyze the .out files produced by the LAPACK, BLAS "
+        "and CBLAS test suites and print a summary of the test results.",
         epilog="By default all precisions and all test families are "
         "analyzed, each library is reported in its own section, and both "
         "the default API and extended API (_64) outputs are summarized "
@@ -1004,12 +1356,18 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "skipped without warning if it does not exist (default: %(default)s)",
     )
     parser.add_argument(
+        "--cblas-dir",
+        default=str(Path("CBLAS") / "testing"),
+        help="directory containing the CBLAS testing output (.out) files; "
+        "skipped without warning if it does not exist (default: %(default)s)",
+    )
+    parser.add_argument(
         "-b",
         "--bin",
         default=None,
         help="directory containing the test drivers for --run; by default "
-        "bin, bin/Release, bin/Debug, TESTING/LIN, TESTING/EIG and "
-        "BLAS/TESTING are probed",
+        "bin, bin/Release, bin/Debug, TESTING/LIN, TESTING/EIG, "
+        "BLAS/TESTING and CBLAS/testing are probed",
     )
     parser.add_argument(
         "-r",
@@ -1054,7 +1412,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
         "rfp=RFP format, dmd=dynamic mode decomposition, blas=BLAS, "
-        "lapack=all LAPACK families, all (default)",
+        "cblas=CBLAS, lapack=all LAPACK families, all (default)",
     )
     parser.add_argument(
         "--suffix",
@@ -1064,6 +1422,22 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         help="API variant to analyze: 'none' for the default API, '64' for "
         "the index-64 extended API; may be given twice (default: analyze "
         "whichever variants have output files)",
+    )
+    parser.add_argument(
+        "--merge-apis",
+        action="store_true",
+        help="when a library was analyzed for both the default and the "
+        "extended API and both report the same errors, summarize them in a "
+        "single section instead of one per API; affects only the summary "
+        "table, not the detailed output or the exit status",
+    )
+    parser.add_argument(
+        "--junit-xml",
+        metavar="PATH",
+        default=None,
+        help="write a JUnit XML report of the analyzed output files to "
+        "PATH (one testcase per output file), e.g. for GitLab CI test "
+        "reports; written regardless of the display and --fail-* options",
     )
     parser.add_argument(
         "--fail-on-error",
@@ -1087,7 +1461,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
 
 
 def main(argv: "Optional[Sequence[str]]" = None) -> int:
-    """Run the LAPACK and BLAS test summary tool.
+    """Run the LAPACK, BLAS and CBLAS test summary tool.
 
     Args:
         argv: The command line arguments, or None to use ``sys.argv``.
@@ -1095,7 +1469,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     Returns:
         int: The process exit status. This is 2 for usage errors, 1 if a
         condition requested via ``--fail-on-error``, ``--fail-if-empty``
-        or ``--fail-on-unrecognized`` occurred, and 0 otherwise.
+        or ``--fail-on-unrecognized`` occurred or a report requested via
+        ``--junit-xml`` could not be written, and 0 otherwise.
     """
     args = parse_args(argv)
     short_summary: bool = args.short or args.number
@@ -1109,12 +1484,15 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
-    # The BLAS tests are absent from builds that use an optimized BLAS, so
-    # a missing directory is normal and is skipped silently.  An
-    # explicitly selected library that has no directory is a usage error,
-    # though.
+    # The BLAS tests are absent from builds that use an optimized BLAS,
+    # and CBLAS is off by default, so a missing directory is normal and
+    # is skipped silently.  An explicitly selected library that has no
+    # directory is a usage error, though.
     directories: "Dict[str, Path]" = {LIBRARY_LAPACK: test_dir}
-    for library, option in ((LIBRARY_BLAS, args.blas_dir),):
+    for library, option in (
+        (LIBRARY_BLAS, args.blas_dir),
+        (LIBRARY_CBLAS, args.cblas_dir),
+    ):
         directory = Path(option)
         if directory.is_dir():
             directories[library] = directory
@@ -1206,18 +1584,21 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     grand_total = Counts()
     missing_files = 0
     run_failures = 0
+    outcomes: "List[CaseOutcome]" = []
+
+    # Counts are collected per (library, API) section first and rendered
+    # afterwards, so that --merge-apis can decide to report two API
+    # variants in one table.  The detailed output below stays per section.
+    results: "Dict[Tuple[str, str], SectionResult]" = {}
 
     for library, suffix in sections:
         directory = directories[library]
-        title = section_title(library, suffix)
         if len(sections) > 1 or suffix:
-            summary += "\n" + section_heading(title) + "\n"
             if not short_summary:
                 print(" ")
-                print(section_heading(title))
-        summary += SUMMARY_HEADER + "\n"
-        summary += SUMMARY_RULE + "\n"
-        section_total = Counts()
+                print(section_heading(section_title(library, [suffix])))
+        result = SectionResult()
+        results[(library, suffix)] = result
 
         for letter, precision_name in PRECISIONS:
             precision_cases = [
@@ -1231,6 +1612,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
 
             for case in precision_cases:
                 output_name = case.suffixed_output(suffix)
+                run_error: "Optional[str]" = None
+                duration: "Optional[float]" = None
                 if not just_errors and not short_summary:
                     print(
                         "Testing {} '{}' ({})".format(
@@ -1239,16 +1622,29 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         end=" ",
                     )
                 if args.run:
-                    error_message = run_test_case(case, suffix, directory, args.bin)
-                    if error_message is not None:
+                    start = time.monotonic()
+                    run_error = run_test_case(case, suffix, directory, args.bin)
+                    duration = time.monotonic() - start
+                    if run_error is not None:
                         run_failures += 1
                         print(
                             "---- TESTING {}... FAILED({})!".format(
-                                case.suffixed_executable(suffix), error_message
+                                case.suffixed_executable(suffix), run_error
                             )
                         )
                 lines = read_output_file(directory / output_name)
                 if lines is None:
+                    # A file that exists but cannot be read is a broken
+                    # run, not a missing one; report it as an error.
+                    if run_error is None and (directory / output_name).is_file():
+                        run_error = (
+                            "output file {} exists but could not be read".format(
+                                output_name
+                            )
+                        )
+                    outcomes.append(
+                        CaseOutcome(case, suffix, run_error, None, duration)
+                    )
                     missing_files += 1
                     if not short_summary:
                         print(
@@ -1269,7 +1665,9 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                     lines,
                 )
                 report = parse_lines(case.parser, lines)
+                outcomes.append(CaseOutcome(case, suffix, run_error, report, duration))
                 precision_total.add(report.counts)
+                result.case_counts[case.output_name] = report.counts
 
                 if not short_summary:
                     if not just_errors:
@@ -1300,16 +1698,62 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         print("")
                 sys.stdout.flush()
 
-            summary += format_summary_row(precision_name, precision_total) + "\n"
-            section_total.add(precision_total)
+            result.precisions.append((precision_name, precision_total))
+            result.total.add(precision_total)
 
-        if args.prec == "x":
-            summary += (
-                "\n" + format_summary_row("--> ALL PRECISIONS", section_total) + "\n"
-            )
-        grand_total.add(section_total)
+        grand_total.add(result.total)
 
     log.close()
+
+    # Group the sections for rendering, collapsing a library's API
+    # variants into one table when --merge-apis is given and their errors
+    # agree.  A missing output file leaves no entry to compare, so a
+    # partial run never collapses.
+    rendered: "List[Tuple[str, List[str], SectionResult]]" = []
+    for library in LIBRARIES:
+        library_suffixes = [
+            suffix for section_library, suffix in sections if section_library == library
+        ]
+        if not library_suffixes:
+            continue
+        first = results[(library, library_suffixes[0])]
+        if (
+            args.merge_apis
+            and len(library_suffixes) > 1
+            and all(
+                results[(library, suffix)].error_map() == first.error_map()
+                for suffix in library_suffixes[1:]
+            )
+        ):
+            rendered.append((library, library_suffixes, first))
+            continue
+        for suffix in library_suffixes:
+            rendered.append((library, [suffix], results[(library, suffix)]))
+
+    for library, shown_suffixes, result in rendered:
+        if len(rendered) > 1 or shown_suffixes != [""]:
+            summary += (
+                "\n" + section_heading(section_title(library, shown_suffixes)) + "\n"
+            )
+        summary += SUMMARY_HEADER + "\n"
+        summary += SUMMARY_RULE + "\n"
+        for precision_name, precision_total in result.precisions:
+            summary += format_summary_row(precision_name, precision_total) + "\n"
+        if args.prec == "x":
+            summary += (
+                "\n" + format_summary_row("--> ALL PRECISIONS", result.total) + "\n"
+            )
+        if len(shown_suffixes) > 1 and any(
+            results[(library, suffix)].case_counts[name].runs != counts.runs
+            for suffix in shown_suffixes[1:]
+            for name, counts in result.case_counts.items()
+        ):
+            # The errors agree, which is what the sections were collapsed
+            # on, but the run counts do not; say which one is shown.
+            summary += SUMMARY_INDENT + (
+                "test counts differ between the APIs; those shown are the "
+                "{}'s\n".format(api_name(shown_suffixes[0]))
+            )
 
     if args.number:
         print(grand_total.numerical)
@@ -1342,11 +1786,19 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         for name in unrecognized:
             print("    {}".format(name), file=sys.stderr)
 
+    junit_error: "Optional[str]" = None
+    if args.junit_xml is not None:
+        junit_error = write_junit_xml(Path(args.junit_xml), outcomes, unrecognized)
+        if junit_error is not None:
+            print("lapack_testing.py: {}".format(junit_error), file=sys.stderr)
+
     if args.fail_if_empty and grand_total.runs == 0:
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1
     if args.fail_on_error and (grand_total.errors > 0 or run_failures):
+        return 1
+    if junit_error is not None:
         return 1
     return 0
 

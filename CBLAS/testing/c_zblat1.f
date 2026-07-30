@@ -8,6 +8,8 @@
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
+      CHARACTER*15     SUBNAM
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Scalars ..
@@ -17,6 +19,8 @@
       EXTERNAL         CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
+      COMMON           /NAMBLA/SUBNAM
 *     .. Data statements ..
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
@@ -31,6 +35,8 @@
 *        these parameters.
 *
          PASS = .TRUE.
+         NTESTS = 0
+         NFAILS = 0
          INCX = 9999
          INCY = 9999
          MODE = 9999
@@ -41,11 +47,14 @@
          END IF
 *        -- Print
          IF (PASS) WRITE (NOUT,99998)
+         WRITE (NOUT,99997) SUBNAM, NTESTS, NFAILS
    20 CONTINUE
       STOP
 *
 99999 FORMAT (' Complex CBLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
+99997 FORMAT (1X,A15,' COMPUTATIONAL TESTS:',I9,' RUN,',I9,
+     +        ' FAILED')
       END
 
 *  =====================================================================
@@ -55,12 +64,14 @@
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
+      CHARACTER*15     SUBNAM
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
       CHARACTER*15      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /NAMBLA/SUBNAM
 *     .. Data statements ..
       DATA             L(1)/'CBLAS_ZDOTC'/
       DATA             L(2)/'CBLAS_ZDOTU'/
@@ -75,6 +86,7 @@
       DATA             L(11)/'CBLAS_ZAXPBY'/
 
 *     .. Executable Statements ..
+      SUBNAM = L(ICASE)
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
 *
@@ -607,6 +619,7 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION SCOMP(LEN), SSIZE(LEN), STRUE(LEN)
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Scalars ..
@@ -619,12 +632,15 @@
       INTRINSIC        ABS
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
 *     .. Executable Statements ..
 *
       DO 40 I = 1, LEN
+         NTESTS = NTESTS + 1
          SD = SCOMP(I) - STRUE(I)
          IF (SDIFF(ABS(SSIZE(I))+ABS(SFAC*SD),ABS(SSIZE(I))).EQ.0.0D0)
      +       GO TO 40
+         NFAILS = NFAILS + 1
 *
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
 *
@@ -735,14 +751,18 @@
 *     .. Scalar Arguments ..
       INTEGER           ICOMP, ITRUE
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
       INTEGER           ID
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
 *     .. Executable Statements ..
+      NTESTS = NTESTS + 1
       IF (ICOMP.EQ.ITRUE) GO TO 40
+      NFAILS = NFAILS + 1
 *
 *                            HERE ICOMP IS NOT EQUAL TO ITRUE.
 *

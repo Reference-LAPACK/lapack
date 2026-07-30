@@ -66,7 +66,7 @@ cblas_testing: cblaslib blaslib
 lapack_testing: tmglib lapacklib blaslib
 	$(MAKE) -C TESTING/LIN cleanexe
 	$(MAKE) -C TESTING
-	./lapack_testing.py --fail-if-empty --fail-on-unrecognized
+	./lapack_testing.py --fail-if-empty --fail-on-unrecognized --merge-apis --junit-xml lapack_testing_junit.xml
 
 .PHONY: variants_testing
 variants_testing: tmglib variants lapacklib blaslib
