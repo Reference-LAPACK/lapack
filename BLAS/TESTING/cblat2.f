@@ -3451,7 +3451,7 @@
 *
  9999 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEAD',
      $      ' OF ', I2, ' *******' )
- 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A6, ' INSTE',
+ 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A, ' INSTE',
      $      'AD OF ', A6, ' *******' )
  9997 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6,
      $      ' *******' )
