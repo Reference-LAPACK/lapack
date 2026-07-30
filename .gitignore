@@ -27,6 +27,7 @@ CBLAS/examples/cblas_ex1
 CBLAS/examples/cblas_ex2
 
 # LAPACK testing
+/lapack_testing_junit.xml
 TESTING/LIN/xlintst*
 TESTING/EIG/xeigtst*
 TESTING/EIG/xdmd*

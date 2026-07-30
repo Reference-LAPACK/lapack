@@ -39,6 +39,10 @@ Examples:
 
     ./lapack_testing.py -t blas
         Summarize only the BLAS test output.
+
+    ./lapack_testing.py -s --junit-xml results.xml
+        Print only the summary table and also write a JUnit XML report
+        of the analyzed output files, e.g. for GitLab CI test reports.
 """
 
 from __future__ import annotations
@@ -50,6 +54,8 @@ import os
 import re
 import subprocess
 import sys
+import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -64,6 +70,9 @@ PRECISIONS: "Tuple[Tuple[str, str], ...]" = (
     ("c", "COMPLEX"),
     ("z", "COMPLEX16"),
 )
+
+# Summary table label of each precision letter, e.g. "s" -> "REAL".
+PRECISION_NAMES: "Dict[str, str]" = dict(PRECISIONS)
 
 # Second precision letter of the mixed-precision linear equation tests.
 MIXED_PARTNER: "Dict[str, str]" = {"d": "s", "z": "c"}
@@ -365,6 +374,24 @@ class TestCase:
             The executable name, e.g. ``xeigtsts_64``.
         """
         return self.executable + suffix
+
+
+@dataclass
+class CaseOutcome:
+    """Analysis outcome of one test case in one API variant.
+
+    Collected in analysis order for the JUnit XML report: the parsing
+    result of the output file (or None when the file was missing), the
+    error message of a driver run that failed under ``--run`` or of an
+    output file that could not be read, and the wall-clock duration of
+    the driver run when ``--run`` was given.
+    """
+
+    case: TestCase
+    suffix: str
+    run_error: "Optional[str]" = None
+    report: "Optional[FileReport]" = None
+    duration: "Optional[float]" = None
 
 
 def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]":
@@ -1046,6 +1073,258 @@ class SummaryLog:
             self._handle.close()
 
 
+# Characters that must not appear in XML 1.0 text (the complement of its
+# Char production).  Fortran test output can contain control characters,
+# which would make consumers reject the whole report.
+RE_XML_FORBIDDEN = re.compile("[^\t\n\r\x20-\ud7ff\ue000-\ufffd\U00010000-\U0010ffff]")
+
+# Cap on the text of one JUnit failure/error element.  GitLab CI shows
+# the text in the test details; an abandoned BLAS run can log megabytes.
+JUNIT_TEXT_LIMIT = 16 * 1024
+
+
+def sanitize_xml_text(text: str) -> str:
+    """Replace characters that must not appear in XML 1.0 text.
+
+    Args:
+        text: The text to sanitize.
+
+    Returns:
+        The text with each forbidden character replaced by U+FFFD, the
+        same replacement character used when decoding the output files.
+    """
+    return RE_XML_FORBIDDEN.sub("\ufffd", text)
+
+
+def counts_message(counts: Counts) -> str:
+    """Format the one-line counts summary of an analyzed output file.
+
+    Args:
+        counts: The counts of the file.
+
+    Returns:
+        A summary such as ``"17 numerical error(s), 2 other error(s)
+        (illegal: 2, info: 0), 1298 test(s) run"``.
+    """
+    parts: "List[str]" = []
+    if counts.numerical:
+        parts.append("{} numerical error(s)".format(counts.numerical))
+    if counts.other:
+        parts.append(
+            "{} other error(s) (illegal: {}, info: {})".format(
+                counts.other, counts.illegal, counts.info
+            )
+        )
+    parts.append("{} test(s) run".format(counts.runs))
+    return ", ".join(parts)
+
+
+def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
+    """Build the JUnit ``<testcase>`` element of one analyzed test case.
+
+    The element carries at most one status child: an ``<error>`` when
+    the driver could not be run under ``--run`` or the output file
+    could not be read, a ``<skipped>`` when the output file was
+    missing, a ``<failure>`` for numerical errors,
+    an ``<error>`` for other (illegal value / INFO) errors, and none
+    when everything passed.  GitLab CI displays the element text of the
+    status child and ignores its ``message`` attribute, so the text
+    always carries the full story: the message first, then the notable
+    lines of the output file.
+
+    Args:
+        outcome: The analysis outcome of the test case.
+
+    Returns:
+        The ``<testcase>`` element.
+    """
+    case = outcome.case
+    element = ET.Element(
+        "testcase",
+        {
+            "classname": "{}{}.{}".format(case.library, outcome.suffix, case.family),
+            "name": "{} ({} {})".format(
+                case.suffixed_output(outcome.suffix),
+                PRECISION_NAMES[case.precision],
+                case.description,
+            ),
+        },
+    )
+    if case.input_name is not None:
+        # The source-tree input file, as a repository-relative path.
+        element.set(
+            "file", "{}/{}".format(SOURCE_INPUT_DIRS[case.library], case.input_name)
+        )
+    report = outcome.report
+    if report is not None:
+        element.set("assertions", str(report.counts.runs))
+    if outcome.duration is not None:
+        element.set("time", "{:.3f}".format(outcome.duration))
+
+    details: "List[str]" = []
+    if outcome.run_error is not None:
+        status = "error"
+        message = outcome.run_error
+        if report is not None:
+            details.append(counts_message(report.counts))
+    elif report is None:
+        status = "skipped"
+        message = "expected output file {} was missing".format(
+            case.suffixed_output(outcome.suffix)
+        )
+    elif report.counts.errors > 0:
+        status = "failure" if report.counts.numerical > 0 else "error"
+        message = counts_message(report.counts)
+    else:
+        return element
+    if report is not None:
+        details.extend(line.rstrip("\n") for line in report.notable_lines)
+
+    child = ET.SubElement(element, status)
+    child.set("message", sanitize_xml_text(message))
+    text = "\n".join([message] + details)
+    if len(text) > JUNIT_TEXT_LIMIT:
+        text = text[:JUNIT_TEXT_LIMIT] + "\n... [output truncated]"
+    child.text = sanitize_xml_text(text)
+    return element
+
+
+def build_junit_tree(
+    outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+) -> "ET.ElementTree":
+    """Build the JUnit XML document for the analyzed test cases.
+
+    The document holds one ``<testsuite>`` per (library, API) section,
+    in analysis order, with one ``<testcase>`` per output file.  Output
+    files this script does not recognize are reported as one extra
+    failing test case in a synthetic ``lapack_testing.py`` suite, so
+    that the report does not look clean while ``--fail-on-unrecognized``
+    fails the run.
+
+    Args:
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+
+    Returns:
+        The document; its root is a ``<testsuites>`` element.
+    """
+    root = ET.Element("testsuites", {"name": "lapack_testing"})
+    grouped: "Dict[Tuple[str, str], List[CaseOutcome]]" = {}
+    for outcome in outcomes:
+        grouped.setdefault((outcome.case.library, outcome.suffix), []).append(outcome)
+
+    total_tests = 0
+    total_failures = 0
+    total_errors = 0
+    total_skipped = 0
+    for (library, suffix), suite_outcomes in grouped.items():
+        suite = ET.SubElement(
+            root, "testsuite", {"name": section_title(library, [suffix])}
+        )
+        failures = 0
+        errors = 0
+        skipped = 0
+        suite_time = 0.0
+        timed = False
+        for outcome in suite_outcomes:
+            element = junit_testcase(outcome)
+            suite.append(element)
+            if element.find("failure") is not None:
+                failures += 1
+            elif element.find("error") is not None:
+                errors += 1
+            elif element.find("skipped") is not None:
+                skipped += 1
+            if outcome.duration is not None:
+                suite_time += outcome.duration
+                timed = True
+        suite.set("tests", str(len(suite_outcomes)))
+        suite.set("failures", str(failures))
+        suite.set("errors", str(errors))
+        suite.set("skipped", str(skipped))
+        if timed:
+            suite.set("time", "{:.3f}".format(suite_time))
+        total_tests += len(suite_outcomes)
+        total_failures += failures
+        total_errors += errors
+        total_skipped += skipped
+
+    if unrecognized:
+        message = (
+            "{} .out file(s) in the testing directories are not known to "
+            "this script and were not analyzed".format(len(unrecognized))
+        )
+        suite = ET.SubElement(
+            root,
+            "testsuite",
+            {
+                "name": "lapack_testing.py",
+                "tests": "1",
+                "failures": "1",
+                "errors": "0",
+                "skipped": "0",
+            },
+        )
+        testcase = ET.SubElement(
+            suite,
+            "testcase",
+            {"classname": "lapack_testing", "name": "unrecognized .out files"},
+        )
+        failure = ET.SubElement(testcase, "failure")
+        failure.set("message", sanitize_xml_text(message))
+        failure.text = sanitize_xml_text("\n".join([message] + list(unrecognized)))
+        total_tests += 1
+        total_failures += 1
+
+    root.set("tests", str(total_tests))
+    root.set("failures", str(total_failures))
+    root.set("errors", str(total_errors))
+    root.set("skipped", str(total_skipped))
+    return ET.ElementTree(root)
+
+
+def write_junit_xml(
+    path: Path, outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+) -> "Optional[str]":
+    """Write the JUnit XML report requested via ``--junit-xml``.
+
+    The file is written atomically: first to a temporary file next to
+    the target, which is renamed over it only when complete, so an
+    aborted run does not leave a truncated report behind.
+
+    Args:
+        path: The target path of the report; missing parent directories
+            are created.
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+
+    Returns:
+        An error message if the report could not be written, otherwise
+        None.
+    """
+    # Path.with_name below would raise ValueError for such a path.
+    if not path.name:
+        return "cannot write {}: the path has no file name".format(path)
+    tree = build_junit_tree(outcomes, unrecognized)
+    # ET.indent is Python 3.9+; without it the report is one long line,
+    # which every consumer accepts just the same.
+    indent = getattr(ET, "indent", None)
+    if indent is not None:
+        indent(tree)
+    temporary_path = path.with_name(path.name + ".tmp")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tree.write(str(temporary_path), encoding="UTF-8", xml_declaration=True)
+        temporary_path.replace(path)
+    except OSError as error:
+        try:
+            temporary_path.unlink()
+        except OSError:
+            pass
+        return "cannot write {}: {}".format(path, error)
+    return None
+
+
 def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     """Parse the command line arguments.
 
@@ -1153,6 +1432,14 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "table, not the detailed output or the exit status",
     )
     parser.add_argument(
+        "--junit-xml",
+        metavar="PATH",
+        default=None,
+        help="write a JUnit XML report of the analyzed output files to "
+        "PATH (one testcase per output file), e.g. for GitLab CI test "
+        "reports; written regardless of the display and --fail-* options",
+    )
+    parser.add_argument(
         "--fail-on-error",
         action="store_true",
         help="exit with a nonzero status if any test failure or error was "
@@ -1182,7 +1469,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     Returns:
         int: The process exit status. This is 2 for usage errors, 1 if a
         condition requested via ``--fail-on-error``, ``--fail-if-empty``
-        or ``--fail-on-unrecognized`` occurred, and 0 otherwise.
+        or ``--fail-on-unrecognized`` occurred or a report requested via
+        ``--junit-xml`` could not be written, and 0 otherwise.
     """
     args = parse_args(argv)
     short_summary: bool = args.short or args.number
@@ -1296,6 +1584,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
     grand_total = Counts()
     missing_files = 0
     run_failures = 0
+    outcomes: "List[CaseOutcome]" = []
 
     # Counts are collected per (library, API) section first and rendered
     # afterwards, so that --merge-apis can decide to report two API
@@ -1323,6 +1612,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
 
             for case in precision_cases:
                 output_name = case.suffixed_output(suffix)
+                run_error: "Optional[str]" = None
+                duration: "Optional[float]" = None
                 if not just_errors and not short_summary:
                     print(
                         "Testing {} '{}' ({})".format(
@@ -1331,16 +1622,29 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         end=" ",
                     )
                 if args.run:
-                    error_message = run_test_case(case, suffix, directory, args.bin)
-                    if error_message is not None:
+                    start = time.monotonic()
+                    run_error = run_test_case(case, suffix, directory, args.bin)
+                    duration = time.monotonic() - start
+                    if run_error is not None:
                         run_failures += 1
                         print(
                             "---- TESTING {}... FAILED({})!".format(
-                                case.suffixed_executable(suffix), error_message
+                                case.suffixed_executable(suffix), run_error
                             )
                         )
                 lines = read_output_file(directory / output_name)
                 if lines is None:
+                    # A file that exists but cannot be read is a broken
+                    # run, not a missing one; report it as an error.
+                    if run_error is None and (directory / output_name).is_file():
+                        run_error = (
+                            "output file {} exists but could not be read".format(
+                                output_name
+                            )
+                        )
+                    outcomes.append(
+                        CaseOutcome(case, suffix, run_error, None, duration)
+                    )
                     missing_files += 1
                     if not short_summary:
                         print(
@@ -1361,6 +1665,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                     lines,
                 )
                 report = parse_lines(case.parser, lines)
+                outcomes.append(CaseOutcome(case, suffix, run_error, report, duration))
                 precision_total.add(report.counts)
                 result.case_counts[case.output_name] = report.counts
 
@@ -1481,11 +1786,19 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         for name in unrecognized:
             print("    {}".format(name), file=sys.stderr)
 
+    junit_error: "Optional[str]" = None
+    if args.junit_xml is not None:
+        junit_error = write_junit_xml(Path(args.junit_xml), outcomes, unrecognized)
+        if junit_error is not None:
+            print("lapack_testing.py: {}".format(junit_error), file=sys.stderr)
+
     if args.fail_if_empty and grand_total.runs == 0:
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1
     if args.fail_on_error and (grand_total.errors > 0 or run_failures):
+        return 1
+    if junit_error is not None:
         return 1
     return 0
 
