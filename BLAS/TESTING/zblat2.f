@@ -3425,7 +3425,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO
-      CHARACTER*6        SRNAME
+      CHARACTER*(*)      SRNAME
 *     .. Scalars in Common ..
       INTEGER            NXRUN, NXFAIL, NXBAD
       INTEGER            INFOT, NOUT
@@ -3435,6 +3435,8 @@
       COMMON             /INFOC/INFOT, NOUT, OK, LERR
       COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
       COMMON             /SRNAMC/SRNAMT
+*     .. Locals ..
+      INTEGER            SRLEN
 *     .. Executable Statements ..
       LERR = .TRUE.
       IF( INFO.NE.INFOT )THEN
@@ -3446,7 +3448,8 @@
          OK = .FALSE.
          NXBAD = 1
       END IF
-      IF( SRNAME.NE.SRNAMT )THEN
+      SRLEN = MIN(LEN_TRIM(SRNAME), LEN_TRIM(SRNAMT))
+      IF( SRNAME(1:SRLEN).NE.SRNAMT(1:SRLEN) )THEN
          WRITE( NOUT, FMT = 9998 )SRNAME, SRNAMT
          OK = .FALSE.
          NXBAD = 1
