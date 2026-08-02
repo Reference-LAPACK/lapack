@@ -1353,8 +1353,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-               IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1616,8 +1616,8 @@
 *
                   RESULT( 27 ) = TEMP1 / TEMP2
 *
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
@@ -1676,8 +1676,8 @@
 *
                IF( CRANGE ) THEN
                   NTEST = 29
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL

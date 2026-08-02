@@ -1261,8 +1261,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( REAL( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
