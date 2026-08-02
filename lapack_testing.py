@@ -1382,13 +1382,19 @@ def markdown_count_cell(count: int, runs: int) -> str:
         runs: The number of tests run, for the percentage.
 
     Returns:
-        The cell text, e.g. ``"3 (0.1%)"``; nonzero counts are bold.
+        The cell text, e.g. ``"3 (0.64%)"``; nonzero counts are bold,
+        and their percentage is rounded up to 0.01% when it would
+        otherwise display as 0.00%.
     """
     if runs > 0:
         percent = 100.0 * count / runs
     else:
         percent = 0.0
-    cell = "{:,} ({:.1f}%)".format(count, percent)
+    percent_str = "{:.2f}".format(percent)
+    if count > 0 and runs > 0 and percent_str == "0.00":
+        # A nonzero error count must not read as a zero error rate.
+        percent_str = "0.01"
+    cell = "{:,} ({}%)".format(count, percent_str)
     if count > 0:
         cell = "**{}**".format(cell)
     return cell
