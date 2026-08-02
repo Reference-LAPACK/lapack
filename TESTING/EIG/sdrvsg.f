@@ -645,8 +645,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( REAL( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( REAL( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
