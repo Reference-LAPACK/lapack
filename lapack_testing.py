@@ -973,6 +973,29 @@ SUMMARY_HEADER = SUMMARY_INDENT + "{:<18}   {:>13}   {:>18}   {:>18}".format(
 SUMMARY_RULE = SUMMARY_INDENT + "   ".join(("=" * 18, "=" * 13, "=" * 18, "=" * 18))
 
 
+def error_percent(count: int, runs: int) -> str:
+    """Format the error rate of one summary cell, e.g. ``"0.64"``.
+
+    Args:
+        count: The number of errors.
+        runs: The number of tests run.
+
+    Returns:
+        The percentage with two decimals.  A nonzero count whose
+        percentage would display as 0.00 is rounded up to 0.01, so that
+        it cannot read as a zero error rate; a zero-run cell keeps 0.00
+        because it has no meaningful rate at all.
+    """
+    if runs > 0:
+        percent = 100.0 * count / runs
+    else:
+        percent = 0.0
+    percent_str = "{:.2f}".format(percent)
+    if count > 0 and runs > 0 and percent_str == "0.00":
+        percent_str = "0.01"
+    return percent_str
+
+
 def format_summary_row(label: str, counts: Counts) -> str:
     """Format one row of the summary table.
 
@@ -983,15 +1006,9 @@ def format_summary_row(label: str, counts: Counts) -> str:
     Returns:
         The formatted table row without trailing newline.
     """
-    if counts.runs > 0:
-        numerical_percent = 100.0 * counts.numerical / counts.runs
-        other_percent = 100.0 * counts.other / counts.runs
-    else:
-        numerical_percent = 0.0
-        other_percent = 0.0
-    numerical_percent_str = "({:.1f}%)".format(numerical_percent)
-    other_percent_str = "({:.1f}%)".format(other_percent)
-    return SUMMARY_INDENT + "{:<18}   {:>13}   {:>9} {:>8}   {:>9} {:>8}".format(
+    numerical_percent_str = "({}%)".format(error_percent(counts.numerical, counts.runs))
+    other_percent_str = "({}%)".format(error_percent(counts.other, counts.runs))
+    return SUMMARY_INDENT + "{:<18}   {:>13}   {:>8} {:>9}   {:>8} {:>9}".format(
         label,
         counts.runs,
         counts.numerical,
@@ -1384,17 +1401,9 @@ def markdown_count_cell(count: int, runs: int) -> str:
     Returns:
         The cell text, e.g. ``"3 (0.64%)"``; nonzero counts are bold,
         and their percentage is rounded up to 0.01% when it would
-        otherwise display as 0.00%.
+        otherwise display as 0.00% (see ``error_percent``).
     """
-    if runs > 0:
-        percent = 100.0 * count / runs
-    else:
-        percent = 0.0
-    percent_str = "{:.2f}".format(percent)
-    if count > 0 and runs > 0 and percent_str == "0.00":
-        # A nonzero error count must not read as a zero error rate.
-        percent_str = "0.01"
-    cell = "{:,} ({}%)".format(count, percent_str)
+    cell = "{:,} ({}%)".format(count, error_percent(count, runs))
     if count > 0:
         cell = "**{}**".format(cell)
     return cell
