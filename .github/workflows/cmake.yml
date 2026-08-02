@@ -137,7 +137,7 @@ jobs:
         ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
       run: |
         cd build 2>/dev/null || exit 0
-        python3 lapack_testing.py -s -d TESTING --merge-apis --markdown summary.md || true
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
         if [ -f summary.md ]; then
           cat summary.md >> "$GITHUB_STEP_SUMMARY"
           if [ -n "$ARTIFACT_URL" ]; then
@@ -207,7 +207,7 @@ jobs:
         ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
       run: |
         cd build 2>/dev/null || exit 0
-        python3 lapack_testing.py -s -d TESTING --merge-apis --markdown summary.md || true
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
         if [ -f summary.md ]; then
           cat summary.md >> "$GITHUB_STEP_SUMMARY"
           if [ -n "$ARTIFACT_URL" ]; then
