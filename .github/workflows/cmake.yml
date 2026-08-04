@@ -7,6 +7,7 @@ on:
     - try-github-actions-for-windows
     paths:
     - .github/workflows/cmake.yml
+    - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
     - 'CBLAS/**'
@@ -21,6 +22,7 @@ on:
   pull_request:
     paths:
     - .github/workflows/cmake.yml
+    - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
     - 'CBLAS/**'
@@ -115,6 +117,34 @@ jobs:
       if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
 
+    - name: Upload test results
+      id: upload-test-results
+      # Uploaded even when the tests failed; that is when the results
+      # are needed most.  The test summary below links to the artifact.
+      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: test-results-${{ matrix.os }}-${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
@@ -158,6 +188,32 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
+
+    - name: Upload test results
+      id: upload-test-results
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: test-results-extended-api-shared-${{ matrix.shared_libs }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
 
   coverage:
 

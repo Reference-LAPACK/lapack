@@ -43,11 +43,17 @@ Examples:
     ./lapack_testing.py -s --junit-xml results.xml
         Print only the summary table and also write a JUnit XML report
         of the analyzed output files, e.g. for GitLab CI test reports.
+
+    ./lapack_testing.py -s --markdown summary.md
+        Print only the summary table and also write a GitHub-flavored
+        Markdown report of the test results, e.g. for GitHub Actions
+        step summaries ($GITHUB_STEP_SUMMARY).
 """
 
 from __future__ import annotations
 
 import argparse
+import html
 import io
 import math
 import os
@@ -967,6 +973,29 @@ SUMMARY_HEADER = SUMMARY_INDENT + "{:<18}   {:>13}   {:>18}   {:>18}".format(
 SUMMARY_RULE = SUMMARY_INDENT + "   ".join(("=" * 18, "=" * 13, "=" * 18, "=" * 18))
 
 
+def error_percent(count: int, runs: int) -> str:
+    """Format the error rate of one summary cell, e.g. ``"0.64"``.
+
+    Args:
+        count: The number of errors.
+        runs: The number of tests run.
+
+    Returns:
+        The percentage with two decimals.  A nonzero count whose
+        percentage would display as 0.00 is rounded up to 0.01, so that
+        it cannot read as a zero error rate; a zero-run cell keeps 0.00
+        because it has no meaningful rate at all.
+    """
+    if runs > 0:
+        percent = 100.0 * count / runs
+    else:
+        percent = 0.0
+    percent_str = "{:.2f}".format(percent)
+    if count > 0 and runs > 0 and percent_str == "0.00":
+        percent_str = "0.01"
+    return percent_str
+
+
 def format_summary_row(label: str, counts: Counts) -> str:
     """Format one row of the summary table.
 
@@ -977,15 +1006,9 @@ def format_summary_row(label: str, counts: Counts) -> str:
     Returns:
         The formatted table row without trailing newline.
     """
-    if counts.runs > 0:
-        numerical_percent = 100.0 * counts.numerical / counts.runs
-        other_percent = 100.0 * counts.other / counts.runs
-    else:
-        numerical_percent = 0.0
-        other_percent = 0.0
-    numerical_percent_str = "({:.1f}%)".format(numerical_percent)
-    other_percent_str = "({:.1f}%)".format(other_percent)
-    return SUMMARY_INDENT + "{:<18}   {:>13}   {:>9} {:>8}   {:>9} {:>8}".format(
+    numerical_percent_str = "({}%)".format(error_percent(counts.numerical, counts.runs))
+    other_percent_str = "({}%)".format(error_percent(counts.other, counts.runs))
+    return SUMMARY_INDENT + "{:<18}   {:>13}   {:>8} {:>9}   {:>8} {:>9}".format(
         label,
         counts.runs,
         counts.numerical,
@@ -1325,6 +1348,347 @@ def write_junit_xml(
     return None
 
 
+def api_counts_differ(
+    results: "Dict[Tuple[str, str], SectionResult]",
+    library: str,
+    shown_suffixes: "Sequence[str]",
+) -> bool:
+    """Return whether a merged section's APIs ran different test counts.
+
+    A library's API variants are merged into one summary section only
+    when their errors agree, but the number of tests run may still
+    differ between the APIs.  The rendered table then shows the first
+    API's counts and points that out.
+
+    Args:
+        results: The results of every analyzed (library, API) section.
+        library: The library of the merged section.
+        shown_suffixes: The API suffixes the section covers.
+
+    Returns:
+        True when at least two of the section's API variants ran a
+        different number of tests.
+    """
+    if len(shown_suffixes) < 2:
+        return False
+    first = results[(library, shown_suffixes[0])]
+    return any(
+        results[(library, suffix)].case_counts[name].runs != counts.runs
+        for suffix in shown_suffixes[1:]
+        for name, counts in first.case_counts.items()
+    )
+
+
+# Cap on the collapsible detail text of one Markdown report entry, in
+# UTF-8 bytes and in the spirit of JUNIT_TEXT_LIMIT: an abandoned BLAS
+# run can log megabytes of notable lines.
+MARKDOWN_TEXT_LIMIT = 8 * 1024
+
+# Cap on the combined size of the failure entries of the Markdown
+# report, in UTF-8 bytes.  GitHub rejects step summaries larger than
+# 1 MiB (of bytes, not characters), and losing the whole report to one
+# bad run would be worse than an abbreviated failure list.
+MARKDOWN_ENTRIES_LIMIT = 768 * 1024
+
+
+def markdown_count_cell(count: int, runs: int) -> str:
+    """Format one error count as a Markdown summary table cell.
+
+    Args:
+        count: The number of errors.
+        runs: The number of tests run, for the percentage.
+
+    Returns:
+        The cell text, e.g. ``"3 (0.64%)"``; nonzero counts are bold,
+        and their percentage is rounded up to 0.01% when it would
+        otherwise display as 0.00% (see ``error_percent``).
+    """
+    cell = "{:,} ({}%)".format(count, error_percent(count, runs))
+    if count > 0:
+        cell = "**{}**".format(cell)
+    return cell
+
+
+def markdown_summary_table(result: SectionResult, show_total: bool) -> "List[str]":
+    """Render one section of the summary as a Markdown table.
+
+    Args:
+        result: The accumulated counts of the section.
+        show_total: Whether to append the all-precisions total row
+            (mirroring the text summary, which shows it only when all
+            precisions were analyzed).
+
+    Returns:
+        The lines of the table.
+    """
+    lines = [
+        "| Precision | Tests run | Numerical errors | Other errors |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for precision_name, counts in result.precisions:
+        lines.append(
+            "| {} | {:,} | {} | {} |".format(
+                precision_name,
+                counts.runs,
+                markdown_count_cell(counts.numerical, counts.runs),
+                markdown_count_cell(counts.other, counts.runs),
+            )
+        )
+    if show_total:
+        total = result.total
+        lines.append(
+            "| **ALL PRECISIONS** | **{:,}** | {} | {} |".format(
+                total.runs,
+                markdown_count_cell(total.numerical, total.runs),
+                markdown_count_cell(total.other, total.runs),
+            )
+        )
+    return lines
+
+
+def markdown_failure_entry(outcome: CaseOutcome) -> "List[str]":
+    """Render one failed or abnormal test case for the Markdown report.
+
+    Mirrors the statuses of ``junit_testcase``: a driver that could not
+    be run (or whose output file could not be read), a missing output
+    file, and an output file that reported errors.  The notable (error)
+    lines of the output file, when there are any, are folded into a
+    collapsible ``<details>`` block.
+
+    Args:
+        outcome: The analysis outcome of the test case.
+
+    Returns:
+        The Markdown lines of the entry, ending with a blank line.
+    """
+    case = outcome.case
+    report = outcome.report
+    details: "List[str]" = []
+    if outcome.run_error is not None:
+        message = outcome.run_error
+        if report is not None:
+            details.append(counts_message(report.counts))
+    elif report is None:
+        message = "expected output file was missing"
+    else:
+        message = counts_message(report.counts)
+    if report is not None:
+        details.extend(line.rstrip() for line in report.notable_lines)
+
+    # sanitize_xml_text also removes the surrogates that undecodable
+    # command line arguments leave in run_error messages, which the
+    # UTF-8 encoding of the report would otherwise trip over.
+    summary = "<code>{}</code> ({}) &mdash; {} {}: {}".format(
+        html.escape(case.suffixed_output(outcome.suffix)),
+        case.library,
+        PRECISION_NAMES[case.precision],
+        html.escape(case.description),
+        html.escape(sanitize_xml_text(message)),
+    )
+    if not details:
+        return ["- {}".format(summary), ""]
+    text = sanitize_xml_text("\n".join(details))
+    encoded = text.encode("utf-8")
+    if len(encoded) > MARKDOWN_TEXT_LIMIT:
+        # Cut the encoded text, since the limit is in bytes; decoding
+        # with "ignore" drops a character cut in half by the slice.
+        text = encoded[:MARKDOWN_TEXT_LIMIT].decode("utf-8", "ignore")
+        text += "\n... [output truncated]"
+    # A run of four or more backticks would end the fenced block early.
+    text = re.sub(r"`{4,}", "```", text)
+    return [
+        "<details>",
+        "<summary>{}</summary>".format(summary),
+        "",
+        "````text",
+        text,
+        "````",
+        "",
+        "</details>",
+        "",
+    ]
+
+
+def build_markdown_report(
+    rendered: "Sequence[Tuple[str, List[str], SectionResult]]",
+    results: "Dict[Tuple[str, str], SectionResult]",
+    outcomes: "Sequence[CaseOutcome]",
+    unrecognized: "Sequence[str]",
+    show_total: bool,
+) -> str:
+    """Build the Markdown report requested via ``--markdown``.
+
+    The report is GitHub-flavored Markdown: an overall status line and
+    the summary table of every section first (following the same
+    ``--merge-apis`` grouping as the text summary), then one entry per
+    failing, missing or unreadable output file, so that it can be
+    appended to a GitHub Actions step summary as-is.
+
+    Args:
+        rendered: The summary sections, as (library, shown API
+            suffixes, result) triples in reporting order.
+        results: The results of every analyzed (library, API) section.
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+        show_total: Whether the tables end in an all-precisions total
+            row.
+
+    Returns:
+        The report text.
+    """
+    failing = [
+        outcome
+        for outcome in outcomes
+        if outcome.run_error is not None
+        or outcome.report is None
+        or outcome.report.counts.errors > 0
+    ]
+    missing = sum(
+        1
+        for outcome in outcomes
+        if outcome.report is None and outcome.run_error is None
+    )
+    run_failures = sum(1 for outcome in outcomes if outcome.run_error is not None)
+
+    # The status line describes what the tables below show: with
+    # --merge-apis a merged section is counted once, so the headline
+    # matches the sum of the displayed tables.  (The exit status still
+    # accounts for every API variant separately.)
+    displayed_total = Counts()
+    for _library, _suffixes, result in rendered:
+        displayed_total.add(result.total)
+
+    lines: "List[str]" = ["## LAPACK Testing Summary", ""]
+    if displayed_total.errors > 0 or run_failures > 0:
+        # Checked before the no-results case: an abandoned run can
+        # report errors without completing a single test.
+        status = (
+            "❌ **{:,} tests run: {:,} numerical error(s), "
+            "{:,} other error(s).**".format(
+                displayed_total.runs,
+                displayed_total.numerical,
+                displayed_total.other,
+            )
+        )
+    elif displayed_total.runs == 0:
+        status = "⚠️ **No test results were analyzed.**"
+    elif missing > 0 or unrecognized:
+        status = "⚠️ **{:,} tests run, all passed.**".format(displayed_total.runs)
+    else:
+        status = "✅ **{:,} tests run, all passed.**".format(displayed_total.runs)
+    lines.append(status)
+    qualifiers: "List[str]" = []
+    if run_failures:
+        qualifiers.append(
+            "{:,} test driver run(s) failed or produced unreadable "
+            "output".format(run_failures)
+        )
+    if missing:
+        qualifiers.append("{:,} expected output file(s) were missing".format(missing))
+    if unrecognized:
+        qualifiers.append(
+            "{:,} unrecognized .out file(s) were not analyzed".format(len(unrecognized))
+        )
+    if qualifiers:
+        lines.append("")
+        lines.append("⚠️ {}.".format("; ".join(qualifiers)))
+    lines.append("")
+
+    for library, shown_suffixes, result in rendered:
+        if len(rendered) > 1 or shown_suffixes != [""]:
+            lines.append("### {}".format(section_title(library, shown_suffixes)))
+            lines.append("")
+        lines.extend(markdown_summary_table(result, show_total))
+        lines.append("")
+        if api_counts_differ(results, library, shown_suffixes):
+            lines.append(
+                "*test counts differ between the APIs; those shown are "
+                "the {}'s*".format(api_name(shown_suffixes[0]))
+            )
+            lines.append("")
+
+    if failing:
+        lines.append("### Failures and other errors")
+        lines.append("")
+        entries_size = 0
+        shown = 0
+        for outcome in failing:
+            entry = markdown_failure_entry(outcome)
+            entries_size += sum(len(line.encode("utf-8")) + 1 for line in entry)
+            if entries_size > MARKDOWN_ENTRIES_LIMIT:
+                lines.append(
+                    "- ... and {:,} more failing output file(s), omitted "
+                    "to keep the report small.".format(len(failing) - shown)
+                )
+                lines.append("")
+                break
+            lines.extend(entry)
+            shown += 1
+
+    if unrecognized:
+        lines.append("### Unrecognized output files")
+        lines.append("")
+        lines.append(
+            "{:,} `.out` file(s) in the testing directories are not known "
+            "to this script and were **not** analyzed:".format(len(unrecognized))
+        )
+        lines.append("")
+        for name in unrecognized:
+            # sanitize_xml_text also removes the surrogates that
+            # undecodable file names leave behind, which the UTF-8
+            # encoding of the report would otherwise trip over.
+            lines.append("- `{}`".format(sanitize_xml_text(name)))
+        lines.append("")
+
+    return "\n".join(lines).rstrip("\n") + "\n"
+
+
+def write_markdown_report(
+    path: Path,
+    rendered: "Sequence[Tuple[str, List[str], SectionResult]]",
+    results: "Dict[Tuple[str, str], SectionResult]",
+    outcomes: "Sequence[CaseOutcome]",
+    unrecognized: "Sequence[str]",
+    show_total: bool,
+) -> "Optional[str]":
+    """Write the Markdown report requested via ``--markdown``.
+
+    The file is written atomically, like the JUnit XML report, and
+    always in UTF-8 so that it renders the same on every platform.
+
+    Args:
+        path: The target path of the report; missing parent directories
+            are created.
+        rendered: The summary sections, as (library, shown API
+            suffixes, result) triples in reporting order.
+        results: The results of every analyzed (library, API) section.
+        outcomes: The analysis outcomes, in analysis order.
+        unrecognized: The names of the unrecognized ``.out`` files.
+        show_total: Whether the tables end in an all-precisions total
+            row.
+
+    Returns:
+        An error message if the report could not be written, otherwise
+        None.
+    """
+    # Path.with_name below would raise ValueError for such a path.
+    if not path.name:
+        return "cannot write {}: the path has no file name".format(path)
+    text = build_markdown_report(rendered, results, outcomes, unrecognized, show_total)
+    temporary_path = path.with_name(path.name + ".tmp")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_path.write_text(text, encoding="utf-8")
+        temporary_path.replace(path)
+    except OSError as error:
+        try:
+            temporary_path.unlink()
+        except OSError:
+            pass
+        return "cannot write {}: {}".format(path, error)
+    return None
+
+
 def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     """Parse the command line arguments.
 
@@ -1440,6 +1804,16 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "reports; written regardless of the display and --fail-* options",
     )
     parser.add_argument(
+        "--markdown",
+        metavar="PATH",
+        default=None,
+        help="write a GitHub-flavored Markdown report of the test results "
+        "to PATH (the summary table first, then one entry per failing "
+        "output file), e.g. for GitHub Actions step summaries "
+        "($GITHUB_STEP_SUMMARY); written regardless of the display and "
+        "--fail-* options",
+    )
+    parser.add_argument(
         "--fail-on-error",
         action="store_true",
         help="exit with a nonzero status if any test failure or error was "
@@ -1470,7 +1844,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         int: The process exit status. This is 2 for usage errors, 1 if a
         condition requested via ``--fail-on-error``, ``--fail-if-empty``
         or ``--fail-on-unrecognized`` occurred or a report requested via
-        ``--junit-xml`` could not be written, and 0 otherwise.
+        ``--junit-xml`` or ``--markdown`` could not be written, and 0
+        otherwise.
     """
     args = parse_args(argv)
     short_summary: bool = args.short or args.number
@@ -1743,11 +2118,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             summary += (
                 "\n" + format_summary_row("--> ALL PRECISIONS", result.total) + "\n"
             )
-        if len(shown_suffixes) > 1 and any(
-            results[(library, suffix)].case_counts[name].runs != counts.runs
-            for suffix in shown_suffixes[1:]
-            for name, counts in result.case_counts.items()
-        ):
+        if api_counts_differ(results, library, shown_suffixes):
             # The errors agree, which is what the sections were collapsed
             # on, but the run counts do not; say which one is shown.
             summary += SUMMARY_INDENT + (
@@ -1792,13 +2163,26 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         if junit_error is not None:
             print("lapack_testing.py: {}".format(junit_error), file=sys.stderr)
 
+    markdown_error: "Optional[str]" = None
+    if args.markdown is not None:
+        markdown_error = write_markdown_report(
+            Path(args.markdown),
+            rendered,
+            results,
+            outcomes,
+            unrecognized,
+            args.prec == "x",
+        )
+        if markdown_error is not None:
+            print("lapack_testing.py: {}".format(markdown_error), file=sys.stderr)
+
     if args.fail_if_empty and grand_total.runs == 0:
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1
     if args.fail_on_error and (grand_total.errors > 0 or run_failures):
         return 1
-    if junit_error is not None:
+    if junit_error is not None or markdown_error is not None:
         return 1
     return 0
 
