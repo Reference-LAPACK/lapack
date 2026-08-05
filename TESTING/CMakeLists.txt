@@ -99,7 +99,8 @@ if(BUILD_DOUBLE)
   add_lapack_test(dtest.out dtest.in xlintstd)
 
   # ======== DOUBLE LAPACKE LIN TESTS ====================
-  # Outputs live in the TESTING/lapacke subdirectory. Only the
+  # Outputs live in the TESTING/lapacke subdirectory, where
+  # lapack_testing.py analyzes them as their own LAPACKE section. Only the
   # work-level column-major flavor runs the error-exit tests: the row-major
   # interface has different leading-dimension semantics (LDA >= N instead
   # of LDA >= M), and the high-level interface ignores the caller's
@@ -129,6 +130,14 @@ if(BUILD_DOUBLE)
           -DOUTPUT=${LAPACK_BINARY_DIR}/TESTING/lapacke/dtest_${_layer}_${_layout}.out
           -DINTDIR=${CMAKE_CFG_INTDIR}
           -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+
+        if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
+          set_property(
+            TEST LAPACK_Test_Summary
+            APPEND PROPERTY DEPENDS
+            LAPACK-xlintstd_lapacke_${_layer}_${_layout}_dtest_in
+          )
+        endif()
       endforeach()
     endforeach()
   endif()
