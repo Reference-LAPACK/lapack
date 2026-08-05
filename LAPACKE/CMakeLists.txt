@@ -116,6 +116,7 @@ lapack_install_library(${LAPACKELIB})
 
 if(BUILD_TESTING)
   add_subdirectory(example)
+  add_subdirectory(testing)
 endif()
 
 
