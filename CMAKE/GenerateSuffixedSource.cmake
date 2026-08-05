@@ -10,6 +10,22 @@ if(NOT DEFINED REPLACE_IN_STRINGS)
   set(REPLACE_IN_STRINGS ON)
 endif()
 
+if(NOT DEFINED SUFFIX)
+  message(FATAL_ERROR "SUFFIX must be set")
+endif()
+
+# Optional allowlist: if given, only the listed symbols (case-insensitive)
+# are suffixed. Used to route a subset of the routines to alternative
+# implementations (e.g. LAPACKE test wrappers) while all other references
+# keep resolving to their default implementation.
+if(DEFINED SYMBOL_ALLOWLIST)
+  set(_symbol_allowlist)
+  foreach(_allowlist_entry IN LISTS SYMBOL_ALLOWLIST)
+    string(TOLOWER "${_allowlist_entry}" _allowlist_entry)
+    list(APPEND _symbol_allowlist "${_allowlist_entry}")
+  endforeach()
+endif()
+
 # Check whether the input file is fixed or free form based on its extension.
 get_filename_component(input_extension "${INPUT_FILE}" LAST_EXT)
 string(TOLOWER "${input_extension}" input_extension_lower)
@@ -279,7 +295,7 @@ function(_protect_fortran_string_literals input_text result count_result)
     string(REGEX MATCHALL "${string_literal_regex}" string_literals
       "${current_line}")
     foreach(string_literal IN LISTS string_literals)
-      set(placeholder "@@LAPACK_64_STRING_LITERAL_${literal_count}@@")
+      set(placeholder "@@LAPACK_SUFFIX_STRING_LITERAL_${literal_count}@@")
       string(REPLACE "${string_literal}" "${placeholder}" current_line
         "${current_line}")
       set(protected_string_literal_${literal_count} "${string_literal}"
@@ -304,7 +320,7 @@ function(_restore_fortran_string_literals input_text literal_count result)
   if(literal_count GREATER 0)
     math(EXPR last_literal_index "${literal_count} - 1")
     foreach(index RANGE 0 ${last_literal_index})
-      set(placeholder "@@LAPACK_64_STRING_LITERAL_${index}@@")
+      set(placeholder "@@LAPACK_SUFFIX_STRING_LITERAL_${index}@@")
       string(REPLACE "${placeholder}" "${protected_string_literal_${index}}"
         output_text "${output_text}")
     endforeach()
@@ -382,6 +398,19 @@ endwhile()
 list(REMOVE_DUPLICATES symbol_names)
 list(REMOVE_ITEM symbol_names ETIME etime ETIME_ etime_)
 
+# Restrict the renaming to allowlisted symbols if an allowlist was given
+if(DEFINED SYMBOL_ALLOWLIST)
+  set(_filtered_symbol_names)
+  foreach(symbol_name IN LISTS symbol_names)
+    string(TOLOWER "${symbol_name}" _symbol_name_lower)
+    list(FIND _symbol_allowlist "${_symbol_name_lower}" _symbol_allowlist_index)
+    if(NOT _symbol_allowlist_index EQUAL -1)
+      list(APPEND _filtered_symbol_names "${symbol_name}")
+    endif()
+  endforeach()
+  set(symbol_names ${_filtered_symbol_names})
+endif()
+
 # If string literals should not be modified, protect them before performing replacements
 if(NOT REPLACE_IN_STRINGS)
   _protect_fortran_string_literals(
@@ -394,7 +423,7 @@ foreach(symbol_name IN LISTS symbol_names)
   string(TOUPPER "${symbol_name}" symbol_upper)
   foreach(symbol_variant "${symbol_name}" "${symbol_lower}" "${symbol_upper}")
     set(match_regex "(^|[^A-Za-z0-9_])${symbol_variant}([^A-Za-z0-9_]|$)")
-    set(replacement "\\1${symbol_variant}_64\\2")
+    set(replacement "\\1${symbol_variant}${SUFFIX}\\2")
     string(REGEX REPLACE
       "${match_regex}" "${replacement}"
       rewritten_content "${rewritten_content}")
