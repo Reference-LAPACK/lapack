@@ -1208,6 +1208,7 @@ lapacke_dtzrzf_work.c
 )
 
 set(COMMON_SOURCES
+lapacke_alloc.c
 lapacke_nancheck.c
 )
 set(SOURCES
