@@ -44,3 +44,49 @@ foreach(_layer work high)
     target_link_libraries(${_wrapper_lib} PUBLIC ${LAPACKELIB})
   endforeach()
 endforeach()
+
+# Dedicated tests for the high-level-only behavior the Fortran test suite
+# cannot exercise: NaN checks actually detecting NaNs, and workspace /
+# transposition allocation failures (via malloc failure injection).
+#
+# One test file per routine in high_level/<name>.c, each defining one
+# function via LAPACKE_TEST(<name>). The runner main with the test table is
+# generated from the list below; to add a test, add the file and list its
+# name here.
+set(LAPACKE_HIGH_LEVEL_TESTS
+  matgen
+  dgetrf
+  dgetrs
+  dgetri
+  dpotrf
+  dpotrs
+  dgeqrf
+  dgels
+  dlange)
+
+set(LAPACKE_HIGH_LEVEL_SOURCES
+  high_level/lapacke_test.c
+  high_level/lapacke_test_alloc.c
+  high_level/lapacke_test_matgen.c
+  high_level/lapacke_test_nan_sweep.c)
+set(LAPACKE_HIGH_LEVEL_EXTERNS "")
+set(LAPACKE_HIGH_LEVEL_ENTRIES "")
+foreach(_test_name IN LISTS LAPACKE_HIGH_LEVEL_TESTS)
+  list(APPEND LAPACKE_HIGH_LEVEL_SOURCES high_level/${_test_name}.c)
+  string(APPEND LAPACKE_HIGH_LEVEL_EXTERNS
+    "extern void lapacke_test_fn_${_test_name}( void );\n")
+  string(APPEND LAPACKE_HIGH_LEVEL_ENTRIES
+    "    { \"${_test_name}\", lapacke_test_fn_${_test_name} },\n")
+endforeach()
+configure_file(high_level/lapacke_high_level_main.c.in
+  ${CMAKE_CURRENT_BINARY_DIR}/lapacke_high_level_main.c @ONLY)
+
+add_executable(xlapacke_high_level
+  ${CMAKE_CURRENT_BINARY_DIR}/lapacke_high_level_main.c
+  ${LAPACKE_HIGH_LEVEL_SOURCES})
+target_include_directories(xlapacke_high_level PRIVATE
+  ${LAPACK_SOURCE_DIR}/LAPACKE/include
+  ${LAPACK_BINARY_DIR}/include)
+target_link_libraries(xlapacke_high_level
+  ${LAPACKELIB} ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+add_test(NAME LAPACKE-high-level COMMAND xlapacke_high_level)
