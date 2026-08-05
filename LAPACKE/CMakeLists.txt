@@ -18,11 +18,9 @@ include_directories(${LAPACK_BINARY_DIR}/include include)
 add_subdirectory(src)
 add_subdirectory(utils)
 
-option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON)
-option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
-option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
-option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
-
+# The LAPACKE_BUILD_<precision> options are declared at the top level, next
+# to the LAPACKE option, so that the LAPACKE testing gates added with the
+# LAPACKE test suite can evaluate them before this directory is configured.
 foreach(precision SINGLE DOUBLE COMPLEX COMPLEX16)
   if(LAPACKE_BUILD_${precision} AND NOT BUILD_${precision})
     message(

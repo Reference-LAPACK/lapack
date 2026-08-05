@@ -347,10 +347,6 @@ else()
   add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
-if(BUILD_TESTING)
-  add_subdirectory(TESTING)
-endif()
-
 # --------------------------------------------------
 # LAPACKE
 option(LAPACKE "Build LAPACKE" OFF)
@@ -360,6 +356,19 @@ option(LAPACKE "Build LAPACKE" OFF)
 option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if(LAPACKE_WITH_TMG)
   set(LAPACKE ON)
+endif()
+
+# Declared before add_subdirectory(TESTING) so that the LAPACKE testing
+# gates added with the LAPACKE test suite can evaluate them on the first
+# configure; validated in LAPACKE/CMakeLists.txt against the
+# BUILD_<precision> options.
+option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON)
+option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
+option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
+option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
+
+if(BUILD_TESTING)
+  add_subdirectory(TESTING)
 endif()
 
 # TMGLIB
