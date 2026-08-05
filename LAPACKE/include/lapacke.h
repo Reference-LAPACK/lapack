@@ -45,11 +45,11 @@ extern "C" {
 
 /** \brief Allocate through the installed allocator (malloc by default). */
 void *LAPACKE_malloc_proxy(size_t size);
+
 /** \brief Release through the installed deallocator (free by default). */
 void LAPACKE_free_proxy(void *ptr);
-/** \brief Install a custom allocator: malloc_fn / free_fn must form a
- *  matching pair; NULL restores the defaults. Mutates global state and is
- *  not thread-safe. */
+
+/** \brief Install a custom allocator for LAPACKE-internal allocations. */
 void LAPACKE_set_alloc(void *(*malloc_fn)(size_t), void (*free_fn)(void *));
 
 #ifndef LAPACKE_malloc

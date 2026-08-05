@@ -16,7 +16,7 @@ static void *(*lapacke_malloc_fn)(size_t) = malloc;
 static void (*lapacke_free_fn)(void *) = free;
 
 /**
- * \brief Allocate memory through the installed allocator.
+ * \brief Allocate through the installed allocator (malloc by default).
  *
  * Default of the LAPACKE_malloc macro.
  *
@@ -29,7 +29,7 @@ void *LAPACKE_malloc_proxy(size_t size)
 }
 
 /**
- * \brief Release memory through the installed deallocator.
+ * \brief Release through the installed deallocator (free by default).
  *
  * Default of the LAPACKE_free macro.
  *
