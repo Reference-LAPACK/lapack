@@ -52,9 +52,10 @@
 #error "LAPACKE_TEST_LAYER must be defined as LAPACKE_TEST_LAYER_{WORK,HIGH}"
 #endif
 
-/** Nonzero when the wrappers call the high-level interface. */
-#define LAPACKE_TEST_HIGH_LEVEL_API                                            \
-    (LAPACKE_TEST_LAYER == LAPACKE_TEST_LAYER_HIGH)
+/** Nonzero when the wrappers should call the high-level interface. */
+#define LAPACKE_TEST_HIGH_LEVEL (LAPACKE_TEST_LAYER == LAPACKE_TEST_LAYER_HIGH)
+/** Nonzero when the wrappers should use row-major layout. */
+#define LAPACKE_TEST_ROW_MAJOR (LAPACKE_TEST_LAYOUT == LAPACK_ROW_MAJOR)
 
 /** Map a LAPACKE info return value back to Fortran numbering and report
  *  argument errors through the testing XERBLA. */

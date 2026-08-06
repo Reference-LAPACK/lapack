@@ -5,13 +5,13 @@
 #     BreakBeforeBraces                      Linux
 #     AllowShortFunctionsOnASingleLine       None
 #     AllowShortIfStatementsOnASingleLine    AllIfsAndElse
-#     AlwaysBreakAfterReturnType             None
+#     AlwaysBreakAfterReturnType             Automatic
 #     IncludeCategories                      system headers, then project
 #
-# AlwaysBreakAfterReturnType: None is the pre-clang-format-19 spelling of
-# BreakAfterReturnType: Automatic used by the CBLAS style; the alias is kept
-# so this file also works with older clang-format releases. Commented lines
-# are inert, so they cost nothing.
+# Generated against clang-format 22; a run of --dump-config there reproduces
+# this file's settings. Older releases will not recognise every
+# uncommented key (BreakAfterReturnType and the SortIncludes struct are 19+),
+# but commented lines are inert, so they cost nothing.
 
 BasedOnStyle: LLVM
 
@@ -137,9 +137,8 @@ AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 # BreakAfterOpenBracketIf: false
 # BreakAfterOpenBracketLoop: false
 # BreakAfterOpenBracketSwitch: false
-# Pre-clang-format-19 spelling of BreakAfterReturnType: Automatic (the
-# return type stays on the definition line unless it does not fit).
-AlwaysBreakAfterReturnType: None
+# Spelled AlwaysBreakAfterReturnType before clang-format 19.
+BreakAfterReturnType: Automatic
 # BreakArrays: true
 # BreakBeforeBinaryOperators: None
 # BreakBeforeCloseBracketBracedList: false
@@ -238,7 +237,7 @@ IndentWidth: 4
 # ObjCSpaceBeforeProtocolList: true
 # OneLineFormatOffRegex: ''
 # PackConstructorInitializers: BinPack
-# PenaltyBreakAssignment: 2
+PenaltyBreakAssignment: 200
 # PenaltyBreakBeforeFirstCallParameter: 19
 # PenaltyBreakBeforeMemberAccess: 150
 # PenaltyBreakComment: 300

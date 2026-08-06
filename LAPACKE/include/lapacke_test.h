@@ -186,8 +186,8 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
                                region, expected, reset_expr, call_expr)        \
     do {                                                                       \
         const int lts_layout = lapacke_test_layouts[layout_index];             \
-        const size_t lts_len =                                                 \
-            lapacke_test_alloc_len(lts_layout, rows, cols, ld);                \
+        const size_t lts_len = lapacke_test_alloc_len(lts_layout, rows, cols,  \
+                                                      ld);                     \
         size_t lts_p;                                                          \
         int lts_bad = 0;                                                       \
         for (lts_p = 0; lts_p < lts_len; lts_p++) {                            \
