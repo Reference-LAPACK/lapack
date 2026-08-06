@@ -28,37 +28,41 @@
 
 #include "lapacke.h"
 
-/** \brief Defines the test function collected by the generated test runner. */
+/** Defines the test function collected by the generated test runner. */
 #define LAPACKE_TEST(name) void lapacke_test_fn_##name(void)
 
 /* Dimensions of the shared test matrices. Rectangular (M > N) where the
  * routine allows it; LD leaves padding beyond the matrix in both layouts.
  * Buffers of LAPACKE_TEST_LD * LAPACKE_TEST_LD doubles fit every layout. */
+
+/** Row count of the shared test matrices. */
 #define LAPACKE_TEST_M 4
+/** Column count of the shared test matrices. */
 #define LAPACKE_TEST_N 3
+/** Number of right-hand sides in the shared test matrices. */
 #define LAPACKE_TEST_NRHS 2
+/** Leading dimension of the shared test matrix buffers. */
 #define LAPACKE_TEST_LD 5
 
-/** \brief A matrix_layout value that is neither LAPACK_COL_MAJOR nor
- *  LAPACK_ROW_MAJOR, for the invalid-layout error tests (mirrors
- *  INVALID_LAYOUT in the CBLAS tests). */
+/** A matrix_layout value that is neither LAPACK_COL_MAJOR nor
+ *  LAPACK_ROW_MAJOR, for the invalid-layout error tests. */
 #define LAPACKE_TEST_INVALID_LAYOUT 0
 
-/** \brief Global count of checks run, reported by the test runner. */
+/** Global count of checks run, reported by the test runner. */
 extern int lapacke_test_checks;
-/** \brief Global count of failed checks, reported by the test runner. */
+/** Global count of failed checks, reported by the test runner. */
 extern int lapacke_test_failures;
 
-/** \brief Both matrix layouts (indices 0 and 1), for layout loops, plus
+/** Both matrix layouts (indices 0 and 1), for layout loops, plus
  *  LAPACKE_TEST_INVALID_LAYOUT (index 2) for the argument-error tests. */
 extern const int lapacke_test_layouts[3];
-/** \brief Printable names matching lapacke_test_layouts. */
+/** Printable names matching lapacke_test_layouts. */
 extern const char *lapacke_test_layout_names[3];
 
-/** \brief A quiet NaN produced at run time (not folded by the compiler). */
+/** A quiet NaN produced at run time (not folded by the compiler). */
 double lapacke_create_nan(void);
 
-/** \brief Record one check of an info result against its expected value. */
+/** Record one check of an info result against its expected value. */
 void lapacke_test_check(const char *name, const char *variant, lapack_int info,
                         lapack_int expected);
 
@@ -66,22 +70,19 @@ void lapacke_test_check(const char *name, const char *variant, lapack_int info,
  * Allocation failure injection and leak tracking (lapacke_test_alloc.c).
  * ---------------------------------------------------------------------- */
 
-/** * \brief The counting/failing test allocator.*/
+/** The counting/failing test allocator. */
 void *lapacke_test_malloc(size_t size);
 
-/** \brief The deallocator matching lapacke_test_malloc; fails the test on
- * foreign frees. */
+/** The deallocator matching lapacke_test_malloc. */
 void lapacke_test_free(void *ptr);
 
-/** * \brief Schedule the (countdown+1)-th LAPACKE allocation to fail once (the
- * schedule clears itself).*/
+/** Schedule the (countdown+1)-th LAPACKE allocation to fail once. */
 void lapacke_test_schedule_malloc_failure(long countdown);
 
-/** * \brief Record one check that a call consumed the scheduled countdown
- * exactly.*/
+/** Record one check that a call consumed the scheduled countdown exactly. */
 void lapacke_test_check_alloc_count(const char *name);
 
-/** * \brief Record one check that every tracked allocation has been freed.*/
+/** Record one check that every tracked allocation has been freed. */
 void lapacke_test_check_leaks(const char *name);
 
 /* ------------------------------------------------------------------------
@@ -96,25 +97,25 @@ void lapacke_test_check_leaks(const char *name);
  * need them.
  * ---------------------------------------------------------------------- */
 
-/** \brief Fill a with a random general rows-by-cols matrix. */
+/** Fill a with a random general rows-by-cols matrix. */
 void lapacke_test_fill(int layout, lapack_int rows, lapack_int cols, double *a,
                        lapack_int ld);
 
-/** \brief Fill a with a random symmetric positive definite n-by-n matrix. */
+/** Fill a with a random symmetric positive definite n-by-n matrix. */
 void lapacke_test_fill_spd(int layout, lapack_int n, double *a, lapack_int ld);
 
-/** \brief Fill a with a random symmetric indefinite n-by-n matrix. */
+/** Fill a with a random symmetric indefinite n-by-n matrix. */
 void lapacke_test_fill_sym(int layout, lapack_int n, double *a, lapack_int ld);
 
-/** * \brief Fill a with a random nonsingular triangular n-by-n matrix.*/
+/** Fill a with a random nonsingular triangular n-by-n matrix. */
 void lapacke_test_fill_tri(int layout, char uplo, lapack_int n, double *a,
                            lapack_int ld);
 
-/** * \brief Fill b with a random right-hand side.*/
+/** Fill b with a random right-hand side. */
 void lapacke_test_fill_rhs(int layout, lapack_int rows, lapack_int cols,
                            double *b, lapack_int ld);
 
-/** * \brief Fill every allocated position of a matrix buffer with NaN.*/
+/** Fill every allocated position of a matrix buffer with NaN. */
 void lapacke_test_fill_nan(int layout, lapack_int rows, lapack_int cols,
                            double *a, lapack_int ld);
 
@@ -133,54 +134,54 @@ void lapacke_test_fill_nan(int layout, lapack_int rows, lapack_int cols,
  * functions) next to the test that needs them.
  * ---------------------------------------------------------------------- */
 
-/** \brief Region of a full matrix: every element is read. */
+/** Region of a full matrix: every element is read. */
 #define lapacke_test_region_full(i, j) 1
-/** \brief Region of an upper triangular matrix: i <= j. */
+/** Region of an upper triangular matrix: i <= j. */
 #define lapacke_test_region_upper(i, j) ((i) <= (j))
-/** \brief Region of a lower triangular matrix: i >= j. */
+/** Region of a lower triangular matrix: i >= j. */
 #define lapacke_test_region_lower(i, j) ((i) >= (j))
-/** \brief Region of a unit-diagonal upper triangular matrix (the diagonal
- *  is not referenced): i < j. */
+/** Region of a unit-diagonal upper triangular matrix (the diagonal is not
+ *  referenced): i < j. */
 #define lapacke_test_region_strict_upper(i, j) ((i) < (j))
-/** \brief Region of a unit-diagonal lower triangular matrix (the diagonal
- *  is not referenced): i > j. */
+/** Region of a unit-diagonal lower triangular matrix (the diagonal is not
+ *  referenced): i > j. */
 #define lapacke_test_region_strict_lower(i, j) ((i) > (j))
 
-/** * \brief Number of buffer positions a rows-by-cols matrix with leading
- * dimension ld occupies in the given layout.*/
+/** Number of buffer positions a rows-by-cols matrix with leading dimension
+ *  ld occupies in the given layout. */
 size_t lapacke_test_alloc_len(int layout, lapack_int rows, lapack_int cols,
                               lapack_int ld);
 
-/** * \brief Map a buffer position to logical matrix coordinates.*/
+/** Map a buffer position to logical matrix coordinates. */
 int lapacke_test_map_position(int layout, lapack_int rows, lapack_int cols,
                               lapack_int ld, size_t p, lapack_int *i,
                               lapack_int *j);
 
-/** \brief Print the detail line for one misreported NaN sweep position. */
+/** Print the detail line for one misreported NaN sweep position. */
 void lapacke_test_sweep_mismatch(const char *name, const char *variant,
                                  lapack_int i, lapack_int j, lapack_int info,
                                  lapack_int expected);
-/** \brief Record the one aggregated check of a finished NaN sweep. */
+/** Record the one aggregated check of a finished NaN sweep. */
 void lapacke_test_sweep_result(const char *name, const char *variant,
                                size_t positions, int mismatches);
 
-/** \brief Run one NaN sweep over a matrix argument; counts as one check.
- *  \param name         Name of the sweep, printed on the report line.
- *  \param layout_index Index into lapacke_test_layouts selecting the
- *                      layout.
- *  \param rows         Number of matrix rows.
- *  \param cols         Number of matrix columns.
- *  \param mat          Buffer of the matrix argument to sweep.
- *  \param ld           Leading dimension of mat in the selected layout.
- *  \param region       Region macro or function; NaNs inside it must yield
- *                      the info value expected, NaNs outside it must yield
- *                      0.
- *  \param expected     Info value the routine must report for a NaN inside
- *                      the region.
- *  \param reset_expr   Expression (use the comma operator to refill several
- *                      matrices) that restores all inputs of call_expr.
- *  \param call_expr    Expression evaluating to the routine's info
- *                      result. */
+/**
+ * Run one NaN sweep over a matrix argument; counts as one check.
+ *
+ * \param name         Name of the sweep, printed on the report line.
+ * \param layout_index Index into lapacke_test_layouts selecting the layout.
+ * \param rows         Number of matrix rows.
+ * \param cols         Number of matrix columns.
+ * \param mat          Buffer of the matrix argument to sweep.
+ * \param ld           Leading dimension of mat in the selected layout.
+ * \param region       Region macro or function; NaNs inside it must yield
+ *                     the info value expected, NaNs outside it must yield 0.
+ * \param expected     Info value the routine must report for a NaN inside
+ *                     the region.
+ * \param reset_expr   Expression (use the comma operator to refill several
+ *                     matrices) that restores all inputs of call_expr.
+ * \param call_expr    Expression evaluating to the routine's info result.
+ */
 #define LAPACKE_TEST_NAN_SWEEP(name, layout_index, rows, cols, mat, ld,        \
                                region, expected, reset_expr, call_expr)        \
     do {                                                                       \

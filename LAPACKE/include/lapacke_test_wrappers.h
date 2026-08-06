@@ -43,21 +43,21 @@
 #error "LAPACKE_TEST_LAYOUT must be defined as LAPACK_{COL,ROW}_MAJOR"
 #endif
 
-/** \brief LAPACKE_TEST_LAYER value selecting the middle-level (_work) API. */
+/** LAPACKE_TEST_LAYER value selecting the middle-level (_work) API. */
 #define LAPACKE_TEST_LAYER_WORK 1
-/** \brief LAPACKE_TEST_LAYER value selecting the high-level API. */
+/** LAPACKE_TEST_LAYER value selecting the high-level API. */
 #define LAPACKE_TEST_LAYER_HIGH 2
 
 #ifndef LAPACKE_TEST_LAYER
 #error "LAPACKE_TEST_LAYER must be defined as LAPACKE_TEST_LAYER_{WORK,HIGH}"
 #endif
 
-/** \brief Nonzero when the wrappers call the high-level interface. */
+/** Nonzero when the wrappers call the high-level interface. */
 #define LAPACKE_TEST_HIGH_LEVEL_API                                            \
     (LAPACKE_TEST_LAYER == LAPACKE_TEST_LAYER_HIGH)
 
-/** * \brief Map a LAPACKE info return value back to Fortran numbering and
- * report argument errors through the testing XERBLA.*/
+/** Map a LAPACKE info return value back to Fortran numbering and report
+ *  argument errors through the testing XERBLA. */
 lapack_int lapacke_test_info(const char *srname, lapack_int ret);
 
 #if LAPACKE_TEST_LAYOUT == LAPACK_ROW_MAJOR
@@ -67,50 +67,50 @@ lapack_int lapacke_test_info(const char *srname, lapack_int ret);
  * have their own buffer geometry and get their helpers with the wrappers
  * that first need them. */
 
-/** * \brief Allocate a row-major shadow copy of an m-by-n column-major general
- * matrix.*/
+/** Allocate a row-major shadow copy of an m-by-n column-major general
+ *  matrix. */
 double *lapacke_test_dge_cm_to_rm(lapack_int m, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
 
-/** * \brief Copy a row-major shadow buffer back into a column-major general
- * matrix.*/
+/** Copy a row-major shadow buffer back into a column-major general
+ *  matrix. */
 void lapacke_test_dge_rm_to_cm(lapack_int m, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda);
 
-/** * \brief Allocate a row-major shadow copy of the uplo triangle of a
- * column-major symmetric positive definite matrix.*/
+/** Allocate a row-major shadow copy of the uplo triangle of a column-major
+ *  symmetric positive definite matrix. */
 double *lapacke_test_dpo_cm_to_rm(char uplo, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
 
-/** * \brief Copy the uplo triangle of a row-major shadow buffer back into a
- * column-major symmetric positive definite matrix.*/
+/** Copy the uplo triangle of a row-major shadow buffer back into a
+ *  column-major symmetric positive definite matrix. */
 void lapacke_test_dpo_rm_to_cm(char uplo, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda);
 
-/** * \brief Allocate a row-major shadow copy of the uplo triangle of a
- * column-major symmetric matrix.*/
+/** Allocate a row-major shadow copy of the uplo triangle of a column-major
+ *  symmetric matrix. */
 double *lapacke_test_dsy_cm_to_rm(char uplo, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
 
-/** * \brief Copy the uplo triangle of a row-major shadow buffer back into a
- * column-major symmetric matrix.*/
+/** Copy the uplo triangle of a row-major shadow buffer back into a
+ *  column-major symmetric matrix. */
 void lapacke_test_dsy_rm_to_cm(char uplo, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda);
 
-/** * \brief Allocate a row-major shadow copy of the referenced triangle of a
- * column-major triangular matrix.*/
+/** Allocate a row-major shadow copy of the referenced triangle of a
+ *  column-major triangular matrix. */
 double *lapacke_test_dtr_cm_to_rm(char uplo, char diag, lapack_int n,
                                   const double *a, lapack_int lda,
                                   lapack_int *ldr);
 
-/** * \brief Copy the referenced triangle of a row-major shadow buffer back into
- * a column-major triangular matrix.*/
+/** Copy the referenced triangle of a row-major shadow buffer back into a
+ *  column-major triangular matrix. */
 void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
                                const double *r, lapack_int ldr, double *a,
                                lapack_int lda);
 
-/** * \brief Report a failed shadow buffer allocation and set info to
- * LAPACK_TRANSPOSE_MEMORY_ERROR.*/
+/** Report a failed shadow buffer allocation and set info to
+ *  LAPACK_TRANSPOSE_MEMORY_ERROR. */
 void lapacke_test_report_alloc_failure(const char *srname, lapack_int *info);
 
 #endif /* LAPACK_ROW_MAJOR */

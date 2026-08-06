@@ -56,8 +56,7 @@ void *lapacke_test_malloc(size_t size)
 }
 
 /**
- * \brief The deallocator matching lapacke_test_malloc; fails the test on
- * foreign frees.
+ * \brief The deallocator matching lapacke_test_malloc.
  *
  * Removes the pointer from the live table and frees it; freeing a pointer
  * that is not a live allocation (double free, foreign pointer) fails the
@@ -84,8 +83,7 @@ void lapacke_test_free(void *ptr)
 }
 
 /**
- * \brief Schedule the (countdown+1)-th LAPACKE allocation to fail once (the
- * schedule clears itself).
+ * \brief Schedule the (countdown+1)-th LAPACKE allocation to fail once.
  *
  * The schedule clears itself when the failure fires, so at most one
  * allocation fails per schedule. Used to test the LAPACK_WORK_MEMORY_ERROR

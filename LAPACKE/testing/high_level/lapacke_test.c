@@ -20,6 +20,8 @@ const char *lapacke_test_layout_names[3] = {"col-major", "row-major",
  *
  * The zero is read from a volatile object so that the division cannot be
  * folded (and warned about) at compile time.
+ *
+ * \return A quiet NaN.
  */
 double lapacke_create_nan(void)
 {
