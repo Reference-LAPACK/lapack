@@ -1,4 +1,3 @@
-# Based on CBLAS/.clang-format, with the indent widths changed from 3 to 4.
 # Options we simply inherit from the LLVM base style are commented out, so the
 # uncommented lines are exactly what this style changes:
 #

@@ -40,19 +40,18 @@
 #include "lapacke_utils.h"
 
 #ifndef LAPACKE_TEST_LAYOUT
-#error                                                                         \
-    "LAPACKE_TEST_LAYOUT must be defined to LAPACK_COL_MAJOR or LAPACK_ROW_MAJOR"
+#error "LAPACKE_TEST_LAYOUT must be defined as LAPACK_{COL,ROW}_MAJOR"
 #endif
 
-/** \brief LAPACKE_TEST_LAYER value selecting the middle-level (_work)
- *  interface. */
+/** \brief LAPACKE_TEST_LAYER value selecting the middle-level (_work) API. */
 #define LAPACKE_TEST_LAYER_WORK 1
-/** \brief LAPACKE_TEST_LAYER value selecting the high-level interface. */
+/** \brief LAPACKE_TEST_LAYER value selecting the high-level API. */
 #define LAPACKE_TEST_LAYER_HIGH 2
+
 #ifndef LAPACKE_TEST_LAYER
-#error                                                                         \
-    "LAPACKE_TEST_LAYER must be defined to LAPACKE_TEST_LAYER_WORK or LAPACKE_TEST_LAYER_HIGH"
+#error "LAPACKE_TEST_LAYER must be defined as LAPACKE_TEST_LAYER_{WORK,HIGH}"
 #endif
+
 /** \brief Nonzero when the wrappers call the high-level interface. */
 #define LAPACKE_TEST_HIGH_LEVEL_API                                            \
     (LAPACKE_TEST_LAYER == LAPACKE_TEST_LAYER_HIGH)
@@ -72,6 +71,7 @@ lapack_int lapacke_test_info(const char *srname, lapack_int ret);
  * matrix.*/
 double *lapacke_test_dge_cm_to_rm(lapack_int m, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
+
 /** * \brief Copy a row-major shadow buffer back into a column-major general
  * matrix.*/
 void lapacke_test_dge_rm_to_cm(lapack_int m, lapack_int n, const double *r,
@@ -81,6 +81,7 @@ void lapacke_test_dge_rm_to_cm(lapack_int m, lapack_int n, const double *r,
  * column-major symmetric positive definite matrix.*/
 double *lapacke_test_dpo_cm_to_rm(char uplo, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
+
 /** * \brief Copy the uplo triangle of a row-major shadow buffer back into a
  * column-major symmetric positive definite matrix.*/
 void lapacke_test_dpo_rm_to_cm(char uplo, lapack_int n, const double *r,
@@ -90,6 +91,7 @@ void lapacke_test_dpo_rm_to_cm(char uplo, lapack_int n, const double *r,
  * column-major symmetric matrix.*/
 double *lapacke_test_dsy_cm_to_rm(char uplo, lapack_int n, const double *a,
                                   lapack_int lda, lapack_int *ldr);
+
 /** * \brief Copy the uplo triangle of a row-major shadow buffer back into a
  * column-major symmetric matrix.*/
 void lapacke_test_dsy_rm_to_cm(char uplo, lapack_int n, const double *r,
@@ -100,6 +102,7 @@ void lapacke_test_dsy_rm_to_cm(char uplo, lapack_int n, const double *r,
 double *lapacke_test_dtr_cm_to_rm(char uplo, char diag, lapack_int n,
                                   const double *a, lapack_int lda,
                                   lapack_int *ldr);
+
 /** * \brief Copy the referenced triangle of a row-major shadow buffer back into
  * a column-major triangular matrix.*/
 void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
@@ -111,5 +114,4 @@ void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
 void lapacke_test_report_alloc_failure(const char *srname, lapack_int *info);
 
 #endif /* LAPACK_ROW_MAJOR */
-
 #endif /* LAPACKE_TEST_WRAPPERS_H */

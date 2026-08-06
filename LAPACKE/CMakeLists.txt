@@ -18,9 +18,6 @@ include_directories(${LAPACK_BINARY_DIR}/include include)
 add_subdirectory(src)
 add_subdirectory(utils)
 
-# The LAPACKE_BUILD_<precision> options are declared at the top level, next
-# to the LAPACKE option, so that the LAPACKE testing gates added with the
-# LAPACKE test suite can evaluate them before this directory is configured.
 foreach(precision SINGLE DOUBLE COMPLEX COMPLEX16)
   if(LAPACKE_BUILD_${precision} AND NOT BUILD_${precision})
     message(
