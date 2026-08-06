@@ -27,13 +27,12 @@ static lapack_int dlange_info(double value)
 #define LAPACKE_DLANGE_ALLOC_TEST(layout_index, countdown, norm, name,         \
                                   expected)                                    \
     do {                                                                       \
-        lapacke_test_fill(lapacke_test_layouts[layout_index], M, N, a, LD);    \
+        const int layout = lapacke_test_layouts[layout_index];                 \
+        lapacke_test_fill(layout, M, N, a, LD);                                \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(                                                    \
             name, lapacke_test_layout_names[layout_index],                     \
-            dlange_info(LAPACKE_dlange(lapacke_test_layouts[layout_index],     \
-                                       norm, M, N, a, LD)),                    \
-            expected);                                                         \
+            dlange_info(LAPACKE_dlange(layout, norm, M, N, a, LD)), expected); \
     } while (0)
 
 LAPACKE_TEST(dlange)

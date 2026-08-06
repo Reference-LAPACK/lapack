@@ -9,14 +9,14 @@
  * layout. */
 #define LAPACKE_DGETRS_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
-        lapacke_test_fill(lapacke_test_layouts[layout_index], N, N, a, LD);    \
-        lapacke_test_fill_rhs(lapacke_test_layouts[layout_index], N, NRHS, b,  \
-                              LD);                                             \
+        const int layout = lapacke_test_layouts[layout_index];                 \
+        lapacke_test_fill(layout, N, N, a, LD);                                \
+        lapacke_test_fill_rhs(layout, N, NRHS, b, LD);                         \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_dgetrs(lapacke_test_layouts[layout_index],  \
-                                          'N', N, NRHS, a, LD, ipiv, b, LD),   \
-                           expected);                                          \
+        lapacke_test_check(                                                    \
+            name, lapacke_test_layout_names[layout_index],                     \
+            LAPACKE_dgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD),          \
+            expected);                                                         \
     } while (0)
 
 LAPACKE_TEST(dgetrs)

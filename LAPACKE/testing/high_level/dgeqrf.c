@@ -9,11 +9,11 @@
  * layout. */
 #define LAPACKE_DGEQRF_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
-        lapacke_test_fill(lapacke_test_layouts[layout_index], M, N, a, LD);    \
+        const int layout = lapacke_test_layouts[layout_index];                 \
+        lapacke_test_fill(layout, M, N, a, LD);                                \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_dgeqrf(lapacke_test_layouts[layout_index],  \
-                                          M, N, a, LD, tau),                   \
+                           LAPACKE_dgeqrf(layout, M, N, a, LD, tau),           \
                            expected);                                          \
     } while (0)
 

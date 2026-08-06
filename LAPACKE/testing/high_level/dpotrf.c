@@ -8,12 +8,11 @@
  * layout. */
 #define LAPACKE_DPOTRF_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
-        lapacke_test_fill_spd(lapacke_test_layouts[layout_index], N, a, LD);   \
+        const int layout = lapacke_test_layouts[layout_index];                 \
+        lapacke_test_fill_spd(layout, N, a, LD);                               \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(                                                    \
-            name, lapacke_test_layout_names[layout_index],                     \
-            LAPACKE_dpotrf(lapacke_test_layouts[layout_index], 'U', N, a, LD), \
-            expected);                                                         \
+        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
+                           LAPACKE_dpotrf(layout, 'U', N, a, LD), expected);   \
     } while (0)
 
 LAPACKE_TEST(dpotrf)

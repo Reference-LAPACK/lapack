@@ -8,12 +8,11 @@
  * layout. */
 #define LAPACKE_DGETRI_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
-        lapacke_test_fill(lapacke_test_layouts[layout_index], N, N, a, LD);    \
+        const int layout = lapacke_test_layouts[layout_index];                 \
+        lapacke_test_fill(layout, N, N, a, LD);                                \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_dgetri(lapacke_test_layouts[layout_index],  \
-                                          N, a, LD, ipiv),                     \
-                           expected);                                          \
+                           LAPACKE_dgetri(layout, N, a, LD, ipiv), expected);  \
     } while (0)
 
 LAPACKE_TEST(dgetri)
