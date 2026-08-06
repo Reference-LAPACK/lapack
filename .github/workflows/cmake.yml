@@ -227,6 +227,10 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      with:
+        # Codecov cannot determine which commit a report belongs to from a
+        # depth-1 clone of a pull request merge commit.
+        fetch-depth: 2
 
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
@@ -250,13 +254,61 @@ jobs:
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
       run: cmake --build build --target install -j2
 
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 1800
+
     - name: Coverage
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
+      if: ${{ !cancelled() }}
+      run: cmake --build build --target coverage
+
+    - name: Summarize coverage
+      # The coverage target discards gcov's output, so an entirely empty report
+      # is indistinguishable from a good one unless we look at the numbers.
+      # Print them, and fail if nothing was measured at all.
+      if: ${{ !cancelled() }}
       run: |
-        echo "Coverage"
-        cmake --build build --target coverage
-        bash <(curl -s https://codecov.io/bash) -X gcov
+        gcda=$(find build -name '*.gcda' | wc -l)
+        reports=$(find build -name '*.gcov' | wc -l)
+        echo "counter files (.gcda): ${gcda}"
+        echo "gcov reports (.gcov): ${reports}"
+        if [ "${gcda}" -eq 0 ] || [ "${reports}" -eq 0 ]; then
+          echo "::error::No coverage data was recorded; the report would be empty."
+          exit 1
+        fi
+        # In a gcov report an executed line is prefixed with its execution
+        # count and an unexecuted one with '#####' or '====='; everything else
+        # ('-') is not executable.
+        set -- $(find build -name '*.gcov' -exec cat {} + | awk '
+          /^ *[0-9]+[*]?:/     { hit++; next }
+          /^ *(#####|=====):/  { miss++ }
+          END { printf "%d %d\n", hit + 0, hit + miss + 0 }')
+        hit=$1
+        total=$2
+        if [ "${hit}" -eq 0 ]; then
+          echo "::error::Coverage report is empty: not a single line was executed."
+          exit 1
+        fi
+        percent=$(awk -v h="${hit}" -v t="${total}" 'BEGIN { printf "%.2f", 100 * h / t }')
+        echo "lines executed: ${hit} of ${total} (${percent}%)"
+        printf '## Coverage\n\n%s%% of lines executed (%s of %s) across %s files.\n' \
+          "${percent}" "${hit}" "${total}" "${reports}" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload coverage report to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        # The .gcov files already exist, so there is no need for the uploader
+        # to run gcov a second time itself.
+        plugins: noop
+        verbose: true
+        # Pull requests from forks have no access to repository secrets, so
+        # they can only upload if the Codecov organization permits tokenless
+        # uploads.  Do not turn that into a CI failure for the contributor.
+        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
   test-install-cblas-lapacke-without-fortran-compiler:
 
