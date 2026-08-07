@@ -13,10 +13,10 @@
         lapacke_test_zfill(layout, N, N, a, LD);                               \
         lapacke_test_zfill_rhs(layout, N, NRHS, b, LD);                        \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(                                                    \
-            name, lapacke_test_layout_names[layout_index],                     \
-            LAPACKE_zgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD),          \
-            expected);                                                         \
+        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
+                           API_SUFFIX(LAPACKE_zgetrs)(layout, 'N', N, NRHS, a, \
+                                                      LD, ipiv, b, LD),        \
+                           expected);                                          \
     } while (0)
 
 LAPACKE_TEST(zgetrs)
@@ -32,13 +32,15 @@ LAPACKE_TEST(zgetrs)
             "zgetrs a", l, N, N, a, LD, lapacke_test_region_full, -5,
             (lapacke_test_zfill(layout, N, N, a, LD),
              lapacke_test_zfill_rhs(layout, N, NRHS, b, LD)),
-            LAPACKE_zgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD));
+            API_SUFFIX(LAPACKE_zgetrs)(layout, 'N', N, NRHS, a, LD, ipiv, b,
+                                       LD));
 
         LAPACKE_TEST_ZNAN_SWEEP(
             "zgetrs b", l, N, NRHS, b, LD, lapacke_test_region_full, -8,
             (lapacke_test_zfill(layout, N, N, a, LD),
              lapacke_test_zfill_rhs(layout, N, NRHS, b, LD)),
-            LAPACKE_zgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD));
+            API_SUFFIX(LAPACKE_zgetrs)(layout, 'N', N, NRHS, a, LD, ipiv, b,
+                                       LD));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
@@ -46,12 +48,13 @@ LAPACKE_TEST(zgetrs)
         LAPACKE_set_nancheck(0);
         lapacke_test_zfill_nan(layout, N, N, a, LD);
         lapacke_test_zfill_nan(layout, N, NRHS, b, LD);
-        lapacke_test_check(
-            "zgetrs NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_zgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD) >= 0
-                ? 0
-                : -999,
-            0);
+        lapacke_test_check("zgetrs NaN with nancheck off",
+                           lapacke_test_layout_names[l],
+                           API_SUFFIX(LAPACKE_zgetrs)(layout, 'N', N, NRHS, a,
+                                                      LD, ipiv, b, LD) >= 0
+                               ? 0
+                               : -999,
+                           0);
         LAPACKE_set_nancheck(1);
     }
 

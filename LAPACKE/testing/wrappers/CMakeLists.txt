@@ -26,14 +26,28 @@ foreach(_layer work high)
       set(_layout_define LAPACK_ROW_MAJOR)
     endif()
 
-    set(_wrapper_lib lapacke_test_wrappers_${_layer}_${_layout})
-    add_library(${_wrapper_lib} STATIC ${LAPACKE_TEST_WRAPPER_SOURCES})
-    target_compile_definitions(${_wrapper_lib} PRIVATE
-      LAPACKE_TEST_LAYOUT=${_layout_define}
-      LAPACKE_TEST_LAYER=LAPACKE_TEST_LAYER_${_layer_upper})
-    target_include_directories(${_wrapper_lib} PRIVATE
-      ${LAPACK_BINARY_DIR}/include ${LAPACK_SOURCE_DIR}/LAPACKE/include)
-    target_link_libraries(${_wrapper_lib} PUBLIC ${LAPACKELIB})
+    if(BUILD_DEFAULT_API)
+      set(_wrapper_lib lapacke_test_wrappers_${_layer}_${_layout})
+      add_library(${_wrapper_lib} STATIC ${LAPACKE_TEST_WRAPPER_SOURCES})
+      target_compile_definitions(${_wrapper_lib} PRIVATE
+        LAPACKE_TEST_LAYOUT=${_layout_define}
+        LAPACKE_TEST_LAYER=LAPACKE_TEST_LAYER_${_layer_upper})
+      target_include_directories(${_wrapper_lib} PRIVATE
+        ${LAPACK_BINARY_DIR}/include ${LAPACK_SOURCE_DIR}/LAPACKE/include)
+      target_link_libraries(${_wrapper_lib} PUBLIC ${LAPACKELIB})
+    endif()
+
+    if(BUILD_INDEX64_EXT_API)
+      set(_wrapper_lib lapacke_test_wrappers_${_layer}_${_layout}_64)
+      add_library(${_wrapper_lib} STATIC ${LAPACKE_TEST_WRAPPER_SOURCES})
+      target_compile_definitions(${_wrapper_lib} PRIVATE
+        LAPACKE_TEST_LAYOUT=${_layout_define}
+        LAPACKE_TEST_LAYER=LAPACKE_TEST_LAYER_${_layer_upper}
+        LAPACK_ILP64 LAPACKE_API64 WeirdNEC CBLAS_API64)
+      target_include_directories(${_wrapper_lib} PRIVATE
+        ${LAPACK_BINARY_DIR}/include ${LAPACK_SOURCE_DIR}/LAPACKE/include)
+      target_link_libraries(${_wrapper_lib} PUBLIC ${LAPACKELIB})
+    endif()
   endforeach()
 endforeach()
 
@@ -55,9 +69,9 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
   set(_wrapper_source "${CMAKE_CURRENT_SOURCE_DIR}/lapacke_test_wrappers_${_prec}.c")
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${_wrapper_source}")
 
-  file(STRINGS "${_wrapper_source}" _wrapper_symbols REGEX "LAPACK_GLOBAL\\([a-z0-9_]+_test,")
+  file(STRINGS "${_wrapper_source}" _wrapper_symbols REGEX "LAPACK_GLOBAL_SUFFIX\\([a-z0-9_]+_test,")
   foreach(_wrapper_symbol IN LISTS _wrapper_symbols)
-    string(REGEX MATCH "LAPACK_GLOBAL\\(([a-z0-9_]+)_test," _unused "${_wrapper_symbol}")
+    string(REGEX MATCH "LAPACK_GLOBAL_SUFFIX\\(([a-z0-9_]+)_test," _unused "${_wrapper_symbol}")
     set(_routine "${CMAKE_MATCH_1}")
     if(_routine IN_LIST _lapacke_routines)
       list(APPEND _allowlisted_routines "${_routine}")

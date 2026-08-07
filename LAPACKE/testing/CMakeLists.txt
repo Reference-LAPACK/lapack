@@ -1,8 +1,3 @@
-# The LAPACKE tests use the unsuffixed API, which only exists when the
-# default API is built (mirrors LAPACKE/example).
-if(NOT BUILD_DEFAULT_API)
-  return()
-endif()
 
 # Precisions to test: those whose LAPACKE interface is built. A
 # precision-pruned build tests only what it has.
@@ -55,13 +50,13 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     continue()
   endif()
 
+  # Route the allowlisted calls to the wrappers. Both APIs start from this
+  # same rewrite; the extended API then suffixes the result a second time.
   generate_suffixed_sources(xlintst${_prec}_lapacke
     LAPACKE_TEST_LIN_${_prec_upper}_SOURCES _lin_sources_test
     SUFFIX "_TEST"
     ${_allowlist_args}
     NO_STRING_REPLACEMENTS)
-
-  add_library(xlintst${_prec}_lapacke_core OBJECT ${_lin_sources_test})
 
   file(READ ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in _test_in_content)
   string(REPLACE
@@ -70,28 +65,73 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     _test_in_noerr_content "${_test_in_content}")
   file(WRITE ${_lapacke_test_out_dir}/${_prec}test_noerr.in "${_test_in_noerr_content}")
 
-  foreach(_layer work high)
-    foreach(_layout cm rm)
-      set(_driver xlintst${_prec}_lapacke_${_layer}_${_layout})
+  if(BUILD_DEFAULT_API)
+    add_library(xlintst${_prec}_lapacke_core OBJECT ${_lin_sources_test})
 
-      add_executable(${_driver} $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core>)
-      set_target_properties(${_driver} PROPERTIES LINKER_LANGUAGE Fortran)
-      target_link_libraries(${_driver}
-        lapacke_test_wrappers_${_layer}_${_layout}
-        ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+    foreach(_layer work high)
+      foreach(_layout cm rm)
+        set(_driver xlintst${_prec}_lapacke_${_layer}_${_layout})
 
-      if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-        set(_input ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in)
-      else()
-        set(_input ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
-      endif()
-      add_test(NAME LAPACK-${_driver}_${_prec}test_in
-        COMMAND "${CMAKE_COMMAND}"
-        -DTEST=$<TARGET_FILE:${_driver}>
-        -DINPUT=${_input}
-        -DOUTPUT=${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out
-        -DINTDIR=${CMAKE_CFG_INTDIR}
-        -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+        add_executable(${_driver}
+          $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core>)
+        set_target_properties(${_driver} PROPERTIES LINKER_LANGUAGE Fortran)
+        target_link_libraries(${_driver}
+          lapacke_test_wrappers_${_layer}_${_layout}
+          ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+
+        if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
+          set(_input ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in)
+        else()
+          set(_input ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
+        endif()
+        add_test(NAME LAPACK-${_driver}_${_prec}test_in
+          COMMAND "${CMAKE_COMMAND}"
+          -DTEST=$<TARGET_FILE:${_driver}>
+          -DINPUT=${_input}
+          -DOUTPUT=${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out
+          -DINTDIR=${CMAKE_CFG_INTDIR}
+          -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+      endforeach()
     endforeach()
-  endforeach()
+  endif()
+
+  if(BUILD_INDEX64_EXT_API)
+    # Suffix every remaining symbol as well, so that the driver is ILP64
+    # throughout and calls the _64 LAPACK. The routed calls become
+    # <routine>_TEST_64, which is what the wrappers export under
+    # LAPACKE_API64.
+    generate_suffixed_sources(xlintst${_prec}_lapacke_TEST
+      _lin_sources_test _lin_sources_test_64
+      SUFFIX "_64")
+
+    add_library(xlintst${_prec}_lapacke_core_64 OBJECT ${_lin_sources_test_64})
+    target_compile_options(xlintst${_prec}_lapacke_core_64
+      PRIVATE ${FOPT_ILP64})
+
+    foreach(_layer work high)
+      foreach(_layout cm rm)
+        set(_driver xlintst${_prec}_lapacke_${_layer}_${_layout}_64)
+
+        add_executable(${_driver}
+          $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core_64>)
+        set_target_properties(${_driver} PROPERTIES LINKER_LANGUAGE Fortran)
+        target_link_libraries(${_driver}
+          lapacke_test_wrappers_${_layer}_${_layout}_64
+          ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+
+        if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
+          set(_input ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in)
+        else()
+          set(_input ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
+        endif()
+        add_test(NAME LAPACK-${_driver}_${_prec}test_in
+          COMMAND "${CMAKE_COMMAND}"
+          -DTEST=$<TARGET_FILE:${_driver}>
+          -DINPUT=${_input}
+          -DOUTPUT=${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out
+          -DINTDIR=${CMAKE_CFG_INTDIR}
+          -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+      endforeach()
+    endforeach()
+  endif()
 endforeach()

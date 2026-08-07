@@ -16,7 +16,7 @@ static const int layout = LAPACKE_TEST_LAYOUT;
 /*****************************************************************************
  * CGETRF( M, N, A, LDA, IPIV, INFO )
  *****************************************************************************/
-#define CGETRF_TEST LAPACK_GLOBAL(cgetrf_test, CGETRF_TEST)
+#define CGETRF_TEST LAPACK_GLOBAL_SUFFIX(cgetrf_test, CGETRF_TEST)
 void CGETRF_TEST(const lapack_int *m, const lapack_int *n,
                  lapack_complex_float *a, const lapack_int *lda,
                  lapack_int *ipiv, lapack_int *info)
@@ -33,9 +33,9 @@ void CGETRF_TEST(const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cgetrf(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_cgetrf)(layout, *m, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_cgetrf_work(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_cgetrf_work)(layout, *m, *n, a_r, lda_r, ipiv);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -48,7 +48,7 @@ void CGETRF_TEST(const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * CGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
  *****************************************************************************/
-#define CGETRS_TEST LAPACK_GLOBAL(cgetrs_test, CGETRS_TEST)
+#define CGETRS_TEST LAPACK_GLOBAL_SUFFIX(cgetrs_test, CGETRS_TEST)
 void CGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
                  const lapack_complex_float *a, const lapack_int *lda,
                  const lapack_int *ipiv, lapack_complex_float *b,
@@ -76,11 +76,11 @@ void CGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cgetrs(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                         ldb_r);
+    ret = API_SUFFIX(LAPACKE_cgetrs)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                     ipiv, b_r, ldb_r);
 #else
-    ret = LAPACKE_cgetrs_work(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                              ldb_r);
+    ret = API_SUFFIX(LAPACKE_cgetrs_work)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                          ipiv, b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -94,7 +94,7 @@ void CGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * CGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
  *****************************************************************************/
-#define CGETRI_TEST LAPACK_GLOBAL(cgetri_test, CGETRI_TEST)
+#define CGETRI_TEST LAPACK_GLOBAL_SUFFIX(cgetri_test, CGETRI_TEST)
 void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a,
                  const lapack_int *lda, const lapack_int *ipiv,
                  lapack_complex_float *work, const lapack_int *lwork,
@@ -103,8 +103,8 @@ void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_cgetri_work(LAPACK_COL_MAJOR, *n, a, *lda, ipiv, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_cgetri_work)(LAPACK_COL_MAJOR, *n, a, *lda,
+                                              ipiv, work, *lwork);
         *info = lapacke_test_info("CGETRI", ret);
         return;
     }
@@ -121,9 +121,10 @@ void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cgetri(layout, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_cgetri)(layout, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_cgetri_work(layout, *n, a_r, lda_r, ipiv, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_cgetri_work)(layout, *n, a_r, lda_r, ipiv, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -136,7 +137,7 @@ void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a,
 /*****************************************************************************
  * CPOTRF( UPLO, N, A, LDA, INFO )
  *****************************************************************************/
-#define CPOTRF_TEST LAPACK_GLOBAL(cpotrf_test, CPOTRF_TEST)
+#define CPOTRF_TEST LAPACK_GLOBAL_SUFFIX(cpotrf_test, CPOTRF_TEST)
 void CPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_float *a,
                  const lapack_int *lda, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
@@ -157,9 +158,9 @@ void CPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_float *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cpotrf(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_cpotrf)(layout, *uplo, *n, a_r, lda_r);
 #else
-    ret = LAPACKE_cpotrf_work(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_cpotrf_work)(layout, *uplo, *n, a_r, lda_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -172,7 +173,7 @@ void CPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_float *a,
 /*****************************************************************************
  * CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
  *****************************************************************************/
-#define CPOTRS_TEST LAPACK_GLOBAL(cpotrs_test, CPOTRS_TEST)
+#define CPOTRS_TEST LAPACK_GLOBAL_SUFFIX(cpotrs_test, CPOTRS_TEST)
 void CPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
                  const lapack_complex_float *a, const lapack_int *lda,
                  lapack_complex_float *b, const lapack_int *ldb,
@@ -200,9 +201,11 @@ void CPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cpotrs(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_cpotrs)(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r,
+                                     ldb_r);
 #else
-    ret = LAPACKE_cpotrs_work(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_cpotrs_work)(layout, *uplo, *n, *nrhs, a_r, lda_r,
+                                          b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -216,7 +219,7 @@ void CPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * CGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define CGEQRF_TEST LAPACK_GLOBAL(cgeqrf_test, CGEQRF_TEST)
+#define CGEQRF_TEST LAPACK_GLOBAL_SUFFIX(cgeqrf_test, CGEQRF_TEST)
 void CGEQRF_TEST(const lapack_int *m, const lapack_int *n,
                  lapack_complex_float *a, const lapack_int *lda,
                  lapack_complex_float *tau, lapack_complex_float *work,
@@ -225,8 +228,8 @@ void CGEQRF_TEST(const lapack_int *m, const lapack_int *n,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_cgeqrf_work(LAPACK_COL_MAJOR, *m, *n, a, *lda, tau, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_cgeqrf_work)(LAPACK_COL_MAJOR, *m, *n, a, *lda,
+                                              tau, work, *lwork);
         *info = lapacke_test_info("CGEQRF", ret);
         return;
     }
@@ -243,9 +246,10 @@ void CGEQRF_TEST(const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cgeqrf(layout, *m, *n, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_cgeqrf)(layout, *m, *n, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_cgeqrf_work(layout, *m, *n, a_r, lda_r, tau, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_cgeqrf_work)(layout, *m, *n, a_r, lda_r, tau, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -258,7 +262,7 @@ void CGEQRF_TEST(const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * CUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define CUNGQR_TEST LAPACK_GLOBAL(cungqr_test, CUNGQR_TEST)
+#define CUNGQR_TEST LAPACK_GLOBAL_SUFFIX(cungqr_test, CUNGQR_TEST)
 void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
                  lapack_complex_float *a, const lapack_int *lda,
                  const lapack_complex_float *tau, lapack_complex_float *work,
@@ -267,8 +271,8 @@ void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_cungqr_work(LAPACK_COL_MAJOR, *m, *n, *k, a, *lda, tau,
-                                  work, *lwork);
+        ret = API_SUFFIX(LAPACKE_cungqr_work)(LAPACK_COL_MAJOR, *m, *n, *k, a,
+                                              *lda, tau, work, *lwork);
         *info = lapacke_test_info("CUNGQR", ret);
         return;
     }
@@ -285,10 +289,10 @@ void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cungqr(layout, *m, *n, *k, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_cungqr)(layout, *m, *n, *k, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_cungqr_work(layout, *m, *n, *k, a_r, lda_r, tau, work,
-                              *lwork);
+    ret = API_SUFFIX(LAPACKE_cungqr_work)(layout, *m, *n, *k, a_r, lda_r, tau,
+                                          work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -301,7 +305,7 @@ void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 /*****************************************************************************
  * CUNMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK, LWORK, INFO )
  *****************************************************************************/
-#define CUNMQR_TEST LAPACK_GLOBAL(cunmqr_test, CUNMQR_TEST)
+#define CUNMQR_TEST LAPACK_GLOBAL_SUFFIX(cunmqr_test, CUNMQR_TEST)
 void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
                  const lapack_int *n, const lapack_int *k,
                  const lapack_complex_float *a, const lapack_int *lda,
@@ -317,8 +321,9 @@ void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_cunmqr_work(LAPACK_COL_MAJOR, *side, *trans, *m, *n, *k,
-                                  a, *lda, tau, c, *ldc, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_cunmqr_work)(LAPACK_COL_MAJOR, *side, *trans,
+                                              *m, *n, *k, a, *lda, tau, c, *ldc,
+                                              work, *lwork);
         *info = lapacke_test_info("CUNMQR", ret);
         return;
     }
@@ -329,7 +334,7 @@ void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int lda_r = *lda;
     lapack_int ldc_r = *ldc;
 #if LAPACKE_TEST_ROW_MAJOR
-    const lapack_int r = LAPACKE_lsame(*side, 'l') ? *m : *n;
+    const lapack_int r = API_SUFFIX(LAPACKE_lsame)(*side, 'l') ? *m : *n;
     a_r = lapacke_test_cge_cm_to_rm(r, *k, a, *lda, &lda_r);
     c_r = lapacke_test_cge_cm_to_rm(*m, *n, c, *ldc, &ldc_r);
     if (a_r == NULL || c_r == NULL) {
@@ -341,11 +346,12 @@ void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cunmqr(layout, *side, *trans, *m, *n, *k, a_r, lda_r, tau,
-                         c_r, ldc_r);
+    ret = API_SUFFIX(LAPACKE_cunmqr)(layout, *side, *trans, *m, *n, *k, a_r,
+                                     lda_r, tau, c_r, ldc_r);
 #else
-    ret = LAPACKE_cunmqr_work(layout, *side, *trans, *m, *n, *k, a_r, lda_r,
-                              tau, c_r, ldc_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_cunmqr_work)(layout, *side, *trans, *m, *n, *k,
+                                          a_r, lda_r, tau, c_r, ldc_r, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -359,7 +365,7 @@ void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 /*****************************************************************************
  * CGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK, INFO )
  *****************************************************************************/
-#define CGELS_TEST LAPACK_GLOBAL(cgels_test, CGELS_TEST)
+#define CGELS_TEST LAPACK_GLOBAL_SUFFIX(cgels_test, CGELS_TEST)
 void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
                 const lapack_int *nrhs, lapack_complex_float *a,
                 const lapack_int *lda, lapack_complex_float *b,
@@ -374,8 +380,9 @@ void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_cgels_work(LAPACK_COL_MAJOR, *trans, *m, *n, *nrhs, a,
-                                 *lda, b, *ldb, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_cgels_work)(LAPACK_COL_MAJOR, *trans, *m, *n,
+                                             *nrhs, a, *lda, b, *ldb, work,
+                                             *lwork);
         *info = lapacke_test_info("CGELS", ret);
         return;
     }
@@ -398,10 +405,11 @@ void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_cgels(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_cgels)(layout, *trans, *m, *n, *nrhs, a_r, lda_r,
+                                    b_r, ldb_r);
 #else
-    ret = LAPACKE_cgels_work(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r,
-                             ldb_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_cgels_work)(layout, *trans, *m, *n, *nrhs, a_r,
+                                         lda_r, b_r, ldb_r, work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -416,7 +424,7 @@ void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * REAL FUNCTION CLANGE( NORM, M, N, A, LDA, WORK )
  *****************************************************************************/
-#define CLANGE_TEST LAPACK_GLOBAL(clange_test, CLANGE_TEST)
+#define CLANGE_TEST LAPACK_GLOBAL_SUFFIX(clange_test, CLANGE_TEST)
 float CLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
                   const lapack_complex_float *a, const lapack_int *lda,
                   float *work
@@ -439,9 +447,10 @@ float CLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    res = LAPACKE_clange(layout, *norm, *m, *n, a_r, lda_r);
+    res = API_SUFFIX(LAPACKE_clange)(layout, *norm, *m, *n, a_r, lda_r);
 #else
-    res = LAPACKE_clange_work(layout, *norm, *m, *n, a_r, lda_r, work);
+    res = API_SUFFIX(LAPACKE_clange_work)(layout, *norm, *m, *n, a_r, lda_r,
+                                          work);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR

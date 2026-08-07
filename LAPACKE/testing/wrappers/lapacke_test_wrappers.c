@@ -9,7 +9,7 @@
 #include "lapacke_test_wrappers.h"
 
 /* The testing XERBLA provided by the test programs (non-halting). */
-#define fortran_xerbla LAPACK_GLOBAL(xerbla, XERBLA)
+#define fortran_xerbla LAPACK_GLOBAL_SUFFIX(xerbla, XERBLA)
 void fortran_xerbla(const char *srname, const lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                     ,
@@ -86,7 +86,7 @@ double *lapacke_test_dge_cm_to_rm(lapack_int m, lapack_int n, const double *a,
     *ldr = MAX(1, n);
     r = (double *)LAPACKE_malloc(sizeof(double) * MAX(1, m) * (*ldr));
     if (r != NULL) {
-        LAPACKE_dge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_dge_trans)(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
     return r;
 }
@@ -105,7 +105,7 @@ double *lapacke_test_dge_cm_to_rm(lapack_int m, lapack_int n, const double *a,
 void lapacke_test_dge_rm_to_cm(lapack_int m, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda)
 {
-    LAPACKE_dge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_dge_trans)(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
 
 /**
@@ -129,7 +129,8 @@ double *lapacke_test_dpo_cm_to_rm(char uplo, lapack_int n, const double *a,
     *ldr = MAX(1, n);
     r = (double *)LAPACKE_malloc(sizeof(double) * MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_dpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_dpo_trans)(LAPACK_COL_MAJOR, uplo, n, a, lda, r,
+                                      *ldr);
     }
     return r;
 }
@@ -148,7 +149,7 @@ double *lapacke_test_dpo_cm_to_rm(char uplo, lapack_int n, const double *a,
 void lapacke_test_dpo_rm_to_cm(char uplo, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda)
 {
-    LAPACKE_dpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_dpo_trans)(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
 
 /**
@@ -172,7 +173,8 @@ double *lapacke_test_dsy_cm_to_rm(char uplo, lapack_int n, const double *a,
     *ldr = MAX(1, n);
     r = (double *)LAPACKE_malloc(sizeof(double) * MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_dsy_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_dsy_trans)(LAPACK_COL_MAJOR, uplo, n, a, lda, r,
+                                      *ldr);
     }
     return r;
 }
@@ -191,7 +193,7 @@ double *lapacke_test_dsy_cm_to_rm(char uplo, lapack_int n, const double *a,
 void lapacke_test_dsy_rm_to_cm(char uplo, lapack_int n, const double *r,
                                lapack_int ldr, double *a, lapack_int lda)
 {
-    LAPACKE_dsy_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_dsy_trans)(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
 
 /**
@@ -219,7 +221,8 @@ double *lapacke_test_dtr_cm_to_rm(char uplo, char diag, lapack_int n,
     *ldr = MAX(1, n);
     r = (double *)LAPACKE_malloc(sizeof(double) * MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_dtr_trans(LAPACK_COL_MAJOR, uplo, diag, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_dtr_trans)(LAPACK_COL_MAJOR, uplo, diag, n, a, lda,
+                                      r, *ldr);
     }
     return r;
 }
@@ -241,7 +244,8 @@ void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
                                const double *r, lapack_int ldr, double *a,
                                lapack_int lda)
 {
-    LAPACKE_dtr_trans(LAPACK_ROW_MAJOR, uplo, diag, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_dtr_trans)(LAPACK_ROW_MAJOR, uplo, diag, n, r, ldr, a,
+                                  lda);
 }
 
 /**
@@ -263,7 +267,7 @@ float *lapacke_test_sge_cm_to_rm(lapack_int m, lapack_int n, const float *a,
     *ldr = MAX(1, n);
     r = (float *)LAPACKE_malloc(sizeof(float) * MAX(1, m) * (*ldr));
     if (r != NULL) {
-        LAPACKE_sge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_sge_trans)(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
     return r;
 }
@@ -282,7 +286,7 @@ float *lapacke_test_sge_cm_to_rm(lapack_int m, lapack_int n, const float *a,
 void lapacke_test_sge_rm_to_cm(lapack_int m, lapack_int n, const float *r,
                                lapack_int ldr, float *a, lapack_int lda)
 {
-    LAPACKE_sge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_sge_trans)(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
 
 /**
@@ -306,7 +310,8 @@ float *lapacke_test_spo_cm_to_rm(char uplo, lapack_int n, const float *a,
     *ldr = MAX(1, n);
     r = (float *)LAPACKE_malloc(sizeof(float) * MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_spo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_spo_trans)(LAPACK_COL_MAJOR, uplo, n, a, lda, r,
+                                      *ldr);
     }
     return r;
 }
@@ -325,7 +330,7 @@ float *lapacke_test_spo_cm_to_rm(char uplo, lapack_int n, const float *a,
 void lapacke_test_spo_rm_to_cm(char uplo, lapack_int n, const float *r,
                                lapack_int ldr, float *a, lapack_int lda)
 {
-    LAPACKE_spo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_spo_trans)(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
 
 /**
@@ -349,7 +354,7 @@ lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n,
     r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) *
                                                MAX(1, m) * (*ldr));
     if (r != NULL) {
-        LAPACKE_cge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_cge_trans)(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
     return r;
 }
@@ -369,7 +374,7 @@ void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n,
                                const lapack_complex_float *r, lapack_int ldr,
                                lapack_complex_float *a, lapack_int lda)
 {
-    LAPACKE_cge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_cge_trans)(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
 
 /**
@@ -395,7 +400,8 @@ lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n,
     r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) *
                                                MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_cpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_cpo_trans)(LAPACK_COL_MAJOR, uplo, n, a, lda, r,
+                                      *ldr);
     }
     return r;
 }
@@ -415,7 +421,7 @@ void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n,
                                const lapack_complex_float *r, lapack_int ldr,
                                lapack_complex_float *a, lapack_int lda)
 {
-    LAPACKE_cpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_cpo_trans)(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
 
 /**
@@ -440,7 +446,7 @@ lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n,
     r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) *
                                                 MAX(1, m) * (*ldr));
     if (r != NULL) {
-        LAPACKE_zge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_zge_trans)(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
     return r;
 }
@@ -460,7 +466,7 @@ void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n,
                                const lapack_complex_double *r, lapack_int ldr,
                                lapack_complex_double *a, lapack_int lda)
 {
-    LAPACKE_zge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_zge_trans)(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
 
 /**
@@ -487,7 +493,8 @@ lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n,
     r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) *
                                                 MAX(1, n) * (*ldr));
     if (r != NULL) {
-        LAPACKE_zpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+        API_SUFFIX(LAPACKE_zpo_trans)(LAPACK_COL_MAJOR, uplo, n, a, lda, r,
+                                      *ldr);
     }
     return r;
 }
@@ -507,7 +514,7 @@ void lapacke_test_zpo_rm_to_cm(char uplo, lapack_int n,
                                const lapack_complex_double *r, lapack_int ldr,
                                lapack_complex_double *a, lapack_int lda)
 {
-    LAPACKE_zpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+    API_SUFFIX(LAPACKE_zpo_trans)(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
 
 /**

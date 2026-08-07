@@ -12,9 +12,9 @@
         const int layout = lapacke_test_layouts[layout_index];                 \
         lapacke_test_dfill(layout, M, N, a, LD);                               \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_dgeqrf(layout, M, N, a, LD, tau),           \
-                           expected);                                          \
+        lapacke_test_check(                                                    \
+            name, lapacke_test_layout_names[layout_index],                     \
+            API_SUFFIX(LAPACKE_dgeqrf)(layout, M, N, a, LD, tau), expected);   \
     } while (0)
 
 LAPACKE_TEST(dgeqrf)
@@ -24,10 +24,10 @@ LAPACKE_TEST(dgeqrf)
     /* The whole M-by-N matrix is a documented input (tau is output only). */
     for (size_t l = 0; l < 2; l++) {
         const int layout = lapacke_test_layouts[l];
-        LAPACKE_TEST_DNAN_SWEEP("dgeqrf a", l, M, N, a, LD,
-                                lapacke_test_region_full, -4,
-                                (lapacke_test_dfill(layout, M, N, a, LD)),
-                                LAPACKE_dgeqrf(layout, M, N, a, LD, tau));
+        LAPACKE_TEST_DNAN_SWEEP(
+            "dgeqrf a", l, M, N, a, LD, lapacke_test_region_full, -4,
+            (lapacke_test_dfill(layout, M, N, a, LD)),
+            API_SUFFIX(LAPACKE_dgeqrf)(layout, M, N, a, LD, tau));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
@@ -36,7 +36,9 @@ LAPACKE_TEST(dgeqrf)
         lapacke_test_dfill_nan(layout, M, N, a, LD);
         lapacke_test_check(
             "dgeqrf NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_dgeqrf(layout, M, N, a, LD, tau) >= 0 ? 0 : -999, 0);
+            API_SUFFIX(LAPACKE_dgeqrf)(layout, M, N, a, LD, tau) >= 0 ? 0
+                                                                      : -999,
+            0);
         LAPACKE_set_nancheck(1);
     }
 

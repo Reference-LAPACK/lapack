@@ -16,7 +16,7 @@ static const int layout = LAPACKE_TEST_LAYOUT;
 /*****************************************************************************
  * SGETRF( M, N, A, LDA, IPIV, INFO )
  *****************************************************************************/
-#define SGETRF_TEST LAPACK_GLOBAL(sgetrf_test, SGETRF_TEST)
+#define SGETRF_TEST LAPACK_GLOBAL_SUFFIX(sgetrf_test, SGETRF_TEST)
 void SGETRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
                  const lapack_int *lda, lapack_int *ipiv, lapack_int *info)
 {
@@ -32,9 +32,9 @@ void SGETRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sgetrf(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_sgetrf)(layout, *m, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_sgetrf_work(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_sgetrf_work)(layout, *m, *n, a_r, lda_r, ipiv);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -47,7 +47,7 @@ void SGETRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
 /*****************************************************************************
  * SGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
  *****************************************************************************/
-#define SGETRS_TEST LAPACK_GLOBAL(sgetrs_test, SGETRS_TEST)
+#define SGETRS_TEST LAPACK_GLOBAL_SUFFIX(sgetrs_test, SGETRS_TEST)
 void SGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
                  const float *a, const lapack_int *lda, const lapack_int *ipiv,
                  float *b, const lapack_int *ldb, lapack_int *info
@@ -74,11 +74,11 @@ void SGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sgetrs(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                         ldb_r);
+    ret = API_SUFFIX(LAPACKE_sgetrs)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                     ipiv, b_r, ldb_r);
 #else
-    ret = LAPACKE_sgetrs_work(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                              ldb_r);
+    ret = API_SUFFIX(LAPACKE_sgetrs_work)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                          ipiv, b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -92,7 +92,7 @@ void SGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * SGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
  *****************************************************************************/
-#define SGETRI_TEST LAPACK_GLOBAL(sgetri_test, SGETRI_TEST)
+#define SGETRI_TEST LAPACK_GLOBAL_SUFFIX(sgetri_test, SGETRI_TEST)
 void SGETRI_TEST(const lapack_int *n, float *a, const lapack_int *lda,
                  const lapack_int *ipiv, float *work, const lapack_int *lwork,
                  lapack_int *info)
@@ -100,8 +100,8 @@ void SGETRI_TEST(const lapack_int *n, float *a, const lapack_int *lda,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_sgetri_work(LAPACK_COL_MAJOR, *n, a, *lda, ipiv, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_sgetri_work)(LAPACK_COL_MAJOR, *n, a, *lda,
+                                              ipiv, work, *lwork);
         *info = lapacke_test_info("SGETRI", ret);
         return;
     }
@@ -118,9 +118,10 @@ void SGETRI_TEST(const lapack_int *n, float *a, const lapack_int *lda,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sgetri(layout, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_sgetri)(layout, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_sgetri_work(layout, *n, a_r, lda_r, ipiv, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_sgetri_work)(layout, *n, a_r, lda_r, ipiv, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -133,7 +134,7 @@ void SGETRI_TEST(const lapack_int *n, float *a, const lapack_int *lda,
 /*****************************************************************************
  * SPOTRF( UPLO, N, A, LDA, INFO )
  *****************************************************************************/
-#define SPOTRF_TEST LAPACK_GLOBAL(spotrf_test, SPOTRF_TEST)
+#define SPOTRF_TEST LAPACK_GLOBAL_SUFFIX(spotrf_test, SPOTRF_TEST)
 void SPOTRF_TEST(const char *uplo, const lapack_int *n, float *a,
                  const lapack_int *lda, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
@@ -154,9 +155,9 @@ void SPOTRF_TEST(const char *uplo, const lapack_int *n, float *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_spotrf(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_spotrf)(layout, *uplo, *n, a_r, lda_r);
 #else
-    ret = LAPACKE_spotrf_work(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_spotrf_work)(layout, *uplo, *n, a_r, lda_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -169,7 +170,7 @@ void SPOTRF_TEST(const char *uplo, const lapack_int *n, float *a,
 /*****************************************************************************
  * SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
  *****************************************************************************/
-#define SPOTRS_TEST LAPACK_GLOBAL(spotrs_test, SPOTRS_TEST)
+#define SPOTRS_TEST LAPACK_GLOBAL_SUFFIX(spotrs_test, SPOTRS_TEST)
 void SPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
                  const float *a, const lapack_int *lda, float *b,
                  const lapack_int *ldb, lapack_int *info
@@ -196,9 +197,11 @@ void SPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_spotrs(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_spotrs)(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r,
+                                     ldb_r);
 #else
-    ret = LAPACKE_spotrs_work(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_spotrs_work)(layout, *uplo, *n, *nrhs, a_r, lda_r,
+                                          b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -212,7 +215,7 @@ void SPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * SGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define SGEQRF_TEST LAPACK_GLOBAL(sgeqrf_test, SGEQRF_TEST)
+#define SGEQRF_TEST LAPACK_GLOBAL_SUFFIX(sgeqrf_test, SGEQRF_TEST)
 void SGEQRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
                  const lapack_int *lda, float *tau, float *work,
                  const lapack_int *lwork, lapack_int *info)
@@ -220,8 +223,8 @@ void SGEQRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_sgeqrf_work(LAPACK_COL_MAJOR, *m, *n, a, *lda, tau, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_sgeqrf_work)(LAPACK_COL_MAJOR, *m, *n, a, *lda,
+                                              tau, work, *lwork);
         *info = lapacke_test_info("SGEQRF", ret);
         return;
     }
@@ -238,9 +241,10 @@ void SGEQRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sgeqrf(layout, *m, *n, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_sgeqrf)(layout, *m, *n, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_sgeqrf_work(layout, *m, *n, a_r, lda_r, tau, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_sgeqrf_work)(layout, *m, *n, a_r, lda_r, tau, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -253,7 +257,7 @@ void SGEQRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
 /*****************************************************************************
  * SORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define SORGQR_TEST LAPACK_GLOBAL(sorgqr_test, SORGQR_TEST)
+#define SORGQR_TEST LAPACK_GLOBAL_SUFFIX(sorgqr_test, SORGQR_TEST)
 void SORGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
                  float *a, const lapack_int *lda, const float *tau, float *work,
                  const lapack_int *lwork, lapack_int *info)
@@ -261,8 +265,8 @@ void SORGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_sorgqr_work(LAPACK_COL_MAJOR, *m, *n, *k, a, *lda, tau,
-                                  work, *lwork);
+        ret = API_SUFFIX(LAPACKE_sorgqr_work)(LAPACK_COL_MAJOR, *m, *n, *k, a,
+                                              *lda, tau, work, *lwork);
         *info = lapacke_test_info("SORGQR", ret);
         return;
     }
@@ -279,10 +283,10 @@ void SORGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sorgqr(layout, *m, *n, *k, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_sorgqr)(layout, *m, *n, *k, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_sorgqr_work(layout, *m, *n, *k, a_r, lda_r, tau, work,
-                              *lwork);
+    ret = API_SUFFIX(LAPACKE_sorgqr_work)(layout, *m, *n, *k, a_r, lda_r, tau,
+                                          work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -295,7 +299,7 @@ void SORGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 /*****************************************************************************
  * SORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK, LWORK, INFO )
  *****************************************************************************/
-#define SORMQR_TEST LAPACK_GLOBAL(sormqr_test, SORMQR_TEST)
+#define SORMQR_TEST LAPACK_GLOBAL_SUFFIX(sormqr_test, SORMQR_TEST)
 void SORMQR_TEST(const char *side, const char *trans, const lapack_int *m,
                  const lapack_int *n, const lapack_int *k, const float *a,
                  const lapack_int *lda, const float *tau, float *c,
@@ -310,8 +314,9 @@ void SORMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_sormqr_work(LAPACK_COL_MAJOR, *side, *trans, *m, *n, *k,
-                                  a, *lda, tau, c, *ldc, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_sormqr_work)(LAPACK_COL_MAJOR, *side, *trans,
+                                              *m, *n, *k, a, *lda, tau, c, *ldc,
+                                              work, *lwork);
         *info = lapacke_test_info("SORMQR", ret);
         return;
     }
@@ -322,7 +327,7 @@ void SORMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int lda_r = *lda;
     lapack_int ldc_r = *ldc;
 #if LAPACKE_TEST_ROW_MAJOR
-    const lapack_int r = LAPACKE_lsame(*side, 'l') ? *m : *n;
+    const lapack_int r = API_SUFFIX(LAPACKE_lsame)(*side, 'l') ? *m : *n;
     a_r = lapacke_test_sge_cm_to_rm(r, *k, a, *lda, &lda_r);
     c_r = lapacke_test_sge_cm_to_rm(*m, *n, c, *ldc, &ldc_r);
     if (a_r == NULL || c_r == NULL) {
@@ -334,11 +339,12 @@ void SORMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sormqr(layout, *side, *trans, *m, *n, *k, a_r, lda_r, tau,
-                         c_r, ldc_r);
+    ret = API_SUFFIX(LAPACKE_sormqr)(layout, *side, *trans, *m, *n, *k, a_r,
+                                     lda_r, tau, c_r, ldc_r);
 #else
-    ret = LAPACKE_sormqr_work(layout, *side, *trans, *m, *n, *k, a_r, lda_r,
-                              tau, c_r, ldc_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_sormqr_work)(layout, *side, *trans, *m, *n, *k,
+                                          a_r, lda_r, tau, c_r, ldc_r, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -352,7 +358,7 @@ void SORMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 /*****************************************************************************
  * SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK, INFO )
  *****************************************************************************/
-#define SGELS_TEST LAPACK_GLOBAL(sgels_test, SGELS_TEST)
+#define SGELS_TEST LAPACK_GLOBAL_SUFFIX(sgels_test, SGELS_TEST)
 void SGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
                 const lapack_int *nrhs, float *a, const lapack_int *lda,
                 float *b, const lapack_int *ldb, float *work,
@@ -366,8 +372,9 @@ void SGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_sgels_work(LAPACK_COL_MAJOR, *trans, *m, *n, *nrhs, a,
-                                 *lda, b, *ldb, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_sgels_work)(LAPACK_COL_MAJOR, *trans, *m, *n,
+                                             *nrhs, a, *lda, b, *ldb, work,
+                                             *lwork);
         *info = lapacke_test_info("SGELS", ret);
         return;
     }
@@ -390,10 +397,11 @@ void SGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_sgels(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_sgels)(layout, *trans, *m, *n, *nrhs, a_r, lda_r,
+                                    b_r, ldb_r);
 #else
-    ret = LAPACKE_sgels_work(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r,
-                             ldb_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_sgels_work)(layout, *trans, *m, *n, *nrhs, a_r,
+                                         lda_r, b_r, ldb_r, work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -408,7 +416,7 @@ void SGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * REAL FUNCTION SLANGE( NORM, M, N, A, LDA, WORK )
  *****************************************************************************/
-#define SLANGE_TEST LAPACK_GLOBAL(slange_test, SLANGE_TEST)
+#define SLANGE_TEST LAPACK_GLOBAL_SUFFIX(slange_test, SLANGE_TEST)
 float SLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
                   const float *a, const lapack_int *lda, float *work
 #ifdef LAPACK_FORTRAN_STRLEN_END
@@ -430,9 +438,10 @@ float SLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    res = LAPACKE_slange(layout, *norm, *m, *n, a_r, lda_r);
+    res = API_SUFFIX(LAPACKE_slange)(layout, *norm, *m, *n, a_r, lda_r);
 #else
-    res = LAPACKE_slange_work(layout, *norm, *m, *n, a_r, lda_r, work);
+    res = API_SUFFIX(LAPACKE_slange_work)(layout, *norm, *m, *n, a_r, lda_r,
+                                          work);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR

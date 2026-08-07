@@ -13,9 +13,10 @@
         lapacke_test_zfill_spd(layout, N, a, LD);                              \
         lapacke_test_zfill_rhs(layout, N, NRHS, b, LD);                        \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_zpotrs(layout, 'U', N, NRHS, a, LD, b, LD), \
-                           expected);                                          \
+        lapacke_test_check(                                                    \
+            name, lapacke_test_layout_names[layout_index],                     \
+            API_SUFFIX(LAPACKE_zpotrs)(layout, 'U', N, NRHS, a, LD, b, LD),    \
+            expected);                                                         \
     } while (0)
 
 LAPACKE_TEST(zpotrs)
@@ -30,19 +31,19 @@ LAPACKE_TEST(zpotrs)
             "zpotrs a uplo=U", l, N, N, a, LD, lapacke_test_region_upper, -5,
             (lapacke_test_zfill_spd(layout, N, a, LD),
              lapacke_test_zfill_rhs(layout, N, NRHS, b, LD)),
-            LAPACKE_zpotrs(layout, 'U', N, NRHS, a, LD, b, LD));
+            API_SUFFIX(LAPACKE_zpotrs)(layout, 'U', N, NRHS, a, LD, b, LD));
 
         LAPACKE_TEST_ZNAN_SWEEP(
             "zpotrs a uplo=L", l, N, N, a, LD, lapacke_test_region_lower, -5,
             (lapacke_test_zfill_spd(layout, N, a, LD),
              lapacke_test_zfill_rhs(layout, N, NRHS, b, LD)),
-            LAPACKE_zpotrs(layout, 'L', N, NRHS, a, LD, b, LD));
+            API_SUFFIX(LAPACKE_zpotrs)(layout, 'L', N, NRHS, a, LD, b, LD));
 
         LAPACKE_TEST_ZNAN_SWEEP(
             "zpotrs b", l, N, NRHS, b, LD, lapacke_test_region_full, -7,
             (lapacke_test_zfill_spd(layout, N, a, LD),
              lapacke_test_zfill_rhs(layout, N, NRHS, b, LD)),
-            LAPACKE_zpotrs(layout, 'U', N, NRHS, a, LD, b, LD));
+            API_SUFFIX(LAPACKE_zpotrs)(layout, 'U', N, NRHS, a, LD, b, LD));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
@@ -52,7 +53,9 @@ LAPACKE_TEST(zpotrs)
         lapacke_test_zfill_nan(layout, N, NRHS, b, LD);
         lapacke_test_check(
             "zpotrs NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_zpotrs(layout, 'U', N, NRHS, a, LD, b, LD) >= 0 ? 0 : -999,
+            API_SUFFIX(LAPACKE_zpotrs)(layout, 'U', N, NRHS, a, LD, b, LD) >= 0
+                ? 0
+                : -999,
             0);
         LAPACKE_set_nancheck(1);
     }

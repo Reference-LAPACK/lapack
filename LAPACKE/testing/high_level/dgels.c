@@ -16,7 +16,8 @@
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(                                                    \
             name, lapacke_test_layout_names[layout_index],                     \
-            LAPACKE_dgels(layout, 'N', M, N, NRHS, a, LD, b, LD), expected);   \
+            API_SUFFIX(LAPACKE_dgels)(layout, 'N', M, N, NRHS, a, LD, b, LD),  \
+            expected);                                                         \
     } while (0)
 
 LAPACKE_TEST(dgels)
@@ -34,13 +35,13 @@ LAPACKE_TEST(dgels)
             "dgels a", l, M, N, a, LD, lapacke_test_region_full, -6,
             (lapacke_test_dfill(layout, M, N, a, LD),
              lapacke_test_dfill_rhs(layout, M, NRHS, b, LD)),
-            LAPACKE_dgels(layout, 'N', M, N, NRHS, a, LD, b, LD));
+            API_SUFFIX(LAPACKE_dgels)(layout, 'N', M, N, NRHS, a, LD, b, LD));
 
         LAPACKE_TEST_DNAN_SWEEP(
             "dgels b", l, M, NRHS, b, LD, lapacke_test_region_full, -8,
             (lapacke_test_dfill(layout, M, N, a, LD),
              lapacke_test_dfill_rhs(layout, M, NRHS, b, LD)),
-            LAPACKE_dgels(layout, 'N', M, N, NRHS, a, LD, b, LD));
+            API_SUFFIX(LAPACKE_dgels)(layout, 'N', M, N, NRHS, a, LD, b, LD));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
@@ -48,11 +49,13 @@ LAPACKE_TEST(dgels)
         LAPACKE_set_nancheck(0);
         lapacke_test_dfill_nan(layout, M, N, a, LD);
         lapacke_test_dfill_nan(layout, M, NRHS, b, LD);
-        lapacke_test_check(
-            "dgels NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_dgels(layout, 'N', M, N, NRHS, a, LD, b, LD) >= 0 ? 0
-                                                                      : -999,
-            0);
+        lapacke_test_check("dgels NaN with nancheck off",
+                           lapacke_test_layout_names[l],
+                           API_SUFFIX(LAPACKE_dgels)(layout, 'N', M, N, NRHS, a,
+                                                     LD, b, LD) >= 0
+                               ? 0
+                               : -999,
+                           0);
         LAPACKE_set_nancheck(1);
     }
 

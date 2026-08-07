@@ -12,7 +12,8 @@
         lapacke_test_dfill_spd(layout, N, a, LD);                              \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_dpotrf(layout, 'U', N, a, LD), expected);   \
+                           API_SUFFIX(LAPACKE_dpotrf)(layout, 'U', N, a, LD),  \
+                           expected);                                          \
     } while (0)
 
 LAPACKE_TEST(dpotrf)
@@ -24,15 +25,15 @@ LAPACKE_TEST(dpotrf)
     for (size_t l = 0; l < 2; l++) {
         const int layout = lapacke_test_layouts[l];
 
-        LAPACKE_TEST_DNAN_SWEEP("dpotrf a uplo=U", l, N, N, a, LD,
-                                lapacke_test_region_upper, -4,
-                                (lapacke_test_dfill_spd(layout, N, a, LD)),
-                                LAPACKE_dpotrf(layout, 'U', N, a, LD));
+        LAPACKE_TEST_DNAN_SWEEP(
+            "dpotrf a uplo=U", l, N, N, a, LD, lapacke_test_region_upper, -4,
+            (lapacke_test_dfill_spd(layout, N, a, LD)),
+            API_SUFFIX(LAPACKE_dpotrf)(layout, 'U', N, a, LD));
 
-        LAPACKE_TEST_DNAN_SWEEP("dpotrf a uplo=L", l, N, N, a, LD,
-                                lapacke_test_region_lower, -4,
-                                (lapacke_test_dfill_spd(layout, N, a, LD)),
-                                LAPACKE_dpotrf(layout, 'L', N, a, LD));
+        LAPACKE_TEST_DNAN_SWEEP(
+            "dpotrf a uplo=L", l, N, N, a, LD, lapacke_test_region_lower, -4,
+            (lapacke_test_dfill_spd(layout, N, a, LD)),
+            API_SUFFIX(LAPACKE_dpotrf)(layout, 'L', N, a, LD));
 
         /* With NaN checking disabled the NaN must go through to the Fortran
          * routine, which reports it as a not-positive-definite leading
@@ -41,7 +42,8 @@ LAPACKE_TEST(dpotrf)
         lapacke_test_dfill_nan(layout, N, N, a, LD);
         lapacke_test_check(
             "dpotrf NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_dpotrf(layout, 'U', N, a, LD) >= 0 ? 0 : -999, 0);
+            API_SUFFIX(LAPACKE_dpotrf)(layout, 'U', N, a, LD) >= 0 ? 0 : -999,
+            0);
         LAPACKE_set_nancheck(1);
     }
 

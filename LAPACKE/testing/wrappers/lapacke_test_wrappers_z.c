@@ -16,7 +16,7 @@ static const int layout = LAPACKE_TEST_LAYOUT;
 /*****************************************************************************
  * ZGETRF( M, N, A, LDA, IPIV, INFO )
  *****************************************************************************/
-#define ZGETRF_TEST LAPACK_GLOBAL(zgetrf_test, ZGETRF_TEST)
+#define ZGETRF_TEST LAPACK_GLOBAL_SUFFIX(zgetrf_test, ZGETRF_TEST)
 void ZGETRF_TEST(const lapack_int *m, const lapack_int *n,
                  lapack_complex_double *a, const lapack_int *lda,
                  lapack_int *ipiv, lapack_int *info)
@@ -33,9 +33,9 @@ void ZGETRF_TEST(const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zgetrf(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_zgetrf)(layout, *m, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_zgetrf_work(layout, *m, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_zgetrf_work)(layout, *m, *n, a_r, lda_r, ipiv);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -48,7 +48,7 @@ void ZGETRF_TEST(const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
  *****************************************************************************/
-#define ZGETRS_TEST LAPACK_GLOBAL(zgetrs_test, ZGETRS_TEST)
+#define ZGETRS_TEST LAPACK_GLOBAL_SUFFIX(zgetrs_test, ZGETRS_TEST)
 void ZGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
                  const lapack_complex_double *a, const lapack_int *lda,
                  const lapack_int *ipiv, lapack_complex_double *b,
@@ -76,11 +76,11 @@ void ZGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zgetrs(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                         ldb_r);
+    ret = API_SUFFIX(LAPACKE_zgetrs)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                     ipiv, b_r, ldb_r);
 #else
-    ret = LAPACKE_zgetrs_work(layout, *trans, *n, *nrhs, a_r, lda_r, ipiv, b_r,
-                              ldb_r);
+    ret = API_SUFFIX(LAPACKE_zgetrs_work)(layout, *trans, *n, *nrhs, a_r, lda_r,
+                                          ipiv, b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -94,7 +94,7 @@ void ZGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * ZGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
  *****************************************************************************/
-#define ZGETRI_TEST LAPACK_GLOBAL(zgetri_test, ZGETRI_TEST)
+#define ZGETRI_TEST LAPACK_GLOBAL_SUFFIX(zgetri_test, ZGETRI_TEST)
 void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a,
                  const lapack_int *lda, const lapack_int *ipiv,
                  lapack_complex_double *work, const lapack_int *lwork,
@@ -103,8 +103,8 @@ void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_zgetri_work(LAPACK_COL_MAJOR, *n, a, *lda, ipiv, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_zgetri_work)(LAPACK_COL_MAJOR, *n, a, *lda,
+                                              ipiv, work, *lwork);
         *info = lapacke_test_info("ZGETRI", ret);
         return;
     }
@@ -121,9 +121,10 @@ void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zgetri(layout, *n, a_r, lda_r, ipiv);
+    ret = API_SUFFIX(LAPACKE_zgetri)(layout, *n, a_r, lda_r, ipiv);
 #else
-    ret = LAPACKE_zgetri_work(layout, *n, a_r, lda_r, ipiv, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_zgetri_work)(layout, *n, a_r, lda_r, ipiv, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -136,7 +137,7 @@ void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a,
 /*****************************************************************************
  * ZPOTRF( UPLO, N, A, LDA, INFO )
  *****************************************************************************/
-#define ZPOTRF_TEST LAPACK_GLOBAL(zpotrf_test, ZPOTRF_TEST)
+#define ZPOTRF_TEST LAPACK_GLOBAL_SUFFIX(zpotrf_test, ZPOTRF_TEST)
 void ZPOTRF_TEST(const char *uplo, const lapack_int *n,
                  lapack_complex_double *a, const lapack_int *lda,
                  lapack_int *info
@@ -158,9 +159,9 @@ void ZPOTRF_TEST(const char *uplo, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zpotrf(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_zpotrf)(layout, *uplo, *n, a_r, lda_r);
 #else
-    ret = LAPACKE_zpotrf_work(layout, *uplo, *n, a_r, lda_r);
+    ret = API_SUFFIX(LAPACKE_zpotrf_work)(layout, *uplo, *n, a_r, lda_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -173,7 +174,7 @@ void ZPOTRF_TEST(const char *uplo, const lapack_int *n,
 /*****************************************************************************
  * ZPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
  *****************************************************************************/
-#define ZPOTRS_TEST LAPACK_GLOBAL(zpotrs_test, ZPOTRS_TEST)
+#define ZPOTRS_TEST LAPACK_GLOBAL_SUFFIX(zpotrs_test, ZPOTRS_TEST)
 void ZPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
                  const lapack_complex_double *a, const lapack_int *lda,
                  lapack_complex_double *b, const lapack_int *ldb,
@@ -201,9 +202,11 @@ void ZPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zpotrs(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_zpotrs)(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r,
+                                     ldb_r);
 #else
-    ret = LAPACKE_zpotrs_work(layout, *uplo, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_zpotrs_work)(layout, *uplo, *n, *nrhs, a_r, lda_r,
+                                          b_r, ldb_r);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -217,7 +220,7 @@ void ZPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
 /*****************************************************************************
  * ZGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define ZGEQRF_TEST LAPACK_GLOBAL(zgeqrf_test, ZGEQRF_TEST)
+#define ZGEQRF_TEST LAPACK_GLOBAL_SUFFIX(zgeqrf_test, ZGEQRF_TEST)
 void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n,
                  lapack_complex_double *a, const lapack_int *lda,
                  lapack_complex_double *tau, lapack_complex_double *work,
@@ -226,8 +229,8 @@ void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_zgeqrf_work(LAPACK_COL_MAJOR, *m, *n, a, *lda, tau, work,
-                                  *lwork);
+        ret = API_SUFFIX(LAPACKE_zgeqrf_work)(LAPACK_COL_MAJOR, *m, *n, a, *lda,
+                                              tau, work, *lwork);
         *info = lapacke_test_info("ZGEQRF", ret);
         return;
     }
@@ -244,9 +247,10 @@ void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zgeqrf(layout, *m, *n, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_zgeqrf)(layout, *m, *n, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_zgeqrf_work(layout, *m, *n, a_r, lda_r, tau, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_zgeqrf_work)(layout, *m, *n, a_r, lda_r, tau, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -259,7 +263,7 @@ void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * ZUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
-#define ZUNGQR_TEST LAPACK_GLOBAL(zungqr_test, ZUNGQR_TEST)
+#define ZUNGQR_TEST LAPACK_GLOBAL_SUFFIX(zungqr_test, ZUNGQR_TEST)
 void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
                  lapack_complex_double *a, const lapack_int *lda,
                  const lapack_complex_double *tau, lapack_complex_double *work,
@@ -268,8 +272,8 @@ void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_zungqr_work(LAPACK_COL_MAJOR, *m, *n, *k, a, *lda, tau,
-                                  work, *lwork);
+        ret = API_SUFFIX(LAPACKE_zungqr_work)(LAPACK_COL_MAJOR, *m, *n, *k, a,
+                                              *lda, tau, work, *lwork);
         *info = lapacke_test_info("ZUNGQR", ret);
         return;
     }
@@ -286,10 +290,10 @@ void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zungqr(layout, *m, *n, *k, a_r, lda_r, tau);
+    ret = API_SUFFIX(LAPACKE_zungqr)(layout, *m, *n, *k, a_r, lda_r, tau);
 #else
-    ret = LAPACKE_zungqr_work(layout, *m, *n, *k, a_r, lda_r, tau, work,
-                              *lwork);
+    ret = API_SUFFIX(LAPACKE_zungqr_work)(layout, *m, *n, *k, a_r, lda_r, tau,
+                                          work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -302,7 +306,7 @@ void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
 /*****************************************************************************
  * ZUNMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK, LWORK, INFO )
  *****************************************************************************/
-#define ZUNMQR_TEST LAPACK_GLOBAL(zunmqr_test, ZUNMQR_TEST)
+#define ZUNMQR_TEST LAPACK_GLOBAL_SUFFIX(zunmqr_test, ZUNMQR_TEST)
 void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
                  const lapack_int *n, const lapack_int *k,
                  const lapack_complex_double *a, const lapack_int *lda,
@@ -318,8 +322,9 @@ void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_zunmqr_work(LAPACK_COL_MAJOR, *side, *trans, *m, *n, *k,
-                                  a, *lda, tau, c, *ldc, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_zunmqr_work)(LAPACK_COL_MAJOR, *side, *trans,
+                                              *m, *n, *k, a, *lda, tau, c, *ldc,
+                                              work, *lwork);
         *info = lapacke_test_info("ZUNMQR", ret);
         return;
     }
@@ -330,7 +335,7 @@ void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
     lapack_int lda_r = *lda;
     lapack_int ldc_r = *ldc;
 #if LAPACKE_TEST_ROW_MAJOR
-    const lapack_int r = LAPACKE_lsame(*side, 'l') ? *m : *n;
+    const lapack_int r = API_SUFFIX(LAPACKE_lsame)(*side, 'l') ? *m : *n;
     a_r = lapacke_test_zge_cm_to_rm(r, *k, a, *lda, &lda_r);
     c_r = lapacke_test_zge_cm_to_rm(*m, *n, c, *ldc, &ldc_r);
     if (a_r == NULL || c_r == NULL) {
@@ -342,11 +347,12 @@ void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zunmqr(layout, *side, *trans, *m, *n, *k, a_r, lda_r, tau,
-                         c_r, ldc_r);
+    ret = API_SUFFIX(LAPACKE_zunmqr)(layout, *side, *trans, *m, *n, *k, a_r,
+                                     lda_r, tau, c_r, ldc_r);
 #else
-    ret = LAPACKE_zunmqr_work(layout, *side, *trans, *m, *n, *k, a_r, lda_r,
-                              tau, c_r, ldc_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_zunmqr_work)(layout, *side, *trans, *m, *n, *k,
+                                          a_r, lda_r, tau, c_r, ldc_r, work,
+                                          *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -360,7 +366,7 @@ void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
 /*****************************************************************************
  * ZGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK, INFO )
  *****************************************************************************/
-#define ZGELS_TEST LAPACK_GLOBAL(zgels_test, ZGELS_TEST)
+#define ZGELS_TEST LAPACK_GLOBAL_SUFFIX(zgels_test, ZGELS_TEST)
 void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
                 const lapack_int *nrhs, lapack_complex_double *a,
                 const lapack_int *lda, lapack_complex_double *b,
@@ -375,8 +381,9 @@ void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
     if (*lwork == -1) {
-        ret = LAPACKE_zgels_work(LAPACK_COL_MAJOR, *trans, *m, *n, *nrhs, a,
-                                 *lda, b, *ldb, work, *lwork);
+        ret = API_SUFFIX(LAPACKE_zgels_work)(LAPACK_COL_MAJOR, *trans, *m, *n,
+                                             *nrhs, a, *lda, b, *ldb, work,
+                                             *lwork);
         *info = lapacke_test_info("ZGELS", ret);
         return;
     }
@@ -399,10 +406,11 @@ void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    ret = LAPACKE_zgels(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r, ldb_r);
+    ret = API_SUFFIX(LAPACKE_zgels)(layout, *trans, *m, *n, *nrhs, a_r, lda_r,
+                                    b_r, ldb_r);
 #else
-    ret = LAPACKE_zgels_work(layout, *trans, *m, *n, *nrhs, a_r, lda_r, b_r,
-                             ldb_r, work, *lwork);
+    ret = API_SUFFIX(LAPACKE_zgels_work)(layout, *trans, *m, *n, *nrhs, a_r,
+                                         lda_r, b_r, ldb_r, work, *lwork);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR
@@ -417,7 +425,7 @@ void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
 /*****************************************************************************
  * DOUBLE PRECISION FUNCTION ZLANGE( NORM, M, N, A, LDA, WORK )
  *****************************************************************************/
-#define ZLANGE_TEST LAPACK_GLOBAL(zlange_test, ZLANGE_TEST)
+#define ZLANGE_TEST LAPACK_GLOBAL_SUFFIX(zlange_test, ZLANGE_TEST)
 double ZLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
                    const lapack_complex_double *a, const lapack_int *lda,
                    double *work
@@ -440,9 +448,10 @@ double ZLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
 #endif
 
 #if LAPACKE_TEST_HIGH_LEVEL
-    res = LAPACKE_zlange(layout, *norm, *m, *n, a_r, lda_r);
+    res = API_SUFFIX(LAPACKE_zlange)(layout, *norm, *m, *n, a_r, lda_r);
 #else
-    res = LAPACKE_zlange_work(layout, *norm, *m, *n, a_r, lda_r, work);
+    res = API_SUFFIX(LAPACKE_zlange_work)(layout, *norm, *m, *n, a_r, lda_r,
+                                          work);
 #endif
 
 #if LAPACKE_TEST_ROW_MAJOR

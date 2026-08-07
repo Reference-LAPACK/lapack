@@ -103,11 +103,14 @@ LAPACKE_TEST(dmatgen)
     /* The SPD fill must Cholesky-factorize; the indefinite fill must be
      * rejected with a positive info (not positive definite). */
     lapacke_test_dfill_spd(LAPACK_COL_MAJOR, N, a, LD);
-    lapacke_test_check("dmatgen spd is positive definite", NULL,
-                       LAPACKE_dpotrf(LAPACK_COL_MAJOR, 'U', N, a, LD), 0);
+    lapacke_test_check(
+        "dmatgen spd is positive definite", NULL,
+        API_SUFFIX(LAPACKE_dpotrf)(LAPACK_COL_MAJOR, 'U', N, a, LD), 0);
 
     lapacke_test_dfill_sym(LAPACK_COL_MAJOR, N, a, LD);
     lapacke_test_check(
         "dmatgen sym is indefinite", NULL,
-        LAPACKE_dpotrf(LAPACK_COL_MAJOR, 'U', N, a, LD) > 0 ? 0 : -999, 0);
+        API_SUFFIX(LAPACKE_dpotrf)(LAPACK_COL_MAJOR, 'U', N, a, LD) > 0 ? 0
+                                                                        : -999,
+        0);
 }

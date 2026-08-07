@@ -12,7 +12,8 @@
         lapacke_test_sfill(layout, N, N, a, LD);                               \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
-                           LAPACKE_sgetri(layout, N, a, LD, ipiv), expected);  \
+                           API_SUFFIX(LAPACKE_sgetri)(layout, N, a, LD, ipiv), \
+                           expected);                                          \
     } while (0)
 
 LAPACKE_TEST(sgetri)
@@ -23,10 +24,10 @@ LAPACKE_TEST(sgetri)
     /* A holds both the L and the U factor: fully read. */
     for (size_t l = 0; l < 2; l++) {
         const int layout = lapacke_test_layouts[l];
-        LAPACKE_TEST_SNAN_SWEEP("sgetri a", l, N, N, a, LD,
-                                lapacke_test_region_full, -3,
-                                (lapacke_test_sfill(layout, N, N, a, LD)),
-                                LAPACKE_sgetri(layout, N, a, LD, ipiv));
+        LAPACKE_TEST_SNAN_SWEEP(
+            "sgetri a", l, N, N, a, LD, lapacke_test_region_full, -3,
+            (lapacke_test_sfill(layout, N, N, a, LD)),
+            API_SUFFIX(LAPACKE_sgetri)(layout, N, a, LD, ipiv));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
@@ -35,7 +36,8 @@ LAPACKE_TEST(sgetri)
         lapacke_test_sfill_nan(layout, N, N, a, LD);
         lapacke_test_check(
             "sgetri NaN with nancheck off", lapacke_test_layout_names[l],
-            LAPACKE_sgetri(layout, N, a, LD, ipiv) >= 0 ? 0 : -999, 0);
+            API_SUFFIX(LAPACKE_sgetri)(layout, N, a, LD, ipiv) >= 0 ? 0 : -999,
+            0);
         LAPACKE_set_nancheck(1);
     }
 

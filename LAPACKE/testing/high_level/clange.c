@@ -30,9 +30,10 @@ static lapack_int clange_info(float value)
         const int layout = lapacke_test_layouts[layout_index];                 \
         lapacke_test_cfill(layout, M, N, a, LD);                               \
         lapacke_test_schedule_malloc_failure(countdown);                       \
-        lapacke_test_check(                                                    \
-            name, lapacke_test_layout_names[layout_index],                     \
-            clange_info(LAPACKE_clange(layout, norm, M, N, a, LD)), expected); \
+        lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
+                           clange_info(API_SUFFIX(LAPACKE_clange)(             \
+                               layout, norm, M, N, a, LD)),                    \
+                           expected);                                          \
     } while (0)
 
 LAPACKE_TEST(clange)
@@ -45,13 +46,13 @@ LAPACKE_TEST(clange)
         LAPACKE_TEST_CNAN_SWEEP(
             "clange a", l, M, N, a, LD, lapacke_test_region_full, -5,
             (lapacke_test_cfill(layout, M, N, a, LD)),
-            clange_info(LAPACKE_clange(layout, '1', M, N, a, LD)));
+            clange_info(API_SUFFIX(LAPACKE_clange)(layout, '1', M, N, a, LD)));
 
         /* With NaN checking disabled the NaN must not be rejected with
          * -5. */
         LAPACKE_set_nancheck(0);
         lapacke_test_cfill_nan(layout, M, N, a, LD);
-        res = LAPACKE_clange(layout, '1', M, N, a, LD);
+        res = API_SUFFIX(LAPACKE_clange)(layout, '1', M, N, a, LD);
         lapacke_test_check("clange NaN with nancheck off",
                            lapacke_test_layout_names[l],
                            clange_info(res) == -5 ? -5 : 0, 0);
@@ -65,7 +66,7 @@ LAPACKE_TEST(clange)
      * questionable enough to raise upstream. */
     lapacke_test_cfill(LAPACK_COL_MAJOR, M, N, a, LD);
     lapacke_test_schedule_malloc_failure(0);
-    res = LAPACKE_clange(LAPACK_COL_MAJOR, 'I', M, N, a, LD);
+    res = API_SUFFIX(LAPACKE_clange)(LAPACK_COL_MAJOR, 'I', M, N, a, LD);
     lapacke_test_check("clange work alloc failure returns 0.0", "col-major",
                        res == 0.0f ? 0 : -999, 0);
 
