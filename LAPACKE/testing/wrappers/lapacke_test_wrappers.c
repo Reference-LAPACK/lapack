@@ -257,7 +257,7 @@ void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
  *         allocation failed.
  */
 float *lapacke_test_sge_cm_to_rm(lapack_int m, lapack_int n, const float *a,
-                                  lapack_int lda, lapack_int *ldr)
+                                 lapack_int lda, lapack_int *ldr)
 {
     float *r;
     *ldr = MAX(1, n);
@@ -300,7 +300,7 @@ void lapacke_test_sge_rm_to_cm(lapack_int m, lapack_int n, const float *r,
  *         allocation failed.
  */
 float *lapacke_test_spo_cm_to_rm(char uplo, lapack_int n, const float *a,
-                                  lapack_int lda, lapack_int *ldr)
+                                 lapack_int lda, lapack_int *ldr)
 {
     float *r;
     *ldr = MAX(1, n);
@@ -340,12 +340,14 @@ void lapacke_test_spo_rm_to_cm(char uplo, lapack_int n, const float *r,
  * \return The shadow copy (release with LAPACKE_free), or NULL if the
  *         allocation failed.
  */
-lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_float *a,
-                                  lapack_int lda, lapack_int *ldr)
+lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n,
+                                                const lapack_complex_float *a,
+                                                lapack_int lda, lapack_int *ldr)
 {
     lapack_complex_float *r;
     *ldr = MAX(1, n);
-    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) * MAX(1, m) * (*ldr));
+    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) *
+                                               MAX(1, m) * (*ldr));
     if (r != NULL) {
         LAPACKE_cge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
@@ -363,8 +365,9 @@ lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n, cons
  * \param[out] a   Column-major destination matrix.
  * \param[in]  lda Leading dimension of a.
  */
-void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_float *r,
-                               lapack_int ldr, lapack_complex_float *a, lapack_int lda)
+void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n,
+                               const lapack_complex_float *r, lapack_int ldr,
+                               lapack_complex_float *a, lapack_int lda)
 {
     LAPACKE_cge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
@@ -383,12 +386,14 @@ void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_
  * \return The shadow copy (release with LAPACKE_free), or NULL if the
  *         allocation failed.
  */
-lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_float *a,
-                                  lapack_int lda, lapack_int *ldr)
+lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n,
+                                                const lapack_complex_float *a,
+                                                lapack_int lda, lapack_int *ldr)
 {
     lapack_complex_float *r;
     *ldr = MAX(1, n);
-    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) * MAX(1, n) * (*ldr));
+    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) *
+                                               MAX(1, n) * (*ldr));
     if (r != NULL) {
         LAPACKE_cpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
     }
@@ -406,8 +411,9 @@ lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n, const l
  * \param[out] a    Column-major destination matrix.
  * \param[in]  lda  Leading dimension of a.
  */
-void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_float *r,
-                               lapack_int ldr, lapack_complex_float *a, lapack_int lda)
+void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n,
+                               const lapack_complex_float *r, lapack_int ldr,
+                               lapack_complex_float *a, lapack_int lda)
 {
     LAPACKE_cpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }
@@ -424,12 +430,15 @@ void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_flo
  * \return The shadow copy (release with LAPACKE_free), or NULL if the
  *         allocation failed.
  */
-lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_double *a,
-                                  lapack_int lda, lapack_int *ldr)
+lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n,
+                                                 const lapack_complex_double *a,
+                                                 lapack_int lda,
+                                                 lapack_int *ldr)
 {
     lapack_complex_double *r;
     *ldr = MAX(1, n);
-    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) * MAX(1, m) * (*ldr));
+    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) *
+                                                MAX(1, m) * (*ldr));
     if (r != NULL) {
         LAPACKE_zge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
     }
@@ -447,8 +456,9 @@ lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n, con
  * \param[out] a   Column-major destination matrix.
  * \param[in]  lda Leading dimension of a.
  */
-void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_double *r,
-                               lapack_int ldr, lapack_complex_double *a, lapack_int lda)
+void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n,
+                               const lapack_complex_double *r, lapack_int ldr,
+                               lapack_complex_double *a, lapack_int lda)
 {
     LAPACKE_zge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
 }
@@ -467,12 +477,15 @@ void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_
  * \return The shadow copy (release with LAPACKE_free), or NULL if the
  *         allocation failed.
  */
-lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_double *a,
-                                  lapack_int lda, lapack_int *ldr)
+lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n,
+                                                 const lapack_complex_double *a,
+                                                 lapack_int lda,
+                                                 lapack_int *ldr)
 {
     lapack_complex_double *r;
     *ldr = MAX(1, n);
-    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) * MAX(1, n) * (*ldr));
+    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) *
+                                                MAX(1, n) * (*ldr));
     if (r != NULL) {
         LAPACKE_zpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
     }
@@ -490,8 +503,9 @@ lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n, const 
  * \param[out] a    Column-major destination matrix.
  * \param[in]  lda  Leading dimension of a.
  */
-void lapacke_test_zpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_double *r,
-                               lapack_int ldr, lapack_complex_double *a, lapack_int lda)
+void lapacke_test_zpo_rm_to_cm(char uplo, lapack_int n,
+                               const lapack_complex_double *r, lapack_int ldr,
+                               lapack_complex_double *a, lapack_int lda)
 {
     LAPACKE_zpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
 }

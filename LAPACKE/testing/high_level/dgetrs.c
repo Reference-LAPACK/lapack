@@ -10,8 +10,8 @@
 #define LAPACKE_DGETRS_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
         const int layout = lapacke_test_layouts[layout_index];                 \
-        lapacke_test_fill(layout, N, N, a, LD);                                \
-        lapacke_test_fill_rhs(layout, N, NRHS, b, LD);                         \
+        lapacke_test_dfill(layout, N, N, a, LD);                               \
+        lapacke_test_dfill_rhs(layout, N, NRHS, b, LD);                        \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(                                                    \
             name, lapacke_test_layout_names[layout_index],                     \
@@ -28,24 +28,24 @@ LAPACKE_TEST(dgetrs)
         const int layout = lapacke_test_layouts[l];
 
         /* A holds both the L and the U factor: fully read. */
-        LAPACKE_TEST_NAN_SWEEP(
+        LAPACKE_TEST_DNAN_SWEEP(
             "dgetrs a", l, N, N, a, LD, lapacke_test_region_full, -5,
-            (lapacke_test_fill(layout, N, N, a, LD),
-             lapacke_test_fill_rhs(layout, N, NRHS, b, LD)),
+            (lapacke_test_dfill(layout, N, N, a, LD),
+             lapacke_test_dfill_rhs(layout, N, NRHS, b, LD)),
             LAPACKE_dgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD));
 
-        LAPACKE_TEST_NAN_SWEEP(
+        LAPACKE_TEST_DNAN_SWEEP(
             "dgetrs b", l, N, NRHS, b, LD, lapacke_test_region_full, -8,
-            (lapacke_test_fill(layout, N, N, a, LD),
-             lapacke_test_fill_rhs(layout, N, NRHS, b, LD)),
+            (lapacke_test_dfill(layout, N, N, a, LD),
+             lapacke_test_dfill_rhs(layout, N, NRHS, b, LD)),
             LAPACKE_dgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
          * negative). */
         LAPACKE_set_nancheck(0);
-        lapacke_test_fill_nan(layout, N, N, a, LD);
-        lapacke_test_fill_nan(layout, N, NRHS, b, LD);
+        lapacke_test_dfill_nan(layout, N, N, a, LD);
+        lapacke_test_dfill_nan(layout, N, NRHS, b, LD);
         lapacke_test_check(
             "dgetrs NaN with nancheck off", lapacke_test_layout_names[l],
             LAPACKE_dgetrs(layout, 'N', N, NRHS, a, LD, ipiv, b, LD) >= 0

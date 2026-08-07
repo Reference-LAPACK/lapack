@@ -4,78 +4,78 @@
 #define N LAPACKE_TEST_N
 #define LD LAPACKE_TEST_LD
 
-/* dlange is a value-returning function; on NaN detection it returns the
+/* clange is a value-returning function; on NaN detection it returns the
  * (negative) info code as its value. Map a plausible norm (finite,
  * nonnegative) to 0 so the sweep can compare info codes. A NaN result
  * means the routine consumed the swept NaN instead of rejecting it; map
  * it to a sentinel instead of casting (casting NaN to an integer is
  * undefined behavior and yields 0 on AArch64, masking the failure). */
-static lapack_int dlange_info(double value)
+static lapack_int clange_info(float value)
 {
     if (value != value) {
         return -999;
     }
-    if (value >= 0.0) {
+    if (value >= 0.0f) {
         return 0;
     }
     return (lapack_int)value;
 }
 
 /* One allocation test: refill the input, schedule the malloc failure
- * countdown and check the mapped result of a dlange call with the given
+ * countdown and check the mapped result of a clange call with the given
  * norm in the indexed layout. */
-#define LAPACKE_DLANGE_ALLOC_TEST(layout_index, countdown, norm, name,         \
+#define LAPACKE_CLANGE_ALLOC_TEST(layout_index, countdown, norm, name,         \
                                   expected)                                    \
     do {                                                                       \
         const int layout = lapacke_test_layouts[layout_index];                 \
-        lapacke_test_dfill(layout, M, N, a, LD);                               \
+        lapacke_test_cfill(layout, M, N, a, LD);                               \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(                                                    \
             name, lapacke_test_layout_names[layout_index],                     \
-            dlange_info(LAPACKE_dlange(layout, norm, M, N, a, LD)), expected); \
+            clange_info(LAPACKE_clange(layout, norm, M, N, a, LD)), expected); \
     } while (0)
 
-LAPACKE_TEST(dlange)
+LAPACKE_TEST(clange)
 {
-    double a[LD * LD];
-    double res;
+    lapack_complex_float a[LD * LD];
+    float res;
 
     for (size_t l = 0; l < 2; l++) {
         const int layout = lapacke_test_layouts[l];
-        LAPACKE_TEST_DNAN_SWEEP(
-            "dlange a", l, M, N, a, LD, lapacke_test_region_full, -5,
-            (lapacke_test_dfill(layout, M, N, a, LD)),
-            dlange_info(LAPACKE_dlange(layout, '1', M, N, a, LD)));
+        LAPACKE_TEST_CNAN_SWEEP(
+            "clange a", l, M, N, a, LD, lapacke_test_region_full, -5,
+            (lapacke_test_cfill(layout, M, N, a, LD)),
+            clange_info(LAPACKE_clange(layout, '1', M, N, a, LD)));
 
         /* With NaN checking disabled the NaN must not be rejected with
          * -5. */
         LAPACKE_set_nancheck(0);
-        lapacke_test_dfill_nan(layout, M, N, a, LD);
-        res = LAPACKE_dlange(layout, '1', M, N, a, LD);
-        lapacke_test_check("dlange NaN with nancheck off",
+        lapacke_test_cfill_nan(layout, M, N, a, LD);
+        res = LAPACKE_clange(layout, '1', M, N, a, LD);
+        lapacke_test_check("clange NaN with nancheck off",
                            lapacke_test_layout_names[l],
-                           dlange_info(res) == -5 ? -5 : 0, 0);
+                           clange_info(res) == -5 ? -5 : 0, 0);
         LAPACKE_set_nancheck(1);
     }
 
     /* The infinity norm allocates a work array in the high level. On
-     * allocation failure LAPACKE_dlange returns 0.0 -- indistinguishable
+     * allocation failure LAPACKE_clange returns 0.0 -- indistinguishable
      * from a genuine zero norm; checked exactly here (the macro's mapping
      * would accept any plausible norm). Pinned as the current behavior;
      * questionable enough to raise upstream. */
-    lapacke_test_dfill(LAPACK_COL_MAJOR, M, N, a, LD);
+    lapacke_test_cfill(LAPACK_COL_MAJOR, M, N, a, LD);
     lapacke_test_schedule_malloc_failure(0);
-    res = LAPACKE_dlange(LAPACK_COL_MAJOR, 'I', M, N, a, LD);
-    lapacke_test_check("dlange work alloc failure returns 0.0", "col-major",
-                       res == 0.0 ? 0 : -999, 0);
+    res = LAPACKE_clange(LAPACK_COL_MAJOR, 'I', M, N, a, LD);
+    lapacke_test_check("clange work alloc failure returns 0.0", "col-major",
+                       res == 0.0f ? 0 : -999, 0);
 
     /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_DLANGE_ALLOC_TEST(0, 1, 'I', "dlange recovers after alloc failure",
+    LAPACKE_CLANGE_ALLOC_TEST(0, 1, 'I', "clange recovers after alloc failure",
                               0);
-    lapacke_test_check_alloc_count("dlange allocation count");
+    lapacke_test_check_alloc_count("clange allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */
-    LAPACKE_DLANGE_ALLOC_TEST(2, 0, '1', "dlange invalid matrix_layout", -1);
-    lapacke_test_check_alloc_count("dlange invalid layout allocation count");
+    LAPACKE_CLANGE_ALLOC_TEST(2, 0, '1', "clange invalid matrix_layout", -1);
+    lapacke_test_check_alloc_count("clange invalid layout allocation count");
 }

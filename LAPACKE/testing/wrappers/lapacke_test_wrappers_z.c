@@ -17,8 +17,9 @@ static const int layout = LAPACKE_TEST_LAYOUT;
  * ZGETRF( M, N, A, LDA, IPIV, INFO )
  *****************************************************************************/
 #define ZGETRF_TEST LAPACK_GLOBAL(zgetrf_test, ZGETRF_TEST)
-void ZGETRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_double *a,
-                 const lapack_int *lda, lapack_int *ipiv, lapack_int *info)
+void ZGETRF_TEST(const lapack_int *m, const lapack_int *n,
+                 lapack_complex_double *a, const lapack_int *lda,
+                 lapack_int *ipiv, lapack_int *info)
 {
     lapack_int ret = 0;
     lapack_complex_double *a_r = a;
@@ -49,8 +50,9 @@ void ZGETRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_double
  *****************************************************************************/
 #define ZGETRS_TEST LAPACK_GLOBAL(zgetrs_test, ZGETRS_TEST)
 void ZGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
-                 const lapack_complex_double *a, const lapack_int *lda, const lapack_int *ipiv,
-                 lapack_complex_double *b, const lapack_int *ldb, lapack_int *info
+                 const lapack_complex_double *a, const lapack_int *lda,
+                 const lapack_int *ipiv, lapack_complex_double *b,
+                 const lapack_int *ldb, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN trans_len
@@ -93,8 +95,9 @@ void ZGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
  * ZGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
  *****************************************************************************/
 #define ZGETRI_TEST LAPACK_GLOBAL(zgetri_test, ZGETRI_TEST)
-void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a, const lapack_int *lda,
-                 const lapack_int *ipiv, lapack_complex_double *work, const lapack_int *lwork,
+void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a,
+                 const lapack_int *lda, const lapack_int *ipiv,
+                 lapack_complex_double *work, const lapack_int *lwork,
                  lapack_int *info)
 {
     lapack_int ret = 0;
@@ -134,8 +137,9 @@ void ZGETRI_TEST(const lapack_int *n, lapack_complex_double *a, const lapack_int
  * ZPOTRF( UPLO, N, A, LDA, INFO )
  *****************************************************************************/
 #define ZPOTRF_TEST LAPACK_GLOBAL(zpotrf_test, ZPOTRF_TEST)
-void ZPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_double *a,
-                 const lapack_int *lda, lapack_int *info
+void ZPOTRF_TEST(const char *uplo, const lapack_int *n,
+                 lapack_complex_double *a, const lapack_int *lda,
+                 lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN uplo_len
@@ -171,8 +175,9 @@ void ZPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_double *a
  *****************************************************************************/
 #define ZPOTRS_TEST LAPACK_GLOBAL(zpotrs_test, ZPOTRS_TEST)
 void ZPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
-                 const lapack_complex_double *a, const lapack_int *lda, lapack_complex_double *b,
-                 const lapack_int *ldb, lapack_int *info
+                 const lapack_complex_double *a, const lapack_int *lda,
+                 lapack_complex_double *b, const lapack_int *ldb,
+                 lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN uplo_len
@@ -213,8 +218,9 @@ void ZPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
  * ZGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
 #define ZGEQRF_TEST LAPACK_GLOBAL(zgeqrf_test, ZGEQRF_TEST)
-void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_double *a,
-                 const lapack_int *lda, lapack_complex_double *tau, lapack_complex_double *work,
+void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n,
+                 lapack_complex_double *a, const lapack_int *lda,
+                 lapack_complex_double *tau, lapack_complex_double *work,
                  const lapack_int *lwork, lapack_int *info)
 {
     lapack_int ret = 0;
@@ -255,8 +261,9 @@ void ZGEQRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_double
  *****************************************************************************/
 #define ZUNGQR_TEST LAPACK_GLOBAL(zungqr_test, ZUNGQR_TEST)
 void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
-                 lapack_complex_double *a, const lapack_int *lda, const lapack_complex_double *tau,
-                 lapack_complex_double *work, const lapack_int *lwork, lapack_int *info)
+                 lapack_complex_double *a, const lapack_int *lda,
+                 const lapack_complex_double *tau, lapack_complex_double *work,
+                 const lapack_int *lwork, lapack_int *info)
 {
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
@@ -297,10 +304,11 @@ void ZUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
  *****************************************************************************/
 #define ZUNMQR_TEST LAPACK_GLOBAL(zunmqr_test, ZUNMQR_TEST)
 void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
-                 const lapack_int *n, const lapack_int *k, const lapack_complex_double *a,
-                 const lapack_int *lda, const lapack_complex_double *tau, lapack_complex_double *c,
-                 const lapack_int *ldc, lapack_complex_double *work, const lapack_int *lwork,
-                 lapack_int *info
+                 const lapack_int *n, const lapack_int *k,
+                 const lapack_complex_double *a, const lapack_int *lda,
+                 const lapack_complex_double *tau, lapack_complex_double *c,
+                 const lapack_int *ldc, lapack_complex_double *work,
+                 const lapack_int *lwork, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN side_len, FORTRAN_STRLEN trans_len
@@ -354,8 +362,9 @@ void ZUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
  *****************************************************************************/
 #define ZGELS_TEST LAPACK_GLOBAL(zgels_test, ZGELS_TEST)
 void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
-                const lapack_int *nrhs, lapack_complex_double *a, const lapack_int *lda,
-                lapack_complex_double *b, const lapack_int *ldb, lapack_complex_double *work,
+                const lapack_int *nrhs, lapack_complex_double *a,
+                const lapack_int *lda, lapack_complex_double *b,
+                const lapack_int *ldb, lapack_complex_double *work,
                 const lapack_int *lwork, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                 ,
@@ -410,7 +419,8 @@ void ZGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
  *****************************************************************************/
 #define ZLANGE_TEST LAPACK_GLOBAL(zlange_test, ZLANGE_TEST)
 double ZLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
-                   const lapack_complex_double *a, const lapack_int *lda, double *work
+                   const lapack_complex_double *a, const lapack_int *lda,
+                   double *work
 #ifdef LAPACK_FORTRAN_STRLEN_END
                    ,
                    FORTRAN_STRLEN norm_len

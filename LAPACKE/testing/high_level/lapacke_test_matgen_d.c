@@ -1,5 +1,6 @@
 /*****************************************************************************
- * Test matrix generation for the dedicated high-level LAPACKE tests.
+ * Test matrix generation for the dedicated high-level LAPACKE tests
+ * (double precision).
  * See lapacke_test.h.
  *****************************************************************************/
 
@@ -10,26 +11,26 @@
 /**
  * \brief Generate a random, well-conditioned rows-by-cols matrix.
  *
- * Uses DLATMS (the generator the LAPACK test suite uses) to generate the
+ * Uses ?LATMS (the generator the LAPACK test suite uses) to generate the
  * matrix in column-major order and scatters it into the target layout;
  * padding positions get a finite sentinel. The seed is fixed per fill type,
  * so every call produces the same matrix and test failures are
- * reproducible. A DLATMS failure is recorded as a failed check.
+ * reproducible. A ?LATMS failure is recorded as a failed check.
  *
  * \param[in]  layout LAPACK_COL_MAJOR or LAPACK_ROW_MAJOR.
  * \param[in]  rows   Number of matrix rows (at most LAPACKE_TEST_LD).
  * \param[in]  cols   Number of matrix columns (at most LAPACKE_TEST_LD).
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
- * \param[in]  sym    DLATMS SYM parameter: 'N' for a general matrix, 'P'
+ * \param[in]  sym    ?LATMS SYM parameter: 'N' for a general matrix, 'P'
  *                    for symmetric positive definite, 'S' for symmetric
  *                    with random-sign eigenvalues (indefinite).
  * \param[in]  kl     Lower bandwidth (0 gives an upper triangular matrix).
  * \param[in]  ku     Upper bandwidth (0 gives a lower triangular matrix).
- * \param[in]  seed   The DLATMS ISEED to start from (not modified; the
+ * \param[in]  seed   The ?LATMS ISEED to start from (not modified; the
  *                    last entry must be odd).
  */
-static void lapacke_test_fill_dlatms(int layout, lapack_int rows,
+static void lapacke_test_dfill_latms(int layout, lapack_int rows,
                                      lapack_int cols, double *a, lapack_int ld,
                                      char sym, lapack_int kl, lapack_int ku,
                                      const lapack_int seed[4])
@@ -58,7 +59,7 @@ static void lapacke_test_fill_dlatms(int layout, lapack_int rows,
     if (info != 0) {
         lapacke_test_checks++;
         lapacke_test_failures++;
-        printf("FAIL dlatms matrix generation: info = %d\n", (int)info);
+        printf("FAIL matrix generation: info = %d\n", (int)info);
     }
 
     for (p = 0; p < len; p++) {
@@ -71,7 +72,7 @@ static void lapacke_test_fill_dlatms(int layout, lapack_int rows,
 }
 
 /**
- * \brief Fill a with a random general rows-by-cols matrix.
+ * \brief Fill a with a random general rows-by-cols matrix, double precision.
  *
  * \param[in]  layout LAPACK_COL_MAJOR or LAPACK_ROW_MAJOR.
  * \param[in]  rows   Number of matrix rows (at most LAPACKE_TEST_LD).
@@ -79,16 +80,17 @@ static void lapacke_test_fill_dlatms(int layout, lapack_int rows,
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  */
-void lapacke_test_fill(int layout, lapack_int rows, lapack_int cols, double *a,
-                       lapack_int ld)
+void lapacke_test_dfill(int layout, lapack_int rows, lapack_int cols, double *a,
+                        lapack_int ld)
 {
     static const lapack_int seed[4] = {1988, 1989, 1990, 1991};
-    lapacke_test_fill_dlatms(layout, rows, cols, a, ld, 'N', rows - 1, cols - 1,
+    lapacke_test_dfill_latms(layout, rows, cols, a, ld, 'N', rows - 1, cols - 1,
                              seed);
 }
 
 /**
- * \brief Fill a with a random symmetric positive definite n-by-n matrix.
+ * \brief Fill a with a random symmetric positive definite n-by-n matrix, double
+ * precision.
  *
  * The eigenvalues lie in [0.1, 1], so the matrix is safely positive
  * definite for the Cholesky-based tests.
@@ -98,14 +100,15 @@ void lapacke_test_fill(int layout, lapack_int rows, lapack_int cols, double *a,
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  */
-void lapacke_test_fill_spd(int layout, lapack_int n, double *a, lapack_int ld)
+void lapacke_test_dfill_spd(int layout, lapack_int n, double *a, lapack_int ld)
 {
     static const lapack_int seed[4] = {1990, 1991, 1992, 1993};
-    lapacke_test_fill_dlatms(layout, n, n, a, ld, 'P', n - 1, n - 1, seed);
+    lapacke_test_dfill_latms(layout, n, n, a, ld, 'P', n - 1, n - 1, seed);
 }
 
 /**
- * \brief Fill a with a random symmetric indefinite n-by-n matrix.
+ * \brief Fill a with a random symmetric indefinite n-by-n matrix, double
+ * precision.
  *
  * The eigenvalues have magnitudes in [0.1, 1] and random (seed-fixed)
  * signs, so the matrix is well conditioned but not positive definite --
@@ -116,16 +119,17 @@ void lapacke_test_fill_spd(int layout, lapack_int n, double *a, lapack_int ld)
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  */
-void lapacke_test_fill_sym(int layout, lapack_int n, double *a, lapack_int ld)
+void lapacke_test_dfill_sym(int layout, lapack_int n, double *a, lapack_int ld)
 {
     static const lapack_int seed[4] = {2010, 2011, 2012, 2013};
-    lapacke_test_fill_dlatms(layout, n, n, a, ld, 'S', n - 1, n - 1, seed);
+    lapacke_test_dfill_latms(layout, n, n, a, ld, 'S', n - 1, n - 1, seed);
 }
 
 /**
- * \brief Fill a with a random nonsingular triangular n-by-n matrix.
+ * \brief Fill a with a random nonsingular triangular n-by-n matrix, double
+ * precision.
  *
- * Generated by restricting the bandwidth of a general DLATMS matrix, so
+ * Generated by restricting the bandwidth of a general ?LATMS matrix, so
  * the singular values stay in [0.1, 1]: the matrix is well conditioned
  * and nonsingular, and the entries beyond the uplo triangle are exactly
  * zero. Routines with a unit-diagonal option do not read the diagonal;
@@ -137,19 +141,19 @@ void lapacke_test_fill_sym(int layout, lapack_int n, double *a, lapack_int ld)
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  */
-void lapacke_test_fill_tri(int layout, char uplo, lapack_int n, double *a,
-                           lapack_int ld)
+void lapacke_test_dfill_tri(int layout, char uplo, lapack_int n, double *a,
+                            lapack_int ld)
 {
     static const lapack_int seed[4] = {2020, 2021, 2022, 2023};
     const int upper = (uplo == 'U' || uplo == 'u');
-    lapacke_test_fill_dlatms(layout, n, n, a, ld, 'N', upper ? 0 : n - 1,
+    lapacke_test_dfill_latms(layout, n, n, a, ld, 'N', upper ? 0 : n - 1,
                              upper ? n - 1 : 0, seed);
 }
 
 /**
- * \brief Fill b with a random right-hand side.
+ * \brief Fill b with a random right-hand side, double precision.
  *
- * Same generator as lapacke_test_fill with a different seed, so right-hand
+ * Same generator as lapacke_test_dfill with a different seed, so right-hand
  * sides differ from system matrices.
  *
  * \param[in]  layout LAPACK_COL_MAJOR or LAPACK_ROW_MAJOR.
@@ -158,16 +162,17 @@ void lapacke_test_fill_tri(int layout, char uplo, lapack_int n, double *a,
  * \param[out] b      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of b in the given layout.
  */
-void lapacke_test_fill_rhs(int layout, lapack_int rows, lapack_int cols,
-                           double *b, lapack_int ld)
+void lapacke_test_dfill_rhs(int layout, lapack_int rows, lapack_int cols,
+                            double *b, lapack_int ld)
 {
     static const lapack_int seed[4] = {2000, 2001, 2002, 2003};
-    lapacke_test_fill_dlatms(layout, rows, cols, b, ld, 'N', rows - 1, cols - 1,
+    lapacke_test_dfill_latms(layout, rows, cols, b, ld, 'N', rows - 1, cols - 1,
                              seed);
 }
 
 /**
- * \brief Fill every allocated position of a matrix buffer with NaN.
+ * \brief Fill every allocated position of a matrix buffer with NaN, double
+ * precision.
  *
  * Used to verify that a routine with NaN checking disabled does not reject
  * NaNs anywhere in the buffer.
@@ -178,11 +183,21 @@ void lapacke_test_fill_rhs(int layout, lapack_int rows, lapack_int cols,
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  */
-void lapacke_test_fill_nan(int layout, lapack_int rows, lapack_int cols,
-                           double *a, lapack_int ld)
+void lapacke_test_dfill_nan(int layout, lapack_int rows, lapack_int cols,
+                            double *a, lapack_int ld)
 {
     const size_t len = lapacke_test_alloc_len(layout, rows, cols, ld);
     for (size_t p = 0; p < len; p++) {
         a[p] = lapacke_create_nan();
     }
+}
+
+/**
+ * \brief A quiet NaN, double precision.
+ *
+ * \return A quiet NaN.
+ */
+double lapacke_test_dnan(void)
+{
+    return lapacke_create_nan();
 }

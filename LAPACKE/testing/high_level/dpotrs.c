@@ -10,8 +10,8 @@
 #define LAPACKE_DPOTRS_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
         const int layout = lapacke_test_layouts[layout_index];                 \
-        lapacke_test_fill_spd(layout, N, a, LD);                               \
-        lapacke_test_fill_rhs(layout, N, NRHS, b, LD);                         \
+        lapacke_test_dfill_spd(layout, N, a, LD);                              \
+        lapacke_test_dfill_rhs(layout, N, NRHS, b, LD);                        \
         lapacke_test_schedule_malloc_failure(countdown);                       \
         lapacke_test_check(name, lapacke_test_layout_names[layout_index],      \
                            LAPACKE_dpotrs(layout, 'U', N, NRHS, a, LD, b, LD), \
@@ -26,30 +26,30 @@ LAPACKE_TEST(dpotrs)
         const int layout = lapacke_test_layouts[l];
 
         /* Only the uplo triangle of the factor is a documented input. */
-        LAPACKE_TEST_NAN_SWEEP(
+        LAPACKE_TEST_DNAN_SWEEP(
             "dpotrs a uplo=U", l, N, N, a, LD, lapacke_test_region_upper, -5,
-            (lapacke_test_fill_spd(layout, N, a, LD),
-             lapacke_test_fill_rhs(layout, N, NRHS, b, LD)),
+            (lapacke_test_dfill_spd(layout, N, a, LD),
+             lapacke_test_dfill_rhs(layout, N, NRHS, b, LD)),
             LAPACKE_dpotrs(layout, 'U', N, NRHS, a, LD, b, LD));
 
-        LAPACKE_TEST_NAN_SWEEP(
+        LAPACKE_TEST_DNAN_SWEEP(
             "dpotrs a uplo=L", l, N, N, a, LD, lapacke_test_region_lower, -5,
-            (lapacke_test_fill_spd(layout, N, a, LD),
-             lapacke_test_fill_rhs(layout, N, NRHS, b, LD)),
+            (lapacke_test_dfill_spd(layout, N, a, LD),
+             lapacke_test_dfill_rhs(layout, N, NRHS, b, LD)),
             LAPACKE_dpotrs(layout, 'L', N, NRHS, a, LD, b, LD));
 
-        LAPACKE_TEST_NAN_SWEEP(
+        LAPACKE_TEST_DNAN_SWEEP(
             "dpotrs b", l, N, NRHS, b, LD, lapacke_test_region_full, -7,
-            (lapacke_test_fill_spd(layout, N, a, LD),
-             lapacke_test_fill_rhs(layout, N, NRHS, b, LD)),
+            (lapacke_test_dfill_spd(layout, N, a, LD),
+             lapacke_test_dfill_rhs(layout, N, NRHS, b, LD)),
             LAPACKE_dpotrs(layout, 'U', N, NRHS, a, LD, b, LD));
 
         /* With NaN checking disabled even all-NaN input must go through to
          * the Fortran routine (valid arguments, so info must not be
          * negative). */
         LAPACKE_set_nancheck(0);
-        lapacke_test_fill_nan(layout, N, N, a, LD);
-        lapacke_test_fill_nan(layout, N, NRHS, b, LD);
+        lapacke_test_dfill_nan(layout, N, N, a, LD);
+        lapacke_test_dfill_nan(layout, N, NRHS, b, LD);
         lapacke_test_check(
             "dpotrs NaN with nancheck off", lapacke_test_layout_names[l],
             LAPACKE_dpotrs(layout, 'U', N, NRHS, a, LD, b, LD) >= 0 ? 0 : -999,

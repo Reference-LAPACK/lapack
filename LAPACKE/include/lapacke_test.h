@@ -62,6 +62,15 @@ extern const char *lapacke_test_layout_names[3];
 /** A quiet NaN produced at run time (not folded by the compiler). */
 double lapacke_create_nan(void);
 
+/** A quiet NaN, single precision real. */
+float lapacke_test_snan(void);
+/** A quiet NaN, double precision real. */
+double lapacke_test_dnan(void);
+/** A quiet NaN in both parts, single precision complex. */
+lapack_complex_float lapacke_test_cnan(void);
+/** A quiet NaN in both parts, double precision complex. */
+lapack_complex_double lapacke_test_znan(void);
+
 /** Record one check of an info result against its expected value. */
 void lapacke_test_check(const char *name, const char *variant, lapack_int info,
                         lapack_int expected);
@@ -86,38 +95,108 @@ void lapacke_test_check_alloc_count(const char *name);
 void lapacke_test_check_leaks(const char *name);
 
 /* ------------------------------------------------------------------------
- * Test matrix generation (lapacke_test_matgen.c).
+ * Test matrix generation (lapacke_test_matgen_<x>.c, one per precision).
  *
  * One fill per conventional-storage matrix type: the fill functions write
  * the whole allocated buffer (including padding). The random matrices are
- * generated with DLATMS (well conditioned) using a fixed seed per fill
- * type, so repeated calls produce identical data; lapacke_test_fill_nan
- * floods the buffer with NaNs instead. Band and packed storage have their
- * own buffer geometry and get their fills with the routines that first
- * need them.
+ * generated with ?LATMS (well conditioned) using a fixed seed per fill
+ * type, so repeated calls produce identical data; the _nan fills flood the
+ * buffer with NaNs instead. Band and packed storage have their own buffer
+ * geometry and get their fills with the routines that first need them.
+ *
+ * The complex fills generate Hermitian matrices where the real ones
+ * generate symmetric matrices, matching what the complex routines read.
  * ---------------------------------------------------------------------- */
 
-/** Fill a with a random general rows-by-cols matrix. */
-void lapacke_test_fill(int layout, lapack_int rows, lapack_int cols, double *a,
-                       lapack_int ld);
+/** Fill a with a random general rows-by-cols matrix, single precision. */
+void lapacke_test_sfill(int layout, lapack_int rows, lapack_int cols, float *a,
+                        lapack_int ld);
+/** Fill a with a random symmetric positive definite n-by-n matrix, single
+ *  precision. */
+void lapacke_test_sfill_spd(int layout, lapack_int n, float *a, lapack_int ld);
+/** Fill a with a random symmetric indefinite n-by-n matrix, single
+ *  precision. */
+void lapacke_test_sfill_sym(int layout, lapack_int n, float *a, lapack_int ld);
+/** Fill a with a random nonsingular triangular n-by-n matrix, single
+ *  precision. */
+void lapacke_test_sfill_tri(int layout, char uplo, lapack_int n, float *a,
+                            lapack_int ld);
+/** Fill b with a random right-hand side, single precision. */
+void lapacke_test_sfill_rhs(int layout, lapack_int rows, lapack_int cols,
+                            float *b, lapack_int ld);
+/** Fill every allocated position of a matrix buffer with NaN, single
+ *  precision. */
+void lapacke_test_sfill_nan(int layout, lapack_int rows, lapack_int cols,
+                            float *a, lapack_int ld);
 
-/** Fill a with a random symmetric positive definite n-by-n matrix. */
-void lapacke_test_fill_spd(int layout, lapack_int n, double *a, lapack_int ld);
+/** Fill a with a random general rows-by-cols matrix, double precision. */
+void lapacke_test_dfill(int layout, lapack_int rows, lapack_int cols, double *a,
+                        lapack_int ld);
+/** Fill a with a random symmetric positive definite n-by-n matrix, double
+ *  precision. */
+void lapacke_test_dfill_spd(int layout, lapack_int n, double *a, lapack_int ld);
+/** Fill a with a random symmetric indefinite n-by-n matrix, double
+ *  precision. */
+void lapacke_test_dfill_sym(int layout, lapack_int n, double *a, lapack_int ld);
+/** Fill a with a random nonsingular triangular n-by-n matrix, double
+ *  precision. */
+void lapacke_test_dfill_tri(int layout, char uplo, lapack_int n, double *a,
+                            lapack_int ld);
+/** Fill b with a random right-hand side, double precision. */
+void lapacke_test_dfill_rhs(int layout, lapack_int rows, lapack_int cols,
+                            double *b, lapack_int ld);
+/** Fill every allocated position of a matrix buffer with NaN, double
+ *  precision. */
+void lapacke_test_dfill_nan(int layout, lapack_int rows, lapack_int cols,
+                            double *a, lapack_int ld);
 
-/** Fill a with a random symmetric indefinite n-by-n matrix. */
-void lapacke_test_fill_sym(int layout, lapack_int n, double *a, lapack_int ld);
+/** Fill a with a random general rows-by-cols matrix, single precision
+ *  complex. */
+void lapacke_test_cfill(int layout, lapack_int rows, lapack_int cols,
+                        lapack_complex_float *a, lapack_int ld);
+/** Fill a with a random Hermitian positive definite n-by-n matrix, single
+ *  precision complex. */
+void lapacke_test_cfill_spd(int layout, lapack_int n, lapack_complex_float *a,
+                            lapack_int ld);
+/** Fill a with a random Hermitian indefinite n-by-n matrix, single
+ *  precision complex. */
+void lapacke_test_cfill_sym(int layout, lapack_int n, lapack_complex_float *a,
+                            lapack_int ld);
+/** Fill a with a random nonsingular triangular n-by-n matrix, single
+ *  precision complex. */
+void lapacke_test_cfill_tri(int layout, char uplo, lapack_int n,
+                            lapack_complex_float *a, lapack_int ld);
+/** Fill b with a random right-hand side, single precision complex. */
+void lapacke_test_cfill_rhs(int layout, lapack_int rows, lapack_int cols,
+                            lapack_complex_float *b, lapack_int ld);
+/** Fill every allocated position of a matrix buffer with NaN, single
+ *  precision complex. */
+void lapacke_test_cfill_nan(int layout, lapack_int rows, lapack_int cols,
+                            lapack_complex_float *a, lapack_int ld);
 
-/** Fill a with a random nonsingular triangular n-by-n matrix. */
-void lapacke_test_fill_tri(int layout, char uplo, lapack_int n, double *a,
-                           lapack_int ld);
-
-/** Fill b with a random right-hand side. */
-void lapacke_test_fill_rhs(int layout, lapack_int rows, lapack_int cols,
-                           double *b, lapack_int ld);
-
-/** Fill every allocated position of a matrix buffer with NaN. */
-void lapacke_test_fill_nan(int layout, lapack_int rows, lapack_int cols,
-                           double *a, lapack_int ld);
+/** Fill a with a random general rows-by-cols matrix, double precision
+ *  complex. */
+void lapacke_test_zfill(int layout, lapack_int rows, lapack_int cols,
+                        lapack_complex_double *a, lapack_int ld);
+/** Fill a with a random Hermitian positive definite n-by-n matrix, double
+ *  precision complex. */
+void lapacke_test_zfill_spd(int layout, lapack_int n, lapack_complex_double *a,
+                            lapack_int ld);
+/** Fill a with a random Hermitian indefinite n-by-n matrix, double
+ *  precision complex. */
+void lapacke_test_zfill_sym(int layout, lapack_int n, lapack_complex_double *a,
+                            lapack_int ld);
+/** Fill a with a random nonsingular triangular n-by-n matrix, double
+ *  precision complex. */
+void lapacke_test_zfill_tri(int layout, char uplo, lapack_int n,
+                            lapack_complex_double *a, lapack_int ld);
+/** Fill b with a random right-hand side, double precision complex. */
+void lapacke_test_zfill_rhs(int layout, lapack_int rows, lapack_int cols,
+                            lapack_complex_double *b, lapack_int ld);
+/** Fill every allocated position of a matrix buffer with NaN, double
+ *  precision complex. */
+void lapacke_test_zfill_nan(int layout, lapack_int rows, lapack_int cols,
+                            lapack_complex_double *a, lapack_int ld);
 
 /* ------------------------------------------------------------------------
  * NaN position sweeps (lapacke_test_nan_sweep.c).
@@ -168,6 +247,11 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
 /**
  * Run one NaN sweep over a matrix argument; counts as one check.
  *
+ * Use the per-precision LAPACKE_TEST_[SDCZ]NAN_SWEEP wrappers below rather
+ * than this macro: they supply the NaN of the matching element type.
+ *
+ * \param nan_fn       Function returning the NaN to plant, of mat's element
+ *                     type.
  * \param name         Name of the sweep, printed on the report line.
  * \param layout_index Index into lapacke_test_layouts selecting the layout.
  * \param rows         Number of matrix rows.
@@ -182,8 +266,9 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
  *                     matrices) that restores all inputs of call_expr.
  * \param call_expr    Expression evaluating to the routine's info result.
  */
-#define LAPACKE_TEST_NAN_SWEEP(name, layout_index, rows, cols, mat, ld,        \
-                               region, expected, reset_expr, call_expr)        \
+#define LAPACKE_TEST_NAN_SWEEP_IMPL(nan_fn, name, layout_index, rows, cols,    \
+                                    mat, ld, region, expected, reset_expr,     \
+                                    call_expr)                                 \
     do {                                                                       \
         const int lts_layout = lapacke_test_layouts[layout_index];             \
         const size_t lts_len = lapacke_test_alloc_len(lts_layout, rows, cols,  \
@@ -196,7 +281,7 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
             (void)(reset_expr);                                                \
             lts_inside = lapacke_test_map_position(lts_layout, rows, cols, ld, \
                                                    lts_p, &lts_i, &lts_j);     \
-            (mat)[lts_p] = lapacke_create_nan();                               \
+            (mat)[lts_p] = nan_fn();                                           \
             lts_info = (call_expr);                                            \
             lts_want = (lts_inside && region(lts_i, lts_j)) ? (expected) : 0;  \
             if (lts_info != lts_want) {                                        \
@@ -209,5 +294,18 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
         lapacke_test_sweep_result(                                             \
             name, lapacke_test_layout_names[layout_index], lts_len, lts_bad);  \
     } while (0)
+
+/** Run one NaN sweep over a single precision real matrix argument. */
+#define LAPACKE_TEST_SNAN_SWEEP(...)                                           \
+    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_snan, __VA_ARGS__)
+/** Run one NaN sweep over a double precision real matrix argument. */
+#define LAPACKE_TEST_DNAN_SWEEP(...)                                           \
+    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_dnan, __VA_ARGS__)
+/** Run one NaN sweep over a single precision complex matrix argument. */
+#define LAPACKE_TEST_CNAN_SWEEP(...)                                           \
+    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_cnan, __VA_ARGS__)
+/** Run one NaN sweep over a double precision complex matrix argument. */
+#define LAPACKE_TEST_ZNAN_SWEEP(...)                                           \
+    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_znan, __VA_ARGS__)
 
 #endif /* LAPACKE_TEST_H */

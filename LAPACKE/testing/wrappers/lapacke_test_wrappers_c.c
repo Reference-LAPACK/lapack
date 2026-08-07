@@ -17,8 +17,9 @@ static const int layout = LAPACKE_TEST_LAYOUT;
  * CGETRF( M, N, A, LDA, IPIV, INFO )
  *****************************************************************************/
 #define CGETRF_TEST LAPACK_GLOBAL(cgetrf_test, CGETRF_TEST)
-void CGETRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_float *a,
-                 const lapack_int *lda, lapack_int *ipiv, lapack_int *info)
+void CGETRF_TEST(const lapack_int *m, const lapack_int *n,
+                 lapack_complex_float *a, const lapack_int *lda,
+                 lapack_int *ipiv, lapack_int *info)
 {
     lapack_int ret = 0;
     lapack_complex_float *a_r = a;
@@ -49,8 +50,9 @@ void CGETRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_float 
  *****************************************************************************/
 #define CGETRS_TEST LAPACK_GLOBAL(cgetrs_test, CGETRS_TEST)
 void CGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
-                 const lapack_complex_float *a, const lapack_int *lda, const lapack_int *ipiv,
-                 lapack_complex_float *b, const lapack_int *ldb, lapack_int *info
+                 const lapack_complex_float *a, const lapack_int *lda,
+                 const lapack_int *ipiv, lapack_complex_float *b,
+                 const lapack_int *ldb, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN trans_len
@@ -93,8 +95,9 @@ void CGETRS_TEST(const char *trans, const lapack_int *n, const lapack_int *nrhs,
  * CGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
  *****************************************************************************/
 #define CGETRI_TEST LAPACK_GLOBAL(cgetri_test, CGETRI_TEST)
-void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a, const lapack_int *lda,
-                 const lapack_int *ipiv, lapack_complex_float *work, const lapack_int *lwork,
+void CGETRI_TEST(const lapack_int *n, lapack_complex_float *a,
+                 const lapack_int *lda, const lapack_int *ipiv,
+                 lapack_complex_float *work, const lapack_int *lwork,
                  lapack_int *info)
 {
     lapack_int ret = 0;
@@ -171,8 +174,9 @@ void CPOTRF_TEST(const char *uplo, const lapack_int *n, lapack_complex_float *a,
  *****************************************************************************/
 #define CPOTRS_TEST LAPACK_GLOBAL(cpotrs_test, CPOTRS_TEST)
 void CPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
-                 const lapack_complex_float *a, const lapack_int *lda, lapack_complex_float *b,
-                 const lapack_int *ldb, lapack_int *info
+                 const lapack_complex_float *a, const lapack_int *lda,
+                 lapack_complex_float *b, const lapack_int *ldb,
+                 lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN uplo_len
@@ -213,8 +217,9 @@ void CPOTRS_TEST(const char *uplo, const lapack_int *n, const lapack_int *nrhs,
  * CGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
  *****************************************************************************/
 #define CGEQRF_TEST LAPACK_GLOBAL(cgeqrf_test, CGEQRF_TEST)
-void CGEQRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_float *a,
-                 const lapack_int *lda, lapack_complex_float *tau, lapack_complex_float *work,
+void CGEQRF_TEST(const lapack_int *m, const lapack_int *n,
+                 lapack_complex_float *a, const lapack_int *lda,
+                 lapack_complex_float *tau, lapack_complex_float *work,
                  const lapack_int *lwork, lapack_int *info)
 {
     lapack_int ret = 0;
@@ -255,8 +260,9 @@ void CGEQRF_TEST(const lapack_int *m, const lapack_int *n, lapack_complex_float 
  *****************************************************************************/
 #define CUNGQR_TEST LAPACK_GLOBAL(cungqr_test, CUNGQR_TEST)
 void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
-                 lapack_complex_float *a, const lapack_int *lda, const lapack_complex_float *tau,
-                 lapack_complex_float *work, const lapack_int *lwork, lapack_int *info)
+                 lapack_complex_float *a, const lapack_int *lda,
+                 const lapack_complex_float *tau, lapack_complex_float *work,
+                 const lapack_int *lwork, lapack_int *info)
 {
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
@@ -297,10 +303,11 @@ void CUNGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
  *****************************************************************************/
 #define CUNMQR_TEST LAPACK_GLOBAL(cunmqr_test, CUNMQR_TEST)
 void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
-                 const lapack_int *n, const lapack_int *k, const lapack_complex_float *a,
-                 const lapack_int *lda, const lapack_complex_float *tau, lapack_complex_float *c,
-                 const lapack_int *ldc, lapack_complex_float *work, const lapack_int *lwork,
-                 lapack_int *info
+                 const lapack_int *n, const lapack_int *k,
+                 const lapack_complex_float *a, const lapack_int *lda,
+                 const lapack_complex_float *tau, lapack_complex_float *c,
+                 const lapack_int *ldc, lapack_complex_float *work,
+                 const lapack_int *lwork, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                  ,
                  FORTRAN_STRLEN side_len, FORTRAN_STRLEN trans_len
@@ -354,8 +361,9 @@ void CUNMQR_TEST(const char *side, const char *trans, const lapack_int *m,
  *****************************************************************************/
 #define CGELS_TEST LAPACK_GLOBAL(cgels_test, CGELS_TEST)
 void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
-                const lapack_int *nrhs, lapack_complex_float *a, const lapack_int *lda,
-                lapack_complex_float *b, const lapack_int *ldb, lapack_complex_float *work,
+                const lapack_int *nrhs, lapack_complex_float *a,
+                const lapack_int *lda, lapack_complex_float *b,
+                const lapack_int *ldb, lapack_complex_float *work,
                 const lapack_int *lwork, lapack_int *info
 #ifdef LAPACK_FORTRAN_STRLEN_END
                 ,
@@ -410,10 +418,11 @@ void CGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
  *****************************************************************************/
 #define CLANGE_TEST LAPACK_GLOBAL(clange_test, CLANGE_TEST)
 float CLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
-                   const lapack_complex_float *a, const lapack_int *lda, float *work
+                  const lapack_complex_float *a, const lapack_int *lda,
+                  float *work
 #ifdef LAPACK_FORTRAN_STRLEN_END
-                   ,
-                   FORTRAN_STRLEN norm_len
+                  ,
+                  FORTRAN_STRLEN norm_len
 #endif
 )
 {

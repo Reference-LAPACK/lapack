@@ -255,8 +255,8 @@ void SGEQRF_TEST(const lapack_int *m, const lapack_int *n, float *a,
  *****************************************************************************/
 #define SORGQR_TEST LAPACK_GLOBAL(sorgqr_test, SORGQR_TEST)
 void SORGQR_TEST(const lapack_int *m, const lapack_int *n, const lapack_int *k,
-                 float *a, const lapack_int *lda, const float *tau,
-                 float *work, const lapack_int *lwork, lapack_int *info)
+                 float *a, const lapack_int *lda, const float *tau, float *work,
+                 const lapack_int *lwork, lapack_int *info)
 {
     lapack_int ret = 0;
 #if LAPACKE_TEST_HIGH_LEVEL
@@ -410,10 +410,10 @@ void SGELS_TEST(const char *trans, const lapack_int *m, const lapack_int *n,
  *****************************************************************************/
 #define SLANGE_TEST LAPACK_GLOBAL(slange_test, SLANGE_TEST)
 float SLANGE_TEST(const char *norm, const lapack_int *m, const lapack_int *n,
-                   const float *a, const lapack_int *lda, float *work
+                  const float *a, const lapack_int *lda, float *work
 #ifdef LAPACK_FORTRAN_STRLEN_END
-                   ,
-                   FORTRAN_STRLEN norm_len
+                  ,
+                  FORTRAN_STRLEN norm_len
 #endif
 )
 {

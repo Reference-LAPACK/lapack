@@ -67,22 +67,32 @@ endforeach()
 # function via LAPACKE_TEST(<name>). The runner main with the test table is
 # generated from the list below; to add a test, add the file and list its
 # name here.
-set(LAPACKE_HIGH_LEVEL_TESTS
+set(LAPACKE_HIGH_LEVEL_ROUTINES
   matgen
-  dgetrf
-  dgetrs
-  dgetri
-  dpotrf
-  dpotrs
-  dgeqrf
-  dgels
-  dlange)
+  getrf
+  getrs
+  getri
+  potrf
+  potrs
+  geqrf
+  gels
+  lange)
+
+set(LAPACKE_HIGH_LEVEL_TESTS)
+foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
+  foreach(_routine IN LISTS LAPACKE_HIGH_LEVEL_ROUTINES)
+    list(APPEND LAPACKE_HIGH_LEVEL_TESTS ${_prec}${_routine})
+  endforeach()
+endforeach()
 
 set(LAPACKE_HIGH_LEVEL_SOURCES
   high_level/lapacke_test.c
   high_level/lapacke_test_alloc.c
-  high_level/lapacke_test_matgen.c
   high_level/lapacke_test_nan_sweep.c)
+foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
+  list(APPEND LAPACKE_HIGH_LEVEL_SOURCES
+    high_level/lapacke_test_matgen_${_prec}.c)
+endforeach()
 set(LAPACKE_HIGH_LEVEL_EXTERNS "")
 set(LAPACKE_HIGH_LEVEL_ENTRIES "")
 foreach(_test_name IN LISTS LAPACKE_HIGH_LEVEL_TESTS)
