@@ -45,15 +45,21 @@ LAPACKE_TEST(dgeqrf)
     LAPACKE_DGEQRF_ALLOC_TEST(0, 0, "dgeqrf work alloc failure",
                               LAPACK_WORK_MEMORY_ERROR);
 
+    /* Scheduled one past the last column-major allocation: the failure must
+     * not fire, so the call must succeed and the count must match exactly. */
+    LAPACKE_DGEQRF_ALLOC_TEST(0, 1, "dgeqrf allocation count", 0);
+    lapacke_test_check_alloc_count("dgeqrf col-major allocation count");
+
     /* Row-major allocates the workspace, then the transposed copy of A. */
     LAPACKE_DGEQRF_ALLOC_TEST(1, 0, "dgeqrf work alloc failure",
                               LAPACK_WORK_MEMORY_ERROR);
     LAPACKE_DGEQRF_ALLOC_TEST(1, 1, "dgeqrf transpose alloc failure (a)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_DGEQRF_ALLOC_TEST(1, 2, "dgeqrf recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("dgeqrf allocation count");
+    /* Scheduled one past the last row-major allocation: fires if the call
+     * allocates more than expected. */
+    LAPACKE_DGEQRF_ALLOC_TEST(1, 2, "dgeqrf allocation count", 0);
+    lapacke_test_check_alloc_count("dgeqrf row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

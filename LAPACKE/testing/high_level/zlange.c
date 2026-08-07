@@ -70,10 +70,10 @@ LAPACKE_TEST(zlange)
     lapacke_test_check("zlange work alloc failure returns 0.0", "col-major",
                        res == 0.0 ? 0 : -999, 0);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_ZLANGE_ALLOC_TEST(0, 1, 'I', "zlange recovers after alloc failure",
-                              0);
-    lapacke_test_check_alloc_count("zlange allocation count");
+    /* Scheduled one past the last column-major allocation: the failure must
+     * not fire, so the call must succeed and the count must match exactly. */
+    LAPACKE_ZLANGE_ALLOC_TEST(0, 1, 'I', "zlange allocation count", 0);
+    lapacke_test_check_alloc_count("zlange col-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

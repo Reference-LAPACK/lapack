@@ -46,13 +46,19 @@ LAPACKE_TEST(cpotrf)
         LAPACKE_set_nancheck(1);
     }
 
+    /* Column-major neither transposes nor allocates a workspace: the
+     * scheduled failure must not fire at all. */
+    LAPACKE_CPOTRF_ALLOC_TEST(0, 0, "cpotrf allocation count", 0);
+    lapacke_test_check_alloc_count("cpotrf col-major allocation count");
+
     /* Row-major allocates the transposed copy of A (no workspace). */
     LAPACKE_CPOTRF_ALLOC_TEST(1, 0, "cpotrf transpose alloc failure (a)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_CPOTRF_ALLOC_TEST(1, 1, "cpotrf recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("cpotrf allocation count");
+    /* Scheduled one past the last row-major allocation: fires if the call
+     * allocates more than expected. */
+    LAPACKE_CPOTRF_ALLOC_TEST(1, 1, "cpotrf allocation count", 0);
+    lapacke_test_check_alloc_count("cpotrf row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

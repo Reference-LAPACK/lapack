@@ -56,15 +56,21 @@ LAPACKE_TEST(dgetrs)
         LAPACKE_set_nancheck(1);
     }
 
+    /* Column-major neither transposes nor allocates a workspace: the
+     * scheduled failure must not fire at all. */
+    LAPACKE_DGETRS_ALLOC_TEST(0, 0, "dgetrs allocation count", 0);
+    lapacke_test_check_alloc_count("dgetrs col-major allocation count");
+
     /* Row-major allocates the transposed copies of A, then B. */
     LAPACKE_DGETRS_ALLOC_TEST(1, 0, "dgetrs transpose alloc failure (a)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
     LAPACKE_DGETRS_ALLOC_TEST(1, 1, "dgetrs transpose alloc failure (b)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_DGETRS_ALLOC_TEST(1, 2, "dgetrs recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("dgetrs allocation count");
+    /* Scheduled one past the last row-major allocation: fires if the call
+     * allocates more than expected. */
+    LAPACKE_DGETRS_ALLOC_TEST(1, 2, "dgetrs allocation count", 0);
+    lapacke_test_check_alloc_count("dgetrs row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

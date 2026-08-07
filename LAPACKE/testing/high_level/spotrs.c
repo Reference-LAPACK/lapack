@@ -58,15 +58,21 @@ LAPACKE_TEST(spotrs)
         LAPACKE_set_nancheck(1);
     }
 
+    /* Column-major neither transposes nor allocates a workspace: the
+     * scheduled failure must not fire at all. */
+    LAPACKE_SPOTRS_ALLOC_TEST(0, 0, "spotrs allocation count", 0);
+    lapacke_test_check_alloc_count("spotrs col-major allocation count");
+
     /* Row-major allocates the transposed copies of A, then B. */
     LAPACKE_SPOTRS_ALLOC_TEST(1, 0, "spotrs transpose alloc failure (a)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
     LAPACKE_SPOTRS_ALLOC_TEST(1, 1, "spotrs transpose alloc failure (b)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_SPOTRS_ALLOC_TEST(1, 2, "spotrs recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("spotrs allocation count");
+    /* Scheduled one past the last row-major allocation: fires if the call
+     * allocates more than expected. */
+    LAPACKE_SPOTRS_ALLOC_TEST(1, 2, "spotrs allocation count", 0);
+    lapacke_test_check_alloc_count("spotrs row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

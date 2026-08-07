@@ -45,15 +45,21 @@ LAPACKE_TEST(cgetri)
     LAPACKE_CGETRI_ALLOC_TEST(0, 0, "cgetri work alloc failure",
                               LAPACK_WORK_MEMORY_ERROR);
 
+    /* Scheduled one past the last column-major allocation: the failure must
+     * not fire, so the call must succeed and the count must match exactly. */
+    LAPACKE_CGETRI_ALLOC_TEST(0, 1, "cgetri allocation count", 0);
+    lapacke_test_check_alloc_count("cgetri col-major allocation count");
+
     /* Row-major allocates the workspace, then the transposed copy of A. */
     LAPACKE_CGETRI_ALLOC_TEST(1, 0, "cgetri work alloc failure",
                               LAPACK_WORK_MEMORY_ERROR);
     LAPACKE_CGETRI_ALLOC_TEST(1, 1, "cgetri transpose alloc failure (a)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* Recovery, scheduled one past the last allocation. */
-    LAPACKE_CGETRI_ALLOC_TEST(1, 2, "cgetri recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("cgetri allocation count");
+    /* Scheduled one past the last row-major allocation: fires if the call
+     * allocates more than expected. */
+    LAPACKE_CGETRI_ALLOC_TEST(1, 2, "cgetri allocation count", 0);
+    lapacke_test_check_alloc_count("cgetri row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */

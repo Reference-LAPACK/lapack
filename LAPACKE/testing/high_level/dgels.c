@@ -57,9 +57,14 @@ LAPACKE_TEST(dgels)
         LAPACKE_set_nancheck(1);
     }
 
-    /* Column-major: the first allocation is the internal workspace. */
+    /* Column-major: the internal workspace is the only allocation. */
     LAPACKE_DGELS_ALLOC_TEST(0, 0, "dgels work alloc failure",
                              LAPACK_WORK_MEMORY_ERROR);
+
+    /* Scheduled one past the last column-major allocation: the failure must
+     * not fire, so the call must succeed and the count must match exactly. */
+    LAPACKE_DGELS_ALLOC_TEST(0, 1, "dgels allocation count", 0);
+    lapacke_test_check_alloc_count("dgels col-major allocation count");
 
     /* Row-major: allocation order is workspace, then the transposed copies
      * of A and B inside the middle level. */
@@ -70,11 +75,10 @@ LAPACKE_TEST(dgels)
     LAPACKE_DGELS_ALLOC_TEST(1, 2, "dgels transpose alloc failure (b)",
                              LAPACK_TRANSPOSE_MEMORY_ERROR);
 
-    /* After an injected failure the library must be usable again.
-     * Scheduled one past the last allocation: fires if the call suddenly
+    /* Scheduled one past the last row-major allocation: fires if the call
      * allocates more than expected. */
-    LAPACKE_DGELS_ALLOC_TEST(1, 3, "dgels recovers after alloc failure", 0);
-    lapacke_test_check_alloc_count("dgels allocation count");
+    LAPACKE_DGELS_ALLOC_TEST(1, 3, "dgels allocation count", 0);
+    lapacke_test_check_alloc_count("dgels row-major allocation count");
 
     /* An invalid matrix_layout must be rejected as an error in argument 1,
      * before any allocation: the scheduled failure must not fire. */
