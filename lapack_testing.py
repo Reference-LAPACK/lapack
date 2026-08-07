@@ -8,13 +8,13 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The LAPACKE (``xlintstd_lapacke_*``), BLAS (``xblat[123]?``) and CBLAS
+The LAPACKE (``xlintst?_lapacke_*``), BLAS (``xblat[123]?``) and CBLAS
 (``x?cblat[123]``) test drivers are analyzed too, from their own testing
 directories, and are reported in their own summary sections.  The
-LAPACKE drivers are the double precision linear equation tests rebuilt
-with the routine calls routed through LAPACKE, one driver per (API
-layer, matrix layout) flavor; their output uses the classic LAPACK
-summary format.  The BLAS and CBLAS drivers report their test counts in
+LAPACKE drivers are the linear equation tests rebuilt with the routine
+calls routed through LAPACKE, one driver per precision and (API layer,
+matrix layout) flavor; their output uses the classic LAPACK summary
+format.  The BLAS and CBLAS drivers report their test counts in
 lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
@@ -504,11 +504,11 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                     parser=PARSER_DMD,
                 )
             )
-        if "lapacke" in families and letter == "d":
-            # The LAPACKE tests exist for double precision only.  All
-            # flavors of a driver read dtest.in except that the flavors
-            # that cannot run the error-exit tests read the generated
-            # dtest_noerr.in, which only exists in the build tree.
+        if "lapacke" in families:
+            # All flavors of a driver read <x>test.in except that the
+            # flavors that cannot run the error-exit tests read the
+            # generated <x>test_noerr.in, which only exists in the build
+            # tree.
             for layer, layout, flavor in LAPACKE_FLAVORS:
                 error_exits = layer == "work" and layout == "cm"
                 cases.append(
@@ -517,10 +517,16 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         family="lapacke",
                         description="Linear Equation routines via the "
                         + flavor,
-                        input_name="dtest.in" if error_exits else "dtest_noerr.in",
-                        output_name="dtest_{}_{}.out".format(layer, layout),
-                        source_input=None if error_exits else "dtest.in",
-                        executable="xlintstd_lapacke_{}_{}".format(layer, layout),
+                        input_name="{}test.in".format(letter)
+                        if error_exits
+                        else "{}test_noerr.in".format(letter),
+                        output_name="{}test_{}_{}.out".format(letter, layer, layout),
+                        source_input=None
+                        if error_exits
+                        else "{}test.in".format(letter),
+                        executable="xlintst{}_lapacke_{}_{}".format(
+                            letter, layer, layout
+                        ),
                         parser=PARSER_STANDARD,
                         library=LIBRARY_LAPACKE,
                     )

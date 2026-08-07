@@ -14,19 +14,6 @@ add_subdirectory(LIN)
 add_subdirectory(EIG)
 
 
-# Only run this test if python 3 is found
-if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-  message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt and lapack_testing_junit.xml)")
-  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
-  add_test(
-    NAME LAPACK_Test_Summary
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
-      "--fail-if-empty" "--fail-on-unrecognized" "--merge-apis"
-      "--junit-xml" "lapack_testing_junit.xml"
-    )
-endif()
-
 function(_add_lapack_test output input target)
   set(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
@@ -39,13 +26,6 @@ function(_add_lapack_test output input target)
       -DOUTPUT=${TEST_OUTPUT}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
-
-    if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-      set_property(
-        TEST LAPACK_Test_Summary
-        APPEND PROPERTY DEPENDS LAPACK-${testName}
-      )
-    endif()
   endif()
 endfunction()
 
@@ -97,50 +77,6 @@ endif()
 if(BUILD_DOUBLE)
   # ======== DOUBLE LIN TESTS ===========================
   add_lapack_test(dtest.out dtest.in xlintstd)
-
-  # ======== DOUBLE LAPACKE LIN TESTS ====================
-  # Outputs live in the TESTING/lapacke subdirectory, where
-  # lapack_testing.py analyzes them as their own LAPACKE section. Only the
-  # work-level column-major flavor runs the error-exit tests: the row-major
-  # interface has different leading-dimension semantics (LDA >= N instead
-  # of LDA >= M), and the high-level interface ignores the caller's
-  # workspace so LWORK error exits cannot fire. The other flavors use a
-  # generated input with the error-exit tests disabled.
-  if(LAPACKE AND LAPACKE_BUILD_DOUBLE AND BUILD_DEFAULT_API)
-    file(MAKE_DIRECTORY ${LAPACK_BINARY_DIR}/TESTING/lapacke)
-    file(READ ${LAPACK_SOURCE_DIR}/TESTING/dtest.in _dtest_in_content)
-    string(REPLACE
-      "T                      Put T to test the error exits"
-      "F                      Put T to test the error exits"
-      _dtest_in_noerr_content "${_dtest_in_content}")
-    file(WRITE ${LAPACK_BINARY_DIR}/TESTING/lapacke/dtest_noerr.in
-      "${_dtest_in_noerr_content}")
-
-    foreach(_layer work high)
-      foreach(_layout cm rm)
-        if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-          set(_input ${LAPACK_SOURCE_DIR}/TESTING/dtest.in)
-        else()
-          set(_input ${LAPACK_BINARY_DIR}/TESTING/lapacke/dtest_noerr.in)
-        endif()
-        add_test(NAME LAPACK-xlintstd_lapacke_${_layer}_${_layout}_dtest_in
-          COMMAND "${CMAKE_COMMAND}"
-          -DTEST=$<TARGET_FILE:xlintstd_lapacke_${_layer}_${_layout}>
-          -DINPUT=${_input}
-          -DOUTPUT=${LAPACK_BINARY_DIR}/TESTING/lapacke/dtest_${_layer}_${_layout}.out
-          -DINTDIR=${CMAKE_CFG_INTDIR}
-          -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
-
-        if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-          set_property(
-            TEST LAPACK_Test_Summary
-            APPEND PROPERTY DEPENDS
-            LAPACK-xlintstd_lapacke_${_layer}_${_layout}_dtest_in
-          )
-        endif()
-      endforeach()
-    endforeach()
-  endif()
 
   # ======== DOUBLE RFP LIN TESTS ========================
   add_lapack_test(dtest_rfp.out dtest_rfp.in xlintstrfd)

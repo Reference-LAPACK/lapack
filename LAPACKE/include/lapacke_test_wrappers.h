@@ -110,6 +110,66 @@ void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
                                const double *r, lapack_int ldr, double *a,
                                lapack_int lda);
 
+/** Allocate a row-major shadow copy of an m-by-n column-major general
+ *  matrix. */
+float *lapacke_test_sge_cm_to_rm(lapack_int m, lapack_int n, const float *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy a row-major shadow buffer back into a column-major general
+ *  matrix. */
+void lapacke_test_sge_rm_to_cm(lapack_int m, lapack_int n, const float *r,
+                               lapack_int ldr, float *a, lapack_int lda);
+
+/** Allocate a row-major shadow copy of the uplo triangle of a column-major
+ *  symmetric positive definite matrix. */
+float *lapacke_test_spo_cm_to_rm(char uplo, lapack_int n, const float *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy the uplo triangle of a row-major shadow buffer back into a
+ *  column-major symmetric positive definite matrix. */
+void lapacke_test_spo_rm_to_cm(char uplo, lapack_int n, const float *r,
+                               lapack_int ldr, float *a, lapack_int lda);
+
+/** Allocate a row-major shadow copy of an m-by-n column-major general
+ *  matrix. */
+lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_float *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy a row-major shadow buffer back into a column-major general
+ *  matrix. */
+void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_float *r,
+                               lapack_int ldr, lapack_complex_float *a, lapack_int lda);
+
+/** Allocate a row-major shadow copy of the uplo triangle of a column-major
+ *  symmetric positive definite matrix. */
+lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_float *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy the uplo triangle of a row-major shadow buffer back into a
+ *  column-major symmetric positive definite matrix. */
+void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_float *r,
+                               lapack_int ldr, lapack_complex_float *a, lapack_int lda);
+
+/** Allocate a row-major shadow copy of an m-by-n column-major general
+ *  matrix. */
+lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_double *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy a row-major shadow buffer back into a column-major general
+ *  matrix. */
+void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_double *r,
+                               lapack_int ldr, lapack_complex_double *a, lapack_int lda);
+
+/** Allocate a row-major shadow copy of the uplo triangle of a column-major
+ *  symmetric positive definite matrix. */
+lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_double *a,
+                                  lapack_int lda, lapack_int *ldr);
+
+/** Copy the uplo triangle of a row-major shadow buffer back into a
+ *  column-major symmetric positive definite matrix. */
+void lapacke_test_zpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_double *r,
+                               lapack_int ldr, lapack_complex_double *a, lapack_int lda);
+
 /** Report a failed shadow buffer allocation and set info to
  *  LAPACK_TRANSPOSE_MEMORY_ERROR. */
 void lapacke_test_report_alloc_failure(const char *srname, lapack_int *info);

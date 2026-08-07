@@ -338,67 +338,28 @@ if(BUILD_COMPLEX AND BUILD_COMPLEX16)
   add_lin_executable(xlintstzc SOURCES ${ZCLINTST})
 endif()
 
-# LAPACKE testing: rewrite the test sources so that calls to allowlisted
-# routines resolve to <routine>_TEST wrappers (LAPACKE/testing/wrappers),
-# which forward to LAPACKE. String replacements must stay off so that the
-# SRNAMT names used by the error-exit tests keep matching the names the
-# unrenamed LAPACK routines pass to the (interposed) testing XERBLA.
-if(LAPACKE AND BUILD_DOUBLE AND LAPACKE_BUILD_DOUBLE AND BUILD_DEFAULT_API)
-  include(ExtendedAPIHelpers)
+# Source lists for the LIN tests LAPACKE/testing rebuilds with the routine
+# calls routed through LAPACKE, one per precision. The paths must be
+# absolute: generate_suffixed_sources resolves relative source names against
+# the directory that calls it. A list is empty when that precision cannot be
+# built, which is how LAPACKE/testing decides what to build.
+foreach(_spec
+    "S;SINGLE;SLINTST;SCLNTST;SLINTST_NO_XBLAS"
+    "D;DOUBLE;DLINTST;DZLNTST;DLINTST_NO_XBLAS"
+    "C;COMPLEX;CLINTST;SCLNTST;CLINTST_NO_XBLAS"
+    "Z;COMPLEX16;ZLINTST;DZLNTST;ZLINTST_NO_XBLAS")
+  list(GET _spec 0 _prec)
+  list(GET _spec 1 _build)
+  list(GET _spec 2 _lin)
+  list(GET _spec 3 _aux)
+  list(GET _spec 4 _no_xblas)
 
-  # Generate the symbol allowlist: a routine is routed through LAPACKE if it
-  # has a LAPACKE implementation (a lapacke_<name>_work.c source) and a
-  # <NAME>_TEST wrapper in the LAPACKE test wrapper sources.
-  file(GLOB _lapacke_work_sources RELATIVE "${LAPACK_SOURCE_DIR}/LAPACKE/src"
-    "${LAPACK_SOURCE_DIR}/LAPACKE/src/lapacke_*_work.c")
-  set(_lapacke_routines)
-  foreach(_work_source IN LISTS _lapacke_work_sources)
-    string(REGEX REPLACE "^lapacke_(.+)_work\\.c$" "\\1" _routine "${_work_source}")
-    list(APPEND _lapacke_routines "${_routine}")
-  endforeach()
-
-  set(_wrapper_sources
-    "${LAPACK_SOURCE_DIR}/LAPACKE/testing/wrappers/lapacke_test_wrappers_d.c")
-  set(_allowlisted_routines)
-  foreach(_wrapper_source IN LISTS _wrapper_sources)
-    # Rerun the configuration when wrappers are added or removed
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${_wrapper_source}")
-    file(STRINGS "${_wrapper_source}" _wrapper_symbols
-      REGEX "LAPACK_GLOBAL\\([a-z0-9_]+_test,")
-    foreach(_wrapper_symbol IN LISTS _wrapper_symbols)
-      string(REGEX MATCH "LAPACK_GLOBAL\\(([a-z0-9_]+)_test," _unused "${_wrapper_symbol}")
-      set(_routine "${CMAKE_MATCH_1}")
-      if(_routine IN_LIST _lapacke_routines)
-        list(APPEND _allowlisted_routines "${_routine}")
-      else()
-        message(WARNING
-          "LAPACKE test wrapper '${_routine}_test' has no matching LAPACKE"
-          " routine and is not routed through LAPACKE")
-      endif()
+  set(_sources)
+  if(LAPACKE AND BUILD_${_build} AND LAPACKE_BUILD_${_build})
+    foreach(_source IN LISTS ALINTST ${_lin} ${_aux} ${_no_xblas})
+      list(APPEND _sources "${CMAKE_CURRENT_SOURCE_DIR}/${_source}")
     endforeach()
-  endforeach()
-  list(REMOVE_DUPLICATES _allowlisted_routines)
-  list(SORT _allowlisted_routines)
-  list(LENGTH _allowlisted_routines _allowlisted_routine_count)
-  message(STATUS "LAPACKE testing: routing ${_allowlisted_routine_count} routines through LAPACKE")
-
-  set(LAPACKE_D_SOURCES ${ALINTST} ${DLINTST} ${DZLNTST} ${DLINTST_NO_XBLAS})
-  generate_suffixed_sources(xlintstd_lapacke LAPACKE_D_SOURCES LAPACKE_D_SOURCES_TEST
-    SUFFIX "_TEST"
-    SYMBOL_ALLOWLIST ${_allowlisted_routines}
-    NO_STRING_REPLACEMENTS)
-
-  add_library(xlintstd_lapacke_core OBJECT ${LAPACKE_D_SOURCES_TEST})
-
-  foreach(_layer work high)
-    foreach(_layout cm rm)
-      add_executable(xlintstd_lapacke_${_layer}_${_layout}
-        $<TARGET_OBJECTS:xlintstd_lapacke_core>)
-      set_target_properties(xlintstd_lapacke_${_layer}_${_layout} PROPERTIES
-        LINKER_LANGUAGE Fortran)
-      target_link_libraries(xlintstd_lapacke_${_layer}_${_layout}
-        lapacke_test_wrappers_${_layer}_${_layout}
-        ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-    endforeach()
-  endforeach()
-endif()
+  endif()
+  set(LAPACKE_TEST_LIN_${_prec}_SOURCES "${_sources}" CACHE INTERNAL
+    "LIN test sources rerouted through LAPACKE (${_prec}, absolute paths)")
+endforeach()

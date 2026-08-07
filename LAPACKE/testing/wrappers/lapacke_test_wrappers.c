@@ -245,6 +245,258 @@ void lapacke_test_dtr_rm_to_cm(char uplo, char diag, lapack_int n,
 }
 
 /**
+ * \brief Allocate a row-major shadow copy of an m-by-n column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  a   Column-major source matrix.
+ * \param[in]  lda Leading dimension of a.
+ * \param[out] ldr Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+float *lapacke_test_sge_cm_to_rm(lapack_int m, lapack_int n, const float *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    float *r;
+    *ldr = MAX(1, n);
+    r = (float *)LAPACKE_malloc(sizeof(float) * MAX(1, m) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_sge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy a row-major shadow buffer back into a column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  r   Row-major shadow buffer.
+ * \param[in]  ldr Leading dimension of r.
+ * \param[out] a   Column-major destination matrix.
+ * \param[in]  lda Leading dimension of a.
+ */
+void lapacke_test_sge_rm_to_cm(lapack_int m, lapack_int n, const float *r,
+                               lapack_int ldr, float *a, lapack_int lda)
+{
+    LAPACKE_sge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+}
+
+/**
+ * \brief Allocate a row-major shadow copy of the uplo triangle of a
+ * column-major symmetric positive definite matrix.
+ *
+ * Mirrors LAPACKE's own dpo_trans usage: only the uplo triangle is copied.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  a    Column-major source matrix.
+ * \param[in]  lda  Leading dimension of a.
+ * \param[out] ldr  Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+float *lapacke_test_spo_cm_to_rm(char uplo, lapack_int n, const float *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    float *r;
+    *ldr = MAX(1, n);
+    r = (float *)LAPACKE_malloc(sizeof(float) * MAX(1, n) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_spo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy the uplo triangle of a row-major shadow buffer back into a
+ * column-major symmetric positive definite matrix.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  r    Row-major shadow buffer.
+ * \param[in]  ldr  Leading dimension of r.
+ * \param[out] a    Column-major destination matrix.
+ * \param[in]  lda  Leading dimension of a.
+ */
+void lapacke_test_spo_rm_to_cm(char uplo, lapack_int n, const float *r,
+                               lapack_int ldr, float *a, lapack_int lda)
+{
+    LAPACKE_spo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+}
+
+/**
+ * \brief Allocate a row-major shadow copy of an m-by-n column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  a   Column-major source matrix.
+ * \param[in]  lda Leading dimension of a.
+ * \param[out] ldr Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+lapack_complex_float *lapacke_test_cge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_float *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    lapack_complex_float *r;
+    *ldr = MAX(1, n);
+    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) * MAX(1, m) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_cge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy a row-major shadow buffer back into a column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  r   Row-major shadow buffer.
+ * \param[in]  ldr Leading dimension of r.
+ * \param[out] a   Column-major destination matrix.
+ * \param[in]  lda Leading dimension of a.
+ */
+void lapacke_test_cge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_float *r,
+                               lapack_int ldr, lapack_complex_float *a, lapack_int lda)
+{
+    LAPACKE_cge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+}
+
+/**
+ * \brief Allocate a row-major shadow copy of the uplo triangle of a
+ * column-major symmetric positive definite matrix.
+ *
+ * Mirrors LAPACKE's own dpo_trans usage: only the uplo triangle is copied.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  a    Column-major source matrix.
+ * \param[in]  lda  Leading dimension of a.
+ * \param[out] ldr  Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+lapack_complex_float *lapacke_test_cpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_float *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    lapack_complex_float *r;
+    *ldr = MAX(1, n);
+    r = (lapack_complex_float *)LAPACKE_malloc(sizeof(lapack_complex_float) * MAX(1, n) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_cpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy the uplo triangle of a row-major shadow buffer back into a
+ * column-major symmetric positive definite matrix.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  r    Row-major shadow buffer.
+ * \param[in]  ldr  Leading dimension of r.
+ * \param[out] a    Column-major destination matrix.
+ * \param[in]  lda  Leading dimension of a.
+ */
+void lapacke_test_cpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_float *r,
+                               lapack_int ldr, lapack_complex_float *a, lapack_int lda)
+{
+    LAPACKE_cpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+}
+
+/**
+ * \brief Allocate a row-major shadow copy of an m-by-n column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  a   Column-major source matrix.
+ * \param[in]  lda Leading dimension of a.
+ * \param[out] ldr Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+lapack_complex_double *lapacke_test_zge_cm_to_rm(lapack_int m, lapack_int n, const lapack_complex_double *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    lapack_complex_double *r;
+    *ldr = MAX(1, n);
+    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) * MAX(1, m) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_zge_trans(LAPACK_COL_MAJOR, m, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy a row-major shadow buffer back into a column-major general
+ * matrix.
+ *
+ * \param[in]  m   Number of rows.
+ * \param[in]  n   Number of columns.
+ * \param[in]  r   Row-major shadow buffer.
+ * \param[in]  ldr Leading dimension of r.
+ * \param[out] a   Column-major destination matrix.
+ * \param[in]  lda Leading dimension of a.
+ */
+void lapacke_test_zge_rm_to_cm(lapack_int m, lapack_int n, const lapack_complex_double *r,
+                               lapack_int ldr, lapack_complex_double *a, lapack_int lda)
+{
+    LAPACKE_zge_trans(LAPACK_ROW_MAJOR, m, n, r, ldr, a, lda);
+}
+
+/**
+ * \brief Allocate a row-major shadow copy of the uplo triangle of a
+ * column-major symmetric positive definite matrix.
+ *
+ * Mirrors LAPACKE's own dpo_trans usage: only the uplo triangle is copied.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  a    Column-major source matrix.
+ * \param[in]  lda  Leading dimension of a.
+ * \param[out] ldr  Leading dimension of the shadow copy.
+ * \return The shadow copy (release with LAPACKE_free), or NULL if the
+ *         allocation failed.
+ */
+lapack_complex_double *lapacke_test_zpo_cm_to_rm(char uplo, lapack_int n, const lapack_complex_double *a,
+                                  lapack_int lda, lapack_int *ldr)
+{
+    lapack_complex_double *r;
+    *ldr = MAX(1, n);
+    r = (lapack_complex_double *)LAPACKE_malloc(sizeof(lapack_complex_double) * MAX(1, n) * (*ldr));
+    if (r != NULL) {
+        LAPACKE_zpo_trans(LAPACK_COL_MAJOR, uplo, n, a, lda, r, *ldr);
+    }
+    return r;
+}
+
+/**
+ * \brief Copy the uplo triangle of a row-major shadow buffer back into a
+ * column-major symmetric positive definite matrix.
+ *
+ * \param[in]  uplo 'U' or 'L' triangle to copy.
+ * \param[in]  n    Matrix order.
+ * \param[in]  r    Row-major shadow buffer.
+ * \param[in]  ldr  Leading dimension of r.
+ * \param[out] a    Column-major destination matrix.
+ * \param[in]  lda  Leading dimension of a.
+ */
+void lapacke_test_zpo_rm_to_cm(char uplo, lapack_int n, const lapack_complex_double *r,
+                               lapack_int ldr, lapack_complex_double *a, lapack_int lda)
+{
+    LAPACKE_zpo_trans(LAPACK_ROW_MAJOR, uplo, n, r, ldr, a, lda);
+}
+
+/**
  * \brief Report a failed shadow buffer allocation and set info to
  * LAPACK_TRANSPOSE_MEMORY_ERROR.
  *
