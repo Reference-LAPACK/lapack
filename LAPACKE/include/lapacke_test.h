@@ -296,17 +296,27 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
             name, lapacke_test_layout_names[layout_index], lts_len, lts_bad);  \
     } while (0)
 
+/* MSVC's legacy preprocessor substitutes __VA_ARGS__ as one single argument
+ * when it is forwarded to a function-like macro. The extra rescan this
+ * indirection forces splits it back into separate arguments; it is a no-op
+ * for conforming preprocessors. */
+#define LAPACKE_TEST_EXPAND(x) x
+
 /** Run one NaN sweep over a single precision real matrix argument. */
 #define LAPACKE_TEST_SNAN_SWEEP(...)                                           \
-    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_snan, __VA_ARGS__)
+    LAPACKE_TEST_EXPAND(                                                       \
+        LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_snan, __VA_ARGS__))
 /** Run one NaN sweep over a double precision real matrix argument. */
 #define LAPACKE_TEST_DNAN_SWEEP(...)                                           \
-    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_dnan, __VA_ARGS__)
+    LAPACKE_TEST_EXPAND(                                                       \
+        LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_dnan, __VA_ARGS__))
 /** Run one NaN sweep over a single precision complex matrix argument. */
 #define LAPACKE_TEST_CNAN_SWEEP(...)                                           \
-    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_cnan, __VA_ARGS__)
+    LAPACKE_TEST_EXPAND(                                                       \
+        LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_cnan, __VA_ARGS__))
 /** Run one NaN sweep over a double precision complex matrix argument. */
 #define LAPACKE_TEST_ZNAN_SWEEP(...)                                           \
-    LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_znan, __VA_ARGS__)
+    LAPACKE_TEST_EXPAND(                                                       \
+        LAPACKE_TEST_NAN_SWEEP_IMPL(lapacke_test_znan, __VA_ARGS__))
 
 #endif /* LAPACKE_TEST_H */
