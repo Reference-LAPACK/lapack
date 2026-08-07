@@ -251,6 +251,7 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
+        -D BUILD_INDEX64_EXT_API:BOOL=OFF
 
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
