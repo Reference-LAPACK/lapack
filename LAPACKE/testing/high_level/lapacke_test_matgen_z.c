@@ -36,14 +36,14 @@ static void lapacke_test_zfill_latms(int layout, lapack_int rows,
                                      lapack_int ku, const lapack_int seed[4])
 {
     lapack_complex_double tmp[LAPACKE_TEST_LD * LAPACKE_TEST_LD];
-    lapack_complex_double d[LAPACKE_TEST_LD];
+    double d[LAPACKE_TEST_LD];
     lapack_complex_double work[3 * LAPACKE_TEST_LD];
     lapack_int iseed[4];
     const char dist = 'U';
     const char pack = 'N';
     const lapack_int mode = 3;
-    const lapack_complex_double cond = 10.0;
-    const lapack_complex_double dmax = 1.0;
+    const double cond = 10.0;
+    const double dmax = 1.0;
     const lapack_int ld_tmp = LAPACKE_TEST_LD;
     lapack_int info = 0;
     const size_t len = lapacke_test_alloc_len(layout, rows, cols, ld);
