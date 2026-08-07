@@ -87,6 +87,7 @@ if(BUILD_DEFAULT_API)
 else()
   add_library(${LAPACKELIB}_obj OBJECT ${COMMON_SOURCES} ${COMMON_UTILS})
 endif()
+lapack_add_coverage(${LAPACKELIB}_obj)
 
 if(BUILD_INDEX64_EXT_API)
   add_library(${LAPACKELIB}_64_obj OBJECT ${SOURCES})
@@ -114,6 +115,7 @@ if(LAPACKE_WITH_TMG)
 endif()
 target_link_libraries(${LAPACKELIB} PRIVATE ${LAPACK_LIBRARIES})
 
+lapack_add_coverage(${LAPACKELIB})
 lapack_install_library(${LAPACKELIB})
 
 if(BUILD_TESTING)
