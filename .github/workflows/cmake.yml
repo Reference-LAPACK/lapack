@@ -57,6 +57,9 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.os }}
 
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
+    environment: codecov
+
     env:
       BUILD_TYPE: Release
       FFLAGS: ${{ matrix.fflags }}
@@ -131,6 +134,23 @@ jobs:
         if-no-files-found: warn
         retention-days: 14
 
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-${{ matrix.os }}-${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
+        name: ${{ matrix.os }} ${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
+        # Pull requests from forks have no access to repository secrets, so they
+        # can only upload if the Codecov organization permits tokenless uploads.
+        # Do not turn that into a CI failure for the contributor.
+        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
+
     - name: Write test summary
       if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
       env:
@@ -152,6 +172,9 @@ jobs:
 
   test-extended-api-only:
     runs-on: ubuntu-latest
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
+    environment: codecov
 
     env:
       BUILD_TYPE: Release
@@ -200,6 +223,23 @@ jobs:
           build/lapack_testing_junit.xml
         if-no-files-found: warn
         retention-days: 14
+
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-extended-api-shared-${{ matrix.shared_libs }}
+        name: extended API only, shared ${{ matrix.shared_libs }}
+        # Pull requests from forks have no access to repository secrets, so they
+        # can only upload if the Codecov organization permits tokenless uploads.
+        # Do not turn that into a CI failure for the contributor.
+        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
     - name: Write test summary
       if: ${{ !cancelled() }}
