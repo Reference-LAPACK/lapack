@@ -57,8 +57,11 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.os }}
 
-    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
-    environment: codecov
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
 
     env:
       BUILD_TYPE: Release
@@ -175,8 +178,11 @@ jobs:
   test-extended-api-only:
     runs-on: ubuntu-latest
 
-    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
-    environment: codecov
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
 
     env:
       BUILD_TYPE: Release
@@ -263,8 +269,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
-    environment: codecov
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
 
     env:
       BUILD_TYPE: Coverage
