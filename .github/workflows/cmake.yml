@@ -219,6 +219,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.
+    environment: codecov
+
     env:
       BUILD_TYPE: Coverage
       FFLAGS: "-fopenmp"
