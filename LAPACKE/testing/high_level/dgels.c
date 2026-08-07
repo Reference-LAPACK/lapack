@@ -52,9 +52,7 @@ LAPACKE_TEST(dgels)
         lapacke_test_check("dgels NaN with nancheck off",
                            lapacke_test_layout_names[l],
                            API_SUFFIX(LAPACKE_dgels)(layout, 'N', M, N, NRHS, a,
-                                                     LD, b, LD) >= 0
-                               ? 0
-                               : -999,
+                                                     LD, b, LD) < 0,
                            0);
         LAPACKE_set_nancheck(1);
     }

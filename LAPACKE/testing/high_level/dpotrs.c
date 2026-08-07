@@ -53,9 +53,7 @@ LAPACKE_TEST(dpotrs)
         lapacke_test_dfill_nan(layout, N, NRHS, b, LD);
         lapacke_test_check(
             "dpotrs NaN with nancheck off", lapacke_test_layout_names[l],
-            API_SUFFIX(LAPACKE_dpotrs)(layout, 'U', N, NRHS, a, LD, b, LD) >= 0
-                ? 0
-                : -999,
+            API_SUFFIX(LAPACKE_dpotrs)(layout, 'U', N, NRHS, a, LD, b, LD) < 0,
             0);
         LAPACKE_set_nancheck(1);
     }

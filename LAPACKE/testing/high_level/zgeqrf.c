@@ -36,9 +36,7 @@ LAPACKE_TEST(zgeqrf)
         lapacke_test_zfill_nan(layout, M, N, a, LD);
         lapacke_test_check(
             "zgeqrf NaN with nancheck off", lapacke_test_layout_names[l],
-            API_SUFFIX(LAPACKE_zgeqrf)(layout, M, N, a, LD, tau) >= 0 ? 0
-                                                                      : -999,
-            0);
+            API_SUFFIX(LAPACKE_zgeqrf)(layout, M, N, a, LD, tau) < 0, 0);
         LAPACKE_set_nancheck(1);
     }
 

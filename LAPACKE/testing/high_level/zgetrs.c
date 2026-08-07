@@ -51,9 +51,7 @@ LAPACKE_TEST(zgetrs)
         lapacke_test_check("zgetrs NaN with nancheck off",
                            lapacke_test_layout_names[l],
                            API_SUFFIX(LAPACKE_zgetrs)(layout, 'N', N, NRHS, a,
-                                                      LD, ipiv, b, LD) >= 0
-                               ? 0
-                               : -999,
+                                                      LD, ipiv, b, LD) < 0,
                            0);
         LAPACKE_set_nancheck(1);
     }
