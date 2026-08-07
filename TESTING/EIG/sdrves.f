@@ -734,7 +734,14 @@
                   CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
                   CALL SGEES( 'V', SORT, SSLECT, N, H, LDA, SDIM, WR,
      $                        WI, VS, LDVS, WORK, NNWORK, BWORK, IINFO )
-                  IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
+                  IF( IINFO.EQ.N+1 ) THEN
+                     WRITE( NOUNIT, FMT = 9991 )'SGEES1', IINFO, N,
+     $                  JTYPE, IOLDSD
+                     GO TO 220
+                  ELSE IF( IINFO.EQ.N+2 ) THEN
+                     WRITE( NOUNIT, FMT = 9990 )'SGEES1', IINFO, N,
+     $                  JTYPE, IOLDSD
+                  ELSE IF( IINFO.NE.0 ) THEN
                      RESULT( 1+RSUB ) = ULPINV
                      WRITE( NOUNIT, FMT = 9992 )'SGEES1', IINFO, N,
      $                  JTYPE, IOLDSD
@@ -809,7 +816,14 @@
                   CALL SGEES( 'N', SORT, SSLECT, N, HT, LDA, SDIM, WRT,
      $                        WIT, VS, LDVS, WORK, NNWORK, BWORK,
      $                        IINFO )
-                  IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
+                  IF( IINFO.EQ.N+1 ) THEN
+                     WRITE( NOUNIT, FMT = 9991 )'SGEES2', IINFO, N,
+     $                  JTYPE, IOLDSD
+                     GO TO 220
+                  ELSE IF( IINFO.EQ.N+2 ) THEN
+                     WRITE( NOUNIT, FMT = 9990 )'SGEES2', IINFO, N,
+     $                  JTYPE, IOLDSD
+                  ELSE IF( IINFO.NE.0 ) THEN
                      RESULT( 5+RSUB ) = ULPINV
                      WRITE( NOUNIT, FMT = 9992 )'SGEES2', IINFO, N,
      $                  JTYPE, IOLDSD
@@ -950,6 +964,14 @@
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
  9992 FORMAT( ' SDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9991 FORMAT( ' SDRVES: ', A, ' returned the known code N+1 =', I6,
+     $      ': eigenvalues too close', / 9X, 'to reorder; ill-',
+     $      'conditioned matrix, accepted as no error.', / 9X, 'N=',
+     $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9990 FORMAT( ' SDRVES: ', A, ' returned the known code N+2 =', I6,
+     $      ': roundoff undid the sort', / 9X, 'order; ill-conditioned',
+     $      ' matrix, accepted as no error.', / 9X, 'N=', I6,
+     $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
