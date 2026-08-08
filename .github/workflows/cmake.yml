@@ -70,7 +70,7 @@ jobs:
       FFLAGS: ${{ matrix.fflags }}
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
         fflags: [
@@ -143,6 +143,7 @@ jobs:
       # Like the artifact above, uploaded even when the tests failed: a failing
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -153,10 +154,8 @@ jobs:
         disable_search: true
         flags: tests-${{ matrix.os }}-${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
         name: ${{ matrix.os }} ${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
-        # Pull requests from forks have no access to repository secrets, so they
-        # can only upload if the Codecov organization permits tokenless uploads.
-        # Do not turn that into a CI failure for the contributor.
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
+        fail_ci_if_error: true
+        verbose: true
 
     - name: Write test summary
       if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
@@ -191,7 +190,7 @@ jobs:
       FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         shared_libs: [ OFF, ON ]
 
@@ -238,6 +237,7 @@ jobs:
       # Like the artifact above, uploaded even when the tests failed: a failing
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -248,10 +248,8 @@ jobs:
         disable_search: true
         flags: tests-extended-api-shared-${{ matrix.shared_libs }}
         name: extended API only, shared ${{ matrix.shared_libs }}
-        # Pull requests from forks have no access to repository secrets, so they
-        # can only upload if the Codecov organization permits tokenless uploads.
-        # Do not turn that into a CI failure for the contributor.
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
+        fail_ci_if_error: true
+        verbose: true
 
     - name: Write test summary
       if: ${{ !cancelled() }}
@@ -382,6 +380,7 @@ jobs:
     # declared in codecov.yml.
     - name: Upload BLAS coverage report to Codecov
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -391,14 +390,12 @@ jobs:
         # The .gcov files already exist, so there is no need for the uploader
         # to run gcov a second time itself.
         plugins: noop
+        fail_ci_if_error: true
         verbose: true
-        # Pull requests from forks have no access to repository secrets, so
-        # they can only upload if the Codecov organization permits tokenless
-        # uploads.  Do not turn that into a CI failure for the contributor.
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
     - name: Upload CBLAS coverage report to Codecov
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -406,11 +403,12 @@ jobs:
         flags: cblas
         name: CBLAS
         plugins: noop
+        fail_ci_if_error: true
         verbose: true
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
     - name: Upload LAPACK coverage report to Codecov
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -418,11 +416,12 @@ jobs:
         flags: lapack
         name: LAPACK
         plugins: noop
+        fail_ci_if_error: true
         verbose: true
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
     - name: Upload LAPACKE coverage report to Codecov
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -430,8 +429,8 @@ jobs:
         flags: lapacke
         name: LAPACKE
         plugins: noop
+        fail_ci_if_error: true
         verbose: true
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
 
   test-install-cblas-lapacke-without-fortran-compiler:
 
