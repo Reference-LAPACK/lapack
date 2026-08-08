@@ -1,0 +1,68 @@
+# Configuration for https://codecov.io.  After changing it, validate it with
+#   curl -X POST --data-binary @codecov.yml https://codecov.io/validate
+# See https://docs.codecov.com/docs/codecovyml-reference for the full reference.
+
+codecov:
+  notify:
+    # Comment as soon as a report has been processed instead of holding the
+    # comment back until every other CI status has completed.  A pull request
+    # whose build or tests fail is one where the report is wanted most, and
+    # the comment is updated in place as the remaining uploads arrive.
+    wait_for_ci: false
+
+comment:
+  layout: "header, reach, diff, components, files, footer"
+  behavior: default
+  # Comment on every pull request: also on one that changes no coverage at
+  # all ...
+  require_changes: false
+  # ... on one whose base commit has no report to compare against ...
+  require_base: false
+  # ... and on one for which no coverage was uploaded, so that the test
+  # results are reported even when the coverage build did not get that far.
+  require_head: false
+
+flags:
+  # The four components are uploaded separately, each from the build
+  # directory that holds its gcov reports; see the coverage job of
+  # .github/workflows/cmake.yml.  Their coverage is therefore already
+  # separated at upload time and needs no path filtering here.
+  blas:
+    carryforward: true
+  cblas:
+    carryforward: true
+  lapack:
+    carryforward: true
+  lapacke:
+    carryforward: true
+
+# The same four groups once more, as components.  A flag is attached to an
+# upload and so depends on the coverage job splitting its uploads the way it
+# does; a component is a filter over whatever coverage arrives, so these keep
+# reporting the four libraries separately even if that split ever changes.
+# The paths are the source directories the libraries are built from, which is
+# also how the CMake build directories the uploads use are laid out.
+component_management:
+  individual_components:
+    - component_id: blas
+      name: BLAS
+      paths:
+        - BLAS/SRC/**
+    - component_id: cblas
+      name: CBLAS
+      paths:
+        - CBLAS/src/**
+        - CBLAS/include/**
+    - component_id: lapack
+      name: LAPACK
+      paths:
+        # The LAPACK library is built from SRC together with the machine
+        # parameter and support routines it takes from INSTALL; see the
+        # ../INSTALL/ entries in SRC/CMakeLists.txt.
+        - SRC/**
+        - INSTALL/**
+    - component_id: lapacke
+      name: LAPACKE
+      paths:
+        - LAPACKE/src/**
+        - LAPACKE/utils/**

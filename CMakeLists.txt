@@ -50,6 +50,18 @@ if(_is_coverage_build)
   find_package(codecov)
 endif()
 
+# Instrument the library ${lib} for coverage.
+function(lapack_add_coverage lib)
+  if(NOT _is_coverage_build)
+    return()
+  endif()
+  if(NOT TARGET ${lib})
+    message(FATAL_ERROR "lapack_add_coverage: no such target '${lib}'")
+  endif()
+  add_coverage(${lib})
+  target_link_libraries(${lib} PRIVATE gcov)
+endfunction()
+
 # Use valgrind if it is found
 option( LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON )
 find_program( MEMORYCHECK_COMMAND valgrind )

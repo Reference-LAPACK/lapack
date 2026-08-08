@@ -7,6 +7,7 @@ on:
     - try-github-actions-for-windows
     paths:
     - .github/workflows/cmake.yml
+    - codecov.yml
     - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
@@ -22,6 +23,7 @@ on:
   pull_request:
     paths:
     - .github/workflows/cmake.yml
+    - codecov.yml
     - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
@@ -57,12 +59,18 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.os }}
 
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
     env:
       BUILD_TYPE: Release
       FFLAGS: ${{ matrix.fflags }}
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
         fflags: [
@@ -131,6 +139,22 @@ jobs:
         if-no-files-found: warn
         retention-days: 14
 
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-${{ matrix.os }}-${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
+        name: ${{ matrix.os }} ${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
+        fail_ci_if_error: true
+        verbose: true
+
     - name: Write test summary
       if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
       env:
@@ -153,12 +177,18 @@ jobs:
   test-extended-api-only:
     runs-on: ubuntu-latest
 
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
     env:
       BUILD_TYPE: Release
       FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         shared_libs: [ OFF, ON ]
 
@@ -201,6 +231,22 @@ jobs:
         if-no-files-found: warn
         retention-days: 14
 
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-extended-api-shared-${{ matrix.shared_libs }}
+        name: extended API only, shared ${{ matrix.shared_libs }}
+        fail_ci_if_error: true
+        verbose: true
+
     - name: Write test summary
       if: ${{ !cancelled() }}
       env:
@@ -218,6 +264,12 @@ jobs:
   coverage:
 
     runs-on: ubuntu-latest
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
 
     env:
       BUILD_TYPE: Coverage
@@ -248,6 +300,7 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
+        -D BUILD_INDEX64_EXT_API:BOOL=OFF
 
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
@@ -267,7 +320,9 @@ jobs:
     - name: Summarize coverage
       # The coverage target discards gcov's output, so an entirely empty report
       # is indistinguishable from a good one unless we look at the numbers.
-      # Print them, and fail if nothing was measured at all.
+      # Print them, per component, and fail if any component measured nothing:
+      # each is uploaded under its own Codecov flag, and a flag without data
+      # would quietly disappear from the report.
       if: ${{ !cancelled() }}
       run: |
         gcda=$(find build -name '*.gcda' | wc -l)
@@ -278,37 +333,100 @@ jobs:
           echo "::error::No coverage data was recorded; the report would be empty."
           exit 1
         fi
-        # In a gcov report an executed line is prefixed with its execution
-        # count and an unexecuted one with '#####' or '====='; everything else
-        # ('-') is not executable.
-        set -- $(find build -name '*.gcov' -exec cat {} + | awk '
-          /^ *[0-9]+[*]?:/     { hit++; next }
-          /^ *(#####|=====):/  { miss++ }
-          END { printf "%d %d\n", hit + 0, hit + miss + 0 }')
-        hit=$1
-        total=$2
-        if [ "${hit}" -eq 0 ]; then
-          echo "::error::Coverage report is empty: not a single line was executed."
-          exit 1
-        fi
-        percent=$(awk -v h="${hit}" -v t="${total}" 'BEGIN { printf "%.2f", 100 * h / t }')
-        echo "lines executed: ${hit} of ${total} (${percent}%)"
-        printf '## Coverage\n\n%s%% of lines executed (%s of %s) across %s files.\n' \
-          "${percent}" "${hit}" "${total}" "${reports}" >> "$GITHUB_STEP_SUMMARY"
+        status=0
+        summary=""
+        # gcov writes its report next to the object it belongs to, so the
+        # reports of a component are those below its own build directory.
+        # These are the directories the uploads below use as well.
+        for component in BLAS:build/BLAS CBLAS:build/CBLAS LAPACK:build/SRC LAPACKE:build/LAPACKE; do
+          name=${component%%:*}
+          dir=${component#*:}
+          if [ ! -d "${dir}" ]; then
+            echo "::error::${name}: ${dir} does not exist; its Codecov flag would be empty."
+            status=1
+            continue
+          fi
+          files=$(find "${dir}" -name '*.gcov' | wc -l)
+          # In a gcov report an executed line is prefixed with its execution
+          # count and an unexecuted one with '#####' or '====='; everything
+          # else ('-') is not executable.
+          set -- $(find "${dir}" -name '*.gcov' -exec cat {} + | awk '
+            /^ *[0-9]+[*]?:/     { hit++; next }
+            /^ *(#####|=====):/  { miss++ }
+            END { printf "%d %d\n", hit + 0, hit + miss + 0 }')
+          hit=$1
+          total=$2
+          if [ "${hit}" -eq 0 ]; then
+            echo "::error::${name}: not a single line was executed; its Codecov flag would be empty."
+            status=1
+            percent="n/a"
+          else
+            percent=$(awk -v h="${hit}" -v t="${total}" 'BEGIN { printf "%.2f%%", 100 * h / t }')
+          fi
+          echo "${name}: ${hit} of ${total} lines executed (${percent}) across ${files} files"
+          summary="${summary}| ${name} | ${percent} | ${hit} | ${total} | ${files} |"$'\n'
+        done
+        printf '## Coverage\n\n| Component | Coverage | Lines executed | Lines executable | Files |\n| --- | --: | --: | --: | --: |\n%s' \
+          "${summary}" >> "$GITHUB_STEP_SUMMARY"
+        exit ${status}
 
-    - name: Upload coverage report to Codecov
+    # Each component is uploaded on its own, so that Codecov reports the
+    # coverage of BLAS, CBLAS, LAPACK and LAPACKE under a flag of its own
+    # rather than as a single number for the whole library.  The flags are
+    # declared in codecov.yml.
+    - name: Upload BLAS coverage report to Codecov
       if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/BLAS
+        flags: blas
+        name: BLAS
         # The .gcov files already exist, so there is no need for the uploader
         # to run gcov a second time itself.
         plugins: noop
+        fail_ci_if_error: true
         verbose: true
-        # Pull requests from forks have no access to repository secrets, so
-        # they can only upload if the Codecov organization permits tokenless
-        # uploads.  Do not turn that into a CI failure for the contributor.
-        fail_ci_if_error: ${{ secrets.CODECOV_TOKEN != '' }}
+
+    - name: Upload CBLAS coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/CBLAS
+        flags: cblas
+        name: CBLAS
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACK coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/SRC
+        flags: lapack
+        name: LAPACK
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACKE coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/LAPACKE
+        flags: lapacke
+        name: LAPACKE
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
 
   test-install-cblas-lapacke-without-fortran-compiler:
 
