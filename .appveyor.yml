@@ -36,7 +36,7 @@ before_build:
 #  - cmake -G "NMake Makefiles JOM" -DCMAKE_Fortran_COMPILER=flang -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
 
 build_script:
-  - cmake --build .
+  - cmake --build . --parallel
 
 test_script:
   - ctest -j2 --output-on-failure 
