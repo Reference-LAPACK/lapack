@@ -11,9 +11,7 @@ codecov:
     wait_for_ci: false
 
 comment:
-  # 'flags' and 'components' are the tables listing BLAS, CBLAS, LAPACK and
-  # LAPACKE separately.
-  layout: "header, diff, flags, components, files, footer"
+  layout: "header, reach, diff, components, files, footer"
   behavior: default
   # Comment on every pull request: also on one that changes no coverage at
   # all ...
@@ -23,10 +21,6 @@ comment:
   # ... and on one for which no coverage was uploaded, so that the test
   # results are reported even when the coverage build did not get that far.
   require_head: false
-  # A flag carried forward from the base commit is labelled as such, so
-  # showing them keeps all four components in the table even when one of
-  # them did not build.
-  show_carryforward_flags: true
 
 flags:
   # The four components are uploaded separately, each from the build
