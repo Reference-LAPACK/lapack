@@ -68,6 +68,10 @@
 *     .. Parameters ..
       INTEGER            NMAX
       PARAMETER          ( NMAX = 2 )
+      COMPLEX            CZERO
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, INFO, J
@@ -101,12 +105,12 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = CMPLX( 1. / REAL( I+J ), -1. / REAL( I+J ) )
-            AF( I, J ) = CMPLX( 1. / REAL( I+J ), -1. / REAL( I+J ) )
+            A( I, J ) = CMPLX( ONE / REAL( I+J ), -ONE / REAL( I+J ) )
+            AF( I, J ) = CMPLX( ONE / REAL( I+J ), -ONE / REAL( I+J ) )
    10    CONTINUE
-         B( J ) = 0.
-         W( J ) = 0.
-         X( J ) = 0.
+         B( J ) = CZERO
+         W( J ) = CZERO
+         X( J ) = CZERO
    20 CONTINUE
       OK = .TRUE.
 *
