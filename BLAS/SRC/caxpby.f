@@ -108,12 +108,13 @@
       INTEGER I,IX,IY
 *     ..
       IF (N.LE.0) RETURN
-
-      IF (CA .EQ. (0.0,0.0) .AND. CB.NE.(0.0,0.0)) THEN
-         CALL CSCAL(N,CB, CY, INCY)
+*
+*     Scale if CA is zero - (note that SCAL does not handle INCY.LE.0)
+      IF (CA .EQ. (0.0,0.0) .AND. INCY.GT.0) THEN
+         CALL CSCAL(N, CB, CY, INCY)
          RETURN
       END IF
-
+*
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
@@ -139,6 +140,6 @@
 *
       RETURN
 *
-*     End of CAXBPY
+*     End of CAXPBY
 *
       END
