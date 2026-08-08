@@ -349,13 +349,20 @@ jobs:
           files=$(find "${dir}" -name '*.gcov' | wc -l)
           # In a gcov report an executed line is prefixed with its execution
           # count and an unexecuted one with '#####' or '====='; everything
-          # else ('-') is not executable.
+          # else ('-') is not executable.  gcov -b additionally emits one
+          # 'branch N ...' record per branch outcome, taken either a number
+          # of times or never; a branch outcome counts as covered when it was
+          # taken at least once.
           set -- $(find "${dir}" -name '*.gcov' -exec cat {} + | awk '
-            /^ *[0-9]+[*]?:/     { hit++; next }
-            /^ *(#####|=====):/  { miss++ }
-            END { printf "%d %d\n", hit + 0, hit + miss + 0 }')
+            /^ *[0-9]+[*]?:/         { hit++; next }
+            /^ *(#####|=====):/      { miss++; next }
+            /^branch +[0-9]+ taken/  { btotal++; if ($4 + 0 > 0) bhit++; next }
+            /^branch +[0-9]+ never/  { btotal++ }
+            END { printf "%d %d %d %d\n", hit + 0, hit + miss + 0, bhit + 0, btotal + 0 }')
           hit=$1
           total=$2
+          bhit=$3
+          btotal=$4
           if [ "${hit}" -eq 0 ]; then
             echo "::error::${name}: not a single line was executed; its Codecov flag would be empty."
             status=1
@@ -363,10 +370,17 @@ jobs:
           else
             percent=$(awk -v h="${hit}" -v t="${total}" 'BEGIN { printf "%.2f%%", 100 * h / t }')
           fi
-          echo "${name}: ${hit} of ${total} lines executed (${percent}) across ${files} files"
-          summary="${summary}| ${name} | ${percent} | ${hit} | ${total} | ${files} |"$'\n'
+          # A component with no branches at all is possible in principle, so
+          # report n/a rather than dividing by zero.
+          if [ "${btotal}" -eq 0 ]; then
+            bpercent="n/a"
+          else
+            bpercent=$(awk -v h="${bhit}" -v t="${btotal}" 'BEGIN { printf "%.2f%%", 100 * h / t }')
+          fi
+          echo "${name}: ${hit} of ${total} lines executed (${percent}), ${bhit} of ${btotal} branches taken (${bpercent}) across ${files} files"
+          summary="${summary}| ${name} | ${percent} | ${hit} | ${total} | ${bpercent} | ${bhit} | ${btotal} | ${files} |"$'\n'
         done
-        printf '## Coverage\n\n| Component | Coverage | Lines executed | Lines executable | Files |\n| --- | --: | --: | --: | --: |\n%s' \
+        printf '## Coverage\n\n| Component | Lines | Executed | Executable | Branches | Taken | Total | Files |\n| --- | --: | --: | --: | --: | --: | --: | --: |\n%s' \
           "${summary}" >> "$GITHUB_STEP_SUMMARY"
         exit ${status}
 

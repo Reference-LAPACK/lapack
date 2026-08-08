@@ -135,8 +135,12 @@ function (add_gcov_target TNAME)
     get_filename_component(FILE_PATH "${TDIR}/${FILE}" PATH)
 
     # call gcov
+    #
+    # -b records branch frequencies, -c reports them as counts rather than
+    # percentages. Without -b the report carries line counts only, and both
+    # the summary below and Codecov have no branch coverage to work with.
     add_custom_command(OUTPUT ${TDIR}/${FILE}.gcov
-      COMMAND ${GCOV_ENV} ${GCOV_BIN} ${TDIR}/${FILE}.gcno > /dev/null
+      COMMAND ${GCOV_ENV} ${GCOV_BIN} -b -c ${TDIR}/${FILE}.gcno > /dev/null
       DEPENDS ${TNAME} ${TDIR}/${FILE}.gcno
       WORKING_DIRECTORY ${FILE_PATH}
     )

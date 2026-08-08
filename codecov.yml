@@ -22,6 +22,14 @@ comment:
   # results are reported even when the coverage build did not get that far.
   require_head: false
 
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
 flags:
   # The four components are uploaded separately, each from the build
   # directory that holds its gcov reports; see the coverage job of
