@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Summarize (and optionally run) the LAPACK, BLAS and CBLAS test suites.
+"""Summarize (and optionally run) the LAPACK, LAPACKE, BLAS and CBLAS test
+suites.
 
 This script analyzes the ``.out`` files written by the LAPACK testing
 drivers (``xlintst*``, ``xeigtst*`` and ``xdmdeigtst*``) and prints a
@@ -7,9 +8,13 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The BLAS (``xblat[123]?``) and CBLAS (``x?cblat[123]``) test drivers are
-analyzed too, from their own testing directories, and are reported in
-their own summary sections.  Those drivers report their test counts in
+The LAPACKE (``xlintst?_lapacke_*``), BLAS (``xblat[123]?``) and CBLAS
+(``x?cblat[123]``) test drivers are analyzed too, from their own testing
+directories, and are reported in their own summary sections.  The
+LAPACKE drivers are the linear equation tests rebuilt with the routine
+calls routed through LAPACKE, one driver per precision and (API layer,
+matrix layout) flavor; their output uses the classic LAPACK summary
+format.  The BLAS and CBLAS drivers report their test counts in
 lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
@@ -133,23 +138,45 @@ BLAS_LEVELS: "Tuple[Tuple[int, str], ...]" = (
     (3, "Level 3 BLAS routines"),
 )
 
+# LAPACKE linear equation test flavors: (layer, layout, description).
+# The double precision LIN tests are rebuilt with allowlisted routine
+# calls routed through LAPACKE, once per (API layer, matrix layout)
+# combination; only the work/column-major flavor runs the error-exit
+# tests, so the other flavors read a generated input with those disabled.
+LAPACKE_FLAVORS: "Tuple[Tuple[str, str, str], ...]" = (
+    ("work", "cm", "column-major work-level API"),
+    ("work", "rm", "row-major work-level API"),
+    ("high", "cm", "column-major high-level API"),
+    ("high", "rm", "row-major high-level API"),
+)
+
 # Libraries, in reporting order.  Each has its own testing directory and
 # its own section in the summary table.
 LIBRARY_LAPACK = "LAPACK"
+LIBRARY_LAPACKE = "LAPACKE"
 LIBRARY_BLAS = "BLAS"
 LIBRARY_CBLAS = "CBLAS"
-LIBRARIES: "Tuple[str, ...]" = (LIBRARY_LAPACK, LIBRARY_BLAS, LIBRARY_CBLAS)
+LIBRARIES: "Tuple[str, ...]" = (
+    LIBRARY_LAPACK,
+    LIBRARY_LAPACKE,
+    LIBRARY_BLAS,
+    LIBRARY_CBLAS,
+)
 
 # LAPACK test families, in reporting order per precision.
 LAPACK_FAMILIES: "Tuple[str, ...]" = ("eig",) + tuple(s[0] for s in LIN_SETS) + ("dmd",)
 
 # All test families, in reporting order per precision.
-ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("blas", "cblas")
+ALL_FAMILIES: "Tuple[str, ...]" = LAPACK_FAMILIES + ("lapacke", "blas", "cblas")
 
 # Which library each family belongs to.
 FAMILY_LIBRARY: "Dict[str, str]" = dict(
     [(family, LIBRARY_LAPACK) for family in LAPACK_FAMILIES]
-    + [("blas", LIBRARY_BLAS), ("cblas", LIBRARY_CBLAS)]
+    + [
+        ("lapacke", LIBRARY_LAPACKE),
+        ("blas", LIBRARY_BLAS),
+        ("cblas", LIBRARY_CBLAS),
+    ]
 )
 
 # API suffixes that may exist: default API and index-64 extended API.
@@ -341,6 +368,10 @@ class TestCase:
     # False when the driver opens its own output file, so the harness must
     # not also redirect standard output onto it.
     redirect_stdout: bool = True
+    # The tracked source-tree file a generated input is derived from, used
+    # for the JUnit 'file' attribute; None when input_name itself is a
+    # source-tree file.
+    source_input: "Optional[str]" = None
 
     def suffixed_output(self, suffix: str) -> str:
         """Return the output file name for an API suffix.
@@ -406,8 +437,8 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
     Args:
         letters: Precision letters to include, in order (subset of
             ``"sdcz"``).
-        families: Test families to include (subset of ``lin``, ``eig``,
-            ``mixed``, ``rfp``, ``dmd``).
+        families: Test families to include (a subset of
+            ``ALL_FAMILIES``).
 
     Returns:
         The test cases in reporting order: for each precision, the
@@ -473,6 +504,33 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                     parser=PARSER_DMD,
                 )
             )
+        if "lapacke" in families:
+            # All flavors of a driver read <x>test.in except that the
+            # flavors that cannot run the error-exit tests read the
+            # generated <x>test_noerr.in, which only exists in the build
+            # tree.
+            for layer, layout, flavor in LAPACKE_FLAVORS:
+                error_exits = layer == "work" and layout == "cm"
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="lapacke",
+                        description="Linear Equation routines via the "
+                        + flavor,
+                        input_name="{}test.in".format(letter)
+                        if error_exits
+                        else "{}test_noerr.in".format(letter),
+                        output_name="{}test_{}_{}.out".format(letter, layer, layout),
+                        source_input=None
+                        if error_exits
+                        else "{}test.in".format(letter),
+                        executable="xlintst{}_lapacke_{}_{}".format(
+                            letter, layer, layout
+                        ),
+                        parser=PARSER_STANDARD,
+                        library=LIBRARY_LAPACKE,
+                    )
+                )
         if "blas" in families:
             for level, description in BLAS_LEVELS:
                 # Level 1 reads no input; Level 2/3 read e.g. sblat2.in,
@@ -851,6 +909,7 @@ def find_executable(name: str, bin_dir: "Optional[str]") -> "Optional[Path]":
 
 SOURCE_INPUT_DIRS: "Dict[str, str]" = {
     LIBRARY_LAPACK: "TESTING",
+    LIBRARY_LAPACKE: "TESTING",
     LIBRARY_BLAS: "BLAS/TESTING",
     LIBRARY_CBLAS: "CBLAS/testing",
 }
@@ -1174,9 +1233,15 @@ def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
         },
     )
     if case.input_name is not None:
-        # The source-tree input file, as a repository-relative path.
+        # The source-tree input file, as a repository-relative path.  A
+        # generated input has no source-tree counterpart, so its testcase
+        # points at the tracked file it is derived from.
         element.set(
-            "file", "{}/{}".format(SOURCE_INPUT_DIRS[case.library], case.input_name)
+            "file",
+            "{}/{}".format(
+                SOURCE_INPUT_DIRS[case.library],
+                case.source_input or case.input_name,
+            ),
         )
     report = outcome.report
     if report is not None:
@@ -1699,8 +1764,8 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         The parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Analyze the .out files produced by the LAPACK, BLAS "
-        "and CBLAS test suites and print a summary of the test results.",
+        description="Analyze the .out files produced by the LAPACK, LAPACKE, "
+        "BLAS and CBLAS test suites and print a summary of the test results.",
         epilog="By default all precisions and all test families are "
         "analyzed, each library is reported in its own section, and both "
         "the default API and extended API (_64) outputs are summarized "
@@ -1712,6 +1777,12 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         default="TESTING",
         help="directory containing the LAPACK testing output (.out) files "
         "(default: %(default)s)",
+    )
+    parser.add_argument(
+        "--lapacke-dir",
+        default=str(Path("TESTING") / "lapacke"),
+        help="directory containing the LAPACKE testing output (.out) files; "
+        "skipped without warning if it does not exist (default: %(default)s)",
     )
     parser.add_argument(
         "--blas-dir",
@@ -1775,7 +1846,8 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         default="all",
         help="test family to analyze: lin=linear equations, "
         "eig=eigenproblems (including balancing), mixed=mixed precision, "
-        "rfp=RFP format, dmd=dynamic mode decomposition, blas=BLAS, "
+        "rfp=RFP format, dmd=dynamic mode decomposition, "
+        "lapacke=linear equations via LAPACKE, blas=BLAS, "
         "cblas=CBLAS, lapack=all LAPACK families, all (default)",
     )
     parser.add_argument(
@@ -1835,7 +1907,7 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
 
 
 def main(argv: "Optional[Sequence[str]]" = None) -> int:
-    """Run the LAPACK, BLAS and CBLAS test summary tool.
+    """Run the LAPACK, LAPACKE, BLAS and CBLAS test summary tool.
 
     Args:
         argv: The command line arguments, or None to use ``sys.argv``.
@@ -1859,12 +1931,14 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         )
         return 2
 
-    # The BLAS tests are absent from builds that use an optimized BLAS,
-    # and CBLAS is off by default, so a missing directory is normal and
-    # is skipped silently.  An explicitly selected library that has no
-    # directory is a usage error, though.
+    # The LAPACKE tests are built only with LAPACKE=ON, the BLAS tests
+    # are absent from builds that use an optimized BLAS, and CBLAS is off
+    # by default, so a missing directory is normal and is skipped
+    # silently.  An explicitly selected library that has no directory is
+    # a usage error, though.
     directories: "Dict[str, Path]" = {LIBRARY_LAPACK: test_dir}
     for library, option in (
+        (LIBRARY_LAPACKE, args.lapacke_dir),
         (LIBRARY_BLAS, args.blas_dir),
         (LIBRARY_CBLAS, args.cblas_dir),
     ):
