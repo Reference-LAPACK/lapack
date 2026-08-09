@@ -150,20 +150,24 @@
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
 *     .. Scalar Arguments ..
-      REAL                        SFAC
+      REAL              SFAC
 *     .. Scalars in Common ..
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      COMPLEX                CS, CSA, CSB
-      REAL                        SC
+      COMPLEX           CS, CSA, CSB, CA0, CB0
+      REAL              SC, SGOT, RTMIN, RTMAX, SONE,
+     +                  SZERO
       INTEGER           K
 *     .. Local Arrays ..
-      COMPLEX                CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
+      COMPLEX           CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
      +                  CGOT(1), CWANT(1)
-      REAL                        CCTRUE(8)
+      REAL              SWANT(1)
+      REAL              CCTRUE(8)
 *     .. External Subroutines ..
       EXTERNAL          CROTG, CTEST, STEST1
+*     .. Intrinsic Functions ..
+      INTRINSIC         AIMAG, HUGE, REAL, SQRT, TINY
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -207,6 +211,54 @@
          CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
          CALL STEST1(SC,CCTRUE(K),CCTRUE(K),SFAC)
    20 CONTINUE
+*
+*     The scaled arms of CROTG.  Their results are awkward to tabulate,
+*     so check the identities that define the rotation instead:
+*     C*A + S*B = R, and C**2 + ABS(S)**2 = 1.  RTMIN and RTMAX bracket
+*     the window inside which the routine uses its unscaled algorithm.
+*
+      SONE = 1E0
+      SZERO = 0E0
+      RTMIN = SQRT(TINY(SONE))
+      RTMAX = SQRT(HUGE(SONE))
+      DO 40 K = 1, 5
+         N = 8 + K
+         IF (K.EQ.1) THEN
+*           A zero and B below the window, with both parts nonzero so
+*           the general arm is taken rather than the real or imaginary
+*           shortcut.
+            CA0 = CMPLX(SZERO,SZERO)
+            CB0 = CMPLX(RTMIN*0.25E0,RTMIN*0.25E0)
+         ELSE IF (K.EQ.2) THEN
+*           Both nonzero, B far above the window.
+            CA0 = CMPLX(SONE,SZERO)
+            CB0 = CMPLX(RTMAX,SZERO)
+         ELSE IF (K.EQ.3) THEN
+*           Both inside the window, but A so small against B that the
+*           routine switches to its F2 < H2*SAFMIN formulation.
+            CA0 = CMPLX(RTMIN*2E0,SZERO)
+            CB0 = CMPLX(RTMAX*0.25E0,SZERO)
+         ELSE IF (K.EQ.4) THEN
+*           Both above the window and of a size, so the routine scales
+*           A and B by the same factor rather than one of its own.
+            CA0 = CMPLX(RTMAX,SZERO)
+            CB0 = CMPLX(RTMAX,SZERO)
+         ELSE
+*           The same, below the window.
+            CA0 = CMPLX(RTMIN*0.25E0,SZERO)
+            CB0 = CMPLX(RTMIN*0.25E0,SZERO)
+         END IF
+         CSA = CA0
+         CSB = CB0
+         CALL CROTG(CSA,CSB,SC,CS)
+*        CSA holds R on return.
+         CGOT(1) = SC*CA0 + CS*CB0
+         CWANT(1) = CSA
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
+         SWANT(1) = SONE
+         CALL STEST1(SGOT,SONE,SWANT,SFAC)
+   40 CONTINUE
       RETURN
 *
 *     End of CHECK0
@@ -453,7 +505,7 @@
       COMPLEX           CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
-      REAL SC, SS
+      REAL              SC, SS
 *     .. Local Arrays ..
       COMPLEX           CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
