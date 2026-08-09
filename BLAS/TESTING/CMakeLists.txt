@@ -1,6 +1,7 @@
 function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
-  target_link_libraries(${name} ${BLASLIB})
+  target_link_libraries(${name} PRIVATE ${BLASLIB})
+  lapack_add_coverage(${name})
   if(EXISTS "${test_input}")
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>

@@ -268,7 +268,8 @@ function(add_lin_executable name)
 
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
-    target_link_libraries(${name} ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+    target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+    lapack_add_coverage(${name})
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -289,7 +290,8 @@ function(add_lin_executable name)
 
     add_executable(${name}_64 ${ext_sources_64})
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
-    target_link_libraries(${name}_64 ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+    target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+    lapack_add_coverage(${name}_64)
 
     # Add depedency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be
