@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 11
+      DO 20 IC = 1, 13
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,10 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
+         IF (ICASE.EQ.12) THEN
+            CALL CHECK0(SFAC)
+         ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
+     +            ICASE.EQ.13) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -111,7 +114,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(11)
+      CHARACTER*6      L(13)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -127,6 +130,8 @@
       DATA             L(9)/'ZDSCAL'/
       DATA             L(10)/'IZAMAX'/
       DATA             L(11)/'ZAXPBY'/
+      DATA             L(12)/'ZROTG '/
+      DATA             L(13)/'ZDROT '/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -136,6 +141,74 @@
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
 *
 *     End of HEADER
+*
+      END
+      SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION              SFAC
+*     .. Scalars in Common ..
+      INTEGER           ICASE, INCX, INCY, MODE, N
+      LOGICAL           PASS
+*     .. Local Scalars ..
+      COMPLEX*16             CS, CSA, CSB
+      DOUBLE PRECISION              SC
+      INTEGER           K
+*     .. Local Arrays ..
+      COMPLEX*16             CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
+     +                  CGOT(1), CWANT(1)
+      DOUBLE PRECISION              CCTRUE(8)
+*     .. External Subroutines ..
+      EXTERNAL          ZROTG, CTEST, STEST1
+*     .. Common blocks ..
+      COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+*     .. Data statements ..
+*
+*     ZROTG is exercised on the branches its argument pair selects:
+*     B zero, A zero with B real, imaginary or general, and the ordinary
+*     path with real, imaginary and negative A.  Each expected value
+*     satisfies C*A + S*B = R and C**2 + ABS(S)**2 = 1 exactly.
+*
+      DATA              CA1/(1.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (3.0D0,0.0D0), (0.0D0,3.0D0),
+     +                  (3.0D0,4.0D0), (-3.0D0,0.0D0)/
+      DATA              CB1/(0.0D0,0.0D0), (3.0D0,0.0D0),
+     +                  (0.0D0,4.0D0), (3.0D0,4.0D0),
+     +                  (4.0D0,0.0D0), (0.0D0,4.0D0),
+     +                  (0.0D0,0.0D0), (4.0D0,0.0D0)/
+      DATA              CCTRUE/1.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.6D0, 0.6D0, 1.0D0, 0.6D0/
+      DATA              CSTRUE/(0.0D0,0.0D0), (1.0D0,0.0D0),
+     +                  (0.0D0,-1.0D0), (0.6D0,-0.8D0),
+     +                  (0.8D0,0.0D0), (0.8D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.8D0,0.0D0)/
+      DATA              CATRUE/(1.0D0,0.0D0), (3.0D0,0.0D0),
+     +                  (4.0D0,0.0D0), (5.0D0,0.0D0),
+     +                  (5.0D0,0.0D0), (0.0D0,5.0D0),
+     +                  (3.0D0,4.0D0), (-5.0D0,0.0D0)/
+*     .. Executable Statements ..
+*
+      DO 20 K = 1, 8
+*        .. Set N=K for identification in output if any ..
+         N = K
+         CSA = CA1(K)
+         CSB = CB1(K)
+         CALL ZROTG(CSA,CSB,SC,CS)
+         CGOT(1) = CSA
+         CWANT(1) = CATRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CGOT(1) = CS
+         CWANT(1) = CSTRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CALL STEST1(SC,CCTRUE(K),CCTRUE(K),SFAC)
+   20 CONTINUE
+      RETURN
+*
+*     End of CHECK0
 *
       END
       SUBROUTINE CHECK1(SFAC)
@@ -379,17 +452,19 @@
       COMPLEX*16        CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
+      DOUBLE PRECISION SC, SS
 *     .. Local Arrays ..
       COMPLEX*16        CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
      +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
-     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4)
+     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4),
+     +                  CTX(7), CTY(7)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX*16        ZDOTC, ZDOTU
       EXTERNAL          ZDOTC, ZDOTU
 *     .. External Subroutines ..
-      EXTERNAL          ZAXPY, ZAXPBY, ZCOPY, ZSWAP, CTEST
+      EXTERNAL          ZAXPY, ZAXPBY, ZCOPY, ZSWAP, CTEST, ZDROT
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -615,6 +690,49 @@
 
 
 *     .. Executable Statements ..
+*
+*     ZDROT applies a real plane rotation to a pair of complex vectors.
+*     The expected values are formed here with explicit indexing, so the
+*     stride arithmetic inside the routine is what is under test; the
+*     negative stride exercises its IX = (-N+1)*INCX + 1 start.
+*
+      IF (ICASE.EQ.13) THEN
+         SC = 0.6D0
+         SS = 0.8D0
+         DO 100 KI = 1, 3
+            IF (KI.EQ.1) THEN
+               LINCX = 1
+               LINCY = 1
+            ELSE IF (KI.EQ.2) THEN
+               LINCX = 2
+               LINCY = 1
+            ELSE
+               LINCX = -2
+               LINCY = 1
+            END IF
+            N = 3
+            DO 80 I = 1, 7
+               CX(I) = CX1(I)
+               CY(I) = CY1(I)
+               CTX(I) = CX1(I)
+               CTY(I) = CY1(I)
+   80       CONTINUE
+            MX = 1
+            MY = 1
+            IF (LINCX.LT.0) MX = (-N+1)*LINCX + 1
+            IF (LINCY.LT.0) MY = (-N+1)*LINCY + 1
+            DO 90 I = 1, N
+               CTX(MX) = SC*CX1(MX) + SS*CY1(MY)
+               CTY(MY) = SC*CY1(MY) - SS*CX1(MX)
+               MX = MX + LINCX
+               MY = MY + LINCY
+   90       CONTINUE
+            CALL ZDROT(N,CX,LINCX,CY,LINCY,SC,SS)
+            CALL CTEST(7,CX,CTX,CTX,SFAC)
+            CALL CTEST(7,CY,CTY,CTY,SFAC)
+  100    CONTINUE
+         RETURN
+      END IF
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
          INCY = INCYS(KI)
