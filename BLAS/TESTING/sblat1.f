@@ -160,25 +160,25 @@
       REAL              D12, SA, SB, SC, SS
       INTEGER           I, K
 *     .. Local Arrays ..
-      REAL              DA1(8), DATRUE(8), DB1(8), DBTRUE(8), DC1(8),
-     +                  DS1(8), DAB(4,9), DTEMP(9), DTRUE(9,9)
+      REAL              DA1(9), DATRUE(9), DB1(9), DBTRUE(9), DC1(9),
+     +                  DS1(9), DAB(4,10), DTEMP(9), DTRUE(9,10)
 *     .. External Subroutines ..
       EXTERNAL          SROTG, SROTMG, STEST, STEST1
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
       DATA              DA1/0.3E0, 0.4E0, -0.3E0, -0.4E0, -0.3E0, 0.0E0,
-     +                  0.0E0, 1.0E0/
-      DATA              DB1/0.4E0, 0.3E0, 0.4E0, 0.3E0, -0.4E0, 0.0E0,
-     +                  1.0E0, 0.0E0/
-      DATA              DC1/0.6E0, 0.8E0, -0.6E0, 0.8E0, 0.6E0, 1.0E0,
-     +                  0.0E0, 1.0E0/
-      DATA              DS1/0.8E0, 0.6E0, 0.8E0, -0.6E0, 0.8E0, 0.0E0,
-     +                  1.0E0, 0.0E0/
-      DATA              DATRUE/0.5E0, 0.5E0, 0.5E0, -0.5E0, -0.5E0,
-     +                  0.0E0, 1.0E0, 1.0E0/
-      DATA              DBTRUE/0.0E0, 0.6E0, 0.0E0, -0.6E0, 0.0E0,
      +                  0.0E0, 1.0E0, 0.0E0/
+      DATA              DB1/0.4E0, 0.3E0, 0.4E0, 0.3E0, -0.4E0, 0.0E0,
+     +                  1.0E0, 0.0E0, 0.0E0/
+      DATA              DC1/0.6E0, 0.8E0, -0.6E0, 0.8E0, 0.6E0, 1.0E0,
+     +                  0.0E0, 1.0E0, 0.0E0/
+      DATA              DS1/0.8E0, 0.6E0, 0.8E0, -0.6E0, 0.8E0, 0.0E0,
+     +                  1.0E0, 0.0E0, 0.0E0/
+      DATA              DATRUE/0.5E0, 0.5E0, 0.5E0, -0.5E0, -0.5E0,
+     +                  0.0E0, 1.0E0, 1.0E0, 0.0E0/
+      DATA              DBTRUE/0.0E0, 0.6E0, 0.0E0, -0.6E0, 0.0E0,
+     +                  0.0E0, 1.0E0, 0.0E0, 0.0E0/
 *     INPUT FOR MODIFIED GIVENS
       DATA DAB/ .1E0,.3E0,1.2E0,.2E0,
      A          .7E0, .2E0, .6E0, 4.2E0,
@@ -188,7 +188,8 @@
      E          4.E10, 2.E-2, 1.E-5, 10.E0,
      F          2.E-10, 4.E-2, 1.E5, 10.E0,
      G          2.E10, 4.E-2, 1.E-5, 10.E0,
-     H          4.E-9, 2.E-9, 2.E0, 1.E0/
+     H          4.E-9, 2.E-9, 2.E0, 1.E0,
+     I          -1.E0, 1.E0, 1.E0, 1.E0/
 *    TRUE RESULTS FOR MODIFIED GIVENS
       DATA DTRUE/0.E0,0.E0, 1.3E0, .2E0, 0.E0,0.E0,0.E0, .5E0, 0.E0,
      A           0.E0,0.E0, 4.5E0, 4.2E0, 1.E0, .5E0, 0.E0,0.E0,0.E0,
@@ -201,7 +202,9 @@
      H           0.E0,0.E0,15.E0,10.E0,-1.E0, 5.E-5, 0.E0,1.E0,0.E0,
      I           0.E0,0.E0, 15.E0, 10.E0, -1. E0, 5.E5, -4096.E0,
      J           1.E0, 4096.E-6,
-     K           0.E0,0.E0, 7.E0, 4.E0, 0.E0,0.E0, -.5E0, -.25E0, 0.E0/
+     K           0.E0,0.E0, 7.E0, 4.E0, 0.E0,0.E0, -.5E0, -.25E0, 0.E0,
+     Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
+     Z          0.E0,0.E0/
 *                   4096 = 2 ** 12
       DATA D12  /4096.E0/
       DTRUE(1,1) = 12.E0 / 130.E0
@@ -232,6 +235,19 @@
       DTRUE(7,9) = -1.2207031250000000E-04
       DTRUE(8,9) = 6.1035156250000000E-05
       DTRUE(9,9) = 2.4414062500000000E-04
+*
+*     The tenth case has DD1 < 0, which ?ROTMG rejects by zeroing H,
+*     D and DX1 and returning DFLAG = -1.  DY1 is left alone.
+*
+      DTRUE(1,10) = 0.E0
+      DTRUE(2,10) = 0.E0
+      DTRUE(3,10) = 0.E0
+      DTRUE(4,10) = 1.E0
+      DTRUE(5,10) = -1.E0
+      DTRUE(6,10) = 0.E0
+      DTRUE(7,10) = 0.E0
+      DTRUE(8,10) = 0.E0
+      DTRUE(9,10) = 0.E0
 *     .. Executable Statements ..
 *
 *     Compute true values which cannot be prestored
@@ -241,12 +257,24 @@
       DBTRUE(3) = -1.0E0/0.6E0
       DBTRUE(5) = 1.0E0/0.6E0
 *
-      DO 20 K = 1, 9
+*     A ninth ?ROTG case, built here because it needs run-time
+*     arithmetic: A is so small against B that C = A/R underflows to
+*     zero, which is the only way to reach the Z = ONE branch.  Both
+*     values are powers of two, so the expected results are exact.
+*
+      DA1(9) = 2.0E0**(-100)
+      DB1(9) = 2.0E0**60
+      DATRUE(9) = 2.0E0**60
+      DBTRUE(9) = 1.0E0
+      DC1(9) = 0.0E0
+      DS1(9) = 1.0E0
+*
+      DO 20 K = 1, 10
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN
 *           .. SROTG ..
-            IF (K.GT.8) GO TO 40
+            IF (K.GT.9) GO TO 40
             SA = DA1(K)
             SB = DB1(K)
             CALL SROTG(SA,SB,SC,SS)
