@@ -342,7 +342,8 @@ jobs:
         # gcov writes its report next to the object it belongs to, so the
         # reports of a component are those below its own build directory.
         # These are the directories the uploads below use as well.
-        for component in BLAS:build/BLAS CBLAS:build/CBLAS LAPACK:build/SRC LAPACKE:build/LAPACKE; do
+        for component in BLAS:build/BLAS CBLAS:build/CBLAS LAPACK:build/SRC \
+                         LAPACKE:build/LAPACKE TESTING:build/TESTING; do
           name=${component%%:*}
           dir=${component#*:}
           if [ ! -d "${dir}" ]; then
@@ -429,6 +430,19 @@ jobs:
         directory: build/SRC
         flags: lapack
         name: LAPACK
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACK testing coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/TESTING
+        flags: lapack
+        name: LAPACK testing
         plugins: noop
         fail_ci_if_error: true
         verbose: true

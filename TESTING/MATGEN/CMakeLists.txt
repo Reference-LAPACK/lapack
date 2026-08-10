@@ -50,6 +50,7 @@ list(REMOVE_DUPLICATES SOURCES)
 if(BUILD_DEFAULT_API)
   add_library(${TMGLIB}_obj OBJECT ${SOURCES})
   set_target_properties(${TMGLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+  lapack_add_coverage(${TMGLIB}_obj)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -71,5 +72,6 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
 )
 
-target_link_libraries(${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+target_link_libraries(${TMGLIB} PRIVATE ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+lapack_add_coverage(${TMGLIB})
 lapack_install_library(${TMGLIB})

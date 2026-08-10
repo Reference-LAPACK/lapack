@@ -74,3 +74,30 @@ component_management:
       paths:
         - LAPACKE/src/**
         - LAPACKE/utils/**
+    - component_id: tmglib
+      name: TMGLIB
+      paths:
+        # The test matrix generators.  Shipped as a library of their own and
+        # used by every LAPACK test to build its inputs, so a generator path
+        # no test asks for shows up here rather than in any of the above.
+        - TESTING/MATGEN/**
+    # The test programs, one component per library they exercise.  These
+    # measure the tests themselves, not the code under test: a routine here
+    # that never runs is a test that was written and then never reached.
+    - component_id: blas_testing
+      name: BLAS testing
+      paths:
+        - BLAS/TESTING/**
+    - component_id: cblas_testing
+      name: CBLAS testing
+      paths:
+        - CBLAS/testing/**
+    - component_id: lapack_testing
+      name: LAPACK testing
+      paths:
+        - TESTING/LIN/**
+        - TESTING/EIG/**
+    - component_id: lapacke_testing
+      name: LAPACKE testing
+      paths:
+        - LAPACKE/testing/**
