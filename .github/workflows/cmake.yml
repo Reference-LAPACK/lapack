@@ -144,7 +144,7 @@ jobs:
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         # The uploader defaults to coverage; this is a test analytics report.
@@ -238,7 +238,7 @@ jobs:
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         # The uploader defaults to coverage; this is a test analytics report.
@@ -396,7 +396,7 @@ jobs:
     - name: Upload BLAS coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: build/BLAS
@@ -411,7 +411,7 @@ jobs:
     - name: Upload CBLAS coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: build/CBLAS
@@ -424,7 +424,7 @@ jobs:
     - name: Upload LAPACK coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: build/SRC
@@ -437,7 +437,7 @@ jobs:
     - name: Upload LAPACK testing coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: build/TESTING
@@ -450,7 +450,7 @@ jobs:
     - name: Upload LAPACKE coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: build/LAPACKE
