@@ -410,6 +410,12 @@ class CaseOutcome:
     run_error: "Optional[str]" = None
     report: "Optional[FileReport]" = None
     duration: "Optional[float]" = None
+    # When the run behind this outcome took place, in seconds since the
+    # epoch: the wall-clock start of the driver under ``--run``,
+    # otherwise the modification time of the output file, which is when
+    # the driver that wrote it finished.  None when there is no output
+    # file to go by.
+    started: "Optional[float]" = None
 
 
 def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]":
@@ -1198,6 +1204,37 @@ def case_time(outcome: CaseOutcome) -> "Optional[float]":
     return None
 
 
+def junit_timestamp(seconds: float) -> str:
+    """Format a point in time for a JUnit ``timestamp`` attribute.
+
+    Local time without a UTC offset, as in the Ant convention that the
+    JUnit XML dialects follow.
+
+    Args:
+        seconds: The point in time, in seconds since the epoch.
+
+    Returns:
+        The time as ``YYYY-MM-DDThh:mm:ss``.
+    """
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(seconds))
+
+
+def output_mtime(path: Path) -> "Optional[float]":
+    """Return the modification time of a test output file.
+
+    Args:
+        path: The output file to inspect.
+
+    Returns:
+        The modification time in seconds since the epoch, or None when
+        the file cannot be stat'ed.
+    """
+    try:
+        return path.stat().st_mtime
+    except OSError:
+        return None
+
+
 def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
     """Build the JUnit ``<testcase>`` element of one analyzed test case.
 
@@ -1289,6 +1326,13 @@ def build_junit_tree(
     contributes nothing to the sum rather than a zero, and a suite
     without a single timed case carries no ``time`` at all.
 
+    Every suite also carries a ``timestamp`` of when it ran: the
+    earliest start among its cases, which is when this script launched
+    the first of them under ``--run`` and otherwise how old the oldest
+    of their output files is.  A suite none of whose cases left an
+    output file behind falls back to the time the report was built, so
+    that the attribute is always present.
+
     Args:
         outcomes: The analysis outcomes, in analysis order.
         unrecognized: The names of the unrecognized ``.out`` files.
@@ -1297,6 +1341,7 @@ def build_junit_tree(
         The document; its root is a ``<testsuites>`` element.
     """
     root = ET.Element("testsuites", {"name": "lapack_testing"})
+    report_time = time.time()
     grouped: "Dict[Tuple[str, str], List[CaseOutcome]]" = {}
     for outcome in outcomes:
         grouped.setdefault((outcome.case.library, outcome.suffix), []).append(outcome)
@@ -1309,8 +1354,14 @@ def build_junit_tree(
     total_time = 0.0
     total_timed = False
     for (library, suffix), suite_outcomes in grouped.items():
+        starts = [o.started for o in suite_outcomes if o.started is not None]
         suite = ET.SubElement(
-            root, "testsuite", {"name": section_title(library, [suffix])}
+            root,
+            "testsuite",
+            {
+                "name": section_title(library, [suffix]),
+                "timestamp": junit_timestamp(min(starts) if starts else report_time),
+            },
         )
         failures = 0
         errors = 0
@@ -1353,22 +1404,30 @@ def build_junit_tree(
             "{} .out file(s) in the testing directories are not known to "
             "this script and were not analyzed".format(len(unrecognized))
         )
+        # This suite is a check this script makes rather than a driver it
+        # timed, so its run time is a true zero rather than an unknown.
         suite = ET.SubElement(
             root,
             "testsuite",
             {
                 "name": "lapack_testing.py",
+                "timestamp": junit_timestamp(report_time),
                 "tests": "1",
                 "failures": "1",
                 "errors": "0",
                 "skipped": "0",
                 "assertions": "0",
+                "time": "0.000",
             },
         )
         testcase = ET.SubElement(
             suite,
             "testcase",
-            {"classname": "lapack_testing", "name": "unrecognized .out files"},
+            {
+                "classname": "lapack_testing",
+                "name": "unrecognized .out files",
+                "time": "0.000",
+            },
         )
         failure = ET.SubElement(testcase, "failure")
         failure.set("message", sanitize_xml_text(message))
@@ -2069,6 +2128,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                 output_name = case.suffixed_output(suffix)
                 run_error: "Optional[str]" = None
                 duration: "Optional[float]" = None
+                started: "Optional[float]" = None
                 if not just_errors and not short_summary:
                     print(
                         "Testing {} '{}' ({})".format(
@@ -2077,6 +2137,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                         end=" ",
                     )
                 if args.run:
+                    started = time.time()
                     start = time.monotonic()
                     run_error = run_test_case(case, suffix, directory, args.bin)
                     duration = time.monotonic() - start
@@ -2097,8 +2158,10 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                                 output_name
                             )
                         )
+                    if started is None:
+                        started = output_mtime(directory / output_name)
                     outcomes.append(
-                        CaseOutcome(case, suffix, run_error, None, duration)
+                        CaseOutcome(case, suffix, run_error, None, duration, started)
                     )
                     missing_files += 1
                     if not short_summary:
@@ -2119,8 +2182,12 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
                     ),
                     lines,
                 )
+                if started is None:
+                    started = output_mtime(directory / output_name)
                 report = parse_lines(case.parser, lines)
-                outcomes.append(CaseOutcome(case, suffix, run_error, report, duration))
+                outcomes.append(
+                    CaseOutcome(case, suffix, run_error, report, duration, started)
+                )
                 precision_total.add(report.counts)
                 result.case_counts[case.output_name] = report.counts
 
