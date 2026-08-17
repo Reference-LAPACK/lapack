@@ -1495,10 +1495,10 @@
   270       CONTINUE
 *
 *
-*     Tests 35-49: DBDSVR (MRRR), mirroring tests 20-34.
+*     Tests 35-49: DBDSVDMR3 (MRRR), mirroring tests 20-34.
 *
 *
-*           Use DBDSVR to compute the SVD of the bidiagonal matrix B:
+*           Use DBDSVDMR3 to compute the SVD of the bidiagonal matrix B:
 *           B := U * S1 * VT
 *
             IF( JTYPE.EQ.10 .OR. JTYPE.EQ.16 ) THEN
@@ -1522,15 +1522,16 @@
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'V', 'A', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'V', 'A', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, 0, 0, NS1, S1,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(vects,A)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(vects,A)', IINFO, M,
+     $              N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1549,7 +1550,7 @@
                J = J + MNMIN
   770       CONTINUE
 *
-*           Use DBDSVR to compute only the singular values of the
+*           Use DBDSVDMR3 to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
             IF( JTYPE.EQ.9 ) THEN
@@ -1564,15 +1565,15 @@
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'N', 'A', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'N', 'A', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, 0, 0, NS2, S2,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(values,A)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(values,A)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1592,7 +1593,7 @@
 *                22:  Check the orthogonality of VT
 *                23:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                24:  Compare DBDSVR with and without singular vectors
+*                24:  Compare DBDSVDMR3 with and without singular vectors
 *
             CALL DBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT,
      $                   LDPT, WORK( IWBS+MNMIN ), RESULT( 35 ) )
@@ -1625,7 +1626,7 @@
             RESULT( 39 ) = TEMP2
             ANORM = S1( 1 )
 *
-*           Use DBDSVR with RANGE='I': choose random values for IL and
+*           Use DBDSVDMR3 with RANGE='I': choose random values for IL and
 *           IU, and ask for the IL-th through IU-th singular values
 *           and corresponding vectors.
 *
@@ -1649,15 +1650,15 @@
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'V', 'I', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'V', 'I', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, IL, IU, NS1,
      $                    S1, WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(vects,I)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(vects,I)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1676,22 +1677,22 @@
                J = J + MNMIN
   810       CONTINUE
 *
-*           Use DBDSVR to compute only the singular values of the
+*           Use DBDSVDMR3 to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
             CALL DCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'N', 'I', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'N', 'I', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, IL, IU, NS2,
      $                    S2, WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(values,I)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(values,I)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1707,7 +1708,7 @@
 *                27:  Check the orthogonality of VT
 *                28:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                29:  Compare DBDSVR with and without singular vectors
+*                29:  Compare DBDSVDMR3 with and without singular vectors
 *
             CALL DBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
      $                   LDPT, VT, LDPT, WORK( IWBS+MNMIN ),
@@ -1740,7 +1741,7 @@
   830       CONTINUE
             RESULT( 44 ) = TEMP2
 *
-*           Use DBDSVR with RANGE='V': determine the values VL and VU
+*           Use DBDSVDMR3 with RANGE='V': determine the values VL and VU
 *           of the IL-th and IU-th singular values and ask for all
 *           singular values in this range.
 *
@@ -1773,15 +1774,15 @@
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'V', 'V', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'V', 'V', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), VL, VU, 0, 0, NS1, S1,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(vects,V)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(vects,V)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1800,22 +1801,22 @@
                J = J + MNMIN
   840       CONTINUE
 *
-*           Use DBDSVR to compute only the singular values of the
+*           Use DBDSVDMR3 to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
             CALL DCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
      $         CALL DCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL DBDSVR(UPLO, 'N', 'V', MNMIN, WORK( IWBD ),
+            CALL DBDSVDMR3(UPLO, 'N', 'V', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), VL, VU, 0, 0, NS2, S2,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    LWED, IWORK, LIWED, IINFO )
 *
-*           Check error code from DBDSVR.
+*           Check error code from DBDSVDMR3.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'DBDSVR(values,V)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'DBDSVDMR3(values,V)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1831,7 +1832,7 @@
 *                32:  Check the orthogonality of VT
 *                33:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                34:  Compare DBDSVR with and without singular vectors
+*                34:  Compare DBDSVDMR3 with and without singular vectors
 *
             CALL DBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
      $                   LDPT, VT, LDPT, WORK( IWBS+MNMIN ),

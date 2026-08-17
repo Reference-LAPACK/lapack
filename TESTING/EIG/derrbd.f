@@ -87,7 +87,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, DBDSDC, DBDSQR, DBDSVDX, DBDSVR, DGEBD2,
+      EXTERNAL           CHKXER, DBDSDC, DBDSQR, DBDSVDX, DBDSVDMR3,
+     $              DGEBD2,
      $                   DGEBRD, DORGBR, DORMBR
 *     ..
 *     .. Scalars in Common ..
@@ -355,57 +356,57 @@
      $                    NS, S, Q, 2, W, IW, INFO)
          CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
 *
-*        DBDSVR
+*        DBDSVDMR3
 *
-         SRNAMT = 'DBDSVR'
+         SRNAMT = 'DBDSVDMR3'
          INFOT = 1
-         CALL DBDSVR( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0, NS,
+         CALL DBDSVDMR3( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DBDSVR( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0, NS,
+         CALL DBDSVDMR3( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL DBDSVR( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0, NS,
+         CALL DBDSVDMR3( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL DBDSVR( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0, NS,
+         CALL DBDSVDMR3( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL DBDSVR( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0, NS,
+         CALL DBDSVDMR3( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL DBDSVR( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0, NS,
+         CALL DBDSVDMR3( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL DBDSVR( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL DBDSVR( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL DBDSVR( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL DBDSVR( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5, NS,
      $                 S, Q, 1, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL DBDSVR( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0, NS,
      $                 S, Q, 0, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL DBDSVR( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0, NS,
+         CALL DBDSVDMR3( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0, NS,
      $                 S, Q, 2, W, 1, IW, 1, INFO )
-         CALL CHKXER( 'DBDSVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          NT = NT + 12
       END IF
 *

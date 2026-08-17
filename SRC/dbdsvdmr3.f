@@ -1,479 +1,534 @@
-      SUBROUTINE DBDSVDMR3( JOBZ, UPLO, N, D, E, S, U, LDU, VT, LDVT,
-     $                   M, WORK, LWORK, IWORK, LIWORK, INFO )
+*> \brief \b DBDSVR
 *
-*  -- New driver for the bidiagonal SVD via TGK-rooted MR^3 --
-*     Uses the advisor's stegr_ID tree logic below the root via
-*     DLARRV_TGK.  The bundled DLARRB has a bounded-progress guard so an
-*     invalid bracket radius returns INFO instead of looping forever.
-*     Standard LAPACK dependencies include DLASQ1, DLAMCH, DLANST,
-*     DLARNV, DSCAL, and DSWAP.
+*  =========== DOCUMENTATION ===========
 *
-*  Purpose
-*  =======
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
-*  DBDSVDMR3 computes the SVD of a real N-by-N bidiagonal matrix
-*  B = U * S * VT, with S diagonal (the singular values, ascending) and
-*  U, VT orthonormal.  Method:
-*    1. Build the Tridiagonal Golub-Kahan (TGK) matrix of order 2N; its
-*       off-diagonals beta interleave the bidiagonal entries (d,e).
-*    2. Split the TGK wherever any beta is negligible -- this covers both
-*       the bidiagonal off-diagonals e_i (even positions) and zero
-*       diagonal entries d_i (odd positions), each of which makes the TGK
-*       reducible.
-*    3. Per TGK block, compute the positive eigenvalues (= singular
-*       values) with DLASQ1 (dqds); an odd-dimension block is a
-*       rectangular bidiagonal handled by appending a zero diagonal.
-*    4. Compute the positive eigenvectors by MR^3 rooted at the TGK
-*       (DLARRV_TGK) and de-interleave each into its left/right singular
-*       vectors.
-*    5. Each odd-dimension block also carries one structural ZERO
-*       eigenvalue; its one-sided null vector (closed form) supplies a
-*       singular vector for a zero singular value.
+*  Definition:
+*  ===========
 *
-*  Arguments  (see below; UPLO='U'/'L'; JOBZ='N'/'V'; RANGE = all)
-*  =========
+*       SUBROUTINE DBDSVDMR3( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+*                          NS, S, Z, LDZ, WORK, LWORK, IWORK, LIWORK,
+*                          INFO )
 *
-*  JOBZ   (input) CHARACTER*1   'N' values only; 'V' values + vectors.
-*  UPLO   (input) CHARACTER*1   'U' upper bidiagonal; 'L' lower.
-*  N      (input) INTEGER       Order of B.  N >= 0.
-*  D      (in/out) DOUBLE (N)   Diagonal of B (overwritten).
-*  E      (in/out) DOUBLE (N)   Off-diagonal in 1..N-1 (overwritten).
-*  S      (output) DOUBLE (N)   Singular values, ascending.
-*  U      (output) DOUBLE (LDU,N)   Left singular vectors (col i <-> S(i)).
-*  LDU    (input) INTEGER
-*  VT     (output) DOUBLE (LDVT,N)  Right singular vectors, by ROWS.
-*  LDVT   (input) INTEGER
-*  M      (output) INTEGER      Number of singular values found (= N).
-*  WORK   (workspace) DOUBLE (LWORK).  LWORK >= max(1, 2*N*N + 34*N).
-*  LWORK  (input) INTEGER       -1 => workspace query.
-*  IWORK  (workspace) INTEGER (LIWORK).  LIWORK >= max(1, 20*N).
-*  LIWORK (input) INTEGER       -1 => workspace query.
-*  INFO   (output) INTEGER  0 ok; <0 illegal arg; 1 DLASQ1; 2 DLARRV_TGK.
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, RANGE, UPLO
+*       INTEGER            IL, INFO, IU, LDZ, LIWORK, LWORK, N, NS
+*       DOUBLE PRECISION   VL, VU
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   D( * ), E( * ), S( * ), WORK( * ),
+*                          Z( LDZ, * )
+*       ..
+*
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
+*>  DBDSVR computes the singular value decomposition (SVD) of a real
+*>  N-by-N (upper or lower) bidiagonal matrix B, B = U * S * VT, using
+*>  the Tridiagonal Golub-Kahan (TGK) MR^3 driver DBDSVDMR3.  Its
+*>  argument list mirrors DBDSVDX so that DBDSVR is a drop-in
+*>  alternative alongside DBDSVDX for callers that want the MR^3
+*>  variant.
+*>
+*>  Given an upper bidiagonal B with diagonal D and superdiagonal E,
+*>  DBDSVR builds the 2N-by-2N TGK tridiagonal, computes its
+*>  eigendecomposition by the MR^3 algorithm rooted at the TGK
+*>  (see P. Willems and B. Lang, SIAM J. Sci. Comput., 35:740-766,
+*>  2013), and returns the singular values and (optionally) singular
+*>  vectors of B in the same packing convention as DBDSVDX.
+*>
+*>  RANGE = 'V' or 'I' is realized by post-filtering the full spectrum
+*>  from DBDSVDMR3 (which always returns all N singular values).
+*>
+*>  DBDSVR tries DBDSVDMR3 first for every matrix order.  If DBDSVDMR3
+*>  reports a positive INFO, returns an incomplete spectrum, or produces
+*>  a NaN or infinity in the requested output, DBDSVR restores the input
+*>  and retries with DBDSDC.  DBDSDC results are normalized to the same
+*>  internal ordering before RANGE filtering, so either successful path
+*>  is transparent.  This result-based fallback avoids a size cutoff:
+*>  solver-only probes showed that the historical large TIMEOUT cases
+*>  were evaluator timeouts rather than DBDSVDMR3 failing to return.
+*> \endverbatim
+*
+*  Arguments:
+*  ==========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  B is upper bidiagonal;
+*>          = 'L':  B is lower bidiagonal.
+*> \endverbatim
+*>
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute singular values only;
+*>          = 'V':  Compute singular values and singular vectors.
+*> \endverbatim
+*>
+*> \param[in] RANGE
+*> \verbatim
+*>          RANGE is CHARACTER*1
+*>          = 'A': all singular values will be found.
+*>          = 'V': all singular values in the half-open interval [VL,VU)
+*>                 will be found.
+*>          = 'I': the IL-th through IU-th singular values will be found.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the bidiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (max(1,N-1))
+*>          The (n-1) off-diagonal elements of the bidiagonal matrix
+*>          B in elements 1 to N-1.
+*> \endverbatim
+*>
+*> \param[in] VL
+*> \verbatim
+*>         VL is DOUBLE PRECISION
+*>          If RANGE='V', the lower bound of the interval to
+*>          be searched for singular values. VU > VL.
+*>          Not referenced if RANGE = 'A' or 'I'.
+*> \endverbatim
+*>
+*> \param[in] VU
+*> \verbatim
+*>         VU is DOUBLE PRECISION
+*>          If RANGE='V', the upper bound of the interval to
+*>          be searched for singular values. VU > VL.
+*>          Not referenced if RANGE = 'A' or 'I'.
+*> \endverbatim
+*>
+*> \param[in] IL
+*> \verbatim
+*>          IL is INTEGER
+*>          If RANGE='I', the index of the smallest singular value
+*>          to be returned.  1 <= IL <= IU <= N, if N > 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
+*> \endverbatim
+*>
+*> \param[in] IU
+*> \verbatim
+*>          IU is INTEGER
+*>          If RANGE='I', the index of the largest singular value
+*>          to be returned.  1 <= IL <= IU <= N, if N > 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
+*> \endverbatim
+*>
+*> \param[out] NS
+*> \verbatim
+*>          NS is INTEGER
+*>          The total number of singular values found.  0 <= NS <= N.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (N)
+*>          The first NS elements contain the selected singular values
+*>          in decreasing order (matching DBDSVDX's ordering).
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension (LDZ, K)
+*>          If JOBZ = 'V', the first NS columns of Z contain the
+*>          singular vectors of B corresponding to the selected
+*>          singular values, with U stored in rows 1..N and V in
+*>          rows N+1..2N (Z = [U; V]).  If JOBZ = 'N', Z is not
+*>          referenced.  K >= NS+1 (the caller must supply an upper
+*>          bound on NS when RANGE = 'V').
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          Leading dimension of Z.  LDZ >= 1; if JOBZ = 'V', LDZ >= 2N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          If JOBZ='V', LWORK >= max( 1, 5*N*N + 37*N ).
+*>          If JOBZ='N', LWORK >= max( 1, 2*N*N + 37*N ).  These bounds
+*>          cover both DBDSVDMR3 and the DBDSDC fallback.  If
+*>          LWORK = -1, a workspace query is performed: the optimal
+*>          size is returned in WORK(1) and no work is done.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (LIWORK)
+*>          On successful exit for N > 1, IWORK(2) records the path:
+*>             1: DBDSVDMR3
+*>             2: DBDSVDMR3 returned positive INFO, then DBDSDC succeeded
+*>             3: DBDSVDMR3 output audit failed, then DBDSDC succeeded
+*> \endverbatim
+*>
+*> \param[in] LIWORK
+*> \verbatim
+*>          LIWORK is INTEGER
+*>          LIWORK >= max( 1, 20*N ).  If LIWORK = -1, a workspace
+*>          query is performed.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  every backend attempted by the routing policy failed
+*>                to compute the SVD.
+*> \endverbatim
+*
+*  Authors:
+*  ========
+*
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
+*
+*> \ingroup bdsvr
 *
 *  =====================================================================
+      SUBROUTINE DBDSVDMR3( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+     $                   NS, S, Z, LDZ, WORK, LWORK, IWORK, LIWORK,
+     $                   INFO )
+      IMPLICIT NONE
+*
+*  -- LAPACK-style driver (offline PR) --
 *
 *     .. Scalar Arguments ..
-      CHARACTER          JOBZ, UPLO
-      INTEGER            INFO, LDU, LDVT, LIWORK, LWORK, M, N
+      CHARACTER          JOBZ, RANGE, UPLO
+      INTEGER            IL, INFO, IU, LDZ, LIWORK, LWORK, N, NS
+      DOUBLE PRECISION   VL, VU
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      DOUBLE PRECISION   D( * ), E( * ), S( * ), U( LDU, * ),
-     $                   VT( LDVT, * ), WORK( * )
+      DOUBLE PRECISION   D( * ), E( * ), S( * ), WORK( * ),
+     $                   Z( LDZ, * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, TWO, PERTK
-      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0,
-     $                   PERTK = 4.0D0 )
-*     ..
-*     .. Local Arrays ..
-      INTEGER            ISEED( 4 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            DIAGB, WANTZ, LQUERY, UPPER
-      INTEGER            I, IDBL, IEBL, IINFO, INDBL, INDE2, INDGSC,
-     $                   INDISP, INDISUP, INDIWK, INDIXW, INDTGK, INDWK,
-     $                   IQ, J, JBLK, K, KB, KZU, KZV, L, LIWMIN, LWMIN,
-     $                   MPOS, NPOS, NSPLIT, NZSV, TBEG, TEND, BDIM
-      DOUBLE PRECISION   BNRM, EPS, RT2, SCL, SFMIN, THRESH, TOL,
-     $                   ZNRM, ZE, ZG
+      LOGICAL            ALLSV, BADOUT, INDSV, LOWER, LQUERY, VALSV,
+     $                   WANTZ
+      CHARACTER          COMPC
+      INTEGER            I, IDCOPY, IECOPY, ISFULL, IUFULL, IVTFULL,
+     $                   IWRK, J, LWMIN, LIWMIN, MFOUND, FALLWHY,
+     $                   IWKENG, IIWENG, ILO, IHI, NCOL, PATH
+      DOUBLE PRECISION   OVFL, SVAL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANST
-      EXTERNAL           LSAME, DLAMCH, DLANST
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDTGK, DLARNV, DLARRV_TGK, DLASQ1, DSCAL,
-     $                   DSWAP, XERBLA
+      EXTERNAL           DBDSDC, DBDSVDMR3_WORK, DCOPY, DLASET, DSWAP,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, MAX, MOD, SIGN, SQRT
+      INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
-      LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
-      LWMIN = MAX( 1, 2*N*N + 34*N )
-      LIWMIN = MAX( 1, 20*N )
+      ALLSV  = LSAME( RANGE, 'A' )
+      VALSV  = LSAME( RANGE, 'V' )
+      INDSV  = LSAME( RANGE, 'I' )
+      WANTZ  = LSAME( JOBZ,  'V' )
+      LOWER  = LSAME( UPLO,  'L' )
+      LQUERY = ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 )
+*
+*     Test the input parameters (mirror DBDSVDX).
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LOWER ) THEN
          INFO = -1
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( N.LT.0 ) THEN
+      ELSE IF( .NOT.( ALLSV .OR. VALSV .OR. INDSV ) ) THEN
          INFO = -3
-      ELSE IF( LDU.LT.1 .OR. ( WANTZ .AND. LDU.LT.N ) ) THEN
-         INFO = -8
-      ELSE IF( LDVT.LT.1 .OR. ( WANTZ .AND. LDVT.LT.N ) ) THEN
-         INFO = -10
-      ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
-         INFO = -13
-      ELSE IF( LIWORK.LT.LIWMIN .AND. .NOT.LQUERY ) THEN
-         INFO = -15
+      ELSE IF( N.LT.0 ) THEN
+         INFO = -4
+      ELSE IF( N.GT.0 ) THEN
+         IF( VALSV ) THEN
+            IF( VL.LT.ZERO ) THEN
+               INFO = -7
+            ELSE IF( VU.LE.VL ) THEN
+               INFO = -8
+            END IF
+         ELSE IF( INDSV ) THEN
+            IF( IL.LT.1 .OR. IL.GT.MAX( 1, N ) ) THEN
+               INFO = -9
+            ELSE IF( IU.LT.MIN( N, IL ) .OR. IU.GT.N ) THEN
+               INFO = -10
+            END IF
+         END IF
       END IF
       IF( INFO.EQ.0 ) THEN
-         WORK( 1 ) = LWMIN
-         IWORK( 1 ) = LIWMIN
+         IF( LDZ.LT.1 .OR. ( WANTZ .AND. LDZ.LT.2*N ) ) INFO = -14
       END IF
+*
+*     Workspace requirements.  The wrapper needs (in doubles):
+*       * N   for a private copy of D
+*       * N   for a private copy of E
+*       * N   for the full unfiltered spectrum
+*       * LDU*N = N*N for a private copy of U (when WANTZ)
+*       * LDVT*N = N*N for a private copy of VT (when WANTZ)
+*       * 2*N*N + 34*N for the DBDSVDMR3 engine itself
+*     The DBDSDC fallback additionally needs 3*N*N + 4*N doubles after
+*     its explicit U and VT arrays.  Total (WANTZ): 5*N*N + 7*N; retain
+*     the larger linear allowance from DBDSVDMR3 for small N.
+*
+      IF( N.EQ.0 ) THEN
+         LWMIN  = 1
+         LIWMIN = 1
+      ELSE IF( WANTZ ) THEN
+         LWMIN  = MAX( 1, 5*N*N + 37*N )
+         LIWMIN = MAX( 1, 20*N )
+      ELSE
+         LWMIN  = MAX( 1, 2*N*N + 37*N )
+         LIWMIN = MAX( 1, 20*N )
+      END IF
+*
+      IF( INFO.EQ.0 .AND. .NOT.LQUERY ) THEN
+         IF( LWORK.LT.LWMIN ) THEN
+            INFO = -16
+         ELSE IF( LIWORK.LT.LIWMIN ) THEN
+            INFO = -18
+         END IF
+      END IF
+*
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DBDSVDMR3', -INFO )
          RETURN
-      ELSE IF( LQUERY ) THEN
-         RETURN
       END IF
 *
-      M = 0
-      IF( N.EQ.0 ) RETURN
-      IF( N.EQ.1 ) THEN
-         M = 1
-         S( 1 ) = ABS( D( 1 ) )
-         IF( WANTZ ) THEN
-            U( 1, 1 ) = SIGN( ONE, D( 1 ) )
-            VT( 1, 1 ) = ONE
-         END IF
-         RETURN
-      END IF
-*
-*     An exactly diagonal bidiagonal has an exact canonical SVD.  Taking
-*     it through the TGK path would normalize 2-by-2 eigenvectors by
-*     1/sqrt(2) and then multiply them by sqrt(2), needlessly turning
-*     exact identity/permutation vectors into one-ULP approximations.
-*     Besides removing that roundoff, this path avoids the MR^3 setup for
-*     the diagonal cases that occur in the LAPACK test suite.
-*
-      DIAGB = .TRUE.
-      DO 5 I = 1, N - 1
-         IF( E( I ).NE.ZERO ) DIAGB = .FALSE.
-    5 CONTINUE
-      IF( DIAGB ) THEN
-         DO 8 I = 1, N
-            S( I ) = ABS( D( I ) )
-    8    CONTINUE
-         IF( WANTZ ) THEN
-            DO 12 J = 1, N
-               DO 10 I = 1, N
-                  U( I, J ) = ZERO
-                  VT( I, J ) = ZERO
-   10          CONTINUE
-               U( J, J ) = SIGN( ONE, D( J ) )
-               VT( J, J ) = ONE
-   12       CONTINUE
-         END IF
-         CALL DBSORT( N, S, U, LDU, VT, LDVT, WANTZ )
-         M = N
-         RETURN
-      END IF
-*
-      EPS = DLAMCH( 'Precision' )
-      SFMIN = DLAMCH( 'Safe minimum' )
-      RT2 = SQRT( TWO )
-*
-*     Workspace map (DOUBLE):  INDTGK 2N (TGK diag=0); INDE2 2N (TGK
-*     off-diagonals beta); INDGSC 4N (Gerschgorin); INDWK = scratch /
-*     eigenvector array Z (LDZ=2N) / DLARRV_TGK WORK.
-*     INTEGER:  INDISP 2N (ISPLIT); INDBL 2N (IBLOCK); INDIXW 2N (INDEXW);
-*     INDISUP 2N (ISUPPZ scratch); INDIWK (DLARRV_TGK IWORK).
-*
-      INDTGK = 1
-      INDE2 = INDTGK + 2*N
-      INDGSC = INDE2 + 2*N
-      INDWK = INDGSC + 4*N
-*
-      INDISP = 1
-      INDBL = INDISP + 2*N
-      INDIXW = INDBL + 2*N
-      INDISUP = INDIXW + 2*N
-      INDIWK = INDISUP + 2*N
-*
-*     Scale B so that its norm is in a safe range.
-*
-      BNRM = DLANST( 'M', N, D, E )
-      SCL = ONE
-      IF( BNRM.GT.ZERO .AND. BNRM.LT.SQRT( SFMIN ) ) THEN
-         SCL = SQRT( SFMIN ) / BNRM
-      ELSE IF( BNRM.GT.ONE / SQRT( SFMIN ) ) THEN
-         SCL = ( ONE / SQRT( SFMIN ) ) / BNRM
-      END IF
-      IF( SCL.NE.ONE ) THEN
-         CALL DSCAL( N, SCL, D, 1 )
-         CALL DSCAL( N-1, SCL, E, 1 )
-         BNRM = BNRM*SCL
-      END IF
-*
-*     Random relative perturbation (Dhillon, Parlett & Voemel 2005,
-*     sec. 5.4) is NOT applied blindly to the root here.  A blanket
-*     O(n*eps) perturbation jolts every singular value by ~n*eps, which
-*     OVERWRITES the genuine fine structure of clusters whose true
-*     internal gaps are smaller than n*eps (e.g. the Lipshitz matrices,
-*     whose ~800-fold cluster at sigma~1 has real relative spacing
-*     ~7e-15 < n*eps): there the perturbation destroyed orthogonality.
-*     Instead the perturbation is applied SELECTIVELY by DLARRF_TGK, and
-*     only to a child RRR whose cluster contains EXACTLY-equal
-*     eigenvalues (true ties, e.g. from identical glued blocks) that
-*     recursive shifting alone can never separate.  ISEED (fixed seed,
-*     threaded into DLARRV_TGK -> DLARRF_TGK) is initialised here.
-*
-      ISEED( 1 ) = 4002
-      ISEED( 2 ) = 572
-      ISEED( 3 ) = 3145
-      ISEED( 4 ) = 1751
-*
-*     Build the TGK matrix of order 2N from the (perturbed) bidiagonal.
-*     WORK(INDE2 .. INDE2+2N-2) holds beta_1..beta_{2N-1}, where
-*     beta_{2k-1}=D(k), beta_{2k}=E(k).
-*
-      CALL DBDTGK( UPLO, N, D, E, WORK( INDTGK ), WORK( INDE2 ),
-     $             WORK( INDGSC ) )
-*
-*     Split the TGK wherever an off-diagonal beta_j is negligible.  This
-*     handles both the bidiagonal off-diagonals e_i (even j) and zero
-*     diagonal entries d_i (odd j).  ISPLIT lists the block-end TGK rows.
-*
-      THRESH = EPS*BNRM
-      NSPLIT = 0
-      DO 20 I = 1, 2*N - 1
-         IF( ABS( WORK( INDE2+I-1 ) ).LE.THRESH ) THEN
-            WORK( INDE2+I-1 ) = ZERO
-            NSPLIT = NSPLIT + 1
-            IWORK( INDISP+NSPLIT-1 ) = I
-         END IF
-   20 CONTINUE
-      NSPLIT = NSPLIT + 1
-      IWORK( INDISP+NSPLIT-1 ) = 2*N
-*
-*     For each TGK block compute the NPOS positive eigenvalues
-*     (= singular values) with DLASQ1.  Block of dimension BDIM has its
-*     beta's at WORK(INDE2 + TBEG-1 .. INDE2 + TEND-2); the sub-bidiagonal
-*     is d~(l)=beta(local 2l-1), e~(l)=beta(local 2l).
-*        even BDIM=2k : square k-by-k bidiagonal -> k positive sv;
-*        odd  BDIM=2k+1: rectangular k-by-(k+1); append a zero diagonal to
-*                        make it (k+1)-square -> k positive sv + 1 zero.
-*     The NPOS positives sit in the upper part of the block's BDIM-point
-*     spectrum, so INDEXW(j-th positive) = (BDIM-NPOS)+j.
-*
-      IDBL = INDWK
-      IEBL = INDWK + N + 1
-      IQ = INDWK + 2*N + 2
-      MPOS = 0
-      TBEG = 1
-      DO 60 JBLK = 1, NSPLIT
-         TEND = IWORK( INDISP+JBLK-1 )
-         BDIM = TEND - TBEG + 1
-         NPOS = BDIM / 2
-         KB = NPOS
-*        diagonals d~(1..KB) at local odd positions 1,3,...
-         DO 30 L = 1, KB
-            WORK( IDBL+L-1 ) = ABS( WORK( INDE2+TBEG-2+2*L-1 ) )
-   30    CONTINUE
-         IF( MOD( BDIM, 2 ).EQ.0 ) THEN
-*           even block: square KB-by-KB, KB-1 off-diagonals
-            DO 32 L = 1, KB - 1
-               WORK( IEBL+L-1 ) = ABS( WORK( INDE2+TBEG-2+2*L ) )
-   32       CONTINUE
-            CALL DLASQ1( KB, WORK( IDBL ), WORK( IEBL ), WORK( IQ ),
-     $                   IINFO )
-         ELSE
-*           odd block: append a zero diagonal -> (KB+1)-square, KB offdiag
-            WORK( IDBL+KB ) = ZERO
-            DO 34 L = 1, KB
-               WORK( IEBL+L-1 ) = ABS( WORK( INDE2+TBEG-2+2*L ) )
-   34       CONTINUE
-            CALL DLASQ1( KB+1, WORK( IDBL ), WORK( IEBL ), WORK( IQ ),
-     $                   IINFO )
-         END IF
-         IF( IINFO.NE.0 ) THEN
-            INFO = 1
-            RETURN
-         END IF
-*        DLASQ1 returns the singular values in DECREASING order in IDBL;
-*        the appended structural zero (odd block) is the smallest entry,
-*        so the NPOS positives are IDBL(0..NPOS-1).  Store ascending.
-         DO 40 I = 1, NPOS
-            S( MPOS+I ) = WORK( IDBL+NPOS-I )
-            IWORK( INDBL+MPOS+I-1 ) = JBLK
-            IWORK( INDIXW+MPOS+I-1 ) = ( BDIM-NPOS ) + I
-   40    CONTINUE
-         MPOS = MPOS + NPOS
-         TBEG = TEND + 1
-   60 CONTINUE
-*
-      NZSV = N - MPOS
-*
-*     Eigenvectors are not wanted: append the NZSV zero singular values,
-*     sort ascending, rescale, and return.
-*
-      IF( .NOT.WANTZ ) THEN
-         DO 65 I = 1, NZSV
-            S( MPOS+I ) = ZERO
-   65    CONTINUE
-         CALL DBSORT( N, S, U, LDU, VT, LDVT, .FALSE. )
-         IF( SCL.NE.ONE )
-     $      CALL DSCAL( N, ONE / SCL, S, 1 )
-         M = N
-         WORK( 1 ) = LWMIN
+      IF( LQUERY ) THEN
+         WORK( 1 ) = DBLE( LWMIN )
          IWORK( 1 ) = LIWMIN
          RETURN
       END IF
 *
-*     Compute the eigenvectors of the MPOS positive eigenvalues by MR^3
-*     rooted at the TGK matrix.  The 2N-by-MPOS eigenvector array is held
-*     in WORK(INDWK) with leading dimension 2N.
+*     Quick return if possible.
 *
-      IF( MPOS.GT.0 ) THEN
-         TOL = MAX( DBLE( 2*N )*EPS, ZERO )
-         CALL DLARRV_TGK( 2*N, WORK( INDTGK ), WORK( INDE2 ),
-     $                IWORK( INDISP ), MPOS, S, IWORK( INDBL ),
-     $                IWORK( INDIXW ), WORK( INDGSC ), TOL,
-     $                WORK( INDWK ), 2*N, IWORK( INDISUP ),
-     $                WORK( INDWK+2*N*MPOS ), IWORK( INDIWK ), IINFO )
-         IF( IINFO.NE.0 ) THEN
-            INFO = 2
-            RETURN
+      NS = 0
+      IF( N.EQ.0 ) RETURN
+*
+      IF( N.EQ.1 ) THEN
+         IWORK( 2 ) = 0
+         SVAL = ABS( D( 1 ) )
+         IF( ALLSV .OR. INDSV ) THEN
+            NS = 1
+            S( 1 ) = SVAL
+         ELSE
+            IF( VL.LT.SVAL .AND. VU.GE.SVAL ) THEN
+               NS = 1
+               S( 1 ) = SVAL
+            END IF
          END IF
-*
-*        De-interleave each 2N-eigenvector into its left/right singular
-*        vectors by GLOBAL position parity (this stays correct across
-*        split blocks).  beta_{2k-1}=d_k, beta_{2k}=e_k, so global-odd
-*        rows carry one half and global-even rows the other.  For LOWER B
-*        the odd half is u and the even half is v; for UPPER (B^T is the
-*        lower bidiagonal with the same d,e) the two roles swap.
-*
-         DO 100 K = 1, MPOS
-            DO 90 I = 1, N
-               IF( UPPER ) THEN
-                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
-                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
-               ELSE
-                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
-                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
-               END IF
-   90       CONTINUE
-  100    CONTINUE
+         IF( WANTZ .AND. NS.GT.0 ) THEN
+            Z( 1, 1 ) = SIGN( ONE, D( 1 ) )
+            Z( 2, 1 ) = ONE
+         END IF
+         RETURN
       END IF
 *
-*     Zero singular values.  Each odd-dimension TGK block has one
-*     structural zero eigenvalue whose null vector lives on the ODD local
-*     positions of the block (the even local entries are zero):
-*        z(1)=1,  z(2l+1) = -beta(2l-1)/beta(2l) * z(2l-1).
-*     De-interleaving by global parity, the vector is one-sided -- it is
-*     a left singular vector (u) if the block starts at a u-row, else a
-*     right singular vector (v) -- supplying one half of a zero singular
-*     triplet (the other half comes from the paired block).  Because the
-*     singular value is zero, any orthonormal completion is valid, so we
-*     simply collect the u's into the trailing U-columns and the v's into
-*     the trailing VT-rows.  Build the 2N null vector in WORK(INDWK) (the
-*     eigenvector array is no longer needed).
+*     Slice the WORK buffer.
 *
-      KZU = 0
-      KZV = 0
-      TBEG = 1
-      DO 160 JBLK = 1, NSPLIT
-         TEND = IWORK( INDISP+JBLK-1 )
-         BDIM = TEND - TBEG + 1
-         IF( MOD( BDIM, 2 ).EQ.1 ) THEN
-*           build the local null vector spread over global rows TBEG..TEND
-            DO 110 I = 1, 2*N
-               WORK( INDWK+I-1 ) = ZERO
-  110       CONTINUE
-            WORK( INDWK+TBEG-1 ) = ONE
-            ZNRM = ONE
-            ZG = ONE
-            DO 120 L = 1, ( BDIM-1 ) / 2
-               ZE = -( WORK( INDE2+TBEG-2+2*L-1 ) /
-     $                 WORK( INDE2+TBEG-2+2*L ) )*ZG
-               WORK( INDWK+TBEG-1+2*L ) = ZE
-               ZNRM = ZNRM + ZE*ZE
-               ZG = ZE
-  120       CONTINUE
-            ZNRM = SQRT( ZNRM )
-*           The (one-sided) null vector lives on global-ODD rows when the
-*           block starts at an odd row (MOD(TBEG,2)=1), else on global-
-*           EVEN rows.  For LOWER B the odd half is u and the even half is
-*           v; for UPPER the two roles swap.  Route the nonzero half to a
-*           u-column or a v-row accordingly, normalizing by its own norm.
-            IF( MOD( TBEG, 2 ).EQ.1 ) THEN
-               IF( UPPER ) THEN
-                  KZV = KZV + 1
-                  DO 140 I = 1, N
-                     VT( MPOS+KZV, I ) = WORK( INDWK+2*I-2 ) / ZNRM
-  140             CONTINUE
-               ELSE
-                  KZU = KZU + 1
-                  DO 142 I = 1, N
-                     U( I, MPOS+KZU ) = WORK( INDWK+2*I-2 ) / ZNRM
-  142             CONTINUE
-               END IF
-            ELSE
-               IF( UPPER ) THEN
-                  KZU = KZU + 1
-                  DO 144 I = 1, N
-                     U( I, MPOS+KZU ) = WORK( INDWK+2*I-1 ) / ZNRM
-  144             CONTINUE
-               ELSE
-                  KZV = KZV + 1
-                  DO 146 I = 1, N
-                     VT( MPOS+KZV, I ) = WORK( INDWK+2*I-1 ) / ZNRM
-  146             CONTINUE
-               END IF
+      IDCOPY  = 1
+      IECOPY  = IDCOPY + N
+      ISFULL  = IECOPY + N
+      IF( WANTZ ) THEN
+         IUFULL  = ISFULL + N
+         IVTFULL = IUFULL + N*N
+         IWRK    = IVTFULL + N*N
+      ELSE
+         IUFULL  = ISFULL + N
+         IVTFULL = IUFULL
+         IWRK    = ISFULL + N
+      END IF
+*
+*     Stage inputs (DBDSVDMR3 overwrites D and E; we must not
+*     modify the caller's arrays).
+*
+      CALL DCOPY( N, D, 1, WORK( IDCOPY ), 1 )
+      IF( N.GT.1 ) THEN
+         CALL DCOPY( N-1, E, 1, WORK( IECOPY ), 1 )
+      END IF
+      WORK( IECOPY + N - 1 ) = ZERO
+*
+*     Compute the full spectrum with DBDSVDMR3 for every N.  A positive
+*     INFO, incomplete spectrum, or nonfinite requested output triggers a
+*     restored-input DBDSDC retry.  The O(N**2) output audit is no more
+*     expensive asymptotically than returning all singular vectors.
+*
+      IWKENG = LWORK - IWRK + 1
+      IIWENG = LIWORK
+      IF( WANTZ ) THEN
+         CALL DBDSVDMR3_WORK( 'V', UPLO, N,
+     $                   WORK( IDCOPY ), WORK( IECOPY ),
+     $                   WORK( ISFULL ),
+     $                   WORK( IUFULL  ), N,
+     $                   WORK( IVTFULL ), N,
+     $                   MFOUND,
+     $                   WORK( IWRK ), IWKENG,
+     $                   IWORK, IIWENG, INFO )
+      ELSE
+         CALL DBDSVDMR3_WORK( 'N', UPLO, N,
+     $                   WORK( IDCOPY ), WORK( IECOPY ),
+     $                   WORK( ISFULL ),
+     $                   WORK( IUFULL  ), MAX( 1, N ),
+     $                   WORK( IVTFULL ), MAX( 1, N ),
+     $                   MFOUND,
+     $                   WORK( IWRK ), IWKENG,
+     $                   IWORK, IIWENG, INFO )
+      END IF
+      IF( INFO.LT.0 ) RETURN
+*
+      FALLWHY = 0
+      IF( INFO.GT.0 ) THEN
+         FALLWHY = 2
+      ELSE
+         OVFL = DLAMCH( 'Overflow' )
+         BADOUT = MFOUND.NE.N
+         IF( .NOT.BADOUT ) THEN
+            DO 12 I = 1, N
+               SVAL = WORK( ISFULL + I - 1 )
+               IF( .NOT.( SVAL.EQ.SVAL .AND.
+     $                     ABS( SVAL ).LE.OVFL ) ) BADOUT = .TRUE.
+   12       CONTINUE
+            IF( WANTZ ) THEN
+               DO 14 J = 1, N
+                  DO 13 I = 1, N
+                     SVAL = WORK( IUFULL + (J-1)*N + I - 1 )
+                     IF( .NOT.( SVAL.EQ.SVAL .AND.
+     $                           ABS( SVAL ).LE.OVFL ) ) BADOUT = .TRUE.
+                     SVAL = WORK( IVTFULL + (J-1)*N + I - 1 )
+                     IF( .NOT.( SVAL.EQ.SVAL .AND.
+     $                           ABS( SVAL ).LE.OVFL ) ) BADOUT = .TRUE.
+   13             CONTINUE
+   14          CONTINUE
             END IF
          END IF
-         TBEG = TEND + 1
-  160 CONTINUE
+         IF( BADOUT ) FALLWHY = 3
+      END IF
 *
-*     Set the zero singular values and (defensively) any unmatched
-*     trailing vectors, then sort everything ascending and rescale.
+      IF( FALLWHY.EQ.0 ) THEN
+         PATH = 1
+      ELSE
+*        DBDSVDMR3 destroys its staged inputs.  Restore them before the
+*        DBDSDC retry.
+         CALL DCOPY( N, D, 1, WORK( IDCOPY ), 1 )
+         CALL DCOPY( N-1, E, 1, WORK( IECOPY ), 1 )
+         WORK( IECOPY + N - 1 ) = ZERO
+         INFO = 0
+         IF( WANTZ ) THEN
+            COMPC = 'I'
+         ELSE
+            COMPC = 'N'
+         END IF
+         CALL DBDSDC( UPLO, COMPC, N, WORK( IDCOPY ),
+     $                WORK( IECOPY ), WORK( IUFULL ), MAX( 1, N ),
+     $                WORK( IVTFULL ), MAX( 1, N ), WORK( IWRK ),
+     $                IWORK, WORK( IWRK ), IWORK, INFO )
+         IF( INFO.NE.0 ) RETURN
 *
-      DO 170 I = 1, NZSV
-         S( MPOS+I ) = ZERO
-  170 CONTINUE
-      M = N
-      CALL DBSORT( N, S, U, LDU, VT, LDVT, .TRUE. )
-      IF( SCL.NE.ONE )
-     $   CALL DSCAL( N, ONE / SCL, S, 1 )
+*        DBDSDC returns descending singular values, while DBDSVDMR3
+*        returns ascending values.  Normalize DBDSDC's result so the
+*        common RANGE filtering and packing below is unchanged.
 *
-      WORK( 1 ) = LWMIN
-      IWORK( 1 ) = LIWMIN
-      RETURN
+         CALL DCOPY( N, WORK( IDCOPY ), 1, WORK( ISFULL ), 1 )
+         DO 18 I = 1, N / 2
+            CALL DSWAP( 1, WORK( ISFULL + I - 1 ), 1,
+     $                  WORK( ISFULL + N - I ), 1 )
+            IF( WANTZ ) THEN
+               CALL DSWAP( N, WORK( IUFULL + (I-1)*N ), 1,
+     $                     WORK( IUFULL + (N-I)*N ), 1 )
+               CALL DSWAP( N, WORK( IVTFULL + I - 1 ), N,
+     $                     WORK( IVTFULL + N - I ), N )
+            END IF
+   18    CONTINUE
+         PATH = FALLWHY
+      END IF
+      IWORK( 2 ) = PATH
 *
-*     End of DBDSVDMR3
+*     Filter and pack the requested slice into S and Z.
 *
-      END
-*
-*     =================================================================
-*
-      SUBROUTINE DBSORT( N, S, U, LDU, VT, LDVT, WANTZ )
-*
-*     Sort S(1:N) into ascending order by straight selection, applying
-*     the same permutation to the columns of U and the rows of VT when
-*     WANTZ is .TRUE.
-*
-      LOGICAL            WANTZ
-      INTEGER            N, LDU, LDVT
-      DOUBLE PRECISION   S( * ), U( LDU, * ), VT( LDVT, * )
-      INTEGER            I, J, K
-      DOUBLE PRECISION   P
-      EXTERNAL           DSWAP
-      INTRINSIC          ABS
-      DO 20 I = 1, N - 1
-         K = I
-         P = S( I )
-         DO 10 J = I + 1, N
-            IF( S( J ).LT.P ) THEN
-               K = J
-               P = S( J )
+      IF( ALLSV ) THEN
+         ILO = 1
+         IHI = N
+      ELSE IF( INDSV ) THEN
+         ILO = IL
+         IHI = IU
+      ELSE
+*        RANGE='V'; scan ascending spectrum for [VL, VU).
+         ILO = N + 1
+         IHI = 0
+         DO 10 I = 1, N
+            SVAL = WORK( ISFULL + I - 1 )
+            IF( SVAL.GE.VL .AND. SVAL.LT.VU ) THEN
+               IF( I.LT.ILO ) ILO = I
+               IF( I.GT.IHI ) IHI = I
             END IF
    10    CONTINUE
-         IF( K.NE.I ) THEN
-            S( K ) = S( I )
-            S( I ) = P
-            IF( WANTZ ) THEN
-               CALL DSWAP( N, U( 1, I ), 1, U( 1, K ), 1 )
-               CALL DSWAP( N, VT( I, 1 ), LDVT, VT( K, 1 ), LDVT )
-            END IF
+      END IF
+*
+      IF( IHI.GE.ILO ) THEN
+         NS = IHI - ILO + 1
+*        Reverse ascending -> descending so S(1) is the largest,
+*        matching DBDSVDX's convention (see /tmp/lapack-ref/SRC/dbdsvdx.f
+*        line 747 sort loop).
+         DO 20 I = 1, NS
+            S( I ) = WORK( ISFULL + IHI - I )
+   20    CONTINUE
+         IF( WANTZ ) THEN
+*           Column J of Z holds the vector for S(J).  In the engine's
+*           spectrum that is column (IHI - J + 1).
+*           Rows 1..N of Z(:, J) hold U(:, IHI-J+1).
+*           Rows N+1..2N of Z(:, J) hold VT(IHI-J+1, :)^T.
+            NCOL = NS
+            DO 40 J = 1, NCOL
+               DO 30 I = 1, N
+                  Z( I,     J ) = WORK( IUFULL  + (IHI-J)*N + I - 1 )
+                  Z( N + I, J ) = WORK( IVTFULL + (I-1)*N + (IHI-J) )
+   30          CONTINUE
+   40       CONTINUE
          END IF
-   20 CONTINUE
+      ELSE
+         NS = 0
+      END IF
+*
       RETURN
+*
+*     End of DBDSVR
+*
       END

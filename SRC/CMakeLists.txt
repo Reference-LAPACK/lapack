@@ -286,7 +286,7 @@ set(ZCLASRC
     sisnan.f slaisnan.f)
 
 set(DLASRC
-   dbdsvdx.f dbdsvr.f dbdsvdmr3.f dbdtgk.f dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
+   dbdsvdx.f dbdsvdmr3.f dbdsvdmr3_work.f dbdtgk.f dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
    dgbsvx.f dgbtf2.f dgbtrf.f dgbtrs.f dgebak.f dgebal.f dgebd2.f
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
