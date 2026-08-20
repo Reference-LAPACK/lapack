@@ -5,9 +5,11 @@ name: Compilers
 # oneAPI compilers and the Arm Toolchain for Linux.  Each of them is exercised
 # in both Debug and Release mode.
 #
-# The NAG Fortran Compiler is licence managed and needs the repository secret
-# NAG_KUSARI_KEY to hold its licence key; the configurations using it are
-# skipped when that secret is not available.
+# The NAG Fortran Compiler is licence managed and its key is tied to the
+# platform it was issued for, so each of its configurations reads a repository
+# secret of its own: NAG_KUSARI_KEY_LINUX_X86_64, NAG_KUSARI_KEY_LINUX_ARM64
+# and NAG_KUSARI_KEY_MACOS_ARM64.  A configuration whose secret is not set is
+# skipped.
 
 on:
   push:
@@ -72,6 +74,7 @@ jobs:
           name: nagfor + gcc
           os: ubuntu-24.04
           nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
+          nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
         - id: llvm
           name: flang + clang
           os: ubuntu-24.04
@@ -82,6 +85,7 @@ jobs:
           name: nagfor + gcc (ARM)
           os: ubuntu-24.04-arm
           nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
+          nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
         - id: arm
           name: armflang + armclang (ARM)
           os: ubuntu-24.04-arm
@@ -89,6 +93,7 @@ jobs:
           name: nagfor + AppleClang
           os: macos-latest
           nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
+          nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
 
     steps:
 
@@ -101,7 +106,11 @@ jobs:
     - name: Install the NAG Fortran Compiler
       if: ${{ startsWith(matrix.toolchain.id, 'nag') }}
       env:
-        NAG_KUSARI_KEY: ${{ secrets.NAG_KUSARI_KEY }}
+        # The secrets context cannot be reached from the matrix, but it can be
+        # indexed with a name taken from it.  The guard keeps the index away
+        # from an undefined name for the non-NAG toolchains.
+        NAG_KUSARI_KEY: ${{ matrix.toolchain.nag_secret && secrets[matrix.toolchain.nag_secret] || '' }}
+        NAG_KUSARI_SECRET: ${{ matrix.toolchain.nag_secret }}
         NAG_URL: ${{ matrix.toolchain.nag_url }}
       run: |
         # Repository secrets are not exposed to pull requests from forks, so
@@ -109,9 +118,9 @@ jobs:
         # run of a contributor who cannot do anything about it.
         if [ -z "${NAG_KUSARI_KEY}" ]; then
           echo "::warning title=NAG Fortran Compiler skipped::" \
-            "The NAG_KUSARI_KEY secret is not available (pull requests from" \
-            "forks cannot read repository secrets), so the compiler cannot be" \
-            "licensed."
+            "The ${NAG_KUSARI_SECRET} secret is not available (pull requests" \
+            "from forks cannot read repository secrets), so the compiler" \
+            "cannot be licensed for this platform."
           echo "SKIP_TOOLCHAIN=true" >> "$GITHUB_ENV"
           exit 0
         fi
@@ -171,7 +180,8 @@ jobs:
         printf '%s\n' "${licence_info}"
         if printf '%s\n' "${licence_info}" | grep -q '^Error:'; then
           echo "::error title=NAG Fortran Compiler licence invalid::" \
-            "nagfor found no usable licence; check the NAG_KUSARI_KEY secret."
+            "nagfor found no usable licence; check that the" \
+            "${NAG_KUSARI_SECRET} secret holds a key for this platform."
           exit 1
         fi
 
