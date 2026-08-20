@@ -72,18 +72,18 @@ jobs:
         toolchain:
         - id: nag
           name: nagfor + gcc
-          os: ubuntu-24.04
+          os: ubuntu-26.04
           nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
         - id: llvm
           name: flang + clang
-          os: ubuntu-24.04
+          os: ubuntu-26.04
         - id: intel
           name: ifx + icx
           os: ubuntu-24.04
         - id: nag-arm
           name: nagfor + gcc (ARM)
-          os: ubuntu-24.04-arm
+          os: ubuntu-26.04-arm
           nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
         - id: arm
@@ -187,15 +187,15 @@ jobs:
         echo "CC=gcc" >> "$GITHUB_ENV"
         echo "FC=nagfor" >> "$GITHUB_ENV"
 
-    - name: Install flang 20 and clang 20
+    - name: Install flang 21 and clang 21
       if: ${{ matrix.toolchain.id == 'llvm' }}
       run: |
         sudo apt-get update
-        sudo apt-get install -y flang-20 clang-20
-        flang-20 --version
-        clang-20 --version
-        echo "FC=flang-20" >> "$GITHUB_ENV"
-        echo "CC=clang-20" >> "$GITHUB_ENV"
+        sudo apt-get install -y flang-21 clang-21
+        flang-21 --version
+        clang-21 --version
+        echo "FC=flang-21" >> "$GITHUB_ENV"
+        echo "CC=clang-21" >> "$GITHUB_ENV"
 
     - name: Install the Intel oneAPI compilers
       if: ${{ matrix.toolchain.id == 'intel' }}
