@@ -9,7 +9,7 @@ on:
 jobs:
   build-linux-x64:
     name: blas / lapack -- Linux (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
 
   build-linux-aarch64:
     name: blas / lapack -- Linux (aarch64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
 
   build-windows-x64:
     name: blas / lapack -- Windows (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4
@@ -113,7 +113,7 @@ jobs:
 
   build-mac-x64:
     name: blas / lapack -- macOS (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
 
   build-mac-aarch64:
     name: blas / lapack -- macOS (aarch64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4
@@ -184,7 +184,7 @@ jobs:
   release:
     name: Create Release and Upload Binaries
     needs: [build-windows-x64, build-linux-x64, build-linux-aarch64, build-mac-x64, build-mac-aarch64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
         uses: actions/checkout@v4

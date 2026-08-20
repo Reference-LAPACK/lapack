@@ -91,7 +91,7 @@ jobs:
           os: ubuntu-24.04-arm
         - id: nag-macos
           name: nagfor + AppleClang
-          os: macos-latest
+          os: macos-26
           nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
           nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
 
@@ -99,9 +99,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Install the NAG Fortran Compiler
       if: ${{ startsWith(matrix.toolchain.id, 'nag') }}

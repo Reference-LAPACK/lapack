@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
+        os: [ macos-26, ubuntu-24.04, ubuntu-24.04-arm, windows-2025 ]
         fflags: [
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all",
           "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp" ]
@@ -75,7 +75,7 @@ jobs:
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Use GCC-14 on MacOS
-      if: ${{ matrix.os == 'macos-latest' }}
+      if: ${{ matrix.os == 'macos-26' }}
       run: >
         cmake -B build -G Ninja
         -D CMAKE_C_COMPILER="gcc-14"
@@ -83,7 +83,7 @@ jobs:
         -D USE_FLAT_NAMESPACE:BOOL=ON
 
     - name: Special flags for Windows
-      if: ${{ matrix.os == 'windows-latest' }}
+      if: ${{ matrix.os == 'windows-2025' }}
       run: >
         cmake -B build -G Ninja
         -D CMAKE_EXE_LINKER_FLAGS="-Wl,--stack=2097152"
@@ -109,19 +109,19 @@ jobs:
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
-      if: ${{ contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
+      if: ${{ contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-2025') }}
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j1 --output-on-failure --timeout 100
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-latest') }}
+      if: ${{ !contains( matrix.fflags, 'openmp' ) && (matrix.os != 'windows-2025') }}
       run: ctest -C ${{env.BUILD_TYPE}} --schedule-random -j2 --output-on-failure --timeout 100
 
     - name: Upload test results
       id: upload-test-results
       # Uploaded even when the tests failed; that is when the results
       # are needed most.  The test summary below links to the artifact.
-      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      if: ${{ !cancelled() && matrix.os != 'windows-2025' }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: test-results-${{ matrix.os }}-${{ contains( matrix.fflags, 'openmp' ) && 'openmp' || 'no-openmp' }}
@@ -132,7 +132,7 @@ jobs:
         retention-days: 14
 
     - name: Write test summary
-      if: ${{ !cancelled() && matrix.os != 'windows-latest' }}
+      if: ${{ !cancelled() && matrix.os != 'windows-2025' }}
       env:
         ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
       run: |
@@ -151,7 +151,7 @@ jobs:
       run: cmake --build build --target install -j2
 
   test-extended-api-only:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       BUILD_TYPE: Release
@@ -166,9 +166,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Configure CMake
       run: >
@@ -217,7 +214,7 @@ jobs:
 
   coverage:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       BUILD_TYPE: Coverage
@@ -231,9 +228,6 @@ jobs:
         # Codecov cannot determine which commit a report belongs to from a
         # depth-1 clone of a pull request merge commit.
         fetch-depth: 2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using
@@ -312,7 +306,7 @@ jobs:
 
   test-install-cblas-lapacke-without-fortran-compiler:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       BUILD_TYPE: Release
@@ -321,9 +315,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Install basics
       run: |
@@ -354,7 +345,7 @@ jobs:
 
   memory-check:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       BUILD_TYPE: Debug
@@ -363,9 +354,6 @@ jobs:
 
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-
-    - name: Install ninja-build tool
-      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
 
     - name: Install APT packages
       run: |
