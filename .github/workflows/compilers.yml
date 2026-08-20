@@ -394,8 +394,7 @@ jobs:
 
         extra=()
         if [ "${RUNNER_OS}" = "Windows" ]; then
-          # Shared libraries on Windows would need the symbols exported; static
-          # is what .appveyor.yml builds and tests.
+          # Shared libraries on Windows doesn't work for all CBLAS tests
           extra+=(-D BUILD_SHARED_LIBS:BOOL=OFF)
         else
           extra+=(-D BUILD_SHARED_LIBS:BOOL=ON)
