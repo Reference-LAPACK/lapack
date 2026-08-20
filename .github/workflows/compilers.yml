@@ -49,9 +49,6 @@ on:
 permissions:
   contents: read
 
-env:
-  CFLAGS: "-Wall -pedantic"
-
 defaults:
   run:
     shell: bash
@@ -63,6 +60,10 @@ jobs:
     name: ${{ matrix.toolchain.name }} (${{ matrix.build_type }})
     runs-on: ${{ matrix.toolchain.os }}
 
+    env:
+      # Set per toolchain: the MSVC driver rejects the GCC/Clang spellings.
+      CFLAGS: ${{ matrix.toolchain.cflags }}
+
     strategy:
       # Every toolchain is independent, so a failure of one of them should not
       # hide the results of the others.
@@ -73,27 +74,41 @@ jobs:
         - id: nag
           name: nagfor + gcc
           os: ubuntu-26.04
+          cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
         - id: llvm
           name: flang + clang
           os: ubuntu-26.04
+          cflags: "-Wall -pedantic"
         - id: intel
           name: ifx + icx
           os: ubuntu-24.04
+          cflags: "-Wall -pedantic"
         - id: nag-arm
           name: nagfor + gcc (ARM)
           os: ubuntu-26.04-arm
+          cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
         - id: arm
           name: armflang + armclang (ARM)
           os: ubuntu-24.04-arm
+          cflags: "-Wall -pedantic"
         - id: nag-macos
           name: nagfor + AppleClang
           os: macos-26
+          cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
           nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
+        - id: windows
+          name: flang + msvc
+          os: windows-2025-vs2026
+          cflags: "/W3"
+        - id: windows-intel
+          name: ifx + icx (Windows)
+          os: windows-2025-vs2026
+          cflags: "/W3"
 
     steps:
 
@@ -259,6 +274,117 @@ jobs:
         echo "FC=armflang" >> "$GITHUB_ENV"
         echo "CC=armclang" >> "$GITHUB_ENV"
 
+    - name: Install flang (Windows)
+      if: ${{ matrix.toolchain.id == 'windows' }}
+      run: |
+        "${CONDA}/Scripts/conda" install -y -q -c conda-forge \
+          "flang=${FLANG_VERSION}" "flang-rt_win-64=${FLANG_VERSION}"
+
+        # conda puts the compilers under Library, which is not on PATH, and
+        # its headers and import libraries are not on the MSVC search paths.
+        echo "${CONDA}/Library/bin" >> "$GITHUB_PATH"
+        echo "LIB=${CONDA}/Library/lib;${LIB-}" >> "$GITHUB_ENV"
+        echo "INCLUDE=${CONDA}/Library/include;${INCLUDE-}" >> "$GITHUB_ENV"
+
+        "${CONDA}/Library/bin/flang" --version
+        echo "FC=flang" >> "$GITHUB_ENV"
+        echo "CC=cl" >> "$GITHUB_ENV"
+      env:
+        FLANG_VERSION: 22.1.8
+
+    - name: Install the Intel oneAPI compilers (Windows)
+      if: ${{ matrix.toolchain.id == 'windows-intel' }}
+      env:
+        ONEAPI_VERSION: 2026.1.1
+      run: |
+        # Take the _impl_ packages, not the ifx_win-64/dpcpp_win-64
+        # metapackages -- those add nothing but a dependency on vs_win-64,
+        # an activation package for Visual Studio releases far older than
+        # anything the image carries.
+        "${CONDA}/Scripts/conda" install -y -q \
+          -c https://software.repos.intel.com/python/conda/ \
+          "ifx_impl_win-64=${ONEAPI_VERSION}" \
+          "dpcpp_impl_win-64=${ONEAPI_VERSION}"
+
+        # Same layout as the conda-forge flang packages: drivers under
+        # Library/bin, import libraries under Library/lib.  The compilers find
+        # their own resource directories relative to the executable, and the
+        # Windows-only Fortran interface modules these packages also ship are
+        # not something LAPACK uses.
+        echo "${CONDA}/Library/bin" >> "$GITHUB_PATH"
+        echo "LIB=${CONDA}/Library/lib;${LIB-}" >> "$GITHUB_ENV"
+        echo "INCLUDE=${CONDA}/Library/include;${INCLUDE-}" >> "$GITHUB_ENV"
+
+        "${CONDA}/Library/bin/ifx" --version
+        "${CONDA}/Library/bin/icx" --version
+        echo "FC=ifx" >> "$GITHUB_ENV"
+        echo "CC=icx" >> "$GITHUB_ENV"
+
+    - name: Set up the Windows build environment
+      if: ${{ runner.os == 'Windows' }}
+      run: |
+        # vcvars64.bat is a batch file, so bash cannot source it.  Run it under
+        # cmd, diff the environment it leaves behind, and write that out as a
+        # shell script: Windows then announces itself through TOOLCHAIN_SETUP
+        # like the other toolchains, rather than needing a mechanism of its
+        # own.  vswhere locates the install, so the Visual Studio edition and
+        # version stay unpinned here.
+        vswhere="/c/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
+        vcvars=$("${vswhere}" -latest -products '*' \
+          -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+          -find 'VC/Auxiliary/Build/vcvars64.bat' | head -n 1 | tr -d '\r')
+        if [ -z "${vcvars}" ]; then
+          echo "::error::Could not locate vcvars64.bat via vswhere."
+          exit 1
+        fi
+
+        temp=$(cygpath -u "${RUNNER_TEMP}")
+        cmd //c "set" | tr -d '\r' > "${temp}/env-before.txt"
+        cmd //c "call \"${vcvars}\" > nul && set" | tr -d '\r' > "${temp}/env-after.txt"
+
+        setup="${temp}/windows-toolchain.sh"
+        python3 - "${temp}/env-before.txt" "${temp}/env-after.txt" "${setup}" <<'PYTHON'
+        import subprocess, sys
+
+        def read(path):
+            env = {}
+            with open(path, encoding="utf-8", errors="replace") as handle:
+                for line in handle:
+                    name, sep, value = line.rstrip("\n").partition("=")
+                    if name and sep:
+                        env[name.upper()] = value
+            return env
+
+        def quote(value):
+            return "'" + value.replace("'", "'\\''") + "'"
+
+        before, after, out = read(sys.argv[1]), read(sys.argv[2]), sys.argv[3]
+
+        lines = []
+        for name, value in after.items():
+            if value == before.get(name):
+                continue
+            if name == "PATH":
+                # Windows PATH values are ';'-separated and in native form;
+                # bash needs its own, so hand the new entries to cygpath.
+                old = before.get("PATH", "").split(";")
+                fresh = [e for e in value.split(";") if e and e not in old]
+                if fresh:
+                    posix = subprocess.run(["cygpath", "-u", *fresh], check=True,
+                                           capture_output=True, text=True
+                                           ).stdout.splitlines()
+                    lines.append("PATH=" + quote(":".join(posix)) + ':"${PATH}"')
+                    lines.append("export PATH")
+            else:
+                # The compilers want these in native form, so leave them alone.
+                lines.append(f"export {name}={quote(value)}")
+
+        with open(out, "w", encoding="utf-8") as handle:
+            handle.write("\n".join(lines) + "\n")
+        PYTHON
+
+        echo "TOOLCHAIN_SETUP=${setup}" >> "$GITHUB_ENV"
+
     - name: Configure CMake
       if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
       run: |
@@ -267,6 +393,13 @@ jobs:
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
 
         extra=()
+        if [ "${RUNNER_OS}" = "Windows" ]; then
+          # Shared libraries on Windows would need the symbols exported; static
+          # is what .appveyor.yml builds and tests.
+          extra+=(-D BUILD_SHARED_LIBS:BOOL=OFF)
+        else
+          extra+=(-D BUILD_SHARED_LIBS:BOOL=ON)
+        fi
         if [ "${RUNNER_OS}" = "macOS" ]; then
           # Symbol resolution in the test suite needs flat namespaces on macOS
           extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
@@ -281,7 +414,6 @@ jobs:
           -D LAPACKE:BOOL=ON \
           -D BUILD_TESTING:BOOL=ON \
           -D LAPACKE_WITH_TMG:BOOL=ON \
-          -D BUILD_SHARED_LIBS:BOOL=ON \
           "${extra[@]}"
 
     - name: Build
