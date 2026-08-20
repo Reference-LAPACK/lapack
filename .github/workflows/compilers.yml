@@ -276,129 +276,60 @@ jobs:
 
     - name: Install flang (Windows)
       if: ${{ matrix.toolchain.id == 'windows' }}
-      run: |
-        "${CONDA}/Scripts/conda" install -y -q -c conda-forge \
-          "flang=${FLANG_VERSION}" "flang-rt_win-64=${FLANG_VERSION}"
-
-        # conda puts the compilers under Library, which is not on PATH, and
-        # its headers and import libraries are not on the MSVC search paths.
-        echo "${CONDA}/Library/bin" >> "$GITHUB_PATH"
-        echo "LIB=${CONDA}/Library/lib;${LIB-}" >> "$GITHUB_ENV"
-        echo "INCLUDE=${CONDA}/Library/include;${INCLUDE-}" >> "$GITHUB_ENV"
-
-        "${CONDA}/Library/bin/flang" --version
-        echo "FC=flang" >> "$GITHUB_ENV"
-        echo "CC=cl" >> "$GITHUB_ENV"
+      shell: cmd
       env:
         FLANG_VERSION: 22.1.8
+      run: |
+        call "%CONDA%\Scripts\conda.exe" install -y -q -c conda-forge ^
+          flang=%FLANG_VERSION% flang-rt_win-64=%FLANG_VERSION% || exit /b 1
+
+        echo %CONDA%\Library\bin>> %GITHUB_PATH%
+        echo LIB=%CONDA%\Library\lib>> %GITHUB_ENV%
+        echo INCLUDE=%CONDA%\Library\include>> %GITHUB_ENV%
+
+        "%CONDA%\Library\bin\flang.exe" --version || exit /b 1
+        echo FC=flang>> %GITHUB_ENV%
+        echo CC=cl>> %GITHUB_ENV%
 
     - name: Install the Intel oneAPI compilers (Windows)
       if: ${{ matrix.toolchain.id == 'windows-intel' }}
+      shell: cmd
       env:
         ONEAPI_VERSION: 2026.1.1
       run: |
-        # Take the _impl_ packages, not the ifx_win-64/dpcpp_win-64
-        # metapackages -- those add nothing but a dependency on vs_win-64,
-        # an activation package for Visual Studio releases far older than
-        # anything the image carries.
-        "${CONDA}/Scripts/conda" install -y -q \
-          -c https://software.repos.intel.com/python/conda/ \
-          "ifx_impl_win-64=${ONEAPI_VERSION}" \
-          "dpcpp_impl_win-64=${ONEAPI_VERSION}"
+        call "%CONDA%\Scripts\conda.exe" install -y -q ^
+          -c https://software.repos.intel.com/python/conda/ ^
+          ifx_impl_win-64=%ONEAPI_VERSION% ^
+          dpcpp_impl_win-64=%ONEAPI_VERSION% || exit /b 1
 
-        # Same layout as the conda-forge flang packages: drivers under
-        # Library/bin, import libraries under Library/lib.  The compilers find
-        # their own resource directories relative to the executable, and the
-        # Windows-only Fortran interface modules these packages also ship are
-        # not something LAPACK uses.
-        echo "${CONDA}/Library/bin" >> "$GITHUB_PATH"
-        echo "LIB=${CONDA}/Library/lib;${LIB-}" >> "$GITHUB_ENV"
-        echo "INCLUDE=${CONDA}/Library/include;${INCLUDE-}" >> "$GITHUB_ENV"
+        echo %CONDA%\Library\bin>> %GITHUB_PATH%
+        echo LIB=%CONDA%\Library\lib;%CONDA%\compiler\lib>> %GITHUB_ENV%
+        echo INCLUDE=%CONDA%\opt\compiler\include\intel64;%CONDA%\Library\include>> %GITHUB_ENV%
 
-        "${CONDA}/Library/bin/ifx" --version
-        "${CONDA}/Library/bin/icx" --version
-        echo "FC=ifx" >> "$GITHUB_ENV"
-        echo "CC=icx" >> "$GITHUB_ENV"
+        "%CONDA%\Library\bin\ifx.exe" --version || exit /b 1
+        "%CONDA%\Library\bin\icx.exe" --version || exit /b 1
+        echo FC=ifx>> %GITHUB_ENV%
+        echo CC=icx>> %GITHUB_ENV%
 
-    - name: Set up the Windows build environment
+    - name: Locate the MSVC environment script
       if: ${{ runner.os == 'Windows' }}
+      shell: cmd
       run: |
-        # vcvars64.bat is a batch file, so bash cannot source it.  Run it under
-        # cmd, diff the environment it leaves behind, and write that out as a
-        # shell script: Windows then announces itself through TOOLCHAIN_SETUP
-        # like the other toolchains, rather than needing a mechanism of its
-        # own.  vswhere locates the install, so the Visual Studio edition and
-        # version stay unpinned here.
-        vswhere="/c/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
-        vcvars=$("${vswhere}" -latest -products '*' \
-          -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-          -find 'VC/Auxiliary/Build/vcvars64.bat' | head -n 1 | tr -d '\r')
-        if [ -z "${vcvars}" ]; then
-          echo "::error::Could not locate vcvars64.bat via vswhere."
-          exit 1
-        fi
-
-        temp=$(cygpath -u "${RUNNER_TEMP}")
-        cmd //c "set" | tr -d '\r' > "${temp}/env-before.txt"
-        cmd //c "call \"${vcvars}\" > nul && set" | tr -d '\r' > "${temp}/env-after.txt"
-
-        setup="${temp}/windows-toolchain.sh"
-        python3 - "${temp}/env-before.txt" "${temp}/env-after.txt" "${setup}" <<'PYTHON'
-        import subprocess, sys
-
-        def read(path):
-            env = {}
-            with open(path, encoding="utf-8", errors="replace") as handle:
-                for line in handle:
-                    name, sep, value = line.rstrip("\n").partition("=")
-                    if name and sep:
-                        env[name.upper()] = value
-            return env
-
-        def quote(value):
-            return "'" + value.replace("'", "'\\''") + "'"
-
-        before, after, out = read(sys.argv[1]), read(sys.argv[2]), sys.argv[3]
-
-        lines = []
-        for name, value in after.items():
-            if value == before.get(name):
-                continue
-            if name == "PATH":
-                # Windows PATH values are ';'-separated and in native form;
-                # bash needs its own, so hand the new entries to cygpath.
-                old = before.get("PATH", "").split(";")
-                fresh = [e for e in value.split(";") if e and e not in old]
-                if fresh:
-                    posix = subprocess.run(["cygpath", "-u", *fresh], check=True,
-                                           capture_output=True, text=True
-                                           ).stdout.splitlines()
-                    lines.append("PATH=" + quote(":".join(posix)) + ':"${PATH}"')
-                    lines.append("export PATH")
-            else:
-                # The compilers want these in native form, so leave them alone.
-                lines.append(f"export {name}={quote(value)}")
-
-        with open(out, "w", encoding="utf-8") as handle:
-            handle.write("\n".join(lines) + "\n")
-        PYTHON
-
-        echo "TOOLCHAIN_SETUP=${setup}" >> "$GITHUB_ENV"
+        set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+        for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Auxiliary\Build\vcvars64.bat`) do set "VCVARS=%%i"
+        if not defined VCVARS (
+          echo ::error::Could not locate vcvars64.bat via vswhere.
+          exit /b 1
+        )
+        echo Using %VCVARS%
+        echo TOOLCHAIN_SETUP=%VCVARS%>> %GITHUB_ENV%
 
     - name: Configure CMake
-      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
-        # Only the toolchains whose compilers are not already in the
-        # default environment set TOOLCHAIN_SETUP; it is empty for the rest.
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
 
         extra=()
-        if [ "${RUNNER_OS}" = "Windows" ]; then
-          # Shared libraries on Windows doesn't work for all CBLAS tests
-          extra+=(-D BUILD_SHARED_LIBS:BOOL=OFF)
-        else
-          extra+=(-D BUILD_SHARED_LIBS:BOOL=ON)
-        fi
         if [ "${RUNNER_OS}" = "macOS" ]; then
           # Symbol resolution in the test suite needs flat namespaces on macOS
           extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
@@ -413,21 +344,51 @@ jobs:
           -D LAPACKE:BOOL=ON \
           -D BUILD_TESTING:BOOL=ON \
           -D LAPACKE_WITH_TMG:BOOL=ON \
+          -D BUILD_SHARED_LIBS:BOOL=ON \
           "${extra[@]}"
 
     - name: Build
-      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
         cmake --build build
 
     - name: Test
-      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       working-directory: ${{ github.workspace }}/build
-      # A generous per-test timeout: an unoptimized Debug build is far slower
-      # than the Release builds that cmake.yml sizes its limit for.
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        ctest -C ${{ matrix.build_type }} --schedule-random -j2 --output-on-failure --timeout 1800
+
+    - name: Configure CMake (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        cmake -B build -G Ninja ^
+          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} ^
+          -D CMAKE_Fortran_COMPILER=%FC% ^
+          -D CMAKE_C_COMPILER=%CC% ^
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}\lapack_install ^
+          -D CBLAS:BOOL=ON ^
+          -D LAPACKE:BOOL=ON ^
+          -D BUILD_TESTING:BOOL=ON ^
+          -D LAPACKE_WITH_TMG:BOOL=ON ^
+          -D BUILD_SHARED_LIBS:BOOL=OFF
+
+    - name: Build (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        cmake --build build
+
+    - name: Test (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      working-directory: ${{ github.workspace }}\build
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
         ctest -C ${{ matrix.build_type }} --schedule-random -j2 --output-on-failure --timeout 1800
 
     - name: Upload test results
@@ -459,7 +420,14 @@ jobs:
         fi
 
     - name: Install
-      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        cmake --build build --target install -j2
+
+    - name: Install (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
         cmake --build build --target install -j2
