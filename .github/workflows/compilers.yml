@@ -128,6 +128,7 @@ jobs:
         key_file="${RUNNER_TEMP}/nag.key"
         printf '%s\n' "${NAG_KUSARI_KEY}" > "${key_file}"
         chmod 600 "${key_file}"
+        export NAG_KUSARI_FILE="${key_file}"
         echo "NAG_KUSARI_FILE=${key_file}" >> "$GITHUB_ENV"
 
         # Linux is shipped as a tarball, macOS as a disk image; both unpack to
@@ -177,8 +178,8 @@ jobs:
         printf '%s\n' "${licence_info}"
         if printf '%s\n' "${licence_info}" | grep -q '^Error:'; then
           echo "::error title=NAG Fortran Compiler licence invalid::" \
-            "nagfor found no usable licence; check that the" \
-            "${NAG_KUSARI_SECRET} secret holds a key for this platform."
+            "nagfor found no usable licence in ${NAG_KUSARI_FILE}; check that" \
+            "the ${NAG_KUSARI_SECRET} secret holds a key for this platform."
           exit 1
         fi
 
