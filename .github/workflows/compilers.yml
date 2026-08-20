@@ -1,0 +1,326 @@
+name: Compilers
+
+# Build and test LAPACK with the vendor compilers that the regular CMake
+# workflow does not cover: the NAG Fortran Compiler, LLVM Flang, the Intel
+# oneAPI compilers and the Arm Toolchain for Linux.  Each of them is exercised
+# in both Debug and Release mode.
+#
+# The NAG Fortran Compiler is licence managed and needs the repository secret
+# NAG_KUSARI_KEY to hold its licence key; the configurations using it are
+# skipped when that secret is not available.
+
+on:
+  push:
+    branches:
+    - master
+    - ci_different_compiler
+    paths:
+    - .github/workflows/compilers.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/compilers.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+
+permissions:
+  contents: read
+
+env:
+  CFLAGS: "-Wall -pedantic"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  test-install:
+
+    name: ${{ matrix.toolchain.name }} (${{ matrix.build_type }})
+    runs-on: ${{ matrix.toolchain.os }}
+
+    strategy:
+      # Every toolchain is independent, so a failure of one of them should not
+      # hide the results of the others.
+      fail-fast: false
+      matrix:
+        build_type: [ Debug, Release ]
+        toolchain:
+        - id: nag
+          name: nagfor + gcc
+          os: ubuntu-24.04
+          nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
+        - id: llvm
+          name: flang + clang
+          os: ubuntu-24.04
+        - id: intel
+          name: ifx + icx
+          os: ubuntu-24.04
+        - id: nag-arm
+          name: nagfor + gcc (ARM)
+          os: ubuntu-24.04-arm
+          nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
+        - id: arm
+          name: armflang + armclang (ARM)
+          os: ubuntu-24.04-arm
+        - id: nag-macos
+          name: nagfor + AppleClang
+          os: macos-latest
+          nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
+
+    steps:
+
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install ninja-build tool
+      uses: seanmiddleditch/gha-setup-ninja@16b940825621068d98711680b6c3ff92201f8fc0 # v3
+
+    - name: Install the NAG Fortran Compiler
+      if: ${{ startsWith(matrix.toolchain.id, 'nag') }}
+      env:
+        NAG_KUSARI_KEY: ${{ secrets.NAG_KUSARI_KEY }}
+        NAG_URL: ${{ matrix.toolchain.nag_url }}
+      run: |
+        # Repository secrets are not exposed to pull requests from forks, so
+        # the compiler cannot be licensed there.  Skip instead of failing the
+        # run of a contributor who cannot do anything about it.
+        if [ -z "${NAG_KUSARI_KEY}" ]; then
+          echo "::warning title=NAG Fortran Compiler skipped::" \
+            "The NAG_KUSARI_KEY secret is not available (pull requests from" \
+            "forks cannot read repository secrets), so the compiler cannot be" \
+            "licensed."
+          echo "SKIP_TOOLCHAIN=true" >> "$GITHUB_ENV"
+          exit 0
+        fi
+
+        # Kusari looks for the licence key in a file of its own; anywhere
+        # outside its handful of default locations has to be named explicitly
+        # through NAG_KUSARI_FILE.
+        key_file="${RUNNER_TEMP}/nag.key"
+        printf '%s\n' "${NAG_KUSARI_KEY}" > "${key_file}"
+        chmod 600 "${key_file}"
+        echo "NAG_KUSARI_FILE=${key_file}" >> "$GITHUB_ENV"
+
+        # Linux is shipped as a tarball, macOS as a disk image; both unpack to
+        # the same distribution layout.
+        case "${NAG_URL}" in
+          *.dmg)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.dmg" "${NAG_URL}"
+            dist="${RUNNER_TEMP}/nag-mount"
+            hdiutil attach "${RUNNER_TEMP}/nagfor.dmg" \
+              -nobrowse -readonly -mountpoint "${dist}"
+            ;;
+          *)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.tgz" "${NAG_URL}"
+            tar xzf "${RUNNER_TEMP}/nagfor.tgz" -C "${RUNNER_TEMP}"
+            # The directory carries the platform in its name
+            # (NAG_Fortran-amd64, NAG_Fortran-arm64linux, ...), so look it up
+            # rather than assuming one.
+            dist=$(find "${RUNNER_TEMP}" -maxdepth 1 -type d -name 'NAG_Fortran-*' \
+                     | head -n 1)
+            ;;
+        esac
+        if [ -z "${dist}" ] || [ ! -f "${dist}/INSTALLU.sh" ]; then
+          echo "::error::No NAG Fortran Compiler distribution found in ${RUNNER_TEMP}."
+          exit 1
+        fi
+
+        # INSTALLU.sh is the unattended installer.  It takes both target
+        # directories from the environment, they have to be absolute and they
+        # have to differ from each other.  /usr/local/lib/NAG_Fortran is the
+        # compiler's own default library directory on every platform here,
+        # which keeps the installed nagfor a plain binary rather than a -Qpath
+        # wrapper script.
+        cd "${dist}"
+        sudo env \
+          INSTALL_TO_BINDIR=/usr/local/bin \
+          INSTALL_TO_LIBDIR=/usr/local/lib/NAG_Fortran \
+          ./INSTALLU.sh
+
+        nagfor -version
+
+        # Confirm the key is usable rather than merely present.  -xlicinfo
+        # reports the licence status but exits with status 2 whether or not a
+        # licence was found, so it cannot be used as a bare command: what
+        # counts is its output, which reports a failure as a line starting
+        # with 'Error:'.
+        licence_info=$(nagfor -xlicinfo 2>&1) || true
+        printf '%s\n' "${licence_info}"
+        if printf '%s\n' "${licence_info}" | grep -q '^Error:'; then
+          echo "::error title=NAG Fortran Compiler licence invalid::" \
+            "nagfor found no usable licence; check the NAG_KUSARI_KEY secret."
+          exit 1
+        fi
+
+        # Rely on AppleClang alias to gcc on macOS
+        echo "CC=gcc" >> "$GITHUB_ENV"
+        echo "FC=nagfor" >> "$GITHUB_ENV"
+
+    - name: Install flang 20 and clang 20
+      if: ${{ matrix.toolchain.id == 'llvm' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y flang-20 clang-20
+        flang-20 --version
+        clang-20 --version
+        echo "FC=flang-20" >> "$GITHUB_ENV"
+        echo "CC=clang-20" >> "$GITHUB_ENV"
+
+    - name: Install the Intel oneAPI compilers
+      if: ${{ matrix.toolchain.id == 'intel' }}
+      run: |
+        # ifx and icx are not in the Ubuntu archive; Intel ships them from its
+        # own APT repository.
+        curl -fsSL https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+          | gpg --dearmor \
+          | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+        echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg]" \
+             "https://apt.repos.intel.com/oneapi all main" \
+          | sudo tee /etc/apt/sources.list.d/oneAPI.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y \
+          intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp
+
+        # setvars.sh only changes the shell that sources it, and every step
+        # runs in a shell of its own, so announce it through TOOLCHAIN_SETUP
+        # and let the steps below source it themselves.
+        echo "TOOLCHAIN_SETUP=/opt/intel/oneapi/setvars.sh" >> "$GITHUB_ENV"
+
+        source /opt/intel/oneapi/setvars.sh
+        ifx --version
+        icx --version
+        echo "FC=ifx" >> "$GITHUB_ENV"
+        echo "CC=icx" >> "$GITHUB_ENV"
+
+    - name: Install the Arm Toolchain for Linux
+      if: ${{ matrix.toolchain.id == 'arm' }}
+      env:
+        ARM_REPO: https://developer.arm.com/packages/arm-toolchains/ubuntu
+      run: |
+        # armclang and armflang come from Arm's own APT repository, whose
+        # configuration package carries both the sources list and the signing
+        # key.  Its version moves independently of the toolchain, so look the
+        # file up instead of pinning it.
+        deb=$(curl -fsSL "${ARM_REPO}/dists/noble/main/binary-arm64/Packages" \
+                | awk '/^Package: arm-toolchains-repository$/ { found = 1 }
+                       found && /^Filename:/ { print $2; exit }')
+        if [ -z "${deb}" ]; then
+          echo "::error::Could not find the arm-toolchains-repository package."
+          exit 1
+        fi
+        curl -fsSL -o "${RUNNER_TEMP}/arm-repo.deb" "${ARM_REPO}/${deb}"
+        sudo apt-get install -y "${RUNNER_TEMP}/arm-repo.deb"
+        sudo apt-get update
+        sudo apt-get install -y arm-toolchain-for-linux
+
+        # The package ships a modulefile generator rather than an environment
+        # script, so set up what that module would: its bin directory, plus
+        # the library paths the compilers and the built shared libraries need.
+        prefix=/opt/arm/arm-toolchain-for-linux
+        libs="${prefix}/lib:${prefix}/lib/aarch64-unknown-linux-gnu"
+        echo "${prefix}/bin" >> "$GITHUB_PATH"
+        echo "CPATH=${prefix}/include${CPATH:+:${CPATH}}" >> "$GITHUB_ENV"
+        echo "LIBRARY_PATH=${libs}${LIBRARY_PATH:+:${LIBRARY_PATH}}" >> "$GITHUB_ENV"
+        echo "LD_LIBRARY_PATH=${libs}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> "$GITHUB_ENV"
+
+        "${prefix}/bin/armflang" --version
+        "${prefix}/bin/armclang" --version
+        echo "FC=armflang" >> "$GITHUB_ENV"
+        echo "CC=armclang" >> "$GITHUB_ENV"
+
+    - name: Configure CMake
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        # Only the toolchains whose compilers are not already in the
+        # default environment set TOOLCHAIN_SETUP; it is empty for the rest.
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+
+        extra=()
+        if [ "${RUNNER_OS}" = "macOS" ]; then
+          # Symbol resolution in the test suite needs flat namespaces on macOS
+          extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
+        fi
+
+        cmake -B build -G Ninja \
+          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -D CMAKE_Fortran_COMPILER="${FC}" \
+          -D CMAKE_C_COMPILER="${CC}" \
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/lapack_install \
+          -D CBLAS:BOOL=ON \
+          -D LAPACKE:BOOL=ON \
+          -D BUILD_TESTING:BOOL=ON \
+          -D LAPACKE_WITH_TMG:BOOL=ON \
+          -D BUILD_SHARED_LIBS:BOOL=ON \
+          "${extra[@]}"
+
+    - name: Build
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        cmake --build build
+
+    - name: Test
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      working-directory: ${{ github.workspace }}/build
+      # A generous per-test timeout: an unoptimized Debug build is far slower
+      # than the Release builds that cmake.yml sizes its limit for.
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        ctest -C ${{ matrix.build_type }} --schedule-random -j2 --output-on-failure --timeout 1800
+
+    - name: Upload test results
+      id: upload-test-results
+      # Uploaded even when the tests failed; that is when the results are
+      # needed most.  The test summary below links to the artifact.
+      if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: test-results-${{ matrix.toolchain.id }}-${{ matrix.build_type }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        cmake --build build --target install -j2
