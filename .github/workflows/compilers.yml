@@ -302,16 +302,16 @@ jobs:
           ifx_impl_win-64=%ONEAPI_VERSION% ^
           dpcpp_impl_win-64=%ONEAPI_VERSION% || exit /b 1
 
-        echo %CONDA%\Library\bin>> %GITHUB_PATH%
-        echo LIB=%CONDA%\Library\lib;%CONDA%\compiler\lib>> %GITHUB_ENV%
-        echo INCLUDE=%CONDA%\opt\compiler\include\intel64;%CONDA%\Library\include>> %GITHUB_ENV%
+        echo ONEAPI_PATH=%CONDA%\Library\bin>> %GITHUB_ENV%
+        echo ONEAPI_LIB=%CONDA%\Library\lib;%CONDA%\compiler\lib>> %GITHUB_ENV%
+        echo ONEAPI_INCLUDE=%CONDA%\opt\compiler\include;%CONDA%\opt\compiler\include\intel64;%CONDA%\Library\include>> %GITHUB_ENV%
 
         "%CONDA%\Library\bin\ifx.exe" --version || exit /b 1
         "%CONDA%\Library\bin\icx.exe" --version || exit /b 1
         echo FC=ifx>> %GITHUB_ENV%
         echo CC=icx>> %GITHUB_ENV%
 
-    - name: Locate the MSVC environment script
+    - name: Write the Windows toolchain setup script
       if: ${{ runner.os == 'Windows' }}
       shell: cmd
       run: |
@@ -322,7 +322,15 @@ jobs:
           exit /b 1
         )
         echo Using %VCVARS%
-        echo TOOLCHAIN_SETUP=%VCVARS%>> %GITHUB_ENV%
+
+        set "SETUP=%RUNNER_TEMP%\toolchain.bat"
+        > "%SETUP%" echo @echo off
+        >>"%SETUP%" echo call "%VCVARS%" ^|^| exit /b 1
+        >>"%SETUP%" echo if defined ONEAPI_PATH set "PATH=%%ONEAPI_PATH%%;%%PATH%%"
+        >>"%SETUP%" echo if defined ONEAPI_LIB set "LIB=%%ONEAPI_LIB%%;%%LIB%%"
+        >>"%SETUP%" echo if defined ONEAPI_INCLUDE set "INCLUDE=%%ONEAPI_INCLUDE%%;%%INCLUDE%%"
+        type "%SETUP%"
+        echo TOOLCHAIN_SETUP=%SETUP%>> %GITHUB_ENV%
 
     - name: Configure CMake
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
