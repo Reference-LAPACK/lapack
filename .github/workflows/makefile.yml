@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-    - try-github-actions
+    - ci_different_compiler
     paths:
     - .github/workflows/makefile.yml
     - '**Makefile'
@@ -50,12 +50,18 @@ defaults:
     shell: bash
 
 jobs:
+  build-install:
+    runs-on: ${{ matrix.os }}
 
-  install-ubuntu:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-26, ubuntu-24.04, ubuntu-24.04-arm, windows-2025 ]
+
     steps:
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
     - name: Set configurations
       run: |
         echo "SHELL = /bin/sh" >> make.inc
@@ -67,32 +73,15 @@ jobs:
         echo "TMGLIB = ${{github.workspace}}/libtmglib.a" >> make.inc
         echo "LAPACKELIB = ${{github.workspace}}/liblapacke.a" >> make.inc
         echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
-    - name: Install
-      run: |
-        make -s -j2 all
-        make -j2 lapack_install
 
-  install-macos:
-    runs-on: macos-26
-    steps:
-    - name: Checkout LAPACK
-      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-    - name: Set configurations
-      run: |
-        echo "SHELL = /bin/sh" >> make.inc
-        echo "FFLAGS_DRV = ${{env.FFLAGS}}" >> make.inc
-        echo "TIMER = INT_ETIME" >> make.inc
-        echo "BLASLIB = ${{github.workspace}}/librefblas.a" >> make.inc
-        echo "CBLASLIB = ${{github.workspace}}/libcblas.a" >> make.inc
-        echo "LAPACKLIB = ${{github.workspace}}/liblapack.a" >> make.inc
-        echo "TMGLIB = ${{github.workspace}}/libtmglib.a" >> make.inc
-        echo "LAPACKELIB = ${{github.workspace}}/liblapacke.a" >> make.inc
-        echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
-    - name: Alias for GCC compilers
+    - name: Alias for GCC compilers (macOS)
+      if: ${{ runner.os == 'macOS' }}
       run: |
         sudo ln -s $(which gcc-14) /usr/local/bin/gcc
         sudo ln -s $(which gfortran-14) /usr/local/bin/gfortran
+
+    - name: Build
+      run: make -s -j2 all
+
     - name: Install
-      run: |
-        make -s -j2 all
-        make -j2 lapack_install
+      run: make -j2 lapack_install
