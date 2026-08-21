@@ -3,7 +3,7 @@ name: Compilers
 # Build and test LAPACK with the vendor compilers that the regular CMake
 # workflow does not cover: the NAG Fortran Compiler, LLVM Flang, the Intel
 # oneAPI compilers and the Arm Toolchain for Linux.  Each of them is exercised
-# in both Debug and Release mode.
+# against static and against shared libraries, always in Release mode.
 #
 # The NAG Fortran Compiler is licence managed and its key is tied to the
 # platform it was issued for, so each of its configurations reads a repository
@@ -57,7 +57,7 @@ jobs:
 
   test-install:
 
-    name: ${{ matrix.toolchain.name }} (${{ matrix.build_type }})
+    name: ${{ matrix.toolchain.name }} / ${{ matrix.lib_type }}
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
@@ -69,44 +69,44 @@ jobs:
       # hide the results of the others.
       fail-fast: false
       matrix:
-        build_type: [ Debug, Release ]
+        lib_type: [ static, shared ]
         toolchain:
         - id: nag
-          name: nagfor + gcc
+          name: linux / x86_64 / nagfor + gcc
           os: ubuntu-26.04
           cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
         - id: llvm
-          name: flang + clang
+          name: linux / x86_64 / flang + clang
           os: ubuntu-26.04
           cflags: "-Wall -pedantic"
         - id: intel
-          name: ifx + icx
+          name: linux / x86_64 / ifx + icx
           os: ubuntu-24.04
           cflags: "-Wall -pedantic"
         - id: nag-arm
-          name: nagfor + gcc (ARM)
+          name: linux / arm64 / nagfor + gcc
           os: ubuntu-26.04-arm
           cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
         - id: arm
-          name: armflang + armclang (ARM)
+          name: linux / arm64 / armflang + armclang
           os: ubuntu-24.04-arm
           cflags: "-Wall -pedantic"
         - id: nag-macos
-          name: nagfor + AppleClang
+          name: macos / arm64 / nagfor + AppleClang
           os: macos-26
           cflags: "-Wall -pedantic"
           nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
           nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
         - id: windows
-          name: flang + msvc
+          name: windows / x86_64 / flang + msvc
           os: windows-2025-vs2026
           cflags: "/W3"
         - id: windows-intel
-          name: ifx + icx (Windows)
+          name: windows / x86_64 / ifx + icx
           os: windows-2025-vs2026
           cflags: "/W3"
 
@@ -338,13 +338,13 @@ jobs:
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
 
         extra=()
-        if [ "${RUNNER_OS}" = "macOS" ]; then
+        if [ "${RUNNER_OS}" = "macOS" ] && [ "${{ matrix.lib_type }}" = shared ]; then
           # Symbol resolution in the test suite needs flat namespaces on macOS
           extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
         fi
 
         cmake -B build -G Ninja \
-          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -D CMAKE_BUILD_TYPE=Release \
           -D CMAKE_Fortran_COMPILER="${FC}" \
           -D CMAKE_C_COMPILER="${CC}" \
           -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/lapack_install \
@@ -352,7 +352,7 @@ jobs:
           -D LAPACKE:BOOL=ON \
           -D BUILD_TESTING:BOOL=ON \
           -D LAPACKE_WITH_TMG:BOOL=ON \
-          -D BUILD_SHARED_LIBS:BOOL=ON \
+          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }} \
           "${extra[@]}"
 
     - name: Build
@@ -366,7 +366,7 @@ jobs:
       working-directory: ${{ github.workspace }}/build
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
-        ctest -C ${{ matrix.build_type }} --schedule-random -j2 --output-on-failure --timeout 1800
+        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
 
     - name: Configure CMake (Windows)
       if: ${{ runner.os == 'Windows' }}
@@ -374,7 +374,7 @@ jobs:
       run: |
         call "%TOOLCHAIN_SETUP%" || exit /b 1
         cmake -B build -G Ninja ^
-          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} ^
+          -D CMAKE_BUILD_TYPE=Release ^
           -D CMAKE_Fortran_COMPILER=%FC% ^
           -D CMAKE_C_COMPILER=%CC% ^
           -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}\lapack_install ^
@@ -382,7 +382,7 @@ jobs:
           -D LAPACKE:BOOL=ON ^
           -D BUILD_TESTING:BOOL=ON ^
           -D LAPACKE_WITH_TMG:BOOL=ON ^
-          -D BUILD_SHARED_LIBS:BOOL=OFF
+          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
 
     - name: Build (Windows)
       if: ${{ runner.os == 'Windows' }}
@@ -397,7 +397,7 @@ jobs:
       working-directory: ${{ github.workspace }}\build
       run: |
         call "%TOOLCHAIN_SETUP%" || exit /b 1
-        ctest -C ${{ matrix.build_type }} --schedule-random -j2 --output-on-failure --timeout 1800
+        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
 
     - name: Upload test results
       id: upload-test-results
@@ -406,7 +406,7 @@ jobs:
       if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
-        name: test-results-${{ matrix.toolchain.id }}-${{ matrix.build_type }}
+        name: test-results-${{ matrix.toolchain.id }}-${{ matrix.lib_type }}
         path: |
           build/TESTING/testing_results.txt
           build/lapack_testing_junit.xml
