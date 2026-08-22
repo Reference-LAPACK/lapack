@@ -228,18 +228,6 @@ jobs:
           exit 1
         fi
 
-    - name: Install flang 21 and clang 21
-      if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Linux' }}
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y flang-21 clang-21
-        sudo update-alternatives \
-          --install /usr/bin/clang clang /usr/bin/clang-21 100 \
-          --slave   /usr/bin/flang flang /usr/bin/flang-21 \
-          --slave   /usr/bin/clang++ clang++ /usr/bin/clang++-21
-        flang --version
-        clang --version
-
     - name: Install the Intel oneAPI compilers
       if: ${{ matrix.toolchain.FC == 'ifx' && runner.os == 'Linux' }}
       run: |
