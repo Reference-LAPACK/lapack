@@ -109,7 +109,7 @@ jobs:
           CC: icx
           os: ubuntu-24.04
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -warn nounused"
         - FC: nagfor
           CC: gcc
           os: ubuntu-26.04-arm
@@ -139,7 +139,7 @@ jobs:
           CC: icx
           os: windows-2025-vs2026
           CFLAGS: "/W3"
-          FFLAGS: "/warn:all"
+          FFLAGS: "/warn:nounused"
 
     steps:
     - name: Checkout LAPACK
