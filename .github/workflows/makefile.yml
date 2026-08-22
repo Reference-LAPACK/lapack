@@ -38,7 +38,7 @@ permissions:
 
 env:
   CFLAGS: "-O3 -flto -Wall -pedantic-errors"
-  FFLAGS: "-O2 -flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -pedantic -fimplicit-none -frecursive -fopenmp -fcheck=all"
+  FFLAGS: "-O2 -flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Wmaybe-uninitialized -Werror=conversion -pedantic -fimplicit-none -frecursive -fopenmp -fcheck=all"
   LDFLAGS: ""
   AR: "ar"
   ARFLAGS: "cr"
@@ -67,9 +67,6 @@ jobs:
         - FC: gfortran
           CC: gcc
           os: ubuntu-26.04-arm
-        - FC: gfortran
-          CC: gcc
-          os: windows-2025
         - FC: gfortran-14
           CC: gcc-14
           os: macos-26

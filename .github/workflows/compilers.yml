@@ -92,12 +92,12 @@ jobs:
           CC: clang
           os: ubuntu-26.04
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
+          FFLAGS: "-Wall -pedantic"
         - FC: flang
           CC: clang
           os: ubuntu-26.04-arm
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
+          FFLAGS: "-Wall -pedantic"
         - FC: nagfor
           CC: gcc
           os: ubuntu-26.04
@@ -121,7 +121,7 @@ jobs:
           CC: armclang
           os: ubuntu-24.04-arm
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
+          FFLAGS: "-Wall -pedantic"
         - FC: nagfor
           CC: gcc
           name: mac_arm64 / nagfor + AppleClang
@@ -134,7 +134,7 @@ jobs:
           CC: cl
           os: windows-2025-vs2026
           CFLAGS: "/W3"
-          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
+          FFLAGS: "-Wall -pedantic"
         - FC: ifx
           CC: icx
           os: windows-2025-vs2026
