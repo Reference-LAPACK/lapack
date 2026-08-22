@@ -54,10 +54,8 @@ defaults:
     shell: bash
 
 jobs:
-
-  test-install:
-
-    name: ${{ runner.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+  default-test-install:
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
