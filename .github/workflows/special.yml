@@ -262,18 +262,12 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      # ctest exits 0 even when valgrind reports defects, but it exits
-      # non-zero if a test itself fails.  Keep going either way so that
-      # the output is always printed and uploaded; the check below
-      # decides whether the job passes.
       run: |
         ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
         cat memcheck.out
 
     - name: Upload valgrind logs
       id: upload-valgrind-logs
-      # Uploaded even when the memory check failed; that is when the
-      # logs are needed most.  The step summary below links to them.
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
