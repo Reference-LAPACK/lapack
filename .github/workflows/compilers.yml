@@ -131,7 +131,7 @@ jobs:
 
     steps:
     - name: Checkout LAPACK
-      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Install the NAG Fortran Compiler
       if: ${{ matrix.toolchain.FC == 'nagfor' }}
@@ -412,7 +412,7 @@ jobs:
       # Uploaded even when the tests failed; that is when the results are
       # needed most.  The test summary below links to the artifact.
       if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: test-results-${{ matrix.toolchain.FC }}-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
         path: |
