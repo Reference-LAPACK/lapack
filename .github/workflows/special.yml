@@ -262,24 +262,90 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
+      # ctest exits 0 even when valgrind reports defects, but it exits
+      # non-zero if a test itself fails.  Keep going either way so that
+      # the output is always printed and uploaded; the check below
+      # decides whether the job passes.
       run: |
-        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out
+        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
         cat memcheck.out
-        if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
-          exit 0
-        else
-          for f in Testing/Temporary/MemoryChecker.*.log; do
-            if tail -n 1 $f | grep -q "ERROR SUMMARY: 0 errors"; then
-              tail -n 1 $f
-              continue
-            else
-              echo "Memory check failed in $f"
-              cat $f
-              exit 1
-            fi
-          done
+
+    - name: Upload valgrind logs
+      id: upload-valgrind-logs
+      # Uploaded even when the memory check failed; that is when the
+      # logs are needed most.  The step summary below links to them.
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: valgrind-logs
+        path: |
+          build/memcheck.out
+          build/Testing/Temporary/MemoryChecker.*.log
+          build/Testing/Temporary/LastDynamicAnalysis_*.log
+          build/Testing/*/DynamicAnalysis.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Check memory checking results
+      working-directory: ${{github.workspace}}/build
+      run: |
+        shopt -s nullglob
+        logs=( Testing/Temporary/MemoryChecker.*.log )
+        if [ ${#logs[@]} -eq 0 ]; then
+          echo "::error::No MemoryChecker logs found; valgrind did not run"
+          exit 1
+        fi
+        # A systematic problem makes nearly every test report a defect, so
+        # only the first few logs are echoed here; the artifact has them all.
+        max_dump=5
+        dumped=0
+        failed=()
+        for f in "${logs[@]}"; do
+          if tail -n 1 "$f" | grep -q "ERROR SUMMARY: 0 errors"; then
+            continue
+          fi
+          failed+=( "$f" )
+          if [ "$dumped" -lt "$max_dump" ]; then
+            echo "::group::$f"
+            cat "$f"
+            echo "::endgroup::"
+            dumped=$(( dumped + 1 ))
+          fi
+        done
+        if [ ${#failed[@]} -eq 0 ]; then
+          echo "All ${#logs[@]} logs reported no valgrind errors"
           exit 0
         fi
+        echo "::error::Memory check failed in ${#failed[@]} of ${#logs[@]} tests"
+        printf '%s\n' "${failed[@]}"
+        if [ ${#failed[@]} -gt "$max_dump" ]; then
+          echo "Only the first $max_dump logs are shown above;" \
+               "every log is in the valgrind-logs artifact."
+        fi
+        exit 1
+
+    - name: Write memory check summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-valgrind-logs.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        [ -f memcheck.out ] || exit 0
+        defects=$(sed -n '/^Memory checking results:/,$p' memcheck.out | tail -n +2) || true
+        {
+          echo '## valgrind memory check'
+          echo
+          if [ -n "$defects" ]; then
+            echo 'Defects reported by CTest:'
+            echo
+            echo "$defects" | sed 's/^/- /'
+          else
+            echo 'No defects reported.'
+          fi
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe full valgrind output for every test is in the [valgrind-logs artifact](%s).\n' "$ARTIFACT_URL"
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
 
   coverage:
     name: gcov coverage
