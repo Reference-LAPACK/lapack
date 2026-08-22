@@ -48,6 +48,7 @@ defaults:
 
 jobs:
   openmp-build:
+    name: openmp-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
@@ -129,6 +130,7 @@ jobs:
       run: cmake --build build --target install -j2
 
   test-extended-api-only:
+    name: extended-api-only (${{ matrix.lib_type }})
     runs-on: ubuntu-24.04
 
     strategy:
@@ -190,6 +192,7 @@ jobs:
       run: cmake --build build --target install -j2
 
   cblas-lapacke-without-fortran-compiler:
+    name: cblas + lapacke (${{ matrix.lib_type }})
     runs-on: ubuntu-24.04
 
     strategy:
@@ -227,6 +230,7 @@ jobs:
       run: cmake --build build --target install -j2
 
   memory-check:
+    name: valgrind memory check
     runs-on: ubuntu-24.04
 
     steps:
@@ -274,6 +278,7 @@ jobs:
         fi
 
   coverage:
+    name: gcov coverage
     runs-on: ubuntu-24.04
 
     env:

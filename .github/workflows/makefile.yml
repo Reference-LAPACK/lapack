@@ -48,6 +48,7 @@ defaults:
 
 jobs:
   build-install:
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
