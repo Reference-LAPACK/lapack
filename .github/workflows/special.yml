@@ -1,0 +1,268 @@
+name: Special Build Configurations
+
+on:
+  push:
+    branches:
+    - master
+    - ci_different_compiler
+    paths:
+    - .github/workflows/special.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/special.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+
+permissions:
+  contents: read
+
+env:
+  CFLAGS: "-Wall -pedantic"
+  FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  openmp-build:
+    runs-on: ${{ matrix.os }}
+
+    env:
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp"
+      FC: ${{ matrix.toolchain.FC }}
+      CC: ${{ matrix.toolchain.CC }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        lib_type: [ static, shared ]
+        toolchain:
+        - FC: gfortran
+          CC: gcc
+          os: [ubuntu-26.04, ubuntu-26.04-arm, windows-2025]
+        - FC: gfortran-14
+          CC: gcc-14
+          os: macos-26
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_Fortran_COMPILER="${FC}" \
+        -D CMAKE_C_COMPILER="${CC}" \
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test with OpenMP
+      working-directory: ${{github.workspace}}/build
+      run: ctest --schedule-random -j1 --output-on-failure --timeout 100
+
+    - name: Upload test results
+      id: upload-test-results
+      # Uploaded even when the tests failed; that is when the results
+      # are needed most.  The test summary below links to the artifact.
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: test-results-openmp-${{ matrix.os }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  test-extended-api-only:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        lib_type: [ static, shared ]
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+        -D BUILD_DEFAULT_API:BOOL=OFF
+        -D BUILD_INDEX64_EXT_API:BOOL=ON
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest --schedule-random -j2 --output-on-failure --timeout 100
+
+    - name: Upload test results
+      id: upload-test-results
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: test-results-extended-api-${{ matrix.lib_type }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  cblas-lapacke-without-fortran-compiler:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        lib_type: [ static, shared ]
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install LAPACK and BLAS, remove gfortran
+      run: |
+        sudo apt update
+        sudo apt install -y liblapack-dev libblas-dev
+        sudo apt purge gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D USE_OPTIMIZED_LAPACK:BOOL=ON
+        -D BUILD_TESTING:BOOL=OFF
+        -D LAPACKE_WITH_TMG:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  memory-check:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+    - name: Install APT packages
+      run: |
+        sudo apt update
+        sudo apt install -y valgrind
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Debug
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+        -D LAPACK_TESTING_USE_PYTHON:BOOL=OFF
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: |
+        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out
+        cat memcheck.out
+        if tail -n 1 memcheck.out | grep -q "Memory checking results:"; then
+          exit 0
+        else
+          for f in Testing/Temporary/MemoryChecker.*.log; do
+            if tail -n 1 $f | grep -q "ERROR SUMMARY: 0 errors"; then
+              tail -n 1 $f
+              continue
+            else
+              echo "Memory check failed in $f"
+              cat $f
+              exit 1
+            fi
+          done
+          exit 0
+        fi
