@@ -4,7 +4,6 @@ on:
   push:
     branches:
     - master
-    - ci_different_compiler
     paths:
     - .github/workflows/makefile.yml
     - '**Makefile'

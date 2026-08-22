@@ -15,7 +15,6 @@ on:
   push:
     branches:
     - master
-    - ci_different_compiler
     paths:
     - .github/workflows/compilers.yml
     - lapack_testing.py
