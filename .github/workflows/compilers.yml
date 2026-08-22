@@ -71,7 +71,17 @@ jobs:
         toolchain:
         - FC: gfortran
           CC: gcc
-          os: [ubuntu-26.04, ubuntu-26.04-arm, windows-2025]
+          os: ubuntu-26.04
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran
+          CC: gcc
+          os: windows-2025
           CFLAGS: "-Wall -pedantic"
           FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
         - FC: gfortran-14
@@ -81,9 +91,14 @@ jobs:
           FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
         - FC: flang
           CC: clang
-          os: [ubuntu-26.04, ubuntu-26.04-arm]
+          os: ubuntu-26.04
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
+        - FC: flang
+          CC: clang
+          os: ubuntu-26.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
         - FC: nagfor
           CC: gcc
           os: ubuntu-26.04
@@ -107,7 +122,7 @@ jobs:
           CC: armclang
           os: ubuntu-24.04-arm
           CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
         - FC: nagfor
           CC: gcc
           name: mac_arm64 / nagfor + AppleClang
@@ -120,7 +135,7 @@ jobs:
           CC: cl
           os: windows-2025-vs2026
           CFLAGS: "/W3"
-          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+          FFLAGS: "-Wall -pedantic -Wno-unused-variable"
         - FC: ifx
           CC: icx
           os: windows-2025-vs2026

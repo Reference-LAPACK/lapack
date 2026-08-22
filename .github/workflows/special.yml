@@ -62,7 +62,13 @@ jobs:
         toolchain:
         - FC: gfortran
           CC: gcc
-          os: [ubuntu-26.04, ubuntu-26.04-arm, windows-2025]
+          os: ubuntu-26.04
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04-arm
+        - FC: gfortran
+          CC: gcc
+          os: windows-2025
         - FC: gfortran-14
           CC: gcc-14
           os: macos-26
@@ -72,11 +78,11 @@ jobs:
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Configure CMake
-      run: |
+      run: >
         cmake -B build -G Ninja
         -D CMAKE_BUILD_TYPE=Release
-        -D CMAKE_Fortran_COMPILER="${FC}" \
-        -D CMAKE_C_COMPILER="${CC}" \
+        -D CMAKE_Fortran_COMPILER="${FC}"
+        -D CMAKE_C_COMPILER="${CC}"
         -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
         -D CBLAS:BOOL=ON
         -D LAPACKE:BOOL=ON
@@ -291,6 +297,9 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
+
+    - name: Build
+      run: cmake --build build -j2
 
     - name: Test
       working-directory: ${{github.workspace}}/build
