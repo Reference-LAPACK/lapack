@@ -1,5 +1,10 @@
 name: Special Build Configurations
 
+# This workflow builds and tests LAPACK with special configurations that are not
+# covered by the compilers workflow: OpenMP, extended API only,
+# CBLAS and LAPACKE without a Fortran compiler, memory checking with Valgrind,
+# and gcov coverage.
+
 on:
   push:
     branches:

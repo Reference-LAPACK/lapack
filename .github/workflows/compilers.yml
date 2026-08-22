@@ -1,9 +1,9 @@
 name: Compilers
 
-# Build and test LAPACK with the vendor compilers that the regular CMake
-# workflow does not cover: the NAG Fortran Compiler, LLVM Flang, the Intel
-# oneAPI compilers and the Arm Toolchain for Linux.  Each of them is exercised
-# against static and against shared libraries, always in Release mode.
+# Build and test BLAS, CBLAS, LAPACK, and LAPACKE with a variety of compilers:
+# GFortran, NAG Fortran Compiler, LLVM Flang, Intel oneAPI compilers and the
+# Arm Toolchain for Linux.  Each of them is exercised against static and against
+# shared libraries, always in Release mode.
 #
 # The NAG Fortran Compiler is licence managed and its key is tied to the
 # platform it was issued for, so each of its configurations reads a repository

@@ -1,5 +1,8 @@
 name: Makefile
 
+# This workflow builds and installs LAPACK using the Makefile build system.
+# Only GFortran is tested.
+
 on:
   push:
     branches:
