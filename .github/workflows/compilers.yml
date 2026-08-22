@@ -57,66 +57,84 @@ jobs:
 
   test-install:
 
-    name: ${{ matrix.toolchain.name }} / ${{ matrix.lib_type }}
+    name: ${{ runner.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
-      # Set per toolchain: the MSVC driver rejects the GCC/Clang spellings.
-      CFLAGS: ${{ matrix.toolchain.cflags }}
+      FC: ${{ matrix.toolchain.FC }}
+      CC: ${{ matrix.toolchain.CC }}
+      FFLAGS: ${{ matrix.toolchain.FFLAGS }}
+      CFLAGS: ${{ matrix.toolchain.CFLAGS }}
 
     strategy:
-      # Every toolchain is independent, so a failure of one of them should not
-      # hide the results of the others.
       fail-fast: false
       matrix:
         lib_type: [ static, shared ]
         toolchain:
-        - id: nag
-          name: linux / x86_64 / nagfor + gcc
+        - FC: gfortran
+          CC: gcc
+          os: [ubuntu-26.04, ubuntu-26.04-arm, windows-2025]
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran-14
+          CC: gcc-14
+          os: macos-26
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: flang
+          CC: clang
+          os: [ubuntu-26.04, ubuntu-26.04-arm]
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: nagfor
+          CC: gcc
           os: ubuntu-26.04
-          cflags: "-Wall -pedantic"
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
           nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
-        - id: llvm
-          name: linux / x86_64 / flang + clang
-          os: ubuntu-26.04
-          cflags: "-Wall -pedantic"
-        - id: intel
-          name: linux / x86_64 / ifx + icx
+        - FC: ifx
+          CC: icx
           os: ubuntu-24.04
-          cflags: "-Wall -pedantic"
-        - id: nag-arm
-          name: linux / arm64 / nagfor + gcc
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic"
+        - FC: nagfor
+          CC: gcc
           os: ubuntu-26.04-arm
-          cflags: "-Wall -pedantic"
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
           nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
           nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
-        - id: arm
-          name: linux / arm64 / armflang + armclang
+        - FC: armflang
+          CC: armclang
           os: ubuntu-24.04-arm
-          cflags: "-Wall -pedantic"
-        - id: nag-macos
-          name: macos / arm64 / nagfor + AppleClang
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: nagfor
+          CC: gcc
+          name: mac_arm64 / nagfor + AppleClang
           os: macos-26
-          cflags: "-Wall -pedantic"
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
           nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
           nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
-        - id: windows
-          name: windows / x86_64 / flang + msvc
+        - FC: flang
+          CC: cl
           os: windows-2025-vs2026
-          cflags: "/W3"
-        - id: windows-intel
-          name: windows / x86_64 / ifx + icx
+          CFLAGS: "/W3"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: ifx
+          CC: icx
           os: windows-2025-vs2026
-          cflags: "/W3"
+          CFLAGS: "/W3"
+          FFLAGS: "/warn:all"
 
     steps:
-
     - name: Checkout LAPACK
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Install the NAG Fortran Compiler
-      if: ${{ startsWith(matrix.toolchain.id, 'nag') }}
+      if: ${{ matrix.toolchain.FC == 'nagfor' }}
       env:
         # The secrets context cannot be reached from the matrix, but it can be
         # indexed with a name taken from it.  The guard keeps the index away
@@ -198,22 +216,20 @@ jobs:
           exit 1
         fi
 
-        # Rely on AppleClang alias to gcc on macOS
-        echo "CC=gcc" >> "$GITHUB_ENV"
-        echo "FC=nagfor" >> "$GITHUB_ENV"
-
     - name: Install flang 21 and clang 21
-      if: ${{ matrix.toolchain.id == 'llvm' }}
+      if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Linux' }}
       run: |
         sudo apt-get update
         sudo apt-get install -y flang-21 clang-21
-        flang-21 --version
-        clang-21 --version
-        echo "FC=flang-21" >> "$GITHUB_ENV"
-        echo "CC=clang-21" >> "$GITHUB_ENV"
+        sudo update-alternatives \
+          --install /usr/bin/flang flang /usr/bin/flang-21 100 \
+          --slave   /usr/bin/clang clang /usr/bin/clang-21 \
+          --slave   /usr/bin/clang++ clang++ /usr/bin/clang++-21
+        flang --version
+        clang --version
 
     - name: Install the Intel oneAPI compilers
-      if: ${{ matrix.toolchain.id == 'intel' }}
+      if: ${{ matrix.toolchain.FC == 'ifx' && runner.os == 'Linux' }}
       run: |
         # ifx and icx are not in the Ubuntu archive; Intel ships them from its
         # own APT repository.
@@ -235,11 +251,9 @@ jobs:
         source /opt/intel/oneapi/setvars.sh
         ifx --version
         icx --version
-        echo "FC=ifx" >> "$GITHUB_ENV"
-        echo "CC=icx" >> "$GITHUB_ENV"
 
     - name: Install the Arm Toolchain for Linux
-      if: ${{ matrix.toolchain.id == 'arm' }}
+      if: ${{ matrix.toolchain.FC == 'armflang' }}
       env:
         ARM_REPO: https://developer.arm.com/packages/arm-toolchains/ubuntu
       run: |
@@ -271,11 +285,9 @@ jobs:
 
         "${prefix}/bin/armflang" --version
         "${prefix}/bin/armclang" --version
-        echo "FC=armflang" >> "$GITHUB_ENV"
-        echo "CC=armclang" >> "$GITHUB_ENV"
 
     - name: Install flang (Windows)
-      if: ${{ matrix.toolchain.id == 'windows' }}
+      if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Windows' }}
       shell: cmd
       env:
         FLANG_VERSION: 22.1.8
@@ -288,11 +300,9 @@ jobs:
         echo INCLUDE=%CONDA%\Library\include>> %GITHUB_ENV%
 
         "%CONDA%\Library\bin\flang.exe" --version || exit /b 1
-        echo FC=flang>> %GITHUB_ENV%
-        echo CC=cl>> %GITHUB_ENV%
 
     - name: Install the Intel oneAPI compilers (Windows)
-      if: ${{ matrix.toolchain.id == 'windows-intel' }}
+      if: ${{ matrix.toolchain.FC == 'ifx' && runner.os == 'Windows' }}
       shell: cmd
       env:
         ONEAPI_VERSION: 2026.1.1
@@ -308,8 +318,6 @@ jobs:
 
         "%CONDA%\Library\bin\ifx.exe" --version || exit /b 1
         "%CONDA%\Library\bin\icx.exe" --version || exit /b 1
-        echo FC=ifx>> %GITHUB_ENV%
-        echo CC=icx>> %GITHUB_ENV%
 
     - name: Write the Windows toolchain setup script
       if: ${{ runner.os == 'Windows' }}
@@ -406,7 +414,7 @@ jobs:
       if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
-        name: test-results-${{ matrix.toolchain.id }}-${{ matrix.lib_type }}
+        name: test-results-${{ matrix.toolchain.FC }}-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
         path: |
           build/TESTING/testing_results.txt
           build/lapack_testing_junit.xml
