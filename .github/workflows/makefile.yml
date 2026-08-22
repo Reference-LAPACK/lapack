@@ -35,8 +35,6 @@ permissions:
   contents: read
 
 env:
-  CC: "gcc"
-  FC: "gfortran"
   CFLAGS: "-O3 -flto -Wall -pedantic-errors"
   FFLAGS: "-O2 -flto -Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -pedantic -fimplicit-none -frecursive -fopenmp -fcheck=all"
   LDFLAGS: ""
@@ -50,12 +48,22 @@ defaults:
 
 jobs:
   build-install:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.toolchain.os }}
+
+    env:
+      FC: ${{ matrix.toolchain.FC }}
+      CC: ${{ matrix.toolchain.CC }}
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-26, ubuntu-24.04, ubuntu-24.04-arm, windows-2025 ]
+        toolchain:
+        - FC: gfortran
+          CC: gcc
+          os: [ ubuntu-24.04, ubuntu-24.04-arm, windows-2025 ]
+        - FC: gfortran-14
+          CC: gcc-14
+          os: macos-26
 
     steps:
     - name: Checkout LAPACK
@@ -72,12 +80,6 @@ jobs:
         echo "TMGLIB = ${{github.workspace}}/libtmglib.a" >> make.inc
         echo "LAPACKELIB = ${{github.workspace}}/liblapacke.a" >> make.inc
         echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
-
-    - name: Alias for GCC compilers (macOS)
-      if: ${{ runner.os == 'macOS' }}
-      run: |
-        sudo ln -s $(which gcc-14) /usr/local/bin/gcc
-        sudo ln -s $(which gfortran-14) /usr/local/bin/gfortran
 
     - name: Build
       run: make -s -j2 all
