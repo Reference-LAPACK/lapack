@@ -9,13 +9,13 @@ on:
 jobs:
   build-linux-x64:
     name: blas / lapack -- Linux (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: "1.7"
           arch: x64
@@ -37,20 +37,20 @@ jobs:
         run: julia --color=no .github/julia/generate_binaries.jl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: blas_lapack_binaries.${{ github.ref_name }}.x86_64-linux-gnu-libgfortran5.tar.gz
           path: ./blas_lapack_binaries.${{ github.ref_name }}.x86_64-linux-gnu-libgfortran5.tar.gz
 
   build-linux-aarch64:
     name: blas / lapack -- Linux (aarch64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: "1.7"
           arch: x64
@@ -72,20 +72,20 @@ jobs:
         run: julia --color=no .github/julia/generate_binaries.jl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: blas_lapack_binaries.${{ github.ref_name }}.aarch64-linux-gnu-libgfortran5.tar.gz
           path: ./blas_lapack_binaries.${{ github.ref_name }}.aarch64-linux-gnu-libgfortran5.tar.gz
 
   build-windows-x64:
     name: blas / lapack -- Windows (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: "1.7"
           arch: x64
@@ -106,20 +106,20 @@ jobs:
         run: julia --color=no .github/julia/generate_binaries.jl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: blas_lapack_binaries.${{ github.ref_name }}.x86_64-w64-mingw32-libgfortran5.zip
           path: ./blas_lapack_binaries.${{ github.ref_name }}.x86_64-w64-mingw32-libgfortran5.zip
 
   build-mac-x64:
     name: blas / lapack -- macOS (x86_64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: "1.7"
           arch: x64
@@ -141,20 +141,20 @@ jobs:
         run: julia --color=no .github/julia/generate_binaries.jl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: blas_lapack_binaries.${{ github.ref_name }}.x86_64-apple-darwin-libgfortran5.tar.gz
           path: ./blas_lapack_binaries.${{ github.ref_name }}.x86_64-apple-darwin-libgfortran5.tar.gz
 
   build-mac-aarch64:
     name: blas / lapack -- macOS (aarch64) -- Release ${{ github.ref_name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: "1.7"
           arch: x64
@@ -176,7 +176,7 @@ jobs:
         run: julia --color=no .github/julia/generate_binaries.jl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: blas_lapack_binaries.${{ github.ref_name }}.aarch64-apple-darwin-libgfortran5.tar.gz
           path: ./blas_lapack_binaries.${{ github.ref_name }}.aarch64-apple-darwin-libgfortran5.tar.gz
@@ -184,13 +184,13 @@ jobs:
   release:
     name: Create Release and Upload Binaries
     needs: [build-windows-x64, build-linux-x64, build-linux-aarch64, build-mac-x64, build-mac-aarch64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout lapack
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: .
 

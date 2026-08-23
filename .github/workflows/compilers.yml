@@ -1,0 +1,460 @@
+name: Compilers
+
+# Build and test BLAS, CBLAS, LAPACK, and LAPACKE with a variety of compilers:
+# GFortran, NAG Fortran Compiler, LLVM Flang, Intel oneAPI compilers and the
+# Arm Toolchain for Linux.  Each of them is exercised against static and against
+# shared libraries, always in Release mode.
+#
+# The NAG Fortran Compiler is licence managed and its key is tied to the
+# platform it was issued for, so each of its configurations reads a repository
+# secret of its own: NAG_KUSARI_KEY_LINUX_X86_64, NAG_KUSARI_KEY_LINUX_ARM64
+# and NAG_KUSARI_KEY_MACOS_ARM64.  A configuration whose secret is not set is
+# skipped.
+
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - .github/workflows/compilers.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/compilers.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  default-test-install:
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+    runs-on: ${{ matrix.toolchain.os }}
+
+    env:
+      FC: ${{ matrix.toolchain.FC }}
+      CC: ${{ matrix.toolchain.CC }}
+      FFLAGS: ${{ matrix.toolchain.FFLAGS }}
+      CFLAGS: ${{ matrix.toolchain.CFLAGS }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        lib_type: [ static, shared ]
+        toolchain:
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran
+          CC: gcc
+          os: windows-2025
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran-14
+          CC: gcc-14
+          os: macos-26
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: flang
+          CC: clang
+          os: ubuntu-26.04
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic"
+        - FC: flang
+          CC: clang
+          os: ubuntu-26.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic"
+        - FC: nagfor
+          CC: gcc
+          os: ubuntu-26.04
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
+          nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
+          nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
+        - FC: ifx
+          CC: icx
+          os: ubuntu-24.04
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -warn nounused"
+        - FC: nagfor
+          CC: gcc
+          os: ubuntu-26.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
+          nag_url: https://support.nag.com/downloads/impl/npla872na_arm64linux.tgz
+          nag_secret: NAG_KUSARI_KEY_LINUX_ARM64
+        - FC: armflang
+          CC: armclang
+          os: ubuntu-24.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic"
+        - FC: nagfor
+          CC: gcc
+          name: mac_arm64 / nagfor + AppleClang
+          os: macos-26
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: ""
+          nag_url: https://support.nag.com/downloads/impl/npma872na_macarm64.dmg
+          nag_secret: NAG_KUSARI_KEY_MACOS_ARM64
+        - FC: flang
+          CC: cl
+          os: windows-2025-vs2026
+          CFLAGS: "/W3"
+          FFLAGS: "-Wall -pedantic"
+        - FC: ifx
+          CC: icx
+          os: windows-2025-vs2026
+          CFLAGS: "/W3"
+          FFLAGS: "/warn:nounused"
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install the NAG Fortran Compiler
+      if: ${{ matrix.toolchain.FC == 'nagfor' }}
+      env:
+        # The secrets context cannot be reached from the matrix, but it can be
+        # indexed with a name taken from it.  The guard keeps the index away
+        # from an undefined name for the non-NAG toolchains.
+        NAG_KUSARI_KEY: ${{ matrix.toolchain.nag_secret && secrets[matrix.toolchain.nag_secret] || '' }}
+        NAG_KUSARI_SECRET: ${{ matrix.toolchain.nag_secret }}
+        NAG_URL: ${{ matrix.toolchain.nag_url }}
+      run: |
+        # Repository secrets are not exposed to pull requests from forks, so
+        # the compiler cannot be licensed there.  Skip instead of failing the
+        # run of a contributor who cannot do anything about it.
+        if [ -z "${NAG_KUSARI_KEY}" ]; then
+          echo "::warning title=NAG Fortran Compiler skipped::" \
+            "The ${NAG_KUSARI_SECRET} secret is not available (pull requests" \
+            "from forks cannot read repository secrets), so the compiler" \
+            "cannot be licensed for this platform."
+          echo "SKIP_TOOLCHAIN=true" >> "$GITHUB_ENV"
+          exit 0
+        fi
+
+        # Kusari looks for the licence key in a file of its own; anywhere
+        # outside its handful of default locations has to be named explicitly
+        # through NAG_KUSARI_FILE.
+        key_file="${RUNNER_TEMP}/nag.key"
+        printf '%s\n' "${NAG_KUSARI_KEY}" > "${key_file}"
+        chmod 600 "${key_file}"
+        export NAG_KUSARI_FILE="${key_file}"
+        echo "NAG_KUSARI_FILE=${key_file}" >> "$GITHUB_ENV"
+
+        # Linux is shipped as a tarball, macOS as a disk image; both unpack to
+        # the same distribution layout.
+        case "${NAG_URL}" in
+          *.dmg)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.dmg" "${NAG_URL}"
+            dist="${RUNNER_TEMP}/nag-mount"
+            hdiutil attach "${RUNNER_TEMP}/nagfor.dmg" \
+              -nobrowse -readonly -mountpoint "${dist}"
+            ;;
+          *)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.tgz" "${NAG_URL}"
+            tar xzf "${RUNNER_TEMP}/nagfor.tgz" -C "${RUNNER_TEMP}"
+            # The directory carries the platform in its name
+            # (NAG_Fortran-amd64, NAG_Fortran-arm64linux, ...), so look it up
+            # rather than assuming one.
+            dist=$(find "${RUNNER_TEMP}" -maxdepth 1 -type d -name 'NAG_Fortran-*' \
+                     | head -n 1)
+            ;;
+        esac
+        if [ -z "${dist}" ] || [ ! -f "${dist}/INSTALLU.sh" ]; then
+          echo "::error::No NAG Fortran Compiler distribution found in ${RUNNER_TEMP}."
+          exit 1
+        fi
+
+        # INSTALLU.sh is the unattended installer.  It takes both target
+        # directories from the environment, they have to be absolute and they
+        # have to differ from each other.  /usr/local/lib/NAG_Fortran is the
+        # compiler's own default library directory on every platform here,
+        # which keeps the installed nagfor a plain binary rather than a -Qpath
+        # wrapper script.
+        cd "${dist}"
+        sudo env \
+          INSTALL_TO_BINDIR=/usr/local/bin \
+          INSTALL_TO_LIBDIR=/usr/local/lib/NAG_Fortran \
+          ./INSTALLU.sh
+
+        nagfor -version
+
+        # Confirm the key is usable rather than merely present.  -xlicinfo
+        # reports the licence status but exits with status 2 whether or not a
+        # licence was found, so it cannot be used as a bare command: what
+        # counts is its output, which reports a failure as a line starting
+        # with 'Error:'.
+        licence_info=$(nagfor -xlicinfo 2>&1) || true
+        printf '%s\n' "${licence_info}"
+        if printf '%s\n' "${licence_info}" | grep -q '^Error:'; then
+          echo "::error title=NAG Fortran Compiler licence invalid::" \
+            "nagfor found no usable licence in ${NAG_KUSARI_FILE}; check that" \
+            "the ${NAG_KUSARI_SECRET} secret holds a key for this platform."
+          exit 1
+        fi
+
+    - name: Install flang 21 and clang 21
+      if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Linux' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y flang-21 clang-21
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-21 100
+        sudo update-alternatives --install /usr/bin/flang flang /usr/bin/flang-21 100
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-21 100
+        flang --version
+        clang --version
+
+    - name: Install the Intel oneAPI compilers
+      if: ${{ matrix.toolchain.FC == 'ifx' && runner.os == 'Linux' }}
+      run: |
+        # ifx and icx are not in the Ubuntu archive; Intel ships them from its
+        # own APT repository.
+        curl -fsSL https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+          | gpg --dearmor \
+          | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+        echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg]" \
+             "https://apt.repos.intel.com/oneapi all main" \
+          | sudo tee /etc/apt/sources.list.d/oneAPI.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y \
+          intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp
+
+        # setvars.sh only changes the shell that sources it, and every step
+        # runs in a shell of its own, so announce it through TOOLCHAIN_SETUP
+        # and let the steps below source it themselves.
+        echo "TOOLCHAIN_SETUP=/opt/intel/oneapi/setvars.sh" >> "$GITHUB_ENV"
+
+        source /opt/intel/oneapi/setvars.sh
+        ifx --version
+        icx --version
+
+    - name: Install the Arm Toolchain for Linux
+      if: ${{ matrix.toolchain.FC == 'armflang' }}
+      env:
+        ARM_REPO: https://developer.arm.com/packages/arm-toolchains/ubuntu
+      run: |
+        # armclang and armflang come from Arm's own APT repository, whose
+        # configuration package carries both the sources list and the signing
+        # key.  Its version moves independently of the toolchain, so look the
+        # file up instead of pinning it.
+        deb=$(curl -fsSL "${ARM_REPO}/dists/noble/main/binary-arm64/Packages" \
+                | awk '/^Package: arm-toolchains-repository$/ { found = 1 }
+                       found && /^Filename:/ { print $2; exit }')
+        if [ -z "${deb}" ]; then
+          echo "::error::Could not find the arm-toolchains-repository package."
+          exit 1
+        fi
+        curl -fsSL -o "${RUNNER_TEMP}/arm-repo.deb" "${ARM_REPO}/${deb}"
+        sudo apt-get install -y "${RUNNER_TEMP}/arm-repo.deb"
+        sudo apt-get update
+        sudo apt-get install -y arm-toolchain-for-linux
+
+        # The package ships a modulefile generator rather than an environment
+        # script, so set up what that module would: its bin directory, plus
+        # the library paths the compilers and the built shared libraries need.
+        prefix=/opt/arm/arm-toolchain-for-linux
+        libs="${prefix}/lib:${prefix}/lib/aarch64-unknown-linux-gnu"
+        echo "${prefix}/bin" >> "$GITHUB_PATH"
+        echo "CPATH=${prefix}/include${CPATH:+:${CPATH}}" >> "$GITHUB_ENV"
+        echo "LIBRARY_PATH=${libs}${LIBRARY_PATH:+:${LIBRARY_PATH}}" >> "$GITHUB_ENV"
+        echo "LD_LIBRARY_PATH=${libs}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> "$GITHUB_ENV"
+
+        "${prefix}/bin/armflang" --version
+        "${prefix}/bin/armclang" --version
+
+    - name: Install flang (Windows)
+      if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Windows' }}
+      shell: cmd
+      env:
+        FLANG_VERSION: 22.1.8
+      run: |
+        call "%CONDA%\Scripts\conda.exe" install -y -q -c conda-forge ^
+          flang=%FLANG_VERSION% flang-rt_win-64=%FLANG_VERSION% || exit /b 1
+
+        echo %CONDA%\Library\bin>> %GITHUB_PATH%
+        echo LIB=%CONDA%\Library\lib>> %GITHUB_ENV%
+        echo INCLUDE=%CONDA%\Library\include>> %GITHUB_ENV%
+
+        "%CONDA%\Library\bin\flang.exe" --version || exit /b 1
+
+    - name: Install the Intel oneAPI compilers (Windows)
+      if: ${{ matrix.toolchain.FC == 'ifx' && runner.os == 'Windows' }}
+      shell: cmd
+      env:
+        ONEAPI_VERSION: 2026.1.1
+      run: |
+        call "%CONDA%\Scripts\conda.exe" install -y -q ^
+          -c https://software.repos.intel.com/python/conda/ ^
+          ifx_impl_win-64=%ONEAPI_VERSION% ^
+          dpcpp_impl_win-64=%ONEAPI_VERSION% || exit /b 1
+
+        echo ONEAPI_PATH=%CONDA%\Library\bin>> %GITHUB_ENV%
+        echo ONEAPI_LIB=%CONDA%\Library\lib;%CONDA%\compiler\lib>> %GITHUB_ENV%
+        echo ONEAPI_INCLUDE=%CONDA%\opt\compiler\include;%CONDA%\opt\compiler\include\intel64;%CONDA%\Library\include>> %GITHUB_ENV%
+
+        "%CONDA%\Library\bin\ifx.exe" --version || exit /b 1
+        "%CONDA%\Library\bin\icx.exe" --version || exit /b 1
+
+    - name: Write the Windows toolchain setup script
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+        for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Auxiliary\Build\vcvars64.bat`) do set "VCVARS=%%i"
+        if not defined VCVARS (
+          echo ::error::Could not locate vcvars64.bat via vswhere.
+          exit /b 1
+        )
+        echo Using %VCVARS%
+
+        set "SETUP=%RUNNER_TEMP%\toolchain.bat"
+        > "%SETUP%" echo @echo off
+        >>"%SETUP%" echo call "%VCVARS%" ^|^| exit /b 1
+        >>"%SETUP%" echo if defined ONEAPI_PATH set "PATH=%%ONEAPI_PATH%%;%%PATH%%"
+        >>"%SETUP%" echo if defined ONEAPI_LIB set "LIB=%%ONEAPI_LIB%%;%%LIB%%"
+        >>"%SETUP%" echo if defined ONEAPI_INCLUDE set "INCLUDE=%%ONEAPI_INCLUDE%%;%%INCLUDE%%"
+        type "%SETUP%"
+        echo TOOLCHAIN_SETUP=%SETUP%>> %GITHUB_ENV%
+
+    - name: Configure CMake
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+
+        extra=()
+        if [ "${RUNNER_OS}" = "macOS" ] && [ "${{ matrix.lib_type }}" = shared ]; then
+          # Symbol resolution in the test suite needs flat namespaces on macOS
+          extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
+        fi
+
+        cmake -B build -G Ninja \
+          -D CMAKE_BUILD_TYPE=Release \
+          -D CMAKE_Fortran_COMPILER="${FC}" \
+          -D CMAKE_C_COMPILER="${CC}" \
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/lapack_install \
+          -D CBLAS:BOOL=ON \
+          -D LAPACKE:BOOL=ON \
+          -D BUILD_TESTING:BOOL=ON \
+          -D LAPACKE_WITH_TMG:BOOL=ON \
+          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }} \
+          "${extra[@]}"
+
+    - name: Build
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        cmake --build build
+
+    - name: Test
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
+      working-directory: ${{ github.workspace }}/build
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
+
+    - name: Configure CMake (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        cmake -B build -G Ninja ^
+          -D CMAKE_BUILD_TYPE=Release ^
+          -D CMAKE_Fortran_COMPILER=%FC% ^
+          -D CMAKE_C_COMPILER=%CC% ^
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}\lapack_install ^
+          -D CBLAS:BOOL=ON ^
+          -D LAPACKE:BOOL=ON ^
+          -D BUILD_TESTING:BOOL=ON ^
+          -D LAPACKE_WITH_TMG:BOOL=ON ^
+          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        cmake --build build
+
+    - name: Test (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      working-directory: ${{ github.workspace }}\build
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
+
+    - name: Upload test results
+      id: upload-test-results
+      # Uploaded even when the tests failed; that is when the results are
+      # needed most.  The test summary below links to the artifact.
+      if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: test-results-${{ matrix.toolchain.FC }}-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Write test summary
+      if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        cmake --build build --target install -j2
+
+    - name: Install (Windows)
+      if: ${{ runner.os == 'Windows' }}
+      shell: cmd
+      run: |
+        call "%TOOLCHAIN_SETUP%" || exit /b 1
+        cmake --build build --target install -j2
