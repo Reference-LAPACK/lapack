@@ -66,6 +66,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 2 )
 *     ..
@@ -90,7 +92,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX
+      INTRINSIC          CMPLX, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -101,9 +103,9 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.D0 / DCMPLX( DBLE( I+J ), 0.D0 )
-            C( I, J ) = 1.D0 / DCMPLX( DBLE( I+J ), 0.D0 )
-            T( I, J ) = 1.D0 / DCMPLX( DBLE( I+J ), 0.D0 )
+            A( I, J ) = 1.D0 / CMPLX( DBLE( I+J ), 0.D0, KIND=DP )
+            C( I, J ) = 1.D0 / CMPLX( DBLE( I+J ), 0.D0, KIND=DP )
+            T( I, J ) = 1.D0 / CMPLX( DBLE( I+J ), 0.D0, KIND=DP )
          END DO
          W( J ) = 0.0
       END DO

@@ -168,6 +168,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NTYPE1, NTYPES
       PARAMETER          ( NTYPE1 = 9, NTYPES = 17 )
       INTEGER            NTESTS
@@ -212,7 +214,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -298,8 +300,8 @@
 *                 Form the inverse of A so we can get a good estimate
 *                 of RCONDC = 1/(norm(A) * norm(inv(A))).
 *
-                  CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ),
-     $                         DCMPLX( ONE ), AINV, LDA )
+                  CALL ZLASET( 'Full', N, N, CMPLX( ZERO, KIND=DP ),
+     $                         CMPLX( ONE, KIND=DP ), AINV, LDA )
                   IF( LSAME( UPLO, 'U' ) ) THEN
                      DO 20 J = 1, N
                         CALL ZTBSV( UPLO, 'No transpose', DIAG, J, KD,

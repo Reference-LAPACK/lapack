@@ -141,6 +141,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -157,7 +159,7 @@
       EXTERNAL           ZAXPY, ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -218,8 +220,8 @@
 *
             JUA = MIN( JU, KU )
             IF( JUA+JL+1.GT.0 )
-     $         CALL ZAXPY( JUA+JL+1, -DCMPLX( ONE ), A( KU+1-JUA, J ),
-     $                     1, WORK( JU+1-JUA ), 1 )
+     $         CALL ZAXPY( JUA+JL+1, -CMPLX( ONE, KIND=DP ),
+     $                     A( KU+1-JUA, J ), 1, WORK( JU+1-JUA ), 1 )
 *
 *           Compute the 1-norm of the column.
 *

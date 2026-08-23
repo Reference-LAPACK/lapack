@@ -178,6 +178,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
@@ -213,7 +215,7 @@
      $                   ZPBT02, ZPBT05, ZPBTRF, ZPBTRS, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -470,8 +472,9 @@
 *
 *                          Form the inverse of A.
 *
-                           CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ),
-     $                                  DCMPLX( ONE ), A, LDA )
+                           CALL ZLASET( 'Full', N, N,
+     $                                  CMPLX( ZERO, KIND=DP ),
+     $                                  CMPLX( ONE, KIND=DP ), A, LDA )
                            SRNAMT = 'ZPBTRS'
                            CALL ZPBTRS( UPLO, N, KD, N, AFAC, LDAB, A,
      $                                  LDA, INFO )
@@ -568,10 +571,13 @@
 *                       --- Test ZPBSVX ---
 *
                         IF( .NOT.PREFAC )
-     $                     CALL ZLASET( 'Full', KD+1, N, DCMPLX( ZERO ),
-     $                                  DCMPLX( ZERO ), AFAC, LDAB )
-                        CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
-     $                               DCMPLX( ZERO ), X, LDA )
+     $                     CALL ZLASET( 'Full', KD+1, N,
+     $                                  CMPLX( ZERO, KIND=DP ),
+     $                                  CMPLX( ZERO, KIND=DP ), AFAC,
+     $                                  LDAB )
+                        CALL ZLASET( 'Full', N, NRHS,
+     $                               CMPLX( ZERO, KIND=DP ),
+     $                               CMPLX( ZERO, KIND=DP ), X, LDA )
                         IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                          Equilibrate the matrix if FACT='F' and

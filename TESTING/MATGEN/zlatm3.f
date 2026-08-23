@@ -269,7 +269,7 @@
 *
 *     .. Intrinsic Functions ..
 *
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *
 *-----------------------------------------------------------------------
@@ -334,7 +334,7 @@
       ELSE IF( IGRADE.EQ.4 .AND. I.NE.J ) THEN
          CTEMP = CTEMP*DL( I ) / DL( J )
       ELSE IF( IGRADE.EQ.5 ) THEN
-         CTEMP = CTEMP*DL( I )*DCONJG( DL( J ) )
+         CTEMP = CTEMP*DL( I )*CONJG( DL( J ) )
       ELSE IF( IGRADE.EQ.6 ) THEN
          CTEMP = CTEMP*DL( I )*DL( J )
       END IF

@@ -190,6 +190,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   RONE, TWO, THREE
       PARAMETER          ( RONE = 1.0D+0, TWO = 2.0D+0, THREE = 3.0D+0 )
       COMPLEX*16         ZERO, ONE
@@ -204,7 +206,7 @@
       COMPLEX*16         WORK( 26 ), Z( 8, 8 )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CDABS, DBLE, DCMPLX, DCONJG, SQRT
+      INTRINSIC          ABS, CMPLX, CONJG, DBLE, SQRT
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGESVD, ZLACPY, ZLAKF2
@@ -218,7 +220,7 @@
          DO 10 J = 1, N
 *
             IF( I.EQ.J ) THEN
-               A( I, I ) = DCMPLX( I ) + ALPHA
+               A( I, I ) = CMPLX( I, KIND=DP ) + ALPHA
                B( I, I ) = ONE
             ELSE
                A( I, J ) = ZERO
@@ -228,22 +230,23 @@
    10    CONTINUE
    20 CONTINUE
       IF( TYPE.EQ.2 ) THEN
-         A( 1, 1 ) = DCMPLX( RONE, RONE )
-         A( 2, 2 ) = DCONJG( A( 1, 1 ) )
+         A( 1, 1 ) = CMPLX( RONE, RONE, KIND=DP )
+         A( 2, 2 ) = CONJG( A( 1, 1 ) )
          A( 3, 3 ) = ONE
-         A( 4, 4 ) = DCMPLX( DBLE( ONE+ALPHA ), DBLE( ONE+BETA ) )
-         A( 5, 5 ) = DCONJG( A( 4, 4 ) )
+         A( 4, 4 ) = CMPLX( DBLE( ONE+ALPHA ), DBLE( ONE+BETA ),
+     $                      KIND=DP )
+         A( 5, 5 ) = CONJG( A( 4, 4 ) )
       END IF
 *
 *     Form X and Y
 *
       CALL ZLACPY( 'F', N, N, B, LDA, Y, LDY )
-      Y( 3, 1 ) = -DCONJG( WY )
-      Y( 4, 1 ) = DCONJG( WY )
-      Y( 5, 1 ) = -DCONJG( WY )
-      Y( 3, 2 ) = -DCONJG( WY )
-      Y( 4, 2 ) = DCONJG( WY )
-      Y( 5, 2 ) = -DCONJG( WY )
+      Y( 3, 1 ) = -CONJG( WY )
+      Y( 4, 1 ) = CONJG( WY )
+      Y( 5, 1 ) = -CONJG( WY )
+      Y( 3, 2 ) = -CONJG( WY )
+      Y( 4, 2 ) = CONJG( WY )
+      Y( 5, 2 ) = -CONJG( WY )
 *
       CALL ZLACPY( 'F', N, N, B, LDA, X, LDX )
       X( 1, 3 ) = -WX
@@ -270,16 +273,16 @@
 *
 *     Compute condition numbers
 *
-      S( 1 ) = RONE / SQRT( ( RONE+THREE*CDABS( WY )*CDABS( WY ) ) /
-     $         ( RONE+CDABS( A( 1, 1 ) )*CDABS( A( 1, 1 ) ) ) )
-      S( 2 ) = RONE / SQRT( ( RONE+THREE*CDABS( WY )*CDABS( WY ) ) /
-     $         ( RONE+CDABS( A( 2, 2 ) )*CDABS( A( 2, 2 ) ) ) )
-      S( 3 ) = RONE / SQRT( ( RONE+TWO*CDABS( WX )*CDABS( WX ) ) /
-     $         ( RONE+CDABS( A( 3, 3 ) )*CDABS( A( 3, 3 ) ) ) )
-      S( 4 ) = RONE / SQRT( ( RONE+TWO*CDABS( WX )*CDABS( WX ) ) /
-     $         ( RONE+CDABS( A( 4, 4 ) )*CDABS( A( 4, 4 ) ) ) )
-      S( 5 ) = RONE / SQRT( ( RONE+TWO*CDABS( WX )*CDABS( WX ) ) /
-     $         ( RONE+CDABS( A( 5, 5 ) )*CDABS( A( 5, 5 ) ) ) )
+      S( 1 ) = RONE / SQRT( ( RONE+THREE*ABS( WY )*ABS( WY ) ) /
+     $         ( RONE+ABS( A( 1, 1 ) )*ABS( A( 1, 1 ) ) ) )
+      S( 2 ) = RONE / SQRT( ( RONE+THREE*ABS( WY )*ABS( WY ) ) /
+     $         ( RONE+ABS( A( 2, 2 ) )*ABS( A( 2, 2 ) ) ) )
+      S( 3 ) = RONE / SQRT( ( RONE+TWO*ABS( WX )*ABS( WX ) ) /
+     $         ( RONE+ABS( A( 3, 3 ) )*ABS( A( 3, 3 ) ) ) )
+      S( 4 ) = RONE / SQRT( ( RONE+TWO*ABS( WX )*ABS( WX ) ) /
+     $         ( RONE+ABS( A( 4, 4 ) )*ABS( A( 4, 4 ) ) ) )
+      S( 5 ) = RONE / SQRT( ( RONE+TWO*ABS( WX )*ABS( WX ) ) /
+     $         ( RONE+ABS( A( 5, 5 ) )*ABS( A( 5, 5 ) ) ) )
 *
       CALL ZLAKF2( 1, 4, A, LDA, A( 2, 2 ), B, B( 2, 2 ), Z, 8 )
       CALL ZGESVD( 'N', 'N', 8, 8, Z, 8, RWORK, WORK, 1, WORK( 2 ), 1,

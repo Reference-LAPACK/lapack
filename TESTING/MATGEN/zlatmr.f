@@ -540,7 +540,7 @@
       EXTERNAL           XERBLA, ZDSCAL, ZLATM1
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, MOD
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN, MOD
 *     ..
 *     .. Executable Statements ..
 *
@@ -872,7 +872,7 @@
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      A( ISUB, JSUB ) = CTEMP
-                     A( JSUB, ISUB ) = DCONJG( CTEMP )
+                     A( JSUB, ISUB ) = CONJG( CTEMP )
   100             CONTINUE
   110          CONTINUE
             ELSE IF( ISYM.EQ.1 ) THEN
@@ -907,7 +907,7 @@
                   MNSUB = MIN( ISUB, JSUB )
                   MXSUB = MAX( ISUB, JSUB )
                   IF( MXSUB.EQ.ISUB .AND. ISYM.EQ.0 ) THEN
-                     A( MNSUB, MXSUB ) = DCONJG( CTEMP )
+                     A( MNSUB, MXSUB ) = CONJG( CTEMP )
                   ELSE
                      A( MNSUB, MXSUB ) = CTEMP
                   END IF
@@ -927,7 +927,7 @@
                   MNSUB = MIN( ISUB, JSUB )
                   MXSUB = MAX( ISUB, JSUB )
                   IF( MXSUB.EQ.JSUB .AND. ISYM.EQ.0 ) THEN
-                     A( MXSUB, MNSUB ) = DCONJG( CTEMP )
+                     A( MXSUB, MNSUB ) = CONJG( CTEMP )
                   ELSE
                      A( MXSUB, MNSUB ) = CTEMP
                   END IF
@@ -958,7 +958,7 @@
                   IISUB = K - LDA*( JJSUB-1 )
 *
                   IF( MXSUB.EQ.ISUB .AND. ISYM.EQ.0 ) THEN
-                     A( IISUB, JJSUB ) = DCONJG( CTEMP )
+                     A( IISUB, JJSUB ) = CONJG( CTEMP )
                   ELSE
                      A( IISUB, JJSUB ) = CTEMP
                   END IF
@@ -991,7 +991,7 @@
                   IISUB = K - LDA*( JJSUB-1 )
 *
                   IF( MXSUB.EQ.JSUB .AND. ISYM.EQ.0 ) THEN
-                     A( IISUB, JJSUB ) = DCONJG( CTEMP )
+                     A( IISUB, JJSUB ) = CONJG( CTEMP )
                   ELSE
                      A( IISUB, JJSUB ) = CTEMP
                   END IF
@@ -1011,7 +1011,7 @@
                      MNSUB = MIN( ISUB, JSUB )
                      MXSUB = MAX( ISUB, JSUB )
                      IF( MXSUB.EQ.JSUB .AND. ISYM.EQ.0 ) THEN
-                        A( MXSUB-MNSUB+1, MNSUB ) = DCONJG( CTEMP )
+                        A( MXSUB-MNSUB+1, MNSUB ) = CONJG( CTEMP )
                      ELSE
                         A( MXSUB-MNSUB+1, MNSUB ) = CTEMP
                      END IF
@@ -1030,7 +1030,7 @@
                   MNSUB = MIN( ISUB, JSUB )
                   MXSUB = MAX( ISUB, JSUB )
                   IF( MXSUB.EQ.ISUB .AND. ISYM.EQ.0 ) THEN
-                     A( MNSUB-MXSUB+KUU+1, MXSUB ) = DCONJG( CTEMP )
+                     A( MNSUB-MXSUB+KUU+1, MXSUB ) = CONJG( CTEMP )
                   ELSE
                      A( MNSUB-MXSUB+KUU+1, MXSUB ) = CTEMP
                   END IF
@@ -1050,14 +1050,14 @@
                      IF( I.LT.1 )
      $                  A( J-I+1+KUU, I+N ) = CZERO
                      IF( MXSUB.EQ.ISUB .AND. ISYM.EQ.0 ) THEN
-                        A( MNSUB-MXSUB+KUU+1, MXSUB ) = DCONJG( CTEMP )
+                        A( MNSUB-MXSUB+KUU+1, MXSUB ) = CONJG( CTEMP )
                      ELSE
                         A( MNSUB-MXSUB+KUU+1, MXSUB ) = CTEMP
                      END IF
                      IF( I.GE.1 .AND. MNSUB.NE.MXSUB ) THEN
                         IF( MNSUB.EQ.ISUB .AND. ISYM.EQ.0 ) THEN
                            A( MXSUB-MNSUB+1+KUU,
-     $                        MNSUB ) = DCONJG( CTEMP )
+     $                        MNSUB ) = CONJG( CTEMP )
                         ELSE
                            A( MXSUB-MNSUB+1+KUU, MNSUB ) = CTEMP
                         END IF
@@ -1088,7 +1088,7 @@
                      A( I, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
-                     A( J, I ) = DCONJG( A( I, J ) )
+                     A( J, I ) = CONJG( A( I, J ) )
   320             CONTINUE
   330          CONTINUE
             ELSE IF( ISYM.EQ.1 ) THEN
@@ -1127,7 +1127,7 @@
             DO 410 J = 1, N
                DO 400 I = 1, J
                   IF( ISYM.EQ.0 ) THEN
-                     A( J, I ) = DCONJG( ZLATM2( M, N, I, J, KL, KU,
+                     A( J, I ) = CONJG( ZLATM2( M, N, I, J, KL, KU,
      $                           IDIST, ISEED, D, IGRADE, DL, DR,
      $                           IPVTNG, IWORK, SPARSE ) )
                   ELSE
@@ -1182,7 +1182,7 @@
      $                                 IDIST, ISEED, D, IGRADE, DL, DR,
      $                                 IPVTNG, IWORK, SPARSE )
                      IF( ISYM.EQ.0 )
-     $                  A( ISUB, JSUB ) = DCONJG( A( ISUB, JSUB ) )
+     $                  A( ISUB, JSUB ) = CONJG( A( ISUB, JSUB ) )
   440             CONTINUE
   450          CONTINUE
             ELSE
@@ -1210,7 +1210,7 @@
                      A( J-I+1, I+N ) = CZERO
                   ELSE
                      IF( ISYM.EQ.0 ) THEN
-                        A( J-I+1, I ) = DCONJG( ZLATM2( M, N, I, J,
+                        A( J-I+1, I ) = CONJG( ZLATM2( M, N, I, J,
      $                                  KL,
      $                                  KU, IDIST, ISEED, D, IGRADE, DL,
      $                                  DR, IPVTNG, IWORK, SPARSE ) )
@@ -1246,7 +1246,7 @@
      $                  A( J-I+1+KUU, I+N ) = CZERO
                      IF( I.GE.1 .AND. I.NE.J ) THEN
                         IF( ISYM.EQ.0 ) THEN
-                           A( J-I+1+KUU, I ) = DCONJG( A( I-J+KUU+1,
+                           A( J-I+1+KUU, I ) = CONJG( A( I-J+KUU+1,
      $                                         J ) )
                         ELSE
                            A( J-I+1+KUU, I ) = A( I-J+KUU+1, J )

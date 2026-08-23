@@ -349,6 +349,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
       DOUBLE PRECISION   ONE
@@ -380,7 +382,7 @@
      $                   ZLAROT, ZLARTG, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, COS, DBLE, DCMPLX, DCONJG, MAX, MIN, MOD,
+      INTRINSIC          ABS, CMPLX, CONJG, COS, DBLE, MAX, MIN, MOD,
      $                   SIN
 *     ..
 *     .. Executable Statements ..
@@ -608,7 +610,7 @@
 *
       IF( LLB.EQ.0 .AND. UUB.EQ.0 ) THEN
          DO 30 J = 1, MNMIN
-            A( ( 1-ISKEW )*J+IOFFST, J ) = DCMPLX( D( J ) )
+            A( ( 1-ISKEW )*J+IOFFST, J ) = CMPLX( D( J ), KIND=DP )
    30    CONTINUE
 *
          IF( IPACK.LE.2 .OR. IPACK.GE.5 )
@@ -630,7 +632,7 @@
             END IF
 *
             DO 40 J = 1, MNMIN
-               A( ( 1-ISKEW )*J+IOFFST, J ) = DCMPLX( D( J ) )
+               A( ( 1-ISKEW )*J+IOFFST, J ) = CMPLX( D( J ), KIND=DP )
    40       CONTINUE
 *
             IF( TOPDWN ) THEN
@@ -665,8 +667,8 @@
                            CALL ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), EXTRA, REALC, S, DUMMY )
                            DUMMY = ZLARND( 5, ISEED )
-                           C = DCONJG( REALC*DUMMY )
-                           S = DCONJG( -S*DUMMY )
+                           C = CONJG( REALC*DUMMY )
+                           S = CONJG( -S*DUMMY )
                         END IF
                         IROW = MAX( 1, JCH-JKU )
                         IL = IR + 2 - IROW
@@ -680,8 +682,8 @@
                            CALL ZLARTG( A( IROW+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), CTEMP, REALC, S, DUMMY )
                            DUMMY = ZLARND( 5, ISEED )
-                           C = DCONJG( REALC*DUMMY )
-                           S = DCONJG( -S*DUMMY )
+                           C = CONJG( REALC*DUMMY )
+                           S = CONJG( -S*DUMMY )
 *
                            ICOL = MAX( 1, JCH-JKU-JKL )
                            IL = IC + 2 - ICOL
@@ -726,8 +728,8 @@
                            CALL ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), EXTRA, REALC, S, DUMMY )
                            DUMMY = ZLARND( 5, ISEED )
-                           C = DCONJG( REALC*DUMMY )
-                           S = DCONJG( -S*DUMMY )
+                           C = CONJG( REALC*DUMMY )
+                           S = CONJG( -S*DUMMY )
                         END IF
                         ICOL = MAX( 1, JCH-JKL )
                         IL = IC + 2 - ICOL
@@ -742,8 +744,8 @@
      $                                  ICOL+1 ), CTEMP, REALC, S,
      $                                  DUMMY )
                            DUMMY = ZLARND( 5, ISEED )
-                           C = DCONJG( REALC*DUMMY )
-                           S = DCONJG( -S*DUMMY )
+                           C = CONJG( REALC*DUMMY )
+                           S = CONJG( -S*DUMMY )
                            IROW = MAX( 1, JCH-JKL-JKU )
                            IL = IR + 2 - IROW
                            EXTRA = CZERO
@@ -907,7 +909,7 @@
                END IF
 *
                DO 170 J = 1, MNMIN
-                  A( ( 1-ISKEW )*J+IOFFG, J ) = DCMPLX( D( J ) )
+                  A( ( 1-ISKEW )*J+IOFFG, J ) = CMPLX( D( J ), KIND=DP )
   170          CONTINUE
 *
                DO 200 K = 1, UUB
@@ -923,9 +925,9 @@
                         CT = C
                         ST = S
                      ELSE
-                        CTEMP = DCONJG( CTEMP )
-                        CT = DCONJG( C )
-                        ST = DCONJG( S )
+                        CTEMP = CONJG( CTEMP )
+                        CT = CONJG( C )
+                        ST = CONJG( S )
                      END IF
                      CALL ZLAROT( .FALSE., JC.GT.K, .TRUE., IL, C, S,
      $                            A( IROW-ISKEW*JC+IOFFG, JC ), ILDA,
@@ -942,16 +944,16 @@
                         CALL ZLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
      $                               ICOL+1 ), EXTRA, REALC, S, DUMMY )
                         DUMMY = ZLARND( 5, ISEED )
-                        C = DCONJG( REALC*DUMMY )
-                        S = DCONJG( -S*DUMMY )
+                        C = CONJG( REALC*DUMMY )
+                        S = CONJG( -S*DUMMY )
                         CTEMP = A( JCH-ISKEW*( JCH+1 )+IOFFG, JCH+1 )
                         IF( ZSYM ) THEN
                            CT = C
                            ST = S
                         ELSE
-                           CTEMP = DCONJG( CTEMP )
-                           CT = DCONJG( C )
-                           ST = DCONJG( S )
+                           CTEMP = CONJG( CTEMP )
+                           CT = CONJG( C )
+                           ST = CONJG( S )
                         END IF
                         CALL ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C,
      $                               S,
@@ -981,7 +983,7 @@
   210                   CONTINUE
                      ELSE
                         DO 220 JR = JC, MIN( N, JC+UUB )
-                           A( JR+IROW, JC ) = DCONJG( A( JC-ISKEW*JR+
+                           A( JR+IROW, JC ) = CONJG( A( JC-ISKEW*JR+
      $                                        IOFFG, JR ) )
   220                   CONTINUE
                      END IF
@@ -1012,7 +1014,7 @@
                END IF
 *
                DO 260 J = 1, MNMIN
-                  A( ( 1-ISKEW )*J+IOFFG, J ) = DCMPLX( D( J ) )
+                  A( ( 1-ISKEW )*J+IOFFG, J ) = CMPLX( D( J ), KIND=DP )
   260          CONTINUE
 *
                DO 290 K = 1, UUB
@@ -1027,9 +1029,9 @@
                         CT = C
                         ST = S
                      ELSE
-                        CTEMP = DCONJG( CTEMP )
-                        CT = DCONJG( C )
-                        ST = DCONJG( S )
+                        CTEMP = CONJG( CTEMP )
+                        CT = CONJG( C )
+                        ST = CONJG( S )
                      END IF
                      CALL ZLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, C,
      $                            S,
@@ -1054,9 +1056,9 @@
                            CT = C
                            ST = S
                         ELSE
-                           CTEMP = DCONJG( CTEMP )
-                           CT = DCONJG( C )
-                           ST = DCONJG( S )
+                           CTEMP = CONJG( CTEMP )
+                           CT = CONJG( C )
+                           ST = CONJG( S )
                         END IF
                         CALL ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C,
      $                               S,
@@ -1084,7 +1086,7 @@
   300                   CONTINUE
                      ELSE
                         DO 310 JR = JC, MAX( 1, JC-UUB ), -1
-                           A( JR+IROW, JC ) = DCONJG( A( JC-ISKEW*JR+
+                           A( JR+IROW, JC ) = CONJG( A( JC-ISKEW*JR+
      $                                        IOFFG, JR ) )
   310                   CONTINUE
                      END IF
@@ -1109,7 +1111,8 @@
             IF( .NOT.ZSYM ) THEN
                DO 350 JC = 1, N
                   IROW = IOFFST + ( 1-ISKEW )*JC
-                  A( IROW, JC ) = DCMPLX( DBLE( A( IROW, JC ) ) )
+                  A( IROW, JC ) = CMPLX( DBLE( A( IROW, JC ) ),
+     $                          KIND=DP )
   350          CONTINUE
             END IF
 *

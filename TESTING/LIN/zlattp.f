@@ -147,6 +147,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, TWO, ZERO
       PARAMETER          ( ONE = 1.0D+0, TWO = 2.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -173,7 +175,7 @@
      $                   ZROTG
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, MAX, SQRT
+      INTRINSIC          ABS, CMPLX, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -407,7 +409,7 @@
                   JX = JCNEXT + J
                   DO 140 I = J + 2, N
                      CTEMP = C*AP( JX+J ) + S*AP( JX+J+1 )
-                     AP( JX+J+1 ) = -DCONJG( S )*AP( JX+J ) +
+                     AP( JX+J+1 ) = -CONJG( S )*AP( JX+J ) +
      $                              C*AP( JX+J+1 )
                      AP( JX+J ) = CTEMP
                      JX = JX + I
@@ -431,7 +433,7 @@
                RA = AP( JC+1 )
                RB = TWO
                CALL ZROTG( RA, RB, C, S )
-               S = DCONJG( S )
+               S = CONJG( S )
 *
 *              Multiply by [ c -s;  conjg(s) c] on the right.
 *
@@ -445,7 +447,7 @@
                   JX = 1
                   DO 160 I = 1, J - 1
                      CTEMP = -C*AP( JX+J-I ) + S*AP( JX+J-I+1 )
-                     AP( JX+J-I+1 ) = -DCONJG( S )*AP( JX+J-I ) -
+                     AP( JX+J-I+1 ) = -CONJG( S )*AP( JX+J-I ) -
      $                                C*AP( JX+J-I+1 )
                      AP( JX+J-I ) = CTEMP
                      JX = JX + N - I + 1
@@ -621,11 +623,11 @@
                   AP( JC+I-1 ) = ZERO
   300          CONTINUE
                IF( J.GT.1 )
-     $            AP( JC+J-2 ) = DCMPLX( -ONE, -ONE )
+     $            AP( JC+J-2 ) = CMPLX( -ONE, -ONE, KIND=DP )
                AP( JC+J-1 ) = TSCAL*ZLARND( 5, ISEED )
                JC = JC + J
   310       CONTINUE
-            B( N ) = DCMPLX( ONE, ONE )
+            B( N ) = CMPLX( ONE, ONE, KIND=DP )
          ELSE
             JC = 1
             DO 330 J = 1, N
@@ -633,11 +635,11 @@
                   AP( JC+I-J ) = ZERO
   320          CONTINUE
                IF( J.LT.N )
-     $            AP( JC+1 ) = DCMPLX( -ONE, -ONE )
+     $            AP( JC+1 ) = CMPLX( -ONE, -ONE, KIND=DP )
                AP( JC ) = TSCAL*ZLARND( 5, ISEED )
                JC = JC + N - J + 1
   330       CONTINUE
-            B( 1 ) = DCMPLX( ONE, ONE )
+            B( 1 ) = CMPLX( ONE, ONE, KIND=DP )
          END IF
 *
       ELSE IF( IMAT.EQ.16 ) THEN

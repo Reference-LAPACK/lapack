@@ -154,6 +154,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, TWO, ZERO
       PARAMETER          ( ONE = 1.0D+0, TWO = 2.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -179,7 +181,7 @@
      $                   ZLATMS, ZROT, ZROTG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, MAX, SQRT
+      INTRINSIC          ABS, CMPLX, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -401,7 +403,7 @@
                RA = A( J+1, J )
                RB = 2.0D0
                CALL ZROTG( RA, RB, C, S )
-               S = DCONJG( S )
+               S = CONJG( S )
 *
 *              Multiply by [ c -s;  conjg(s) c] on the right.
 *
@@ -569,20 +571,20 @@
                   A( I, J ) = 0.D0
   260          CONTINUE
                IF( J.GT.1 )
-     $            A( J-1, J ) = DCMPLX( -ONE, -ONE )
+     $            A( J-1, J ) = CMPLX( -ONE, -ONE, KIND=DP )
                A( J, J ) = TSCAL*ZLARND( 5, ISEED )
   270       CONTINUE
-            B( N ) = DCMPLX( ONE, ONE )
+            B( N ) = CMPLX( ONE, ONE, KIND=DP )
          ELSE
             DO 290 J = 1, N
                DO 280 I = J + 2, N
                   A( I, J ) = 0.D0
   280          CONTINUE
                IF( J.LT.N )
-     $            A( J+1, J ) = DCMPLX( -ONE, -ONE )
+     $            A( J+1, J ) = CMPLX( -ONE, -ONE, KIND=DP )
                A( J, J ) = TSCAL*ZLARND( 5, ISEED )
   290       CONTINUE
-            B( 1 ) = DCMPLX( ONE, ONE )
+            B( 1 ) = CMPLX( ONE, ONE, KIND=DP )
          END IF
 *
       ELSE IF( IMAT.EQ.16 ) THEN

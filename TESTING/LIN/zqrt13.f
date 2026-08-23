@@ -106,6 +106,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D0 )
 *     ..
@@ -121,7 +123,7 @@
       EXTERNAL           ZLARNV, ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, SIGN
+      INTRINSIC          CMPLX, DBLE, SIGN
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUMMY( 1 )
@@ -136,8 +138,8 @@
       DO 10 J = 1, N
          CALL ZLARNV( 2, ISEED, M, A( 1, J ) )
          IF( J.LE.M ) THEN
-            A( J, J ) = A( J, J ) + DCMPLX( SIGN( DZASUM( M, A( 1, J ),
-     $                  1 ), DBLE( A( J, J ) ) ) )
+            A( J, J ) = A( J, J ) + CMPLX( SIGN( DZASUM( M, A( 1, J ),
+     $                  1 ), DBLE( A( J, J ) ) ), KIND=DP )
          END IF
    10 CONTINUE
 *
