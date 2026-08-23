@@ -337,3 +337,29 @@ endif()
 if(BUILD_COMPLEX AND BUILD_COMPLEX16)
   add_lin_executable(xlintstzc SOURCES ${ZCLINTST})
 endif()
+
+# Source lists for the LIN tests LAPACKE/testing rebuilds with the routine
+# calls routed through LAPACKE, one per precision. The paths must be
+# absolute: generate_suffixed_sources resolves relative source names against
+# the directory that calls it. A list is empty when that precision cannot be
+# built, which is how LAPACKE/testing decides what to build.
+foreach(_spec
+    "S;SINGLE;SLINTST;SCLNTST;SLINTST_NO_XBLAS"
+    "D;DOUBLE;DLINTST;DZLNTST;DLINTST_NO_XBLAS"
+    "C;COMPLEX;CLINTST;SCLNTST;CLINTST_NO_XBLAS"
+    "Z;COMPLEX16;ZLINTST;DZLNTST;ZLINTST_NO_XBLAS")
+  list(GET _spec 0 _prec)
+  list(GET _spec 1 _build)
+  list(GET _spec 2 _lin)
+  list(GET _spec 3 _aux)
+  list(GET _spec 4 _no_xblas)
+
+  set(_sources)
+  if(LAPACKE AND BUILD_${_build} AND LAPACKE_BUILD_${_build})
+    foreach(_source IN LISTS ALINTST ${_lin} ${_aux} ${_no_xblas})
+      list(APPEND _sources "${CMAKE_CURRENT_SOURCE_DIR}/${_source}")
+    endforeach()
+  endif()
+  set(LAPACKE_TEST_LIN_${_prec}_SOURCES "${_sources}" CACHE INTERNAL
+    "LIN test sources rerouted through LAPACKE (${_prec}, absolute paths)")
+endforeach()

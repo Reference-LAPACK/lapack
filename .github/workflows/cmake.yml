@@ -105,7 +105,7 @@ jobs:
     - name: Build
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: cmake --build build
+      run: cmake --build build --parallel
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
@@ -148,7 +148,7 @@ jobs:
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
   test-extended-api-only:
     runs-on: ubuntu-latest
@@ -183,7 +183,7 @@ jobs:
         -D LAPACKE_WITH_TMG:BOOL=ON
 
     - name: Build
-      run: cmake --build build --config ${{env.BUILD_TYPE}}
+      run: cmake --build build --config ${{env.BUILD_TYPE}} --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
@@ -252,7 +252,7 @@ jobs:
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
@@ -350,7 +350,7 @@ jobs:
     - name: Install
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
   memory-check:
 
@@ -389,7 +389,7 @@ jobs:
     - name: Build
       # Since we use a single configuration generator, Ninja, there is no need to provide
       # the '--config ${{env.BUILD_TYPE}}' option for the build step in the 'cmake --build' command.
-      run: cmake --build build
+      run: cmake --build build --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build

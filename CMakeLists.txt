@@ -347,10 +347,6 @@ else()
   add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
 
-if(BUILD_TESTING)
-  add_subdirectory(TESTING)
-endif()
-
 # --------------------------------------------------
 # LAPACKE
 option(LAPACKE "Build LAPACKE" OFF)
@@ -360,6 +356,15 @@ option(LAPACKE "Build LAPACKE" OFF)
 option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if(LAPACKE_WITH_TMG)
   set(LAPACKE ON)
+endif()
+
+option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON)
+option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
+option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
+option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
+
+if(BUILD_TESTING)
+  add_subdirectory(TESTING)
 endif()
 
 # TMGLIB
@@ -385,9 +390,6 @@ endif()
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
 unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 
-
-#-------------------------------------
-# LAPACKE
 # Include lapack.h and lapacke_mangling.h even if LAPACKE is not built
 add_subdirectory(LAPACKE/include)
 
@@ -395,6 +397,43 @@ if(LAPACKE)
   add_subdirectory(LAPACKE)
 endif()
 
+#-------------------------------------
+# Test summary
+#
+# The summary parses the .out files the LAPACK, LAPACKE, BLAS and CBLAS
+# drivers leave behind, so it has to run after all of them. set_property(TEST)
+# only reaches tests added in the calling directory, hence the top level.
+if(BUILD_TESTING AND Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
+  message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt and lapack_testing_junit.xml)")
+
+  # Every test registered anywhere below the source root, so that adding a
+  # test directory never needs a matching edit here. Collected before the
+  # summary itself is added, so that it does not depend on itself.
+  function(_collect_tests dir out)
+    get_property(_tests DIRECTORY "${dir}" PROPERTY TESTS)
+    get_property(_subdirs DIRECTORY "${dir}" PROPERTY SUBDIRECTORIES)
+    foreach(_subdir IN LISTS _subdirs)
+      _collect_tests("${_subdir}" _subdir_tests)
+      list(APPEND _tests ${_subdir_tests})
+    endforeach()
+    set(${out} "${_tests}" PARENT_SCOPE)
+  endfunction()
+
+  _collect_tests("${LAPACK_SOURCE_DIR}" _all_tests)
+
+  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
+  add_test(
+    NAME LAPACK_Test_Summary
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
+    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
+      "--fail-if-empty" "--fail-on-unrecognized" "--merge-apis"
+      "--junit-xml" "lapack_testing_junit.xml"
+    )
+
+  if(_all_tests)
+    set_property(TEST LAPACK_Test_Summary APPEND PROPERTY DEPENDS ${_all_tests})
+  endif()
+endif()
 
 #-------------------------------------
 # BLAS++ / LAPACK++
