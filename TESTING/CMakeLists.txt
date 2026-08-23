@@ -33,12 +33,9 @@ function(_add_lapack_test output input target)
   string(REPLACE "." "_" input_name ${input})
   set(testName "${target}_${input_name}")
   if(EXISTS "${TEST_INPUT}")
-    add_test(NAME LAPACK-${testName} COMMAND "${CMAKE_COMMAND}"
-      -DTEST=$<TARGET_FILE:${target}>
-      -DINPUT=${TEST_INPUT}
-      -DOUTPUT=${TEST_OUTPUT}
-      -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    lapack_runtest_command(test_command ${target}
+      INPUT "${TEST_INPUT}" OUTPUT "${TEST_OUTPUT}")
+    add_test(NAME LAPACK-${testName} COMMAND ${test_command})
 
     if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
       set_property(

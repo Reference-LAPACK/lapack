@@ -384,7 +384,7 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
-        -D LAPACK_TESTING_USE_PYTHON:BOOL=OFF
+        -D LAPACK_MEMORY_CHECK:BOOL=ON
 
     - name: Build
       # Since we use a single configuration generator, Ninja, there is no need to provide

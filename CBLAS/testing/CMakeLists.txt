@@ -11,18 +11,12 @@ function(add_cblas_ctest output input target)
   set(testName "${target}")
 
   if(DEFINED TEST_INPUT AND EXISTS "${TEST_INPUT}")
-    add_test(NAME CBLAS-${testName} COMMAND "${CMAKE_COMMAND}"
-      -DTEST=$<TARGET_FILE:${target}>
-      -DINPUT=${TEST_INPUT}
-      -DOUTPUT=${TEST_OUTPUT}
-      -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    lapack_runtest_command(test_command ${target}
+      INPUT "${TEST_INPUT}" OUTPUT "${TEST_OUTPUT}")
+    add_test(NAME CBLAS-${testName} COMMAND ${test_command})
   else()
-    add_test(NAME CBLAS-${testName} COMMAND "${CMAKE_COMMAND}"
-      -DTEST=$<TARGET_FILE:${target}>
-      -DOUTPUT=${TEST_OUTPUT}
-      -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    lapack_runtest_command(test_command ${target} OUTPUT "${TEST_OUTPUT}")
+    add_test(NAME CBLAS-${testName} COMMAND ${test_command})
   endif()
 endfunction()
 
