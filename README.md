@@ -1,7 +1,8 @@
 # LAPACK
 
 [![Build Status](https://travis-ci.org/Reference-LAPACK/lapack.svg?branch=master)](https://travis-ci.org/Reference-LAPACK/lapack)
-![CMake](https://github.com/Reference-LAPACK/lapack/actions/workflows/cmake.yml/badge.svg)
+![Compilers](https://github.com/Reference-LAPACK/lapack/actions/workflows/compilers.yml/badge.svg)
+![Special Build Configurations](https://github.com/Reference-LAPACK/lapack/actions/workflows/special.yml/badge.svg)
 ![Makefile](https://github.com/Reference-LAPACK/lapack/actions/workflows/makefile.yml/badge.svg)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/bh38iin398msrbtr?svg=true)](https://ci.appveyor.com/project/langou/lapack/)
 [![BLAS coverage](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg?component=blas)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=blas)

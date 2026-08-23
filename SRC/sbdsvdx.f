@@ -100,17 +100,19 @@
 *>          The order of the bidiagonal matrix.  N >= 0.
 *> \endverbatim
 *>
-*> \param[in] D
+*> \param[in,out] D
 *> \verbatim
 *>          D is REAL array, dimension (N)
 *>          The n diagonal elements of the bidiagonal matrix B.
+*>          On exit, very small entries are set to 0.
 *> \endverbatim
 *>
-*> \param[in] E
+*> \param[in,out] E
 *> \verbatim
 *>          E is REAL array, dimension (max(1,N-1))
 *>          The (n-1) superdiagonal elements of the bidiagonal matrix
 *>          B in elements 1 to N-1.
+*>          On exit, very small entries are set to 0.
 *> \endverbatim
 *>
 *> \param[in] VL

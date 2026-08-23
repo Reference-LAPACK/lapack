@@ -33,7 +33,7 @@ parsers:
 flags:
   # The four components are uploaded separately, each from the build
   # directory that holds its gcov reports; see the coverage job of
-  # .github/workflows/cmake.yml.  Their coverage is therefore already
+  # .github/workflows/special.yml.  Their coverage is therefore already
   # separated at upload time and needs no path filtering here.
   blas:
     carryforward: true
