@@ -6,6 +6,9 @@ on:
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v2023.11.15
 
+permissions:
+  contents: read
+
 jobs:
   build-linux-x64:
     name: blas / lapack -- Linux (x86_64) -- Release ${{ github.ref_name }}
@@ -185,6 +188,9 @@ jobs:
     name: Create Release and Upload Binaries
     needs: [build-windows-x64, build-linux-x64, build-linux-aarch64, build-mac-x64, build-mac-aarch64]
     runs-on: ubuntu-24.04
+    permissions:
+      # Needed to create the release and upload the binaries to it.
+      contents: write
     steps:
       - name: Checkout lapack
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
