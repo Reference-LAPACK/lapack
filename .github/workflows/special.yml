@@ -49,6 +49,11 @@ permissions:
 env:
   CFLAGS: "-Wall -pedantic"
   FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+  CODECOV_OVERRIDE_BRANCH: >-
+    ${{ github.event.pull_request.head.repo.full_name != ''
+    && github.event.pull_request.head.repo.full_name != github.repository
+    && format('{0}:{1}', github.event.pull_request.head.repo.full_name,
+    github.event.pull_request.head.ref) || '' }}
 
 defaults:
   run:
@@ -134,6 +139,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         # The uploader defaults to coverage; this is a test analytics report.
         report_type: test_results
         files: build/lapack_testing_junit.xml
@@ -220,6 +226,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         # The uploader defaults to coverage; this is a test analytics report.
         report_type: test_results
         files: build/lapack_testing_junit.xml
@@ -357,6 +364,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         report_type: test_results
         files: build/memcheck_junit.xml
         disable_search: true
@@ -548,6 +556,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         directory: build/BLAS
         flags: blas
         name: BLAS
@@ -563,6 +572,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         directory: build/CBLAS
         flags: cblas
         name: CBLAS
@@ -576,6 +586,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         directory: build/SRC
         flags: lapack
         name: LAPACK
@@ -589,6 +600,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         directory: build/TESTING
         flags: lapack
         name: LAPACK testing
@@ -602,6 +614,7 @@ jobs:
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
         directory: build/LAPACKE
         flags: lapacke
         name: LAPACKE
