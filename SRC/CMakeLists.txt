@@ -528,14 +528,17 @@ list(REMOVE_DUPLICATES SOURCES)
 # any other files that depend on them
 add_library(const_mod_file OBJECT ${CONSTMOD})
 set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
+lapack_add_coverage(const_mod_file)
 
 add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
+lapack_add_coverage(mod_files)
 
 if(BUILD_DEFAULT_API)
   add_library(${LAPACKLIB}_obj OBJECT ${SOURCES} ${XSOURCES})
-  target_link_libraries(${LAPACKLIB}_obj mod_files)
+  target_link_libraries(${LAPACKLIB}_obj PUBLIC mod_files)
   set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+  lapack_add_coverage(${LAPACKLIB}_obj)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -543,7 +546,7 @@ if(BUILD_INDEX64_EXT_API)
   generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
 
   add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-  target_link_libraries(${LAPACKLIB}_64_obj mod_files)
+  target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)
   target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
   set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
 endif()
@@ -575,9 +578,5 @@ if(USE_XBLAS)
 endif()
 target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
-if(_is_coverage_build)
-  target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB}_obj)
-endif()
-
+lapack_add_coverage(${LAPACKLIB})
 lapack_install_library(${LAPACKLIB})

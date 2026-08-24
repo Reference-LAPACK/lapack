@@ -107,6 +107,7 @@
       INTEGER            NIDMAX, NALMAX, NBEMAX
       PARAMETER          ( NIDMAX = 9, NALMAX = 7, NBEMAX = 7 )
 *     .. Local Scalars ..
+      DOUBLE PRECISION   S1, S2
       DOUBLE PRECISION   EPS, ERR, THRESH
       INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NOUT, NTRA
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
@@ -146,6 +147,7 @@
      $                   'ZTRSM ', 'ZHERK ', 'ZSYRK ', 'ZHER2K',
      $                   'ZSYR2K', 'ZGEMMTR'/
 *     .. Executable Statements ..
+      CALL CPU_TIME( S1 )
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -376,6 +378,8 @@
   230 CONTINUE
       IF( TRACE )
      $   CLOSE ( NTRA )
+      CALL CPU_TIME( S2 )
+      WRITE( NOUT, FMT = 9983 )S2 - S1
       CLOSE ( NOUT )
       STOP
 *
@@ -407,6 +411,7 @@
  9986 FORMAT( /' END OF TESTS' )
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
+ 9983 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
 *
 *     End of ZBLAT3
 *

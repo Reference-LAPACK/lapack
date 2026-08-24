@@ -17,6 +17,7 @@ on:
     - master
     paths:
     - .github/workflows/compilers.yml
+    - codecov.yml
     - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
@@ -32,6 +33,7 @@ on:
   pull_request:
     paths:
     - .github/workflows/compilers.yml
+    - codecov.yml
     - lapack_testing.py
     - '**CMakeLists.txt'
     - 'BLAS/**'
@@ -56,6 +58,12 @@ jobs:
   default-test-install:
     name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
     runs-on: ${{ matrix.toolchain.os }}
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
 
     env:
       FC: ${{ matrix.toolchain.FC }}
@@ -431,6 +439,24 @@ jobs:
           build/lapack_testing_junit.xml
         if-no-files-found: warn
         retention-days: 14
+
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        # The uploader defaults to coverage; this is a test analytics report.
+        report_type: test_results
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}-${{ matrix.lib_type }}
+        name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+        fail_ci_if_error: true
+        verbose: true
 
     - name: Write test summary
       if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}

@@ -1,10 +1,14 @@
 # LAPACK
 
 [![Build Status](https://travis-ci.org/Reference-LAPACK/lapack.svg?branch=master)](https://travis-ci.org/Reference-LAPACK/lapack)
-![CMake](https://github.com/Reference-LAPACK/lapack/actions/workflows/cmake.yml/badge.svg)
+![Compilers](https://github.com/Reference-LAPACK/lapack/actions/workflows/compilers.yml/badge.svg)
+![Special Build Configurations](https://github.com/Reference-LAPACK/lapack/actions/workflows/special.yml/badge.svg)
 ![Makefile](https://github.com/Reference-LAPACK/lapack/actions/workflows/makefile.yml/badge.svg)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/bh38iin398msrbtr?svg=true)](https://ci.appveyor.com/project/langou/lapack/)
-[![codecov](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg)](https://codecov.io/gh/Reference-LAPACK/lapack)
+[![BLAS coverage](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg?component=blas)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=blas)
+[![CBLAS coverage](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg?component=cblas)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=cblas)
+[![LAPACK coverage](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg?component=lapack)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=lapack)
+[![LAPACKE coverage](https://codecov.io/gh/Reference-LAPACK/lapack/branch/master/graph/badge.svg?component=lapacke)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=lapacke)
 [![Packaging status](https://repology.org/badge/tiny-repos/lapack.svg)](https://repology.org/metapackage/lapack/versions)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Reference-LAPACK/lapack/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Reference-LAPACK/lapack)
 

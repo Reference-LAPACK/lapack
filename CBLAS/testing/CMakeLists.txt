@@ -28,6 +28,7 @@ endfunction()
 
 function(add_cblas_test_target target)
   add_executable(${target} ${ARGN})
+  lapack_add_coverage(${target})
 
   if(HAS_ATTRIBUTE_WEAK_SUPPORT)
     target_compile_definitions(${target} PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
