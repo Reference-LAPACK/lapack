@@ -1,6 +1,7 @@
 # Python tooling configuration for the repository's Python scripts
-# (currently only lapack_testing.py). This file intentionally has no
-# [project]/[build-system] tables: the repository is not a Python package.
+# (lapack_testing.py and the CI helpers under .github/scripts). This file
+# intentionally has no [project]/[build-system] tables: the repository is
+# not a Python package.
 
 [tool.black]
 target-version = ["py37"]
@@ -9,12 +10,12 @@ target-version = ["py37"]
 python-version = "3.7"
 
 [tool.ty.src]
-include = ["lapack_testing.py"]
+include = ["lapack_testing.py", ".github/scripts/memcheck_junit.py"]
 
 [tool.basedpyright]
 pythonVersion = "3.7"
 typeCheckingMode = "strict"
-include = ["lapack_testing.py"]
+include = ["lapack_testing.py", ".github/scripts/memcheck_junit.py"]
 
 [tool.pydocstyle]
 convention = "google"

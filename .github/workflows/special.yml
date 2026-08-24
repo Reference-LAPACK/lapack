@@ -10,6 +10,7 @@ on:
     branches:
     - master
     paths:
+    - .github/scripts/memcheck_junit.py
     - .github/workflows/special.yml
     - codecov.yml
     - lapack_testing.py
@@ -26,6 +27,7 @@ on:
     - '!**md'
   pull_request:
     paths:
+    - .github/scripts/memcheck_junit.py
     - .github/workflows/special.yml
     - codecov.yml
     - lapack_testing.py
@@ -287,6 +289,12 @@ jobs:
     name: valgrind memory check
     runs-on: ubuntu-24.04
 
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
     steps:
     - name: Checkout LAPACK
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -306,6 +314,7 @@ jobs:
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=ON
         -D LAPACK_MEMORY_CHECK:BOOL=ON
+        -D BUILD_INDEX64_EXT_API:BOOL=OFF
 
     - name: Build
       run: cmake --build build -j2
@@ -316,6 +325,17 @@ jobs:
         ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
         cat memcheck.out
 
+    - name: Convert memory check results to JUnit XML
+      if: ${{ !cancelled() }}
+      working-directory: ${{github.workspace}}/build
+      run: |
+        ctest --show-only=json-v1 > ctest_tests.json
+        python3 ${{github.workspace}}/.github/scripts/memcheck_junit.py \
+          --test-list ctest_tests.json \
+          --log-dir Testing/Temporary \
+          --ctest-output memcheck.out \
+          --output memcheck_junit.xml
+
     - name: Upload valgrind logs
       id: upload-valgrind-logs
       if: ${{ !cancelled() }}
@@ -324,11 +344,26 @@ jobs:
         name: valgrind-logs
         path: |
           build/memcheck.out
+          build/memcheck_junit.xml
           build/Testing/Temporary/MemoryChecker.*.log
           build/Testing/Temporary/LastDynamicAnalysis_*.log
           build/Testing/*/DynamicAnalysis.xml
         if-no-files-found: warn
         retention-days: 14
+
+    - name: Upload memory check results to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        report_type: test_results
+        files: build/memcheck_junit.xml
+        disable_search: true
+        flags: tests-memcheck
+        name: valgrind memory check
+        fail_ci_if_error: true
+        verbose: true
 
     - name: Check memory checking results
       working-directory: ${{github.workspace}}/build
