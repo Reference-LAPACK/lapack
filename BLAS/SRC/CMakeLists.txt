@@ -119,6 +119,7 @@ list(REMOVE_DUPLICATES SOURCES)
 
 if(BUILD_DEFAULT_API)
   add_library(${BLASLIB}_obj OBJECT ${SOURCES})
+  lapack_add_coverage(${BLASLIB}_obj)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -144,6 +145,7 @@ set_target_properties(
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+lapack_add_coverage(${BLASLIB})
 lapack_install_library(${BLASLIB})
 
 add_library(BLAS::BLAS ALIAS ${BLASLIB})

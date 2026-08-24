@@ -50,6 +50,18 @@ if(_is_coverage_build)
   find_package(codecov)
 endif()
 
+# Instrument the library ${lib} for coverage.
+function(lapack_add_coverage lib)
+  if(NOT _is_coverage_build)
+    return()
+  endif()
+  if(NOT TARGET ${lib})
+    message(FATAL_ERROR "lapack_add_coverage: no such target '${lib}'")
+  endif()
+  add_coverage(${lib})
+  target_link_libraries(${lib} PRIVATE gcov)
+endfunction()
+
 option(LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON)
 option(LAPACK_MEMORY_CHECK "Configure the test suite for valgrind memory checking" OFF)
 if(LAPACK_MEMORY_CHECK)
@@ -182,7 +194,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # Testing
 option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
-include(AddRuntest)
+include(RuntestCommand)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
 if(BUILD_TESTING)

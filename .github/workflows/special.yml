@@ -1,0 +1,575 @@
+name: Special Build Configurations
+
+# This workflow builds and tests LAPACK with special configurations that are not
+# covered by the compilers workflow: OpenMP, extended API only,
+# CBLAS and LAPACKE without a Fortran compiler, memory checking with Valgrind,
+# and gcov coverage.
+
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - .github/workflows/special.yml
+    - codecov.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+  pull_request:
+    paths:
+    - .github/workflows/special.yml
+    - codecov.yml
+    - lapack_testing.py
+    - '**CMakeLists.txt'
+    - 'BLAS/**'
+    - 'CBLAS/**'
+    - 'CMAKE/**'
+    - 'INSTALL/**'
+    - 'LAPACKE/**'
+    - 'SRC/**'
+    - 'TESTING/**'
+    - '!**README'
+    - '!**Makefile'
+    - '!**md'
+
+permissions:
+  contents: read
+
+env:
+  CFLAGS: "-Wall -pedantic"
+  FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  openmp-build:
+    name: openmp-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+    runs-on: ${{ matrix.toolchain.os }}
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
+    env:
+      FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp"
+      FC: ${{ matrix.toolchain.FC }}
+      CC: ${{ matrix.toolchain.CC }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        lib_type: [ static, shared ]
+        toolchain:
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04-arm
+        - FC: gfortran
+          CC: gcc
+          os: windows-2025
+        - FC: gfortran-14
+          CC: gcc-14
+          os: macos-26
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_Fortran_COMPILER="${FC}"
+        -D CMAKE_C_COMPILER="${CC}"
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test with OpenMP
+      working-directory: ${{github.workspace}}/build
+      run: ctest --schedule-random -j1 --output-on-failure --timeout 100
+
+    - name: Upload test results
+      id: upload-test-results
+      # Uploaded even when the tests failed; that is when the results
+      # are needed most.  The test summary below links to the artifact.
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: test-results-openmp-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        # The uploader defaults to coverage; this is a test analytics report.
+        report_type: test_results
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-openmp-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
+        name: openmp-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Write test summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  test-extended-api-only:
+    name: extended-api-only (${{ matrix.lib_type }})
+    runs-on: ubuntu-24.04
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
+    strategy:
+      fail-fast: false
+      matrix:
+        lib_type: [ static, shared ]
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+        -D BUILD_DEFAULT_API:BOOL=OFF
+        -D BUILD_INDEX64_EXT_API:BOOL=ON
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest --schedule-random -j2 --output-on-failure --timeout 100
+
+    - name: Upload test results
+      id: upload-test-results
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: test-results-extended-api-${{ matrix.lib_type }}
+        path: |
+          build/TESTING/testing_results.txt
+          build/lapack_testing_junit.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Upload test results to Codecov
+      # Like the artifact above, uploaded even when the tests failed: a failing
+      # test is exactly what the test analytics report is for.
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        # The uploader defaults to coverage; this is a test analytics report.
+        report_type: test_results
+        files: build/lapack_testing_junit.xml
+        # The report is named above, so there is nothing to search the tree for.
+        disable_search: true
+        flags: tests-extended-api-${{ matrix.lib_type }}
+        name: extended-api-only (${{ matrix.lib_type }})
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Write test summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-test-results.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        python3 lapack_testing.py -d TESTING --merge-apis --markdown summary.md || true
+        if [ -f summary.md ]; then
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe raw output of every test run (`testing_results.txt`) and a JUnit XML report are in the [test-results artifact](%s).\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  cblas-lapacke-without-fortran-compiler:
+    name: cblas + lapacke (${{ matrix.lib_type }})
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        lib_type: [ static, shared ]
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install LAPACK and BLAS, remove gfortran
+      run: |
+        sudo apt update
+        sudo apt install -y liblapack-dev libblas-dev
+        sudo apt purge gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D USE_OPTIMIZED_LAPACK:BOOL=ON
+        -D BUILD_TESTING:BOOL=OFF
+        -D LAPACKE_WITH_TMG:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Install
+      run: cmake --build build --target install -j2
+
+  memory-check:
+    name: valgrind memory check
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install APT packages
+      run: |
+        sudo apt update
+        sudo apt install -y valgrind
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Debug
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+        -D LAPACK_MEMORY_CHECK:BOOL=ON
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: |
+        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
+        cat memcheck.out
+
+    - name: Upload valgrind logs
+      id: upload-valgrind-logs
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: valgrind-logs
+        path: |
+          build/memcheck.out
+          build/Testing/Temporary/MemoryChecker.*.log
+          build/Testing/Temporary/LastDynamicAnalysis_*.log
+          build/Testing/*/DynamicAnalysis.xml
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Check memory checking results
+      working-directory: ${{github.workspace}}/build
+      run: |
+        shopt -s nullglob
+        logs=( Testing/Temporary/MemoryChecker.*.log )
+        if [ ${#logs[@]} -eq 0 ]; then
+          echo "::error::No MemoryChecker logs found; valgrind did not run"
+          exit 1
+        fi
+        # A systematic problem makes nearly every test report a defect, so
+        # only the first few logs are echoed here; the artifact has them all.
+        max_dump=5
+        dumped=0
+        failed=()
+        for f in "${logs[@]}"; do
+          if tail -n 1 "$f" | grep -q "ERROR SUMMARY: 0 errors"; then
+            continue
+          fi
+          failed+=( "$f" )
+          if [ "$dumped" -lt "$max_dump" ]; then
+            echo "::group::$f"
+            cat "$f"
+            echo "::endgroup::"
+            dumped=$(( dumped + 1 ))
+          fi
+        done
+        if [ ${#failed[@]} -eq 0 ]; then
+          echo "All ${#logs[@]} logs reported no valgrind errors"
+          exit 0
+        fi
+        echo "::error::Memory check failed in ${#failed[@]} of ${#logs[@]} tests"
+        printf '%s\n' "${failed[@]}"
+        if [ ${#failed[@]} -gt "$max_dump" ]; then
+          echo "Only the first $max_dump logs are shown above;" \
+               "every log is in the valgrind-logs artifact."
+        fi
+        exit 1
+
+    - name: Write memory check summary
+      if: ${{ !cancelled() }}
+      env:
+        ARTIFACT_URL: ${{ steps.upload-valgrind-logs.outputs.artifact-url }}
+      run: |
+        cd build 2>/dev/null || exit 0
+        [ -f memcheck.out ] || exit 0
+        defects=$(sed -n '/^Memory checking results:/,$p' memcheck.out | tail -n +2) || true
+        {
+          echo '## valgrind memory check'
+          echo
+          if [ -n "$defects" ]; then
+            echo 'Defects reported by CTest:'
+            echo
+            echo "$defects" | sed 's/^/- /'
+          else
+            echo 'No defects reported.'
+          fi
+          if [ -n "$ARTIFACT_URL" ]; then
+            printf '\nThe full valgrind output for every test is in the [valgrind-logs artifact](%s).\n' "$ARTIFACT_URL"
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
+
+  coverage:
+    name: gcov coverage
+    runs-on: ubuntu-24.04
+
+    # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
+    # is being deployed here, so do not record a deployment for it.
+    environment:
+      name: codecov
+      deployment: false
+
+    env:
+      FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -fopenmp"
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        # Codecov cannot determine which commit a report belongs to from a
+        # depth-1 clone of a pull request merge commit.
+        fetch-depth: 2
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Coverage
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D LAPACKE_WITH_TMG:BOOL=ON
+        -D BUILD_SHARED_LIBS:BOOL=ON
+        -D BUILD_INDEX64_EXT_API:BOOL=OFF
+
+    - name: Build
+      run: cmake --build build -j2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest --schedule-random -j2 --output-on-failure --timeout 1800
+
+    - name: Coverage
+      if: ${{ !cancelled() }}
+      run: cmake --build build --target coverage
+
+    - name: Summarize coverage
+      # The coverage target discards gcov's output, so an entirely empty report
+      # is indistinguishable from a good one unless we look at the numbers.
+      # Print them, per component, and fail if any component measured nothing:
+      # each is uploaded under its own Codecov flag, and a flag without data
+      # would quietly disappear from the report.
+      if: ${{ !cancelled() }}
+      run: |
+        gcda=$(find build -name '*.gcda' | wc -l)
+        reports=$(find build -name '*.gcov' | wc -l)
+        echo "counter files (.gcda): ${gcda}"
+        echo "gcov reports (.gcov): ${reports}"
+        if [ "${gcda}" -eq 0 ] || [ "${reports}" -eq 0 ]; then
+          echo "::error::No coverage data was recorded; the report would be empty."
+          exit 1
+        fi
+        status=0
+        summary=""
+        # gcov writes its report next to the object it belongs to, so the
+        # reports of a component are those below its own build directory.
+        # These are the directories the uploads below use as well.
+        for component in BLAS:build/BLAS CBLAS:build/CBLAS LAPACK:build/SRC \
+                         LAPACKE:build/LAPACKE TESTING:build/TESTING; do
+          name=${component%%:*}
+          dir=${component#*:}
+          if [ ! -d "${dir}" ]; then
+            echo "::error::${name}: ${dir} does not exist; its Codecov flag would be empty."
+            status=1
+            continue
+          fi
+          files=$(find "${dir}" -name '*.gcov' | wc -l)
+          # In a gcov report an executed line is prefixed with its execution
+          # count and an unexecuted one with '#####' or '====='; everything
+          # else ('-') is not executable.  gcov -b additionally emits one
+          # 'branch N ...' record per branch outcome, taken either a number
+          # of times or never; a branch outcome counts as covered when it was
+          # taken at least once.
+          set -- $(find "${dir}" -name '*.gcov' -exec cat {} + | awk '
+            /^ *[0-9]+[*]?:/         { hit++; next }
+            /^ *(#####|=====):/      { miss++; next }
+            /^branch +[0-9]+ taken/  { btotal++; if ($4 + 0 > 0) bhit++; next }
+            /^branch +[0-9]+ never/  { btotal++ }
+            END { printf "%d %d %d %d\n", hit + 0, hit + miss + 0, bhit + 0, btotal + 0 }')
+          hit=$1
+          total=$2
+          bhit=$3
+          btotal=$4
+          if [ "${hit}" -eq 0 ]; then
+            echo "::error::${name}: not a single line was executed; its Codecov flag would be empty."
+            status=1
+            percent="n/a"
+          else
+            percent=$(awk -v h="${hit}" -v t="${total}" 'BEGIN { printf "%.2f%%", 100 * h / t }')
+          fi
+          # A component with no branches at all is possible in principle, so
+          # report n/a rather than dividing by zero.
+          if [ "${btotal}" -eq 0 ]; then
+            bpercent="n/a"
+          else
+            bpercent=$(awk -v h="${bhit}" -v t="${btotal}" 'BEGIN { printf "%.2f%%", 100 * h / t }')
+          fi
+          echo "${name}: ${hit} of ${total} lines executed (${percent}), ${bhit} of ${btotal} branches taken (${bpercent}) across ${files} files"
+          summary="${summary}| ${name} | ${percent} | ${hit} | ${total} | ${bpercent} | ${bhit} | ${btotal} | ${files} |"$'\n'
+        done
+        printf '## Coverage\n\n| Component | Lines | Executed | Executable | Branches | Taken | Total | Files |\n| --- | --: | --: | --: | --: | --: | --: | --: |\n%s' \
+          "${summary}" >> "$GITHUB_STEP_SUMMARY"
+        exit ${status}
+
+    # Each component is uploaded on its own, so that Codecov reports the
+    # coverage of BLAS, CBLAS, LAPACK and LAPACKE under a flag of its own
+    # rather than as a single number for the whole library.  The flags are
+    # declared in codecov.yml.
+    - name: Upload BLAS coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/BLAS
+        flags: blas
+        name: BLAS
+        # The .gcov files already exist, so there is no need for the uploader
+        # to run gcov a second time itself.
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload CBLAS coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/CBLAS
+        flags: cblas
+        name: CBLAS
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACK coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/SRC
+        flags: lapack
+        name: LAPACK
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACK testing coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/TESTING
+        flags: lapack
+        name: LAPACK testing
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
+
+    - name: Upload LAPACKE coverage report to Codecov
+      if: ${{ !cancelled() }}
+      continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: build/LAPACKE
+        flags: lapacke
+        name: LAPACKE
+        plugins: noop
+        fail_ci_if_error: true
+        verbose: true
