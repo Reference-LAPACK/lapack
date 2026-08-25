@@ -1269,7 +1269,11 @@
          CALL XLAENV( 14, 0 )
          CALL XLAENV( 15, 2 )
          CALL XLAENV( 16, 2 )
+#ifdef LAPACK_TEST_NO_ERROR_EXITS
+         TSTERR = .FALSE.
+#else
          TSTERR = .TRUE.
+#endif
          CALL DCHKEC( THRESH, TSTERR, NIN, NOUT )
          GO TO 10
       ELSE
@@ -1714,6 +1718,13 @@
 *     Read the flag that indicates whether to test the error exits.
 *
       READ( NIN, FMT = * )TSTERR
+#ifdef LAPACK_TEST_NO_ERROR_EXITS
+*
+*     XERBLA cannot be substituted in this build, so an error exit would end
+*     the run instead of being tested.  See LAPACK_TEST_ERROR_EXITS.
+*
+      TSTERR = .FALSE.
+#endif
 *
 *     Read the code describing how to set the random number seed.
 *

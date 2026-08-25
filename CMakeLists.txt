@@ -188,6 +188,53 @@ option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
+# The test drivers check that the routines report an illegal argument by
+# substituting their own XERBLA for the one in the library.  A call made inside
+# a Windows DLL binds to that DLL's own XERBLA, which cannot be substituted, so
+# the reference XERBLA prints its message and STOPs and every driver dies at its
+# first deliberate illegal argument.  ELF symbol interposition and the macOS
+# flat namespace (see USE_FLAT_NAMESPACE) leave the substitution working
+# everywhere else, so this only turns the error exits off where they cannot run
+# at all; the static Windows builds keep testing them.
+if(WIN32 AND BUILD_SHARED_LIBS)
+  set(LAPACK_TEST_ERROR_EXITS_DEFAULT OFF)
+else()
+  set(LAPACK_TEST_ERROR_EXITS_DEFAULT ON)
+endif()
+option(LAPACK_TEST_ERROR_EXITS
+  "Test that the routines report illegal arguments through XERBLA."
+  ${LAPACK_TEST_ERROR_EXITS_DEFAULT})
+if(BUILD_TESTING AND NOT LAPACK_TEST_ERROR_EXITS)
+  message(STATUS "Error exits are not tested: XERBLA cannot be substituted in this build")
+endif()
+
+# The test input file to hand to a test driver: the file itself, or, when the
+# error exits are not being tested, a copy of it whose "test the error exits"
+# flag reads F.  The drivers read the flag by position, so only its value is
+# rewritten and the file keeps its shape.
+function(lapack_test_input input output_variable)
+  if(LAPACK_TEST_ERROR_EXITS OR NOT EXISTS "${input}")
+    set(${output_variable} "${input}" PARENT_SCOPE)
+    return()
+  endif()
+  file(READ "${input}" lapack_test_input_original)
+  set(lapack_test_input_content "${lapack_test_input_original}")
+  string(REGEX REPLACE "(^|\n)T([ \t]+Put T to test the error exits)" "\\1F\\2"
+    lapack_test_input_content "${lapack_test_input_content}")
+  string(REGEX REPLACE "(^|\n)T([ \t]+LOGICAL FLAG, T TO TEST ERROR EXITS)" "\\1F\\2"
+    lapack_test_input_content "${lapack_test_input_content}")
+  # An input without the flag drives a driver that has no error exits to test.
+  if(lapack_test_input_content STREQUAL lapack_test_input_original)
+    set(${output_variable} "${input}" PARENT_SCOPE)
+    return()
+  endif()
+  get_filename_component(lapack_test_input_name "${input}" NAME)
+  set(lapack_test_input_copy
+    "${CMAKE_CURRENT_BINARY_DIR}/no_error_exits/${lapack_test_input_name}")
+  file(WRITE "${lapack_test_input_copy}" "${lapack_test_input_content}")
+  set(${output_variable} "${lapack_test_input_copy}" PARENT_SCOPE)
+endfunction()
+
 if(BUILD_TESTING)
   set(_msg "Looking for Python3 needed for summary tests")
   message(STATUS "${_msg}")

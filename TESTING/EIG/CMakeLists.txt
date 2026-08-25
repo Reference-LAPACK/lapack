@@ -104,12 +104,23 @@ set(ZEIGTST
 
 set(ZDMDEIGTST zchkdmd.f90)
 
+# Every other driver takes the error exit flag from its input file, which
+# lapack_test_input() rewrites, but ?chkee.F forces the flag on for the EC path
+# and reads it from an unmarked line for the ED ones, so neither can be reached
+# that way.  Turn them off in the driver instead.
+function(add_eig_error_exit_definition target)
+  if(NOT LAPACK_TEST_ERROR_EXITS)
+    target_compile_definitions(${target} PRIVATE LAPACK_TEST_NO_ERROR_EXITS)
+  endif()
+endfunction()
+
 function(add_eig_executable name)
   set(sources ${ARGN})
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
     target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name})
+    add_eig_error_exit_definition(${name})
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -120,6 +131,7 @@ function(add_eig_executable name)
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name}_64)
+    add_eig_error_exit_definition(${name}_64)
 
     # Add dependency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be

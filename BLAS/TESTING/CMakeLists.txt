@@ -3,6 +3,7 @@ function(_add_blas_test name src test_input test_output)
   target_link_libraries(${name} PRIVATE ${BLASLIB})
   lapack_add_coverage(${name})
   if(EXISTS "${test_input}")
+    lapack_test_input("${test_input}" test_input)
     add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${name}>
       -DINPUT=${test_input}

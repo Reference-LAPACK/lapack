@@ -33,6 +33,7 @@ function(_add_lapack_test output input target)
   string(REPLACE "." "_" input_name ${input})
   set(testName "${target}_${input_name}")
   if(EXISTS "${TEST_INPUT}")
+    lapack_test_input("${TEST_INPUT}" TEST_INPUT)
     add_test(NAME LAPACK-${testName} COMMAND "${CMAKE_COMMAND}"
       -DTEST=$<TARGET_FILE:${target}>
       -DINPUT=${TEST_INPUT}
