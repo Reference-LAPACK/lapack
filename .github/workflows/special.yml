@@ -111,7 +111,7 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
 
     - name: Build
-      run: cmake --build build -j2
+      run: cmake --build build --parallel
 
     - name: Test with OpenMP
       working-directory: ${{github.workspace}}/build
@@ -165,7 +165,7 @@ jobs:
         fi
 
     - name: Install
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
   test-extended-api-only:
     name: extended-api-only (${{ matrix.lib_type }})
@@ -200,11 +200,11 @@ jobs:
         -D BUILD_INDEX64_EXT_API:BOOL=ON
 
     - name: Build
-      run: cmake --build build -j2
+      run: cmake --build build --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest --schedule-random -j2 --output-on-failure --timeout 100
+      run: ctest --schedule-random --output-on-failure --timeout 100 --parallel
 
     - name: Upload test results
       id: upload-test-results
@@ -252,7 +252,7 @@ jobs:
         fi
 
     - name: Install
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
   cblas-lapacke-without-fortran-compiler:
     name: cblas + lapacke (${{ matrix.lib_type }})
@@ -287,10 +287,10 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
 
     - name: Build
-      run: cmake --build build -j2
+      run: cmake --build build --parallel
 
     - name: Install
-      run: cmake --build build --target install -j2
+      run: cmake --build build --target install --parallel
 
   memory-check:
     name: valgrind memory check
@@ -324,12 +324,13 @@ jobs:
         -D BUILD_INDEX64_EXT_API:BOOL=OFF
 
     - name: Build
-      run: cmake --build build -j2
+      run: cmake --build build --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
+      timeout-minutes: 300  # Leave 1 hour for the rest of the steps
       run: |
-        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
+        ctest --output-on-failure --schedule-random -T memcheck --timeout 7200 --parallel > memcheck.out 2>&1 || true
         cat memcheck.out
 
     - name: Convert memory check results to JUnit XML
@@ -468,11 +469,11 @@ jobs:
         -D BUILD_INDEX64_EXT_API:BOOL=OFF
 
     - name: Build
-      run: cmake --build build -j2
+      run: cmake --build build --parallel
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest --schedule-random -j2 --output-on-failure --timeout 1800
+      run: ctest --schedule-random --output-on-failure --timeout 1800 --parallel
 
     - name: Coverage
       if: ${{ !cancelled() }}

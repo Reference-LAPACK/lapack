@@ -393,14 +393,14 @@ jobs:
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
-        cmake --build build
+        cmake --build build --parallel
 
     - name: Test
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       working-directory: ${{ github.workspace }}/build
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
-        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
+        ctest -C Release --schedule-random --output-on-failure --timeout 1800 --parallel
 
     - name: Configure CMake (Windows)
       if: ${{ runner.os == 'Windows' }}
@@ -423,7 +423,7 @@ jobs:
       shell: cmd
       run: |
         call "%TOOLCHAIN_SETUP%" || exit /b 1
-        cmake --build build
+        cmake --build build --parallel
 
     - name: Test (Windows)
       if: ${{ runner.os == 'Windows' }}
@@ -431,7 +431,7 @@ jobs:
       working-directory: ${{ github.workspace }}\build
       run: |
         call "%TOOLCHAIN_SETUP%" || exit /b 1
-        ctest -C Release --schedule-random -j2 --output-on-failure --timeout 1800
+        ctest -C Release --schedule-random --output-on-failure --timeout 1800 --parallel
 
     - name: Upload test results
       id: upload-test-results
@@ -484,11 +484,11 @@ jobs:
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
-        cmake --build build --target install -j2
+        cmake --build build --target install --parallel
 
     - name: Install (Windows)
       if: ${{ runner.os == 'Windows' }}
       shell: cmd
       run: |
         call "%TOOLCHAIN_SETUP%" || exit /b 1
-        cmake --build build --target install -j2
+        cmake --build build --target install --parallel
