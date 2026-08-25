@@ -206,8 +206,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME
-      COMPLEX*16        ZDOTU
-      EXTERNAL          LSAME,ZDOTU
+      COMPLEX*16        ZDOTC
+      EXTERNAL          LSAME,ZDOTC
 *     ..
 *     .. Executable Statements ..
 *
@@ -248,7 +248,7 @@
      $                        ZBETA, C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
                      END DO
                   ELSE
                      DO I = 1, K
@@ -257,7 +257,7 @@
      $                        ZBETA, C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
      $                     + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -279,7 +279,7 @@
      $                        ZBETA, C(I,I+1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE)
                      END DO
                   ELSE
@@ -289,7 +289,7 @@
      $                        ZBETA, C(I,I+1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1) +
+     $                     (ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1) +
      $                     ONE) + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -317,7 +317,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
                      END DO
                   ELSE
                      DO I = 1, K
@@ -326,7 +326,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
      $                     + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -349,7 +349,7 @@
      $                        ZBETA, C(I+1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE)
                      END DO
                   ELSE
@@ -359,7 +359,7 @@
      $                        ZBETA, C(I+1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (ZDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE) + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -392,7 +392,7 @@
      $                        LDA, ZBETA, C(I,I+1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -402,7 +402,7 @@
      $                        LDA, ZBETA, C(I,I+1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE) + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -425,7 +425,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -435,7 +435,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE) + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -463,7 +463,7 @@
      $                        LDA, ZBETA, C(I+1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -473,7 +473,7 @@
      $                        LDA, ZBETA, C(I+1,I), 1)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE) + ZBETA*C(I,I)
                      END DO
                   END IF
@@ -496,7 +496,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -506,7 +506,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
-     $                     (ZDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE) + ZBETA*C(I,I)
                      END DO
                   END IF

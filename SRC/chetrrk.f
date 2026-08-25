@@ -102,7 +102,7 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is COMPLEX.
+*>          ALPHA is REAL.
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
@@ -128,7 +128,7 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is COMPLEX.
+*>          BETA is REAL.
 *>           On entry, BETA specifies the scalar beta.
 *> \endverbatim
 *>

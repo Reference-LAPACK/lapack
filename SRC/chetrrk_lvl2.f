@@ -206,8 +206,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME
-      COMPLEX           CDOTU
-      EXTERNAL          LSAME,CDOTU
+      COMPLEX           CDOTC
+      EXTERNAL          LSAME,CDOTC
 *     ..
 *     .. Executable Statements ..
 *
@@ -248,7 +248,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (CDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
                      END DO
                   ELSE
                      DO I = 1, K
@@ -257,7 +257,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (CDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
      $                     + CBETA*C(I,I)
                      END DO
                   END IF
@@ -280,7 +280,7 @@
      $                        CBETA, C(I,I+1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (CDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE)
                      END DO
                   ELSE
@@ -290,7 +290,7 @@
      $                        CBETA, C(I,I+1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1) +
+     $                     (CDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1) +
      $                     ONE) + CBETA*C(I,I)
                      END DO
                   END IF
@@ -318,7 +318,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (CDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
                      END DO
                   ELSE
                      DO I = 1, K
@@ -327,7 +327,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(1,I), 1, A(1,I), 1) + ONE)
+     $                     (CDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
      $                     + CBETA*C(I,I)
                      END DO
                   END IF
@@ -350,7 +350,7 @@
      $                        CBETA, C(I+1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (CDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE)
                      END DO
                   ELSE
@@ -360,7 +360,7 @@
      $                        CBETA, C(I+1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I+1,I), 1, A(I+1,I), 1)
+     $                     (CDOTC(K-I, A(I+1,I), 1, A(I+1,I), 1)
      $                     + ONE) + CBETA*C(I,I)
                      END DO
                   END IF
@@ -393,7 +393,7 @@
      $                        LDA, CBETA, C(I,I+1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -403,7 +403,7 @@
      $                        LDA, CBETA, C(I,I+1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE) + CBETA*C(I,I)
                      END DO
                   END IF
@@ -426,7 +426,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -436,7 +436,7 @@
      $                        C(1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE) + CBETA*C(I,I)
                      END DO
                   END IF
@@ -464,7 +464,7 @@
      $                        LDA, CBETA, C(I+1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -474,7 +474,7 @@
      $                        LDA, CBETA, C(I+1,I), 1)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
      $                     + ONE) + CBETA*C(I,I)
                      END DO
                   END IF
@@ -497,7 +497,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
@@ -507,7 +507,7 @@
      $                        C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
-     $                     (CDOTU(I-1, A(I,1), LDA, A(I,1), LDA)
+     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
      $                     + ONE) + CBETA*C(I,I)
                      END DO
                   END IF

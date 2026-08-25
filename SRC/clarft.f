@@ -273,7 +273,7 @@
 *
 *        Finish this component with a level 2 BLAS implementation
 *
-         CALL CLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU,
+         CALL CLARFT_UT(DIRECT, STOREV, 'M', N, K, V, LDV, TAU,
      $         T, LDT)
          RETURN
       END IF
