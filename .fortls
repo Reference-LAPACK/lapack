@@ -1,0 +1,19 @@
+{
+  "source_dirs": [
+    "./**"
+  ],
+  "excl_paths": [
+    "build/**",
+    ".git/**",
+    "CBLAS/**",
+    "CMAKE/**",
+    "DOCS/**",
+    "INSTALL/**",
+    "LAPACKE/**",
+    "TESTING/**"
+  ],
+  "incremental_sync": true,
+
+  "use_signature_help": true,
+  "notify_init": true,
+}

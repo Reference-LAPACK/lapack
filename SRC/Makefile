@@ -278,7 +278,7 @@ CLASRC = \
    ctprfs.o ctptri.o \
    ctptrs.o ctrcon.o ctrevc.o ctrevc3.o ctrexc.o ctrrfs.o ctrsen.o ctrsna.o \
    ctrsyl.o ctrsyl3.o ctrti2.o ctrtri.o ctrtrs.o ctzrzf.o cung2l.o cung2r.o \
-   clarft_ut.o chetrrk.o chetrrk_lvl2.o ctrmmoop.o ctrmmoop_lvl2.o ctrmvoop.o cacxpy.o \
+   clarft_ut.o chetrrk.o chetrrk_lvl2.o ctrmmoop.o ctrmmoop_lvl2.o ctrmvoop.o ctrmcvoop.o cacxpy.o \
    ctrsm_mod.o ctrsm_lvl2_mod.o ctrtri_mod.o ctrti2_mod.o \
    cungbr.o cunghr.o cungl2.o cunglq.o cungql.o cungqr.o cungr2.o \
    cungrq.o cungtr.o cungtsqr.o cungtsqr_row.o cunm2l.o cunm2r.o cunmbr.o cunmhr.o cunml2.o cunm22.o \
@@ -487,7 +487,7 @@ ZLASRC = \
    ztprfs.o ztptri.o \
    ztptrs.o ztrcon.o ztrevc.o ztrevc3.o ztrexc.o ztrrfs.o ztrsen.o ztrsna.o \
    ztrsyl.o ztrsyl3.o ztrti2.o ztrtri.o ztrtrs.o ztzrzf.o zung2l.o \
-   zlarft_ut.o zhetrrk.o zhetrrk_lvl2.o ztrmmoop.o ztrmmoop_lvl2.o ztrmvoop.o zacxpy.o \
+   zlarft_ut.o zhetrrk.o zhetrrk_lvl2.o ztrmmoop.o ztrmmoop_lvl2.o ztrmvoop.o ztrmcvoop.o zacxpy.o \
    ztrsm_mod.o ztrsm_lvl2_mod.o ztrtri_mod.o ztrti2_mod.o \
    zung2r.o zungbr.o zunghr.o zungl2.o zunglq.o zungql.o zungqr.o zungr2.o \
    zungrq.o zungtr.o zungtsqr.o zungtsqr_row.o zunm2l.o zunm2r.o zunmbr.o zunmhr.o zunml2.o zunm22.o \

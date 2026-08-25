@@ -322,13 +322,13 @@
                   DO K = 1,M
                      TEMP = B(K,J)
                      DO I = K+1,M
-                        B(I,J) = B(I,J)-TEMP*CONJG(A(K,I))
+                        B(I,J) = B(I,J)-TEMP*DCONJG(A(K,I))
                      END DO
                      IF (NOUNIT) THEN
                         IF (A(K,K).EQ.ZERO) THEN
                            B(K,J) = ZERO
                         ELSE
-                           B(K,J) = B(K,J)/CONJG(A(K,K))
+                           B(K,J) = B(K,J)/DCONJG(A(K,K))
                         END IF
                      END IF
                   END DO
@@ -338,13 +338,13 @@
                   DO K = M,1,-1
                      TEMP = B(K,J)
                      DO I = 1,K-1
-                        B(I,J) = B(I,J)-TEMP*CONJG(A(K,I))
+                        B(I,J) = B(I,J)-TEMP*DCONJG(A(K,I))
                      END DO
                      IF (NOUNIT) THEN
                         IF (A(K,K).EQ.ZERO) THEN
                            B(K,J) = ZERO
                         ELSE
-                           B(K,J) = B(K,J)/CONJG(A(K,K))
+                           B(K,J) = B(K,J)/DCONJG(A(K,K))
                         END IF
                      END IF
                   END DO
@@ -436,13 +436,13 @@
                   DO K = 1,N
                      TEMP = B(I,K)
                      DO J = K+1,N
-                        B(I,J) = B(I,J)-TEMP*CONJG(A(K,J))
+                        B(I,J) = B(I,J)-TEMP*DCONJG(A(K,J))
                      END DO
                      IF (NOUNIT) THEN
                         IF (A(K,K).EQ.ZERO) THEN
                            B(I,K) = ZERO
                         ELSE
-                           B(I,K) = B(I,K)/CONJG(A(K,K))
+                           B(I,K) = B(I,K)/DCONJG(A(K,K))
                         END IF
                      END IF
                   END DO
@@ -452,13 +452,13 @@
                   DO K = N,1,-1
                      TEMP = B(I,K)
                      DO J = 1,K-1
-                        B(I,J) = B(I,J)-TEMP*A(K,J)
+                        B(I,J) = B(I,J)-TEMP*DCONJG(A(K,J))
                      END DO
                      IF (NOUNIT) THEN
                         IF (A(K,K).EQ.ZERO) THEN
                            B(I,K) = ZERO
                         ELSE
-                           B(I,K) = B(I,K)/A(K,K)
+                           B(I,K) = B(I,K)/DCONJG(A(K,K))
                         END IF
                      END IF
                   END DO
