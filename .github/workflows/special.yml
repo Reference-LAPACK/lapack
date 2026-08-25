@@ -313,7 +313,7 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: |
-        ctest --output-on-failure --schedule-random -j2 -T memcheck > memcheck.out 2>&1 || true
+        ctest --output-on-failure --schedule-random -j2 --timeout 3600 -T memcheck > memcheck.out 2>&1 || true
         cat memcheck.out
 
     - name: Upload valgrind logs
