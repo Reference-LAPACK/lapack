@@ -67,6 +67,7 @@ jobs:
       FFLAGS: "-Wall -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label -Werror=conversion -fimplicit-none -frecursive -fcheck=all -fopenmp"
       FC: ${{ matrix.toolchain.FC }}
       CC: ${{ matrix.toolchain.CC }}
+      JOB_ID: openmp-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
 
     strategy:
       fail-fast: false
@@ -102,6 +103,8 @@ jobs:
         -D BUILD_TESTING:BOOL=ON
         -D LAPACKE_WITH_TMG:BOOL=ON
         -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+        -D LAPACK_TESTING_JUNIT_JOB_ID="${JOB_ID}"
+        ${{ startsWith(matrix.toolchain.os, 'macos') && matrix.lib_type == 'shared' && '-D USE_FLAT_NAMESPACE:BOOL=ON' || '' }}
 
     - name: Build
       run: cmake --build build -j2
@@ -137,7 +140,7 @@ jobs:
         files: build/lapack_testing_junit.xml
         # The report is named above, so there is nothing to search the tree for.
         disable_search: true
-        flags: tests-openmp-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
+        flags: tests-${{ env.JOB_ID }}
         name: openmp-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
         fail_ci_if_error: true
         verbose: true
@@ -169,6 +172,9 @@ jobs:
       name: codecov
       deployment: false
 
+    env:
+      JOB_ID: extended-api-${{ matrix.lib_type }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -190,6 +196,7 @@ jobs:
         -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
         -D BUILD_DEFAULT_API:BOOL=OFF
         -D BUILD_INDEX64_EXT_API:BOOL=ON
+        -D LAPACK_TESTING_JUNIT_JOB_ID="${JOB_ID}"
 
     - name: Build
       run: cmake --build build -j2
@@ -223,7 +230,7 @@ jobs:
         files: build/lapack_testing_junit.xml
         # The report is named above, so there is nothing to search the tree for.
         disable_search: true
-        flags: tests-extended-api-${{ matrix.lib_type }}
+        flags: tests-${{ env.JOB_ID }}
         name: extended-api-only (${{ matrix.lib_type }})
         fail_ci_if_error: true
         verbose: true
