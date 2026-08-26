@@ -194,7 +194,7 @@
       PARAMETER(ZERO = 0.0E+0, ONE = (1.0E+0,0.0E+0))
 *     ..
 *     .. Local Scalars ..
-      INTEGER           I
+      INTEGER           I, J
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
       COMPLEX           CALPHA, CBETA
 *     ..
@@ -275,7 +275,7 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I,
+                        CALL CTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I,
      $                        CALPHA, A(I+1,I+1), LDA, A(I+1,I), 1,
      $                        CBETA, C(I,I+1), LDC)
 *
@@ -285,7 +285,7 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I,
+                        CALL CTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I,
      $                        CALPHA, A(I+1,I+1), LDA, A(I+1,I), 1,
      $                        CBETA, C(I,I+1), LDC)
 *
@@ -296,7 +296,7 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I+1,
+                     CALL CTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I+1,
      $                     CALPHA, A(I,I), LDA, A(I,I), 1, CBETA,
      $                     C(I,I), LDC)
                   END DO
@@ -313,7 +313,7 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
+                        CALL CTRMCVOOP(UPLOA, 'Tranpose', DIAG, I-1,
      $                        CALPHA, A, LDA, A(1,I), 1, CBETA,
      $                        C(I,1), LDC)
 *
@@ -322,7 +322,7 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
+                        CALL CTRMCVOOP(UPLOA, 'Transpose', DIAG, I-1,
      $                        CALPHA, A, LDA, A(1,I), 1, CBETA,
      $                        C(I,1), LDC)
 *
@@ -333,7 +333,7 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'Conjugate', DIAG, I,
+                     CALL CTRMCVOOP(UPLOA, 'Transpose', DIAG, I,
      $                     CALPHA, A, LDA, A(1,I), 1,
      $                     CBETA, C(I,1), LDC)
                   END DO
@@ -385,33 +385,44 @@
 *
 *              This means T is upper triangular
 *
+*              Note: This differs from the real implemenation at the moment
+*              This version must compute C columnwise to use our kernels
+*
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, CALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, CBETA, C(I,I+1), LDC)
+                     DO J = 1, K
+!                       CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+!    $                        K-J, CALPHA, A(J+1,J+1), LDA, A(J,J+1),
+!    $                        LDA, CBETA, C(J+1,J), 1)
+                     CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J, CALPHA,
+     $                  A(J+1,J+1), LDA, A(J,J+1), LDA, CBETA,
+     $                  C(J,J+1), LDC)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(K-J, A(J,J+1), LDA, A(J,J+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, CALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, CBETA, C(I,I+1), LDC)
+                     DO J = 1, K
+!                       CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+!    $                        K-J, CALPHA, A(J+1,J+1), LDA, A(J,J+1),
+!    $                        LDA, CBETA, C(J+1,J), 1)
+                     CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J, CALPHA,
+     $                  A(J+1,J+1), LDA, A(J,J+1), LDA, CBETA,
+     $                  C(J,J+1), LDC)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                     + ONE) + CBETA*C(I,I)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(K-J, A(J,J+1), LDA, A(J,J+1), LDA)
+     $                     + ONE) + CBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                     K-I+1, CALPHA, A(I,I), LDA, A(I,I), LDA,
-     $                     CBETA, C(I,I), LDC)
+                  DO J = 1, K
+                     CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J+1, CALPHA,
+     $                  A(J,J), LDA, A(J,J), LDA, CBETA, C(J,J), LDC)
                   END DO
                END IF
             ELSE
@@ -420,31 +431,31 @@
 *
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, CALPHA, A, LDA, A(I,1), LDA, CBETA,
-     $                        C(1,I), 1)
+                     DO J = 1, K
+                        CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        J-1, CALPHA, A, LDA, A(1,J), 1,
+     $                        CBETA, C(1,J), 1)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(J-1, A(1,J), 1, A(1,J), 1)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, CALPHA, A, LDA, A(I,1), LDA, CBETA,
-     $                        C(1,I), 1)
+                     DO J = 1, K
+                        CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        J-1, CALPHA, A, LDA, A(1,J), 1,
+     $                        CBETA, C(1,J), 1)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
-     $                     + ONE) + CBETA*C(I,I)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(J-1, A(1,J), 1, A(1,J), 1)
+     $                     + ONE) + CBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG, I,
-     $                     CALPHA, A, LDA, A(I,1), LDA,
-     $                     CBETA, C(1,I), 1)
+                  DO J = 1, K
+                     CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                     J, CALPHA, A, LDA, A(1,J), 1,
+     $                     CBETA, C(1,J), 1)
                   END DO
                END IF
             END IF
@@ -458,31 +469,33 @@
 *
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, CALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, CBETA, C(I+1,I), 1)
+                     DO J = 1, K
+                        CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        K-J,
+     $                        CALPHA, A(J+1,J+1), LDA, A(J,J+1), LDA,
+     $                        CBETA, C(J+1,J), 1)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(K-I, A(J,J+1), LDA, A(J,J+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, CALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, CBETA, C(I+1,I), 1)
+                     DO J = 1, K
+                        CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        K-J,
+     $                        CALPHA, A(J+1,J+1), LDA, A(J,J+1), LDA,
+     $                        CBETA, C(J+1,J), 1)
 *
-                        C(I,I) = CALPHA *
-     $                     (CDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                     + ONE) + CBETA*C(I,I)
+                        C(J,J) = CALPHA *
+     $                     (CDOTC(K-I, A(J,J+1), LDA, A(J,J+1), LDA)
+     $                     + ONE) + CBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                     K-I+1, CALPHA, A(I,I), LDA, A(I,I), LDA,
-     $                     CBETA, C(I,I), 1)
+                  DO J = 1, K
+                     CALL CTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                     K-J+1, CALPHA, A(J,J), LDA, A(J,J), LDA,
+     $                     CBETA, C(J,J), 1)
                   END DO
                END IF
             ELSE
@@ -492,9 +505,9 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, CALPHA, A, LDA, A(I,1), LDA, CBETA,
-     $                        C(I,1), LDC)
+                        CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                        'No Transpose', DIAG, 1, I-1, CALPHA,
+     $                        A, LDA, A(I,1), LDA, CBETA, C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
      $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
@@ -502,9 +515,9 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, CALPHA, A, LDA, A(I,1), LDA, CBETA,
-     $                        C(I,1), LDC)
+                        CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                        'No Transpose', DIAG, 1, I-1, CALPHA,
+     $                        A, LDA, A(I,1), LDA, CBETA, C(I,1), LDC)
 *
                         C(I,I) = CALPHA *
      $                     (CDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
@@ -513,9 +526,9 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL CTRMVOOP(UPLOA, 'No Transpose', DIAG, I,
-     $                     CALPHA, A, LDA, A(I,1), LDA, CBETA, C(I,1),
-     $                     LDC)
+                     CALL CTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, I, CALPHA,
+     $                     A, LDA, A(I,1), LDA, CBETA, C(I,1), LDC)
                   END DO
                END IF
             END IF

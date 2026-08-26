@@ -102,7 +102,7 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is DOUBLE PRECISION.
+*>          ALPHA is REAL
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
@@ -128,7 +128,7 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is DOUBLE PRECISION.
+*>          BETA is REAL.
 *>           On entry, BETA specifies the scalar beta.
 *> \endverbatim
 *>
@@ -194,9 +194,9 @@
       PARAMETER(ZERO = 0.0D+0, ONE = (1.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
-      INTEGER           I
+      INTEGER           I, J
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
-      COMPLEx*16        ZALPHA, ZBETA
+      COMPLEX*16        ZALPHA, ZBETA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC         DCMPLX
@@ -224,7 +224,7 @@
       TRANSL = LSAME(TRANS,'T').OR.LSAME(TRANS,'C')
       UNITT = LSAME(DIAG,'U')
 *
-*     Convert alpha and beta to complex*16 to pass to TRMMOOP
+*     Convert Alpha and Beta to complex for calls to trmvoop
 *
       ZALPHA = DCMPLX(ALPHA, ZERO)
       ZBETA  = DCMPLX(BETA, ZERO)
@@ -244,8 +244,8 @@
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
                         CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
-     $                        ZALPHA, A, LDA, A(1,I), 1,
-     $                        ZBETA, C(1,I), 1)
+     $                        ZALPHA, A, LDA, A(1,I), 1, ZBETA,
+     $                        C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
      $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
@@ -253,8 +253,8 @@
                   ELSE
                      DO I = 1, K
                         CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
-     $                        ZALPHA, A, LDA, A(1,I), 1,
-     $                        ZBETA, C(1,I), 1)
+     $                        ZALPHA, A, LDA, A(1,I), 1, ZBETA,
+     $                        C(1,I), 1)
 *
                         C(I,I) = ZALPHA *
      $                     (ZDOTC(I-1, A(1,I), 1, A(1,I), 1) + ONE)
@@ -264,7 +264,8 @@
                ELSE
                   DO I = 1, K
                      CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I,
-     $                     ZALPHA, A, LDA, A(1,I), 1, ZBETA, C(1,I), 1)
+     $                     ZALPHA, A, LDA, A(1,I), 1, ZBETA,
+     $                     C(1,I), 1)
                   END DO
                END IF
             ELSE
@@ -274,7 +275,7 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I,
+                        CALL ZTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I,
      $                        ZALPHA, A(I+1,I+1), LDA, A(I+1,I), 1,
      $                        ZBETA, C(I,I+1), LDC)
 *
@@ -284,7 +285,7 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I,
+                        CALL ZTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I,
      $                        ZALPHA, A(I+1,I+1), LDA, A(I+1,I), 1,
      $                        ZBETA, C(I,I+1), LDC)
 *
@@ -295,7 +296,7 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, K-I+1,
+                     CALL ZTRMCVOOP(UPLOA, 'Transpose', DIAG, K-I+1,
      $                     ZALPHA, A(I,I), LDA, A(I,I), 1, ZBETA,
      $                     C(I,I), LDC)
                   END DO
@@ -312,7 +313,7 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
+                        CALL ZTRMCVOOP(UPLOA, 'Tranpose', DIAG, I-1,
      $                        ZALPHA, A, LDA, A(1,I), 1, ZBETA,
      $                        C(I,1), LDC)
 *
@@ -321,7 +322,7 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I-1,
+                        CALL ZTRMCVOOP(UPLOA, 'Transpose', DIAG, I-1,
      $                        ZALPHA, A, LDA, A(1,I), 1, ZBETA,
      $                        C(I,1), LDC)
 *
@@ -332,7 +333,7 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'Conjugate', DIAG, I,
+                     CALL ZTRMCVOOP(UPLOA, 'Transpose', DIAG, I,
      $                     ZALPHA, A, LDA, A(1,I), 1,
      $                     ZBETA, C(I,1), LDC)
                   END DO
@@ -384,33 +385,44 @@
 *
 *              This means T is upper triangular
 *
+*              Note: This differs from the real implemenation at the moment
+*              This version must compute C columnwise to use our kernels
+*
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, ZALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, ZBETA, C(I,I+1), LDC)
+                     DO J = 1, K
+!                       CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+!    $                        K-J, ZALPHA, A(J+1,J+1), LDA, A(J,J+1),
+!    $                        LDA, ZBETA, C(J+1,J), 1)
+                     CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J, ZALPHA,
+     $                  A(J+1,J+1), LDA, A(J,J+1), LDA, ZBETA,
+     $                  C(J,J+1), LDC)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(K-J, A(J,J+1), LDA, A(J,J+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, ZALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, ZBETA, C(I,I+1), LDC)
+                     DO J = 1, K
+!                       CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+!    $                        K-J, ZALPHA, A(J+1,J+1), LDA, A(J,J+1),
+!    $                        LDA, ZBETA, C(J+1,J), 1)
+                     CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J, ZALPHA,
+     $                  A(J+1,J+1), LDA, A(J,J+1), LDA, ZBETA,
+     $                  C(J,J+1), LDC)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                     + ONE) + ZBETA*C(I,I)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(K-J, A(J,J+1), LDA, A(J,J+1), LDA)
+     $                     + ONE) + ZBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                     K-I+1, ZALPHA, A(I,I), LDA, A(I,I), LDA,
-     $                     ZBETA, C(I,I), LDC)
+                  DO J = 1, K
+                     CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                  'No Transpose', DIAG, 1, K-J+1, ZALPHA,
+     $                  A(J,J), LDA, A(J,J), LDA, ZBETA, C(J,J), LDC)
                   END DO
                END IF
             ELSE
@@ -419,31 +431,31 @@
 *
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, ZALPHA, A, LDA, A(I,1), LDA, ZBETA,
-     $                        C(1,I), 1)
+                     DO J = 1, K
+                        CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        J-1, ZALPHA, A, LDA, A(1,J), 1,
+     $                        ZBETA, C(1,J), 1)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(J-1, A(1,J), 1, A(1,J), 1)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, ZALPHA, A, LDA, A(I,1), LDA, ZBETA,
-     $                        C(1,I), 1)
+                     DO J = 1, K
+                        CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        J-1, ZALPHA, A, LDA, A(1,J), 1,
+     $                        ZBETA, C(1,J), 1)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
-     $                     + ONE) + ZBETA*C(I,I)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(J-1, A(1,J), 1, A(1,J), 1)
+     $                     + ONE) + ZBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG, I,
-     $                     ZALPHA, A, LDA, A(I,1), LDA,
-     $                     ZBETA, C(1,I), 1)
+                  DO J = 1, K
+                     CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                     J, ZALPHA, A, LDA, A(1,J), 1,
+     $                     ZBETA, C(1,J), 1)
                   END DO
                END IF
             END IF
@@ -457,31 +469,33 @@
 *
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, ZALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, ZBETA, C(I+1,I), 1)
+                     DO J = 1, K
+                        CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        K-J,
+     $                        ZALPHA, A(J+1,J+1), LDA, A(J,J+1), LDA,
+     $                        ZBETA, C(J+1,J), 1)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(K-I, A(J,J+1), LDA, A(J,J+1), LDA)
      $                     + ONE)
                      END DO
                   ELSE
-                     DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        K-I, ZALPHA, A(I+1,I+1), LDA, A(I,I+1),
-     $                        LDA, ZBETA, C(I+1,I), 1)
+                     DO J = 1, K
+                        CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                        K-J,
+     $                        ZALPHA, A(J+1,J+1), LDA, A(J,J+1), LDA,
+     $                        ZBETA, C(J+1,J), 1)
 *
-                        C(I,I) = ZALPHA *
-     $                     (ZDOTC(K-I, A(I,I+1), LDA, A(I,I+1), LDA)
-     $                     + ONE) + ZBETA*C(I,I)
+                        C(J,J) = ZALPHA *
+     $                     (ZDOTC(K-I, A(J,J+1), LDA, A(J,J+1), LDA)
+     $                     + ONE) + ZBETA*C(J,J)
                      END DO
                   END IF
                ELSE
-                  DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                     K-I+1, ZALPHA, A(I,I), LDA, A(I,I), LDA,
-     $                     ZBETA, C(I,I), 1)
+                  DO J = 1, K
+                     CALL ZTRMCVOOP(UPLOA, 'No Transpose', DIAG,
+     $                     K-J+1, ZALPHA, A(J,J), LDA, A(J,J), LDA,
+     $                     ZBETA, C(J,J), 1)
                   END DO
                END IF
             ELSE
@@ -491,9 +505,9 @@
                IF(UNITT) THEN
                   IF (BETA.EQ.ZERO) THEN
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, ZALPHA, A, LDA, A(I,1), LDA, ZBETA,
-     $                        C(I,1), LDC)
+                        CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                        'No Transpose', DIAG, 1, I-1, ZALPHA,
+     $                        A, LDA, A(I,1), LDA, ZBETA, C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
      $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
@@ -501,9 +515,9 @@
                      END DO
                   ELSE
                      DO I = 1, K
-                        CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG,
-     $                        I-1, ZALPHA, A, LDA, A(I,1), LDA, ZBETA,
-     $                        C(I,1), LDC)
+                        CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                        'No Transpose', DIAG, 1, I-1, ZALPHA,
+     $                        A, LDA, A(I,1), LDA, ZBETA, C(I,1), LDC)
 *
                         C(I,I) = ZALPHA *
      $                     (ZDOTC(I-1, A(I,1), LDA, A(I,1), LDA)
@@ -512,9 +526,9 @@
                   END IF
                ELSE
                   DO I = 1, K
-                     CALL ZTRMVOOP(UPLOA, 'No Transpose', DIAG, I,
-     $                     ZALPHA, A, LDA, A(I,1), LDA, ZBETA, C(I,1),
-     $                     LDC)
+                     CALL ZTRMMOOP_LVL2('Right', UPLOA, 'Conjugate',
+     $                     'No Transpose', DIAG, 1, I, ZALPHA,
+     $                     A, LDA, A(I,1), LDA, ZBETA, C(I,1), LDC)
                   END DO
                END IF
             END IF
