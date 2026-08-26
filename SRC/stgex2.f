@@ -246,12 +246,11 @@
       PARAMETER          ( WANDS = .TRUE. )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            STRONG, WEAK
+      LOGICAL            RAWACC, STRONG, WEAK
       INTEGER            I, IDUM, LINFO, M
-      REAL               BQRA21, BRQA21, DDUM, DNORMA, DNORMB,
-     $                   DSCALE,
-     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM,
-     $                   THRESHA, THRESHB
+      REAL               BQRA21, BQRB21, BRQA21, DDUM, DNORMA, DNORMB,
+     $                   DSCALE, DSUM, EPS, F, G, SA, SB, SCALE,
+     $                   SMLNUM, THRESHA, THRESHB
 *     ..
 *     .. Local Arrays ..
       INTEGER            IWORK( LDST + 2 )
@@ -262,8 +261,8 @@
      $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEQR2, SGERQ2, SLACPY, SLAGV2,
@@ -323,6 +322,8 @@
 *     on 04/01/10.
 *     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
 *     Jim Demmel and Guillaume Revy. See forum post 1783.
+*     The weak test now checks both A and B off-diagonal blocks from the
+*     raw Sylvester result.
 *
       THRESHA = MAX( TWENTY*EPS*DNORMA, SMLNUM )
       THRESHB = MAX( TWENTY*EPS*DNORMB, SMLNUM )
@@ -505,6 +506,16 @@
          CALL SGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO,
      $               T,
      $               LDST )
+*
+*        Compute F-norm(S21) and F-norm(T21) for the raw Sylvester
+*        result before the QR/RQ cleanup.
+*
+         BQRA21 = SLANGE( 'F', N1, N2, S( N2+1, 1 ), LDST, WORK )
+*
+         BQRB21 = SLANGE( 'F', N1, N2, T( N2+1, 1 ), LDST, WORK )
+*
+         RAWACC = BQRA21.LE.THRESHA .AND. BQRB21.LE.THRESHB
+*
          CALL SLACPY( 'F', M, M, S, LDST, SCPY, LDST )
          CALL SLACPY( 'F', M, M, T, LDST, TCPY, LDST )
          CALL SLACPY( 'F', M, M, IR, LDST, IRCOP, LDST )
@@ -529,12 +540,7 @@
 *
 *        Compute F-norm(S21) in BRQA21. (T21 is 0.)
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 30 I = 1, N2
-            CALL SLASSQ( N1, S( N2+1, I ), 1, DSCALE, DSUM )
-   30    CONTINUE
-         BRQA21 = DSCALE*SQRT( DSUM )
+         BRQA21 = SLANGE( 'F', N1, N2, S( N2+1, 1 ), LDST, WORK )
 *
 *        Triangularize the B-part by a QR factorization.
 *        Apply transformation (from right) to A-part, giving S.
@@ -553,23 +559,25 @@
 *
 *        Compute F-norm(S21) in BQRA21. (T21 is 0.)
 *
-         DSCALE = ZERO
-         DSUM = ONE
-         DO 40 I = 1, N2
-            CALL SLASSQ( N1, SCPY( N2+1, I ), 1, DSCALE, DSUM )
-   40    CONTINUE
-         BQRA21 = DSCALE*SQRT( DSUM )
+         BQRA21 = SLANGE( 'F', N1, N2, SCPY( N2+1, 1 ), LDST, WORK )
 *
 *        Decide which method to use.
 *          Weak stability test:
 *             F-norm(S21) <= O(EPS * F-norm((S)))
+*         and
+*             F-norm(T21) <= O(EPS * F-norm((T)))
+*
+*        First check the raw Sylvester result (before RQ/QR cleanup).
+*        If both A and B off-diagonal blocks are below threshold the
+*        swap is accepted unconditionally -- the RQ/QR cleanup that
+*        follows cannot trigger a false rejection.
 *
          IF( BQRA21.LE.BRQA21 .AND. BQRA21.LE.THRESHA ) THEN
             CALL SLACPY( 'F', M, M, SCPY, LDST, S, LDST )
             CALL SLACPY( 'F', M, M, TCPY, LDST, T, LDST )
             CALL SLACPY( 'F', M, M, IRCOP, LDST, IR, LDST )
             CALL SLACPY( 'F', M, M, LICOP, LDST, LI, LDST )
-         ELSE IF( BRQA21.GE.THRESHA ) THEN
+         ELSE IF( BRQA21.GE.THRESHA .AND. .NOT.RAWACC ) THEN
             GO TO 70
          END IF
 *
