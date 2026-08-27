@@ -110,6 +110,7 @@ set(SLASRC
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarf1f.f slarf1l.f slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarft_lvl2.f slarfx.f slarfy.f
    slarft_ut.f ssytrrk.f ssytrrk_lvl2.f strmmoop.f strmmoop_lvl2.f strmvoop.f
+   strsm_mod.f strsm_lvl2_mod.f strtri_mod.f strti2_mod.f
    slargv.f slarmm.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
@@ -223,6 +224,7 @@ set(CLASRC
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarf1f.f clarf1l.f clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f clarft_lvl2.f
    clarft_ut.f chetrrk.f chetrrk_lvl2.f ctrmmoop.f ctrmmoop_lvl2.f ctrmvoop.f
+   ctrsm_mod.f ctrsm_lvl2_mod.f ctrtri_mod.f ctrti2_mod.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
@@ -313,6 +315,7 @@ set(DLASRC
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarft_lvl2.f dlarfx.f dlarfy.f dlarf1f.f dlarf1l.f
    dlarft_ut.f dsytrrk.f dsytrrk_lvl2.f dtrmmoop.f dtrmmoop_lvl2.f dtrmvoop.f
+   dtrsm_mod.f dtrsm_lvl2_mod.f dtrtri_mod.f dtrti2_mod.f
    dlargv.f dlarmm.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
@@ -426,6 +429,7 @@ set(ZLASRC
    zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f zlarf1f.f zlarf1l.f
    zlarfg.f zlarfgp.f zlarft.f zlarft_lvl2.f
    zlarft_ut.f zhetrrk.f zhetrrk_lvl2.f ztrmmoop.f ztrmmoop_lvl2.f ztrmvoop.f
+   ztrsm_mod.f ztrsm_lvl2_mod.f ztrtri_mod.f ztrti2_mod.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f90 zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
