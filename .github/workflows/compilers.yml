@@ -70,6 +70,7 @@ jobs:
       CC: ${{ matrix.toolchain.CC }}
       FFLAGS: ${{ matrix.toolchain.FFLAGS }}
       CFLAGS: ${{ matrix.toolchain.CFLAGS }}
+      JOB_ID: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}-${{ matrix.lib_type }}
 
     strategy:
       fail-fast: false
@@ -380,6 +381,7 @@ jobs:
           -D BUILD_TESTING:BOOL=ON \
           -D LAPACKE_WITH_TMG:BOOL=ON \
           -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }} \
+          -D LAPACK_TESTING_JUNIT_JOB_ID="${JOB_ID}" \
           "${extra[@]}"
 
     - name: Build
@@ -409,7 +411,8 @@ jobs:
           -D LAPACKE:BOOL=ON ^
           -D BUILD_TESTING:BOOL=ON ^
           -D LAPACKE_WITH_TMG:BOOL=ON ^
-          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+          -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }} ^
+          -D LAPACK_TESTING_JUNIT_JOB_ID=%JOB_ID%
 
     - name: Build (Windows)
       if: ${{ runner.os == 'Windows' }}
@@ -453,7 +456,7 @@ jobs:
         files: build/lapack_testing_junit.xml
         # The report is named above, so there is nothing to search the tree for.
         disable_search: true
-        flags: tests-${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}-${{ matrix.lib_type }}
+        flags: tests-${{ env.JOB_ID }}
         name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
         fail_ci_if_error: true
         verbose: true
