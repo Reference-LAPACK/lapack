@@ -225,6 +225,7 @@ set(CLASRC
    clarf.f  clarf1f.f clarf1l.f clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f clarft_lvl2.f
    clarft_ut.f chetrrk.f chetrrk_lvl2.f ctrmmoop.f ctrmmoop_lvl2.f ctrmvoop.f
    ctrsm_mod.f ctrsm_lvl2_mod.f ctrtri_mod.f ctrti2_mod.f
+   cacxpy.f ctrmcvoop.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
@@ -430,6 +431,7 @@ set(ZLASRC
    zlarfg.f zlarfgp.f zlarft.f zlarft_lvl2.f
    zlarft_ut.f zhetrrk.f zhetrrk_lvl2.f ztrmmoop.f ztrmmoop_lvl2.f ztrmvoop.f
    ztrsm_mod.f ztrsm_lvl2_mod.f ztrtri_mod.f ztrti2_mod.f
+   zacxpy.f ztrmcvoop.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f90 zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
