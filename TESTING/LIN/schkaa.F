@@ -1103,7 +1103,8 @@
       DEALLOCATE (E, STAT = AllocateStatus)
       DEALLOCATE (S, STAT = AllocateStatus)
       DEALLOCATE (WORK, STAT = AllocateStatus)
-      DEALLOCATE (RWORK,  STAT = AllocateStatus)
+      DEALLOCATE (RWORK, STAT = AllocateStatus)
+      DEALLOCATE (IWORK, STAT = AllocateStatus)
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )

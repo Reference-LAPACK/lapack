@@ -3,17 +3,11 @@ function(_add_blas_test name src test_input test_output)
   target_link_libraries(${name} PRIVATE ${BLASLIB})
   lapack_add_coverage(${name})
   if(EXISTS "${test_input}")
-    add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
-      -DTEST=$<TARGET_FILE:${name}>
-      -DINPUT=${test_input}
-      -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    lapack_runtest_command(test_command ${name} INPUT "${test_input}")
+    add_test(NAME BLAS-${name} COMMAND ${test_command})
   else()
-    add_test(NAME BLAS-${name} COMMAND "${CMAKE_COMMAND}"
-      -DTEST=$<TARGET_FILE:${name}>
-      -DOUTPUT=${test_output}
-      -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    lapack_runtest_command(test_command ${name} OUTPUT "${test_output}")
+    add_test(NAME BLAS-${name} COMMAND ${test_command})
   endif()
 
   # Disable constant propagation for NAG compiler to avoid issues with
