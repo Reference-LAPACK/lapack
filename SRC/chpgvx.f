@@ -354,6 +354,7 @@
 *
 *     Quick return if possible
 *
+      M = 0
       IF( N.EQ.0 )
      $   RETURN
 *
