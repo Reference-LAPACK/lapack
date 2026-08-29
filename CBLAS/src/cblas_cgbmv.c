@@ -155,7 +155,7 @@ void API_SUFFIX(cblas_cgbmv)(const CBLAS_LAYOUT layout,
       if (TransA == CblasConjTrans)
       {
          if (x != X) free(x);
-         if (N > 0)
+         if (M > 0 && N > 0)
          {
             do
             {

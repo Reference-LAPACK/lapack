@@ -149,7 +149,7 @@ void API_SUFFIX(cblas_cgemv)(const CBLAS_LAYOUT layout,
       if (TransA == CblasConjTrans)
       {
          if (x != (const float *)X) free(x);
-         if (N > 0)
+         if (M > 0 && N > 0)
          {
             do
             {
