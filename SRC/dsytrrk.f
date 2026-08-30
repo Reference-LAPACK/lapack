@@ -197,7 +197,7 @@
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          DSYRK,DTRMMOOP
+      EXTERNAL          DSYTRRK_LVL2, DSYRK, DTRMMOOP
 *     ..
 *     .. External Functions ..
       INTEGER           ILAENV

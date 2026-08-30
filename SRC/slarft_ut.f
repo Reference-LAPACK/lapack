@@ -199,8 +199,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          SSYTRRK, SSYRK, STRTRI_MOD, SLARFT_LVL2,
-     $                  XERBLA
+      EXTERNAL          SSYTRRK, SSYRK, STRTRI_MOD
 *
 *     .. External Functions..
 *

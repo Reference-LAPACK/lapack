@@ -216,8 +216,7 @@
          EXTERNAL          LSAME, SDOT, ILAENV
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          SGEMM, SAXPY, SLASET, SSCAL,
-     $                     STRMVOOP
+         EXTERNAL          STRMMOOP_LVL2, SGEMM
 *        ..
 *        .. Intrinsic Functions ..
          INTRINSIC         MIN
@@ -259,141 +258,10 @@
 *
 *        Terminating Case
 *
-         IF (M.EQ.1.AND.N.EQ.1) THEN
-*
-*           This case is the simplest as we are just computing C = \alpha A*B +
-*           \beta C where all components are 1-by-1 matrices, thus treated as
-*           scalars
-*
-*           First, we compute C = \beta*C
-*
-            IF (BETA.EQ.ZERO) THEN
-               C(1,1) = ZERO
-            ELSE
-               C(1,1) = C(1,1) * BETA
-            END IF
-*
-*           Now, we compute C = \alpha*A*B + C
-*
-            IF(ALPHA.NE.ZERO) THEN
-               IF(UNIT) THEN
-*
-*                 Compute C = \alpha*B+C
-*
-                  C(1,1) = C(1,1) + ALPHA*B(1,1)
-               ELSE
-*
-*                 Compute C = \alpha*A*B+C
-*
-                  C(1,1) = C(1,1) + ALPHA*A(1,1)*B(1,1)
-               END IF
-            END IF
-            RETURN
-         ELSE IF (M.EQ.1) THEN
-*
-*           This means that C is a row vector. If BETA is 0, then we
-*           set it explicitly, otherwise we overwrite it with BETA*C
-*
-            IF (BETA.EQ.ZERO) THEN
-               CALL SLASET('All', M, N, ZERO, ZERO, C, LDC)
-            ELSE
-               CALL SSCAL(N, BETA, C, LDC)
-            END IF
-            IF (ALPHA.NE.ZERO) THEN
-*
-*              Determine if B is stored as a column or row. Regardless
-*              of if A is on the left or right, op(B)\in\R^{m\times n}.
-*
-               IF (TRANSG) THEN
-*
-*                 This means that B is stored as a column vector
-*
-                  INCB = 1
-               ELSE
-*
-*                 This means that B is stored as a row vector
-*
-                  INCB = LDB
-               END IF
-               IF (LSIDE) THEN
-*
-*                 This means we are computing
-*                 C = \alpha*op(A)*B + C
-*
-*                 Since this means A\in\R^{m\times m} = \R^{1\times 1},
-*                 A should be treated as a scalar that is either assumed to be
-*                 ONE or explicitly stored in A(1,1)
-*
-                  IF (UNIT) THEN
-                     CALL SAXPY(N, ALPHA, B, INCB, C, LDC)
-                  ELSE
-                     CALL SAXPY(N, ALPHA * A(1,1), B, INCB, C, LDC)
-                  END IF
-               ELSE
-*
-*                 This means we are computing
-*                 C = \alpha*B*op(A) + C = alpha*op(A)**T*B + C
-*
-*                 In order to use our routine DTRMVOOP, we must flip the
-*                 transpose flag
-*
-                  TRANSF = 'T'
-                  IF (TRANST) THEN
-                     TRANSF = 'N'
-                  END IF
-                  CALL STRMVOOP(UPLO, TRANSF, DIAG, N, ALPHA, A, LDA,
-     $                  B, INCB, ONE, C, LDC)
-               END IF
-            END IF
-            RETURN
-         ELSE IF (N.EQ.1) THEN
-*
-*           This means that C is a column vector. If BETA is 0, then we
-*           set it explicitly, otherwise we overwrite it with BETA*C
-*
-            IF (BETA.EQ.ZERO) THEN
-               CALL SLASET('All', M, N, ZERO, ZERO, C, LDC)
-            ELSE
-               CALL SSCAL(M, BETA, C, 1)
-            END IF
-            IF (ALPHA.NE.ZERO) THEN
-*
-*              Determine if B is stored as a column or row
-*
-               IF (TRANSG) THEN
-*
-*                 This means that B is stored as a column vector
-*
-                  INCB = LDB
-               ELSE
-*
-*                 This means that B is stored as a row vector
-*
-                  INCB = 1
-               END IF
-               IF (LSIDE) THEN
-*
-*                 This means we are computing
-*                 C = \alpha*op(A)*B + C
-*
-                  CALL STRMVOOP(UPLO, TRANSA, DIAG, M, ALPHA,
-     $                  A, LDA, B, INCB, ONE, C, 1)
-               ELSE
-*
-*                 This means we are computing
-*                 C = \alpha*B*op(A) + C
-*
-*                 Since this means A\in\R^{n\times n} = \R^{1\times 1},
-*                 A should be treated as a scalar that is either assumed to be
-*                 ONE or explicitly stored in A(1,1)
-*
-                  IF (UNIT) THEN
-                     CALL SAXPY(M, ALPHA, B, INCB, C, 1)
-                  ELSE
-                     CALL SAXPY(M, ALPHA*A(1,1), B, INCB, C, 1)
-                  END IF
-               END IF
-            END IF
+         IF (M.EQ.1.OR.N.EQ.1) THEN
+            ! Let the level 2 implementation handle this termination case
+            CALL STRMMOOP_LVL2(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+     $         M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
             RETURN
          END IF
 *

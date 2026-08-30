@@ -198,7 +198,7 @@
       EXTERNAL          LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, CACXPY, CAXPY, CSCAL
+      EXTERNAL          XERBLA, CSCAL, CAXPY, CACXPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC         MAX, CONJG

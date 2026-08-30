@@ -198,7 +198,7 @@
       EXTERNAL          LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, SAXPY, SSCAL
+      EXTERNAL          XERBLA, SSCAL, SAXPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC         MAX

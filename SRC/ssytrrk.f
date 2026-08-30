@@ -197,7 +197,7 @@
       LOGICAL           UPPERA,UPPERC,TRANSL,UNITT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          SSYRK,STRMMOOP
+      EXTERNAL          SSYTRRK_LVL2, SSYRK, STRMMOOP
 *     ..
 *     .. External Functions ..
       INTEGER           ILAENV

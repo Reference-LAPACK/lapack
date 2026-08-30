@@ -187,7 +187,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          DTRMM,DGEMM,DLACPY,DLARFT_UT
+      EXTERNAL          DLARFT_UT, DTRMM, DGEMM, DLACPY
 *
 *     .. External Functions..
 *

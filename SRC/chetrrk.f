@@ -198,7 +198,7 @@
       COMPLEX           CALPHA, CBETA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          CHERK,CTRMMOOP
+      EXTERNAL          CHETRRK_LVL2, CHERK, CTRMMOOP
 *     ..
 *     .. External Functions ..
       INTEGER           ILAENV

@@ -188,7 +188,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          ZTRMM,ZGEMM,ZLACPY,ZLARFT_UT
+      EXTERNAL          ZLARFT_UT, ZTRMM, ZGEMM, ZLACPY
 *
 *     .. External Functions..
 *

@@ -201,8 +201,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          CHETRRK, CHERK, CTRTRI_MOD, CLARFT_LVL2,
-     $                  XERBLA
+      EXTERNAL          CHETRRK, CHERK, CTRTRI_MOD
 *
 *
 *     .. External Functions..

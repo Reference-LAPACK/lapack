@@ -215,7 +215,7 @@
          EXTERNAL          LSAME,CDOTC,CDOTU
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          CTRMVOOP
+         EXTERNAL          CTRMVOOP, CTRMCVOOP
 *        ..
 *        .. Intrinsic Functions ..
          INTRINSIC         MIN, CONJG

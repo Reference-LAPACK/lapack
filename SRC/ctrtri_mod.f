@@ -134,6 +134,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
+      EXTERNAL XERBLA, CTRTI2, CTRMM, CTRSM_MOD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

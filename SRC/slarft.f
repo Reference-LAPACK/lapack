@@ -187,7 +187,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          STRMM,SGEMM,SLACPY,SLARFT_UT
+      EXTERNAL          SLARFT_UT, STRMM, SGEMM, SLACPY
 *
 *     .. External Functions..
 *

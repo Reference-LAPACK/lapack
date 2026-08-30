@@ -192,7 +192,7 @@
       EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL XERBLA, ZLASET, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX

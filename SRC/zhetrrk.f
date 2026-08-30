@@ -198,7 +198,7 @@
       COMPLEX*16        ZALPHA, ZBETA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          ZHERK,ZTRMMOOP
+      EXTERNAL          ZHETRRK_LVL2, ZHERK, ZTRMMOOP
 *     ..
 *     .. External Functions ..
       INTEGER           ILAENV

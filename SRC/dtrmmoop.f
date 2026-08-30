@@ -216,8 +216,7 @@
          EXTERNAL          LSAME, DDOT, ILAENV
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          DGEMM, DAXPY, DLASET, DSCAL,
-     $                     DTRMVOOP
+         EXTERNAL          DTRMMOOP_LVL2, DGEMM
 *        ..
 *        .. Intrinsic Functions ..
          INTRINSIC         MIN
@@ -261,8 +260,8 @@
 *
          IF (M.EQ.1.OR.N.EQ.1) THEN
             ! Let the level 2 implementation handle this termination case
-            CALL DTRMMOOP_LVL2(SIDE, UPLO, TRANSA, TRANSB, DIAG, M, N,
-     $         ALPHA, A, LDA, B, LDB, BETA, C, LDC)
+            CALL DTRMMOOP_LVL2(SIDE, UPLO, TRANSA, TRANSB, DIAG,
+     $         M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
             RETURN
          END IF
 *

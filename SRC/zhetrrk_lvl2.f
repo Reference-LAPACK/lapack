@@ -202,7 +202,7 @@
       INTRINSIC         DCMPLX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          ZTRMVOOP
+      EXTERNAL          ZTRMVOOP, ZTRMCVOOP, ZTRMMOOP_LVL2
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME

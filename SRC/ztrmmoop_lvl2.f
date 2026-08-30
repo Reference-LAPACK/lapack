@@ -215,7 +215,7 @@
          EXTERNAL          LSAME,ZDOTC,ZDOTU
 *        ..
 *        .. External Subroutines ..
-         EXTERNAL          ZTRMVOOP
+         EXTERNAL          ZTRMCVOOP, ZTRMVOOP
 *        ..
 *        .. Intrinsic Functions ..
          INTRINSIC         MIN, DCONJG

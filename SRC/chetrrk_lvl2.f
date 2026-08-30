@@ -202,7 +202,7 @@
       INTRINSIC         CMPLX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          CTRMVOOP
+      EXTERNAL          CTRMVOOP, CTRMCVOOP, CTRMMOOP_LVL2
 *     ..
 *     .. External Functions ..
       LOGICAL           LSAME
