@@ -6,15 +6,15 @@
 *  ===========
 *
 *       SUBROUTINE CTRMCVOOP( UPLO, TRANS, DIAG, N, ALPHA, A, LDA,
-*    $               X, INCX, BETA, Y, INCY )
+*    $ X, INCX, BETA, Y, INCY )
 *
 *     .. Scalar Arguments ..
-*     INTEGER           N, LDA, INCX, INCY
-*     CHARACTER         UPLO, TRANS, DIAG
-*     COMPLEX           ALPHA, BETA
+*     INTEGER N, LDA, INCX, INCY
+*     CHARACTER UPLO, TRANS, DIAG
+*     COMPLEX ALPHA, BETA
 *     ..
 *     .. Array Arguments ..
-*     COMPLEX           A(LDA,*),X(*),Y(*)
+*     COMPLEX A(LDA,*),X(*),Y(*)
 *     ..
 *
 *
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> CTRMCVOOP  performs one of the matrix-vector operations
+*> CTRMCVOOP performs one of the matrix-vector operations
 *>
 *>                y := alpha*op(A)*CONJG(x) + beta*y,
 *>
@@ -41,9 +41,9 @@
 *>           On entry, UPLO specifies whether the matrix is an upper or
 *>           lower triangular matrix as follows:
 *>
-*>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
+*>              UPLO = 'U' or 'u' A is an upper triangular matrix.
 *>
-*>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
+*>              UPLO = 'L' or 'l' A is a lower triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] TRANS
@@ -52,11 +52,11 @@
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
 *>
-*>              TRANS = 'N' or 'n'   y := A*x + y.
+*>              TRANS = 'N' or 'n' y := A*x + y.
 *>
-*>              TRANS = 'T' or 't'   y := A**T*x + y.
+*>              TRANS = 'T' or 't' y := A**T*x + y.
 *>
-*>              TRANS = 'C' or 'c'   y := A**H*x + y.
+*>              TRANS = 'C' or 'c' y := A**H*x + y.
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -65,9 +65,9 @@
 *>           On entry, DIAG specifies whether or not A is unit
 *>           triangular as follows:
 *>
-*>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+*>              DIAG = 'U' or 'u' A is assumed to be unit triangular.
 *>
-*>              DIAG = 'N' or 'n'   A is not assumed to be unit
+*>              DIAG = 'N' or 'n' A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim
 *>
@@ -80,14 +80,14 @@
 *>
 *> \param[in] ALPHA
 *> \verbatim
-*>          ALPHA is COMPLEX   .
+*>          ALPHA is COMPLEX .
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX    array, dimension ( LDA, N )
-*>           Before entry with  UPLO = 'U' or 'u', the leading n by n
+*>          A is COMPLEX array, dimension ( LDA, N )
+*>           Before entry with UPLO = 'U' or 'u', the leading n by n
 *>           upper triangular part of the array A must contain the upper
 *>           triangular matrix and the strictly lower triangular part of
 *>           A is not referenced.
@@ -95,7 +95,7 @@
 *>           lower triangular part of the array A must contain the lower
 *>           triangular matrix and the strictly upper triangular part of
 *>           A is not referenced.
-*>           Note that when  DIAG = 'U' or 'u', the diagonal elements of
+*>           Note that when DIAG = 'U' or 'u', the diagonal elements of
 *>           A are not referenced either, but are assumed to be unity.
 *> \endverbatim
 *>
@@ -109,7 +109,7 @@
 *>
 *> \param[in,out] X
 *> \verbatim
-*>          X is COMPLEX    array, dimension at least
+*>          X is COMPLEX array, dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCX ) ).
 *>           Before entry, the incremented array X must contain the n
 *>           element vector x.
@@ -124,14 +124,14 @@
 *>
 *> \param[in] BETA
 *> \verbatim
-*>          BETA is COMPLEX   .
+*>          BETA is COMPLEX .
 *>           On entry, BETA specifies the scalar beta. When BETA is
 *>           supplied as zero then Y need not be set on input.
 *> \endverbatim
 *>
 *> \param[in,out] Y
 *> \verbatim
-*>          Y is COMPLEX    array, dimension at least
+*>          Y is COMPLEX array, dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCY ) ).
 *>           Before entry with BETA non-zero, the incremented array Y
 *>           must contain the vector y. On exit, Y is overwritten by the

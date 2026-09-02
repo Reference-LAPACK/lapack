@@ -67,8 +67,8 @@
 *>          STOREV is CHARACTER*1
 *>          Specifies how the vectors which define the elementary
 *>          reflectors are stored (see also Further Details):
-*>          = 'C': columnwise
-*>          = 'R': rowwise
+*>          = 'C': column-wise
+*>          = 'R': row-wise
 *> \endverbatim
 *>
 *> \param[in] N
@@ -726,13 +726,13 @@
 *
 *        T_{2,1} = -T_{2,2}*T_{2,1}
 *
-         CALL DTRMM('Left', 'Lower', 'No tranpose', 'Non-unit', L,
+         CALL DTRMM('Left', 'Lower', 'No transpose', 'Non-unit', L,
      $      K-L, NEG_ONE, T(K-L+1,K-L+1), LDT, T(K-L+1,1), LDT)
 
 *
 *        T_{2,1} = T_{2,1}*T_{1,1}
 *
-         CALL DTRMM('Right', 'Lower', 'No tranpose', 'Non-unit', L,
+         CALL DTRMM('Right', 'Lower', 'No transpose', 'Non-unit', L,
      $      K-L, ONE, T, LDT, T(K-L+1,1), LDT)
       ELSE IF(RQT) THEN
 *        Break V apart into 6 components
@@ -809,7 +809,7 @@
 *
 *        T_{1,2} = V_{1,1}V_{2,1}' + T_{1,2}
 *
-         CALL DGEMM('No Tranpose', 'Transpose', K-L, L, N-K, ONE, V,
+         CALL DGEMM('No Transpose', 'Transpose', K-L, L, N-K, ONE, V,
      $         LDV, V(K-L+1,1), LDV, ONE, T(1, K-L+1), LDT)
 *
 *        At this point, we have that T_{1,2} = V_1*V_2'

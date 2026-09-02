@@ -20,11 +20,11 @@
 *       SUBROUTINE DTRTI2( UPLO, DIAG, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
-*       CHARACTER          DIAG, UPLO
-*       INTEGER            INFO, LDA, N
+*       CHARACTER DIAG, UPLO
+*       INTEGER INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION   A( LDA, * )
+*       DOUBLE PRECISION A( LDA, * )
 *       ..
 *
 *
@@ -47,34 +47,34 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the matrix A is upper or lower triangular.
-*>          = 'U':  Upper triangular
-*>          = 'L':  Lower triangular
+*>          = 'U': Upper triangular
+*>          = 'L': Lower triangular
 *> \endverbatim
 *>
 *> \param[in] DIAG
 *> \verbatim
 *>          DIAG is CHARACTER*1
 *>          Specifies whether or not the matrix A is unit triangular.
-*>          = 'N':  Non-unit triangular
-*>          = 'U':  Unit triangular
+*>          = 'N': Non-unit triangular
+*>          = 'U': Unit triangular
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.
+*>          The order of the matrix A. N >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
-*>          On entry, the triangular matrix A.  If UPLO = 'U', the
+*>          On entry, the triangular matrix A. If UPLO = 'U', the
 *>          leading n by n upper triangular part of the array A contains
 *>          the upper triangular matrix, and the strictly lower
-*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          triangular part of A is not referenced. If UPLO = 'L', the
 *>          leading n by n lower triangular part of the array A contains
 *>          the lower triangular matrix, and the strictly upper
-*>          triangular part of A is not referenced.  If DIAG = 'U', the
+*>          triangular part of A is not referenced. If DIAG = 'U', the
 *>          diagonal elements of A are also not referenced and are
 *>          assumed to be 1.
 *>
@@ -85,7 +85,7 @@
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>          The leading dimension of the array A. LDA >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -171,7 +171,7 @@
             ! Determine if we have a 0 diagonal.
             ! If not, we compute this column as normal
             ! Otherwise we set the current column to 0.
-            ! Then all 0s should propogate to the right in the
+            ! Then all 0s should propagate to the right in the
             ! same column
             IF( UNIT ) THEN
                CALL DSCAL(J-1, -ONE, A(1,J), 1)
@@ -183,7 +183,7 @@
                   CALL DLASET('a', J, 1, ZERO, ZERO, A(1,J), LDA)
                ELSE
                   ! In this case we must manually invert the diagonal
-                  ! element then propogate
+                  ! element then propagate
                   A(J,J) = ONE / A(J,J)
                   CALL DSCAL(J-1, -A(J,J), A(1,J), 1)
                END IF
@@ -210,7 +210,7 @@
                   !call dlaset('a', 1, j-1, zero, zero, a(j+1,1), lda)
                ELSE
                   ! In this case we must manually invert the diagonal
-                  ! element then propogate
+                  ! element then propagate
                   A(J,J) = ONE / A(J,J)
                   CALL DSCAL(N-J, -A(J,J), A(J+1,J), 1)
                END IF

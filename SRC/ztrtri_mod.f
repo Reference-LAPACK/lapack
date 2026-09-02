@@ -19,11 +19,11 @@
 *       RECURSIVE SUBROUTINE ZTRTRI_MOD( UPLO, DIAG, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
-*       CHARACTER          DIAG, UPLO
-*       INTEGER            INFO, LDA, N
+*       CHARACTER DIAG, UPLO
+*       INTEGER INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16   A( LDA, * )
+*       COMPLEX*16 A( LDA, * )
 *       ..
 *
 *
@@ -44,33 +44,33 @@
 *> \param[in] UPLO
 *> \verbatim
 *>          UPLO is CHARACTER*1
-*>          = 'U':  A is upper triangular;
-*>          = 'L':  A is lower triangular.
+*>          = 'U': A is upper triangular;
+*>          = 'L': A is lower triangular.
 *> \endverbatim
 *>
 *> \param[in] DIAG
 *> \verbatim
 *>          DIAG is CHARACTER*1
-*>          = 'N':  A is non-unit triangular;
-*>          = 'U':  A is unit triangular.
+*>          = 'N': A is non-unit triangular;
+*>          = 'U': A is unit triangular.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.
+*>          The order of the matrix A. N >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>          On entry, the triangular matrix A.  If UPLO = 'U', the
+*>          On entry, the triangular matrix A. If UPLO = 'U', the
 *>          leading N-by-N upper triangular part of the array A contains
 *>          the upper triangular matrix, and the strictly lower
-*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          triangular part of A is not referenced. If UPLO = 'L', the
 *>          leading N-by-N lower triangular part of the array A contains
 *>          the lower triangular matrix, and the strictly upper
-*>          triangular part of A is not referenced.  If DIAG = 'U', the
+*>          triangular part of A is not referenced. If DIAG = 'U', the
 *>          diagonal elements of A are also not referenced and are
 *>          assumed to be 1.
 *>          On exit, the (triangular) inverse of the original matrix, in
@@ -80,7 +80,7 @@
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>          The leading dimension of the array A. LDA >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -88,7 +88,7 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>          > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
+*>          > 0: if INFO = i, A(i,i) is exactly zero. The triangular
 *>               matrix is singular and its inverse can not be computed.
 *> \endverbatim
 *
@@ -180,7 +180,7 @@
       IF( UPPER ) THEN
          ! Compute X_{22}
          CALL ZTRTRI_MOD('Upper', DIAG, N-K, A(K+1,K+1), LDA, INFO)
-         ! Propogate to A_{12}
+         ! Propagate to A_{12}
          CALL ZTRMM('Right', 'Upper', 'No Transpose', DIAG, K, N-K,
      $      -ONE, A(K+1,K+1), LDA, A(1,K+1), LDA)
          ! Solve for X_{12}
@@ -191,7 +191,7 @@
       ELSE ! A is lower
          ! Compute X_{11}
          CALL ZTRTRI_MOD('Lower', DIAG, K, A, LDA, INFO)
-         ! Propogate to A_{21}
+         ! Propagate to A_{21}
          CALL ZTRMM('Right', 'Lower', 'No Transpose', DIAG, N-K, K,
      $      -ONE, A, LDA, A(K+1,1), LDA)
          ! Solve for X_{21}

@@ -6,15 +6,15 @@
 *  ===========
 *
 *       SUBROUTINE DTRMVOOP( UPLO, TRANS, DIAG, N, ALPHA, A, LDA,
-*    $               X, INCX, BETA, Y, INCY )
+*    $ X, INCX, BETA, Y, INCY )
 *
 *     .. Scalar Arguments ..
-*     INTEGER           N, LDA, INCX, INCY
-*     CHARACTER         UPLO, TRANS, DIAG
-*     DOUBLE PRECISION  ALPHA, BETA
+*     INTEGER N, LDA, INCX, INCY
+*     CHARACTER UPLO, TRANS, DIAG
+*     DOUBLE PRECISION ALPHA, BETA
 *     ..
 *     .. Array Arguments ..
-*     DOUBLE PRECISION  A(LDA,*),X(*),Y(*)
+*     DOUBLE PRECISION A(LDA,*),X(*),Y(*)
 *     ..
 *
 *
@@ -23,9 +23,9 @@
 *>
 *> \verbatim
 *>
-*> DTRMVOOP  performs one of the matrix-vector operations
+*> DTRMVOOP performs one of the matrix-vector operations
 *>
-*>    y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
+*>    y := alpha*A*x + beta*y, or y := alpha*A**T*x + beta*y,
 *>
 *> where alpha and beta are scalars, x and y are n element vectors, and
 *> A is an n by n unit, or non-unit, upper or lower triangular matrix.
@@ -41,9 +41,9 @@
 *>           On entry, UPLO specifies whether the matrix is an upper or
 *>           lower triangular matrix as follows:
 *>
-*>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
+*>              UPLO = 'U' or 'u' A is an upper triangular matrix.
 *>
-*>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
+*>              UPLO = 'L' or 'l' A is a lower triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] TRANS
@@ -52,11 +52,11 @@
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
 *>
-*>              TRANS = 'N' or 'n'   y := A*x + y.
+*>              TRANS = 'N' or 'n' y := A*x + y.
 *>
-*>              TRANS = 'T' or 't'   y := A**T*x + y.
+*>              TRANS = 'T' or 't' y := A**T*x + y.
 *>
-*>              TRANS = 'C' or 'c'   y := A**T*x + y.
+*>              TRANS = 'C' or 'c' y := A**T*x + y.
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -65,9 +65,9 @@
 *>           On entry, DIAG specifies whether or not A is unit
 *>           triangular as follows:
 *>
-*>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+*>              DIAG = 'U' or 'u' A is assumed to be unit triangular.
 *>
-*>              DIAG = 'N' or 'n'   A is not assumed to be unit
+*>              DIAG = 'N' or 'n' A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim
 *>
@@ -87,7 +87,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension ( LDA, N )
-*>           Before entry with  UPLO = 'U' or 'u', the leading n by n
+*>           Before entry with UPLO = 'U' or 'u', the leading n by n
 *>           upper triangular part of the array A must contain the upper
 *>           triangular matrix and the strictly lower triangular part of
 *>           A is not referenced.
@@ -95,7 +95,7 @@
 *>           lower triangular part of the array A must contain the lower
 *>           triangular matrix and the strictly upper triangular part of
 *>           A is not referenced.
-*>           Note that when  DIAG = 'U' or 'u', the diagonal elements of
+*>           Note that when DIAG = 'U' or 'u', the diagonal elements of
 *>           A are not referenced either, but are assumed to be unity.
 *> \endverbatim
 *>

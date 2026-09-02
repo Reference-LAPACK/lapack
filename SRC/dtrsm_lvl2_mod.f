@@ -25,14 +25,14 @@
 *>
 *> \verbatim
 *>
-*> DTRSM_lvl2_mod  solves one of the matrix equations
+*> DTRSM_lvl2_mod solves one of the matrix equations
 *>
-*>    op( A )*X = alpha*B,   or   X*op( A ) = alpha*B,
+*>    op( A )*X = alpha*B, or X*op( A ) = alpha*B,
 *>
 *> where alpha is a scalar, X and B are m by n matrices, A is a unit, or
-*> non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
+*> non-unit, upper or lower triangular matrix and op( A ) is one of
 *>
-*>    op( A ) = A   or   op( A ) = A**T.
+*>    op( A ) = A or op( A ) = A**T.
 *>
 *> The matrix X is overwritten on B.
 *> \endverbatim
@@ -46,9 +46,9 @@
 *>           On entry, SIDE specifies whether op( A ) appears on the left
 *>           or right of X as follows:
 *>
-*>              SIDE = 'L' or 'l'   op( A )*X = alpha*B.
+*>              SIDE = 'L' or 'l' op( A )*X = alpha*B.
 *>
-*>              SIDE = 'R' or 'r'   X*op( A ) = alpha*B.
+*>              SIDE = 'R' or 'r' X*op( A ) = alpha*B.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -57,9 +57,9 @@
 *>           On entry, UPLO specifies whether the matrix A is an upper or
 *>           lower triangular matrix as follows:
 *>
-*>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
+*>              UPLO = 'U' or 'u' A is an upper triangular matrix.
 *>
-*>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
+*>              UPLO = 'L' or 'l' A is a lower triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] TRANSA
@@ -68,11 +68,11 @@
 *>           On entry, TRANSA specifies the form of op( A ) to be used in
 *>           the matrix multiplication as follows:
 *>
-*>              TRANSA = 'N' or 'n'   op( A ) = A.
+*>              TRANSA = 'N' or 'n' op( A ) = A.
 *>
-*>              TRANSA = 'T' or 't'   op( A ) = A**T.
+*>              TRANSA = 'T' or 't' op( A ) = A**T.
 *>
-*>              TRANSA = 'C' or 'c'   op( A ) = A**T.
+*>              TRANSA = 'C' or 'c' op( A ) = A**T.
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -81,9 +81,9 @@
 *>           On entry, DIAG specifies whether or not A is unit triangular
 *>           as follows:
 *>
-*>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+*>              DIAG = 'U' or 'u' A is assumed to be unit triangular.
 *>
-*>              DIAG = 'N' or 'n'   A is not assumed to be unit
+*>              DIAG = 'N' or 'n' A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim
 *>
@@ -97,15 +97,15 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>           On entry, N specifies the number of columns of B.  N must be
+*>           On entry, N specifies the number of columns of B. N must be
 *>           at least zero.
 *> \endverbatim
 *>
 *> \param[in] ALPHA
 *> \verbatim
 *>          ALPHA is DOUBLE PRECISION.
-*>           On entry,  ALPHA specifies the scalar  alpha. When  alpha is
-*>           zero then  A is not referenced and  B need not be set before
+*>           On entry, ALPHA specifies the scalar alpha. When alpha is
+*>           zero then A is not referenced and B need not be set before
 *>           entry.
 *> \endverbatim
 *>
@@ -114,40 +114,40 @@
 *>          A is DOUBLE PRECISION array, dimension ( LDA, k ),
 *>           where k is m when SIDE = 'L' or 'l'
 *>             and k is n when SIDE = 'R' or 'r'.
-*>           Before entry  with  UPLO = 'U' or 'u',  the  leading  k by k
-*>           upper triangular part of the array  A must contain the upper
-*>           triangular matrix  and the strictly lower triangular part of
+*>           Before entry with UPLO = 'U' or 'u', the leading k by k
+*>           upper triangular part of the array A must contain the upper
+*>           triangular matrix and the strictly lower triangular part of
 *>           A is not referenced.
-*>           Before entry  with  UPLO = 'L' or 'l',  the  leading  k by k
-*>           lower triangular part of the array  A must contain the lower
-*>           triangular matrix  and the strictly upper triangular part of
+*>           Before entry with UPLO = 'L' or 'l', the leading k by k
+*>           lower triangular part of the array A must contain the lower
+*>           triangular matrix and the strictly upper triangular part of
 *>           A is not referenced.
-*>           Note that when  DIAG = 'U' or 'u',  the diagonal elements of
-*>           A  are not referenced either,  but are assumed to be  unity.
+*>           Note that when DIAG = 'U' or 'u', the diagonal elements of
+*>           A are not referenced either, but are assumed to be unity.
 *> \endverbatim
 *>
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
 *>           On entry, LDA specifies the first dimension of A as declared
-*>           in the calling (sub) program.  When  SIDE = 'L' or 'l'  then
-*>           LDA  must be at least  max( 1, m ),  when  SIDE = 'R' or 'r'
+*>           in the calling (sub) program. When SIDE = 'L' or 'l' then
+*>           LDA must be at least max( 1, m ), when SIDE = 'R' or 'r'
 *>           then LDA must be at least max( 1, n ).
 *> \endverbatim
 *>
 *> \param[in,out] B
 *> \verbatim
 *>          B is DOUBLE PRECISION array, dimension ( LDB, N )
-*>           Before entry,  the leading  m by n part of the array  B must
-*>           contain  the  right-hand  side  matrix  B,  and  on exit  is
-*>           overwritten by the solution matrix  X.
+*>           Before entry, the leading m by n part of the array B must
+*>           contain the right-hand side matrix B, and on exit is
+*>           overwritten by the solution matrix X.
 *> \endverbatim
 *>
 *> \param[in] LDB
 *> \verbatim
 *>          LDB is INTEGER
 *>           On entry, LDB specifies the first dimension of B as declared
-*>           in  the  calling  (sub)  program.   LDB  must  be  at  least
+*>           in the calling (sub) program. LDB must be at least
 *>           max( 1, m ).
 *> \endverbatim
 *

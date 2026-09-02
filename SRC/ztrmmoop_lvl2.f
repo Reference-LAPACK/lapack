@@ -9,15 +9,15 @@
 *  ===========
 *
 *     SUBROUTINE ZTRMMOOP_LVL2(SIDE, UPLO, TRANSA, TRANSB, DIAG
-*    $         M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
+*    $ M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
 *
 *        .. Scalar Arguments ..
-*        COMPLEX*16        ALPHA, BETA
-*        INTEGER           M, N, LDA, LDB, LDC
-*        CHARACTER         SIDE, UPLO, TRANSA, TRANSB, DIAG
+*        COMPLEX*16 ALPHA, BETA
+*        INTEGER M, N, LDA, LDB, LDC
+*        CHARACTER SIDE, UPLO, TRANSA, TRANSB, DIAG
 *        ..
 *        .. Array Arguments ..
-*        COMPLEX*16        A(LDA,*), B(LDB,*), C(LDC,*)
+*        COMPLEX*16 A(LDA,*), B(LDB,*), C(LDC,*)
 *        ..
 *
 *> \par Purpose:
@@ -35,7 +35,7 @@
 *> a unit, or non-unit, upper or lower triangular matrix, and op(A) is
 *> is one of
 *>
-*>          op(A) = A  or  op(A) = A**T  or  op(A) = A**H
+*>          op(A) = A or op(A) = A**T or op(A) = A**H
 *> \endverbatim
 *
 *  Arguments:
@@ -47,9 +47,9 @@
 *>           On entry, SIDE specifies whether op(A) multiplies op(B) from
 *>           the left or right as follows:
 *>
-*>             SIDE = 'L' or 'l'    C = \alpha op(A) * op(B) + \beta C
+*>             SIDE = 'L' or 'l' C = \alpha op(A) * op(B) + \beta C
 *>
-*>             SIDE = 'R' or 'r'    C = \alpha op(B) * op(A) + \beta C
+*>             SIDE = 'R' or 'r' C = \alpha op(B) * op(A) + \beta C
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -57,9 +57,9 @@
 *>          UPLO is CHARACTER*1
 *>           On entry, UPLO specifies whether the matrix A is an upper or
 *>           lower triangular matrix as follows:
-*>             UPLO = 'U' or 'u'    A is upper triangular
+*>             UPLO = 'U' or 'u' A is upper triangular
 *>
-*>             UPLO = 'L' or 'l'    A is lower triangular
+*>             UPLO = 'L' or 'l' A is lower triangular
 *> \Endverbatim
 *>
 *> \param[in] TRANSA
@@ -67,11 +67,11 @@
 *>          TRANSA is CHARACTER*1
 *>           On entry, TRANSA specifies the form of op(A) to be used in
 *>           the matrix multiplication as follows:
-*>             TRANSA = 'N' or 'n'    op(A) = A
+*>             TRANSA = 'N' or 'n' op(A) = A
 *>
-*>             TRANSA = 'T' or 't'    op(A) = A**T
+*>             TRANSA = 'T' or 't' op(A) = A**T
 *>
-*>             TRANSA = 'C' or 'c'    op(A) = A**H
+*>             TRANSA = 'C' or 'c' op(A) = A**H
 *> \endverbatim
 *>
 *> \param[in] TRANSB
@@ -79,11 +79,11 @@
 *>          TRANSB is CHARACTER*1
 *>           On entry, TRANSB specifies the form of op(B) to be used in
 *>           the matrix multiplication as follows:
-*>             TRANSB = 'N' or 'n'     op(B) = B
+*>             TRANSB = 'N' or 'n' op(B) = B
 *>
-*>             TRANSB = 'T' or 't'     op(B) = B**T
+*>             TRANSB = 'T' or 't' op(B) = B**T
 *>
-*>             TRANSB = 'C' or 'c'     op(B) = B**H
+*>             TRANSB = 'C' or 'c' op(B) = B**H
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -92,9 +92,9 @@
 *>           On entry, DIAG specifies whether or not A is unit triangular
 *>           as follows:
 *>
-*>              DIAG = 'U' or 'u'      A is assumed to be unit triangular.
+*>              DIAG = 'U' or 'u' A is assumed to be unit triangular.
 *>
-*>              DIAG = 'N' or 'n'      A is not assumed to be unit
+*>              DIAG = 'N' or 'n' A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim
 *>
@@ -128,12 +128,12 @@
 *>           upper triangular part of the array A must contain the upper
 *>           triangular matrix and the strictly lower triangular part of
 *>           A is not referenced.
-*>           Before entry  with  UPLO = 'L' or 'l', the leading k-by-k
+*>           Before entry with UPLO = 'L' or 'l', the leading k-by-k
 *>           lower triangular part of the array A must contain the lower
 *>           triangular matrix and the strictly upper triangular part of
 *>           A is not referenced.
-*>           Note that when  DIAG = 'U' or 'u',  the diagonal elements of
-*>           A  are not referenced either,  but are assumed to be  unity.
+*>           Note that when DIAG = 'U' or 'u', the diagonal elements of
+*>           A are not referenced either, but are assumed to be unity.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -141,7 +141,7 @@
 *>          LDA is INTEGER
 *>           On entry, LDA specifies the first dimension of A as declared
 *>           in the calling (sub) program. When SIDE = 'L' or 'l' then
-*>           LDA must be at least max( 1, m ), when  SIDE = 'R' or 'r'
+*>           LDA must be at least max( 1, m ), when SIDE = 'R' or 'r'
 *>           then LDA must be at least max( 1, n ).
 *> \endverbatim
 *>
@@ -149,7 +149,7 @@
 *> \verbatim
 *>           B is COMPLEX*16 array, dimension ( LDB, K ), where K is M
 *>           If SIDE='R' and TRANSA='N', or SIDE='L' and TRANSA='T' and N
-*>           otherwise. On entry, the leading k-by-k submatrix must contain
+*>           otherwise. On entry, the leading k-by-k sub-matrix must contain
 *>           B.
 *> \endverbatim
 *>
@@ -157,8 +157,8 @@
 *> \verbatim
 *>          LDB is INTEGER
 *>           On entry, LDB specifies the first dimension of B as declared
-*>           in the calling (sub) program.  When  SIDE = 'R' and TRANSB='N'
-*>           then LDB  must be at least  max( 1, m ), when SIDE = 'R'
+*>           in the calling (sub) program. When SIDE = 'R' and TRANSB='N'
+*>           then LDB must be at least max( 1, m ), when SIDE = 'R'
 *>           and TRANSB = 'T' then LDB must be at least max( 1, n ).
 *> \endverbatim
 *>
@@ -300,7 +300,7 @@
 *
 *              C = \alpha B**H*op(A) + \beta C
 *
-*              Which we compute componentwise.
+*              Which we compute component-wise.
 *              TODO: Consider extracting this into another subroutine
                IF (CONJA) THEN
                   IF (UPPER) THEN
