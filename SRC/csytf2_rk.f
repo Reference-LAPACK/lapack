@@ -263,6 +263,9 @@
      $                   CZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
+      LOGICAL            SAFEDIV
+      REAL               SMLNUM, BIGNUM, ABSD, ABSW1, ABSW2
+      COMPLEX            DINV, W1, W2
       LOGICAL            UPPER, DONE
       INTEGER            I, IMAX, J, JMAX, ITEMP, K, KK, KP, KSTEP,
      $                   P, II
@@ -270,10 +273,11 @@
       COMPLEX            D11, D12, D21, D22, T, WK, WKM1, WKP1, Z
 *     ..
 *     .. External Functions ..
+      COMPLEX            CLADIV
       LOGICAL            LSAME
       INTEGER            ICAMAX
       REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH, CLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSCAL, CSWAP, CSYR, XERBLA
@@ -308,6 +312,8 @@
 *     Initialize ALPHA for use in choosing pivot block size.
 *
       ALPHA = ( ONE+SQRT( SEVTEN ) ) / EIGHT
+      SMLNUM = SQRT( SLAMCH( 'S' ) )
+      BIGNUM = ONE / ( 4*SMLNUM )
 *
 *     Compute machine safe minimum
 *
@@ -580,10 +586,35 @@
                   D11 = A( K, K ) / D12
                   T = CONE / ( D11*D22-CONE )
 *
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( REAL( D12 ) ), ABS( AIMAG( D12 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D12
+                     ABSD = MAX( ABS( REAL( DINV ) ),
+     $                       ABS( AIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 30 J = K - 2, 1, -1
 *
-                     WKM1 = T*( ( D11*A( J, K-1 )-A( J, K ) ) / D12 )
-                     WK = T*( ( D22*A( J, K )-A( J, K-1 ) ) / D12 )
+                     W1 = D11*A( J, K-1 )-A( J, K )
+                     W2 = D22*A( J, K )-A( J, K-1 )
+                     ABSW1 = MAX( ABS( REAL( W1 ) ),
+     $                       ABS( AIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( REAL( W2 ) ),
+     $                       ABS( AIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        WKM1 = W1*DINV
+                        WK = W2*DINV
+                     ELSE
+                        WKM1 = T*CLADIV( W1, D12 )
+                        WK = T*CLADIV( W2, D12 )
+                     END IF
 *
                      DO 20 I = J, 1, -1
                         A( I, J ) = A( I, J ) - A( I, K )*WK -
@@ -896,12 +927,37 @@
                   D22 = A( K, K ) / D21
                   T = CONE / ( D11*D22-CONE )
 *
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( REAL( D21 ) ), ABS( AIMAG( D21 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D21
+                     ABSD = MAX( ABS( REAL( DINV ) ),
+     $                       ABS( AIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 60 J = K + 2, N
 *
 *                    Compute  ( W(k)W(k+1) ) * inv(D(k)) for row J
 *
-                     WK = T*( ( D11*A( J, K )-A( J, K+1 ) ) / D21 )
-                     WKP1 = T*( ( D22*A( J, K+1 )-A( J, K ) ) / D21 )
+                     W1 = D11*A( J, K )-A( J, K+1 )
+                     W2 = D22*A( J, K+1 )-A( J, K )
+                     ABSW1 = MAX( ABS( REAL( W1 ) ),
+     $                       ABS( AIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( REAL( W2 ) ),
+     $                       ABS( AIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        WK = W1*DINV
+                        WKP1 = W2*DINV
+                     ELSE
+                        WK = T*CLADIV( W1, D21 )
+                        WKP1 = T*CLADIV( W2, D21 )
+                     END IF
 *
 *                    Perform a rank-2 update of A(k+2:n,k+2:n)
 *

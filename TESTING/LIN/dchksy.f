@@ -214,6 +214,7 @@
       EXTERNAL           DGET06, DLANSY
 *     ..
 *     .. External Subroutines ..
+      EXTERNAL           DCHKSY_2X2
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
      $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
      $                   DSYCON, DSYRFS, DSYT01, DSYTRF,
@@ -655,6 +656,8 @@
   160       CONTINUE
   170    CONTINUE
   180 CONTINUE
+*
+      CALL DCHKSY_2X2( NOUT, NFAIL, NRUN )
 *
 *     Print a summary of the results.
 *

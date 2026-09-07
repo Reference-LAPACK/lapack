@@ -199,15 +199,21 @@
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
+      LOGICAL            SAFEDIV
+      DOUBLE PRECISION   SMLNUM, BIGNUM, ABSD, ABSW1, ABSW2
+      COMPLEX*16         DINV, W1, W2
       INTEGER            IMAX, J, JJ, JMAX, JP, K, KK, KKW, KP,
      $                   KSTEP, KW
       DOUBLE PRECISION   ABSAKK, ALPHA, COLMAX, ROWMAX
       COMPLEX*16         D11, D21, D22, R1, T, Z
 *     ..
 *     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
+      COMPLEX*16         ZLADIV
       LOGICAL            LSAME
       INTEGER            IZAMAX
-      EXTERNAL           LSAME, IZAMAX
+      EXTERNAL           LSAME, IZAMAX, ZLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZCOPY, ZGEMMTR, ZGEMV, ZSCAL, ZSWAP
@@ -228,6 +234,8 @@
 *     Initialize ALPHA for use in choosing pivot block size.
 *
       ALPHA = ( ONE+SQRT( SEVTEN ) ) / EIGHT
+      SMLNUM = SQRT( DLAMCH( 'S' ) )
+      BIGNUM = ONE / ( 4*SMLNUM )
 *
       IF( LSAME( UPLO, 'U' ) ) THEN
 *
@@ -431,9 +439,9 @@
 *                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
 *                               ( (  -1 ) ( D22 ) )
 *
-*                 T/d21 is not formed, since it overflows when d21 is
-*                 subnormal: each entry of the product is divided by
-*                 d21 and then scaled by T.
+*                 T/d21 is formed only in a safe range. Otherwise each
+*                 entry is divided by d21 using scaled division before
+*                 multiplication by T.
 *
                   D21 = W( K-1, KW )
                   D11 = W( K, KW ) / D21
@@ -444,11 +452,34 @@
 *                 dot products of rows of ( W(kw-1) W(kw) ) and columns
 *                 of D**(-1)
 *
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( DBLE( D21 ) ), ABS( DIMAG( D21 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D21
+                     ABSD = MAX( ABS( DBLE( DINV ) ),
+     $                       ABS( DIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 20 J = 1, K - 2
-                     A( J, K-1 ) = T*( (D11*W( J, KW-1 )-W( J, KW ) ) /
-     $                             D21 )
-                     A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
-     $                           D21 )
+                     W1 = D11*W( J, KW-1 )- W( J, KW )
+                     W2 = D22*W( J, KW )- W( J, KW-1 )
+                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
+     $                       ABS( DIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
+     $                       ABS( DIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        A( J, K-1 ) = W1*DINV
+                        A( J, K ) = W2*DINV
+                     ELSE
+                        A( J, K-1 ) = T*ZLADIV( W1, D21 )
+                        A( J, K ) = T*ZLADIV( W2, D21 )
+                     END IF
    20             CONTINUE
                END IF
 *
@@ -712,9 +743,9 @@
 *                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
 *                               ( (  -1 ) ( D22 ) )
 *
-*                 T/d21 is not formed, since it overflows when d21 is
-*                 subnormal: each entry of the product is divided by
-*                 d21 and then scaled by T.
+*                 T/d21 is formed only in a safe range. Otherwise each
+*                 entry is divided by d21 using scaled division before
+*                 multiplication by T.
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
@@ -725,11 +756,34 @@
 *                 dot products of rows of ( W(k) W(k+1) ) and columns
 *                 of D**(-1)
 *
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( DBLE( D21 ) ), ABS( DIMAG( D21 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D21
+                     ABSD = MAX( ABS( DBLE( DINV ) ),
+     $                       ABS( DIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 80 J = K + 2, N
-                     A( J, K ) = T*( ( D11*W( J, K )-W( J, K+1 ) ) /
-     $                           D21 )
-                     A( J, K+1 ) = T*( ( D22*W( J, K+1 )-W( J, K ) ) /
-     $                             D21 )
+                     W1 = D11*W( J, K )- W( J, K+1 )
+                     W2 = D22*W( J, K+1 )- W( J, K )
+                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
+     $                       ABS( DIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
+     $                       ABS( DIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        A( J, K ) = W1*DINV
+                        A( J, K+1 ) = W2*DINV
+                     ELSE
+                        A( J, K ) = T*ZLADIV( W1, D21 )
+                        A( J, K+1 ) = T*ZLADIV( W2, D21 )
+                     END IF
    80             CONTINUE
                END IF
 *

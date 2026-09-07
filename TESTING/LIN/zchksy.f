@@ -218,6 +218,7 @@
       EXTERNAL           DGET06, ZLANSY
 *     ..
 *     .. External Subroutines ..
+      EXTERNAL           ZCHKSY_2X2
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRSY, ZGET04,
      $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLATSY, ZPOT05,
      $                   ZSYCON, ZSYRFS, ZSYT01, ZSYT02, ZSYT03, ZSYTRF,
@@ -670,6 +671,8 @@
   160       CONTINUE
   170    CONTINUE
   180 CONTINUE
+*
+      CALL ZCHKSY_2X2( NOUT, NFAIL, NRUN )
 *
 *     Print a summary of the results.
 *
