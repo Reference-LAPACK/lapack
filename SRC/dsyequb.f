@@ -145,8 +145,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D0, ZERO = 0.0D0 )
+      DOUBLE PRECISION   ZERO, ONE, TWO
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0 )
       INTEGER            MAX_ITER
       PARAMETER          ( MAX_ITER = 100 )
 *     ..
@@ -222,14 +222,14 @@
          END DO
       END IF
       DO J = 1, N
-         S( J ) = 1.0D0 / S( J )
+         S( J ) = ONE / S( J )
       END DO
 
-      TOL = ONE / SQRT( 2.0D0 * N )
+      TOL = ONE / SQRT( TWO * N )
 
       DO ITER = 1, MAX_ITER
-         SCALE = 0.0D0
-         SUMSQ = 0.0D0
+         SCALE = ZERO
+         SUMSQ = ZERO
 *        beta = |A|s
          DO I = 1, N
             WORK( I ) = ZERO
@@ -253,13 +253,13 @@
          END IF
 
 *        avg = s^T beta / n
-         AVG = 0.0D0
+         AVG = ZERO
          DO I = 1, N
             AVG = AVG + S( I )*WORK( I )
          END DO
          AVG = AVG / N
 
-         STD = 0.0D0
+         STD = ZERO
          DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO

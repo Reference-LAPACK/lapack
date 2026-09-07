@@ -130,8 +130,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
+      REAL               ZERO, HALF, ONE
+      PARAMETER          ( ZERO = 0.0E+0, HALF = 0.5E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
@@ -173,7 +173,7 @@
       END IF
 
       BASE = SLAMCH( 'B' )
-      TMP = -0.5 / LOG ( BASE )
+      TMP = -HALF / LOG ( BASE )
 *
 *     Find the minimum and maximum diagonal elements.
 *
