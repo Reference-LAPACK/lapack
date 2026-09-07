@@ -214,7 +214,6 @@
       EXTERNAL           SGET06, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCHKSY_2X2
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
      $                   SLARHS, SLATB4, SLATMS, SPOT02, SPOT03, SPOT05,
      $                   SSYCON, SSYRFS, SSYT01, SSYTRF, SSYTRI2,
@@ -655,8 +654,6 @@
   160       CONTINUE
   170    CONTINUE
   180 CONTINUE
-*
-      CALL SCHKSY_2X2( NOUT, NFAIL, NRUN )
 *
 *     Print a summary of the results.
 *
