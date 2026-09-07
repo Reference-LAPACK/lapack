@@ -284,6 +284,9 @@
      $                   CZERO = ( 0.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
+      LOGICAL            SAFEDIV
+      DOUBLE PRECISION   SMLNUM, BIGNUM, ABSD, ABSW1, ABSW2
+      COMPLEX*16         DINV, W1, W2
       LOGICAL            DONE
       INTEGER            IMAX, ITEMP, J, JB, JJ, JMAX, K, KK, KW, KKW,
      $                   KP, KSTEP, P, II
@@ -291,10 +294,11 @@
       COMPLEX*16         D11, D12, D21, D22, R1, T, Z
 *     ..
 *     .. External Functions ..
+      COMPLEX*16         ZLADIV
       LOGICAL            LSAME
       INTEGER            IZAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DLAMCH, ZLADIV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZCOPY, ZGEMMTR, ZGEMV, ZSCAL, ZSWAP
@@ -315,6 +319,8 @@
 *     Initialize ALPHA for use in choosing pivot block size.
 *
       ALPHA = ( ONE+SQRT( SEVTEN ) ) / EIGHT
+      SMLNUM = SQRT( DLAMCH( 'S' ) )
+      BIGNUM = ONE / ( 4*SMLNUM )
 *
 *     Compute machine safe minimum
 *
@@ -582,11 +588,34 @@
                   D11 = W( K, KW ) / D12
                   D22 = W( K-1, KW-1 ) / D12
                   T = CONE / ( D11*D22-CONE )
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( DBLE( D12 ) ), ABS( DIMAG( D12 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D12
+                     ABSD = MAX( ABS( DBLE( DINV ) ),
+     $                       ABS( DIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 20 J = 1, K - 2
-                     A( J, K-1 ) = T*( (D11*W( J, KW-1 )-W( J, KW ) ) /
-     $                             D12 )
-                     A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
-     $                           D12 )
+                     W1 = D11*W( J, KW-1 )- W( J, KW )
+                     W2 = D22*W( J, KW )- W( J, KW-1 )
+                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
+     $                       ABS( DIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
+     $                       ABS( DIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        A( J, K-1 ) = W1*DINV
+                        A( J, K ) = W2*DINV
+                     ELSE
+                        A( J, K-1 ) = T*ZLADIV( W1, D12 )
+                        A( J, K ) = T*ZLADIV( W2, D12 )
+                     END IF
    20             CONTINUE
                END IF
 *
@@ -883,11 +912,34 @@
                   D11 = W( K+1, K+1 ) / D21
                   D22 = W( K, K ) / D21
                   T = CONE / ( D11*D22-CONE )
+*                 Bound reciprocal and numerators by BIGNUM, so each
+*                 complex product is at most 2*BIGNUM**2.
+*
+                  ABSD = MAX( ABS( DBLE( D21 ) ), ABS( DIMAG( D21 ) ) )
+                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
+                  IF( SAFEDIV ) THEN
+                     DINV = T / D21
+                     ABSD = MAX( ABS( DBLE( DINV ) ),
+     $                       ABS( DIMAG( DINV ) ) )
+                     SAFEDIV = ABSD.GE.SMLNUM .AND.
+     $                       ABSD.LE.BIGNUM
+                  END IF
+*
                   DO 80 J = K + 2, N
-                     A( J, K ) = T*( ( D11*W( J, K )-W( J, K+1 ) ) /
-     $                           D21 )
-                     A( J, K+1 ) = T*( ( D22*W( J, K+1 )-W( J, K ) ) /
-     $                             D21 )
+                     W1 = D11*W( J, K )- W( J, K+1 )
+                     W2 = D22*W( J, K+1 )- W( J, K )
+                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
+     $                       ABS( DIMAG( W1 ) ) )
+                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
+     $                       ABS( DIMAG( W2 ) ) )
+                     IF( SAFEDIV .AND.
+     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
+                        A( J, K ) = W1*DINV
+                        A( J, K+1 ) = W2*DINV
+                     ELSE
+                        A( J, K ) = T*ZLADIV( W1, D21 )
+                        A( J, K+1 ) = T*ZLADIV( W2, D21 )
+                     END IF
    80             CONTINUE
                END IF
 *
