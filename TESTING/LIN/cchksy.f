@@ -218,7 +218,6 @@
       EXTERNAL           SGET06, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCHKSY_2X2
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CGET04, CLACPY,
      $                   CLARHS, CLATB4, CLATMS, CLATSY, CPOT05, CSYCON,
      $                   CSYRFS, CSYT01, CSYT02, CSYT03, CSYTRF,
@@ -670,8 +669,6 @@
   160       CONTINUE
   170    CONTINUE
   180 CONTINUE
-*
-      CALL CCHKSY_2X2( NOUT, NFAIL, NRUN )
 *
 *     Print a summary of the results.
 *

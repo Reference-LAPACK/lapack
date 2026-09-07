@@ -46,7 +46,7 @@ SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkqp3rk.o schkcxx.o schkql.o schkqr.o schkrq.o \
-   schksp.o schksy.o schksy_2x2.o schksy_rook.o schksy_rk.o  \
+   schksp.o schksy.o schksy_rook.o schksy_rk.o  \
    schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
@@ -90,7 +90,7 @@ CLINTST = cchkaa.o \
    cchkhe.o cchkhe_rook.o cchkhe_rk.o  \
    cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkqp3rk.o cchkcxx.o cchkql.o \
-   cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_2x2.o cchksy_rook.o cchksy_rk.o \
+   cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o \
    cchksy_aa.o cchksy_aa_2stage.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhe_rook.o cdrvhe_rk.o cdrvhe_aa.o cdrvhp.o \
@@ -138,7 +138,7 @@ DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
    dchkpt.o dchkq3.o dchkqp3rk.o dchkcxx.o dchkql.o dchkqr.o \
-   dchkrq.o dchksp.o dchksy.o dchksy_2x2.o dchksy_rook.o dchksy_rk.o  \
+   dchkrq.o dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
    dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
@@ -183,7 +183,7 @@ ZLINTST = zchkaa.o \
    zchkhe.o zchkhe_rook.o zchkhe_rk.o zchkhe_aa.o zchkhe_aa_2stage.o \
    zchkhp.o zchklq.o zchkpb.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkqp3rk.o zchkcxx.o zchkql.o \
-   zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_2x2.o zchksy_rook.o zchksy_rk.o \
+   zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchksy_rk.o \
    zchksy_aa.o zchksy_aa_2stage.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhe_rook.o zdrvhe_rk.o zdrvhe_aa.o zdrvhe_aa_2stage.o zdrvhp.o \

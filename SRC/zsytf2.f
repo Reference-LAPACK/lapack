@@ -212,21 +212,15 @@
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            SAFEDIV
-      DOUBLE PRECISION   SMLNUM, BIGNUM, ABSD, ABSW1, ABSW2
-      COMPLEX*16         DINV, W1, W2
       LOGICAL            UPPER
       INTEGER            I, IMAX, J, JMAX, K, KK, KP, KSTEP
       DOUBLE PRECISION   ABSAKK, ALPHA, COLMAX, ROWMAX
       COMPLEX*16         D11, D12, D21, D22, R1, T, WK, WKM1, WKP1, Z
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
-      COMPLEX*16         ZLADIV
       LOGICAL            DISNAN, LSAME
       INTEGER            IZAMAX
-      EXTERNAL           DISNAN, LSAME, IZAMAX, ZLADIV
+      EXTERNAL           DISNAN, LSAME, IZAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZSCAL, ZSWAP, ZSYR
@@ -261,8 +255,6 @@
 *     Initialize ALPHA for use in choosing pivot block size.
 *
       ALPHA = ( ONE+SQRT( SEVTEN ) ) / EIGHT
-      SMLNUM = SQRT( DLAMCH( 'S' ) )
-      BIGNUM = ONE / ( 4*SMLNUM )
 *
       IF( UPPER ) THEN
 *
@@ -403,34 +395,9 @@
                   D11 = A( K, K ) / D12
                   T = CONE / ( D11*D22-CONE )
 *
-*                 Bound reciprocal and numerators by BIGNUM, so each
-*                 complex product is at most 2*BIGNUM**2.
-*
-                  ABSD = MAX( ABS( DBLE( D12 ) ), ABS( DIMAG( D12 ) ) )
-                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
-                  IF( SAFEDIV ) THEN
-                     DINV = T / D12
-                     ABSD = MAX( ABS( DBLE( DINV ) ),
-     $                       ABS( DIMAG( DINV ) ) )
-                     SAFEDIV = ABSD.GE.SMLNUM .AND.
-     $                       ABSD.LE.BIGNUM
-                  END IF
-*
                   DO 30 J = K - 2, 1, -1
-                     W1 = D11*A( J, K-1 )-A( J, K )
-                     W2 = D22*A( J, K )-A( J, K-1 )
-                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
-     $                       ABS( DIMAG( W1 ) ) )
-                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
-     $                       ABS( DIMAG( W2 ) ) )
-                     IF( SAFEDIV .AND.
-     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
-                        WKM1 = W1*DINV
-                        WK = W2*DINV
-                     ELSE
-                        WKM1 = T*ZLADIV( W1, D12 )
-                        WK = T*ZLADIV( W2, D12 )
-                     END IF
+                     WKM1 = T*( ( D11*A( J, K-1 )-A( J, K ) ) / D12 )
+                     WK = T*( ( D22*A( J, K )-A( J, K-1 ) ) / D12 )
                      DO 20 I = J, 1, -1
                         A( I, J ) = A( I, J ) - A( I, K )*WK -
      $                              A( I, K-1 )*WKM1
@@ -602,34 +569,9 @@
                   D22 = A( K, K ) / D21
                   T = CONE / ( D11*D22-CONE )
 *
-*                 Bound reciprocal and numerators by BIGNUM, so each
-*                 complex product is at most 2*BIGNUM**2.
-*
-                  ABSD = MAX( ABS( DBLE( D21 ) ), ABS( DIMAG( D21 ) ) )
-                  SAFEDIV = ABSD.GE.SMLNUM .AND. ABSD.LE.BIGNUM
-                  IF( SAFEDIV ) THEN
-                     DINV = T / D21
-                     ABSD = MAX( ABS( DBLE( DINV ) ),
-     $                       ABS( DIMAG( DINV ) ) )
-                     SAFEDIV = ABSD.GE.SMLNUM .AND.
-     $                       ABSD.LE.BIGNUM
-                  END IF
-*
                   DO 60 J = K + 2, N
-                     W1 = D11*A( J, K )-A( J, K+1 )
-                     W2 = D22*A( J, K+1 )-A( J, K )
-                     ABSW1 = MAX( ABS( DBLE( W1 ) ),
-     $                       ABS( DIMAG( W1 ) ) )
-                     ABSW2 = MAX( ABS( DBLE( W2 ) ),
-     $                       ABS( DIMAG( W2 ) ) )
-                     IF( SAFEDIV .AND.
-     $                   MAX( ABSW1, ABSW2 ).LE.BIGNUM ) THEN
-                        WK = W1*DINV
-                        WKP1 = W2*DINV
-                     ELSE
-                        WK = T*ZLADIV( W1, D21 )
-                        WKP1 = T*ZLADIV( W2, D21 )
-                     END IF
+                     WK = T*( ( D11*A( J, K )-A( J, K+1 ) ) / D21 )
+                     WKP1 = T*( ( D22*A( J, K+1 )-A( J, K ) ) / D21 )
                      DO 50 I = J, N
                         A( I, J ) = A( I, J ) - A( I, K )*WK -
      $                              A( I, K+1 )*WKP1
