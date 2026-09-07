@@ -200,9 +200,10 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            FINISH, I, ICOMPZ, II, J, K, LGN, LIWMIN,
-     $                   LWMIN, M, SMLSIZ, START, STOREZ, STRTRW
-      DOUBLE PRECISION   EPS, ORGNRM, P, TINY
+      INTEGER            FINISH, I, ICOMPZ, II, ISCALE, J, K, LGN,
+     $                   LIWMIN, LWMIN, M, SMLSIZ, START, STOREZ, STRTRW
+      DOUBLE PRECISION   EPS, EPS2, ORGNRM, P, SAFMAX, SAFMIN,
+     $                   SSFMAX, SSFMIN, TINY
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -339,7 +340,14 @@
          IF( ORGNRM.EQ.ZERO )
      $      GO TO 50
 *
+*        Determine the unit roundoff and over/underflow thresholds.
+*
          EPS = DLAMCH( 'Epsilon' )
+         EPS2 = EPS**2
+         SAFMIN = DLAMCH( 'S' )
+         SAFMAX = ONE / SAFMIN
+         SSFMAX = SQRT( SAFMAX ) / ( ONE + TWO )
+         SSFMIN = SQRT( SAFMIN ) / EPS2
 *
          START = 1
 *
@@ -377,12 +385,20 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
-     $                      M,
-     $                      INFO )
-               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1,
-     $                      E( START ),
-     $                      M-1, INFO )
+               ISCALE = 0
+               IF( ORGNRM.GT.SSFMAX ) THEN
+                  ISCALE = 1
+                  CALL DLASCL( 'G', 0, 0, ORGNRM, SSFMAX, M, 1,
+     $                         D( START ), M, INFO )
+                  CALL DLASCL( 'G', 0, 0, ORGNRM, SSFMAX, M-1, 1,
+     $                          E( START ), M-1, INFO )
+               ELSE IF( ORGNRM.LT.SSFMIN ) THEN
+                  ISCALE = 2
+                  CALL DLASCL( 'G', 0, 0, ORGNRM, SSFMIN, M, 1,
+     $                         D( START ), M, INFO )
+                  CALL DLASCL( 'G', 0, 0, ORGNRM, SSFMIN, M-1, 1,
+     $                          E( START ), M-1, INFO )
+               END IF
 *
                IF( ICOMPZ.EQ.1 ) THEN
                   STRTRW = 1
@@ -400,9 +416,13 @@
 *
 *              Scale back.
 *
-               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
-     $                      M,
-     $                      INFO )
+               IF( ISCALE.EQ.1 ) THEN
+                  CALL DLASCL( 'G', 0, 0, SSFMAX, ORGNRM, M, 1,
+     $                         D( START ), M, INFO )
+               ELSE IF( ISCALE.EQ.2 ) THEN
+                  CALL DLASCL( 'G', 0, 0, SSFMIN, ORGNRM, M, 1,
+     $                         D( START ), M, INFO )
+               END IF
 *
             ELSE
                IF( ICOMPZ.EQ.1 ) THEN
