@@ -66,18 +66,18 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      INTEGER            NMAX
-      PARAMETER          ( NMAX = 2 )
+      INTEGER            NMAX, LW, LIW
+      PARAMETER          ( NMAX = 2, LW = 1000, LIW = 30 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            INFO, IRNK
-      DOUBLE PRECISION   RCOND
+      DOUBLE PRECISION   NAN, ONE, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            IP( NMAX )
+      INTEGER            IP( LIW )
       DOUBLE PRECISION   A( NMAX, NMAX ), B( NMAX, NMAX ), S( NMAX ),
-     $                   W( NMAX )
+     $                   W( LW )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -95,6 +95,9 @@
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NOUT, OK, LERR
       COMMON             / SRNAMC / SRNAMT
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -265,6 +268,26 @@
          CALL DGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, 1, IP,
      $                INFO )
          CALL CHKXER( 'DGELSD', INFOT, NOUT, LERR, OK )
+*
+*        DGELSD must return INFO = 1, without calling XERBLA, when A
+*        contains a NaN: the NaN norm would otherwise be rejected by
+*        DLASCL inside DLALSD.
+*
+         ONE = 1.0D+0
+         NAN = SQRT( -ONE )
+         A( 2, 2 ) = NAN
+         B( 1, 1 ) = 1.0D+0
+         B( 2, 1 ) = 1.0D+0
+         RCOND = -1.0D+0
+         SRNAMT = 'DGELSD'
+         INFOT = 0
+         LERR = .FALSE.
+         CALL DGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, LW, IP,
+     $                INFO )
+         IF( LERR .OR. INFO.NE.1 ) THEN
+            WRITE( NOUT, FMT = 9999 )INFO
+            OK = .FALSE.
+         END IF
       END IF
 *
 *     Print a summary line.
@@ -272,6 +295,9 @@
       CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
+*
+ 9999 FORMAT( ' *** DGELSD on a matrix with a NaN returned INFO = ', I6,
+     $      ' instead of 1 ***' )
 *
 *     End of DERRLS
 *
