@@ -44,7 +44,7 @@ function(lapack_no_constant_propagation_flag out_var)
   endif()
 endfunction()
 
-# Disable it for the CXX error-exit and tridiagonal Cholesky tests among
+# Disable it for the CXX error-exit and packed, banded and tridiagonal Cholesky tests among
 # ARGN, which manufacture NaNs. Call this with every source list: the
 # generated _64 and _TEST copies need it as much as the originals.
 function(lapack_nag_disable_constant_propagation)
@@ -54,7 +54,7 @@ function(lapack_nag_disable_constant_propagation)
   endif()
   foreach(source IN LISTS ARGN)
     get_filename_component(name "${source}" NAME)
-    if(name MATCHES "^[scdz](errcxx|chkpt)(_[A-Za-z0-9]+)*\\.f$")
+    if(name MATCHES "^[scdz](errcxx|chkp[tpb])(_[A-Za-z0-9]+)*\\.f$")
       set_source_files_properties("${source}"
         PROPERTIES COMPILE_OPTIONS "${flag}")
     endif()
