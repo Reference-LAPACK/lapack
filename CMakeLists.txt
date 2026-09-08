@@ -62,12 +62,20 @@ function(lapack_add_coverage lib)
   target_link_libraries(${lib} PRIVATE gcov)
 endfunction()
 
-# Use valgrind if it is found
-option( LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON )
-find_program( MEMORYCHECK_COMMAND valgrind )
-if( MEMORYCHECK_COMMAND )
-  message( STATUS "Found valgrind: ${MEMORYCHECK_COMMAND}" )
-  set( MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=all --track-origins=yes" )
+option(LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON)
+option(LAPACK_MEMORY_CHECK "Configure the test suite for valgrind memory checking" OFF)
+if(LAPACK_MEMORY_CHECK)
+  find_program(MEMORYCHECK_COMMAND valgrind REQUIRED)
+  message(STATUS "Memory checking with valgrind: ${MEMORYCHECK_COMMAND}")
+  set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=definite,indirect --track-origins=yes --trace-children=yes")
+
+  # The Python summary is a test of its own, so the memory check would run the
+  # interpreter under valgrind and report on that rather than on LAPACK.
+  if(LAPACK_TESTING_USE_PYTHON)
+    message(STATUS "Memory checking: forcing LAPACK_TESTING_USE_PYTHON to OFF")
+    set(LAPACK_TESTING_USE_PYTHON OFF CACHE BOOL
+      "Use Python for testing. Disable it on memory checks." FORCE)
+  endif()
 endif()
 
 # By default test Fortran compiler complex abs and complex division
@@ -186,6 +194,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # Testing
 option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
+include(RuntestCommand)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
 if(BUILD_TESTING)
