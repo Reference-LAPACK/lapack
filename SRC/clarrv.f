@@ -702,6 +702,10 @@
      $                       WERR(WBEGIN),WORK( INDWRK ),
      $                       IWORK( IINDWK ), PIVMIN, SPDIAM,
      $                       IN, IINFO )
+                        IF( IINFO.NE.0 ) THEN
+                           INFO = -1
+                           RETURN
+                        END IF
  55                  CONTINUE
 *
                      IF((WBEGIN+NEWLST-1.LT.DOL).OR.

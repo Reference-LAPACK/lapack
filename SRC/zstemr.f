@@ -304,10 +304,11 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = 1X, internal error in DLARRE,
-*>                if INFO = 2X, internal error in ZLARRV.
+*>                if INFO = 2X, internal error in ZLARRV,
+*>                if INFO = 3X, internal error in DLARRJ.
 *>                Here, the digit X = ABS( IINFO ) < 10, where IINFO is
-*>                the nonzero error code returned by DLARRE or
-*>                ZLARRV, respectively.
+*>                the nonzero error code returned by DLARRE, ZLARRV
+*>                or DLARRJ, respectively.
 *> \endverbatim
 *
 *  Authors:
@@ -751,6 +752,10 @@
      $                   WORK( INDERR+WBEGIN-1 ),
      $                   WORK( INDWRK ), IWORK( IINDWK ), PIVMIN,
      $                   TNRM, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  INFO = 30 + ABS( IINFO )
+                  RETURN
+               END IF
                IBEGIN = IEND + 1
                WBEGIN = WEND + 1
  39      CONTINUE
