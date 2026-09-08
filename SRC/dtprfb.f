@@ -588,7 +588,7 @@
             END DO
          END DO
          CALL DTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, MP ), LDV,
-     $               WORK, LDB )
+     $               WORK, LDWORK )
          CALL DGEMM( 'N', 'N', L, N, M-L, ONE, V, LDV,B, LDB,
      $               ONE, WORK, LDWORK )
          CALL DGEMM( 'N', 'N', K-L, N, M, ONE, V( KP, 1 ), LDV,

@@ -45,6 +45,7 @@ void API_SUFFIX(cblas_sgemv)(const CBLAS_LAYOUT layout,
          API_SUFFIX(cblas_xerbla)(2, "cblas_sgemv","Illegal TransA setting, %d\n", TransA);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
+         return;
       }
       #ifdef F77_CHAR
          F77_TA = C2F_CHAR(&TA);
