@@ -462,7 +462,11 @@
          ABSE = ABS( E( LL ) )
          IF( TOL.LT.ZERO .AND. ABSS.LE.THRESH )
      $      D( LL ) = ZERO
-         IF( ABSE.LE.THRESH )
+*        An exact zero always marks a split, also when THRESH is NaN
+*        because the input contains an Inf; otherwise the convergence
+*        tests below zero E( M-1 ) and return here without the split
+*        ever being found.
+         IF( ABSE.LE.THRESH .OR. ABSE.EQ.ZERO )
      $      GO TO 80
          SMAX = MAX( SMAX, ABSS, ABSE )
    70 CONTINUE
