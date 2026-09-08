@@ -146,6 +146,7 @@
 *>         > 0:  The algorithm failed to compute a singular value while
 *>               working on the submatrix lying in rows and columns
 *>               INFO/(N+1) through MOD(INFO,N+1).
+*>         = 1:  also if D or E contains a NaN.
 *> \endverbatim
 *
 *  Authors:
@@ -200,8 +201,8 @@
 *     .. External Functions ..
       INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH, DLANST
-      LOGICAL            LSAME
-      EXTERNAL           IDAMAX, DLAMCH, DLANST, LSAME
+      LOGICAL            DISNAN, LSAME
+      EXTERNAL           IDAMAX, DLAMCH, DLANST, DISNAN, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG,
@@ -248,6 +249,8 @@
       ELSE IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
             CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
+         ELSE IF( DISNAN( D( 1 ) ) ) THEN
+            INFO = 1
          ELSE
             RANK = 1
             CALL DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
@@ -290,6 +293,9 @@
       ORGNRM = DLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
          CALL DLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
+         RETURN
+      ELSE IF( DISNAN( ORGNRM ) ) THEN
+         INFO = 1
          RETURN
       END IF
 *

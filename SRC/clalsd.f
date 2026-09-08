@@ -153,6 +153,7 @@
 *>         > 0:  The algorithm failed to compute a singular value while
 *>               working on the submatrix lying in rows and columns
 *>               INFO/(N+1) through MOD(INFO,N+1).
+*>         = 1:  also if D or E contains a NaN.
 *> \endverbatim
 *
 *  Authors:
@@ -212,8 +213,8 @@
 *     .. External Functions ..
       INTEGER            ISAMAX
       REAL               SLAMCH, SLANST
-      LOGICAL            LSAME
-      EXTERNAL           ISAMAX, SLAMCH, SLANST, LSAME
+      LOGICAL            SISNAN, LSAME
+      EXTERNAL           ISAMAX, SLAMCH, SLANST, SISNAN, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET,
@@ -261,6 +262,8 @@
       ELSE IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
             CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
+         ELSE IF( SISNAN( D( 1 ) ) ) THEN
+            INFO = 1
          ELSE
             RANK = 1
             CALL CLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
@@ -303,6 +306,9 @@
       ORGNRM = SLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
          CALL CLASET( 'A', N, NRHS, CZERO, CZERO, B, LDB )
+         RETURN
+      ELSE IF( SISNAN( ORGNRM ) ) THEN
+         INFO = 1
          RETURN
       END IF
 *

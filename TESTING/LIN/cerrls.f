@@ -66,18 +66,18 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      INTEGER            NMAX
-      PARAMETER          ( NMAX = 2 )
+      INTEGER            NMAX, LW, LIW
+      PARAMETER          ( NMAX = 2, LW = 1000, LIW = 30 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            INFO, IRNK
-      REAL               RCOND
+      REAL               NAN, ONE, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            IP( NMAX )
-      REAL               RW( NMAX ), S( NMAX )
-      COMPLEX            A( NMAX, NMAX ), B( NMAX, NMAX ), W( NMAX )
+      INTEGER            IP( LIW )
+      REAL               RW( LW ), S( NMAX )
+      COMPLEX            A( NMAX, NMAX ), B( NMAX, NMAX ), W( LW )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -95,6 +95,9 @@
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NOUT, OK, LERR
       COMMON             / SRNAMC / SRNAMT
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -271,6 +274,26 @@
          CALL CGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, 1,
      $                RW, IP, INFO )
          CALL CHKXER( 'CGELSD', INFOT, NOUT, LERR, OK )
+*
+*        CGELSD must return INFO = 1, without calling XERBLA, when A
+*        contains a NaN: the NaN norm would otherwise be rejected by
+*        SLASCL inside CLALSD.
+*
+         ONE = 1.0E+0
+         NAN = SQRT( -ONE )
+         A( 2, 2 ) = NAN
+         B( 1, 1 ) = ( 1.0E+0, 0.0E+0 )
+         B( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+         RCOND = -1.0E+0
+         SRNAMT = 'CGELSD'
+         INFOT = 0
+         LERR = .FALSE.
+         CALL CGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, LW, RW,
+     $                IP, INFO )
+         IF( LERR .OR. INFO.NE.1 ) THEN
+            WRITE( NOUT, FMT = 9999 )INFO
+            OK = .FALSE.
+         END IF
       END IF
 *
 *     Print a summary line.
@@ -278,6 +301,9 @@
       CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
+*
+ 9999 FORMAT( ' *** CGELSD on a matrix with a NaN returned INFO = ', I6,
+     $      ' instead of 1 ***' )
 *
 *     End of CERRLS
 *
