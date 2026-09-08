@@ -178,10 +178,10 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E+0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 9 )
+      PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 8 )
 *     ..
@@ -193,6 +193,7 @@
      $                   KL, KU, LDA, MODE, N, NERRS, NFAIL, NIMAT, NPP,
      $                   NRHS, NRUN
       REAL               ANORM, CNDNUM, RCOND, RCONDC
+      REAL               RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       CHARACTER          PACKS( 2 ), UPLOS( 2 )
@@ -219,7 +220,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MAX, SQRT
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -331,6 +332,18 @@
                   IZERO = 0
                END IF
 *
+*              Type 10:  put a NaN on the last diagonal entry, which is
+*              the last entry of the packed array for both values of
+*              UPLO.  The factorization must report it like a
+*              nonpositive pivot.
+*
+               IF( IMAT.EQ.10 ) THEN
+                  IZERO = N
+                  RONE = ONE
+                  RNAN = SQRT( -RONE )
+                  A( N*( N+1 ) / 2 ) = RNAN
+               END IF
+*
 *              Set the imaginary part of the diagonals.
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -346,11 +359,22 @@
                SRNAMT = 'CPPTRF'
                CALL CPPTRF( UPLO, N, AFAC, INFO )
 *
-*              Check error code from CPPTRF.
+*              Check error code from CPPTRF.  ALAERH returns without a
+*              message when INFO is zero, so an undetected bad pivot is
+*              reported here instead.
 *
                IF( INFO.NE.IZERO ) THEN
-                  CALL ALAERH( PATH, 'CPPTRF', INFO, IZERO, UPLO, N, N,
-     $                         -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+                  IF( INFO.EQ.0 ) THEN
+                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9997 )'CPPTRF', IZERO, UPLO, N,
+     $                  IMAT
+                     NFAIL = NFAIL + 1
+                  ELSE
+                     CALL ALAERH( PATH, 'CPPTRF', INFO, IZERO, UPLO, N,
+     $                            N, -1, -1, -1, IMAT, NFAIL, NERRS,
+     $                            NOUT )
+                  END IF
                   GO TO 90
                END IF
 *
@@ -502,6 +526,8 @@
      $      I2, ', ratio =', G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
      $      I2, ', test(', I2, ') =', G12.5 )
+ 9997 FORMAT( ' *** ', A, ' returned INFO = 0 instead of ', I5,
+     $      ' for UPLO = ''', A1, ''', N =', I5, ', type ', I2 )
       RETURN
 *
 *     End of CCHKPP

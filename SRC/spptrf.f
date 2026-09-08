@@ -140,9 +140,9 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       REAL               SDOT
-      EXTERNAL           LSAME, SDOT
+      EXTERNAL           LSAME, SDOT, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSPR, STPSV, XERBLA
@@ -189,7 +189,7 @@
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
             AJJ = AP( JJ ) - SDOT( J-1, AP( JC ), 1, AP( JC ), 1 )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF
@@ -205,7 +205,7 @@
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
             AJJ = AP( JJ )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF

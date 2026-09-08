@@ -857,7 +857,8 @@
      $      '10. Middle row and column zero', / 4X,
      $      '5. Scaled near underflow', 10X,
      $      '11. Scaled near underflow', / 4X,
-     $      '6. Scaled near overflow', 11X, '12. Scaled near overflow' )
+     $      '6. Scaled near overflow', 11X, '12. Scaled near overflow',
+     $      / 39X, '13. Last diagonal entry a NaN' )
 *
 *     PO, PP matrix types
 *
@@ -868,7 +869,8 @@
      $      '8. Scaled near underflow', / 3X,
      $      '*4. Last row and column zero', 8X,
      $      '9. Scaled near overflow', / 3X,
-     $      '*5. Middle row and column zero', / 3X,
+     $      '*5. Middle row and column zero', 6X,
+     $      '10. Last diagonal entry a NaN', / 3X,
      $      '(* - tests error exits from ', A3,
      $      'TRF, no test ratios are computed)' )
 *
@@ -909,6 +911,7 @@
      $      '7. Scaled near underflow', / 3X,
      $      '*4. Middle row and column zero', 6X,
      $      '8. Scaled near overflow', / 3X,
+     $      '*9. Last diagonal entry a NaN', / 3X,
      $      '(* - tests error exits from ', A3,
      $      'TRF, no test ratios are computed)' )
 *

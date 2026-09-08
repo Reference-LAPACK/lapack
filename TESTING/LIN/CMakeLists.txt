@@ -222,7 +222,8 @@ else()
 endif()
 
 lapack_nag_disable_constant_propagation(
-  serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f)
+  serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f
+  schkpt.f cchkpt.f dchkpt.f zchkpt.f)
 
 set(DSLINTST dchkab.f
 	ddrvab.f ddrvac.f derrab.f derrac.f dget08.f

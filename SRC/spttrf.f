@@ -109,6 +109,10 @@
       INTEGER            I, I4
       REAL               EI
 *     ..
+*     .. External Functions ..
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA
 *     ..
@@ -135,7 +139,7 @@
 *
       I4 = MOD( N-1, 4 )
       DO 10 I = 1, I4
-         IF( D( I ).LE.ZERO ) THEN
+         IF( D( I ).LE.ZERO.OR.SISNAN( D( I ) ) ) THEN
             INFO = I
             GO TO 30
          END IF
@@ -149,7 +153,7 @@
 *        Drop out of the loop if d(i) <= 0: the matrix is not positive
 *        definite.
 *
-         IF( D( I ).LE.ZERO ) THEN
+         IF( D( I ).LE.ZERO.OR.SISNAN( D( I ) ) ) THEN
             INFO = I
             GO TO 30
          END IF
@@ -160,7 +164,7 @@
          E( I ) = EI / D( I )
          D( I+1 ) = D( I+1 ) - E( I )*EI
 *
-         IF( D( I+1 ).LE.ZERO ) THEN
+         IF( D( I+1 ).LE.ZERO.OR.SISNAN( D( I+1 ) ) ) THEN
             INFO = I + 1
             GO TO 30
          END IF
@@ -171,7 +175,7 @@
          E( I+1 ) = EI / D( I+1 )
          D( I+2 ) = D( I+2 ) - E( I+1 )*EI
 *
-         IF( D( I+2 ).LE.ZERO ) THEN
+         IF( D( I+2 ).LE.ZERO.OR.SISNAN( D( I+2 ) ) ) THEN
             INFO = I + 2
             GO TO 30
          END IF
@@ -182,7 +186,7 @@
          E( I+2 ) = EI / D( I+2 )
          D( I+3 ) = D( I+3 ) - E( I+2 )*EI
 *
-         IF( D( I+3 ).LE.ZERO ) THEN
+         IF( D( I+3 ).LE.ZERO.OR.SISNAN( D( I+3 ) ) ) THEN
             INFO = I + 3
             GO TO 30
          END IF
@@ -196,7 +200,7 @@
 *
 *     Check d(n) for positive definiteness.
 *
-      IF( D( N ).LE.ZERO )
+      IF( D( N ).LE.ZERO.OR.SISNAN( D( N ) ) )
      $   INFO = N
 *
    30 CONTINUE
