@@ -144,6 +144,7 @@ if(BUILD_DEFAULT_API)
 else()
   add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES})
 endif()
+lapack_add_coverage(${CBLASLIB}_obj)
 
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
@@ -175,4 +176,6 @@ target_include_directories(${CBLASLIB} PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(${CBLASLIB} PUBLIC ${BLAS_LIBRARIES})
+
+lapack_add_coverage(${CBLASLIB})
 lapack_install_library(${CBLASLIB})

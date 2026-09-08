@@ -186,6 +186,11 @@ macro(CheckLAPACKCompilerFlags)
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Flang")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
 
+  # LLVM Flang
+  elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+    # Nothing to do here for now, but this is a placeholder for future
+    # LLVM Flang specific flags
+
   # Compaq Fortran
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq")
     if(WIN32)
@@ -212,8 +217,6 @@ macro(CheckLAPACKCompilerFlags)
         endif()
       endif()
     endif()
-
-
 
   else()
     message(WARNING "Fortran local arrays should be allocated on the stack."

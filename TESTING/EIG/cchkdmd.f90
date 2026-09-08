@@ -60,6 +60,7 @@
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_XW, &
                        TMP_EX
+      REAL(KIND=WP) :: S1, S2
 !............................................................
       COMPLEX(KIND=WP) :: CMAX
       INTEGER :: LCWORK
@@ -100,6 +101,8 @@
       INTRINSIC ABS, INT, MIN, MAX, SIGN
 !............................................................
 
+
+      CALL CPU_TIME( S1 )
 
       WRITE(*,*) 'COMPLEX CODE TESTING'
 
@@ -720,5 +723,7 @@
 
       WRITE(*,*)
       WRITE(*,*) 'Test completed.'
+      CALL CPU_TIME( S2 )
+      WRITE(*,'(A,F12.2,A,/)') ' Total time used = ', S2 - S1, ' seconds'
       STOP
       END

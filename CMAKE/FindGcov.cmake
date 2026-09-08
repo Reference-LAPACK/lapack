@@ -107,38 +107,40 @@ function (add_gcov_target TNAME)
 
   # We don't have to check, if the target has support for coverage, thus this
   # will be checked by add_coverage_target in Findcoverage.cmake. Instead we
-  # have to determine which gcov binary to use.
+  # have to determine which gcov binary to use. A target may mix languages
+  # built by different compilers, so this is decided per source file.
   get_target_property(TSOURCES ${TNAME} SOURCES)
-  set(SOURCES "")
-  set(TCOMPILER "")
-  foreach (FILE ${TSOURCES})
-    codecov_path_of_source(${FILE} FILE)
-    if(NOT "${FILE}" STREQUAL "")
-      codecov_lang_of_source(${FILE} LANG)
-      if(NOT "${LANG}" STREQUAL "")
-        list(APPEND SOURCES "${FILE}")
-        set(TCOMPILER ${CMAKE_${LANG}_COMPILER_ID})
-      endif()
-    endif()
-  endforeach()
-
-  # If no gcov binary was found, coverage data can't be evaluated.
-  if(NOT GCOV_${TCOMPILER}_BIN)
-    message(WARNING "No coverage evaluation binary found for ${TCOMPILER}.")
-    return()
-  endif()
-
-  set(GCOV_BIN "${GCOV_${TCOMPILER}_BIN}")
-  set(GCOV_ENV "${GCOV_${TCOMPILER}_ENV}")
-
-
   set(BUFFER "")
-  foreach(FILE ${SOURCES})
+  foreach(FILE IN LISTS TSOURCES)
+    codecov_path_of_source("${FILE}" FILE)
+    if(FILE STREQUAL "")
+      continue()
+    endif()
+
+    codecov_lang_of_source("${FILE}" LANG)
+    if(LANG STREQUAL "")
+      continue()
+    endif()
+
+    # If no gcov binary was found, coverage data can't be evaluated.
+    set(TCOMPILER ${CMAKE_${LANG}_COMPILER_ID})
+    if(NOT GCOV_${TCOMPILER}_BIN)
+      message(WARNING "No coverage evaluation binary found for ${TCOMPILER}.")
+      return()
+    endif()
+
+    set(GCOV_BIN "${GCOV_${TCOMPILER}_BIN}")
+    set(GCOV_ENV "${GCOV_${TCOMPILER}_ENV}")
+
     get_filename_component(FILE_PATH "${TDIR}/${FILE}" PATH)
 
     # call gcov
+    #
+    # -b records branch frequencies, -c reports them as counts rather than
+    # percentages. Without -b the report carries line counts only, and both
+    # the summary below and Codecov have no branch coverage to work with.
     add_custom_command(OUTPUT ${TDIR}/${FILE}.gcov
-      COMMAND ${GCOV_ENV} ${GCOV_BIN} ${TDIR}/${FILE}.gcno > /dev/null
+      COMMAND ${GCOV_ENV} ${GCOV_BIN} -b -c ${TDIR}/${FILE}.gcno > /dev/null
       DEPENDS ${TNAME} ${TDIR}/${FILE}.gcno
       WORKING_DIRECTORY ${FILE_PATH}
     )
@@ -146,6 +148,11 @@ function (add_gcov_target TNAME)
     list(APPEND BUFFER ${TDIR}/${FILE}.gcov)
   endforeach()
 
+  # Targets assembled purely from $<TARGET_OBJECTS:...> compile nothing of
+  # their own; their coverage data is evaluated with the object libraries.
+  if(NOT BUFFER)
+    return()
+  endif()
 
   # add target for gcov evaluation of <TNAME>
   add_custom_target(${TNAME}-gcov DEPENDS ${BUFFER})

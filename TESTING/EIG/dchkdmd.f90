@@ -81,6 +81,7 @@
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_ZXW, &
                        TMP_EX, XNORM, YNORM
+      REAL(KIND=WP) :: S1, S2
 !............................................................
       INTEGER :: K, KQ, LDF, LDS, LDA, LDAU, LDW, LDX, LDY,  &
                  LDZ, LIWORK, LWORK, M, N, L, LLOOP, NRNK
@@ -112,6 +113,8 @@
       ! The test is always in pairs : ( DGEDMD and DGEDMDQ )
       ! because the test includes comparing the results (in pairs).
 !.....................................................................................
+      CALL CPU_TIME( S1 )
+
       TEST_QRDMD = .TRUE. ! This code by default performs tests on DGEDMDQ
                           ! Since the QR factorizations based algorithm is designed for
                           ! single trajectory data, only single trajectory tests will
@@ -811,5 +814,7 @@
 
       WRITE(*,*)
       WRITE(*,*) 'Test completed.'
+      CALL CPU_TIME( S2 )
+      WRITE(*,'(A,F12.2,A,/)') ' Total time used = ', S2 - S1, ' seconds'
       STOP
       END

@@ -51,6 +51,7 @@
       INTEGER          ICASE, INCX, INCY, N
       LOGICAL          PASS
 *     .. Local Scalars ..
+      REAL             S1, S2
       REAL             SFAC
       INTEGER          IC
 *     .. External Subroutines ..
@@ -62,6 +63,7 @@
 *     .. Data statements ..
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
+      CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
       DO 20 IC = 1, 14
          ICASE = IC
@@ -93,12 +95,15 @@
          IF (PASS) WRITE (NOUT,99998)
          WRITE (NOUT,99997) SUBNAM, NTESTS, NFAILS
    20 CONTINUE
+      CALL CPU_TIME( S2 )
+      WRITE (NOUT,99996) S2 - S1
       STOP
 *
 99999 FORMAT (' Real BLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
 99997 FORMAT (1X,A6,' COMPUTATIONAL TESTS:',I9,' RUN,',I9,
      +        ' FAILED')
+99996 FORMAT (' Total time used = ',F12.2,' seconds',/)
 *
 *     End of SBLAT1
 *

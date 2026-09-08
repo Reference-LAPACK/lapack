@@ -79,6 +79,7 @@
       PARAMETER          ( NINMAX = 7, NIDMAX = 9, NKBMAX = 7,
      $                   NALMAX = 7, NBEMAX = 7 )
 *     .. Local Scalars ..
+      REAL               S1, S2
       REAL               EPS, ERR, THRESH
       INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NINC, NKB,
      $                   NTRA, LAYOUT
@@ -133,6 +134,7 @@
      $                   'cblas_sskewsymv ',
      $                   'cblas_sskewsyr2 '/
 *     .. Executable Statements ..
+      CALL CPU_TIME( S1 )
 *
       NOUTC = NOUT
 *
@@ -430,6 +432,8 @@
   240 CONTINUE
       IF( TRACE )
      $   CLOSE ( NTRA )
+      CALL CPU_TIME( S2 )
+      WRITE( NOUT, FMT = 9979 )S2 - S1
       CLOSE ( NOUT )
       STOP
 *
@@ -466,6 +470,7 @@
  9982 FORMAT( /' END OF TESTS' )
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
+ 9979 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
 *
 *     End of SBLAT2.
 *

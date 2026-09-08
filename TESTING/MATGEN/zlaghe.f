@@ -175,10 +175,15 @@
 *
          CALL ZLARNV( 3, ISEED, N-I+1, WORK )
          WN = DZNRM2( N-I+1, WORK, 1 )
-         WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
          IF( WN.EQ.ZERO ) THEN
+            WA = ZERO
             TAU = ZERO
          ELSE
+            IF( ABS( WORK( 1 ) ).EQ.0.0D+0 ) THEN
+               WA = DCMPLX( WN, 0.0D+0 )
+            ELSE
+               WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
+            END IF
             WB = WORK( 1 ) + WA
             CALL ZSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
@@ -211,10 +216,15 @@
 *        generate reflection to annihilate A(k+i+1:n,i)
 *
          WN = DZNRM2( N-K-I+1, A( K+I, I ), 1 )
-         WA = ( WN / ABS( A( K+I, I ) ) )*A( K+I, I )
          IF( WN.EQ.ZERO ) THEN
+            WA = ZERO
             TAU = ZERO
          ELSE
+            IF( ABS( A( K+I, I ) ).EQ.0.0D+0 ) THEN
+               WA = DCMPLX( WN, 0.0D+0 )
+            ELSE
+               WA = ( WN / ABS( A( K+I, I ) ) )*A( K+I, I )
+            END IF
             WB = A( K+I, I ) + WA
             CALL ZSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
             A( K+I, I ) = ONE
