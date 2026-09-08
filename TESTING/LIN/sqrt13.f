@@ -111,7 +111,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, J
-      REAL               BIGNUM, SMLNUM
+      REAL               BIGNUM, BIGUP, SMLNUM
 *     ..
 *     .. External Functions ..
       REAL               SASUM, SLAMCH, SLANGE
@@ -150,11 +150,17 @@
          SMLNUM = SMLNUM / SLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
+*        The least squares drivers scale a matrix whose largest
+*        entry lies outside [SMLNUM, BIGNUM].  Scale up past
+*        that bound, so that their scaling is exercised.
+*
+         BIGUP = SLAMCH( 'Overflow' ) / 256
+*
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL SLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL SLASCL( 'General', 0, 0, NORMA, BIGUP, M, N, A, LDA,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *

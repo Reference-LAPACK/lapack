@@ -111,7 +111,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, J
-      DOUBLE PRECISION   BIGNUM, SMLNUM
+      DOUBLE PRECISION   BIGNUM, BIGUP, SMLNUM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
@@ -150,11 +150,17 @@
          SMLNUM = SMLNUM / DLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
+*        The least squares drivers scale a matrix whose largest
+*        entry lies outside [SMLNUM, BIGNUM].  Scale up past
+*        that bound, so that their scaling is exercised.
+*
+         BIGUP = DLAMCH( 'Overflow' ) / 256
+*
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL DLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL DLASCL( 'General', 0, 0, NORMA, BIGUP, M, N, A, LDA,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *
