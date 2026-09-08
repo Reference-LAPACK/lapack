@@ -26,16 +26,15 @@ static int equal_buffers(const lapack_complex_float *a,
 
 static int is_zero(lapack_complex_float v)
 {
-    const float *parts = (const float *)&v;
-    return parts[0] == 0.0f && parts[1] == 0.0f;
+    return lapack_complex_float_real(v) == 0.0f &&
+           lapack_complex_float_imag(v) == 0.0f;
 }
 
 /* a[i][j] == conj(a[j][i]); plain equality in the real precisions. */
 static int conj_equal(lapack_complex_float x, lapack_complex_float y)
 {
-    const float *xp = (const float *)&x;
-    const float *yp = (const float *)&y;
-    return xp[0] == yp[0] && xp[1] == -yp[1];
+    return lapack_complex_float_real(x) == lapack_complex_float_real(y) &&
+           lapack_complex_float_imag(x) == -lapack_complex_float_imag(y);
 }
 
 static int is_triangular(const lapack_complex_float *a, int layout, char uplo)
