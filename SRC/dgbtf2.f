@@ -161,11 +161,13 @@
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
+      DOUBLE PRECISION   SFMIN
       INTEGER            I, J, JP, JU, KM, KV
 *     ..
 *     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH
       INTEGER            IDAMAX
-      EXTERNAL           IDAMAX
+      EXTERNAL           DLAMCH, IDAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGER, DSCAL, DSWAP, XERBLA
@@ -203,6 +205,10 @@
 *
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
+*
+*     Compute machine safe minimum
+*
+      SFMIN = DLAMCH('S')
 *
 *     Gaussian elimination with partial pivoting
 *
@@ -248,8 +254,14 @@
 *
 *              Compute multipliers.
 *
-               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
-     $                     1 )
+               IF( ABS( AB( KV+1, J ) ).GE.SFMIN ) THEN
+                  CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
+     $                        1 )
+               ELSE
+                  DO 35 I = 1, KM
+                     AB( KV+1+I, J ) = AB( KV+1+I, J ) / AB( KV+1, J )
+   35             CONTINUE
+               END IF
 *
 *              Update trailing submatrix within the band.
 *
