@@ -23,7 +23,7 @@
  * \param[out] a      Buffer of lapacke_test_alloc_len(...) doubles.
  * \param[in]  ld     Leading dimension of a in the given layout.
  * \param[in]  sym    ?LATMS SYM parameter: 'N' for a general matrix, 'P'
- *                    for Hermitian positive definite, 'S' for symmetric
+ *                    for Hermitian positive definite, 'H' for Hermitian
  *                    with random-sign eigenvalues (indefinite).
  * \param[in]  kl     Lower bandwidth (0 gives an upper triangular matrix).
  * \param[in]  ku     Upper bandwidth (0 gives a lower triangular matrix).
