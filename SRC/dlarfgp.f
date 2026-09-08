@@ -116,8 +116,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   TWO, ONE, ZERO
-      PARAMETER          ( TWO = 2.0D+0, ONE = 1.0D+0, ZERO = 0.0D+0 )
+      DOUBLE PRECISION   TWO, ONE, ZERO, HALF
+      PARAMETER          ( TWO = 2.0D+0, ONE = 1.0D+0, ZERO = 0.0D+0,
+     $                   HALF = 0.5D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
@@ -128,7 +129,7 @@
       EXTERNAL           DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, SIGN
+      INTRINSIC          ABS, HUGE, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL
@@ -185,6 +186,17 @@
 *
             XNORM = DNRM2( N-1, X, INCX )
             BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
+         ELSE IF( ABS( BETA ).GT.HALF*HUGE( ZERO ) ) THEN
+*
+*           |ALPHA| <= |BETA|, so ALPHA+BETA can overflow only when
+*           |BETA| > HUGE/2; scale X down and recompute them.
+*
+            BIGNUM = ONE / SMLNUM
+            KNT = -1
+            CALL DSCAL( N-1, SMLNUM, X, INCX )
+            ALPHA = ALPHA*SMLNUM
+            XNORM = DNRM2( N-1, X, INCX )
+            BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -229,11 +241,14 @@
 *
          END IF
 *
-*        If BETA is subnormal, it may lose relative accuracy
+*        Undo the scaling.  If BETA is subnormal, it may lose relative
+*        accuracy
 *
          DO 20 J = 1, KNT
             BETA = BETA*SMLNUM
  20      CONTINUE
+         IF( KNT.LT.0 )
+     $      BETA = BETA*BIGNUM
          ALPHA = BETA
       END IF
 *
