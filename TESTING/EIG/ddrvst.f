@@ -479,7 +479,7 @@
       DOUBLE PRECISION   HALF
       PARAMETER          ( HALF = 0.5D0 )
       INTEGER            MAXTYP
-      PARAMETER          ( MAXTYP = 18 )
+      PARAMETER          ( MAXTYP = 19 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            BADNN
@@ -519,11 +519,11 @@
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MIN, SQRT
 *     ..
 *     .. Data statements ..
-      DATA               KTYPE / 1, 2, 5*4, 5*5, 3*8, 3*9 /
+      DATA               KTYPE / 1, 2, 5*4, 5*5, 3*8, 3*9, 10 /
       DATA               KMAGN / 2*1, 1, 1, 1, 2, 3, 1, 1, 1, 2, 3, 1,
-     $                   2, 3, 1, 2, 3 /
+     $                   2, 3, 1, 2, 3, 2 /
       DATA               KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
-     $                   0, 0, 4, 4, 4 /
+     $                   0, 0, 4, 4, 4, 0 /
 *     ..
 *     .. Executable Statements ..
 *
@@ -741,6 +741,22 @@ c           LIWEDC = 12
                      A( I, J ) = U( IROW, J )
    90             CONTINUE
   100          CONTINUE
+*
+            ELSE IF( ITYPE.EQ.10 ) THEN
+*
+*              Tridiagonal with equal diagonal entries and half that
+*              off the diagonal, so that the absolute tolerance below
+*              is a meaningful fraction of the spread of the
+*              eigenvalues.
+*
+               DO 105 JCOL = 1, N
+                  A( JCOL, JCOL ) = ANORM
+  105          CONTINUE
+               DO 106 JCOL = 1, N - 1
+                  A( JCOL, JCOL+1 ) = ANORM / TWO
+                  A( JCOL+1, JCOL ) = A( JCOL, JCOL+1 )
+  106          CONTINUE
+*
             ELSE
                IINFO = 1
             END IF
@@ -755,6 +771,13 @@ c           LIWEDC = 12
   110       CONTINUE
 *
             ABSTOL = UNFL + UNFL
+*
+*           A tolerance at or below the smallest pivot is inert in the
+*           bisection, so type 19 asks for one that the routine has to
+*           scale along with the matrix.
+*
+            IF( JTYPE.EQ.19 )
+     $         ABSTOL = TEN*ULP*ANORM
             IF( N.LE.1 ) THEN
                IL = 1
                IU = N
@@ -770,7 +793,7 @@ c           LIWEDC = 12
 *
 *           3)      If matrix is tridiagonal, call DSTEV and DSTEVX.
 *
-            IF( JTYPE.LE.7 ) THEN
+            IF( JTYPE.LE.7 .OR. JTYPE.EQ.19 ) THEN
                NTEST = 1
                DO 120 I = 1, N
                   D1( I ) = A( I, I )
@@ -2051,7 +2074,7 @@ c           LIWEDC = 12
 *
 *              6)      Call DSBEV and DSBEVX.
 *
-               IF( JTYPE.LE.7 ) THEN
+               IF( JTYPE.LE.7 .OR. JTYPE.EQ.19 ) THEN
                   KD = 1
                ELSE IF( JTYPE.GE.8 .AND. JTYPE.LE.15 ) THEN
                   KD = MAX( N-1, 0 )
@@ -2555,7 +2578,7 @@ c           LIWEDC = 12
 *
 *              9)      Call DSBEVD.
 *
-               IF( JTYPE.LE.7 ) THEN
+               IF( JTYPE.LE.7 .OR. JTYPE.EQ.19 ) THEN
                   KD = 1
                ELSE IF( JTYPE.GE.8 .AND. JTYPE.LE.15 ) THEN
                   KD = MAX( N-1, 0 )
