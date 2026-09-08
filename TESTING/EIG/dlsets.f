@@ -166,10 +166,25 @@
      $                   RESULT( 2 ), RWORK( * ), WORK( LWORK ), X( * )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            INFO
+      INTEGER            INFO, J
+      DOUBLE PRECISION   RESID, SCL
+*     ..
+*     .. Parameters ..
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      INTEGER            MAXEXP
+      PARAMETER          ( MAXEXP = MAXEXPONENT( ZERO ) - 2 )
+*     ..
+*     .. External Functions ..
+      LOGICAL            DISNAN
+      DOUBLE PRECISION   DLANGE, DLAMCH
+      EXTERNAL           DISNAN, DLANGE, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGET02, DGGLSE, DLACPY
+      EXTERNAL           DCOPY, DGET02, DGGLSE, DLACPY, DSCAL
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          EXPONENT, MAX, MAXEXPONENT, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -199,6 +214,48 @@
 *
       CALL DGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P, RWORK,
      $             RESULT( 2 ) )
+*
+*     The problem is exactly invariant under scaling A, B, c and d by
+*     one power of two, so solving it again with the largest entry near
+*     the overflow threshold has to give the same residuals.
+*
+      SCL = MAX( DLANGE( 'M', M, N, A, LDA, RWORK ),
+     $           DLANGE( 'M', P, N, B, LDB, RWORK ),
+     $           DLANGE( 'M', M, 1, C, M, RWORK ),
+     $           DLANGE( 'M', P, 1, D, P, RWORK ) )
+      IF( SCL.GT.ZERO .AND. SCL.LE.DLAMCH( 'Overflow' ) ) THEN
+         SCL = SCALE( ONE, MAXEXP-EXPONENT( SCL ) )
+         CALL DLACPY( 'Full', M, N, A, LDA, AF, LDA )
+         CALL DLACPY( 'Full', P, N, B, LDB, BF, LDB )
+         CALL DCOPY( M, C, 1, CF, 1 )
+         CALL DCOPY( P, D, 1, DF, 1 )
+         DO 10 J = 1, N
+            CALL DSCAL( M, SCL, AF( 1, J ), 1 )
+            CALL DSCAL( P, SCL, BF( 1, J ), 1 )
+   10    CONTINUE
+         CALL DSCAL( M, SCL, CF, 1 )
+         CALL DSCAL( P, SCL, DF, 1 )
+*
+         CALL DGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK,
+     $                LWORK, INFO )
+*
+         CALL DCOPY( M, C, 1, CF, 1 )
+         CALL DCOPY( P, D, 1, DF, 1 )
+         CALL DGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
+     $                RWORK, RESID )
+         IF( DISNAN( RESID ) ) THEN
+            RESULT( 1 ) = ONE / DLAMCH( 'Epsilon' )
+         ELSE
+            RESULT( 1 ) = MAX( RESULT( 1 ), RESID )
+         END IF
+         CALL DGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
+     $                RWORK, RESID )
+         IF( DISNAN( RESID ) ) THEN
+            RESULT( 2 ) = ONE / DLAMCH( 'Epsilon' )
+         ELSE
+            RESULT( 2 ) = MAX( RESULT( 2 ), RESID )
+         END IF
+      END IF
 *
       RETURN
 *

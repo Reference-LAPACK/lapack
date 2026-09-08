@@ -164,21 +164,25 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      INTEGER            MAXEXP
+      PARAMETER          ( MAXEXP = MAXEXPONENT( ZERO ) - 2 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            INFO
+      INTEGER            INFO, J
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
+      DOUBLE PRECISION    SCL
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN, DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
 *
-      EXTERNAL           DCOPY, DGEMV, DGGGLM, DLACPY
+      EXTERNAL           DCOPY, DGEMV, DGGGLM, DLACPY, DSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          EXPONENT, MAX, MAXEXPONENT, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -218,6 +222,43 @@
          RESULT = ZERO
       ELSE
          RESULT = ( ( DNORM / YNORM ) / XNORM ) / EPS
+      END IF
+*
+*     The problem is exactly invariant under scaling A, B and d by one
+*     power of two, so solving it again with the largest entry near the
+*     overflow threshold has to give the same residual.
+*
+      SCL = MAX( DLANGE( 'M', N, M, A, LDA, RWORK ),
+     $           DLANGE( 'M', N, P, B, LDB, RWORK ),
+     $           DLANGE( 'M', N, 1, D, N, RWORK ) )
+      IF( SCL.GT.ZERO .AND. SCL.LE.DLAMCH( 'Overflow' ) ) THEN
+         SCL = SCALE( ONE, MAXEXP-EXPONENT( SCL ) )
+         CALL DLACPY( 'Full', N, M, A, LDA, AF, LDA )
+         CALL DLACPY( 'Full', N, P, B, LDB, BF, LDB )
+         CALL DCOPY( N, D, 1, DF, 1 )
+         DO 10 J = 1, M
+            CALL DSCAL( N, SCL, AF( 1, J ), 1 )
+   10    CONTINUE
+         DO 20 J = 1, P
+            CALL DSCAL( N, SCL, BF( 1, J ), 1 )
+   20    CONTINUE
+         CALL DSCAL( N, SCL, DF, 1 )
+*
+         CALL DGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+     $                INFO )
+*
+         CALL DCOPY( N, D, 1, DF, 1 )
+         CALL DGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1, ONE,
+     $               DF, 1 )
+         CALL DGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1, ONE,
+     $               DF, 1 )
+         DNORM = DASUM( N, DF, 1 )
+         XNORM = DASUM( M, X, 1 ) + DASUM( P, U, 1 )
+         IF( DISNAN( DNORM ) .OR. DISNAN( XNORM ) ) THEN
+            RESULT = ONE / EPS
+         ELSE IF( XNORM.GT.ZERO ) THEN
+            RESULT = MAX( RESULT, ( ( DNORM / YNORM ) / XNORM ) / EPS )
+         END IF
       END IF
 *
       RETURN
