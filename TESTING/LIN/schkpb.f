@@ -193,7 +193,7 @@
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
       INTEGER            NTYPES, NTESTS
-      PARAMETER          ( NTYPES = 8, NTESTS = 7 )
+      PARAMETER          ( NTYPES = 9, NTESTS = 7 )
       INTEGER            NBW
       PARAMETER          ( NBW = 4 )
 *     ..
@@ -206,6 +206,7 @@
      $                   LDA, LDAB, MODE, N, NB, NERRS, NFAIL, NIMAT,
      $                   NKD, NRHS, NRUN
       REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      REAL               RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KDVAL( NBW )
@@ -222,7 +223,7 @@
      $                   SSWAP, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -397,6 +398,22 @@
                      END IF
                   END IF
 *
+*                 Type 9:  put a NaN on the last diagonal entry.  The
+*                 factorization must report it like a nonpositive
+*                 pivot.
+*
+                  IF( IMAT.EQ.9 ) THEN
+                     IZERO = N
+                     RONE = ONE
+                     RNAN = SQRT( -RONE )
+                     IF( IUPLO.EQ.1 ) THEN
+                        IOFF = ( N-1 )*LDAB + KD + 1
+                     ELSE
+                        IOFF = ( N-1 )*LDAB + 1
+                     END IF
+                     A( IOFF ) = RNAN
+                  END IF
+*
 *                 Do for each value of NB in NBVAL
 *
                   DO 50 INB = 1, NNB
@@ -410,12 +427,22 @@
                      SRNAMT = 'SPBTRF'
                      CALL SPBTRF( UPLO, N, KD, AFAC, LDAB, INFO )
 *
-*                    Check error code from SPBTRF.
+*                    Check error code from SPBTRF.  ALAERH returns
+*                    without a message when INFO is zero, so an
+*                    undetected bad pivot is reported here instead.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        CALL ALAERH( PATH, 'SPBTRF', INFO, IZERO, UPLO,
-     $                               N, N, KD, KD, NB, IMAT, NFAIL,
-     $                               NERRS, NOUT )
+                        IF( INFO.EQ.0 ) THEN
+                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                        CALL ALAHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9996 )'SPBTRF', IZERO,
+     $                        UPLO, N, KD, IMAT
+                           NFAIL = NFAIL + 1
+                        ELSE
+                           CALL ALAERH( PATH, 'SPBTRF', INFO, IZERO,
+     $                                  UPLO, N, N, KD, KD, NB, IMAT,
+     $                                  NFAIL, NERRS, NOUT )
+                        END IF
                         GO TO 50
                      END IF
 *
@@ -580,6 +607,9 @@
      $      ', type ', I2, ', test(', I2, ') = ', G12.5 )
  9997 FORMAT( ' UPLO=''', A1, ''', N=', I5, ', KD=', I5, ',', 10X,
      $      ' type ', I2, ', test(', I2, ') = ', G12.5 )
+ 9996 FORMAT( ' *** ', A, ' returned INFO = 0 instead of ', I5,
+     $      ' for UPLO=''', A1, ''', N=', I5, ', KD=', I5,
+     $      ', type ', I2 )
       RETURN
 *
 *     End of SCHKPB

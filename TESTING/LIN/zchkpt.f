@@ -169,7 +169,7 @@
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 12 )
+      PARAMETER          ( NTYPES = 13 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
 *     ..
@@ -181,6 +181,7 @@
      $                   J, K, KL, KU, LDA, MODE, N, NERRS, NFAIL,
      $                   NIMAT, NRHS, NRUN
       DOUBLE PRECISION   AINVNM, ANORM, COND, DMAX, RCOND, RCONDC
+      DOUBLE PRECISION   RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -200,7 +201,7 @@
      $                   ZPTT02, ZPTT05, ZPTTRF, ZPTTRS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, MAX
+      INTRINSIC          ABS, DBLE, MAX, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -364,6 +365,16 @@
                   Z( 2 ) = D( IZERO )
                   D( IZERO ) = ZERO
                END IF
+*
+*              Type 13:  put a NaN on the last diagonal entry.  The
+*              factorization must report it like a nonpositive pivot.
+*
+               IF( IMAT.EQ.13 ) THEN
+                  IZERO = N
+                  RONE = ONE
+                  RNAN = SQRT( -RONE )
+                  D( N ) = RNAN
+               END IF
             END IF
 *
             CALL DCOPY( N, D, 1, D( N+1 ), 1 )
@@ -376,11 +387,20 @@
 *
             CALL ZPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*           Check error code from ZPTTRF.
+*           Check error code from ZPTTRF.  ALAERH returns without a
+*           message when INFO is zero, so an undetected bad pivot is
+*           reported here instead.
 *
             IF( INFO.NE.IZERO ) THEN
-               CALL ALAERH( PATH, 'ZPTTRF', INFO, IZERO, ' ', N, N, -1,
-     $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
+               IF( INFO.EQ.0 ) THEN
+                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $               CALL ALAHD( NOUT, PATH )
+                  WRITE( NOUT, FMT = 9997 )'ZPTTRF', IZERO, N, IMAT
+                  NFAIL = NFAIL + 1
+               ELSE
+                  CALL ALAERH( PATH, 'ZPTTRF', INFO, IZERO, ' ', N, N,
+     $                         -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+               END IF
                GO TO 110
             END IF
 *
@@ -543,6 +563,8 @@
      $      G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS =', I3,
      $        ', type ', I2, ', test ', I2, ', ratio = ', G12.5 )
+ 9997 FORMAT( ' *** ', A, ' returned INFO = 0 instead of ', I5,
+     $      ' for N =', I5, ', type ', I2 )
       RETURN
 *
 *     End of ZCHKPT
