@@ -168,22 +168,28 @@
 *     .. Parameters ..
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E+0 )
+      REAL              ONE
+      PARAMETER          ( ONE = 1.0E+0 )
+      INTEGER            MAXEXP
+      PARAMETER          ( MAXEXP = MAXEXPONENT( ZERO ) - 2 )
       COMPLEX            CONE
       PARAMETER          ( CONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            INFO
+      INTEGER            INFO, J
       REAL               ANORM, BNORM, EPS, XNORM, YNORM, DNORM, UNFL
+      REAL             SCL
 *     ..
 *     .. External Functions ..
       REAL               SCASUM, SLAMCH, CLANGE
-      EXTERNAL           SCASUM, SLAMCH, CLANGE
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN, SCASUM, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMV, CGGGLM, CLACPY
+      EXTERNAL           CCOPY, CGEMV, CGGGLM, CLACPY, CSSCAL
 *
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          EXPONENT, MAX, MAXEXPONENT, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -225,6 +231,43 @@
          RESULT = ZERO
       ELSE
          RESULT =  ( ( DNORM / YNORM ) / XNORM ) /EPS
+      END IF
+*
+*     The problem is exactly invariant under scaling A, B and d by one
+*     power of two, so solving it again with the largest entry near the
+*     overflow threshold has to give the same residual.
+*
+      SCL = MAX( CLANGE( 'M', N, M, A, LDA, RWORK ),
+     $           CLANGE( 'M', N, P, B, LDB, RWORK ),
+     $           CLANGE( 'M', N, 1, D, N, RWORK ) )
+      IF( SCL.GT.ZERO .AND. SCL.LE.SLAMCH( 'Overflow' ) ) THEN
+         SCL = SCALE( ONE, MAXEXP-EXPONENT( SCL ) )
+         CALL CLACPY( 'Full', N, M, A, LDA, AF, LDA )
+         CALL CLACPY( 'Full', N, P, B, LDB, BF, LDB )
+         CALL CCOPY( N, D, 1, DF, 1 )
+         DO 10 J = 1, M
+            CALL CSSCAL( N, SCL, AF( 1, J ), 1 )
+   10    CONTINUE
+         DO 20 J = 1, P
+            CALL CSSCAL( N, SCL, BF( 1, J ), 1 )
+   20    CONTINUE
+         CALL CSSCAL( N, SCL, DF, 1 )
+*
+         CALL CGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+     $                INFO )
+*
+         CALL CCOPY( N, D, 1, DF, 1 )
+         CALL CGEMV( 'No transpose', N, M, -CONE, A, LDA, X, 1, CONE,
+     $               DF, 1 )
+         CALL CGEMV( 'No transpose', N, P, -CONE, B, LDB, U, 1, CONE,
+     $               DF, 1 )
+         DNORM = SCASUM( N, DF, 1 )
+         XNORM = SCASUM( M, X, 1 ) + SCASUM( P, U, 1 )
+         IF( SISNAN( DNORM ) .OR. SISNAN( XNORM ) ) THEN
+            RESULT = ONE / EPS
+         ELSE IF( XNORM.GT.ZERO ) THEN
+            RESULT = MAX( RESULT, ( ( DNORM / YNORM ) / XNORM ) / EPS )
+         END IF
       END IF
 *
       RETURN

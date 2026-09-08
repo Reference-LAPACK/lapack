@@ -171,10 +171,25 @@
 *
 *     ..
 *     .. Local Scalars ..
-      INTEGER            INFO
+      INTEGER            INFO, J
+      REAL              RESID, SCL
+*     ..
+*     .. Parameters ..
+      REAL              ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
+      INTEGER            MAXEXP
+      PARAMETER          ( MAXEXP = MAXEXPONENT( ZERO ) - 2 )
+*     ..
+*     .. External Functions ..
+      LOGICAL            SISNAN
+      REAL              SLANGE, SLAMCH
+      EXTERNAL           SISNAN, SLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGGLSE, SLACPY, SGET02
+      EXTERNAL           SCOPY, SGGLSE, SLACPY, SGET02, SSCAL
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          EXPONENT, MAX, MAXEXPONENT, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -204,6 +219,48 @@
 *
       CALL SGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
      $             RWORK, RESULT( 2 ) )
+*
+*     The problem is exactly invariant under scaling A, B, c and d by
+*     one power of two, so solving it again with the largest entry near
+*     the overflow threshold has to give the same residuals.
+*
+      SCL = MAX( SLANGE( 'M', M, N, A, LDA, RWORK ),
+     $           SLANGE( 'M', P, N, B, LDB, RWORK ),
+     $           SLANGE( 'M', M, 1, C, M, RWORK ),
+     $           SLANGE( 'M', P, 1, D, P, RWORK ) )
+      IF( SCL.GT.ZERO .AND. SCL.LE.SLAMCH( 'Overflow' ) ) THEN
+         SCL = SCALE( ONE, MAXEXP-EXPONENT( SCL ) )
+         CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+         CALL SLACPY( 'Full', P, N, B, LDB, BF, LDB )
+         CALL SCOPY( M, C, 1, CF, 1 )
+         CALL SCOPY( P, D, 1, DF, 1 )
+         DO 10 J = 1, N
+            CALL SSCAL( M, SCL, AF( 1, J ), 1 )
+            CALL SSCAL( P, SCL, BF( 1, J ), 1 )
+   10    CONTINUE
+         CALL SSCAL( M, SCL, CF, 1 )
+         CALL SSCAL( P, SCL, DF, 1 )
+*
+         CALL SGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK,
+     $                LWORK, INFO )
+*
+         CALL SCOPY( M, C, 1, CF, 1 )
+         CALL SCOPY( P, D, 1, DF, 1 )
+         CALL SGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
+     $                RWORK, RESID )
+         IF( SISNAN( RESID ) ) THEN
+            RESULT( 1 ) = ONE / SLAMCH( 'Epsilon' )
+         ELSE
+            RESULT( 1 ) = MAX( RESULT( 1 ), RESID )
+         END IF
+         CALL SGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
+     $                RWORK, RESID )
+         IF( SISNAN( RESID ) ) THEN
+            RESULT( 2 ) = ONE / SLAMCH( 'Epsilon' )
+         ELSE
+            RESULT( 2 ) = MAX( RESULT( 2 ), RESID )
+         END IF
+      END IF
 *
       RETURN
 *
