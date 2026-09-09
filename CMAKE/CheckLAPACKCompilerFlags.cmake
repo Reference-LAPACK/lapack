@@ -59,17 +59,27 @@ macro(CheckLAPACKCompilerFlags)
     # Disabling loop vectorization for GNU Fortran versions affected by
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408. See issue
     # https://github.com/Reference-LAPACK/lapack/issues/1160 as well.
-    if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm|arm64|aarch64")
-      if((CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "14.0" AND
-          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "14.4") OR
-         (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
-          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "15.2"))
-        message(WARNING
-          "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
-          "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
-          "For full performance, consider changing to a different compiler or compiler version.")
-        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
-      endif()
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|arm64|aarch64" AND
+       ((CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "14.0" AND
+         CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "14.5") OR
+        (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
+         CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "15.3")))
+      message(WARNING
+        "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
+        "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
+        "For full performance, consider changing to a different compiler or compiler version.")
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
+    endif()
+
+    # Disabling SLP vectorization for GNU Fortran versions affected by
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124802.
+    if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
+       CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "15.3")
+      message(WARNING
+        "Disabling SLP vectorization for GNU Fortran (15.0-15.2) "
+        "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124802). "
+        "For full performance, consider changing to a different compiler or compiler version.")
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-slp-vectorize>")
     endif()
 
   # Intel Fortran
