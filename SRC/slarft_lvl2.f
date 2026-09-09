@@ -210,7 +210,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          STRMV,SGEMV
+      EXTERNAL          STRMV,SGEMV,XERBLA
 *
 *     .. External Functions..
 *

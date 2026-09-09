@@ -209,7 +209,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          CTRMV,CGEMV,CGEMM
+      EXTERNAL          CTRMV,CGEMV,CGEMM,XERBLA
 *
 *     .. External Functions..
 *

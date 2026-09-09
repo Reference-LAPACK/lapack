@@ -220,7 +220,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          CLARFT_LVL2, CTRMM, CGEMM, CLACPY
+      EXTERNAL          CLARFT_LVL2, CTRMM, CGEMM, CLACPY, XERBLA
 *
 *     .. External Functions..
 *

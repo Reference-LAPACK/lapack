@@ -219,7 +219,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          SLARFT_LVL2, STRMM, SGEMM, SLACPY
+      EXTERNAL          SLARFT_LVL2, STRMM, SGEMM, SLACPY, XERBLA
 *
 *     .. External Functions..
 *

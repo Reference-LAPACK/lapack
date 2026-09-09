@@ -210,7 +210,7 @@
 *
 *     .. External Subroutines ..
 *
-      EXTERNAL          DTRMV,DGEMV
+      EXTERNAL          DTRMV,DGEMV,XERBLA
 *
 *     .. External Functions..
 *
