@@ -146,7 +146,7 @@
       CHARACTER          UPLO, CFORM, DIAG, TRANS, SIDE
       INTEGER            I, IFORM, IIM, IIN, INFO, IUPLO, J, M, N, NA,
      +                   NFAIL, NRUN, ISIDE, IDIAG, IALPHA, ITRANS
-      REAL               EPS, ALPHA
+      REAL               EPS, ALPHA, SOLNRM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 ), FORMS( 2 ), TRANSS( 2 ),
@@ -347,6 +347,9 @@
 *
 *                             Check that the result agrees.
 *
+                              SOLNRM = SLANGE( 'I', M, N, B1, LDA,
+     +                                        S_WORK_SLANGE )
+*
                               DO J = 1, N
                                  DO I = 1, M
                                     B1( I, J ) = B2( I, J ) - B1( I, J )
@@ -358,6 +361,7 @@
 *
                               RESULT( 1 ) = RESULT( 1 ) / SQRT( EPS )
      +                                    / REAL( MAX( M, N, 1 ) )
+     +                                    / MAX( SOLNRM, 1.0E+0 )
 *
                               IF( RESULT( 1 ).GE.THRESH ) THEN
                                  IF( NFAIL.EQ.0 ) THEN
