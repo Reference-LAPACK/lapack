@@ -769,7 +769,10 @@
 *>          printed about each test for which the test ratio is greater
 *>          than or equal to the threshold.
 *>
-*> lines  3-EOF:
+*> line  3: TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits.
+*>
+*> lines  4-EOF:
 *>
 *> Input for testing the eigencondition routines consists of a set of
 *> specially constructed test cases and their solutions.  The data
@@ -1264,9 +1267,9 @@
 *        CEC:  Eigencondition estimation
 *
          READ( NIN, FMT = * )THRESH
+         READ( NIN, FMT = * )TSTERR
          CALL XLAENV( 1, 1 )
          CALL XLAENV( 12, 1 )
-         TSTERR = .TRUE.
          CALL CCHKEC( THRESH, TSTERR, NIN, NOUT )
          GO TO 380
       ELSE

@@ -198,7 +198,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # Testing
 option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
-include(RuntestCommand)
+include(LAPACKTestHelpers)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
 if(BUILD_TESTING)

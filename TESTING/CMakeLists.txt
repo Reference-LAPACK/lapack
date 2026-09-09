@@ -15,7 +15,7 @@ add_subdirectory(EIG)
 
 
 function(_add_lapack_test output input target)
-  set(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
+  lapack_test_input(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
   string(REPLACE "." "_" input_name ${input})
   set(testName "${target}_${input_name}")

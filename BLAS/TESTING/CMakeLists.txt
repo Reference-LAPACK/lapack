@@ -19,7 +19,8 @@ endfunction()
 
 function(add_blas_test name source)
   get_filename_component(baseNAME ${source} NAME_WE)
-  set(test_input "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
+  lapack_test_input(test_input
+    "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
 
   if(BUILD_DEFAULT_API)
     _add_blas_test(${name} ${source} "${test_input}"
