@@ -58,6 +58,7 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     SUFFIX "_TEST"
     ${_allowlist_args}
     NO_STRING_REPLACEMENTS)
+  lapack_nag_disable_constant_propagation(${_lin_sources_test})
 
   lapack_test_input(_test_input
     ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in
@@ -101,6 +102,7 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     generate_suffixed_sources(xlintst${_prec}_lapacke_TEST
       _lin_sources_test _lin_sources_test_64
       SUFFIX "_64")
+    lapack_nag_disable_constant_propagation(${_lin_sources_test_64})
 
     add_library(xlintst${_prec}_lapacke_core_64 OBJECT ${_lin_sources_test_64})
     target_compile_options(xlintst${_prec}_lapacke_core_64

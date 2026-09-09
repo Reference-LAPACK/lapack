@@ -13,6 +13,25 @@ else()
   set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
 endif()
 
+# nagfor folds the SQRT( -ONE ) with which the ?errcxx drivers manufacture
+# a NaN and rejects it ("Invalid operand for intrinsic SQRT ... Errors found
+# during constant propagation"), so those drivers are compiled with constant
+# propagation disabled.  Call this with every source list such a driver is
+# built from: the generated _64 and _TEST copies need it as much as the
+# originals.
+function(lapack_nag_disable_constant_propagation)
+  if(NOT CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+    return()
+  endif()
+  foreach(source IN LISTS ARGN)
+    get_filename_component(name "${source}" NAME)
+    if(name MATCHES "^[scdz]errcxx(_[A-Za-z0-9]+)*\\.f$")
+      set_source_files_properties("${source}"
+        PROPERTIES COMPILE_OPTIONS "-Onopropagate")
+    endif()
+  endforeach()
+endfunction()
+
 # Set ${out_var} to the test input to feed to a test driver.  Every driver
 # that tests error exits reads a TSTERR flag from its input, so where those
 # tests cannot run, or where DISABLE_ERROR_EXIT_TESTS asks for it anyway,
