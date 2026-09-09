@@ -14,19 +14,6 @@ add_subdirectory(LIN)
 add_subdirectory(EIG)
 
 
-# Only run this test if python 3 is found
-if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-  message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt and lapack_testing_junit.xml)")
-  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
-  add_test(
-    NAME LAPACK_Test_Summary
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
-      "--fail-if-empty" "--fail-on-unrecognized" "--merge-apis"
-      "--junit-xml" "lapack_testing_junit.xml"
-    )
-endif()
-
 function(_add_lapack_test output input target)
   set(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
@@ -36,13 +23,9 @@ function(_add_lapack_test output input target)
     lapack_runtest_command(test_command ${target}
       INPUT "${TEST_INPUT}" OUTPUT "${TEST_OUTPUT}")
     add_test(NAME LAPACK-${testName} COMMAND ${test_command})
-
-    if(Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
-      set_property(
-        TEST LAPACK_Test_Summary
-        APPEND PROPERTY DEPENDS LAPACK-${testName}
-      )
-    endif()
+  else()
+    lapack_runtest_command(test_command ${target} OUTPUT "${TEST_OUTPUT}")
+    add_test(NAME LAPACK-${testName} COMMAND ${test_command})
   endif()
 endfunction()
 
