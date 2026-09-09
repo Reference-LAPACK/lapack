@@ -111,14 +111,13 @@
       INTRINSIC MOD
 *     ..
       IF (N.LE.0) RETURN
-
-*     Scale if SA.EQ.0
-      IF (SA.EQ.0.0E0 .AND. SB.NE.0.0E0) THEN
+*
+*     Scale if SA is zero - (note that SCAL does not handle INCY.LE.0)
+      IF (SA.EQ.0.0E0 .AND. INCY.GT.0) THEN
           CALL SSCAL(N, SB, SY, INCY)
           RETURN
       END IF
-
-
+*
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

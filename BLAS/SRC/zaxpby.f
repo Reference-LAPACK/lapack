@@ -108,13 +108,13 @@
       INTEGER I,IX,IY
 *     ..
       IF (N.LE.0) RETURN
-
-*     Scale if ZA .EQ. 0
-      IF ( ZA.EQ.(0.0D0,0.0D0) .AND. ZB.NE.(0.0D0,0.0D0)) THEN
+*
+*     Scale if ZA is zero - (note that SCAL does not handle INCY.LE.0)
+      IF ( ZA.EQ.(0.0D0,0.0D0) .AND. INCY.GT.0) THEN
         CALL ZSCAL(N, ZB, ZY, INCY)
         RETURN
       END IF
-
+*
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
@@ -140,6 +140,6 @@
 *
       RETURN
 *
-*     End of ZAXBPY
+*     End of ZAXPBY
 *
       END
