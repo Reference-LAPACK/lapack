@@ -2,13 +2,8 @@ function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
   target_link_libraries(${name} PRIVATE ${BLASLIB})
   lapack_add_coverage(${name})
-  if(EXISTS "${test_input}")
-    lapack_runtest_command(test_command ${name} INPUT "${test_input}")
-    add_test(NAME BLAS-${name} COMMAND ${test_command})
-  else()
-    lapack_runtest_command(test_command ${name} OUTPUT "${test_output}")
-    add_test(NAME BLAS-${name} COMMAND ${test_command})
-  endif()
+  lapack_runtest_command(test_command ${name} INPUT "${test_input}" OUTPUT "${test_output}")
+  add_test(NAME BLAS-${name} COMMAND ${test_command})
 
   # Disable constant propagation for NAG compiler to avoid issues with
   # special values (Inf, NaN) returned by SXVALS and DXVALS.

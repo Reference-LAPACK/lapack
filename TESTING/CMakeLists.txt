@@ -17,16 +17,11 @@ add_subdirectory(EIG)
 function(_add_lapack_test output input target)
   lapack_test_input(TEST_INPUT "${LAPACK_SOURCE_DIR}/TESTING/${input}")
   set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/TESTING/${output}")
+
   string(REPLACE "." "_" input_name ${input})
-  set(testName "${target}_${input_name}")
-  if(EXISTS "${TEST_INPUT}")
-    lapack_runtest_command(test_command ${target}
-      INPUT "${TEST_INPUT}" OUTPUT "${TEST_OUTPUT}")
-    add_test(NAME LAPACK-${testName} COMMAND ${test_command})
-  else()
-    lapack_runtest_command(test_command ${target} OUTPUT "${TEST_OUTPUT}")
-    add_test(NAME LAPACK-${testName} COMMAND ${test_command})
-  endif()
+  lapack_runtest_command(test_command ${target}
+    INPUT "${TEST_INPUT}" OUTPUT "${TEST_OUTPUT}")
+  add_test(NAME LAPACK-${target}_${input_name} COMMAND ${test_command})
 endfunction()
 
 function(add_lapack_test output input target)
