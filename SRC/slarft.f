@@ -132,7 +132,7 @@
 *
 *> \author Univ. of Tennessee
 *> \author Univ. of California Berkeley
-*> \author Johnathan Rhyne, Univ. of Colorado Denver (original author, 2024)
+*> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
 *> \ingroup larft
