@@ -288,28 +288,6 @@
          RETURN
       END IF
 *
-*     Base case
-*
-      IF(N.EQ.1.OR.K.EQ.1) THEN
-         T(1,1) = TAU(1)
-         RETURN
-      END IF
-*
-*     Determine crossover point from level 2 to level 3 BLAS implementation
-*
-      NX = ILAENV(3, "DLARFT", DIRECT // STOREV, N, K, -1, -1)
-      IF(K.LT.NX) THEN
-*
-*        Finish this component with a level 2 BLAS implementation
-*
-         CALL DLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
-         RETURN
-      END IF
-*
-*     Beginning of executable statements for the recursive case
-*
-      L = K / 2
-*
 *     Now we determine what factorization our flags are associated with
 *
 *     QR happens when we have forward direction in column storage
@@ -339,6 +317,28 @@
 *     would normally compute
 *
       RQ = DIRB.AND.STORER
+*
+*     Base case
+*
+      IF(N.EQ.1.OR.K.EQ.1) THEN
+         T(1,1) = TAU(1)
+         RETURN
+      END IF
+*
+*     Determine crossover point from level 2 to level 3 BLAS implementation
+*
+      NX = ILAENV(3, "DLARFT", DIRECT // STOREV, N, K, -1, -1)
+      IF(K.LT.NX) THEN
+*
+*        Finish this component with a level 2 BLAS implementation
+*
+         CALL DLARFT_LVL2(DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT)
+         RETURN
+      END IF
+*
+*     Beginning of executable statements for the recursive case
+*
+      L = K / 2
       IF(QR) THEN
 *
 *        Break V apart into 6 components
