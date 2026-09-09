@@ -40,7 +40,8 @@ endif()
 # different leading-dimension semantics (LDA >= N instead of LDA >= M), and
 # the high-level interface ignores the caller's workspace so LWORK error
 # exits cannot fire. The other flavors read a generated input with the
-# error-exit tests disabled.
+# error-exit tests disabled, and so does that one where the platform cannot
+# run them at all.
 set(_lapacke_test_out_dir ${LAPACK_BINARY_DIR}/TESTING/lapacke)
 file(MAKE_DIRECTORY ${_lapacke_test_out_dir})
 
@@ -58,19 +59,20 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     ${_allowlist_args}
     NO_STRING_REPLACEMENTS)
 
-  file(READ ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in _test_in_content)
-  string(REPLACE
-    "T                      Put T to test the error exits"
-    "F                      Put T to test the error exits"
-    _test_in_noerr_content "${_test_in_content}")
-  file(WRITE ${_lapacke_test_out_dir}/${_prec}test_noerr.in "${_test_in_noerr_content}")
+  lapack_test_input(_test_input
+    ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in
+    OUTPUT ${_lapacke_test_out_dir}/${_prec}test.in)
+  lapack_test_input(_test_input_noerr
+    ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in
+    DISABLE_ERROR_EXIT_TESTS
+    OUTPUT ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
 
   if(BUILD_DEFAULT_API)
     add_library(xlintst${_prec}_lapacke_core OBJECT ${_lin_sources_test})
 
     foreach(_layer work high)
       foreach(_layout cm rm)
-        set(_driver xlintst${_prec}_lapacke_${_layer}_${_layout})
+        set(_driver xlintst${_prec}_${_layer}_${_layout})
 
         add_executable(${_driver}
           $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core>)
@@ -79,18 +81,14 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
           lapacke_test_wrappers_${_layer}_${_layout}
           ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
+        set(_output ${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out)
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-          set(_input ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in)
+          set(_input ${_test_input})
         else()
-          set(_input ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
+          set(_input ${_test_input_noerr})
         endif()
-        add_test(NAME LAPACK-${_driver}_${_prec}test_in
-          COMMAND "${CMAKE_COMMAND}"
-          -DTEST=$<TARGET_FILE:${_driver}>
-          -DINPUT=${_input}
-          -DOUTPUT=${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out
-          -DINTDIR=${CMAKE_CFG_INTDIR}
-          -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+        lapack_runtest_command(_test_command ${_driver} INPUT ${_input} OUTPUT ${_output})
+        add_test(NAME LAPACKE-${_driver}_${_prec}test_in COMMAND ${_test_command})
       endforeach()
     endforeach()
   endif()
@@ -110,7 +108,7 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
 
     foreach(_layer work high)
       foreach(_layout cm rm)
-        set(_driver xlintst${_prec}_lapacke_${_layer}_${_layout}_64)
+        set(_driver xlintst${_prec}_${_layer}_${_layout}_64)
 
         add_executable(${_driver}
           $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core_64>)
@@ -119,18 +117,14 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
           lapacke_test_wrappers_${_layer}_${_layout}_64
           ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
+        set(_output ${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out)
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-          set(_input ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in)
+          set(_input ${_test_input})
         else()
-          set(_input ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
+          set(_input ${_test_input_noerr})
         endif()
-        add_test(NAME LAPACK-${_driver}_${_prec}test_in
-          COMMAND "${CMAKE_COMMAND}"
-          -DTEST=$<TARGET_FILE:${_driver}>
-          -DINPUT=${_input}
-          -DOUTPUT=${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out
-          -DINTDIR=${CMAKE_CFG_INTDIR}
-          -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+        lapack_runtest_command(_test_command ${_driver} INPUT ${_input} OUTPUT ${_output})
+        add_test(NAME LAPACKE-${_driver}_${_prec}test_in COMMAND ${_test_command})
       endforeach()
     endforeach()
   endif()

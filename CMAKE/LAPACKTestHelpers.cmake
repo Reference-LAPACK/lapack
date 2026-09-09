@@ -15,11 +15,19 @@ endif()
 
 # Set ${out_var} to the test input to feed to a test driver.  Every driver
 # that tests error exits reads a TSTERR flag from its input, so where those
-# tests cannot run this is a copy in the build tree with the flag turned
-# off; everywhere else, and for the drivers that take no input, it is
-# ${input} itself.
+# tests cannot run, or where DISABLE_ERROR_EXIT_TESTS asks for it anyway,
+# this is a copy with the flag turned off; everywhere else, and for the
+# drivers that take no input, it is ${input} itself.
+#
+# The copy goes to OUTPUT, or to the name of ${input} in the current binary
+# directory.  Write it where lapack_testing.py looks for that input, which is
+# the directory holding the .out files of the tests that read it, so that
+# running the drivers from the script uses the same input ctest does.
 function(lapack_test_input out_var input)
-  if(NOT LAPACK_SKIP_ERROR_EXIT_TESTS OR NOT EXISTS "${input}")
+  cmake_parse_arguments(ARG "DISABLE_ERROR_EXIT_TESTS" "OUTPUT" "" ${ARGN})
+
+  if(NOT EXISTS "${input}" OR
+      NOT (LAPACK_SKIP_ERROR_EXIT_TESTS OR ARG_DISABLE_ERROR_EXIT_TESTS))
     set(${out_var} "${input}" PARENT_SCOPE)
     return()
   endif()
@@ -29,8 +37,11 @@ function(lapack_test_input out_var input)
     "\n[ \t]*(T|\\.TRUE\\.)([ \t]+[^\n]*(Put T to test the error exits|LOGICAL FLAG, T TO TEST ERROR EXITS))"
     "\nF\\2" content "${content}")
 
-  get_filename_component(name "${input}" NAME)
-  set(rewritten "${CMAKE_CURRENT_BINARY_DIR}/${name}")
+  set(rewritten "${ARG_OUTPUT}")
+  if(NOT rewritten)
+    get_filename_component(name "${input}" NAME)
+    set(rewritten "${CMAKE_CURRENT_BINARY_DIR}/${name}")
+  endif()
   file(WRITE "${rewritten}" "${content}")
   set(${out_var} "${rewritten}" PARENT_SCOPE)
 endfunction()
