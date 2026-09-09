@@ -13,12 +13,11 @@ else()
   set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
 endif()
 
-# Set ${out_var} to the test input to feed to a test driver.  Almost every
-# driver reads a TSTERR flag from its input, so where the error-exit tests
-# cannot run this is a copy in the build tree with that flag turned off;
-# everywhere else, and for the drivers that take no input, it is ${input}
-# itself.  The drivers that do not read the flag are handled in the source,
-# see LAPACK_SKIP_ERROR_EXIT_TESTS in TESTING/EIG/xchkee.F.
+# Set ${out_var} to the test input to feed to a test driver.  Every driver
+# that tests error exits reads a TSTERR flag from its input, so where those
+# tests cannot run this is a copy in the build tree with the flag turned
+# off; everywhere else, and for the drivers that take no input, it is
+# ${input} itself.
 function(lapack_test_input out_var input)
   if(NOT LAPACK_SKIP_ERROR_EXIT_TESTS OR NOT EXISTS "${input}")
     set(${out_var} "${input}" PARENT_SCOPE)
