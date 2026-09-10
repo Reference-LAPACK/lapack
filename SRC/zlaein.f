@@ -173,7 +173,8 @@
 *     .. Local Scalars ..
       CHARACTER          NORMIN, TRANS
       INTEGER            I, IERR, ITS, J
-      DOUBLE PRECISION   GROWTO, NRMSML, ROOTN, RTEMP, SCALE, VNORM
+      DOUBLE PRECISION   GROWTO, NRMSML, ROOTN, RTEMP, SCALE, VI_NORM,
+     $                   VIP1_NORM
       COMPLEX*16         CDUM, EI, EJ, TEMP, X
 *     ..
 *     .. External Functions ..
@@ -198,11 +199,14 @@
 *
       INFO = 0
 *
-*     GROWTO is the threshold used in the acceptance test for an
-*     eigenvector.
+*     The residual of the vector x that a solve returns is SCALE times
+*     the norm of the starting vector, over the norm of x, so GROWTO is
+*     the growth VIP1_NORM/(SCALE*VI_NORM) that the acceptance test
+*     below requires, where VI_NORM and VIP1_NORM are the norms of the
+*     vectors the current iteration started from and produced.
 *
       ROOTN = SQRT( DBLE( N ) )
-      GROWTO = TENTH / ROOTN
+      GROWTO = TENTH / ( DBLE( N )*EPS3 )
       NRMSML = MAX( ONE, EPS3*ROOTN )*SMLNUM
 *
 *     Form B = H - W*I (except that the subdiagonal elements are not
@@ -226,8 +230,8 @@
 *
 *        Scale supplied initial vector.
 *
-         VNORM = DZNRM2( N, V, 1 )
-         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V,
+         VI_NORM = DZNRM2( N, V, 1 )
+         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VI_NORM, NRMSML ), V,
      $                1 )
       END IF
 *
@@ -309,6 +313,7 @@
 *
       NORMIN = 'N'
       DO 110 ITS = 1, N
+         VI_NORM = DZASUM( N, V, 1 )
 *
 *        Solve U*x = scale*v for a right eigenvector
 *          or U**H *x = scale*v for a left eigenvector,
@@ -321,8 +326,8 @@
 *
 *        Test for sufficient growth in the norm of v.
 *
-         VNORM = DZASUM( N, V, 1 )
-         IF( VNORM.GE.GROWTO*SCALE )
+         VIP1_NORM = DZASUM( N, V, 1 )
+         IF( VIP1_NORM.GE.GROWTO*SCALE*VI_NORM )
      $      GO TO 120
 *
 *        Choose new orthogonal starting vector and try again.
