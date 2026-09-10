@@ -74,15 +74,8 @@
 *> \ingroup xerbla
 *
 *  =====================================================================
+*
       SUBROUTINE XERBLA( SRNAME, INFO )
-#ifdef LAPACK_ILP64
-#define CB_MODULE XERBLA_CALLBACKS_64
-#define CB_CALLBACK ACTIVE_CALLBACK_64
-#else
-#define CB_MODULE XERBLA_CALLBACKS
-#define CB_CALLBACK ACTIVE_CALLBACK
-#endif
-      USE CB_MODULE, ONLY: CB_CALLBACK
       IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
@@ -97,13 +90,23 @@
 * =====================================================================
 *
 *     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM
+      INTRINSIC          LEN_TRIM, NULL
+*     ..
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: ACTIVE_CALLBACK => NULL()
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: CB_RET
+      PROCEDURE(XERBLA_INTERFACE) :: CB
+      ABSTRACT INTERFACE
+        SUBROUTINE XERBLA_INTERFACE(SRNAME, INFO)
+          CHARACTER*(*), INTENT(IN) :: SRNAME
+          INTEGER, INTENT(IN) :: INFO
+        END SUBROUTINE
+      END INTERFACE
 *     ..
 *     .. Executable Statements ..
 *
-      IF (ASSOCIATED(CB_CALLBACK)) THEN
-          CALL CB_CALLBACK(SRNAME, INFO)
-          RETURN
+      IF (ASSOCIATED(ACTIVE_CALLBACK)) THEN
+        CALL ACTIVE_CALLBACK(SRNAME, INFO)
+        RETURN
       END IF
 *
       WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
@@ -114,5 +117,13 @@
      $      'an illegal value' )
 *
 *     End of XERBLA
+*
+      ENTRY SET_XERBLA(CB)
+        ACTIVE_CALLBACK => CB
+      RETURN
+*
+      ENTRY GET_XERBLA(CB_RET)
+        CB_RET => ACTIVE_CALLBACK
+      RETURN
 *
       END

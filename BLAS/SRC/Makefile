@@ -57,12 +57,10 @@ TOPSRCDIR = ../..
 include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .F .f90 .o
-.f.o:
-	$(FC) $(FFLAGS) -cpp -c -o $@ $<
 .F.o:
-	$(FC) $(FFLAGS) -cpp -c -o $@ $<
+	$(FC) $(FFLAGS) -c -o $@ $<
 .f90.o:
-	$(FC) $(FFLAGS) -cpp -c -o $@ $<
+	$(FC) $(FFLAGS) -c -o $@ $<
 
 .PHONY: all
 all: $(BLASLIB)
@@ -98,7 +96,7 @@ $(ZB1AUX): $(FRC)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-ALLBLAS = lsame.o xerbla.o xerbla_array.o xerbla_callbacks.o
+ALLBLAS = lsame.o xerbla.o xerbla_array.o
 $(ALLBLAS): $(FRC)
 
 #---------------------------------------------------------
@@ -178,9 +176,6 @@ FRC:
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
-	rm -f *.o *.mod
+	rm -f *.o
 cleanlib:
 	#rm -f $(BLASLIB)  # May point to a system lib, e.g. -lblas
-
-# Modules
-xerbla.o: xerbla.f xerbla_callbacks.o
