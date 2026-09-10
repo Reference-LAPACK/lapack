@@ -651,6 +651,9 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      CHARACTER          COMPZ
+      INTEGER            JCOMPZ, JNAN, NSMLSZ
+      REAL               RNAN, RONE
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -1953,11 +1956,62 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     CSTEDC must report a NaN in the matrix through INFO.  A NaN
+*     off-diagonal entry used to split the matrix and was dropped, and
+*     a NaN diagonal entry was isolated as a 1 by 1 block, both with
+*     INFO = 0, whenever the block left over was large enough for the
+*     divide and conquer recursion, which the sizes in the input file
+*     do not reach; N = LDU is the capacity of the arrays.
+*
+      NSMLSZ = ILAENV( 9, 'CSTEDC', ' ', 0, 0, 0, 0 )
+      IF( LDU.GT.NSMLSZ .AND.
+     $    ILAENV( 10, 'CSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'CSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = LDU
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         CALL CSTEDC( 'V', N, SD, SE, Z, LDU, WORK, -1, RWORK, -1,
+     $                IWORK, -1, IINFO )
+         IF( IINFO.EQ.0 .AND. INT( REAL( WORK( 1 ) ) ).LE.LWORK .AND.
+     $       INT( RWORK( 1 ) ).LE.LRWORK .AND. IWORK( 1 ).LE.LIWORK )
+     $       THEN
+            DO 340 JNAN = 1, 2
+               DO 330 JCOMPZ = 1, 2
+                  IF( JCOMPZ.EQ.1 ) THEN
+                     COMPZ = 'I'
+                  ELSE
+                     COMPZ = 'V'
+                  END IF
+                  DO 320 J = 1, N
+                     SD( J ) = REAL( J )
+                     SE( J ) = ONE / REAL( J+1 )
+  320             CONTINUE
+                  IF( JNAN.EQ.1 ) THEN
+                     SE( N / 2 ) = RNAN
+                  ELSE
+                     SD( N ) = RNAN
+                  END IF
+                  CALL CLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+                  CALL CSTEDC( COMPZ, N, SD, SE, Z, LDU, WORK, LWORK,
+     $                         RWORK, LRWORK, IWORK, LIWORK, IINFO )
+                  IF( IINFO.EQ.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9985 )COMPZ, JNAN
+                     NERRS = NERRS + 1
+                  END IF
+                  NTESTT = NTESTT + 1
+  330          CONTINUE
+  340       CONTINUE
+         END IF
+      END IF
+*
 *     Summary
 *
       CALL SLASUM( 'CST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9985 FORMAT( ' CCHKST: CSTEDC( ', A1, ' ) returned INFO=0 for a',
+     $      ' matrix with a NaN, case ', I1 )
  9999 FORMAT( ' CCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
