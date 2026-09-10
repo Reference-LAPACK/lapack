@@ -709,6 +709,7 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
                         SRC/VARIANTS
                         BLAS/SRC/lsame.f
                         BLAS/SRC/xerbla.f
+                        BLAS/SRC/xerbla_blas.f90
                         BLAS/SRC/xerbla_array.f
                         INSTALL/slamchf77.f
                         INSTALL/dlamchf77.f )

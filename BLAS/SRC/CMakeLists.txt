@@ -29,6 +29,8 @@
 #  Level 1 BLAS
 #---------------------------------------------------------
 
+set(XERBLAMOD xerbla_blas.f90)
+
 set(LAPACK_INSTALL_EXPORT_NAME ${BLASLIB}-targets)
 
 set(SBLAS1
@@ -60,7 +62,7 @@ set(ZB1AUX
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
 #---------------------------------------------------------------------
-set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
+set(ALLBLAS lsame.f xerbla.f xerbla_array.f ${XERBLAMOD})
 
 #---------------------------------------------------------
 #  Level 2 BLAS
@@ -117,8 +119,12 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
+add_library(blas_mod_files OBJECT ${XERBLAMOD})
+lapack_add_coverage(blas_mod_files)
+
 if(BUILD_DEFAULT_API)
   add_library(${BLASLIB}_obj OBJECT ${SOURCES})
+  target_link_libraries(${BLASLIB}_obj PUBLIC blas_mod_files)
   lapack_add_coverage(${BLASLIB}_obj)
 endif()
 
@@ -127,6 +133,7 @@ if(BUILD_INDEX64_EXT_API)
   generate_64bit_suffixed_sources(${BLASLIB} SOURCES SOURCES_64)
 
   add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64})
+  target_link_libraries(${BLASLIB}_64_obj PUBLIC blas_mod_files)
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
 endif()
 

@@ -65,6 +65,10 @@ include $(TOPSRCDIR)/make.inc
 .PHONY: all
 all: $(BLASLIB)
 
+xerbla.o: blas_xerbla.mod
+blas_xerbla.mod: xerbla_blas.o
+	@true
+
 #---------------------------------------------------------
 #  Comment out the next 6 definitions if you already have
 #  the Level 1 BLAS.
@@ -176,6 +180,6 @@ FRC:
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
-	rm -f *.o
+	rm -f *.o *.mod
 cleanlib:
 	#rm -f $(BLASLIB)  # May point to a system lib, e.g. -lblas
