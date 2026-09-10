@@ -2089,7 +2089,8 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "--fail-if-empty",
         action="store_true",
-        help="exit with a nonzero status if no test results were analyzed",
+        help="exit with a nonzero status if no test results were analyzed, "
+        "or if any analyzed output file accounted for no tests at all",
     )
     parser.add_argument(
         "--fail-on-unrecognized",
@@ -2419,6 +2420,28 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             file=sys.stderr,
         )
 
+    # A file that parses but accounts for no tests at all means a driver
+    # wrote its header and then ran nothing, which is what happens when
+    # its input file stops lining up with what it reads.  Neither of the
+    # other checks notices: such a driver exits with status 0, and its
+    # sibling files keep the grand total nonzero.
+    empty_outputs = [
+        outcome
+        for outcome in outcomes
+        if outcome.report is not None and outcome.report.counts.runs == 0
+    ]
+    if empty_outputs:
+        print(
+            "lapack_testing.py: {} output file(s) accounted for no tests at "
+            "all:".format(len(empty_outputs)),
+            file=sys.stderr,
+        )
+        for outcome in empty_outputs:
+            print(
+                "  {}".format(outcome.case.suffixed_output(outcome.suffix)),
+                file=sys.stderr,
+            )
+
     unrecognized = find_unrecognized_outputs(directories)
     if unrecognized:
         print(
@@ -2454,7 +2477,7 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         if markdown_error is not None:
             print("lapack_testing.py: {}".format(markdown_error), file=sys.stderr)
 
-    if args.fail_if_empty and grand_total.runs == 0:
+    if args.fail_if_empty and (grand_total.runs == 0 or empty_outputs):
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1
