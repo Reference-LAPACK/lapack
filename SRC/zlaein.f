@@ -173,8 +173,8 @@
 *     .. Local Scalars ..
       CHARACTER          NORMIN, TRANS
       INTEGER            I, IERR, ITS, J
-      DOUBLE PRECISION   GROWTO, NRMSML, ROOTN, RTEMP, SCALE, VI_NORM,
-     $                   VIP1_NORM
+      DOUBLE PRECISION   GROWTO, NRMSML, ROOTN, RTEMP, SCALE, V0NORM,
+     $                   V1NORM
       COMPLEX*16         CDUM, EI, EJ, TEMP, X
 *     ..
 *     .. External Functions ..
@@ -199,11 +199,10 @@
 *
       INFO = 0
 *
-*     The residual of the vector x that a solve returns is SCALE times
-*     the norm of the starting vector, over the norm of x, so GROWTO is
-*     the growth VIP1_NORM/(SCALE*VI_NORM) that the acceptance test
-*     below requires, where VI_NORM and VIP1_NORM are the norms of the
-*     vectors the current iteration started from and produced.
+*     Each starting vector gets one solve, from v0 to v1.  The residual
+*     of v1 is SCALE times the norm of v0, over the norm of v1, so
+*     GROWTO is the growth V1NORM/(SCALE*V0NORM) that the acceptance
+*     test below requires.
 *
       ROOTN = SQRT( DBLE( N ) )
       GROWTO = TENTH / ( DBLE( N )*EPS3 )
@@ -230,8 +229,8 @@
 *
 *        Scale supplied initial vector.
 *
-         VI_NORM = DZNRM2( N, V, 1 )
-         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VI_NORM, NRMSML ), V,
+         V0NORM = DZNRM2( N, V, 1 )
+         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( V0NORM, NRMSML ), V,
      $                1 )
       END IF
 *
@@ -313,7 +312,7 @@
 *
       NORMIN = 'N'
       DO 110 ITS = 1, N
-         VI_NORM = DZASUM( N, V, 1 )
+         V0NORM = DZASUM( N, V, 1 )
 *
 *        Solve U*x = scale*v for a right eigenvector
 *          or U**H *x = scale*v for a left eigenvector,
@@ -326,8 +325,8 @@
 *
 *        Test for sufficient growth in the norm of v.
 *
-         VIP1_NORM = DZASUM( N, V, 1 )
-         IF( VIP1_NORM.GE.GROWTO*SCALE*VI_NORM )
+         V1NORM = DZASUM( N, V, 1 )
+         IF( V1NORM.GE.GROWTO*SCALE*V0NORM )
      $      GO TO 120
 *
 *        Choose new orthogonal starting vector and try again.
