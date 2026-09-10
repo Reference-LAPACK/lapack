@@ -60,6 +60,7 @@ set(ZB1AUX
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
 #---------------------------------------------------------------------
+set(ALLBLASMOD xerbla_callbacks.f90)
 set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
 
 #---------------------------------------------------------
@@ -103,7 +104,7 @@ set(ZBLAS3
 
 set(SOURCES)
 if(BUILD_SINGLE)
-  list(APPEND SOURCES ${SBLAS1} ${ALLBLAS} ${SBLAS2} ${SBLAS3})
+  list(APPEND SOURCES ${SBLAS1} ${ALLBLAS} ${ALLBLASMOD} ${SBLAS2} ${SBLAS3})
 endif()
 if(BUILD_DOUBLE)
   list(APPEND SOURCES
@@ -130,9 +131,17 @@ if(BUILD_INDEX64_EXT_API)
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
 endif()
 
+# Use special target for MOD files to guarantee they are built before
+# any other files that depend on them
+add_library(blas_mod_files OBJECT ${ALLBLASMOD})
+set_target_properties(blas_mod_files PROPERTIES Fortran_PREPROCESS ON)
+lapack_add_coverage(blas_mod_files)
+
 add_library(${BLASLIB}
+  $<TARGET_OBJECTS:blas_mod_files>
   $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${BLASLIB}_obj>>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>)
+set_target_properties(${BLASLIB} PROPERTIES Fortran_PREPROCESS ON)
 
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
 # that CMake adds (tested CMake 4.2).
