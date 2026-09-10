@@ -157,62 +157,13 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Determine the block size for this environment.
+*     Here we dispatch to whatever is more efficient in a particular environment
+*     We are defaulting to recursive, but if you want to use the blocked variant
+*     Comment out the line starting with `CALL ZLAUUM_RECURSIVE...`
+*     and uncomment the line starting with `CALL ZLAUUM_BLOCKED...`
 *
-      NB = ILAENV( 1, 'ZLAUUM', UPLO, N, -1, -1, -1 )
-*
-      IF( NB.LE.1 .OR. NB.GE.N ) THEN
-*
-*        Use unblocked code
-*
-         CALL ZLAUU2( UPLO, N, A, LDA, INFO )
-      ELSE
-*
-*        Use blocked code
-*
-         IF( UPPER ) THEN
-*
-*           Compute the product U * U**H.
-*
-            DO 10 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL ZTRMM( 'Right', 'Upper', 'Conjugate transpose',
-     $                     'Non-unit', I-1, IB, CONE, A( I, I ), LDA,
-     $                     A( 1, I ), LDA )
-               CALL ZLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL ZGEMM( 'No transpose', 'Conjugate transpose',
-     $                        I-1, IB, N-I-IB+1, CONE, A( 1, I+IB ),
-     $                        LDA, A( I, I+IB ), LDA, CONE, A( 1, I ),
-     $                        LDA )
-                  CALL ZHERK( 'Upper', 'No transpose', IB, N-I-IB+1,
-     $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
-     $                        LDA )
-               END IF
-   10       CONTINUE
-         ELSE
-*
-*           Compute the product L**H * L.
-*
-            DO 20 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL ZTRMM( 'Left', 'Lower', 'Conjugate transpose',
-     $                     'Non-unit', IB, I-1, CONE, A( I, I ), LDA,
-     $                     A( I, 1 ), LDA )
-               CALL ZLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL ZGEMM( 'Conjugate transpose', 'No transpose',
-     $                        IB,
-     $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
-     $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
-                  CALL ZHERK( 'Lower', 'Conjugate transpose', IB,
-     $                        N-I-IB+1, ONE, A( I+IB, I ), LDA, ONE,
-     $                        A( I, I ), LDA )
-               END IF
-   20       CONTINUE
-         END IF
-      END IF
-*
+      CALL ZLAUUM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL ZLAUUM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of ZLAUUM
