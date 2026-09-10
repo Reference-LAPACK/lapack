@@ -403,11 +403,11 @@
                   D11 = REAL( A( K, K ) ) / D
                   TT = ONE / ( D11*D22-ONE )
                   D12 = A( K-1, K ) / D
-                  D = TT / D
 *
                   DO 40 J = K - 2, 1, -1
-                     WKM1 = D*( D11*A( J, K-1 )-CONJG( D12 )*A( J, K ) )
-                     WK = D*( D22*A( J, K )-D12*A( J, K-1 ) )
+                     WKM1 = TT*( ( D11*A( J, K-1 )-CONJG( D12 )*
+     $                      A( J, K ) ) / D )
+                     WK = TT*( ( D22*A( J, K )-D12*A( J, K-1 ) ) / D )
                      DO 30 I = J, 1, -1
                         A( I, J ) = A( I, J ) - A( I, K )*CONJG( WK ) -
      $                              A( I, K-1 )*CONJG( WKM1 )
@@ -593,11 +593,11 @@
                   D22 = REAL( A( K, K ) ) / D
                   TT = ONE / ( D11*D22-ONE )
                   D21 = A( K+1, K ) / D
-                  D =  TT / D
 *
                   DO 80 J = K + 2, N
-                     WK = D*( D11*A( J, K )-D21*A( J, K+1 ) )
-                     WKP1 = D*( D22*A( J, K+1 )-CONJG( D21 )*A( J, K ) )
+                     WK = TT*( ( D11*A( J, K )-D21*A( J, K+1 ) ) / D )
+                     WKP1 = TT*( ( D22*A( J, K+1 )-CONJG( D21 )*
+     $                      A( J, K ) ) / D )
                      DO 70 I = J, N
                         A( I, J ) = A( I, J ) - A( I, K )*CONJG( WK ) -
      $                              A( I, K+1 )*CONJG( WKP1 )

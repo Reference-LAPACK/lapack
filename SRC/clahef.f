@@ -481,16 +481,16 @@
 *                 = (1/|d21|**2) * T * ( d21*( D11 ) conj(d21)*(  -1 ) ) =
 *                                      (     (  -1 )           ( D22 ) )
 *
-*                 = ( (T/conj(d21))*( D11 ) (T/d21)*(  -1 ) ) =
+*                 = ( (T/conj(d21))*( D11 ) (T/d21)*(  -1 ) ),
 *                   (               (  -1 )         ( D22 ) )
-*
-*                 = ( conj(D21)*( D11 ) D21*(  -1 ) )
-*                   (           (  -1 )     ( D22 ) ),
 *
 *                 where D11 = d22/d21,
 *                       D22 = d11/conj(d21),
-*                       D21 = T/d21,
 *                       T = 1/(D22*D11-1).
+*
+*                 T/d21 is not formed, since it overflows when d21 is
+*                 subnormal: each entry of the product is divided by
+*                 d21 or conj(d21) and then scaled by T.
 *
 *                 (NOTE: No need to check for division by ZERO,
 *                  since that was ensured earlier in pivot search:
@@ -503,16 +503,16 @@
                   D11 = W( K, KW ) / CONJG( D21 )
                   D22 = W( K-1, KW-1 ) / D21
                   T = ONE / ( REAL( D11*D22 )-ONE )
-                  D21 = T / D21
 *
 *                 Update elements in columns A(k-1) and A(k) as
 *                 dot products of rows of ( W(kw-1) W(kw) ) and columns
 *                 of D**(-1)
 *
                   DO 20 J = 1, K - 2
-                     A( J, K-1 ) = D21*( D11*W( J, KW-1 )-W( J, KW ) )
-                     A( J, K ) = CONJG( D21 )*
-     $                           ( D22*W( J, KW )-W( J, KW-1 ) )
+                     A( J, K-1 ) = T*( ( D11*W( J, KW-1 )-W( J, KW ) ) /
+     $                             D21 )
+                     A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
+     $                           CONJG( D21 ) )
    20             CONTINUE
                END IF
 *
@@ -828,16 +828,16 @@
 *                 = (1/|d21|**2) * T * ( d21*( D11 ) conj(d21)*(  -1 ) ) =
 *                                      (     (  -1 )           ( D22 ) )
 *
-*                 = ( (T/conj(d21))*( D11 ) (T/d21)*(  -1 ) ) =
+*                 = ( (T/conj(d21))*( D11 ) (T/d21)*(  -1 ) ),
 *                   (               (  -1 )         ( D22 ) )
-*
-*                 = ( conj(D21)*( D11 ) D21*(  -1 ) )
-*                   (           (  -1 )     ( D22 ) )
 *
 *                 where D11 = d22/d21,
 *                       D22 = d11/conj(d21),
-*                       D21 = T/d21,
 *                       T = 1/(D22*D11-1).
+*
+*                 T/d21 is not formed, since it overflows when d21 is
+*                 subnormal: each entry of the product is divided by
+*                 d21 or conj(d21) and then scaled by T.
 *
 *                 (NOTE: No need to check for division by ZERO,
 *                  since that was ensured earlier in pivot search:
@@ -850,16 +850,16 @@
                   D11 = W( K+1, K+1 ) / D21
                   D22 = W( K, K ) / CONJG( D21 )
                   T = ONE / ( REAL( D11*D22 )-ONE )
-                  D21 = T / D21
 *
 *                 Update elements in columns A(k) and A(k+1) as
 *                 dot products of rows of ( W(k) W(k+1) ) and columns
 *                 of D**(-1)
 *
                   DO 80 J = K + 2, N
-                     A( J, K ) = CONJG( D21 )*
-     $                           ( D11*W( J, K )-W( J, K+1 ) )
-                     A( J, K+1 ) = D21*( D22*W( J, K+1 )-W( J, K ) )
+                     A( J, K ) = T*( ( D11*W( J, K )-W( J, K+1 ) ) /
+     $                           CONJG( D21 ) )
+                     A( J, K+1 ) = T*( ( D22*W( J, K+1 )-W( J, K ) ) /
+     $                             D21 )
    80             CONTINUE
                END IF
 *

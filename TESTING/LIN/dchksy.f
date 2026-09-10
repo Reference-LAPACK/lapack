@@ -177,6 +177,7 @@
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NNB, NNS, NOUT
       DOUBLE PRECISION   THRESH
+      DOUBLE PRECISION   SUBNRM
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
@@ -190,8 +191,10 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
+      DOUBLE PRECISION   FOUR
+      PARAMETER          ( FOUR = 4.0D+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
+      PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 9 )
 *     ..
@@ -210,13 +213,16 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
+      LOGICAL            DISNAN
+      DOUBLE PRECISION   DLAMCH
       DOUBLE PRECISION   DGET06, DLANSY
       EXTERNAL           DGET06, DLANSY
+      EXTERNAL           DISNAN, DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
      $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYRFS, DSYT01, DSYTRF,
+     $                   DSCAL, DSYCON, DSYRFS, DSYT01, DSYTRF,
      $                   DSYTRI2, DSYTRS, DSYTRS2, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -387,6 +393,32 @@
                   IZERO = 0
                END IF
 *
+*              Type 11:  scale two adjacent rows and columns into the
+*              subnormal range and give them a 2 by 2 pivot block whose
+*              off-diagonal entry is four times its diagonal, at the
+*              end the factorization starts from.  Inverting that pivot
+*              through the reciprocal of the off-diagonal entry
+*              overflows.
+*
+               IF( IMAT.EQ.11 .AND. N.GE.2 ) THEN
+                  SUBNRM = DLAMCH( 'Safe minimum' ) / 512
+                  IF( IUPLO.EQ.1 ) THEN
+                     I1 = N - 1
+                  ELSE
+                     I1 = 1
+                  END IF
+                  I2 = I1 + 1
+                  CALL DSCAL( N, SUBNRM, A( I1 ), LDA )
+                  CALL DSCAL( N, SUBNRM, A( I2 ), LDA )
+                  CALL DSCAL( N, SUBNRM, A( ( I1-1 )*LDA+1 ), 1 )
+                  CALL DSCAL( N, SUBNRM, A( ( I2-1 )*LDA+1 ), 1 )
+                  A( ( I1-1 )*LDA+I1 ) = SUBNRM
+                  A( ( I2-1 )*LDA+I2 ) = SUBNRM
+                  A( ( I2-1 )*LDA+I1 ) = FOUR*SUBNRM
+                  A( ( I1-1 )*LDA+I2 ) = FOUR*SUBNRM
+                  IZERO = 0
+               END IF
+*
 *              End generate the test matrix A.
 *
 *              Do for each value of NB in NBVAL
@@ -440,7 +472,7 @@
 *
 *                 Set the condition estimate flag if the INFO is not 0.
 *
-                  IF( INFO.NE.0 ) THEN
+                  IF( INFO.NE.0 .OR. IMAT.EQ.11 ) THEN
                      TRFCON = .TRUE.
                   ELSE
                      TRFCON = .FALSE.
@@ -485,7 +517,8 @@
 *                 the threshold.
 *
                   DO 110 K = 1, NT
-                     IF( RESULT( K ).GE.THRESH ) THEN
+                     IF( RESULT( K ).GE.THRESH .OR.
+     $              DISNAN( RESULT( K ) ) ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
@@ -624,6 +657,8 @@
 *                 Get an estimate of RCOND = 1/CNDNUM.
 *
   140             CONTINUE
+                  IF( IMAT.EQ.11 )
+     $               GO TO 150
                   ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
                   SRNAMT = 'DSYCON'
                   CALL DSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
