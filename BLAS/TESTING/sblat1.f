@@ -265,7 +265,7 @@
             CALL STEST(9,DTEMP,DTRUE(1,K),DTRUE(1,K),SFAC)
          ELSE
             WRITE (NOUT,*) ' Shouldn''t be here in CHECK0'
-            STOP
+            STOP 1
          END IF
    20 CONTINUE
    40 RETURN
@@ -374,7 +374,7 @@
                CALL ITEST1(ISAMAX(N,SX,INCX),ITRUEC(NP1))
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
-               STOP
+               STOP 1
             END IF
    60    CONTINUE
          IF (ICASE.EQ.10) THEN
@@ -781,7 +781,7 @@
      $                 ST7B(KN,KI),SSIZE3(KN),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
-               STOP
+               STOP 1
             END IF
   100    CONTINUE
   120 CONTINUE
@@ -896,7 +896,7 @@
                CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK3'
-               STOP
+               STOP 1
             END IF
    40    CONTINUE
    60 CONTINUE

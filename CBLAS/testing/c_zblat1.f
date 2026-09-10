@@ -255,7 +255,7 @@
                CALL ITEST1(IZAMAXTEST(N,CX,INCX),ITRUE3(NP1))
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
-               STOP
+               STOP 1
             END IF
 *
    40    CONTINUE
@@ -596,7 +596,7 @@
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
-               STOP
+               STOP 1
             END IF
 *
    40    CONTINUE
