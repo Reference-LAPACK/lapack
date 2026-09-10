@@ -651,6 +651,9 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      CHARACTER          JOBZ
+      INTEGER            JOBNUM
+      DOUBLE PRECISION   RINF, RZERO
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -1952,11 +1955,53 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     ZSTEMR must not scale a matrix with an infinite entry to zero:
+*     the factor RMAX / TNRM underflows to zero for an infinite TNRM,
+*     and the routine returned INFO = 0 with every eigenvalue a NaN.
+*
+      IF( NMAX.GE.3 .AND. LRWORK.GE.18*NMAX .AND. LIWORK.GE.12*NMAX
+     $    .AND.
+     $    ILAENV( 10, 'ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = NMAX
+         RZERO = ZERO
+         RINF = ONE / RZERO
+         DO 360 JOBNUM = 1, 2
+            IF( JOBNUM.EQ.1 ) THEN
+               JOBZ = 'V'
+            ELSE
+               JOBZ = 'N'
+            END IF
+            DO 350 J = 1, N
+               SD( J ) = DBLE( J )
+               SE( J ) = ONE / DBLE( J+1 )
+  350       CONTINUE
+            SD( 1 ) = RINF
+            SE( N ) = ZERO
+            VL = ZERO
+            VU = ZERO
+            IL = 0
+            IU = 0
+            TRYRAC = .TRUE.
+            CALL ZSTEMR( JOBZ, 'A', N, SD, SE, VL, VU, IL, IU, M,
+     $                   WR, Z, LDU, N, IWORK( 1 ), TRYRAC, RWORK,
+     $                   LRWORK, IWORK( 2*N+1 ), LIWORK-2*N, IINFO )
+            IF( IINFO.EQ.0 ) THEN
+               WRITE( NOUNIT, FMT = 9984 )JOBZ
+               NERRS = NERRS + 1
+            END IF
+            NTESTT = NTESTT + 1
+  360    CONTINUE
+      END IF
+*
 *     Summary
 *
       CALL DLASUM( 'ZST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9984 FORMAT( ' ZCHKST: ZSTEMR( ', A1, ', A ) returned INFO=0 for a',
+     $      ' matrix with an infinite entry' )
  9999 FORMAT( ' ZCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
