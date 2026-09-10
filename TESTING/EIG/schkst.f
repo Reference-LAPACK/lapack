@@ -644,6 +644,8 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      CHARACTER          COMPZ
+      INTEGER            JCOMPZ, JNAN, NSMLSZ
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -2019,6 +2021,54 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     SSTEDC must report a NaN in the matrix through INFO.  A NaN
+*     off-diagonal entry used to split the matrix and was dropped, and
+*     a NaN diagonal entry was isolated as a 1 by 1 block, both with
+*     INFO = 0, whenever the block left over was large enough for the
+*     divide and conquer recursion, which the sizes in the input file
+*     do not reach; N = LDU is the capacity of the arrays.
+*
+      NSMLSZ = ILAENV( 9, 'SSTEDC', ' ', 0, 0, 0, 0 )
+      IF( LDU.GT.NSMLSZ .AND.
+     $    ILAENV( 10, 'SSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'SSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = LDU
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         CALL SSTEDC( 'V', N, SD, SE, Z, LDU, WORK, -1, IWORK, -1,
+     $                IINFO )
+         IF( IINFO.EQ.0 .AND. INT( WORK( 1 ) ).LE.LWORK .AND.
+     $       IWORK( 1 ).LE.LIWORK ) THEN
+            DO 360 JNAN = 1, 2
+               DO 350 JCOMPZ = 1, 2
+                  IF( JCOMPZ.EQ.1 ) THEN
+                     COMPZ = 'I'
+                  ELSE
+                     COMPZ = 'V'
+                  END IF
+                  DO 340 J = 1, N
+                     SD( J ) = REAL( J )
+                     SE( J ) = ONE / REAL( J+1 )
+  340             CONTINUE
+                  IF( JNAN.EQ.1 ) THEN
+                     SE( N / 2 ) = RNAN
+                  ELSE
+                     SD( N ) = RNAN
+                  END IF
+                  CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDU )
+                  CALL SSTEDC( COMPZ, N, SD, SE, Z, LDU, WORK, LWORK,
+     $                         IWORK, LIWORK, IINFO )
+                  IF( IINFO.EQ.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9985 )COMPZ, JNAN
+                     NERRS = NERRS + 1
+                  END IF
+                  NTESTT = NTESTT + 1
+  350          CONTINUE
+  360       CONTINUE
+         END IF
+      END IF
+*
 *     Summary
 *
 *
@@ -2071,6 +2121,8 @@
 *
  9986 FORMAT( ' SCHKST: SSTEMR( ', A1, ', A ) on a matrix with a',
      $      ' NaN returned INFO=', I6 )
+ 9985 FORMAT( ' SCHKST: SSTEDC( ', A1, ' ) returned INFO=0 for a',
+     $      ' matrix with a NaN, case ', I1 )
  9999 FORMAT( ' SCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
