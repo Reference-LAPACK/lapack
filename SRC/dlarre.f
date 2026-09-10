@@ -256,7 +256,8 @@
 *>                for further information.
 *>
 *>          =-1:  Problem in DLARRD.
-*>          = 2:  No base representation could be found in MAXTRY iterations.
+*>          = 2:  No base representation could be found in MAXTRY iterations,
+*>                or the matrix has an infinite entry.
 *>                Increasing MAXTRY and recompilation might be a remedy.
 *>          =-3:  Problem in DLARRB when computing the refined root
 *>                representation for DLASQ2.
@@ -350,8 +351,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION            DLAMCH
-      EXTERNAL           DLAMCH, LSAME
+      DOUBLE PRECISION            DLAMCH, DLANST
+      EXTERNAL           DLAMCH, DLANST, LSAME
 
 *     ..
 *     .. External Subroutines ..
@@ -442,6 +443,11 @@
 *     Compute spectral diameter. The Gerschgorin bounds give an
 *     estimate that is wrong by at most a factor of SQRT(2)
       SPDIAM = GU - GL
+*     An infinite matrix has no base representation.
+      IF( DLANST( 'M', N, D, E ).GT.DLAMCH( 'O' ) ) THEN
+         INFO = 2
+         RETURN
+      END IF
 
 *     Compute splitting points
       CALL DLARRA( N, D, E, E2, SPLTOL, SPDIAM,
