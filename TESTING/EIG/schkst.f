@@ -634,6 +634,9 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      CHARACTER*6        RNAME
+      INTEGER            JNAN, JROUT
+      REAL               RNAN, RONE
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -641,9 +644,10 @@
       REAL               DUMMA( 1 )
 *     ..
 *     .. External Functions ..
+      LOGICAL            SISNAN
       INTEGER            ILAENV
       REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
+      EXTERNAL           SISNAN, ILAENV, SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLACPY, SLASET, SLASUM, SLATMR, SLATMS,
@@ -1931,11 +1935,62 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     A 2 by 2 matrix with a NaN on its diagonal must not get finite
+*     eigenvalues: SLAE2 and SLAEV2 fell through the comparisons of
+*     |a-c| with |2b| and of a+c with zero, which are all false for a
+*     NaN, and returned +/- |b| sqrt(2).
+*
+      IF( NMAX.GE.2 .AND. LWORK.GE.36 .AND. LIWORK.GE.24 .AND.
+     $    ILAENV( 10, 'SSTEQR', 'N', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'SSTEQR', 'N', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = 2
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         DO 380 JNAN = 1, 2
+            DO 370 JROUT = 1, 3
+               SD( 1 ) = ONE
+               SD( 2 ) = ONE + ONE
+               SE( 1 ) = ONE
+               SE( 2 ) = ZERO
+               SD( JNAN ) = RNAN
+               IF( JROUT.EQ.1 ) THEN
+                  RNAME = 'SSTEQR'
+                  CALL SSTEQR( 'N', N, SD, SE, Z, LDU, WORK, IINFO )
+               ELSE IF( JROUT.EQ.2 ) THEN
+                  RNAME = 'SSTERF'
+                  CALL SSTERF( N, SD, SE, IINFO )
+               ELSE
+                  RNAME = 'SSTEMR'
+                  VL = ZERO
+                  VU = ZERO
+                  IL = 0
+                  IU = 0
+                  TRYRAC = .TRUE.
+                  CALL SSTEMR( 'N', 'A', N, SD, SE, VL, VU, IL, IU, M,
+     $                         WR, Z, LDU, N, IWORK( 1 ), TRYRAC,
+     $                         WORK, LWORK,
+     $                         IWORK( 2*N+1 ), LIWORK-2*N, IINFO )
+                  IF( IINFO.EQ.0 .AND. M.EQ.N )
+     $               CALL SCOPY( N, WR, 1, SD, 1 )
+               END IF
+               IF( IINFO.EQ.0 .AND. .NOT.( SISNAN( SD( 1 ) ) .AND.
+     $             SISNAN( SD( 2 ) ) ) ) THEN
+                  WRITE( NOUNIT, FMT = 9983 )RNAME, JNAN
+                  NERRS = NERRS + 1
+               END IF
+               NTESTT = NTESTT + 1
+  370       CONTINUE
+  380    CONTINUE
+      END IF
+*
 *     Summary
 *
       CALL SLASUM( 'SST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9983 FORMAT( ' SCHKST: ', A6, ' returned a finite eigenvalue for a',
+     $      ' 2 by 2 matrix with a NaN at D(', I1, ')' )
  9999 FORMAT( ' SCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
