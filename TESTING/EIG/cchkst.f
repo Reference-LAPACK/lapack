@@ -651,6 +651,7 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      INTEGER            NSMLSZ
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -1953,11 +1954,74 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     CSTEDC( 'V' ) must leave the rows of Z below N alone.  CLAED0
+*     used the caller's Z as a packed QSIZ by N workspace, which
+*     spills into rows N+1 to LDZ whenever LDZ > N.  The sizes in the
+*     input file do not reach the divide and conquer recursion, so it
+*     is exercised here with N = LDU - 1, and the eigensystem is
+*     checked as in the size loop.
+*
+      NSMLSZ = ILAENV( 9, 'CSTEDC', ' ', 0, 0, 0, 0 )
+      N = LDU - 1
+      IF( N.GT.NSMLSZ ) THEN
+         CALL CSTEDC( 'V', N, SD, RWORK, Z, LDU, WORK, -1, RWORK, -1,
+     $                IWORK, -1, IINFO )
+         IF( IINFO.EQ.0 .AND. INT( REAL( WORK( 1 ) ) ).LE.LWORK .AND.
+     $       INT( RWORK( 1 ) ).LE.LRWORK-N .AND. IWORK( 1 ).LE.LIWORK )
+     $       THEN
+            DO 390 J = 1, N
+               SD( J ) = REAL( J )
+               SE( J ) = ONE / REAL( J+1 )
+  390       CONTINUE
+            SE( N ) = ZERO
+            CALL SCOPY( N, SD, 1, D1, 1 )
+            CALL SCOPY( N-1, SE, 1, RWORK, 1 )
+            CALL CLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+            CALL CLASET( 'Full', LDU-N, N, -CONE, -CONE, Z( N+1, 1 ),
+     $                   LDU )
+            CALL CSTEDC( 'V', N, D1, RWORK, Z, LDU, WORK, LWORK,
+     $                   RWORK( N+1 ), LRWORK-N, IWORK, LIWORK, IINFO )
+            NTESTT = NTESTT + 1
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9982 )N, IINFO
+               NERRS = NERRS + 1
+            ELSE
+               ITEMP = 0
+               DO 410 J = 1, N
+                  DO 400 I = N + 1, LDU
+                     IF( Z( I, J ).NE.-CONE )
+     $                  ITEMP = ITEMP + 1
+  400             CONTINUE
+  410          CONTINUE
+               IF( ITEMP.GT.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9981 )N, ITEMP
+                  NERRS = NERRS + 1
+               END IF
+               CALL CSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK,
+     $                      RWORK( N+1 ), RESULT( 1 ) )
+               DO 420 J = 1, 2
+                  IF( RESULT( J ).GE.THRESH ) THEN
+                     WRITE( NOUNIT, FMT = 9980 )N, J, RESULT( J )
+                     NERRS = NERRS + 1
+                  END IF
+  420          CONTINUE
+               NTESTT = NTESTT + 3
+            END IF
+         END IF
+      END IF
+*
 *     Summary
 *
       CALL SLASUM( 'CST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9982 FORMAT( ' CCHKST: CSTEDC( V ) with N=', I5, ' returned INFO=',
+     $      I6 )
+ 9981 FORMAT( ' CCHKST: CSTEDC( V ) with N=', I5, ' overwrote ', I6,
+     $      ' entries of Z below row N' )
+ 9980 FORMAT( ' CCHKST: CSTEDC( V ) with N=', I5, ', test ', I2,
+     $      ' ratio=', G10.3, ' >= threshold' )
  9999 FORMAT( ' CCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
