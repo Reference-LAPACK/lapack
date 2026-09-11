@@ -184,7 +184,7 @@
       EXTERNAL           DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAORD, DLASCL, XERBLA, ZDSCAL, ZGEMM, ZLARF,
+      EXTERNAL           DLAORD, DLASCL, XER_REPLACE, ZDSCAL, ZGEMM, ZLARF,
      $                   ZLARNV, ZLAROR, ZLASCL, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
@@ -194,7 +194,7 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL XERBLA( 'ZQRT15', 16 )
+         CALL XER_REPLACE( 'ZQRT15', 16 )
          RETURN
       END IF
 *
@@ -214,7 +214,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL XERBLA( 'ZQRT15', 2 )
+         CALL XER_REPLACE( 'ZQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -302,7 +302,7 @@
                CALL ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE
-               CALL XERBLA( 'ZQRT15', 1 )
+               CALL XER_REPLACE( 'ZQRT15', 1 )
                RETURN
             END IF
          END IF

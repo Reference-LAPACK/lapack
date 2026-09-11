@@ -1,4 +1,4 @@
-*> \brief \b XERBLA
+*> \brief \b XER_REPLACE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE XERBLA( SRNAME, INFO )
+*       SUBROUTINE XER_REPLACE( SRNAME, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*(*)      SRNAME
@@ -33,7 +33,7 @@
 *> \param[in] SRNAME
 *> \verbatim
 *>          SRNAME is CHARACTER*(*)
-*>          The name of the subroutine calling XERBLA.  This name should
+*>          The name of the subroutine calling XER_REPLACE.  This name should
 *>          match the COMMON variable SRNAMT.
 *> \endverbatim
 *>
@@ -66,12 +66,12 @@
 *>  NOUT    INTEGER      Unit number for printing error messages
 *>  OK      LOGICAL      Set to .TRUE. if INFO = INFOT and
 *>                       SRNAME = SRNAMT, otherwise set to .FALSE.
-*>  LERR    LOGICAL      Set to .TRUE., indicating that XERBLA was called
+*>  LERR    LOGICAL      Set to .TRUE., indicating that XER_REPLACE was called
 *>  SRNAMT  CHARACTER*(*) Expected name of calling subroutine
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine --
@@ -125,6 +125,6 @@
  9997 FORMAT( ' *** On entry to ', A, ' parameter number ', I6,
      $      ' had an illegal value ***' )
 *
-*     End of XERBLA
+*     End of XER_REPLACE
 *
       END

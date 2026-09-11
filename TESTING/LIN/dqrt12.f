@@ -114,7 +114,7 @@
       EXTERNAL           DASUM, DLAMCH, DLANGE, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DBDSQR, DGEBD2, DLASCL, DLASET, XERBLA
+      EXTERNAL           DAXPY, DBDSQR, DGEBD2, DLASCL, DLASET, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -130,7 +130,7 @@
 *
       IF( LWORK.LT.MAX( M*N+4*MIN( M, N )+MAX( M, N ),
      $                  M*N+2*MIN( M, N )+4*N) ) THEN
-         CALL XERBLA( 'DQRT12', 7 )
+         CALL XER_REPLACE( 'DQRT12', 7 )
          RETURN
       END IF
 *

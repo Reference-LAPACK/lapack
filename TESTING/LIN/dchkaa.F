@@ -175,6 +175,7 @@
      $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
      $                   DDRVSY_RK, DDRVSY_AA, ILAVER, DCHKLQTP,
      $                   DCHKQRT, DCHKQRTP, DCHKLQT, DCHKTSQR,
+     $                   SET_XERBLA, XER_REPLACE,
      $                   DCHKSY_AA_2STAGE, DDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
@@ -213,6 +214,7 @@
 *
 *     .. Executable Statements ..
 *
+      CALL SET_XERBLA(XER_REPLACE)
       S1 = DSECND( )
       LDA = NMAX
       FATAL = .FALSE.

@@ -181,6 +181,7 @@
      $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
      $                   CDRVSY, CDRVSY_ROOK, CDRVSY_RK, CDRVSY_AA,
      $                   ILAVER, CCHKQRT, CCHKQRTP,
+     $                   SET_XERBLA, XER_REPLACE,
      $                   CCHKLQT, CCHKLQTP, CCHKTSQR,
      $                   CCHKHE_AA_2STAGE, CDRVHE_AA_2STAGE,
      $                   CCHKSY_AA_2STAGE, CDRVSY_AA_2STAGE
@@ -220,6 +221,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_XERBLA(XER_REPLACE)
       S1 = SECOND( )
       LDA = NMAX
       FATAL = .FALSE.

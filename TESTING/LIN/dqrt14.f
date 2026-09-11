@@ -147,7 +147,7 @@
       EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGELQ2, DGEQR2, DLACPY, DLASCL, XERBLA
+      EXTERNAL           DGELQ2, DGEQR2, DLACPY, DLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -159,7 +159,7 @@
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL XERBLA( 'DQRT14', 10 )
+            CALL XER_REPLACE( 'DQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
@@ -168,13 +168,13 @@
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL XERBLA( 'DQRT14', 10 )
+            CALL XER_REPLACE( 'DQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL XERBLA( 'DQRT14', 1 )
+         CALL XER_REPLACE( 'DQRT14', 1 )
          RETURN
       END IF
 *

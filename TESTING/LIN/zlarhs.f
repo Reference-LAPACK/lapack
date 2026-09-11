@@ -239,7 +239,7 @@
       EXTERNAL           LSAME, LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGBMV, ZGEMM, ZHBMV, ZHEMM, ZHPMV,
+      EXTERNAL           XER_REPLACE, ZGBMV, ZGEMM, ZHBMV, ZHEMM, ZHPMV,
      $                   ZLACPY, ZLARNV, ZSBMV, ZSPMV, ZSYMM, ZTBMV,
      $                   ZTPMV, ZTRMM
 *     ..
@@ -294,7 +294,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLARHS', -INFO )
+         CALL XER_REPLACE( 'ZLARHS', -INFO )
          RETURN
       END IF
 *
@@ -432,7 +432,7 @@
 *        If none of the above, set INFO = -1 and return
 *
          INFO = -1
-         CALL XERBLA( 'ZLARHS', -INFO )
+         CALL XER_REPLACE( 'ZLARHS', -INFO )
       END IF
 *
       RETURN
