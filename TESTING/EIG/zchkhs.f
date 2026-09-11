@@ -21,7 +21,7 @@
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * ), SELECT( * )
 *       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
-*       DOUBLE PRECISION   RESULT( 16 ), RWORK( * )
+*       DOUBLE PRECISION   RESULT( 17 ), RWORK( * )
 *       COMPLEX*16         A( LDA, * ), EVECTL( LDU, * ),
 *      $                   EVECTR( LDU, * ), EVECTX( LDU, * ),
 *      $                   EVECTY( LDU, * ), H( LDA, * ), T1( LDA, * ),
@@ -95,17 +95,21 @@
 *>
 *>    (10)    | L**H T - W**H L | / ( |T| |L| ulp )
 *>
-*>    (11)    | HX - XW | / ( |H| |X| ulp )
+*>    (11)    | ( W(Schur form) - W(eigenvalues only) ) s | / ( |W| ulp )
+*>            over the eigenvalues whose reciprocal condition number s
+*>            is at least sqrt(ulp); s = 1 for a normal matrix
 *>
-*>    (12)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
+*>    (12)    | HX - XW | / ( |H| |X| ulp )
 *>
-*>    (13)    | AX - XW | / ( |A| |X| ulp )
+*>    (13)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
 *>
-*>    (14)    | Y**H A - W**H Y | / ( |A| |Y| ulp )
+*>    (14)    | AX - XW | / ( |A| |X| ulp )
 *>
-*>    (15)    | AR - RW | / ( |A| |R| ulp )
+*>    (15)    | Y**H A - W**H Y | / ( |A| |Y| ulp )
 *>
-*>    (16)    | LA - WL | / ( |A| |L| ulp )
+*>    (16)    | AR - RW | / ( |A| |R| ulp )
+*>
+*>    (17)    | LA - WL | / ( |A| |L| ulp )
 *>
 *>    The "sizes" are specified by an array NN(1:NSIZES); the value of
 *>    each element NN(j) specifies one size.
@@ -437,7 +441,7 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * ), SELECT( * )
       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
-      DOUBLE PRECISION   RESULT( 16 ), RWORK( * )
+      DOUBLE PRECISION   RESULT( 17 ), RWORK( * )
       COMPLEX*16         A( LDA, * ), EVECTL( LDU, * ),
      $                   EVECTR( LDU, * ), EVECTX( LDU, * ),
      $                   EVECTY( LDU, * ), H( LDA, * ), T1( LDA, * ),
@@ -463,7 +467,8 @@
      $                   JJ, JSIZE, JTYPE, K, MTYPES, N, N1, NERRS,
      $                   NMATS, NMAX, NTEST, NTESTT
       DOUBLE PRECISION   ANINV, ANORM, COND, CONDS, OVFL, RTOVFL, RTULP,
-     $                   RTULPI, RTUNFL, TEMP1, TEMP2, ULP, ULPINV, UNFL
+     $                   RTULPI, RTUNFL, SJ, TEMP1, TEMP2, ULP, ULPINV,
+     $                   UNFL, XNORM, YNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), KCONDS( MAXTYP ),
@@ -473,8 +478,9 @@
       COMPLEX*16         CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   DLAMCH, DZNRM2
+      COMPLEX*16         ZDOTC
+      EXTERNAL           DLAMCH, DZNRM2, ZDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD, ZGEMM,
@@ -940,6 +946,38 @@
      $            N, JTYPE, IOLDSD
             END IF
 *
+*           Do Test 11: | ( W3 - W1 ) s | / ( max(|W1|,|W3|) ulp )
+*
+*           W1 comes from JOB = 'S' and W3 from JOB = 'E'.  Unlike test
+*           8, which varies only COMPZ, these two are not expected to
+*           agree exactly: the paths cover different index ranges and
+*           need not round alike.  s(j) = |y(j)**H x(j)| over
+*           ||y(j)|| ||x(j)||, the reciprocal condition number of
+*           eigenvalue j of T1, is what makes the comparison meaningful.
+*           A backward error eps in H moves that eigenvalue by
+*           eps / s(j), so the two can only be asked to agree to within
+*           |dW(j)| s(j); s(j) = 1 for a normal matrix.  Eigenvalues
+*           with s(j) < sqrt(ulp) are skipped: those are the ones the
+*           two paths have been seen to return in a different order,
+*           which the index-wise comparison could not tell apart from a
+*           real error.
+*
+            NTEST = 11
+            RESULT( 11 ) = ULPINV
+            TEMP1 = ZERO
+            TEMP2 = ZERO
+            DO 155 J = 1, N
+               XNORM = DZNRM2( N, EVECTR( 1, J ), 1 )
+               YNORM = DZNRM2( N, EVECTL( 1, J ), 1 )
+               SJ = ABS( ZDOTC( N, EVECTL( 1, J ), 1,
+     $              EVECTR( 1, J ), 1 ) ) / MAX( XNORM*YNORM, UNFL )
+               TEMP1 = MAX( TEMP1, ABS( W1( J ) ), ABS( W3( J ) ) )
+               IF( SJ.GE.RTULP )
+     $            TEMP2 = MAX( TEMP2, SJ*ABS( W1( J )-W3( J ) ) )
+  155       CONTINUE
+*
+            RESULT( 11 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
+*
 *           Compute selected left eigenvectors and confirm that
 *           they agree with previous left eigenvectors
 *
@@ -970,10 +1008,10 @@
      $         WRITE( NOUNIT, FMT = 9997 )'Left', 'ZTREVC', N, JTYPE,
      $         IOLDSD
 *
-*           Call ZHSEIN for Right eigenvectors of H, do test 11
+*           Call ZHSEIN for Right eigenvectors of H, do test 12
 *
-            NTEST = 11
-            RESULT( 11 ) = ULPINV
+            NTEST = 12
+            RESULT( 12 ) = ULPINV
             DO 220 J = 1, N
                SELECT( J ) = .TRUE.
   220       CONTINUE
@@ -989,24 +1027,24 @@
      $            GO TO 240
             ELSE
 *
-*              Test 11:  | HX - XW | / ( |H| |X| ulp )
+*              Test 12:  | HX - XW | / ( |H| |X| ulp )
 *
 *                        (from inverse iteration)
 *
                CALL ZGET22( 'N', 'N', 'N', N, H, LDA, EVECTX, LDU, W3,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
-     $            RESULT( 11 ) = DUMMA( 1 )*ANINV
+     $            RESULT( 12 ) = DUMMA( 1 )*ANINV
                IF( DUMMA( 2 ).GT.THRESH ) THEN
                   WRITE( NOUNIT, FMT = 9998 )'Right', 'ZHSEIN',
      $               DUMMA( 2 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call ZHSEIN for Left eigenvectors of H, do test 12
+*           Call ZHSEIN for Left eigenvectors of H, do test 13
 *
-            NTEST = 12
-            RESULT( 12 ) = ULPINV
+            NTEST = 13
+            RESULT( 13 ) = ULPINV
             DO 230 J = 1, N
                SELECT( J ) = .TRUE.
   230       CONTINUE
@@ -1022,24 +1060,24 @@
      $            GO TO 240
             ELSE
 *
-*              Test 12:  | YH - WY | / ( |H| |Y| ulp )
+*              Test 13:  | YH - WY | / ( |H| |Y| ulp )
 *
 *                        (from inverse iteration)
 *
                CALL ZGET22( 'C', 'N', 'C', N, H, LDA, EVECTY, LDU, W3,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
-     $            RESULT( 12 ) = DUMMA( 3 )*ANINV
+     $            RESULT( 13 ) = DUMMA( 3 )*ANINV
                IF( DUMMA( 4 ).GT.THRESH ) THEN
                   WRITE( NOUNIT, FMT = 9998 )'Left', 'ZHSEIN',
      $               DUMMA( 4 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call ZUNMHR for Right eigenvectors of A, do test 13
+*           Call ZUNMHR for Right eigenvectors of A, do test 14
 *
-            NTEST = 13
-            RESULT( 13 ) = ULPINV
+            NTEST = 14
+            RESULT( 14 ) = ULPINV
 *
             CALL ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTX, LDU, WORK, NWORK, IINFO )
@@ -1051,20 +1089,20 @@
      $            GO TO 240
             ELSE
 *
-*              Test 13:  | AX - XW | / ( |A| |X| ulp )
+*              Test 14:  | AX - XW | / ( |A| |X| ulp )
 *
 *                        (from inverse iteration)
 *
                CALL ZGET22( 'N', 'N', 'N', N, A, LDA, EVECTX, LDU, W3,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
-     $            RESULT( 13 ) = DUMMA( 1 )*ANINV
+     $            RESULT( 14 ) = DUMMA( 1 )*ANINV
             END IF
 *
-*           Call ZUNMHR for Left eigenvectors of A, do test 14
+*           Call ZUNMHR for Left eigenvectors of A, do test 15
 *
-            NTEST = 14
-            RESULT( 14 ) = ULPINV
+            NTEST = 15
+            RESULT( 15 ) = ULPINV
 *
             CALL ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTY, LDU, WORK, NWORK, IINFO )
@@ -1076,22 +1114,22 @@
      $            GO TO 240
             ELSE
 *
-*              Test 14:  | YA - WY | / ( |A| |Y| ulp )
+*              Test 15:  | YA - WY | / ( |A| |Y| ulp )
 *
 *                        (from inverse iteration)
 *
                CALL ZGET22( 'C', 'N', 'C', N, A, LDA, EVECTY, LDU, W3,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
-     $            RESULT( 14 ) = DUMMA( 3 )*ANINV
+     $            RESULT( 15 ) = DUMMA( 3 )*ANINV
             END IF
 *
 *           Compute Left and Right Eigenvectors of A
 *
 *           Compute a Right eigenvector matrix:
 *
-            NTEST = 15
-            RESULT( 15 ) = ULPINV
+            NTEST = 16
+            RESULT( 16 ) = ULPINV
 *
             CALL ZLACPY( ' ', N, N, UZ, LDU, EVECTR, LDU )
 *
@@ -1105,13 +1143,13 @@
                GO TO 250
             END IF
 *
-*           Test 15:  | AR - RW | / ( |A| |R| ulp )
+*           Test 16:  | AR - RW | / ( |A| |R| ulp )
 *
 *                     (from Schur decomposition)
 *
             CALL ZGET22( 'N', 'N', 'N', N, A, LDA, EVECTR, LDU, W1,
      $                   WORK, RWORK, DUMMA( 1 ) )
-            RESULT( 15 ) = DUMMA( 1 )
+            RESULT( 16 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
                WRITE( NOUNIT, FMT = 9998 )'Right', 'ZTREVC3',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
@@ -1119,8 +1157,8 @@
 *
 *           Compute a Left eigenvector matrix:
 *
-            NTEST = 16
-            RESULT( 16 ) = ULPINV
+            NTEST = 17
+            RESULT( 17 ) = ULPINV
 *
             CALL ZLACPY( ' ', N, N, UZ, LDU, EVECTL, LDU )
 *
@@ -1134,13 +1172,13 @@
                GO TO 250
             END IF
 *
-*           Test 16:  | LA - WL | / ( |A| |L| ulp )
+*           Test 17:  | LA - WL | / ( |A| |L| ulp )
 *
 *                     (from Schur decomposition)
 *
             CALL ZGET22( 'Conj', 'N', 'Conj', N, A, LDA, EVECTL, LDU,
      $                   W1, WORK, RWORK, DUMMA( 3 ) )
-            RESULT( 16 ) = DUMMA( 3 )
+            RESULT( 17 ) = DUMMA( 3 )
             IF( DUMMA( 4 ).GT.THRESH ) THEN
                WRITE( NOUNIT, FMT = 9998 )'Left', 'ZTREVC3', DUMMA( 4 ),
      $            N, JTYPE, IOLDSD
