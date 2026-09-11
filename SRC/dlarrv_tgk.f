@@ -1,17 +1,31 @@
+*> \brief \b DLARRV_TGK MRRR representation-tree traversal computing eigenvectors of the Golub-Kahan matrix (Golub-Kahan variant of the LAPACK 3.0 DLARRV).
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> MRRR representation-tree traversal computing eigenvectors of the Golub-Kahan matrix (Golub-Kahan variant of the LAPACK 3.0 DLARRV).
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DLARRV_TGK( N, D, L, ISPLIT, M, W, IBLOCK, INDEXW,
      $                   GERSCH, TOL, Z, LDZ, ISUPPZ, WORK, IWORK,
      $                   INFO )
 *
 *  -- New auxiliary routine for bidiagonal SVD via TGK-rooted MR^3 --
 *     Based on LAPACK DLARRV (Dhillon & Marques, Nov 11 2003).
-*     stegr_ID/dlarrv.f is UNCHANGED.  This is a separate copy with one
+*     Derived from the LAPACK 3.0 DLARRV.  This is a separate copy with one
 *     structural change: the ROOT of the representation tree (tree depth
 *     NDEPTH = 0) is a symmetric tridiagonal -- the Tridiagonal Golub-
 *     Kahan (TGK) matrix -- rather than an L D L^T factorization.  At the
 *     root the eigenvectors / child RRRs are obtained with the TGK-input
 *     paths of DLAR1V_TGK / DLARRF_TGK (REP = 'T'); every node at depth
 *     >= 1 is an ordinary L D L^T child and uses REP = 'L'.  DLARRB
-*     retains the advisor algorithm with an added bounded-progress guard;
+*     retains that algorithm with an added bounded-progress guard;
 *     its positive INFO is propagated to the driver for safe fallback.
 *
 *  Usage / calling convention (set up by the driver DBDSVDMR3)
@@ -48,7 +62,7 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER          REP
-      LOGICAL            DONE1, DONE2, NOMGS
+      LOGICAL            DONE1, DONE2, NOMGS, KTOT2OK
       INTEGER            I, IBEGIN, IEND, IINDC1, IINDC2, IINDR, IINDWK,
      $                   IINFO, IM, IN, INDERR, INDGAP, INDLD, INDLLD,
      $                   INDWRK, ITER, ITER2, ITMP1, ITMP2, J, JBLK, K,
@@ -66,8 +80,8 @@
       EXTERNAL           DDOT, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLAR1V_TGK, DLAR1V2_TGK, DLARRB_TGK,
-     $                   DLARRF_TGK, DLASET, DSCAL, DSTEIN
+      EXTERNAL           DAXPY, DCOPY, DLAR1V_TGK, DLAR1V2_TGK,
+     $                   DLARRB_TGK, DLARRF_TGK, DLASET, DSCAL, DSTEIN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -281,7 +295,19 @@
                      ELSE
                         INFO = 0
                         IF( MINRGP.GE.MGSTOL ) THEN
-                           NOMGS = .FALSE.
+*                          No relatively robust child representation
+*                          could be found for this cluster; report it
+*                          instead of leaving the cluster unprocessed
+*                          (the caller falls back to DBDSDC).
+                           INFO = 3
+                           RETURN
+                        ELSE IF( REP.EQ.'T' ) THEN
+*                          At the root the representation is the
+*                          Golub-Kahan matrix by its entries, so the
+*                          LDL^T-based inverse-iteration fallback does
+*                          not apply.
+                           INFO = 2
+                           RETURN
                         ELSE
 *
 *                          Call DSTEIN to process this tight cluster.
@@ -418,7 +444,11 @@
                   ELSE
                      KTOT2 = 0
                   END IF
-                  IF( KTOT2.GT.0 .AND. IWORK( KTOT2 ).EQ.-1 ) THEN
+                  KTOT2OK = .FALSE.
+                  IF( KTOT2.GT.0 ) THEN
+                     IF( IWORK( KTOT2 ).EQ.-1 ) KTOT2OK = .TRUE.
+                  END IF
+                  IF( KTOT2OK ) THEN
                      ITER = 0
                      ITER2 = 0
                      DONE1 = .FALSE.

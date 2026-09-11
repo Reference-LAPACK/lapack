@@ -1,9 +1,23 @@
+*> \brief \b DLAR1V_TGK computes one eigenvector of a shifted tridiagonal from a twisted factorization, keeping the full support (Golub-Kahan variant of DLAR1V); also DLAR1V2_TGK, the two-eigenvalue variant.
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> computes one eigenvector of a shifted tridiagonal from a twisted factorization, keeping the full support (Golub-Kahan variant of DLAR1V); also DLAR1V2_TGK, the two-eigenvalue variant.
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DLAR1V_TGK( REP, N, B1, BN, SIGMA, D, L, LD, LLD, EVAL,
      $                   GERSCH, Z, ZTZ, MINGMA, R, ISUPPZ, WORK )
 *
 *  -- New auxiliary routine for bidiagonal SVD via TGK-rooted MR^3 --
 *     Based on LAPACK DLAR1V (Dhillon & Marques, Nov 11 2003).
-*     stegr_ID/dlar1v.f is UNCHANGED; this is a separate copy that adds a
+*     Derived from the LAPACK 3.0 DLAR1V; this is a separate copy that adds a
 *     representation switch so the matrix M may be supplied either as an
 *     L D L^T factorization (REP='L', identical to the original) or as a
 *     symmetric tridiagonal -- in particular the Tridiagonal Golub-Kahan
@@ -39,7 +53,7 @@
 *  For REP='T' the qd transforms run on the tridiagonal entries directly
 *  (diagonal in D, off-diagonals beta_i in L), so LD and LLD are not
 *  referenced.  Using the identity  gamma_k = D(+)(k) + D(-)(k) - J_kk
-*  with J_kk = D(k) - sigma (thesis eq. 3.1.12), the WORK slots are filled
+*  with J_kk = D(k) - sigma (Dhillon, PhD thesis, UC Berkeley 1997, eq. 3.1.12), the WORK slots are filled
 *  so that the twist selection and back-substitution code below are
 *  shared, unchanged, with the REP='L' path:
 *       WORK(INDS + k-1) = D(+)(k)
@@ -53,7 +67,7 @@
 *  In the direct recurrence a zero pivot self-heals through IEEE
 *  arithmetic (D(+) -> -Inf, then L(+) -> 0), so no stationary/progressive
 *  restart is needed; only the back-substitution uses a slow path (to
-*  avoid Inf*0 = NaN), with beta-ratios per thesis Algorithm 3.3.1.
+*  avoid Inf*0 = NaN), with beta-ratios per Algorithm 3.3.1 of Dhillon's thesis (UC Berkeley, 1997).
 *
 *  Arguments
 *  =========
@@ -286,7 +300,7 @@
       ELSE
 *
 *        Slow path: some pivot vanished, so L(+)/U(-) may be +-Inf.
-*        Use the recurrence of thesis Algorithm 3.3.1, switching the
+*        Use the recurrence of Algorithm 3.3.1 in Dhillon's thesis, switching the
 *        coupling ratio between LD (REP='L') and beta=L (REP='T').
 *
          DO 160 I = R - 1, B1, -1

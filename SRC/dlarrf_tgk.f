@@ -1,9 +1,23 @@
+*> \brief \b DLARRF_TGK computes a shifted child representation for a cluster (Golub-Kahan variant of DLARRF).
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> computes a shifted child representation for a cluster (Golub-Kahan variant of DLARRF).
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DLARRF_TGK( REP, N, D, L, LD, LLD, IFIRST, ILAST, W,
      $                   SIGMA, DPLUS, LPLUS, WORK, ISEED, INFO )
 *
 *  -- New auxiliary routine for bidiagonal SVD via TGK-rooted MR^3 --
 *     Based on LAPACK DLARRF (Dhillon & Marques, Nov 11 2003).
-*     stegr_ID/dlarrf.f is UNCHANGED; this is a separate copy that adds
+*     Derived from the LAPACK 3.0 DLARRF; this is a separate copy that adds
 *     a representation switch so the parent may be supplied either as an
 *     L D L^T factorization (REP='L', identical to the original) or as a
 *     symmetric tridiagonal matrix -- in particular the Tridiagonal
@@ -30,7 +44,7 @@
 *  such that at least one of the eigenvalues of L(+) D(+) L(+)^T is
 *  relatively isolated.  The output L(+) D(+) L(+)^T is an ordinary
 *  L D L^T representation regardless of REP, so every descendant node in
-*  the representation tree can be processed by the unmodified stegr_ID
+*  the representation tree can be processed by the unmodified LAPACK 3.0-lineage
 *  routines.
 *
 *  Arguments

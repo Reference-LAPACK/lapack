@@ -1,11 +1,25 @@
+*> \brief \b DLARRB_TGK bisection refinement of eigenvalues of an LDL^T representation (Golub-Kahan variant of DLARRB); also DLARRBTGK_STURM4 (four-lane Sturm count) and DLARRBTGK_STURM_SLOW (reference Sturm count).
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> bisection refinement of eigenvalues of an LDL^T representation (Golub-Kahan variant of DLARRB); also DLARRBTGK_STURM4 (four-lane Sturm count) and DLARRBTGK_STURM_SLOW (reference Sturm count).
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DLARRB_TGK( N, D, L, LD, LLD, IFIRST, ILAST, RTOL1,
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version *TBA*) --
+*  -- LAPACK auxiliary routine --
 *     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
 *     Courant Institute, Argonne National Lab, and Rice University
-*     November 11, 2003
+*     Derived from the LAPACK 3.0 DLARRB (1999); TGK adaptation 2026
 *
 *     .. Scalar Arguments ..
       INTEGER            IFIRST, ILAST, INFO, N, OFFSET

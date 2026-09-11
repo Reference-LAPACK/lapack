@@ -1,13 +1,27 @@
+*> \brief \b DBDSVDMR3_WORK computational core of DBDSVDMR3.
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> computational core of DBDSVDMR3: preprocessing, dqds singular values, MRRR eigenvectors of the Golub-Kahan matrix, extraction of singular vectors.
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DBDSVDMR3_WORK( JOBZ, UPLO, N, D, E, S, U, LDU, VT,
      $              LDVT,
      $                   M, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *  -- New driver for the bidiagonal SVD via TGK-rooted MR^3 --
-*     Uses the advisor's stegr_ID tree logic below the root via
+*     Uses the LAPACK 3.0-lineage MRRR tree code below the root via
 *     DLARRV_TGK.  The bundled DLARRB has a bounded-progress guard so an
 *     invalid bracket radius returns INFO instead of looping forever.
 *     Standard LAPACK dependencies include DLASQ1, DLAMCH, DLANST,
-*     DLARNV, DSCAL, and DSWAP.
+*     DSCAL, and DSWAP.
 *
 *  Purpose
 *  =======
@@ -63,12 +77,10 @@
      $                   VT( LDVT, * ), WORK( * )
 *     ..
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, TWO, PERTK
-      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0,
-     $                   PERTK = 4.0D0 )
+      DOUBLE PRECISION   ZERO, ONE, TWO
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0 )
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            DIAGB, WANTZ, LQUERY, UPPER
@@ -85,7 +97,7 @@
       EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDTGK, DLARNV, DLARRV_TGK, DLASQ1, DSCAL,
+      EXTERNAL           DBDTGK, DLARRV_TGK, DLASQ1, DSCAL,
      $                   DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -97,7 +109,7 @@
       UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
       LWMIN = MAX( 1, 2*N*N + 34*N )
-      LIWMIN = MAX( 1, 20*N )
+      LIWMIN = MAX( 1, 24*N )
 *
       INFO = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
@@ -214,13 +226,9 @@
 *     Instead the perturbation is applied SELECTIVELY by DLARRF_TGK, and
 *     only to a child RRR whose cluster contains EXACTLY-equal
 *     eigenvalues (true ties, e.g. from identical glued blocks) that
-*     recursive shifting alone can never separate.  ISEED (fixed seed,
-*     threaded into DLARRV_TGK -> DLARRF_TGK) is initialised here.
+*     recursive shifting alone can never separate; the fixed seed is
+*     set inside DLARRV_TGK.
 *
-      ISEED( 1 ) = 4002
-      ISEED( 2 ) = 572
-      ISEED( 3 ) = 3145
-      ISEED( 4 ) = 1751
 *
 *     Build the TGK matrix of order 2N from the (perturbed) bidiagonal.
 *     WORK(INDE2 .. INDE2+2N-2) holds beta_1..beta_{2N-1}, where
@@ -319,42 +327,8 @@
          RETURN
       END IF
 *
-*     Compute the eigenvectors of the MPOS positive eigenvalues by MR^3
-*     rooted at the TGK matrix.  The 2N-by-MPOS eigenvector array is held
-*     in WORK(INDWK) with leading dimension 2N.
-*
-      IF( MPOS.GT.0 ) THEN
-         TOL = MAX( DBLE( 2*N )*EPS, ZERO )
-         CALL DLARRV_TGK( 2*N, WORK( INDTGK ), WORK( INDE2 ),
-     $                IWORK( INDISP ), MPOS, S, IWORK( INDBL ),
-     $                IWORK( INDIXW ), WORK( INDGSC ), TOL,
-     $                WORK( INDWK ), 2*N, IWORK( INDISUP ),
-     $                WORK( INDWK+2*N*MPOS ), IWORK( INDIWK ), IINFO )
-         IF( IINFO.NE.0 ) THEN
-            INFO = 2
-            RETURN
-         END IF
-*
-*        De-interleave each 2N-eigenvector into its left/right singular
-*        vectors by GLOBAL position parity (this stays correct across
-*        split blocks).  beta_{2k-1}=d_k, beta_{2k}=e_k, so global-odd
-*        rows carry one half and global-even rows the other.  For LOWER B
-*        the odd half is u and the even half is v; for UPPER (B^T is the
-*        lower bidiagonal with the same d,e) the two roles swap.
-*
-         DO 100 K = 1, MPOS
-            DO 90 I = 1, N
-               IF( UPPER ) THEN
-                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
-                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
-               ELSE
-                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
-                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
-               END IF
-   90       CONTINUE
-  100    CONTINUE
-      END IF
-*
+*     NOTE: this must run BEFORE DLARRV_TGK, which overwrites the
+*     off-diagonal array WORK(INDE2) in place with child representations.
 *     Zero singular values.  Each odd-dimension TGK block has one
 *     structural zero eigenvalue whose null vector lives on the ODD local
 *     positions of the block (the even local entries are zero):
@@ -366,7 +340,7 @@
 *     singular value is zero, any orthonormal completion is valid, so we
 *     simply collect the u's into the trailing U-columns and the v's into
 *     the trailing VT-rows.  Build the 2N null vector in WORK(INDWK) (the
-*     eigenvector array is no longer needed).
+*     eigenvector array, not yet in use).
 *
       KZU = 0
       KZV = 0
@@ -423,6 +397,42 @@
          END IF
          TBEG = TEND + 1
   160 CONTINUE
+*     Compute the eigenvectors of the MPOS positive eigenvalues by MR^3
+*     rooted at the TGK matrix.  The 2N-by-MPOS eigenvector array is held
+*     in WORK(INDWK) with leading dimension 2N.
+*
+      IF( MPOS.GT.0 ) THEN
+         TOL = MAX( DBLE( 2*N )*EPS, ZERO )
+         CALL DLARRV_TGK( 2*N, WORK( INDTGK ), WORK( INDE2 ),
+     $                IWORK( INDISP ), MPOS, S, IWORK( INDBL ),
+     $                IWORK( INDIXW ), WORK( INDGSC ), TOL,
+     $                WORK( INDWK ), 2*N, IWORK( INDISUP ),
+     $                WORK( INDWK+2*N*MPOS ), IWORK( INDIWK ), IINFO )
+         IF( IINFO.NE.0 ) THEN
+            INFO = 2
+            RETURN
+         END IF
+*
+*        De-interleave each 2N-eigenvector into its left/right singular
+*        vectors by GLOBAL position parity (this stays correct across
+*        split blocks).  beta_{2k-1}=d_k, beta_{2k}=e_k, so global-odd
+*        rows carry one half and global-even rows the other.  For LOWER B
+*        the odd half is u and the even half is v; for UPPER (B^T is the
+*        lower bidiagonal with the same d,e) the two roles swap.
+*
+         DO 100 K = 1, MPOS
+            DO 90 I = 1, N
+               IF( UPPER ) THEN
+                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
+                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
+               ELSE
+                  U( I, K )  = RT2*WORK( INDWK+(K-1)*2*N+(2*I-2) )
+                  VT( K, I ) = RT2*WORK( INDWK+(K-1)*2*N+(2*I-1) )
+               END IF
+   90       CONTINUE
+  100    CONTINUE
+      END IF
+*
 *
 *     Set the zero singular values and (defensively) any unmatched
 *     trailing vectors, then sort everything ascending and rescale.

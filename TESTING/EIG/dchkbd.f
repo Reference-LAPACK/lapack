@@ -659,7 +659,7 @@
                IOLDSD( J ) = ISEED( J )
    20       CONTINUE
 *
-            DO 30 J = 1, 34
+            DO 30 J = 1, 49
                RESULT( J ) = -ONE
    30       CONTINUE
 *
@@ -1505,7 +1505,7 @@
 *              =================================
 *              Matrix types temporarily disabled
 *              =================================
-               RESULT( 20:34 ) = ZERO
+               RESULT( 35:49 ) = ZERO
                GO TO 870
             END IF
 *
@@ -1515,7 +1515,13 @@
             IWBZ = IWBE + MNMIN
             IWWORK = IWBZ + 2*MNMIN*(MNMIN+1)
             LWED = LWORK - IWWORK + 1
-            LIWED = MAX( 1, 20*MNMIN )
+            LIWED = MAX( 1, 24*MNMIN )
+*           DBDSVDMR3 needs 5*MNMIN**2 + 37*MNMIN doubles; skip these
+*           tests (rather than fail) when the caller's LWORK is smaller.
+            IF( LWED.LT.5*MNMIN*MNMIN+37*MNMIN ) THEN
+               RESULT( 35:49 ) = ZERO
+               GO TO 870
+            END IF
             MNMIN2 = MAX( 1,MNMIN*2 )
 *
             CALL DCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
@@ -1847,13 +1853,13 @@
             RESULT( 48 ) = ZERO
             DO 850 I = 1, NS1 - 1
                IF( S1( I ).LT.S1( I+1 ) )
-     $            RESULT( 43 ) = ULPINV
+     $            RESULT( 48 ) = ULPINV
                IF( S1( I ).LT.ZERO )
-     $            RESULT( 43 ) = ULPINV
+     $            RESULT( 48 ) = ULPINV
   850       CONTINUE
             IF( NS1.GE.1 ) THEN
                IF( S1( NS1 ).LT.ZERO )
-     $            RESULT( 43 ) = ULPINV
+     $            RESULT( 48 ) = ULPINV
             END IF
 *
             TEMP2 = ZERO

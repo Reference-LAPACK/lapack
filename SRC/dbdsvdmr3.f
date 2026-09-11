@@ -1,4 +1,4 @@
-*> \brief \b DBDSVR
+*> \brief \b DBDSVDMR3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -28,15 +28,15 @@
 *>
 *> \verbatim
 *>
-*>  DBDSVR computes the singular value decomposition (SVD) of a real
+*>  DBDSVDMR3 computes the singular value decomposition (SVD) of a real
 *>  N-by-N (upper or lower) bidiagonal matrix B, B = U * S * VT, using
 *>  the Tridiagonal Golub-Kahan (TGK) MR^3 driver DBDSVDMR3.  Its
-*>  argument list mirrors DBDSVDX so that DBDSVR is a drop-in
+*>  argument list mirrors DBDSVDX so that DBDSVDMR3 is a drop-in
 *>  alternative alongside DBDSVDX for callers that want the MR^3
 *>  variant.
 *>
 *>  Given an upper bidiagonal B with diagonal D and superdiagonal E,
-*>  DBDSVR builds the 2N-by-2N TGK tridiagonal, computes its
+*>  DBDSVDMR3 builds the 2N-by-2N TGK tridiagonal, computes its
 *>  eigendecomposition by the MR^3 algorithm rooted at the TGK
 *>  (see P. Willems and B. Lang, SIAM J. Sci. Comput., 35:740-766,
 *>  2013), and returns the singular values and (optionally) singular
@@ -45,14 +45,33 @@
 *>  RANGE = 'V' or 'I' is realized by post-filtering the full spectrum
 *>  from DBDSVDMR3 (which always returns all N singular values).
 *>
-*>  DBDSVR tries DBDSVDMR3 first for every matrix order.  If DBDSVDMR3
+*>  DBDSVDMR3 tries DBDSVDMR3_WORK first for every matrix order.  If DBDSVDMR3_WORK
 *>  reports a positive INFO, returns an incomplete spectrum, or produces
-*>  a NaN or infinity in the requested output, DBDSVR restores the input
+*>  a NaN or infinity in the requested output, DBDSVDMR3 restores the input
 *>  and retries with DBDSDC.  DBDSDC results are normalized to the same
 *>  internal ordering before RANGE filtering, so either successful path
 *>  is transparent.  This result-based fallback avoids a size cutoff:
 *>  solver-only probes showed that the historical large TIMEOUT cases
 *>  were evaluator timeouts rather than DBDSVDMR3 failing to return.
+*>
+*>  Subset modes.  RANGE = 'I' and RANGE = 'V' follow DBDSVDX's
+*>  conventions (for RANGE = 'I', IL = 1 selects the largest singular
+*>  value; S is returned in descending order).  In all modes the full
+*>  decomposition is computed and the requested subset is then
+*>  returned, so the cost and workspace are those of RANGE = 'A'; the
+*>  O(N*K) subset capability of MRRR is not exposed by this routine.
+*>
+*>  Accuracy notes.  (1) Entries of B (diagonal or off-diagonal) with
+*>  magnitude at most eps*max|B| are set to zero before the singular
+*>  values are computed; the singular values are therefore accurate
+*>  to O(eps*max|B|) in the absolute sense (as for DBDSDC) but are not
+*>  determined to high relative accuracy when they are far below |B|
+*>  (DBDSQR and DBDSVDX preserve relative accuracy).  (2) Child
+*>  representations of the MRRR tree are accepted without the
+*>  element-growth test of DSTEMR; on spectra with tight clusters the
+*>  orthogonality of the computed vectors can degrade to 10-100 times
+*>  that of DBDSDC while the residuals remain small.  See the
+*>  accompanying paper for a quantitative account.
 *> \endverbatim
 *
 *  Arguments:
@@ -180,6 +199,10 @@
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, dimension (LIWORK)
+*>          On exit, IWORK(2) reports the path taken: 1 = MRRR result
+*>          accepted, 2 = DBDSDC fallback after the MRRR path returned
+*>          INFO > 0, 3 = DBDSDC fallback after the finiteness audit
+*>          rejected the MRRR result.
 *>          On successful exit for N > 1, IWORK(2) records the path:
 *>             1: DBDSVDMR3
 *>             2: DBDSVDMR3 returned positive INFO, then DBDSDC succeeded
@@ -198,8 +221,12 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  every backend attempted by the routing policy failed
-*>                to compute the SVD.
+*>          = N+1: the input contains a NaN or an Inf; nothing was
+*>                computed.
+*>          = N+2: the MRRR path was rejected and the DBDSDC fallback
+*>                returned a non-finite result.
+*>          > 0, other values: the MRRR path was rejected and the DBDSDC
+*>                fallback failed; INFO is the INFO returned by DBDSDC.
 *> \endverbatim
 *
 *  Authors:
@@ -210,7 +237,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup bdsvr
+*> \ingroup bdsvdmr3
 *
 *  =====================================================================
       SUBROUTINE DBDSVDMR3( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
@@ -218,7 +245,7 @@
      $                   INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK-style driver (offline PR) --
+*  -- LAPACK driver routine --
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -313,10 +340,10 @@
          LIWMIN = 1
       ELSE IF( WANTZ ) THEN
          LWMIN  = MAX( 1, 5*N*N + 37*N )
-         LIWMIN = MAX( 1, 20*N )
+         LIWMIN = MAX( 1, 24*N )
       ELSE
-         LWMIN  = MAX( 1, 2*N*N + 37*N )
-         LIWMIN = MAX( 1, 20*N )
+         LWMIN  = MAX( 1, 2*N*N + 37*N + 2 )
+         LIWMIN = MAX( 1, 24*N )
       END IF
 *
       IF( INFO.EQ.0 .AND. .NOT.LQUERY ) THEN
@@ -342,6 +369,26 @@
 *
       NS = 0
       IF( N.EQ.0 ) RETURN
+*
+*     A NaN or Inf in the input cannot be processed by either backend
+*     (it may hang the fallback's QR iteration); report it as INFO = N+1
+*     without calling XERBLA, so that the caller can recover.
+*
+      OVFL = DLAMCH( 'Overflow' )
+      DO 5 I = 1, N
+         SVAL = D( I )
+         IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) ) THEN
+            INFO = N + 1
+            RETURN
+         END IF
+         IF( I.LT.N ) THEN
+            SVAL = E( I )
+            IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) ) THEN
+               INFO = N + 1
+               RETURN
+            END IF
+         END IF
+    5 CONTINUE
 *
       IF( N.EQ.1 ) THEN
          IWORK( 2 ) = 0
@@ -372,9 +419,11 @@
          IVTFULL = IUFULL + N*N
          IWRK    = IVTFULL + N*N
       ELSE
+*        U and VT are not referenced for JOBZ = 'N'; give them one
+*        element each, disjoint from WORK, to avoid aliasing.
          IUFULL  = ISFULL + N
-         IVTFULL = IUFULL
-         IWRK    = ISFULL + N
+         IVTFULL = IUFULL + 1
+         IWRK    = IVTFULL + 1
       END IF
 *
 *     Stage inputs (DBDSVDMR3 overwrites D and E; we must not
@@ -456,11 +505,36 @@
          ELSE
             COMPC = 'N'
          END IF
+*        Q and IQ are not referenced for COMPQ = 'I' or 'N'; pass
+*        storage disjoint from WORK and IWORK to avoid aliasing.
          CALL DBDSDC( UPLO, COMPC, N, WORK( IDCOPY ),
      $                WORK( IECOPY ), WORK( IUFULL ), MAX( 1, N ),
-     $                WORK( IVTFULL ), MAX( 1, N ), WORK( IWRK ),
-     $                IWORK, WORK( IWRK ), IWORK, INFO )
+     $                WORK( IVTFULL ), MAX( 1, N ), WORK( ISFULL ),
+     $                IWORK( 8*N+1 ), WORK( IWRK ), IWORK, INFO )
          IF( INFO.NE.0 ) RETURN
+*        The finiteness audit applies to the fallback as well.
+         BADOUT = .FALSE.
+         DO 16 I = 1, N
+            SVAL = WORK( IDCOPY + I - 1 )
+            IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) )
+     $         BADOUT = .TRUE.
+   16    CONTINUE
+         IF( WANTZ ) THEN
+            DO 17 J = 1, N
+               DO 15 I = 1, N
+                  SVAL = WORK( IUFULL + (J-1)*N + I - 1 )
+                  IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) )
+     $               BADOUT = .TRUE.
+                  SVAL = WORK( IVTFULL + (J-1)*N + I - 1 )
+                  IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) )
+     $               BADOUT = .TRUE.
+   15          CONTINUE
+   17       CONTINUE
+         END IF
+         IF( BADOUT ) THEN
+            INFO = N + 2
+            RETURN
+         END IF
 *
 *        DBDSDC returns descending singular values, while DBDSVDMR3
 *        returns ascending values.  Normalize DBDSDC's result so the
@@ -487,8 +561,10 @@
          ILO = 1
          IHI = N
       ELSE IF( INDSV ) THEN
-         ILO = IL
-         IHI = IU
+*        IL and IU follow DBDSVDX: index 1 is the largest singular
+*        value.  The internal spectrum is ascending.
+         ILO = N - IU + 1
+         IHI = N - IL + 1
       ELSE
 *        RANGE='V'; scan ascending spectrum for [VL, VU).
          ILO = N + 1
@@ -505,7 +581,7 @@
       IF( IHI.GE.ILO ) THEN
          NS = IHI - ILO + 1
 *        Reverse ascending -> descending so S(1) is the largest,
-*        matching DBDSVDX's convention (see /tmp/lapack-ref/SRC/dbdsvdx.f
+*        matching DBDSVDX's convention (see dbdsvdx.f
 *        line 747 sort loop).
          DO 20 I = 1, NS
             S( I ) = WORK( ISFULL + IHI - I )
@@ -529,6 +605,6 @@
 *
       RETURN
 *
-*     End of DBDSVR
+*     End of DBDSVDMR3
 *
       END

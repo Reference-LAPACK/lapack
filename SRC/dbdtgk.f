@@ -1,8 +1,22 @@
+*> \brief \b DBDTGK forms the Golub-Kahan tridiagonal matrix of a bidiagonal matrix.
+*>
+*> \ingroup bdsvdmr3
+*>
+*> \par Purpose:
+*> =============
+*>
+*> \verbatim
+*> forms the Golub-Kahan tridiagonal matrix of a bidiagonal matrix.
+*> All routines in this file are auxiliary to DBDSVDMR3 and derive
+*> from the LAPACK 3.0 (1999) MRRR kernels DLARRV, DLAR1V, DLARRB and
+*> DLARRF rather than from the current DSTEMR kernels.
+*> \endverbatim
+*
       SUBROUTINE DBDTGK( UPLO, N, D, E, DTGK, ETGK, GERSCH )
 *
 *  -- New auxiliary routine for bidiagonal SVD via TGK-rooted MR^3 --
 *     Builds the Tridiagonal Golub-Kahan (TGK) matrix of a bidiagonal B.
-*     Does not touch stegr_ID.
+*     Standalone; does not modify any other routine.
 *
 *  Purpose
 *  =======
