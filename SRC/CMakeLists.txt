@@ -40,10 +40,12 @@ set(CONSTMOD la_constants.f90)
 
 set(NANMOD la_xisnan.F90)
 
+set(XERBLAMOD xerbla_lapack.f90)
+
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
-   ../INSTALL/slamch.f)
+   ../INSTALL/slamch.f ${XERBLAMOD})
 
 set(SCLAUX
    sbdsvdx.f sbdsdc.f
@@ -530,7 +532,7 @@ add_library(const_mod_file OBJECT ${CONSTMOD})
 set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
 lapack_add_coverage(const_mod_file)
 
-add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
+add_library(mod_files OBJECT ${NANMOD} ${XERBLAMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
 lapack_add_coverage(mod_files)
 
