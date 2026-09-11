@@ -651,12 +651,14 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
-      INTEGER            NSMLSZ
+      INTEGER            LDZREG, NSMLSZ
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
       DOUBLE PRECISION   DUMMA( 1 )
+      DOUBLE PRECISION, ALLOCATABLE :: DREG( : ), EREG( : ), D1REG( : )
+      COMPLEX*16, ALLOCATABLE :: ZREG( :, : )
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -1958,57 +1960,59 @@
 *     used the caller's Z as a packed QSIZ by N workspace, which
 *     spills into rows N+1 to LDZ whenever LDZ > N.  The sizes in the
 *     input file do not reach the divide and conquer recursion, so it
-*     is exercised here with N = LDU - 1, and the eigensystem is
-*     checked as in the size loop.
+*     is exercised with local arrays and N > SMLSIZ.  LDU does not
+*     give the capacity of the caller's eigenvalue arrays or Z columns.
 *
       NSMLSZ = ILAENV( 9, 'ZSTEDC', ' ', 0, 0, 0, 0 )
-      N = LDU - 1
-      IF( N.GT.NSMLSZ ) THEN
-         CALL ZSTEDC( 'V', N, SD, RWORK, Z, LDU, WORK, -1, RWORK, -1,
-     $                IWORK, -1, IINFO )
-         IF( IINFO.EQ.0 .AND. INT( DBLE( WORK( 1 ) ) ).LE.LWORK .AND.
-     $       INT( RWORK( 1 ) ).LE.LRWORK-N .AND. IWORK( 1 ).LE.LIWORK )
-     $       THEN
-            DO 390 J = 1, N
-               SD( J ) = DBLE( J )
-               SE( J ) = ONE / DBLE( J+1 )
-  390       CONTINUE
-            SE( N ) = ZERO
-            CALL DCOPY( N, SD, 1, D1, 1 )
-            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
-            CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
-            CALL ZLASET( 'Full', LDU-N, N, -CONE, -CONE, Z( N+1, 1 ),
-     $                   LDU )
-            CALL ZSTEDC( 'V', N, D1, RWORK, Z, LDU, WORK, LWORK,
-     $                   RWORK( N+1 ), LRWORK-N, IWORK, LIWORK, IINFO )
-            NTESTT = NTESTT + 1
-            IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9982 )N, IINFO
+      N = MAX( 2, NSMLSZ+1 )
+      LDZREG = N + 1
+      ALLOCATE( DREG( N ), EREG( N ), D1REG( N ),
+     $          ZREG( LDZREG, N ) )
+      CALL ZSTEDC( 'V', N, DREG, RWORK, ZREG, LDZREG, WORK, -1,
+     $             RWORK, -1, IWORK, -1, IINFO )
+      IF( IINFO.EQ.0 .AND. INT( DBLE( WORK( 1 ) ) ).LE.LWORK .AND.
+     $    INT( RWORK( 1 ) ).LE.LRWORK-N .AND. IWORK( 1 ).LE.LIWORK )
+     $    THEN
+         DO 390 J = 1, N
+            DREG( J ) = DBLE( J )
+            EREG( J ) = ONE / DBLE( J+1 )
+  390    CONTINUE
+         EREG( N ) = ZERO
+         CALL DCOPY( N, DREG, 1, D1REG, 1 )
+         CALL DCOPY( N-1, EREG, 1, RWORK, 1 )
+         CALL ZLASET( 'Full', N, N, CZERO, CONE, ZREG, LDZREG )
+         CALL ZLASET( 'Full', LDZREG-N, N, -CONE, -CONE,
+     $                ZREG( N+1, 1 ), LDZREG )
+         CALL ZSTEDC( 'V', N, D1REG, RWORK, ZREG, LDZREG, WORK, LWORK,
+     $                RWORK( N+1 ), LRWORK-N, IWORK, LIWORK, IINFO )
+         NTESTT = NTESTT + 1
+         IF( IINFO.NE.0 ) THEN
+            WRITE( NOUNIT, FMT = 9982 )N, IINFO
+            NERRS = NERRS + 1
+         ELSE
+            ITEMP = 0
+            DO 410 J = 1, N
+               DO 400 I = N + 1, LDZREG
+                  IF( ZREG( I, J ).NE.-CONE )
+     $               ITEMP = ITEMP + 1
+  400          CONTINUE
+  410       CONTINUE
+            IF( ITEMP.GT.0 ) THEN
+               WRITE( NOUNIT, FMT = 9981 )N, ITEMP
                NERRS = NERRS + 1
-            ELSE
-               ITEMP = 0
-               DO 410 J = 1, N
-                  DO 400 I = N + 1, LDU
-                     IF( Z( I, J ).NE.-CONE )
-     $                  ITEMP = ITEMP + 1
-  400             CONTINUE
-  410          CONTINUE
-               IF( ITEMP.GT.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9981 )N, ITEMP
+            END IF
+            CALL ZSTT21( N, 0, DREG, EREG, D1REG, DUMMA, ZREG,
+     $                   LDZREG, WORK, RWORK( N+1 ), RESULT( 1 ) )
+            DO 420 J = 1, 2
+               IF( RESULT( J ).GE.THRESH ) THEN
+                  WRITE( NOUNIT, FMT = 9980 )N, J, RESULT( J )
                   NERRS = NERRS + 1
                END IF
-               CALL ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK,
-     $                      RWORK( N+1 ), RESULT( 1 ) )
-               DO 420 J = 1, 2
-                  IF( RESULT( J ).GE.THRESH ) THEN
-                     WRITE( NOUNIT, FMT = 9980 )N, J, RESULT( J )
-                     NERRS = NERRS + 1
-                  END IF
-  420          CONTINUE
-               NTESTT = NTESTT + 3
-            END IF
+  420       CONTINUE
+            NTESTT = NTESTT + 3
          END IF
       END IF
+      DEALLOCATE( DREG, EREG, D1REG, ZREG )
 *
 *     Summary
 *
