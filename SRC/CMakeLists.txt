@@ -43,7 +43,7 @@ set(NANMOD la_xisnan.F90)
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
-   ../INSTALL/slamch.f)
+   ../INSTALL/slamch.f xerbla_lapack.f90)
 
 set(SCLAUX
    sbdsvdx.f sbdsvdmr3.f sbdsvdmr3_work.f sbdtgk.f slar1v_tgk.f slarrf_tgk.f slarrv_tgk.f slarrb_tgk.f sbdsdc.f
