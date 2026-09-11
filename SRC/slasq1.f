@@ -81,7 +81,8 @@
 *>        = 0: successful exit
 *>        < 0: if INFO = -i, the i-th argument had an illegal value
 *>        > 0: the algorithm failed
-*>             = 1, a split was marked by a positive value in E
+*>             = 1, a split was marked by a positive value in E, or
+*>                  the input contains a NaN
 *>             = 2, current block of Z not diagonalized after 100*N
 *>                  iterations (in inner while loop)  On exit D and E
 *>                  represent a matrix with the same singular values
@@ -132,7 +133,8 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -175,6 +177,14 @@
       DO 20 I = 1, N
          SIGMX = MAX( SIGMX, D( I ) )
    20 CONTINUE
+*
+*     A NaN in D or E can make SIGMX a NaN, which SLASCL would reject
+*     by stopping in XERBLA; report it through INFO instead.
+*
+      IF( SISNAN( SIGMX ) ) THEN
+         INFO = 1
+         RETURN
+      END IF
 *
 *     Copy D and E into WORK (in the Z format) and scale (squaring the
 *     input data makes scaling by a power of the radix pointless).
