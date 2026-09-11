@@ -644,7 +644,8 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
-      CHARACTER*6        RNAME
+      CHARACTER          OPT
+      CHARACTER*9        RNAME
       INTEGER            JNAN, JROUT
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
@@ -2026,7 +2027,8 @@
 *     A 2 by 2 matrix with a NaN on its diagonal must not get finite
 *     eigenvalues: DLAE2 and DLAEV2 fell through the comparisons of
 *     |a-c| with |2b| and of a+c with zero, which are all false for a
-*     NaN, and returned +/- |b| sqrt(2).
+*     NaN, and returned +/- |b| sqrt(2).  Eigenvalue-only calls test
+*     xLAE2; eigenvector-producing calls also test xLAEV2.
 *
       IF( NMAX.GE.2 .AND. LWORK.GE.36 .AND. LIWORK.GE.24 .AND.
      $    ILAENV( 10, 'DSTEQR', 'N', 1, 0, 0, 0 ).EQ.1 .AND.
@@ -2035,26 +2037,29 @@
          RONE = ONE
          RNAN = SQRT( -RONE )
          DO 380 JNAN = 1, 2
-            DO 370 JROUT = 1, 3
+            DO 370 JROUT = 1, 5
                SD( 1 ) = ONE
                SD( 2 ) = ONE + ONE
                SE( 1 ) = ONE
                SE( 2 ) = ZERO
                SD( JNAN ) = RNAN
-               IF( JROUT.EQ.1 ) THEN
-                  RNAME = 'DSTEQR'
-                  CALL DSTEQR( 'N', N, SD, SE, Z, LDU, WORK, IINFO )
+               OPT = 'N'
+               IF( JROUT.EQ.4 ) OPT = 'I'
+               IF( JROUT.EQ.5 ) OPT = 'V'
+               IF( JROUT.EQ.1 .OR. JROUT.EQ.4 ) THEN
+                  RNAME = 'DSTEQR('//OPT//')'
+                  CALL DSTEQR( OPT, N, SD, SE, Z, LDU, WORK, IINFO )
                ELSE IF( JROUT.EQ.2 ) THEN
                   RNAME = 'DSTERF'
                   CALL DSTERF( N, SD, SE, IINFO )
                ELSE
-                  RNAME = 'DSTEMR'
+                  RNAME = 'DSTEMR('//OPT//')'
                   VL = ZERO
                   VU = ZERO
                   IL = 0
                   IU = 0
                   TRYRAC = .TRUE.
-                  CALL DSTEMR( 'N', 'A', N, SD, SE, VL, VU, IL, IU, M,
+                  CALL DSTEMR( OPT, 'A', N, SD, SE, VL, VU, IL, IU, M,
      $                         WR, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                         WORK, LWORK,
      $                         IWORK( 2*N+1 ), LIWORK-2*N, IINFO )
@@ -2123,7 +2128,7 @@
 *
  9986 FORMAT( ' DCHKST: DSTEMR( ', A1, ', A ) on a matrix with a',
      $      ' NaN returned INFO=', I6 )
- 9983 FORMAT( ' DCHKST: ', A6, ' returned a finite eigenvalue for a',
+ 9983 FORMAT( ' DCHKST: ', A9, ' returned a finite eigenvalue for a',
      $      ' 2 by 2 matrix with a NaN at D(', I1, ')' )
  9999 FORMAT( ' DCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
