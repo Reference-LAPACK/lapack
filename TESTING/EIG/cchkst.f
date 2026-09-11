@@ -659,6 +659,8 @@
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
       REAL               DUMMA( 1 )
+      REAL, ALLOCATABLE :: DREG( : ), EREG( : )
+      COMPLEX, ALLOCATABLE :: ZREG( :, : )
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -1962,16 +1964,17 @@
 *     a NaN diagonal entry was isolated as a 1 by 1 block, both with
 *     INFO = 0, whenever the block left over was large enough for the
 *     divide and conquer recursion, which the sizes in the input file
-*     do not reach; N = LDU is the capacity of the arrays.
+*     do not reach.  Use local arrays because LDU is a row stride,
+*     not the capacity of the caller's eigenvalue arrays or Z columns.
 *
       NSMLSZ = ILAENV( 9, 'CSTEDC', ' ', 0, 0, 0, 0 )
-      IF( LDU.GT.NSMLSZ .AND.
-     $    ILAENV( 10, 'CSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 .AND.
+      IF( ILAENV( 10, 'CSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 .AND.
      $    ILAENV( 11, 'CSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 ) THEN
-         N = LDU
+         N = MAX( 2, NSMLSZ+1 )
+         ALLOCATE( DREG( N ), EREG( N ), ZREG( N, N ) )
          RONE = ONE
          RNAN = SQRT( -RONE )
-         CALL CSTEDC( 'V', N, SD, SE, Z, LDU, WORK, -1, RWORK, -1,
+         CALL CSTEDC( 'V', N, DREG, EREG, ZREG, N, WORK, -1, RWORK, -1,
      $                IWORK, -1, IINFO )
          IF( IINFO.EQ.0 .AND. INT( REAL( WORK( 1 ) ) ).LE.LWORK .AND.
      $       INT( RWORK( 1 ) ).LE.LRWORK .AND. IWORK( 1 ).LE.LIWORK )
@@ -1984,17 +1987,18 @@
                      COMPZ = 'V'
                   END IF
                   DO 320 J = 1, N
-                     SD( J ) = REAL( J )
-                     SE( J ) = ONE / REAL( J+1 )
+                     DREG( J ) = REAL( J )
+                     EREG( J ) = ONE / REAL( J+1 )
   320             CONTINUE
                   IF( JNAN.EQ.1 ) THEN
-                     SE( N / 2 ) = RNAN
+                     EREG( N / 2 ) = RNAN
                   ELSE
-                     SD( N ) = RNAN
+                     DREG( N ) = RNAN
                   END IF
-                  CALL CLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
-                  CALL CSTEDC( COMPZ, N, SD, SE, Z, LDU, WORK, LWORK,
-     $                         RWORK, LRWORK, IWORK, LIWORK, IINFO )
+                  CALL CLASET( 'Full', N, N, CZERO, CONE, ZREG, N )
+                  CALL CSTEDC( COMPZ, N, DREG, EREG, ZREG, N,
+     $                         WORK, LWORK, RWORK, LRWORK, IWORK,
+     $                         LIWORK, IINFO )
                   IF( IINFO.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9985 )COMPZ, JNAN
                      NERRS = NERRS + 1
@@ -2003,6 +2007,7 @@
   330          CONTINUE
   340       CONTINUE
          END IF
+         DEALLOCATE( DREG, EREG, ZREG )
       END IF
 *
 *     Summary
