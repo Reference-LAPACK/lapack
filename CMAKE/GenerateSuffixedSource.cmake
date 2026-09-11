@@ -150,7 +150,7 @@ function(_extract_symbols statement_text result)
         list(APPEND symbols "${external_name}")
       endif()
     endforeach()
-  elseif("${statement_text}" MATCHES "(subroutine|SUBROUTINE|function|FUNCTION)")
+  elseif("${statement_text}" MATCHES "(subroutine|SUBROUTINE|function|FUNCTION|entry|ENTRY)  *[a-zA-Z][a-zA-Z0-9_]* *\\(")
     string(REGEX REPLACE
       "^[a-zA-Z0-9_ *]*${CMAKE_MATCH_1}[ ]*" ""
       symbol_name "${statement_text}")
