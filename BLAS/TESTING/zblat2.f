@@ -150,7 +150,7 @@
       EXTERNAL           DDIFF, LZE
 *     .. External Subroutines ..
       EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5, ZCHK6,
-     $                   ZCHKE, ZMVCH
+     $                   ZCHKE, ZMVCH, SET_XERBLA, XER_REPLACE
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -168,6 +168,7 @@
      $                   'ZHPR2 '/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -3410,7 +3411,7 @@
   10  CONTINUE
       RETURN
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of

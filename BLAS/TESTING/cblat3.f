@@ -130,7 +130,7 @@
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
       EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHKE, CMMCH
-      EXTERNAL           CCHK6
+      EXTERNAL           CCHK6, SET_XERBLA, XER_REPLACE
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -146,6 +146,7 @@
      $                   'CSYR2K', 'CGEMMTR'/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -3726,7 +3727,7 @@
 *     End of CHKXER
 *
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
 *
 *  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 3 BLAS
