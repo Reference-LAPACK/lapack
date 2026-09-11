@@ -110,10 +110,12 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, DDRVRFP, DDRVRF1, DDRVRF2, DDRVRF3,
+     +                   SET_LAPACK_XERBLA, XER_REPLACE,
      +                   DDRVRF4, DERRRFP
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       S1 = DSECND( )
       FATAL = .FALSE.
 *

@@ -111,10 +111,25 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, CDRVRFP, CDRVRF1, CDRVRF2, CDRVRF3,
+     +                   SET_LAPACK_XERBLA, XER_REPLACE,
      +                   CDRVRF4, CERRRFP
+      INTERFACE
+        SUBROUTINE XERBLA_INTERFACE(SRNAME, INFO)
+          CHARACTER*(*), INTENT(IN) :: SRNAME
+          INTEGER, INTENT(IN) :: INFO
+        END SUBROUTINE
+        FUNCTION GET_LAPACK_XERBLA() RESULT(CB_RET)
+          IMPORT :: XERBLA_INTERFACE
+          IMPLICIT NONE
+          PROCEDURE(XERBLA_INTERFACE), POINTER :: CB_RET
+        END FUNCTION
+      END INTERFACE
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: ALREADY_CB
 *     ..
 *     .. Executable Statements ..
 *
+      ALREADY_CB => GET_LAPACK_XERBLA()
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       S1 = SECOND( )
       FATAL = .FALSE.
 *
