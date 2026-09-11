@@ -96,7 +96,7 @@
       LOGICAL  TEST_QRDMD
 !..... external subroutines (BLAS and LAPACK)
       EXTERNAL DAXPY, DGEEV, DGEMM, DGEMV, DLASCL
-      EXTERNAL DLARNV, DLATMR, XLAENV
+      EXTERNAL DLARNV, DLATMR, XLAENV, SET_XERBLA, XER_REPLACE
 !.....external subroutines DMD package, part 1
 !     subroutines under test
       EXTERNAL DGEDMD, DGEDMDQ
@@ -114,6 +114,7 @@
       ! because the test includes comparing the results (in pairs).
 !.....................................................................................
       CALL CPU_TIME( S1 )
+      CALL SET_XERBLA(XER_REPLACE)
 
       TEST_QRDMD = .TRUE. ! This code by default performs tests on DGEDMDQ
                           ! Since the QR factorizations based algorithm is designed for

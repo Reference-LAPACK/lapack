@@ -342,7 +342,7 @@
       EXTERNAL           ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SGET52, SGGEVX, SLACPY, SLATM6, XERBLA
+      EXTERNAL           ALASVM, SGET52, SGGEVX, SLACPY, SLATM6, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -389,7 +389,7 @@
      $   INFO = -24
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRGVX', -INFO )
+         CALL XER_REPLACE( 'SDRGVX', -INFO )
          RETURN
       END IF
 *

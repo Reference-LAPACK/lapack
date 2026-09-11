@@ -377,7 +377,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLASET, DLASUM, DLATMR, DLATMS, DSBT21,
-     $                   DSBTRD, XERBLA, DSYTRD_SB2ST, DSTEQR, DCOPY
+     $                   DSBTRD, XER_REPLACE, DSYTRD_SB2ST, DSTEQR, DCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -436,7 +436,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKSB2STG', -INFO )
+         CALL XER_REPLACE( 'DCHKSB2STG', -INFO )
          RETURN
       END IF
 *

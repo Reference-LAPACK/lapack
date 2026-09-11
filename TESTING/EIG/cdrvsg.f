@@ -421,7 +421,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CHBGV, CHBGVD, CHBGVX, CHEGV, CHEGVD, CHEGVX,
      $                   CHPGV, CHPGVD, CHPGVX, CLACPY, CLASET, CLATMR,
-     $                   CLATMS, CSGT01, SLAFTS, SLASUM, XERBLA
+     $                   CLATMS, CSGT01, SLAFTS, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -469,7 +469,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVSG', -INFO )
+         CALL XER_REPLACE( 'CDRVSG', -INFO )
          RETURN
       END IF
 *

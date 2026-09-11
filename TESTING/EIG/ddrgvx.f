@@ -340,7 +340,7 @@
       EXTERNAL           ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DGET52, DGGEVX, DLACPY, DLATM6, XERBLA
+      EXTERNAL           ALASVM, DGET52, DGGEVX, DLACPY, DLATM6, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -387,7 +387,7 @@
      $   INFO = -24
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRGVX', -INFO )
+         CALL XER_REPLACE( 'DDRGVX', -INFO )
          RETURN
       END IF
 *

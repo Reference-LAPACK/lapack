@@ -550,7 +550,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGET23, CLATME, CLATMR, CLATMS, CLASET, SLASUM,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -612,7 +612,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVVX', -INFO )
+         CALL XER_REPLACE( 'CDRVVX', -INFO )
          RETURN
       END IF
 *

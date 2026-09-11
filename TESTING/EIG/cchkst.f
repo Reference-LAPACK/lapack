@@ -666,7 +666,7 @@
       EXTERNAL           CCOPY, CHET21, CHETRD, CHPT21, CHPTRD, CLACPY,
      $                   CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC, CSTEMR,
      $                   CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR, CUPGTR,
-     $                   SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XERBLA
+     $                   SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, INT, LOG, MAX, MIN, REAL, SQRT
@@ -720,7 +720,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKST', -INFO )
+         CALL XER_REPLACE( 'CCHKST', -INFO )
          RETURN
       END IF
 *

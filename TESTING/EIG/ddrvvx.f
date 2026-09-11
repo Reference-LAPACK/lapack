@@ -570,7 +570,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGET23, DLASET, DLASUM, DLATME, DLATMR, DLATMS,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -632,7 +632,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVVX', -INFO )
+         CALL XER_REPLACE( 'DDRVVX', -INFO )
          RETURN
       END IF
 *
