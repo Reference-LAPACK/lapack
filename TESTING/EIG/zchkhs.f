@@ -10,9 +10,9 @@
 *
 *       SUBROUTINE ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
-*                          W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
-*                          WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
-*                          INFO )
+*                          W2, W3, EVECTL, EVECTR, EVECTY, EVECTX, UU,
+*                          TAU, WORK, NWORK, RWORK, IWORK, SELECT,
+*                          RESULT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDU, NOUNIT, NSIZES, NTYPES, NWORK
@@ -26,8 +26,8 @@
 *      $                   EVECTR( LDU, * ), EVECTX( LDU, * ),
 *      $                   EVECTY( LDU, * ), H( LDA, * ), T1( LDA, * ),
 *      $                   T2( LDA, * ), TAU( * ), U( LDU, * ),
-*      $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W3( * ),
-*      $                   WORK( * ), Z( LDU, * )
+*      $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W2( * ),
+*      $                   W3( * ), WORK( * ), Z( LDU, * )
 *       ..
 *
 *
@@ -286,6 +286,12 @@
 *>           eigenvalues of the matrix in A.
 *>           Modified.
 *>
+*>  W2     - COMPLEX*16 array, dimension (max(NN))
+*>           The eigenvalues of A, as computed when T is computed but
+*>           not Z.  On exit, W2 contains the eigenvalues of the matrix
+*>           in A.
+*>           Modified.
+*>
 *>  W3     - COMPLEX*16 array, dimension (max(NN))
 *>           The eigenvalues of A, as computed by a partial Schur
 *>           decomposition (Z not computed, T only computed as much
@@ -415,8 +421,8 @@
 *  =====================================================================
       SUBROUTINE ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
-     $                   W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
-     $                   WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
+     $                   W2, W3, EVECTL, EVECTR, EVECTY, EVECTX, UU,
+     $                   TAU, WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
      $                   INFO )
       IMPLICIT NONE
 *
@@ -436,8 +442,8 @@
      $                   EVECTR( LDU, * ), EVECTX( LDU, * ),
      $                   EVECTY( LDU, * ), H( LDA, * ), T1( LDA, * ),
      $                   T2( LDA, * ), TAU( * ), U( LDU, * ),
-     $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W3( * ),
-     $                   WORK( * ), Z( LDU, * )
+     $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W2( * ),
+     $                   W3( * ), WORK( * ), Z( LDU, * )
 *     ..
 *
 *  =====================================================================
@@ -782,11 +788,11 @@
                END IF
             END IF
 *
-*           Eigenvalues (W1) and Full Schur Form (T2)
+*           Eigenvalues (W2) and Full Schur Form (T2)
 *
             CALL ZLACPY( ' ', N, N, H, LDA, T2, LDA )
 *
-            CALL ZHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W1, UZ, LDU,
+            CALL ZHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W2, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 .AND. IINFO.LE.N+2 ) THEN
                WRITE( NOUNIT, FMT = 9999 )'ZHSEQR(S)', IINFO, N, JTYPE,
@@ -832,13 +838,17 @@
             CALL ZGET10( N, N, T2, LDA, T1, LDA, WORK, RWORK,
      $                   RESULT( 7 ) )
 *
-*           Do Test 8: | W3 - W1 | / ( max(|W1|,|W3|) ulp )
+*           Do Test 8: | W2 - W1 | / ( max(|W1|,|W2|) ulp )
+*
+*           Both lists come from JOB = 'S'; only COMPZ differs, and COMPZ
+*           decides nothing but whether Z is accumulated, so the two are
+*           expected to agree exactly.
 *
             TEMP1 = ZERO
             TEMP2 = ZERO
             DO 130 J = 1, N
-               TEMP1 = MAX( TEMP1, ABS( W1( J ) ), ABS( W3( J ) ) )
-               TEMP2 = MAX( TEMP2, ABS( W1( J )-W3( J ) ) )
+               TEMP1 = MAX( TEMP1, ABS( W1( J ) ), ABS( W2( J ) ) )
+               TEMP2 = MAX( TEMP2, ABS( W1( J )-W2( J ) ) )
   130       CONTINUE
 *
             RESULT( 8 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
