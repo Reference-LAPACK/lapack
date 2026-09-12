@@ -439,7 +439,7 @@
      $                   JTYPE, MTYPES, N, NERRS, NFAIL, NMAX, NNWORK,
      $                   NTEST, NTESTF, NTESTT
       DOUBLE PRECISION   ANORM, COND, CONDS, OVFL, RTULP, RTULPI, TNRM,
-     $                   ULP, ULPINV, UNFL, VMX, VRMX, VTST
+     $                   ULP, ULPINV, UNFL, VMX, VRMX, VTST, WDIF, WNRM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          ADUMMA( 1 )
@@ -827,10 +827,17 @@
 *
 *              Do Test (5)
 *
+               WNRM = ZERO
+               WDIF = ZERO
                DO 150 J = 1, N
-                  IF( WR( J ).NE.WR1( J ) .OR. WI( J ).NE.WI1( J ) )
-     $               RESULT( 5 ) = ULPINV
+                  WNRM = MAX( WNRM, ABS( WR( J ) )+ABS( WI( J ) ),
+     $                        ABS( WR1( J ) )+ABS( WI1( J ) ) )
+                  WDIF = MAX( WDIF, ABS( WR( J )-WR1( J ) )+
+     $                        ABS( WI( J )-WI1( J ) ) )
   150          CONTINUE
+               RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                       MAX( UNFL, ULP*DBLE( N )*
+     $                       MAX( WNRM, WDIF ) ) )
 *
 *              Compute eigenvalues and right eigenvectors, and test them
 *
@@ -847,10 +854,17 @@
 *
 *              Do Test (5) again
 *
+               WNRM = ZERO
+               WDIF = ZERO
                DO 160 J = 1, N
-                  IF( WR( J ).NE.WR1( J ) .OR. WI( J ).NE.WI1( J ) )
-     $               RESULT( 5 ) = ULPINV
+                  WNRM = MAX( WNRM, ABS( WR( J ) )+ABS( WI( J ) ),
+     $                        ABS( WR1( J ) )+ABS( WI1( J ) ) )
+                  WDIF = MAX( WDIF, ABS( WR( J )-WR1( J ) )+
+     $                        ABS( WI( J )-WI1( J ) ) )
   160          CONTINUE
+               RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                       MAX( UNFL, ULP*DBLE( N )*
+     $                       MAX( WNRM, WDIF ) ) )
 *
 *              Do Test (6)
 *
@@ -876,10 +890,17 @@
 *
 *              Do Test (5) again
 *
+               WNRM = ZERO
+               WDIF = ZERO
                DO 190 J = 1, N
-                  IF( WR( J ).NE.WR1( J ) .OR. WI( J ).NE.WI1( J ) )
-     $               RESULT( 5 ) = ULPINV
+                  WNRM = MAX( WNRM, ABS( WR( J ) )+ABS( WI( J ) ),
+     $                        ABS( WR1( J ) )+ABS( WI1( J ) ) )
+                  WDIF = MAX( WDIF, ABS( WR( J )-WR1( J ) )+
+     $                        ABS( WI( J )-WI1( J ) ) )
   190          CONTINUE
+               RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                       MAX( UNFL, ULP*DBLE( N )*
+     $                       MAX( WNRM, WDIF ) ) )
 *
 *              Do Test (7)
 *
@@ -959,8 +980,7 @@
      $      / ' 2 = | transpose(A) VL - VL W | / ( n |A| ulp ) ',
      $      / ' 3 = | |VR(i)| - 1 | / ulp ',
      $      / ' 4 = | |VL(i)| - 1 | / ulp ',
-     $      / ' 5 = 0 if W same no matter if VR or VL computed,',
-     $      ' 1/ulp otherwise', /
+     $      / ' 5 = | W - W(other JOBVL/JOBVR) | / ( n |W| ulp ) ', /
      $      ' 6 = 0 if VR same no matter if VL computed,',
      $      '  1/ulp otherwise', /
      $      ' 7 = 0 if VL same no matter if VR computed,',
