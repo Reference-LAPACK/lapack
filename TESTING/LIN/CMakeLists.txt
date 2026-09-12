@@ -222,10 +222,12 @@ else()
 endif()
 
 # Disable constant propagation for NAG compiler to avoid issues with
-# creating NaN values in the CXX error-exit tests.
+# creating NaN values in the CXX error-exit tests and in the NaN pivot
+# checks of the packed symmetric-indefinite tests.
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
   set_source_files_properties(
     serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f
+    schksp.f cchksp.f dchksp.f zchksp.f cchkhp.f zchkhp.f
     PROPERTIES COMPILE_OPTIONS "-Onopropagate")
 endif()
 
@@ -277,11 +279,12 @@ function(add_lin_executable name)
     generate_64bit_suffixed_sources(${name} ext_sources ext_sources_64)
 
     # Disable constant propagation for NAG compiler to avoid issues with
-    # creating NaN values in the CXX error-exit tests.
+    # creating NaN values in the CXX error-exit tests and in the NaN
+    # pivot checks of the packed symmetric-indefinite tests.
     if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
       foreach(source IN LISTS ext_sources_64)
         get_filename_component(source_name "${source}" NAME)
-        if(source_name MATCHES "^[scdz]errcxx_64\\.f$")
+        if(source_name MATCHES "^[scdz](errcxx|chksp|chkhp)_64\\.f$")
           set_source_files_properties(
             "${source}" PROPERTIES COMPILE_OPTIONS "-Onopropagate")
         endif()
