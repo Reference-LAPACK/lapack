@@ -1863,10 +1863,10 @@
             CALL CCHKHS( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 5 ), NMAX, A( 1, 6 ),
-     $                   A( 1, 7 ), DC( 1, 1 ), DC( 1, 2 ), A( 1, 8 ),
-     $                   A( 1, 9 ), A( 1, 10 ), A( 1, 11 ), A( 1, 12 ),
-     $                   DC( 1, 3 ), WORK, LWORK, RWORK, IWORK, LOGWRK,
-     $                   RESULT, INFO )
+     $                   A( 1, 7 ), DC( 1, 1 ), DC( 1, 4 ), DC( 1, 2 ),
+     $                   A( 1, 8 ), A( 1, 9 ), A( 1, 10 ), A( 1, 11 ),
+     $                   A( 1, 12 ), DC( 1, 3 ), WORK, LWORK, RWORK,
+     $                   IWORK, LOGWRK, RESULT, INFO )
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9980 )'CCHKHS', INFO
   270    CONTINUE

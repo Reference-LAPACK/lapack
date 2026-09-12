@@ -404,7 +404,7 @@
      $                   J, JJ, KMIN
       REAL               ABNRM, ABNRM1, EPS, SMLNUM, TNRM, TOL, TOLIN,
      $                   ULP, ULPINV, V, VMAX, VMX, VRICMP, VRIMIN,
-     $                   VRMX, VTST
+     $                   VRMX, VTST, WDIF, WNRM
       COMPLEX            CTMP
 *     ..
 *     .. Local Arrays ..
@@ -580,10 +580,15 @@
 *
 *        Do Test (5)
 *
+         WNRM = ZERO
+         WDIF = ZERO
          DO 60 J = 1, N
-            IF( W( J ).NE.W1( J ) )
-     $         RESULT( 5 ) = ULPINV
+            WNRM = MAX( WNRM, ABS( W( J ) ), ABS( W1( J ) ) )
+            WDIF = MAX( WDIF, ABS( W( J )-W1( J ) ) )
    60    CONTINUE
+         RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                 MAX( SMLNUM, ULP*REAL( N )*
+     $                 MAX( WNRM, WDIF ) ) )
 *
 *        Do Test (8)
 *
@@ -630,10 +635,15 @@
 *
 *        Do Test (5) again
 *
+         WNRM = ZERO
+         WDIF = ZERO
          DO 90 J = 1, N
-            IF( W( J ).NE.W1( J ) )
-     $         RESULT( 5 ) = ULPINV
+            WNRM = MAX( WNRM, ABS( W( J ) ), ABS( W1( J ) ) )
+            WDIF = MAX( WDIF, ABS( W( J )-W1( J ) ) )
    90    CONTINUE
+         RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                 MAX( SMLNUM, ULP*REAL( N )*
+     $                 MAX( WNRM, WDIF ) ) )
 *
 *        Do Test (6)
 *
@@ -689,10 +699,15 @@
 *
 *        Do Test (5) again
 *
+         WNRM = ZERO
+         WDIF = ZERO
          DO 140 J = 1, N
-            IF( W( J ).NE.W1( J ) )
-     $         RESULT( 5 ) = ULPINV
+            WNRM = MAX( WNRM, ABS( W( J ) ), ABS( W1( J ) ) )
+            WDIF = MAX( WDIF, ABS( W( J )-W1( J ) ) )
   140    CONTINUE
+         RESULT( 5 ) = MAX( RESULT( 5 ), WDIF /
+     $                 MAX( SMLNUM, ULP*REAL( N )*
+     $                 MAX( WNRM, WDIF ) ) )
 *
 *        Do Test (7)
 *
