@@ -24,7 +24,7 @@
 *> \verbatim
 *>
 *> DGLMTS tests DGGGLM - a subroutine for solving the generalized
-*> linear model problem.
+*> linear model problem, including independent scaling of its inputs.
 *> \endverbatim
 *
 *  Arguments:
@@ -168,9 +168,9 @@
       PARAMETER          ( MAXEXP = MAXEXPONENT( ZERO ) - 2 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            INFO, J
+      INTEGER            INFO, ISCALE, J
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
-      DOUBLE PRECISION    SCL
+      DOUBLE PRECISION   ASCL, BSCL, DSCL, SCL, TNRM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
@@ -224,41 +224,66 @@
          RESULT = ( ( DNORM / YNORM ) / XNORM ) / EPS
       END IF
 *
-*     The problem is exactly invariant under scaling A, B and d by one
-*     power of two, so solving it again with the largest entry near the
-*     overflow threshold has to give the same residual.
+*     A, B and d may be scaled independently: for factors a, b, d,
+*     the solutions become (d/a)*x and (d/b)*u.  Test large and
+*     tiny inputs, then undo solution scaling before the residual.
 *
-      SCL = MAX( DLANGE( 'M', N, M, A, LDA, RWORK ),
+      TNRM = MAX( DLANGE( 'M', N, M, A, LDA, RWORK ),
      $           DLANGE( 'M', N, P, B, LDB, RWORK ),
      $           DLANGE( 'M', N, 1, D, N, RWORK ) )
-      IF( SCL.GT.ZERO .AND. SCL.LE.DLAMCH( 'Overflow' ) ) THEN
-         SCL = SCALE( ONE, MAXEXP-EXPONENT( SCL ) )
-         CALL DLACPY( 'Full', N, M, A, LDA, AF, LDA )
-         CALL DLACPY( 'Full', N, P, B, LDB, BF, LDB )
-         CALL DCOPY( N, D, 1, DF, 1 )
-         DO 10 J = 1, M
-            CALL DSCAL( N, SCL, AF( 1, J ), 1 )
-   10    CONTINUE
-         DO 20 J = 1, P
-            CALL DSCAL( N, SCL, BF( 1, J ), 1 )
-   20    CONTINUE
-         CALL DSCAL( N, SCL, DF, 1 )
+      IF( TNRM.GT.ZERO .AND. TNRM.LE.DLAMCH( 'Overflow' ) ) THEN
 *
-         CALL DGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
-     $                INFO )
+*        Cases: common large, common tiny, tiny d, tiny (A,d),
+*        and tiny (B,d).
 *
-         CALL DCOPY( N, D, 1, DF, 1 )
-         CALL DGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1, ONE,
-     $               DF, 1 )
-         CALL DGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1, ONE,
-     $               DF, 1 )
-         DNORM = DASUM( N, DF, 1 )
-         XNORM = DASUM( M, X, 1 ) + DASUM( P, U, 1 )
-         IF( DISNAN( DNORM ) .OR. DISNAN( XNORM ) ) THEN
-            RESULT = ONE / EPS
-         ELSE IF( XNORM.GT.ZERO ) THEN
-            RESULT = MAX( RESULT, ( ( DNORM / YNORM ) / XNORM ) / EPS )
-         END IF
+         DO 30 ISCALE = 1, 5
+            IF( ISCALE.EQ.1 ) THEN
+               SCL = SCALE( ONE, MAXEXP-EXPONENT( TNRM ) )
+            ELSE
+               SCL = DLAMCH( 'Safe minimum' ) /
+     $               DLAMCH( 'Precision' )
+               SCL = SCALE( ONE, EXPONENT( SCL )-4-
+     $                      EXPONENT( TNRM ) )
+            END IF
+            ASCL = SCL
+            BSCL = SCL
+            DSCL = SCL
+            IF( ISCALE.EQ.3 .OR. ISCALE.EQ.5 ) ASCL = ONE
+            IF( ISCALE.EQ.3 .OR. ISCALE.EQ.4 ) BSCL = ONE
+            CALL DLACPY( 'Full', N, M, A, LDA, AF, LDA )
+            CALL DLACPY( 'Full', N, P, B, LDB, BF, LDB )
+            CALL DCOPY( N, D, 1, DF, 1 )
+            DO 10 J = 1, M
+               CALL DSCAL( N, ASCL, AF( 1, J ), 1 )
+   10       CONTINUE
+            DO 20 J = 1, P
+               CALL DSCAL( N, BSCL, BF( 1, J ), 1 )
+   20       CONTINUE
+            CALL DSCAL( N, DSCL, DF, 1 )
+*
+            CALL DGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK,
+     $                   LWORK, INFO )
+            IF( INFO.NE.0 ) THEN
+               RESULT = ONE / EPS
+               GO TO 30
+            END IF
+            CALL DSCAL( M, ASCL / DSCL, X, 1 )
+            CALL DSCAL( P, BSCL / DSCL, U, 1 )
+*
+            CALL DCOPY( N, D, 1, DF, 1 )
+            CALL DGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1, ONE,
+     $                  DF, 1 )
+            CALL DGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1, ONE,
+     $                  DF, 1 )
+            DNORM = DASUM( N, DF, 1 )
+            XNORM = DASUM( M, X, 1 ) + DASUM( P, U, 1 )
+            IF( DISNAN( DNORM ) .OR. DISNAN( XNORM ) ) THEN
+               RESULT = ONE / EPS
+            ELSE IF( XNORM.GT.ZERO ) THEN
+               RESULT = MAX( RESULT,
+     $                       ( ( DNORM / YNORM ) / XNORM ) / EPS )
+            END IF
+   30    CONTINUE
       END IF
 *
       RETURN
