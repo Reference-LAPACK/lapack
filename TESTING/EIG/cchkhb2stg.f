@@ -388,7 +388,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASET, SLASUM, XERBLA, CHBT21,
+      EXTERNAL           SCOPY, SLASET, SLASUM, XER_REPLACE, CHBT21,
      $                   CHBTRD, CLACPY, CLASET, CLATMR, CLATMS,
      $                   CHETRD_HB2ST, CSTEQR
 *     ..
@@ -449,7 +449,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKHB2STG', -INFO )
+         CALL XER_REPLACE( 'CCHKHB2STG', -INFO )
          RETURN
       END IF
 *

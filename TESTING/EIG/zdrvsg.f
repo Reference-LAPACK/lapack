@@ -419,7 +419,7 @@
       EXTERNAL           LSAME, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAFTS, DLASUM, XERBLA, ZHBGV, ZHBGVD,
+      EXTERNAL           DLAFTS, DLASUM, XER_REPLACE, ZHBGV, ZHBGVD,
      $                   ZHBGVX, ZHEGV, ZHEGVD, ZHEGVX, ZHPGV, ZHPGVD,
      $                   ZHPGVX, ZLACPY, ZLASET, ZLATMR, ZLATMS, ZSGT01
 *     ..
@@ -469,7 +469,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVSG', -INFO )
+         CALL XER_REPLACE( 'ZDRVSG', -INFO )
          RETURN
       END IF
 *

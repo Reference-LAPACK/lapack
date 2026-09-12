@@ -127,7 +127,7 @@
       EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLASET, DORMRZ, XERBLA
+      EXTERNAL           DAXPY, DLASET, DORMRZ, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
@@ -137,7 +137,7 @@
       DRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'DRZT01', 8 )
+         CALL XER_REPLACE( 'DRZT01', 8 )
          RETURN
       END IF
 *

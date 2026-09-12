@@ -132,7 +132,7 @@
       EXTERNAL           DDIFF, LZE
 *     .. External Subroutines ..
       EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5, ZCHK6
-      EXTERNAL           ZCHKE, ZMMCH
+      EXTERNAL           ZCHKE, ZMMCH, SET_XERBLA, XER_REPLACE
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -148,6 +148,7 @@
      $                   'ZSYR2K', 'ZGEMMTR'/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -3737,7 +3738,7 @@
 *     End of CHKXER
 *
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
 *
 *  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 3 BLAS

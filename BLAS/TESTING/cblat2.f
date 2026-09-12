@@ -149,7 +149,7 @@
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
       EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHK6,
-     $                   CCHKE, CMVCH
+     $                   CCHKE, CMVCH, SET_XERBLA, XER_REPLACE
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -165,8 +165,16 @@
      $                   'CTRSV ', 'CTBSV ', 'CTPSV ', 'CGERC ',
      $                   'CGERU ', 'CHER  ', 'CHPR  ', 'CHER2 ',
      $                   'CHPR2 '/
+      PROCEDURE(), POINTER :: ALREADY_CB
+      INTERFACE
+        SUBROUTINE GET_XERBLA(CB_RET)
+          PROCEDURE(), POINTER :: CB_RET
+        END SUBROUTINE
+      END INTERFACE
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL GET_XERBLA(ALREADY_CB)
+      CALL SET_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -3403,7 +3411,7 @@
   10  CONTINUE
       RETURN
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of

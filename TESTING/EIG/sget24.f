@@ -395,7 +395,7 @@
       EXTERNAL           SSLECT, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEESX, SGEMM, SLACPY, SORT01, XERBLA
+      EXTERNAL           SCOPY, SGEESX, SGEMM, SLACPY, SORT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN, SQRT
@@ -420,7 +420,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGET24', -INFO )
+         CALL XER_REPLACE( 'SGET24', -INFO )
          RETURN
       END IF
 *

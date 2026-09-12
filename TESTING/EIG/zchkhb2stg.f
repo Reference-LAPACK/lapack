@@ -385,7 +385,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLASET, DLASUM, XERBLA, ZHBT21,
+      EXTERNAL           DCOPY, DLASET, DLASUM, XER_REPLACE, ZHBT21,
      $                   ZHBTRD, ZLACPY, ZLASET, ZLATMR, ZLATMS,
      $                   ZHETRD_HB2ST, ZSTEQR
 *     ..
@@ -446,7 +446,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKHB2STG', -INFO )
+         CALL XER_REPLACE( 'ZCHKHB2STG', -INFO )
          RETURN
       END IF
 *

@@ -486,7 +486,7 @@
       EXTERNAL           CCOPY, CGEHRD, CGEMM, CGET10, CGET22, CHSEIN,
      $                   CHSEQR, CHST01, CLACPY, CLASET, CLATME, CLATMR,
      $                   CLATMS, CTREVC, CTREVC3, CUNGHR, CUNMHR,
-     $                   SLAFTS, SLASUM, XERBLA
+     $                   SLAFTS, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -533,7 +533,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKHS', -INFO )
+         CALL XER_REPLACE( 'CCHKHS', -INFO )
          RETURN
       END IF
 *

@@ -140,7 +140,7 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DORMRQ, DTRSM, XERBLA
+      EXTERNAL           DLASET, DORMRQ, DTRSM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGERQS', -INFO )
+         CALL XER_REPLACE( 'DGERQS', -INFO )
          RETURN
       END IF
 *

@@ -483,7 +483,7 @@
       EXTERNAL           DLAMCH, DZNRM2, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD, ZGEMM,
+      EXTERNAL           DLAFTS, DLASUM, XER_REPLACE, ZCOPY, ZGEHRD, ZGEMM,
      $                   ZGET10, ZGET22, ZHSEIN, ZHSEQR, ZHST01, ZLACPY,
      $                   ZLASET, ZLATME, ZLATMR, ZLATMS, ZTREVC,
      $                   ZTREVC3, ZUNGHR, ZUNMHR
@@ -533,7 +533,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKHS', -INFO )
+         CALL XER_REPLACE( 'ZCHKHS', -INFO )
          RETURN
       END IF
 *

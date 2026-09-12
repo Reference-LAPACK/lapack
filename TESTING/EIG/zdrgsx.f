@@ -395,7 +395,7 @@
       EXTERNAL           ZLCTSX, ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, XERBLA, ZGESVD, ZGET51, ZGGESX,
+      EXTERNAL           ALASVM, XER_REPLACE, ZGESVD, ZGET51, ZGGESX,
      $                   ZLACPY, ZLAKF2, ZLASET, ZLATM5
 *     ..
 *     .. Scalars in Common ..
@@ -470,7 +470,7 @@
      $   INFO = -18
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRGSX', -INFO )
+         CALL XER_REPLACE( 'ZDRGSX', -INFO )
          RETURN
       END IF
 *

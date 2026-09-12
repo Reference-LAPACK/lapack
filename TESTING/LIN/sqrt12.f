@@ -114,7 +114,7 @@
       EXTERNAL           SASUM, SLAMCH, SLANGE, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SBDSQR, SGEBD2, SLASCL, SLASET, XERBLA
+      EXTERNAL           SAXPY, SBDSQR, SGEBD2, SLASCL, SLASET, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -130,7 +130,7 @@
 *
       IF( LWORK.LT.MAX( M*N+4*MIN( M, N )+MAX( M, N ),
      $                  M*N+2*MIN( M, N )+4*N) ) THEN
-         CALL XERBLA( 'SQRT12', 7 )
+         CALL XER_REPLACE( 'SQRT12', 7 )
          RETURN
       END IF
 *

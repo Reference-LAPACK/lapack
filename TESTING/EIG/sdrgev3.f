@@ -457,7 +457,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGET52, SGGEV3, SLACPY, SLARFG, SLASET,
-     $                   SLATM4, SORM2R, XERBLA, XLAENV
+     $                   SLATM4, SORM2R, XER_REPLACE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -534,7 +534,7 @@
      $   INFO = -25
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRGEV3', -INFO )
+         CALL XER_REPLACE( 'SDRGEV3', -INFO )
          RETURN
       END IF
 *

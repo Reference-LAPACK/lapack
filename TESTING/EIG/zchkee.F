@@ -1108,6 +1108,7 @@
      $                   ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES, ZDRVEV,
      $                   ZDRVST, ZDRVSX, ZDRVVX, ZERRBD, ZERRED, ZERRGG,
      $                   ZERRHS, ZERRST, ILAVER, ZDRGES3, ZDRGEV3,
+     $                   SET_XERBLA, XER_REPLACE,
      $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG, ZDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -1152,6 +1153,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_XERBLA(XER_REPLACE)
       A = 0.0
       B = 0.0
       C = 0.0

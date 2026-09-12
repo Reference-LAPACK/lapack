@@ -467,7 +467,7 @@
       EXTERNAL           ALASUM, CBDSQR, CBDT01, CBDT02, CBDT03,
      $                   CGEBRD, CGEMM, CLACPY, CLASET, CLATMR,
      $                   CLATMS, CUNGBR, CUNT01, SCOPY, SLAHD2,
-     $                   SSVDCH, XERBLA
+     $                   SSVDCH, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -537,7 +537,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKBD', -INFO )
+         CALL XER_REPLACE( 'CCHKBD', -INFO )
          RETURN
       END IF
 *

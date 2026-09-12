@@ -1111,6 +1111,7 @@
      $                   SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV, SDRVST,
      $                   SDRVSX, SDRVVX, SERRBD, SERRED, SERRGG, SERRHS,
      $                   SERRST, ILAVER, XLAENV, SDRGES3, SDRGEV3,
+     $                   SET_XERBLA, XER_REPLACE,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -1151,6 +1152,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_XERBLA(XER_REPLACE)
       A = 0.0
       B = 0.0
       C = 0.0

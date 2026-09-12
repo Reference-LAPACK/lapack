@@ -684,7 +684,7 @@
       EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XERBLA,
+      EXTERNAL           SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XER_REPLACE,
      $                   CCOPY, CHET21, CHETRD, CHPT21, CHPTRD, CLACPY,
      $                   CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC, CSTEMR,
      $                   CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR,
@@ -742,7 +742,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKST2STG', -INFO )
+         CALL XER_REPLACE( 'CCHKST2STG', -INFO )
          RETURN
       END IF
 *

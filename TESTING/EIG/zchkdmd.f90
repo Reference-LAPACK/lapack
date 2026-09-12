@@ -87,7 +87,7 @@
 !.....external subroutines (BLAS and LAPACK)
       EXTERNAL ZGEEV,  ZGEMV, ZLASCL
       EXTERNAL ZLARNV, ZLATMR, XLAENV
-      EXTERNAL ZAXPY,  ZGEMM
+      EXTERNAL ZAXPY,  ZGEMM, SET_XERBLA, XER_REPLACE
 !.....external subroutines DMD package, part 1
 !     subroutines under test
       EXTERNAL ZGEDMD, ZGEDMDQ
@@ -107,6 +107,7 @@
       ! because the test includes comparing the results (in pairs).
 !.....................................................................................
       CALL CPU_TIME( S1 )
+      CALL SET_XERBLA(XER_REPLACE)
 
       TEST_QRDMD = .TRUE. ! This code by default performs tests on ZGEDMDQ
                           ! Since the QR factorizations based algorithm is designed for

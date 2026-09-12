@@ -184,7 +184,7 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASCL, XERBLA
+      EXTERNAL           SGEMM, SLACPY, SLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -200,12 +200,12 @@
          NROWS = N
          NCOLS = M
       ELSE
-         CALL XERBLA( 'SQRT17', 1 )
+         CALL XER_REPLACE( 'SQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL XERBLA( 'SQRT17', 13 )
+         CALL XER_REPLACE( 'SQRT17', 13 )
          RETURN
       END IF
 *

@@ -184,7 +184,7 @@
       EXTERNAL           LSAME, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASCL, XERBLA
+      EXTERNAL           CGEMM, CLACPY, CLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
@@ -200,12 +200,12 @@
          NROWS = N
          NCOLS = M
       ELSE
-         CALL XERBLA( 'CQRT17', 1 )
+         CALL XER_REPLACE( 'CQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL XERBLA( 'CQRT17', 13 )
+         CALL XER_REPLACE( 'CQRT17', 13 )
          RETURN
       END IF
 *

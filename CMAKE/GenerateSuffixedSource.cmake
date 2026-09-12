@@ -140,7 +140,7 @@ function(_extract_symbols statement_text result)
 
   if("${statement_text}" MATCHES "(external|EXTERNAL)")
     string(REGEX REPLACE
-      "^.*(external|EXTERNAL)[ \t]*(::)?[ \t]*" ""
+      "^.*${CMAKE_MATCH_1}[ \t]*(::)?[ \t]*" ""
       external_names "${statement_text}")
     string(REGEX REPLACE "^[ \t]*::[ \t]*" "" external_names "${external_names}")
     string(REPLACE "," ";" external_names "${external_names}")
@@ -150,9 +150,9 @@ function(_extract_symbols statement_text result)
         list(APPEND symbols "${external_name}")
       endif()
     endforeach()
-  elseif("${statement_text}" MATCHES "(subroutine|SUBROUTINE|function|FUNCTION)")
+  elseif("${statement_text}" MATCHES "(subroutine|SUBROUTINE|function|FUNCTION|entry|ENTRY)  *[a-zA-Z][a-zA-Z0-9_]* *\\(")
     string(REGEX REPLACE
-      "^[a-zA-Z0-9_ *]*(subroutine|SUBROUTINE|function|FUNCTION)[ ]*" ""
+      "^[a-zA-Z0-9_ *]*${CMAKE_MATCH_1}[ ]*" ""
       symbol_name "${statement_text}")
     string(REGEX REPLACE "[(].*$" "" symbol_name "${symbol_name}")
     string(STRIP "${symbol_name}" symbol_name)

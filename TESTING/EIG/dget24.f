@@ -395,7 +395,7 @@
       EXTERNAL           DSLECT, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEESX, DGEMM, DLACPY, DORT01, XERBLA
+      EXTERNAL           DCOPY, DGEESX, DGEMM, DLACPY, DORT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN, SQRT
@@ -420,7 +420,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGET24', -INFO )
+         CALL XER_REPLACE( 'DGET24', -INFO )
          RETURN
       END IF
 *

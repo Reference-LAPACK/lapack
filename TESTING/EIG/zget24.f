@@ -382,7 +382,7 @@
       EXTERNAL           ZSLECT, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGEESX, ZGEMM, ZLACPY, ZUNT01
+      EXTERNAL           XER_REPLACE, ZCOPY, ZGEESX, ZGEMM, ZLACPY, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -417,7 +417,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGET24', -INFO )
+         CALL XER_REPLACE( 'ZGET24', -INFO )
          RETURN
       END IF
 *

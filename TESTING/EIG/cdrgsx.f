@@ -396,7 +396,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGESVD, CGET51, CGGESX, CLACPY, CLAKF2,
-     $                   CLASET, CLATM5, XERBLA
+     $                   CLASET, CLATM5, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            FS
@@ -469,7 +469,7 @@
      $   INFO = -18
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGSX', -INFO )
+         CALL XER_REPLACE( 'CDRGSX', -INFO )
          RETURN
       END IF
 *

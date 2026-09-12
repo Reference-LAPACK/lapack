@@ -382,7 +382,7 @@
       EXTERNAL           CSLECT, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01, XERBLA
+      EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -417,7 +417,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGET24', -INFO )
+         CALL XER_REPLACE( 'CGET24', -INFO )
          RETURN
       END IF
 *

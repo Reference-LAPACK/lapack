@@ -510,7 +510,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGET24, SLASUM, SLATME, SLATMR, SLATMS,
-     $                   SLASET, XERBLA
+     $                   SLASET, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -571,7 +571,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVSX', -INFO )
+         CALL XER_REPLACE( 'SDRVSX', -INFO )
          RETURN
       END IF
 *

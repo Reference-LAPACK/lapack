@@ -410,7 +410,7 @@
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLAFTS, DLASET, DLASUM, DLATMR,
      $                   DLATMS, DSBGV, DSBGVD, DSBGVX, DSGT01, DSPGV,
-     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX, XERBLA,
+     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX, XER_REPLACE,
      $                   DSYGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -457,7 +457,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVSG2STG', -INFO )
+         CALL XER_REPLACE( 'DDRVSG2STG', -INFO )
          RETURN
       END IF
 *

@@ -392,7 +392,7 @@
       EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLAFTS, XERBLA, ZHBEV, ZHBEVD, ZHBEVX,
+      EXTERNAL           ALASVM, DLAFTS, XER_REPLACE, ZHBEV, ZHBEVD, ZHBEVX,
      $                   ZHEEV, ZHEEVD, ZHEEVR, ZHEEVX, ZHET21, ZHET22,
      $                   ZHPEV, ZHPEVD, ZHPEVX, ZLACPY, ZLASET, ZLATMR,
      $                   ZLATMS
@@ -439,7 +439,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVST', -INFO )
+         CALL XER_REPLACE( 'ZDRVST', -INFO )
          RETURN
       END IF
 *

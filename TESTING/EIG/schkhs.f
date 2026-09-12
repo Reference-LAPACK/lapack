@@ -476,7 +476,7 @@
       EXTERNAL           SCOPY, SGEHRD, SGEMM, SGET10, SGET22, SHSEIN,
      $                   SHSEQR, SHST01, SLACPY, SLAFTS, SLASET, SLASUM,
      $                   SLATME, SLATMR, SLATMS, SORGHR, SORMHR, STREVC,
-     $                   STREVC3, XERBLA
+     $                   STREVC3, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -523,7 +523,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKHS', -INFO )
+         CALL XER_REPLACE( 'SCHKHS', -INFO )
          RETURN
       END IF
 *

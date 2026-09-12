@@ -121,7 +121,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, ZDRVAB, ZDRVAC, ZERRAB, ZERRAC,
-     $                   ILAVER
+     $                   ILAVER, SET_XERBLA, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -137,6 +137,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_XERBLA(XER_REPLACE)
       S1 = DSECND( )
       LDA = NMAX
       FATAL = .FALSE.

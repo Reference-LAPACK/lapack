@@ -140,7 +140,7 @@
       PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRSM, CUNMQL, XERBLA
+      EXTERNAL           CTRSM, CUNMQL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEQLS', -INFO )
+         CALL XER_REPLACE( 'CGEQLS', -INFO )
          RETURN
       END IF
 *

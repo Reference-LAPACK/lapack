@@ -158,7 +158,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DSCAL, DSWAP, XERBLA
+      EXTERNAL           DGEMV, DGER, DSCAL, DSWAP, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -182,7 +182,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAVSP ', -INFO )
+         CALL XER_REPLACE( 'DLAVSP ', -INFO )
          RETURN
       END IF
 *

@@ -25,6 +25,24 @@
 *> It is called by an LAPACK routine if an input parameter has an
 *> invalid value.  A message is printed and execution stops.
 *>
+*> Users can replace the system XERBLA by calling SET_XERBLA
+*> with a replacement handler that takes the same arguments, which
+*> will then be called on error instead of the above behaviour. This
+*> can then be negated by calling SET_XERBLA with NULL().
+*> The current handler value can be retried by calling GET_XERBLA
+*> with an output argument:
+*>
+*>   PROGRAM HELLO
+*>     EXTERNAL GET_XERBLA
+*>     PROCEDURE(), POINTER :: ALREADY_CB
+*>     INTERFACE
+*>       SUBROUTINE GET_XERBLA(CB_RET)
+*>         PROCEDURE(), POINTER :: CB_RET
+*>       END SUBROUTINE
+*>     END INTERFACE
+*>     CALL GET_XERBLA(ALREADY_CB)
+*>   END PROGRAM HELLO
+*>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
 *> \endverbatim
@@ -56,6 +74,7 @@
 *> \ingroup xerbla
 *
 *  =====================================================================
+*
       SUBROUTINE XERBLA( SRNAME, INFO )
       IMPLICIT NONE
 *
@@ -71,9 +90,24 @@
 * =====================================================================
 *
 *     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM
+      INTRINSIC          LEN_TRIM, NULL
+*     ..
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: ACTIVE_CALLBACK => NULL()
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: CB_RET
+      PROCEDURE(XERBLA_INTERFACE) :: CB
+      ABSTRACT INTERFACE
+        SUBROUTINE XERBLA_INTERFACE(SRNAME, INFO)
+          CHARACTER*(*), INTENT(IN) :: SRNAME
+          INTEGER, INTENT(IN) :: INFO
+        END SUBROUTINE
+      END INTERFACE
 *     ..
 *     .. Executable Statements ..
+*
+      IF (ASSOCIATED(ACTIVE_CALLBACK)) THEN
+        CALL ACTIVE_CALLBACK(SRNAME, INFO)
+        RETURN
+      END IF
 *
       WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
 *
@@ -83,5 +117,13 @@
      $      'an illegal value' )
 *
 *     End of XERBLA
+*
+      ENTRY SET_XERBLA(CB)
+        ACTIVE_CALLBACK => CB
+      RETURN
+*
+      ENTRY GET_XERBLA(CB_RET)
+        CB_RET => ACTIVE_CALLBACK
+      RETURN
 *
       END
