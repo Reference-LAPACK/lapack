@@ -29,7 +29,8 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by DGEQLF.
+*> computed by DGEQLF. Large right hand sides are scaled before
+*> applying Q, and the solution is returned at the original scale.
 *> \endverbatim
 *
 *  Arguments:
@@ -139,8 +140,18 @@
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D+0 )
 *     ..
+*     .. Local Scalars ..
+      DOUBLE PRECISION   BIGNUM, BNRM
+*     ..
+*     .. Local Arrays ..
+      DOUBLE PRECISION   RWORK( 1 )
+*     ..
+*     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
+*     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMQL, DTRSM, XERBLA
+      EXTERNAL           DLASCL, DORMQL, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -174,6 +185,15 @@
       IF( N.EQ.0 .OR. NRHS.EQ.0 .OR. M.EQ.0 )
      $   RETURN
 *
+*     Scale large right hand sides before applying Q: tau*w can
+*     overflow even when Q' * B and the solution are representable.
+*
+      BNRM = DLANGE( 'M', M, NRHS, B, LDB, RWORK )
+      BIGNUM = DLAMCH( 'Precision' ) / DLAMCH( 'Safe minimum' )
+      IF( BNRM.GT.BIGNUM )
+     $   CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
+*
 *     B := Q' * B
 *
       CALL DORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, LDB,
@@ -183,6 +203,10 @@
 *
       CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
+*
+      IF( BNRM.GT.BIGNUM )
+     $   CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, M, NRHS, B, LDB,
+     $                INFO )
 *
       RETURN
 *
