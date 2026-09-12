@@ -194,8 +194,8 @@
       CHARACTER          NORMIN, TRANS
       INTEGER            I, I1, I2, I3, IERR, ITS, J
       REAL               ABSBII, ABSBJJ, EI, EJ, GROWTO, NORM, NRMSML,
-     $                   REC, ROOTN, SCALE, TEMP, VCRIT, VMAX, VNORM, W,
-     $                   W1, X, XI, XR, Y
+     $                   REC, ROOTN, SCALE, TEMP, V0NORM, V1NORM,
+     $                   VCRIT, VMAX, W, W1, X, XI, XR, Y
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
@@ -212,11 +212,13 @@
 *
       INFO = 0
 *
-*     GROWTO is the threshold used in the acceptance test for an
-*     eigenvector.
+*     Each starting vector gets one solve, from v0 to v1.  The residual
+*     of v1 is SCALE times the norm of v0, over the norm of v1, so
+*     GROWTO is the growth V1NORM/(SCALE*V0NORM) that the acceptance
+*     test below requires.
 *
       ROOTN = SQRT( REAL( N ) )
-      GROWTO = TENTH / ROOTN
+      GROWTO = TENTH / ( REAL( N )*EPS3 )
       NRMSML = MAX( ONE, EPS3*ROOTN )*SMLNUM
 *
 *     Form B = H - (WR,WI)*I (except that the subdiagonal elements and
@@ -244,8 +246,8 @@
 *
 *           Scale supplied initial vector.
 *
-            VNORM = SNRM2( N, VR, 1 )
-            CALL SSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), VR,
+            V0NORM = SNRM2( N, VR, 1 )
+            CALL SSCAL( N, ( EPS3*ROOTN ) / MAX( V0NORM, NRMSML ), VR,
      $                  1 )
          END IF
 *
@@ -327,6 +329,7 @@
 *
          NORMIN = 'N'
          DO 110 ITS = 1, N
+            V0NORM = SASUM( N, VR, 1 )
 *
 *           Solve U*x = scale*v for a right eigenvector
 *             or U**T*x = scale*v for a left eigenvector,
@@ -339,8 +342,8 @@
 *
 *           Test for sufficient growth in the norm of v.
 *
-            VNORM = SASUM( N, VR, 1 )
-            IF( VNORM.GE.GROWTO*SCALE )
+            V1NORM = SASUM( N, VR, 1 )
+            IF( V1NORM.GE.GROWTO*SCALE*V0NORM )
      $         GO TO 120
 *
 *           Choose new orthogonal starting vector and try again.
@@ -521,6 +524,7 @@
          END IF
 *
          DO 270 ITS = 1, N
+            V0NORM = SASUM( N, VR, 1 ) + SASUM( N, VI, 1 )
             SCALE = ONE
             VMAX = ONE
             VCRIT = BIGNUM
@@ -591,8 +595,8 @@
 *
 *           Test for sufficient growth in the norm of (VR,VI).
 *
-            VNORM = SASUM( N, VR, 1 ) + SASUM( N, VI, 1 )
-            IF( VNORM.GE.GROWTO*SCALE )
+            V1NORM = SASUM( N, VR, 1 ) + SASUM( N, VI, 1 )
+            IF( V1NORM.GE.GROWTO*SCALE*V0NORM )
      $         GO TO 280
 *
 *           Choose a new orthogonal starting vector and try again.
@@ -616,12 +620,12 @@
 *
 *        Normalize eigenvector.
 *
-         VNORM = ZERO
+         V1NORM = ZERO
          DO 290 I = 1, N
-            VNORM = MAX( VNORM, ABS( VR( I ) )+ABS( VI( I ) ) )
+            V1NORM = MAX( V1NORM, ABS( VR( I ) )+ABS( VI( I ) ) )
   290    CONTINUE
-         CALL SSCAL( N, ONE / VNORM, VR, 1 )
-         CALL SSCAL( N, ONE / VNORM, VI, 1 )
+         CALL SSCAL( N, ONE / V1NORM, VR, 1 )
+         CALL SSCAL( N, ONE / V1NORM, VI, 1 )
 *
       END IF
 *
