@@ -3,7 +3,7 @@ CES               Data for the Complex Nonsymmetric Schur Form Driver
 0 1 2 3 5 10 20   Matrix dimensions
 3 3 1 11 4 8 2 0  Parameters NB, NBMIN, NXOVER, INMIN, INWIN, INIBL, ISHFTS, IACC22
 20.0              Threshold for test ratios
-T
+T                 Put T to test the error exits
 2                 Read another line with random number generate seed
 2518 3899 995 397 Seed for random number generator
 CES 21            Use all matrix types
@@ -12,7 +12,7 @@ CEV               Data for the Complex Nonsymmetric Eigenvalue Driver
 0 1 2 3 5 10 20   Matrix dimensions
 3 3 1 11 4 8 2 0  Parameters NB, NBMIN, NXOVER, INMIN, INWIN, INIBL, ISHFTS, IACC22
 20.0              Threshold for test ratios
-T
+T                 Put T to test the error exits
 2                 Read another line with random number generate seed
 2518 3899 995 397 Seed for random number generator
 CEV 21            Use all matrix types
@@ -21,7 +21,7 @@ CSX               Data for the Complex Nonsymmetric Schur Form Expert Driver
 0 1 2 3 5 10 20   Matrix dimensions
 3 3 1 11 4 8 2 0  Parameters NB, NBMIN, NXOVER, INMIN, INWIN, INIBL, ISHFTS, IACC22
 20.0              Threshold for test ratios
-T
+T                 Put T to test the error exits
 2                 Read another line with random number generate seed
 2518 3899 995 397 Seed for random number generator
 CSX 21            Use all matrix types
@@ -526,7 +526,7 @@ CVX               Data for the Complex Nonsymmetric Eigenvalue Expert Driver
 0 1 2 3 5 10 20   Matrix dimensions
 3 3 1 11 4 8 2 0  Parameters NB, NBMIN, NXOVER, INMIN, INWIN, INIBL, ISHFTS, IACC22
 20.0              Threshold for test ratios
-T
+T                 Put T to test the error exits
 2                 Read another line with random number generate seed
 2518 3899 995 397 Seed for random number generator
 CVX 21            Use all matrix types

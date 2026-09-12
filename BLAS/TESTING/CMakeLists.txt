@@ -2,13 +2,18 @@ function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
   target_link_libraries(${name} PRIVATE ${BLASLIB})
   lapack_add_coverage(${name})
+
+  # A driver that reads an input file takes the name of its summary file from
+  # it and opens that itself on unit 6, so redirecting stdout there as well
+  # would open the one file twice; xBLAT2 fails outright with "Cannot change
+  # STATUS parameter in OPEN statement".  Only xBLAT1, which has no input and
+  # writes to stdout, needs the redirect.
   if(EXISTS "${test_input}")
     lapack_runtest_command(test_command ${name} INPUT "${test_input}")
-    add_test(NAME BLAS-${name} COMMAND ${test_command})
   else()
     lapack_runtest_command(test_command ${name} OUTPUT "${test_output}")
-    add_test(NAME BLAS-${name} COMMAND ${test_command})
   endif()
+  add_test(NAME BLAS-${name} COMMAND ${test_command})
 
   # Disable constant propagation for NAG compiler to avoid issues with
   # special values (Inf, NaN) returned by SXVALS and DXVALS.
@@ -19,7 +24,8 @@ endfunction()
 
 function(add_blas_test name source)
   get_filename_component(baseNAME ${source} NAME_WE)
-  set(test_input "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
+  lapack_test_input(test_input
+    "${CMAKE_CURRENT_SOURCE_DIR}/${baseNAME}.in")
 
   if(BUILD_DEFAULT_API)
     _add_blas_test(${name} ${source} "${test_input}"

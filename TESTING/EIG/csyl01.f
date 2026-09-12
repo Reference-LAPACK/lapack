@@ -143,17 +143,35 @@
 *     ..
 *     .. Allocate memory dynamically ..
       ALLOCATE ( A( MAXM, MAXM ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
       ALLOCATE ( B( MAXN, MAXN ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
       ALLOCATE ( C( MAXM, MAXN ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
       ALLOCATE ( CC( MAXM, MAXN ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
       ALLOCATE ( X( MAXM, MAXN ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
       ALLOCATE ( SWORK( LDSWORK, 54 ), STAT = AllocateStatus )
-      IF( AllocateStatus /= 0 ) STOP "*** Not enough memory ***"
+      IF( AllocateStatus /= 0 ) THEN
+         WRITE( *, FMT = * )'*** Not enough memory ***'
+         STOP 1
+      END IF
 *     ..
 *     .. Executable Statements ..
 *

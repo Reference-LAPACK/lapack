@@ -62,6 +62,10 @@ function(lapack_add_coverage lib)
   target_link_libraries(${lib} PRIVATE gcov)
 endfunction()
 
+set(LAPACK_TESTING_JUNIT_JOB_ID "" CACHE STRING
+  "Identifier of the job running the tests, prefixed to the JUnit report's names." )
+mark_as_advanced(LAPACK_TESTING_JUNIT_JOB_ID)
+
 option(LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON)
 option(LAPACK_MEMORY_CHECK "Configure the test suite for valgrind memory checking" OFF)
 if(LAPACK_MEMORY_CHECK)
@@ -194,7 +198,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # Testing
 option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
-include(RuntestCommand)
+include(LAPACKTestHelpers)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
 if(BUILD_TESTING)
@@ -442,19 +446,30 @@ if(BUILD_TESTING AND Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
 
   _collect_tests("${LAPACK_SOURCE_DIR}" _all_tests)
 
+  # Without a job identifier the report keeps the plain suite and class names.
+  set(_summary_job_option "")
+  if(LAPACK_TESTING_JUNIT_JOB_ID)
+    set(_summary_job_option "--junit-job" "${LAPACK_TESTING_JUNIT_JOB_ID}")
+  endif()
+
   file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
+  # The test drivers report a numerical failure in their output and still exit
+  # with a status of 0, so this is the test that fails the run when one of them
+  # found something: --fail-on-error turns any failure or error they reported
+  # into a nonzero exit status of the summary.
   add_test(
     NAME LAPACK_Test_Summary
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
     COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
-      "--fail-if-empty" "--fail-on-unrecognized" "--merge-apis"
-      "--junit-xml" "lapack_testing_junit.xml"
+      "--fail-on-error" "--fail-if-empty" "--fail-on-unrecognized" "--merge-apis"
+      "--junit-xml" "lapack_testing_junit.xml" ${_summary_job_option}
     )
 
   if(_all_tests)
     set_property(TEST LAPACK_Test_Summary APPEND PROPERTY DEPENDS ${_all_tests})
   endif()
 endif()
+
 
 #-------------------------------------
 # BLAS++ / LAPACK++
