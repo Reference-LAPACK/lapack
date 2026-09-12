@@ -29,7 +29,8 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by SGEQLF.
+*> computed by SGEQLF. Large right hand sides are scaled before
+*> applying Q, and the solution is returned at the original scale.
 *> \endverbatim
 *
 *  Arguments:
@@ -139,8 +140,18 @@
       REAL               ONE
       PARAMETER          ( ONE = 1.0E+0 )
 *     ..
+*     .. Local Scalars ..
+      REAL               BIGNUM, BNRM
+*     ..
+*     .. Local Arrays ..
+      REAL               RWORK( 1 )
+*     ..
+*     .. External Functions ..
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
+*     ..
 *     .. External Subroutines ..
-      EXTERNAL           SORMQL, STRSM, XERBLA
+      EXTERNAL           SLASCL, SORMQL, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -174,6 +185,15 @@
       IF( N.EQ.0 .OR. NRHS.EQ.0 .OR. M.EQ.0 )
      $   RETURN
 *
+*     Scale large right hand sides before applying Q: tau*w can
+*     overflow even when Q' * B and the solution are representable.
+*
+      BNRM = SLANGE( 'M', M, NRHS, B, LDB, RWORK )
+      BIGNUM = SLAMCH( 'Precision' ) / SLAMCH( 'Safe minimum' )
+      IF( BNRM.GT.BIGNUM )
+     $   CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
+*
 *     B := Q' * B
 *
       CALL SORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, LDB,
@@ -183,6 +203,10 @@
 *
       CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
+*
+      IF( BNRM.GT.BIGNUM )
+     $   CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, M, NRHS, B, LDB,
+     $                INFO )
 *
       RETURN
 *

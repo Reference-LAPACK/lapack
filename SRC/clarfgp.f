@@ -116,8 +116,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               TWO, ONE, ZERO
-      PARAMETER          ( TWO = 2.0E+0, ONE = 1.0E+0, ZERO = 0.0E+0 )
+      REAL               TWO, ONE, ZERO, HALF
+      PARAMETER          ( TWO = 2.0E+0, ONE = 1.0E+0, ZERO = 0.0E+0,
+     $                   HALF = 0.5E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
@@ -131,7 +132,7 @@
      $                   CLADIV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN
+      INTRINSIC          ABS, AIMAG, CMPLX, HUGE, REAL, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSCAL, CSSCAL
@@ -193,6 +194,18 @@
             XNORM = SCNRM2( N-1, X, INCX )
             ALPHA = CMPLX( ALPHR, ALPHI )
             BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         ELSE IF( ABS( BETA ).GT.HALF*HUGE( ZERO ) ) THEN
+*
+*           |ALPHA| <= |BETA|, so ALPHA+BETA can overflow only when
+*           |BETA| > HUGE/2; scale X down and recompute them.
+*
+            KNT = -1
+            CALL CSSCAL( N-1, SMLNUM, X, INCX )
+            ALPHI = ALPHI*SMLNUM
+            ALPHR = ALPHR*SMLNUM
+            XNORM = SCNRM2( N-1, X, INCX )
+            ALPHA = CMPLX( ALPHR, ALPHI )
+            BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -245,11 +258,14 @@
 *
          END IF
 *
-*        If BETA is subnormal, it may lose relative accuracy
+*        Undo the scaling.  If BETA is subnormal, it may lose relative
+*        accuracy
 *
          DO 20 J = 1, KNT
             BETA = BETA*SMLNUM
  20      CONTINUE
+         IF( KNT.LT.0 )
+     $      BETA = BETA*BIGNUM
          ALPHA = BETA
       END IF
 *

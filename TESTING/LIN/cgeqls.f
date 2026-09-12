@@ -29,7 +29,8 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by CGEQLF.
+*> computed by CGEQLF. Large right hand sides are scaled before
+*> applying Q, and the solution is returned at the original scale.
 *> \endverbatim
 *
 *  Arguments:
@@ -139,11 +140,19 @@
       COMPLEX            ONE
       PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
+*     .. Local Scalars ..
+      REAL               BIGNUM, BNRM
+      INTEGER            I, J
+*     ..
+*     .. External Functions ..
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
+*     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRSM, CUNMQL, XERBLA
+      EXTERNAL           CLASCL, CTRSM, CUNMQL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -174,6 +183,23 @@
       IF( N.EQ.0 .OR. NRHS.EQ.0 .OR. M.EQ.0 )
      $   RETURN
 *
+*     Scale large right hand sides before applying Q: tau*w can
+*     overflow even when Q' * B and the solution are representable.
+*     Use component magnitudes since ABS of a finite complex entry
+*     can exceed the overflow threshold.
+*
+      BNRM = 0.0E+0
+      DO 20 J = 1, NRHS
+         DO 10 I = 1, M
+            BNRM = MAX( BNRM, ABS( REAL( B( I, J ) ) ),
+     $                  ABS( AIMAG( B( I, J ) ) ) )
+   10    CONTINUE
+   20 CONTINUE
+      BIGNUM = SLAMCH( 'Precision' ) / SLAMCH( 'Safe minimum' )
+      IF( BNRM.GT.BIGNUM )
+     $   CALL CLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB,
+     $                INFO )
+*
 *     B := Q' * B
 *
       CALL CUNMQL( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
@@ -183,6 +209,10 @@
 *
       CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
+*
+      IF( BNRM.GT.BIGNUM )
+     $   CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, M, NRHS, B, LDB,
+     $                INFO )
 *
       RETURN
 *
