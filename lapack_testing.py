@@ -2089,8 +2089,14 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "--fail-if-empty",
         action="store_true",
-        help="exit with a nonzero status if no test results were analyzed, "
-        "or if any analyzed output file accounted for no tests at all",
+        help="exit with a nonzero status if no test results were analyzed "
+        "at all",
+    )
+    parser.add_argument(
+        "--fail-on-empty-output",
+        action="store_true",
+        help="exit with a nonzero status if any analyzed output file "
+        "accounted for no tests at all",
     )
     parser.add_argument(
         "--fail-on-unrecognized",
@@ -2109,10 +2115,10 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
 
     Returns:
         int: The process exit status. This is 2 for usage errors, 1 if a
-        condition requested via ``--fail-on-error``, ``--fail-if-empty``
-        or ``--fail-on-unrecognized`` occurred or a report requested via
-        ``--junit-xml`` or ``--markdown`` could not be written, and 0
-        otherwise.
+        condition requested via ``--fail-on-error``, ``--fail-if-empty``,
+        ``--fail-on-empty-output`` or ``--fail-on-unrecognized`` occurred
+        or a report requested via ``--junit-xml`` or ``--markdown``
+        could not be written, and 0 otherwise.
     """
     args = parse_args(argv)
     short_summary: bool = args.short or args.number
@@ -2477,7 +2483,9 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
         if markdown_error is not None:
             print("lapack_testing.py: {}".format(markdown_error), file=sys.stderr)
 
-    if args.fail_if_empty and (grand_total.runs == 0 or empty_outputs):
+    if args.fail_if_empty and grand_total.runs == 0:
+        return 1
+    if args.fail_on_empty_output and empty_outputs:
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1
