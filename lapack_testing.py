@@ -1313,13 +1313,20 @@ def junit_scoped_name(job: "Optional[str]", name: str, separator: str) -> str:
             the report is not scoped to a job.
         name: The name to prefix.
         separator: What to put between the two: ``"."`` for the dotted
-            class names, ``" / "`` for the free-text suite names.
+            class names, which also replaces any dot in ``job``,
+            ``" / "`` for the free-text suite names.
 
     Returns:
         The prefixed name, or the name unchanged when there is no job.
     """
     if not job:
         return name
+    if separator == ".":
+        # A dotted name is read as a path, one package or class per
+        # segment.  Job identifiers carry the runner image version
+        # ("ubuntu-26.04-gfortran-shared"), so left alone their dots
+        # would split one job across two levels of that hierarchy.
+        job = job.replace(".", "_")
     return "{}{}{}".format(job, separator, name)
 
 
