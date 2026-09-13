@@ -26,7 +26,8 @@
 *> invalid value.  A message is printed and execution stops.
 *>
 *> Users can replace the BLAS XERBLA by calling SET_BLAS_XERBLA
-*> with a replacement handler. See separate documentation.
+*> with a replacement handler, or LAPACK's SET_XERBLA. See separate
+*> documentation.
 *>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
