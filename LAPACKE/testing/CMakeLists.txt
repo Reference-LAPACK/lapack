@@ -61,12 +61,12 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
   lapack_nag_disable_constant_propagation(${_lin_sources_test})
 
   lapack_test_input(_test_input
-    ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in
-    OUTPUT ${_lapacke_test_out_dir}/${_prec}test.in)
+    "${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in"
+    OUTPUT "${_lapacke_test_out_dir}/${_prec}test.in")
   lapack_test_input(_test_input_noerr
-    ${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in
+    "${LAPACK_SOURCE_DIR}/TESTING/${_prec}test.in"
     DISABLE_ERROR_EXIT_TESTS
-    OUTPUT ${_lapacke_test_out_dir}/${_prec}test_noerr.in)
+    OUTPUT "${_lapacke_test_out_dir}/${_prec}test_noerr.in")
 
   if(BUILD_DEFAULT_API)
     add_library(xlintst${_prec}_lapacke_core OBJECT ${_lin_sources_test})
@@ -82,13 +82,14 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
           lapacke_test_wrappers_${_layer}_${_layout}
           ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
-        set(_output ${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out)
+        set(_output "${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out")
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-          set(_input ${_test_input})
+          set(_input "${_test_input}")
         else()
-          set(_input ${_test_input_noerr})
+          set(_input "${_test_input_noerr}")
         endif()
-        lapack_runtest_command(_test_command ${_driver} INPUT ${_input} OUTPUT ${_output})
+        lapack_runtest_command(_test_command ${_driver}
+          INPUT "${_input}" OUTPUT "${_output}")
         add_test(NAME LAPACKE-${_driver}_${_prec}test_in COMMAND ${_test_command})
       endforeach()
     endforeach()
@@ -119,13 +120,14 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
           lapacke_test_wrappers_${_layer}_${_layout}_64
           ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
-        set(_output ${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out)
+        set(_output "${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out")
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
-          set(_input ${_test_input})
+          set(_input "${_test_input}")
         else()
-          set(_input ${_test_input_noerr})
+          set(_input "${_test_input_noerr}")
         endif()
-        lapack_runtest_command(_test_command ${_driver} INPUT ${_input} OUTPUT ${_output})
+        lapack_runtest_command(_test_command ${_driver}
+          INPUT "${_input}" OUTPUT "${_output}")
         add_test(NAME LAPACKE-${_driver}_${_prec}test_in COMMAND ${_test_command})
       endforeach()
     endforeach()
