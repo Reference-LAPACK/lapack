@@ -15,11 +15,9 @@ function(_add_blas_test name src test_input test_output)
   endif()
   add_test(NAME BLAS-${name} COMMAND ${test_command})
 
-  # Disable constant propagation for NAG compiler to avoid issues with
-  # special values (Inf, NaN) returned by SXVALS and DXVALS.
-  if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
-    target_compile_options(${name} PRIVATE "-Onopropagate")
-  endif()
+  # The special values (Inf, NaN) that SXVALS and DXVALS return do not
+  # survive nagfor folding the expressions that make them.
+  lapack_nag_disable_constant_propagation_target(${name})
 endfunction()
 
 function(add_blas_test name source)

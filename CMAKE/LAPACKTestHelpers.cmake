@@ -27,23 +27,42 @@ if(NOT DEFINED LAPACK_SKIP_ERROR_EXIT_TESTS)
   endif()
 endif()
 
-# nagfor folds the SQRT( -ONE ) with which the ?errcxx drivers manufacture
-# a NaN and rejects it ("Invalid operand for intrinsic SQRT ... Errors found
-# during constant propagation"), so those drivers are compiled with constant
-# propagation disabled.  Call this with every source list such a driver is
-# built from: the generated _64 and _TEST copies need it as much as the
-# originals.
+# nagfor folds expressions that deliberately manufacture an Inf or a NaN
+# and then rejects the result ("Invalid operand for intrinsic SQRT ... Errors
+# found during constant propagation"), so the test drivers that do that are
+# built with constant propagation disabled.  The compiler id and the flag it
+# takes live here only.
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+  set(LAPACK_NO_CONSTANT_PROPAGATION_FLAG "-Onopropagate")
+else()
+  set(LAPACK_NO_CONSTANT_PROPAGATION_FLAG "")
+endif()
+
+# Disable it for the ?errcxx drivers among ARGN, which manufacture their NaN
+# with SQRT( -ONE ).  Call this with every source list such a driver is built
+# from: the generated _64 and _TEST copies need it as much as the originals.
 function(lapack_nag_disable_constant_propagation)
-  if(NOT CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
+  if(NOT LAPACK_NO_CONSTANT_PROPAGATION_FLAG)
     return()
   endif()
   foreach(source IN LISTS ARGN)
     get_filename_component(name "${source}" NAME)
     if(name MATCHES "^[scdz]errcxx(_[A-Za-z0-9]+)*\\.f$")
       set_source_files_properties("${source}"
-        PROPERTIES COMPILE_OPTIONS "-Onopropagate")
+        PROPERTIES COMPILE_OPTIONS "${LAPACK_NO_CONSTANT_PROPAGATION_FLAG}")
     endif()
   endforeach()
+endfunction()
+
+# The same for a whole target: the BLAS drivers take the special values they
+# test from SXVALS and DXVALS, so there is no one source file to pick out by
+# name here.
+function(lapack_nag_disable_constant_propagation_target target)
+  if(NOT LAPACK_NO_CONSTANT_PROPAGATION_FLAG)
+    return()
+  endif()
+  target_compile_options(${target}
+    PRIVATE "${LAPACK_NO_CONSTANT_PROPAGATION_FLAG}")
 endfunction()
 
 # Set ${out_var} to the test input to feed to a test driver.  Every driver
