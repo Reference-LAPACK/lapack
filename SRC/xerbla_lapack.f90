@@ -43,6 +43,9 @@
 !>     ALREADY_CB => GET_LAPACK_XERBLA()
 !>   END PROGRAM HELLO
 !> \endverbatim
+!>
+!> Finally, there is a SET_XERBLA in LAPACK which will override
+!> both handlers.
 !
 !  Arguments:
 !  ==========
@@ -99,4 +102,13 @@ function get_lapack_xerbla() result(cb_ret)
   implicit none
   procedure(xerbla_interface), pointer :: cb_ret
   cb_ret => active_callback
+end
+
+subroutine set_xerbla(cb)
+  implicit none
+  procedure() :: cb
+  external set_lapack_xerbla
+  external set_blas_xerbla
+  call set_blas_xerbla(cb)
+  call set_lapack_xerbla(cb)
 end
