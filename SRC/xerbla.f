@@ -34,7 +34,7 @@
 *> invalid value.  A message is printed and execution stops.
 *>
 *> Users can replace the LAPACK XERBLA by calling SET_LAPACK_XERBLA
-*> with a replacement handler. See separate documentation.
+*> with a replacement handler, or SET_XERBLA. See separate documentation.
 *>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
