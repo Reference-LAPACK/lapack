@@ -3,7 +3,7 @@ SGS               Data for the Real Nonsymmetric Schur Form Driver
 2 6 10 12 20 30   Matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 SGS 26            Test all 26 matrix types
 SGV               Data for the Real Nonsymmetric Eigenvalue Problem Driver
@@ -11,20 +11,20 @@ SGV               Data for the Real Nonsymmetric Eigenvalue Problem Driver
 2 6 8 10 15 20    Matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold value
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 SGV 26            Test all 26 matrix types
 SGX               Data for the Real Nonsymmetric Schur Form Expert Driver
 2                 Largest matrix dimension (0 <= NSIZE <= 5)
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 SGX               Data for the Real Nonsymmetric Schur Form Expert Driver
 0                 Largest matrix dimension (0 <= NSIZE <= 5)
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
    4
    2
@@ -53,13 +53,13 @@ SXV               Data for the Real Nonsymmetric Eigenvalue Expert Driver
 5                 Largest matrix dimension
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 SXV               Data for the Real Nonsymmetric Eigenvalue Expert Driver
 0                 Largest matrix dimension
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
    4
    8.0000E+00   4.0000E+00  -1.3000E+01   4.0000E+00   Input matrix A

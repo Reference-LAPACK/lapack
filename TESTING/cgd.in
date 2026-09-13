@@ -3,7 +3,7 @@ CGV               Data for the Complex Nonsymmetric Eigenvalue Driver
 2 6 8 10 12 20    Matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 CGV 26            Test all 26 matrix types
 CGS               Data for the Complex Nonsymmetric Schur Form Driver
@@ -11,26 +11,26 @@ CGS               Data for the Complex Nonsymmetric Schur Form Driver
 2 6 10 12 20 30   Matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 CGS 26            Test all 26 matrix types
 CGX               Data for the Complex Nonsymmetric Schur Form Expert Driver
 2                 Largest matrix dimension (0 <= NSIZE <= 5)
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 CXV               Data for the Complex Nonsymmetric Eigenvalue Expert Driver
 6                 Number of matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
 CGX               Data for the Complex Nonsymmetric Schur Form Expert Driver
 0                 Number of matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
   4
   2
@@ -107,7 +107,7 @@ CXV               Data for the Complex Nonsymmetric Eigenvalue Expert Driver
 0                 Number of matrix dimensions
 1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
 10                Threshold for test ratios
-.TRUE.            Put T to test the error exits
+T                 Put T to test the error exits
 0                 Code to interpret the seed
   4
 ( 2.0000E+00, 6.0000E+00)

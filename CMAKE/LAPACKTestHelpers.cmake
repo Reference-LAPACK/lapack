@@ -94,8 +94,8 @@ function(lapack_test_input out_var input)
     set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${input}")
     file(READ "${input}" content)
     string(REGEX REPLACE
-      "\n[ \t]*(T|\\.TRUE\\.)([ \t]+[^\n]*(Put T to test the error exits|LOGICAL FLAG, T TO TEST ERROR EXITS))"
-      "\nF\\2" disabled "${content}")
+      "\n[ \t]*T([ \t]+[^\n]*(Put T to test the error exits|LOGICAL FLAG, T TO TEST ERROR EXITS))"
+      "\nF\\1" disabled "${content}")
   endif()
 
   # Only a copy that differs is worth having.  Everywhere else -- a build
