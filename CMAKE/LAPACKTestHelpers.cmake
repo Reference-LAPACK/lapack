@@ -3,14 +3,28 @@
 # stops.  A shared library on Windows always calls the XERBLA it was linked
 # with, so the first deliberate illegal argument stops the driver before any
 # test runs.  CBLAS skips its xerbla tests for the same reason, see
-# CBLAS/testing.
-if(WIN32 AND BUILD_SHARED_LIBS)
-  set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
-  message(STATUS
-    "Disabling the error-exit tests: the test suite's XERBLA cannot replace "
-    "the one in a shared library on Windows")
-else()
-  set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
+# CBLAS/testing.  macOS binds a shared library with a two-level namespace by
+# default, which keeps the override from taking effect in the same way;
+# USE_FLAT_NAMESPACE restores it, see the top-level CMakeLists.txt.
+#
+# Recomputed on every configure, so that toggling BUILD_SHARED_LIBS in an
+# existing build tree is picked up, but left alone when it was asked for on
+# the command line: -D puts it in the cache, which defines it here.
+if(NOT DEFINED LAPACK_SKIP_ERROR_EXIT_TESTS)
+  if(WIN32 AND BUILD_SHARED_LIBS)
+    set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
+    message(STATUS
+      "Disabling the error-exit tests: the test suite's XERBLA cannot replace "
+      "the one in a shared library on Windows")
+  elseif(APPLE AND BUILD_SHARED_LIBS AND NOT USE_FLAT_NAMESPACE)
+    set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
+    message(STATUS
+      "Disabling the error-exit tests: the test suite's XERBLA cannot replace "
+      "the one in a shared library bound with the default two-level namespace; "
+      "configure with -D USE_FLAT_NAMESPACE=ON to run them")
+  else()
+    set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
+  endif()
 endif()
 
 # nagfor folds the SQRT( -ONE ) with which the ?errcxx drivers manufacture

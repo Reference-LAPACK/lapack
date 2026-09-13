@@ -165,12 +165,6 @@ if(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flat_namespace")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-flat_namespace")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-flat_namespace")
-  else()
-    if(BUILD_SHARED_LIBS AND BUILD_TESTING)
-      message(WARNING
-        "LAPACK test suite might fail with shared libraries and the default two-level namespace. "
-        "Disable shared libraries or enable flat namespace for symbol resolution via -DUSE_FLAT_NAMESPACE=ON.")
-    endif()
   endif()
 endif()
 
