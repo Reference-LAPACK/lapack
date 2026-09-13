@@ -8,14 +8,14 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The LAPACKE (``xlintst?_lapacke_*``), BLAS (``xblat[123]?``) and CBLAS
-(``x?cblat[123]``) test drivers are analyzed too, from their own testing
-directories, and are reported in their own summary sections.  The
-LAPACKE drivers are the linear equation tests rebuilt with the routine
-calls routed through LAPACKE, one driver per precision and (API layer,
-matrix layout) flavor; their output uses the classic LAPACK summary
-format.  The BLAS and CBLAS drivers report their test counts in
-lines of the form::
+The LAPACKE (``xlintst?_{work,high}_{cm,rm}``), BLAS (``xblat[123]?``)
+and CBLAS (``x?cblat[123]``) test drivers are analyzed too, from their
+own testing directories, and are reported in their own summary
+sections.  The LAPACKE drivers are the linear equation tests rebuilt
+with the routine calls routed through LAPACKE, one driver per precision
+and (API layer, matrix layout) flavor; their output uses the classic
+LAPACK summary format.  The BLAS and CBLAS drivers report their test
+counts in lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
      SGEMV      ERROR-EXIT TESTS:           6 RUN,        0 FAILED
@@ -547,7 +547,7 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         source_input=None
                         if error_exits
                         else "{}test.in".format(letter),
-                        executable="xlintst{}_lapacke_{}_{}".format(
+                        executable="xlintst{}_{}_{}".format(
                             letter, layer, layout
                         ),
                         parser=PARSER_STANDARD,
