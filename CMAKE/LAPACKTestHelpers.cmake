@@ -45,24 +45,38 @@ endfunction()
 function(lapack_test_input out_var input)
   cmake_parse_arguments(ARG "DISABLE_ERROR_EXIT_TESTS" "OUTPUT" "" ${ARGN})
 
-  if(NOT EXISTS "${input}" OR
-      NOT (LAPACK_SKIP_ERROR_EXIT_TESTS OR ARG_DISABLE_ERROR_EXIT_TESTS))
-    set(${out_var} "${input}" PARENT_SCOPE)
-    return()
-  endif()
-
-  file(READ "${input}" content)
-  string(REGEX REPLACE
-    "\n[ \t]*(T|\\.TRUE\\.)([ \t]+[^\n]*(Put T to test the error exits|LOGICAL FLAG, T TO TEST ERROR EXITS))"
-    "\nF\\2" content "${content}")
-
   set(rewritten "${ARG_OUTPUT}")
   if(NOT rewritten)
     get_filename_component(name "${input}" NAME)
     set(rewritten "${CMAKE_CURRENT_BINARY_DIR}/${name}")
   endif()
-  file(WRITE "${rewritten}" "${content}")
-  set(${out_var} "${rewritten}" PARENT_SCOPE)
+
+  set(content "")
+  set(disabled "")
+  if(EXISTS "${input}" AND
+      (LAPACK_SKIP_ERROR_EXIT_TESTS OR ARG_DISABLE_ERROR_EXIT_TESTS))
+    # The rewrite happens at configure time, so ask CMake to re-run when
+    # ${input} changes; otherwise the build tree goes on serving a copy
+    # made from a version of it that no longer exists.
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${input}")
+    file(READ "${input}" content)
+    string(REGEX REPLACE
+      "\n[ \t]*(T|\\.TRUE\\.)([ \t]+[^\n]*(Put T to test the error exits|LOGICAL FLAG, T TO TEST ERROR EXITS))"
+      "\nF\\2" disabled "${content}")
+  endif()
+
+  # Only a copy that differs is worth having.  Everywhere else -- a build
+  # that runs the error exits, an input with no flag to turn off -- uses
+  # ${input} itself, and any copy an earlier configure left behind goes:
+  # lapack_testing.py --run prefers the copy in the build tree, so a stale
+  # one would feed the drivers what ctest never sees.
+  if(disabled STREQUAL content)
+    file(REMOVE "${rewritten}")
+    set(${out_var} "${input}" PARENT_SCOPE)
+  else()
+    file(WRITE "${rewritten}" "${disabled}")
+    set(${out_var} "${rewritten}" PARENT_SCOPE)
+  endif()
 endfunction()
 
 # Build the ctest COMMAND that runs ${target}, optionally reading standard
