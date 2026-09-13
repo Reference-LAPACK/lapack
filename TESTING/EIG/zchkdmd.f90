@@ -147,7 +147,7 @@
       ! ... Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
-          STOP
+          STOP 1
       END IF
 !.............
       ! The seed inside the LLOOP so that each pass can be reproduced easily.
@@ -355,7 +355,7 @@
            WRITE(*,*) 'The input parameters were ',      &
            SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,          &
            M, N, LDX, LDY, NRNK, TOL, LDZ, LDAU, LDW, LDS
-           STOP
+           STOP 1
       END IF
 
       LZWORK = INT(ZDUMMY(LWMINOPT))
@@ -379,7 +379,7 @@
            WRITE(*,*) 'The input parameters were ',&
            SCALE, JOBZ, RESIDS, JOBREF, WHTSVD, &
            M, N, LDX, LDY, NRNK, TOL
-           STOP
+           STOP 1
       END IF
 
       SINGVX(1:N) = WORK(1:N)
@@ -535,7 +535,7 @@
              WRITE(*,*) 'The input parameters were ',&
              SCALE, JOBZ, RESIDS, WANTQ, WANTR, WHTSVD, &
              M, N, LDX, LDY, NRNK, TOL
-             STOP
+             STOP 1
       END IF
       SINGVQX(1:N) = WORK(1:N)
 
@@ -606,7 +606,7 @@
               NFAIL_REZQ = NFAIL_REZQ + 1
               WRITE(*,*) '................ ZGEDMDQ FAILED!', &
                   'Check the code for implementation errors.'
-              STOP
+              STOP 1
           END IF
 
       END IF

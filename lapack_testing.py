@@ -8,14 +8,14 @@ summary table of the number of tests run and the number of failures per
 precision (s/d/c/z).  With ``--run`` it executes the testing drivers
 first and then analyzes their output.
 
-The LAPACKE (``xlintst?_lapacke_*``), BLAS (``xblat[123]?``) and CBLAS
-(``x?cblat[123]``) test drivers are analyzed too, from their own testing
-directories, and are reported in their own summary sections.  The
-LAPACKE drivers are the linear equation tests rebuilt with the routine
-calls routed through LAPACKE, one driver per precision and (API layer,
-matrix layout) flavor; their output uses the classic LAPACK summary
-format.  The BLAS and CBLAS drivers report their test counts in
-lines of the form::
+The LAPACKE (``xlintst?_{work,high}_{cm,rm}``), BLAS (``xblat[123]?``)
+and CBLAS (``x?cblat[123]``) test drivers are analyzed too, from their
+own testing directories, and are reported in their own summary
+sections.  The LAPACKE drivers are the linear equation tests rebuilt
+with the routine calls routed through LAPACKE, one driver per precision
+and (API layer, matrix layout) flavor; their output uses the classic
+LAPACK summary format.  The BLAS and CBLAS drivers report their test
+counts in lines of the form::
 
      SGEMV      COMPUTATIONAL TESTS:     3456 RUN,        0 FAILED
      SGEMV      ERROR-EXIT TESTS:           6 RUN,        0 FAILED
@@ -48,6 +48,11 @@ Examples:
     ./lapack_testing.py -s --junit-xml results.xml
         Print only the summary table and also write a JUnit XML report
         of the analyzed output files, e.g. for GitLab CI test reports.
+
+    ./lapack_testing.py --junit-xml results.xml --junit-job linux-gfortran
+        Write a JUnit XML report whose suite and class names carry the
+        name of the job that ran the tests, so that the reports of
+        several jobs stay apart where they are collected.
 
     ./lapack_testing.py -s --markdown summary.md
         Print only the summary table and also write a GitHub-flavored
@@ -542,7 +547,7 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         source_input=None
                         if error_exits
                         else "{}test.in".format(letter),
-                        executable="xlintst{}_lapacke_{}_{}".format(
+                        executable="xlintst{}_{}_{}".format(
                             letter, layer, layout
                         ),
                         parser=PARSER_STANDARD,
@@ -1294,7 +1299,38 @@ def output_mtime(path: Path) -> "Optional[float]":
         return None
 
 
-def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
+def junit_scoped_name(job: "Optional[str]", name: str, separator: str) -> str:
+    """Prefix a JUnit name with the identifier of the job that ran it.
+
+    The same test suite is run by many CI jobs, and a report collector
+    that gathers all of them keys a test case on its suite, class and
+    test name alone.  Without the job in those names the reports of the
+    jobs collapse onto one another; with it they stay apart, and a
+    failure names the job it came from.
+
+    Args:
+        job: The job identifier passed to ``--junit-job``, or None when
+            the report is not scoped to a job.
+        name: The name to prefix.
+        separator: What to put between the two: ``"."`` for the dotted
+            class names, which also replaces any dot in ``job``,
+            ``" / "`` for the free-text suite names.
+
+    Returns:
+        The prefixed name, or the name unchanged when there is no job.
+    """
+    if not job:
+        return name
+    if separator == ".":
+        # A dotted name is read as a path, one package or class per
+        # segment.  Job identifiers carry the runner image version
+        # ("ubuntu-26.04-gfortran-shared"), so left alone their dots
+        # would split one job across two levels of that hierarchy.
+        job = job.replace(".", "_")
+    return "{}{}{}".format(job, separator, name)
+
+
+def junit_testcase(outcome: CaseOutcome, job: "Optional[str]" = None) -> "ET.Element":
     """Build the JUnit ``<testcase>`` element of one analyzed test case.
 
     The element carries at most one status child: an ``<error>`` when
@@ -1309,6 +1345,7 @@ def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
 
     Args:
         outcome: The analysis outcome of the test case.
+        job: The job identifier to prefix to the class name, or None.
 
     Returns:
         The ``<testcase>`` element.
@@ -1317,7 +1354,11 @@ def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
     element = ET.Element(
         "testcase",
         {
-            "classname": "{}{}.{}".format(case.library, outcome.suffix, case.family),
+            "classname": junit_scoped_name(
+                job,
+                "{}{}.{}".format(case.library, outcome.suffix, case.family),
+                ".",
+            ),
             "name": "{} ({} {})".format(
                 case.suffixed_output(outcome.suffix),
                 PRECISION_NAMES[case.precision],
@@ -1372,7 +1413,9 @@ def junit_testcase(outcome: CaseOutcome) -> "ET.Element":
 
 
 def build_junit_tree(
-    outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+    outcomes: "Sequence[CaseOutcome]",
+    unrecognized: "Sequence[str]",
+    job: "Optional[str]" = None,
 ) -> "ET.ElementTree":
     """Build the JUnit XML document for the analyzed test cases.
 
@@ -1398,9 +1441,14 @@ def build_junit_tree(
     output file behind falls back to the time the report was built, so
     that the attribute is always present.
 
+    A job identifier prefixes every suite and class name, so that the
+    reports of the CI jobs that all run this one test suite do not
+    collapse onto one another where they are collected.
+
     Args:
         outcomes: The analysis outcomes, in analysis order.
         unrecognized: The names of the unrecognized ``.out`` files.
+        job: The job identifier to prefix to the names, or None.
 
     Returns:
         The document; its root is a ``<testsuites>`` element.
@@ -1424,7 +1472,7 @@ def build_junit_tree(
             root,
             "testsuite",
             {
-                "name": section_title(library, [suffix]),
+                "name": junit_scoped_name(job, section_title(library, [suffix]), " / "),
                 "timestamp": junit_timestamp(min(starts) if starts else report_time),
             },
         )
@@ -1435,7 +1483,7 @@ def build_junit_tree(
         suite_time = 0.0
         timed = False
         for outcome in suite_outcomes:
-            element = junit_testcase(outcome)
+            element = junit_testcase(outcome, job)
             suite.append(element)
             if element.find("failure") is not None:
                 failures += 1
@@ -1475,7 +1523,7 @@ def build_junit_tree(
             root,
             "testsuite",
             {
-                "name": "lapack_testing.py",
+                "name": junit_scoped_name(job, "lapack_testing.py", " / "),
                 "timestamp": junit_timestamp(report_time),
                 "tests": "1",
                 "failures": "1",
@@ -1489,7 +1537,7 @@ def build_junit_tree(
             suite,
             "testcase",
             {
-                "classname": "lapack_testing",
+                "classname": junit_scoped_name(job, "lapack_testing", "."),
                 "name": "unrecognized .out files",
                 "time": "0.000",
             },
@@ -1511,7 +1559,10 @@ def build_junit_tree(
 
 
 def write_junit_xml(
-    path: Path, outcomes: "Sequence[CaseOutcome]", unrecognized: "Sequence[str]"
+    path: Path,
+    outcomes: "Sequence[CaseOutcome]",
+    unrecognized: "Sequence[str]",
+    job: "Optional[str]" = None,
 ) -> "Optional[str]":
     """Write the JUnit XML report requested via ``--junit-xml``.
 
@@ -1524,6 +1575,7 @@ def write_junit_xml(
             are created.
         outcomes: The analysis outcomes, in analysis order.
         unrecognized: The names of the unrecognized ``.out`` files.
+        job: The job identifier to prefix to the names, or None.
 
     Returns:
         An error message if the report could not be written, otherwise
@@ -1532,7 +1584,7 @@ def write_junit_xml(
     # Path.with_name below would raise ValueError for such a path.
     if not path.name:
         return "cannot write {}: the path has no file name".format(path)
-    tree = build_junit_tree(outcomes, unrecognized)
+    tree = build_junit_tree(outcomes, unrecognized, job)
     # ET.indent is Python 3.9+; without it the report is one long line,
     # which every consumer accepts just the same.
     indent = getattr(ET, "indent", None)
@@ -2015,6 +2067,16 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
         "reports; written regardless of the display and --fail-* options",
     )
     parser.add_argument(
+        "--junit-job",
+        metavar="NAME",
+        default=None,
+        help="identifier of the job that produced the results, e.g. the "
+        "name or the Codecov flag of a CI job; it is prefixed to the suite "
+        "and class names of the --junit-xml report, so that the reports of "
+        "the jobs that all run this one test suite stay apart where they "
+        "are collected",
+    )
+    parser.add_argument(
         "--markdown",
         metavar="PATH",
         default=None,
@@ -2034,7 +2096,14 @@ def parse_args(argv: "Optional[Sequence[str]]" = None) -> argparse.Namespace:
     parser.add_argument(
         "--fail-if-empty",
         action="store_true",
-        help="exit with a nonzero status if no test results were analyzed",
+        help="exit with a nonzero status if no test results were analyzed "
+        "at all",
+    )
+    parser.add_argument(
+        "--fail-on-empty-output",
+        action="store_true",
+        help="exit with a nonzero status if any analyzed output file "
+        "accounted for no tests at all",
     )
     parser.add_argument(
         "--fail-on-unrecognized",
@@ -2053,10 +2122,10 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
 
     Returns:
         int: The process exit status. This is 2 for usage errors, 1 if a
-        condition requested via ``--fail-on-error``, ``--fail-if-empty``
-        or ``--fail-on-unrecognized`` occurred or a report requested via
-        ``--junit-xml`` or ``--markdown`` could not be written, and 0
-        otherwise.
+        condition requested via ``--fail-on-error``, ``--fail-if-empty``,
+        ``--fail-on-empty-output`` or ``--fail-on-unrecognized`` occurred
+        or a report requested via ``--junit-xml`` or ``--markdown``
+        could not be written, and 0 otherwise.
     """
     args = parse_args(argv)
     short_summary: bool = args.short or args.number
@@ -2364,6 +2433,28 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             file=sys.stderr,
         )
 
+    # A file that parses but accounts for no tests at all means a driver
+    # wrote its header and then ran nothing, which is what happens when
+    # its input file stops lining up with what it reads.  Neither of the
+    # other checks notices: such a driver exits with status 0, and its
+    # sibling files keep the grand total nonzero.
+    empty_outputs = [
+        outcome
+        for outcome in outcomes
+        if outcome.report is not None and outcome.report.counts.runs == 0
+    ]
+    if empty_outputs:
+        print(
+            "lapack_testing.py: {} output file(s) accounted for no tests at "
+            "all:".format(len(empty_outputs)),
+            file=sys.stderr,
+        )
+        for outcome in empty_outputs:
+            print(
+                "  {}".format(outcome.case.suffixed_output(outcome.suffix)),
+                file=sys.stderr,
+            )
+
     unrecognized = find_unrecognized_outputs(directories)
     if unrecognized:
         print(
@@ -2380,7 +2471,9 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
 
     junit_error: "Optional[str]" = None
     if args.junit_xml is not None:
-        junit_error = write_junit_xml(Path(args.junit_xml), outcomes, unrecognized)
+        junit_error = write_junit_xml(
+            Path(args.junit_xml), outcomes, unrecognized, args.junit_job
+        )
         if junit_error is not None:
             print("lapack_testing.py: {}".format(junit_error), file=sys.stderr)
 
@@ -2398,6 +2491,8 @@ def main(argv: "Optional[Sequence[str]]" = None) -> int:
             print("lapack_testing.py: {}".format(markdown_error), file=sys.stderr)
 
     if args.fail_if_empty and grand_total.runs == 0:
+        return 1
+    if args.fail_on_empty_output and empty_outputs:
         return 1
     if args.fail_on_unrecognized and unrecognized:
         return 1

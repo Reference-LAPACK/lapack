@@ -156,7 +156,7 @@
       ! ... Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
-          STOP
+          STOP 1
       END IF
 !.............
       ! The seed inside the LLOOP so that each pass can be reproduced easily.
@@ -660,7 +660,7 @@
                   NFAIL_REZQ = NFAIL_REZQ + 1
                   WRITE(*,*) '................ DGEDMDQ FAILED!', &
                       'Check the code for implementation errors.'
-                  STOP
+                  STOP 1
               END IF
 
           END IF

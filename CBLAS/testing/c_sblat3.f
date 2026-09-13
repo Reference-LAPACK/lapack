@@ -201,7 +201,7 @@
      $      GO TO 50
    40 CONTINUE
       WRITE( NOUT, FMT = 9990 )SNAMET
-      STOP
+      STOP 1
    50 LTEST( I ) = LTESTT
       GO TO 30
 *
@@ -245,7 +245,7 @@
       SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
-         STOP
+         STOP 1
       END IF
       TRANSB = 'T'
       CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
@@ -254,7 +254,7 @@
       SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
-         STOP
+         STOP 1
       END IF
       DO 120 J = 1, N
          AB( J, NMAX + 1 ) = REAL( N - J + 1 )
@@ -272,7 +272,7 @@
       SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
-         STOP
+         STOP 1
       END IF
       TRANSB = 'T'
       CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
@@ -281,7 +281,7 @@
       SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
-         STOP
+         STOP 1
       END IF
 *
 *     Test each subroutine in turn.
