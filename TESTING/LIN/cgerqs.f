@@ -141,7 +141,7 @@
      $                   CONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CTRSM, CUNMRQ, XERBLA
+      EXTERNAL           CLASET, CTRSM, CUNMRQ, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -166,7 +166,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGERQS', -INFO )
+         CALL XER_REPLACE( 'CGERQS', -INFO )
          RETURN
       END IF
 *

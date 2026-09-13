@@ -549,8 +549,8 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASUM, XERBLA, ZGET23, ZLASET, ZLATME, ZLATMR,
-     $                   ZLATMS
+      EXTERNAL           DLASUM, ZGET23, ZLASET, ZLATME, ZLATMR,
+     $                   XER_REPLACE, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX, MIN, SQRT
@@ -612,7 +612,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVVX', -INFO )
+         CALL XER_REPLACE( 'ZDRVVX', -INFO )
          RETURN
       END IF
 *

@@ -402,7 +402,8 @@
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
      $                   SLATMS, SSBGV, SSBGVD, SSBGVX, SSGT01, SSPGV,
-     $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX, XERBLA
+     $                   XER_REPLACE,
+     $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -448,7 +449,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVSG', -INFO )
+         CALL XER_REPLACE( 'SDRVSG', -INFO )
          RETURN
       END IF
 *

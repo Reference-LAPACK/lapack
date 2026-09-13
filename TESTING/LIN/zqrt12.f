@@ -126,8 +126,8 @@
       EXTERNAL           DASUM, DLAMCH, DNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DBDSQR, DLASCL, XERBLA, ZGEBD2, ZLASCL,
-     $                   ZLASET
+      EXTERNAL           DAXPY, DBDSQR, DLASCL, ZGEBD2, ZLASCL,
+     $                   XER_REPLACE, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -139,7 +139,7 @@
 *     Test that enough workspace is supplied
 *
       IF( LWORK.LT.M*N+2*MIN( M, N )+MAX( M, N ) ) THEN
-         CALL XERBLA( 'ZQRT12', 7 )
+         CALL XER_REPLACE( 'ZQRT12', 7 )
          RETURN
       END IF
 *

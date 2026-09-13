@@ -421,7 +421,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGEJSV, SGESDD, SGESVD,
      $                   SGESVDQ, SGESVDX, SGESVJ, SLACPY, SLASET,
-     $                   SLATMS, SBDT05, SORT01, SORT03, XERBLA
+     $                   SLATMS, SBDT05, SORT01, SORT03, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, INT, MAX, MIN
@@ -485,7 +485,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVBD', -INFO )
+         CALL XER_REPLACE( 'SDRVBD', -INFO )
          RETURN
       END IF
 *

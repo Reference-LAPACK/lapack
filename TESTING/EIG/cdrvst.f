@@ -395,7 +395,7 @@
       EXTERNAL           ALASVM, CHBEV, CHBEVD, CHBEVX, CHEEV, CHEEVD,
      $                   CHEEVR, CHEEVX, CHET21, CHET22, CHPEV, CHPEVD,
      $                   CHPEVX, CLACPY, CLASET, CLATMR, CLATMS, SLAFTS,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, REAL, SQRT
@@ -439,7 +439,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVST', -INFO )
+         CALL XER_REPLACE( 'CDRVST', -INFO )
          RETURN
       END IF
 *

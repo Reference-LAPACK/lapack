@@ -452,7 +452,8 @@
       EXTERNAL           ILAENV, DLAMCH, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, XERBLA, ZGET52, ZGGEV3, ZLACPY, ZLARFG,
+      EXTERNAL           ALASVM, ZGET52, ZGGEV3, ZLACPY, ZLARFG,
+     $                   XER_REPLACE,
      $                   ZLASET, ZLATM4, ZUNM2R, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -534,7 +535,7 @@
      $   INFO = -23
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRGEV3', -INFO )
+         CALL XER_REPLACE( 'ZDRGEV3', -INFO )
          RETURN
       END IF
 *

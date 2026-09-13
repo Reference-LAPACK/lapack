@@ -118,7 +118,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SORMRZ, XERBLA
+      EXTERNAL           SLASET, SORMRZ, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -128,7 +128,7 @@
       SRZT02 = ZERO
 *
       IF( LWORK.LT.N*N+N ) THEN
-         CALL XERBLA( 'SRZT02', 7 )
+         CALL XER_REPLACE( 'SRZT02', 7 )
          RETURN
       END IF
 *
