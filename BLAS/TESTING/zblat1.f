@@ -220,7 +220,7 @@
       SZERO = 0D0
       RTMIN = SQRT(TINY(SONE))
       RTMAX = SQRT(HUGE(SONE))
-      DO 40 K = 1, 5
+      DO 40 K = 1, 8
          N = 8 + K
          IF (K.EQ.1) THEN
 *           A zero and B below the window, with both parts nonzero so
@@ -242,10 +242,26 @@
 *           A and B by the same factor rather than one of its own.
             CA0 = DCMPLX(RTMAX,SZERO)
             CB0 = DCMPLX(RTMAX,SZERO)
-         ELSE
+         ELSE IF (K.EQ.5) THEN
 *           The same, below the window.
             CA0 = DCMPLX(RTMIN*0.25D0,SZERO)
             CB0 = DCMPLX(RTMIN*0.25D0,SZERO)
+         ELSE IF (K.EQ.6) THEN
+*           B above the window with both parts set, so the routine
+*           scales, and A small enough against it that the scaled
+*           algorithm takes its F2 < H2*SAFMIN arm as well.
+            CA0 = DCMPLX(SONE,SZERO)
+            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+         ELSE IF (K.EQ.7) THEN
+*           The same, with A large enough that SQRT(F2*H2) is no longer
+*           known to stay in range, so S is formed from R/H2 instead.
+            CA0 = DCMPLX(1.5D0,SZERO)
+            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+         ELSE
+*           Both inside the window, A just above its lower edge, where
+*           the unscaled algorithm forms S from R/H2 for that reason.
+            CA0 = DCMPLX(RTMIN*2D0,SZERO)
+            CB0 = DCMPLX(SONE,SONE)
          END IF
          CSA = CA0
          CSB = CB0
@@ -751,16 +767,19 @@
       IF (ICASE.EQ.13) THEN
          SC = 0.6D0
          SS = 0.8D0
-         DO 100 KI = 1, 3
+         DO 100 KI = 1, 4
             IF (KI.EQ.1) THEN
                LINCX = 1
                LINCY = 1
             ELSE IF (KI.EQ.2) THEN
                LINCX = 2
                LINCY = 1
-            ELSE
+            ELSE IF (KI.EQ.3) THEN
                LINCX = -2
                LINCY = 1
+            ELSE
+               LINCX = -1
+               LINCY = -2
             END IF
             N = 3
             DO 80 I = 1, 7
@@ -783,6 +802,19 @@
             CALL CTEST(7,CX,CTX,CTX,SFAC)
             CALL CTEST(7,CY,CTY,CTY,SFAC)
   100    CONTINUE
+*
+*        N = 0 must leave both vectors untouched.
+*
+         N = 0
+         DO 110 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            CTX(I) = CX1(I)
+            CTY(I) = CY1(I)
+  110    CONTINUE
+         CALL ZDROT(N,CX,1,CY,1,SC,SS)
+         CALL CTEST(7,CX,CTX,CTX,SFAC)
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
          RETURN
       END IF
       DO 60 KI = 1, 4
