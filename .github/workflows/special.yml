@@ -337,8 +337,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       timeout-minutes: 300  # Leave 1 hour for the rest of the steps
       run: |
-        ctest --output-on-failure --schedule-random -T memcheck --timeout 7200 --parallel > memcheck.out 2>&1 || true
-        cat memcheck.out
+        (ctest --output-on-failure --schedule-random -T memcheck --timeout 7200 --parallel 2>&1 | tee memcheck.out) || true
 
     - name: Convert memory check results to JUnit XML
       if: ${{ !cancelled() }}
