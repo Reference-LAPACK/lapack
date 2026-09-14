@@ -287,10 +287,13 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       INTEGER           I, IX, LEN, NP1
+      INTEGER           NLONG
+      PARAMETER         (NLONG=16)
+      DOUBLE PRECISION  SLSUM, SLSIZE(1)
 *     .. Local Arrays ..
       DOUBLE PRECISION  DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
      +                  DVR(8), SA(10), STEMP(1), STRUE(8), SX(8),
-     +                  SXR(15)
+     +                  SXR(15), SXL(NLONG), STL(NLONG)
       INTEGER           ITRUE2(5), ITRUEC(5)
 *     .. External Functions ..
       DOUBLE PRECISION  DASUM, DNRM2
@@ -299,7 +302,7 @@
 *     .. External Subroutines ..
       EXTERNAL          ITEST1, DB1NRM2, DSCAL, STEST, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         ABS, DBLE, MAX, MOD, SQRT
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -389,6 +392,52 @@
             CALL ITEST1(IDAMAX(N,SXR,INCX),3)
          END IF
    80 CONTINUE
+*
+*     The Level 1 routines process their vectors in unrolled blocks of
+*     up to seven elements once N reaches the unroll factor, and handle
+*     only the remainder below it.  Every case above stops at N = 4, so
+*     the unrolled bodies never ran.  Repeat the tests at N = 16, which
+*     leaves a nonzero remainder for every unroll factor in use.  The
+*     data are small integers, so the unrolled and sequential sums agree
+*     exactly and the expected values can be formed here.
+*
+      IF (ICASE.GE.7 .AND. ICASE.LE.10) THEN
+         INCX = 1
+         N = NLONG
+         DO 140 I = 1, N
+            SXL(I) = DBLE(MOD(I,7) - 3)
+  140    CONTINUE
+*        Give the search a unique maximum away from either end.
+         SXL(11) = -9D0
+         IF (ICASE.EQ.7) THEN
+*           .. ?NRM2 ..
+            SLSUM = 0D0
+            DO 150 I = 1, N
+               SLSUM = SLSUM + SXL(I)*SXL(I)
+  150       CONTINUE
+            SLSUM = SQRT(SLSUM)
+            SLSIZE(1) = SLSUM
+            CALL STEST1(DNRM2(N,SXL,INCX),SLSUM,SLSIZE,SFAC)
+         ELSE IF (ICASE.EQ.8) THEN
+*           .. ?ASUM ..
+            SLSUM = 0D0
+            DO 160 I = 1, N
+               SLSUM = SLSUM + ABS(SXL(I))
+  160       CONTINUE
+            SLSIZE(1) = SLSUM
+            CALL STEST1(DASUM(N,SXL,INCX),SLSUM,SLSIZE,SFAC)
+         ELSE IF (ICASE.EQ.9) THEN
+*           .. ?SCAL ..
+            DO 170 I = 1, N
+               STL(I) = SA(1)*SXL(I)
+  170       CONTINUE
+            CALL DSCAL(N,SA(1),SXL,INCX)
+            CALL STEST(N,SXL,STL,STL,SFAC)
+         ELSE
+*           .. I?AMAX ..
+            CALL ITEST1(IDAMAX(N,SXL,INCX),11)
+         END IF
+      END IF
       RETURN
 *
 *     End of CHECK1
@@ -405,7 +454,9 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      DOUBLE PRECISION  SA, SB
+      DOUBLE PRECISION  SA, SB, SLSUM
+      INTEGER           NLONG
+      PARAMETER         (NLONG=16)
       INTEGER           I, J, KI, KN, KNI, KPAR, KSIZE, LENX, LENY,
      $                  LINCX, LINCY, MX, MY
 *     .. Local Arrays ..
@@ -417,7 +468,9 @@
      $                  DT19XB(7,4,4), DT19XC(7,4,4),DT19XD(7,4,4),
      $                  DT19Y(7,4,16), DT19YA(7,4,4),DT19YB(7,4,4),
      $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5),
-     $                  STY0(1), SX0(1), SY0(1), DT20(7,4,4)
+     $                  STY0(1), SX0(1), SY0(1), DT20(7,4,4),
+     $                  SXL(NLONG), SYL(NLONG), STXL(NLONG),
+     $                  STYL(NLONG), SLSIZE(1)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       DOUBLE PRECISION  DDOT, DSDOT
@@ -426,7 +479,7 @@
       EXTERNAL          DAXPY, DAXPBY, DCOPY, DROTM, DSWAP, STEST,
      $                  STEST1, TESTDSDOT
 *     .. Intrinsic Functions ..
-      INTRINSIC         ABS, MIN
+      INTRINSIC         ABS, DBLE, MIN, MOD
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -786,6 +839,82 @@
             END IF
   100    CONTINUE
   120 CONTINUE
+*
+*     As in CHECK1, the two-vector routines unroll once N reaches the
+*     unroll factor and the cases above stop at N = 4.  Repeat them at
+*     N = 16 on small integer data, so the expected values are exact.
+*
+      IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
+     +    ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13 .OR.
+     +    ICASE.EQ.14) THEN
+         INCX = 1
+         INCY = 1
+         N = NLONG
+         DO 200 I = 1, N
+            SXL(I) = DBLE(MOD(I,7) - 3)
+            SYL(I) = DBLE(MOD(I,5) - 2)
+  200    CONTINUE
+         IF (ICASE.EQ.1 .OR. ICASE.EQ.13) THEN
+*           .. ?DOT / ?SDOT ..
+            SLSUM = 0D0
+            DO 210 I = 1, N
+               SLSUM = SLSUM + SXL(I)*SYL(I)
+  210       CONTINUE
+            SLSIZE(1) = SLSUM
+            IF (ICASE.EQ.1) THEN
+               CALL STEST1(DDOT(N,SXL,INCX,SYL,INCY),SLSUM,SLSIZE,
+     +                     SFAC)
+            ELSE
+               CALL TESTDSDOT(REAL(DSDOT(N,REAL(SXL),INCX,REAL(SYL),
+     +                        INCY)),REAL(SLSUM),REAL(SLSUM),.3125E-1)
+            END IF
+         ELSE
+            DO 220 I = 1, N
+               STXL(I) = SXL(I)
+               STYL(I) = SYL(I)
+  220       CONTINUE
+            IF (ICASE.EQ.2) THEN
+*              .. ?AXPY ..
+               DO 230 I = 1, N
+                  STYL(I) = SYL(I) + SA*SXL(I)
+  230          CONTINUE
+               CALL DAXPY(N,SA,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.5) THEN
+*              .. ?COPY ..
+               DO 240 I = 1, N
+                  STYL(I) = SXL(I)
+  240          CONTINUE
+               CALL DCOPY(N,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.6) THEN
+*              .. ?SWAP ..
+               DO 250 I = 1, N
+                  STXL(I) = SYL(I)
+                  STYL(I) = SXL(I)
+  250          CONTINUE
+               CALL DSWAP(N,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.12) THEN
+*              .. ?ROTM, with DFLAG = -1 so the full H is applied ..
+               DTEMP(1) = -1D0
+               DTEMP(2) = 2D0
+               DTEMP(3) = 3D0
+               DTEMP(4) = 4D0
+               DTEMP(5) = 5D0
+               DO 260 I = 1, N
+                  STXL(I) = SXL(I)*DTEMP(2) + SYL(I)*DTEMP(4)
+                  STYL(I) = SXL(I)*DTEMP(3) + SYL(I)*DTEMP(5)
+  260          CONTINUE
+               CALL DROTM(N,SXL,INCX,SYL,INCY,DTEMP)
+            ELSE
+*              .. ?AXPBY ..
+               DO 270 I = 1, N
+                  STYL(I) = SA*SXL(I) + SB*SYL(I)
+  270          CONTINUE
+               CALL DAXPBY(N,SA,SXL,INCX,SB,SYL,INCY)
+            END IF
+            CALL STEST(N,SXL,STXL,STXL,SFAC)
+            CALL STEST(N,SYL,STYL,STYL,SFAC)
+         END IF
+      END IF
       RETURN
 *
 *     End of CHECK2
@@ -1236,7 +1365,7 @@
 *  =====================================================================
 *     .. Parameters ..
       INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      PARAMETER         (NMAX=20, NOUT=6, NV=12)
       DOUBLE PRECISION  HALF, ONE, TWO, ZERO
       PARAMETER         (HALF=0.5D+0, ONE=1.0D+0, TWO= 2.0D+0,
      &                  ZERO=0.0D+0)
@@ -1274,6 +1403,14 @@
       VALUES(8) = SAFMAX
       VALUES(9) = DXVALS(V0,2)
       VALUES(10) = DXVALS(V0,3)
+*     SQRT(SAFMIN) is exactly the threshold at which ?NRM2 switches to
+*     its small accumulator: SAFMIN is RADIX**(MINEXPONENT-1) and the
+*     threshold is that exponent halved.  One value at the threshold
+*     and one just below it let the small part of a vector outweigh
+*     its mid-range part, which is what the arm ordering the two sums
+*     needs.  A wider pair leaves them too far apart for that.
+      VALUES(11) = SQRT(SAFMIN)
+      VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
       ROGUE = -1234.5678D+0
       FIRST = .TRUE.
 *
