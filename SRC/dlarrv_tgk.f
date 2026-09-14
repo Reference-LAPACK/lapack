@@ -456,27 +456,18 @@
   142                CONTINUE
                      LAMBDA = WORK( K )
                      LAMBDA2 = WORK( K2 )
-                     IF( .NOT.DONE1 .AND. .NOT.DONE2 ) THEN
-                        CALL DLAR1V2_TGK( REP, IN, 1, IN,
-     $                       LAMBDA, LAMBDA2, D( IBEGIN ), L( IBEGIN ),
-     $                       WORK( INDLD+1 ), WORK( INDLLD+1 ),
-     $                       W( WBEGIN+K-1 ), W( WBEGIN+K2-1 ),
-     $                       GERSCH( 2*OLDIEN+1 ),
-     $                       Z( IBEGIN, KTOT ), Z( IBEGIN, KTOT2 ),
-     $                       ZTZ, ZTZ2, MINGMA, MINGMA2,
-     $                       IWORK( IINDR+KTOT ),
-     $                       IWORK( IINDR+KTOT2 ),
-     $                       ISUPPZ( 2*KTOT-1 ),
-     $                       ISUPPZ( 2*KTOT2-1 ), WORK( INDWRK ),
-     $                       WORK( INDWRK+4*IN ) )
-                     ELSE IF( .NOT.DONE1 ) THEN
+*                    The paired two-lane variant DLAR1V2_TGK is kept in
+*                    dlar1v_tgk.f but not used: the two eigenvectors are
+*                    computed by separate one-lane calls (reference code).
+                     IF( .NOT.DONE1 ) THEN
                         CALL DLAR1V_TGK( REP, IN, 1, IN, LAMBDA,
      $                       D( IBEGIN ), L( IBEGIN ), WORK( INDLD+1 ),
      $                       WORK( INDLLD+1 ), W( WBEGIN+K-1 ),
      $                       GERSCH( 2*OLDIEN+1 ), Z( IBEGIN, KTOT ),
      $                       ZTZ, MINGMA, IWORK( IINDR+KTOT ),
      $                       ISUPPZ( 2*KTOT-1 ), WORK( INDWRK ) )
-                     ELSE
+                     END IF
+                     IF( .NOT.DONE2 ) THEN
                         CALL DLAR1V_TGK( REP, IN, 1, IN, LAMBDA2,
      $                       D( IBEGIN ), L( IBEGIN ), WORK( INDLD+1 ),
      $                       WORK( INDLLD+1 ), W( WBEGIN+K2-1 ),

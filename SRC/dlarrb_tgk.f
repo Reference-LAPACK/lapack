@@ -380,7 +380,11 @@
          BNRGHT( B ) = IWORK( K )
          BAFTER = BNEXT( B )
    87 CONTINUE
-      CALL DLARRBTGK_STURM4( N, D, LLD, NB, BMID, BCNT )
+*     The four-lane count DLARRBTGK_STURM4 is kept below but not used;
+*     each midpoint is counted by the reference one-shift routine.
+      DO 88 B = 1, NB
+         CALL DLARRBTGK_STURM_SLOW( N, D, LLD, BMID( B ), BCNT( B ) )
+   88 CONTINUE
 *
       DO 100 B = 1, NB
          I = BI( B )
