@@ -161,7 +161,7 @@
       INTEGER           I, K
 *     .. Local Arrays ..
       REAL              DA1(9), DATRUE(9), DB1(9), DBTRUE(9), DC1(9),
-     +                  DS1(9), DAB(4,10), DTEMP(9), DTRUE(9,10)
+     +                  DS1(9), DAB(4,12), DTEMP(9), DTRUE(9,12)
 *     .. External Subroutines ..
       EXTERNAL          SROTG, SROTMG, STEST, STEST1
 *     .. Common blocks ..
@@ -189,7 +189,9 @@
      F          2.E-10, 4.E-2, 1.E5, 10.E0,
      G          2.E10, 4.E-2, 1.E-5, 10.E0,
      H          4.E-9, 2.E-9, 2.E0, 1.E0,
-     I          -1.E0, 1.E0, 1.E0, 1.E0/
+     I          -1.E0, 1.E0, 1.E0, 1.E0,
+     J          0.E0,0.E0,0.E0,0.E0,
+     K          0.E0,0.E0,0.E0,0.E0/
 *    TRUE RESULTS FOR MODIFIED GIVENS
       DATA DTRUE/0.E0,0.E0, 1.3E0, .2E0, 0.E0,0.E0,0.E0, .5E0, 0.E0,
      A           0.E0,0.E0, 4.5E0, 4.2E0, 1.E0, .5E0, 0.E0,0.E0,0.E0,
@@ -203,6 +205,10 @@
      I           0.E0,0.E0, 15.E0, 10.E0, -1. E0, 5.E5, -4096.E0,
      J           1.E0, 4096.E-6,
      K           0.E0,0.E0, 7.E0, 4.E0, 0.E0,0.E0, -.5E0, -.25E0, 0.E0,
+     Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
+     Z          0.E0,0.E0,
+     Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
+     Z          0.E0,0.E0,
      Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
      Z          0.E0,0.E0/
 *                   4096 = 2 ** 12
@@ -248,6 +254,42 @@
       DTRUE(7,10) = 0.E0
       DTRUE(8,10) = 0.E0
       DTRUE(9,10) = 0.E0
+*
+*     Two more cases enter ?ROTMG's scale check holding a flag that no
+*     existing input pairs with it: the eleventh rescales D1 having set
+*     DFLAG = 1, the twelfth rescales D2 having set DFLAG = 0.  Each of
+*     those arms rewrites H into the DFLAG = -1 form before scaling.
+*     The inputs are powers of two, so the eleventh case is exact
+*     throughout; the twelfth divides by SU = 1 + 2**(-10) = 1025/1024,
+*     which leaves its D1 and D2 as the quotients below.
+*
+      DAB(1,11) = 2.0E0**(-40)
+      DAB(2,11) = 2.0E0**(-40)
+      DAB(3,11) = 1.E0
+      DAB(4,11) = 1.E0
+      DTRUE(1,11) = 2.0E0**(-17)
+      DTRUE(2,11) = 2.0E0**(-17)
+      DTRUE(3,11) = 2.0E0**(-11)
+      DTRUE(4,11) = 1.E0
+      DTRUE(5,11) = -1.E0
+      DTRUE(6,11) = 2.0E0**(-12)
+      DTRUE(7,11) = -2.0E0**(-12)
+      DTRUE(8,11) = 2.0E0**(-12)
+      DTRUE(9,11) = 2.0E0**(-12)
+*
+      DAB(1,12) = 2.0E0**(-20)
+      DAB(2,12) = 2.0E0**(-30)
+      DAB(3,12) = 1.E0
+      DAB(4,12) = 1.E0
+      DTRUE(1,12) = 1.E0 / 1049600.E0
+      DTRUE(2,12) = 16.E0 / 1025.E0
+      DTRUE(3,12) = 1025.E0 / 1024.E0
+      DTRUE(4,12) = 1.E0
+      DTRUE(5,12) = -1.E0
+      DTRUE(6,12) = 1.E0
+      DTRUE(7,12) = -2.0E0**(-12)
+      DTRUE(8,12) = 2.0E0**(-10)
+      DTRUE(9,12) = 2.0E0**(-12)
 *     .. Executable Statements ..
 *
 *     Compute true values which cannot be prestored
@@ -269,7 +311,7 @@
       DC1(9) = 0.0E0
       DS1(9) = 1.0E0
 *
-      DO 20 K = 1, 10
+      DO 20 K = 1, 12
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN
