@@ -113,7 +113,7 @@ DZLAUX = \
    ../INSTALL/dlamch.o ../INSTALL/dsecnd_$(TIMER).o
 
 SLASRC = \
-   sbdsvdx.o spotrf2.o sgetrf2.o \
+   sbdsvdx.o sbdsvdmr3.o sbdsvdmr3_work.o sbdtgk.o slar1v_tgk.o slarrf_tgk.o slarrv_tgk.o slarrb_tgk.o spotrf2.o sgetrf2.o \
    sgbbrd.o sgbcon.o sgbequ.o sgbrfs.o sgbsv.o \
    sgbsvx.o sgbtf2.o sgbtrf.o sgbtrs.o sgebak.o sgebal.o sgebd2.o \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \

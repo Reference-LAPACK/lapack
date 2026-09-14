@@ -46,7 +46,7 @@ set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ../INSTALL/slamch.f)
 
 set(SCLAUX
-   sbdsvdx.f sbdsdc.f
+   sbdsvdx.f sbdsvdmr3.f sbdsvdmr3_work.f sbdtgk.f slar1v_tgk.f slarrf_tgk.f slarrv_tgk.f slarrb_tgk.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
    slaed7.f slaed8.f slaed9.f slaeda.f slaev2.f slagtf.f
