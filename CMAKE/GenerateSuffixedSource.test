@@ -98,17 +98,17 @@ end program hello
 EOF
 
 IFS='' read -r -d '' EXP_FREE <<'EOF'
-module xerbla_callbacks
+module xerbla_callbacks_64
   public :: active_callback
   procedure(), pointer :: active_callback => null()
-end module xerbla_callbacks
+end module xerbla_callbacks_64
 subroutine set_xerbla_64(cb)
   use omp_lib
-  use xerbla_callbacks
+  use xerbla_callbacks_64
   active_callback => cb
 end subroutine set_xerbla_64
 program hello
-  use xerbla_callbacks
+  use xerbla_callbacks_64
   call set_xerbla_64(cb)
 end program hello
 EOF
