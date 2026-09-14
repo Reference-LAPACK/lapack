@@ -161,9 +161,11 @@
       INTEGER           I, K
 *     .. Local Arrays ..
       REAL              DA1(9), DATRUE(9), DB1(9), DBTRUE(9), DC1(9),
-     +                  DS1(9), DAB(4,12), DTEMP(9), DTRUE(9,12)
+     +                  DS1(9), DAB(4,13), DTEMP(9), DTRUE(9,13)
 *     .. External Subroutines ..
       EXTERNAL          SROTG, SROTMG, STEST, STEST1
+*     .. Intrinsic Functions ..
+      INTRINSIC         NEAREST
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -191,7 +193,8 @@
      H          4.E-9, 2.E-9, 2.E0, 1.E0,
      I          -1.E0, 1.E0, 1.E0, 1.E0,
      J          0.E0,0.E0,0.E0,0.E0,
-     K          0.E0,0.E0,0.E0,0.E0/
+     K          0.E0,0.E0,0.E0,0.E0,
+     L          0.E0,0.E0,0.E0,0.E0/
 *    TRUE RESULTS FOR MODIFIED GIVENS
       DATA DTRUE/0.E0,0.E0, 1.3E0, .2E0, 0.E0,0.E0,0.E0, .5E0, 0.E0,
      A           0.E0,0.E0, 4.5E0, 4.2E0, 1.E0, .5E0, 0.E0,0.E0,0.E0,
@@ -205,6 +208,8 @@
      I           0.E0,0.E0, 15.E0, 10.E0, -1. E0, 5.E5, -4096.E0,
      J           1.E0, 4096.E-6,
      K           0.E0,0.E0, 7.E0, 4.E0, 0.E0,0.E0, -.5E0, -.25E0, 0.E0,
+     Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
+     Z          0.E0,0.E0,
      Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
      Z          0.E0,0.E0,
      Z          0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,0.E0,
@@ -290,6 +295,32 @@
       DTRUE(7,12) = -2.0E0**(-12)
       DTRUE(8,12) = 2.0E0**(-10)
       DTRUE(9,12) = 2.0E0**(-12)
+*
+*     A thirteenth case reaches the block ?ROTMG keeps for safety
+*     against rounding.  ABS(SQ1) > ABS(SQ2) holds, yet the quotients
+*     SP2/SP1 and SY1/SX1 each round up, so that their exact product is
+*     at least one and SU = 1 - SH12*SH21 is not positive.  The block
+*     then zeroes H, D and X1; without it D1/SU would be infinite and
+*     the scale check would never terminate.  Because the product is at
+*     least one exactly, the outcome does not depend on whether the
+*     compiler fuses it.  The ulp alignment behind this is specific to
+*     the precision, so the constants differ between the real testers,
+*     and NEAREST steps D2 one ulp toward zero exactly in any arithmetic.
+*
+      DAB(1,13) = 1.E0
+      DAB(3,13) = 13.E0
+      DAB(4,13) = 9.E0
+      DAB(2,13) = NEAREST(-(DAB(1,13)*DAB(3,13)*DAB(3,13)
+     +                      /(DAB(4,13)*DAB(4,13))), 1.E0)
+      DTRUE(1,13) = 0.E0
+      DTRUE(2,13) = 0.E0
+      DTRUE(3,13) = 0.E0
+      DTRUE(4,13) = DAB(4,13)
+      DTRUE(5,13) = -1.E0
+      DTRUE(6,13) = 0.E0
+      DTRUE(7,13) = 0.E0
+      DTRUE(8,13) = 0.E0
+      DTRUE(9,13) = 0.E0
 *     .. Executable Statements ..
 *
 *     Compute true values which cannot be prestored
@@ -311,7 +342,7 @@
       DC1(9) = 0.0E0
       DS1(9) = 1.0E0
 *
-      DO 20 K = 1, 12
+      DO 20 K = 1, 13
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN
