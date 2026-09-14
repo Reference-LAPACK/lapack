@@ -24,6 +24,11 @@
 *> \verbatim
 *>
 *>    ISAMAX finds the index of the first element having maximum absolute value.
+*>
+*>    If the vector contains a NaN, the index of the first NaN is returned.
+*>    Otherwise, if it contains an Inf or -Inf, the index of the first of
+*>    those is returned.  This keeps the result independent of the order of
+*>    the elements, so that exceptional values propagate.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,10 +104,12 @@
 *        code for increment equal to 1
 *
          SMAX = ABS(SX(1))
+         IF (SMAX.NE.SMAX) RETURN
          DO I = 2,N
-            IF (ABS(SX(I)).GT.SMAX) THEN
+            IF (.NOT.(ABS(SX(I)).LE.SMAX)) THEN
                ISAMAX = I
                SMAX = ABS(SX(I))
+               IF (SMAX.NE.SMAX) RETURN
             END IF
          END DO
       ELSE
@@ -111,11 +118,13 @@
 *
          IX = 1
          SMAX = ABS(SX(1))
+         IF (SMAX.NE.SMAX) RETURN
          IX = IX + INCX
          DO I = 2,N
-            IF (ABS(SX(IX)).GT.SMAX) THEN
+            IF (.NOT.(ABS(SX(IX)).LE.SMAX)) THEN
                ISAMAX = I
                SMAX = ABS(SX(IX))
+               IF (SMAX.NE.SMAX) RETURN
             END IF
             IX = IX + INCX
          END DO
