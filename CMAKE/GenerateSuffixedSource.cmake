@@ -1,3 +1,6 @@
+# Use this to test GenerateSuffixedSource.cmake. Run from top of repo:
+# bash CMAKE/GenerateSuffixedSource.test
+
 if(NOT DEFINED INPUT_FILE)
   message(FATAL_ERROR "INPUT_FILE must be set")
 endif()
