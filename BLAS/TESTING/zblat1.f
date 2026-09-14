@@ -382,8 +382,8 @@
 *     .. Local Arrays ..
       COMPLEX*16        CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
-     +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
-     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4)
+     +                  CT8(7,4,4), CTY(7), CTY0(1), CX(7), CX0(1),
+     +                  CX1(7), CY(7), CY0(1), CY1(7), CT11(7,4,4)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX*16        ZDOTC, ZDOTU
@@ -680,6 +680,29 @@
 *
    40    CONTINUE
    60 CONTINUE
+*
+*     Test the quick return taken when the scalar multiplying X is zero.
+*     The cases above all use a nonzero CA, so neither shortcut is
+*     reached by them: ZAXPY must leave Y untouched and ZAXPBY must scale
+*     Y by CB alone.
+*
+      IF (ICASE.EQ.3 .OR. ICASE.EQ.11) THEN
+         DO 80 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            IF (ICASE.EQ.3) THEN
+               CTY(I) = CY1(I)
+            ELSE
+               CTY(I) = CB*CY1(I)
+            END IF
+   80    CONTINUE
+         IF (ICASE.EQ.3) THEN
+            CALL ZAXPY(7,(0.0D0,0.0D0),CX,1,CY,1)
+         ELSE
+            CALL ZAXPBY(7,(0.0D0,0.0D0),CX,1,CB,CY,1)
+         END IF
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
+      END IF
       RETURN
 *
 *     End of CHECK2

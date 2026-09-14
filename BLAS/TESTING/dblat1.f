@@ -786,6 +786,29 @@
             END IF
   100    CONTINUE
   120 CONTINUE
+*
+*     Test the quick return taken when the scalar multiplying X is zero.
+*     The cases above all use SA = 0.3, so neither shortcut is reached by
+*     them: DAXPY must leave Y untouched and DAXPBY must scale Y by SB
+*     alone.  SB is a power of two, so the expected result is exact.
+*
+      IF (ICASE.EQ.2 .OR. ICASE.EQ.14) THEN
+         DO 130 I = 1, 7
+            SX(I) = DX1(I)
+            SY(I) = DY1(I)
+            IF (ICASE.EQ.2) THEN
+               STY(I) = DY1(I)
+            ELSE
+               STY(I) = SB*DY1(I)
+            END IF
+  130    CONTINUE
+         IF (ICASE.EQ.2) THEN
+            CALL DAXPY(7,0.0D0,SX,1,SY,1)
+         ELSE
+            CALL DAXPBY(7,0.0D0,SX,1,SB,SY,1)
+         END IF
+         CALL STEST(7,SY,STY,STY,SFAC)
+      END IF
       RETURN
 *
 *     End of CHECK2
