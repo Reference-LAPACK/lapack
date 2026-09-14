@@ -158,7 +158,8 @@ clean:
 	$(MAKE) -C TESTING/LIN clean
 	$(MAKE) -C TESTING/EIG clean
 	$(MAKE) -C LAPACKE clean
-	rm -f *.a
+	rm -f *.a lapack_testing_junit.xml
+
 cleanobj:
 	$(MAKE) -C INSTALL cleanobj
 	$(MAKE) -C BLAS cleanobj
