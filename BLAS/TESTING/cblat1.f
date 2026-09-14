@@ -899,7 +899,7 @@
 *  =====================================================================
 *     .. Parameters ..
       INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      PARAMETER         (NMAX=20, NOUT=6, NV=12)
       REAL              HALF, ONE, THREE, TWO, ZERO
       PARAMETER         (HALF=0.5E+0, ONE=1.0E+0, TWO= 2.0E+0,
      &                  THREE=3.0E+0, ZERO=0.0E+0)
@@ -939,6 +939,14 @@
       VALUES(8) = SAFMAX
       VALUES(9) = SXVALS(V0,2)
       VALUES(10) = SXVALS(V0,3)
+*     SQRT(SAFMIN) is exactly the threshold at which ?NRM2 switches to
+*     its small accumulator: SAFMIN is RADIX**(MINEXPONENT-1) and the
+*     threshold is that exponent halved.  One value at the threshold
+*     and one just below it let the small part of a vector outweigh
+*     its mid-range part, which is what the arm ordering the two sums
+*     needs.  A wider pair leaves them too far apart for that.
+      VALUES(11) = SQRT(SAFMIN)
+      VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
       ROGUE = CMPLX(1234.5678E+0,-1234.5678E+0)
       FIRST = .TRUE.
 *
