@@ -156,18 +156,18 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX           CS, CSA, CSB, CA0, CB0
-      REAL              SC, SGOT, RTMIN, RTMAX, SONE,
+      REAL              SC, SGOT, RTMIN, RTMAX, SONE, SSIZ,
      +                  SZERO
       INTEGER           K
 *     .. Local Arrays ..
       COMPLEX           CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
-     +                  CGOT(1), CWANT(1)
+     +                  CGOT(1), CWANT(1), CSIZE(1)
       REAL              SWANT(1)
       REAL              CCTRUE(8)
 *     .. External Subroutines ..
       EXTERNAL          CROTG, CTEST, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         AIMAG, HUGE, REAL, SQRT, TINY
+      INTRINSIC         ABS, AIMAG, HUGE, REAL, SQRT, TINY
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -267,10 +267,17 @@
          CSA = CA0
          CSB = CB0
          CALL CROTG(CSA,CSB,SC,CS)
-*        CSA holds R on return.
+*        CSA holds R on return.  C*A and S*B are each bounded by the
+*        larger of ABS(A) and ABS(B), so their sum is the scale the
+*        residual of the identity has to be measured against.  Passing
+*        CWANT as the size would ask the imaginary part for an exact
+*        zero, which it cannot give: for operands near either end of
+*        the range it is a cancellation of two quantities of that size.
+         SSIZ = ABS(CA0) + ABS(CB0)
          CGOT(1) = SC*CA0 + CS*CB0
          CWANT(1) = CSA
-         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CSIZE(1) = CMPLX(SSIZ,SSIZ)
+         CALL CTEST(1,CGOT,CWANT,CSIZE,SFAC)
          SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
          SWANT(1) = SONE
          CALL STEST1(SGOT,SONE,SWANT,SFAC)
