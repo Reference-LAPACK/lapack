@@ -140,7 +140,7 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SORMRQ, STRSM, XERBLA
+      EXTERNAL           SLASET, SORMRQ, STRSM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGERQS', -INFO )
+         CALL XER_REPLACE( 'SGERQS', -INFO )
          RETURN
       END IF
 *

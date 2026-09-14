@@ -127,7 +127,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBD2, CLASCL, CLASET, SAXPY, SBDSQR, SLASCL,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -139,7 +139,7 @@
 *     Test that enough workspace is supplied
 *
       IF( LWORK.LT.M*N+2*MIN( M, N )+MAX( M, N ) ) THEN
-         CALL XERBLA( 'CQRT12', 7 )
+         CALL XER_REPLACE( 'CQRT12', 7 )
          RETURN
       END IF
 *

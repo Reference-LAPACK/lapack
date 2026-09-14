@@ -649,7 +649,7 @@
       EXTERNAL           DCOPY, DLACPY, DLASET, DLASUM, DLATMR, DLATMS,
      $                   DOPGTR, DORGTR, DPTEQR, DSPT21, DSPTRD, DSTEBZ,
      $                   DSTECH, DSTEDC, DSTEMR, DSTEIN, DSTEQR, DSTERF,
-     $                   DSTT21, DSTT22, DSYT21, DSYTRD, XERBLA
+     $                   DSTT21, DSTT22, DSYT21, DSYTRD, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MIN, SQRT
@@ -703,7 +703,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKST', -INFO )
+         CALL XER_REPLACE( 'DCHKST', -INFO )
          RETURN
       END IF
 *

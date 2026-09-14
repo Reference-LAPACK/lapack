@@ -159,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CLACGV, CSCAL, CSWAP, XERBLA
+      EXTERNAL           CGEMV, CGERU, CLACGV, CSCAL, CSWAP, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX
@@ -183,7 +183,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAVHP ', -INFO )
+         CALL XER_REPLACE( 'CLAVHP ', -INFO )
          RETURN
       END IF
 *

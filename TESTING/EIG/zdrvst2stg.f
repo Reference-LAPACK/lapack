@@ -392,12 +392,12 @@
       EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLAFTS, XERBLA, ZHBEV, ZHBEVD, ZHBEVX,
+      EXTERNAL           ALASVM, DLAFTS, ZHBEV, ZHBEVD, ZHBEVX,
      $                   ZHEEV, ZHEEVD, ZHEEVR, ZHEEVX, ZHET21, ZHET22,
      $                   ZHPEV, ZHPEVD, ZHPEVX, ZLACPY, ZLASET,
      $                   ZHEEVD_2STAGE, ZHEEVR_2STAGE, ZHEEVX_2STAGE,
      $                   ZHEEV_2STAGE, ZHBEV_2STAGE, ZHBEVD_2STAGE,
-     $                   ZHBEVX_2STAGE, ZLATMR, ZLATMS
+     $                   XER_REPLACE, ZHBEVX_2STAGE, ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MIN, SQRT
@@ -441,7 +441,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'ZDRVST2STG', -INFO )
          RETURN
       END IF
 *

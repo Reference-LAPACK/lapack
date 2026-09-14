@@ -564,7 +564,7 @@
 *     .. External Subroutines ..
       EXTERNAL           DGEQR2, DGET51, DGET52, DGGHRD, DHGEQZ, DLACPY,
      $                   DLARFG, DLASET, DLASUM, DLATM4, DORM2R, DTGEVC,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -629,7 +629,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKGG', -INFO )
+         CALL XER_REPLACE( 'DCHKGG', -INFO )
          RETURN
       END IF
 *

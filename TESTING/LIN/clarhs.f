@@ -241,7 +241,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CGBMV, CGEMM, CHBMV, CHEMM, CHPMV, CLACPY,
      $                   CLARNV, CSBMV, CSPMV, CSYMM, CTBMV, CTPMV,
-     $                   CTRMM, XERBLA
+     $                   CTRMM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -294,7 +294,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLARHS', -INFO )
+         CALL XER_REPLACE( 'CLARHS', -INFO )
          RETURN
       END IF
 *
@@ -432,7 +432,7 @@
 *        If none of the above, set INFO = -1 and return
 *
          INFO = -1
-         CALL XERBLA( 'CLARHS', -INFO )
+         CALL XER_REPLACE( 'CLARHS', -INFO )
       END IF
 *
       RETURN

@@ -402,7 +402,8 @@
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLAFTS, DLASET, DLASUM, DLATMR,
      $                   DLATMS, DSBGV, DSBGVD, DSBGVX, DSGT01, DSPGV,
-     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX, XERBLA
+     $                   XER_REPLACE,
+     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -448,7 +449,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVSG', -INFO )
+         CALL XER_REPLACE( 'DDRVSG', -INFO )
          RETURN
       END IF
 *
