@@ -632,6 +632,10 @@ lapacke_dbdsdc_work.c
 lapacke_dbdsqr.c
 lapacke_dbdsqr_work.c
 lapacke_dbdsvdx.c
+lapacke_dbdsvdmr3.c
+lapacke_dbdsvdmr3_work.c
+lapacke_sbdsvdmr3.c
+lapacke_sbdsvdmr3_work.c
 lapacke_dbdsvdx_work.c
 lapacke_ddisna.c
 lapacke_ddisna_work.c

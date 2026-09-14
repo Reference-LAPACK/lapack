@@ -124,6 +124,16 @@ lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
                            lapack_int il, lapack_int iu, lapack_int* ns,
                            float* s, float* z, lapack_int ldz,
                            lapack_int* superb );
+lapack_int LAPACKE_dbdsvdmr3( int matrix_layout, char uplo, char jobz, char range,
+                             lapack_int n, const double* d, const double* e,
+                             double vl, double vu,
+                             lapack_int il, lapack_int iu, lapack_int* ns,
+                             double* s, double* z, lapack_int ldz );
+lapack_int LAPACKE_sbdsvdmr3( int matrix_layout, char uplo, char jobz, char range,
+                             lapack_int n, const float* d, const float* e,
+                             float vl, float vu,
+                             lapack_int il, lapack_int iu, lapack_int* ns,
+                             float* s, float* z, lapack_int ldz );
 lapack_int LAPACKE_dbdsvdx( int matrix_layout, char uplo, char jobz, char range,
                            lapack_int n, const double* d, const double* e,
                            double vl, double vu,
@@ -4825,6 +4835,20 @@ lapack_int LAPACKE_sbdsvdx_work( int matrix_layout, char uplo, char jobz, char r
                                  lapack_int il, lapack_int iu, lapack_int* ns,
                                  float* s, float* z, lapack_int ldz,
                                  float* work, lapack_int* iwork );
+lapack_int LAPACKE_dbdsvdmr3_work( int matrix_layout, char uplo, char jobz,
+                                  char range, lapack_int n, const double* d,
+                                  const double* e, double vl, double vu,
+                                  lapack_int il, lapack_int iu, lapack_int* ns,
+                                  double* s, double* z, lapack_int ldz,
+                                  double* work, lapack_int lwork,
+                                  lapack_int* iwork, lapack_int liwork );
+lapack_int LAPACKE_sbdsvdmr3_work( int matrix_layout, char uplo, char jobz,
+                                  char range, lapack_int n, const float* d,
+                                  const float* e, float vl, float vu,
+                                  lapack_int il, lapack_int iu, lapack_int* ns,
+                                  float* s, float* z, lapack_int ldz,
+                                  float* work, lapack_int lwork,
+                                  lapack_int* iwork, lapack_int liwork );
 lapack_int LAPACKE_dbdsvdx_work( int matrix_layout, char uplo, char jobz, char range,
                                  lapack_int n, const double* d, const double* e,
                                  double vl, double vu,

@@ -420,6 +420,52 @@ void LAPACK_zbdsqr_base(
     #define LAPACK_zbdsqr(...) LAPACK_zbdsqr_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dbdsvdmr3_base LAPACK_GLOBAL_SUFFIX(dbdsvdmr3,DBDSVDMR3)
+void LAPACK_dbdsvdmr3_base(
+    char const* uplo, char const* jobz, char const* range,
+    lapack_int const* n,
+    double const* D,
+    double const* E,
+    double const* vl,
+    double const* vu, lapack_int const* il, lapack_int const* iu, lapack_int* ns,
+    double* S,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_dbdsvdmr3(...) LAPACK_dbdsvdmr3_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_dbdsvdmr3(...) LAPACK_dbdsvdmr3_base(__VA_ARGS__)
+#endif
+
+#define LAPACK_sbdsvdmr3_base LAPACK_GLOBAL_SUFFIX(sbdsvdmr3,SBDSVDMR3)
+void LAPACK_sbdsvdmr3_base(
+    char const* uplo, char const* jobz, char const* range,
+    lapack_int const* n,
+    float const* D,
+    float const* E,
+    float const* vl,
+    float const* vu, lapack_int const* il, lapack_int const* iu, lapack_int* ns,
+    float* S,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    , FORTRAN_STRLEN, FORTRAN_STRLEN, FORTRAN_STRLEN
+#endif
+);
+#ifdef LAPACK_FORTRAN_STRLEN_END
+    #define LAPACK_sbdsvdmr3(...) LAPACK_sbdsvdmr3_base(__VA_ARGS__, 1, 1, 1)
+#else
+    #define LAPACK_sbdsvdmr3(...) LAPACK_sbdsvdmr3_base(__VA_ARGS__)
+#endif
+
 #define LAPACK_dbdsvdx_base LAPACK_GLOBAL_SUFFIX(dbdsvdx,DBDSVDX)
 void LAPACK_dbdsvdx_base(
     char const* uplo, char const* jobz, char const* range,

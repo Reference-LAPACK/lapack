@@ -678,6 +678,10 @@ lapacke_dbdsdc_work.o \
 lapacke_dbdsqr.o \
 lapacke_dbdsqr_work.o \
 lapacke_dbdsvdx.o \
+lapacke_dbdsvdmr3.o \
+lapacke_dbdsvdmr3_work.o \
+lapacke_sbdsvdmr3.o \
+lapacke_sbdsvdmr3_work.o \
 lapacke_dbdsvdx_work.o \
 lapacke_ddisna.o \
 lapacke_ddisna_work.o \
