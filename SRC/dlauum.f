@@ -67,9 +67,11 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**T;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L.
+*>          overwritten with the upper triangle of the product U * U**T,
+*>          and the lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L**T * L, and the upper
+*>          triangular part of A is not referenced
 *> \endverbatim
 *>
 *> \param[in] LDA
