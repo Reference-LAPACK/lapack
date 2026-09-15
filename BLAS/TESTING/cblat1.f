@@ -55,7 +55,7 @@
       REAL             SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 11
+      DO 20 IC = 1, 12
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,9 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
+         IF (ICASE.EQ.12) THEN
+            CALL CHECK0(SFAC)
+         ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -112,7 +114,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(11)
+      CHARACTER*6      L(12)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -128,6 +130,7 @@
       DATA             L(9)/'CSSCAL'/
       DATA             L(10)/'ICAMAX'/
       DATA             L(11)/'CAXPBY'/
+      DATA             L(12)/'SCABS1'/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -137,6 +140,52 @@
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
 *
 *     End of HEADER
+*
+      END
+      SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
+*
+*     SCABS1 is the only routine tested here that takes no vector at
+*     all, so neither the loop over N nor the loop over INCX that
+*     CHECK1 and CHECK2 run applies to it, and it gets a check of its
+*     own.  Nothing in the library calls SCABS1, so this is the only
+*     thing that exercises it.
+*
+*     .. Scalar Arguments ..
+      REAL              SFAC
+*     .. Scalars in Common ..
+      INTEGER           ICASE, INCX, INCY, MODE, N
+      LOGICAL           PASS
+*     .. Local Scalars ..
+      INTEGER           I
+*     .. Local Arrays ..
+      COMPLEX           CV0(6)
+      REAL              STRUE0(6)
+*     .. External Functions ..
+      REAL              SCABS1
+      EXTERNAL          SCABS1
+*     .. External Subroutines ..
+      EXTERNAL          STEST1
+*     .. Common blocks ..
+      COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+*     .. Data statements ..
+*     Every part below is exact in binary, so the expected sums are
+*     exact as well, and the zero case is required to be exact by the
+*     zero it also supplies as the comparison size.  The three (3,4)
+*     variants separate |Re| + |Im| from the Euclidean length, which
+*     would give 5 rather than 7, and cover both signs of both parts.
+      DATA              CV0/(0.0E0,0.0E0), (0.5E0,0.0E0),
+     +                  (0.0E0,-0.25E0), (3.0E0,4.0E0), (-3.0E0,4.0E0),
+     +                  (-3.0E0,-4.0E0)/
+      DATA              STRUE0/0.0E0, 0.5E0, 0.25E0, 7.0E0, 7.0E0,
+     +                  7.0E0/
+*     .. Executable Statements ..
+      DO 20 I = 1, 6
+         CALL STEST1(SCABS1(CV0(I)),STRUE0(I),STRUE0(I),SFAC)
+   20 CONTINUE
+      RETURN
+*
+*     End of CHECK0
 *
       END
       SUBROUTINE CHECK1(SFAC)
