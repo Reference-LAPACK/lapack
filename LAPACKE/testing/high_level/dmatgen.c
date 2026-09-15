@@ -113,4 +113,67 @@ LAPACKE_TEST(dmatgen)
         API_SUFFIX(LAPACKE_dpotrf)(LAPACK_COL_MAJOR, 'U', N, a, LD) > 0 ? 0
                                                                         : -999,
         0);
+
+    /* The band, packed and vector fills: deterministic, and structured as
+     * promised (positive definite band and packed matrices factorize,
+     * triangular band and packed matrices are nonsingular). */
+    for (size_t l = 0; l < 2; l++) {
+        const int layout = lapacke_test_layouts[l];
+        const char *lname = lapacke_test_layout_names[l];
+        double ab[LD * LD], ab2[LD * LD], ap[LD * (LD + 1) / 2], v[LD];
+        lapack_int i;
+        int ok;
+
+        ok = 1;
+        lapacke_test_dfill_gb(layout, M, N, 1, 1, 4, ab, LD);
+        lapacke_test_dfill_gb(layout, M, N, 1, 1, 4, ab2, LD);
+        ok = ok &&
+             equal_buffers(ab, ab2, lapacke_test_alloc_len(layout, 4, N, LD));
+        lapacke_test_dfill_pp(layout, 'U', N, ap);
+        lapacke_test_dfill_pp(layout, 'U', N, ab2);
+        ok = ok && equal_buffers(ap, ab2, (size_t)N * (N + 1) / 2);
+        lapacke_test_check("dmatgen band and packed fills deterministic", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_dfill_pb(layout, 'U', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_dpbtrf)(layout, 'U', N, 1, ab, LD) == 0;
+        lapacke_test_dfill_pb(layout, 'L', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_dpbtrf)(layout, 'L', N, 1, ab, LD) == 0;
+        lapacke_test_dfill_pp(layout, 'U', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_dpptrf)(layout, 'U', N, ap) == 0;
+        lapacke_test_dfill_pp(layout, 'L', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_dpptrf)(layout, 'L', N, ap) == 0;
+        lapacke_test_check("dmatgen pb and pp are positive definite", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_dfill_tb(layout, 'U', N, 1, ab, LD);
+        lapacke_test_dfill_rhs(layout, N, NRHS, ab2, LD);
+        ok = ok && API_SUFFIX(LAPACKE_dtbtrs)(layout, 'U', 'N', 'N', N, 1, NRHS,
+                                              ab, LD, ab2, LD) == 0;
+        lapacke_test_dfill_tb(layout, 'L', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_dtbtrs)(layout, 'L', 'N', 'N', N, 1, NRHS,
+                                              ab, LD, ab2, LD) == 0;
+        lapacke_test_dfill_tp(layout, 'U', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_dtptrs)(layout, 'U', 'N', 'N', N, NRHS,
+                                              ap, ab2, LD) == 0;
+        lapacke_test_dfill_tp(layout, 'L', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_dtptrs)(layout, 'L', 'N', 'N', N, NRHS,
+                                              ap, ab2, LD) == 0;
+        lapacke_test_check("dmatgen tb and tp are nonsingular", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_dfill_vec(LD, v);
+        for (i = 0; i < LD; i++) {
+            ok = ok && !is_zero(v[i]);
+        }
+        lapacke_test_dfill_pos(LD, v);
+        for (i = 0; i < LD; i++) {
+            ok = ok && (v[i]) >= 2;
+        }
+        lapacke_test_check("dmatgen vec is nonzero and pos is positive", lname,
+                           ok ? 0 : -999, 0);
+    }
 }

@@ -3,9 +3,7 @@
 #define N LAPACKE_TEST_N
 #define LD LAPACKE_TEST_LD
 
-/* One allocation test: refill the input, schedule the malloc failure
- * countdown and check the info result of a spotrf call in the indexed
- * layout. */
+/* Refill the inputs, schedule the malloc failure, call spotrf. */
 #define LAPACKE_SPOTRF_ALLOC_TEST(layout_index, countdown, name, expected)     \
     do {                                                                       \
         const int layout = lapacke_test_layouts[layout_index];                 \
@@ -20,8 +18,6 @@ LAPACKE_TEST(spotrf)
 {
     float a[LD * LD];
 
-    /* Only the uplo triangle is a documented input; a NaN in the other
-     * (never referenced) triangle must be ignored. */
     for (size_t l = 0; l < 2; l++) {
         const int layout = lapacke_test_layouts[l];
 
@@ -35,9 +31,7 @@ LAPACKE_TEST(spotrf)
             (lapacke_test_sfill_spd(layout, N, a, LD)),
             API_SUFFIX(LAPACKE_spotrf)(layout, 'L', N, a, LD));
 
-        /* With NaN checking disabled the NaN must go through to the Fortran
-         * routine, which reports it as a not-positive-definite leading
-         * minor (info > 0), never as a LAPACKE argument error. */
+        /* NaN checks off: all-NaN input must reach the Fortran routine. */
         LAPACKE_set_nancheck(0);
         lapacke_test_sfill_nan(layout, N, N, a, LD);
         lapacke_test_check(
@@ -46,22 +40,17 @@ LAPACKE_TEST(spotrf)
         LAPACKE_set_nancheck(1);
     }
 
-    /* Column-major neither transposes nor allocates a workspace: the
-     * scheduled failure must not fire at all. */
+    /* column-major: no allocation at all */
     LAPACKE_SPOTRF_ALLOC_TEST(0, 0, "spotrf allocation count", 0);
     lapacke_test_check_alloc_count("spotrf col-major allocation count");
 
-    /* Row-major allocates the transposed copy of A (no workspace). */
-    LAPACKE_SPOTRF_ALLOC_TEST(1, 0, "spotrf transpose alloc failure (a)",
+    /* row-major: the workspaces, then the transposed copies */
+    LAPACKE_SPOTRF_ALLOC_TEST(1, 0, "spotrf transpose alloc failure (a_t)",
                               LAPACK_TRANSPOSE_MEMORY_ERROR);
-
-    /* Scheduled one past the last row-major allocation: fires if the call
-     * allocates more than expected. */
     LAPACKE_SPOTRF_ALLOC_TEST(1, 1, "spotrf allocation count", 0);
     lapacke_test_check_alloc_count("spotrf row-major allocation count");
 
-    /* An invalid matrix_layout must be rejected as an error in argument 1,
-     * before any allocation: the scheduled failure must not fire. */
+    /* invalid matrix_layout: rejected before any allocation */
     LAPACKE_SPOTRF_ALLOC_TEST(2, 0, "spotrf invalid matrix_layout", -1);
     lapacke_test_check_alloc_count("spotrf invalid layout allocation count");
 }

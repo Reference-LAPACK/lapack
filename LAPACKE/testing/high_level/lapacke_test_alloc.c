@@ -1,4 +1,4 @@
-/*****************************************************************************
+/******************************************************************************
  * Allocation failure injection and leak tracking for the dedicated
  * high-level LAPACKE tests. See lapacke_test.h.
  *
@@ -9,7 +9,7 @@
  * allocation is tracked so that lapacke_test_check_leaks can verify that
  * LAPACKE released all its buffers, in particular on error paths (nonzero
  * info, injected allocation failures).
- *****************************************************************************/
+ ******************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>

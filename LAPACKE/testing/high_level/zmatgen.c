@@ -116,4 +116,68 @@ LAPACKE_TEST(zmatgen)
         API_SUFFIX(LAPACKE_zpotrf)(LAPACK_COL_MAJOR, 'U', N, a, LD) > 0 ? 0
                                                                         : -999,
         0);
+
+    /* The band, packed and vector fills: deterministic, and structured as
+     * promised (positive definite band and packed matrices factorize,
+     * triangular band and packed matrices are nonsingular). */
+    for (size_t l = 0; l < 2; l++) {
+        const int layout = lapacke_test_layouts[l];
+        const char *lname = lapacke_test_layout_names[l];
+        lapack_complex_double ab[LD * LD], ab2[LD * LD], ap[LD * (LD + 1) / 2],
+            v[LD];
+        lapack_int i;
+        int ok;
+
+        ok = 1;
+        lapacke_test_zfill_gb(layout, M, N, 1, 1, 4, ab, LD);
+        lapacke_test_zfill_gb(layout, M, N, 1, 1, 4, ab2, LD);
+        ok = ok &&
+             equal_buffers(ab, ab2, lapacke_test_alloc_len(layout, 4, N, LD));
+        lapacke_test_zfill_pp(layout, 'U', N, ap);
+        lapacke_test_zfill_pp(layout, 'U', N, ab2);
+        ok = ok && equal_buffers(ap, ab2, (size_t)N * (N + 1) / 2);
+        lapacke_test_check("zmatgen band and packed fills deterministic", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_zfill_pb(layout, 'U', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_zpbtrf)(layout, 'U', N, 1, ab, LD) == 0;
+        lapacke_test_zfill_pb(layout, 'L', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_zpbtrf)(layout, 'L', N, 1, ab, LD) == 0;
+        lapacke_test_zfill_pp(layout, 'U', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_zpptrf)(layout, 'U', N, ap) == 0;
+        lapacke_test_zfill_pp(layout, 'L', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_zpptrf)(layout, 'L', N, ap) == 0;
+        lapacke_test_check("zmatgen pb and pp are positive definite", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_zfill_tb(layout, 'U', N, 1, ab, LD);
+        lapacke_test_zfill_rhs(layout, N, NRHS, ab2, LD);
+        ok = ok && API_SUFFIX(LAPACKE_ztbtrs)(layout, 'U', 'N', 'N', N, 1, NRHS,
+                                              ab, LD, ab2, LD) == 0;
+        lapacke_test_zfill_tb(layout, 'L', N, 1, ab, LD);
+        ok = ok && API_SUFFIX(LAPACKE_ztbtrs)(layout, 'L', 'N', 'N', N, 1, NRHS,
+                                              ab, LD, ab2, LD) == 0;
+        lapacke_test_zfill_tp(layout, 'U', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_ztptrs)(layout, 'U', 'N', 'N', N, NRHS,
+                                              ap, ab2, LD) == 0;
+        lapacke_test_zfill_tp(layout, 'L', N, ap);
+        ok = ok && API_SUFFIX(LAPACKE_ztptrs)(layout, 'L', 'N', 'N', N, NRHS,
+                                              ap, ab2, LD) == 0;
+        lapacke_test_check("zmatgen tb and tp are nonsingular", lname,
+                           ok ? 0 : -999, 0);
+
+        ok = 1;
+        lapacke_test_zfill_vec(LD, v);
+        for (i = 0; i < LD; i++) {
+            ok = ok && !is_zero(v[i]);
+        }
+        lapacke_test_zfill_pos(LD, v);
+        for (i = 0; i < LD; i++) {
+            ok = ok && lapack_complex_double_real(v[i]) >= 2;
+        }
+        lapacke_test_check("zmatgen vec is nonzero and pos is positive", lname,
+                           ok ? 0 : -999, 0);
+    }
 }

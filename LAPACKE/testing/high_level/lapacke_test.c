@@ -1,7 +1,7 @@
-/*****************************************************************************
+/******************************************************************************
  * Check reporting for the dedicated high-level LAPACKE tests.
  * See lapacke_test.h.
- *****************************************************************************/
+ ******************************************************************************/
 
 #include <stdio.h>
 
@@ -55,5 +55,38 @@ void lapacke_test_check(const char *name, const char *variant, lapack_int info,
     } else {
         printf("%s %s: info = %6d, expected %6d\n", status, name, (int)info,
                (int)expected);
+    }
+}
+
+/**
+ * \brief Fill ipiv with the identity permutation 1, 2, ..., n.
+ *
+ * A valid pivot vector for any factored input the tests hand to a solve,
+ * inverse or condition estimate: every pivot is a 1-by-1 block that stays in
+ * place.
+ *
+ * \param[in]  n    Number of entries.
+ * \param[out] ipiv The pivot vector.
+ */
+void lapacke_test_fill_ipiv(lapack_int n, lapack_int *ipiv)
+{
+    lapack_int i;
+    for (i = 0; i < n; i++) {
+        ipiv[i] = i + 1;
+    }
+}
+
+/**
+ * \brief Fill the first n entries of v with value.
+ *
+ * \param[in]  n     Number of entries.
+ * \param[out] v     The vector.
+ * \param[in]  value The value to store.
+ */
+void lapacke_test_fill_int(lapack_int n, lapack_int *v, lapack_int value)
+{
+    lapack_int i;
+    for (i = 0; i < n; i++) {
+        v[i] = value;
     }
 }

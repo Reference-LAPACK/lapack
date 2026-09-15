@@ -1,7 +1,7 @@
-/*****************************************************************************
+/******************************************************************************
  * NaN position sweeps for the dedicated high-level LAPACKE tests.
  * See the LAPACKE_TEST_NAN_SWEEP macro in lapacke_test.h.
- *****************************************************************************/
+ ******************************************************************************/
 
 #include <stdio.h>
 
@@ -96,4 +96,34 @@ void lapacke_test_sweep_result(const char *name, const char *variant,
         printf("ok   %s (%s): swept %zu NaN positions\n", name, variant,
                positions);
     }
+}
+
+/**
+ * \brief Nonzero if position p of a packed n-by-n triangle holds a diagonal
+ * element.
+ *
+ * Column-major upper and row-major lower triangles pack column by column
+ * (row by row) with the diagonal element of index j at j * (j + 3) / 2; the
+ * other two schemes pack the diagonal of index j at j * (2n - j + 1) / 2,
+ * as LAPACKE_?tp_trans lays them out.
+ *
+ * \param[in] layout LAPACK_COL_MAJOR or LAPACK_ROW_MAJOR.
+ * \param[in] uplo   'U' or 'L'.
+ * \param[in] n      Order of the triangle.
+ * \param[in] p      Position in the packed array.
+ * \return Nonzero if position p is a diagonal element.
+ */
+int lapacke_test_packed_diag(int layout, char uplo, lapack_int n, lapack_int p)
+{
+    const int colmaj = (layout == LAPACK_COL_MAJOR);
+    const int upper = (uplo == 'U' || uplo == 'u');
+    lapack_int j;
+    for (j = 0; j < n; j++) {
+        const lapack_int diag = (colmaj == upper) ? j * (j + 3) / 2
+                                                  : j * (2 * n - j + 1) / 2;
+        if (p == diag) {
+            return 1;
+        }
+    }
+    return 0;
 }
