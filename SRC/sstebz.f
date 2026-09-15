@@ -418,7 +418,16 @@
 *
       DO 10 J = 2, N
          TMP1 = E( J-1 )**2
-         IF( ABS( D( J )*D( J-1 ) )*ULP**2+SAFEMN.GT.TMP1 ) THEN
+*        Split where e(j)**2 < ulp**2 |d(j) d(j+1)| (Kahan's relative
+*        criterion, as in xLARRA) or e(j) = 0.  No absolute floor: the
+*        drivers scale small matrices to sqrt(SAFEMN/ULP), where a floor
+*        of SAFEMN on e(j)**2 would discard off-diagonals as large as
+*        sqrt(ULP) relative to the matrix.  The threshold is formed as
+*        a product of scaled factors so that it cannot overflow before
+*        e(j)**2 does.
+*
+         TMP2 = ( ABS( D( J ) )*ULP )*( ABS( D( J-1 ) )*ULP )
+         IF( TMP1.LT.TMP2 .OR. TMP1.EQ.ZERO ) THEN
             ISPLIT( NSPLIT ) = J - 1
             NSPLIT = NSPLIT + 1
             WORK( J-1 ) = ZERO
