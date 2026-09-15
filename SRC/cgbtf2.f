@@ -162,11 +162,13 @@
      $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
+      REAL               SFMIN
       INTEGER            I, J, JP, JU, KM, KV
 *     ..
 *     .. External Functions ..
+      REAL               SLAMCH
       INTEGER            ICAMAX
-      EXTERNAL           ICAMAX
+      EXTERNAL           SLAMCH, ICAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGERU, CSCAL, CSWAP, XERBLA
@@ -204,6 +206,10 @@
 *
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
+*
+*     Compute machine safe minimum
+*
+      SFMIN = SLAMCH('S')
 *
 *     Gaussian elimination with partial pivoting
 *
@@ -248,8 +254,14 @@
 *
 *              Compute multipliers.
 *
-               CALL CSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
-     $                     1 )
+               IF( ABS( AB( KV+1, J ) ).GE.SFMIN ) THEN
+                  CALL CSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ),
+     $                        1 )
+               ELSE
+                  DO 35 I = 1, KM
+                     AB( KV+1+I, J ) = AB( KV+1+I, J ) / AB( KV+1, J )
+   35             CONTINUE
+               END IF
 *
 *              Update trailing submatrix within the band.
 *
