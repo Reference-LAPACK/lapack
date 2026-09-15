@@ -625,11 +625,14 @@
       PARAMETER          ( SREL = .FALSE. )
 *     ..
 *     .. Local Scalars ..
+      CHARACTER          JOBZ
+      INTEGER            JOBNUM
       LOGICAL            BADNN, TRYRAC
       INTEGER            I, IINFO, IL, IMODE, ITEMP, ITYPE, IU, J, JC,
      $                   JR, JSIZE, JTYPE, LGN, LIWEDC, LOG2UI, LWEDC,
      $                   M, M2, M3, MTYPES, N, NAP, NBLOCK, NERRS,
      $                   NMATS, NMAX, NSPLIT, NTEST, NTESTT
+      REAL               RNAN, RONE
       REAL               ABSTOL, ANINV, ANORM, COND, OVFL, RTOVFL,
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
@@ -1933,9 +1936,56 @@
 *
 *     Summary
 *
+*
+*     SSTEMR must return for a tridiagonal matrix that contains a NaN
+*     instead of widening a bracket forever.  A NaN pivot is never
+*     counted, so the Sturm count of such a matrix never reaches the
+*     index of the wanted eigenvalue, and the widening loops of
+*     SLARRB, which refines the eigenvalues of a representation, and
+*     of SLARRJ, which refines them on the matrix itself when no
+*     eigenvectors are wanted, can only be ended by a bound on the
+*     step.  Any nonnegative INFO is accepted: the test is that the
+*     call returns at all.
+*
+      IF( NMAX.GE.3 .AND. LWORK.GE.18*NMAX .AND. LIWORK.GE.12*NMAX .AND.
+     $    ILAENV( 10, 'SSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'SSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = NMAX
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         DO 330 JOBNUM = 1, 2
+            IF( JOBNUM.EQ.1 ) THEN
+               JOBZ = 'V'
+            ELSE
+               JOBZ = 'N'
+            END IF
+            DO 320 J = 1, N
+               SD( J ) = REAL( J )
+               SE( J ) = ONE / REAL( J+1 )
+  320       CONTINUE
+            SD( 1 ) = RNAN
+            SE( N ) = ZERO
+            VL = ZERO
+            VU = ZERO
+            IL = 0
+            IU = 0
+            TRYRAC = .TRUE.
+            CALL SSTEMR( JOBZ, 'A', N, SD, SE, VL, VU, IL, IU, M,
+     $                   WR, Z, LDU, N, IWORK( 1 ), TRYRAC, WORK,
+     $                   LWORK, IWORK( 2*N+1 ), LIWORK-2*N, IINFO )
+            IF( IINFO.LT.0 ) THEN
+               WRITE( NOUNIT, FMT = 9986 )JOBZ, IINFO
+               NERRS = NERRS + 1
+            END IF
+            NTESTT = NTESTT + 1
+  330    CONTINUE
+      END IF
+*
       CALL SLASUM( 'SST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9986 FORMAT( ' SCHKST: SSTEMR( ', A1, ', A ) on a matrix with a',
+     $      ' NaN returned INFO=', I6 )
  9999 FORMAT( ' SCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
