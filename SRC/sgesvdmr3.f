@@ -238,10 +238,14 @@
 *>     INFO is INTEGER
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
-*>           > 0:  if INFO = i, then i eigenvectors failed to converge
-*>                 in SBDSVDMR3.
+*>           > 0:  SBDSVDMR3 returned a positive INFO, passed through
+*>                 unchanged: MIN(M,N)+1 if the bidiagonal contained
+*>                 a NaN or Inf, MIN(M,N)+2 if the SBDSDC fallback
+*>                 in SBDSVDMR3 returned a non-finite result, and any
+*>                 other positive value is the INFO of that fallback.
+*>                 See SBDSVDMR3.
 *>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 SBDSVDX
+*>                 SGESVDMR3
 *> \endverbatim
 *
 *  Authors:
