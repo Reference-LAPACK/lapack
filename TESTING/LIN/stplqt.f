@@ -204,7 +204,7 @@
       INTEGER    I, IB, LB, NB, IINFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   STPLQT2, STPRFB, XERBLA
+      EXTERNAL   STPLQT2, STPRFB, XER_REPLACE
 *     ..
 *     .. Executable Statements ..
 *
@@ -227,7 +227,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STPLQT', -INFO )
+         CALL XER_REPLACE( 'STPLQT', -INFO )
          RETURN
       END IF
 *

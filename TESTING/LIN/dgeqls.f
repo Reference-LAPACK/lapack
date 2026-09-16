@@ -140,7 +140,7 @@
       PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMQL, DTRSM, XERBLA
+      EXTERNAL           DORMQL, DTRSM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQLS', -INFO )
+         CALL XER_REPLACE( 'DGEQLS', -INFO )
          RETURN
       END IF
 *

@@ -181,7 +181,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -205,7 +205,7 @@
          INFO = 11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSBMV ', INFO )
+         CALL XER_REPLACE( 'CSBMV ', INFO )
          RETURN
       END IF
 *
