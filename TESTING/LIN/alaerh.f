@@ -59,6 +59,8 @@
 *>          The expected error code from routine SUBNAM, if SUBNAM were
 *>          error-free.  If INFOE = 0, an error message is printed, but
 *>          if INFOE.NE.0, we assume only the return code INFO is wrong.
+*>          An unexpected INFO = 0 is also reported.  No message is
+*>          printed when both INFO and INFOE are zero.
 *> \endverbatim
 *>
 *> \param[in] OPTS
@@ -177,7 +179,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      IF( INFO.EQ.0 )
+      IF( INFO.EQ.0 .AND. INFOE.EQ.0 )
      $   RETURN
       P2 = PATH( 2: 3 )
       C3 = SUBNAM( 4: 6 )
