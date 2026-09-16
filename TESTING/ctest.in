@@ -19,9 +19,9 @@ CGB    8               List types on next line if 0 < NTYPES <  8
 CGT   12               List types on next line if 0 < NTYPES < 12
 CPO    9               List types on next line if 0 < NTYPES <  9
 CPS    9               List types on next line if 0 < NTYPES <  9
-CPP    9               List types on next line if 0 < NTYPES <  9
-CPB    8               List types on next line if 0 < NTYPES <  8
-CPT   12               List types on next line if 0 < NTYPES < 12
+CPP   10               List types on next line if 0 < NTYPES < 10
+CPB    9               List types on next line if 0 < NTYPES <  9
+CPT   13               List types on next line if 0 < NTYPES < 13
 CHE   10               List types on next line if 0 < NTYPES < 10
 CHR   10               List types on next line if 0 < NTYPES < 10
 CHK   10               List types on next line if 0 < NTYPES < 10

@@ -167,7 +167,7 @@
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 12 )
+      PARAMETER          ( NTYPES = 13 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
 *     ..
@@ -179,6 +179,7 @@
      $                   KL, KU, LDA, MODE, N, NERRS, NFAIL, NIMAT,
      $                   NRHS, NRUN
       DOUBLE PRECISION   AINVNM, ANORM, COND, DMAX, RCOND, RCONDC
+      DOUBLE PRECISION   RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
@@ -196,7 +197,7 @@
      $                   DSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX
+      INTRINSIC          ABS, MAX, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -359,6 +360,16 @@
                   END IF
                   Z( 2 ) = D( IZERO )
                   D( IZERO ) = ZERO
+               END IF
+*
+*              Type 13:  put a NaN on the last diagonal entry.  The
+*              factorization must report it like a nonpositive pivot.
+*
+               IF( IMAT.EQ.13 ) THEN
+                  IZERO = N
+                  RONE = ONE
+                  RNAN = SQRT( -RONE )
+                  D( N ) = RNAN
                END IF
             END IF
 *
