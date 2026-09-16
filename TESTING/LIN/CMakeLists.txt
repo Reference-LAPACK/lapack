@@ -257,7 +257,7 @@ set(ZLINTSTRFP
   chkxer.f xerbla.f alaerh.f aladhd.f alahd.f alasvm.f)
 
 function(add_lin_executable name)
-  cmake_parse_arguments(PARSE_ARGV 1 LIN "" "" "SOURCES;DEFAULT_API;EXT_API")
+  cmake_parse_arguments(PARSE_ARGV 1 LIN "TEST" "" "SOURCES;DEFAULT_API;EXT_API")
   set(sources ${LIN_SOURCES} ${LIN_DEFAULT_API})
   set(ext_sources ${LIN_SOURCES} ${LIN_EXT_API})
 
@@ -265,6 +265,9 @@ function(add_lin_executable name)
     add_executable(${name} ${sources})
     target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name})
+    if(LIN_TEST)
+      add_test(NAME LAPACK-${name} COMMAND $<TARGET_FILE:${name}>)
+    endif()
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -276,6 +279,9 @@ function(add_lin_executable name)
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name}_64)
+    if(LIN_TEST)
+      add_test(NAME LAPACK-${name}_64 COMMAND $<TARGET_FILE:${name}_64>)
+    endif()
 
     # Add depedency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be
@@ -310,6 +316,8 @@ if(BUILD_COMPLEX)
     DEFAULT_API ${CXLINTST}
     EXT_API ${CLINTST_NO_XBLAS})
   add_lin_executable(xlintstrfc SOURCES ${CLINTSTRFP})
+  add_lin_executable(xrq_helpers_c TEST
+    SOURCES ctest_rq_helpers.f90 cgerqs.f cget02.f)
 endif()
 
 if(BUILD_COMPLEX16)
@@ -318,6 +326,8 @@ if(BUILD_COMPLEX16)
     DEFAULT_API ${ZXLINTST}
     EXT_API ${ZLINTST_NO_XBLAS})
   add_lin_executable(xlintstrfz SOURCES ${ZLINTSTRFP})
+  add_lin_executable(xrq_helpers_z TEST
+    SOURCES ztest_rq_helpers.f90 zgerqs.f zget02.f)
 endif()
 
 if(BUILD_COMPLEX AND BUILD_COMPLEX16)

@@ -118,8 +118,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      REAL               ONE, ZERO, HALF
+      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0,
+     $                   HALF = 0.5E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
@@ -130,7 +131,7 @@
       EXTERNAL           SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, SIGN
+      INTRINSIC          ABS, HUGE, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL
@@ -173,15 +174,29 @@
 *
             XNORM = SNRM2( N-1, X, INCX )
             BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
+         ELSE IF( ABS( BETA ).GT.HALF*HUGE( ZERO ) ) THEN
+*
+*           |ALPHA| <= |BETA|, so ALPHA-BETA can overflow only when
+*           |BETA| > HUGE/2; scale X down and recompute them.
+*
+            RSAFMN = ONE / SAFMIN
+            KNT = -1
+            CALL SSCAL( N-1, SAFMIN, X, INCX )
+            ALPHA = ALPHA*SAFMIN
+            XNORM = SNRM2( N-1, X, INCX )
+            BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
          TAU = ( BETA-ALPHA ) / BETA
          CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
 *
-*        If ALPHA is subnormal, it may lose relative accuracy
+*        Undo the scaling.  If ALPHA is subnormal, it may lose relative
+*        accuracy
 *
          DO 20 J = 1, KNT
             BETA = BETA*SAFMIN
  20      CONTINUE
+         IF( KNT.LT.0 )
+     $      BETA = BETA*RSAFMN
          ALPHA = BETA
       END IF
 *

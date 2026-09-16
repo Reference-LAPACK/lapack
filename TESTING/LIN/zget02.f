@@ -168,7 +168,7 @@
       EXTERNAL           ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          HUGE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -187,7 +187,7 @@
          N2 = N
       END IF
 *
-*     Exit with RESID = 1/EPS if ANORM = 0.
+*     Exit with RESID = 1/EPS if ANORM is zero or nonfinite.
 *
       EPS = DLAMCH( 'Epsilon' )
       IF( LSAME( TRANS, 'N' ) ) THEN
@@ -195,7 +195,8 @@
       ELSE
          ANORM = ZLANGE( 'I', M, N, A, LDA, RWORK )
       END IF
-      IF( ANORM.LE.ZERO ) THEN
+      IF( .NOT.( ANORM.GT.ZERO .AND.
+     $           ANORM.LE.HUGE( ANORM ) ) ) THEN
          RESID = ONE / EPS
          RETURN
       END IF
@@ -212,8 +213,12 @@
       DO 10 J = 1, NRHS
          BNORM = DZASUM( N1, B( 1, J ), 1 )
          XNORM = DZASUM( N2, X( 1, J ), 1 )
-         IF( XNORM.LE.ZERO ) THEN
+*        Reject nonfinite norms before MAX can hide a NaN ratio.
+         IF( .NOT.( XNORM.GT.ZERO .AND.
+     $              XNORM.LE.HUGE( XNORM ) .AND.
+     $              BNORM.LE.HUGE( BNORM ) ) ) THEN
             RESID = ONE / EPS
+            RETURN
          ELSE
             RESID = MAX( RESID, ( ( BNORM / ANORM ) / XNORM ) / EPS )
          END IF

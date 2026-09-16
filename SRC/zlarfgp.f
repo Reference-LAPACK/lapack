@@ -116,8 +116,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   TWO, ONE, ZERO
-      PARAMETER          ( TWO = 2.0D+0, ONE = 1.0D+0, ZERO = 0.0D+0 )
+      DOUBLE PRECISION   TWO, ONE, ZERO, HALF
+      PARAMETER          ( TWO = 2.0D+0, ONE = 1.0D+0, ZERO = 0.0D+0,
+     $                   HALF = 0.5D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
@@ -131,7 +132,7 @@
      $                   ZLADIV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN
+      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, HUGE, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZDSCAL, ZSCAL
@@ -193,6 +194,18 @@
             XNORM = DZNRM2( N-1, X, INCX )
             ALPHA = DCMPLX( ALPHR, ALPHI )
             BETA = SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         ELSE IF( ABS( BETA ).GT.HALF*HUGE( ZERO ) ) THEN
+*
+*           |ALPHA| <= |BETA|, so ALPHA+BETA can overflow only when
+*           |BETA| > HUGE/2; scale X down and recompute them.
+*
+            KNT = -1
+            CALL ZDSCAL( N-1, SMLNUM, X, INCX )
+            ALPHI = ALPHI*SMLNUM
+            ALPHR = ALPHR*SMLNUM
+            XNORM = DZNRM2( N-1, X, INCX )
+            ALPHA = DCMPLX( ALPHR, ALPHI )
+            BETA = SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -245,11 +258,14 @@
 *
          END IF
 *
-*        If BETA is subnormal, it may lose relative accuracy
+*        Undo the scaling.  If BETA is subnormal, it may lose relative
+*        accuracy
 *
          DO 20 J = 1, KNT
             BETA = BETA*SMLNUM
  20      CONTINUE
+         IF( KNT.LT.0 )
+     $      BETA = BETA*BIGNUM
          ALPHA = BETA
       END IF
 *

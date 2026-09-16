@@ -945,7 +945,8 @@
      $      '2. Upper triangular', 16X, '6. Random, CNDNUM = 0.1/EPS',
      $      / 4X, '3. Lower triangular', 16X,
      $      '7. Scaled near underflow', / 4X, '4. Random, CNDNUM = 2',
-     $      14X, '8. Scaled near overflow' )
+     $      14X, '8. Scaled near overflow', / 39X,
+     $      '9. Leading entry near overflow' )
 *
 *     QP matrix types
 *
