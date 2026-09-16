@@ -67,10 +67,10 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**T,
+*>          overwritten with the upper triangle of the product U * U**H,
 *>          and the lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L, and the upper
+*>          the lower triangle of the product L**H * L, and the upper
 *>          triangular part of A is not referenced
 *> \endverbatim
 *>
