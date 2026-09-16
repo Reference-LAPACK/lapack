@@ -431,22 +431,12 @@
                      SRNAMT = 'CPBTRF'
                      CALL CPBTRF( UPLO, N, KD, AFAC, LDAB, INFO )
 *
-*                    Check error code from CPBTRF.  ALAERH returns
-*                    without a message when INFO is zero, so an
-*                    undetected bad pivot is reported here instead.
+*                    Check error code from CPBTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        IF( INFO.EQ.0 ) THEN
-                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9996 )'CPBTRF', IZERO,
-     $                        UPLO, N, KD, IMAT
-                           NFAIL = NFAIL + 1
-                        ELSE
-                           CALL ALAERH( PATH, 'CPBTRF', INFO, IZERO,
-     $                                  UPLO, N, N, KD, KD, NB, IMAT,
-     $                                  NFAIL, NERRS, NOUT )
-                        END IF
+                        CALL ALAERH( PATH, 'CPBTRF', INFO, IZERO, UPLO,
+     $                               N, N, KD, KD, NB, IMAT, NFAIL,
+     $                               NERRS, NOUT )
                         GO TO 50
                      END IF
 *
@@ -612,9 +602,6 @@
      $      ', type ', I2, ', test(', I2, ') = ', G12.5 )
  9997 FORMAT( ' UPLO=''', A1, ''', N=', I5, ', KD=', I5, ',', 10X,
      $      ' type ', I2, ', test(', I2, ') = ', G12.5 )
- 9996 FORMAT( ' *** ', A, ' returned INFO = 0 instead of ', I5,
-     $      ' for UPLO=''', A1, ''', N=', I5, ', KD=', I5,
-     $      ', type ', I2 )
       RETURN
 *
 *     End of CCHKPB

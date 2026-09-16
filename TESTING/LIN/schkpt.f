@@ -383,20 +383,11 @@
 *
             CALL SPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*           Check error code from SPTTRF.  ALAERH returns without a
-*           message when INFO is zero, so an undetected bad pivot is
-*           reported here instead.
+*           Check error code from SPTTRF.
 *
             IF( INFO.NE.IZERO ) THEN
-               IF( INFO.EQ.0 ) THEN
-                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALAHD( NOUT, PATH )
-                  WRITE( NOUT, FMT = 9997 )'SPTTRF', IZERO, N, IMAT
-                  NFAIL = NFAIL + 1
-               ELSE
-                  CALL ALAERH( PATH, 'SPTTRF', INFO, IZERO, ' ', N, N,
-     $                         -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
-               END IF
+               CALL ALAERH( PATH, 'SPTTRF', INFO, IZERO, ' ', N, N, -1,
+     $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 100
             END IF
 *
@@ -546,8 +537,6 @@
      $      G12.5 )
  9998 FORMAT( ' N =', I5, ', NRHS=', I3, ', type ', I2, ', test(', I2,
      $      ') = ', G12.5 )
- 9997 FORMAT( ' *** ', A, ' returned INFO = 0 instead of ', I5,
-     $      ' for N =', I5, ', type ', I2 )
       RETURN
 *
 *     End of SCHKPT
