@@ -150,7 +150,7 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZUNMQR
+      EXTERNAL           XER_REPLACE, ZAXPY, ZCOPY, ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -162,7 +162,7 @@
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'ZQPT01', 10 )
+         CALL XER_REPLACE( 'ZQPT01', 10 )
          RETURN
       END IF
 *

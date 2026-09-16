@@ -684,11 +684,11 @@
       EXTERNAL           ILAENV, DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLASUM, DSTEBZ, DSTECH, DSTERF, XERBLA,
+      EXTERNAL           DCOPY, DLASUM, DSTEBZ, DSTECH, DSTERF,
      $                   ZCOPY, ZHET21, ZHETRD, ZHPT21, ZHPTRD, ZLACPY,
      $                   ZLASET, ZLATMR, ZLATMS, ZPTEQR, ZSTEDC, ZSTEMR,
      $                   ZSTEIN, ZSTEQR, ZSTT21, ZSTT22, ZUNGTR, ZUPGTR,
-     $                   ZHETRD_2STAGE, DLASET
+     $                   XER_REPLACE, ZHETRD_2STAGE, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, INT, LOG, MAX, MIN, SQRT
@@ -742,7 +742,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKST2STG', -INFO )
+         CALL XER_REPLACE( 'ZCHKST2STG', -INFO )
          RETURN
       END IF
 *

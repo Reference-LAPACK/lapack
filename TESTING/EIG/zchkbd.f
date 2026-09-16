@@ -464,8 +464,9 @@
       EXTERNAL           DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, DCOPY, DLAHD2, DSVDCH, XERBLA, ZBDSQR,
+      EXTERNAL           ALASUM, DCOPY, DLAHD2, DSVDCH, ZBDSQR,
      $                   ZBDT01, ZBDT02, ZBDT03, ZGEBRD, ZGEMM, ZLACPY,
+     $                   XER_REPLACE,
      $                   ZLASET, ZLATMR, ZLATMS, ZUNGBR, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
@@ -536,7 +537,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKBD', -INFO )
+         CALL XER_REPLACE( 'ZCHKBD', -INFO )
          RETURN
       END IF
 *

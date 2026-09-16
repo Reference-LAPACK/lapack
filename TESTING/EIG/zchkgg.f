@@ -560,9 +560,9 @@
       EXTERNAL           DLAMCH, ZLANGE, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASUM, XERBLA, ZGEQR2, ZGET51, ZGET52, ZGGHRD,
+      EXTERNAL           DLASUM, ZGEQR2, ZGET51, ZGET52, ZGGHRD,
      $                   ZHGEQZ, ZLACPY, ZLARFG, ZLASET, ZLATM4, ZTGEVC,
-     $                   ZUNM2R
+     $                   XER_REPLACE, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SIGN
@@ -627,7 +627,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKGG', -INFO )
+         CALL XER_REPLACE( 'ZCHKGG', -INFO )
          RETURN
       END IF
 *

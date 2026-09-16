@@ -421,7 +421,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DBDT01, DGEJSV, DGESDD, DGESVD,
      $                   DGESVDQ, DGESVDX, DGESVJ, DLACPY, DLASET,
-     $                   DLATMS, DBDT05, DORT01, DORT03, XERBLA
+     $                   DLATMS, DBDT05, DORT01, DORT03, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN
@@ -485,7 +485,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVBD', -INFO )
+         CALL XER_REPLACE( 'DDRVBD', -INFO )
          RETURN
       END IF
 *

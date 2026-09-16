@@ -339,7 +339,8 @@
       EXTERNAL           ILAENV, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, CGET52, CGGEVX, CLACPY, CLATM6, XERBLA
+      EXTERNAL           ALASVM, CGET52, CGGEVX, CLACPY, CLATM6
+      EXTERNAL           XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, SQRT
@@ -386,7 +387,7 @@
      $   INFO = -23
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGVX', -INFO )
+         CALL XER_REPLACE( 'CDRGVX', -INFO )
          RETURN
       END IF
 *
