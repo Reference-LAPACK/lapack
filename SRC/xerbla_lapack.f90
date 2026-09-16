@@ -108,7 +108,9 @@ subroutine set_xerbla(cb)
   implicit none
   procedure() :: cb
   external set_lapack_xerbla
+#ifdef HAS_SET_BLAS_XERBLA
   external set_blas_xerbla
   call set_blas_xerbla(cb)
+#endif
   call set_lapack_xerbla(cb)
 end
