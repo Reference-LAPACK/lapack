@@ -29,7 +29,8 @@
 *>     min || A*X - B ||
 *> using the RQ factorization
 *>     A = R*Q
-*> computed by ZGERQF.
+*> computed by ZGERQF. The triangular solve uses scaled
+*> complex division to avoid intermediate overflow.
 *> \endverbatim
 *
 *  Arguments:
@@ -136,12 +137,18 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX*16         CZERO, CONE
-      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
-     $                   CONE = ( 1.0D+0, 0.0D+0 ) )
+      COMPLEX*16         CZERO
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
+*     ..
+*     .. Local Scalars ..
+      INTEGER            I, J
+*     ..
+*     .. External Functions ..
+      COMPLEX*16         ZLADIV
+      EXTERNAL           ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLASET, ZTRSM, ZUNMRQ
+      EXTERNAL           XERBLA, ZAXPY, ZLASET, ZUNMRQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -177,8 +184,17 @@
 *
 *     Solve R*X = B(n-m+1:n,:)
 *
-      CALL ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRHS,
-     $            CONE, A( 1, N-M+1 ), LDA, B( N-M+1, 1 ), LDB )
+*     LADIV avoids overflow in intrinsic complex division. Scaling
+*     all of B instead could erase small solution components.
+*
+      DO 20 J = 1, NRHS
+         DO 10 I = M, 1, -1
+            B( N-M+I, J ) = ZLADIV( B( N-M+I, J ),
+     $                              A( I, N-M+I ) )
+            CALL ZAXPY( I-1, -B( N-M+I, J ), A( 1, N-M+I ),
+     $                  1, B( N-M+1, J ), 1 )
+   10    CONTINUE
+   20 CONTINUE
 *
 *     Set B(1:n-m,:) to zero
 *
