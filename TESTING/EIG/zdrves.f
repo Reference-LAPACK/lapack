@@ -438,8 +438,8 @@
       EXTERNAL           ZSLECT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASUM, XERBLA, ZGEES, ZHST01, ZLACPY, ZLASET,
-     $                   ZLATME, ZLATMR, ZLATMS
+      EXTERNAL           DLASUM, XER_REPLACE, ZGEES, ZHST01, ZLACPY,
+     $                   ZLASET, ZLATME, ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX, MIN, SQRT
@@ -495,7 +495,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVES', -INFO )
+         CALL XER_REPLACE( 'ZDRVES', -INFO )
          RETURN
       END IF
 *

@@ -141,7 +141,7 @@
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLASET, ZTRSM, ZUNMRQ
+      EXTERNAL           XER_REPLACE, ZLASET, ZTRSM, ZUNMRQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -166,7 +166,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGERQS', -INFO )
+         CALL XER_REPLACE( 'ZGERQS', -INFO )
          RETURN
       END IF
 *
