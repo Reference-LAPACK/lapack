@@ -16543,6 +16543,24 @@ void LAPACK_sstebz_base(
     #define LAPACK_sstebz(...) LAPACK_sstebz_base(__VA_ARGS__)
 #endif
 
+#define LAPACK_dstebr LAPACK_GLOBAL_SUFFIX(dstebr,DSTEBR)
+void LAPACK_dstebr(
+    lapack_int const* n,
+    double* D,
+    double* E,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info );
+
+#define LAPACK_sstebr LAPACK_GLOBAL_SUFFIX(sstebr,SSTEBR)
+void LAPACK_sstebr(
+    lapack_int const* n,
+    float* D,
+    float* E,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info );
+
 #define LAPACK_cstedc_base LAPACK_GLOBAL_SUFFIX(cstedc,CSTEDC)
 void LAPACK_cstedc_base(
     char const* compz,

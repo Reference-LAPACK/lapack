@@ -594,6 +594,7 @@
             @defgroup stebz         stebz:          eig, Kahan
             @defgroup sterf         sterf:          eig, QR iteration
             @defgroup stedc         stedc:          eig, divide and conquer
+            @defgroup stebr         stebr:          eig, boundary-row divide and conquer
             @defgroup stegr         stegr:          eig, bisection, see stemr
             @defgroup stein         stein:          eig, inverse iteration
             @defgroup stemr         stemr:          eig, relatively robust representation (RRR)
