@@ -299,6 +299,40 @@ jobs:
     - name: Install
       run: cmake --build build --target install --parallel
 
+  lapack-with-opti-blas:
+    name: lapack with optimised blas (${{ matrix.lib_type }})
+    runs-on: ubuntu-26.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        lib_type: [ static, shared ]
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install BLAS and gfortran
+      run: |
+        sudo apt update
+        sudo apt install -y libblas-dev gfortran
+
+    - name: Configure CMake
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Debug
+        -D CMAKE_INSTALL_PREFIX=${{github.workspace}}/lapack_install
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D BUILD_TESTING:BOOL=ON
+        -D BUILD_INDEX64_EXT_API:BOOL=OFF
+        -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }}
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Install
+      run: cmake --build build --target install --parallel
+
   memory-check:
     name: valgrind memory check
     runs-on: ubuntu-24.04
