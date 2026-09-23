@@ -37,9 +37,11 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> part of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
 *> This is the blocked form of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
@@ -68,10 +70,10 @@
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
 *>          overwritten with the upper triangle of the product U * U**T,
-*>          and the lower triangular part of A is not referenced.
+*>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L, and the upper
-*>          triangular part of A is not referenced
+*>          the lower triangle of the product L**T * L, and the strictly upper
+*>          triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
