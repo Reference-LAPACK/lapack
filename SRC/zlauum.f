@@ -1,4 +1,4 @@
-*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (driver algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -37,11 +37,13 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*> This is the driver that dispatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +69,11 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**H;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**H * L.
+*>          overwritten with the upper triangle of the product U * U**H,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L**H * L, and the strictly
+*>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -129,7 +133,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZLAUU2, ZTRMM
+      EXTERNAL          XERBLA, ZLAUUM_RECURSIVE,
+     $                  ZLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

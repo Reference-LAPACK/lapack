@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download ZLAUUM_RECURSIVE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlauum.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlauum.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauum.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -32,16 +24,18 @@
 *>
 *> \verbatim
 *>
-*> ZLAUUM_RECURSIVE computes the product U * U**T or L**T * L, where the triangular
+*> ZLAUUM_RECURSIVE computes the product U * U**H or L**H * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*> This is the recursive version of the algorithm
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +61,11 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**T;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L.
+*>          overwritten with the upper triangle of the product U * U**H,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L**H * L, and the strictly
+*>          strictly upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -127,7 +123,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHERK, ZTRMM, ZLAUU2
+      EXTERNAL           XERBLA, ZLAUU2, ZHERK, ZTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -143,7 +139,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAUUM_RECURSIVE', -INFO )
+         CALL XERBLA( 'ZLAUUM_RECURSIVE', -INFO )
          RETURN
       END IF
 *
@@ -156,14 +152,14 @@
 *     Base Case
 *
       IF( N.EQ.1 ) THEN
-         A(1,1) = A(1,1) * A(1,1)
+         A(1,1) = A(1,1) * CONJG(A(1,1))
          RETURN
       END IF
 *
 *     Determine crossover point for when to bail to level2
 *
-      NX = ILAENV(3, "DLAUUM_RECURSIVE", UPLO, N, -1, -1, -1)
-      IF( K.LT.NX ) THEN
+      NX = ILAENV(3, "ZLAUUM_RECURSIVE", UPLO, N, -1, -1, -1)
+      IF( N.LT.NX ) THEN
          CALL ZLAUU2(UPLO, N, A, LDA, INFO)
          RETURN
       END IF
@@ -182,8 +178,8 @@
 *              |-----------------|
 *
 *        Where
-*           U_{11}\in\R^{k\times k} U_{12}\in\R^{  k\times n-k}
-*                                   U_{22}\in\R^{n-k\times n-k}
+*           U_{11}\in\C^{k\times k} U_{12}\in\C^{  k\times n-k}
+*                                   U_{22}\in\C^{n-k\times n-k}
 *
 *        and U_{11},U_{22} are upper triangular and U_{12} is rectangular
 *
@@ -203,7 +199,7 @@
 *        We break these operations apart as follows
 *
 *        U_{11} = U_{11}U_{11}**H            (This subroutine)
-*        U_{11} = U_{12}U_{12}**H + U_{11}   (SYRK)
+*        U_{11} = U_{12}U_{12}**H + U_{11}   (HERK)
 *
 *        U_{12} = U_{12}U_{22}**H            (TRMM)
 *
@@ -235,8 +231,8 @@
 *              |-----------------|
 *
 *        Where
-*           L_{11}\in\R^{  k\times k}
-*           L_{21}\in\R^{n-k\times k} l_{22}\in\R^{n-k\times n-k}
+*           L_{11}\in\C^{  k\times k}
+*           L_{21}\in\C^{n-k\times k} l_{22}\in\C^{n-k\times n-k}
 *
 *        and L_{11},L_{22} are lower triangular and L_{21} is rectangular
 *
@@ -256,7 +252,7 @@
 *        We break these operations apart as follows
 *
 *        L_{11} = L_{11}**H L_{11}           (This subroutine)
-*        L_{11} = L_{21}**H L_{21} + L_{11}  (SYRK)
+*        L_{11} = L_{21}**H L_{21} + L_{11}  (HERK)
 *
 *        L_{21} = L_{22}**H L_{21}           (TRMM)
 *

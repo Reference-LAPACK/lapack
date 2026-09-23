@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download DLAUUM_RECURSIVE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlauum.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlauum.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauum.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -37,11 +29,13 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*> This is the recursive version of the algorithm
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +61,11 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**T;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L.
+*>          overwritten with the upper triangle of the product U * U**T,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L**T * L, and the strictly
+*>          strictly upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -127,7 +123,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYRK, DTRMM, DLAUU2
+      EXTERNAL           XERBLA, DLAUU2, DSYRK, DTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -163,7 +159,7 @@
 *     Determine crossover point for when to bail to level2
 *
       NX = ILAENV(3, "DLAUUM_RECURSIVE", UPLO, N, -1, -1, -1)
-      IF( K.LT.NX ) THEN
+      IF( N.LT.NX ) THEN
          CALL DLAUU2(UPLO, N, A, LDA, INFO)
          RETURN
       END IF
