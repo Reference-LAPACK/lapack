@@ -222,12 +222,14 @@
       WNORM = SLANSY( '1', 'L', M, WORK, M, WORK( 1, M+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
-         RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
+         RESULT( 1 ) = ( WNORM / ANORM ) / ( REAL( M )*ULP )
       ELSE
          IF( ANORM.LT.ONE ) THEN
-            RESULT( 1 ) = ( MIN( WNORM, M*ANORM ) / ANORM ) / ( M*ULP )
+            RESULT( 1 ) = ( MIN( WNORM, REAL( M )*ANORM ) / ANORM ) / 
+     $                    ( REAL( M )*ULP )
          ELSE
-            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( M ) ) / ( M*ULP )
+            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( M ) ) /
+     $                    ( REAL( M )*ULP )
          END IF
       END IF
 *
@@ -243,7 +245,7 @@
    50 CONTINUE
 *
       RESULT( 2 ) = MIN( REAL( M ), SLANGE( '1', M, M, WORK, M, WORK( 1,
-     $              M+1 ) ) ) / ( M*ULP )
+     $              M+1 ) ) ) / ( REAL( M )*ULP )
 *
       RETURN
 *

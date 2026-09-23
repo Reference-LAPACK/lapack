@@ -256,7 +256,7 @@
                IF( ( IMAT.LT.3 .OR. IMAT.GT.5 ) .AND. IRANK.GT.1 )
      $            GO TO 130
 *
-               RANK = CEILING( ( N * REAL( RANKVAL( IRANK ) ) )
+               RANK = CEILING( ( REAL( N ) * REAL( RANKVAL( IRANK ) ) )
      $              / 100.E+0 )
 *
 *

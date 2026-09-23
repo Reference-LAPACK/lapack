@@ -151,7 +151,7 @@
       EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DORMQR, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DORMQR, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -163,7 +163,7 @@
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'DQPT01', 10 )
+         CALL XER_REPLACE( 'DQPT01', 10 )
          RETURN
       END IF
 *

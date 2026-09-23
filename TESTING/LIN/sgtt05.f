@@ -282,7 +282,8 @@
                AXBI = MIN( AXBI, TMP )
             END IF
          END IF
-         TMP = BERR( K ) / ( NZ*EPS+NZ*UNFL / MAX( AXBI, NZ*UNFL ) )
+          TMP = BERR( K ) / ( REAL( NZ )*EPS+REAL( NZ )*UNFL /
+     $                        MAX( AXBI, REAL( NZ )*UNFL ) )
          IF( K.EQ.1 ) THEN
             RESLTS( 2 ) = TMP
          ELSE

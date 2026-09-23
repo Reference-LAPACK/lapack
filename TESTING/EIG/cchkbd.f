@@ -467,7 +467,7 @@
       EXTERNAL           ALASUM, CBDSQR, CBDT01, CBDT02, CBDT03,
      $                   CGEBRD, CGEMM, CLACPY, CLASET, CLATMR,
      $                   CLATMS, CUNGBR, CUNT01, SCOPY, SLAHD2,
-     $                   SSVDCH, XERBLA
+     $                   SSVDCH, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -537,7 +537,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKBD', -INFO )
+         CALL XER_REPLACE( 'CCHKBD', -INFO )
          RETURN
       END IF
 *
@@ -562,7 +562,7 @@
          M = MVAL( JSIZE )
          N = NVAL( JSIZE )
          MNMIN = MIN( M, N )
-         AMNINV = ONE / MAX( M, N, 1 )
+         AMNINV = ONE / REAL( MAX( M, N, 1 ) )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -619,7 +619,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*MAX( M, N )*ULPINV
+            ANORM = RTUNFL*REAL( MAX( M, N ) )*ULPINV
             GO TO 70
 *
    70       CONTINUE

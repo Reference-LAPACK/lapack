@@ -342,7 +342,8 @@
       EXTERNAL           ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SGET52, SGGEVX, SLACPY, SLATM6, XERBLA
+      EXTERNAL           ALASVM, SGET52, SGGEVX, SLACPY, SLATM6,
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -382,14 +383,14 @@
          MAXWRK = 6*NMAX + NMAX*ILAENV( 1, 'SGEQRF', ' ', NMAX, 1, NMAX,
      $            0 )
          MAXWRK = MAX( MAXWRK, 2*NMAX*NMAX+12*NMAX+16 )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -24
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRGVX', -INFO )
+         CALL XER_REPLACE( 'SDRGVX', -INFO )
          RETURN
       END IF
 *
@@ -704,7 +705,7 @@
 *
       CALL ALASVM( 'SXV', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

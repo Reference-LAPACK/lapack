@@ -298,7 +298,7 @@
             IF( I.GE.L ) THEN
                LB = 0
             ELSE
-               LB = 0
+               LB = NB-M+L-I+1
             END IF
             CALL DTPRFB( 'L', 'T', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
@@ -329,7 +329,7 @@
             IF( I.GE.L ) THEN
                LB = 0
             ELSE
-               LB = 0
+               LB = NB-M+L-I+1
             END IF
             CALL DTPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,

@@ -684,11 +684,11 @@
       EXTERNAL           ILAENV, DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLASUM, DSTEBZ, DSTECH, DSTERF, XERBLA,
-     $                   ZCOPY, ZHET21, ZHETRD, ZHPT21, ZHPTRD, ZLACPY,
-     $                   ZLASET, ZLATMR, ZLATMS, ZPTEQR, ZSTEDC, ZSTEMR,
-     $                   ZSTEIN, ZSTEQR, ZSTT21, ZSTT22, ZUNGTR, ZUPGTR,
-     $                   ZHETRD_2STAGE, DLASET
+      EXTERNAL           DCOPY, DLASUM, DSTEBZ, DSTECH, DSTERF,
+     $                   XER_REPLACE, ZCOPY, ZHET21, ZHETRD, ZHPT21,
+     $                   ZHPTRD, ZLACPY, ZLASET, ZLATMR, ZLATMS, ZPTEQR,
+     $                   ZSTEDC, ZSTEMR, ZSTEIN, ZSTEQR, ZSTT21, ZSTT22,
+     $                   ZUNGTR, ZUPGTR, ZHETRD_2STAGE, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, INT, LOG, MAX, MIN, SQRT
@@ -742,7 +742,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKST2STG', -INFO )
+         CALL XER_REPLACE( 'ZCHKST2STG', -INFO )
          RETURN
       END IF
 *
@@ -1443,8 +1443,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-               IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1706,8 +1706,8 @@
 *
                   RESULT( 27 ) = TEMP1 / TEMP2
 *
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
@@ -1765,8 +1765,8 @@
 *
                IF( CRANGE ) THEN
                   NTEST = 29
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL

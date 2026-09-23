@@ -162,8 +162,8 @@
       EPS = SLAMCH( 'Precision' )
       SMALL = SLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
-      SMALL = SMALL * LDA * LDA
-      LARGE = LARGE / LDA / LDA
+      SMALL = SMALL * REAL( LDA ) * REAL( LDA )
+      LARGE = LARGE / REAL( LDA ) / REAL( LDA )
 *
       DO 130 IIN = 1, NN
 *

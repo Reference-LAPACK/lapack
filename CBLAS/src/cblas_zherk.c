@@ -74,13 +74,12 @@ void API_SUFFIX(cblas_zherk)(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
       else if ( Uplo == CblasLower ) UL='U';
       else
       {
-         API_SUFFIX(cblas_xerbla)(3, "cblas_zherk", "Illegal Uplo setting, %d\n", Uplo);
+         API_SUFFIX(cblas_xerbla)(2, "cblas_zherk", "Illegal Uplo setting, %d\n", Uplo);
          CBLAS_CallFromC = 0;
          RowMajorStrg = 0;
          return;
       }
-      if( Trans == CblasTrans) TR ='N';
-      else if ( Trans == CblasConjTrans ) TR='N';
+      if( Trans == CblasConjTrans ) TR='N';
       else if ( Trans == CblasNoTrans )   TR='C';
       else
       {

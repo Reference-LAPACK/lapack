@@ -392,7 +392,7 @@
       EXTERNAL           SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SLAFTS, XERBLA, CHBEV, CHBEVD,
+      EXTERNAL           ALASVM, SLAFTS, XER_REPLACE, CHBEV, CHBEVD,
      $                   CHBEVX, CHEEV, CHEEVD, CHEEVR, CHEEVX, CHET21,
      $                   CHET22, CHPEV, CHPEVD, CHPEVX, CLACPY, CLASET,
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
@@ -441,7 +441,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'CDRVST2STG', -INFO )
          RETURN
       END IF
 *
@@ -537,7 +537,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -597,7 +597,7 @@
 *
 *              Hermitian banded, eigenvalues specified
 *
-               IHBW = INT( ( N-1 )*SLARND( 1, ISEED3 ) )
+               IHBW = INT( REAL( N-1 )*SLARND( 1, ISEED3 ) )
                CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, IHBW, IHBW, 'Z', U, LDU, WORK,
      $                      IINFO )
@@ -632,8 +632,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

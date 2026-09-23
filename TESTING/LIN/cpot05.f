@@ -280,8 +280,8 @@
                AXBI = MIN( AXBI, TMP )
             END IF
    80    CONTINUE
-         TMP = BERR( K ) / ( ( N+1 )*EPS+( N+1 )*UNFL /
-     $         MAX( AXBI, ( N+1 )*UNFL ) )
+         TMP = BERR( K ) / ( REAL( N+1 )*EPS+REAL( N+1 )*UNFL /
+     $                       MAX( AXBI, REAL( N+1 )*UNFL ) )
          IF( K.EQ.1 ) THEN
             RESLTS( 2 ) = TMP
          ELSE

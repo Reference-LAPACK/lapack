@@ -4,7 +4,7 @@
 ## HINTS: ctest -Ddashboard_model=Nightly      -S $(pwd)/lapack/lapack_build.cmake
 ##
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.18)
 ###################################################################
 # The values in this section must always be provided
 ###################################################################

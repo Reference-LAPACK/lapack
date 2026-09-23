@@ -186,10 +186,10 @@
       COMPLEX*16         D12, D21, T, WK, WKM1, WKP1, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       INTEGER            IZAMAX
       DOUBLE PRECISION   DLAPY2
-      EXTERNAL           LSAME, IZAMAX, DLAPY2
+      EXTERNAL           LSAME, IZAMAX, DLAPY2, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZSWAP
@@ -256,9 +256,11 @@
             COLMAX = ZERO
          END IF
 *
-         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR.
+     $       DISNAN(ABSAKK) ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow, or contains a NaN:
+*           set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
@@ -459,9 +461,11 @@
             COLMAX = ZERO
          END IF
 *
-         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR.
+     $       DISNAN(ABSAKK) ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow, or contains a NaN:
+*           set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K

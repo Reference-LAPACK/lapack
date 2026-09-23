@@ -564,7 +564,7 @@
 *     .. External Subroutines ..
       EXTERNAL           SGEQR2, SGET51, SGET52, SGGHRD, SHGEQZ, SLACPY,
      $                   SLARFG, SLASET, SLASUM, SLATM4, SORM2R, STGEVC,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -629,7 +629,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKGG', -INFO )
+         CALL XER_REPLACE( 'SCHKGG', -INFO )
          RETURN
       END IF
 *
@@ -659,7 +659,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )

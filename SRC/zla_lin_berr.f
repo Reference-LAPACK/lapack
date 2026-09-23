@@ -126,7 +126,7 @@
       DOUBLE PRECISION   SAFE1
 *     ..
 *     .. Statement Functions ..
-      COMPLEX*16         CABS1
+      DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function Definitions ..
       CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )

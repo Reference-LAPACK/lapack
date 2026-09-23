@@ -226,13 +226,13 @@
                DO 10 I = 1, J - 1
                   AP( JC+I-1 ) = ZERO
    10          CONTINUE
-               AP( JC+J-1 ) = J
+               AP( JC+J-1 ) = CMPLX( REAL( J ) )
                JC = JC + J
    20       CONTINUE
          ELSE
             JC = 1
             DO 40 J = 1, N
-               AP( JC ) = J
+               AP( JC ) = CMPLX( REAL( J ) )
                DO 30 I = J + 1, N
                   AP( JC+I-J ) = ZERO
    30          CONTINUE
@@ -253,13 +253,13 @@
                DO 50 I = 1, J - 1
                   AP( JC+I ) = ZERO
    50          CONTINUE
-               AP( JC+J ) = J
+               AP( JC+J ) = CMPLX( REAL( J ) )
                JC = JC + J
    60       CONTINUE
          ELSE
             JC = 1
             DO 80 J = 1, N
-               AP( JC ) = J
+               AP( JC ) = CMPLX( REAL( J ) )
                DO 70 I = J + 1, N
                   AP( JC+I-J ) = ZERO
    70          CONTINUE

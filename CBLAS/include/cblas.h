@@ -45,6 +45,21 @@ typedef enum CBLAS_SIDE {CblasLeft=141, CblasRight=142} CBLAS_SIDE;
 #define CBLAS_ORDER CBLAS_LAYOUT /* this for backward compatibility with CBLAS_ORDER */
 
 /*
+ * Weak symbol support for cblas_xerbla() and F77_xerbla()
+ *
+ * Must precede the cblas_64.h include below: that header declares
+ * cblas_xerbla_64() with CBLAS_WEAK_SYMBOL, and its own include of cblas.h is
+ * a no-op while we are still inside this header's include guard.
+ */
+#ifndef CBLAS_WEAK_SYMBOL
+#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
+   #define CBLAS_WEAK_SYMBOL __attribute__((weak))
+#else
+   #define CBLAS_WEAK_SYMBOL
+#endif
+#endif
+
+/*
  * Integer specific API
  */
 #ifndef API_SUFFIX
@@ -684,11 +699,8 @@ void cblas_zher2k(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const CBLAS_INT ldb, const double beta,
                   void *C, const CBLAS_INT ldc);
 
-void
-#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
-__attribute__((weak))
-#endif
-cblas_xerbla(CBLAS_INT p, const char *rout, const char *form, ...);
+void CBLAS_WEAK_SYMBOL cblas_xerbla(CBLAS_INT p, const char *rout,
+                                    const char *form, ...);
 
 #ifdef __cplusplus
 }

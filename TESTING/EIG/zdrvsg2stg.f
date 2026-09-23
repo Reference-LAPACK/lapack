@@ -426,7 +426,7 @@
       EXTERNAL           LSAME, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAFTS, DLASUM, XERBLA, ZHBGV, ZHBGVD,
+      EXTERNAL           DLAFTS, DLASUM, XER_REPLACE, ZHBGV, ZHBGVD,
      $                   ZHBGVX, ZHEGV, ZHEGVD, ZHEGVX, ZHPGV, ZHPGVD,
      $                   ZHPGVX, ZLACPY, ZLASET, ZLATMR, ZLATMS, ZSGT01,
      $                   ZHEGV_2STAGE
@@ -477,7 +477,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVSG2STG', -INFO )
+         CALL XER_REPLACE( 'ZDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -671,8 +671,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

@@ -60,6 +60,7 @@
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_XW, &
                        TMP_EX
+      REAL(KIND=WP) :: S1, S2
 !............................................................
       COMPLEX(KIND=WP) :: CMAX
       INTEGER :: LCWORK
@@ -100,6 +101,8 @@
       INTRINSIC ABS, INT, MIN, MAX, SIGN
 !............................................................
 
+
+      CALL CPU_TIME( S1 )
 
       WRITE(*,*) 'COMPLEX CODE TESTING'
 
@@ -144,7 +147,7 @@
       ! Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
-          STOP
+          STOP 1
       END IF
 !.............
       ! The seed inside the LLOOP so that each pass can be reproduced easily.
@@ -191,8 +194,8 @@
       ALLOCATE( SINGVX(N) )
       ALLOCATE( SINGVQX(N) )
 
-      TOL  = 10*M*EPS
-      TOL2 = 10*M*N*EPS
+      TOL  = 10.0_WP*REAL( M, KIND=WP )*EPS
+      TOL2 = 10.0_WP*REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS
 
 !.............
 
@@ -349,7 +352,7 @@
         WRITE(*,*) 'The input parameters were ',      &
         SCALE, JOBZ, RESIDS, JOBREF, WHTSVD,          &
         M, N, LDX, LDY, NRNK, TOL, LDZ, LDAU, LDW, LDS
-        STOP
+        STOP 1
       ELSE
         !WRITE(*,*) '... done. Workspace length computed.'
       END IF
@@ -373,7 +376,7 @@
            WRITE(*,*) 'The input parameters were ',&
            SCALE, JOBZ, RESIDS, JOBREF, WHTSVD, &
            M, N, LDX, LDY, NRNK, TOL
-           STOP
+           STOP 1
       END IF
       SINGVX(1:N) = WORK(1:N)
 
@@ -524,7 +527,7 @@
                  WRITE(*,*) 'The input parameters were ',&
                  SCALE, JOBZ, RESIDS, WANTQ, WANTR, WHTSVD, &
                  M, N, LDX, LDY, NRNK, TOL
-                 STOP
+                 STOP 1
           END IF
           SINGVQX(1:N) =WORK(1:N)
 
@@ -720,5 +723,7 @@
 
       WRITE(*,*)
       WRITE(*,*) 'Test completed.'
+      CALL CPU_TIME( S2 )
+      WRITE(*,'(A,F12.2,A,/)') ' Total time used = ', S2 - S1, ' seconds'
       STOP
       END

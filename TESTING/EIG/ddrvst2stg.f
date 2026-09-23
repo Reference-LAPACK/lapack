@@ -509,7 +509,7 @@
      $                   DSYEV, DSYEVD, DSYEVR, DSYEVX, DSYT21,
      $                   DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
      $                   DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
-     $                   DSBEVX_2STAGE, DSYT22, XERBLA
+     $                   DSBEVX_2STAGE, DSYT22, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -564,7 +564,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'DDRVST2STG', -INFO )
          RETURN
       END IF
 *
@@ -761,8 +761,8 @@ c           LIWEDC = 12
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

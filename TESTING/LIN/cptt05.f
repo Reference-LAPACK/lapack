@@ -252,7 +252,8 @@
      $            CABS1( X( N-1, K ) ) + CABS1( D( N )*X( N, K ) )
             AXBI = MIN( AXBI, TMP )
          END IF
-         TMP = BERR( K ) / ( NZ*EPS+NZ*UNFL / MAX( AXBI, NZ*UNFL ) )
+         TMP = BERR( K ) / ( REAL( NZ )*EPS+REAL( NZ )*UNFL /
+     $                       MAX( AXBI, REAL( NZ )*UNFL ) )
          IF( K.EQ.1 ) THEN
             RESLTS( 2 ) = TMP
          ELSE

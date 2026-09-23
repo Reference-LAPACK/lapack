@@ -410,8 +410,8 @@
 *     .. External Subroutines ..
       EXTERNAL           DLACPY, DLAFTS, DLASET, DLASUM, DLATMR,
      $                   DLATMS, DSBGV, DSBGVD, DSBGVX, DSGT01, DSPGV,
-     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX, XERBLA,
-     $                   DSYGV_2STAGE
+     $                   DSPGVD, DSPGVX, DSYGV, DSYGVD, DSYGVX,
+     $                   XER_REPLACE, DSYGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -457,7 +457,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVSG2STG', -INFO )
+         CALL XER_REPLACE( 'DDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -654,8 +654,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

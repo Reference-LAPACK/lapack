@@ -421,7 +421,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CHBGV, CHBGVD, CHBGVX, CHEGV, CHEGVD, CHEGVX,
      $                   CHPGV, CHPGVD, CHPGVX, CLACPY, CLASET, CLATMR,
-     $                   CLATMS, CSGT01, SLAFTS, SLASUM, XERBLA
+     $                   CLATMS, CSGT01, SLAFTS, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -469,7 +469,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVSG', -INFO )
+         CALL XER_REPLACE( 'CDRVSG', -INFO )
          RETURN
       END IF
 *
@@ -552,7 +552,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -663,8 +663,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

@@ -345,7 +345,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHBT21, CHBTRD, CLACPY, CLATMR, CLATMS, CLASET,
-     $                   SLASUM, XERBLA
+     $                   SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SQRT
@@ -404,7 +404,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKHB', -INFO )
+         CALL XER_REPLACE( 'CCHKHB', -INFO )
          RETURN
       END IF
 *
@@ -489,7 +489,7 @@
                GO TO 70
 *
    60          CONTINUE
-               ANORM = RTUNFL*N*ULPINV
+               ANORM = RTUNFL*REAL( N )*ULPINV
                GO TO 70
 *
    70          CONTINUE

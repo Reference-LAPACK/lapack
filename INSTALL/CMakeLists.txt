@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.18)
 project(TIMING Fortran)
 
 # Add the CMake directory for custom CMake modules

@@ -396,7 +396,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGESVD, CGET51, CGGESX, CLACPY, CLAKF2,
-     $                   CLASET, CLATM5, XERBLA
+     $                   CLASET, CLATM5, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            FS
@@ -462,14 +462,14 @@
 *
          MAXWRK = MAX( MAXWRK, MINWRK )
 *
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -18
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGSX', -INFO )
+         CALL XER_REPLACE( 'CDRGSX', -INFO )
          RETURN
       END IF
 *
@@ -895,7 +895,7 @@
 *
       CALL ALASVM( 'CGX', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *

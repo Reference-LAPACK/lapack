@@ -1,3 +1,5 @@
+set(COMMON_UTILS lapacke_make_complex_float.c lapacke_make_complex_double.c)
+
 set(UTILS
 lapacke_c_nancheck.c          lapacke_d_nancheck.c          lapacke_s_nancheck.c          lapacke_z_nancheck.c
 lapacke_cgb_nancheck.c        lapacke_dgb_nancheck.c        lapacke_sgb_nancheck.c        lapacke_zgb_trans.c
@@ -39,8 +41,6 @@ lapacke_ctr_nancheck.c        lapacke_dtr_nancheck.c        lapacke_str_nancheck
 lapacke_ctr_trans.c           lapacke_dtr_trans.c           lapacke_str_trans.c           lapacke_ztr_trans.c
 lapacke_ctz_nancheck.c        lapacke_dtz_nancheck.c        lapacke_stz_nancheck.c        lapacke_ztz_nancheck.c
 lapacke_ctz_trans.c           lapacke_dtz_trans.c           lapacke_stz_trans.c           lapacke_ztz_trans.c
-
-lapacke_make_complex_float.c                                                              lapacke_make_complex_double.c
 lapacke_lsame.c
 lapacke_xerbla.c
 )

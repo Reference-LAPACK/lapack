@@ -299,7 +299,7 @@
             ELSE
                CALL SLASET( 'F', M, M, ZERO, ONE, X, LDX )
                DO I = 1, M
-                  J = INT( SLARAN( ISEED ) * M ) + 1
+                  J = INT( SLARAN( ISEED ) * REAL( M ) ) + 1
                   IF( J .NE. I ) THEN
                      CALL SROT( M, X(1+(I-1)*LDX), 1, X(1+(J-1)*LDX), 1,
      $                 ZERO, ONE )

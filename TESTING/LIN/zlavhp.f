@@ -159,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMV, ZGERU, ZLACGV, ZSCAL, ZSWAP
+      EXTERNAL           XER_REPLACE, ZGEMV, ZGERU, ZLACGV, ZSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX
@@ -183,7 +183,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLAVHP ', -INFO )
+         CALL XER_REPLACE( 'ZLAVHP ', -INFO )
          RETURN
       END IF
 *

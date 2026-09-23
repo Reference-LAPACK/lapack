@@ -436,7 +436,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET51, CGET54, CGGES, CLACPY, CLARFG,
-     $                   CLASET, CLATM4, CUNM2R, XERBLA
+     $                   CLASET, CLATM4, CUNM2R, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, MIN, REAL, SIGN
@@ -514,14 +514,14 @@
      $        ILAENV( 1, 'CUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'CUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( NMAX+NMAX*NB, 3*NMAX*NMAX )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGES', -INFO )
+         CALL XER_REPLACE( 'CDRGES', -INFO )
          RETURN
       END IF
 *
@@ -874,7 +874,7 @@
 *
       CALL ALASVM( 'CGS', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *

@@ -234,12 +234,14 @@
       WNORM = CLANGE( '1', N, 2*N, WORK, N, DUM )
 *
       IF( ABNORM.GT.WNORM ) THEN
-         RESULT = ( WNORM / ABNORM ) / ( 2*N*ULP )
+         RESULT = ( WNORM / ABNORM ) / ( REAL( 2*N )*ULP )
       ELSE
          IF( ABNORM.LT.ONE ) THEN
-            RESULT = ( MIN( WNORM, 2*N*ABNORM ) / ABNORM ) / ( 2*N*ULP )
+            RESULT = ( MIN( WNORM, REAL( 2*N )*ABNORM ) / ABNORM ) /
+     $               ( REAL( 2*N )*ULP )
          ELSE
-            RESULT = MIN( WNORM / ABNORM, REAL( 2*N ) ) / ( 2*N*ULP )
+            RESULT = MIN( WNORM / ABNORM, REAL( 2*N ) ) /
+     $               ( REAL( 2*N )*ULP )
          END IF
       END IF
 *

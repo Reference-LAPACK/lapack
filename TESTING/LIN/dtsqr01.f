@@ -427,7 +427,7 @@
 *     Compute |C*Q - C*Q| / |C|
 *
       CALL DGEMM( 'N', 'N', M, N, N, -ONE, C, M, Q, N, ONE, CF, M )
-      RESID = DLANGE( '1', N, M, DF, N, RWORK )
+      RESID = DLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 5 ) = RESID / (EPS*MAX(1,N)*CNORM)
       ELSE

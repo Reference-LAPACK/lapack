@@ -24,7 +24,7 @@ else()
                           HAS_ATTRIBUTE_WEAK_SUPPORT)
 endif()
 
-include_directories(include ${LAPACK_BINARY_DIR}/include)
+include_directories(${LAPACK_BINARY_DIR}/include include)
 add_subdirectory(src)
 
 macro(append_subdir_files variable dirname)

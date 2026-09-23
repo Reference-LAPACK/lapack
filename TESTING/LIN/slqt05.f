@@ -178,7 +178,7 @@
       ANORM = SLANGE( '1', M, N2, A, M, RWORK )
       RESID = SLANGE( '1', M, N2, R, N2, RWORK )
       IF( ANORM.GT.ZERO ) THEN
-         RESULT( 1 ) = RESID / (EPS*ANORM*MAX(1,N2))
+         RESULT( 1 ) = RESID / (EPS*ANORM*REAL( MAX( 1, N2 ) ))
       ELSE
          RESULT( 1 ) = ZERO
       END IF
@@ -188,7 +188,7 @@
       CALL SLASET( 'Full', N2, N2, ZERO, ONE, R, N2 )
       CALL SSYRK( 'U', 'N', N2, N2, -ONE, Q, N2, ONE, R, N2 )
       RESID = SLANSY( '1', 'Upper', N2, R, N2, RWORK )
-      RESULT( 2 ) = RESID / (EPS*MAX(1,N2))
+      RESULT( 2 ) = RESID / (EPS*REAL( MAX( 1, N2 ) ))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
@@ -209,7 +209,7 @@
       CALL SGEMM( 'N', 'N', N2, M, N2, -ONE, Q, N2, C, N2, ONE, CF, N2 )
       RESID = SLANGE( '1', N2, M, CF, N2, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 3 ) = RESID / (EPS*MAX(1,N2)*CNORM)
+         RESULT( 3 ) = RESID / (EPS*REAL( MAX( 1, N2 ) )*CNORM)
       ELSE
          RESULT( 3 ) = ZERO
       END IF
@@ -230,7 +230,7 @@
       RESID = SLANGE( '1', N2, M, CF, N2, RWORK )
 
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 4 ) = RESID / (EPS*MAX(1,N2)*CNORM)
+         RESULT( 4 ) = RESID / (EPS*REAL( MAX( 1, N2 ) )*CNORM)
       ELSE
          RESULT( 4 ) = ZERO
       END IF
@@ -253,7 +253,7 @@
       CALL SGEMM('N','N',M,N2,N2,-ONE,D,M,Q,N2,ONE,DF,M)
       RESID = SLANGE('1',M, N2,DF,M,RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 5 ) = RESID / (EPS*MAX(1,N2)*DNORM)
+         RESULT( 5 ) = RESID / (EPS*REAL( MAX( 1, N2 ) )*DNORM)
       ELSE
          RESULT( 5 ) = ZERO
       END IF
@@ -273,7 +273,7 @@
       CALL SGEMM( 'N', 'T', M, N2, N2, -ONE, D, M, Q, N2, ONE, DF, M )
       RESID = SLANGE( '1', M, N2, DF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
-         RESULT( 6 ) = RESID / (EPS*MAX(1,N2)*DNORM)
+         RESULT( 6 ) = RESID / (EPS*REAL( MAX( 1, N2 ) )*DNORM)
       ELSE
          RESULT( 6 ) = ZERO
       END IF

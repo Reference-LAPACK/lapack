@@ -1,72 +1,45 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
+
 #include "cblas.h"
 #include "cblas_f77.h"
+#include "cblas_xerbla_internal.h"
 
-void
-#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
-__attribute__((weak))
-#endif
-API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout, const char *form, ...)
+/**
+ * \brief CBLAS error handler: report an invalid argument and terminate.
+ *
+ * Remaps \p info to the CBLAS argument position for row-major calls, writes
+ * the diagnostic to stderr and exits; it does not return to its caller.
+ *
+ * \param[in] info  CBLAS argument number, or 0 to report only \p form.
+ * \param[in] rout  Routine name, e.g. "cblas_dgemm".
+ * \param[in] form  printf-style format for further detail, followed by the
+ *                  values it refers to.
+ */
+void CBLAS_WEAK_SYMBOL API_SUFFIX(cblas_xerbla)(CBLAS_INT info,
+                                                const char *rout,
+                                                const char *form, ...)
 {
    extern int RowMajorStrg;
    char empty[1] = "";
-   va_list argptr;
 
-   va_start(argptr, form);
+   info = cblas_xerbla_map_info(info, rout, RowMajorStrg);
+   if (info) {
+      char reported[CBLAS_XERBLA_ROUT_BUFFER_SIZE];
+      cblas_xerbla_apply_api_suffix(reported, sizeof(reported), rout);
 
-   if (RowMajorStrg)
-   {
-      if (strstr(rout,"gemm") != 0)
-      {
-         if      (info == 5 ) info =  4;
-         else if (info == 4 ) info =  5;
-         else if (info == 11) info =  9;
-         else if (info == 9 ) info = 11;
-      }
-      else if (strstr(rout,"symm") != 0 || strstr(rout,"hemm") != 0)
-      {
-         if      (info == 5 ) info =  4;
-         else if (info == 4 ) info =  5;
-      }
-      else if (strstr(rout,"trmm") != 0 || strstr(rout,"trsm") != 0)
-      {
-         if      (info == 7 ) info =  6;
-         else if (info == 6 ) info =  7;
-      }
-      else if (strstr(rout,"gemv") != 0)
-      {
-         if      (info == 4)  info = 3;
-         else if (info == 3)  info = 4;
-      }
-      else if (strstr(rout,"gbmv") != 0)
-      {
-         if      (info == 4)  info = 3;
-         else if (info == 3)  info = 4;
-         else if (info == 6)  info = 5;
-         else if (info == 5)  info = 6;
-      }
-      else if (strstr(rout,"ger") != 0)
-      {
-         if      (info == 3) info = 2;
-         else if (info == 2) info = 3;
-         else if (info == 8) info = 6;
-         else if (info == 6) info = 8;
-      }
-      else if ( (strstr(rout,"her2") != 0 || strstr(rout,"hpr2") != 0)
-                 && strstr(rout,"her2k") == 0 )
-      {
-         if      (info == 8) info = 6;
-         else if (info == 6) info = 8;
-      }
+      fprintf(stderr, "Parameter %" CBLAS_IFMT " to routine %s was incorrect\n",
+              info, reported);
    }
-   if (info)
-      fprintf(stderr, "Parameter %" CBLAS_IFMT " to routine %s was incorrect\n", info, rout);
+
+   va_list argptr;
+   va_start(argptr, form);
    vfprintf(stderr, form, argptr);
    va_end(argptr);
-   if (info && !info)
+
+   if (info && !info) {
       F77_xerbla(empty, &info); /* Force link of our F77 error handler */
+   }
    exit(-1);
 }

@@ -382,7 +382,8 @@
       EXTERNAL           CSLECT, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01, XERBLA
+      EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01,
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -417,7 +418,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGET24', -INFO )
+         CALL XER_REPLACE( 'CGET24', -INFO )
          RETURN
       END IF
 *
@@ -500,14 +501,14 @@
          WNORM = CLANGE( '1', N, N, VS1, LDVS, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
-            RESULT( 2+RSUB ) = ( WNORM / ANORM ) / ( N*ULP )
+            RESULT( 2+RSUB ) = ( WNORM / ANORM ) / ( REAL( N )*ULP )
          ELSE
             IF( ANORM.LT.ONE ) THEN
-               RESULT( 2+RSUB ) = ( MIN( WNORM, N*ANORM ) / ANORM ) /
-     $                            ( N*ULP )
+               RESULT( 2+RSUB ) = ( MIN( WNORM, REAL( N )*ANORM ) /
+     $                            ANORM ) / ( REAL( N )*ULP )
             ELSE
                RESULT( 2+RSUB ) = MIN( WNORM / ANORM, REAL( N ) ) /
-     $                            ( N*ULP )
+     $                            ( REAL( N )*ULP )
             END IF
          END IF
 *

@@ -24,11 +24,7 @@ macro(CheckLAPACKCompilerFlags)
          (CMAKE_Fortran_COMPILER_ID STREQUAL "XL"))           # CMake 2.8
     set(FOPT_ILP64 -qintsize=8)
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
-    if(WIN32)
-      set(FOPT_ILP64 /i8)
-    else()
-      set(FOPT_ILP64 -i8)
-    endif()
+    set(FOPT_ILP64 -i8)
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
     if(WIN32)
       set(FOPT_ILP64 /i8)
@@ -37,9 +33,9 @@ macro(CheckLAPACKCompilerFlags)
     endif()
   else()
     set(CPE_ENV $ENV{PE_ENV})
-    if(CPE_ENV STREQUAL "CRAY")
+    if(CPE_ENV STREQUAL "CRAY" AND NOT CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
       set(FOPT_ILP64 -sinteger64)
-    elseif(CPE_ENV STREQUAL "NVIDIA")
+    elseif(CPE_ENV STREQUAL "NVIDIA" AND NOT CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
       set(FOPT_ILP64 -i8)
     else()
       set(FOPT_ILP64 -fdefault-integer-8)
@@ -63,17 +59,27 @@ macro(CheckLAPACKCompilerFlags)
     # Disabling loop vectorization for GNU Fortran versions affected by
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408. See issue
     # https://github.com/Reference-LAPACK/lapack/issues/1160 as well.
-    if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm|arm64|aarch64")
-      if((CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "14.0" AND
-          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "14.4") OR
-         (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
-          CMAKE_Fortran_COMPILER_VERSION VERSION_LESS_EQUAL "15.2"))
-        message(WARNING
-          "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
-          "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
-          "For full performance, consider changing to a different compiler or compiler version.")
-        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
-      endif()
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|arm64|aarch64" AND
+       ((CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "14.0" AND
+         CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "14.5") OR
+        (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
+         CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "15.3")))
+      message(WARNING
+        "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
+        "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
+        "For full performance, consider changing to a different compiler or compiler version.")
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
+    endif()
+
+    # Disabling SLP vectorization for GNU Fortran versions affected by
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124802.
+    if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0" AND
+       CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "15.3")
+      message(WARNING
+        "Disabling SLP vectorization for GNU Fortran (15.0-15.2) "
+        "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124802). "
+        "For full performance, consider changing to a different compiler or compiler version.")
+      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-slp-vectorize>")
     endif()
 
   # Intel Fortran
@@ -190,6 +196,11 @@ macro(CheckLAPACKCompilerFlags)
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Flang")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
 
+  # LLVM Flang
+  elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+    # Nothing to do here for now, but this is a placeholder for future
+    # LLVM Flang specific flags
+
   # Compaq Fortran
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq")
     if(WIN32)
@@ -216,8 +227,6 @@ macro(CheckLAPACKCompilerFlags)
         endif()
       endif()
     endif()
-
-
 
   else()
     message(WARNING "Fortran local arrays should be allocated on the stack."

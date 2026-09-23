@@ -550,7 +550,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGET23, CLATME, CLATMR, CLATMS, CLASET, SLASUM,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -612,7 +612,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVVX', -INFO )
+         CALL XER_REPLACE( 'CDRVVX', -INFO )
          RETURN
       END IF
 *
@@ -969,8 +969,7 @@
      $      / ' 2 = | transpose(A) VL - VL W | / ( n |A| ulp ) ',
      $      / ' 3 = | |VR(i)| - 1 | / ulp ',
      $      / ' 4 = | |VL(i)| - 1 | / ulp ',
-     $      / ' 5 = 0 if W same no matter if VR or VL computed,',
-     $      ' 1/ulp otherwise', /
+     $      / ' 5 = | W - W(other JOBVL/JOBVR) | / ( n |W| ulp ) ', /
      $      ' 6 = 0 if VR same no matter what else computed,',
      $      '  1/ulp otherwise', /
      $      ' 7 = 0 if VL same no matter what else computed,',

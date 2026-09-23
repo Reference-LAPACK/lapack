@@ -206,7 +206,7 @@
             RESID = ONE / EPS
          ELSE
             RESID = MAX( RESID, ( ( BNORM / ANORM ) / XNORM ) /
-     $              ( MAX( M, N )*EPS ) )
+     $                          ( REAL( MAX( M, N ) )*EPS ) )
          END IF
    10 CONTINUE
 *

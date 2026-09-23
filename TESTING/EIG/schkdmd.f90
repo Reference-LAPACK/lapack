@@ -81,6 +81,7 @@
                        TOL, TOL2, SVDIFF, TMP, TMP_AU,       &
                        TMP_FQR, TMP_REZ, TMP_REZQ,  TMP_ZXW, &
                        TMP_EX, XNORM, YNORM
+      REAL(KIND=WP) :: S1, S2
 !............................................................
       INTEGER :: K, KQ, LDF, LDS, LDA, LDAU, LDW, LDX, LDY,  &
                  LDZ, LIWORK, LWORK, M, N, L, LLOOP, NRNK
@@ -112,6 +113,8 @@
       ! The test is always in pairs : ( SGEDMD and SGEDMDQ )
       ! because the test includes comparing the results (in pairs).
 !.....................................................................................
+      CALL CPU_TIME( S1 )
+
       TEST_QRDMD = .TRUE. ! This code by default performs tests on SGEDMDQ
                           ! Since the QR factorizations based algorithm is designed for
                           ! single trajectory data, only single trajectory tests will
@@ -153,7 +156,7 @@
       ! ... Test the dimensions
       IF ( ( MIN(M,N) == 0 ) .OR. ( M < N )  ) THEN
           WRITE(*,*) 'Bad dimensions. Required: M >= N > 0.'
-          STOP
+          STOP 1
       END IF
 !.............
       ! The seed inside the LLOOP so that each pass can be reproduced easily.
@@ -218,10 +221,10 @@
       ALLOCATE( AU(LDAU,N) )
       ALLOCATE( S(N,N) )
 
-      TOL  = M*EPS
+      TOL  = REAL( M, KIND=WP )*EPS
       ! This mimics O(M*N)*EPS bound for accumulated roundoff error.
       ! The factor 10 is somewhat arbitrary.
-      TOL2 = 10*M*N*EPS
+      TOL2 = 10.0_WP*REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS
 
 !.............
 
@@ -398,7 +401,7 @@
           END DO
           TMP_ZXW = MAX(TMP_ZXW, TMP )
 
-          IF ( TMP_ZXW > 10*M*EPS ) THEN
+          IF ( TMP_ZXW > 10.0_WP*REAL( M, KIND=WP )*EPS ) THEN
               NFAIL_Z_XV = NFAIL_Z_XV + 1
           END IF
 
@@ -571,7 +574,7 @@
                                    SINGVX(1) )
           END DO
           SVDIFF = MAX( SVDIFF, TMP )
-          IF ( TMP > M*N*EPS ) THEN
+          IF ( TMP > REAL( M, KIND=WP )*REAL( N, KIND=WP )*EPS ) THEN
              NFAIL_SVDIFF = NFAIL_SVDIFF + 1
           END IF
 
@@ -631,7 +634,7 @@
               TMP = ZERO
               DO i = 1, KQ
               TMP = MAX( TMP, ABS(RES(i) - RES1(i)) * &
-                  SINGVQX(K)/(ANORM*SINGVQX(1)) )
+                  SINGVQX(KQ)/(ANORM*SINGVQX(1)) )
               END DO
               TMP_REZQ = MAX( TMP_REZQ, TMP )
               IF ( TMP > TOL2 ) THEN
@@ -790,5 +793,7 @@
 
       WRITE(*,*)
       WRITE(*,*) 'Test completed.'
+      CALL CPU_TIME( S2 )
+      WRITE(*,'(A,F12.2,A,/)') ' Total time used = ', S2 - S1, ' seconds'
       STOP
       END

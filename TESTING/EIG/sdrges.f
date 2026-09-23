@@ -453,7 +453,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGET51, SGET53, SGET54, SGGES, SLACPY,
-     $                   SLARFG, SLASET, SLATM4, SORM2R, XERBLA
+     $                   SLARFG, SLASET, SLATM4, SORM2R, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -522,14 +522,14 @@
      $        ILAENV( 1, 'SORMQR', 'LT', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'SORGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( 10*( NMAX+1 ), 2*NMAX+NMAX*NB, 3*NMAX*NMAX )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -20
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRGES', -INFO )
+         CALL XER_REPLACE( 'SDRGES', -INFO )
          RETURN
       END IF
 *
@@ -929,7 +929,7 @@
 *
       CALL ALASVM( 'SGS', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

@@ -59,6 +59,17 @@
 #endif
 #endif
 
+/*
+ * Weak symbol support for cblas_xerbla() and F77_xerbla()
+ */
+#ifndef CBLAS_WEAK_SYMBOL
+#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
+   #define CBLAS_WEAK_SYMBOL __attribute__((weak))
+#else
+   #define CBLAS_WEAK_SYMBOL
+#endif
+#endif
+
 #define F77_GLOBAL_SUFFIX(a,b) F77_GLOBAL_SUFFIX_(API_SUFFIX(a),API_SUFFIX(b))
 #define F77_GLOBAL_SUFFIX_(a,b) F77_GLOBAL(a,b)
 
@@ -613,11 +624,7 @@ extern "C" {
 #else
    #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__)
 #endif
-void
-#ifdef HAS_ATTRIBUTE_WEAK_SUPPORT
-__attribute__((weak))
-#endif
-F77_xerbla_base(FCHAR, void *
+void CBLAS_WEAK_SYMBOL F77_xerbla_base(FCHAR, void *
 #ifdef BLAS_FORTRAN_STRLEN_END
    , FORTRAN_STRLEN
 #endif

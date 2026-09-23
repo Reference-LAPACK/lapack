@@ -392,10 +392,10 @@
       EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLAFTS, XERBLA, ZHBEV, ZHBEVD, ZHBEVX,
-     $                   ZHEEV, ZHEEVD, ZHEEVR, ZHEEVX, ZHET21, ZHET22,
-     $                   ZHPEV, ZHPEVD, ZHPEVX, ZLACPY, ZLASET, ZLATMR,
-     $                   ZLATMS
+      EXTERNAL           ALASVM, DLAFTS, XER_REPLACE, ZHBEV, ZHBEVD,
+     $                   ZHBEVX, ZHEEV, ZHEEVD, ZHEEVR, ZHEEVX, ZHET21,
+     $                   ZHET22, ZHPEV, ZHPEVD, ZHPEVX, ZLACPY, ZLASET,
+     $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MIN, SQRT
@@ -439,7 +439,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVST', -INFO )
+         CALL XER_REPLACE( 'ZDRVST', -INFO )
          RETURN
       END IF
 *
@@ -630,8 +630,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

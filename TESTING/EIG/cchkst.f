@@ -666,7 +666,8 @@
       EXTERNAL           CCOPY, CHET21, CHETRD, CHPT21, CHPTRD, CLACPY,
      $                   CLASET, CLATMR, CLATMS, CPTEQR, CSTEDC, CSTEMR,
      $                   CSTEIN, CSTEQR, CSTT21, CSTT22, CUNGTR, CUPGTR,
-     $                   SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF, XERBLA
+     $                   SCOPY, SLASUM, SSTEBZ, SSTECH, SSTERF,
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, INT, LOG, MAX, MIN, REAL, SQRT
@@ -720,7 +721,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKST', -INFO )
+         CALL XER_REPLACE( 'CCHKST', -INFO )
          RETURN
       END IF
 *
@@ -817,7 +818,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -1301,8 +1302,8 @@
 *
 *              Do test 17
 *
-               TEMP2 = TWO*( TWO*N-ONE )*ULP*( ONE+EIGHT*HALF**2 ) /
-     $                 ( ONE-HALF )**4
+               TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
+     $                 ( ONE+EIGHT*HALF**2 ) / ( ONE-HALF )**4
 *
                TEMP1 = ZERO
                DO 190 J = 1, N
@@ -1353,8 +1354,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
-               IU = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1605,7 +1606,8 @@
 *
 *              Do test 27
 *
-                  TEMP2 = TWO*( TWO*N-ONE )*ULP*( ONE+EIGHT*HALF**2 ) /
+                  TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
+     $                    ( ONE+EIGHT*HALF**2 ) /
      $                    ( ONE-HALF )**4
 *
                   TEMP1 = ZERO
@@ -1616,8 +1618,8 @@
 *
                   RESULT( 27 ) = TEMP1 / TEMP2
 *
-                  IL = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
@@ -1647,7 +1649,7 @@
 *
 *                 Do test 28
 *
-                     TEMP2 = TWO*( TWO*N-ONE )*ULP*
+                     TEMP2 = TWO*( TWO*REAL( N )-ONE )*ULP*
      $                       ( ONE+EIGHT*HALF**2 ) / ( ONE-HALF )**4
 *
                      TEMP1 = ZERO
@@ -1676,8 +1678,8 @@
 *
                IF( CRANGE ) THEN
                   NTEST = 29
-                  IL = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( SLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL

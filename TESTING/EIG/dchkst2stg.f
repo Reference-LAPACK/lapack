@@ -670,7 +670,7 @@
       EXTERNAL           DCOPY, DLACPY, DLASET, DLASUM, DLATMR, DLATMS,
      $                   DOPGTR, DORGTR, DPTEQR, DSPT21, DSPTRD, DSTEBZ,
      $                   DSTECH, DSTEDC, DSTEMR, DSTEIN, DSTEQR, DSTERF,
-     $                   DSTT21, DSTT22, DSYT21, DSYTRD, XERBLA,
+     $                   DSTT21, DSTT22, DSYT21, DSYTRD, XER_REPLACE,
      $                   DSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -725,7 +725,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKST2STG', -INFO )
+         CALL XER_REPLACE( 'DCHKST2STG', -INFO )
          RETURN
       END IF
 *
@@ -1425,8 +1425,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-               IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1686,8 +1686,8 @@
 *
                   RESULT( 27 ) = TEMP1 / TEMP2
 *
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
@@ -1745,8 +1745,8 @@
 *
                IF( SRANGE ) THEN
                   NTEST = 29
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( N*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( N*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL

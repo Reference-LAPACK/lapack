@@ -90,7 +90,7 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f
    sgels.f  sgelst.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
-   sgeqp3.f sgeqp3rk.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
+   sgeqp3.f sgeqp3rk.f sgecxx.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
    sgetri.f
    sggbak.f sggbal.f
@@ -181,7 +181,7 @@ set(CLASRC
    cgecon.f cgeequ.f cgees.f  cgeesx.f cgeev.f  cgeevx.f
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f
    cgels.f  cgelst.f cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f
-   cgeqp3.f cgeqp3rk.f
+   cgeqp3.f cgeqp3rk.f cgecxx.f
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
    cgesvj.f cgejsv.f cgsvj0.f cgsvj1.f
@@ -291,7 +291,7 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
    dgels.f  dgelst.f dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f
-   dgeqp3.f dgeqp3rk.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
+   dgeqp3.f dgeqp3rk.f dgecxx.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
@@ -380,7 +380,7 @@ set(ZLASRC
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f
    zgels.f zgelst.f zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f
-   zgeqp3.f zgeqp3rk.f
+   zgeqp3.f zgeqp3rk.f zgecxx.f
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
    zgesvj.f zgejsv.f zgsvj0.f zgsvj1.f
@@ -496,92 +496,70 @@ if(BUILD_DEPRECATED)
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
 endif()
 
-if(USE_XBLAS)
-  list(APPEND SLASRC ${SXLASRC})
-  list(APPEND DLASRC ${DXLASRC})
-  list(APPEND CLASRC ${CXLASRC})
-  list(APPEND ZLASRC ${ZXLASRC})
-endif()
-
-
 set(SOURCES)
+set(XSOURCES)
 if(BUILD_SINGLE)
   list(APPEND SOURCES ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
+  if(USE_XBLAS)
+    list(APPEND XSOURCES ${SXLASRC})
+  endif()
 endif()
 if(BUILD_DOUBLE)
   list(APPEND SOURCES ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
+  if(USE_XBLAS)
+    list(APPEND XSOURCES ${DXLASRC})
+  endif()
 endif()
 if(BUILD_COMPLEX)
   list(APPEND SOURCES ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
+  if(USE_XBLAS)
+    list(APPEND XSOURCES ${CXLASRC})
+  endif()
 endif()
 if(BUILD_COMPLEX16)
   list(APPEND SOURCES ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
+  if(USE_XBLAS)
+    list(APPEND XSOURCES ${ZXLASRC})
+  endif()
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 # Use special target for MOD files to guarantee they are built before
 # any other files that depend on them
 add_library(const_mod_file OBJECT ${CONSTMOD})
-set_target_properties(
-  const_mod_file PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
-  Fortran_PREPROCESS ON
-  )
+set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
+lapack_add_coverage(const_mod_file)
 
 add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
-set_target_properties(
-  mod_files PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
-  Fortran_PREPROCESS ON
-  )
+set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
+lapack_add_coverage(mod_files)
 
-add_library(${LAPACKLIB}_obj OBJECT ${SOURCES})
-target_link_libraries(${LAPACKLIB}_obj mod_files)
-set_target_properties(
-  ${LAPACKLIB}_obj PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
-  Fortran_PREPROCESS ON
-  )
+if(BUILD_DEFAULT_API)
+  add_library(${LAPACKLIB}_obj OBJECT ${SOURCES} ${XSOURCES})
+  target_link_libraries(${LAPACKLIB}_obj PUBLIC mod_files)
+  set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+  lapack_add_coverage(${LAPACKLIB}_obj)
+endif()
 
 if(BUILD_INDEX64_EXT_API)
-  if(NOT CMAKE_Fortran_COMPILER_ID MATCHES ${INDEX64_EXT_API_COMPILERS})
-    message(STATUS "Build Index-64 API as extended API with _64 suffix: skipped (unsupported Fortran compiler)")
-    # Disable extended API for LAPACK and LAPACKE as it depends on LAPACK build.
-    set(BUILD_INDEX64_EXT_API OFF)
-    set(BUILD_INDEX64_EXT_API OFF PARENT_SCOPE)
-  else()
-    cmake_minimum_required(VERSION 3.18)
-    set(SOURCES_64)
-    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    file(COPY ${SOURCES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    file(GLOB SOURCES_64 ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj/*.*)
-    list(REMOVE_ITEM SOURCES_64 la_xisnan.F90)
-    foreach(F IN LISTS SOURCES_64)
-      set(FFILE "")
-      file(READ ${F} FFILE)
-      file(WRITE ${F} "#include \"lapack_64.h\"\n")
-      file(APPEND ${F} "${FFILE}")
-    endforeach()
-    file(COPY lapack_64.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_obj)
-    add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-    target_link_libraries(${LAPACKLIB}_64_obj mod_files)
-    target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64} -DLAPACK_64)
-    set_target_properties(
-      ${LAPACKLIB}_64_obj PROPERTIES
-      POSITION_INDEPENDENT_CODE ON
-      Fortran_PREPROCESS ON
-    )
-  endif()
+  include(ExtendedAPIHelpers)
+  generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
+
+  add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
+  target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)
+  target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
 endif()
 
 add_library(${LAPACKLIB}
   $<TARGET_OBJECTS:mod_files>
-  $<TARGET_OBJECTS:${LAPACKLIB}_obj>
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_obj>>
   $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
+
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
 # that CMake adds (tested CMake 4.2).
-if (CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
-   set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+  set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
 endif()
 set_target_properties(
   ${LAPACKLIB} PROPERTIES
@@ -589,8 +567,10 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 
-if( TEST_FORTRAN_COMPILER )
-  add_dependencies( ${LAPACKLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
+if(TEST_FORTRAN_COMPILER)
+  add_dependencies(${LAPACKLIB}
+    run_test_zcomplexabs run_test_zcomplexdiv
+    run_test_zcomplexmult run_test_zminMax)
 endif()
 
 if(USE_XBLAS)
@@ -598,9 +578,5 @@ if(USE_XBLAS)
 endif()
 target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
 
-if(_is_coverage_build)
-  target_link_libraries(${LAPACKLIB} PRIVATE gcov)
-  add_coverage(${LAPACKLIB}_obj)
-endif()
-
+lapack_add_coverage(${LAPACKLIB})
 lapack_install_library(${LAPACKLIB})

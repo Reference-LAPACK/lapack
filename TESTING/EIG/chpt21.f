@@ -423,12 +423,14 @@
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
-         RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
+         RESULT( 1 ) = ( WNORM / ANORM ) / ( REAL( N )*ULP )
       ELSE
          IF( ANORM.LT.ONE ) THEN
-            RESULT( 1 ) = ( MIN( WNORM, N*ANORM ) / ANORM ) / ( N*ULP )
+            RESULT( 1 ) = ( MIN( WNORM, REAL( N )*ANORM ) / ANORM ) /
+     $                    ( REAL( N )*ULP )
          ELSE
-            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( N ) ) / ( N*ULP )
+            RESULT( 1 ) = MIN( WNORM / ANORM, REAL( N ) ) /
+     $                         ( REAL( N )*ULP )
          END IF
       END IF
 *
@@ -445,7 +447,7 @@
    90    CONTINUE
 *
          RESULT( 2 ) = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
-     $                 REAL( N ) ) / ( N*ULP )
+     $                      REAL( N ) ) / ( REAL( N )*ULP )
       END IF
 *
       RETURN

@@ -453,7 +453,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET52, CGGEV3, CLACPY, CLARFG, CLASET,
-     $                   CLATM4, CUNM2R, XERBLA, XLAENV
+     $                   CLATM4, CUNM2R, XER_REPLACE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN
@@ -527,14 +527,14 @@
      $        ILAENV( 1, 'CUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
      $        ILAENV( 1, 'CUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( 2*NMAX, NMAX*( NB+1 ), NMAX*( NMAX+1 ) )
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -23
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGEV3', -INFO )
+         CALL XER_REPLACE( 'CDRGEV3', -INFO )
          RETURN
       END IF
 *
@@ -564,7 +564,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -912,7 +912,7 @@
 *
       CALL ALASVM( 'CGV3', NOUNIT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = CMPLX( REAL( MAXWRK ) )
 *
       RETURN
 *

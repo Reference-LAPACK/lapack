@@ -402,7 +402,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGESVD, SGET51, SGET53, SGGESX,
-     $                   SLACPY, SLAKF2, SLASET, SLATM5, XERBLA
+     $                   SLACPY, SLAKF2, SLASET, SLATM5, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -463,14 +463,14 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
          MAXWRK = MAX( MAXWRK, MINWRK )
 *
-         WORK( 1 ) = MAXWRK
+         WORK( 1 ) = REAL( MAXWRK )
       END IF
 *
       IF( LWORK.LT.MINWRK )
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRGSX', -INFO )
+         CALL XER_REPLACE( 'SDRGSX', -INFO )
          RETURN
       END IF
 *
@@ -958,7 +958,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
       CALL ALASVM( 'SGX', NOUT, NERRS, NTESTT, 0 )
 *
-      WORK( 1 ) = MAXWRK
+      WORK( 1 ) = REAL( MAXWRK )
 *
       RETURN
 *

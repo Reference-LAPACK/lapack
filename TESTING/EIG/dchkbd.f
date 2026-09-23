@@ -546,7 +546,7 @@
       EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01,
      $                   DBDT02, DBDT03, DBDT04, DCOPY, DGEBRD,
      $                   DGEMM, DLACPY, DLAHD2, DLASET, DLATMR,
-     $                   DLATMS, DORGBR, DORT01, XERBLA
+     $                   DLATMS, DORGBR, DORT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -616,7 +616,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKBD', -INFO )
+         CALL XER_REPLACE( 'DCHKBD', -INFO )
          RETURN
       END IF
 *
@@ -1261,8 +1261,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( ( MNMIN-1 )*DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( MNMIN-1 )*DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( MNMIN*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( MNMIN*DLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL

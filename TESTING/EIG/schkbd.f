@@ -546,7 +546,7 @@
       EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,
      $                   SBDT02, SBDT03, SBDT04, SCOPY, SGEBRD,
      $                   SGEMM, SLACPY, SLAHD2, SLASET, SLATMR,
-     $                   SLATMS, SORGBR, SORT01, XERBLA
+     $                   SLATMS, SORGBR, SORT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -616,7 +616,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKBD', -INFO )
+         CALL XER_REPLACE( 'SCHKBD', -INFO )
          RETURN
       END IF
 *
@@ -642,7 +642,7 @@
          M = MVAL( JSIZE )
          N = NVAL( JSIZE )
          MNMIN = MIN( M, N )
-         AMNINV = ONE / MAX( M, N, 1 )
+         AMNINV = ONE / REAL( MAX( M, N, 1 ) )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )
@@ -699,7 +699,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*MAX( M, N )*ULPINV
+            ANORM = RTUNFL*REAL( MAX( M, N ) )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -1261,8 +1261,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL

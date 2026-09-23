@@ -285,7 +285,7 @@
             IF( I.GE.L ) THEN
                LB = 0
             ELSE
-               LB = 0
+               LB = NB-M+L-I+1
             END IF
             CALL CTPRFB( 'L', 'C', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
@@ -316,7 +316,7 @@
             IF( I.GE.L ) THEN
                LB = 0
             ELSE
-               LB = 0
+               LB = NB-M+L-I+1
             END IF
             CALL CTPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,

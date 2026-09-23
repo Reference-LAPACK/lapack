@@ -562,7 +562,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CGEQR2, CGET51, CGET52, CGGHRD, CHGEQZ, CLACPY,
      $                   CLARFG, CLASET, CLATM4, CTGEVC, CUNM2R, SLASUM,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN
@@ -627,7 +627,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKGG', -INFO )
+         CALL XER_REPLACE( 'CCHKGG', -INFO )
          RETURN
       END IF
 *
@@ -657,7 +657,7 @@
          N = NN( JSIZE )
          N1 = MAX( 1, N )
          RMAGN( 2 ) = SAFMAX*ULP / REAL( N1 )
-         RMAGN( 3 ) = SAFMIN*ULPINV*N1
+         RMAGN( 3 ) = SAFMIN*ULPINV*REAL( N1 )
 *
          IF( NSIZES.NE.1 ) THEN
             MTYPES = MIN( MAXTYP, NTYPES )

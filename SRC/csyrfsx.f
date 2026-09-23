@@ -463,7 +463,8 @@
       EXTERNAL           LSAME, ILAPREC
       EXTERNAL           SLAMCH, CLANSY, CLA_SYRCOND_X,
      $                   CLA_SYRCOND_C
-      REAL               SLAMCH, CLANSY, CLA_SYRCOND_X, CLA_SYRCOND_C
+      REAL               SLAMCH, CLANSY, CLA_SYRCOND_X,
+     $                   CLA_SYRCOND_C
       LOGICAL            LSAME
       INTEGER            ILAPREC
 *     ..
@@ -477,7 +478,7 @@
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0 ) THEN
             PARAMS( LA_LINRX_ITREF_I ) = ITREF_DEFAULT
          ELSE
-            REF_TYPE = PARAMS( LA_LINRX_ITREF_I )
+            REF_TYPE = INT( PARAMS( LA_LINRX_ITREF_I ) )
          END IF
       END IF
 *
@@ -491,7 +492,7 @@
 *
       IF ( NPARAMS.GE.LA_LINRX_ITHRESH_I ) THEN
          IF ( PARAMS( LA_LINRX_ITHRESH_I ).LT.0.0 ) THEN
-            PARAMS( LA_LINRX_ITHRESH_I ) = ITHRESH
+            PARAMS( LA_LINRX_ITHRESH_I ) = REAL( ITHRESH )
          ELSE
             ITHRESH = INT( PARAMS( LA_LINRX_ITHRESH_I ) )
          END IF

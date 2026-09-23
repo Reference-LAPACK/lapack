@@ -120,7 +120,7 @@
             DO 40 J = 1, NSZ
                DO 30 I = 1, NSZ
                   IF( I.LE.M .AND. J.LE.N ) THEN
-                     A( I, J ) = POW( I+J+1 )*( -1 )**( I+J )
+                     A( I, J ) = POW( I+J+1 )*REAL( -1 )**( I+J )
                   ELSE
                      A( I, J ) = CZERO
                   END IF
@@ -193,7 +193,7 @@
                         IF( I.LE.MIN( M, J+KL ) .AND. I.GE.
      $                      MAX( 1, J-KU ) .AND. J.LE.N ) THEN
                            AB( KU+1+I-J, J ) = POW( I+J+1 )*
-     $                                         ( -1 )**( I+J )
+     $                                         REAL( -1 )**( I+J )
                         END IF
   140                CONTINUE
   150             CONTINUE
@@ -273,7 +273,7 @@
          DO 270 I = 1, NSZ
             DO 260 J = 1, NSZ
                IF( I.LE.N .AND. J.EQ.I ) THEN
-                  A( I, J ) = POW( I+J+1 )*( -1 )**( I+J )
+                  A( I, J ) = POW( I+J+1 )*REAL( -1 )**( I+J )
                ELSE
                   A( I, J ) = CZERO
                END IF

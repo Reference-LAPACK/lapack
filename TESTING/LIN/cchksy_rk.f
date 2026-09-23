@@ -558,7 +558,7 @@
                      IF( K.LE.1 )
      $                  GO TO 130
 *
-                     IF( IWORK( K ).GT.ZERO ) THEN
+                     IF( IWORK( K ).GT.0 ) THEN
 *
 *                       Get max absolute value from elements
 *                       in column k in in U
@@ -596,7 +596,7 @@
                      IF( K.GE.N )
      $                  GO TO 150
 *
-                     IF( IWORK( K ).GT.ZERO ) THEN
+                     IF( IWORK( K ).GT.0 ) THEN
 *
 *                       Get max absolute value from elements
 *                       in column k in in L
@@ -646,7 +646,7 @@
                      IF( K.LE.1 )
      $                  GO TO 170
 *
-                     IF( IWORK( K ).LT.ZERO ) THEN
+                     IF( IWORK( K ).LT.0 ) THEN
 *
 *                       Get the two singular values
 *                       (real and non-negative) of a 2-by-2 block,
@@ -690,7 +690,7 @@
                      IF( K.GE.N )
      $                  GO TO 190
 *
-                     IF( IWORK( K ).LT.ZERO ) THEN
+                     IF( IWORK( K ).LT.0 ) THEN
 *
 *                       Get the two singular values
 *                       (real and non-negative) of a 2-by-2 block,

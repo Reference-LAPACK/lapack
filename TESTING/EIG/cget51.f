@@ -245,12 +245,14 @@
          WNORM = CLANGE( '1', N, N, WORK, N, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
-            RESULT = ( WNORM / ANORM ) / ( N*ULP )
+            RESULT = ( WNORM / ANORM ) / ( REAL( N )*ULP )
          ELSE
             IF( ANORM.LT.ONE ) THEN
-               RESULT = ( MIN( WNORM, N*ANORM ) / ANORM ) / ( N*ULP )
+               RESULT = ( MIN( WNORM, REAL( N )*ANORM ) / ANORM ) /
+     $                  ( REAL( N )*ULP )
             ELSE
-               RESULT = MIN( WNORM / ANORM, REAL( N ) ) / ( N*ULP )
+               RESULT = MIN( WNORM / ANORM, REAL( N ) ) /
+     $                  ( REAL( N )*ULP )
             END IF
          END IF
 *
@@ -269,7 +271,7 @@
    30    CONTINUE
 *
          RESULT = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
-     $            REAL( N ) ) / ( N*ULP )
+     $                 REAL( N ) ) / ( REAL( N )*ULP )
       END IF
 *
       RETURN

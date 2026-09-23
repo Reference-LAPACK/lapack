@@ -217,13 +217,13 @@
                DO 10 I = 1, J - 1
                   A( JC+I-1 ) = ZERO
    10          CONTINUE
-               A( JC+J-1 ) = J
+               A( JC+J-1 ) = REAL( J )
                JC = JC + J
    20       CONTINUE
          ELSE
             JC = 1
             DO 40 J = 1, N
-               A( JC ) = J
+               A( JC ) = REAL( J )
                DO 30 I = J + 1, N
                   A( JC+I-J ) = ZERO
    30          CONTINUE
@@ -244,13 +244,13 @@
                DO 50 I = 1, J - 1
                   A( JC+I ) = ZERO
    50          CONTINUE
-               A( JC+J ) = J
+               A( JC+J ) = REAL( J )
                JC = JC + J
    60       CONTINUE
          ELSE
             JC = 1
             DO 80 J = 1, N
-               A( JC ) = J
+               A( JC ) = REAL( J )
                DO 70 I = J + 1, N
                   A( JC+I-J ) = ZERO
    70          CONTINUE

@@ -410,8 +410,8 @@
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
      $                   SLATMS, SSBGV, SSBGVD, SSBGVX, SSGT01, SSPGV,
-     $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX, XERBLA,
-     $                   SSYGV_2STAGE
+     $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX,
+     $                   XER_REPLACE, SSYGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -457,7 +457,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVSG2STG', -INFO )
+         CALL XER_REPLACE( 'SDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -540,7 +540,7 @@
             GO TO 70
 *
    60       CONTINUE
-            ANORM = RTUNFL*N*ULPINV
+            ANORM = RTUNFL*REAL( N )*ULPINV
             GO TO 70
 *
    70       CONTINUE
@@ -654,8 +654,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( N )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU

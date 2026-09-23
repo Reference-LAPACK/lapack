@@ -455,7 +455,7 @@
       EXTERNAL           SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD,
+      EXTERNAL           ALASVM, XER_REPLACE, CBDT01, CBDT05, CGESDD,
      $                   CGESVD, CGESVDQ, CGESVJ, CGEJSV, CGESVDX,
      $                   CLACPY, CLASET, CLATMS, CUNT01, CUNT03
 *     ..
@@ -524,7 +524,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVBD', -INFO )
+         CALL XER_REPLACE( 'CDRVBD', -INFO )
          RETURN
       END IF
 *
@@ -1140,8 +1140,8 @@
                   IL = 1
                   IU = MAX( 1, MNMIN )
                ELSE
-                  IL = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-                  IU = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL

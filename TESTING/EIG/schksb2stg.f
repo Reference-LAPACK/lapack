@@ -377,7 +377,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLASET, SLASUM, SLATMR, SLATMS, SSBT21,
-     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR, SCOPY
+     $                   SSBTRD, XER_REPLACE, SSYTRD_SB2ST, SSTEQR,
+     $                   SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -436,7 +437,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKSB2STG', -INFO )
+         CALL XER_REPLACE( 'SCHKSB2STG', -INFO )
          RETURN
       END IF
 *
@@ -521,7 +522,7 @@
                GO TO 70
 *
    60          CONTINUE
-               ANORM = RTUNFL*N*ULPINV
+               ANORM = RTUNFL*REAL( N )*ULPINV
                GO TO 70
 *
    70          CONTINUE

@@ -46,18 +46,24 @@
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
+      CHARACTER*6      SUBNAM
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Scalars ..
+      REAL             S1, S2
       REAL             SFAC
       INTEGER          IC
 *     .. External Subroutines ..
       EXTERNAL         CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
+      COMMON           /NAMBLA/SUBNAM
 *     .. Data statements ..
       DATA             SFAC/9.765625E-4/
 *     .. Executable Statements ..
+      CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
       DO 20 IC = 1, 11
          ICASE = IC
@@ -69,6 +75,8 @@
 *        these parameters.
 *
          PASS = .TRUE.
+         NTESTS = 0
+         NFAILS = 0
          INCX = 9999
          INCY = 9999
          MODE = 9999
@@ -79,11 +87,17 @@
          END IF
 *        -- Print
          IF (PASS) WRITE (NOUT,99998)
+         WRITE (NOUT,99997) SUBNAM, NTESTS, NFAILS
    20 CONTINUE
+      CALL CPU_TIME( S2 )
+      WRITE (NOUT,99996) S2 - S1
       STOP
 *
 99999 FORMAT (' Complex BLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
+99997 FORMAT (1X,A6,' COMPUTATIONAL TESTS:',I9,' RUN,',I9,
+     +        ' FAILED')
+99996 FORMAT (' Total time used = ',F12.2,' seconds',/)
 *
 *     End of CBLAT1
 *
@@ -94,12 +108,14 @@
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
 *     .. Scalars in Common ..
+      CHARACTER*6      SUBNAM
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
       CHARACTER*6      L(11)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /NAMBLA/SUBNAM
 *     .. Data statements ..
       DATA             L(1)/'CDOTC '/
       DATA             L(2)/'CDOTU '/
@@ -114,6 +130,7 @@
       DATA             L(11)/'CAXPBY'/
 
 *     .. Executable Statements ..
+      SUBNAM = L(ICASE)
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
 *
@@ -291,7 +308,7 @@
                CALL ITEST1(ICAMAX(N,CX,INCX),ITRUEC(NP1))
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
-               STOP
+               STOP 1
             END IF
 *
    40    CONTINUE
@@ -658,7 +675,7 @@
                CALL CTEST(LENY,CY,CT11(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
-               STOP
+               STOP 1
             END IF
 *
    40    CONTINUE
@@ -688,6 +705,7 @@
 *     .. Array Arguments ..
       REAL             SCOMP(LEN), SSIZE(LEN), STRUE(LEN)
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Scalars ..
@@ -700,12 +718,15 @@
       INTRINSIC        ABS
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
 *     .. Executable Statements ..
 *
       DO 40 I = 1, LEN
+         NTESTS = NTESTS + 1
          SD = SCOMP(I) - STRUE(I)
          IF (ABS(SFAC*SD) .LE. ABS(SSIZE(I))*EPSILON(ZERO))
      +       GO TO 40
+         NFAILS = NFAILS + 1
 *
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
 *
@@ -820,14 +841,18 @@
 *     .. Scalar Arguments ..
       INTEGER           ICOMP, ITRUE
 *     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
       INTEGER           ICASE, INCX, INCY, MODE, N
       LOGICAL           PASS
 *     .. Local Scalars ..
       INTEGER           ID
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+      COMMON           /CNTBLA/NTESTS, NFAILS
 *     .. Executable Statements ..
+      NTESTS = NTESTS + 1
       IF (ICOMP.EQ.ITRUE) GO TO 40
+      NFAILS = NFAILS + 1
 *
 *                            HERE ICOMP IS NOT EQUAL TO ITRUE.
 *
@@ -899,6 +924,10 @@
 *     .. Local Arrays ..
       COMPLEX           X(NMAX), Z(NMAX)
       REAL              VALUES(NV), WORK(NMAX)
+*     .. Scalars in Common ..
+      INTEGER          NTESTS, NFAILS
+*     .. Common blocks ..
+      COMMON           /CNTBLA/NTESTS, NFAILS
 *     .. Executable Statements ..
       VALUES(1) = ZERO
       VALUES(2) = TWO*SAFMIN
@@ -1040,7 +1069,9 @@
             ELSE
                TRAT = (ABS(SNRM-ZNRM) / ZNRM) / (TWO*REAL(N)*ULP)
             END IF
+            NTESTS = NTESTS + 1
             IF ((TRAT.NE.TRAT).OR.(TRAT.GE.THRESH)) THEN
+               NFAILS = NFAILS + 1
                IF (FIRST) THEN
                   FIRST = .FALSE.
                   WRITE(NOUT,99999)
