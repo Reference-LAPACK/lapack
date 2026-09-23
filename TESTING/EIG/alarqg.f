@@ -212,7 +212,7 @@
  9994 FORMAT( ' ==> Specify ', I4, ' matrix types on this line or ',
      $      'adjust NTYPES on previous line' )
       WRITE( NOUT, FMT = * )
-      STOP
+      STOP 1
 *
 *     End of ALARQG
 *

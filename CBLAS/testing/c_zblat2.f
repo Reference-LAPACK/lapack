@@ -247,7 +247,7 @@
      $      GO TO 70
    60 CONTINUE
       WRITE( NOUT, FMT = 9986 )SNAMET
-      STOP
+      STOP 1
    70 LTEST( I ) = LTESTT
       GO TO 50
 *
@@ -287,7 +287,7 @@
       SAME = LZE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
-         STOP
+         STOP 1
       END IF
       TRANS = 'T'
       CALL ZMVCH( TRANS, N, N, ONE, A, NMAX, X, -1, ZERO, Y, -1, YT, G,
@@ -295,7 +295,7 @@
       SAME = LZE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
-         STOP
+         STOP 1
       END IF
 *
 *     Test each subroutine in turn.

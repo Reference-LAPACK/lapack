@@ -173,7 +173,8 @@
 *     .. Local Scalars ..
       CHARACTER          NORMIN, TRANS
       INTEGER            I, IERR, ITS, J
-      REAL               GROWTO, NRMSML, ROOTN, RTEMP, SCALE, VNORM
+      REAL               GROWTO, NRMSML, ROOTN, RTEMP, SCALE, V0NORM,
+     $                   V1NORM
       COMPLEX            CDUM, EI, EJ, TEMP, X
 *     ..
 *     .. External Functions ..
@@ -198,11 +199,13 @@
 *
       INFO = 0
 *
-*     GROWTO is the threshold used in the acceptance test for an
-*     eigenvector.
+*     Each starting vector gets one solve, from v0 to v1.  The residual
+*     of v1 is SCALE times the norm of v0, over the norm of v1, so
+*     GROWTO is the growth V1NORM/(SCALE*V0NORM) that the acceptance
+*     test below requires.
 *
       ROOTN = SQRT( REAL( N ) )
-      GROWTO = TENTH / ROOTN
+      GROWTO = TENTH / ( REAL( N )*EPS3 )
       NRMSML = MAX( ONE, EPS3*ROOTN )*SMLNUM
 *
 *     Form B = H - W*I (except that the subdiagonal elements are not
@@ -226,8 +229,8 @@
 *
 *        Scale supplied initial vector.
 *
-         VNORM = SCNRM2( N, V, 1 )
-         CALL CSSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V,
+         V0NORM = SCNRM2( N, V, 1 )
+         CALL CSSCAL( N, ( EPS3*ROOTN ) / MAX( V0NORM, NRMSML ), V,
      $                1 )
       END IF
 *
@@ -309,6 +312,7 @@
 *
       NORMIN = 'N'
       DO 110 ITS = 1, N
+         V0NORM = SCASUM( N, V, 1 )
 *
 *        Solve U*x = scale*v for a right eigenvector
 *          or U**H *x = scale*v for a left eigenvector,
@@ -321,8 +325,8 @@
 *
 *        Test for sufficient growth in the norm of v.
 *
-         VNORM = SCASUM( N, V, 1 )
-         IF( VNORM.GE.GROWTO*SCALE )
+         V1NORM = SCASUM( N, V, 1 )
+         IF( V1NORM.GE.GROWTO*SCALE*V0NORM )
      $      GO TO 120
 *
 *        Choose new orthogonal starting vector and try again.
