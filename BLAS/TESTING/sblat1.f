@@ -285,6 +285,7 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       INTEGER           I, IX, LEN, NP1
+      REAL              SBIG, SINF, SNAN, SONE
 *     .. Local Arrays ..
       REAL              DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
      +                  DVR(8), SA(10), STEMP(1), STRUE(8), SX(8),
@@ -297,7 +298,7 @@
 *     .. External Subroutines ..
       EXTERNAL          ITEST1, SB1NRM2, SSCAL, STEST, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         HUGE, MAX
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -385,6 +386,46 @@
                IX = IX + INCX
   120       CONTINUE
             CALL ITEST1(ISAMAX(N,SXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0E0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 130 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  130       CONTINUE
+            SXR(1+3*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),4)
+            SXR(1+5*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),4)
+            SXR(1) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),1)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 140 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  140       CONTINUE
+            SXR(1+2*INCX) = SINF
+            SXR(1+4*INCX) = SINF
+            CALL ITEST1(ISAMAX(N,SXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            SXR(1+6*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),7)
          END IF
    80 CONTINUE
       RETURN

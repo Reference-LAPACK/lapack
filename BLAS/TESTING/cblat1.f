@@ -152,7 +152,7 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX           CA
-      REAL              SA
+      REAL              SA, SBIG, SINF, SNAN, SONE, SZERO
       INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
       COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
@@ -166,7 +166,7 @@
 *     .. External Subroutines ..
       EXTERNAL          CB1NRM2, CSCAL, CSSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         HUGE, MAX
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -320,6 +320,68 @@
                IX = IX + INCX
   180       CONTINUE
             CALL ITEST1(ICAMAX(N,CXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0E0
+            SZERO = 0.0E0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 190 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  190       CONTINUE
+            CXR(1+3*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),4)
+            CXR(1+5*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),4)
+*
+*           A NaN in the imaginary part counts just as much as one in
+*           the real part.
+            IX = 1
+            DO 200 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  200       CONTINUE
+            CXR(1+INCX) = CMPLX(SZERO,SNAN)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),2)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 210 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  210       CONTINUE
+            CXR(1+2*INCX) = CMPLX(SINF,SZERO)
+            CXR(1+4*INCX) = CMPLX(SZERO,SINF)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            CXR(1+6*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),7)
+*
+*           An element can be finite while abs(real) + abs(aimag)
+*           overflows; i?amax then switches to a scaled comparison for
+*           the rest of the vector.  Both entries below are finite, so
+*           the larger of the two wins.
+            IX = 1
+            DO 220 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  220       CONTINUE
+            CXR(1+INCX) = CMPLX(0.6E0*SBIG,0.6E0*SBIG)
+            CXR(1+4*INCX) = CMPLX(0.9E0*SBIG,0.9E0*SBIG)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),5)
          END IF
    60 CONTINUE
 *
