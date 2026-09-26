@@ -1086,7 +1086,7 @@
       REAL               EPS, S1, S2, THRESH, THRSHN
 *     ..
 *     .. Local Arrays ..
-      LOGICAL            DOTYPE( MAXT ), LOGWRK( NMAX )
+      LOGICAL            DOTYPE( MAXT ), LOGWRK( NMAX ), DOTYP1( 10 )
       INTEGER            IOLDSD( 4 ), ISEED( 4 ), IWORK( LIWORK ),
      $                   KVAL( MAXIN ), MVAL( MAXIN ), MXBVAL( MAXIN ),
      $                   NBCOL( MAXIN ), NBMIN( MAXIN ), NBVAL( MAXIN ),
@@ -1139,6 +1139,7 @@
 *     ..
 *     .. Data statements ..
       DATA               INTSTR / '0123456789' /
+      DATA               DOTYP1 / 10*.TRUE. /
       DATA               IOLDSD / 0, 0, 0, 1 / 
 *     ..
 *     .. Allocate memory dynamically ..
@@ -2043,6 +2044,12 @@
             END IF
             IF( TSTDRV )
      $         CALL SDRVBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, ISEED,
+     $                      THRESH, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
+     $                      A( 1, 3 ), NMAX, A( 1, 4 ), A( 1, 5 ),
+     $                      A( 1, 6 ), D( 1, 1 ), D( 1, 2 ), D( 1, 3 ),
+     $                      WORK, LWORK, IWORK, NOUT, INFO )
+            IF( TSTDRV )
+     $         CALL SDRVMR3( NN, MVAL, NVAL, 10, DOTYP1, ISEED,
      $                      THRESH, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
      $                      A( 1, 3 ), NMAX, A( 1, 4 ), A( 1, 5 ),
      $                      A( 1, 6 ), D( 1, 1 ), D( 1, 2 ), D( 1, 3 ),
