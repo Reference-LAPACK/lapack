@@ -152,6 +152,9 @@
 *> (26)    | D1 - D2 | / ( |D1| ulp )           SSTEDC('V') and
 *>                                              SSTEDC('N')
 *>
+*> (38)    | D1 - D5 | / ( |D1| ulp )           SSTEBR
+*>         (values-only boundary-row divide-and-conquer)
+*>
 *> Test 27 is disabled at the moment because SSTEMR does not
 *> guarantee high relatvie accuracy.
 *>
@@ -648,8 +651,9 @@
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLACPY, SLASET, SLASUM, SLATMR, SLATMS,
      $                   SOPGTR, SORGTR, SPTEQR, SSPT21, SSPTRD, SSTEBZ,
-     $                   SSTECH, SSTEDC, SSTEMR, SSTEIN, SSTEQR, SSTERF,
-     $                   SSTT21, SSTT22, SSYT21, SSYTRD, XER_REPLACE
+     $                   SSTEBR, SSTECH, SSTEDC, SSTEMR, SSTEIN, SSTEQR,
+     $                   SSTERF, SSTT21, SSTT22, SSYT21, SSYTRD,
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, REAL, SQRT
@@ -1898,6 +1902,44 @@
      $                        ULP*MAX( TEMP1, TEMP2 ) )
             END IF
   270       CONTINUE
+*
+*           Call SSTEBR (values-only boundary-row DC), do test 38.
+*           Compare against D1 from SSTEQR('V'), same ratio as tests
+*           12 and 26.
+*
+            DO 265 JR = NTEST + 1, 37
+               RESULT( JR ) = ZERO
+  265       CONTINUE
+*
+            CALL SCOPY( N, SD, 1, D5, 1 )
+            IF( N.GT.0 )
+     $         CALL SCOPY( N-1, SE, 1, WORK, 1 )
+*
+            NTEST = 38
+            CALL SSTEBR( N, D5, WORK, WORK( N+1 ), LWORK-N, IWORK,
+     $                   LIWORK, IINFO )
+            IF( IINFO.NE.0 ) THEN
+               WRITE( NOUNIT, FMT = 9999 )'SSTEBR', IINFO, N, JTYPE,
+     $            IOLDSD
+               INFO = ABS( IINFO )
+               IF( IINFO.LT.0 ) THEN
+                  RETURN
+               ELSE
+                  RESULT( 38 ) = ULPINV
+                  GO TO 280
+               END IF
+            END IF
+*
+            TEMP1 = ZERO
+            TEMP2 = ZERO
+*
+            DO 266 J = 1, N
+               TEMP1 = MAX( TEMP1, ABS( D1( J ) ), ABS( D5( J ) ) )
+               TEMP2 = MAX( TEMP2, ABS( D1( J )-D5( J ) ) )
+  266       CONTINUE
+*
+            RESULT( 38 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
+*
   280       CONTINUE
             NTESTT = NTESTT + NTEST
 *
