@@ -88,9 +88,8 @@
       DOUBLE PRECISION STEMP
       INTEGER I,NINCX
 *     ..
-*     .. External Functions ..
-      DOUBLE PRECISION DCABS1
-      EXTERNAL DCABS1
+*     .. Intrinsic Functions ..
+      INTRINSIC ABS,DBLE,DIMAG
 *     ..
       DZASUM = 0.0d0
       STEMP = 0.0d0
@@ -100,7 +99,7 @@
 *        code for increment equal to 1
 *
          DO I = 1,N
-            STEMP = STEMP + DCABS1(ZX(I))
+            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(DIMAG(ZX(I))))
          END DO
       ELSE
 *
@@ -108,7 +107,7 @@
 *
          NINCX = N*INCX
          DO I = 1,NINCX,INCX
-            STEMP = STEMP + DCABS1(ZX(I))
+            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(DIMAG(ZX(I))))
          END DO
       END IF
       DZASUM = STEMP

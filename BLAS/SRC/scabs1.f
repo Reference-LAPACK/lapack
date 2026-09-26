@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SCABS1 computes |Re(.)| + |Im(.)| of a complex number
+*>    SCABS1 computes |Re(.)| + |Im(.)| of a complex number.
 *> \endverbatim
 *
 *  Arguments:
@@ -41,6 +41,18 @@
 *
 *> \ingroup abs1
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>    No routine in the reference BLAS or in LAPACK calls SCABS1 any
+*>    longer: each one inlines ABS(REAL(Z)) + ABS(AIMAG(Z)) instead.
+*>    SCABS1 is kept for backwards compatibility and because vendor
+*>    BLAS libraries have long exported it, so callers outside this
+*>    library might depend on it.
+*> \endverbatim
+*>
 *  =====================================================================
       REAL FUNCTION SCABS1(Z)
       IMPLICIT NONE
