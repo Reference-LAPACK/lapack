@@ -1,4 +1,4 @@
-*> \brief \b SLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b SLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (driver algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -38,12 +38,12 @@
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
 *> overwriting the factor U in A, and the strictly lower triangular part
-*> part of A is not referenced.
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
 *>
-*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*> This is the driver that dispatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -131,7 +131,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLAUU2, SSYRK, STRMM, XERBLA
+      EXTERNAL          XERBLA, SLAUUM_RECURSIVE,
+     $                  SLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -159,60 +160,13 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Determine the block size for this environment.
+*     Here we dispatch to whatever is more efficient in a particular environment
+*     We are defaulting to recursive, but if you want to use the blocked variant
+*     Comment out the line starting with `CALL SLAUUM_RECURSIVE...`
+*     and uncomment the line starting with `CALL SLAUUM_BLOCKED...`
 *
-      NB = ILAENV( 1, 'SLAUUM', UPLO, N, -1, -1, -1 )
-*
-      IF( NB.LE.1 .OR. NB.GE.N ) THEN
-*
-*        Use unblocked code
-*
-         CALL SLAUU2( UPLO, N, A, LDA, INFO )
-      ELSE
-*
-*        Use blocked code
-*
-         IF( UPPER ) THEN
-*
-*           Compute the product U * U**T.
-*
-            DO 10 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL STRMM( 'Right', 'Upper', 'Transpose', 'Non-unit',
-     $                     I-1, IB, ONE, A( I, I ), LDA, A( 1, I ),
-     $                     LDA )
-               CALL SLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL SGEMM( 'No transpose', 'Transpose', I-1, IB,
-     $                        N-I-IB+1, ONE, A( 1, I+IB ), LDA,
-     $                        A( I, I+IB ), LDA, ONE, A( 1, I ), LDA )
-                  CALL SSYRK( 'Upper', 'No transpose', IB, N-I-IB+1,
-     $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
-     $                        LDA )
-               END IF
-   10       CONTINUE
-         ELSE
-*
-*           Compute the product L**T * L.
-*
-            DO 20 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL STRMM( 'Left', 'Lower', 'Transpose', 'Non-unit',
-     $                     IB,
-     $                     I-1, ONE, A( I, I ), LDA, A( I, 1 ), LDA )
-               CALL SLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL SGEMM( 'Transpose', 'No transpose', IB, I-1,
-     $                        N-I-IB+1, ONE, A( I+IB, I ), LDA,
-     $                        A( I+IB, 1 ), LDA, ONE, A( I, 1 ), LDA )
-                  CALL SSYRK( 'Lower', 'Transpose', IB, N-I-IB+1,
-     $                        ONE,
-     $                        A( I+IB, I ), LDA, ONE, A( I, I ), LDA )
-               END IF
-   20       CONTINUE
-         END IF
-      END IF
-*
+      CALL SLAUUM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL SLAUUM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of SLAUUM
