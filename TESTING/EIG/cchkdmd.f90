@@ -84,7 +84,7 @@
 
 !..... external subroutines (BLAS and LAPACK)
       EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV, &
-               CLARNV, CLATMR
+               CLARNV, CLATMR, SET_LAPACK_XERBLA, XER_REPLACE
 !.....external subroutines DMD package
 !     subroutines under test
       EXTERNAL CGEDMD, CGEDMDQ
@@ -103,6 +103,7 @@
 
 
       CALL CPU_TIME( S1 )
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
 
       WRITE(*,*) 'COMPLEX CODE TESTING'
 

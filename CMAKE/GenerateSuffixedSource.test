@@ -1,0 +1,116 @@
+#!/bin/bash
+
+# Use this to test GenerateSuffixedSource.cmake. Run from top of repo:
+# bash CMAKE/GenerateSuffixedSource.test
+
+run_diff() {
+  IN=$(mktemp "inXXXX$3")
+  OUT=$(mktemp -t output)
+  EXP=$(mktemp -t expected)
+  echo -n "$1" >"$IN"
+  echo -n "$2" >"$EXP"
+  set -x
+  cmake -DINPUT_FILE="$IN" -DOUTPUT_FILE="$OUT" -DSUFFIX=_64 -P CMAKE/GenerateSuffixedSource.cmake
+  diff -u "$EXP" "$OUT"
+  rm -f "$IN" "$OUT" "$EXP"
+  set +x
+}
+
+IFS='' read -r -d '' IN_FIXED <<'EOF'
+*> brief b ALADHD
+*
+*       SUBROUTINE ALADHD( IOUNIT, PATH )
+*
+      SUBROUTINE ALADHD( IOUNIT, PATH )
+      USE, INTRINSIC :: iso_fortran_env, only: real64
+      use iso_fortran_env
+      use LA_XISNAN
+      EXTERNAL           LSAME, LSAMEN
+      REAL, EXTERNAL :: SLAMCH, CLANHS
+      EXTERNAL           DLACPY, DLAFTS, DLASET, DLASUM, DLATMR,
+     $                   DSYGV_2STAGE, XER_REPLACE
+*       Code...
+      SORD = LSAME( C1, 'S' ) .OR. LSAME( C1, 'D' )
+      IF( LSAMEN( 2, P2, 'GE' ) ) THEN
+        print *, 'OK'
+      END IF
+      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+*                 Test DSYGV_2STAGE
+                  CALL DSYGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+     $                               BB, LDB, D2, WORK, NWORK, IINFO )
+*     End of ALADHD
+      END
+      REAL             FUNCTION CLANHS( NORM, N, A, LDA, WORK )
+      CLANHS = VALUE
+      RETURN
+*     End of CLANHS
+      END
+EOF
+
+IFS='' read -r -d '' EXP_FIXED <<'EOF'
+*> brief b ALADHD_64
+*
+*       SUBROUTINE ALADHD_64( IOUNIT, PATH )
+*
+      SUBROUTINE ALADHD_64( IOUNIT, PATH )
+      USE, INTRINSIC :: iso_fortran_env, only: real64
+      use iso_fortran_env
+      use LA_XISNAN
+      EXTERNAL           LSAME_64, LSAMEN_64
+      REAL, EXTERNAL :: SLAMCH_64, CLANHS_64
+      EXTERNAL           DLACPY_64, DLAFTS_64, DLASET_64, DLASUM_64,
+     $ DLATMR_64,
+     $                   DSYGV_2STAGE_64, XER_REPLACE_64
+*       Code...
+      SORD = LSAME_64( C1, 'S' ) .OR. LSAME_64( C1, 'D' )
+      IF( LSAMEN_64( 2, P2, 'GE' ) ) THEN
+        print *, 'OK'
+      END IF
+      SAFMIN = SLAMCH_64( 'SAFE MINIMUM' )
+*                 Test DSYGV_2STAGE_64
+                  CALL DSYGV_2STAGE_64( IBTYPE, 'N', UPLO, N, Z, LDZ,
+     $                               BB, LDB, D2, WORK, NWORK, IINFO )
+*     End of ALADHD_64
+      END
+      REAL             FUNCTION CLANHS_64( NORM, N, A, LDA, WORK )
+      CLANHS_64 = VALUE
+      RETURN
+*     End of CLANHS_64
+      END
+EOF
+
+run_diff "$IN_FIXED" "$EXP_FIXED" ".f"
+
+IFS='' read -r -d '' IN_FREE <<'EOF'
+module xerbla_callbacks
+  public :: active_callback
+  procedure(), pointer :: active_callback => null()
+end module xerbla_callbacks
+subroutine set_xerbla(cb)
+  use omp_lib
+  use xerbla_callbacks
+  active_callback => cb
+end subroutine set_xerbla
+program hello
+  use xerbla_callbacks
+  call set_xerbla(cb)
+end program hello
+EOF
+
+IFS='' read -r -d '' EXP_FREE <<'EOF'
+module xerbla_callbacks_64
+  public :: active_callback
+  procedure(), pointer :: active_callback => null()
+end module xerbla_callbacks_64
+subroutine set_xerbla_64(cb)
+  use omp_lib
+  use xerbla_callbacks_64
+  active_callback => cb
+end subroutine set_xerbla_64
+program hello
+  use xerbla_callbacks_64
+  call set_xerbla_64(cb)
+end program hello
+EOF
+
+run_diff "$IN_FREE" "$EXP_FREE" ".f90"

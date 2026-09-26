@@ -69,7 +69,7 @@ ALLMOD = la_xisnan.mod la_constants.mod
 .o.mod:
 	@true
 
-ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
+ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o xerbla_lapack.o \
    iparmq.o iparam2stage.o la_xisnan.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
@@ -638,8 +638,9 @@ dla_wwaddw.o: dla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 cla_wwaddw.o: cla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 
-# Modules
+# Modules - these rules are to supersede the implicit ones at top
 la_xisnan.o: la_xisnan.F90 la_constants.mod
 	$(FC) $(FFLAGS) -c -o $@ $<
 la_constants.o: la_constants.f90
 	$(FC) $(FFLAGS) -c -o $@ $<
+xerbla.o: xerbla_lapack.o
