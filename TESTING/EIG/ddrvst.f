@@ -507,7 +507,7 @@
      $                   DSBEV, DSBEVD, DSBEVX, DSPEV, DSPEVD, DSPEVX,
      $                   DSTEV, DSTEVD, DSTEVR, DSTEVX, DSTT21, DSTT22,
      $                   DSYEV, DSYEVD, DSYEVR, DSYEVX, DSYT21, DSYT22,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -562,7 +562,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVST', -INFO )
+         CALL XER_REPLACE( 'DDRVST', -INFO )
          RETURN
       END IF
 *

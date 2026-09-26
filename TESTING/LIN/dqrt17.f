@@ -184,7 +184,7 @@
       EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLASCL, XERBLA
+      EXTERNAL           DGEMM, DLACPY, DLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
@@ -200,12 +200,12 @@
          NROWS = N
          NCOLS = M
       ELSE
-         CALL XERBLA( 'DQRT17', 1 )
+         CALL XER_REPLACE( 'DQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL XERBLA( 'DQRT17', 13 )
+         CALL XER_REPLACE( 'DQRT17', 13 )
          RETURN
       END IF
 *

@@ -158,7 +158,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SGER, SSCAL, SSWAP, XERBLA
+      EXTERNAL           SGEMV, SGER, SSCAL, SSWAP, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -182,7 +182,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAVSP ', -INFO )
+         CALL XER_REPLACE( 'SLAVSP ', -INFO )
          RETURN
       END IF
 *

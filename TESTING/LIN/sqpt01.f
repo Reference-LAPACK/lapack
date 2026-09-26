@@ -151,7 +151,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SORMQR, XERBLA
+      EXTERNAL           SAXPY, SCOPY, SORMQR, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -163,7 +163,7 @@
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'SQPT01', 10 )
+         CALL XER_REPLACE( 'SQPT01', 10 )
          RETURN
       END IF
 *

@@ -180,7 +180,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLAORD, DLARF, DLARNV, DLAROR, DLASCL,
-     $                   DLASET, DSCAL, XERBLA
+     $                   DLASET, DSCAL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -189,7 +189,7 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL XERBLA( 'DQRT15', 16 )
+         CALL XER_REPLACE( 'DQRT15', 16 )
          RETURN
       END IF
 *
@@ -209,7 +209,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL XERBLA( 'DQRT15', 2 )
+         CALL XER_REPLACE( 'DQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -297,7 +297,7 @@
                CALL DLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE
-               CALL XERBLA( 'DQRT15', 1 )
+               CALL XER_REPLACE( 'DQRT15', 1 )
                RETURN
             END IF
          END IF
