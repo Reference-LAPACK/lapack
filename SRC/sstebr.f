@@ -152,8 +152,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANST
-      EXTERNAL           ILAENV, SLAMCH, SLANST
+      REAL               SLAMCH, SLANST, SROUNDUP_LWORK
+      EXTERNAL           ILAENV, SLAMCH, SLANST, SROUNDUP_LWORK
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAED0_BR, SLASCL, SLASRT, SSTERF, XERBLA
@@ -182,7 +182,7 @@
             LWMIN = MAX( 1, 16*N )
             LIWMIN = MAX( 1, 7*N )
          END IF
-         WORK( 1 ) = LWMIN
+         WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
          IWORK( 1 ) = LIWMIN
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
@@ -267,7 +267,7 @@
       CALL SLASRT( 'I', N, D, INFO )
 *
    50 CONTINUE
-      WORK( 1 ) = LWMIN
+      WORK( 1 ) = SROUNDUP_LWORK( LWMIN )
       IWORK( 1 ) = LIWMIN
       RETURN
 *
