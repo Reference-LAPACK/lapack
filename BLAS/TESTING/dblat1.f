@@ -161,25 +161,27 @@
       DOUBLE PRECISION  SA, SB, SC, SS, D12
       INTEGER           I, K
 *     .. Local Arrays ..
-      DOUBLE PRECISION  DA1(8), DATRUE(8), DB1(8), DBTRUE(8), DC1(8),
-     $                  DS1(8), DAB(4,9), DTEMP(9), DTRUE(9,9)
+      DOUBLE PRECISION  DA1(9), DATRUE(9), DB1(9), DBTRUE(9), DC1(9),
+     $                  DS1(9), DAB(4,13), DTEMP(9), DTRUE(9,13)
 *     .. External Subroutines ..
       EXTERNAL          DROTG, DROTMG, STEST, STEST1
+*     .. Intrinsic Functions ..
+      INTRINSIC         NEAREST
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
       DATA              DA1/0.3D0, 0.4D0, -0.3D0, -0.4D0, -0.3D0, 0.0D0,
-     +                  0.0D0, 1.0D0/
-      DATA              DB1/0.4D0, 0.3D0, 0.4D0, 0.3D0, -0.4D0, 0.0D0,
-     +                  1.0D0, 0.0D0/
-      DATA              DC1/0.6D0, 0.8D0, -0.6D0, 0.8D0, 0.6D0, 1.0D0,
-     +                  0.0D0, 1.0D0/
-      DATA              DS1/0.8D0, 0.6D0, 0.8D0, -0.6D0, 0.8D0, 0.0D0,
-     +                  1.0D0, 0.0D0/
-      DATA              DATRUE/0.5D0, 0.5D0, 0.5D0, -0.5D0, -0.5D0,
-     +                  0.0D0, 1.0D0, 1.0D0/
-      DATA              DBTRUE/0.0D0, 0.6D0, 0.0D0, -0.6D0, 0.0D0,
      +                  0.0D0, 1.0D0, 0.0D0/
+      DATA              DB1/0.4D0, 0.3D0, 0.4D0, 0.3D0, -0.4D0, 0.0D0,
+     +                  1.0D0, 0.0D0, 0.0D0/
+      DATA              DC1/0.6D0, 0.8D0, -0.6D0, 0.8D0, 0.6D0, 1.0D0,
+     +                  0.0D0, 1.0D0, 0.0D0/
+      DATA              DS1/0.8D0, 0.6D0, 0.8D0, -0.6D0, 0.8D0, 0.0D0,
+     +                  1.0D0, 0.0D0, 0.0D0/
+      DATA              DATRUE/0.5D0, 0.5D0, 0.5D0, -0.5D0, -0.5D0,
+     +                  0.0D0, 1.0D0, 1.0D0, 0.0D0/
+      DATA              DBTRUE/0.0D0, 0.6D0, 0.0D0, -0.6D0, 0.0D0,
+     +                  0.0D0, 1.0D0, 0.0D0, 0.0D0/
 *     INPUT FOR MODIFIED GIVENS
       DATA DAB/ .1D0,.3D0,1.2D0,.2D0,
      A          .7D0, .2D0, .6D0, 4.2D0,
@@ -189,7 +191,11 @@
      E          4.D10, 2.D-2, 1.D-5, 10.D0,
      F          2.D-10, 4.D-2, 1.D5, 10.D0,
      G          2.D10, 4.D-2, 1.D-5, 10.D0,
-     H          4.D-9, 2.D-9, 2.D0, 1.D0/
+     H          4.D-9, 2.D-9, 2.D0, 1.D0,
+     I          -1.D0, 1.D0, 1.D0, 1.D0,
+     J          0.D0,0.D0,0.D0,0.D0,
+     K          0.D0,0.D0,0.D0,0.D0,
+     L          0.D0,0.D0,0.D0,0.D0/
 *    TRUE RESULTS FOR MODIFIED GIVENS
       DATA DTRUE/0.D0,0.D0, 1.3D0, .2D0, 0.D0,0.D0,0.D0, .5D0, 0.D0,
      A           0.D0,0.D0, 4.5D0, 4.2D0, 1.D0, .5D0, 0.D0,0.D0,0.D0,
@@ -202,7 +208,15 @@
      H           0.D0,0.D0,15.D0,10.D0,-1.D0, 5.D-5, 0.D0,1.D0,0.D0,
      I           0.D0,0.D0, 15.D0, 10.D0, -1. D0, 5.D5, -4096.D0,
      J           1.D0, 4096.D-6,
-     K           0.D0,0.D0, 7.D0, 4.D0, 0.D0,0.D0, -.5D0, -.25D0, 0.D0/
+     K           0.D0,0.D0, 7.D0, 4.D0, 0.D0,0.D0, -.5D0, -.25D0, 0.D0,
+     Z          0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,
+     Z          0.D0,0.D0,
+     Z          0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,
+     Z          0.D0,0.D0,
+     Z          0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,
+     Z          0.D0,0.D0,
+     Z          0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,0.D0,
+     Z          0.D0,0.D0/
 *                   4096 = 2 ** 12
       DATA D12  /4096.D0/
       DTRUE(1,1) = 12.D0 / 130.D0
@@ -233,6 +247,81 @@
       DTRUE(7,9) = -1.2207031250000000D-04
       DTRUE(8,9) = 6.1035156250000000D-05
       DTRUE(9,9) = 2.4414062500000000D-04
+*
+*     The tenth case has DD1 < 0, which ?ROTMG rejects by zeroing H,
+*     D and DX1 and returning DFLAG = -1.  DY1 is left alone.
+*
+      DTRUE(1,10) = 0.D0
+      DTRUE(2,10) = 0.D0
+      DTRUE(3,10) = 0.D0
+      DTRUE(4,10) = 1.D0
+      DTRUE(5,10) = -1.D0
+      DTRUE(6,10) = 0.D0
+      DTRUE(7,10) = 0.D0
+      DTRUE(8,10) = 0.D0
+      DTRUE(9,10) = 0.D0
+*
+*     Two more cases enter ?ROTMG's scale check holding a flag that no
+*     existing input pairs with it: the eleventh rescales D1 having set
+*     DFLAG = 1, the twelfth rescales D2 having set DFLAG = 0.  Each of
+*     those arms rewrites H into the DFLAG = -1 form before scaling.
+*     The inputs are powers of two, so the eleventh case is exact
+*     throughout; the twelfth divides by SU = 1 + 2**(-10) = 1025/1024,
+*     which leaves its D1 and D2 as the quotients below.
+*
+      DAB(1,11) = 2.0D0**(-40)
+      DAB(2,11) = 2.0D0**(-40)
+      DAB(3,11) = 1.D0
+      DAB(4,11) = 1.D0
+      DTRUE(1,11) = 2.0D0**(-17)
+      DTRUE(2,11) = 2.0D0**(-17)
+      DTRUE(3,11) = 2.0D0**(-11)
+      DTRUE(4,11) = 1.D0
+      DTRUE(5,11) = -1.D0
+      DTRUE(6,11) = 2.0D0**(-12)
+      DTRUE(7,11) = -2.0D0**(-12)
+      DTRUE(8,11) = 2.0D0**(-12)
+      DTRUE(9,11) = 2.0D0**(-12)
+*
+      DAB(1,12) = 2.0D0**(-20)
+      DAB(2,12) = 2.0D0**(-30)
+      DAB(3,12) = 1.D0
+      DAB(4,12) = 1.D0
+      DTRUE(1,12) = 1.D0 / 1049600.D0
+      DTRUE(2,12) = 16.D0 / 1025.D0
+      DTRUE(3,12) = 1025.D0 / 1024.D0
+      DTRUE(4,12) = 1.D0
+      DTRUE(5,12) = -1.D0
+      DTRUE(6,12) = 1.D0
+      DTRUE(7,12) = -2.0D0**(-12)
+      DTRUE(8,12) = 2.0D0**(-10)
+      DTRUE(9,12) = 2.0D0**(-12)
+*
+*     A thirteenth case reaches the block ?ROTMG keeps for safety
+*     against rounding.  ABS(SQ1) > ABS(SQ2) holds, yet the quotients
+*     SP2/SP1 and SY1/SX1 each round up, so that their exact product is
+*     at least one and SU = 1 - SH12*SH21 is not positive.  The block
+*     then zeroes H, D and X1; without it D1/SU would be infinite and
+*     the scale check would never terminate.  Because the product is at
+*     least one exactly, the outcome does not depend on whether the
+*     compiler fuses it.  The ulp alignment behind this is specific to
+*     the precision, so the constants differ between the real testers,
+*     and NEAREST steps D2 one ulp toward zero exactly in any arithmetic.
+*
+      DAB(1,13) = 1.D0
+      DAB(3,13) = 5.D0
+      DAB(4,13) = 27.D0
+      DAB(2,13) = NEAREST(-(DAB(1,13)*DAB(3,13)*DAB(3,13)
+     +                      /(DAB(4,13)*DAB(4,13))), 1.D0)
+      DTRUE(1,13) = 0.D0
+      DTRUE(2,13) = 0.D0
+      DTRUE(3,13) = 0.D0
+      DTRUE(4,13) = DAB(4,13)
+      DTRUE(5,13) = -1.D0
+      DTRUE(6,13) = 0.D0
+      DTRUE(7,13) = 0.D0
+      DTRUE(8,13) = 0.D0
+      DTRUE(9,13) = 0.D0
 *     .. Executable Statements ..
 *
 *     Compute true values which cannot be prestored
@@ -242,12 +331,24 @@
       DBTRUE(3) = -1.0D0/0.6D0
       DBTRUE(5) = 1.0D0/0.6D0
 *
-      DO 20 K = 1, 9
+*     A ninth ?ROTG case, built here because it needs run-time
+*     arithmetic: A is so small against B that C = A/R underflows to
+*     zero, which is the only way to reach the Z = ONE branch.  Both
+*     values are powers of two, so the expected results are exact.
+*
+      DA1(9) = 2.0D0**(-1000)
+      DB1(9) = 2.0D0**100
+      DATRUE(9) = 2.0D0**100
+      DBTRUE(9) = 1.0D0
+      DC1(9) = 0.0D0
+      DS1(9) = 1.0D0
+*
+      DO 20 K = 1, 13
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN
 *           .. DROTG ..
-            IF (K.GT.8) GO TO 40
+            IF (K.GT.9) GO TO 40
             SA = DA1(K)
             SB = DB1(K)
             CALL DROTG(SA,SB,SC,SS)
