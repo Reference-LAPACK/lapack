@@ -446,7 +446,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEES, DHST01, DLACPY, DLASET, DLASUM, DLATME,
-     $                   DLATMR, DLATMS, XERBLA
+     $                   DLATMR, DLATMS, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -502,7 +502,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVES', -INFO )
+         CALL XER_REPLACE( 'DDRVES', -INFO )
          RETURN
       END IF
 *

@@ -149,7 +149,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLASCL, ZTRSM, ZUNMQL
+      EXTERNAL           XER_REPLACE, ZLASCL, ZTRSM, ZUNMQL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -174,7 +174,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEQLS', -INFO )
+         CALL XER_REPLACE( 'ZGEQLS', -INFO )
          RETURN
       END IF
 *

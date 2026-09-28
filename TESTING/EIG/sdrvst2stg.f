@@ -509,7 +509,7 @@
      $                   SSYEV, SSYEVD, SSYEVR, SSYEVX, SSYT21,
      $                   SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
      $                   SSYEV_2STAGE, SSBEV_2STAGE, SSBEVD_2STAGE,
-     $                   SSBEVX_2STAGE, SSYT22, XERBLA
+     $                   SSBEVX_2STAGE, SSYT22, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -564,7 +564,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'SDRVST2STG', -INFO )
          RETURN
       END IF
 *

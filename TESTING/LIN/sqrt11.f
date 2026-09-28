@@ -122,7 +122,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SORM2R, XERBLA
+      EXTERNAL           SLASET, SORM2R, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -137,7 +137,7 @@
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL XERBLA( 'SQRT11', 7 )
+         CALL XER_REPLACE( 'SQRT11', 7 )
          RETURN
       END IF
 *

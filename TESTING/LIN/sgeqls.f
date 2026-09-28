@@ -151,7 +151,7 @@
       EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, SORMQL, STRSM, XERBLA
+      EXTERNAL           SLASCL, SORMQL, STRSM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,7 +176,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEQLS', -INFO )
+         CALL XER_REPLACE( 'SGEQLS', -INFO )
          RETURN
       END IF
 *

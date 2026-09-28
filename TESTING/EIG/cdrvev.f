@@ -444,7 +444,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEEV, CGET22, CLACPY, CLATME, CLATMR, CLATMS,
-     $                   CLASET, SLASUM, XERBLA
+     $                   CLASET, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, MAX, MIN, REAL, SQRT
@@ -503,7 +503,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVEV', -INFO )
+         CALL XER_REPLACE( 'CDRVEV', -INFO )
          RETURN
       END IF
 *

@@ -151,7 +151,7 @@
       EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CUNMQR, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CUNMQR, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -163,7 +163,7 @@
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'CQPT01', 10 )
+         CALL XER_REPLACE( 'CQPT01', 10 )
          RETURN
       END IF
 *

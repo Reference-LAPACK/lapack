@@ -148,7 +148,7 @@
       EXTERNAL           ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZLASET, ZUNMRQ
+      EXTERNAL           XER_REPLACE, ZAXPY, ZLASET, ZUNMRQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -173,7 +173,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGERQS', -INFO )
+         CALL XER_REPLACE( 'ZGERQS', -INFO )
          RETURN
       END IF
 *

@@ -398,7 +398,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SBDT01, SBDT02, SGBBRD, SLACPY, SLAHD2, SLASET,
-     $                   SLASUM, SLATMR, SLATMS, SORT01, XERBLA
+     $                   SLASUM, SLATMR, SLATMS, SORT01, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -472,7 +472,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKBB', -INFO )
+         CALL XER_REPLACE( 'SCHKBB', -INFO )
          RETURN
       END IF
 *

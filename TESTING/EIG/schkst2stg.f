@@ -670,7 +670,7 @@
       EXTERNAL           SCOPY, SLACPY, SLASET, SLASUM, SLATMR, SLATMS,
      $                   SOPGTR, SORGTR, SPTEQR, SSPT21, SSPTRD, SSTEBZ,
      $                   SSTECH, SSTEDC, SSTEMR, SSTEIN, SSTEQR, SSTERF,
-     $                   SSTT21, SSTT22, SSYT21, SSYTRD, XERBLA,
+     $                   SSTT21, SSTT22, SSYT21, SSYTRD, XER_REPLACE,
      $                   SSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -725,7 +725,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKST2STG', -INFO )
+         CALL XER_REPLACE( 'SCHKST2STG', -INFO )
          RETURN
       END IF
 *

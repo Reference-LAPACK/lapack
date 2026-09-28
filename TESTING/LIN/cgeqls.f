@@ -149,7 +149,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASCL, CTRSM, CUNMQL, XERBLA
+      EXTERNAL           CLASCL, CTRSM, CUNMQL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -174,7 +174,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEQLS', -INFO )
+         CALL XER_REPLACE( 'CGEQLS', -INFO )
          RETURN
       END IF
 *

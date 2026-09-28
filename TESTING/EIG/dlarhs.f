@@ -236,7 +236,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGBMV, DGEMM, DLACPY, DLARNV, DSBMV, DSPMV,
-     $                   DSYMM, DTBMV, DTPMV, DTRMM, XERBLA
+     $                   DSYMM, DTBMV, DTPMV, DTRMM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -288,7 +288,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLARHS', -INFO )
+         CALL XER_REPLACE( 'DLARHS', -INFO )
          RETURN
       END IF
 *
@@ -401,7 +401,7 @@
 *        If PATH is none of the above, return with an error code.
 *
          INFO = -1
-         CALL XERBLA( 'DLARHS', -INFO )
+         CALL XER_REPLACE( 'DLARHS', -INFO )
       END IF
 *
       RETURN

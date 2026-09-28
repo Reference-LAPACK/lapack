@@ -188,7 +188,7 @@
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORT01, XERBLA
+      EXTERNAL           DORT01, XER_REPLACE
 *     ..
 *     .. Executable Statements ..
 *
@@ -220,7 +220,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORT03', -INFO )
+         CALL XER_REPLACE( 'DORT03', -INFO )
          RETURN
       END IF
 *

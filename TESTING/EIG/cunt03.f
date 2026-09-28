@@ -197,7 +197,7 @@
       INTRINSIC          ABS, CMPLX, MAX, MIN, REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CUNT01, XERBLA
+      EXTERNAL           CUNT01, XER_REPLACE
 *     ..
 *     .. Executable Statements ..
 *
@@ -229,7 +229,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CUNT03', -INFO )
+         CALL XER_REPLACE( 'CUNT03', -INFO )
          RETURN
       END IF
 *

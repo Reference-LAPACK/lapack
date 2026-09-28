@@ -147,7 +147,7 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGELQ2, SGEQR2, SLACPY, SLASCL, XERBLA
+      EXTERNAL           SGELQ2, SGEQR2, SLACPY, SLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -159,7 +159,7 @@
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL XERBLA( 'SQRT14', 10 )
+            CALL XER_REPLACE( 'SQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
@@ -168,13 +168,13 @@
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL XERBLA( 'SQRT14', 10 )
+            CALL XER_REPLACE( 'SQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL XERBLA( 'SQRT14', 1 )
+         CALL XER_REPLACE( 'SQRT14', 1 )
          RETURN
       END IF
 *

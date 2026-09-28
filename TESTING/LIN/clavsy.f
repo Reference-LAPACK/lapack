@@ -181,7 +181,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CSCAL, CSWAP, XERBLA
+      EXTERNAL           CGEMV, CGERU, CSCAL, CSWAP, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -207,7 +207,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAVSY ', -INFO )
+         CALL XER_REPLACE( 'CLAVSY ', -INFO )
          RETURN
       END IF
 *

@@ -443,7 +443,7 @@
       EXTERNAL           DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASUM, XERBLA, ZGEEV, ZGET22, ZLACPY,
+      EXTERNAL           DLASUM, XER_REPLACE, ZGEEV, ZGET22, ZLACPY,
      $                   ZLASET, ZLATME, ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
@@ -503,7 +503,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVEV', -INFO )
+         CALL XER_REPLACE( 'ZDRVEV', -INFO )
          RETURN
       END IF
 *

@@ -151,7 +151,7 @@
       EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DORMQL, DTRSM, XERBLA
+      EXTERNAL           DLASCL, DORMQL, DTRSM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,7 +176,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQLS', -INFO )
+         CALL XER_REPLACE( 'DGEQLS', -INFO )
          RETURN
       END IF
 *

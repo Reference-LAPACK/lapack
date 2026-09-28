@@ -236,7 +236,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGBMV, SGEMM, SLACPY, SLARNV, SSBMV, SSPMV,
-     $                   SSYMM, STBMV, STPMV, STRMM, XERBLA
+     $                   SSYMM, STBMV, STPMV, STRMM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -288,7 +288,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLARHS', -INFO )
+         CALL XER_REPLACE( 'SLARHS', -INFO )
          RETURN
       END IF
 *
@@ -401,7 +401,7 @@
 *        If PATH is none of the above, return with an error code.
 *
          INFO = -1
-         CALL XERBLA( 'SLARHS', -INFO )
+         CALL XER_REPLACE( 'SLARHS', -INFO )
       END IF
 *
       RETURN

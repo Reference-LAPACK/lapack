@@ -148,7 +148,7 @@
       EXTERNAL           CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CLASET, CUNMRQ, XERBLA
+      EXTERNAL           CAXPY, CLASET, CUNMRQ, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -173,7 +173,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGERQS', -INFO )
+         CALL XER_REPLACE( 'CGERQS', -INFO )
          RETURN
       END IF
 *

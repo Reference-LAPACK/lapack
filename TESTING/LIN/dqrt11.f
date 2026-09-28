@@ -122,7 +122,7 @@
       EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DORM2R, XERBLA
+      EXTERNAL           DLASET, DORM2R, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -137,7 +137,7 @@
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL XERBLA( 'DQRT11', 7 )
+         CALL XER_REPLACE( 'DQRT11', 7 )
          RETURN
       END IF
 *

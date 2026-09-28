@@ -185,7 +185,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CLARF, CLARNV, CLAROR, CLASCL, CLASET,
-     $                   CSSCAL, SLAORD, SLASCL, XERBLA
+     $                   CSSCAL, SLAORD, SLASCL, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN
@@ -194,7 +194,7 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL XERBLA( 'CQRT15', 16 )
+         CALL XER_REPLACE( 'CQRT15', 16 )
          RETURN
       END IF
 *
@@ -214,7 +214,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL XERBLA( 'CQRT15', 2 )
+         CALL XER_REPLACE( 'CQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -302,7 +302,7 @@
                CALL CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE
-               CALL XERBLA( 'CQRT15', 1 )
+               CALL XER_REPLACE( 'CQRT15', 1 )
                RETURN
             END IF
          END IF

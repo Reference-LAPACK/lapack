@@ -457,7 +457,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGET52, DGGEV3, DLACPY, DLARFG, DLASET,
-     $                   DLATM4, DORM2R, XERBLA, XLAENV
+     $                   DLATM4, DORM2R, XER_REPLACE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -534,7 +534,7 @@
      $   INFO = -25
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRGEV3', -INFO )
+         CALL XER_REPLACE( 'DDRGEV3', -INFO )
          RETURN
       END IF
 *
