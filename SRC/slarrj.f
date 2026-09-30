@@ -137,7 +137,11 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          Error flag.
+*>          = 0:  successful exit
+*>          = 1:  the interval around one of the eigenvalues could not
+*>                be widened to contain it: the Sturm counts of the
+*>                matrix are inconsistent, as they are when it contains
+*>                a NaN or an Inf.
 *> \endverbatim
 *
 *  Authors:
@@ -190,7 +194,7 @@
 *     .. Local Scalars ..
       INTEGER            CNT, I, I1, I2, II, ITER, J, K, NEXT, NINT,
      $                   OLNINT, P, PREV, SAVI1
-      REAL               DPLUS, FAC, LEFT, MID, RIGHT, S, TMP, WIDTH
+      REAL               BACK, DPLUS, LEFT, MID, RIGHT, S, TMP, WIDTH
 *
 *     ..
 *     .. Intrinsic Functions ..
@@ -249,7 +253,16 @@
 *
 *           Do while( CNT(LEFT).GT.I-1 )
 *
-            FAC = ONE
+*           The interval is widened by BACK, doubled at every step,
+*           until the Sturm count agrees with the index.  In exact
+*           arithmetic this terminates because the count is 0 below the
+*           spectrum and N above it.  A NaN or an Inf in the matrix is
+*           never counted, so the count can stay short of the index;
+*           stop once BACK has overflowed, when no further step can move
+*           the endpoint.  BACK starts at no less than the minimum
+*           interval width so that a zero WERR still makes progress.
+*
+            BACK = MAX( WERR( II ), TWO*PIVMIN )
  20         CONTINUE
             CNT = 0
             S = LEFT
@@ -260,14 +273,18 @@
                IF( DPLUS.LT.ZERO ) CNT = CNT + 1
  30         CONTINUE
             IF( CNT.GT.I-1 ) THEN
-               LEFT = LEFT - WERR( II )*FAC
-               FAC = TWO*FAC
+               IF( .NOT.( BACK.LT.TWO*BACK ) ) THEN
+                  INFO = 1
+                  RETURN
+               END IF
+               LEFT = LEFT - BACK
+               BACK = TWO*BACK
                GO TO 20
             END IF
 *
 *           Do while( CNT(RIGHT).LT.I )
 *
-            FAC = ONE
+            BACK = MAX( WERR( II ), TWO*PIVMIN )
  50         CONTINUE
             CNT = 0
             S = RIGHT
@@ -278,8 +295,12 @@
                IF( DPLUS.LT.ZERO ) CNT = CNT + 1
  60         CONTINUE
             IF( CNT.LT.I ) THEN
-               RIGHT = RIGHT + WERR( II )*FAC
-               FAC = TWO*FAC
+               IF( .NOT.( BACK.LT.TWO*BACK ) ) THEN
+                  INFO = 1
+                  RETURN
+               END IF
+               RIGHT = RIGHT + BACK
+               BACK = TWO*BACK
                GO TO 50
             END IF
             NINT = NINT + 1

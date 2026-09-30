@@ -165,7 +165,11 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          Error flag.
+*>          = 0:  successful exit
+*>          = 1:  the interval around one of the eigenvalues could not
+*>                be widened to contain it: the Sturm counts of the
+*>                representation are inconsistent, as they are when it
+*>                contains a NaN or an Inf.
 *> \endverbatim
 *
 *  Authors:
@@ -274,10 +278,23 @@
 *
 *        Do while( NEGCNT(LEFT).GT.I-1 )
 *
-         BACK = WERR( II )
+*        The interval is widened by BACK, doubled at every step, until
+*        the Sturm count agrees with the index.  In exact arithmetic
+*        this terminates because the count is 0 below the spectrum and
+*        N above it.  A NaN or an Inf in the representation is never
+*        counted, so the count can stay short of the index; stop once
+*        BACK has overflowed, when no further step can move the
+*        endpoint.  BACK starts at no less than the minimum interval
+*        width so that a zero WERR still makes progress.
+*
+         BACK = MAX( WERR( II ), MNWDTH )
  20      CONTINUE
          NEGCNT = SLANEG( N, D, LLD, LEFT, PIVMIN, R )
          IF( NEGCNT.GT.I-1 ) THEN
+            IF( .NOT.( BACK.LT.TWO*BACK ) ) THEN
+               INFO = 1
+               RETURN
+            END IF
             LEFT = LEFT - BACK
             BACK = TWO*BACK
             GO TO 20
@@ -286,15 +303,18 @@
 *        Do while( NEGCNT(RIGHT).LT.I )
 *        Compute negcount from dstqds facto L+D+L+^T = L D L^T - RIGHT
 *
-         BACK = WERR( II )
+         BACK = MAX( WERR( II ), MNWDTH )
  50      CONTINUE
-
          NEGCNT = SLANEG( N, D, LLD, RIGHT, PIVMIN, R )
-          IF( NEGCNT.LT.I ) THEN
-             RIGHT = RIGHT + BACK
-             BACK = TWO*BACK
-             GO TO 50
-          END IF
+         IF( NEGCNT.LT.I ) THEN
+            IF( .NOT.( BACK.LT.TWO*BACK ) ) THEN
+               INFO = 1
+               RETURN
+            END IF
+            RIGHT = RIGHT + BACK
+            BACK = TWO*BACK
+            GO TO 50
+         END IF
          WIDTH = HALF*ABS( LEFT - RIGHT )
          TMP = MAX( ABS( LEFT ), ABS( RIGHT ) )
          CVRGD = MAX(RTOL1*GAP,RTOL2*TMP)
