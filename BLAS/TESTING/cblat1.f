@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 11
+      DO 20 IC = 1, 13
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,10 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
+         IF (ICASE.EQ.12) THEN
+            CALL CHECK0(SFAC)
+         ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
+     +            ICASE.EQ.13) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -112,7 +115,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(11)
+      CHARACTER*6      L(13)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -128,6 +131,8 @@
       DATA             L(9)/'CSSCAL'/
       DATA             L(10)/'ICAMAX'/
       DATA             L(11)/'CAXPBY'/
+      DATA             L(12)/'CROTG '/
+      DATA             L(13)/'CSROT '/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -137,6 +142,149 @@
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
 *
 *     End of HEADER
+*
+      END
+      SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      REAL              SFAC
+*     .. Scalars in Common ..
+      INTEGER           ICASE, INCX, INCY, MODE, N
+      LOGICAL           PASS
+*     .. Local Scalars ..
+      COMPLEX           CS, CSA, CSB, CA0, CB0
+      REAL              SC, SGOT, RTMIN, RTMAX, SONE, SSIZ,
+     +                  SZERO
+      INTEGER           K
+*     .. Local Arrays ..
+      COMPLEX           CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
+     +                  CGOT(1), CWANT(1), CSIZE(1)
+      REAL              SWANT(1)
+      REAL              CCTRUE(8)
+*     .. External Subroutines ..
+      EXTERNAL          CROTG, CTEST, STEST1
+*     .. Intrinsic Functions ..
+      INTRINSIC         ABS, AIMAG, HUGE, REAL, SQRT, TINY
+*     .. Common blocks ..
+      COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+*     .. Data statements ..
+*
+*     CROTG is exercised on the branches its argument pair selects:
+*     B zero, A zero with B real, imaginary or general, and the ordinary
+*     path with real, imaginary and negative A.  Each expected value
+*     satisfies C*A + S*B = R and C**2 + ABS(S)**2 = 1 exactly.
+*
+      DATA              CA1/(1.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (0.0E0,0.0E0), (0.0E0,0.0E0),
+     +                  (3.0E0,0.0E0), (0.0E0,3.0E0),
+     +                  (3.0E0,4.0E0), (-3.0E0,0.0E0)/
+      DATA              CB1/(0.0E0,0.0E0), (3.0E0,0.0E0),
+     +                  (0.0E0,4.0E0), (3.0E0,4.0E0),
+     +                  (4.0E0,0.0E0), (0.0E0,4.0E0),
+     +                  (0.0E0,0.0E0), (4.0E0,0.0E0)/
+      DATA              CCTRUE/1.0E0, 0.0E0, 0.0E0, 0.0E0,
+     +                  0.6E0, 0.6E0, 1.0E0, 0.6E0/
+      DATA              CSTRUE/(0.0E0,0.0E0), (1.0E0,0.0E0),
+     +                  (0.0E0,-1.0E0), (0.6E0,-0.8E0),
+     +                  (0.8E0,0.0E0), (0.8E0,0.0E0),
+     +                  (0.0E0,0.0E0), (-0.8E0,0.0E0)/
+      DATA              CATRUE/(1.0E0,0.0E0), (3.0E0,0.0E0),
+     +                  (4.0E0,0.0E0), (5.0E0,0.0E0),
+     +                  (5.0E0,0.0E0), (0.0E0,5.0E0),
+     +                  (3.0E0,4.0E0), (-5.0E0,0.0E0)/
+*     .. Executable Statements ..
+*
+      DO 20 K = 1, 8
+*        .. Set N=K for identification in output if any ..
+         N = K
+         CSA = CA1(K)
+         CSB = CB1(K)
+         CALL CROTG(CSA,CSB,SC,CS)
+         CGOT(1) = CSA
+         CWANT(1) = CATRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CGOT(1) = CS
+         CWANT(1) = CSTRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CALL STEST1(SC,CCTRUE(K),CCTRUE(K),SFAC)
+   20 CONTINUE
+*
+*     The scaled arms of CROTG.  Their results are awkward to tabulate,
+*     so check the identities that define the rotation instead:
+*     C*A + S*B = R, and C**2 + ABS(S)**2 = 1.  RTMIN and RTMAX bracket
+*     the window inside which the routine uses its unscaled algorithm.
+*
+      SONE = 1E0
+      SZERO = 0E0
+      RTMIN = SQRT(TINY(SONE))
+      RTMAX = SQRT(HUGE(SONE))
+      DO 40 K = 1, 8
+         N = 8 + K
+         IF (K.EQ.1) THEN
+*           A zero and B below the window, with both parts nonzero so
+*           the general arm is taken rather than the real or imaginary
+*           shortcut.
+            CA0 = CMPLX(SZERO,SZERO)
+            CB0 = CMPLX(RTMIN*0.25E0,RTMIN*0.25E0)
+         ELSE IF (K.EQ.2) THEN
+*           Both nonzero, B far above the window.
+            CA0 = CMPLX(SONE,SZERO)
+            CB0 = CMPLX(RTMAX,SZERO)
+         ELSE IF (K.EQ.3) THEN
+*           Both inside the window, but A so small against B that the
+*           routine switches to its F2 < H2*SAFMIN formulation.
+            CA0 = CMPLX(RTMIN*2E0,SZERO)
+            CB0 = CMPLX(RTMAX*0.25E0,SZERO)
+         ELSE IF (K.EQ.4) THEN
+*           Both above the window and of a size, so the routine scales
+*           A and B by the same factor rather than one of its own.
+            CA0 = CMPLX(RTMAX,SZERO)
+            CB0 = CMPLX(RTMAX,SZERO)
+         ELSE IF (K.EQ.5) THEN
+*           The same, below the window.
+            CA0 = CMPLX(RTMIN*0.25E0,SZERO)
+            CB0 = CMPLX(RTMIN*0.25E0,SZERO)
+         ELSE IF (K.EQ.6) THEN
+*           B above the window with both parts set, so the routine
+*           scales, and A small enough against it that the scaled
+*           algorithm takes its F2 < H2*SAFMIN arm as well.
+            CA0 = CMPLX(SONE,SZERO)
+            CB0 = CMPLX(RTMAX*0.5E0,RTMAX*0.5E0)
+         ELSE IF (K.EQ.7) THEN
+*           The same, with A large enough that SQRT(F2*H2) is no longer
+*           known to stay in range, so S is formed from R/H2 instead.
+            CA0 = CMPLX(1.5E0,SZERO)
+            CB0 = CMPLX(RTMAX*0.5E0,RTMAX*0.5E0)
+         ELSE
+*           Both inside the window, A just above its lower edge, where
+*           the unscaled algorithm forms S from R/H2 for that reason.
+            CA0 = CMPLX(RTMIN*2E0,SZERO)
+            CB0 = CMPLX(SONE,SONE)
+         END IF
+         CSA = CA0
+         CSB = CB0
+         CALL CROTG(CSA,CSB,SC,CS)
+*        CSA holds R on return.  C*A and S*B are each bounded by the
+*        larger of ABS(A) and ABS(B), so their sum is the scale the
+*        residual of the identity has to be measured against.  Passing
+*        CWANT as the size would ask the imaginary part for an exact
+*        zero, which it cannot give: for operands near either end of
+*        the range it is a cancellation of two quantities of that size.
+         SSIZ = ABS(CA0) + ABS(CB0)
+         CGOT(1) = SC*CA0 + CS*CB0
+         CWANT(1) = CSA
+         CSIZE(1) = CMPLX(SSIZ,SSIZ)
+         CALL CTEST(1,CGOT,CWANT,CSIZE,SFAC)
+         SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
+         SWANT(1) = SONE
+         CALL STEST1(SGOT,SONE,SWANT,SFAC)
+   40 CONTINUE
+      RETURN
+*
+*     End of CHECK0
 *
       END
       SUBROUTINE CHECK1(SFAC)
@@ -380,17 +528,19 @@
       COMPLEX           CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
+      REAL              SC, SS
 *     .. Local Arrays ..
       COMPLEX           CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
      +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
-     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4)
+     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4),
+     +                  CTX(7), CTY(7)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX           CDOTC, CDOTU
       EXTERNAL          CDOTC, CDOTU
 *     .. External Subroutines ..
-      EXTERNAL          CAXPY, CAXPBY, CCOPY, CSWAP, CTEST
+      EXTERNAL          CAXPY, CAXPBY, CCOPY, CSWAP, CTEST, CSROT
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -615,6 +765,65 @@
      +                  (-0.2E0,-1.27E0)/
 
 *     .. Executable Statements ..
+*
+*     CSROT applies a real plane rotation to a pair of complex vectors.
+*     The expected values are formed here with explicit indexing, so the
+*     stride arithmetic inside the routine is what is under test; the
+*     negative stride exercises its IX = (-N+1)*INCX + 1 start.
+*
+      IF (ICASE.EQ.13) THEN
+         SC = 0.6E0
+         SS = 0.8E0
+         DO 100 KI = 1, 4
+            IF (KI.EQ.1) THEN
+               LINCX = 1
+               LINCY = 1
+            ELSE IF (KI.EQ.2) THEN
+               LINCX = 2
+               LINCY = 1
+            ELSE IF (KI.EQ.3) THEN
+               LINCX = -2
+               LINCY = 1
+            ELSE
+               LINCX = -1
+               LINCY = -2
+            END IF
+            N = 3
+            DO 80 I = 1, 7
+               CX(I) = CX1(I)
+               CY(I) = CY1(I)
+               CTX(I) = CX1(I)
+               CTY(I) = CY1(I)
+   80       CONTINUE
+            MX = 1
+            MY = 1
+            IF (LINCX.LT.0) MX = (-N+1)*LINCX + 1
+            IF (LINCY.LT.0) MY = (-N+1)*LINCY + 1
+            DO 90 I = 1, N
+               CTX(MX) = SC*CX1(MX) + SS*CY1(MY)
+               CTY(MY) = SC*CY1(MY) - SS*CX1(MX)
+               MX = MX + LINCX
+               MY = MY + LINCY
+   90       CONTINUE
+            CALL CSROT(N,CX,LINCX,CY,LINCY,SC,SS)
+            CALL CTEST(7,CX,CTX,CTX,SFAC)
+            CALL CTEST(7,CY,CTY,CTY,SFAC)
+  100    CONTINUE
+*
+*        N = 0 must leave both vectors untouched.
+*
+         N = 0
+         DO 110 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            CTX(I) = CX1(I)
+            CTY(I) = CY1(I)
+  110    CONTINUE
+         CALL CSROT(N,CX,1,CY,1,SC,SS)
+         CALL CTEST(7,CX,CTX,CTX,SFAC)
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
+         RETURN
+      END IF
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
          INCY = INCYS(KI)
