@@ -1,29 +1,21 @@
-*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (driver algorithm).
+*> \brief \b SLAUUM_BLOCKED computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download ZLAUUM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlauum.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlauum.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlauum.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAUUM( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE SLAUUM_BLOCKED( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         A( LDA, * )
+*       REAL               A( LDA, * )
 *       ..
 *
 *
@@ -32,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAUUM computes the product U * U**H or L**H * L, where the triangular
+*> SLAUUM_BLOCKED computes the product U * U**T or L**T * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -43,7 +35,7 @@
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
 *>
-*> This is the driver that dispatches to either blocked or recursive
+*> This is the blocked form of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,13 +58,13 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**H,
+*>          overwritten with the upper triangle of the product U * U**T,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**H * L, and the strictly
+*>          the lower triangle of the product L**T * L, and the strictly
 *>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
@@ -100,7 +92,7 @@
 *> \ingroup lauum
 *
 *  =====================================================================
-      SUBROUTINE ZLAUUM( UPLO, N, A, LDA, INFO )
+      SUBROUTINE SLAUUM_BLOCKED( UPLO, N, A, LDA, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -112,16 +104,14 @@
       INTEGER            INFO, LDA, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16         A( LDA, * )
+      REAL               A( LDA, * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
-      COMPLEX*16         CONE
-      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
+      REAL               ONE
+      PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
@@ -133,8 +123,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, ZLAUUM_RECURSIVE,
-     $                  ZLAUUM_BLOCKED
+      EXTERNAL           XERBLA, SLAUU2, STRMM, SGEMM, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -153,7 +142,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLAUUM', -INFO )
+         CALL XERBLA( 'SLAUUM_BLOCKED', -INFO )
          RETURN
       END IF
 *
@@ -162,15 +151,62 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Here we dispatch to whatever is more efficient in a particular environment
-*     We are defaulting to recursive, but if you want to use the blocked variant
-*     Comment out the line starting with `CALL ZLAUUM_RECURSIVE...`
-*     and uncomment the line starting with `CALL ZLAUUM_BLOCKED...`
+*     Determine the block size for this environment.
 *
-      CALL ZLAUUM_RECURSIVE(UPLO, N, A, LDA, INFO)
-*      CALL ZLAUUM_BLOCKED(UPLO, N, A, LDA, INFO)
+      NB = ILAENV( 1, 'SLAUUM_BLOCKED', UPLO, N, -1, -1, -1 )
+*
+      IF( NB.LE.1 .OR. NB.GE.N ) THEN
+*
+*        Use unblocked code
+*
+         CALL SLAUU2( UPLO, N, A, LDA, INFO )
+      ELSE
+*
+*        Use blocked code
+*
+         IF( UPPER ) THEN
+*
+*           Compute the product U * U**T.
+*
+            DO 10 I = 1, N, NB
+               IB = MIN( NB, N-I+1 )
+               CALL STRMM( 'Right', 'Upper', 'Transpose', 'Non-unit',
+     $                     I-1, IB, ONE, A( I, I ), LDA, A( 1, I ),
+     $                     LDA )
+               CALL SLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
+               IF( I+IB.LE.N ) THEN
+                  CALL SGEMM( 'No transpose', 'Transpose', I-1, IB,
+     $                        N-I-IB+1, ONE, A( 1, I+IB ), LDA,
+     $                        A( I, I+IB ), LDA, ONE, A( 1, I ), LDA )
+                  CALL SSYRK( 'Upper', 'No transpose', IB, N-I-IB+1,
+     $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
+     $                        LDA )
+               END IF
+   10       CONTINUE
+         ELSE
+*
+*           Compute the product L**T * L.
+*
+            DO 20 I = 1, N, NB
+               IB = MIN( NB, N-I+1 )
+               CALL STRMM( 'Left', 'Lower', 'Transpose', 'Non-unit',
+     $                     IB,
+     $                     I-1, ONE, A( I, I ), LDA, A( I, 1 ), LDA )
+               CALL SLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
+               IF( I+IB.LE.N ) THEN
+                  CALL SGEMM( 'Transpose', 'No transpose', IB, I-1,
+     $                        N-I-IB+1, ONE, A( I+IB, I ), LDA,
+     $                        A( I+IB, 1 ), LDA, ONE, A( I, 1 ), LDA )
+                  CALL SSYRK( 'Lower', 'Transpose', IB, N-I-IB+1,
+     $                        ONE,
+     $                        A( I+IB, I ), LDA, ONE, A( I, I ), LDA )
+               END IF
+   20       CONTINUE
+         END IF
+      END IF
+*
       RETURN
 *
-*     End of ZLAUUM
+*     End of SLAUUM_BLOCKED
 *
       END

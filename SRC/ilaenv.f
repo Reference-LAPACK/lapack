@@ -679,6 +679,12 @@
       ELSE IF( C2.EQ.'LA' ) THEN
          IF( C3.EQ.'RFT' ) THEN
             NX = 64
+         ELSE IF( C3.EQ.'UUM' ) THEN
+*
+*           Note that this matches on *lauum_recursive, which is the
+*           only place we currently use this
+*
+            NX = 64
          END IF
       END IF
       ILAENV = NX

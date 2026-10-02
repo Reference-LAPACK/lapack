@@ -119,8 +119,8 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I
-      REAL               AII
+      INTEGER            I, J
+      COMPLEX            AII, AJJ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -160,42 +160,51 @@
 *
 *        Compute the product U * U**H.
 *
-         DO 10 I = 1, N
-            AII = REAL( A( I, I ) )
-            IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ),
-     $            LDA,
-     $                     A( I, I+1 ), LDA ) )
-               CALL CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1,
-     $                     I+1 ),
-     $                     LDA, A( I, I+1 ), LDA, CMPLX( AII ),
-     $                     A( 1, I ), 1 )
-               CALL CLACGV( N-I, A( I, I+1 ), LDA )
+         DO J = 1, N
+            AJJ = CONJG(A(J,J))
+            IF( J.EQ.N ) THEN
+*
+*              We have this case separate just to ensure we never
+*              access A out of bounds when we do A(J,J+1) = A(N,N+1)
+*
+               CALL CSCAL( N, AJJ, A(1,N), 1 )
             ELSE
-               CALL CSSCAL( I, AII, A( 1, I ), 1 )
+               CALL CGEMM('No Transpose', 'Conjugate Transpose',
+     $            J, 1, N-J, ONE, A(1,J+1), LDA, A(J,J+1), LDA,
+     $            AJJ, A(1,J), LDA)
             END IF
-   10    CONTINUE
+*
+*           Since in exact arithmetic the diagonal will be real on output
+*           we explicitly cast the diagonal to real (zero out the
+*           imaginary component)
+*
+            A(J,J) = REAL(A(J,J))
+         END DO
 *
       ELSE
 *
 *        Compute the product L**H * L.
 *
-         DO 20 I = 1, N
-            AII = REAL( A( I, I ) )
-            IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ),
-     $            1,
-     $                     A( I+1, I ), 1 ) )
-               CALL CLACGV( I-1, A( I, 1 ), LDA )
-               CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
-     $                     A( I+1, 1 ), LDA, A( I+1, I ), 1,
-     $                     CMPLX( AII ), A( I, 1 ), LDA )
-               CALL CLACGV( I-1, A( I, 1 ), LDA )
+         DO I = 1, N
+            AII = CONJG(A(I,I))
+            IF( I.EQ.N ) THEN
+*
+*              We have this case separate just to ensure we never
+*              access A out of bounds when we do A(I+1,I) = A(N+1,N)
+*
+               CALL CSCAL(N, AII, A(N,1), LDA)
             ELSE
-               CALL CSSCAL( I, AII, A( I, 1 ), LDA )
+               CALL CGEMM('Conjugate Transpose', 'No Transpose',
+     $            1, I, N-I, ONE, A(I+1,I), LDA, A(I+1,1), LDA,
+     $            AII, A(I,1), LDA)
             END IF
-   20    CONTINUE
+*
+*           Since in exact arithmetic the diagonal will be real on output
+*           we explicitly cast the diagonal to real (zero out the
+*           imaginary component)
+*
+            A(I,I) = REAL(A(I,I))
+         END DO
       END IF
 *
       RETURN
