@@ -71,7 +71,8 @@
 *>          The dimension of the array WORK.
 *>          If N <= SMLSIZ, where SMLSIZ is returned by ILAENV and is
 *>          typically about 25, LWORK must be at least 1.
-*>          If N > SMLSIZ, LWORK must be at least 16*N.
+*>          If N > SMLSIZ, LWORK must be at least
+*>          MAX( 16*N, 2*N + SMLSIZ**2 + 2*SMLSIZ - 2 ).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK and
@@ -178,8 +179,11 @@
          ELSE
 *
 *           BLO/BHI: 2*N; merge scratch: 14*N (see DLAED7_BR).
+*           Leaf solves need 2*N + SMLSIZ**2 + 2*SMLSIZ - 2: the
+*           SMLSIZ-by-SMLSIZ leaf eigenvector block plus the
+*           DSTEQR work array.
 *
-            LWMIN = MAX( 1, 16*N )
+            LWMIN = MAX( 16*N, 2*N + SMLSIZ*SMLSIZ + 2*SMLSIZ - 2 )
             LIWMIN = MAX( 1, 7*N )
          END IF
          WORK( 1 ) = LWMIN
