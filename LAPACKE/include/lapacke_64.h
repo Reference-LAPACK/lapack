@@ -3603,6 +3603,9 @@ int64_t LAPACKE_dstebz_64( char range, char order, int64_t n, double vl,
                            int64_t* m, int64_t* nsplit, double* w,
                            int64_t* iblock, int64_t* isplit );
 
+int64_t LAPACKE_sstebr_64( int64_t n, float* d, float* e );
+int64_t LAPACKE_dstebr_64( int64_t n, double* d, double* e );
+
 int64_t LAPACKE_sstedc_64( int matrix_layout, char compz, int64_t n, float* d,
                            float* e, float* z, int64_t ldz );
 int64_t LAPACKE_dstedc_64( int matrix_layout, char compz, int64_t n,
@@ -9282,6 +9285,13 @@ int64_t LAPACKE_dstebz_work_64( char range, char order, int64_t n, double vl,
                                 int64_t* m, int64_t* nsplit, double* w,
                                 int64_t* iblock, int64_t* isplit,
                                 double* work, int64_t* iwork );
+
+int64_t LAPACKE_sstebr_work_64( int64_t n, float* d, float* e, float* work,
+                                int64_t lwork, int64_t* iwork,
+                                int64_t liwork );
+int64_t LAPACKE_dstebr_work_64( int64_t n, double* d, double* e,
+                                double* work, int64_t lwork,
+                                int64_t* iwork, int64_t liwork );
 
 int64_t LAPACKE_sstedc_work_64( int matrix_layout, char compz, int64_t n,
                                 float* d, float* e, float* z, int64_t ldz,
