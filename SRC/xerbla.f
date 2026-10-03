@@ -89,16 +89,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      IF (ASSOCIATED(ACTIVE_CALLBACK)) THEN
-        CALL XERBLA_LAPACK_SUB(SRNAME, INFO)
-        RETURN
-      END IF
-      WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
-*
-      STOP
-*
- 9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
-     $      'an illegal value' )
+      CALL XERBLA_LAPACK_SUB( SRNAME, INFO )
+      RETURN
 *
 *     End of XERBLA
 *
