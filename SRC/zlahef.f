@@ -285,6 +285,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
 *
@@ -636,6 +637,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
 *
