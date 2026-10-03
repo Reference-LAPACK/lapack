@@ -34,13 +34,14 @@
 !>         CHARACTER*(*), INTENT(IN) :: SRNAME
 !>         INTEGER, INTENT(IN) :: INFO
 !>       END SUBROUTINE
-!>       FUNCTION GET_BLAS_XERBLA() RESULT(CB_RET)
+!>       SUBROUTINE GET_BLAS_XERBLA(CB)
+!>         IMPORT :: XERBLA_INTERFACE
 !>         IMPLICIT NONE
-!>         PROCEDURE(XERBLA_INTERFACE), POINTER :: CB_RET
-!>       END FUNCTION
+!>         PROCEDURE(XERBLA_INTERFACE), POINTER, INTENT(OUT) :: CB
+!>       END SUBROUTINE
 !>     END INTERFACE
 !>     PROCEDURE(XERBLA_INTERFACE), POINTER :: ALREADY_CB
-!>     ALREADY_CB => GET_BLAS_XERBLA()
+!>     CALL GET_BLAS_XERBLA(ALREADY_CB)
 !>   END PROGRAM HELLO
 !> \endverbatim
 !
@@ -94,9 +95,13 @@ subroutine set_blas_xerbla(cb)
   active_callback => cb
 end
 
-function get_blas_xerbla() result(cb_ret)
+! A subroutine, not a function returning a procedure pointer: ifx
+! miscompiles references to such a function when the caller declares
+! it through an interface body (ICE in 2025.1, a call through a null
+! pointer in 2026.1).
+subroutine get_blas_xerbla(cb)
   use xerbla_blas
   implicit none
-  procedure(xerbla_interface), pointer :: cb_ret
-  cb_ret => active_callback
+  procedure(xerbla_interface), pointer, intent(out) :: cb
+  cb => active_callback
 end
