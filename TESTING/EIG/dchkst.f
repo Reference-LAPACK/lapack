@@ -634,11 +634,16 @@
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
      $                   ULPINV, UNFL, VL, VU
 *     ..
+      CHARACTER          COMPZ
+      INTEGER            JCOMPZ, JNAN, NSMLSZ
+      DOUBLE PRECISION   RNAN, RONE
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
       DOUBLE PRECISION   DUMMA( 1 )
+      DOUBLE PRECISION, ALLOCATABLE :: DREG( : ), EREG( : )
+      DOUBLE PRECISION, ALLOCATABLE :: ZREG( :, : )
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -1931,11 +1936,63 @@
   300    CONTINUE
   310 CONTINUE
 *
+*
+*     DSTEDC must report a NaN in the matrix through INFO.  A NaN
+*     off-diagonal entry used to split the matrix and was dropped, and
+*     a NaN diagonal entry was isolated as a 1 by 1 block, both with
+*     INFO = 0, whenever the block left over was large enough for the
+*     divide and conquer recursion, which the sizes in the input file
+*     do not reach.  Use local arrays because LDU is a row stride,
+*     not the capacity of the caller's eigenvalue arrays or Z columns.
+*
+      NSMLSZ = ILAENV( 9, 'DSTEDC', ' ', 0, 0, 0, 0 )
+      IF( ILAENV( 10, 'DSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 .AND.
+     $    ILAENV( 11, 'DSTEDC', 'V', 1, 0, 0, 0 ).EQ.1 ) THEN
+         N = MAX( 2, NSMLSZ+1 )
+         ALLOCATE( DREG( N ), EREG( N ), ZREG( N, N ) )
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         CALL DSTEDC( 'V', N, DREG, EREG, ZREG, N, WORK, -1, IWORK, -1,
+     $                IINFO )
+         IF( IINFO.EQ.0 .AND. INT( WORK( 1 ) ).LE.LWORK .AND.
+     $       IWORK( 1 ).LE.LIWORK ) THEN
+            DO 340 JNAN = 1, 2
+               DO 330 JCOMPZ = 1, 2
+                  IF( JCOMPZ.EQ.1 ) THEN
+                     COMPZ = 'I'
+                  ELSE
+                     COMPZ = 'V'
+                  END IF
+                  DO 320 J = 1, N
+                     DREG( J ) = DBLE( J )
+                     EREG( J ) = ONE / DBLE( J+1 )
+  320             CONTINUE
+                  IF( JNAN.EQ.1 ) THEN
+                     EREG( N / 2 ) = RNAN
+                  ELSE
+                     DREG( N ) = RNAN
+                  END IF
+                  CALL DLASET( 'Full', N, N, ZERO, ONE, ZREG, N )
+                  CALL DSTEDC( COMPZ, N, DREG, EREG, ZREG, N,
+     $                         WORK, LWORK, IWORK, LIWORK, IINFO )
+                  IF( IINFO.EQ.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9985 )COMPZ, JNAN
+                     NERRS = NERRS + 1
+                  END IF
+                  NTESTT = NTESTT + 1
+  330          CONTINUE
+  340       CONTINUE
+         END IF
+         DEALLOCATE( DREG, EREG, ZREG )
+      END IF
+*
 *     Summary
 *
       CALL DLASUM( 'DST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
+ 9985 FORMAT( ' DCHKST: DSTEDC( ', A1, ' ) returned INFO=0 for a',
+     $      ' matrix with a NaN, case ', I1 )
  9999 FORMAT( ' DCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *

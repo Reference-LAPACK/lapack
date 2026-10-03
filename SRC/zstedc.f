@@ -230,10 +230,10 @@
       DOUBLE PRECISION   EPS, ORGNRM, P, TINY
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            DISNAN, LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, DLANST
-      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
+      EXTERNAL           DISNAN, LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASCL, DLASET, DSTEDC, DSTEQR, DSTERF,
@@ -394,7 +394,10 @@
             IF( FINISH.LT.N ) THEN
                TINY = EPS*SQRT( ABS( D( FINISH ) ) )*
      $                    SQRT( ABS( D( FINISH+1 ) ) )
-               IF( ABS( E( FINISH ) ).GT.TINY ) THEN
+*              A NaN in D or E must not split the matrix: keep it in the
+*              block so that it is reported below instead of being
+*              dropped or isolated.
+               IF( .NOT.( ABS( E( FINISH ) ).LE.TINY ) ) THEN
                   FINISH = FINISH + 1
                   GO TO 40
                END IF
@@ -408,6 +411,10 @@
 *              Scale.
 *
                ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
+               IF( DISNAN( ORGNRM ) ) THEN
+                  INFO = START*( N+1 ) + FINISH
+                  GO TO 70
+               END IF
                CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
      $                      M,
      $                      INFO )
