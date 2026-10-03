@@ -617,24 +617,24 @@
 *
                   DO 30 J = K - 2, 1, -1
 *
-*                    Compute  D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J
+*                    Compute  ( W(k)W(k+1) ) * inv(D(k)) for row J
 *
-                     WKM1 = TT*( D11*A( J, K-1 )-DCONJG( D12 )*
-     $                      A( J, K ) )
-                     WK = TT*( D22*A( J, K )-D12*A( J, K-1 ) )
+                     WKM1 = TT*( ( D11*A( J, K-1 )-DCONJG( D12 )*
+     $                      A( J, K ) ) / D )
+                     WK = TT*( ( D22*A( J, K )-D12*A( J, K-1 ) ) / D )
 *
 *                    Perform a rank-2 update of A(1:k-2,1:k-2)
 *
                      DO 20 I = J, 1, -1
                         A( I, J ) = A( I, J ) -
-     $                              ( A( I, K ) / D )*DCONJG( WK ) -
-     $                              ( A( I, K-1 ) / D )*DCONJG( WKM1 )
+     $                              A( I, K )*DCONJG( WK ) -
+     $                              A( I, K-1 )*DCONJG( WKM1 )
    20                CONTINUE
 *
 *                    Store U(k) and U(k-1) in cols k and k-1 for row J
 *
-                     A( J, K ) = WK / D
-                     A( J, K-1 ) = WKM1 / D
+                     A( J, K ) = WK
+                     A( J, K-1 ) = WKM1
 *                    (*) Make sure that diagonal element of pivot is real
                      A( J, J ) = DCMPLX( DBLE( A( J, J ) ), ZERO )
 *
@@ -978,24 +978,24 @@
 *
                   DO 60 J = K + 2, N
 *
-*                    Compute  D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J
+*                    Compute  ( W(k)W(k+1) ) * inv(D(k)) for row J
 *
-                     WK = TT*( D11*A( J, K )-D21*A( J, K+1 ) )
-                     WKP1 = TT*( D22*A( J, K+1 )-DCONJG( D21 )*
-     $                      A( J, K ) )
+                     WK = TT*( ( D11*A( J, K )-D21*A( J, K+1 ) ) / D )
+                     WKP1 = TT*( ( D22*A( J, K+1 )-DCONJG( D21 )*
+     $                      A( J, K ) ) / D )
 *
 *                    Perform a rank-2 update of A(k+2:n,k+2:n)
 *
                      DO 50 I = J, N
                         A( I, J ) = A( I, J ) -
-     $                              ( A( I, K ) / D )*DCONJG( WK ) -
-     $                              ( A( I, K+1 ) / D )*DCONJG( WKP1 )
+     $                              A( I, K )*DCONJG( WK ) -
+     $                              A( I, K+1 )*DCONJG( WKP1 )
    50                CONTINUE
 *
 *                    Store L(k) and L(k+1) in cols k and k+1 for row J
 *
-                     A( J, K ) = WK / D
-                     A( J, K+1 ) = WKP1 / D
+                     A( J, K ) = WK
+                     A( J, K+1 ) = WKP1
 *                    (*) Make sure that diagonal element of pivot is real
                      A( J, J ) = DCMPLX( DBLE( A( J, J ) ), ZERO )
 *

@@ -177,6 +177,7 @@
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NNB, NNS, NOUT
       REAL               THRESH
+      REAL               SUBNRM
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
@@ -190,8 +191,10 @@
 *     .. Parameters ..
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E+0 )
+      REAL               FOUR
+      PARAMETER          ( FOUR = 4.0E+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
+      PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 9 )
 *     ..
@@ -210,14 +213,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
+      LOGICAL            SISNAN
+      REAL               SLAMCH
       REAL               SGET06, SLANSY
       EXTERNAL           SGET06, SLANSY
+      EXTERNAL           SISNAN, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
      $                   SLARHS, SLATB4, SLATMS, SPOT02, SPOT03, SPOT05,
-     $                   SSYCON, SSYRFS, SSYT01, SSYTRF, SSYTRI2,
-     $                   SSYTRS, SSYTRS2, XLAENV
+     $                   SSCAL, SSYCON, SSYRFS, SSYT01, SSYTRF,
+     $                   SSYTRI2, SSYTRS, SSYTRS2, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -386,6 +392,32 @@
                   IZERO = 0
                END IF
 *
+*              Type 11:  scale two adjacent rows and columns into the
+*              subnormal range and give them a 2 by 2 pivot block whose
+*              off-diagonal entry is four times its diagonal, at the
+*              end the factorization starts from.  Inverting that pivot
+*              through the reciprocal of the off-diagonal entry
+*              overflows.
+*
+               IF( IMAT.EQ.11 .AND. N.GE.2 ) THEN
+                  SUBNRM = SLAMCH( 'Safe minimum' ) / 512
+                  IF( IUPLO.EQ.1 ) THEN
+                     I1 = N - 1
+                  ELSE
+                     I1 = 1
+                  END IF
+                  I2 = I1 + 1
+                  CALL SSCAL( N, SUBNRM, A( I1 ), LDA )
+                  CALL SSCAL( N, SUBNRM, A( I2 ), LDA )
+                  CALL SSCAL( N, SUBNRM, A( ( I1-1 )*LDA+1 ), 1 )
+                  CALL SSCAL( N, SUBNRM, A( ( I2-1 )*LDA+1 ), 1 )
+                  A( ( I1-1 )*LDA+I1 ) = SUBNRM
+                  A( ( I2-1 )*LDA+I2 ) = SUBNRM
+                  A( ( I2-1 )*LDA+I1 ) = FOUR*SUBNRM
+                  A( ( I1-1 )*LDA+I2 ) = FOUR*SUBNRM
+                  IZERO = 0
+               END IF
+*
 *              End generate the test matrix A.
 *
 *
@@ -440,7 +472,7 @@
 *
 *                 Set the condition estimate flag if the INFO is not 0.
 *
-                  IF( INFO.NE.0 ) THEN
+                  IF( INFO.NE.0 .OR. IMAT.EQ.11 ) THEN
                      TRFCON = .TRUE.
                   ELSE
                      TRFCON = .FALSE.
@@ -485,7 +517,8 @@
 *                 the threshold.
 *
                   DO 110 K = 1, NT
-                     IF( RESULT( K ).GE.THRESH ) THEN
+                     IF( RESULT( K ).GE.THRESH .OR.
+     $              SISNAN( RESULT( K ) ) ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
@@ -623,6 +656,8 @@
 *                 Get an estimate of RCOND = 1/CNDNUM.
 *
   140             CONTINUE
+                  IF( IMAT.EQ.11 )
+     $               GO TO 150
                   ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
                   SRNAMT = 'SSYCON'
                   CALL SSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,

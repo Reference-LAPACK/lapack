@@ -432,8 +432,9 @@
 *                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
 *                               ( (  -1 ) ( D22 ) )
 *
-*                 = D21 * ( ( D11 ) (  -1 ) )
-*                         ( (  -1 ) ( D22 ) )
+*                 T/d21 is not formed, since it overflows when d21 is
+*                 subnormal: each entry of the product is divided by
+*                 d21 and then scaled by T.
 *
                   D21 = W( K-1, KW )
                   D11 = W( K, KW ) / D21
@@ -444,10 +445,11 @@
 *                 dot products of rows of ( W(kw-1) W(kw) ) and columns
 *                 of D**(-1)
 *
-                  D21 = T / D21
                   DO 20 J = 1, K - 2
-                     A( J, K-1 ) = D21*( D11*W( J, KW-1 )-W( J, KW ) )
-                     A( J, K ) = D21*( D22*W( J, KW )-W( J, KW-1 ) )
+                     A( J, K-1 ) = T*( (D11*W( J, KW-1 )-W( J, KW ) ) /
+     $                             D21 )
+                     A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
+     $                           D21 )
    20             CONTINUE
                END IF
 *
@@ -712,22 +714,24 @@
 *                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
 *                               ( (  -1 ) ( D22 ) )
 *
-*                 = D21 * ( ( D11 ) (  -1 ) )
-*                         ( (  -1 ) ( D22 ) )
+*                 T/d21 is not formed, since it overflows when d21 is
+*                 subnormal: each entry of the product is divided by
+*                 d21 and then scaled by T.
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
                   D22 = W( K, K ) / D21
                   T = CONE / ( D11*D22-CONE )
-                  D21 = T / D21
 *
 *                 Update elements in columns A(k) and A(k+1) as
 *                 dot products of rows of ( W(k) W(k+1) ) and columns
 *                 of D**(-1)
 *
                   DO 80 J = K + 2, N
-                     A( J, K ) = D21*( D11*W( J, K )-W( J, K+1 ) )
-                     A( J, K+1 ) = D21*( D22*W( J, K+1 )-W( J, K ) )
+                     A( J, K ) = T*( ( D11*W( J, K )-W( J, K+1 ) ) /
+     $                           D21 )
+                     A( J, K+1 ) = T*( ( D22*W( J, K+1 )-W( J, K ) ) /
+     $                             D21 )
    80             CONTINUE
                END IF
 *
