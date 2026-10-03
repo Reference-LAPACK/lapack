@@ -203,6 +203,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CONE
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
@@ -210,18 +212,23 @@
       LOGICAL            LQUERY
       INTEGER            LOPT, LWKMIN, LWKOPT, MN, NB, NB1, NB2, NB3,
      $                   NB4, NR
+      INTEGER            IA, IB, IBIG, IC, ID, ISML, IU, KA, KB, KT
+      DOUBLE PRECISION   ANRM, BIGNUM, BNRM, CNRM, DNRM, SMLNUM
+*     ..
+*     .. Local Arrays ..
+      DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGGRQF,
-     $                   ZTRMV,
-     $                   ZTRTRS, ZUNMQR, ZUNMRQ
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZDSCAL, ZGEMV, ZGGRQF,
+     $                   ZLASCL, ZTRMV, ZTRTRS, ZUNMQR, ZUNMRQ
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           DLAMCH, ILAENV, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          INT, MAX, MIN
+      INTRINSIC          EXPONENT, HUGE, INT, MAX, MIN, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -275,6 +282,72 @@
 *
       IF( N.EQ.0 )
      $   RETURN
+*
+*     Get machine parameters
+*
+      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      BIGNUM = ONE / SMLNUM
+      ISML = EXPONENT( SMLNUM )
+      IBIG = EXPONENT( BIGNUM ) - 1
+*
+*     Scale A, B, c and d by powers of two so that their largest
+*     entries lie in [SMLNUM,BIGNUM), the values whose EXPONENT lies
+*     in [ISML,IBIG].  A and B are scaled independently, by 2**KA and
+*     2**KB.  c is scaled by 2**(KA+KT) and d by 2**(KB+KT), which
+*     keeps the constraint and the residual consistent and scales x by
+*     2**KT; KT brings the larger of the two right-hand sides into
+*     range.  Scaling by a power of two is exact.  A norm that is zero,
+*     infinite or NaN takes no part.  ZLASCL is called with both
+*     endpoints at or above one so that forming the factor raises no
+*     underflow.
+*
+      ANRM = ZLANGE( 'M', M, N, A, LDA, RWORK )
+      KA = 0
+      IF( ANRM.GT.ZERO .AND. ANRM.LE.HUGE( ZERO ) ) THEN
+         IA = EXPONENT( ANRM )
+         IF( IA.LT.ISML ) THEN
+            KA = ISML - IA
+         ELSE IF( IA.GT.IBIG ) THEN
+            KA = IBIG - IA
+         END IF
+      END IF
+      IF( KA.NE.0 )
+     $   CALL ZLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KA, 0 ) ),
+     $                SCALE( ONE, MAX( KA, 0 ) ), M, N, A, LDA, INFO )
+*
+      BNRM = ZLANGE( 'M', P, N, B, LDB, RWORK )
+      KB = 0
+      IF( BNRM.GT.ZERO .AND. BNRM.LE.HUGE( ZERO ) ) THEN
+         IB = EXPONENT( BNRM )
+         IF( IB.LT.ISML ) THEN
+            KB = ISML - IB
+         ELSE IF( IB.GT.IBIG ) THEN
+            KB = IBIG - IB
+         END IF
+      END IF
+      IF( KB.NE.0 )
+     $   CALL ZLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KB, 0 ) ),
+     $                SCALE( ONE, MAX( KB, 0 ) ), P, N, B, LDB, INFO )
+*
+      CNRM = ZLANGE( 'M', M, 1, C, MAX( 1, M ), RWORK )
+      DNRM = ZLANGE( 'M', P, 1, D, MAX( 1, P ), RWORK )
+      IC = -HUGE( 0 )
+      IF( CNRM.GT.ZERO .AND. CNRM.LE.HUGE( ZERO ) )
+     $   IC = EXPONENT( CNRM ) + KA
+      ID = -HUGE( 0 )
+      IF( DNRM.GT.ZERO .AND. DNRM.LE.HUGE( ZERO ) )
+     $   ID = EXPONENT( DNRM ) + KB
+      IU = MAX( IC, ID )
+      KT = 0
+      IF( IU.GT.IBIG ) THEN
+         KT = IBIG - IU
+      ELSE IF( IU.LT.ISML .AND. IU.NE.-HUGE( 0 ) ) THEN
+         KT = ISML - IU
+      END IF
+      IF( KA+KT.NE.0 )
+     $   CALL ZDSCAL( M, SCALE( ONE, KA+KT ), C, 1 )
+      IF( KB+KT.NE.0 )
+     $   CALL ZDSCAL( P, SCALE( ONE, KB+KT ), D, 1 )
 *
 *     Compute the GRQ factorization of matrices B and A:
 *
@@ -356,6 +429,15 @@
 *
       CALL ZUNMRQ( 'Left', 'Conjugate Transpose', N, 1, P, B, LDB,
      $             WORK( 1 ), X, N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
+*
+*     Undo scaling: x carries 2**KT and the residual in c(N-P+1:M)
+*     carries 2**(KA+KT)
+*
+      IF( KT.NE.0 )
+     $   CALL ZDSCAL( N, SCALE( ONE, -KT ), X, 1 )
+      IF( KA+KT.NE.0 .AND. M+P.GT.N )
+     $   CALL ZDSCAL( M+P-N, SCALE( ONE, -KA-KT ), C( N-P+1 ), 1 )
+*
       WORK( 1 ) = P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
       RETURN

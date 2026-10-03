@@ -203,6 +203,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CONE
       PARAMETER          ( CONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
@@ -210,19 +212,24 @@
       LOGICAL            LQUERY
       INTEGER            LOPT, LWKMIN, LWKOPT, MN, NB, NB1, NB2, NB3,
      $                   NB4, NR
+      INTEGER            IA, IB, IBIG, IC, ID, ISML, IU, KA, KB, KT
+      REAL               ANRM, BIGNUM, BNRM, CNRM, DNRM, SMLNUM
+*     ..
+*     .. Local Arrays ..
+      REAL               RWORK( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGGRQF, CTRMV,
-     $                   CTRTRS,
-     $                   CUNMQR, CUNMRQ, XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGGRQF, CLASCL, CSSCAL,
+     $                   CTRMV, CTRTRS, CUNMQR, CUNMRQ, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
       REAL               SROUNDUP_LWORK
-      EXTERNAL           ILAENV, SROUNDUP_LWORK
+      REAL               SLAMCH, CLANGE
+      EXTERNAL           CLANGE, ILAENV, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          INT, MAX, MIN
+      INTRINSIC          EXPONENT, HUGE, INT, MAX, MIN, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -276,6 +283,72 @@
 *
       IF( N.EQ.0 )
      $   RETURN
+*
+*     Get machine parameters
+*
+      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      BIGNUM = ONE / SMLNUM
+      ISML = EXPONENT( SMLNUM )
+      IBIG = EXPONENT( BIGNUM ) - 1
+*
+*     Scale A, B, c and d by powers of two so that their largest
+*     entries lie in [SMLNUM,BIGNUM), the values whose EXPONENT lies
+*     in [ISML,IBIG].  A and B are scaled independently, by 2**KA and
+*     2**KB.  c is scaled by 2**(KA+KT) and d by 2**(KB+KT), which
+*     keeps the constraint and the residual consistent and scales x by
+*     2**KT; KT brings the larger of the two right-hand sides into
+*     range.  Scaling by a power of two is exact.  A norm that is zero,
+*     infinite or NaN takes no part.  CLASCL is called with both
+*     endpoints at or above one so that forming the factor raises no
+*     underflow.
+*
+      ANRM = CLANGE( 'M', M, N, A, LDA, RWORK )
+      KA = 0
+      IF( ANRM.GT.ZERO .AND. ANRM.LE.HUGE( ZERO ) ) THEN
+         IA = EXPONENT( ANRM )
+         IF( IA.LT.ISML ) THEN
+            KA = ISML - IA
+         ELSE IF( IA.GT.IBIG ) THEN
+            KA = IBIG - IA
+         END IF
+      END IF
+      IF( KA.NE.0 )
+     $   CALL CLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KA, 0 ) ),
+     $                SCALE( ONE, MAX( KA, 0 ) ), M, N, A, LDA, INFO )
+*
+      BNRM = CLANGE( 'M', P, N, B, LDB, RWORK )
+      KB = 0
+      IF( BNRM.GT.ZERO .AND. BNRM.LE.HUGE( ZERO ) ) THEN
+         IB = EXPONENT( BNRM )
+         IF( IB.LT.ISML ) THEN
+            KB = ISML - IB
+         ELSE IF( IB.GT.IBIG ) THEN
+            KB = IBIG - IB
+         END IF
+      END IF
+      IF( KB.NE.0 )
+     $   CALL CLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KB, 0 ) ),
+     $                SCALE( ONE, MAX( KB, 0 ) ), P, N, B, LDB, INFO )
+*
+      CNRM = CLANGE( 'M', M, 1, C, MAX( 1, M ), RWORK )
+      DNRM = CLANGE( 'M', P, 1, D, MAX( 1, P ), RWORK )
+      IC = -HUGE( 0 )
+      IF( CNRM.GT.ZERO .AND. CNRM.LE.HUGE( ZERO ) )
+     $   IC = EXPONENT( CNRM ) + KA
+      ID = -HUGE( 0 )
+      IF( DNRM.GT.ZERO .AND. DNRM.LE.HUGE( ZERO ) )
+     $   ID = EXPONENT( DNRM ) + KB
+      IU = MAX( IC, ID )
+      KT = 0
+      IF( IU.GT.IBIG ) THEN
+         KT = IBIG - IU
+      ELSE IF( IU.LT.ISML .AND. IU.NE.-HUGE( 0 ) ) THEN
+         KT = ISML - IU
+      END IF
+      IF( KA+KT.NE.0 )
+     $   CALL CSSCAL( M, SCALE( ONE, KA+KT ), C, 1 )
+      IF( KB+KT.NE.0 )
+     $   CALL CSSCAL( P, SCALE( ONE, KB+KT ), D, 1 )
 *
 *     Compute the GRQ factorization of matrices B and A:
 *
@@ -357,6 +430,15 @@
 *
       CALL CUNMRQ( 'Left', 'Conjugate Transpose', N, 1, P, B, LDB,
      $             WORK( 1 ), X, N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
+*
+*     Undo scaling: x carries 2**KT and the residual in c(N-P+1:M)
+*     carries 2**(KA+KT)
+*
+      IF( KT.NE.0 )
+     $   CALL CSSCAL( N, SCALE( ONE, -KT ), X, 1 )
+      IF( KA+KT.NE.0 .AND. M+P.GT.N )
+     $   CALL CSSCAL( M+P-N, SCALE( ONE, -KA-KT ), C( N-P+1 ), 1 )
+*
       WORK( 1 ) = CMPLX( P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) ) )
 *
       RETURN
