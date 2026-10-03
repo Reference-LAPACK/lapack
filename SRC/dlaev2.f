@@ -165,11 +165,17 @@
          RT = ADF*SQRT( ONE+( AB / ADF )**2 )
       ELSE IF( ADF.LT.AB ) THEN
          RT = AB*SQRT( ONE+( ADF / AB )**2 )
-      ELSE
+      ELSE IF( ADF.EQ.AB ) THEN
 *
 *        Includes case AB=ADF=0
 *
          RT = AB*SQRT( TWO )
+      ELSE
+*
+*        ADF or AB is a NaN; propagate it instead of returning
+*        finite eigenvalues for a matrix that contains a NaN.
+*
+         RT = ADF + AB
       END IF
       IF( SM.LT.ZERO ) THEN
          RT1 = HALF*( SM-RT )
