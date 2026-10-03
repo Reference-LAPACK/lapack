@@ -140,9 +140,9 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      EXTERNAL           LSAME, ZDOTC, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZTPSV
@@ -191,7 +191,7 @@
 *
             AJJ = DBLE( AP( JJ ) ) - DBLE( ZDOTC( J-1,
      $            AP( JC ), 1, AP( JC ), 1 ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF
@@ -207,7 +207,7 @@
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
             AJJ = DBLE( AP( JJ ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF

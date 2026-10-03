@@ -178,10 +178,10 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E+0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 9 )
+      PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 8 )
 *     ..
@@ -193,6 +193,7 @@
      $                   KL, KU, LDA, MODE, N, NERRS, NFAIL, NIMAT, NPP,
      $                   NRHS, NRUN
       REAL               ANORM, CNDNUM, RCOND, RCONDC
+      REAL               RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       CHARACTER          PACKS( 2 ), UPLOS( 2 )
@@ -219,7 +220,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MAX, SQRT
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -329,6 +330,18 @@
                   END IF
                ELSE
                   IZERO = 0
+               END IF
+*
+*              Type 10:  put a NaN on the last diagonal entry, which is
+*              the last entry of the packed array for both values of
+*              UPLO.  The factorization must report it like a
+*              nonpositive pivot.
+*
+               IF( IMAT.EQ.10 ) THEN
+                  IZERO = N
+                  RONE = ONE
+                  RNAN = SQRT( -RONE )
+                  A( N*( N+1 ) / 2 ) = RNAN
                END IF
 *
 *              Set the imaginary part of the diagonals.

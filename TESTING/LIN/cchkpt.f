@@ -169,7 +169,7 @@
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 12 )
+      PARAMETER          ( NTYPES = 13 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
 *     ..
@@ -181,6 +181,7 @@
      $                   J, K, KL, KU, LDA, MODE, N, NERRS, NFAIL,
      $                   NIMAT, NRHS, NRUN
       REAL               AINVNM, ANORM, COND, DMAX, RCOND, RCONDC
+      REAL               RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -200,7 +201,7 @@
      $                   CSSCAL, SCOPY, SLARNV, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, REAL
+      INTRINSIC          ABS, MAX, REAL, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -363,6 +364,16 @@
                   END IF
                   Z( 2 ) = D( IZERO )
                   D( IZERO ) = ZERO
+               END IF
+*
+*              Type 13:  put a NaN on the last diagonal entry.  The
+*              factorization must report it like a nonpositive pivot.
+*
+               IF( IMAT.EQ.13 ) THEN
+                  IZERO = N
+                  RONE = ONE
+                  RNAN = SQRT( -RONE )
+                  D( N ) = RNAN
                END IF
             END IF
 *

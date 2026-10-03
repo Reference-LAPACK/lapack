@@ -163,8 +163,8 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSYR, XERBLA
@@ -208,7 +208,7 @@
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
             AJJ = AB( KD+1, J )
-            IF( AJJ.LE.ZERO )
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) )
      $         GO TO 30
             AJJ = SQRT( AJJ )
             AB( KD+1, J ) = AJJ
@@ -232,7 +232,7 @@
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
             AJJ = AB( 1, J )
-            IF( AJJ.LE.ZERO )
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) )
      $         GO TO 30
             AJJ = SQRT( AJJ )
             AB( 1, J ) = AJJ
