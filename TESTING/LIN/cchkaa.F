@@ -1038,7 +1038,7 @@
 *
 *        QR:  QR factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -1055,7 +1055,7 @@
 *
 *        LQ:  LQ factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -1072,7 +1072,7 @@
 *
 *        QL:  QL factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -1089,7 +1089,7 @@
 *
 *        RQ:  RQ factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
