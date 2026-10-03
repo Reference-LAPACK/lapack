@@ -105,16 +105,15 @@
 *> \param[out] QSTORE
 *> \verbatim
 *>          QSTORE is COMPLEX array, dimension (LDQS, N)
-*>         Used to store parts of
-*>         the eigenvector matrix when the updating matrix multiplies
-*>         take place.
+*>         Workspace: holds the products of the leaf eigenvector
+*>         matrices and the QSIZ*N workspace of CLAED7.
 *> \endverbatim
 *>
 *> \param[in] LDQS
 *> \verbatim
 *>          LDQS is INTEGER
 *>         The leading dimension of the array QSTORE.
-*>         LDQS >= max(1,N).
+*>         LDQS >= max(1,QSIZ).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -171,7 +170,7 @@
       REAL               TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACRM, CLAED7, SCOPY, SSTEQR,
+      EXTERNAL           CCOPY, CLACPY, CLACRM, CLAED7, SCOPY, SSTEQR,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -288,6 +287,8 @@
          CALL CLACRM( QSIZ, MATSIZ, Q( 1, SUBMAT ), LDQ, RWORK( LL ),
      $                MATSIZ, QSTORE( 1, SUBMAT ), LDQS,
      $                RWORK( IWREM ) )
+         CALL CLACPY( 'A', QSIZ, MATSIZ, QSTORE( 1, SUBMAT ), LDQS,
+     $                Q( 1, SUBMAT ), LDQ )
          IWORK( IQPTR+CURR+1 ) = IWORK( IQPTR+CURR ) + MATSIZ**2
          CURR = CURR + 1
          IF( INFO.GT.0 ) THEN
@@ -328,15 +329,17 @@
 *     when the eigenvectors of a full or band Hermitian matrix (which
 *     was reduced to tridiagonal form) are desired.
 *
-*     I am free to use Q as a valuable working space until Loop 150.
+*     The eigenvectors stay in Q, which has leading dimension LDQ, and
+*     the contiguous QSTORE is the QSIZ*MATSIZ workspace of CLAED7:
+*     Q(N+1:LDQ,:) belongs to the caller and must not be touched.
 *
             CALL CLAED7( MATSIZ, MSD2, QSIZ, TLVLS, CURLVL, CURPRB,
-     $                   D( SUBMAT ), QSTORE( 1, SUBMAT ), LDQS,
+     $                   D( SUBMAT ), Q( 1, SUBMAT ), LDQ,
      $                   E( SUBMAT+MSD2-1 ), IWORK( INDXQ+SUBMAT ),
      $                   RWORK( IQ ), IWORK( IQPTR ), IWORK( IPRMPT ),
      $                   IWORK( IPERM ), IWORK( IGIVPT ),
      $                   IWORK( IGIVCL ), RWORK( IGIVNM ),
-     $                   Q( 1, SUBMAT ), RWORK( IWREM ),
+     $                   QSTORE, RWORK( IWREM ),
      $                   IWORK( SUBPBS+1 ), INFO )
             IF( INFO.GT.0 ) THEN
                INFO = SUBMAT*( N+1 ) + SUBMAT + MATSIZ - 1
@@ -357,9 +360,10 @@
       DO 100 I = 1, N
          J = IWORK( INDXQ+I )
          RWORK( I ) = D( J )
-         CALL CCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
+         CALL CCOPY( QSIZ, Q( 1, J ), 1, QSTORE( 1, I ), 1 )
   100 CONTINUE
       CALL SCOPY( N, RWORK, 1, D, 1 )
+      CALL CLACPY( 'A', QSIZ, N, QSTORE, LDQS, Q, LDQ )
 *
       RETURN
 *
