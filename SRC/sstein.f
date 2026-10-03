@@ -88,6 +88,8 @@
 *>          the first submatrix from the top, =2 if W(i) belongs to
 *>          the second submatrix, etc.  ( The output array IBLOCK
 *>          from SSTEBZ is expected here. )
+*>          A negative entry, with which SSTEBZ flags an eigenvalue that
+*>          did not converge, is treated as its absolute value.
 *> \endverbatim
 *>
 *> \param[in] ISPLIT
@@ -233,11 +235,12 @@
          INFO = -9
       ELSE
          DO 20 J = 2, M
-            IF( IBLOCK( J ).LT.IBLOCK( J-1 ) ) THEN
+            IF( ABS( IBLOCK( J ) ).LT.ABS( IBLOCK( J-1 ) ) ) THEN
                INFO = -6
                GO TO 30
             END IF
-            IF( IBLOCK( J ).EQ.IBLOCK( J-1 ) .AND. W( J ).LT.W( J-1 ) )
+            IF( ABS( IBLOCK( J ) ).EQ.ABS( IBLOCK( J-1 ) ) .AND.
+     $          W( J ).LT.W( J-1 ) )
      $           THEN
                INFO = -5
                GO TO 30
@@ -281,7 +284,7 @@
 *     Compute eigenvectors of matrix blocks.
 *
       J1 = 1
-      DO 160 NBLK = 1, IBLOCK( M )
+      DO 160 NBLK = 1, ABS( IBLOCK( M ) )
 *
 *        Find starting and ending indices of block nblk.
 *
@@ -313,7 +316,7 @@
    60    CONTINUE
          JBLK = 0
          DO 150 J = J1, M
-            IF( IBLOCK( J ).NE.NBLK ) THEN
+            IF( ABS( IBLOCK( J ) ).NE.NBLK ) THEN
                J1 = J
                GO TO 160
             END IF
