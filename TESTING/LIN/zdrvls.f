@@ -199,6 +199,7 @@
       LOGICAL            TSTERR
       INTEGER            NM, NN, NNB, NNS, NOUT
       DOUBLE PRECISION   THRESH
+      DOUBLE PRECISION   SMLX
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
@@ -282,6 +283,7 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
       EPS = DLAMCH( 'Epsilon' )
+      SMLX = 256*DLAMCH( 'Safe minimum' )
 *
 *     Threshold for rank estimation
 *
@@ -470,6 +472,14 @@
                                  CALL ZDSCAL( NCOLS*NRHS,
      $                                        ONE / DBLE( NCOLS ), WORK,
      $                                        1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                 IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL ZDSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                               END IF
                               CALL ZGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
@@ -587,6 +597,14 @@
                                  CALL ZDSCAL( NCOLS*NRHS,
      $                                        ONE / DBLE( NCOLS ), WORK,
      $                                        1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                 IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL ZDSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                               END IF
                               CALL ZGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
@@ -710,6 +728,14 @@
                                     CALL ZSCAL( NCOLS*NRHS,
      $                                          CONE / DBLE( NCOLS ),
      $                                          WORK, 1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                    IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL ZDSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                                  END IF
                                  CALL ZGEMM( TRANS, 'No transpose',
      $                                       NROWS, NRHS, NCOLS, CONE,
