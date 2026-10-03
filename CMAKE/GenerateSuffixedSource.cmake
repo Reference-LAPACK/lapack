@@ -1,3 +1,6 @@
+# Use this to test GenerateSuffixedSource.cmake. Run from top of repo:
+# bash CMAKE/GenerateSuffixedSource.test
+
 if(NOT DEFINED INPUT_FILE)
   message(FATAL_ERROR "INPUT_FILE must be set")
 endif()
@@ -150,6 +153,11 @@ function(_extract_symbols statement_text result)
         list(APPEND symbols "${external_name}")
       endif()
     endforeach()
+  elseif("${statement_text}" MATCHES "^ *(use|USE|module|MODULE)  *([a-zA-Z][a-zA-Z0-9_]*)")
+    set(symbol_name "${CMAKE_MATCH_2}")
+    if(NOT symbol_name MATCHES "^(la|LA|iso|ISO|omp|OMP)_")
+      list(APPEND symbols "${symbol_name}")
+    endif()
   elseif("${statement_text}" MATCHES "(subroutine|SUBROUTINE|function|FUNCTION)")
     string(REGEX REPLACE
       "^[a-zA-Z0-9_ *]*${CMAKE_MATCH_1}[ ]*" ""
