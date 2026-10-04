@@ -49,7 +49,8 @@
      $                   SUBPBS, WBASE, WRKBASE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAED7_BR, SSTEQR_BOUNDARY_BR, XERBLA
+      EXTERNAL           SCOPY, SLAED0_MERGE_PAIR,
+     $                   SSTEQR_BOUNDARY_BR, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -185,65 +186,4 @@
 *
 *     End of SLAED0_BR
 *
-      END
-*
-*> \brief \b SLAED0_MERGE_PAIR executes one merge in the DC tree.
-*
-      SUBROUTINE SLAED0_MERGE_PAIR( MERGE, NMERGE, IWORK, WANTQ, D, E,
-     $                               WORK, IBLO, IBHI, ISCR, IIWRK,
-     $                               INDXQ, SUBMAT, MATSIZ, MSD2,
-     $                               WRKBASE, IWBASE, KDEFL, INFO,
-     $                               WRKSTR )
-*
-      INTEGER            IBHI, IBLO, IIWRK, INDXQ, INFO, ISCR, IWBASE,
-     $                   KDEFL, MATSIZ, MERGE, MSD2, NMERGE, RIGHT,
-     $                   SUBMAT, WRKBASE, WRKSTR
-      LOGICAL            WANTQ
-      INTEGER            IWORK( * )
-      REAL               D( * ), E( * ), WORK( * )
-      EXTERNAL           SLAED7_BR
-*
-      INTEGER            LEFT
-*
-      LEFT = 2*MERGE - 1
-      RIGHT = LEFT + 1
-      IF( MERGE.EQ.1 ) THEN
-         SUBMAT = 1
-         MATSIZ = IWORK( RIGHT )
-         MSD2 = IWORK( 1 )
-      ELSE
-         SUBMAT = IWORK( LEFT-1 ) + 1
-         MATSIZ = IWORK( RIGHT ) - IWORK( LEFT-1 )
-         MSD2 = IWORK( LEFT ) - IWORK( LEFT-1 )
-      END IF
-*
-      WRKBASE = ISCR + WRKSTR*( SUBMAT-1 )
-      IWBASE = IIWRK + 5*( SUBMAT-1 )
-*
-      CALL SLAED7_BR( WANTQ, MATSIZ, MSD2, D( SUBMAT ),
-     $                IWORK( INDXQ+SUBMAT-1 ), E( SUBMAT+MSD2-1 ),
-     $                WORK( IBLO+SUBMAT-1 ), WORK( IBHI+SUBMAT-1 ),
-     $                WORK( WRKBASE ), IWORK( IWBASE ), KDEFL, INFO )
-      RETURN
-      END
-*
-*> \brief \b SSTEQR_BOUNDARY_BR solves one leaf and keeps boundary rows.
-*
-      SUBROUTINE SSTEQR_BOUNDARY_BR( N, D, E, BLO, BHI, Q, LDQ, WORK,
-     $                               INFO )
-*
-      INTEGER            INFO, J, LDQ, N
-      REAL               BLO( * ), BHI( * ), D( * ), E( * ), Q( * ),
-     $                   WORK( * )
-      EXTERNAL           SSTEQR
-*
-      CALL SSTEQR( 'I', N, D, E, Q, LDQ, WORK, INFO )
-      IF( INFO.NE.0 )
-     $   RETURN
-*
-      DO 10 J = 1, N
-         BLO( J ) = Q( 1 + ( J - 1 )*LDQ )
-         BHI( J ) = Q( N + ( J - 1 )*LDQ )
-   10 CONTINUE
-      RETURN
       END

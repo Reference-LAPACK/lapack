@@ -60,7 +60,8 @@ set(SCLAUX
    slaset.f slasq1.f slasq2.f slasq3.f slasq4.f slasq5.f slasq6.f
    slasr.f  slasrt.f slassq.f90 slasv2.f spttrf.f sstebz.f sstedc.f
    sstein.f ssteqr.f ssterf.f sstevx.f sstebr.f
-   slaed0_br.f slaed4_br.f slaed7_br.f slaed9_br.f
+   slaed0_br.f slaed4_br.f slaed7_br.f slaed8_br.f slaed9_br.f
+   slaed0_merge_pair.f ssteqr_boundary_br.f
    slartgp.f slartgs.f ../INSTALL/sroundup_lwork.f
    ${SECOND_SRC})
 
@@ -82,7 +83,8 @@ set(DZLAUX
    dlasr.f  dlasrt.f dlassq.f90 dlasv2.f dlaisnan.f
    dpttrf.f
    dstebz.f dstedc.f dstein.f dsteqr.f dsterf.f dstevx.f dstebr.f
-   dlaed0_br.f dlaed4_br.f dlaed7_br.f dlaed9_br.f
+   dlaed0_br.f dlaed4_br.f dlaed7_br.f dlaed8_br.f dlaed9_br.f
+   dlaed0_merge_pair.f dsteqr_boundary_br.f
    dlartgp.f dlartgs.f ../INSTALL/droundup_lwork.f
    ../INSTALL/dlamch.f ${DSECOND_SRC})
 
