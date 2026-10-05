@@ -5,8 +5,8 @@
 
 run_diff() {
   IN=$(mktemp "inXXXX$3")
-  OUT=$(mktemp -t output)
-  EXP=$(mktemp -t expected)
+  OUT=$(mktemp -t output_XXX)
+  EXP=$(mktemp -t expected_XXX)
   echo -n "$1" >"$IN"
   echo -n "$2" >"$EXP"
   set -x
