@@ -277,7 +277,7 @@ function(add_lin_executable name)
     target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name}_64)
 
-    # Add depedency to the global codegen target. Since we reuse the same
+    # Add dependency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be
     # triggered by multiple targets when building in parallel.
     add_dependencies(${name}_64 64bit_codegen)
