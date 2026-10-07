@@ -618,6 +618,9 @@
             SCALE = RMIN / TNRM
          ELSE IF( TNRM.GT.RMAX ) THEN
             SCALE = RMAX / TNRM
+*           An infinite matrix would be scaled to zero; leave it
+*           unscaled so that SLARRE reports it.
+            IF( SCALE.EQ.ZERO ) SCALE = ONE
          END IF
          IF( SCALE.NE.ONE ) THEN
             CALL SSCAL( N, SCALE, D, 1 )
