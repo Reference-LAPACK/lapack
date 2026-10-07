@@ -169,10 +169,13 @@
 *> (1)  The zero matrix.
 *> (2)  The identity matrix.
 *> (3)  A matrix of the form  U D V, where U and V are orthogonal and
-*>      D has evenly spaced entries 1, ..., ULP with random signs
-*>      on the diagonal.
-*> (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
-*> (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
+*>      D has an arithmetic spectrum with condition number sqrt(1/ULP).
+*> (4)  As (3), with a geometric spectrum, condition number sqrt(1/ULP).
+*> (5)  As (3), with a log-uniform spectrum, condition number sqrt(1/ULP).
+*> (6)  As (3), with an arithmetic spectrum, condition number 1/ULP.
+*> (7)  As (3), with a geometric spectrum, condition number 1/ULP.
+*> (8)  As (3), with one singular value equal to 1 and the rest equal to
+*>      sqrt(ULP) (a clustered spectrum).
 *> \endverbatim
 *
 *  Arguments:
@@ -415,8 +418,8 @@
       REAL               RESULT( 13 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND
-      EXTERNAL           SLAMCH, SLARND
+      REAL               SLAMCH, SLARND, SLANGE
+      EXTERNAL           SLAMCH, SLARND, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGEJSV, SGESDD, SGESVD,
@@ -529,6 +532,7 @@
      $         GO TO 30
 *
             IINFO = 0
+            ANORM = ONE
             IF( JTYPE.EQ.1 ) THEN
                CALL SLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
             ELSE IF( JTYPE.EQ.2 ) THEN
@@ -714,6 +718,15 @@
                RESULT( 10 ) = ZERO
                CALL SBDT05( M, N, ASAV, LDA, S, NSI, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 8 ) )
+*
+*              SBDT05 normalizes by max |A(i,j)|; rescale to the 1-norm
+*              used by SBDT01 in test (1), so that tests (1), (8) and
+*              (11) measure the same quantity.
+*
+               ANORM = SLANGE( '1', M, N, ASAV, LDA, RWORK )
+               IF( ANORM.GT.ZERO )
+     $            RESULT( 8 ) = RESULT( 8 )*
+     $                 ( SLANGE( 'M', M, N, ASAV, LDA, RWORK ) / ANORM )
                CALL SORT01( 'Columns', M, NSI, U, LDU, WORK, LWORK,
      $                      RESULT( 9 ) )
                CALL SORT01( 'Rows', NSI, N, VT, LDVT, WORK, LWORK,
@@ -762,6 +775,15 @@
                RESULT( 13 ) = ZERO
                CALL SBDT05( M, N, ASAV, LDA, S, NSV, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 11 ) )
+*
+*              SBDT05 normalizes by max |A(i,j)|; rescale to the 1-norm
+*              used by SBDT01 in test (1), so that tests (1), (8) and
+*              (11) measure the same quantity.
+*
+               ANORM = SLANGE( '1', M, N, ASAV, LDA, RWORK )
+               IF( ANORM.GT.ZERO )
+     $            RESULT( 11 ) = RESULT( 11 )*
+     $                 ( SLANGE( 'M', M, N, ASAV, LDA, RWORK ) / ANORM )
                CALL SORT01( 'Columns', M, NSV, U, LDU, WORK, LWORK,
      $                      RESULT( 12 ) )
                CALL SORT01( 'Rows', NSV, N, VT, LDVT, WORK, LWORK,

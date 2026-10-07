@@ -170,11 +170,14 @@
 *>
 *> (1)  The zero matrix.
 *> (2)  The identity matrix.
-*> (3)  A matrix of the form  U D V, where U and V are unitary and
-*>      D has evenly spaced entries 1, ..., ULP with random signs
-*>      on the diagonal.
-*> (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
-*> (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
+*> (3)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has an arithmetic spectrum with condition number sqrt(1/ULP).
+*> (4)  As (3), with a geometric spectrum, condition number sqrt(1/ULP).
+*> (5)  As (3), with a log-uniform spectrum, condition number sqrt(1/ULP).
+*> (6)  As (3), with an arithmetic spectrum, condition number 1/ULP.
+*> (7)  As (3), with a geometric spectrum, condition number 1/ULP.
+*> (8)  As (3), with one singular value equal to 1 and the rest equal to
+*>      sqrt(ULP) (a clustered spectrum).
 *> \endverbatim
 *
 *  Arguments:
@@ -451,8 +454,8 @@
       REAL               RESULT( 13 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND
-      EXTERNAL           SLAMCH, SLARND
+      REAL               SLAMCH, SLARND, CLANGE
+      EXTERNAL           SLAMCH, SLARND, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD,
@@ -571,6 +574,7 @@
      $         GO TO 50
 *
             IINFO = 0
+            ANORM = ONE
             IF( JTYPE.EQ.1 ) THEN
                CALL CLASET( 'Full', M, N, CZERO, CZERO, A, LDA )
             ELSE IF( JTYPE.EQ.2 ) THEN
@@ -690,7 +694,7 @@
                      CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
                      SRNAMT = 'CGESVDMR3'
                      CALL CGESVDMR3( JOBU, JOBVT, 'A', M, N, A, LDA,
-     $                            VL, VU, IL, IU, NS, SSAV, U, LDU,
+     $                            VL, VU, IL, IU, NS, S, U, LDU,
      $                            VT, LDVT, WORK, LWORK, RWORK,
      $                            IWORK, IINFO )
 *
@@ -730,7 +734,7 @@
      $                     DIF = ULPINV
                         DIF = MAX( DIF, ABS( SSAV( I )-S( I ) ) / DIV )
   150                CONTINUE
-                     RESULT( 29) = MAX( RESULT( 7 ), DIF )
+                     RESULT( 7 ) = MAX( RESULT( 7 ), DIF )
   160             CONTINUE
   170          CONTINUE
 *
@@ -769,6 +773,15 @@
                RESULT( 10 ) = ZERO
                CALL CBDT05( M, N, ASAV, LDA, S, NSI, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 8 ) )
+*
+*              CBDT05 normalizes by max |A(i,j)|; rescale to the 1-norm
+*              used by CBDT01 in test (1), so that tests (1), (8) and
+*              (11) measure the same quantity.
+*
+               ANORM = CLANGE( '1', M, N, ASAV, LDA, RWORK )
+               IF( ANORM.GT.ZERO )
+     $            RESULT( 8 ) = RESULT( 8 )*
+     $                 ( CLANGE( 'M', M, N, ASAV, LDA, RWORK ) / ANORM )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
                   CALL CUNT01( 'Columns', M, NSI, U, LDU, WORK,
      $                         LWORK, RWORK, RESULT( 9 ) )
@@ -820,6 +833,15 @@
                RESULT( 13 ) = ZERO
                CALL CBDT05( M, N, ASAV, LDA, S, NSV, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 11 ) )
+*
+*              CBDT05 normalizes by max |A(i,j)|; rescale to the 1-norm
+*              used by CBDT01 in test (1), so that tests (1), (8) and
+*              (11) measure the same quantity.
+*
+               ANORM = CLANGE( '1', M, N, ASAV, LDA, RWORK )
+               IF( ANORM.GT.ZERO )
+     $            RESULT( 11 ) = RESULT( 11 )*
+     $                 ( CLANGE( 'M', M, N, ASAV, LDA, RWORK ) / ANORM )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
                   CALL CUNT01( 'Columns', M, NSV, U, LDU, WORK,
      $                         LWORK, RWORK, RESULT( 12 ) )

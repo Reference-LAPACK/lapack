@@ -112,7 +112,7 @@
 *     from over-perturbing moderately-clustered RRRs.
       LOGICAL            DOPERT
       DOUBLE PRECISION   PGFAC
-      PARAMETER          ( DOPERT = .TRUE., PGFAC = 1.0D2 )
+      PARAMETER          ( DOPERT = .FALSE., PGFAC = 1.0D2 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TGK, DEGEN
