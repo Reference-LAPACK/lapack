@@ -346,7 +346,7 @@
                   DO J = 1, I
                      TEMP = ABS( A( J, I ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -354,7 +354,7 @@
                   DO J = I+1, N
                      TEMP = ABS( A( I, J ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -382,7 +382,7 @@
                   DO J = 1, I
                      TEMP = ABS( A( I, J ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -390,7 +390,7 @@
                   DO J = I+1, N
                      TEMP = ABS( A( J, I ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
                      JX = JX + INCX
