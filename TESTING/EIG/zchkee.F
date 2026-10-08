@@ -1106,6 +1106,7 @@
      $                   ZCHKEC, ZCHKGG, ZCHKGK, ZCHKGL, ZCHKHS, ZCHKST,
      $                   ZCKCSD, ZCKGLM, ZCKGQR, ZCKGSV, ZCKLSE, ZDRGES,
      $                   ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES, ZDRVEV,
+     $                   ZDRVMR3,
      $                   ZDRVST, ZDRVSX, ZDRVVX, ZERRBD, ZERRED, ZERRGG,
      $                   ZERRHS, ZERRST, ILAVER, ZDRGES3, ZDRGEV3,
      $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG, ZDRVSG2STG

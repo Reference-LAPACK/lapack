@@ -1109,6 +1109,7 @@
      $                   DCHKGG, DCHKGK, DCHKGL, DCHKHS, DCHKST, DCKCSD,
      $                   DCKGLM, DCKGQR, DCKGSV, DCKLSE, DDRGES, DDRGEV,
      $                   DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV, DDRVST,
+     $                   DDRVMR3,
      $                   DDRVSX, DDRVVX, DERRBD, DERRED, DERRGG, DERRHS,
      $                   DERRST, ILAVER, XLAENV, DDRGES3, DDRGEV3,
      $                   DCHKST2STG, DDRVST2STG, DCHKSB2STG, DDRVSG2STG

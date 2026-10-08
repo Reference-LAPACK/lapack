@@ -1109,6 +1109,7 @@
      $                   SCHKGG, SCHKGK, SCHKGL, SCHKHS, SCHKST, SCKCSD,
      $                   SCKGLM, SCKGQR, SCKGSV, SCKLSE, SDRGES, SDRGEV,
      $                   SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV, SDRVST,
+     $                   SDRVMR3,
      $                   SDRVSX, SDRVVX, SERRBD, SERRED, SERRGG, SERRHS,
      $                   SERRST, ILAVER, XLAENV, SDRGES3, SDRGEV3,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG

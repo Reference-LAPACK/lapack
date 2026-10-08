@@ -1106,6 +1106,7 @@
      $                   CCHKGG, CCHKGK, CCHKGL, CCHKHS, CCHKST, CCKCSD,
      $                   CCKGLM, CCKGQR, CCKGSV, CCKLSE, CDRGES, CDRGEV,
      $                   CDRGSX, CDRGVX, CDRVBD, CDRVES, CDRVEV, CDRVST,
+     $                   CDRVMR3,
      $                   CDRVSX, CDRVVX, CERRBD, CERRED, CERRGG, CERRHS,
      $                   CERRST, ILAVER, XLAENV, CDRGES3, CDRGEV3,
      $                   CCHKST2STG, CDRVST2STG, CCHKHB2STG, CDRVSG2STG
