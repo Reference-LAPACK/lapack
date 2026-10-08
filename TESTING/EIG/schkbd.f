@@ -544,6 +544,7 @@
       EXTERNAL           SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
+      EXTERNAL           SBDSVDMR3
       EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,
      $                   SBDT02, SBDT03, SBDT04, SCOPY, SGEBRD,
      $                   SGEMM, SLACPY, SLAHD2, SLASET, SLATMR,
@@ -1643,8 +1644,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( MNMIN*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( MNMIN*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( REAL( MNMIN )*SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL

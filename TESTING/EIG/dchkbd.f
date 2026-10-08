@@ -544,6 +544,7 @@
       EXTERNAL           DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
+      EXTERNAL           DBDSVDMR3
       EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01,
      $                   DBDT02, DBDT03, DBDT04, DCOPY, DGEBRD,
      $                   DGEMM, DLACPY, DLAHD2, DLASET, DLATMR,
