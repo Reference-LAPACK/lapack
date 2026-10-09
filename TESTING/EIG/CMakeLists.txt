@@ -27,7 +27,7 @@ set(SEIGTST
   schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schkst2stg.f schksb2stg.f
   sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
   sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f
-  sdrvbd.f sdrves.f sdrvev.f sdrvsg.f sdrvsg2stg.f
+  sdrvbd.f sdrvmr3.f sdrves.f sdrvev.f sdrvsg.f sdrvsg2stg.f
   sdrvst.f sdrvst2stg.f sdrvsx.f sdrvvx.f
   serrbd.f serrec.f serred.f serrgg.f serrhs.f serrst.f
   sget02.f sget10.f sget22.f sget23.f sget24.f sget31.f
@@ -47,7 +47,7 @@ set(CEIGTST
   cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f cchkst2stg.f cchkhb2stg.f
   cckcsd.f cckglm.f cckgqr.f cckgsv.f ccklse.f ccsdts.f
   cdrges.f cdrgev.f cdrges3.f cdrgev3.f cdrgsx.f cdrgvx.f
-  cdrvbd.f cdrves.f cdrvev.f cdrvsg.f cdrvsg2stg.f
+  cdrvbd.f cdrvmr3.f cdrves.f cdrvev.f cdrvsg.f cdrvsg2stg.f
   cdrvst.f cdrvst2stg.f cdrvsx.f cdrvvx.f
   cerrbd.f cerrec.f cerred.f cerrgg.f cerrhs.f cerrst.f
   cget02.f cget10.f cget22.f cget23.f cget24.f
@@ -71,7 +71,7 @@ set(DEIGTST
   dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f dchkst2stg.f dchksb2stg.f
   dckcsd.f dckglm.f dckgqr.f dckgsv.f dcklse.f dcsdts.f
   ddrges.f ddrgev.f ddrges3.f ddrgev3.f ddrgsx.f ddrgvx.f
-  ddrvbd.f ddrves.f ddrvev.f ddrvsg.f ddrvsg2stg.f
+  ddrvbd.f ddrvmr3.f ddrves.f ddrvev.f ddrvsg.f ddrvsg2stg.f
   ddrvst.f ddrvst2stg.f ddrvsx.f ddrvvx.f
   derrbd.f derrec.f derred.f derrgg.f derrhs.f derrst.f
   dget02.f dget10.f dget22.f dget23.f dget24.f dget31.f
@@ -91,7 +91,7 @@ set(ZEIGTST
   zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f zchkst2stg.f zchkhb2stg.f
   zckcsd.f zckglm.f zckgqr.f zckgsv.f zcklse.f zcsdts.f
   zdrges.f zdrgev.f zdrges3.f zdrgev3.f zdrgsx.f zdrgvx.f
-  zdrvbd.f zdrves.f zdrvev.f zdrvsg.f zdrvsg2stg.f
+  zdrvbd.f zdrvmr3.f zdrves.f zdrvev.f zdrvsg.f zdrvsg2stg.f
   zdrvst.f zdrvst2stg.f zdrvsx.f zdrvvx.f
   zerrbd.f zerrec.f zerred.f zerrgg.f zerrhs.f zerrst.f
   zget02.f zget10.f zget22.f zget23.f zget24.f
