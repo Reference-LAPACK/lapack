@@ -112,8 +112,8 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D+0 )
-      COMPLEX*16         CONE
-      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
+      COMPLEX*16         ZONE
+      PARAMETER          ( ZONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
@@ -173,13 +173,13 @@
             DO 10 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
                CALL ZTRMM( 'Right', 'Upper', 'Conjugate transpose',
-     $                     'Non-unit', I-1, IB, CONE, A( I, I ), LDA,
+     $                     'Non-unit', I-1, IB, ZONE, A( I, I ), LDA,
      $                     A( 1, I ), LDA )
                CALL ZLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
                   CALL ZGEMM( 'No transpose', 'Conjugate transpose',
-     $                        I-1, IB, N-I-IB+1, CONE, A( 1, I+IB ),
-     $                        LDA, A( I, I+IB ), LDA, CONE, A( 1, I ),
+     $                        I-1, IB, N-I-IB+1, ZONE, A( 1, I+IB ),
+     $                        LDA, A( I, I+IB ), LDA, ZONE, A( 1, I ),
      $                        LDA )
                   CALL ZHERK( 'Upper', 'No transpose', IB, N-I-IB+1,
      $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
@@ -193,14 +193,14 @@
             DO 20 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
                CALL ZTRMM( 'Left', 'Lower', 'Conjugate transpose',
-     $                     'Non-unit', IB, I-1, CONE, A( I, I ), LDA,
+     $                     'Non-unit', IB, I-1, ZONE, A( I, I ), LDA,
      $                     A( I, 1 ), LDA )
                CALL ZLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
                   CALL ZGEMM( 'Conjugate transpose', 'No transpose',
      $                        IB,
-     $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
-     $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
+     $                        I-1, N-I-IB+1, ZONE, A( I+IB, I ), LDA,
+     $                        A( I+IB, 1 ), LDA, ZONE, A( I, 1 ), LDA )
                   CALL ZHERK( 'Lower', 'Conjugate transpose', IB,
      $                        N-I-IB+1, ONE, A( I+IB, I ), LDA, ONE,
      $                        A( I, I ), LDA )

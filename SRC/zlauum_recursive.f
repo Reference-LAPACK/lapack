@@ -114,7 +114,7 @@
 *     .. Parameters ..
       COMPLEX*16         ZONE
       DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0, CONE = (1.0D+0, 0.0D+0) )
+      PARAMETER          ( ONE = 1.0D+0, ZONE = (1.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
