@@ -73,7 +73,9 @@
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
 *>          the lower triangle of the product L**H * L, and the strictly upper
-*>          triangular part of A is not referenced.
+*>          triangular part of A is not referenced. Regardless,
+*>          the diagonal elements are explicitly set to be real by casting
+*.          to REAL before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA

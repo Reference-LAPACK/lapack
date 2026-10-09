@@ -69,7 +69,9 @@
 *>          On exit, if UPLO = 'U', the upper triangle of A is
 *>          overwritten with the upper triangle of the product U * U**H;
 *>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**H * L.
+*>          the lower triangle of the product L**H * L. Regardless,
+*>          the diagonal elements are explicitly set to be real by casting
+*.          to REAL before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
