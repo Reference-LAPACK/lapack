@@ -1,29 +1,21 @@
-*> \brief \b DLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (driver algorithm).
+*> \brief \b ZLAUUM_BLOCKED computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download DLAUUM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlauum.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlauum.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauum.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAUUM( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE ZLAUUM_BLOCKED( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION   A( LDA, * )
+*       COMPLEX*16         A( LDA, * )
 *       ..
 *
 *
@@ -32,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLAUUM computes the product U * U**T or L**T * L, where the triangular
+*> ZLAUUM_BLOCKED computes the product U * U**H or L**H * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -43,7 +35,7 @@
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
 *>
-*> This is the driver that dispatches to either blocked or recursive
+*> This is the blocked form of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,14 +58,14 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U * U**T,
+*>          overwritten with the upper triangle of the product U * U**H,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L, and the strictly upper
-*>          triangular part of A is not referenced.
+*>          the lower triangle of the product L**H * L, and the strictly
+*>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -100,7 +92,7 @@
 *> \ingroup lauum
 *
 *  =====================================================================
-      SUBROUTINE DLAUUM( UPLO, N, A, LDA, INFO )
+      SUBROUTINE ZLAUUM_BLOCKED( UPLO, N, A, LDA, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -112,24 +104,31 @@
       INTEGER            INFO, LDA, N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION   A( LDA, * )
+      COMPLEX*16         A( LDA, * )
 *     ..
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      DOUBLE PRECISION   ONE
+      PARAMETER          ( ONE = 1.0D+0 )
+      COMPLEX*16         ZONE
+      PARAMETER          ( ZONE = ( 1.0D+0, 0.0D+0 ) )
+*     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
+      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DLAUUM_RECURSIVE,
-     $                   DLAUUM_BLOCKED
+      EXTERNAL           XERBLA, ZLAUU2, ZTRMM, ZGEMM, ZHERK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -145,7 +144,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAUUM', -INFO )
+         CALL XERBLA( 'ZLAUUM_BLOCKED', -INFO )
          RETURN
       END IF
 *
@@ -154,15 +153,64 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Here we dispatch to whatever is more efficient in a particular environment
-*     We are defaulting to recursive, but if you want to use the blocked variant
-*     Comment out the line starting with `CALL DLAUUM_RECURSIVE...`
-*     and uncomment the line starting with `CALL DLAUUM_BLOCKED...`
+*     Determine the block size for this environment.
 *
-      CALL DLAUUM_RECURSIVE(UPLO, N, A, LDA, INFO)
-*      CALL DLAUUM_BLOCKED(UPLO, N, A, LDA, INFO)
+      NB = ILAENV( 1, 'ZLAUUM_BLOCKED', UPLO, N, -1, -1, -1 )
+*
+      IF( NB.LE.1 .OR. NB.GE.N ) THEN
+*
+*        Use unblocked code
+*
+         CALL ZLAUU2( UPLO, N, A, LDA, INFO )
+      ELSE
+*
+*        Use blocked code
+*
+         IF( UPPER ) THEN
+*
+*           Compute the product U * U**H.
+*
+            DO 10 I = 1, N, NB
+               IB = MIN( NB, N-I+1 )
+               CALL ZTRMM( 'Right', 'Upper', 'Conjugate transpose',
+     $                     'Non-unit', I-1, IB, ZONE, A( I, I ), LDA,
+     $                     A( 1, I ), LDA )
+               CALL ZLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
+               IF( I+IB.LE.N ) THEN
+                  CALL ZGEMM( 'No transpose', 'Conjugate transpose',
+     $                        I-1, IB, N-I-IB+1, ZONE, A( 1, I+IB ),
+     $                        LDA, A( I, I+IB ), LDA, ZONE, A( 1, I ),
+     $                        LDA )
+                  CALL ZHERK( 'Upper', 'No transpose', IB, N-I-IB+1,
+     $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
+     $                        LDA )
+               END IF
+   10       CONTINUE
+         ELSE
+*
+*           Compute the product L**H * L.
+*
+            DO 20 I = 1, N, NB
+               IB = MIN( NB, N-I+1 )
+               CALL ZTRMM( 'Left', 'Lower', 'Conjugate transpose',
+     $                     'Non-unit', IB, I-1, ZONE, A( I, I ), LDA,
+     $                     A( I, 1 ), LDA )
+               CALL ZLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
+               IF( I+IB.LE.N ) THEN
+                  CALL ZGEMM( 'Conjugate transpose', 'No transpose',
+     $                        IB,
+     $                        I-1, N-I-IB+1, ZONE, A( I+IB, I ), LDA,
+     $                        A( I+IB, 1 ), LDA, ZONE, A( I, 1 ), LDA )
+                  CALL ZHERK( 'Lower', 'Conjugate transpose', IB,
+     $                        N-I-IB+1, ONE, A( I+IB, I ), LDA, ONE,
+     $                        A( I, I ), LDA )
+               END IF
+   20       CONTINUE
+         END IF
+      END IF
+*
       RETURN
 *
-*     End of DLAUUM
+*     End of ZLAUUM_BLOCKED
 *
       END
