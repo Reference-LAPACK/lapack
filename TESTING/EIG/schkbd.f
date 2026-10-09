@@ -1671,7 +1671,7 @@
                IF( IINFO.LT.0 ) THEN
                   RETURN
                ELSE
-                  RESULT( 55 ) = ULPINV
+                  RESULT( 40 ) = ULPINV
                   GO TO 870
                END IF
             END IF
@@ -1719,7 +1719,7 @@
 *
             CALL SBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
      $                   LDPT, VT, LDPT, WORK( IWBS+MNMIN ),
-     $                   RESULT( 55 ) )
+     $                   RESULT( 40 ) )
             CALL SORT01( 'Columns', MNMIN, NS1, U, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 41 ) )
