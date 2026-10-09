@@ -64,7 +64,7 @@
 *>          overwritten with the upper triangle of the product U * U**T,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**T * L, and the strictly
+*>          the lower triangle of the product L**T * L, and the
 *>          strictly upper triangular part of A is not referenced.
 *> \endverbatim
 *>
@@ -92,7 +92,7 @@
 *> \ingroup lauum
 *
 *  =====================================================================
-      SUBROUTINE DLAUUM_RECURSIVE( UPLO, N, A, LDA, INFO )
+      RECURSIVE SUBROUTINE DLAUUM_RECURSIVE( UPLO, N, A, LDA, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -169,7 +169,7 @@
       K = N/2
       IF( UPPER ) THEN
 *
-*        We are computing A = ut(U*U**H).
+*        We are computing A = ut(U*U**T).
 *
 *        Break apart U as follows
 *              |-----------------|
@@ -185,25 +185,25 @@
 *
 *        This gives us our operations as
 *                          |--------------------| |------------------------|
-*        ut(U * U**H)   =  |  U_{11}   U_{12}   | |  U_{11}**H  0          |
-*                          |  0        U_{22}   | |  U_{12}**H  U_{22}**H  |
+*        ut(U * U**T)   =  |  U_{11}   U_{12}   | |  U_{11}**T  0          |
+*                          |  0        U_{22}   | |  U_{12}**T  U_{22}**T  |
 *                          |--------------------| |------------------------|
 *
 *        Thus we get
 *
-*        U_{11} = U_{11}U_{11}**H + U_{12}U_{12}**H
-*        U_{12} = U_{12}U_{22}**H
+*        U_{11} = U_{11}U_{11}**T + U_{12}U_{12}**T
+*        U_{12} = U_{12}U_{22}**T
 *
-*        U_{22} = U_{22}U_{22}**H
+*        U_{22} = U_{22}U_{22}**T
 *
 *        We break these operations apart as follows
 *
-*        U_{11} = U_{11}U_{11}**H            (This subroutine)
-*        U_{11} = U_{12}U_{12}**H + U_{11}   (SYRK)
+*        U_{11} = U_{11}U_{11}**T            (This subroutine)
+*        U_{11} = U_{12}U_{12}**T + U_{11}   (SYRK)
 *
-*        U_{12} = U_{12}U_{22}**H            (TRMM)
+*        U_{12} = U_{12}U_{22}**T            (TRMM)
 *
-*        U_{22} = U_{22}U_{22}**H            (This subroutine)
+*        U_{22} = U_{22}U_{22}**T            (This subroutine)
 *
 *
 *        Compute U_{11}
@@ -222,7 +222,7 @@
          CALL DLAUUM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
       ELSE
 *
-*        We are computing A = lt(L**H*L).
+*        We are computing A = lt(L**T*L).
 *
 *        Break apart L as follows
 *              |-----------------|
@@ -238,25 +238,25 @@
 *
 *        This gives us our operations as
 *                          |--------------------------| |-----------------|
-*        lt(L**H * L)   =  |  L_{11}**H   L_{21}**H   | | L_{11} 0        |
-*                          |  0           L_{22}**H   | | L_{21} L_{22}   |
+*        lt(L**T * L)   =  |  L_{11}**T   L_{21}**T   | | L_{11} 0        |
+*                          |  0           L_{22}**T   | | L_{21} L_{22}   |
 *                          |--------------------------| |-----------------|
 *
 *        Thus we get
 *
-*        L_{11} = L_{11}**H L_{11} + L_{21}**H L_{21}
-*        L_{21} = L_{22}**H L_{21}
+*        L_{11} = L_{11}**T L_{11} + L_{21}**T L_{21}
+*        L_{21} = L_{22}**T L_{21}
 *
-*        L_{22} = L_{22}**H L_{22}
+*        L_{22} = L_{22}**T L_{22}
 *
 *        We break these operations apart as follows
 *
-*        L_{11} = L_{11}**H L_{11}           (This subroutine)
-*        L_{11} = L_{21}**H L_{21} + L_{11}  (SYRK)
+*        L_{11} = L_{11}**T L_{11}           (This subroutine)
+*        L_{11} = L_{21}**T L_{21} + L_{11}  (SYRK)
 *
-*        L_{21} = L_{22}**H L_{21}           (TRMM)
+*        L_{21} = L_{22}**T L_{21}           (TRMM)
 *
-*        L_{22} = L_{22}**H L_{22}           (This subroutine)
+*        L_{22} = L_{22}**T L_{22}           (This subroutine)
 *
 *
 *        Compute L_{11}

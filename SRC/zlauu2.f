@@ -124,14 +124,13 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZLACGV
+      EXTERNAL           XERBLA, ZSCAL, ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX
+      INTRINSIC          DBLE, DCONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *

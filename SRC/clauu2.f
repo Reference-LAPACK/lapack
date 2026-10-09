@@ -124,14 +124,13 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACGV, CSSCAL, XERBLA
+      EXTERNAL           CGEMM, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CMPLX, MAX, REAL
+      INTRINSIC          CONJG, MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *

@@ -117,27 +117,20 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
-      COMPLEX            CONE
-      PARAMETER          ( CONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, CLAUUM_RECURSIVE,
-     $                  CLAUUM_BLOCKED
+      EXTERNAL           XERBLA, CLAUUM_RECURSIVE,
+     $                   CLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

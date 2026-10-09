@@ -117,25 +117,19 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, DLAUUM_RECURSIVE,
-     $                  DLAUUM_BLOCKED
+      EXTERNAL           XERBLA, DLAUUM_RECURSIVE,
+     $                   DLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

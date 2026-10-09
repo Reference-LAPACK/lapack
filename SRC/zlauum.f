@@ -117,27 +117,20 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
-      COMPLEX*16         CONE
-      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          XERBLA, ZLAUUM_RECURSIVE,
-     $                  ZLAUUM_BLOCKED
+      EXTERNAL           XERBLA, ZLAUUM_RECURSIVE,
+     $                   ZLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

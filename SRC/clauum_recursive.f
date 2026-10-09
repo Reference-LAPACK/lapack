@@ -64,7 +64,7 @@
 *>          overwritten with the upper triangle of the product U * U**H,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**H * L, and the strictly
+*>          the lower triangle of the product L**H * L, and the
 *>          strictly upper triangular part of A is not referenced.
 *> \endverbatim
 *>
@@ -92,7 +92,7 @@
 *> \ingroup lauum
 *
 *  =====================================================================
-      SUBROUTINE CLAUUM_RECURSIVE( UPLO, N, A, LDA, INFO )
+      RECURSIVE SUBROUTINE CLAUUM_RECURSIVE( UPLO, N, A, LDA, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -110,8 +110,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX   ONE
-      PARAMETER          ( ONE = 1.0E+0 )
+      COMPLEX            CONE
+      REAL               ONE
+      PARAMETER          ( ONE = 1.0E+0, CONE = (1.0E+0, 0.0E+0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
@@ -215,7 +216,7 @@
 *        Compute U_{12}
 *
          CALL CTRMM('Right', 'Upper', 'Conjugate', 'Non-unit',
-     $      K, N-K, ONE, A(K+1,K+1), LDA, A(1,K+1), LDA)
+     $      K, N-K, CONE, A(K+1,K+1), LDA, A(1,K+1), LDA)
 *
 *        Compute U_{22}
 *
@@ -268,7 +269,7 @@
 *        Compute L_{21}
 *
          CALL CTRMM('Left', 'Lower', 'Conjugate', 'Non-Unit',
-     $      N-K, K, ONE, A(K+1,K+1), LDA, A(K+1,1), LDA)
+     $      N-K, K, CONE, A(K+1,K+1), LDA, A(K+1,1), LDA)
 *
 *        Compute L_{22}
 *
