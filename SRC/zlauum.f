@@ -1,4 +1,4 @@
-*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (driver algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -38,12 +38,12 @@
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
 *> overwriting the factor U in A, and the strictly lower triangular part
-*> part of A is not referenced.
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
 *>
-*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*> This is the driver that dispatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -72,8 +72,10 @@
 *>          overwritten with the upper triangle of the product U * U**H,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L**H * L, and the strictly upper
-*>          triangular part of A is not referenced.
+*>          the lower triangle of the product L**H * L, and the strictly
+*>          upper triangular part of A is not referenced. Regardless,
+*>          the diagonal elements are explicitly set to be real by casting
+*.          to DBLE before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -117,26 +119,20 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
-      COMPLEX*16         CONE
-      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZLAUU2, ZTRMM
+      EXTERNAL           XERBLA, ZLAUUM_RECURSIVE,
+     $                   ZLAUUM_BLOCKED
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -161,62 +157,13 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Determine the block size for this environment.
+*     Here we dispatch to whatever is more efficient in a particular environment
+*     We are defaulting to recursive, but if you want to use the blocked variant
+*     Comment out the line starting with `CALL ZLAUUM_RECURSIVE...`
+*     and uncomment the line starting with `CALL ZLAUUM_BLOCKED...`
 *
-      NB = ILAENV( 1, 'ZLAUUM', UPLO, N, -1, -1, -1 )
-*
-      IF( NB.LE.1 .OR. NB.GE.N ) THEN
-*
-*        Use unblocked code
-*
-         CALL ZLAUU2( UPLO, N, A, LDA, INFO )
-      ELSE
-*
-*        Use blocked code
-*
-         IF( UPPER ) THEN
-*
-*           Compute the product U * U**H.
-*
-            DO 10 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL ZTRMM( 'Right', 'Upper', 'Conjugate transpose',
-     $                     'Non-unit', I-1, IB, CONE, A( I, I ), LDA,
-     $                     A( 1, I ), LDA )
-               CALL ZLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL ZGEMM( 'No transpose', 'Conjugate transpose',
-     $                        I-1, IB, N-I-IB+1, CONE, A( 1, I+IB ),
-     $                        LDA, A( I, I+IB ), LDA, CONE, A( 1, I ),
-     $                        LDA )
-                  CALL ZHERK( 'Upper', 'No transpose', IB, N-I-IB+1,
-     $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
-     $                        LDA )
-               END IF
-   10       CONTINUE
-         ELSE
-*
-*           Compute the product L**H * L.
-*
-            DO 20 I = 1, N, NB
-               IB = MIN( NB, N-I+1 )
-               CALL ZTRMM( 'Left', 'Lower', 'Conjugate transpose',
-     $                     'Non-unit', IB, I-1, CONE, A( I, I ), LDA,
-     $                     A( I, 1 ), LDA )
-               CALL ZLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
-               IF( I+IB.LE.N ) THEN
-                  CALL ZGEMM( 'Conjugate transpose', 'No transpose',
-     $                        IB,
-     $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
-     $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
-                  CALL ZHERK( 'Lower', 'Conjugate transpose', IB,
-     $                        N-I-IB+1, ONE, A( I+IB, I ), LDA, ONE,
-     $                        A( I, I ), LDA )
-               END IF
-   20       CONTINUE
-         END IF
-      END IF
-*
+      CALL ZLAUUM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL ZLAUUM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of ZLAUUM
