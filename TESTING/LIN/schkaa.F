@@ -173,6 +173,7 @@
      $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
      $                   SDRVSY_RK, SDRVSY_AA, ILAVER, SCHKLQTP,
      $                   SCHKQRT, SCHKQRTP, SCHKLQT, SCHKTSQR,
+     $                   SET_LAPACK_XERBLA, XER_REPLACE,
      $                   SCHKSY_AA_2STAGE, SDRVSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
@@ -231,6 +232,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       S1 = SECOND( )
       LDA = NMAX
       FATAL = .FALSE.
