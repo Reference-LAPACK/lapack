@@ -19,9 +19,9 @@ SGB    8               List types on next line if 0 < NTYPES <  8
 SGT   12               List types on next line if 0 < NTYPES < 12
 SPO    9               List types on next line if 0 < NTYPES <  9
 SPS    9               List types on next line if 0 < NTYPES <  9
-SPP    9               List types on next line if 0 < NTYPES <  9
-SPB    8               List types on next line if 0 < NTYPES <  8
-SPT   12               List types on next line if 0 < NTYPES < 12
+SPP   10               List types on next line if 0 < NTYPES < 10
+SPB    9               List types on next line if 0 < NTYPES <  9
+SPT   13               List types on next line if 0 < NTYPES < 13
 SSY   10               List types on next line if 0 < NTYPES < 10
 SSR   10               List types on next line if 0 < NTYPES < 10
 SSK   10               List types on next line if 0 < NTYPES < 10

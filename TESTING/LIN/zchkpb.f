@@ -190,7 +190,7 @@
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
-      PARAMETER          ( NTYPES = 8, NTESTS = 7 )
+      PARAMETER          ( NTYPES = 9, NTESTS = 7 )
       INTEGER            NBW
       PARAMETER          ( NBW = 4 )
 *     ..
@@ -203,6 +203,7 @@
      $                   LDA, LDAB, MODE, N, NB, NERRS, NFAIL, NIMAT,
      $                   NKD, NRHS, NRUN
       DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   RNAN, RONE
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KDVAL( NBW )
@@ -219,7 +220,7 @@
      $                   ZPBTRF, ZPBTRS, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          DCMPLX, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -399,6 +400,22 @@
                      CALL ZLAIPD( N, A( KD+1 ), LDAB, 0 )
                   ELSE
                      CALL ZLAIPD( N, A( 1 ), LDAB, 0 )
+                  END IF
+*
+*                 Type 9:  put a NaN on the last diagonal entry.  The
+*                 factorization must report it like a nonpositive
+*                 pivot.
+*
+                  IF( IMAT.EQ.9 ) THEN
+                     IZERO = N
+                     RONE = ONE
+                     RNAN = SQRT( -RONE )
+                     IF( IUPLO.EQ.1 ) THEN
+                        IOFF = ( N-1 )*LDAB + KD + 1
+                     ELSE
+                        IOFF = ( N-1 )*LDAB + 1
+                     END IF
+                     A( IOFF ) = RNAN
                   END IF
 *
 *                 Do for each value of NB in NBVAL
