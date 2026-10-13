@@ -683,6 +683,10 @@
 *
 *           Note that this matches on *lallm*, but we only use it in
 *           *lallm_recursive at the moment
+         ELSE IF( C3.EQ.'UUM' ) THEN
+*
+*           Note that this matches on *lauum_recursive, which is the
+*           only place we currently use this
 *
             NX = 64
          END IF

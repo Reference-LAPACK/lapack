@@ -143,7 +143,7 @@
 !>           contains the eigenvectors of the compression of the
 !>           underlying discretised operator onto the span of
 !>           the data snapshots. See the descriptions of F, V, Z.
-!>           Q is from the inital QR facorization.
+!>           Q is from the initial QR factorization.
 !>    'N' :: The eigenvectors are not computed.
 !>    \endverbatim
 !.....
