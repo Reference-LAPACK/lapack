@@ -34,6 +34,7 @@
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
+*> This is the driver that idpatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -106,14 +107,9 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

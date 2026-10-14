@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download dlallm_recursive + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlallm_recursive.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlallm_recursive.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlallm_recursive.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -32,14 +24,16 @@
 *>
 *> \verbatim
 *>
-*> DLALLM_RECURSIVE computes the product L * L**H or U**H * U, where the triangular
+*> DLALLM_RECURSIVE computes the product L * L**T or U**T * U, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
 *> This is the recursive form of the algorithm
 *> \endverbatim
@@ -67,9 +61,11 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**T * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**T, and the strictly
+*>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,12 +117,10 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
-      !DOUBLE PRECISION   DDOT
-      !EXTERNAL           LSAME, DDOT
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           DGEMV, DSCAL, XERBLA
+      EXTERNAL           XERBLA, DLALL2, DSYRK, DTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -175,7 +169,7 @@
       K = N/2
       IF( UPPER ) THEN
 *
-*        We are computing A = ut(U**H U)
+*        We are computing A = ut(U**T U)
 *
 *        Break apart U as
 *
@@ -192,43 +186,43 @@
 *
 *        This gives us our operations as
 *                       |--------------------------|  |-----------------|
-*        ut(U**H U) =   |  U_{11}**H   0           |  | U_{11} U_{12}   |
-*                       |  U_{12}**H   U_{22}**H   |  | 0      U_{22}   |
+*        ut(U**T U) =   |  U_{11}**T   0           |  | U_{11} U_{12}   |
+*                       |  U_{12}**T   U_{22}**T   |  | 0      U_{22}   |
 *                       |--------------------------|  |-----------------|
 *
 *        Thus we get
 *
-*        U_{11} = U_{11}**H U_{11}
-*        U_{12} = U_{11}**H U_{12}
+*        U_{11} = U_{11}**T U_{11}
+*        U_{12} = U_{11}**T U_{12}
 *
-*        U_{22} = U_{12}**H U_{12} + U_{22}**H U_{22}
+*        U_{22} = U_{12}**T U_{12} + U_{22}**T U_{22}
 *
 *        We break these operations apart as follows
 *
-*        U_{22} = U_{22}**H U_{22}           (This subroutine)
-*        U_{22} = U_{12}**H U_{12} + U_{22}  (SYRK)
+*        U_{22} = U_{22}**T U_{22}           (This subroutine)
+*        U_{22} = U_{12}**T U_{12} + U_{22}  (SYRK)
 *
-*        U_{12} = U_{11}**H U_{12}           (TRMM)
+*        U_{12} = U_{11}**T U_{12}           (TRMM)
 *
-*        U_{11} = U_{11}**H U_{11}           (This subroutine)
+*        U_{11} = U_{11}**T U_{11}           (This subroutine)
 *
 *        Compute U_{22}
 *
          CALL DLALLM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
-         CALL DSYRK('Upper', 'Transpose', N-k, k, one, a(1,k+1), lda,
-     $      one, a(k+1,k+1), lda)
+         CALL DSYRK('Upper', 'Transpose', N-K, K, ONE, A(1,K+1), LDA,
+     $      ONE, A(K+1,K+1), LDA)
 *
 *        Compute U_{12}
 *
          CALL DTRMM('Left', 'Upper', 'Transpose', 'Non-unit',
-     $      k, n-k, one, a, lda, a(1,k+1), lda)
+     $      K, N-K, ONE, A, LDA, A(1,K+1), LDA)
 *
 *        Compute U_{11}
 *
          CALL DLALLM_RECURSIVE(UPLO, K, A, LDA, INFO)
       ELSE
 *
-*        We are computing A = lt(LL**H)
+*        We are computing A = lt(LL**T)
 *
 *        Break apart L as
 *
@@ -245,25 +239,25 @@
 *
 *        This gives us our operations as
 *                       |--------------------|  |-----------------------|
-*        lt(LL**H) =    |  L_{11}   0        |  | L_{11}**H L_{21}**H   |
-*                       |  L_{21}   L_{22}   |  | 0         L_{22}**H   |
+*        lt(LL**T) =    |  L_{11}   0        |  | L_{11}**T L_{21}**T   |
+*                       |  L_{21}   L_{22}   |  | 0         L_{22}**T   |
 *                       |--------------------|  |-----------------------|
 *
 *        Thus we get
 *
-*        L_{11} = L_{11} L_{11}**H
-*        L_{21} = L_{21} L_{11}**H
+*        L_{11} = L_{11} L_{11}**T
+*        L_{21} = L_{21} L_{11}**T
 *
-*        L_{22} = L_{21} L_{21}**H + L_{22} L_{22}**H
+*        L_{22} = L_{21} L_{21}**T + L_{22} L_{22}**T
 *
 *        We break these operations apart as follows
 *
-*        L_{22} = L_{22} L_{22}**H           (This subroutine)
-*        L_{22} = L_{21} L_{21}**H + L_{22}  (SYRK)
+*        L_{22} = L_{22} L_{22}**T           (This subroutine)
+*        L_{22} = L_{21} L_{21}**T + L_{22}  (SYRK)
 *
-*        L_{21} = L_{21} L_{11}**H           (TRMM)
+*        L_{21} = L_{21} L_{11}**T           (TRMM)
 *
-*        L_{11} = L_{11} L_{11}**H           (This subroutine)
+*        L_{11} = L_{11} L_{11}**T           (This subroutine)
 *
 *        Compute L_{22}
 *

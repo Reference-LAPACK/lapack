@@ -1,22 +1,14 @@
-*> \brief \b DLALLM computes the product LLH or UHU, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b DLALLM_BLOCKED computes the product LLH or UHU, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download dlallm + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlallm.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlallm.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlallm.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLALLM( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE DLALLM_BLOCKED( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -32,16 +24,18 @@
 *>
 *> \verbatim
 *>
-*> DLALLM computes the product L * L**H or U**H * U, where the triangular
+*> DLALLM_BLOCKED computes the product L * L**T or U**T * U, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the unblocked form of the algorithm, calling Level 2 BLAS.
+*> This is the blocked form of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +61,11 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**T * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**T, and the strictly
+*>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,15 +115,15 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB, J, K, KI
+      INTEGER            I, IB, NB, K, KI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      !DOUBLE PRECISION   DDOT
-      !EXTERNAL           LSAME, DDOT
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           DGEMV, DSCAL, XERBLA
+      EXTERNAL           XERBLA, DLALL2, DTRMM, DGEMM, DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -146,7 +142,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLALLM', -INFO )
+         CALL XERBLA( 'DLALLM_BLOCKED', -INFO )
          RETURN
       END IF
 *
@@ -157,8 +153,7 @@
 *
 *     Determine the block size for this environment.
 *
-      !NB = ILAENV( 1, 'DLALLM', UPLO, N, -1, -1, -1 )
-      NB = 64 ! remove later and use ILAENV
+      NB = ILAENV( 1, 'DLALLM_BLOCKED', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code

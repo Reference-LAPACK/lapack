@@ -1,17 +1,9 @@
-*> \brief \b DLALL2 computes the product LLH or UHU, where U and L are upper or lower triangular matrices (unblocked algorithm).
+*> \brief \b DLALL2 computes the product LLT or UTU, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
-*
-*> Download dlall2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlall2.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlall2.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlall2.f">
-*> [TXT]</a>
 *
 *  Definition:
 *  ===========
@@ -32,16 +24,18 @@
 *>
 *> \verbatim
 *>
-*> DLALL2 computes the product L * L**H or U**H * U, where the triangular
+*> DLALL2 computes the product L * L**T or U**T * U, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the unblocked form of the algorithm, calling Level 2 BLAS.
+*> This is the unblocked form of the algorithm.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +61,11 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**h * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**T, and the strictly
+*>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -124,11 +120,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      !DOUBLE PRECISION   DDOT
-      !EXTERNAL           LSAME, DDOT
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           DGEMV, DSCAL, XERBLA
+      EXTERNAL           XERBLA, DSCAL, DGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -156,33 +150,43 @@
       IF( N.EQ.0 )
      $   RETURN
       IF( UPPER ) THEN
-         ! Compute and store ut(U**H U)
+*
+*        Compute and store ut(U**T U)
+*
          DO J = N, 1, -1
-            ! Complex will want to store the conjugate
+*
+*           Complex will want to store the conjugate
+*
             AJJ = A(J,J)
             IF( J.EQ.1 ) THEN
                CALL DSCAL(N, AJJ, A, LDA)
             ELSE
-               ! complex version will need {c,z}gemm since the vector x is
-               ! conjugated (or a {c,z}gemcv-like statement)
+*
+*              complex version will need {c,z}gemm since the vector x is
+*              conjugated (or a {c,z}gemcv-like statement)
+*
                CALL DGEMV('Transpose', J-1, N-J+1, ONE,
      $            A(1,J), LDA, A(1,J), 1, AJJ, A(J,J), LDA)
             END IF
          END DO
       ELSE
-         ! compute and store lt(LL**H)
-         DO J = N, 1, -1
-            ! complex will want to store the conjugate
-            AJJ = A(J,J)
-            IF( J.EQ.1 ) THEN
-               ! n is simplified from n-j+1 for readability
-               ! a=a(1,1) is simplified from a(j,j) also for readability
-               CALL DSCAL(N, AJJ, A, 1)
+*
+*        Compute and store lt(LL**T)
+*
+         DO I = N, 1, -1
+*
+*           Complex will want to store the conjugate
+*
+            AII = A(I,I)
+            IF( I.EQ.1 ) THEN
+               CALL DSCAL(N, AII, A, 1)
             ELSE
-               ! complex version will need {c,z}gemm since the vector x is
-               ! conjugated (or a {c,z}gemcv-like statement)
-               CALL DGEMV('No Transpose', N-J+1, J-1, ONE,
-     $            A(J,1), LDA, A(J,1), LDA, AJJ, A(J,J), 1)
+*
+*              complex version will need {c,z}gemm since the vector x is
+*              conjugated (or a {c,z}gemcv-like statement)
+*
+               CALL DGEMV('No Transpose', N-I+1, I-1, ONE,
+     $            A(I,1), LDA, A(I,1), LDA, AII, A(I,I), 1)
             END IF
          END DO
       END IF

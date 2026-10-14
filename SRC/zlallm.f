@@ -15,7 +15,7 @@
 *       INTEGER            INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16         A( LDA, * )
+*       COMPLEX*16   A( LDA, * )
 *       ..
 *
 *
@@ -33,7 +33,9 @@
 *> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
 *> overwriting the factor L in A, and the strictly upper triangular part
-*> of A is not referenced.
+*> of A is not referenced. Regardless, the diagonal elements are explicitly
+*> set to be real by casting to DBLE before exit.
+*> This is the driver that idpatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -61,9 +63,11 @@
 *>          On exit, if UPLO = 'U', the upper triangle of A is
 *>          overwritten with the upper triangle of the product U**h * U,
 *>          and the strictly lower triangular part of A is not referenced.
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
 *>          the lower triangle of the product L * L**H, and the strictly
-*>          upper triangular part of A is not referenced.
+*>          upper triangular part of A is not referenced. Regardless,
+*>          the diagonal elements are explicitly set to be real by casting
+*>          to DBLE before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -106,14 +110,9 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      COMPLEX*16         ONE
-      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -154,8 +153,8 @@
 *     Comment out the line starting with `CALL ZLAUUM_RECURSIVE...`
 *     and uncomment the line starting with `CALL ZLAUUM_BLOCKED...`
 *
-      CALL ZLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-*      CALL ZLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+*      CALL ZLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+      CALL ZLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of ZLAUUM

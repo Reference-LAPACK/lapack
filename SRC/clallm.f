@@ -29,11 +29,13 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A, and the strictly lower triangular
-*> part of A is not referenced.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A, and the strictly upper triangular
-*> part of A is not referenced.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced. Regardless, the diagonal elements are explicitly
+*> set to be real by casting to REAL before exit.
+*> This is the driver that idpatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -59,11 +61,13 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U,
+*>          overwritten with the upper triangle of the product U**H * U,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
 *>          the lower triangle of the product L * L**H, and the strictly
-*>          upper triangular part of A is not referenced.
+*>          upper triangular part of A is not referenced. Regardless, the
+*>          diagonal elements are explicitly set to be real by casting to
+*>          REAL before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -106,14 +110,9 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      COMPLEX            ONE
-      PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -151,11 +150,11 @@
 *
 *     Here we dispatch to whatever is more efficient in a particular environment
 *     We are defaulting to recursive, but if you want to use the blocked variant
-*     Comment out the line starting with `CALL CLALLM_RECURSIVE...`
-*     and uncomment the line starting with `CALL CLALLM_BLOCKED...`
+*     Comment out the line starting with `CALL CLAUUM_RECURSIVE...`
+*     and uncomment the line starting with `CALL CLAUUM_BLOCKED...`
 *
-      CALL CLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-*      CALL CLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+*      CALL CLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+      CALL CLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of CLAUUM

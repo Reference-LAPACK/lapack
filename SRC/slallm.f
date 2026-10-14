@@ -1,4 +1,4 @@
-*> \brief \b SLALLM computes the product LLH or UHU, where U and L are upper or lower triangular matrices (driver algorithm).
+*> \brief \b SLALLM computes the product LLT or UTU, where U and L are upper or lower triangular matrices (driver algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SLALLM computes the product L * L**H or U**H * U, where the triangular
+*> SLALLM computes the product L * L**T or U**T * U, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -34,6 +34,7 @@
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
 *> overwriting the factor L in A, and the strictly upper triangular part
 *> of A is not referenced.
+*> This is the driver that idpatches to either blocked or recursive
 *> \endverbatim
 *
 *  Arguments:
@@ -59,10 +60,10 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U,
+*>          overwritten with the upper triangle of the product U**T * U,
 *>          and the strictly lower triangular part of A is not referenced.
 *>          If UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H, and the strictly
+*>          the lower triangle of the product L * L**T, and the strictly
 *>          upper triangular part of A is not referenced.
 *> \endverbatim
 *>
@@ -106,14 +107,9 @@
 *     ..
 *
 *  =====================================================================
-*
-*     .. Parameters ..
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -151,8 +147,8 @@
 *
 *     Here we dispatch to whatever is more efficient in a particular environment
 *     We are defaulting to recursive, but if you want to use the blocked variant
-*     Comment out the line starting with `CALL SLALLM_RECURSIVE...`
-*     and uncomment the line starting with `CALL SLALLM_BLOCKED...`
+*     Comment out the line starting with `CALL SLAUUM_RECURSIVE...`
+*     and uncomment the line starting with `CALL SLAUUM_BLOCKED...`
 *
 *      CALL SLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
       CALL SLALLM_BLOCKED(UPLO, N, A, LDA, INFO)

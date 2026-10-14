@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download zlallm_recursive + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlallm_recursive.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlallm_recursive.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlallm_recursive.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -37,9 +29,12 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced. Regardless, the diagonal elements are explicitly
+*> set to be real by casting to DBLE before exit.
 *>
 *> This is the recursive form of the algorithm
 *> \endverbatim
@@ -67,9 +62,13 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**H * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**H, and the strictly
+*>          upper triangular part of A is not referenced. Regardless, the
+*>          diagonal elements are explicitly set to be real by casting to
+*>          DBLE before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -111,8 +110,8 @@
 *
 *     .. Parameters ..
       COMPLEX*16   ZONE
-      DOUBLE PRECISION DONE
-      PARAMETER          ( ZONE=(1.0D+0,0.0D+0), DONE = 1.0D+0 )
+      DOUBLE PRECISION ONE
+      PARAMETER          ( ZONE=(1.0D+0,0.0D+0), ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
@@ -122,12 +121,10 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
-      !COMPLEX*16   ZDOTU
-      !EXTERNAL           LSAME, ZDOTU
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           ZGEMV, ZSCAL, XERBLA
+      EXTERNAL           XERBLA, ZLALL2, ZHERK, ZTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,7 +156,7 @@
 *     Base Case
 *
       IF( N.EQ.1 ) THEN
-         A(1,1) = A(1,1) * CONJG(A(1,1))
+         A(1,1) = DBLE(A(1,1) * CONJG(A(1,1)))
          RETURN
       END IF
 *
@@ -186,8 +183,8 @@
 *              |-----------------|
 *
 *        Where
-*           U_{11}\in\R^{k\times k} U_{12}\in\R^{  k\times n-k}
-*                                   U_{22}\in\R^{n-k\times n-k}
+*           U_{11}\in\C^{k\times k} U_{12}\in\C^{  k\times n-k}
+*                                   U_{22}\in\C^{n-k\times n-k}
 *
 *        and U_{11} and U_{22} are upper triangular and U_{12} is rectangular
 *
@@ -207,7 +204,7 @@
 *        We break these operations apart as follows
 *
 *        U_{22} = U_{22}**H U_{22}           (This subroutine)
-*        U_{22} = U_{12}**H U_{12} + U_{22}  (SYRK)
+*        U_{22} = U_{12}**H U_{12} + U_{22}  (HERK)
 *
 *        U_{12} = U_{11}**H U_{12}           (TRMM)
 *
@@ -216,13 +213,13 @@
 *        Compute U_{22}
 *
          CALL ZLALLM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
-         CALL ZHERK('Upper', 'Conjugate', N-k, k, done, a(1,k+1), lda,
-     $      done, a(k+1,k+1), lda)
+         CALL ZHERK('Upper', 'Conjugate', N-K, K, ONE, A(1,K+1), LDA,
+     $      ONE, A(K+1,K+1), LDA)
 *
 *        Compute U_{12}
 *
          CALL ZTRMM('Left', 'Upper', 'Conjugate', 'Non-unit',
-     $      k, n-k, zone, a, lda, a(1,k+1), lda)
+     $      K, N-K, ZONE, A, LDA, A(1,K+1), LDA)
 *
 *        Compute U_{11}
 *
@@ -239,8 +236,8 @@
 *              |-----------------|
 *
 *        Where
-*           L_{11}\in\R^{  k\times k}
-*           L_{21}\in\R^{n-k\times k} L_{22}\in\R^{n-k\times n-k}
+*           L_{11}\in\C^{  k\times k}
+*           L_{21}\in\C^{n-k\times k} L_{22}\in\C^{n-k\times n-k}
 *
 *        and L_{11} and L_{22} are lower triangular and L_{21} is rectangular
 *
@@ -260,7 +257,7 @@
 *        We break these operations apart as follows
 *
 *        L_{22} = L_{22} L_{22}**H           (This subroutine)
-*        L_{22} = L_{21} L_{21}**H + L_{22}  (SYRK)
+*        L_{22} = L_{21} L_{21}**H + L_{22}  (HERK)
 *
 *        L_{21} = L_{21} L_{11}**H           (TRMM)
 *
@@ -270,7 +267,7 @@
 *
          CALL ZLALLM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
          CALL ZHERK('Lower', 'No Transpose', N-K, K,
-     $      DONE, A(K+1,1), LDA, DONE, A(K+1,K+1), LDA)
+     $      ONE, A(K+1,1), LDA, ONE, A(K+1,K+1), LDA)
 *
 *        Compute L_{21}
 *

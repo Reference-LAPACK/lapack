@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download clall2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlall2.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlall2.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlall2.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -37,11 +29,13 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced.
 *>
-*> This is the unblocked form of the algorithm, calling Level 2 BLAS.
+*> This is the unblocked form of the algorithm.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +61,13 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**h * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**H, and the strictly
+*>          upper triangular part of A is not referenced. Regardless,
+*>          the diagonal elements are explicitly set to be real by casting
+*>          to REAL before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -114,24 +112,22 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX   ONE
-      PARAMETER          ( ONE = (1.0E+0, 0.0E+0) )
+      COMPLEX            ONE
+      PARAMETER          ( ONE = (1.0E+0,0.0E+0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
       INTEGER            I,J
-      COMPLEX   AII,AJJ
+      COMPLEX            AII,AJJ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      !COMPLEX   CDOTU
-      !EXTERNAL           LSAME, CDOTU
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           CGEMV, CSCAL, XERBLA
+      EXTERNAL           XERBLA, CSCAL, CGEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MAX, CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -156,37 +152,48 @@
       IF( N.EQ.0 )
      $   RETURN
       IF( UPPER ) THEN
-         ! Compute and store ut(U**H U)
+*
+*        Compute and store ut(U**H U)
+*
          DO J = N, 1, -1
-            ! Complex will want to store the conjugate
+*
+*           Complex will want to store the conjugate
+*
             AJJ = CONJG(A(J,J))
             IF( J.EQ.1 ) THEN
                CALL CSCAL(N, AJJ, A, LDA)
             ELSE
-               ! complex version will need {c,z}gemm since the vector x is
-               ! conjugated (or a {c,z}gemcv-like statement)
+*
+*              complex version will need {c,z}gemm since the vector x is
+*              conjugated (or a {c,z}gemcv-like statement)
+*
                CALL CGEMM('Conjugate Transpose', 'No Transpose',
      $            1, N-J+1, J-1, ONE, A(1,J), LDA, A(1,J), LDA,
      $            AJJ, A(J,J), LDA)
             END IF
+            A(J,J) = REAL(A(J,J))
          END DO
       ELSE
-         ! compute and store lt(LL**H)
-         DO J = N, 1, -1
-            ! complex will want to store the conjugate
-            !
-            AJJ = CONJG(A(J,J))
-            IF( J.EQ.1 ) THEN
-               ! n is simplified from n-j+1 for readability
-               ! a=a(1,1) is simplified from a(j,j) also for readability
-               CALL CSCAL(N, AJJ, A, 1)
+*
+*        Compute and store lt(LL**H)
+*
+         DO I = N, 1, -1
+*
+*           Complex will want to store the conjugate
+*
+            AII = CONJG(A(I,I))
+            IF( I.EQ.1 ) THEN
+               CALL CSCAL(N, AII, A, 1)
             ELSE
-               ! complex version will need {c,z}gemm since the vector x is
-               ! conjugated (or a {c,z}gemcv-like statement)
-               CALL CGEMM('No Transpose', 'Conjugate Transpose',
-     $            N-J+1, 1, J-1, ONE, A(J,1), LDA, A(J,1), LDA,
-     $            AJJ, A(J,J), LDA)
+*
+*              complex version will need {c,z}gemm since the vector x is
+*              conjugated (or a {c,z}gemcv-like statement)
+*
+               CALL CGEMM('Conjugate Transpose', 'No Transpose',
+     $            N-I+1, 1, I-1, ONE, A(I,1), LDA, A(I,1), LDA,
+     $            AII, A(I,I), LDA)
             END IF
+            A(I,I) = CONJG(A(I,I))
          END DO
       END IF
       END SUBROUTINE

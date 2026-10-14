@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download zlallm + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlallm.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlallm.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlallm.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -37,11 +29,14 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced. Regardless, the diagonal of A is explicitly
+*> set to real by casting to DBLE before exit.
 *>
-*> This is the unblocked form of the algorithm, calling Level 2 BLAS.
+*> This is the blocked form of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,9 +62,13 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
+*>          overwritten with the upper triangle of the product U**H * U,
+*>          and the strictly lower triangular part of A is not referenced.
 *>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          the lower triangle of the product L * L**H, and the strictly
+*>          upper triangular part of A is not referenced. Regardless,
+*>          the diagonal of A is explicitly set to be real by casting to
+*>          DBLE before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -108,26 +107,27 @@
       INTEGER            INFO, LDA, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16   A( LDA, * )
+      COMPLEX*16         A( LDA, * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX*16   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
+      DOUBLE PRECISION   ONE
+      COMPLEX*16         ZONE
+      PARAMETER          ( ONE = 1.0D+0, ZONE = (1.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, IB, NB, J, K, KI
+      INTEGER            I, IB, NB, K, KI
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      !COMPLEX*16   ZDOTU
-      !EXTERNAL           LSAME, ZDOTU
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           ZGEMV, ZSCAL, XERBLA
+      EXTERNAL           XERBLA, ZLALL2, ZTRMM, ZGEMM, ZHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -157,8 +157,7 @@
 *
 *     Determine the block size for this environment.
 *
-      !NB = ILAENV( 1, 'DLALLM', UPLO, N, -1, -1, -1 )
-      NB = 64 ! remove later and use ILAENV
+      NB = ILAENV( 1, 'ZLALLM_BLOCKED', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
@@ -192,7 +191,7 @@
 *              We guard this to prevent potentially referencing invalid memory
 *
                CALL ZTRMM('Left', 'Upper', 'Conjguate', 'Non-Unit',
-     $            IB, N-(I+IB)+1, ONE, A(I,I), LDA, A(I,I+IB), LDA)
+     $            IB, N-(I+IB)+1, ZONE, A(I,I), LDA, A(I,I+IB), LDA)
 *
 *              Update the right of the current diagonal block with the
 *              part of A above the current diagonal block
@@ -203,8 +202,8 @@
 *
                CALL ZGEMM('Conjguate', 'No Transpose',
      $            IB, N-(I+IB)+1, I-1,
-     $            ONE, A(1,I), LDA, A(1,I+IB), LDA,
-     $            ONE, A(I,I+IB), LDA)
+     $            ZONE, A(1,I), LDA, A(1,I+IB), LDA,
+     $            ZONE, A(I,I+IB), LDA)
             END IF
 *
 *           Now, we update the diagonal block of interest
@@ -231,7 +230,7 @@
 *              We guard this to prevent potentially referencing invalid memory
 *
                CALL ZTRMM('Right', 'Lower', 'Conjguate', 'Non-Unit',
-     $            N-(I+IB)+1, IB, ONE, A(I,I), LDA, A(I+IB,I), LDA)
+     $            N-(I+IB)+1, IB, ZONE, A(I,I), LDA, A(I+IB,I), LDA)
 *
 *              Update the right of the current diagonal block with the
 *              part of A above the current diagonal block
@@ -242,8 +241,8 @@
 *
                CALL ZGEMM('No Transpose', 'Conjguate',
      $            N-(I+IB)+1, IB, I-1,
-     $            ONE, A(I+IB,1), LDA, A(I,1), LDA,
-     $            ONE, A(I+IB,I), LDA)
+     $            ZONE, A(I+IB,1), LDA, A(I,1), LDA,
+     $            ZONE, A(I+IB,I), LDA)
             END IF
 *
 *           Now, we update the diagonal block of interest

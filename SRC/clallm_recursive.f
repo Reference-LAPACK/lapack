@@ -5,14 +5,6 @@
 * Online html documentation available at
 *            http://www.netlib.org/lapack/explore-html/
 *
-*> Download clallm_recursive + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clallm_recursive.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clallm_recursive.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clallm_recursive.f">
-*> [TXT]</a>
-*
 *  Definition:
 *  ===========
 *
@@ -23,7 +15,7 @@
 *       INTEGER            INFO, LDA, N
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX   A( LDA, * )
+*       COMPLEX            A( LDA, * )
 *       ..
 *
 *
@@ -37,9 +29,12 @@
 *> the array A.
 *>
 *> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*> overwriting the factor U in A.
+*> overwriting the factor U in A, and the strictly lower triangular part
+*> of A is not referenced.
 *> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*> overwriting the factor L in A.
+*> overwriting the factor L in A, and the strictly upper triangular part
+*> of A is not referenced. Regardless, the diagonal elements are explicitly
+*> set to be real by casting to REAL before exit.
 *>
 *> This is the recursive form of the algorithm
 *> \endverbatim
@@ -67,9 +62,13 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L.
 *>          On exit, if UPLO = 'U', the upper triangle of A is
-*>          overwritten with the upper triangle of the product U**h * U;
-*>          if UPLO = 'L', the lower triangle of A is overwritten with
-*>          the lower triangle of the product L * L**H.
+*>          overwritten with the upper triangle of the product U**H * U,
+*>          and the strictly lower triangular part of A is not referenced.
+*>          If UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L * L**H, and the strictly
+*>          upper triangular part of A is not referenced. Regardless, the
+*>          diagonal elements are explicitly set to be real by casting to
+*>          REAL before exit.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -103,31 +102,29 @@
       INTEGER            INFO, LDA, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX   A( LDA, * )
+      COMPLEX            A( LDA, * )
 *     ..
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX   CONE
-      REAL      RONE
-      PARAMETER          ( CONE = (1.0E+0,0.0E+0), RONE = 1.0E+0 )
+      COMPLEX            CONE
+      REAL               ONE
+      PARAMETER          ( CONE = (1.0E+0,0.0E+0), ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
       INTEGER            I,J,NX,K
-      COMPLEX   AII,AJJ
+      COMPLEX            AII,AJJ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      EXTERNAL           ILAENV
-      !COMPLEX   CDOTU
-      !EXTERNAL           LSAME, CDOTU
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      !EXTERNAL           CGEMV, CSCAL, XERBLA
+      EXTERNAL           XERBLA, CLALL2, CHERK, CTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,7 +156,7 @@
 *     Base Case
 *
       IF( N.EQ.1 ) THEN
-         A(1,1) = A(1,1) * CONJG(A(1,1))
+         A(1,1) = REAL(A(1,1) * CONJG(A(1,1)))
          RETURN
       END IF
 *
@@ -186,8 +183,8 @@
 *              |-----------------|
 *
 *        Where
-*           U_{11}\in\R^{k\times k} U_{12}\in\R^{  k\times n-k}
-*                                   U_{22}\in\R^{n-k\times n-k}
+*           U_{11}\in\C^{k\times k} U_{12}\in\C^{  k\times n-k}
+*                                   U_{22}\in\C^{n-k\times n-k}
 *
 *        and U_{11} and U_{22} are upper triangular and U_{12} is rectangular
 *
@@ -207,7 +204,7 @@
 *        We break these operations apart as follows
 *
 *        U_{22} = U_{22}**H U_{22}           (This subroutine)
-*        U_{22} = U_{12}**H U_{12} + U_{22}  (SYRK)
+*        U_{22} = U_{12}**H U_{12} + U_{22}  (HERK)
 *
 *        U_{12} = U_{11}**H U_{12}           (TRMM)
 *
@@ -216,13 +213,13 @@
 *        Compute U_{22}
 *
          CALL CLALLM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
-         CALL CHERK('Upper', 'Conjugate Transpose', N-k, k,
-     $      rone, a(1,k+1), lda, rone, a(k+1,k+1), lda)
+         CALL CHERK('Upper', 'Conjugate Transpose', N-K, K,
+     $      ONE, A(1,K+1), LDA, ONE, A(K+1,K+1), LDA)
 *
 *        Compute U_{12}
 *
          CALL CTRMM('Left', 'Upper', 'Conjugate', 'Non-unit',
-     $      k, n-k, cone, a, lda, a(1,k+1), lda)
+     $      K, N-K, CONE, A, LDA, A(1,K+1), LDA)
 *
 *        Compute U_{11}
 *
@@ -239,8 +236,8 @@
 *              |-----------------|
 *
 *        Where
-*           L_{11}\in\R^{  k\times k}
-*           L_{21}\in\R^{n-k\times k} L_{22}\in\R^{n-k\times n-k}
+*           L_{11}\in\C^{  k\times k}
+*           L_{21}\in\C^{n-k\times k} L_{22}\in\C^{n-k\times n-k}
 *
 *        and L_{11} and L_{22} are lower triangular and L_{21} is rectangular
 *
@@ -260,7 +257,7 @@
 *        We break these operations apart as follows
 *
 *        L_{22} = L_{22} L_{22}**H           (This subroutine)
-*        L_{22} = L_{21} L_{21}**H + L_{22}  (SYRK)
+*        L_{22} = L_{21} L_{21}**H + L_{22}  (HERK)
 *
 *        L_{21} = L_{21} L_{11}**H           (TRMM)
 *
@@ -270,7 +267,7 @@
 *
          CALL CLALLM_RECURSIVE(UPLO, N-K, A(K+1,K+1), LDA, INFO)
          CALL CHERK('Lower', 'No Transpose', N-K, K,
-     $      RONE, A(K+1,1), LDA, RONE, A(K+1,K+1), LDA)
+     $      ONE, A(K+1,1), LDA, ONE, A(K+1,K+1), LDA)
 *
 *        Compute L_{21}
 *
