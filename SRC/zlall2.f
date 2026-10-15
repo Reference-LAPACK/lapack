@@ -189,11 +189,11 @@
 *              complex version will need {c,z}gemm since the vector x is
 *              conjugated (or a {c,z}gemcv-like statement)
 *
-               CALL ZGEMM('Conjugate Transpose', 'No Transpose',
+               CALL ZGEMM('No Transpose', 'Conjugate Transpose',
      $            N-I+1, 1, I-1, ONE, A(I,1), LDA, A(I,1), LDA,
      $            AII, A(I,I), LDA)
             END IF
-            A(I,I) = DCONJG(A(I,I))
+            A(I,I) = DBLE(A(I,I))
          END DO
       END IF
       END SUBROUTINE
