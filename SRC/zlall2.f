@@ -122,6 +122,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZSCAL, ZGEMM
