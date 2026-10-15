@@ -507,6 +507,12 @@
             ELSE
                NB = 32
             END IF
+         ELSE IF( C3.EQ.'LLM' ) THEN
+            IF( SNAME ) THEN
+               NB = 64
+            ELSE
+               NB = 64
+            END IF
          END IF
       ELSE IF( SNAME .AND. C2.EQ.'ST' ) THEN
          IF( C3.EQ.'EBZ' ) THEN
