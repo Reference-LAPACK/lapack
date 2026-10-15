@@ -150,8 +150,8 @@
 *     Comment out the line starting with `CALL DLAUUM_RECURSIVE...`
 *     and uncomment the line starting with `CALL DLAUUM_BLOCKED...`
 *
-*      CALL DLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-      CALL DLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+      CALL DLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL DLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of DLAUUM

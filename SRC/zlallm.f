@@ -153,8 +153,8 @@
 *     Comment out the line starting with `CALL ZLAUUM_RECURSIVE...`
 *     and uncomment the line starting with `CALL ZLAUUM_BLOCKED...`
 *
-*      CALL ZLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-      CALL ZLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+      CALL ZLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL ZLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of ZLAUUM

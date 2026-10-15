@@ -150,8 +150,8 @@
 *     Comment out the line starting with `CALL SLAUUM_RECURSIVE...`
 *     and uncomment the line starting with `CALL SLAUUM_BLOCKED...`
 *
-*      CALL SLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-      CALL SLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+      CALL SLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL SLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of SLAUUM

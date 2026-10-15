@@ -153,8 +153,8 @@
 *     Comment out the line starting with `CALL CLAUUM_RECURSIVE...`
 *     and uncomment the line starting with `CALL CLAUUM_BLOCKED...`
 *
-*      CALL CLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
-      CALL CLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
+      CALL CLALLM_RECURSIVE(UPLO, N, A, LDA, INFO)
+*      CALL CLALLM_BLOCKED(UPLO, N, A, LDA, INFO)
       RETURN
 *
 *     End of CLAUUM
