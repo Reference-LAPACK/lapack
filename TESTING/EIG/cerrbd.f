@@ -68,12 +68,13 @@
 *     .. Parameters ..
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 4, LW = NMAX )
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            I, INFO, J, NT
+      REAL               RZERO
 *     ..
 *     .. Local Arrays ..
       REAL               D( NMAX ), E( NMAX ), RW( 4*NMAX )
@@ -279,6 +280,34 @@
      $                INFO )
          CALL CHKXER( 'CBDSQR', INFOT, NOUT, LERR, OK )
          NT = NT + 8
+*
+*        CBDSQR with singular vectors must return when D contains an
+*        infinity, which makes its convergence threshold a NaN,
+*        instead of iterating forever.
+*
+         RZERO = ZERO
+         DO 40 J = 1, NMAX
+            D( J ) = REAL( J )
+            E( J ) = ONE / REAL( J+1 )
+            DO 30 I = 1, NMAX
+               U( I, J ) = ZERO
+               V( I, J ) = ZERO
+   30       CONTINUE
+            U( J, J ) = ONE
+            V( J, J ) = ONE
+   40    CONTINUE
+         D( 1 ) = ONE / RZERO
+         E( NMAX ) = ZERO
+         SRNAMT = 'CBDSQR'
+         INFOT = 0
+         LERR = .FALSE.
+         CALL CBDSQR( 'U', NMAX, NMAX, NMAX, 0, D, E, V, NMAX, U,
+     $                NMAX, A, NMAX, RW, INFO )
+         IF( LERR ) THEN
+            WRITE( NOUT, FMT = 9997 )'CBDSQR'
+            OK = .FALSE.
+         END IF
+         NT = NT + 1
       END IF
 *
 *     Print a summary line.
@@ -293,6 +322,8 @@
      $        I3, ' tests done)' )
  9998 FORMAT( ' *** ', A3, ' routines failed the tests of the error ',
      $        'exits ***' )
+ 9997 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with an ',
+     $      'infinity ***' )
 *
       RETURN
 *
