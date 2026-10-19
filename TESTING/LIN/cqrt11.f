@@ -122,7 +122,7 @@
       EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CUNM2R, XERBLA
+      EXTERNAL           CLASET, CUNM2R, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, REAL
@@ -137,7 +137,7 @@
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL XERBLA( 'CQRT11', 7 )
+         CALL XER_REPLACE( 'CQRT11', 7 )
          RETURN
       END IF
 *

@@ -392,7 +392,7 @@
       EXTERNAL           SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SLAFTS, XERBLA, CHBEV, CHBEVD,
+      EXTERNAL           ALASVM, SLAFTS, XER_REPLACE, CHBEV, CHBEVD,
      $                   CHBEVX, CHEEV, CHEEVD, CHEEVR, CHEEVX, CHET21,
      $                   CHET22, CHPEV, CHPEVD, CHPEVX, CLACPY, CLASET,
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
@@ -441,7 +441,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'CDRVST2STG', -INFO )
          RETURN
       END IF
 *

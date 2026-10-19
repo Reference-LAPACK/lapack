@@ -402,7 +402,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGESVD, DGET51, DGET53, DGGESX,
-     $                   DLACPY, DLAKF2, DLASET, DLATM5, XERBLA
+     $                   DLACPY, DLAKF2, DLASET, DLATM5, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -469,7 +469,7 @@
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRGSX', -INFO )
+         CALL XER_REPLACE( 'DDRGSX', -INFO )
          RETURN
       END IF
 *

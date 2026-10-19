@@ -24,6 +24,11 @@
 !> \verbatim
 !>
 !>  IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
+!>
+!>  If the vector contains a NaN, the index of the first NaN is returned.
+!>  Otherwise, if it contains an Inf or -Inf, the index of the first of those
+!>  is returned.  This keeps the result independent of the order of the
+!>  elements, so that exceptional values propagate.
 !> \endverbatim
 !
 !  Arguments:

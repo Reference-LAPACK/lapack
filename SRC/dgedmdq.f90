@@ -359,7 +359,7 @@
 !>    conjugate pair of eigenvalues reads
 !>    LAMBDA(i)   = REIG(i) + sqrt(-1)*IMAG(i)
 !>    LAMBDA(i+1) = REIG(i) - sqrt(-1)*IMAG(i)
-!>    That is, complex conjugate pairs have consequtive
+!>    That is, complex conjugate pairs have consecutive
 !>    indices (i,i+1), with the positive imaginary part
 !>    listed first.
 !>    See the descriptions of K, REIG, Z.

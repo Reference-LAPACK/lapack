@@ -197,7 +197,7 @@
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZUNT01
+      EXTERNAL           XER_REPLACE, ZUNT01
 *     ..
 *     .. Executable Statements ..
 *
@@ -229,7 +229,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNT03', -INFO )
+         CALL XER_REPLACE( 'ZUNT03', -INFO )
          RETURN
       END IF
 *

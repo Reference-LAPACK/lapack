@@ -437,7 +437,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET51, CGET54, CGGES3, CLACPY, CLARFG,
-     $                   CLASET, CLATM4, CUNM2R, XERBLA, XLAENV
+     $                   CLASET, CLATM4, CUNM2R, XER_REPLACE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, MIN, REAL, SIGN
@@ -522,7 +522,7 @@
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRGES3', -INFO )
+         CALL XER_REPLACE( 'CDRGES3', -INFO )
          RETURN
       END IF
 *

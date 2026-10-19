@@ -24,6 +24,11 @@
 *> \verbatim
 *>
 *>    IDAMAX finds the index of the first element having maximum absolute value.
+*>
+*>    If the vector contains a NaN, the index of the first NaN is returned.
+*>    Otherwise, if it contains an Inf or -Inf, the index of the first of
+*>    those is returned.  This keeps the result independent of the order of
+*>    the elements, so that exceptional values propagate.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,10 +104,12 @@
 *        code for increment equal to 1
 *
          DMAX = DABS(DX(1))
+         IF (DMAX.NE.DMAX) RETURN
          DO I = 2,N
-            IF (DABS(DX(I)).GT.DMAX) THEN
+            IF (.NOT.(DABS(DX(I)).LE.DMAX)) THEN
                IDAMAX = I
                DMAX = DABS(DX(I))
+               IF (DMAX.NE.DMAX) RETURN
             END IF
          END DO
       ELSE
@@ -111,11 +118,13 @@
 *
          IX = 1
          DMAX = DABS(DX(1))
+         IF (DMAX.NE.DMAX) RETURN
          IX = IX + INCX
          DO I = 2,N
-            IF (DABS(DX(IX)).GT.DMAX) THEN
+            IF (.NOT.(DABS(DX(IX)).LE.DMAX)) THEN
                IDAMAX = I
                DMAX = DABS(DX(IX))
+               IF (DMAX.NE.DMAX) RETURN
             END IF
             IX = IX + INCX
          END DO

@@ -446,7 +446,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEES, SHST01, SLACPY, SLASUM, SLATME, SLATMR,
-     $                   SLATMS, SLASET, XERBLA
+     $                   SLATMS, SLASET, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -502,7 +502,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVES', -INFO )
+         CALL XER_REPLACE( 'SDRVES', -INFO )
          RETURN
       END IF
 *

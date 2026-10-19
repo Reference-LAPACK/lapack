@@ -188,7 +188,7 @@
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SORT01, XERBLA
+      EXTERNAL           SORT01, XER_REPLACE
 *     ..
 *     .. Executable Statements ..
 *
@@ -220,7 +220,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SORT03', -INFO )
+         CALL XER_REPLACE( 'SORT03', -INFO )
          RETURN
       END IF
 *
