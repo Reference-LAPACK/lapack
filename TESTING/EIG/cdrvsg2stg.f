@@ -426,7 +426,7 @@
       EXTERNAL           LSAME, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAFTS, SLASUM, XERBLA, CHBGV, CHBGVD,
+      EXTERNAL           SLAFTS, SLASUM, XER_REPLACE, CHBGV, CHBGVD,
      $                   CHBGVX, CHEGV, CHEGVD, CHEGVX, CHPGV, CHPGVD,
      $                   CHPGVX, CLACPY, CLASET, CLATMR, CLATMS, CSGT01,
      $                   CHEGV_2STAGE
@@ -477,7 +477,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVSG2STG', -INFO )
+         CALL XER_REPLACE( 'CDRVSG2STG', -INFO )
          RETURN
       END IF
 *

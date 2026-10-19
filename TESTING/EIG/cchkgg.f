@@ -562,7 +562,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CGEQR2, CGET51, CGET52, CGGHRD, CHGEQZ, CLACPY,
      $                   CLARFG, CLASET, CLATM4, CTGEVC, CUNM2R, SLASUM,
-     $                   XERBLA
+     $                   XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN
@@ -627,7 +627,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKGG', -INFO )
+         CALL XER_REPLACE( 'CCHKGG', -INFO )
          RETURN
       END IF
 *

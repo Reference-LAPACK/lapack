@@ -169,7 +169,7 @@
          INFO = -8
       END IF
       IF (INFO .LT. 0) THEN
-         CALL XERBLA('DLAHILB', -INFO)
+         CALL XER_REPLACE('DLAHILB', -INFO)
          RETURN
       END IF
       IF (N .GT. NMAX_EXACT) THEN

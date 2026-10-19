@@ -509,7 +509,7 @@
      $                   DSYEV, DSYEVD, DSYEVR, DSYEVX, DSYT21,
      $                   DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
      $                   DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
-     $                   DSBEVX_2STAGE, DSYT22, XERBLA
+     $                   DSBEVX_2STAGE, DSYT22, XER_REPLACE
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -564,7 +564,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVST2STG', -INFO )
+         CALL XER_REPLACE( 'DDRVST2STG', -INFO )
          RETURN
       END IF
 *
