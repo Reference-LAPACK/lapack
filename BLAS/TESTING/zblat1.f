@@ -55,7 +55,7 @@
       DOUBLE PRECISION SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.EQ.12) THEN
+         IF (ICASE.EQ.12 .OR. ICASE.EQ.14) THEN
             CALL CHECK0(SFAC)
          ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
      +            ICASE.EQ.13) THEN
@@ -114,7 +114,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -132,6 +132,7 @@
       DATA             L(11)/'ZAXPBY'/
       DATA             L(12)/'ZROTG '/
       DATA             L(13)/'ZDROT '/
+      DATA             L(14)/'DCABS1'/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -145,6 +146,12 @@
       END
       SUBROUTINE CHECK0(SFAC)
       IMPLICIT NONE
+*
+*     ZROTG and DCABS1 take no vector at all, so neither the loop over
+*     N nor the loop over INCX that CHECK1 and CHECK2 run applies to
+*     them, and they get a check of their own.  Nothing in the library
+*     calls DCABS1, so this is the only thing that exercises it.
+*
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -163,6 +170,11 @@
      +                  CGOT(1), CWANT(1), CSIZE(1)
       DOUBLE PRECISION  SWANT(1)
       DOUBLE PRECISION  CCTRUE(8)
+      COMPLEX*16        ZV0(6)
+      DOUBLE PRECISION  DTRUE0(6)
+*     .. External Functions ..
+      DOUBLE PRECISION  DCABS1
+      EXTERNAL          DCABS1
 *     .. External Subroutines ..
       EXTERNAL          ZROTG, CTEST, STEST1
 *     .. Intrinsic Functions ..
@@ -194,7 +206,29 @@
      +                  (4.0D0,0.0D0), (5.0D0,0.0D0),
      +                  (5.0D0,0.0D0), (0.0D0,5.0D0),
      +                  (3.0D0,4.0D0), (-5.0D0,0.0D0)/
+*
+*     Every part of the DCABS1 arguments is exact in binary, so the
+*     expected sums are exact as well, and the zero case is required to
+*     be exact by the zero it also supplies as the comparison size.  The
+*     three (3,4) variants separate |Re| + |Im| from the Euclidean
+*     length, which would give 5 rather than 7, and cover both signs of
+*     both parts.
+*
+      DATA              ZV0/(0.0D0,0.0D0), (0.5D0,0.0D0),
+     +                  (0.0D0,-0.25D0), (3.0D0,4.0D0), (-3.0D0,4.0D0),
+     +                  (-3.0D0,-4.0D0)/
+      DATA              DTRUE0/0.0D0, 0.5D0, 0.25D0, 7.0D0, 7.0D0,
+     +                  7.0D0/
 *     .. Executable Statements ..
+*
+      IF (ICASE.EQ.14) THEN
+*        .. DCABS1 ..
+         DO 10 K = 1, 6
+            N = K
+            CALL STEST1(DCABS1(ZV0(K)),DTRUE0(K),DTRUE0(K),SFAC)
+   10    CONTINUE
+         RETURN
+      END IF
 *
       DO 20 K = 1, 8
 *        .. Set N=K for identification in output if any ..

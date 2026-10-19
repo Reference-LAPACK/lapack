@@ -55,7 +55,7 @@
       REAL             SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.EQ.12) THEN
+         IF (ICASE.EQ.12 .OR. ICASE.EQ.14) THEN
             CALL CHECK0(SFAC)
          ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
      +            ICASE.EQ.13) THEN
@@ -115,7 +115,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -133,6 +133,7 @@
       DATA             L(11)/'CAXPBY'/
       DATA             L(12)/'CROTG '/
       DATA             L(13)/'CSROT '/
+      DATA             L(14)/'SCABS1'/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -146,6 +147,12 @@
       END
       SUBROUTINE CHECK0(SFAC)
       IMPLICIT NONE
+*
+*     CROTG and SCABS1 take no vector at all, so neither the loop over
+*     N nor the loop over INCX that CHECK1 and CHECK2 run applies to
+*     them, and they get a check of their own.  Nothing in the library
+*     calls SCABS1, so this is the only thing that exercises it.
+*
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -164,6 +171,11 @@
      +                  CGOT(1), CWANT(1), CSIZE(1)
       REAL              SWANT(1)
       REAL              CCTRUE(8)
+      COMPLEX           CV0(6)
+      REAL              STRUE0(6)
+*     .. External Functions ..
+      REAL              SCABS1
+      EXTERNAL          SCABS1
 *     .. External Subroutines ..
       EXTERNAL          CROTG, CTEST, STEST1
 *     .. Intrinsic Functions ..
@@ -195,7 +207,29 @@
      +                  (4.0E0,0.0E0), (5.0E0,0.0E0),
      +                  (5.0E0,0.0E0), (0.0E0,5.0E0),
      +                  (3.0E0,4.0E0), (-5.0E0,0.0E0)/
+*
+*     Every part of the SCABS1 arguments is exact in binary, so the
+*     expected sums are exact as well, and the zero case is required to
+*     be exact by the zero it also supplies as the comparison size.  The
+*     three (3,4) variants separate |Re| + |Im| from the Euclidean
+*     length, which would give 5 rather than 7, and cover both signs of
+*     both parts.
+*
+      DATA              CV0/(0.0E0,0.0E0), (0.5E0,0.0E0),
+     +                  (0.0E0,-0.25E0), (3.0E0,4.0E0), (-3.0E0,4.0E0),
+     +                  (-3.0E0,-4.0E0)/
+      DATA              STRUE0/0.0E0, 0.5E0, 0.25E0, 7.0E0, 7.0E0,
+     +                  7.0E0/
 *     .. Executable Statements ..
+*
+      IF (ICASE.EQ.14) THEN
+*        .. SCABS1 ..
+         DO 10 K = 1, 6
+            N = K
+            CALL STEST1(SCABS1(CV0(K)),STRUE0(K),STRUE0(K),SFAC)
+   10    CONTINUE
+         RETURN
+      END IF
 *
       DO 20 K = 1, 8
 *        .. Set N=K for identification in output if any ..
