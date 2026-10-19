@@ -251,7 +251,7 @@
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, TEST, VALEIG, WANTZ
       CHARACTER          ORDER
-      INTEGER            I, IINFO, IMAX, INDISP, INDIWO, INDWRK,
+      INTEGER            I, IINFO, INDISP, INDIWO, INDWRK,
      $                   ISCALE, ITMP1, J, JJ, NSPLIT
       DOUBLE PRECISION   BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA, SMLNUM,
      $                   TMP1, TNRM, VLL, VUU
@@ -352,8 +352,11 @@
          ISCALE = 1
          SIGMA = RMIN / TNRM
       ELSE IF( TNRM.GT.RMAX ) THEN
-         ISCALE = 1
+*        An infinite norm gives SIGMA = 0; leave such a matrix
+*        unscaled so that VL and VU remain a valid interval.
          SIGMA = RMAX / TNRM
+         IF( SIGMA.GT.ZERO )
+     $      ISCALE = 1
       END IF
       IF( ISCALE.EQ.1 ) THEN
          CALL DSCAL( N, SIGMA, D, 1 )
@@ -427,14 +430,8 @@
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
    20 CONTINUE
-      IF( ISCALE.EQ.1 ) THEN
-         IF( INFO.EQ.0 ) THEN
-            IMAX = M
-         ELSE
-            IMAX = INFO - 1
-         END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
-      END IF
+      IF( ISCALE.EQ.1 )
+     $   CALL DSCAL( M, ONE / SIGMA, W, 1 )
 *
 *     If eigenvalues are not in order, then sort them, along with
 *     eigenvectors.
