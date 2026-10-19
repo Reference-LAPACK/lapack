@@ -408,7 +408,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CBDT01, CBDT02, CGBBRD, CLACPY, CLASET, CLATMR,
-     $                   CLATMS, CUNT01, SLAHD2, SLASUM, XERBLA
+     $                   CLATMS, CUNT01, SLAHD2, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -482,7 +482,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKBB', -INFO )
+         CALL XER_REPLACE( 'CCHKBB', -INFO )
          RETURN
       END IF
 *

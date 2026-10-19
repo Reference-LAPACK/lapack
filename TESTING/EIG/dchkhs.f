@@ -477,7 +477,7 @@
       EXTERNAL           DCOPY, DGEHRD, DGEMM, DGET10, DGET22, DHSEIN,
      $                   DHSEQR, DHST01, DLACPY, DLAFTS, DLASET, DLASUM,
      $                   DLATME, DLATMR, DLATMS, DORGHR, DORMHR, DTREVC,
-     $                   DTREVC3, XERBLA
+     $                   DTREVC3, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -524,7 +524,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKHS', -INFO )
+         CALL XER_REPLACE( 'DCHKHS', -INFO )
          RETURN
       END IF
 *

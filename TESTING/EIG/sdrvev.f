@@ -454,7 +454,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEEV, SGET22, SLACPY, SLASUM, SLATME,
-     $                   SLATMR, SLATMS, SLASET, XERBLA
+     $                   SLATMR, SLATMS, SLASET, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -513,7 +513,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVEV', -INFO )
+         CALL XER_REPLACE( 'SDRVEV', -INFO )
          RETURN
       END IF
 *

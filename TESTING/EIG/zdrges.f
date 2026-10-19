@@ -435,8 +435,8 @@
       EXTERNAL           ZLCTES, ILAENV, DLAMCH, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, XERBLA, ZGET51, ZGET54, ZGGES, ZLACPY,
-     $                   ZLARFG, ZLASET, ZLATM4, ZUNM2R
+      EXTERNAL           ALASVM, XER_REPLACE, ZGET51, ZGET54, ZGGES,
+     $                   ZLACPY, ZLARFG, ZLASET, ZLATM4, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SIGN
@@ -521,7 +521,7 @@
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRGES', -INFO )
+         CALL XER_REPLACE( 'ZDRGES', -INFO )
          RETURN
       END IF
 *

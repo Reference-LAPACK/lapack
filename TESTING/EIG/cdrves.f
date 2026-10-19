@@ -439,7 +439,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEES, CHST01, CLACPY, CLATME, CLATMR, CLATMS,
-     $                   CLASET, SLASUM, XERBLA
+     $                   CLASET, SLASUM, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -495,7 +495,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVES', -INFO )
+         CALL XER_REPLACE( 'CDRVES', -INFO )
          RETURN
       END IF
 *

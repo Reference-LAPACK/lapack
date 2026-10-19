@@ -127,7 +127,7 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZLASET, ZUNMRZ
+      EXTERNAL           XER_REPLACE, ZAXPY, ZLASET, ZUNMRZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX
@@ -137,7 +137,7 @@
       ZRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'ZRZT01', 8 )
+         CALL XER_REPLACE( 'ZRZT01', 8 )
          RETURN
       END IF
 *

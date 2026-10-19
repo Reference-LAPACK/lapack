@@ -418,7 +418,7 @@
       EXTERNAL           LSAME, DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEEVX, ZGET22, ZLACPY
+      EXTERNAL           XER_REPLACE, ZGEEVX, ZGET22, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -457,7 +457,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGET23', -INFO )
+         CALL XER_REPLACE( 'ZGET23', -INFO )
          RETURN
       END IF
 *

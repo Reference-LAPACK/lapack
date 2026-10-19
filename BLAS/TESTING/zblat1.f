@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 11
+      DO 20 IC = 1, 13
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,10 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.LE.5 .OR. ICASE.EQ.11) THEN
+         IF (ICASE.EQ.12) THEN
+            CALL CHECK0(SFAC)
+         ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
+     +            ICASE.EQ.13) THEN
             CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
             CALL CHECK1(SFAC)
@@ -111,7 +114,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(11)
+      CHARACTER*6      L(13)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -127,6 +130,8 @@
       DATA             L(9)/'ZDSCAL'/
       DATA             L(10)/'IZAMAX'/
       DATA             L(11)/'ZAXPBY'/
+      DATA             L(12)/'ZROTG '/
+      DATA             L(13)/'ZDROT '/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -136,6 +141,149 @@
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
 *
 *     End of HEADER
+*
+      END
+      SUBROUTINE CHECK0(SFAC)
+      IMPLICIT NONE
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION  SFAC
+*     .. Scalars in Common ..
+      INTEGER           ICASE, INCX, INCY, MODE, N
+      LOGICAL           PASS
+*     .. Local Scalars ..
+      COMPLEX*16        CS, CSA, CSB, CA0, CB0
+      DOUBLE PRECISION  SC, SGOT, RTMIN, RTMAX,
+     +                  SONE, SSIZ, SZERO
+      INTEGER           K
+*     .. Local Arrays ..
+      COMPLEX*16        CA1(8), CB1(8), CSTRUE(8), CATRUE(8),
+     +                  CGOT(1), CWANT(1), CSIZE(1)
+      DOUBLE PRECISION  SWANT(1)
+      DOUBLE PRECISION  CCTRUE(8)
+*     .. External Subroutines ..
+      EXTERNAL          ZROTG, CTEST, STEST1
+*     .. Intrinsic Functions ..
+      INTRINSIC         ABS, AIMAG, HUGE, REAL, SQRT, TINY
+*     .. Common blocks ..
+      COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
+*     .. Data statements ..
+*
+*     ZROTG is exercised on the branches its argument pair selects:
+*     B zero, A zero with B real, imaginary or general, and the ordinary
+*     path with real, imaginary and negative A.  Each expected value
+*     satisfies C*A + S*B = R and C**2 + ABS(S)**2 = 1 exactly.
+*
+      DATA              CA1/(1.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (0.0D0,0.0D0), (0.0D0,0.0D0),
+     +                  (3.0D0,0.0D0), (0.0D0,3.0D0),
+     +                  (3.0D0,4.0D0), (-3.0D0,0.0D0)/
+      DATA              CB1/(0.0D0,0.0D0), (3.0D0,0.0D0),
+     +                  (0.0D0,4.0D0), (3.0D0,4.0D0),
+     +                  (4.0D0,0.0D0), (0.0D0,4.0D0),
+     +                  (0.0D0,0.0D0), (4.0D0,0.0D0)/
+      DATA              CCTRUE/1.0D0, 0.0D0, 0.0D0, 0.0D0,
+     +                  0.6D0, 0.6D0, 1.0D0, 0.6D0/
+      DATA              CSTRUE/(0.0D0,0.0D0), (1.0D0,0.0D0),
+     +                  (0.0D0,-1.0D0), (0.6D0,-0.8D0),
+     +                  (0.8D0,0.0D0), (0.8D0,0.0D0),
+     +                  (0.0D0,0.0D0), (-0.8D0,0.0D0)/
+      DATA              CATRUE/(1.0D0,0.0D0), (3.0D0,0.0D0),
+     +                  (4.0D0,0.0D0), (5.0D0,0.0D0),
+     +                  (5.0D0,0.0D0), (0.0D0,5.0D0),
+     +                  (3.0D0,4.0D0), (-5.0D0,0.0D0)/
+*     .. Executable Statements ..
+*
+      DO 20 K = 1, 8
+*        .. Set N=K for identification in output if any ..
+         N = K
+         CSA = CA1(K)
+         CSB = CB1(K)
+         CALL ZROTG(CSA,CSB,SC,CS)
+         CGOT(1) = CSA
+         CWANT(1) = CATRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CGOT(1) = CS
+         CWANT(1) = CSTRUE(K)
+         CALL CTEST(1,CGOT,CWANT,CWANT,SFAC)
+         CALL STEST1(SC,CCTRUE(K),CCTRUE(K),SFAC)
+   20 CONTINUE
+*
+*     The scaled arms of ZROTG.  Their results are awkward to tabulate,
+*     so check the identities that define the rotation instead:
+*     C*A + S*B = R, and C**2 + ABS(S)**2 = 1.  RTMIN and RTMAX bracket
+*     the window inside which the routine uses its unscaled algorithm.
+*
+      SONE = 1D0
+      SZERO = 0D0
+      RTMIN = SQRT(TINY(SONE))
+      RTMAX = SQRT(HUGE(SONE))
+      DO 40 K = 1, 8
+         N = 8 + K
+         IF (K.EQ.1) THEN
+*           A zero and B below the window, with both parts nonzero so
+*           the general arm is taken rather than the real or imaginary
+*           shortcut.
+            CA0 = DCMPLX(SZERO,SZERO)
+            CB0 = DCMPLX(RTMIN*0.25D0,RTMIN*0.25D0)
+         ELSE IF (K.EQ.2) THEN
+*           Both nonzero, B far above the window.
+            CA0 = DCMPLX(SONE,SZERO)
+            CB0 = DCMPLX(RTMAX,SZERO)
+         ELSE IF (K.EQ.3) THEN
+*           Both inside the window, but A so small against B that the
+*           routine switches to its F2 < H2*SAFMIN formulation.
+            CA0 = DCMPLX(RTMIN*2D0,SZERO)
+            CB0 = DCMPLX(RTMAX*0.25D0,SZERO)
+         ELSE IF (K.EQ.4) THEN
+*           Both above the window and of a size, so the routine scales
+*           A and B by the same factor rather than one of its own.
+            CA0 = DCMPLX(RTMAX,SZERO)
+            CB0 = DCMPLX(RTMAX,SZERO)
+         ELSE IF (K.EQ.5) THEN
+*           The same, below the window.
+            CA0 = DCMPLX(RTMIN*0.25D0,SZERO)
+            CB0 = DCMPLX(RTMIN*0.25D0,SZERO)
+         ELSE IF (K.EQ.6) THEN
+*           B above the window with both parts set, so the routine
+*           scales, and A small enough against it that the scaled
+*           algorithm takes its F2 < H2*SAFMIN arm as well.
+            CA0 = DCMPLX(SONE,SZERO)
+            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+         ELSE IF (K.EQ.7) THEN
+*           The same, with A large enough that SQRT(F2*H2) is no longer
+*           known to stay in range, so S is formed from R/H2 instead.
+            CA0 = DCMPLX(1.5D0,SZERO)
+            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+         ELSE
+*           Both inside the window, A just above its lower edge, where
+*           the unscaled algorithm forms S from R/H2 for that reason.
+            CA0 = DCMPLX(RTMIN*2D0,SZERO)
+            CB0 = DCMPLX(SONE,SONE)
+         END IF
+         CSA = CA0
+         CSB = CB0
+         CALL ZROTG(CSA,CSB,SC,CS)
+*        CSA holds R on return.  C*A and S*B are each bounded by the
+*        larger of ABS(A) and ABS(B), so their sum is the scale the
+*        residual of the identity has to be measured against.  Passing
+*        CWANT as the size would ask the imaginary part for an exact
+*        zero, which it cannot give: for operands near either end of
+*        the range it is a cancellation of two quantities of that size.
+         SSIZ = ABS(CA0) + ABS(CB0)
+         CGOT(1) = SC*CA0 + CS*CB0
+         CWANT(1) = CSA
+         CSIZE(1) = DCMPLX(SSIZ,SSIZ)
+         CALL CTEST(1,CGOT,CWANT,CSIZE,SFAC)
+         SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
+         SWANT(1) = SONE
+         CALL STEST1(SGOT,SONE,SWANT,SFAC)
+   40 CONTINUE
+      RETURN
+*
+*     End of CHECK0
 *
       END
       SUBROUTINE CHECK1(SFAC)
@@ -151,7 +299,7 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX*16        CA
-      DOUBLE PRECISION  SA
+      DOUBLE PRECISION  SA, SBIG, SINF, SNAN, SONE, SZERO
       INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
       COMPLEX*16        CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
@@ -165,7 +313,7 @@
 *     .. External Subroutines ..
       EXTERNAL          ZB1NRM2, ZSCAL, ZDSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         HUGE, MAX
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -319,6 +467,68 @@
                IX = IX + INCX
   180       CONTINUE
             CALL ITEST1(IZAMAX(N,CXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0D0
+            SZERO = 0.0D0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 190 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  190       CONTINUE
+            CXR(1+3*INCX) = DCMPLX(SNAN,SZERO)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),4)
+            CXR(1+5*INCX) = DCMPLX(SNAN,SZERO)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),4)
+*
+*           A NaN in the imaginary part counts just as much as one in
+*           the real part.
+            IX = 1
+            DO 200 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  200       CONTINUE
+            CXR(1+INCX) = DCMPLX(SZERO,SNAN)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),2)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 210 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  210       CONTINUE
+            CXR(1+2*INCX) = DCMPLX(SINF,SZERO)
+            CXR(1+4*INCX) = DCMPLX(SZERO,SINF)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            CXR(1+6*INCX) = DCMPLX(SNAN,SZERO)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),7)
+*
+*           An element can be finite while abs(real) + abs(aimag)
+*           overflows; i?amax then switches to a scaled comparison for
+*           the rest of the vector.  Both entries below are finite, so
+*           the larger of the two wins.
+            IX = 1
+            DO 220 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  220       CONTINUE
+            CXR(1+INCX) = DCMPLX(0.6D0*SBIG,0.6D0*SBIG)
+            CXR(1+4*INCX) = DCMPLX(0.9D0*SBIG,0.9D0*SBIG)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),5)
          END IF
    60 CONTINUE
 *
@@ -379,17 +589,19 @@
       COMPLEX*16        CA, CB
       INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
      +                  MX, MY
+      DOUBLE PRECISION  SC, SS
 *     .. Local Arrays ..
       COMPLEX*16        CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
-     +                  CT8(7,4,4), CTY(7), CTY0(1), CX(7), CX0(1),
-     +                  CX1(7), CY(7), CY0(1), CY1(7), CT11(7,4,4)
+     +                  CT8(7,4,4), CTY0(1), CX(7), CX0(1), CX1(7),
+     +                  CY(7), CY0(1), CY1(7), CT11(7,4,4),
+     +                  CTX(7), CTY(7)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       COMPLEX*16        ZDOTC, ZDOTU
       EXTERNAL          ZDOTC, ZDOTU
 *     .. External Subroutines ..
-      EXTERNAL          ZAXPY, ZAXPBY, ZCOPY, ZSWAP, CTEST
+      EXTERNAL          ZAXPY, ZAXPBY, ZCOPY, ZSWAP, CTEST, ZDROT
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -615,6 +827,65 @@
 
 
 *     .. Executable Statements ..
+*
+*     ZDROT applies a real plane rotation to a pair of complex vectors.
+*     The expected values are formed here with explicit indexing, so the
+*     stride arithmetic inside the routine is what is under test; the
+*     negative stride exercises its IX = (-N+1)*INCX + 1 start.
+*
+      IF (ICASE.EQ.13) THEN
+         SC = 0.6D0
+         SS = 0.8D0
+         DO 100 KI = 1, 4
+            IF (KI.EQ.1) THEN
+               LINCX = 1
+               LINCY = 1
+            ELSE IF (KI.EQ.2) THEN
+               LINCX = 2
+               LINCY = 1
+            ELSE IF (KI.EQ.3) THEN
+               LINCX = -2
+               LINCY = 1
+            ELSE
+               LINCX = -1
+               LINCY = -2
+            END IF
+            N = 3
+            DO 80 I = 1, 7
+               CX(I) = CX1(I)
+               CY(I) = CY1(I)
+               CTX(I) = CX1(I)
+               CTY(I) = CY1(I)
+   80       CONTINUE
+            MX = 1
+            MY = 1
+            IF (LINCX.LT.0) MX = (-N+1)*LINCX + 1
+            IF (LINCY.LT.0) MY = (-N+1)*LINCY + 1
+            DO 90 I = 1, N
+               CTX(MX) = SC*CX1(MX) + SS*CY1(MY)
+               CTY(MY) = SC*CY1(MY) - SS*CX1(MX)
+               MX = MX + LINCX
+               MY = MY + LINCY
+   90       CONTINUE
+            CALL ZDROT(N,CX,LINCX,CY,LINCY,SC,SS)
+            CALL CTEST(7,CX,CTX,CTX,SFAC)
+            CALL CTEST(7,CY,CTY,CTY,SFAC)
+  100    CONTINUE
+*
+*        N = 0 must leave both vectors untouched.
+*
+         N = 0
+         DO 110 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            CTX(I) = CX1(I)
+            CTY(I) = CY1(I)
+  110    CONTINUE
+         CALL ZDROT(N,CX,1,CY,1,SC,SS)
+         CALL CTEST(7,CX,CTX,CTX,SFAC)
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
+         RETURN
+      END IF
       DO 60 KI = 1, 4
          INCX = INCXS(KI)
          INCY = INCYS(KI)
@@ -687,7 +958,7 @@
 *     Y by CB alone.
 *
       IF (ICASE.EQ.3 .OR. ICASE.EQ.11) THEN
-         DO 80 I = 1, 7
+         DO 120 I = 1, 7
             CX(I) = CX1(I)
             CY(I) = CY1(I)
             IF (ICASE.EQ.3) THEN
@@ -695,7 +966,7 @@
             ELSE
                CTY(I) = CB*CY1(I)
             END IF
-   80    CONTINUE
+  120    CONTINUE
          IF (ICASE.EQ.3) THEN
             CALL ZAXPY(7,(0.0D0,0.0D0),CX,1,CY,1)
          ELSE

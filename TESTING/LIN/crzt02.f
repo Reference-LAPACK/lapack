@@ -118,7 +118,7 @@
       EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CUNMRZ, XERBLA
+      EXTERNAL           CLASET, CUNMRZ, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
@@ -128,7 +128,7 @@
       CRZT02 = ZERO
 *
       IF( LWORK.LT.N*N+N ) THEN
-         CALL XERBLA( 'CRZT02', 7 )
+         CALL XER_REPLACE( 'CRZT02', 7 )
          RETURN
       END IF
 *

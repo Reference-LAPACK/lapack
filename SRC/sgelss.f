@@ -193,7 +193,8 @@
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
       INTEGER            LWORK_SGEQRF, LWORK_SORMQR, LWORK_SGEBRD,
-     $                   LWORK_SORMBR, LWORK_SORGBR, LWORK_SORMLQ
+     $                   LWORK_SORMBR, LWORK_SORGBR, LWORK_SORMLQ,
+     $                   LWORK_SGELQF
       REAL               ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
@@ -303,6 +304,10 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
+*                 Compute space needed for SGELQF
+                  CALL SGELQF( M, N, A, LDA, DUM(1), DUM(1),
+     $                -1, INFO )
+                  LWORK_SGELQF = INT( DUM(1) )
 *                 Compute space needed for SGEBRD
                   CALL SGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
      $                      DUM(1), DUM(1), -1, INFO )
@@ -320,8 +325,7 @@
      $                 B, LDB, DUM(1), -1, INFO )
                   LWORK_SORMLQ = INT( DUM(1) )
 *                 Compute total workspace needed
-                  MAXWRK = M + M*ILAENV( 1, 'SGELQF', ' ', M, N, -1,
-     $                                  -1 )
+                  MAXWRK = M + LWORK_SGELQF
                   MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_SGEBRD )
                   MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_SORMBR )
                   MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_SORGBR )

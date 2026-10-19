@@ -140,7 +140,7 @@
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZTRSM, ZUNMQL
+      EXTERNAL           XER_REPLACE, ZTRSM, ZUNMQL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEQLS', -INFO )
+         CALL XER_REPLACE( 'ZGEQLS', -INFO )
          RETURN
       END IF
 *

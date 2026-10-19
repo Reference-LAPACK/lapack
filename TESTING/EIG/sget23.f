@@ -426,7 +426,7 @@
       EXTERNAL           LSAME, SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEEVX, SGET22, SLACPY, XERBLA
+      EXTERNAL           SGEEVX, SGET22, SLACPY, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -463,7 +463,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGET23', -INFO )
+         CALL XER_REPLACE( 'SGET23', -INFO )
          RETURN
       END IF
 *
