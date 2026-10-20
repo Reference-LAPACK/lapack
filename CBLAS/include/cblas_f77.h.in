@@ -78,6 +78,8 @@
  */
 
 #define F77_xerbla_base       F77_GLOBAL_SUFFIX(xerbla,XERBLA)
+#define F77_get_blas_xerbla_base F77_GLOBAL_SUFFIX(get_blas_xerbla,GET_BLAS_XERBLA)
+#define F77_set_blas_xerbla_base F77_GLOBAL_SUFFIX(set_blas_xerbla,SET_BLAS_XERBLA)
 #define F77_srotg_base        F77_GLOBAL_SUFFIX(srotg,SROTG)
 #define F77_srotmg_base       F77_GLOBAL_SUFFIX(srotmg,SROTMG)
 #define F77_srot_base         F77_GLOBAL_SUFFIX(srot,SROT)
@@ -631,9 +633,17 @@ extern "C" {
 #define BLAS_FORTRAN_XERBLA_LENARG
 #endif
 #define BLAS_FORTRAN_XERBLA_ARGS \
-  /*not a func-style macro*/(FCHAR F77_srname, void *vinfo BLAS_FORTRAN_XERBLA_LENARG)
+  /*not a func-style macro*/(FCHAR F77_srname, FINT2 info BLAS_FORTRAN_XERBLA_LENARG)
 
 void CBLAS_WEAK_SYMBOL F77_xerbla_base BLAS_FORTRAN_XERBLA_ARGS;
+void API_SUFFIX(cblas_F77_xerbla) BLAS_FORTRAN_XERBLA_ARGS;
+
+typedef void (*blas_fortran_xerbla_callback_t) BLAS_FORTRAN_XERBLA_ARGS;
+
+#define F77_get_blas_xerbla(...) F77_get_blas_xerbla_base(__VA_ARGS__)
+#define F77_set_blas_xerbla(...) F77_set_blas_xerbla_base(__VA_ARGS__)
+void F77_get_blas_xerbla_base(blas_fortran_xerbla_callback_t *);
+void F77_set_blas_xerbla_base(blas_fortran_xerbla_callback_t);
 
 /*
  * Level 1 Fortran Prototypes

@@ -19,6 +19,7 @@ BLAS/TESTING/x*
 BLAS/SRC/xerbla_blas.mod
 
 # CBLAS
+CBLAS/include/cblas.h
 CBLAS/include/cblas_mangling.h
 CBLAS/include/cblas_f77.h
 

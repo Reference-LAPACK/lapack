@@ -639,6 +639,7 @@ void cblas_zher2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const int64_t ldb, const double beta,
                   void *C, const int64_t ldc);
 
+typedef void (*blas_fortran_xerbla_64_callback_t)(char *F77_srname, int64_t *info, FORTRAN_STRLEN len);
 void CBLAS_WEAK_SYMBOL cblas_xerbla_64(int64_t p, const char *rout,
                                        const char *form, ...);
 
