@@ -76,7 +76,7 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
  * \param[in] len         Hidden Fortran length of \p F77_srname, on
  *                        compilers that pass string lengths at the end.
  */
-void F77_xerbla BLAS_FORTRAN_XERBLA_ARGS
+void API_SUFFIX(xer_replace) BLAS_FORTRAN_XERBLA_ARGS
 {
    /* See the comment in API_SUFFIX(cblas_xerbla)() above */
    extern CBLAS_INT link_xerbla;
