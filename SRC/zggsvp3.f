@@ -296,6 +296,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
@@ -314,7 +316,7 @@
      $                   ZLASET, ZUNG2R, ZUNM2R, ZUNMR2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -374,7 +376,7 @@
      $                INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK ( 1 ) ) )
          LWKOPT = MAX( 1, LWKOPT )
-         WORK( 1 ) = DCMPLX( LWKOPT )
+         WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -577,7 +579,7 @@
 *
       END IF
 *
-      WORK( 1 ) = DCMPLX( LWKOPT )
+      WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       RETURN
 *
 *     End of ZGGSVP3

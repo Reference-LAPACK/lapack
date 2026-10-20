@@ -230,7 +230,7 @@
 *
 *     .. Intrinsic Functions..
 *
-      INTRINSIC         DCONJG
+      INTRINSIC         CONJG
 *
 *     The general scheme used is inspired by the approach inside DGEQRT3
 *     which was (at the time of writing this code):
@@ -327,7 +327,7 @@
 *
       IF(N.EQ.1.OR.K.EQ.1) THEN
          IF( LQT.OR.RQT ) THEN
-            T(1,1) = DCONJG(TAU(1))
+            T(1,1) = CONJG(TAU(1))
          ELSE
             T(1,1) = TAU(1)
          END IF

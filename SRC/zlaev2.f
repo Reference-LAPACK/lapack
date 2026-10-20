@@ -143,14 +143,14 @@
       EXTERNAL           DLAEV2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG
+      INTRINSIC          ABS, CONJG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
       IF( ABS( B ).EQ.ZERO ) THEN
          W = ONE
       ELSE
-         W = DCONJG( B ) / ABS( B )
+         W = CONJG( B ) / ABS( B )
       END IF
       CALL DLAEV2( DBLE( A ), ABS( B ), DBLE( C ), RT1, RT2, CS1, T )
       SN1 = W*T

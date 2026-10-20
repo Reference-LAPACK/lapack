@@ -126,6 +126,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            ITMAX
       PARAMETER          ( ITMAX = 5 )
       DOUBLE PRECISION   ONE, TWO
@@ -147,7 +149,7 @@
       EXTERNAL           ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE
 *     ..
 *     .. Save statement ..
       SAVE
@@ -157,7 +159,7 @@
       SAFMIN = DLAMCH( 'Safe minimum' )
       IF( KASE.EQ.0 ) THEN
          DO 10 I = 1, N
-            X( I ) = DCMPLX( ONE / DBLE( N ) )
+            X( I ) = CMPLX( ONE / DBLE( N ), KIND=DP )
    10    CONTINUE
          KASE = 1
          JUMP = 1
@@ -181,8 +183,8 @@
       DO 30 I = 1, N
          ABSXI = ABS( X( I ) )
          IF( ABSXI.GT.SAFMIN ) THEN
-            X( I ) = DCMPLX( DBLE( X( I ) ) / ABSXI,
-     $               DIMAG( X( I ) ) / ABSXI )
+            X( I ) = CMPLX( DBLE( X( I ) ) / ABSXI,
+     $               AIMAG( X( I ) ) / ABSXI, KIND=DP )
          ELSE
             X( I ) = CONE
          END IF
@@ -224,8 +226,8 @@
       DO 80 I = 1, N
          ABSXI = ABS( X( I ) )
          IF( ABSXI.GT.SAFMIN ) THEN
-            X( I ) = DCMPLX( DBLE( X( I ) ) / ABSXI,
-     $               DIMAG( X( I ) ) / ABSXI )
+            X( I ) = CMPLX( DBLE( X( I ) ) / ABSXI,
+     $               AIMAG( X( I ) ) / ABSXI, KIND=DP )
          ELSE
             X( I ) = CONE
          END IF
@@ -251,7 +253,8 @@
   100 CONTINUE
       ALTSGN = ONE
       DO 110 I = 1, N
-         X( I ) = DCMPLX( ALTSGN*( ONE+DBLE( I-1 ) / DBLE( N-1 ) ) )
+         X( I ) = CMPLX( ALTSGN*( ONE+DBLE( I-1 ) / DBLE( N-1 ) ),
+     $                   KIND=DP )
          ALTSGN = -ALTSGN
   110 CONTINUE
       KASE = 1

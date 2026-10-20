@@ -126,6 +126,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D0, ZERO = 0.0D0 )
 *     ..
@@ -133,7 +135,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, DIMAG
+      INTRINSIC          AIMAG, CMPLX, DBLE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM
@@ -162,15 +164,15 @@
 *
       DO 60 J = 1, N
          DO 50 I = 1, M
-            RWORK( ( J-1 )*M+I ) = DIMAG( B( I, J ) )
+            RWORK( ( J-1 )*M+I ) = AIMAG( B( I, J ) )
    50    CONTINUE
    60 CONTINUE
       CALL DGEMM( 'N', 'N', M, N, M, ONE, A, LDA, RWORK, M, ZERO,
      $            RWORK( L ), M )
       DO 80 J = 1, N
          DO 70 I = 1, M
-            C( I, J ) = DCMPLX( DBLE( C( I, J ) ),
-     $                  RWORK( L+( J-1 )*M+I-1 ) )
+            C( I, J ) = CMPLX( DBLE( C( I, J ) ),
+     $                  RWORK( L+( J-1 )*M+I-1 ), KIND=DP )
    70    CONTINUE
    80 CONTINUE
 *

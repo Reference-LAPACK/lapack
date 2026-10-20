@@ -172,6 +172,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       DOUBLE PRECISION   EIGHT, SEVTEN
@@ -195,13 +197,13 @@
       EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, SQRT
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -327,11 +329,11 @@
                KX = KPC + KP - 1
                DO 30 J = KP + 1, KK - 1
                   KX = KX + J - 1
-                  T = DCONJG( AP( KNC+J-1 ) )
-                  AP( KNC+J-1 ) = DCONJG( AP( KX ) )
+                  T = CONJG( AP( KNC+J-1 ) )
+                  AP( KNC+J-1 ) = CONJG( AP( KX ) )
                   AP( KX ) = T
    30          CONTINUE
-               AP( KX+KK-1 ) = DCONJG( AP( KX+KK-1 ) )
+               AP( KX+KK-1 ) = CONJG( AP( KX+KK-1 ) )
                R1 = DBLE( AP( KNC+KK-1 ) )
                AP( KNC+KK-1 ) = DBLE( AP( KPC+KP-1 ) )
                AP( KPC+KP-1 ) = R1
@@ -384,7 +386,7 @@
                IF( K.GT.2 ) THEN
 *
                   D = DLAPY2( DBLE( AP( K-1+( K-1 )*K / 2 ) ),
-     $                DIMAG( AP( K-1+( K-1 )*K / 2 ) ) )
+     $                AIMAG( AP( K-1+( K-1 )*K / 2 ) ) )
                   D22 = DBLE( AP( K-1+( K-2 )*( K-1 ) / 2 ) ) / D
                   D11 = DBLE( AP( K+( K-1 )*K / 2 ) ) / D
                   TT = ONE / ( D11*D22-ONE )
@@ -392,18 +394,20 @@
 *
                   DO 50 J = K - 2, 1, -1
                      WKM1 = TT*( ( D11*AP( J+( K-2 )*( K-1 ) / 2 )-
-     $                      DCONJG( D12 )*AP( J+( K-1 )*K / 2 ) ) / D )
+     $                      CONJG( D12 )*AP( J+( K-1 )*K / 2 ) ) / D )
                      WK = TT*( ( D22*AP( J+( K-1 )*K / 2 )-D12*
      $                    AP( J+( K-2 )*( K-1 ) / 2 ) ) / D )
                      DO 40 I = J, 1, -1
                         AP( I+( J-1 )*J / 2 ) = AP( I+( J-1 )*J / 2 ) -
-     $                     AP( I+( K-1 )*K / 2 )*DCONJG( WK ) -
-     $                     AP( I+( K-2 )*( K-1 ) / 2 )*DCONJG( WKM1 )
+     $                     AP( I+( K-1 )*K / 2 )*CONJG( WK ) -
+     $                     AP( I+( K-2 )*( K-1 ) / 2 )*CONJG( WKM1 )
    40                CONTINUE
                      AP( J+( K-1 )*K / 2 ) = WK
                      AP( J+( K-2 )*( K-1 ) / 2 ) = WKM1
-                     AP( J+( J-1 )*J / 2 ) = DCMPLX( DBLE( AP( J+( J-
-     $                                       1 )*J / 2 ) ), 0.0D+0 )
+                     AP( J+( J-1 )*J / 2 ) =
+     $                                       CMPLX( DBLE( AP( J+(
+     $                                       J-1 )*J / 2 ) ), 0.0D+0,
+     $                                       KIND=DP )
    50             CONTINUE
 *
                END IF
@@ -532,11 +536,11 @@
                KX = KNC + KP - KK
                DO 80 J = KK + 1, KP - 1
                   KX = KX + N - J + 1
-                  T = DCONJG( AP( KNC+J-KK ) )
-                  AP( KNC+J-KK ) = DCONJG( AP( KX ) )
+                  T = CONJG( AP( KNC+J-KK ) )
+                  AP( KNC+J-KK ) = CONJG( AP( KX ) )
                   AP( KX ) = T
    80          CONTINUE
-               AP( KNC+KP-KK ) = DCONJG( AP( KNC+KP-KK ) )
+               AP( KNC+KP-KK ) = CONJG( AP( KNC+KP-KK ) )
                R1 = DBLE( AP( KNC ) )
                AP( KNC ) = DBLE( AP( KPC ) )
                AP( KPC ) = R1
@@ -597,7 +601,7 @@
 *
                   D = DLAPY2(
      $                DBLE( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ),
-     $                DIMAG( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ) )
+     $                AIMAG( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ) )
                   D11 = DBLE( AP( K+1+K*( 2*N-K-1 ) / 2 ) ) / D
                   D22 = DBLE( AP( K+( K-1 )*( 2*N-K ) / 2 ) ) / D
                   TT = ONE / ( D11*D22-ONE )
@@ -607,19 +611,19 @@
                      WK = TT*( ( D11*AP( J+( K-1 )*( 2*N-K ) / 2 )-D21*
      $                    AP( J+K*( 2*N-K-1 ) / 2 ) ) / D )
                      WKP1 = TT*( ( D22*AP( J+K*( 2*N-K-1 ) / 2 )-
-     $                      DCONJG( D21 )*AP( J+( K-1 )*( 2*N-K ) /
+     $                      CONJG( D21 )*AP( J+( K-1 )*( 2*N-K ) /
      $                      2 ) ) / D )
                      DO 90 I = J, N
                         AP( I+( J-1 )*( 2*N-J ) / 2 ) = AP( I+( J-1 )*
      $                     ( 2*N-J ) / 2 ) - AP( I+( K-1 )*( 2*N-K ) /
-     $                     2 )*DCONJG( WK ) - AP( I+K*( 2*N-K-1 ) / 2 )*
-     $                     DCONJG( WKP1 )
+     $                     2 )*CONJG( WK ) - AP( I+K*( 2*N-K-1 ) / 2 )*
+     $                     CONJG( WKP1 )
    90                CONTINUE
                      AP( J+( K-1 )*( 2*N-K ) / 2 ) = WK
                      AP( J+K*( 2*N-K-1 ) / 2 ) = WKP1
-                     AP( J+( J-1 )*( 2*N-J ) / 2 )
-     $                  = DCMPLX( DBLE( AP( J+( J-1 )*( 2*N-J ) / 2 ) ),
-     $                  0.0D+0 )
+                     AP( J+( J-1 )*( 2*N-J ) / 2 ) =
+     $                  CMPLX( DBLE( AP( J+( J-1 )*( 2*N-J ) / 2 ) ),
+     $                  0.0D+0, KIND=DP )
   100             CONTINUE
                END IF
             END IF

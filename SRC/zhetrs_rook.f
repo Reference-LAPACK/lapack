@@ -167,7 +167,7 @@
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX, DBLE
+      INTRINSIC          CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -260,11 +260,11 @@
 *
             AKM1K = A( K-1, K )
             AKM1 = A( K-1, K-1 ) / AKM1K
-            AK = A( K, K ) / DCONJG( AKM1K )
+            AK = A( K, K ) / CONJG( AKM1K )
             DENOM = AKM1*AK - ONE
             DO 20 J = 1, NRHS
                BKM1 = B( K-1, J ) / AKM1K
-               BK = B( K, J ) / DCONJG( AKM1K )
+               BK = B( K, J ) / CONJG( AKM1K )
                B( K-1, J ) = ( AK*BKM1-BK ) / DENOM
                B( K, J ) = ( AKM1*BK-BKM1 ) / DENOM
    20       CONTINUE
@@ -410,11 +410,11 @@
 *           Multiply by the inverse of the diagonal block.
 *
             AKM1K = A( K+1, K )
-            AKM1 = A( K, K ) / DCONJG( AKM1K )
+            AKM1 = A( K, K ) / CONJG( AKM1K )
             AK = A( K+1, K+1 ) / AKM1K
             DENOM = AKM1*AK - ONE
             DO 70 J = 1, NRHS
-               BKM1 = B( K, J ) / DCONJG( AKM1K )
+               BKM1 = B( K, J ) / CONJG( AKM1K )
                BK = B( K+1, J ) / AKM1K
                B( K, J ) = ( AK*BKM1-BK ) / DENOM
                B( K+1, J ) = ( AKM1*BK-BKM1 ) / DENOM

@@ -128,6 +128,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0 )
 *     ..
@@ -145,7 +147,7 @@
       EXTERNAL           IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX
+      INTRINSIC          ABS, CMPLX, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -175,12 +177,12 @@
 *
       I = IZAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
-         TEMP = DCMPLX( ONE / TWO, ZERO ) / ABS( RHS( I ) )
+         TEMP = CMPLX( ONE / TWO, ZERO, KIND=DP ) / ABS( RHS( I ) )
          CALL ZSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*DBLE( TEMP )
       END IF
       DO 40 I = N, 1, -1
-         TEMP = DCMPLX( ONE, ZERO ) / A( I, I )
+         TEMP = CMPLX( ONE, ZERO, KIND=DP ) / A( I, I )
          RHS( I ) = RHS( I )*TEMP
          DO 30 J = I + 1, N
             RHS( I ) = RHS( I ) - RHS( J )*( A( I, J )*TEMP )

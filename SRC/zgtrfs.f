@@ -227,6 +227,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            ITMAX
       PARAMETER          ( ITMAX = 5 )
       DOUBLE PRECISION   ZERO, ONE
@@ -251,7 +253,7 @@
      $                   ZLAGTM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, MAX
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -262,7 +264,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -406,7 +408,8 @@
             CALL ZGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   N,
      $                   INFO )
-            CALL ZAXPY( N, DCMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
+            CALL ZAXPY( N, CMPLX( ONE, KIND=DP ), WORK, 1, X( 1, J ),
+     $                  1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20

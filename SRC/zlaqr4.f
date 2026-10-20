@@ -259,6 +259,8 @@
 *  ================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
 *
 *     ==== Matrices of order NTINY or smaller must be processed by
 *     .    ZLAHQR because of insufficient subdiagonal scratch space.
@@ -309,14 +311,14 @@
       EXTERNAL           ZLACPY, ZLAHQR, ZLAQR2, ZLAQR5
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, INT, MAX, MIN, MOD,
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, INT, MAX, MIN, MOD,
      $                   SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
       INFO = 0
@@ -392,7 +394,7 @@
 *        ==== Quick return in case of workspace query. ====
 *
          IF( LWORK.EQ.-1 ) THEN
-            WORK( 1 ) = DCMPLX( LWKOPT, 0 )
+            WORK( 1 ) = CMPLX( LWKOPT, 0, KIND=DP )
             RETURN
          END IF
 *
@@ -693,7 +695,7 @@
 *
 *     ==== Return the optimal value of LWORK. ====
 *
-      WORK( 1 ) = DCMPLX( LWKOPT, 0 )
+      WORK( 1 ) = CMPLX( LWKOPT, 0, KIND=DP )
 *
 *     ==== End of ZLAQR4 ====
 *

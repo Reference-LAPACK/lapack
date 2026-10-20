@@ -131,7 +131,7 @@
       EXTERNAL           ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -155,7 +155,7 @@
 *           Solve U**H * x = b.
 *
             DO 20 I = 2, N
-               B( I, J ) = B( I, J ) - B( I-1, J )*DCONJG( E( I-1 ) )
+               B( I, J ) = B( I, J ) - B( I-1, J )*CONJG( E( I-1 ) )
    20       CONTINUE
 *
 *           Solve D * U * x = b.
@@ -176,7 +176,7 @@
 *              Solve U**H * x = b.
 *
                DO 50 I = 2, N
-                  B( I, J ) = B( I, J ) - B( I-1, J )*DCONJG( E( I-1 ) )
+                  B( I, J ) = B( I, J ) - B( I-1, J )*CONJG( E( I-1 ) )
    50          CONTINUE
 *
 *              Solve D * U * x = b.
@@ -208,7 +208,7 @@
                B( I, J ) = B( I, J ) / D( I )
   100       CONTINUE
             DO 110 I = N - 1, 1, -1
-               B( I, J ) = B( I, J ) - B( I+1, J )*DCONJG( E( I ) )
+               B( I, J ) = B( I, J ) - B( I+1, J )*CONJG( E( I ) )
   110       CONTINUE
             IF( J.LT.NRHS ) THEN
                J = J + 1
@@ -228,7 +228,7 @@
                B( N, J ) = B( N, J ) / D( N )
                DO 130 I = N - 1, 1, -1
                   B( I, J ) = B( I, J ) / D( I ) -
-     $                        B( I+1, J )*DCONJG( E( I ) )
+     $                        B( I+1, J )*CONJG( E( I ) )
   130          CONTINUE
   140       CONTINUE
          END IF

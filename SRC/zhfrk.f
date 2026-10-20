@@ -182,6 +182,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       COMPLEX*16         CZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
@@ -200,7 +202,7 @@
       EXTERNAL           XERBLA, ZGEMM, ZHERK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, DCMPLX
+      INTRINSIC          CMPLX, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -251,8 +253,8 @@
          RETURN
       END IF
 *
-      CALPHA = DCMPLX( ALPHA, ZERO )
-      CBETA = DCMPLX( BETA, ZERO )
+      CALPHA = CMPLX( ALPHA, ZERO, KIND=DP )
+      CBETA = CMPLX( BETA, ZERO, KIND=DP )
 *
 *     C is N-by-N.
 *     If N is odd, set NISODD = .TRUE., and N1 and N2.

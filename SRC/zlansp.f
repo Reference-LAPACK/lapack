@@ -143,7 +143,7 @@
       EXTERNAL           ZLASSQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, SQRT
+      INTRINSIC          ABS, AIMAG, DBLE, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -244,8 +244,8 @@
                   SUM = SUM + ( ABSA / SCALE )**2
                END IF
             END IF
-            IF( DIMAG( AP( K ) ).NE.ZERO ) THEN
-               ABSA = ABS( DIMAG( AP( K ) ) )
+            IF( AIMAG( AP( K ) ).NE.ZERO ) THEN
+               ABSA = ABS( AIMAG( AP( K ) ) )
                IF( SCALE.LT.ABSA ) THEN
                   SUM = ONE + SUM*( SCALE / ABSA )**2
                   SCALE = ABSA

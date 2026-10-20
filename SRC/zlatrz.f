@@ -162,7 +162,7 @@
       EXTERNAL           ZLACGV, ZLARFG, ZLARZ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -183,15 +183,15 @@
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
          CALL ZLACGV( L, A( I, N-L+1 ), LDA )
-         ALPHA = DCONJG( A( I, I ) )
+         ALPHA = CONJG( A( I, I ) )
          CALL ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
-         TAU( I ) = DCONJG( TAU( I ) )
+         TAU( I ) = CONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
          CALL ZLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
-     $               DCONJG( TAU( I ) ), A( 1, I ), LDA, WORK )
-         A( I, I ) = DCONJG( ALPHA )
+     $               CONJG( TAU( I ) ), A( 1, I ), LDA, WORK )
+         A( I, I ) = CONJG( ALPHA )
 *
    20 CONTINUE
 *

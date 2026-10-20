@@ -129,7 +129,7 @@
       EXTERNAL           XERBLA, ZLAUU2, ZHERK, ZTRMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, DCONJG, DBLE
+      INTRINSIC          CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -158,7 +158,7 @@
 *     Base Case
 *
       IF( N.EQ.1 ) THEN
-         A(1,1) = DBLE(A(1,1) * DCONJG(A(1,1)))
+         A(1,1) = DBLE(A(1,1) * CONJG(A(1,1)))
          RETURN
       END IF
 *

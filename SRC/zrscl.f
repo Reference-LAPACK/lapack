@@ -96,6 +96,8 @@
 * =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -128,7 +130,7 @@
 *     Initialize constants related to A.
 *
       AR = DBLE( A )
-      AI = DIMAG( A )
+      AI = AIMAG( A )
       ABSR = ABS( AR )
       ABSI = ABS( AI )
 *
@@ -141,12 +143,14 @@
 *        alpha were real.
          IF( ABSI.GT.SAFMAX ) THEN
             CALL ZDSCAL( N, SAFMIN, X, INCX )
-            CALL ZSCAL( N, DCMPLX( ZERO, -SAFMAX / AI ), X, INCX )
+            CALL ZSCAL( N, CMPLX( ZERO, -SAFMAX / AI, KIND=DP ), X,
+     $                  INCX )
          ELSE IF( ABSI.LT.SAFMIN ) THEN
-            CALL ZSCAL( N, DCMPLX( ZERO, -SAFMIN / AI ), X, INCX )
+            CALL ZSCAL( N, CMPLX( ZERO, -SAFMIN / AI, KIND=DP ), X,
+     $                  INCX )
             CALL ZDSCAL( N, SAFMAX, X, INCX )
          ELSE
-            CALL ZSCAL( N, DCMPLX( ZERO, -ONE / AI ), X, INCX )
+            CALL ZSCAL( N, CMPLX( ZERO, -ONE / AI, KIND=DP ), X, INCX )
          END IF
 *
       ELSE
@@ -162,13 +166,13 @@
 *
          IF( (ABS( UR ).LT.SAFMIN).OR.(ABS( UI ).LT.SAFMIN) ) THEN
 *           This means that both alphaR and alphaI are very small.
-            CALL ZSCAL( N, DCMPLX( SAFMIN / UR, -SAFMIN / UI ), X,
-     $                  INCX )
+            CALL ZSCAL( N, CMPLX( SAFMIN / UR, -SAFMIN / UI, KIND=DP ),
+     $                  X, INCX )
             CALL ZDSCAL( N, SAFMAX, X, INCX )
          ELSE IF( (ABS( UR ).GT.SAFMAX).OR.(ABS( UI ).GT.SAFMAX) ) THEN
             IF( (ABSR.GT.OV).OR.(ABSI.GT.OV) ) THEN
 *              This means that a and b are both Inf. No need for scaling.
-               CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X,
+               CALL ZSCAL( N, CMPLX( ONE / UR, -ONE / UI, KIND=DP ), X,
      $                     INCX )
             ELSE
                CALL ZDSCAL( N, SAFMIN, X, INCX )
@@ -183,15 +187,16 @@
                      UR = (SAFMIN * AR) + AI * ( (SAFMIN * AI) / AR )
                      UI = (SAFMIN * AI) + SAFMIN * (AR * ( AR / AI ))
                   END IF
-                  CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X,
-     $                        INCX )
-               ELSE
-                  CALL ZSCAL( N, DCMPLX( SAFMAX / UR, -SAFMAX / UI ),
+                  CALL ZSCAL( N, CMPLX( ONE / UR, -ONE / UI, KIND=DP ),
      $                        X, INCX )
+               ELSE
+                  CALL ZSCAL( N, CMPLX( SAFMAX / UR, -SAFMAX / UI,
+     $                        KIND=DP ), X, INCX )
                END IF
             END IF
          ELSE
-            CALL ZSCAL( N, DCMPLX( ONE / UR, -ONE / UI ), X, INCX )
+            CALL ZSCAL( N, CMPLX( ONE / UR, -ONE / UI, KIND=DP ), X,
+     $                  INCX )
          END IF
       END IF
 *
