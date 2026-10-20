@@ -25,6 +25,14 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 #endif
 
+#ifndef F77_INT
+#define F77_INT CBLAS_INT
+#endif
+
+#ifndef FORTRAN_STRLEN
+  #define FORTRAN_STRLEN @FORTRAN_STRLEN_TYPE@
+#endif
+
 /*
  * Integer format string
  */
@@ -699,6 +707,7 @@ void cblas_zher2k(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const CBLAS_INT ldb, const double beta,
                   void *C, const CBLAS_INT ldc);
 
+typedef void (*blas_fortran_xerbla_callback_t)(const char *F77_srname, F77_INT *info, FORTRAN_STRLEN len);
 void CBLAS_WEAK_SYMBOL cblas_xerbla(CBLAS_INT p, const char *rout,
                                     const char *form, ...);
 

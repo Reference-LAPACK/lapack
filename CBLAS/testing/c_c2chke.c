@@ -8,8 +8,6 @@ CBLAS_INT link_xerbla=TRUE;
 CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
 char *cblas_rout;
 
-void F77_xerbla BLAS_FORTRAN_XERBLA_ARGS;
-
 void chkxer(void) {
    extern CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
    extern CBLAS_INT link_xerbla;
@@ -41,6 +39,7 @@ void F77_c2chke(char *rout
           RALPHA = 0.0;
    extern CBLAS_INT cblas_info, cblas_lerr, cblas_ok;
    extern char *cblas_rout;
+   blas_fortran_xerbla_callback_t cb;
 
 #ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
    #ifdef CBLAS_DLL_IMPORTS
@@ -53,9 +52,10 @@ void F77_c2chke(char *rout
    if (link_xerbla) /* call these first to link */
    {
       API_SUFFIX(cblas_xerbla)(cblas_info,cblas_rout,"");
-      F77_xerbla(cblas_rout,&cblas_info, 1);
    }
 #endif
+   F77_get_blas_xerbla(&cb);
+   F77_set_blas_xerbla(API_SUFFIX(xer_replace));
    link_xerbla = 0;
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;

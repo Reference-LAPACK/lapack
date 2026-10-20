@@ -33,7 +33,7 @@
 #ifdef  F77_CHAR
   #define FCHAR F77_CHAR
 #else
-  #define FCHAR char *
+  #define FCHAR const char *
 #endif
 
 #ifdef BLAS_FORTRAN_STRLEN_END
@@ -42,7 +42,7 @@
 #define BLAS_FORTRAN_XERBLA_LENARG
 #endif
 #define BLAS_FORTRAN_XERBLA_ARGS \
-  /*not a func-style macro*/(FCHAR F77_srname, void *vinfo BLAS_FORTRAN_XERBLA_LENARG)
+  /*not a func-style macro*/(FCHAR F77_srname, F77_INT *info BLAS_FORTRAN_XERBLA_LENARG)
 
 #define TRUE         1
 #define PASSED       1
@@ -67,6 +67,11 @@ typedef struct { float real; float imag; } CBLAS_TEST_COMPLEX;
 typedef struct { double real; double imag; } CBLAS_TEST_ZOMPLEX;
 
 #define F77_xerbla 		F77_GLOBAL_SUFFIX(xerbla,XERBLA)
+#define F77_get_blas_xerbla 	F77_GLOBAL_SUFFIX(get_blas_xerbla,GET_BLAS_XERBLA)
+#define F77_set_blas_xerbla 	F77_GLOBAL_SUFFIX(set_blas_xerbla,SET_BLAS_XERBLA)
+void F77_get_blas_xerbla(blas_fortran_xerbla_callback_t *);
+void F77_set_blas_xerbla(blas_fortran_xerbla_callback_t);
+
 /*
  * Level 1 BLAS
  */
@@ -247,5 +252,7 @@ void get_transpose_type(char *type, CBLAS_TRANSPOSE *trans);
 void get_uplo_type(char *type, CBLAS_UPLO *uplo);
 void get_diag_type(char *type, CBLAS_DIAG *diag);
 void get_side_type(char *type, CBLAS_SIDE *side);
+
+void API_SUFFIX(xer_replace) BLAS_FORTRAN_XERBLA_ARGS;
 
 #endif /* CBLAS_TEST_H */
