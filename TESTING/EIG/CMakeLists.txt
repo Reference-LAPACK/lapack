@@ -106,6 +106,8 @@ set(ZDMDEIGTST zchkdmd.f90)
 
 function(add_eig_executable name)
   set(sources ${ARGN})
+  lapack_nag_disable_constant_propagation(${sources})
+
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
     target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
@@ -115,6 +117,7 @@ function(add_eig_executable name)
   if(BUILD_INDEX64_EXT_API)
     include(ExtendedAPIHelpers)
     generate_64bit_suffixed_sources(${name} sources sources_64)
+    lapack_nag_disable_constant_propagation(${sources_64})
 
     add_executable(${name}_64 ${sources_64})
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
