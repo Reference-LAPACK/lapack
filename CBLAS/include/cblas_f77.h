@@ -624,11 +624,16 @@ extern "C" {
 #else
    #define F77_xerbla(...) F77_xerbla_base(__VA_ARGS__)
 #endif
-void CBLAS_WEAK_SYMBOL F77_xerbla_base(FCHAR, void *
+
 #ifdef BLAS_FORTRAN_STRLEN_END
-   , FORTRAN_STRLEN
+#define BLAS_FORTRAN_XERBLA_LENARG , FORTRAN_STRLEN len
+#else
+#define BLAS_FORTRAN_XERBLA_LENARG
 #endif
-);
+#define BLAS_FORTRAN_XERBLA_ARGS \
+  /*not a func-style macro*/(FCHAR F77_srname, void *vinfo BLAS_FORTRAN_XERBLA_LENARG)
+
+void CBLAS_WEAK_SYMBOL F77_xerbla_base BLAS_FORTRAN_XERBLA_ARGS;
 
 /*
  * Level 1 Fortran Prototypes
