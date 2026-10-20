@@ -17,6 +17,7 @@ BLAS/TESTING/x*
 
 # CBLAS
 CBLAS/include/cblas_mangling.h
+CBLAS/include/cblas_f77.h
 
 # CBLAS testing
 CBLAS/testing/*.out
