@@ -215,7 +215,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX,MIN
+      INTRINSIC CONJG, MAX, MIN
 *     ..
 *
 *     Test the input parameters.
@@ -337,9 +337,9 @@
                           IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
                       ELSE
                           DO 100 I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(I)
+                              TEMP = TEMP - CONJG(A(L+I,J))*X(I)
   100                     CONTINUE
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(KPLUS1,J))
+                          IF (NOUNIT) TEMP = TEMP/CONJG(A(KPLUS1,J))
                       END IF
                       X(J) = TEMP
   110             CONTINUE
@@ -357,10 +357,10 @@
                           IF (NOUNIT) TEMP = TEMP/A(KPLUS1,J)
                       ELSE
                           DO 130 I = MAX(1,J-K),J - 1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(IX)
+                              TEMP = TEMP - CONJG(A(L+I,J))*X(IX)
                               IX = IX + INCX
   130                     CONTINUE
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(KPLUS1,J))
+                          IF (NOUNIT) TEMP = TEMP/CONJG(A(KPLUS1,J))
                       END IF
                       X(JX) = TEMP
                       JX = JX + INCX
@@ -379,9 +379,9 @@
                           IF (NOUNIT) TEMP = TEMP/A(1,J)
                       ELSE
                           DO 160 I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(I)
+                              TEMP = TEMP - CONJG(A(L+I,J))*X(I)
   160                     CONTINUE
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(1,J))
+                          IF (NOUNIT) TEMP = TEMP/CONJG(A(1,J))
                       END IF
                       X(J) = TEMP
   170             CONTINUE
@@ -400,10 +400,10 @@
                           IF (NOUNIT) TEMP = TEMP/A(1,J)
                       ELSE
                           DO 190 I = MIN(N,J+K),J + 1,-1
-                              TEMP = TEMP - DCONJG(A(L+I,J))*X(IX)
+                              TEMP = TEMP - CONJG(A(L+I,J))*X(IX)
                               IX = IX - INCX
   190                     CONTINUE
-                          IF (NOUNIT) TEMP = TEMP/DCONJG(A(1,J))
+                          IF (NOUNIT) TEMP = TEMP/CONJG(A(1,J))
                       END IF
                       X(JX) = TEMP
                       JX = JX - INCX

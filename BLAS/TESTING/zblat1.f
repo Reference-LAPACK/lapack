@@ -153,6 +153,8 @@
 *     calls DCABS1, so this is the only thing that exercises it.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
 *     .. Scalar Arguments ..
@@ -260,42 +262,42 @@
 *           A zero and B below the window, with both parts nonzero so
 *           the general arm is taken rather than the real or imaginary
 *           shortcut.
-            CA0 = DCMPLX(SZERO,SZERO)
-            CB0 = DCMPLX(RTMIN*0.25D0,RTMIN*0.25D0)
+            CA0 = CMPLX(SZERO,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMIN*0.25D0,RTMIN*0.25D0,KIND=DP)
          ELSE IF (K.EQ.2) THEN
 *           Both nonzero, B far above the window.
-            CA0 = DCMPLX(SONE,SZERO)
-            CB0 = DCMPLX(RTMAX,SZERO)
+            CA0 = CMPLX(SONE,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX,SZERO,KIND=DP)
          ELSE IF (K.EQ.3) THEN
 *           Both inside the window, but A so small against B that the
 *           routine switches to its F2 < H2*SAFMIN formulation.
-            CA0 = DCMPLX(RTMIN*2D0,SZERO)
-            CB0 = DCMPLX(RTMAX*0.25D0,SZERO)
+            CA0 = CMPLX(RTMIN*2D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.25D0,SZERO,KIND=DP)
          ELSE IF (K.EQ.4) THEN
 *           Both above the window and of a size, so the routine scales
 *           A and B by the same factor rather than one of its own.
-            CA0 = DCMPLX(RTMAX,SZERO)
-            CB0 = DCMPLX(RTMAX,SZERO)
+            CA0 = CMPLX(RTMAX,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX,SZERO,KIND=DP)
          ELSE IF (K.EQ.5) THEN
 *           The same, below the window.
-            CA0 = DCMPLX(RTMIN*0.25D0,SZERO)
-            CB0 = DCMPLX(RTMIN*0.25D0,SZERO)
+            CA0 = CMPLX(RTMIN*0.25D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMIN*0.25D0,SZERO,KIND=DP)
          ELSE IF (K.EQ.6) THEN
 *           B above the window with both parts set, so the routine
 *           scales, and A small enough against it that the scaled
 *           algorithm takes its F2 < H2*SAFMIN arm as well.
-            CA0 = DCMPLX(SONE,SZERO)
-            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+            CA0 = CMPLX(SONE,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.5D0,RTMAX*0.5D0,KIND=DP)
          ELSE IF (K.EQ.7) THEN
 *           The same, with A large enough that SQRT(F2*H2) is no longer
 *           known to stay in range, so S is formed from R/H2 instead.
-            CA0 = DCMPLX(1.5D0,SZERO)
-            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+            CA0 = CMPLX(1.5D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.5D0,RTMAX*0.5D0,KIND=DP)
          ELSE
 *           Both inside the window, A just above its lower edge, where
 *           the unscaled algorithm forms S from R/H2 for that reason.
-            CA0 = DCMPLX(RTMIN*2D0,SZERO)
-            CB0 = DCMPLX(SONE,SONE)
+            CA0 = CMPLX(RTMIN*2D0,SZERO,KIND=DP)
+            CB0 = CMPLX(SONE,SONE,KIND=DP)
          END IF
          CSA = CA0
          CSB = CB0
@@ -309,7 +311,7 @@
          SSIZ = ABS(CA0) + ABS(CB0)
          CGOT(1) = SC*CA0 + CS*CB0
          CWANT(1) = CSA
-         CSIZE(1) = DCMPLX(SSIZ,SSIZ)
+         CSIZE(1) = CMPLX(SSIZ,SSIZ,KIND=DP)
          CALL CTEST(1,CGOT,CWANT,CSIZE,SFAC)
          SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
          SWANT(1) = SONE
@@ -323,6 +325,8 @@
       SUBROUTINE CHECK1(SFAC)
       IMPLICIT NONE
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NOUT
       DOUBLE PRECISION  THRESH
       PARAMETER         (NOUT=6, THRESH=10.0D0)
@@ -521,9 +525,9 @@
                CXR(IX) = CVR(I)
                IX = IX + INCX
   190       CONTINUE
-            CXR(1+3*INCX) = DCMPLX(SNAN,SZERO)
+            CXR(1+3*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),4)
-            CXR(1+5*INCX) = DCMPLX(SNAN,SZERO)
+            CXR(1+5*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),4)
 *
 *           A NaN in the imaginary part counts just as much as one in
@@ -533,7 +537,7 @@
                CXR(IX) = CVR(I)
                IX = IX + INCX
   200       CONTINUE
-            CXR(1+INCX) = DCMPLX(SZERO,SNAN)
+            CXR(1+INCX) = CMPLX(SZERO,SNAN,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),2)
 *
 *           With no NaN present the first Inf wins instead.
@@ -542,13 +546,13 @@
                CXR(IX) = CVR(I)
                IX = IX + INCX
   210       CONTINUE
-            CXR(1+2*INCX) = DCMPLX(SINF,SZERO)
-            CXR(1+4*INCX) = DCMPLX(SZERO,SINF)
+            CXR(1+2*INCX) = CMPLX(SINF,SZERO,KIND=DP)
+            CXR(1+4*INCX) = CMPLX(SZERO,SINF,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),3)
 *
 *           A NaN after an Inf still wins: the scan carries on past the
 *           Inf looking for one.
-            CXR(1+6*INCX) = DCMPLX(SNAN,SZERO)
+            CXR(1+6*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),7)
 *
 *           An element can be finite while abs(real) + abs(aimag)
@@ -560,8 +564,8 @@
                CXR(IX) = CVR(I)
                IX = IX + INCX
   220       CONTINUE
-            CXR(1+INCX) = DCMPLX(0.6D0*SBIG,0.6D0*SBIG)
-            CXR(1+4*INCX) = DCMPLX(0.9D0*SBIG,0.9D0*SBIG)
+            CXR(1+INCX) = CMPLX(0.6D0*SBIG,0.6D0*SBIG,KIND=DP)
+            CXR(1+4*INCX) = CMPLX(0.9D0*SBIG,0.9D0*SBIG,KIND=DP)
             CALL ITEST1(IZAMAX(N,CXR,INCX),5)
          END IF
    60 CONTINUE
@@ -1115,15 +1119,15 @@
 *     .. External Subroutines ..
       EXTERNAL         STEST
 *     .. Intrinsic Functions ..
-      INTRINSIC        DIMAG, DBLE
+      INTRINSIC        AIMAG, DBLE
 *     .. Executable Statements ..
       DO 20 I = 1, LEN
          SCOMP(2*I-1) = DBLE(CCOMP(I))
-         SCOMP(2*I) = DIMAG(CCOMP(I))
+         SCOMP(2*I) = AIMAG(CCOMP(I))
          STRUE(2*I-1) = DBLE(CTRUE(I))
-         STRUE(2*I) = DIMAG(CTRUE(I))
+         STRUE(2*I) = AIMAG(CTRUE(I))
          SSIZE(2*I-1) = DBLE(CSIZE(I))
-         SSIZE(2*I) = DIMAG(CSIZE(I))
+         SSIZE(2*I) = AIMAG(CSIZE(I))
    20 CONTINUE
 *
       CALL STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)
@@ -1203,6 +1207,8 @@
 *
 *  =====================================================================
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NMAX, NOUT, NV
       PARAMETER         (NMAX=20, NOUT=6, NV=12)
       DOUBLE PRECISION  HALF, ONE, THREE, TWO, ZERO
@@ -1212,7 +1218,7 @@
       DOUBLE PRECISION  DZNRM2
       EXTERNAL          DZNRM2
 *     .. Intrinsic Functions ..
-      INTRINSIC         AIMAG, ABS, DCMPLX, DBLE, MAX, MIN, SQRT
+      INTRINSIC         ABS, AIMAG, CMPLX, DBLE, MAX, MIN, SQRT
 *     .. Model parameters ..
       DOUBLE PRECISION  BIGNUM, SAFMAX, SAFMIN, SMLNUM, ULP
       PARAMETER         (BIGNUM=0.99792015476735990583D+292,
@@ -1252,7 +1258,7 @@
 *     needs.  A wider pair leaves them too far apart for that.
       VALUES(11) = SQRT(SAFMIN)
       VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
-      ROGUE = DCMPLX(1234.5678D+0,-1234.5678D+0)
+      ROGUE = CMPLX(1234.5678D+0,-1234.5678D+0,KIND=DP)
       FIRST = .TRUE.
 *
 *     Check that the arrays are large enough
@@ -1292,14 +1298,14 @@
          IF (ABS(V0).GT.ONE) THEN
             V0 = V0*HALF*HALF
          END IF
-         Z(1) = DCMPLX(V0,-THREE*V0)
+         Z(1) = CMPLX(V0,-THREE*V0,KIND=DP)
          DO IW = 1, NV
             V1 = VALUES(IW)
             IF (ABS(V1).GT.ONE) THEN
                V1 = (V1*HALF) / SQRT(DBLE(KS+1))
             END IF
             DO I = 1, N-1
-               Z(I+1) = DCMPLX(V1*WORK(2*I-1),V1*WORK(2*I))
+               Z(I+1) = CMPLX(V1*WORK(2*I-1),V1*WORK(2*I),KIND=DP)
             END DO
 *
 *           Compute the expected value of the 2-norm

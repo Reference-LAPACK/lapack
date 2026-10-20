@@ -69,9 +69,9 @@
 *  =====================================================================
 *
 *     .. Intrinsic Functions ..
-      INTRINSIC ABS,DBLE,DIMAG
+      INTRINSIC ABS, AIMAG, DBLE
 *
-      DCABS1 = ABS(DBLE(Z)) + ABS(DIMAG(Z))
+      DCABS1 = ABS(DBLE(Z)) + ABS(AIMAG(Z))
       RETURN
 *
 *     End of DCABS1

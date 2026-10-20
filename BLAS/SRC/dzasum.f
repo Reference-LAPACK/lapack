@@ -89,7 +89,7 @@
       INTEGER I,NINCX
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC ABS,DBLE,DIMAG
+      INTRINSIC ABS, AIMAG, DBLE
 *     ..
       DZASUM = 0.0d0
       STEMP = 0.0d0
@@ -99,7 +99,7 @@
 *        code for increment equal to 1
 *
          DO I = 1,N
-            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(DIMAG(ZX(I))))
+            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(AIMAG(ZX(I))))
          END DO
       ELSE
 *
@@ -107,7 +107,7 @@
 *
          NINCX = N*INCX
          DO I = 1,NINCX,INCX
-            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(DIMAG(ZX(I))))
+            STEMP = STEMP + (ABS(DBLE(ZX(I))) + ABS(AIMAG(ZX(I))))
          END DO
       END IF
       DZASUM = STEMP
