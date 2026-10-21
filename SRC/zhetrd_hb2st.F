@@ -428,7 +428,7 @@
                   IF( I.LT.N-1 )
      $               AB( ABOFDPOS, I+2 ) = AB( ABOFDPOS, I+2 )*TMP
 C                  IF( WANTZ ) THEN
-C                     CALL ZSCAL( N, DCONJG( TMP ), Q( 1, I+1 ), 1 )
+C                     CALL ZSCAL( N, CONJG( TMP ), Q( 1, I+1 ), 1 )
 C                  END IF
    60         CONTINUE
           ELSE

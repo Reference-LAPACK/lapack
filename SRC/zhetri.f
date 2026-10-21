@@ -147,7 +147,7 @@
       EXTERNAL           XERBLA, ZCOPY, ZHEMV, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -273,11 +273,11 @@
 *
             CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
             DO 40 J = KP + 1, K - 1
-               TEMP = DCONJG( A( J, K ) )
-               A( J, K ) = DCONJG( A( KP, J ) )
+               TEMP = CONJG( A( J, K ) )
+               A( J, K ) = CONJG( A( KP, J ) )
                A( KP, J ) = TEMP
    40       CONTINUE
-            A( KP, K ) = DCONJG( A( KP, K ) )
+            A( KP, K ) = CONJG( A( KP, K ) )
             TEMP = A( K, K )
             A( K, K ) = A( KP, KP )
             A( KP, KP ) = TEMP
@@ -375,11 +375,11 @@
             IF( KP.LT.N )
      $         CALL ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
             DO 70 J = K + 1, KP - 1
-               TEMP = DCONJG( A( J, K ) )
-               A( J, K ) = DCONJG( A( KP, J ) )
+               TEMP = CONJG( A( J, K ) )
+               A( J, K ) = CONJG( A( KP, J ) )
                A( KP, J ) = TEMP
    70       CONTINUE
-            A( KP, K ) = DCONJG( A( KP, K ) )
+            A( KP, K ) = CONJG( A( KP, K ) )
             TEMP = A( K, K )
             A( K, K ) = A( KP, KP )
             A( KP, KP ) = TEMP

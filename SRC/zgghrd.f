@@ -236,7 +236,7 @@
       EXTERNAL           XERBLA, ZLARTG, ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -335,7 +335,7 @@
      $                 B( JROW, JROW-1 ), LDB, C, S )
             IF( ILQ )
      $         CALL ZROT( N, Q( 1, JROW-1 ), 1, Q( 1, JROW ), 1, C,
-     $                    DCONJG( S ) )
+     $                    CONJG( S ) )
 *
 *           Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1)
 *

@@ -111,6 +111,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0 )
       INTEGER            LV
@@ -125,7 +127,7 @@
       DOUBLE PRECISION   U( LV )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, EXP, LOG, MIN, SQRT
+      INTRINSIC          CMPLX, EXP, LOG, MIN, SQRT
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLARUV
@@ -145,15 +147,15 @@
 *           Copy generated numbers
 *
             DO 10 I = 1, IL
-               X( IV+I-1 ) = DCMPLX( U( 2*I-1 ), U( 2*I ) )
+               X( IV+I-1 ) = CMPLX( U( 2*I-1 ), U( 2*I ), KIND=DP )
    10       CONTINUE
          ELSE IF( IDIST.EQ.2 ) THEN
 *
 *           Convert generated numbers to uniform (-1,1) distribution
 *
             DO 20 I = 1, IL
-               X( IV+I-1 ) = DCMPLX( TWO*U( 2*I-1 )-ONE,
-     $                       TWO*U( 2*I )-ONE )
+               X( IV+I-1 ) = CMPLX( TWO*U( 2*I-1 )-ONE,
+     $                       TWO*U( 2*I )-ONE, KIND=DP )
    20       CONTINUE
          ELSE IF( IDIST.EQ.3 ) THEN
 *
@@ -161,7 +163,8 @@
 *
             DO 30 I = 1, IL
                X( IV+I-1 ) = SQRT( -TWO*LOG( U( 2*I-1 ) ) )*
-     $                       EXP( DCMPLX( ZERO, TWOPI*U( 2*I ) ) )
+     $                       EXP( CMPLX( ZERO, TWOPI*U( 2*I ),
+     $                       KIND=DP ) )
    30       CONTINUE
          ELSE IF( IDIST.EQ.4 ) THEN
 *
@@ -169,8 +172,8 @@
 *           distributed on the unit disk
 *
             DO 40 I = 1, IL
-               X( IV+I-1 ) = SQRT( U( 2*I-1 ) )*
-     $                       EXP( DCMPLX( ZERO, TWOPI*U( 2*I ) ) )
+               X( IV+I-1 ) = SQRT( U( 2*I-1 ) )*EXP( CMPLX( ZERO,
+     $                       TWOPI*U( 2*I ), KIND=DP ) )
    40       CONTINUE
          ELSE IF( IDIST.EQ.5 ) THEN
 *
@@ -178,7 +181,8 @@
 *           distributed on the unit circle
 *
             DO 50 I = 1, IL
-               X( IV+I-1 ) = EXP( DCMPLX( ZERO, TWOPI*U( 2*I ) ) )
+               X( IV+I-1 ) = EXP( CMPLX( ZERO, TWOPI*U( 2*I ),
+     $                          KIND=DP ) )
    50       CONTINUE
          END IF
    60 CONTINUE

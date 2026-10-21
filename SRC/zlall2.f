@@ -128,7 +128,7 @@
       EXTERNAL           XERBLA, ZSCAL, ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, DCONJG
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -160,7 +160,7 @@
 *
 *           Complex will want to store the conjugate
 *
-            AJJ = DCONJG(A(J,J))
+            AJJ = CONJG(A(J,J))
             IF( J.EQ.1 ) THEN
                CALL ZSCAL(N, AJJ, A, LDA)
             ELSE
@@ -182,7 +182,7 @@
 *
 *           Complex will want to store the conjugate
 *
-            AII = DCONJG(A(I,I))
+            AII = CONJG(A(I,I))
             IF( I.EQ.1 ) THEN
                CALL ZSCAL(N, AII, A, 1)
             ELSE

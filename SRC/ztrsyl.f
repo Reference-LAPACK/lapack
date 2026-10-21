@@ -170,6 +170,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D+0 )
 *     ..
@@ -194,7 +196,7 @@
       EXTERNAL           XERBLA, ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -267,18 +269,18 @@
 *
                SCALOC = ONE
                A11 = A( K, K ) + SGN*B( L, L )
-               DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) )
+               DA11 = ABS( DBLE( A11 ) ) + ABS( AIMAG( A11 ) )
                IF( DA11.LE.SMIN ) THEN
                   A11 = SMIN
                   DA11 = SMIN
                   INFO = 1
                END IF
-               DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) )
+               DB = ABS( DBLE( VEC ) ) + ABS( AIMAG( VEC ) )
                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN
                   IF( DB.GT.BIGNUM*DA11 )
      $               SCALOC = ONE / DB
                END IF
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = ZLADIV( VEC*CMPLX( SCALOC, KIND=DP ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 10 J = 1, N
@@ -313,20 +315,20 @@
                VEC = C( K, L ) - ( SUML+SGN*SUMR )
 *
                SCALOC = ONE
-               A11 = DCONJG( A( K, K ) ) + SGN*B( L, L )
-               DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) )
+               A11 = CONJG( A( K, K ) ) + SGN*B( L, L )
+               DA11 = ABS( DBLE( A11 ) ) + ABS( AIMAG( A11 ) )
                IF( DA11.LE.SMIN ) THEN
                   A11 = SMIN
                   DA11 = SMIN
                   INFO = 1
                END IF
-               DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) )
+               DB = ABS( DBLE( VEC ) ) + ABS( AIMAG( VEC ) )
                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN
                   IF( DB.GT.BIGNUM*DA11 )
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = ZLADIV( VEC*CMPLX( SCALOC, KIND=DP ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 40 J = 1, N
@@ -362,23 +364,23 @@
                SUML = ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 )
                SUMR = ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
      $                B( L, MIN( L+1, N ) ), LDB )
-               VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) )
+               VEC = C( K, L ) - ( SUML+SGN*CONJG( SUMR ) )
 *
                SCALOC = ONE
-               A11 = DCONJG( A( K, K )+SGN*B( L, L ) )
-               DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) )
+               A11 = CONJG( A( K, K )+SGN*B( L, L ) )
+               DA11 = ABS( DBLE( A11 ) ) + ABS( AIMAG( A11 ) )
                IF( DA11.LE.SMIN ) THEN
                   A11 = SMIN
                   DA11 = SMIN
                   INFO = 1
                END IF
-               DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) )
+               DB = ABS( DBLE( VEC ) ) + ABS( AIMAG( VEC ) )
                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN
                   IF( DB.GT.BIGNUM*DA11 )
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = ZLADIV( VEC*CMPLX( SCALOC, KIND=DP ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 70 J = 1, N
@@ -412,23 +414,23 @@
      $                C( MIN( K+1, M ), L ), 1 )
                SUMR = ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
      $                B( L, MIN( L+1, N ) ), LDB )
-               VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) )
+               VEC = C( K, L ) - ( SUML+SGN*CONJG( SUMR ) )
 *
                SCALOC = ONE
-               A11 = A( K, K ) + SGN*DCONJG( B( L, L ) )
-               DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) )
+               A11 = A( K, K ) + SGN*CONJG( B( L, L ) )
+               DA11 = ABS( DBLE( A11 ) ) + ABS( AIMAG( A11 ) )
                IF( DA11.LE.SMIN ) THEN
                   A11 = SMIN
                   DA11 = SMIN
                   INFO = 1
                END IF
-               DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) )
+               DB = ABS( DBLE( VEC ) ) + ABS( AIMAG( VEC ) )
                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN
                   IF( DB.GT.BIGNUM*DA11 )
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = ZLADIV( VEC*CMPLX( SCALOC, KIND=DP ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 100 J = 1, N

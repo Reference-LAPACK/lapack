@@ -204,6 +204,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       DOUBLE PRECISION   EIGHT, SEVTEN
@@ -226,13 +228,13 @@
       EXTERNAL           XERBLA, ZDSCAL, ZHER, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, SQRT
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -356,11 +358,11 @@
 *
                CALL ZSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
                DO 20 J = KP + 1, KK - 1
-                  T = DCONJG( A( J, KK ) )
-                  A( J, KK ) = DCONJG( A( KP, J ) )
+                  T = CONJG( A( J, KK ) )
+                  A( J, KK ) = CONJG( A( KP, J ) )
                   A( KP, J ) = T
    20          CONTINUE
-               A( KP, KK ) = DCONJG( A( KP, KK ) )
+               A( KP, KK ) = CONJG( A( KP, KK ) )
                R1 = DBLE( A( KK, KK ) )
                A( KK, KK ) = DBLE( A( KP, KP ) )
                A( KP, KP ) = R1
@@ -413,23 +415,24 @@
                IF( K.GT.2 ) THEN
 *
                   D = DLAPY2( DBLE( A( K-1, K ) ),
-     $                DIMAG( A( K-1, K ) ) )
+     $                AIMAG( A( K-1, K ) ) )
                   D22 = DBLE( A( K-1, K-1 ) ) / D
                   D11 = DBLE( A( K, K ) ) / D
                   TT = ONE / ( D11*D22-ONE )
                   D12 = A( K-1, K ) / D
 *
                   DO 40 J = K - 2, 1, -1
-                     WKM1 = TT*( ( D11*A( J, K-1 )-DCONJG( D12 )*
+                     WKM1 = TT*( ( D11*A( J, K-1 )-CONJG( D12 )*
      $                      A( J, K ) ) / D )
                      WK = TT*( ( D22*A( J, K )-D12*A( J, K-1 ) ) / D )
                      DO 30 I = J, 1, -1
-                        A( I, J ) = A( I, J ) - A( I, K )*DCONJG( WK ) -
-     $                              A( I, K-1 )*DCONJG( WKM1 )
+                        A( I, J ) = A( I, J ) - A( I, K )*CONJG( WK ) -
+     $                              A( I, K-1 )*CONJG( WKM1 )
    30                CONTINUE
                      A( J, K ) = WK
                      A( J, K-1 ) = WKM1
-                     A( J, J ) = DCMPLX( DBLE( A( J, J ) ), 0.0D+0 )
+                     A( J, J ) = CMPLX( DBLE( A( J, J ) ), 0.0D+0,
+     $                          KIND=DP )
    40             CONTINUE
 *
                END IF
@@ -554,11 +557,11 @@
      $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ),
      $                        1 )
                DO 60 J = KK + 1, KP - 1
-                  T = DCONJG( A( J, KK ) )
-                  A( J, KK ) = DCONJG( A( KP, J ) )
+                  T = CONJG( A( J, KK ) )
+                  A( J, KK ) = CONJG( A( KP, J ) )
                   A( KP, J ) = T
    60          CONTINUE
-               A( KP, KK ) = DCONJG( A( KP, KK ) )
+               A( KP, KK ) = CONJG( A( KP, KK ) )
                R1 = DBLE( A( KK, KK ) )
                A( KK, KK ) = DBLE( A( KP, KP ) )
                A( KP, KP ) = R1
@@ -613,7 +616,7 @@
 *                 columns of L
 *
                   D = DLAPY2( DBLE( A( K+1, K ) ),
-     $                DIMAG( A( K+1, K ) ) )
+     $                AIMAG( A( K+1, K ) ) )
                   D11 = DBLE( A( K+1, K+1 ) ) / D
                   D22 = DBLE( A( K, K ) ) / D
                   TT = ONE / ( D11*D22-ONE )
@@ -621,15 +624,16 @@
 *
                   DO 80 J = K + 2, N
                      WK = TT*( ( D11*A( J, K )-D21*A( J, K+1 ) ) / D )
-                     WKP1 = TT*( ( D22*A( J, K+1 )-DCONJG( D21 )*
+                     WKP1 = TT*( ( D22*A( J, K+1 )-CONJG( D21 )*
      $                      A( J, K ) ) / D )
                      DO 70 I = J, N
-                        A( I, J ) = A( I, J ) - A( I, K )*DCONJG( WK ) -
-     $                              A( I, K+1 )*DCONJG( WKP1 )
+                        A( I, J ) = A( I, J ) - A( I, K )*CONJG( WK ) -
+     $                              A( I, K+1 )*CONJG( WKP1 )
    70                CONTINUE
                      A( J, K ) = WK
                      A( J, K+1 ) = WKP1
-                     A( J, J ) = DCMPLX( DBLE( A( J, J ) ), 0.0D+0 )
+                     A( J, J ) = CMPLX( DBLE( A( J, J ) ), 0.0D+0,
+     $                          KIND=DP )
    80             CONTINUE
                END IF
             END IF

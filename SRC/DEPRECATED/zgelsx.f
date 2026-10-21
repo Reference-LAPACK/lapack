@@ -221,7 +221,7 @@
       EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -383,7 +383,7 @@
       IF( RANK.LT.N ) THEN
          DO 50 I = 1, RANK
             CALL ZLATZM( 'Left', N-RANK+1, NRHS, A( I, RANK+1 ),
-     $                   LDA, DCONJG( WORK( MN+I ) ), B( I, 1 ),
+     $                   LDA, CONJG( WORK( MN+I ) ), B( I, 1 ),
      $                   B( RANK+1, 1 ), LDB, WORK( 2*MN+1 ) )
    50    CONTINUE
       END IF

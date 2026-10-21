@@ -183,7 +183,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZGEMV, ZGERC, ZSCAL
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -260,7 +260,7 @@
 *              w(1:lastc,1) += v(1,1) * C(1,1:lastc)**H
 *
                DO J = 1, LASTC
-                  WORK( J ) = WORK( J ) + DCONJG( C( 1, J ) )
+                  WORK( J ) = WORK( J ) + CONJG( C( 1, J ) )
                END DO
 *
 *           C(1:lastv,1:lastc) := C(...) - tau * v(1:lastv,1) * w(1:lastc,1)**H
@@ -269,7 +269,7 @@
             !                  = C(...) - tau * Conj(w(1:lastc,1))
             ! This is essentially a zaxpyc
                DO J = 1, LASTC
-                  C( 1, J ) = C( 1, J ) - TAU * DCONJG( WORK( J ) )
+                  C( 1, J ) = C( 1, J ) - TAU * CONJG( WORK( J ) )
                END DO
 *
 *        C(2:lastv,1:lastc) += - tau * v(2:lastv,1) * w(1:lastc,1)**H

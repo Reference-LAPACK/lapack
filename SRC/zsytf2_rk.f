@@ -279,13 +279,13 @@
       EXTERNAL           ZSCAL, ZSWAP, ZSYR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, SQRT, DIMAG, DBLE
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( DIMAG( Z ) )
+      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
 *     ..
 *     .. Executable Statements ..
 *

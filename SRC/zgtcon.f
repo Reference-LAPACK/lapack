@@ -155,6 +155,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -174,7 +176,7 @@
       EXTERNAL           XERBLA, ZGTTRS, ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     ..
 *     .. Executable Statements ..
 *
@@ -207,7 +209,7 @@
 *     Check that D(1:N) is non-zero.
 *
       DO 10 I = 1, N
-         IF( D( I ).EQ.DCMPLX( ZERO ) )
+         IF( D( I ).EQ.CMPLX( ZERO, KIND=DP ) )
      $      RETURN
    10 CONTINUE
 *

@@ -118,7 +118,7 @@
       COMPLEX*16         CDUM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, REAL, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. External Functions ..
       EXTERNAL           DLAMCH
@@ -129,7 +129,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function Definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

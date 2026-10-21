@@ -166,7 +166,7 @@
       EXTERNAL     ZLAHEF_AA, ZGEMM, ZCOPY, ZSCAL, ZSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC    DBLE, DCONJG, MAX
+      INTRINSIC    CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -284,7 +284,7 @@
 *
 *              Merge rank-1 update with BLAS-3 update
 *
-               ALPHA = DCONJG( A( J, J+1 ) )
+               ALPHA = CONJG( A( J, J+1 ) )
                A( J, J+1 ) = ONE
                CALL ZCOPY( N-J, A( J-1, J+1 ), LDA,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
@@ -336,7 +336,7 @@
 *
 *              Recover T( J, J+1 )
 *
-               A( J, J+1 ) = DCONJG( ALPHA )
+               A( J, J+1 ) = CONJG( ALPHA )
             END IF
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
@@ -404,7 +404,7 @@
 *
 *              Merge rank-1 update with BLAS-3 update
 *
-               ALPHA = DCONJG( A( J+1, J ) )
+               ALPHA = CONJG( A( J+1, J ) )
                A( J+1, J ) = ONE
                CALL ZCOPY( N-J, A( J+1, J-1 ), 1,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
@@ -457,7 +457,7 @@
 *
 *              Recover T( J+1, J )
 *
-               A( J+1, J ) = DCONJG( ALPHA )
+               A( J+1, J ) = CONJG( ALPHA )
             END IF
 *
 *           WORK(J+1, 1) stores H(J+1, 1)

@@ -223,13 +223,13 @@
      $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SQRT
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( DIMAG( Z ) )
+      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -602,7 +602,7 @@
 *                      both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.)
 *
                   D21 = W( K-1, KW )
-                  D11 = W( K, KW ) / DCONJG( D21 )
+                  D11 = W( K, KW ) / CONJG( D21 )
                   D22 = W( K-1, KW-1 ) / D21
                   T = ONE / ( DBLE( D11*D22 )-ONE )
 *
@@ -614,7 +614,7 @@
                      A( J, K-1 ) = T*( ( D11*W( J, KW-1 )-W( J, KW ) ) /
      $                             D21 )
                      A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
-     $                           DCONJG( D21 ) )
+     $                           CONJG( D21 ) )
    20             CONTINUE
                END IF
 *
@@ -1062,7 +1062,7 @@
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
-                  D22 = W( K, K ) / DCONJG( D21 )
+                  D22 = W( K, K ) / CONJG( D21 )
                   T = ONE / ( DBLE( D11*D22 )-ONE )
 *
 *                 Update elements in columns A(k) and A(k+1) as
@@ -1071,7 +1071,7 @@
 *
                   DO 80 J = K + 2, N
                      A( J, K ) = T*( ( D11*W( J, K )-W( J, K+1 ) ) /
-     $                           DCONJG( D21 ) )
+     $                           CONJG( D21 ) )
                      A( J, K+1 ) = T*( ( D22*W( J, K+1 )-W( J, K ) ) /
      $                             D21 )
    80             CONTINUE

@@ -123,7 +123,7 @@
       COMPLEX*16         XI, YI
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -134,7 +134,7 @@
          XI = X( IX )
          YI = Y( IY )
          X( IX ) = C( IC )*XI + S( IC )*YI
-         Y( IY ) = C( IC )*YI - DCONJG( S( IC ) )*XI
+         Y( IY ) = C( IC )*YI - CONJG( S( IC ) )*XI
          IX = IX + INCX
          IY = IY + INCY
          IC = IC + INCC

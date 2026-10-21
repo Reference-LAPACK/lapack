@@ -122,7 +122,7 @@
       COMPLEX*16         A11, A12, A22, C, TAU
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG
+      INTRINSIC          ABS, CONJG
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZDOTC
@@ -146,7 +146,7 @@
       A11 = X( 1 )
       X( 1 ) = CONE
 *
-      C = -DCONJG( TAU )*ZDOTC( N, X, INCX, Y, INCY )
+      C = -CONJG( TAU )*ZDOTC( N, X, INCX, Y, INCY )
       CALL ZAXPY( N, C, X, INCX, Y, INCY )
 *
       CALL ZLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
