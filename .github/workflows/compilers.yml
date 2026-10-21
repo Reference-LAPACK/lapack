@@ -106,6 +106,12 @@ jobs:
           os: macos-26
           CFLAGS: "-Wall -pedantic"
           FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran-14
+          name: macos / gfortran / 2-level namespace
+          CC: gcc-14
+          os: macos-26
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
         - FC: flang
           CC: clang
           os: ubuntu-26.04
