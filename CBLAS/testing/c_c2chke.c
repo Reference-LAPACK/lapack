@@ -4,13 +4,11 @@
 #include "cblas_test.h"
 
 CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
-CBLAS_INT link_xerbla=TRUE;
 CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
 char *cblas_rout;
 
 void chkxer(void) {
    extern CBLAS_INT cblas_ok, cblas_lerr, cblas_info;
-   extern CBLAS_INT link_xerbla;
    extern CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
    extern char *cblas_rout;
    cblas_xtests++;
@@ -40,23 +38,13 @@ void F77_c2chke(char *rout
    extern CBLAS_INT cblas_info, cblas_lerr, cblas_ok;
    extern char *cblas_rout;
    blas_fortran_xerbla_callback_t cb;
+   cblas_xerbla_callback_t cblas_cb;
 
-#ifndef HAS_ATTRIBUTE_WEAK_SUPPORT
-   #ifdef CBLAS_DLL_IMPORTS
-   // Since Windows does not support weak symbols, and the trick below doesn't
-   // work for shared libraries on Windows, we skip the xerbla tests here.
-   printf("***** WARNING: Skipping xerbla tests since weak symbols are not supported on Windows *****\n");
-   return;
-   #endif
-
-   if (link_xerbla) /* call these first to link */
-   {
-      API_SUFFIX(cblas_xerbla)(cblas_info,cblas_rout,"");
-   }
-#endif
+   cblas_cb = API_SUFFIX(cblas_get_xerbla)();
+   API_SUFFIX(cblas_set_xerbla)(cblas_cb, NULL); /* uses value */
    F77_get_blas_xerbla(&cb);
-   F77_set_blas_xerbla(API_SUFFIX(xer_replace));
-   link_xerbla = 0;
+   F77_set_blas_xerbla(API_SUFFIX(xer_replace)); /* overridden by next, just tests call */
+   API_SUFFIX(cblas_set_xerbla)(API_SUFFIX(cblas_xer_replace), API_SUFFIX(xer_replace));
    cblas_ok = TRUE ;
    cblas_lerr = PASSED ;
    cblas_xtests = 0;
