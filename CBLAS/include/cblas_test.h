@@ -253,6 +253,7 @@ void get_uplo_type(char *type, CBLAS_UPLO *uplo);
 void get_diag_type(char *type, CBLAS_DIAG *diag);
 void get_side_type(char *type, CBLAS_SIDE *side);
 
+void API_SUFFIX(cblas_xer_replace) CBLAS_XERBLA_CALLBACK_ARGS;
 void API_SUFFIX(xer_replace) BLAS_FORTRAN_XERBLA_ARGS;
 
 #endif /* CBLAS_TEST_H */
