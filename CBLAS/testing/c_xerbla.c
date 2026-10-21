@@ -18,22 +18,14 @@
  * \param[in] rout  Routine name, e.g. "cblas_dgemm".
  * \param[in] form  Unused; kept so the signature matches the library's.
  */
-void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
-                              const char *form, ...)
+void API_SUFFIX(cblas_xer_replace)(CBLAS_INT info, const char *rout,
+                              const char *form, va_list ap)
 {
    extern CBLAS_INT cblas_lerr, cblas_info, cblas_ok;
-   extern CBLAS_INT link_xerbla;
    extern CBLAS_INT cblas_xbad;
    extern char *cblas_rout;
 
    (void)form;
-
-   /* Initially, c__3chke may call this routine with
-    * global variable link_xerbla=1, and F77_xerbla will set link_xerbla=0.
-    * This is done to fool the linker into loading these subroutines first
-    * instead of ones in the CBLAS or the legacy BLAS library.
-    */
-   if (link_xerbla) return;
 
    /* The name is checked and reported as the user would see it, suffix and
     * all, while the remapping below keys off the unsuffixed \p rout. The
@@ -53,8 +45,6 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
       cblas_ok = FALSE;
       cblas_xbad = 1;
    }
-
-   info = cblas_xerbla_map_info(info, rout, RowMajorStrg);
 
    if (info != cblas_info) {
       printf("***** XERBLA WAS CALLED WITH INFO = %" CBLAS_IFMT
@@ -78,13 +68,6 @@ void API_SUFFIX(cblas_xerbla)(CBLAS_INT info, const char *rout,
  */
 void API_SUFFIX(xer_replace) BLAS_FORTRAN_XERBLA_ARGS
 {
-   /* See the comment in API_SUFFIX(cblas_xerbla)() above */
-   extern CBLAS_INT link_xerbla;
-   if (link_xerbla) {
-      link_xerbla = 0;
-      return;
-   }
-
 #ifdef BLAS_FORTRAN_STRLEN_END
    const size_t srname_len = len > 0 ? (size_t)len : 0;
 #else
@@ -97,7 +80,6 @@ void API_SUFFIX(xer_replace) BLAS_FORTRAN_XERBLA_ARGS
    const char *srname = F77_srname;
 #endif
 
-   const F77_INT *info = (const F77_INT *)vinfo;
    const CBLAS_INT cblas_info = (CBLAS_INT)*info;
 
    char rout[CBLAS_XERBLA_ROUT_BUFFER_SIZE];

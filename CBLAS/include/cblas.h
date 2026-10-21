@@ -2,6 +2,7 @@
 #define CBLAS_H
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 #include <inttypes.h>
 
 
@@ -23,6 +24,10 @@ extern "C" {            /* Assume C declarations for C++ */
 #else
    #define CBLAS_INT int32_t
 #endif
+#endif
+
+#ifndef F77_INT
+#define F77_INT CBLAS_INT
 #endif
 
 /*
@@ -699,8 +704,15 @@ void cblas_zher2k(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const CBLAS_INT ldb, const double beta,
                   void *C, const CBLAS_INT ldc);
 
-void CBLAS_WEAK_SYMBOL cblas_xerbla(CBLAS_INT p, const char *rout,
-                                    const char *form, ...);
+#define CBLAS_XERBLA_ARGS \
+  (CBLAS_INT p, const char *rout, const char *form, ...)
+#define CBLAS_XERBLA_CALLBACK_ARGS \
+  (CBLAS_INT p, const char *rout, const char *form, va_list ap)
+typedef void (*cblas_xerbla_callback_t) CBLAS_XERBLA_CALLBACK_ARGS;
+typedef void (*BLAS_FORTRAN_XERBLA_callback_t)(char *F77_srname, F77_INT *info, size_t len);
+void CBLAS_WEAK_SYMBOL cblas_xerbla CBLAS_XERBLA_ARGS;
+cblas_xerbla_callback_t cblas_get_xerbla(void);
+cblas_xerbla_callback_t cblas_set_xerbla(cblas_xerbla_callback_t cb, BLAS_FORTRAN_XERBLA_callback_t F77_cb);
 
 #ifdef __cplusplus
 }

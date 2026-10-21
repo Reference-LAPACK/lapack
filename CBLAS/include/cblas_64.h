@@ -2,6 +2,7 @@
 #define CBLAS_64_H
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 #include <inttypes.h>
 
 #include "cblas.h"
@@ -639,8 +640,15 @@ void cblas_zher2k_64(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                   const void *B, const int64_t ldb, const double beta,
                   void *C, const int64_t ldc);
 
-void CBLAS_WEAK_SYMBOL cblas_xerbla_64(int64_t p, const char *rout,
-                                       const char *form, ...);
+#define CBLAS_XERBLA_64_ARGS \
+  (int64_t p, const char *rout, const char *form, ...)
+#define CBLAS_XERBLA_64_CALLBACK_ARGS \
+  (CBLAS_INT p, const char *rout, const char *form, va_list ap)
+typedef void (*cblas_xerbla_64_callback_t) CBLAS_XERBLA_64_CALLBACK_ARGS;
+typedef void (*BLAS_FORTRAN_XERBLA_64_callback_t)(char *F77_srname, int64_t *info, size_t len);
+void CBLAS_WEAK_SYMBOL cblas_xerbla_64 CBLAS_XERBLA_64_ARGS;
+cblas_xerbla_64_callback_t cblas_get_xerbla_64(void);
+cblas_xerbla_64_callback_t cblas_set_xerbla_64(cblas_xerbla_64_callback_t cb, BLAS_FORTRAN_XERBLA_64_callback_t F77_cb);
 
 #ifdef __cplusplus
 }

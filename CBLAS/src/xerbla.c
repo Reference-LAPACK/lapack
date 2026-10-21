@@ -25,7 +25,6 @@ void API_SUFFIX(cblas_F77_xerbla) BLAS_FORTRAN_XERBLA_ARGS
    const char *srname = F77_srname;
 #endif
 
-   const F77_INT *info = (const F77_INT *)vinfo;
    const CBLAS_INT cblas_info = (CBLAS_INT)*info;
 
    if (CBLAS_CallFromC) {
@@ -33,7 +32,7 @@ void API_SUFFIX(cblas_F77_xerbla) BLAS_FORTRAN_XERBLA_ARGS
       cblas_xerbla_make_rout(rout, sizeof(rout), srname, srname_len);
       API_SUFFIX(cblas_xerbla)(cblas_info + 1, rout, "");
    } else if (active_callback) {
-      active_callback(F77_srname, vinfo
+      active_callback(F77_srname, info
 #ifdef BLAS_FORTRAN_STRLEN_END
          , len
 #endif
@@ -67,14 +66,14 @@ the BLAS one, thereby influencing its operation, and defeating the
  *
  * \param[in] F77_srname  Routine name reported by the Fortran BLAS, blank
  *                        padded and not NUL terminated.
- * \param[in] vinfo       Pointer to the Fortran argument number.
+ * \param[in] info        Pointer to the Fortran argument number.
  * \param[in] len         Hidden Fortran length of \p F77_srname, on
  *                        compilers that pass string lengths at the end of
  *                        the argument list.
  */
 void CBLAS_WEAK_SYMBOL F77_xerbla_base BLAS_FORTRAN_XERBLA_ARGS
 {
-   API_SUFFIX(cblas_F77_xerbla)(F77_srname, vinfo
+   API_SUFFIX(cblas_F77_xerbla)(F77_srname, info
 #ifdef BLAS_FORTRAN_STRLEN_END
       , len
 #endif
