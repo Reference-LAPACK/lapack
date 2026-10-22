@@ -133,6 +133,14 @@ if(BUILD_COMPLEX)
 
   # ======== COMPLEX DMD EIG TESTS ===========================
   add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
+
+  # ======== COMPLEX QZ SCALING REGRESSION ===================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_cgges3_scaling COMMAND $<TARGET_FILE:test_cgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_cgges3_scaling_64 COMMAND $<TARGET_FILE:test_cgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_COMPLEX16)

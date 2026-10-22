@@ -136,6 +136,7 @@ endif()
 if(BUILD_COMPLEX)
 add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
 add_eig_executable(xdmdeigtstc ${CDMDEIGTST} ${AEIGTST})
+add_eig_executable(test_cgges3_scaling test_cgges3_scaling.f90)
 endif()
 
 
