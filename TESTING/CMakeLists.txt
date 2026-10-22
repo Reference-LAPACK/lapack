@@ -67,6 +67,14 @@ if(BUILD_SINGLE)
 
   # ======== SINGLE DMD EIG TESTS ===========================
   add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
+
+  # ======== SINGLE QZ SCALING REGRESSION ====================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_sgges3_scaling COMMAND $<TARGET_FILE:test_sgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_sgges3_scaling_64 COMMAND $<TARGET_FILE:test_sgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_DOUBLE)
@@ -100,6 +108,14 @@ if(BUILD_DOUBLE)
 
   # ======== DOUBLE DMD EIG TESTS ===========================
   add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
+
+  # ======== DOUBLE QZ SCALING REGRESSION ====================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_dgges3_scaling COMMAND $<TARGET_FILE:test_dgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_dgges3_scaling_64 COMMAND $<TARGET_FILE:test_dgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_COMPLEX)
