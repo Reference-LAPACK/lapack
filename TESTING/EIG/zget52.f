@@ -200,13 +200,13 @@
       EXTERNAL           ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -254,8 +254,8 @@
          ACOEFF = SCALE*BETAI
          BCOEFF = SCALE*ALPHAI
          IF( LEFT ) THEN
-            ACOEFF = DCONJG( ACOEFF )
-            BCOEFF = DCONJG( BCOEFF )
+            ACOEFF = CONJG( ACOEFF )
+            BCOEFF = CONJG( BCOEFF )
          END IF
          CALL ZGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
      $               CZERO, WORK( N*( JVEC-1 )+1 ), 1 )

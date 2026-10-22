@@ -149,7 +149,7 @@
       EXTERNAL           ZLASET, ZLAVHP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG
+      INTRINSIC          AIMAG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -171,7 +171,7 @@
       JC = 1
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 J = 1, N
-            IF( DIMAG( AFAC( JC ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( JC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF
@@ -179,7 +179,7 @@
    10    CONTINUE
       ELSE
          DO 20 J = 1, N
-            IF( DIMAG( AFAC( JC ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( JC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF

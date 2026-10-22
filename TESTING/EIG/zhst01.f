@@ -155,6 +155,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -170,7 +172,7 @@
       EXTERNAL           ZGEMM, ZLACPY, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -197,14 +199,14 @@
 *     Compute Q*H
 *
       CALL ZGEMM( 'No transpose', 'No transpose', N, N, N,
-     $            DCMPLX( ONE ), Q, LDQ, H, LDH, DCMPLX( ZERO ),
-     $            WORK( LDWORK*N+1 ), LDWORK )
+     $            CMPLX( ONE, KIND=DP ), Q, LDQ, H, LDH,
+     $            CMPLX( ZERO, KIND=DP ), WORK( LDWORK*N+1 ), LDWORK )
 *
 *     Compute A - Q*H*Q'
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
-     $            DCMPLX( -ONE ), WORK( LDWORK*N+1 ), LDWORK, Q, LDQ,
-     $            DCMPLX( ONE ), WORK, LDWORK )
+     $            CMPLX( -ONE, KIND=DP ), WORK( LDWORK*N+1 ), LDWORK, Q,
+     $            LDQ, CMPLX( ONE, KIND=DP ), WORK, LDWORK )
 *
       ANORM = MAX( ZLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
       WNORM = ZLANGE( '1', N, N, WORK, LDWORK, RWORK )

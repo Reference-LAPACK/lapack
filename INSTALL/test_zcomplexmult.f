@@ -48,11 +48,13 @@
 
 *     ..
 *     .. Constants ..
+      integer           DP
+      parameter       ( DP = KIND( 0.0d0 ) )
       integer           nNaN, nInf
       parameter       ( nNaN = 3, nInf = 5 )
       double complex    czero, cone
-      parameter       ( czero = DCMPLX( 0.0d0, 0.0d0 ),
-     $                  cone  = DCMPLX( 1.0d0, 0.0d0 ) )
+      parameter       ( czero = CMPLX( 0.0d0, 0.0d0, KIND=DP ),
+     $                  cone  = CMPLX( 1.0d0, 0.0d0, KIND=DP ) )
 *     ..
 *     .. Local Variables ..
       integer           i, nFailingTests, nTests
@@ -60,7 +62,7 @@
       double complex    Y, R, cInf( nInf ), cNaN( nNaN )
 *
 *     .. Intrinsic Functions ..
-      intrinsic         HUGE, DCMPLX
+      intrinsic         CMPLX, HUGE
 
 *
 *     .. Initialize error counts ..
@@ -70,17 +72,17 @@
 *     .. Inf entries ..
       OV = HUGE(0.0d0)
       aInf = OV * 2
-      cInf(1) = DCMPLX( aInf, 0.0d0 )
-      cInf(2) = DCMPLX(-aInf, 0.0d0 )
-      cInf(3) = DCMPLX( 0.0d0, aInf )
-      cInf(4) = DCMPLX( 0.0d0,-aInf )
-      cInf(5) = DCMPLX( aInf,  aInf )
+      cInf(1) = CMPLX( aInf, 0.0d0, KIND=DP )
+      cInf(2) = CMPLX(-aInf, 0.0d0, KIND=DP )
+      cInf(3) = CMPLX( 0.0d0, aInf, KIND=DP )
+      cInf(4) = CMPLX( 0.0d0,-aInf, KIND=DP )
+      cInf(5) = CMPLX( aInf,  aInf, KIND=DP )
 *
 *     .. NaN entries ..
       aNaN = aInf / aInf
-      cNaN(1) = DCMPLX( aNaN, 0.0d0 )
-      cNaN(2) = DCMPLX( 0.0d0, aNaN )
-      cNaN(3) = DCMPLX( aNaN,  aNaN )
+      cNaN(1) = CMPLX( aNaN, 0.0d0, KIND=DP )
+      cNaN(2) = CMPLX( 0.0d0, aNaN, KIND=DP )
+      cNaN(3) = CMPLX( aNaN,  aNaN, KIND=DP )
 
 *
 *     .. Tests ..

@@ -136,7 +136,7 @@
      $                   ZLACPY, ZTREVC, ZTRSNA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG, MAX, SQRT
+      INTRINSIC          AIMAG, DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -248,7 +248,7 @@
 *           Sort by increasing imaginary part
 *
             DO 90 I = 1, N
-               WSRT( I ) = DIMAG( W( I ) )
+               WSRT( I ) = AIMAG( W( I ) )
    90       CONTINUE
          END IF
          CALL DCOPY( N, S, 1, STMP, 1 )

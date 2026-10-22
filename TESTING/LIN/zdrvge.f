@@ -183,6 +183,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES
@@ -220,7 +222,7 @@
      $                   ZLATB4, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX
+      INTRINSIC          ABS, CMPLX, MAX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -323,8 +325,9 @@
                      A( IOFF+I ) = ZERO
    20             CONTINUE
                ELSE
-                  CALL ZLASET( 'Full', N, N-IZERO+1, DCMPLX( ZERO ),
-     $                         DCMPLX( ZERO ), A( IOFF+1 ), LDA )
+                  CALL ZLASET( 'Full', N, N-IZERO+1,
+     $                         CMPLX( ZERO, KIND=DP ), CMPLX( ZERO,
+     $                         KIND=DP ), A( IOFF+1 ), LDA )
                END IF
             ELSE
                IZERO = 0
@@ -518,10 +521,12 @@
 *                    --- Test ZGESVX ---
 *
                      IF( .NOT.PREFAC )
-     $                  CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ),
-     $                               DCMPLX( ZERO ), AFAC, LDA )
-                     CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
-     $                            DCMPLX( ZERO ), X, LDA )
+     $                  CALL ZLASET( 'Full', N, N, CMPLX( ZERO,
+     $                               KIND=DP ), CMPLX( ZERO, KIND=DP ),
+     $                               AFAC, LDA )
+                     CALL ZLASET( 'Full', N, NRHS,
+     $                            CMPLX( ZERO, KIND=DP ),
+     $                            CMPLX( ZERO, KIND=DP ), X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and

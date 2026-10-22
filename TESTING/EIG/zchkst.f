@@ -675,7 +675,7 @@
      $                   ZUNGTR, ZUPGTR
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, INT, LOG, MAX, MIN, SQRT
+      INTRINSIC          ABS, CONJG, DBLE, INT, LOG, MAX, MIN, SQRT
 *     ..
 *     .. Data statements ..
       DATA               KTYPE / 1, 2, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 8,
@@ -912,7 +912,7 @@
                   IF( TEMP1.GT.HALF*TEMP2 ) THEN
                      A( I-1, I ) = A( I-1, I )*
      $                             ( HALF*TEMP2 / ( UNFL+TEMP1 ) )
-                     A( I, I-1 ) = DCONJG( A( I-1, I ) )
+                     A( I, I-1 ) = CONJG( A( I-1, I ) )
                   END IF
    90          CONTINUE
 *

@@ -230,6 +230,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TEN
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TEN = 10.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -253,7 +255,7 @@
      $                   ZUNM2L, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -306,8 +308,8 @@
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL ZHER2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
-     $                     U( 1, J+1 ), 1, WORK, N )
+               CALL ZHER2( CUPLO, N, -CMPLX( E( J ), KIND=DP ),
+     $                     U( 1, J ), 1, U( 1, J+1 ), 1, WORK, N )
    20       CONTINUE
          END IF
          WNORM = ZLANHE( '1', CUPLO, N, WORK, N, RWORK )

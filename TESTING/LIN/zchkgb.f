@@ -211,6 +211,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
@@ -250,7 +252,7 @@
      $                   ZLATB4, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -541,8 +543,10 @@
 *                          estimate of CNDNUM = norm(A) * norm(inv(A)).
 *
                            LDB = MAX( 1, N )
-                           CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ),
-     $                                  DCMPLX( ONE ), WORK, LDB )
+                           CALL ZLASET( 'Full', N, N,
+     $                                  CMPLX( ZERO, KIND=DP ),
+     $                                  CMPLX( ONE, KIND=DP ), WORK,
+     $                                  LDB )
                            SRNAMT = 'ZGBTRS'
                            CALL ZGBTRS( 'No transpose', N, KL, KU, N,
      $                                  AFAC, LDAFAC, IWORK, WORK, LDB,

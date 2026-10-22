@@ -155,6 +155,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 3 )
       INTEGER            NTESTS
@@ -181,7 +183,7 @@
      $                   ZLASET, ZLATMS, ZTZRZF
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -248,8 +250,8 @@
 *                 singular value distribution indicated by `mode'.
 *
                   IF( MODE.EQ.0 ) THEN
-                     CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ),
-     $                            DCMPLX( ZERO ), A, LDA )
+                     CALL ZLASET( 'Full', M, N, CMPLX( ZERO, KIND=DP ),
+     $                            CMPLX( ZERO, KIND=DP ), A, LDA )
                      DO 30 I = 1, MNMIN
                         S( I ) = ZERO
    30                CONTINUE
@@ -260,8 +262,9 @@
      $                            LDA, WORK, INFO )
                      CALL ZGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
-                     CALL ZLASET( 'Lower', M-1, N, DCMPLX( ZERO ),
-     $                            DCMPLX( ZERO ), A( 2 ), LDA )
+                     CALL ZLASET( 'Lower', M-1, N,
+     $                            CMPLX( ZERO, KIND=DP ),
+     $                            CMPLX( ZERO, KIND=DP ), A( 2 ), LDA )
                      CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *

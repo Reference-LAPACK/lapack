@@ -154,7 +154,7 @@
       EXTERNAL           ZDSCAL, ZHER, ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG, MAX, MIN
+      INTRINSIC          AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,14 +179,14 @@
 *
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 J = 1, N
-            IF( DIMAG( AFAC( KD+1, J ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( KD+1, J ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF
    10    CONTINUE
       ELSE
          DO 20 J = 1, N
-            IF( DIMAG( AFAC( 1, J ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( 1, J ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF

@@ -162,7 +162,7 @@
       EXTERNAL           ZHEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG
+      INTRINSIC          CONJG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -192,13 +192,13 @@
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
-               AINV( J, I ) = DCONJG( AINV( I, J ) )
+               AINV( J, I ) = CONJG( AINV( I, J ) )
    10       CONTINUE
    20    CONTINUE
       ELSE
          DO 40 J = 1, N
             DO 30 I = J + 1, N
-               AINV( J, I ) = DCONJG( AINV( I, J ) )
+               AINV( J, I ) = CONJG( AINV( I, J ) )
    30       CONTINUE
    40    CONTINUE
       END IF

@@ -104,6 +104,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -121,7 +123,7 @@
       EXTERNAL           XER_REPLACE, ZLASET, ZUNMRZ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX
+      INTRINSIC          CMPLX, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -139,8 +141,8 @@
 *
 *     Q := I
 *
-      CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ), DCMPLX( ONE ), WORK,
-     $             N )
+      CALL ZLASET( 'Full', N, N, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ONE, KIND=DP ), WORK, N )
 *
 *     Q := P(1) * ... * P(m) * Q
 *

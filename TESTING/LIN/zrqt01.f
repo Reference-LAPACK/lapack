@@ -141,6 +141,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         ROGUE
@@ -158,7 +160,7 @@
       EXTERNAL           ZGEMM, ZGERQF, ZHERK, ZLACPY, ZLASET, ZUNGRQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -202,8 +204,8 @@
 *
 *     Copy R
 *
-      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), R,
-     $             LDA )
+      CALL ZLASET( 'Full', M, N, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ZERO, KIND=DP ), R, LDA )
       IF( M.LE.N ) THEN
          IF( M.GT.0 )
      $      CALL ZLACPY( 'Upper', M, M, AF( 1, N-M+1 ), LDA,
@@ -219,8 +221,8 @@
 *     Compute R - A*Q'
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', M, N, N,
-     $            DCMPLX( -ONE ), A, LDA, Q, LDA, DCMPLX( ONE ), R,
-     $            LDA )
+     $            CMPLX( -ONE, KIND=DP ), A, LDA, Q, LDA,
+     $            CMPLX( ONE, KIND=DP ), R, LDA )
 *
 *     Compute norm( R - Q'*A ) / ( N * norm(A) * EPS ) .
 *
@@ -234,7 +236,8 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ), DCMPLX( ONE ), R, LDA )
+      CALL ZLASET( 'Full', N, N, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ONE, KIND=DP ), R, LDA )
       CALL ZHERK( 'Upper', 'No transpose', N, N, -ONE, Q, LDA, ONE, R,
      $            LDA )
 *

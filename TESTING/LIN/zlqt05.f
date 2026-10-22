@@ -191,7 +191,7 @@
 *     Compute |I - Q*Q'| and store in RESULT(2)
 *
       CALL ZLASET( 'Full', N2, N2, CZERO, ONE, R, N2 )
-      CALL ZHERK( 'U', 'N', N2, N2, DREAL(-ONE), Q, N2, DREAL(ONE),
+      CALL ZHERK( 'U', 'N', N2, N2, DBLE(-ONE), Q, N2, DBLE(ONE),
      $               R, N2 )
       RESID = ZLANSY( '1', 'Upper', N2, R, N2, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,N2))

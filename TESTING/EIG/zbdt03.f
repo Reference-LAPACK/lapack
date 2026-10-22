@@ -151,6 +151,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -168,7 +170,7 @@
       EXTERNAL           ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          ABS, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -193,8 +195,9 @@
                DO 10 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    10          CONTINUE
-               CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
-     $                     WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', N, N, -CMPLX( ONE, KIND=DP ),
+     $                     U, LDU, WORK( N+1 ), 1, CMPLX( ZERO,
+     $                     KIND=DP ), WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.GT.1 ) THEN
                   WORK( J-1 ) = WORK( J-1 ) + E( J-1 )
@@ -212,8 +215,9 @@
                DO 30 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    30          CONTINUE
-               CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
-     $                     WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', N, N, -CMPLX( ONE, KIND=DP ),
+     $                     U, LDU, WORK( N+1 ), 1, CMPLX( ZERO,
+     $                     KIND=DP ), WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.LT.N ) THEN
                   WORK( J+1 ) = WORK( J+1 ) + E( J )
@@ -232,8 +236,9 @@
             DO 50 I = 1, N
                WORK( N+I ) = S( I )*VT( I, J )
    50       CONTINUE
-            CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
-     $                  WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
+            CALL ZGEMV( 'No transpose', N, N, -CMPLX( ONE, KIND=DP ), U,
+     $                  LDU, WORK( N+1 ), 1, CMPLX( ZERO, KIND=DP ),
+     $                  WORK, 1 )
             WORK( J ) = WORK( J ) + D( J )
             RESID = MAX( RESID, DZASUM( N, WORK, 1 ) )
    60    CONTINUE

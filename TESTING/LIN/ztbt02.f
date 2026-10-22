@@ -176,6 +176,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -192,7 +194,7 @@
       EXTERNAL           ZAXPY, ZCOPY, ZTBMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX
+      INTRINSIC          CMPLX, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -226,7 +228,7 @@
       DO 10 J = 1, NRHS
          CALL ZCOPY( N, X( 1, J ), 1, WORK, 1 )
          CALL ZTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
-         CALL ZAXPY( N, DCMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
+         CALL ZAXPY( N, CMPLX( -ONE, KIND=DP ), B( 1, J ), 1, WORK, 1 )
          BNORM = DZASUM( N, WORK, 1 )
          XNORM = DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN

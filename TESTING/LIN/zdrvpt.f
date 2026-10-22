@@ -159,6 +159,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES
@@ -191,7 +193,7 @@
      $                   ZPTT01, ZPTT02, ZPTT05, ZPTTRF, ZPTTRS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX
+      INTRINSIC          ABS, CMPLX, MAX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -495,8 +497,8 @@
      $               D( N+N ) = ZERO
                END IF
 *
-               CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
-     $                      DCMPLX( ZERO ), X, LDA )
+               CALL ZLASET( 'Full', N, NRHS, CMPLX( ZERO, KIND=DP ),
+     $                      CMPLX( ZERO, KIND=DP ), X, LDA )
 *
 *              Solve the system and compute the condition number and
 *              error bounds using ZPTSVX.

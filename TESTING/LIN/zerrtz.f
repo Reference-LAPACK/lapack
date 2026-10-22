@@ -65,6 +65,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 2 )
 *     ..
@@ -92,18 +94,18 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     ..
 *     .. Executable Statements ..
 *
       NOUT = NUNIT
       C2 = PATH( 2: 3 )
-      A( 1, 1 ) = DCMPLX( 1.D+0, -1.D+0 )
-      A( 1, 2 ) = DCMPLX( 2.D+0, -2.D+0 )
-      A( 2, 2 ) = DCMPLX( 3.D+0, -3.D+0 )
-      A( 2, 1 ) = DCMPLX( 4.D+0, -4.D+0 )
-      W( 1 ) = DCMPLX( 0.D+0, 0.D+0 )
-      W( 2 ) = DCMPLX( 0.D+0, 0.D+0 )
+      A( 1, 1 ) = CMPLX( 1.D+0, -1.D+0, KIND=DP )
+      A( 1, 2 ) = CMPLX( 2.D+0, -2.D+0, KIND=DP )
+      A( 2, 2 ) = CMPLX( 3.D+0, -3.D+0, KIND=DP )
+      A( 2, 1 ) = CMPLX( 4.D+0, -4.D+0, KIND=DP )
+      W( 1 ) = CMPLX( 0.D+0, 0.D+0, KIND=DP )
+      W( 2 ) = CMPLX( 0.D+0, 0.D+0, KIND=DP )
       OK = .TRUE.
 *
 *     Test error exits for the trapezoidal routines.

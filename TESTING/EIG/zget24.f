@@ -386,7 +386,7 @@
      $                   ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -840,20 +840,20 @@
             IPNT( I ) = I
             SELVAL( I ) = .FALSE.
             SELWR( I ) = DBLE( WTMP( I ) )
-            SELWI( I ) = DIMAG( WTMP( I ) )
+            SELWI( I ) = AIMAG( WTMP( I ) )
   230    CONTINUE
          DO 250 I = 1, N - 1
             KMIN = I
             IF( ISRT.EQ.0 ) THEN
                VRIMIN = DBLE( WTMP( I ) )
             ELSE
-               VRIMIN = DIMAG( WTMP( I ) )
+               VRIMIN = AIMAG( WTMP( I ) )
             END IF
             DO 240 J = I + 1, N
                IF( ISRT.EQ.0 ) THEN
                   VRICMP = DBLE( WTMP( J ) )
                ELSE
-                  VRICMP = DIMAG( WTMP( J ) )
+                  VRICMP = AIMAG( WTMP( J ) )
                END IF
                IF( VRICMP.LT.VRIMIN ) THEN
                   KMIN = J

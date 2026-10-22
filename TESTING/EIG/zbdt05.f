@@ -140,6 +140,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -185,7 +187,7 @@
 *
       J = 0
       DO 10 I = 1, NS
-         WORK( J+I ) =  WORK( J+I ) + DCMPLX( S( I ), ZERO )
+         WORK( J+I ) =  WORK( J+I ) + CMPLX( S( I ), ZERO, KIND=DP )
          RESID = MAX( RESID, DZASUM( NS, WORK( J+1 ), 1 ) )
          J = J + NS
    10 CONTINUE

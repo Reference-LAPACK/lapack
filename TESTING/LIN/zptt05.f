@@ -179,13 +179,13 @@
       EXTERNAL           IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

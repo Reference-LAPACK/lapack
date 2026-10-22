@@ -138,13 +138,13 @@
       LOGICAL            LSAMEN
 
 *     .. Intrinsic Functions ..
-      INTRINSIC          SQRT, MAX, ABS, DBLE, DIMAG
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, SQRT
 
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 
 *     .. Statement Function Definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 
 *     .. Parameters ..
       INTEGER            NWISE_I, CWISE_I

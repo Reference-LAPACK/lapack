@@ -178,6 +178,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES
@@ -221,7 +223,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX
+      INTRINSIC          CMPLX, MAX
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -497,10 +499,12 @@
 *                    --- Test ZPPSVX ---
 *
                      IF( .NOT.PREFAC .AND. NPP.GT.0 )
-     $                  CALL ZLASET( 'Full', NPP, 1, DCMPLX( ZERO ),
-     $                               DCMPLX( ZERO ), AFAC, NPP )
-                     CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
-     $                            DCMPLX( ZERO ), X, LDA )
+     $                  CALL ZLASET( 'Full', NPP, 1, CMPLX( ZERO,
+     $                               KIND=DP ), CMPLX( ZERO, KIND=DP ),
+     $                               AFAC, NPP )
+                     CALL ZLASET( 'Full', N, NRHS,
+     $                            CMPLX( ZERO, KIND=DP ),
+     $                            CMPLX( ZERO, KIND=DP ), X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT='F' and
