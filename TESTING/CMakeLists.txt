@@ -171,9 +171,11 @@ if(BUILD_COMPLEX16)
   # ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
   if(BUILD_DEFAULT_API)
     add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
+    add_test(NAME LAPACK-test_zgges3_scaling COMMAND $<TARGET_FILE:test_zgges3_scaling>)
   endif()
   if(BUILD_INDEX64_EXT_API)
     add_test(NAME LAPACK-test_wq_zrwork_64 COMMAND $<TARGET_FILE:test_wq_zrwork_64>)
+    add_test(NAME LAPACK-test_zgges3_scaling_64 COMMAND $<TARGET_FILE:test_zgges3_scaling_64>)
   endif()
 endif()
 
