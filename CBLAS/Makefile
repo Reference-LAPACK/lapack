@@ -9,7 +9,7 @@ cblas: include/cblas_mangling.h
 	$(MAKE) -C src
 
 include/cblas_mangling.h: include/cblas_mangling_with_flags.h.in
-	cp include/cblas_mangling_with_flags.h.in $@
+	cp $< $@
 
 .PHONY: cblas_testing
 cblas_testing: cblas
@@ -24,6 +24,7 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C testing clean
 	$(MAKE) -C examples clean
+	rm -f include/cblas_mangling.h
 cleanobj:
 	$(MAKE) -C src cleanobj
 	$(MAKE) -C testing cleanobj
