@@ -8,13 +8,16 @@ program test_cgges3_scaling
   ! IPARMQ crossover NMIN=75, without overriding the tuning routines.
   integer, parameter :: n=80, lwork=200000
   complex(sp) :: a(n,n), b(n,n), a0(n,n), b0(n,n), q(n,n), z(n,n)
-  complex(sp) :: alpha(n), beta(n), work(lwork), residual(n,n)
+  complex(sp) :: alpha(n), beta(n), residual(n,n)
+  complex(sp), allocatable :: work(:)
   real(sp) :: rwork(8*n), scale, anorm, bnorm, aerr, berr, lower, tol
   real(sp), external :: slamch
   logical :: bwork(n), select_none
-  external :: select_none
+  external :: select_none, cgges3
   integer :: i, j, info, sdim
 
+  ! Keep the large workspace off the stack, including recursive builds.
+  allocate(work(lwork))
   scale=1.0e-30_sp
   a=0; b=0
   do i=1,n
@@ -53,6 +56,7 @@ program test_cgges3_scaling
   print '(a,es24.16e3)', 'A relative max-entry residual = ',aerr
   print '(a,es24.16e3)', 'B relative max-entry residual = ',berr
   print '(a,es24.16e3)', 'B strict lower triangle maximum = ',lower
+  deallocate(work)
   ! Negated comparisons also reject NaNs.
   if(.not.(aerr<=tol .and. berr<=tol .and. lower==0.0_sp)) stop 1
 end program
