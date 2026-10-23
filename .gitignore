@@ -37,6 +37,9 @@ TESTING/*.txt
 !TESTING/CMakeLists.txt
 TESTING/x*
 
+# LAPACKE
+LAPACKE/include/lapack.h
+
 # LAPACKE example
 LAPACKE/example/xexample*
 
