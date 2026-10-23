@@ -29,6 +29,9 @@ int main(int argc, char** argv)
         sizeof(lapacke_high_level_tests) / sizeof(lapacke_high_level_tests[0]);
     size_t i;
     int matched = 0;
+    LAPACK_XERBLA F77_cb;
+    LAPACK_get_lapack_xerbla(&F77_cb);
+    LAPACK_set_lapack_xerbla(F77_cb);
 
     /* Route LAPACKE-internal allocations through the counting/failing test
      * allocator; everything else tests the stock LAPACKE library. */
