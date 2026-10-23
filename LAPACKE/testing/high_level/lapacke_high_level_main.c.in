@@ -23,21 +23,43 @@ static const struct {
 } lapacke_high_level_tests[] = {
 @LAPACKE_HIGH_LEVEL_ENTRIES@};
 
+static char *saved_name = NULL;
+static lapack_int saved_info = 0;
+void LAPACKE_xer_replace LAPACKE_XERBLA_ARGS
+{
+    saved_name = strdup(name);
+    saved_info = info;
+}
+
 int main(int argc, char** argv)
 {
-    const size_t test_count =
+    const size_t test_count = 1 +
         sizeof(lapacke_high_level_tests) / sizeof(lapacke_high_level_tests[0]);
     size_t i;
     int matched = 0;
+    lapack_int minus_1 = -1, two = 2, one = 1, info = 0;
     LAPACK_XERBLA F77_cb;
     LAPACK_get_lapack_xerbla(&F77_cb);
     LAPACK_set_lapack_xerbla(F77_cb);
+    API_SUFFIX(LAPACKE_set_xerbla)(LAPACKE_xer_replace, NULL);
+    LAPACK_sgesv(&minus_1, &minus_1, NULL, &minus_1, NULL, NULL, &minus_1, &info);
+    if (!saved_name || saved_info != 1 || strncmp("SGESV", saved_name, 5) != 0) {
+        lapacke_test_failures++;
+        if (!saved_name)
+            fprintf(stderr, "LAPACKE_xerbla override failed: name NULL\n");
+        else if (saved_info != 1)
+            fprintf(stderr, "LAPACKE_xerbla override failed: saved_info=%d\n", (int)saved_info);
+        else
+            fprintf(stderr, "LAPACKE_xerbla override failed: name='%s'\n", saved_name);
+    }
+    free(saved_name);
+    API_SUFFIX(LAPACKE_set_xerbla)(NULL, NULL);
 
     /* Route LAPACKE-internal allocations through the counting/failing test
      * allocator; everything else tests the stock LAPACKE library. */
     LAPACKE_set_alloc(lapacke_test_malloc, lapacke_test_free);
 
-    for (i = 0; i < test_count; i++) {
+    for (i = 0; i < test_count-1; i++) {
         if (argc > 1 && strcmp(argv[1], lapacke_high_level_tests[i].name) != 0) {
             continue;
         }
@@ -49,13 +71,13 @@ int main(int argc, char** argv)
 
     if (argc > 1 && matched == 0) {
         fprintf(stderr, "unknown test '%s'; available tests:\n", argv[1]);
-        for (i = 0; i < test_count; i++) {
+        for (i = 0; i < test_count-1; i++) {
             fprintf(stderr, "  %s\n", lapacke_high_level_tests[i].name);
         }
         return 1;
     }
 
-    printf("%d checks, %d failures\n", lapacke_test_checks,
+    printf("%d checks, %d failures\n", lapacke_test_checks + 1,
            lapacke_test_failures);
-    return lapacke_test_failures > 125 ? 125 : lapacke_test_failures;
+    return lapacke_test_failures > 126 ? 126 : lapacke_test_failures;
 }
