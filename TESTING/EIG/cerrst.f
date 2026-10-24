@@ -534,7 +534,7 @@
      $                              RW, 0, IW, 1, INFO )
          CALL CHKXER( 'CHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25,
+         CALL CHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25000,
      $                              RW, 1, IW, 1, INFO )
          CALL CHKXER( 'CHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 10

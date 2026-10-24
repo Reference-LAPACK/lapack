@@ -728,7 +728,7 @@
          CALL DSYEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, IW, 0, INFO )
          CALL CHKXER( 'DSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL DSYEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25, IW, 0, INFO )
+         CALL DSYEVD_2STAGE('N', 'U', 2, A, 2, X, W, 25000, IW, 0, INFO)
          CALL CHKXER( 'DSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 10
 *         CALL DSYEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 27, IW, 11, INFO )

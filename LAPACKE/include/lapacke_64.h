@@ -41,6 +41,11 @@ extern "C" {
 
 /* C-LAPACK function prototypes */
 
+typedef void (*lapack_xerbla_64_callback_t)(const char *name, int64_t info);
+typedef void (*lapack_fortran_xerbla_64_callback_t)(char const*F77_srname, int64_t *info, size_t len);
+lapack_xerbla_64_callback_t LAPACKE_get_xerbla_64(void);
+lapack_xerbla_64_callback_t LAPACKE_set_xerbla_64(lapack_xerbla_64_callback_t cb, lapack_fortran_xerbla_64_callback_t F77_cb);
+
 int64_t LAPACKE_sbdsdc_64( int matrix_layout, char uplo, char compq,
                            int64_t n, float* d, float* e, float* u,
                            int64_t ldu, float* vt, int64_t ldvt, float* q,
