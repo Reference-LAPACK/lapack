@@ -63,7 +63,7 @@ extern "C" {
         IS_D_NONZERO(*(((double*)&x)+1)) )
 
     /* Error handler */
-    void API_SUFFIX(LAPACKE_xerbla)( const char *name, lapack_int info );
+    void API_SUFFIX(LAPACKE_xerbla) LAPACKE_XERBLA_ARGS;
 
     /* Compare two chars (case-insensitive) */
     lapack_logical API_SUFFIX(LAPACKE_lsame)( char ca,  char cb )

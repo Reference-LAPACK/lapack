@@ -63,7 +63,7 @@ defaults:
 
 jobs:
   default-test-install:
-    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}${{matrix.toolchain.flat_namespace && ' flat_namespace' || ''}} (${{ matrix.lib_type }})
     runs-on: ${{ matrix.toolchain.os }}
 
     # CODECOV_TOKEN is stored as a secret of the 'codecov' environment.  Nothing
@@ -100,6 +100,8 @@ jobs:
           CFLAGS: "-Wall -pedantic"
           FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
         - FC: gfortran-14
+          name: macos / gfortran / flat_namespace
+          flat_namespace: true
           CC: gcc-14
           os: macos-26
           CFLAGS: "-Wall -pedantic"
@@ -141,6 +143,7 @@ jobs:
         - FC: nagfor
           CC: gcc
           name: mac_arm64 / nagfor + AppleClang
+          flat_namespace: true
           os: macos-26
           CFLAGS: "-Wall -pedantic"
           FFLAGS: ""
@@ -371,13 +374,6 @@ jobs:
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}
       run: |
         [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
-
-        extra=()
-        if [ "${RUNNER_OS}" = "macOS" ] && [ "${{ matrix.lib_type }}" = shared ]; then
-          # Symbol resolution in the test suite needs flat namespaces on macOS
-          extra+=(-D USE_FLAT_NAMESPACE:BOOL=ON)
-        fi
-
         cmake -B build -G Ninja \
           -D CMAKE_BUILD_TYPE=Release \
           -D CMAKE_Fortran_COMPILER="${FC}" \
@@ -389,7 +385,7 @@ jobs:
           -D LAPACKE_WITH_TMG:BOOL=ON \
           -D BUILD_SHARED_LIBS:BOOL=${{ matrix.lib_type == 'shared' && 'ON' || 'OFF' }} \
           -D LAPACK_TESTING_JUNIT_JOB_ID="${JOB_ID}" \
-          "${extra[@]}"
+          ${{ matrix.toolchain.flat_namespace && '-D USE_FLAT_NAMESPACE:BOOL=ON' || '' }}
 
     - name: Build
       if: ${{ runner.os != 'Windows' && env.SKIP_TOOLCHAIN != 'true' }}

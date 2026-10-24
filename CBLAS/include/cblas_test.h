@@ -36,6 +36,14 @@
   #define FCHAR char *
 #endif
 
+#ifdef BLAS_FORTRAN_STRLEN_END
+#define BLAS_FORTRAN_XERBLA_LENARG , FORTRAN_STRLEN len
+#else
+#define BLAS_FORTRAN_XERBLA_LENARG
+#endif
+#define BLAS_FORTRAN_XERBLA_ARGS \
+  /*not a func-style macro*/(FCHAR F77_srname, void *vinfo BLAS_FORTRAN_XERBLA_LENARG)
+
 #define TRUE         1
 #define PASSED       1
 #define TEST_ROW_MJR 1
