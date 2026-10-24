@@ -54,7 +54,7 @@ include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
 	cp $< $@
 
 include/lapack.h: include/lapack.h.in
-	python3 -c "import sys; sys.stdout.write(sys.stdin.read().replace('@FORTRAN_STRLEN_TYPE@', 'size_t'))" < $< > $@
+	sed 's/@FORTRAN_STRLEN_TYPE@/size_t/' $< > $@.tmp && mv $@.tmp $@
 
 .PHONY: lapacke_example
 lapacke_example: lapacke

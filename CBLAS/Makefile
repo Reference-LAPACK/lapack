@@ -12,7 +12,7 @@ include/cblas_mangling.h: include/cblas_mangling_with_flags.h.in
 	cp $< $@
 
 include/cblas_f77.h: include/cblas_f77.h.in
-	python3 -c "import sys; sys.stdout.write(sys.stdin.read().replace('@FORTRAN_STRLEN_TYPE@', 'size_t'))" < $< > $@
+	sed 's/@FORTRAN_STRLEN_TYPE@/size_t/' $< > $@.tmp && mv $@.tmp $@
 
 .PHONY: cblas_testing
 cblas_testing: cblas
