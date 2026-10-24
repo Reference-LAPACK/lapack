@@ -825,6 +825,14 @@ void F77_c2chke(char *rout
       API_SUFFIX(cblas_chpr)(CblasRowMajor, CblasUpper, 0, RALPHA, X, 0, A );
       chkxer();
    }
+   static int version_printed = 0;
+   if (!version_printed) {
+      CBLAS_INT major, minor, patch;
+      API_SUFFIX(cblas_iblaver)(&major, &minor, &patch);
+      printf(" CBLAS wrapping BLAS version %d.%d.%d\n",
+         (int)major, (int)minor, (int)patch);
+      version_printed = 1;
+   }
    if (cblas_ok == TRUE)
        printf(" %-12s PASSED THE TESTS OF ERROR-EXITS\n", cblas_rout);
    else
