@@ -581,7 +581,8 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, KF, KMAX, LDA, LWORK, M, N, NRHS
-      REAL               ABSTOL,  MAXC2NRMK, RELMAXC2NRMK, RELTOL
+      REAL, INTENT(IN) :: ABSTOL, RELTOL
+      REAL               MAXC2NRMK, RELMAXC2NRMK
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * ), JPIV( * )
@@ -601,7 +602,8 @@
       INTEGER            IINFO, IOFFSET, IWS, J, JB, JBF, JMAXB, JMAX,
      $                   JMAXC2NRM, KP1, LWKOPT, MINMN, N_SUB, NB,
      $                   NBMIN, NX
-      REAL               EPS, HUGEVAL, MAXC2NRM, SAFMIN
+      REAL               ABSTOL_WORK, EPS, HUGEVAL, MAXC2NRM,
+     $                   RELTOL_WORK, SAFMIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAQP2RK, SLAQP3RK, XERBLA
@@ -822,17 +824,22 @@
 *
       EPS = SLAMCH('Epsilon')
 *
+*     Preserve the input tolerances; adjust only local copies.
+*
+      ABSTOL_WORK = ABSTOL
+      RELTOL_WORK = RELTOL
+*
 *     Adjust ABSTOL
 *
-      IF( ABSTOL.GE.ZERO ) THEN
+      IF( ABSTOL_WORK.GE.ZERO ) THEN
          SAFMIN = SLAMCH('Safe minimum')
-         ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
+         ABSTOL_WORK = MAX( ABSTOL_WORK, TWO*SAFMIN )
       END IF
 *
 *     Adjust RELTOL
 *
-      IF( RELTOL.GE.ZERO ) THEN
-         RELTOL = MAX( RELTOL, EPS )
+      IF( RELTOL_WORK.GE.ZERO ) THEN
+         RELTOL_WORK = MAX( RELTOL_WORK, EPS )
       END IF
 *
 *     ===================================================================
@@ -849,7 +856,7 @@
 *     i.e. MAXC2NRM <= ABSTOL or RELMAXC2NRM <= RELTOL
 *     (which is ONE <= RELTOL).
 *
-      IF( MAXC2NRM.LE.ABSTOL .OR. ONE.LE.RELTOL ) THEN
+      IF( MAXC2NRM.LE.ABSTOL_WORK .OR. ONE.LE.RELTOL_WORK ) THEN
 *
          K = 0
          MAXC2NRMK = MAXC2NRM
@@ -938,8 +945,9 @@
 *
 *           Factorize JB columns among the columns A(J:N).
 *
-            CALL SLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB, ABSTOL,
-     $                     RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
+            CALL SLAQP3RK( M, N_SUB, NRHS, IOFFSET, JB,
+     $                     ABSTOL_WORK, RELTOL_WORK, KP1, MAXC2NRM,
+     $                     A( 1, J ), LDA,
      $                     DONE, JBF, MAXC2NRMK, RELMAXC2NRMK,
      $                     JPIV( J ), TAU( J ),
      $                     WORK( J ), WORK( N+J ),
@@ -1005,7 +1013,8 @@
          IOFFSET = J-1
 *
          CALL SLAQP2RK( M, N_SUB, NRHS, IOFFSET, JMAX-J+1,
-     $                  ABSTOL, RELTOL, KP1, MAXC2NRM, A( 1, J ), LDA,
+     $                  ABSTOL_WORK, RELTOL_WORK, KP1, MAXC2NRM,
+     $                  A( 1, J ), LDA,
      $                  KF, MAXC2NRMK, RELMAXC2NRMK, JPIV( J ),
      $                  TAU( J ), WORK( J ), WORK( N+J ),
      $                  WORK( 2*N+1 ), IINFO )
