@@ -187,7 +187,7 @@
          RESID = DLANSY( '1', 'Upper', MNMIN, WORK, LDWORK,
      $           WORK( LDWORK*MNMIN+1 ) )
          RESID = ( RESID / DBLE( K ) ) / EPS
-      ELSE IF( TRANSU.EQ.'T' ) THEN
+      ELSE IF( LSAME( TRANSU, 'T' ) ) THEN
 *
 *        Find the maximum element in abs( I - U'*U ) / ( m * EPS )
 *

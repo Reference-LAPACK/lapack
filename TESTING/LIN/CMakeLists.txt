@@ -285,6 +285,21 @@ function(add_lin_executable name)
   endif()
 endfunction()
 
+# Keep the source-library environment queries separate from the LIN override.
+add_lin_executable(test_env_case SOURCES test_env_case.f90)
+add_lin_executable(test_lin_env_case
+  SOURCES test_lin_env_case.f90 ilaenv.f xlaenv.f)
+foreach(_target test_env_case test_lin_env_case)
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-${_target} COMMAND $<TARGET_FILE:${_target}>)
+    set_tests_properties(LAPACK-${_target} PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=1")
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-${_target}_64 COMMAND $<TARGET_FILE:${_target}_64>)
+    set_tests_properties(LAPACK-${_target}_64 PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=1")
+  endif()
+endforeach()
+
 if(BUILD_SINGLE)
   add_lin_executable(xlintsts
     SOURCES ${ALINTST} ${SLINTST} ${SCLNTST}

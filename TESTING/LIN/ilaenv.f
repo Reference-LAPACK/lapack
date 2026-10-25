@@ -69,7 +69,8 @@
 *> \param[in] NAME
 *> \verbatim
 *>          NAME is CHARACTER*(*)
-*>          The name of the calling subroutine.
+*>          The name of the calling subroutine. Comparisons are
+*>          case-insensitive; short names are blank-padded locally.
 *> \endverbatim
 *>
 *> \param[in] OPTS
@@ -160,12 +161,16 @@
 *
 *  =====================================================================
 *
+*     .. Local Scalars ..
+      CHARACTER*6        SUBNAM
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
       INTEGER            IEEECK
-      EXTERNAL           IEEECK
+      LOGICAL            LSAMEN
+      EXTERNAL           IEEECK, LSAMEN
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -182,13 +187,14 @@
 *
 *        Return a value from the common block.
 *
-         IF ( NAME(2:6).EQ.'GEQR ' ) THEN
+         SUBNAM = NAME
+         IF( LSAMEN( 5, SUBNAM( 2:6 ), 'GEQR ' ) ) THEN
             IF (N3.EQ.2) THEN
                ILAENV = IPARMS ( 2 )
             ELSE
                ILAENV = IPARMS ( 1 )
             END IF
-         ELSE IF ( NAME(2:6).EQ.'GELQ ' ) THEN
+         ELSE IF( LSAMEN( 5, SUBNAM( 2:6 ), 'GELQ ' ) ) THEN
             IF (N3.EQ.2) THEN
                ILAENV = IPARMS ( 2 )
             ELSE

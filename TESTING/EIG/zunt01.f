@@ -208,7 +208,7 @@
 *
          RESID = ZLANSY( '1', 'Upper', MNMIN, WORK, LDWORK, RWORK )
          RESID = ( RESID / DBLE( K ) ) / EPS
-      ELSE IF( TRANSU.EQ.'C' ) THEN
+      ELSE IF( LSAME( TRANSU, 'C' ) ) THEN
 *
 *        Find the maximum element in abs( I - U'*U ) / ( m * EPS )
 *

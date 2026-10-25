@@ -249,11 +249,14 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            NH, NS
-      INTEGER            I, IC, IZ
       CHARACTER          SUBNAM*6
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LOG, MAX, MOD, NINT, REAL
+*     ..
+*     .. External Functions ..
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. Executable Statements ..
       IF( ( ISPEC.EQ.ISHFTS ) .OR. ( ISPEC.EQ.INWIN ) .OR.
@@ -321,68 +324,23 @@
 *        .     NH=IHI-ILO+1.
 *
 *
-*        Convert NAME to upper case if the first character is lower case.
+*        Compare names without changing their case.
 *
          IPARMQ = 0
          SUBNAM = NAME
-         IC = ICHAR( SUBNAM( 1: 1 ) )
-         IZ = ICHAR( 'Z' )
-         IF( IZ.EQ.90 .OR. IZ.EQ.122 ) THEN
 *
-*           ASCII character set
-*
-            IF( IC.GE.97 .AND. IC.LE.122 ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC-32 )
-               DO I = 2, 6
-                  IC = ICHAR( SUBNAM( I: I ) )
-                  IF( IC.GE.97 .AND. IC.LE.122 )
-     $               SUBNAM( I: I ) = CHAR( IC-32 )
-               END DO
-            END IF
-*
-         ELSE IF( IZ.EQ.233 .OR. IZ.EQ.169 ) THEN
-*
-*           EBCDIC character set
-*
-            IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $          ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $          ( IC.GE.162 .AND. IC.LE.169 ) ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC+64 )
-               DO I = 2, 6
-                  IC = ICHAR( SUBNAM( I: I ) )
-                  IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $                ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $                ( IC.GE.162 .AND. IC.LE.169 ) )SUBNAM( I:
-     $                I ) = CHAR( IC+64 )
-               END DO
-            END IF
-*
-         ELSE IF( IZ.EQ.218 .OR. IZ.EQ.250 ) THEN
-*
-*           Prime machines:  ASCII+128
-*
-            IF( IC.GE.225 .AND. IC.LE.250 ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC-32 )
-               DO I = 2, 6
-                  IC = ICHAR( SUBNAM( I: I ) )
-                  IF( IC.GE.225 .AND. IC.LE.250 )
-     $               SUBNAM( I: I ) = CHAR( IC-32 )
-               END DO
-            END IF
-         END IF
-*
-         IF( SUBNAM( 2:6 ).EQ.'GGHRD' .OR.
-     $       SUBNAM( 2:6 ).EQ.'GGHD3' ) THEN
+         IF( LSAMEN( 5, SUBNAM( 2:6 ), 'GGHRD' ) .OR. LSAMEN( 5, SUBNAM(
+     $       2:6 ), 'GGHD3' ) ) THEN
             IPARMQ = 1
             IF( NH.GE.K22MIN )
      $         IPARMQ = 2
-         ELSE IF ( SUBNAM( 4:6 ).EQ.'EXC' ) THEN
+         ELSE IF ( LSAMEN( 3, SUBNAM( 4:6 ), 'EXC' ) ) THEN
             IF( NH.GE.KACMIN )
      $         IPARMQ = 1
             IF( NH.GE.K22MIN )
      $         IPARMQ = 2
-         ELSE IF ( SUBNAM( 2:6 ).EQ.'HSEQR' .OR.
-     $             SUBNAM( 2:5 ).EQ.'LAQR' ) THEN
+         ELSE IF ( LSAMEN( 5, SUBNAM( 2:6 ), 'HSEQR' ) .OR. LSAMEN( 4,
+     $       SUBNAM( 2:5 ), 'LAQR' ) ) THEN
             IF( NS.GE.KACMIN )
      $         IPARMQ = 1
             IF( NS.GE.K22MIN )
