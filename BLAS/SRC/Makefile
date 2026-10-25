@@ -106,7 +106,7 @@ $(ALLBLAS): $(FRC)
 SBLAS2 = sgemv.o sgbmv.o ssymv.o ssbmv.o sspmv.o \
 	strmv.o stbmv.o stpmv.o strsv.o stbsv.o stpsv.o \
 	sger.o ssyr.o sspr.o ssyr2.o sspr2.o \
-	sskewsymv.o sskewsyr2.o
+	sskewsymv.o sskewsbmv.o sskewsyr2.o
 $(SBLAS2): $(FRC)
 
 CBLAS2 = cgemv.o cgbmv.o chemv.o chbmv.o chpmv.o \
@@ -117,7 +117,7 @@ $(CBLAS2): $(FRC)
 DBLAS2 = dgemv.o dgbmv.o dsymv.o dsbmv.o dspmv.o \
 	dtrmv.o dtbmv.o dtpmv.o dtrsv.o dtbsv.o dtpsv.o \
 	dger.o dsyr.o dspr.o dsyr2.o dspr2.o \
-	dskewsymv.o dskewsyr2.o
+	dskewsymv.o dskewsbmv.o dskewsyr2.o
 $(DBLAS2): $(FRC)
 
 ZBLAS2 = zgemv.o zgbmv.o zhemv.o zhbmv.o zhpmv.o \
