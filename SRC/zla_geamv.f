@@ -210,13 +210,13 @@
       INTEGER            ILATRANS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, ABS, REAL, DIMAG, SIGN
+      INTRINSIC          ABS, AIMAG, MAX, REAL, SIGN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function Definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

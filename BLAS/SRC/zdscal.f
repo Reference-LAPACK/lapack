@@ -94,11 +94,13 @@
 *     .. Local Scalars ..
       INTEGER I,NINCX
 *     .. Parameters ..
+      INTEGER DP
+      PARAMETER (DP=KIND(0.0D0))
       DOUBLE PRECISION ONE
       PARAMETER (ONE=1.0D+0)
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DBLE, DCMPLX, DIMAG
+      INTRINSIC AIMAG, CMPLX, DBLE
 *     ..
       IF (N.LE.0 .OR. INCX.LE.0 .OR. DA.EQ.ONE) RETURN
       IF (INCX.EQ.1) THEN
@@ -106,7 +108,7 @@
 *        code for increment equal to 1
 *
          DO I = 1,N
-            ZX(I) = DCMPLX(DA*DBLE(ZX(I)),DA*DIMAG(ZX(I)))
+            ZX(I) = CMPLX(DA*DBLE(ZX(I)),DA*AIMAG(ZX(I)),KIND=DP)
          END DO
       ELSE
 *
@@ -114,7 +116,7 @@
 *
          NINCX = N*INCX
          DO I = 1,NINCX,INCX
-            ZX(I) = DCMPLX(DA*DBLE(ZX(I)),DA*DIMAG(ZX(I)))
+            ZX(I) = CMPLX(DA*DBLE(ZX(I)),DA*AIMAG(ZX(I)),KIND=DP)
          END DO
       END IF
       RETURN

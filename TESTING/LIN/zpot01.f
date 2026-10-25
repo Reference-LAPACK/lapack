@@ -140,7 +140,7 @@
       EXTERNAL           ZHER, ZSCAL, ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG
+      INTRINSIC          AIMAG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -164,7 +164,7 @@
 *     an error code if any are nonzero.
 *
       DO 10 J = 1, N
-         IF( DIMAG( AFAC( J, J ) ).NE.ZERO ) THEN
+         IF( AIMAG( AFAC( J, J ) ).NE.ZERO ) THEN
             RESID = ONE / EPS
             RETURN
          END IF

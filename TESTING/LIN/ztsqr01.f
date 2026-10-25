@@ -221,7 +221,7 @@
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
       CALL ZLASET( 'Full', M, M, CZERO, ONE, R, M )
-      CALL ZHERK( 'U', 'C', M, M, DREAL(-ONE), Q, M, DREAL(ONE), R, M )
+      CALL ZHERK( 'U', 'C', M, M, DBLE(-ONE), Q, M, DBLE(ONE), R, M )
       RESID = ZLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,M))
 *
@@ -365,7 +365,7 @@
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
       CALL ZLASET( 'Full', N, N, CZERO, ONE, LQ, L )
-      CALL ZHERK( 'U', 'C', N, N, DREAL(-ONE), Q, N, DREAL(ONE), LQ, L)
+      CALL ZHERK( 'U', 'C', N, N, DBLE(-ONE), Q, N, DBLE(ONE), LQ, L)
       RESID = ZLANSY( '1', 'Upper', N, LQ, L, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,N))
 *

@@ -286,6 +286,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ONE, TWO, ZERO, HALF, TWENTY
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
      $                   TWO = ( 2.0D+0, 0.0D+0 ),
@@ -298,7 +300,7 @@
       COMPLEX*16         IMEPS, REEPS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MOD, SIN
+      INTRINSIC          CMPLX, MOD, SIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM
@@ -338,7 +340,8 @@
 *
          DO 60 I = 1, M
             DO 50 J = 1, N
-               R( I, J ) = ( HALF-SIN( DCMPLX( I / J ) ) )*TWENTY
+               R( I, J ) = ( HALF-SIN( CMPLX( I / J,
+     $                          KIND=DP ) ) )*TWENTY
                L( I, J ) = R( I, J )
    50       CONTINUE
    60    CONTINUE
@@ -347,8 +350,8 @@
          DO 80 I = 1, M
             DO 70 J = 1, M
                IF( I.LE.J ) THEN
-                  A( I, J ) = ( HALF-SIN( DCMPLX( I ) ) )*TWO
-                  D( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*TWO
+                  A( I, J ) = ( HALF-SIN( CMPLX( I, KIND=DP ) ) )*TWO
+                  D( I, J ) = ( HALF-SIN( CMPLX( I*J, KIND=DP ) ) )*TWO
                ELSE
                   A( I, J ) = ZERO
                   D( I, J ) = ZERO
@@ -359,8 +362,8 @@
          DO 100 I = 1, N
             DO 90 J = 1, N
                IF( I.LE.J ) THEN
-                  B( I, J ) = ( HALF-SIN( DCMPLX( I+J ) ) )*TWO
-                  E( I, J ) = ( HALF-SIN( DCMPLX( J ) ) )*TWO
+                  B( I, J ) = ( HALF-SIN( CMPLX( I+J, KIND=DP ) ) )*TWO
+                  E( I, J ) = ( HALF-SIN( CMPLX( J, KIND=DP ) ) )*TWO
                ELSE
                   B( I, J ) = ZERO
                   E( I, J ) = ZERO
@@ -370,8 +373,8 @@
 *
          DO 120 I = 1, M
             DO 110 J = 1, N
-               R( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*TWENTY
-               L( I, J ) = ( HALF-SIN( DCMPLX( I+J ) ) )*TWENTY
+               R( I, J ) = ( HALF-SIN( CMPLX( I*J, KIND=DP ) ) )*TWENTY
+               L( I, J ) = ( HALF-SIN( CMPLX( I+J, KIND=DP ) ) )*TWENTY
   110       CONTINUE
   120    CONTINUE
 *
@@ -394,22 +397,23 @@
       ELSE IF( PRTYPE.EQ.4 ) THEN
          DO 160 I = 1, M
             DO 150 J = 1, M
-               A( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*TWENTY
-               D( I, J ) = ( HALF-SIN( DCMPLX( I+J ) ) )*TWO
+               A( I, J ) = ( HALF-SIN( CMPLX( I*J, KIND=DP ) ) )*TWENTY
+               D( I, J ) = ( HALF-SIN( CMPLX( I+J, KIND=DP ) ) )*TWO
   150       CONTINUE
   160    CONTINUE
 *
          DO 180 I = 1, N
             DO 170 J = 1, N
-               B( I, J ) = ( HALF-SIN( DCMPLX( I+J ) ) )*TWENTY
-               E( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*TWO
+               B( I, J ) = ( HALF-SIN( CMPLX( I+J, KIND=DP ) ) )*TWENTY
+               E( I, J ) = ( HALF-SIN( CMPLX( I*J, KIND=DP ) ) )*TWO
   170       CONTINUE
   180    CONTINUE
 *
          DO 200 I = 1, M
             DO 190 J = 1, N
-               R( I, J ) = ( HALF-SIN( DCMPLX( J / I ) ) )*TWENTY
-               L( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*TWO
+               R( I, J ) = ( HALF-SIN( CMPLX( J / I,
+     $                          KIND=DP ) ) )*TWENTY
+               L( I, J ) = ( HALF-SIN( CMPLX( I*J, KIND=DP ) ) )*TWO
   190       CONTINUE
   200    CONTINUE
 *
@@ -418,8 +422,10 @@
          IMEPS = ( HALF-TWO ) / ALPHA
          DO 220 I = 1, M
             DO 210 J = 1, N
-               R( I, J ) = ( HALF-SIN( DCMPLX( I*J ) ) )*ALPHA / TWENTY
-               L( I, J ) = ( HALF-SIN( DCMPLX( I+J ) ) )*ALPHA / TWENTY
+               R( I, J ) = ( HALF-SIN( CMPLX( I*J,
+     $                          KIND=DP ) ) )*ALPHA / TWENTY
+               L( I, J ) = ( HALF-SIN( CMPLX( I+J,
+     $                          KIND=DP ) ) )*ALPHA / TWENTY
   210       CONTINUE
   220    CONTINUE
 *

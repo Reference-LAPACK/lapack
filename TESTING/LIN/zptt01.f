@@ -120,7 +120,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -139,7 +139,7 @@
       DO 10 I = 1, N - 1
          DE = DF( I )*EF( I )
          WORK( N+I ) = DE - E( I )
-         WORK( 1+I ) = DE*DCONJG( EF( I ) ) + DF( I+1 ) - D( I+1 )
+         WORK( 1+I ) = DE*CONJG( EF( I ) ) + DF( I+1 ) - D( I+1 )
    10 CONTINUE
 *
 *     Compute the 1-norms of the tridiagonal matrices A and WORK.

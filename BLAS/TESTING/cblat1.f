@@ -55,7 +55,7 @@
       REAL             SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.EQ.12) THEN
+         IF (ICASE.EQ.12 .OR. ICASE.EQ.14) THEN
             CALL CHECK0(SFAC)
          ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
      +            ICASE.EQ.13) THEN
@@ -115,7 +115,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -133,6 +133,7 @@
       DATA             L(11)/'CAXPBY'/
       DATA             L(12)/'CROTG '/
       DATA             L(13)/'CSROT '/
+      DATA             L(14)/'SCABS1'/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -146,6 +147,12 @@
       END
       SUBROUTINE CHECK0(SFAC)
       IMPLICIT NONE
+*
+*     CROTG and SCABS1 take no vector at all, so neither the loop over
+*     N nor the loop over INCX that CHECK1 and CHECK2 run applies to
+*     them, and they get a check of their own.  Nothing in the library
+*     calls SCABS1, so this is the only thing that exercises it.
+*
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -164,6 +171,11 @@
      +                  CGOT(1), CWANT(1), CSIZE(1)
       REAL              SWANT(1)
       REAL              CCTRUE(8)
+      COMPLEX           CV0(6)
+      REAL              STRUE0(6)
+*     .. External Functions ..
+      REAL              SCABS1
+      EXTERNAL          SCABS1
 *     .. External Subroutines ..
       EXTERNAL          CROTG, CTEST, STEST1
 *     .. Intrinsic Functions ..
@@ -195,7 +207,29 @@
      +                  (4.0E0,0.0E0), (5.0E0,0.0E0),
      +                  (5.0E0,0.0E0), (0.0E0,5.0E0),
      +                  (3.0E0,4.0E0), (-5.0E0,0.0E0)/
+*
+*     Every part of the SCABS1 arguments is exact in binary, so the
+*     expected sums are exact as well, and the zero case is required to
+*     be exact by the zero it also supplies as the comparison size.  The
+*     three (3,4) variants separate |Re| + |Im| from the Euclidean
+*     length, which would give 5 rather than 7, and cover both signs of
+*     both parts.
+*
+      DATA              CV0/(0.0E0,0.0E0), (0.5E0,0.0E0),
+     +                  (0.0E0,-0.25E0), (3.0E0,4.0E0), (-3.0E0,4.0E0),
+     +                  (-3.0E0,-4.0E0)/
+      DATA              STRUE0/0.0E0, 0.5E0, 0.25E0, 7.0E0, 7.0E0,
+     +                  7.0E0/
 *     .. Executable Statements ..
+*
+      IF (ICASE.EQ.14) THEN
+*        .. SCABS1 ..
+         DO 10 K = 1, 6
+            N = K
+            CALL STEST1(SCABS1(CV0(K)),STRUE0(K),STRUE0(K),SFAC)
+   10    CONTINUE
+         RETURN
+      END IF
 *
       DO 20 K = 1, 8
 *        .. Set N=K for identification in output if any ..
@@ -300,7 +334,7 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX           CA
-      REAL              SA
+      REAL              SA, SBIG, SINF, SNAN, SONE, SZERO
       INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
       COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
@@ -314,7 +348,7 @@
 *     .. External Subroutines ..
       EXTERNAL          CB1NRM2, CSCAL, CSSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         HUGE, MAX
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -468,6 +502,68 @@
                IX = IX + INCX
   180       CONTINUE
             CALL ITEST1(ICAMAX(N,CXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0E0
+            SZERO = 0.0E0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 190 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  190       CONTINUE
+            CXR(1+3*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),4)
+            CXR(1+5*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),4)
+*
+*           A NaN in the imaginary part counts just as much as one in
+*           the real part.
+            IX = 1
+            DO 200 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  200       CONTINUE
+            CXR(1+INCX) = CMPLX(SZERO,SNAN)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),2)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 210 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  210       CONTINUE
+            CXR(1+2*INCX) = CMPLX(SINF,SZERO)
+            CXR(1+4*INCX) = CMPLX(SZERO,SINF)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            CXR(1+6*INCX) = CMPLX(SNAN,SZERO)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),7)
+*
+*           An element can be finite while abs(real) + abs(aimag)
+*           overflows; i?amax then switches to a scaled comparison for
+*           the rest of the vector.  Both entries below are finite, so
+*           the larger of the two wins.
+            IX = 1
+            DO 220 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  220       CONTINUE
+            CXR(1+INCX) = CMPLX(0.6E0*SBIG,0.6E0*SBIG)
+            CXR(1+4*INCX) = CMPLX(0.9E0*SBIG,0.9E0*SBIG)
+            CALL ITEST1(ICAMAX(N,CXR,INCX),5)
          END IF
    60 CONTINUE
 *
@@ -889,6 +985,29 @@
 *
    40    CONTINUE
    60 CONTINUE
+*
+*     Test the quick return taken when the scalar multiplying X is zero.
+*     The cases above all use a nonzero CA, so neither shortcut is
+*     reached by them: CAXPY must leave Y untouched and CAXPBY must scale
+*     Y by CB alone.
+*
+      IF (ICASE.EQ.3 .OR. ICASE.EQ.11) THEN
+         DO 120 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            IF (ICASE.EQ.3) THEN
+               CTY(I) = CY1(I)
+            ELSE
+               CTY(I) = CB*CY1(I)
+            END IF
+  120    CONTINUE
+         IF (ICASE.EQ.3) THEN
+            CALL CAXPY(7,(0.0E0,0.0E0),CX,1,CY,1)
+         ELSE
+            CALL CAXPBY(7,(0.0E0,0.0E0),CX,1,CB,CY,1)
+         END IF
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
+      END IF
       RETURN
 *
 *     End of CHECK2
@@ -1108,7 +1227,7 @@
 *  =====================================================================
 *     .. Parameters ..
       INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      PARAMETER         (NMAX=20, NOUT=6, NV=12)
       REAL              HALF, ONE, THREE, TWO, ZERO
       PARAMETER         (HALF=0.5E+0, ONE=1.0E+0, TWO= 2.0E+0,
      &                  THREE=3.0E+0, ZERO=0.0E+0)
@@ -1148,6 +1267,14 @@
       VALUES(8) = SAFMAX
       VALUES(9) = SXVALS(V0,2)
       VALUES(10) = SXVALS(V0,3)
+*     SQRT(SAFMIN) is exactly the threshold at which ?NRM2 switches to
+*     its small accumulator: SAFMIN is RADIX**(MINEXPONENT-1) and the
+*     threshold is that exponent halved.  One value at the threshold
+*     and one just below it let the small part of a vector outweigh
+*     its mid-range part, which is what the arm ordering the two sums
+*     needs.  A wider pair leaves them too far apart for that.
+      VALUES(11) = SQRT(SAFMIN)
+      VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
       ROGUE = CMPLX(1234.5678E+0,-1234.5678E+0)
       FIRST = .TRUE.
 *

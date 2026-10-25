@@ -162,7 +162,7 @@
       EXTERNAL           XER_REPLACE, ZGEMV, ZGERU, ZLACGV, ZSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -251,7 +251,7 @@
                   D11 = A( KCNEXT-1 )
                   D22 = A( KCNEXT+K )
                   D12 = A( KCNEXT+K-1 )
-                  D21 = DCONJG( D12 )
+                  D21 = CONJG( D12 )
                   DO 20 J = 1, NRHS
                      T1 = B( K, J )
                      T2 = B( K+1, J )
@@ -339,7 +339,7 @@
                   D11 = A( KCNEXT )
                   D22 = A( KC )
                   D21 = A( KCNEXT+1 )
-                  D12 = DCONJG( D21 )
+                  D12 = CONJG( D21 )
                   DO 50 J = 1, NRHS
                      T1 = B( K-1, J )
                      T2 = B( K, J )
@@ -450,7 +450,7 @@
                   D11 = A( KC-1 )
                   D22 = A( KC+K-1 )
                   D12 = A( KC+K-2 )
-                  D21 = DCONJG( D12 )
+                  D21 = CONJG( D12 )
                   DO 80 J = 1, NRHS
                      T1 = B( K-1, J )
                      T2 = B( K, J )
@@ -535,7 +535,7 @@
                   D11 = A( KC )
                   D22 = A( KCNEXT )
                   D21 = A( KC+1 )
-                  D12 = DCONJG( D21 )
+                  D12 = CONJG( D21 )
                   DO 110 J = 1, NRHS
                      T1 = B( K, J )
                      T2 = B( K+1, J )

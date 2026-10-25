@@ -211,13 +211,13 @@
       INTEGER            ILAUPLO
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, ABS, SIGN, REAL, DIMAG
+      INTRINSIC          ABS, AIMAG, MAX, REAL, SIGN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function Definitions ..
-      CABS1( ZDUM ) = ABS( DBLE ( ZDUM ) ) + ABS( DIMAG ( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE ( ZDUM ) ) + ABS( AIMAG ( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -357,7 +357,7 @@
                   DO J = 1, I
                      TEMP = CABS1( A( J, I ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*CABS1( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -365,7 +365,7 @@
                   DO J = I+1, N
                      TEMP = CABS1( A( I, J ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*CABS1( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -393,7 +393,7 @@
                   DO J = 1, I
                      TEMP = CABS1( A( I, J ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*CABS1( X( JX ) )*TEMP
                      JX = JX + INCX
@@ -401,7 +401,7 @@
                   DO J = I+1, N
                      TEMP = CABS1( A( J, I ) )
                      SYMB_ZERO = SYMB_ZERO .AND.
-     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
                      Y( IY ) = Y( IY ) + ALPHA*CABS1( X( JX ) )*TEMP
                      JX = JX + INCX

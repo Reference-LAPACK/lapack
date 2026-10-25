@@ -202,7 +202,7 @@
       EXTERNAL           XERBLA, ZDSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *
 *     Test the input parameters
 *
@@ -258,7 +258,7 @@
                CANSWAP = .TRUE.
                DO J = 1, L
                   IF( I.NE.J .AND. ( DBLE( A( I, J ) ).NE.ZERO .OR.
-     $                DIMAG( A( I, J ) ).NE.ZERO ) ) THEN
+     $                AIMAG( A( I, J ) ).NE.ZERO ) ) THEN
                      CANSWAP = .FALSE.
                      EXIT
                   END IF
@@ -295,7 +295,7 @@
                CANSWAP = .TRUE.
                DO I = K, L
                   IF( I.NE.J .AND. ( DBLE( A( I, J ) ).NE.ZERO .OR.
-     $                DIMAG( A( I, J ) ).NE.ZERO ) ) THEN
+     $                AIMAG( A( I, J ) ).NE.ZERO ) ) THEN
                      CANSWAP = .FALSE.
                      EXIT
                   END IF

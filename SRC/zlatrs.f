@@ -254,6 +254,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, HALF, ONE, TWO
       PARAMETER          ( ZERO = 0.0D+0, HALF = 0.5D+0, ONE = 1.0D+0,
      $                   TWO = 2.0D+0 )
@@ -278,15 +280,15 @@
       EXTERNAL           DSCAL, XERBLA, ZAXPY, ZDSCAL, ZTRSV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1, CABS2
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
       CABS2( ZDUM ) = ABS( DBLE( ZDUM ) / 2.D0 ) +
-     $                ABS( DIMAG( ZDUM ) / 2.D0 )
+     $                ABS( AIMAG( ZDUM ) / 2.D0 )
 *     ..
 *     .. Executable Statements ..
 *
@@ -380,7 +382,7 @@
                DO J = 2, N
                   DO I = 1, J - 1
                      TMAX = MAX( TMAX, ABS( DBLE( A( I, J ) ) ),
-     $                           ABS( DIMAG(A ( I, J ) ) ) )
+     $                           ABS( AIMAG(A ( I, J ) ) ) )
                   END DO
                END DO
             ELSE
@@ -390,7 +392,7 @@
                DO J = 1, N - 1
                   DO I = J + 1, N
                      TMAX = MAX( TMAX, ABS( DBLE( A( I, J ) ) ),
-     $                           ABS( DIMAG(A ( I, J ) ) ) )
+     $                           ABS( AIMAG(A ( I, J ) ) ) )
                   END DO
                END DO
             END IF
@@ -779,7 +781,7 @@
                END IF
 *
                CSUMJ = ZERO
-               IF( USCAL.EQ.DCMPLX( ONE ) ) THEN
+               IF( USCAL.EQ.CMPLX( ONE, KIND=DP ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
 *                 call ZDOTU to perform the dot product.
@@ -805,7 +807,7 @@
                   END IF
                END IF
 *
-               IF( USCAL.EQ.DCMPLX( TSCAL ) ) THEN
+               IF( USCAL.EQ.CMPLX( TSCAL, KIND=DP ) ) THEN
 *
 *                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j)
 *                 was not used to scale the dotproduct.
@@ -894,7 +896,7 @@
 *
                   REC = REC*HALF
                   IF( NOUNIT ) THEN
-                     TJJS = DCONJG( A( J, J ) )*TSCAL
+                     TJJS = CONJG( A( J, J ) )*TSCAL
                   ELSE
                      TJJS = TSCAL
                   END IF
@@ -914,7 +916,7 @@
                END IF
 *
                CSUMJ = ZERO
-               IF( USCAL.EQ.DCMPLX( ONE ) ) THEN
+               IF( USCAL.EQ.CMPLX( ONE, KIND=DP ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
 *                 call ZDOTC to perform the dot product.
@@ -931,18 +933,18 @@
 *
                   IF( UPPER ) THEN
                      DO 180 I = 1, J - 1
-                        CSUMJ = CSUMJ + ( DCONJG( A( I, J ) )*USCAL )*
+                        CSUMJ = CSUMJ + ( CONJG( A( I, J ) )*USCAL )*
      $                          X( I )
   180                CONTINUE
                   ELSE IF( J.LT.N ) THEN
                      DO 190 I = J + 1, N
-                        CSUMJ = CSUMJ + ( DCONJG( A( I, J ) )*USCAL )*
+                        CSUMJ = CSUMJ + ( CONJG( A( I, J ) )*USCAL )*
      $                          X( I )
   190                CONTINUE
                   END IF
                END IF
 *
-               IF( USCAL.EQ.DCMPLX( TSCAL ) ) THEN
+               IF( USCAL.EQ.CMPLX( TSCAL, KIND=DP ) ) THEN
 *
 *                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j)
 *                 was not used to scale the dotproduct.
@@ -950,7 +952,7 @@
                   X( J ) = X( J ) - CSUMJ
                   XJ = CABS1( X( J ) )
                   IF( NOUNIT ) THEN
-                     TJJS = DCONJG( A( J, J ) )*TSCAL
+                     TJJS = CONJG( A( J, J ) )*TSCAL
                   ELSE
                      TJJS = TSCAL
                      IF( TSCAL.EQ.ONE )

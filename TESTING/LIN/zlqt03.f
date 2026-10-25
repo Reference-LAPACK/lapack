@@ -151,6 +151,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         ROGUE
@@ -173,7 +175,7 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX
+      INTRINSIC          CMPLX, DBLE, MAX
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -239,12 +241,12 @@
 *
             IF( LSAME( SIDE, 'L' ) ) THEN
                CALL ZGEMM( TRANS, 'No transpose', MC, NC, MC,
-     $                     DCMPLX( -ONE ), Q, LDA, C, LDA,
-     $                     DCMPLX( ONE ), CC, LDA )
+     $                     CMPLX( -ONE, KIND=DP ), Q, LDA, C, LDA,
+     $                     CMPLX( ONE, KIND=DP ), CC, LDA )
             ELSE
                CALL ZGEMM( 'No transpose', TRANS, MC, NC, NC,
-     $                     DCMPLX( -ONE ), C, LDA, Q, LDA,
-     $                     DCMPLX( ONE ), CC, LDA )
+     $                     CMPLX( -ONE, KIND=DP ), C, LDA, Q, LDA,
+     $                     CMPLX( ONE, KIND=DP ), CC, LDA )
             END IF
 *
 *           Compute error in the difference

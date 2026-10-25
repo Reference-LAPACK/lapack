@@ -88,6 +88,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0 )
       DOUBLE PRECISION   TWOPI
@@ -101,7 +103,7 @@
       EXTERNAL           DLARAN
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, EXP, LOG, SQRT
+      INTRINSIC          CMPLX, EXP, LOG, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -115,28 +117,28 @@
 *
 *        real and imaginary parts each uniform (0,1)
 *
-         ZLARND = DCMPLX( T1, T2 )
+         ZLARND = CMPLX( T1, T2, KIND=DP )
       ELSE IF( IDIST.EQ.2 ) THEN
 *
 *        real and imaginary parts each uniform (-1,1)
 *
-         ZLARND = DCMPLX( TWO*T1-ONE, TWO*T2-ONE )
+         ZLARND = CMPLX( TWO*T1-ONE, TWO*T2-ONE, KIND=DP )
       ELSE IF( IDIST.EQ.3 ) THEN
 *
 *        real and imaginary parts each normal (0,1)
 *
          ZLARND = SQRT( -TWO*LOG( T1 ) )*
-     $            EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+     $            EXP( CMPLX( ZERO, TWOPI*T2, KIND=DP ) )
       ELSE IF( IDIST.EQ.4 ) THEN
 *
 *        uniform distribution on the unit disc abs(z) <= 1
 *
-         ZLARND = SQRT( T1 )*EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+         ZLARND = SQRT( T1 )*EXP( CMPLX( ZERO, TWOPI*T2, KIND=DP ) )
       ELSE IF( IDIST.EQ.5 ) THEN
 *
 *        uniform distribution on the unit circle abs(z) = 1
 *
-         ZLARND = EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+         ZLARND = EXP( CMPLX( ZERO, TWOPI*T2, KIND=DP ) )
       END IF
       RETURN
 *

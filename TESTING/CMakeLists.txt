@@ -67,6 +67,14 @@ if(BUILD_SINGLE)
 
   # ======== SINGLE DMD EIG TESTS ===========================
   add_lapack_test(sdmd.out sdmd.in xdmdeigtsts)
+
+  # ======== SINGLE QZ SCALING REGRESSION ====================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_sgges3_scaling COMMAND $<TARGET_FILE:test_sgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_sgges3_scaling_64 COMMAND $<TARGET_FILE:test_sgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_DOUBLE)
@@ -100,6 +108,14 @@ if(BUILD_DOUBLE)
 
   # ======== DOUBLE DMD EIG TESTS ===========================
   add_lapack_test(ddmd.out ddmd.in xdmdeigtstd)
+
+  # ======== DOUBLE QZ SCALING REGRESSION ====================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_dgges3_scaling COMMAND $<TARGET_FILE:test_dgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_dgges3_scaling_64 COMMAND $<TARGET_FILE:test_dgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_COMPLEX)
@@ -133,6 +149,14 @@ if(BUILD_COMPLEX)
 
   # ======== COMPLEX DMD EIG TESTS ===========================
   add_lapack_test(cdmd.out cdmd.in xdmdeigtstc)
+
+  # ======== COMPLEX QZ SCALING REGRESSION ===================
+  if(BUILD_DEFAULT_API)
+    add_test(NAME LAPACK-test_cgges3_scaling COMMAND $<TARGET_FILE:test_cgges3_scaling>)
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    add_test(NAME LAPACK-test_cgges3_scaling_64 COMMAND $<TARGET_FILE:test_cgges3_scaling_64>)
+  endif()
 endif()
 
 if(BUILD_COMPLEX16)
@@ -171,9 +195,11 @@ if(BUILD_COMPLEX16)
   # ======== COMPLEX16 WORKSPACE QUERY PRECISION TEST ===========
   if(BUILD_DEFAULT_API)
     add_test(NAME LAPACK-test_wq_zrwork COMMAND $<TARGET_FILE:test_wq_zrwork>)
+    add_test(NAME LAPACK-test_zgges3_scaling COMMAND $<TARGET_FILE:test_zgges3_scaling>)
   endif()
   if(BUILD_INDEX64_EXT_API)
     add_test(NAME LAPACK-test_wq_zrwork_64 COMMAND $<TARGET_FILE:test_wq_zrwork_64>)
+    add_test(NAME LAPACK-test_zgges3_scaling_64 COMMAND $<TARGET_FILE:test_zgges3_scaling_64>)
   endif()
 endif()
 

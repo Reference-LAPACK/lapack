@@ -162,6 +162,11 @@
 *     ..
 *     .. Executable Statements ..
 *
+*     Quick return if C is empty
+*
+      IF( M.LE.0 .OR. N.LE.0 )
+     $   RETURN
+*
       APPLYLEFT = LSAME( SIDE, 'L' )
       LASTV = 1
       LASTC = 0

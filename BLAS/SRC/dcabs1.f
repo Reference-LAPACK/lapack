@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DCABS1 computes |Re(.)| + |Im(.)| of a double complex number
+*>    DCABS1 computes |Re(.)| + |Im(.)| of a double complex number.
 *> \endverbatim
 *
 *  Arguments:
@@ -42,6 +42,18 @@
 *
 *> \ingroup abs1
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>    No routine in the reference BLAS or in LAPACK calls DCABS1 any
+*>    longer: each one inlines ABS(DBLE(Z)) + ABS(DIMAG(Z)) instead.
+*>    DCABS1 is kept for backwards compatibility and because vendor
+*>    BLAS libraries have long exported it, so callers outside this
+*>    library might depend on it.
+*> \endverbatim
+*>
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DCABS1(Z)
       IMPLICIT NONE
@@ -57,9 +69,9 @@
 *  =====================================================================
 *
 *     .. Intrinsic Functions ..
-      INTRINSIC ABS,DBLE,DIMAG
+      INTRINSIC ABS, AIMAG, DBLE
 *
-      DCABS1 = ABS(DBLE(Z)) + ABS(DIMAG(Z))
+      DCABS1 = ABS(DBLE(Z)) + ABS(AIMAG(Z))
       RETURN
 *
 *     End of DCABS1

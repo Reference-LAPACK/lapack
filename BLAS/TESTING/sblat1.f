@@ -386,10 +386,14 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       INTEGER           I, IX, LEN, NP1
+      INTEGER           NLONG
+      PARAMETER         (NLONG=16)
+      REAL              SLSUM, SLSIZE(1)
+      REAL              SBIG, SINF, SNAN, SONE
 *     .. Local Arrays ..
       REAL              DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
      +                  DVR(8), SA(10), STEMP(1), STRUE(8), SX(8),
-     +                  SXR(15)
+     +                  SXR(15), SXL(NLONG), STL(NLONG)
       INTEGER           ITRUE2(5), ITRUEC(5)
 *     .. External Functions ..
       REAL              SASUM, SNRM2
@@ -398,7 +402,7 @@
 *     .. External Subroutines ..
       EXTERNAL          ITEST1, SB1NRM2, SSCAL, STEST, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         ABS, HUGE, MAX, MOD, REAL, SQRT
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -486,8 +490,94 @@
                IX = IX + INCX
   120       CONTINUE
             CALL ITEST1(ISAMAX(N,SXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0E0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 130 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  130       CONTINUE
+            SXR(1+3*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),4)
+            SXR(1+5*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),4)
+            SXR(1) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),1)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 140 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  140       CONTINUE
+            SXR(1+2*INCX) = SINF
+            SXR(1+4*INCX) = SINF
+            CALL ITEST1(ISAMAX(N,SXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            SXR(1+6*INCX) = SNAN
+            CALL ITEST1(ISAMAX(N,SXR,INCX),7)
          END IF
    80 CONTINUE
+*
+*     The Level 1 routines process their vectors in unrolled blocks of
+*     up to seven elements once N reaches the unroll factor, and handle
+*     only the remainder below it.  Every case above stops at N = 4, so
+*     the unrolled bodies never ran.  Repeat the tests at N = 16, which
+*     leaves a nonzero remainder for every unroll factor in use.  The
+*     data are small integers, so the unrolled and sequential sums agree
+*     exactly and the expected values can be formed here.
+*
+      IF (ICASE.GE.7 .AND. ICASE.LE.10) THEN
+         INCX = 1
+         N = NLONG
+         DO 150 I = 1, N
+            SXL(I) = REAL(MOD(I,7) - 3)
+  150    CONTINUE
+*        Give the search a unique maximum away from either end.
+         SXL(11) = -9E0
+         IF (ICASE.EQ.7) THEN
+*           .. ?NRM2 ..
+            SLSUM = 0E0
+            DO 160 I = 1, N
+               SLSUM = SLSUM + SXL(I)*SXL(I)
+  160       CONTINUE
+            SLSUM = SQRT(SLSUM)
+            SLSIZE(1) = SLSUM
+            CALL STEST1(SNRM2(N,SXL,INCX),SLSUM,SLSIZE,SFAC)
+         ELSE IF (ICASE.EQ.8) THEN
+*           .. ?ASUM ..
+            SLSUM = 0E0
+            DO 170 I = 1, N
+               SLSUM = SLSUM + ABS(SXL(I))
+  170       CONTINUE
+            SLSIZE(1) = SLSUM
+            CALL STEST1(SASUM(N,SXL,INCX),SLSUM,SLSIZE,SFAC)
+         ELSE IF (ICASE.EQ.9) THEN
+*           .. ?SCAL ..
+            DO 180 I = 1, N
+               STL(I) = SA(1)*SXL(I)
+  180       CONTINUE
+            CALL SSCAL(N,SA(1),SXL,INCX)
+            CALL STEST(N,SXL,STL,STL,SFAC)
+         ELSE
+*           .. I?AMAX ..
+            CALL ITEST1(ISAMAX(N,SXL,INCX),11)
+         END IF
+      END IF
       RETURN
 *
 *     End of CHECK1
@@ -503,7 +593,9 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      REAL              SA,SB
+      REAL              SA,SB, SLSUM
+      INTEGER           NLONG
+      PARAMETER         (NLONG=16)
       INTEGER           I, J, KI, KN, KNI, KPAR, KSIZE, LENX, LENY,
      $                  LINCX, LINCY, MX, MY
 *     .. Local Arrays ..
@@ -515,7 +607,9 @@
      $                  DT19XB(7,4,4), DT19XC(7,4,4),DT19XD(7,4,4),
      $                  DT19Y(7,4,16), DT19YA(7,4,4),DT19YB(7,4,4),
      $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5),
-     $                  ST7B(4,4), STY0(1), SX0(1), SY0(1), DT20(7,4,4)
+     $                  ST7B(4,4), STY0(1), SX0(1), SY0(1), DT20(7,4,4),
+     $                  SXL(NLONG), SYL(NLONG), STXL(NLONG),
+     $                  STYL(NLONG), SLSIZE(1)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       REAL              SDOT, SDSDOT
@@ -523,7 +617,7 @@
 *     .. External Subroutines ..
       EXTERNAL          SAXPY, SAXPBY,SCOPY, SROTM, SSWAP, STEST, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         ABS, MIN
+      INTRINSIC         ABS, MIN, MOD, REAL
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, PASS
 *     .. Data statements ..
@@ -886,6 +980,105 @@
             END IF
   100    CONTINUE
   120 CONTINUE
+*
+*     Test the quick return taken when the scalar multiplying X is zero.
+*     The cases above all use SA = 0.3, so neither shortcut is reached by
+*     them: SAXPY must leave Y untouched and SAXPBY must scale Y by SB
+*     alone.  SB is a power of two, so the expected result is exact.
+*
+      IF (ICASE.EQ.2 .OR. ICASE.EQ.14) THEN
+         DO 130 I = 1, 7
+            SX(I) = DX1(I)
+            SY(I) = DY1(I)
+            IF (ICASE.EQ.2) THEN
+               STY(I) = DY1(I)
+            ELSE
+               STY(I) = SB*DY1(I)
+            END IF
+  130    CONTINUE
+         IF (ICASE.EQ.2) THEN
+            CALL SAXPY(7,0.0E0,SX,1,SY,1)
+         ELSE
+            CALL SAXPBY(7,0.0E0,SX,1,SB,SY,1)
+         END IF
+         CALL STEST(7,SY,STY,STY,SFAC)
+      END IF
+*
+*     As in CHECK1, the two-vector routines unroll once N reaches the
+*     unroll factor and the cases above stop at N = 4.  Repeat them at
+*     N = 16 on small integer data, so the expected values are exact.
+*
+      IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
+     +    ICASE.EQ.6 .OR. ICASE.EQ.12 .OR. ICASE.EQ.13 .OR.
+     +    ICASE.EQ.14) THEN
+         INCX = 1
+         INCY = 1
+         N = NLONG
+         DO 200 I = 1, N
+            SXL(I) = REAL(MOD(I,7) - 3)
+            SYL(I) = REAL(MOD(I,5) - 2)
+  200    CONTINUE
+         IF (ICASE.EQ.1 .OR. ICASE.EQ.13) THEN
+*           .. ?DOT / ?SDOT ..
+            SLSUM = 0E0
+            DO 210 I = 1, N
+               SLSUM = SLSUM + SXL(I)*SYL(I)
+  210       CONTINUE
+            SLSIZE(1) = SLSUM
+            IF (ICASE.EQ.1) THEN
+               CALL STEST1(SDOT(N,SXL,INCX,SYL,INCY),SLSUM,SLSIZE,
+     +                     SFAC)
+            ELSE
+               CALL STEST1(SDSDOT(N,0.0E0,SXL,INCX,SYL,INCY),SLSUM,
+     +                     SLSIZE,SFAC)
+            END IF
+         ELSE
+            DO 220 I = 1, N
+               STXL(I) = SXL(I)
+               STYL(I) = SYL(I)
+  220       CONTINUE
+            IF (ICASE.EQ.2) THEN
+*              .. ?AXPY ..
+               DO 230 I = 1, N
+                  STYL(I) = SYL(I) + SA*SXL(I)
+  230          CONTINUE
+               CALL SAXPY(N,SA,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.5) THEN
+*              .. ?COPY ..
+               DO 240 I = 1, N
+                  STYL(I) = SXL(I)
+  240          CONTINUE
+               CALL SCOPY(N,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.6) THEN
+*              .. ?SWAP ..
+               DO 250 I = 1, N
+                  STXL(I) = SYL(I)
+                  STYL(I) = SXL(I)
+  250          CONTINUE
+               CALL SSWAP(N,SXL,INCX,SYL,INCY)
+            ELSE IF (ICASE.EQ.12) THEN
+*              .. ?ROTM, with DFLAG = -1 so the full H is applied ..
+               DTEMP(1) = -1E0
+               DTEMP(2) = 2E0
+               DTEMP(3) = 3E0
+               DTEMP(4) = 4E0
+               DTEMP(5) = 5E0
+               DO 260 I = 1, N
+                  STXL(I) = SXL(I)*DTEMP(2) + SYL(I)*DTEMP(4)
+                  STYL(I) = SXL(I)*DTEMP(3) + SYL(I)*DTEMP(5)
+  260          CONTINUE
+               CALL SROTM(N,SXL,INCX,SYL,INCY,DTEMP)
+            ELSE
+*              .. ?AXPBY ..
+               DO 270 I = 1, N
+                  STYL(I) = SA*SXL(I) + SB*SYL(I)
+  270          CONTINUE
+               CALL SAXPBY(N,SA,SXL,INCX,SB,SYL,INCY)
+            END IF
+            CALL STEST(N,SXL,STXL,STXL,SFAC)
+            CALL STEST(N,SYL,STYL,STYL,SFAC)
+         END IF
+      END IF
       RETURN
 *
 *     End of CHECK2
@@ -1276,7 +1469,7 @@
 *  =====================================================================
 *     .. Parameters ..
       INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      PARAMETER         (NMAX=20, NOUT=6, NV=12)
       REAL              HALF, ONE, TWO, ZERO
       PARAMETER         (HALF=0.5E+0, ONE=1.0E+0, TWO= 2.0E+0,
      &                  ZERO=0.0E+0)
@@ -1314,6 +1507,14 @@
       VALUES(8) = SAFMAX
       VALUES(9) = SXVALS(V0,2)
       VALUES(10) = SXVALS(V0,3)
+*     SQRT(SAFMIN) is exactly the threshold at which ?NRM2 switches to
+*     its small accumulator: SAFMIN is RADIX**(MINEXPONENT-1) and the
+*     threshold is that exponent halved.  One value at the threshold
+*     and one just below it let the small part of a vector outweigh
+*     its mid-range part, which is what the arm ordering the two sums
+*     needs.  A wider pair leaves them too far apart for that.
+      VALUES(11) = SQRT(SAFMIN)
+      VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
       ROGUE = -1234.5678E+0
       FIRST = .TRUE.
 *

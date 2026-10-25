@@ -367,7 +367,7 @@
       EXTERNAL           ZLARF1F, ZLARFG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SQRT
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN
@@ -588,8 +588,8 @@
 *
          IF( DISNAN( DBLE( TAU(KK) ) ) ) THEN
             TAUNAN = DBLE( TAU(KK) )
-         ELSE IF( DISNAN( DIMAG( TAU(KK) ) ) ) THEN
-            TAUNAN = DIMAG( TAU(KK) )
+         ELSE IF( DISNAN( AIMAG( TAU(KK) ) ) ) THEN
+            TAUNAN = AIMAG( TAU(KK) )
          ELSE
             TAUNAN = ZERO
          END IF

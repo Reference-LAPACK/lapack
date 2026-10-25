@@ -145,7 +145,7 @@
       COMPLEX*16         TEMP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -285,24 +285,24 @@
 *
 *           Solve U**H * x = b.
 *
-            B( 1, J ) = B( 1, J ) / DCONJG( D( 1 ) )
+            B( 1, J ) = B( 1, J ) / CONJG( D( 1 ) )
             IF( N.GT.1 )
-     $         B( 2, J ) = ( B( 2, J )-DCONJG( DU( 1 ) )*B( 1, J ) ) /
-     $                     DCONJG( D( 2 ) )
+     $         B( 2, J ) = ( B( 2, J )-CONJG( DU( 1 ) )*B( 1, J ) ) /
+     $                     CONJG( D( 2 ) )
             DO 140 I = 3, N
-               B( I, J ) = ( B( I, J )-DCONJG( DU( I-1 ) )*B( I-1, J )-
-     $                     DCONJG( DU2( I-2 ) )*B( I-2, J ) ) /
-     $                     DCONJG( D( I ) )
+               B( I, J ) = ( B( I, J )-CONJG( DU( I-1 ) )*B( I-1, J )-
+     $                     CONJG( DU2( I-2 ) )*B( I-2, J ) ) /
+     $                     CONJG( D( I ) )
   140       CONTINUE
 *
 *           Solve L**H * x = b.
 *
             DO 150 I = N - 1, 1, -1
                IF( IPIV( I ).EQ.I ) THEN
-                  B( I, J ) = B( I, J ) - DCONJG( DL( I ) )*B( I+1, J )
+                  B( I, J ) = B( I, J ) - CONJG( DL( I ) )*B( I+1, J )
                ELSE
                   TEMP = B( I+1, J )
-                  B( I+1, J ) = B( I, J ) - DCONJG( DL( I ) )*TEMP
+                  B( I+1, J ) = B( I, J ) - CONJG( DL( I ) )*TEMP
                   B( I, J ) = TEMP
                END IF
   150       CONTINUE
@@ -315,25 +315,25 @@
 *
 *           Solve U**H * x = b.
 *
-               B( 1, J ) = B( 1, J ) / DCONJG( D( 1 ) )
+               B( 1, J ) = B( 1, J ) / CONJG( D( 1 ) )
                IF( N.GT.1 )
-     $            B( 2, J ) = ( B( 2, J )-DCONJG( DU( 1 ) )*B( 1, J ) )
-     $                         / DCONJG( D( 2 ) )
+     $            B( 2, J ) = ( B( 2, J )-CONJG( DU( 1 ) )*B( 1, J ) )
+     $                         / CONJG( D( 2 ) )
                DO 160 I = 3, N
-                  B( I, J ) = ( B( I, J )-DCONJG( DU( I-1 ) )*
-     $                        B( I-1, J )-DCONJG( DU2( I-2 ) )*
-     $                        B( I-2, J ) ) / DCONJG( D( I ) )
+                  B( I, J ) = ( B( I, J )-CONJG( DU( I-1 ) )*
+     $                        B( I-1, J )-CONJG( DU2( I-2 ) )*
+     $                        B( I-2, J ) ) / CONJG( D( I ) )
   160          CONTINUE
 *
 *           Solve L**H * x = b.
 *
                DO 170 I = N - 1, 1, -1
                   IF( IPIV( I ).EQ.I ) THEN
-                     B( I, J ) = B( I, J ) - DCONJG( DL( I ) )*
+                     B( I, J ) = B( I, J ) - CONJG( DL( I ) )*
      $                           B( I+1, J )
                   ELSE
                      TEMP = B( I+1, J )
-                     B( I+1, J ) = B( I, J ) - DCONJG( DL( I ) )*TEMP
+                     B( I+1, J ) = B( I, J ) - CONJG( DL( I ) )*TEMP
                      B( I, J ) = TEMP
                   END IF
   170          CONTINUE

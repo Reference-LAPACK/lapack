@@ -168,6 +168,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -187,7 +189,7 @@
       EXTERNAL           XER_REPLACE, ZGEMM, ZLACPY, ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX
+      INTRINSIC          CMPLX, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -220,8 +222,8 @@
 *
       CALL ZLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
       CALL ZGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS,
-     $            DCMPLX( -ONE ), A, LDA, X, LDX, DCMPLX( ONE ), C,
-     $            LDB )
+     $            CMPLX( -ONE, KIND=DP ), A, LDA, X, LDX,
+     $            CMPLX( ONE, KIND=DP ), C, LDB )
       NORMRS = ZLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
       IF( NORMRS.GT.SMLNUM ) THEN
          ISCL = 1
@@ -232,8 +234,8 @@
 *     compute R**H * op(A)
 *
       CALL ZGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
-     $            DCMPLX( ONE ), C, LDB, A, LDA, DCMPLX( ZERO ), WORK,
-     $            NRHS )
+     $            CMPLX( ONE, KIND=DP ), C, LDB, A, LDA,
+     $            CMPLX( ZERO, KIND=DP ), WORK, NRHS )
 *
 *     compute and properly scale error
 *

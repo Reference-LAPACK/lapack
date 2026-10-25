@@ -136,7 +136,7 @@
       EXTERNAL           XERBLA, ZLACGV, ZLARF1L, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -185,7 +185,7 @@
      $                 CONJG( TAU( I ) ), A, LDA, WORK )
          CALL ZSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
          CALL ZLACGV( N-M+II-1, A( II, 1 ), LDA )
-         A( II, N-M+II ) = ONE - DCONJG( TAU( I ) )
+         A( II, N-M+II ) = ONE - CONJG( TAU( I ) )
 *
 *        Set A(m-k+i,n-k+i+1:n) to zero
 *

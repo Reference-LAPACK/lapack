@@ -135,6 +135,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -153,7 +155,7 @@
       EXTERNAL           XER_REPLACE, ZAXPY, ZCOPY, ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -192,7 +194,7 @@
 *
 *        Compare i-th column of QR and jpvt(i)-th column of A
 *
-         CALL ZAXPY( M, DCMPLX( -ONE ), A( 1, JPVT( J ) ), 1,
+         CALL ZAXPY( M, CMPLX( -ONE, KIND=DP ), A( 1, JPVT( J ) ), 1,
      $               WORK( ( J-1 )*M+1 ), 1 )
       END DO
 *

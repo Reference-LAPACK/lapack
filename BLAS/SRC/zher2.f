@@ -180,7 +180,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      INTRINSIC CONJG, DBLE, MAX
 *     ..
 *
 *     Test the input parameters.
@@ -235,8 +235,8 @@
           IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
               DO 20 J = 1,N
                   IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(J))
-                      TEMP2 = DCONJG(ALPHA*X(J))
+                      TEMP1 = ALPHA*CONJG(Y(J))
+                      TEMP2 = CONJG(ALPHA*X(J))
                       DO 10 I = 1,J - 1
                           A(I,J) = A(I,J) + X(I)*TEMP1 + Y(I)*TEMP2
    10                 CONTINUE
@@ -249,8 +249,8 @@
           ELSE
               DO 40 J = 1,N
                   IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(JY))
-                      TEMP2 = DCONJG(ALPHA*X(JX))
+                      TEMP1 = ALPHA*CONJG(Y(JY))
+                      TEMP2 = CONJG(ALPHA*X(JX))
                       IX = KX
                       IY = KY
                       DO 30 I = 1,J - 1
@@ -274,8 +274,8 @@
           IF ((INCX.EQ.1) .AND. (INCY.EQ.1)) THEN
               DO 60 J = 1,N
                   IF ((X(J).NE.ZERO) .OR. (Y(J).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(J))
-                      TEMP2 = DCONJG(ALPHA*X(J))
+                      TEMP1 = ALPHA*CONJG(Y(J))
+                      TEMP2 = CONJG(ALPHA*X(J))
                       A(J,J) = DBLE(A(J,J)) +
      +                         DBLE(X(J)*TEMP1+Y(J)*TEMP2)
                       DO 50 I = J + 1,N
@@ -288,8 +288,8 @@
           ELSE
               DO 80 J = 1,N
                   IF ((X(JX).NE.ZERO) .OR. (Y(JY).NE.ZERO)) THEN
-                      TEMP1 = ALPHA*DCONJG(Y(JY))
-                      TEMP2 = DCONJG(ALPHA*X(JX))
+                      TEMP1 = ALPHA*CONJG(Y(JY))
+                      TEMP2 = CONJG(ALPHA*X(JX))
                       A(J,J) = DBLE(A(J,J)) +
      +                         DBLE(X(JX)*TEMP1+Y(JY)*TEMP2)
                       IX = JX

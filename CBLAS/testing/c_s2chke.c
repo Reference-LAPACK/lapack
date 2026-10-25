@@ -8,15 +8,7 @@ CBLAS_INT link_xerbla=TRUE;
 CBLAS_INT cblas_xtests, cblas_xfails, cblas_xbad;
 char *cblas_rout;
 
-#ifdef F77_Char
-void F77_xerbla(F77_Char F77_srname, void *vinfo
-#else
-void F77_xerbla(char *srname, void *vinfo
-#endif
-#ifdef BLAS_FORTRAN_STRLEN_END
-  , FORTRAN_STRLEN
-#endif
-);
+void F77_xerbla BLAS_FORTRAN_XERBLA_ARGS;
 
 void chkxer(void) {
    extern CBLAS_INT cblas_ok, cblas_lerr, cblas_info;

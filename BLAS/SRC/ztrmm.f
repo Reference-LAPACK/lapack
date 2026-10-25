@@ -199,7 +199,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      INTRINSIC CONJG, MAX
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16 TEMP
@@ -310,9 +310,9 @@
                                   TEMP = TEMP + A(K,I)*B(K,J)
    90                         CONTINUE
                           ELSE
-                              IF (NOUNIT) TEMP = TEMP*DCONJG(A(I,I))
+                              IF (NOUNIT) TEMP = TEMP*CONJG(A(I,I))
                               DO 100 K = 1,I - 1
-                                  TEMP = TEMP + DCONJG(A(K,I))*B(K,J)
+                                  TEMP = TEMP + CONJG(A(K,I))*B(K,J)
   100                         CONTINUE
                           END IF
                           B(I,J) = ALPHA*TEMP
@@ -328,9 +328,9 @@
                                   TEMP = TEMP + A(K,I)*B(K,J)
   130                         CONTINUE
                           ELSE
-                              IF (NOUNIT) TEMP = TEMP*DCONJG(A(I,I))
+                              IF (NOUNIT) TEMP = TEMP*CONJG(A(I,I))
                               DO 140 K = I + 1,M
-                                  TEMP = TEMP + DCONJG(A(K,I))*B(K,J)
+                                  TEMP = TEMP + CONJG(A(K,I))*B(K,J)
   140                         CONTINUE
                           END IF
                           B(I,J) = ALPHA*TEMP
@@ -382,7 +382,7 @@
                           IF (NOCONJ) THEN
                               TEMP = ALPHA*A(J,K)
                           ELSE
-                              TEMP = ALPHA*DCONJG(A(J,K))
+                              TEMP = ALPHA*CONJG(A(J,K))
                           END IF
                           DO 250 I = 1,M
                               B(I,J) = B(I,J) + TEMP*B(I,K)
@@ -393,7 +393,7 @@
                           IF (NOCONJ) THEN
                               TEMP = TEMP*A(K,K)
                           ELSE
-                              TEMP = TEMP*DCONJG(A(K,K))
+                              TEMP = TEMP*CONJG(A(K,K))
                           END IF
                       END IF
                       IF (TEMP.NE.ONE) THEN
@@ -408,7 +408,7 @@
                           IF (NOCONJ) THEN
                               TEMP = ALPHA*A(J,K)
                           ELSE
-                              TEMP = ALPHA*DCONJG(A(J,K))
+                              TEMP = ALPHA*CONJG(A(J,K))
                           END IF
                           DO 290 I = 1,M
                               B(I,J) = B(I,J) + TEMP*B(I,K)
@@ -419,7 +419,7 @@
                           IF (NOCONJ) THEN
                               TEMP = TEMP*A(K,K)
                           ELSE
-                              TEMP = TEMP*DCONJG(A(K,K))
+                              TEMP = TEMP*CONJG(A(K,K))
                           END IF
                       END IF
                       IF (TEMP.NE.ONE) THEN

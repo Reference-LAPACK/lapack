@@ -155,7 +155,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      INTRINSIC CONJG, MAX
 *     ..
 *
 *     Test the input parameters.
@@ -192,7 +192,7 @@
       IF (INCX.EQ.1) THEN
           DO 20 J = 1,N
               IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*DCONJG(Y(JY))
+                  TEMP = ALPHA*CONJG(Y(JY))
                   DO 10 I = 1,M
                       A(I,J) = A(I,J) + X(I)*TEMP
    10             CONTINUE
@@ -207,7 +207,7 @@
           END IF
           DO 40 J = 1,N
               IF (Y(JY).NE.ZERO) THEN
-                  TEMP = ALPHA*DCONJG(Y(JY))
+                  TEMP = ALPHA*CONJG(Y(JY))
                   IX = KX
                   DO 30 I = 1,M
                       A(I,J) = A(I,J) + X(IX)*TEMP

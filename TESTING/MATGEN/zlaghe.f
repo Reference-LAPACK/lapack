@@ -117,6 +117,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO, ONE, HALF
       PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
      $                   ONE = ( 1.0D+0, 0.0D+0 ),
@@ -137,7 +139,7 @@
       EXTERNAL           DZNRM2, ZDOTC
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -180,7 +182,7 @@
             TAU = ZERO
          ELSE
             IF( ABS( WORK( 1 ) ).EQ.0.0D+0 ) THEN
-               WA = DCMPLX( WN, 0.0D+0 )
+               WA = CMPLX( WN, 0.0D+0, KIND=DP )
             ELSE
                WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
             END IF
@@ -221,7 +223,7 @@
             TAU = ZERO
          ELSE
             IF( ABS( A( K+I, I ) ).EQ.0.0D+0 ) THEN
-               WA = DCMPLX( WN, 0.0D+0 )
+               WA = CMPLX( WN, 0.0D+0, KIND=DP )
             ELSE
                WA = ( WN / ABS( A( K+I, I ) ) )*A( K+I, I )
             END IF
@@ -265,7 +267,7 @@
 *
       DO 80 J = 1, N
          DO 70 I = J + 1, N
-            A( J, I ) = DCONJG( A( I, J ) )
+            A( J, I ) = CONJG( A( I, J ) )
    70    CONTINUE
    80 CONTINUE
       RETURN

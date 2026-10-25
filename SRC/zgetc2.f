@@ -123,6 +123,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -138,7 +140,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX
+      INTRINSIC          ABS, CMPLX, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -162,7 +164,7 @@
          JPIV( 1 ) = 1
          IF( ABS( A( 1, 1 ) ).LT.SMLNUM ) THEN
             INFO = 1
-            A( 1, 1 ) = DCMPLX( SMLNUM, ZERO )
+            A( 1, 1 ) = CMPLX( SMLNUM, ZERO, KIND=DP )
          END IF
          RETURN
       END IF
@@ -203,18 +205,18 @@
 *
          IF( ABS( A( I, I ) ).LT.SMIN ) THEN
             INFO = I
-            A( I, I ) = DCMPLX( SMIN, ZERO )
+            A( I, I ) = CMPLX( SMIN, ZERO, KIND=DP )
          END IF
          DO 30 J = I + 1, N
             A( J, I ) = A( J, I ) / A( I, I )
    30    CONTINUE
-         CALL ZGERU( N-I, N-I, -DCMPLX( ONE ), A( I+1, I ), 1,
+         CALL ZGERU( N-I, N-I, -CMPLX( ONE, KIND=DP ), A( I+1, I ), 1,
      $               A( I, I+1 ), LDA, A( I+1, I+1 ), LDA )
    40 CONTINUE
 *
       IF( ABS( A( N, N ) ).LT.SMIN ) THEN
          INFO = N
-         A( N, N ) = DCMPLX( SMIN, ZERO )
+         A( N, N ) = CMPLX( SMIN, ZERO, KIND=DP )
       END IF
 *
 *     Set last pivots to N

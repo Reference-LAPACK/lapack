@@ -296,6 +296,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       COMPLEX*16         CZERO, CONE
@@ -327,13 +329,13 @@
       EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, INT, MAX
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, INT, MAX
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -635,10 +637,10 @@
 *
       DO 70 JC = 1, N
          ABSAR = ABS( DBLE( ALPHA( JC ) ) )
-         ABSAI = ABS( DIMAG( ALPHA( JC ) ) )
+         ABSAI = ABS( AIMAG( ALPHA( JC ) ) )
          ABSB = ABS( DBLE( BETA( JC ) ) )
          SALFAR = ANRM*DBLE( ALPHA( JC ) )
-         SALFAI = ANRM*DIMAG( ALPHA( JC ) )
+         SALFAI = ANRM*AIMAG( ALPHA( JC ) )
          SBETA = BNRM*DBLE( BETA( JC ) )
          ILIMIT = .FALSE.
          SCALE = ONE
@@ -684,10 +686,10 @@
 *
          IF( ILIMIT ) THEN
             SALFAR = ( SCALE*DBLE( ALPHA( JC ) ) )*ANRM
-            SALFAI = ( SCALE*DIMAG( ALPHA( JC ) ) )*ANRM
+            SALFAI = ( SCALE*AIMAG( ALPHA( JC ) ) )*ANRM
             SBETA = ( SCALE*BETA( JC ) )*BNRM
          END IF
-         ALPHA( JC ) = DCMPLX( SALFAR, SALFAI )
+         ALPHA( JC ) = CMPLX( SALFAR, SALFAI, KIND=DP )
          BETA( JC ) = SBETA
    70 CONTINUE
 *

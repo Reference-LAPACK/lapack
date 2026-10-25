@@ -66,6 +66,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 5 )
 *     ..
@@ -95,7 +97,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, DSQRT
+      INTRINSIC          CMPLX, DBLE, DSQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -109,15 +111,15 @@
          SEL_DESEL_COLS( J ) = 0
          IPIV( J ) = 0
          JPIV( J ) = 0
-         TAU( J ) = 1.D+0 / DCMPLX( J )
-         W( J ) = 1.D+0 / DCMPLX( J )
+         TAU( J ) = 1.D+0 / CMPLX( J, KIND=DP )
+         W( J ) = 1.D+0 / CMPLX( J, KIND=DP )
          RW( J ) = 1.D+0 / DBLE( J )
          IW( J ) = -J
          DO I = 1, NMAX
-            A( I, J ) = 1.D+0 / DCMPLX( I+J )
-            C( I, J ) = 1.D+0 / DCMPLX( I+J )
-            QRC( I, J ) = 1.D+0 / DCMPLX( I+J )
-            X( I, J ) = 1.D+0 / DCMPLX( I+J )
+            A( I, J ) = 1.D+0 / CMPLX( I+J, KIND=DP )
+            C( I, J ) = 1.D+0 / CMPLX( I+J, KIND=DP )
+            QRC( I, J ) = 1.D+0 / CMPLX( I+J, KIND=DP )
+            X( I, J ) = 1.D+0 / CMPLX( I+J, KIND=DP )
          END DO
       END DO
 *

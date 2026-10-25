@@ -318,6 +318,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TEN, TNTH, HALF
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TEN = 1.0D+1,
      $                   TNTH = 1.0D-1, HALF = 0.5D+0 )
@@ -341,7 +343,7 @@
      $                   ZLATM6
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX, SQRT
+      INTRINSIC          ABS, CMPLX, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -402,8 +404,8 @@
 *
 *     Parameters used for generating test matrices.
 *
-      WEIGHT( 1 ) = DCMPLX( TNTH, ZERO )
-      WEIGHT( 2 ) = DCMPLX( HALF, ZERO )
+      WEIGHT( 1 ) = CMPLX( TNTH, ZERO, KIND=DP )
+      WEIGHT( 2 ) = CMPLX( HALF, ZERO, KIND=DP )
       WEIGHT( 3 ) = ONE
       WEIGHT( 4 ) = ONE / WEIGHT( 2 )
       WEIGHT( 5 ) = ONE / WEIGHT( 1 )

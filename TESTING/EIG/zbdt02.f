@@ -136,6 +136,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -151,7 +153,7 @@
       EXTERNAL           ZCOPY, ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -167,8 +169,8 @@
 *
       DO 10 J = 1, N
          CALL ZCOPY( M, B( 1, J ), 1, WORK, 1 )
-         CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), U, LDU,
-     $               C( 1, J ), 1, DCMPLX( ONE ), WORK, 1 )
+         CALL ZGEMV( 'No transpose', M, M, -CMPLX( ONE, KIND=DP ), U,
+     $               LDU, C( 1, J ), 1, CMPLX( ONE, KIND=DP ), WORK, 1 )
          RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    10 CONTINUE
 *

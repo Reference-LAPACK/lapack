@@ -112,6 +112,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -130,7 +132,7 @@
       EXTERNAL           XER_REPLACE, ZAXPY, ZLASET, ZUNMRZ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX
+      INTRINSIC          CMPLX, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -150,8 +152,8 @@
 *
 *     Copy upper triangle R
 *
-      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK,
-     $             M )
+      CALL ZLASET( 'Full', M, N, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ZERO, KIND=DP ), WORK, M )
       DO 20 J = 1, M
          DO 10 I = 1, J
             WORK( ( J-1 )*M+I ) = AF( I, J )
@@ -166,7 +168,7 @@
 *     R = R - A
 *
       DO 30 I = 1, N
-         CALL ZAXPY( M, DCMPLX( -ONE ), A( 1, I ), 1,
+         CALL ZAXPY( M, CMPLX( -ONE, KIND=DP ), A( 1, I ), 1,
      $               WORK( ( I-1 )*M+1 ), 1 )
    30 CONTINUE
 *

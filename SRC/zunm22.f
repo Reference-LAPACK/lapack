@@ -175,6 +175,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ONE
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ) )
 *
@@ -190,7 +192,7 @@
       EXTERNAL           ZGEMM, ZLACPY, ZTRMM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -235,7 +237,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKOPT = M*N
-         WORK( 1 ) = DCMPLX( LWKOPT )
+         WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -436,7 +438,7 @@
          END IF
       END IF
 *
-      WORK( 1 ) = DCMPLX( LWKOPT )
+      WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       RETURN
 *
 *     End of ZUNM22

@@ -142,7 +142,7 @@
       EXTERNAL           XERBLA, ZCOPY, ZHPMV, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG
+      INTRINSIC          ABS, CONJG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -277,11 +277,11 @@
             KX = KPC + KP - 1
             DO 40 J = KP + 1, K - 1
                KX = KX + J - 1
-               TEMP = DCONJG( AP( KC+J-1 ) )
-               AP( KC+J-1 ) = DCONJG( AP( KX ) )
+               TEMP = CONJG( AP( KC+J-1 ) )
+               AP( KC+J-1 ) = CONJG( AP( KX ) )
                AP( KX ) = TEMP
    40       CONTINUE
-            AP( KC+KP-1 ) = DCONJG( AP( KC+KP-1 ) )
+            AP( KC+KP-1 ) = CONJG( AP( KC+KP-1 ) )
             TEMP = AP( KC+K-1 )
             AP( KC+K-1 ) = AP( KPC+KP-1 )
             AP( KPC+KP-1 ) = TEMP
@@ -385,11 +385,11 @@
             KX = KC + KP - K
             DO 70 J = K + 1, KP - 1
                KX = KX + N - J + 1
-               TEMP = DCONJG( AP( KC+J-K ) )
-               AP( KC+J-K ) = DCONJG( AP( KX ) )
+               TEMP = CONJG( AP( KC+J-K ) )
+               AP( KC+J-K ) = CONJG( AP( KX ) )
                AP( KX ) = TEMP
    70       CONTINUE
-            AP( KC+KP-K ) = DCONJG( AP( KC+KP-K ) )
+            AP( KC+KP-K ) = CONJG( AP( KC+KP-K ) )
             TEMP = AP( KC )
             AP( KC ) = AP( KPC )
             AP( KPC ) = TEMP

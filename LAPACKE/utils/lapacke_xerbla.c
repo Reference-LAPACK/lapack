@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************
-* Contents: Native C interface to LAPACK lsame
+* Contents: Native C interface to LAPACK xerbla
 * Author: Intel Corporation
 *****************************************************************************/
 
 #include <stdio.h>
 #include "lapacke_utils.h"
 
-void API_SUFFIX(LAPACKE_xerbla)( const char *name, lapack_int info )
+void API_SUFFIX(LAPACKE_xerbla) LAPACKE_XERBLA_ARGS
 {
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         printf( "Not enough memory to allocate work array in %s\n", name );

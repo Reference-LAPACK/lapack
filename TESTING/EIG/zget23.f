@@ -421,7 +421,7 @@
       EXTERNAL           XER_REPLACE, ZGEEVX, ZGET22, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               SENS / 'N', 'V' /
@@ -525,7 +525,7 @@
             VTST = ABS( VR( JJ, J ) )
             IF( VTST.GT.VMX )
      $         VMX = VTST
-            IF( DIMAG( VR( JJ, J ) ).EQ.ZERO .AND.
+            IF( AIMAG( VR( JJ, J ) ).EQ.ZERO .AND.
      $          ABS( DBLE( VR( JJ, J ) ) ).GT.VRMX )
      $          VRMX = ABS( DBLE( VR( JJ, J ) ) )
    20    CONTINUE
@@ -545,7 +545,7 @@
             VTST = ABS( VL( JJ, J ) )
             IF( VTST.GT.VMX )
      $         VMX = VTST
-            IF( DIMAG( VL( JJ, J ) ).EQ.ZERO .AND.
+            IF( AIMAG( VL( JJ, J ) ).EQ.ZERO .AND.
      $          ABS( DBLE( VL( JJ, J ) ) ).GT.VRMX )
      $          VRMX = ABS( DBLE( VL( JJ, J ) ) )
    40    CONTINUE
@@ -768,13 +768,13 @@
             IF( ISRT.EQ.0 ) THEN
                VRIMIN = DBLE( W( I ) )
             ELSE
-               VRIMIN = DIMAG( W( I ) )
+               VRIMIN = AIMAG( W( I ) )
             END IF
             DO 210 J = I + 1, N
                IF( ISRT.EQ.0 ) THEN
                   VRICMP = DBLE( W( J ) )
                ELSE
-                  VRICMP = DIMAG( W( J ) )
+                  VRICMP = AIMAG( W( J ) )
                END IF
                IF( VRICMP.LT.VRIMIN ) THEN
                   KMIN = J

@@ -213,7 +213,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DBLE,DCONJG,MAX
+      INTRINSIC CONJG, DBLE, MAX
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16 TEMP1,TEMP2
@@ -298,7 +298,7 @@
                       TEMP2 = ZERO
                       DO 50 K = 1,I - 1
                           C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*DCONJG(A(K,I))
+                          TEMP2 = TEMP2 + B(K,J)*CONJG(A(K,I))
    50                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
@@ -315,7 +315,7 @@
                       TEMP2 = ZERO
                       DO 80 K = I + 1,M
                           C(K,J) = C(K,J) + TEMP1*A(K,I)
-                          TEMP2 = TEMP2 + B(K,J)*DCONJG(A(K,I))
+                          TEMP2 = TEMP2 + B(K,J)*CONJG(A(K,I))
    80                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = TEMP1*DBLE(A(I,I)) + ALPHA*TEMP2
@@ -345,7 +345,7 @@
                   IF (UPPER) THEN
                       TEMP1 = ALPHA*A(K,J)
                   ELSE
-                      TEMP1 = ALPHA*DCONJG(A(J,K))
+                      TEMP1 = ALPHA*CONJG(A(J,K))
                   END IF
                   DO 130 I = 1,M
                       C(I,J) = C(I,J) + TEMP1*B(I,K)
@@ -353,7 +353,7 @@
   140         CONTINUE
               DO 160 K = J + 1,N
                   IF (UPPER) THEN
-                      TEMP1 = ALPHA*DCONJG(A(J,K))
+                      TEMP1 = ALPHA*CONJG(A(J,K))
                   ELSE
                       TEMP1 = ALPHA*A(K,J)
                   END IF

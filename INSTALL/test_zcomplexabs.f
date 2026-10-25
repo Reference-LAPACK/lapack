@@ -48,6 +48,8 @@
 
 *     ..
 *     .. Local parameters ..
+      integer           DP
+      parameter       ( DP = KIND( 0.0d0 ) )
       logical           debug
       parameter       ( debug = .false. )
       integer           N, nNaN, nInf
@@ -67,9 +69,9 @@
       double complex    Y, cInf( nInf ), cNaN( nNaN )
 *
 *     .. Intrinsic Functions ..
-      intrinsic         ABS, DBLE, RADIX, CEILING, TINY, DIGITS, SQRT,
-     $                  MAXEXPONENT, MINEXPONENT, FLOOR, HUGE, DCMPLX,
-     $                  EPSILON
+      intrinsic         ABS, CEILING, CMPLX, DBLE, DIGITS, EPSILON,
+     $                  FLOOR, HUGE, MAXEXPONENT, MINEXPONENT, RADIX,
+     $                  SQRT, TINY
 
 *
 *     .. Initialize error counts ..
@@ -112,17 +114,17 @@
 *
 *     .. Inf entries ..
       aInf = X(3) * 2
-      cInf(1) = DCMPLX( aInf, 0.0d0 )
-      cInf(2) = DCMPLX(-aInf, 0.0d0 )
-      cInf(3) = DCMPLX( 0.0d0, aInf )
-      cInf(4) = DCMPLX( 0.0d0,-aInf )
-      cInf(5) = DCMPLX( aInf,  aInf )
+      cInf(1) = CMPLX( aInf, 0.0d0, KIND=DP )
+      cInf(2) = CMPLX(-aInf, 0.0d0, KIND=DP )
+      cInf(3) = CMPLX( 0.0d0, aInf, KIND=DP )
+      cInf(4) = CMPLX( 0.0d0,-aInf, KIND=DP )
+      cInf(5) = CMPLX( aInf,  aInf, KIND=DP )
 *
 *     .. NaN entries ..
       aNaN = aInf / aInf
-      cNaN(1) = DCMPLX( aNaN, 0.0d0 )
-      cNaN(2) = DCMPLX( 0.0d0, aNaN )
-      cNaN(3) = DCMPLX( aNaN,  aNaN )
+      cNaN(1) = CMPLX( aNaN, 0.0d0, KIND=DP )
+      cNaN(2) = CMPLX( 0.0d0, aNaN, KIND=DP )
+      cNaN(3) = CMPLX( aNaN,  aNaN, KIND=DP )
 
 *
 *     .. Tests ..
@@ -162,7 +164,7 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y = DCMPLX( Xj, 0.0d0 )
+                Y = CMPLX( Xj, 0.0d0, KIND=DP )
                 R = ABS( Y )
                 if( R .ne. Xj ) then
                     caseAFails = caseAFails + 1
@@ -187,7 +189,7 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y = DCMPLX( 0.0d0, Xj )
+                Y = CMPLX( 0.0d0, Xj, KIND=DP )
                 R = ABS( Y )
                 if( R .ne. Xj ) then
                     caseBFails = caseBFails + 1
@@ -218,7 +220,7 @@
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
                 answerC = fiveFourth * Xj
-                Y = DCMPLX( threeFourth * Xj, Xj )
+                Y = CMPLX( threeFourth * Xj, Xj, KIND=DP )
                 R = ABS( Y )
                 if( R .ne. answerC ) then
                     caseCFails = caseCFails + 1
@@ -256,7 +258,7 @@
                     endif
                 else
                     nTests = nTests + 1
-                    Y = DCMPLX( oneHalf * Xj, oneHalf * Xj )
+                    Y = CMPLX( oneHalf * Xj, oneHalf * Xj, KIND=DP )
                     R = ABS( Y )
                     relDiff = ABS(R-answerD)/answerD
                     if( relDiff .ge. (0.5*eps) ) then

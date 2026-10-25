@@ -242,7 +242,7 @@
      $              S )
          IF ( ILQ ) THEN
             CALL ZROT( NQ, Q( 1, K+1-QSTART+1 ), 1, Q( 1, K+2-QSTART+
-     $                 1 ), 1, C, DCONJG( S ) )
+     $                 1 ), 1, C, CONJG( S ) )
          END IF
 *
       END IF

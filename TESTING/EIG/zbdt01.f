@@ -163,6 +163,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -178,7 +180,7 @@
       EXTERNAL           ZCOPY, ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -206,8 +208,9 @@
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    10          CONTINUE
                WORK( M+N ) = D( N )*PT( N, J )
-               CALL ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, LDQ,
-     $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', M, N, -CMPLX( ONE, KIND=DP ),
+     $                     Q, LDQ, WORK( M+1 ), 1, CMPLX( ONE,
+     $                     KIND=DP ), WORK, 1 )
                RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    20       CONTINUE
          ELSE IF( KD.LT.0 ) THEN
@@ -220,8 +223,9 @@
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    30          CONTINUE
                WORK( M+M ) = D( M )*PT( M, J )
-               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
-     $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', M, M, -CMPLX( ONE, KIND=DP ),
+     $                     Q, LDQ, WORK( M+1 ), 1, CMPLX( ONE,
+     $                     KIND=DP ), WORK, 1 )
                RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    40       CONTINUE
          ELSE
@@ -235,8 +239,9 @@
                   WORK( M+I ) = E( I-1 )*PT( I-1, J ) +
      $                          D( I )*PT( I, J )
    50          CONTINUE
-               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
-     $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', M, M, -CMPLX( ONE, KIND=DP ),
+     $                     Q, LDQ, WORK( M+1 ), 1, CMPLX( ONE,
+     $                     KIND=DP ), WORK, 1 )
                RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    60       CONTINUE
          END IF
@@ -250,8 +255,9 @@
                DO 70 I = 1, N
                   WORK( M+I ) = D( I )*PT( I, J )
    70          CONTINUE
-               CALL ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, LDQ,
-     $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', M, N, -CMPLX( ONE, KIND=DP ),
+     $                     Q, LDQ, WORK( M+1 ), 1, CMPLX( ONE,
+     $                     KIND=DP ), WORK, 1 )
                RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    80       CONTINUE
          ELSE
@@ -260,8 +266,9 @@
                DO 90 I = 1, M
                   WORK( M+I ) = D( I )*PT( I, J )
    90          CONTINUE
-               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
-     $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
+               CALL ZGEMV( 'No transpose', M, M, -CMPLX( ONE, KIND=DP ),
+     $                     Q, LDQ, WORK( M+1 ), 1, CMPLX( ONE,
+     $                     KIND=DP ), WORK, 1 )
                RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
   100       CONTINUE
          END IF

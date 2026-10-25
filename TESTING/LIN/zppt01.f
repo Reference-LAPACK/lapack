@@ -129,7 +129,7 @@
       EXTERNAL           ZHPR, ZSCAL, ZTPMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG
+      INTRINSIC          AIMAG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -155,7 +155,7 @@
       KC = 1
       IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = 1, N
-            IF( DIMAG( AFAC( KC ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( KC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF
@@ -163,7 +163,7 @@
    10    CONTINUE
       ELSE
          DO 20 K = 1, N
-            IF( DIMAG( AFAC( KC ) ).NE.ZERO ) THEN
+            IF( AIMAG( AFAC( KC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
                RETURN
             END IF

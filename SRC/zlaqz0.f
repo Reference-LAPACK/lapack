@@ -535,6 +535,7 @@
          DO WHILE ( K.GE.ISTART2 )
 
             IF( ABS( B( K, K ) ) .LT. BTOL ) THEN
+               B( K, K ) = CZERO
 *              A diagonal element of B is negligible, move it
 *              to the top and deflate it
                
@@ -570,7 +571,7 @@
      $                          K2 ), LDB, C1, S1 )
                      IF( ILQ ) THEN
                         CALL ZROT( N, Q( 1, K2 ), 1, Q( 1, K2+1 ), 1,
-     $                             C1, DCONJG( S1 ) )
+     $                             C1, CONJG( S1 ) )
                      END IF
                   END IF
 
@@ -590,7 +591,7 @@
      $                       ISTART2+1 ), LDB, C1, S1 )
                   IF( ILQ ) THEN
                      CALL ZROT( N, Q( 1, ISTART2 ), 1, Q( 1,
-     $                          ISTART2+1 ), 1, C1, DCONJG( S1 ) )
+     $                          ISTART2+1 ), 1, C1, CONJG( S1 ) )
                   END IF
                END IF
 

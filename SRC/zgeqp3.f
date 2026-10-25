@@ -172,6 +172,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            INB, INBMIN, IXOVER
       PARAMETER          ( INB = 1, INBMIN = 2, IXOVER = 3 )
 *     ..
@@ -217,7 +219,7 @@
             NB = ILAENV( INB, 'ZGEQRF', ' ', M, N, -1, -1 )
             LWKOPT = ( N + 1 )*NB
          END IF
-         WORK( 1 ) = DCMPLX( LWKOPT )
+         WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
 *
          IF( ( LWORK.LT.IWS ) .AND. .NOT.LQUERY ) THEN
             INFO = -8
@@ -368,7 +370,7 @@
 *
       END IF
 *
-      WORK( 1 ) = DCMPLX( LWKOPT )
+      WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       RETURN
 *
 *     End of ZGEQP3

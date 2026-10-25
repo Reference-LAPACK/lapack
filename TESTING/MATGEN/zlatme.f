@@ -350,7 +350,7 @@
      $                   ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, MOD
+      INTRINSIC          ABS, CONJG, MAX, MOD
 *     ..
 *     .. Executable Statements ..
 *
@@ -564,7 +564,7 @@
             CALL ZCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
             XNORMS = WORK( 1 )
             CALL ZLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
-            TAU = DCONJG( TAU )
+            TAU = CONJG( TAU )
             WORK( 1 ) = CONE
             ALPHA = ZLARND( 5, ISEED )
 *
@@ -575,7 +575,7 @@
 *
             CALL ZGEMV( 'N', N, IROWS, CONE, A( 1, JCR ), LDA, WORK, 1,
      $                  CZERO, WORK( IROWS+1 ), 1 )
-            CALL ZGERC( N, IROWS, -DCONJG( TAU ), WORK( IROWS+1 ), 1,
+            CALL ZGERC( N, IROWS, -CONJG( TAU ), WORK( IROWS+1 ), 1,
      $                  WORK, 1, A( 1, JCR ), LDA )
 *
             A( JCR, IC ) = XNORMS
@@ -583,7 +583,7 @@
      $                   A( JCR+1, IC ), LDA )
 *
             CALL ZSCAL( ICOLS+1, ALPHA, A( JCR, IC ), LDA )
-            CALL ZSCAL( N, DCONJG( ALPHA ), A( 1, JCR ), 1 )
+            CALL ZSCAL( N, CONJG( ALPHA ), A( 1, JCR ), 1 )
    60    CONTINUE
       ELSE IF( KU.LT.N-1 ) THEN
 *
@@ -597,7 +597,7 @@
             CALL ZCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
             XNORMS = WORK( 1 )
             CALL ZLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
-            TAU = DCONJG( TAU )
+            TAU = CONJG( TAU )
             WORK( 1 ) = CONE
             CALL ZLACGV( ICOLS-1, WORK( 2 ), 1 )
             ALPHA = ZLARND( 5, ISEED )
@@ -609,7 +609,7 @@
 *
             CALL ZGEMV( 'C', ICOLS, N, CONE, A( JCR, 1 ), LDA, WORK, 1,
      $                  CZERO, WORK( ICOLS+1 ), 1 )
-            CALL ZGERC( ICOLS, N, -DCONJG( TAU ), WORK, 1,
+            CALL ZGERC( ICOLS, N, -CONJG( TAU ), WORK, 1,
      $                  WORK( ICOLS+1 ), 1, A( JCR, 1 ), LDA )
 *
             A( IR, JCR ) = XNORMS
@@ -617,7 +617,7 @@
      $                   A( IR, JCR+1 ), LDA )
 *
             CALL ZSCAL( IROWS+1, ALPHA, A( IR, JCR ), 1 )
-            CALL ZSCAL( N, DCONJG( ALPHA ), A( JCR, 1 ), LDA )
+            CALL ZSCAL( N, CONJG( ALPHA ), A( JCR, 1 ), LDA )
    70    CONTINUE
       END IF
 *

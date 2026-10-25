@@ -452,6 +452,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            IDIFJB
       PARAMETER          ( IDIFJB = 3 )
       DOUBLE PRECISION   ZERO, ONE
@@ -473,7 +475,7 @@
      $                   ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, DCONJG, MAX, SQRT
+      INTRINSIC          ABS, CMPLX, CONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -765,7 +767,7 @@
       DO 60 K = 1, N
          DSCALE = ABS( B( K, K ) )
          IF( DSCALE.GT.SAFMIN ) THEN
-            TEMP1 = DCONJG( B( K, K ) / DSCALE )
+            TEMP1 = CONJG( B( K, K ) / DSCALE )
             TEMP2 = B( K, K ) / DSCALE
             B( K, K ) = DSCALE
             CALL ZSCAL( N-K, TEMP1, B( K, K+1 ), LDB )
@@ -773,7 +775,7 @@
             IF( WANTQ )
      $         CALL ZSCAL( N, TEMP2, Q( 1, K ), 1 )
          ELSE
-            B( K, K ) = DCMPLX( ZERO, ZERO )
+            B( K, K ) = CMPLX( ZERO, ZERO, KIND=DP )
          END IF
 *
          ALPHA( K ) = A( K, K )
