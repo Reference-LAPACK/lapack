@@ -23,8 +23,8 @@
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV,  DGGEVX,
 *> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD3,
-*> DGGSVP3, DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
-*> DGGES3, DGGEV3, and DTGSYL.
+*> DGGSVP3, DHGEQZ, DORBDB, DORCSD, DTGEVC, DTGEXC, DTGSEN,
+*> DTGSJA, DTGSNA, DGGES3, DGGEV3, and DTGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -95,8 +95,8 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
      $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF,
-     $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
-     $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
+     $                   DHGEQZ, DORBDB, DORCSD, DTGEVC, DTGEXC, DTGSEN,
+     $                   DTGSJA, DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
      $                   DGGSVD3, DGGSVP3, XLAENV
 *     ..
 *     .. Scalars in Common ..
@@ -605,6 +605,23 @@
      $                 -1, W, LW, IW, INFO )
          CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
+*
+*        DORBDB
+*
+         SRNAMT = 'DORBDB'
+         INFOT = 3
+         CALL DORBDB( 'N', 'N', -1, 0, 0, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'DORBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DORBDB( 'N', 'N', 1, -1, 0, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'DORBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DORBDB( 'N', 'N', 1, 1, -1, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'DORBDB', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *     Test error exits for the GQR path.
 *
