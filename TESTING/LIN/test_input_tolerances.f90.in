@@ -1,0 +1,131 @@
+! ABSTOL and RELTOL are inputs, including when supplied as constants.
+! Compare with explicitly clamped tolerances to check that preserving the
+! inputs does not disable the documented stopping-criterion safeguards.
+program test_input_tolerances
+  implicit none
+  integer, parameter :: wp = @REAL_KIND@, m = 8, n = 6, lwork = 10000
+  real(wp), parameter :: zero = 0.0_wp
+  type result
+    @SCALAR_TYPE@(wp) :: a(m,n), tau(n)
+    integer :: jpiv(n), k
+    real(wp) :: maxnorm, relnorm, fnorm
+  end type
+  type(result) :: actual, expected
+  real(wp) :: ab, rel, ab_saved, rel_saved, ab_ref, rel_ref
+  real(wp) :: eps, safmin, abstols(6), reltols(6)
+  real(wp), external :: @LAMCH@
+  integer :: block, family, t, q, cases
+  character(32) :: mode
+  external :: xlaenv, @GEQP3RK@, @GECXX@
+
+  call get_command_argument(1, mode)
+  eps = @LAMCH@('Epsilon')
+  safmin = @LAMCH@('Safe minimum')
+  abstols = [-1.0_wp, zero, -1.0_wp, zero, eps/4, 1.0_wp]
+  reltols = [-1.0_wp, -1.0_wp, zero, zero, eps/4, 1.0_wp]
+  cases = 0
+  do block = 1, 2
+    ! NB=1 selects unblocked QR; NB=2, NX=0 enables blocked QR.
+    call xlaenv(1, block)
+    call xlaenv(2, 2)
+    call xlaenv(3, 0)
+    do family = 1, 2
+      if (index(mode,'gecxx')==1 .and. family==1) cycle
+      do q = 0, 1
+        do t = 1, size(abstols)
+          if (index(mode,'constants')>0) exit
+          ab = abstols(t)
+          rel = reltols(t)
+          ab_saved = ab
+          rel_saved = rel
+          call exercise(family, q==1, .false., ab, rel, actual)
+          if (ab/=ab_saved .or. rel/=rel_saved) then
+            print *, 'Input tolerance modified: family,NB,query,case=',family,block,q,t
+            print *, 'ABSTOL:',ab_saved,ab,'RELTOL:',rel_saved,rel
+            stop 1
+          end if
+          if (q==0) then
+            ab_ref = ab_saved
+            rel_ref = rel_saved
+            if (ab_ref>=zero) ab_ref = max(ab_ref, 2*safmin)
+            if (rel_ref>=zero) rel_ref = max(rel_ref, eps)
+            call exercise(family, .false., .false., ab_ref, rel_ref, expected)
+            if (actual%k/=expected%k .or. any(actual%jpiv/=expected%jpiv) .or. &
+                any(actual%a/=expected%a) .or. any(actual%tau/=expected%tau) .or. &
+                actual%maxnorm/=expected%maxnorm .or. actual%relnorm/=expected%relnorm .or. &
+                actual%fnorm/=expected%fnorm) then
+              print *, 'Clamped-tolerance result mismatch:',family,block,t
+              stop 2
+            end if
+          end if
+          cases = cases+1
+        end do
+        ! The old implementation writes into read-only constant storage
+        ! during ordinary execution, although the query happens to be safe.
+        call exercise(family, q==1, .true., ab, rel, actual)
+        cases = cases+1
+      end do
+    end do
+  end do
+  print *, '@PREFIX@ input tolerances: PASS',cases
+contains
+  subroutine exercise(family, query, constants, ab, rel, r)
+    integer, intent(in) :: family
+    logical, intent(in) :: query, constants
+    real(wp), intent(inout) :: ab, rel
+    type(result), intent(out) :: r
+    @SCALAR_TYPE@(wp) :: work(lwork), c(m,n), qrc(m,n), x(m,n)
+    real(wp) :: rwork(lwork)
+    integer :: iwork(lwork), rows(m), cols(n), ipiv(m), info, lw
+    r%a = zero
+    r%tau = zero
+    r%jpiv = 0
+    r%k = -1
+    r%maxnorm = zero
+    r%relnorm = zero
+    r%fnorm = zero
+    r%a(1,1) = @FIRST_ELEMENT@
+    r%a(2,2) = eps/8
+    r%a(3,3) = safmin
+    work = zero
+    rwork = zero
+    iwork = 0
+    rows = 0
+    cols = 0
+    ipiv = 0
+    c = zero
+    qrc = zero
+    x = zero
+    lw = lwork
+    if (query) lw = -1
+    if (family==1) then
+      if (constants) then
+        call @GEQP3RK@(m,n,0,n,zero,zero,r%a,m,r%k,r%maxnorm,r%relnorm, &
+                       r%jpiv,r%tau,work,lw,@QP_RWORK@iwork,info)
+      else
+        call @GEQP3RK@(m,n,0,n,ab,rel,r%a,m,r%k,r%maxnorm,r%relnorm, &
+                       r%jpiv,r%tau,work,lw,@QP_RWORK@iwork,info)
+      end if
+    else
+      if (constants) then
+        call @GECXX@('P','N',m,n,rows,cols,n,zero,zero,r%a,m,r%k,r%maxnorm,r%relnorm, &
+                     r%fnorm,ipiv,r%jpiv,r%tau,c,m,qrc,m,x,m,work,lw,@CX_RWORK@iwork,lw,info)
+      else
+        call @GECXX@('P','N',m,n,rows,cols,n,ab,rel,r%a,m,r%k,r%maxnorm,r%relnorm, &
+                     r%fnorm,ipiv,r%jpiv,r%tau,c,m,qrc,m,x,m,work,lw,@CX_RWORK@iwork,lw,info)
+      end if
+    end if
+    if (info/=0) then
+      print *, 'Unexpected INFO:',family,info
+      stop 3
+    end if
+  end subroutine
+end program
+
+subroutine xerbla(name,info)
+  implicit none
+  character(*), intent(in) :: name
+  integer, intent(in) :: info
+  print *, 'Unexpected XERBLA:',name,info
+  stop 4
+end subroutine

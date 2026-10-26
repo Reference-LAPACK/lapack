@@ -948,8 +948,8 @@
       CHARACTER           FACT, USESD
       INTEGER             INFO, K, KMAXFREE, LDA, LDC, LDQRC,
      $                    LDX, LIWORK, LRWORK, LWORK, M, N
-      REAL                ABSTOL, FNRMK, MAXC2NRMK,
-     $                    RELMAXC2NRMK, RELTOL
+      REAL, INTENT(IN) :: ABSTOL, RELTOL
+      REAL                FNRMK, MAXC2NRMK, RELMAXC2NRMK
 *     ..
 *     .. Array Arguments ..
       INTEGER             DESEL_ROWS( * ), IPIV( * ), IWORK( * ),
@@ -1536,15 +1536,19 @@
 *
          EPS = SLAMCH('Epsilon')
 *
+*        Preserve the input tolerances; adjust only local copies.
+*
+         ABSTOLFREE = ABSTOL
+         RELTOLFREE = RELTOL
          USETOL = .FALSE.
 *
 *        Adjust ABSTOL only if nonnegative. Negative value means disabled.
 *        We need to keep negative value for later use in criterion
 *        check.
 *
-         IF( ABSTOL.GE.ZERO ) THEN
+         IF( ABSTOLFREE.GE.ZERO ) THEN
             SAFMIN = SLAMCH('Safe minimum')
-            ABSTOL = MAX( ABSTOL, TWO*SAFMIN )
+            ABSTOLFREE = MAX( ABSTOLFREE, TWO*SAFMIN )
             USETOL = .TRUE.
          END IF
 *
@@ -1552,8 +1556,8 @@
 *        We need to keep negative value for later use in criterion
 *        check.
 *
-         IF( RELTOL.GE.ZERO ) THEN
-            RELTOL = MAX( RELTOL, EPS )
+         IF( RELTOLFREE.GE.ZERO ) THEN
+            RELTOLFREE = MAX( RELTOLFREE, EPS )
             USETOL = .TRUE.
          END IF
 *
@@ -1569,7 +1573,7 @@
 *        that the criterion is disabled.
 *
          IF( USETOL ) THEN
-            ABSTOLFREE = MAX( ABSTOL, RELTOL * MAXC2NRM )
+            ABSTOLFREE = MAX( ABSTOLFREE, RELTOLFREE * MAXC2NRM )
          ELSE
             ABSTOLFREE = MINUSONE
          END IF
