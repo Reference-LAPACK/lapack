@@ -39,6 +39,7 @@ include $(TOPSRCDIR)/make.inc
 
 .PHONY: all
 all: single complex double complex16 singleproto doubleproto complexproto complex16proto
+	$(MAKE) -C LIN check-env-case
 
 SEIGTST= snep.out \
          ssep.out \
