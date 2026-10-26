@@ -300,7 +300,7 @@
 *
       IF (LSAME(TRANS,'N')) THEN
 *
-*        Form  C := alpha*A*B**T + alpha*B*A**T + C.
+*        Form  C := -alpha*A*B**T + alpha*B*A**T + beta*C.
 *
           IF (UPPER) THEN
               DO 130 J = 1,N
@@ -349,7 +349,7 @@
           END IF
       ELSE
 *
-*        Form  C := alpha*A**T*B + alpha*B**T*A + C.
+*        Form  C := -alpha*A**T*B + alpha*B**T*A + beta*C.
 *
           IF (UPPER) THEN
               DO 210 J = 1,N
