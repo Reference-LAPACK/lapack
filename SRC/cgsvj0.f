@@ -319,7 +319,7 @@
 *
 *     .. Row-cyclic Jacobi SVD algorithm with column pivoting ..
 *
-      EMPTSW = ( N*( N-1 ) ) / 2
+      EMPTSW = ( N / 2 )*( N-1 + MOD( N, 2 ) )
       NOTROT = 0
 *
 *     .. Row-cyclic pivot strategy with de Rijk's pivoting ..
