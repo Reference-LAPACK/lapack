@@ -23,7 +23,7 @@
 *>
 *> SERRGG tests the error exits for SGGES, SGGESX, SGGEV, SGGEVX,
 *> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF,
-*> SGGSVD3, SGGSVP3, SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN,
+*> SGGSVD3, SGGSVP3, SHGEQZ, SORBDB, SORCSD, STGEVC, STGEXC, STGSEN,
 *> STGSJA, STGSNA, and STGSYL.
 *> \endverbatim
 *
@@ -95,8 +95,8 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, SGGES, SGGESX, SGGEV, SGGEVX, SGGGLM,
      $                   SGGHRD, SGGLSE, SGGQRF, SGGRQF,
-     $                   SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN, STGSJA,
-     $                   STGSNA, STGSYL, SGGES3, SGGEV3, SGGHD3,
+     $                   SHGEQZ, SORBDB, SORCSD, STGEVC, STGEXC, STGSEN,
+     $                   STGSJA, STGSNA, STGSYL, SGGES3, SGGEV3, SGGHD3,
      $                   SGGSVD3, SGGSVP3, XLAENV
 *     ..
 *     .. Scalars in Common ..
@@ -605,6 +605,23 @@
      $                 -1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
+*
+*        SORBDB
+*
+         SRNAMT = 'SORBDB'
+         INFOT = 3
+         CALL SORBDB( 'N', 'N', -1, 0, 0, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'SORBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SORBDB( 'N', 'N', 1, -1, 0, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'SORBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SORBDB( 'N', 'N', 1, 1, -1, A, 1, A, 1, A, 1, A, 1,
+     $                A, A, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'SORBDB', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *     Test error exits for the GQR path.
 *

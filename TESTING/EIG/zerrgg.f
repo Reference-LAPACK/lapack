@@ -24,7 +24,7 @@
 *> ZERRGG tests the error exits for ZGGES, ZGGESX, ZGGEV, ZGGEVX,
 *> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
 *> ZGGSVD3, ZGGSVP3, ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA,
-*> ZTGSNA, ZTGSYL, and ZUNCSD.
+*> ZTGSNA, ZTGSYL, ZUNBDB, and ZUNCSD.
 *> \endverbatim
 *
 *  Arguments:
@@ -97,7 +97,7 @@
       EXTERNAL           CHKXER, ZGGES,  ZGGESX, ZGGEV,  ZGGEVX, ZGGGLM,
      $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
      $                   ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA, ZTGSNA,
-     $                   ZTGSYL, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
+     $                   ZTGSYL, ZUNBDB, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
      $                   ZGGSVD3, ZGGSVP3, XLAENV
 *     ..
 *     .. Scalars in Common ..
@@ -633,6 +633,23 @@
      $                 -1, W, LW, RW, LW, IW, INFO )
          CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
+*
+*        ZUNBDB
+*
+         SRNAMT = 'ZUNBDB'
+         INFOT = 3
+         CALL ZUNBDB( 'N', 'N', -1, 0, 0, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'ZUNBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZUNBDB( 'N', 'N', 1, -1, 0, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'ZUNBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZUNBDB( 'N', 'N', 1, 1, -1, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'ZUNBDB', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *     Test error exits for the GQR path.
 *

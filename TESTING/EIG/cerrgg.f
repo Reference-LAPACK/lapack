@@ -24,7 +24,7 @@
 *> CERRGG tests the error exits for CGGES, CGGESX, CGGEV, CGGEVX,
 *> CGGES3, CGGEV3, CGGGLM, CGGHRD, CGGLSE, CGGQRF, CGGRQF,
 *> CGGSVD3, CGGSVP3, CHGEQZ, CTGEVC, CTGEXC, CTGSEN, CTGSJA,
-*> CTGSNA, CTGSYL, and CUNCSD.
+*> CTGSNA, CTGSYL, CUNBDB, and CUNCSD.
 *> \endverbatim
 *
 *  Arguments:
@@ -97,7 +97,7 @@
       EXTERNAL           CGGES, CGGESX, CGGEV, CGGEVX, CGGGLM, CGGHRD,
      $                   CGGLSE, CGGQRF, CGGRQF, CHGEQZ,
      $                   CHKXER, CTGEVC, CTGEXC, CTGSEN, CTGSJA, CTGSNA,
-     $                   CTGSYL, CUNCSD, CGGES3, CGGEV3, CGGHD3,
+     $                   CTGSYL, CUNBDB, CUNCSD, CGGES3, CGGEV3, CGGHD3,
      $                   CGGSVD3, CGGSVP3, XLAENV
 *     ..
 *     .. Scalars in Common ..
@@ -633,6 +633,23 @@
      $                 -1, W, LW, RW, LW, IW, INFO )
          CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
+*
+*        CUNBDB
+*
+         SRNAMT = 'CUNBDB'
+         INFOT = 3
+         CALL CUNBDB( 'N', 'N', -1, 0, 0, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'CUNBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CUNBDB( 'N', 'N', 1, -1, 0, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'CUNBDB', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL CUNBDB( 'N', 'N', 1, 1, -1, A, 1, A, 1, A, 1, A, 1,
+     $                R1, R1, A, A, A, A, W, LW, INFO )
+         CALL CHKXER( 'CUNBDB', INFOT, NOUT, LERR, OK )
+         NT = NT + 3
 *
 *     Test error exits for the GQR path.
 *
