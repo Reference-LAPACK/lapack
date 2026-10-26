@@ -386,7 +386,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'xORBDB', -INFO )
+         CALL XERBLA( 'ZUNBDB', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
