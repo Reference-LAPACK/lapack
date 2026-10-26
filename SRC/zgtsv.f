@@ -143,7 +143,7 @@
       COMPLEX*16         MULT, TEMP, ZDUM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, DBLE, MAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA
@@ -152,7 +152,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

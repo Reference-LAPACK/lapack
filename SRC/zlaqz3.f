@@ -306,7 +306,7 @@
          CALL ZROT( NS, B( ILO, ILO ), LDB, B( ILO+1, ILO ), LDB, C,
      $              S )
          CALL ZROT( NS+1, QC( 1, 1 ), 1, QC( 1, 2 ), 1, C,
-     $              DCONJG( S ) )
+     $              CONJG( S ) )
         
 *        Chase the shift down
          DO J = 1, NS-I

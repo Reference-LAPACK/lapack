@@ -200,6 +200,7 @@
       LOGICAL            TSTERR
       INTEGER            NM, NN, NNB, NNS, NOUT
       REAL               THRESH
+      REAL               SMLX
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
@@ -283,6 +284,7 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
       EPS = SLAMCH( 'Epsilon' )
+      SMLX = 256*SLAMCH( 'Safe minimum' )
 *
 *     Threshold for rank estimation
 *
@@ -471,6 +473,14 @@
                                  CALL CSSCAL( NCOLS*NRHS,
      $                                        ONE / REAL( NCOLS ), WORK,
      $                                        1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                 IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL CSSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                               END IF
                               CALL CGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
@@ -588,6 +598,14 @@
                                  CALL CSSCAL( NCOLS*NRHS,
      $                                        ONE / REAL( NCOLS ), WORK,
      $                                        1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                 IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL CSSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                               END IF
                               CALL CGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
@@ -711,6 +729,14 @@
                                     CALL CSCAL( NCOLS*NRHS,
      $                                          CONE / REAL( NCOLS ),
      $                                          WORK, 1 )
+*
+*                             Make the last solution column small
+*                             enough that undoing the scaling of
+*                             the solution in two steps flushes it.
+*
+                                    IF( ISCALE.EQ.2 .AND. NRHS.GT.1 )
+     $               CALL CSSCAL( NCOLS, SMLX,
+     $                          WORK( ( NRHS-1 )*LDWORK+1 ), 1 )
                                  END IF
                                  CALL CGEMM( TRANS, 'No transpose',
      $                                       NROWS, NRHS, NCOLS, CONE,

@@ -194,6 +194,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CONE
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
@@ -208,7 +210,7 @@
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CEILING, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -281,14 +283,14 @@
          CALL XERBLA( 'ZGETSQRHRT', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = DCMPLX( LWORKOPT )
+         WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = DCMPLX( LWORKOPT )
+         WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
          RETURN
       END IF
 *
@@ -346,7 +348,7 @@
          END IF
       END DO
 *
-      WORK( 1 ) = DCMPLX( LWORKOPT )
+      WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
       RETURN
 *
 *     End of ZGETSQRHRT

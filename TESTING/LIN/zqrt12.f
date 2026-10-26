@@ -111,6 +111,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -130,7 +132,7 @@
      $                   ZLASCL, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -153,8 +155,8 @@
 *
 *     Copy upper triangle of A into work
 *
-      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK,
-     $             M )
+      CALL ZLASET( 'Full', M, N, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ZERO, KIND=DP ), WORK, M )
       DO J = 1, N
          DO I = 1, MIN( J, M )
             WORK( ( J-1 )*M+I ) = A( I, J )

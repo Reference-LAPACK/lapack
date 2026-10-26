@@ -1345,6 +1345,8 @@
 *     Sven Hammarling, Numerical Algorithms Group Ltd.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ) )
       DOUBLE PRECISION   RONE, RZERO
@@ -1380,7 +1382,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ZHERK, ZMAKE, ZMMCH, ZSYRK
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, DBLE
+      INTRINSIC          CMPLX, DBLE, MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
@@ -1446,14 +1448,14 @@
                      ALPHA = ALF( IA )
                      IF( CONJ )THEN
                         RALPHA = DBLE( ALPHA )
-                        ALPHA = DCMPLX( RALPHA, RZERO )
+                        ALPHA = CMPLX( RALPHA, RZERO, KIND=DP )
                      END IF
 *
                      DO 50 IB = 1, NBET
                         BETA = BET( IB )
                         IF( CONJ )THEN
                            RBETA = DBLE( BETA )
-                           BETA = DCMPLX( RBETA, RZERO )
+                           BETA = CMPLX( RBETA, RZERO, KIND=DP )
                         END IF
                         NULL = N.LE.0
                         IF( CONJ )
@@ -1690,6 +1692,8 @@
 *     Sven Hammarling, Numerical Algorithms Group Ltd.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ),
      $                   ONE = ( 1.0D0, 0.0D0 ) )
@@ -1726,7 +1730,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ZHER2K, ZMAKE, ZMMCH, ZSYR2K
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, DCONJG, MAX, DBLE
+      INTRINSIC          CMPLX, CONJG, DBLE, MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
@@ -1812,7 +1816,7 @@
                         BETA = BET( IB )
                         IF( CONJ )THEN
                            RBETA = DBLE( BETA )
-                           BETA = DCMPLX( RBETA, RZERO )
+                           BETA = CMPLX( RBETA, RZERO, KIND=DP )
                         END IF
                         NULL = N.LE.0
                         IF( CONJ )
@@ -1945,7 +1949,7 @@
                                     W( I ) = ALPHA*AB( ( J - 1 )*2*
      $                                       NMAX + K + I )
                                     IF( CONJ )THEN
-                                       W( K + I ) = DCONJG( ALPHA )*
+                                       W( K + I ) = CONJG( ALPHA )*
      $                                              AB( ( J - 1 )*2*
      $                                              NMAX + I )
                                     ELSE
@@ -1963,9 +1967,9 @@
                               ELSE
                                  DO 60 I = 1, K
                                     IF( CONJ )THEN
-                                       W( I ) = ALPHA*DCONJG( AB( ( K +
+                                       W( I ) = ALPHA*CONJG( AB( ( K +
      $                                          I - 1 )*NMAX + J ) )
-                                       W( K + I ) = DCONJG( ALPHA*
+                                       W( K + I ) = CONJG( ALPHA*
      $                                              AB( ( I - 1 )*NMAX +
      $                                              J ) )
                                     ELSE
@@ -2079,7 +2083,7 @@
 *  3-19-92:  Initialize ALPHA, BETA, RALPHA, and RBETA  (eca)
 *  3-19-92:  Fix argument 12 in calls to ZSYMM and ZHEMM
 *            with INFOT = 9  (eca)
-*  10-9-00:  Declared INTRINSIC DCMPLX (susan)
+*  10-9-00:  Declared INTRINSIC CMPLX (susan)
 *
 *     .. Scalar Arguments ..
       INTEGER            ISNUM, NOUT
@@ -2089,6 +2093,8 @@
       INTEGER            INFOT, NOUTC
       LOGICAL            LERR, OK
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, TWO
       PARAMETER          ( ONE = 1.0D0, TWO = 2.0D0 )
 *     .. Local Scalars ..
@@ -2100,7 +2106,7 @@
       EXTERNAL           ZGEMM, ZHEMM, ZHER2K, ZHERK, CHKXER, ZSYMM,
      $                   ZSYR2K, ZSYRK, ZTRMM, ZTRSM, ZGEMMTR
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /XERCNT/NXRUN, NXFAIL, NXBAD
@@ -2119,8 +2125,8 @@
 *
 *     Initialize ALPHA, BETA, RALPHA, and RBETA.
 *
-      ALPHA = DCMPLX( ONE, -ONE )
-      BETA = DCMPLX( TWO, -TWO )
+      ALPHA = CMPLX( ONE, -ONE, KIND=DP )
+      BETA = CMPLX( TWO, -TWO, KIND=DP )
       RALPHA = ONE
       RBETA = TWO
 *
@@ -3230,6 +3236,8 @@
 *     Sven Hammarling, Numerical Algorithms Group Ltd.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ),
      $                   ONE = ( 1.0D0, 0.0D0 ) )
@@ -3254,7 +3262,7 @@
       COMPLEX*16         ZBEG
       EXTERNAL           ZBEG
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, DCONJG, DBLE
+      INTRINSIC          CMPLX, CONJG, DBLE
 *     .. Executable Statements ..
       GEN = TYPE.EQ.'GE'
       HER = TYPE.EQ.'HE'
@@ -3276,7 +3284,7 @@
                   IF( N.GT.3.AND.J.EQ.N/2 )
      $               A( I, J ) = ZERO
                   IF( HER )THEN
-                     A( J, I ) = DCONJG( A( I, J ) )
+                     A( J, I ) = CONJG( A( I, J ) )
                   ELSE IF( SYM )THEN
                      A( J, I ) = A( I, J )
                   ELSE IF( TRI )THEN
@@ -3286,7 +3294,7 @@
             END IF
    10    CONTINUE
          IF( HER )
-     $      A( J, J ) = DCMPLX( DBLE( A( J, J ) ), RZERO )
+     $      A( J, J ) = CMPLX( DBLE( A( J, J ) ), RZERO, KIND=DP )
          IF( TRI )
      $      A( J, J ) = A( J, J ) + ONE
          IF( UNIT )
@@ -3332,7 +3340,7 @@
    80       CONTINUE
             IF( HER )THEN
                JJ = J + ( J - 1 )*LDA
-               AA( JJ ) = DCMPLX( DBLE( AA( JJ ) ), RROGUE )
+               AA( JJ ) = CMPLX( DBLE( AA( JJ ) ), RROGUE, KIND=DP )
             END IF
    90    CONTINUE
       END IF
@@ -3376,11 +3384,11 @@
       INTEGER            I, J, K
       LOGICAL            CTRANA, CTRANB, TRANA, TRANB
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DIMAG, DCONJG, MAX, DBLE, SQRT
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, SQRT
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     .. Statement Function definitions ..
-      CABS1( CL ) = ABS( DBLE( CL ) ) + ABS( DIMAG( CL ) )
+      CABS1( CL ) = ABS( DBLE( CL ) ) + ABS( AIMAG( CL ) )
 *     .. Executable Statements ..
       TRANA = TRANSA.EQ.'T'.OR.TRANSA.EQ.'C'
       TRANB = TRANSB.EQ.'T'.OR.TRANSB.EQ.'C'
@@ -3409,7 +3417,7 @@
             IF( CTRANA )THEN
                DO 50 K = 1, KK
                   DO 40 I = 1, M
-                     CT( I ) = CT( I ) + DCONJG( A( K, I ) )*B( K, J )
+                     CT( I ) = CT( I ) + CONJG( A( K, I ) )*B( K, J )
                      G( I ) = G( I ) + CABS1( A( K, I ) )*
      $                        CABS1( B( K, J ) )
    40             CONTINUE
@@ -3427,7 +3435,7 @@
             IF( CTRANB )THEN
                DO 90 K = 1, KK
                   DO 80 I = 1, M
-                     CT( I ) = CT( I ) + A( I, K )*DCONJG( B( J, K ) )
+                     CT( I ) = CT( I ) + A( I, K )*CONJG( B( J, K ) )
                      G( I ) = G( I ) + CABS1( A( I, K ) )*
      $                        CABS1( B( J, K ) )
    80             CONTINUE
@@ -3446,8 +3454,8 @@
                IF( CTRANB )THEN
                   DO 130 K = 1, KK
                      DO 120 I = 1, M
-                        CT( I ) = CT( I ) + DCONJG( A( K, I ) )*
-     $                            DCONJG( B( J, K ) )
+                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*
+     $                            CONJG( B( J, K ) )
                         G( I ) = G( I ) + CABS1( A( K, I ) )*
      $                           CABS1( B( J, K ) )
   120                CONTINUE
@@ -3455,7 +3463,7 @@
                ELSE
                   DO 150 K = 1, KK
                      DO 140 I = 1, M
-                        CT( I ) = CT( I ) + DCONJG( A( K, I ) )*
+                        CT( I ) = CT( I ) + CONJG( A( K, I ) )*
      $                            B( J, K )
                         G( I ) = G( I ) + CABS1( A( K, I ) )*
      $                           CABS1( B( J, K ) )
@@ -3467,7 +3475,7 @@
                   DO 170 K = 1, KK
                      DO 160 I = 1, M
                         CT( I ) = CT( I ) + A( K, I )*
-     $                            DCONJG( B( J, K ) )
+     $                            CONJG( B( J, K ) )
                         G( I ) = G( I ) + CABS1( A( K, I ) )*
      $                           CABS1( B( J, K ) )
   160                CONTINUE
@@ -3640,12 +3648,16 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            RESET
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     .. Local Scalars ..
       INTEGER            I, IC, J, MI, MJ
 *     .. Save statement ..
       SAVE               I, IC, J, MI, MJ
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     .. Executable Statements ..
       IF( RESET )THEN
 *        Initialize local variables.
@@ -3673,7 +3685,8 @@
          IC = 0
          GO TO 10
       END IF
-      ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
+      ZBEG = CMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0,
+     $              KIND=DP )
       RETURN
 *
 *     End of ZBEG
@@ -4145,7 +4158,7 @@
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     .. Statement Function definitions ..
-      CABS1( CL ) = ABS( DBLE( CL ) ) + ABS( DIMAG( CL ) )
+      CABS1( CL ) = ABS( DBLE( CL ) ) + ABS( AIMAG( CL ) )
 *     .. Executable Statements ..
       UPPER = UPLO.EQ.'U'
       TRANA = TRANSA.EQ.'T'.OR.TRANSA.EQ.'C'

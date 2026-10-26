@@ -726,15 +726,15 @@
 *     .. External Subroutines ..
       EXTERNAL         STEST
 *     .. Intrinsic Functions ..
-      INTRINSIC        DIMAG, DBLE
+      INTRINSIC        AIMAG, DBLE
 *     .. Executable Statements ..
       DO 20 I = 1, LEN
          SCOMP(2*I-1) = DBLE(CCOMP(I))
-         SCOMP(2*I) = DIMAG(CCOMP(I))
+         SCOMP(2*I) = AIMAG(CCOMP(I))
          STRUE(2*I-1) = DBLE(CTRUE(I))
-         STRUE(2*I) = DIMAG(CTRUE(I))
+         STRUE(2*I) = AIMAG(CTRUE(I))
          SSIZE(2*I-1) = DBLE(CSIZE(I))
-         SSIZE(2*I) = DIMAG(CSIZE(I))
+         SSIZE(2*I) = AIMAG(CSIZE(I))
    20 CONTINUE
 *
       CALL STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)

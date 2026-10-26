@@ -78,7 +78,7 @@
       DOUBLE PRECISION   ZMAX
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, SIGN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, SIGN
 *     ..
 *     .. Executable Statements ..
 *
@@ -86,15 +86,15 @@
          ZLCTES = ( DBLE( Z ).LT.ZERO )
       ELSE
          IF( DBLE( Z ).EQ.ZERO .OR. DBLE( D ).EQ.ZERO ) THEN
-            ZLCTES = ( SIGN( ONE, DIMAG( Z ) ).NE.
-     $               SIGN( ONE, DIMAG( D ) ) )
-         ELSE IF( DIMAG( Z ).EQ.ZERO .OR. DIMAG( D ).EQ.ZERO ) THEN
+            ZLCTES = ( SIGN( ONE, AIMAG( Z ) ).NE.
+     $               SIGN( ONE, AIMAG( D ) ) )
+         ELSE IF( AIMAG( Z ).EQ.ZERO .OR. AIMAG( D ).EQ.ZERO ) THEN
             ZLCTES = ( SIGN( ONE, DBLE( Z ) ).NE.
      $               SIGN( ONE, DBLE( D ) ) )
          ELSE
-            ZMAX = MAX( ABS( DBLE( Z ) ), ABS( DIMAG( Z ) ) )
+            ZMAX = MAX( ABS( DBLE( Z ) ), ABS( AIMAG( Z ) ) )
             ZLCTES = ( ( DBLE( Z ) / ZMAX )*DBLE( D )+
-     $               ( DIMAG( Z ) / ZMAX )*DIMAG( D ).LT.ZERO )
+     $               ( AIMAG( Z ) / ZMAX )*AIMAG( D ).LT.ZERO )
          END IF
       END IF
 *

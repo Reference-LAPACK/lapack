@@ -300,6 +300,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
@@ -329,14 +331,13 @@
       EXTERNAL           XERBLA, ZLARTG, ZLASET, ZROT, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN,
-     $                   SQRT
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -420,7 +421,7 @@
 *
 *     WORK( 1 ) = CMPLX( 1 )
       IF( N.LE.0 ) THEN
-         WORK( 1 ) = DCMPLX( 1 )
+         WORK( 1 ) = CMPLX( 1, KIND=DP )
          RETURN
       END IF
 *
@@ -449,7 +450,7 @@
       DO 10 J = IHI + 1, N
          ABSB = ABS( T( J, J ) )
          IF( ABSB.GT.SAFMIN ) THEN
-            SIGNBC = DCONJG( T( J, J ) / ABSB )
+            SIGNBC = CONJG( T( J, J ) / ABSB )
             T( J, J ) = ABSB
             IF( ILSCHR ) THEN
                CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
@@ -581,7 +582,7 @@
                      IF( ILQ )
      $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
      $                             1,
-     $                             C, DCONJG( S ) )
+     $                             C, CONJG( S ) )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
                      ILAZR2 = .FALSE.
@@ -615,7 +616,7 @@
                      IF( ILQ )
      $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ),
      $                             1,
-     $                             C, DCONJG( S ) )
+     $                             C, CONJG( S ) )
                      CTEMP = H( JCH+1, JCH )
                      CALL ZLARTG( CTEMP, H( JCH+1, JCH-1 ), C, S,
      $                            H( JCH+1, JCH ) )
@@ -669,7 +670,7 @@
    60    CONTINUE
          ABSB = ABS( T( ILAST, ILAST ) )
          IF( ABSB.GT.SAFMIN ) THEN
-            SIGNBC = DCONJG( T( ILAST, ILAST ) / ABSB )
+            SIGNBC = CONJG( T( ILAST, ILAST ) / ABSB )
             T( ILAST, ILAST ) = ABSB
             IF( ILSCHR ) THEN
                CALL ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ),
@@ -754,7 +755,7 @@
                Y = TEMP*SQRT( ( X / TEMP )**2+( CTEMP / TEMP )**2 )
                IF( TEMP2.GT.ZERO ) THEN
                   IF( DBLE( X / TEMP2 )*DBLE( Y )+
-     $                DIMAG( X / TEMP2 )*DIMAG( Y ).LT.ZERO )Y = -Y
+     $                AIMAG( X / TEMP2 )*AIMAG( Y ).LT.ZERO )Y = -Y
                END IF
                SHIFT = SHIFT - CTEMP*ZLADIV( CTEMP, ( X+Y ) )
             END IF
@@ -812,15 +813,15 @@
 *
             DO 100 JC = J, ILASTM
                CTEMP = C*H( J, JC ) + S*H( J+1, JC )
-               H( J+1, JC ) = -DCONJG( S )*H( J, JC ) + C*H( J+1, JC )
+               H( J+1, JC ) = -CONJG( S )*H( J, JC ) + C*H( J+1, JC )
                H( J, JC ) = CTEMP
                CTEMP2 = C*T( J, JC ) + S*T( J+1, JC )
-               T( J+1, JC ) = -DCONJG( S )*T( J, JC ) + C*T( J+1, JC )
+               T( J+1, JC ) = -CONJG( S )*T( J, JC ) + C*T( J+1, JC )
                T( J, JC ) = CTEMP2
   100       CONTINUE
             IF( ILQ ) THEN
                DO 110 JR = 1, N
-                  CTEMP = C*Q( JR, J ) + DCONJG( S )*Q( JR, J+1 )
+                  CTEMP = C*Q( JR, J ) + CONJG( S )*Q( JR, J+1 )
                   Q( JR, J+1 ) = -S*Q( JR, J ) + C*Q( JR, J+1 )
                   Q( JR, J ) = CTEMP
   110          CONTINUE
@@ -832,18 +833,18 @@
 *
             DO 120 JR = IFRSTM, MIN( J+2, ILAST )
                CTEMP = C*H( JR, J+1 ) + S*H( JR, J )
-               H( JR, J ) = -DCONJG( S )*H( JR, J+1 ) + C*H( JR, J )
+               H( JR, J ) = -CONJG( S )*H( JR, J+1 ) + C*H( JR, J )
                H( JR, J+1 ) = CTEMP
   120       CONTINUE
             DO 130 JR = IFRSTM, J
                CTEMP = C*T( JR, J+1 ) + S*T( JR, J )
-               T( JR, J ) = -DCONJG( S )*T( JR, J+1 ) + C*T( JR, J )
+               T( JR, J ) = -CONJG( S )*T( JR, J+1 ) + C*T( JR, J )
                T( JR, J+1 ) = CTEMP
   130       CONTINUE
             IF( ILZ ) THEN
                DO 140 JR = 1, N
                   CTEMP = C*Z( JR, J+1 ) + S*Z( JR, J )
-                  Z( JR, J ) = -DCONJG( S )*Z( JR, J+1 ) + C*Z( JR, J )
+                  Z( JR, J ) = -CONJG( S )*Z( JR, J+1 ) + C*Z( JR, J )
                   Z( JR, J+1 ) = CTEMP
   140          CONTINUE
             END IF
@@ -868,7 +869,7 @@
       DO 200 J = 1, ILO - 1
          ABSB = ABS( T( J, J ) )
          IF( ABSB.GT.SAFMIN ) THEN
-            SIGNBC = DCONJG( T( J, J ) / ABSB )
+            SIGNBC = CONJG( T( J, J ) / ABSB )
             T( J, J ) = ABSB
             IF( ILSCHR ) THEN
                CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
@@ -892,7 +893,7 @@
 *     Exit (other than argument error) -- return optimal workspace size
 *
   210 CONTINUE
-      WORK( 1 ) = DCMPLX( N )
+      WORK( 1 ) = CMPLX( N, KIND=DP )
       RETURN
 *
 *     End of ZHGEQZ

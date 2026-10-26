@@ -348,7 +348,7 @@
      $                   ZLASET, ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SQRT
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Data statements ..
       DATA               KTYPE / 1, 2, 5*4, 5*5, 3*8 /
@@ -622,7 +622,7 @@
 *
                DO 120 JC = 1, N
                   DO 110 JR = 0, MIN( K, N-JC )
-                     A( JR+1, JC ) = DCONJG( A( K+1-JR, JC+JR ) )
+                     A( JR+1, JC ) = CONJG( A( K+1-JR, JC+JR ) )
   110             CONTINUE
   120          CONTINUE
                DO 140 JC = N + 1 - K, N

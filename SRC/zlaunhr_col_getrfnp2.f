@@ -179,6 +179,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D+0 )
       COMPLEX*16         CONE
@@ -197,13 +199,13 @@
       EXTERNAL           ZGEMM, ZSCAL, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, DSIGN, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, DSIGN, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( DIMAG( Z ) )
+      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -234,7 +236,7 @@
 *
 *        Transfer the sign
 *
-         D( 1 ) = DCMPLX( -DSIGN( ONE, DBLE( A( 1, 1 ) ) ) )
+         D( 1 ) = CMPLX( -DSIGN( ONE, DBLE( A( 1, 1 ) ) ), KIND=DP )
 *
 *        Construct the row of U
 *
@@ -247,7 +249,7 @@
 *
 *        Transfer the sign
 *
-         D( 1 ) = DCMPLX( -DSIGN( ONE, DBLE( A( 1, 1 ) ) ) )
+         D( 1 ) = CMPLX( -DSIGN( ONE, DBLE( A( 1, 1 ) ) ), KIND=DP )
 *
 *        Construct the row of U
 *

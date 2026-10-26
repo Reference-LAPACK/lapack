@@ -167,6 +167,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
@@ -188,7 +190,7 @@
       EXTERNAL           ZGEMM, ZHPR, ZHPR2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -253,8 +255,8 @@
 *
       IF( N.GT.1 .AND. KS.EQ.1 ) THEN
          DO 70 J = 1, N - 1
-            CALL ZHPR2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
-     $                  U( 1, J+1 ), 1, WORK )
+            CALL ZHPR2( CUPLO, N, -CMPLX( E( J ), KIND=DP ), U( 1, J ),
+     $                  1, U( 1, J+1 ), 1, WORK )
    70    CONTINUE
       END IF
       WNORM = ZLANHP( '1', CUPLO, N, WORK, RWORK )

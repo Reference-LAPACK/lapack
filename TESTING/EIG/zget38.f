@@ -140,7 +140,7 @@
      $                   ZUNGHR
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG, MAX, SQRT
+      INTRINSIC          AIMAG, DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -237,7 +237,7 @@
    70       CONTINUE
          ELSE
             DO 80 I = 1, N
-               WSRT( I ) = DIMAG( W( I ) )
+               WSRT( I ) = AIMAG( W( I ) )
    80       CONTINUE
          END IF
          DO 100 I = 1, N - 1

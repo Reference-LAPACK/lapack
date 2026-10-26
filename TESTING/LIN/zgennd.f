@@ -89,13 +89,13 @@
       COMPLEX*16 AII
 *     ..
 *     .. Intrinsics ..
-      INTRINSIC MIN, DBLE, DIMAG
+      INTRINSIC AIMAG, DBLE, MIN
 *     ..
 *     .. Executable Statements ..
       K = MIN( M, N )
       DO I = 1, K
          AII = A( I, I )
-         IF( DBLE( AII ).LT.ZERO.OR.DIMAG( AII ).NE.ZERO ) THEN
+         IF( DBLE( AII ).LT.ZERO.OR.AIMAG( AII ).NE.ZERO ) THEN
             ZGENND = .FALSE.
             RETURN
          END IF

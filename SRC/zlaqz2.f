@@ -384,7 +384,7 @@
 
       IF ( KWTOP .NE. ILO .AND. S .NE. CZERO ) THEN
 *        Reflect spike back, this will create optimally packed bulges
-         A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 ) *DCONJG( QC( 1,
+         A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 ) *CONJG( QC( 1,
      $      1:JW-ND ) )
          DO K = KWBOT-1, KWTOP, -1
             CALL ZLARTG( A( K, KWTOP-1 ), A( K+1, KWTOP-1 ), C1, S1,
@@ -400,7 +400,7 @@
      $                 LDB, C1, S1 )
             CALL ZROT( JW, QC( 1, K-KWTOP+1 ), 1, QC( 1,
      $                 K+1-KWTOP+1 ),
-     $                 1, C1, DCONJG( S1 ) )
+     $                 1, C1, CONJG( S1 ) )
          END DO
 
 *        Chase bulges down

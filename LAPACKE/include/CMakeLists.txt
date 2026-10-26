@@ -1,15 +1,8 @@
 # Replace FORTRAN_STRLEN definition in lapack.h if needed
-file(READ lapack.h lapack_h_content)
-if(FORTRAN_STRLEN_TYPE)
-  string(REPLACE
-    "#define FORTRAN_STRLEN size_t" "#define FORTRAN_STRLEN ${FORTRAN_STRLEN_TYPE}"
-    lapack_h_content "${lapack_h_content}")
+if(NOT FORTRAN_STRLEN_TYPE)
+  set(FORTRAN_STRLEN_TYPE "size_t")
 endif()
-# Only touch the header when its content changes so that dependent objects
-# are not recompiled on every configure.
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/lapack.h.staging "${lapack_h_content}")
-configure_file(${CMAKE_CURRENT_BINARY_DIR}/lapack.h.staging
-  ${LAPACK_BINARY_DIR}/include/lapack.h COPYONLY)
+configure_file(lapack.h.in ${LAPACK_BINARY_DIR}/include/lapack.h)
 install(
   FILES ${LAPACK_BINARY_DIR}/include/lapack.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -18,7 +11,9 @@ install(
 
 if(LAPACKE)
   list(APPEND LAPACKE_INCLUDE lapacke.h lapacke_64.h lapacke_config.h lapacke_utils.h)
-  file(COPY ${LAPACKE_INCLUDE} DESTINATION ${LAPACK_BINARY_DIR}/include)
+  foreach(FILE IN LISTS LAPACKE_INCLUDE)
+    configure_file(${FILE} ${LAPACK_BINARY_DIR}/include/${FILE} COPYONLY)
+  endforeach()
   install(
     FILES ${LAPACKE_INCLUDE}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}

@@ -293,7 +293,7 @@
 *     ..
 *     .. Intrinsic Functions ..
 *
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, MOD
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN, MOD
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         VT( 3 )
@@ -306,7 +306,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -423,7 +423,7 @@
 *              .    computational window. ====
 *
                T1 = V( 1, M22 )
-               T2 = T1*DCONJG( V( 2, M22 ) )
+               T2 = T1*CONJG( V( 2, M22 ) )
                DO 30 J = JTOP, MIN( KBOT, K+3 )
                   REFSUM = H( J, K+1 ) + V( 2, M22 )*H( J, K+2 )
                   H( J, K+1 ) = H( J, K+1 ) - REFSUM*T1
@@ -440,11 +440,11 @@
                ELSE
                   JBOT = KBOT
                END IF
-               T1 = DCONJG( V( 1, M22 ) )
+               T1 = CONJG( V( 1, M22 ) )
                T2 = T1*V( 2, M22 )
                DO 40 J = K+1, JBOT
                   REFSUM = H( K+1, J ) +
-     $                     DCONJG( V( 2, M22 ) )*H( K+2, J )
+     $                     CONJG( V( 2, M22 ) )*H( K+2, J )
                   H( K+1, J ) = H( K+1, J ) - REFSUM*T1
                   H( K+2, J ) = H( K+2, J ) - REFSUM*T2
    40          CONTINUE
@@ -503,7 +503,7 @@
      $                        V( 2, M22 )*U( J, KMS+2 ) )
                      U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
                      U( J, KMS+2 ) = U( J, KMS+2 ) -
-     $                               REFSUM*DCONJG( V( 2, M22 ) )
+     $                               REFSUM*CONJG( V( 2, M22 ) )
   50                 CONTINUE
                ELSE IF( WANTZ ) THEN
                   DO 60 J = ILOZ, IHIZ
@@ -511,7 +511,7 @@
      $                        Z( J, K+2 ) )
                      Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
                      Z( J, K+2 ) = Z( J, K+2 ) -
-     $                             REFSUM*DCONJG( V( 2, M22 ) )
+     $                             REFSUM*CONJG( V( 2, M22 ) )
   60              CONTINUE
                END IF
             END IF
@@ -532,8 +532,8 @@
 *                 .    of row are actually zero. ====
 *
                   T1 = V( 1, M )
-                  T2 = T1*DCONJG( V( 2, M ) )
-                  T3 = T1*DCONJG( V( 3, M ) )
+                  T2 = T1*CONJG( V( 2, M ) )
+                  T3 = T1*CONJG( V( 3, M ) )
                   REFSUM = V( 3, M )*H( K+3, K+2 )
                   H( K+3, K   ) = -REFSUM*T1
                   H( K+3, K+1 ) = -REFSUM*T2
@@ -572,10 +572,10 @@
      $                            S( 2*M ), VT )
                      ALPHA = VT( 1 )
                      CALL ZLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
-                     T1 = DCONJG( VT( 1 ) )
+                     T1 = CONJG( VT( 1 ) )
                      T2 = T1*VT( 2 )
                      T3 = T1*VT( 3 )
-                     REFSUM = H( K+1, K )+DCONJG( VT( 2 ) )*H( K+2, K )
+                     REFSUM = H( K+1, K )+CONJG( VT( 2 ) )*H( K+2, K )
 *
                      IF( CABS1( H( K+2, K )-REFSUM*T2 )+
      $                   CABS1( REFSUM*T3 ).GT.ULP*
@@ -613,8 +613,8 @@
 *              .     updates from the left for efficiency. ====
 *
                T1 = V( 1, M )
-               T2 = T1*DCONJG( V( 2, M ) )
-               T3 = T1*DCONJG( V( 3, M ) )
+               T2 = T1*CONJG( V( 2, M ) )
+               T3 = T1*CONJG( V( 3, M ) )
                DO 70 J = JTOP, MIN( KBOT, K+3 )
                   REFSUM = H( J, K+1 ) + V( 2, M )*H( J, K+2 )
      $                     + V( 3, M )*H( J, K+3 )
@@ -626,12 +626,12 @@
 *              ==== Perform update from left for subsequent
 *              .    column. ====
 *
-               T1 = DCONJG( V( 1, M ) )
+               T1 = CONJG( V( 1, M ) )
                T2 = T1*V( 2, M )
                T3 = T1*V( 3, M )
                REFSUM = H( K+1, K+1 )
-     $                  + DCONJG( V( 2, M ) )*H( K+2, K+1 )
-     $                  + DCONJG( V( 3, M ) )*H( K+3, K+1 )
+     $                  + CONJG( V( 2, M ) )*H( K+2, K+1 )
+     $                  + CONJG( V( 3, M ) )*H( K+3, K+1 )
                H( K+1, K+1 ) = H( K+1, K+1 ) - REFSUM*T1
                H( K+2, K+1 ) = H( K+2, K+1 ) - REFSUM*T2
                H( K+3, K+1 ) = H( K+3, K+1 ) - REFSUM*T3
@@ -694,12 +694,12 @@
 *
             DO 100 M = MBOT, MTOP, -1
                K = KRCOL + 2*( M-1 )
-               T1 = DCONJG( V( 1, M ) )
+               T1 = CONJG( V( 1, M ) )
                T2 = T1*V( 2, M )
                T3 = T1*V( 3, M )
                DO 90 J = MAX( KTOP, KRCOL + 2*M ), JBOT
-                  REFSUM = H( K+1, J ) + DCONJG( V( 2, M ) )*H( K+2, J )
-     $                     + DCONJG( V( 3, M ) )*H( K+3, J )
+                  REFSUM = H( K+1, J ) + CONJG( V( 2, M ) )*H( K+2, J )
+     $                     + CONJG( V( 3, M ) )*H( K+3, J )
                   H( K+1, J ) = H( K+1, J ) - REFSUM*T1
                   H( K+2, J ) = H( K+2, J ) - REFSUM*T2
                   H( K+3, J ) = H( K+3, J ) - REFSUM*T3
@@ -721,8 +721,8 @@
                   I2 = MAX( I2, KMS-(KRCOL-INCOL)+1 )
                   I4 = MIN( KDU, KRCOL + 2*( MBOT-1 ) - INCOL + 5 )
                   T1 = V( 1, M )
-                  T2 = T1*DCONJG( V( 2, M ) )
-                  T3 = T1*DCONJG( V( 3, M ) )
+                  T2 = T1*CONJG( V( 2, M ) )
+                  T3 = T1*CONJG( V( 3, M ) )
                   DO 110 J = I2, I4
                      REFSUM = U( J, KMS+1 ) + V( 2, M )*U( J, KMS+2 )
      $                        + V( 3, M )*U( J, KMS+3 )
@@ -740,8 +740,8 @@
                DO 140 M = MBOT, MTOP, -1
                   K = KRCOL + 2*( M-1 )
                   T1 = V( 1, M )
-                  T2 = T1*DCONJG( V( 2, M ) )
-                  T3 = T1*DCONJG( V( 3, M ) )
+                  T2 = T1*CONJG( V( 2, M ) )
+                  T3 = T1*CONJG( V( 3, M ) )
                   DO 130 J = ILOZ, IHIZ
                      REFSUM = Z( J, K+1 ) + V( 2, M )*Z( J, K+2 )
      $                        + V( 3, M )*Z( J, K+3 )

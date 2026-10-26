@@ -132,7 +132,7 @@
       EXTERNAL           XERBLA, ZSCAL, ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, MAX
+      INTRINSIC          CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -162,7 +162,7 @@
 *        Compute the product U * U**H.
 *
          DO J = 1, N
-            AJJ = DCONJG(A(J,J))
+            AJJ = CONJG(A(J,J))
             IF( J.EQ.N ) THEN
 *
 *              We have this case separate just to ensure we never
@@ -187,7 +187,7 @@
 *        Compute the product L**H * L.
 *
          DO I = 1, N
-            AII = DCONJG(A(I,I))
+            AII = CONJG(A(I,I))
             IF( I.EQ.N ) THEN
 *
 *              We have this case separate just to ensure we never

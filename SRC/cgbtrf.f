@@ -166,14 +166,16 @@
       INTEGER            I, I2, I3, II, IP, J, J2, J3, JB, JJ, JM, JP,
      $                   JU, K2, KM, KV, NB, NW
       COMPLEX            TEMP
+      REAL               SFMIN
 *     ..
 *     .. Local Arrays ..
       COMPLEX            WORK13( LDWORK, NBMAX ),
      $                   WORK31( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
+      REAL               SLAMCH
       INTEGER            ICAMAX, ILAENV
-      EXTERNAL           ICAMAX, ILAENV
+      EXTERNAL           SLAMCH, ICAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGBTF2, CGEMM, CGERU, CLASWP,
@@ -213,6 +215,10 @@
 *
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
+*
+*     Compute machine safe minimum
+*
+      SFMIN = SLAMCH('S')
 *
 *     Determine the block size for this environment
 *
@@ -325,9 +331,15 @@
 *
 *                 Compute multipliers
 *
-                  CALL CSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2,
-     $                        JJ ),
-     $                        1 )
+                  IF( ABS( AB( KV+1, JJ ) ).GE.SFMIN ) THEN
+                     CALL CSCAL( KM, ONE / AB( KV+1, JJ ),
+     $                           AB( KV+2, JJ ), 1 )
+                  ELSE
+                     DO 75 I = 1, KM
+                        AB( KV+1+I, JJ ) = AB( KV+1+I, JJ ) /
+     $                                     AB( KV+1, JJ )
+   75                CONTINUE
+                  END IF
 *
 *                 Update trailing submatrix within the band and within
 *                 the current block. JM is the index of the last column

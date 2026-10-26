@@ -118,6 +118,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -131,7 +133,7 @@
       EXTERNAL           DLAMCH, DLAPY3, DZNRM2, ZLADIV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZDSCAL, ZSCAL
@@ -145,7 +147,7 @@
 *
       XNORM = DZNRM2( N-1, X, INCX )
       ALPHR = DBLE( ALPHA )
-      ALPHI = DIMAG( ALPHA )
+      ALPHI = AIMAG( ALPHA )
 *
       IF( XNORM.EQ.ZERO .AND. ALPHI.EQ.ZERO ) THEN
 *
@@ -177,11 +179,11 @@
 *           New BETA is at most 1, at least SAFMIN
 *
             XNORM = DZNRM2( N-1, X, INCX )
-            ALPHA = DCMPLX( ALPHR, ALPHI )
+            ALPHA = CMPLX( ALPHR, ALPHI, KIND=DP )
             BETA = -SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
-         TAU = DCMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-         ALPHA = ZLADIV( DCMPLX( ONE ), ALPHA-BETA )
+         TAU = CMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA, KIND=DP )
+         ALPHA = ZLADIV( CMPLX( ONE, KIND=DP ), ALPHA-BETA )
          CALL ZSCAL( N-1, ALPHA, X, INCX )
 *
 *        If ALPHA is subnormal, it may lose relative accuracy

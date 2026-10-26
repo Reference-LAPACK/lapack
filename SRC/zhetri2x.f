@@ -245,7 +245,7 @@
              WORK(K,INVD) = AKP1 / D
              WORK(K+1,INVD+1) = AK / D
              WORK(K,INVD+1) = -AKKP1 / D
-             WORK(K+1,INVD) = DCONJG (WORK(K,INVD+1) )
+             WORK(K+1,INVD) = CONJG (WORK(K,INVD+1) )
             K=K+2
          END IF
         END DO
@@ -424,7 +424,7 @@
              WORK(K-1,INVD) = AKP1 / D
              WORK(K,INVD) = AK / D
              WORK(K,INVD+1) = -AKKP1 / D
-             WORK(K-1,INVD+1) = DCONJG (WORK(K,INVD+1) )
+             WORK(K-1,INVD+1) = CONJG (WORK(K,INVD+1) )
             K=K-2
          END IF
         END DO

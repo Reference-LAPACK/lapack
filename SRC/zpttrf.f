@@ -104,6 +104,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
 *     ..
@@ -115,7 +117,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, DIMAG, MOD
+      INTRINSIC          AIMAG, CMPLX, DBLE, MOD
 *     ..
 *     .. Executable Statements ..
 *
@@ -142,10 +144,10 @@
             GO TO 30
          END IF
          EIR = DBLE( E( I ) )
-         EII = DIMAG( E( I ) )
+         EII = AIMAG( E( I ) )
          F = EIR / D( I )
          G = EII / D( I )
-         E( I ) = DCMPLX( F, G )
+         E( I ) = CMPLX( F, G, KIND=DP )
          D( I+1 ) = D( I+1 ) - F*EIR - G*EII
    10 CONTINUE
 *
@@ -162,10 +164,10 @@
 *        Solve for e(i) and d(i+1).
 *
          EIR = DBLE( E( I ) )
-         EII = DIMAG( E( I ) )
+         EII = AIMAG( E( I ) )
          F = EIR / D( I )
          G = EII / D( I )
-         E( I ) = DCMPLX( F, G )
+         E( I ) = CMPLX( F, G, KIND=DP )
          D( I+1 ) = D( I+1 ) - F*EIR - G*EII
 *
          IF( D( I+1 ).LE.ZERO ) THEN
@@ -176,10 +178,10 @@
 *        Solve for e(i+1) and d(i+2).
 *
          EIR = DBLE( E( I+1 ) )
-         EII = DIMAG( E( I+1 ) )
+         EII = AIMAG( E( I+1 ) )
          F = EIR / D( I+1 )
          G = EII / D( I+1 )
-         E( I+1 ) = DCMPLX( F, G )
+         E( I+1 ) = CMPLX( F, G, KIND=DP )
          D( I+2 ) = D( I+2 ) - F*EIR - G*EII
 *
          IF( D( I+2 ).LE.ZERO ) THEN
@@ -190,10 +192,10 @@
 *        Solve for e(i+2) and d(i+3).
 *
          EIR = DBLE( E( I+2 ) )
-         EII = DIMAG( E( I+2 ) )
+         EII = AIMAG( E( I+2 ) )
          F = EIR / D( I+2 )
          G = EII / D( I+2 )
-         E( I+2 ) = DCMPLX( F, G )
+         E( I+2 ) = CMPLX( F, G, KIND=DP )
          D( I+3 ) = D( I+3 ) - F*EIR - G*EII
 *
          IF( D( I+3 ).LE.ZERO ) THEN
@@ -204,10 +206,10 @@
 *        Solve for e(i+3) and d(i+4).
 *
          EIR = DBLE( E( I+3 ) )
-         EII = DIMAG( E( I+3 ) )
+         EII = AIMAG( E( I+3 ) )
          F = EIR / D( I+3 )
          G = EII / D( I+3 )
-         E( I+3 ) = DCMPLX( F, G )
+         E( I+3 ) = CMPLX( F, G, KIND=DP )
          D( I+4 ) = D( I+4 ) - F*EIR - G*EII
    20 CONTINUE
 *

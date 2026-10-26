@@ -294,6 +294,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       COMPLEX*16         CZERO, CONE
@@ -409,7 +411,7 @@
          IF( N.EQ.0 ) THEN
             WORK( 1 ) = 1
          ELSE
-            WORK( 1 ) = DCMPLX( LWKOPT )
+            WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
          END IF
       END IF
 *
@@ -597,7 +599,7 @@
 *
    30 CONTINUE
 *
-      WORK( 1 ) = DCMPLX( LWKOPT )
+      WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
 *
       RETURN
 *

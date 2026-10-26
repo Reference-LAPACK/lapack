@@ -200,6 +200,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CONE, CZERO
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ),
      $                     CZERO = ( 0.0D+0, 0.0D+0 ) )
@@ -217,7 +219,7 @@
       EXTERNAL           ZLARFB_GETT, ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -255,14 +257,14 @@
          CALL XERBLA( 'ZUNGTSQR_ROW', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = DCMPLX( LWORKOPT )
+         WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = DCMPLX( LWORKOPT )
+         WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
          RETURN
       END IF
 *
@@ -371,7 +373,7 @@
 *
       END DO
 *
-      WORK( 1 ) = DCMPLX( LWORKOPT )
+      WORK( 1 ) = CMPLX( LWORKOPT, KIND=DP )
       RETURN
 *
 *     End of ZUNGTSQR_ROW

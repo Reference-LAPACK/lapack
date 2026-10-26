@@ -1,11 +1,8 @@
 # Replace FORTRAN_STRLEN definition in cblas_f77.h if needed
-file(READ cblas_f77.h cblas_f77_h_content)
-if(FORTRAN_STRLEN_TYPE)
-  string(REPLACE
-    "#define FORTRAN_STRLEN size_t" "#define FORTRAN_STRLEN ${FORTRAN_STRLEN_TYPE}"
-    cblas_f77_h_content "${cblas_f77_h_content}")
+if(NOT FORTRAN_STRLEN_TYPE)
+  set(FORTRAN_STRLEN_TYPE "size_t")
 endif()
-file(WRITE ${LAPACK_BINARY_DIR}/include/cblas_f77.h "${cblas_f77_h_content}")
+configure_file(cblas_f77.h.in ${LAPACK_BINARY_DIR}/include/cblas_f77.h)
 install(
   FILES ${LAPACK_BINARY_DIR}/include/cblas_f77.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -13,7 +10,8 @@ install(
 
 if(CBLAS)
   set(CBLAS_INCLUDE cblas.h cblas_64.h)
-  file(COPY ${CBLAS_INCLUDE} DESTINATION ${LAPACK_BINARY_DIR}/include)
+  configure_file(cblas.h ${LAPACK_BINARY_DIR}/include/cblas.h COPYONLY)
+  configure_file(cblas_64.h ${LAPACK_BINARY_DIR}/include/cblas_64.h COPYONLY)
   install(FILES ${CBLAS_INCLUDE}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT Development)

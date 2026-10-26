@@ -368,6 +368,10 @@
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     .. Local Scalars ..
       LOGICAL            WANTQ, WANTU, WANTV, LQUERY
       INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT
@@ -433,7 +437,7 @@
          LWKOPT = N + INT( WORK( 1 ) )
          LWKOPT = MAX( 2*N, LWKOPT )
          LWKOPT = MAX( 1, LWKOPT )
-         WORK( 1 ) = DCMPLX( LWKOPT )
+         WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -494,7 +498,7 @@
          END IF
    20 CONTINUE
 *
-      WORK( 1 ) = DCMPLX( LWKOPT )
+      WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       RETURN
 *
 *     End of ZGGSVD3

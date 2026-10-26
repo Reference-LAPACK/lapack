@@ -174,7 +174,7 @@
       EXTERNAL           ZHER, ZSCAL, ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, DIMAG
+      INTRINSIC          AIMAG, CONJG, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -198,7 +198,7 @@
 *     an error code if any are nonzero.
 *
       DO 100 J = 1, N
-         IF( DIMAG( AFAC( J, J ) ).NE.ZERO ) THEN
+         IF( AIMAG( AFAC( J, J ) ).NE.ZERO ) THEN
             RESID = ONE / EPS
             RETURN
          END IF
@@ -268,7 +268,7 @@
                   IF( I.LE.J ) THEN
                      PERM( PIV( I ), PIV( J ) ) = AFAC( I, J )
                   ELSE
-                     PERM( PIV( I ), PIV( J ) ) = DCONJG( AFAC( J, I ) )
+                     PERM( PIV( I ), PIV( J ) ) = CONJG( AFAC( J, I ) )
                   END IF
                END IF
   170       CONTINUE
@@ -283,7 +283,7 @@
                   IF( I.GE.J ) THEN
                      PERM( PIV( I ), PIV( J ) ) = AFAC( I, J )
                   ELSE
-                     PERM( PIV( I ), PIV( J ) ) = DCONJG( AFAC( J, I ) )
+                     PERM( PIV( I ), PIV( J ) ) = CONJG( AFAC( J, I ) )
                   END IF
                END IF
   190       CONTINUE

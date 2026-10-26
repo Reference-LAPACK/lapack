@@ -251,9 +251,10 @@
 *     .. Local Scalars ..
       LOGICAL            ALLEIG, INDEIG, TEST, VALEIG, WANTZ
       CHARACTER          ORDER
-      INTEGER            I, IINFO, IMAX, INDISP, INDIWO, INDWRK,
+      INTEGER            I, IINFO, INDISP, INDIWO, INDWRK,
      $                   ISCALE, ITMP1, J, JJ, NSPLIT
-      REAL               BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA, SMLNUM,
+      REAL               ABSTLL, BIGNUM, EPS, RMAX, RMIN, SAFMIN, SIGMA,
+     $                   SMLNUM,
      $                   TMP1, TNRM, VLL, VUU
 *     ..
 *     .. External Functions ..
@@ -340,6 +341,7 @@
 *     Scale matrix to allowable range, if necessary.
 *
       ISCALE = 0
+      ABSTLL = ABSTOL
       IF ( VALEIG ) THEN
          VLL = VL
          VUU = VU
@@ -352,12 +354,23 @@
          ISCALE = 1
          SIGMA = RMIN / TNRM
       ELSE IF( TNRM.GT.RMAX ) THEN
-         ISCALE = 1
+*        An infinite norm gives SIGMA = 0; leave such a matrix
+*        unscaled so that VL and VU remain a valid interval.
          SIGMA = RMAX / TNRM
+         IF( SIGMA.GT.ZERO )
+     $      ISCALE = 1
       END IF
       IF( ISCALE.EQ.1 ) THEN
          CALL SSCAL( N, SIGMA, D, 1 )
          CALL SSCAL( N-1, SIGMA, E( 1 ), 1 )
+*
+*        Scale a positive ABSTOL with the matrix.  Keep the product
+*        positive, as SSTEBZ takes ABSTOL <= 0 as a request for its
+*        default tolerance EPS*|T|, and cap ABSTOL at |T| so that the
+*        product cannot overflow.
+*
+         IF( ABSTOL.GT.ZERO )
+     $      ABSTLL = MAX( MIN( ABSTOL, TNRM )*SIGMA, SAFMIN )
          IF( VALEIG ) THEN
             VLL = VL*SIGMA
             VUU = VU*SIGMA
@@ -406,7 +419,7 @@
       INDWRK = 1
       INDISP = 1 + N
       INDIWO = INDISP + N
-      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E,
+      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL, D, E,
      $             M,
      $             NSPLIT, W, IWORK( 1 ), IWORK( INDISP ),
      $             WORK( INDWRK ), IWORK( INDIWO ), IINFO )
@@ -427,14 +440,8 @@
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
    20 CONTINUE
-      IF( ISCALE.EQ.1 ) THEN
-         IF( INFO.EQ.0 ) THEN
-            IMAX = M
-         ELSE
-            IMAX = INFO - 1
-         END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
-      END IF
+      IF( ISCALE.EQ.1 )
+     $   CALL SSCAL( M, ONE / SIGMA, W, 1 )
 *
 *     If eigenvalues are not in order, then sort them, along with
 *     eigenvectors.

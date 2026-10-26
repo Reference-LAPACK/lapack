@@ -237,7 +237,7 @@
      $                   ZHETRS_3, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX, MIN, SQRT
+      INTRINSIC          CONJG, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -643,7 +643,7 @@
 *
                         BLOCK( 1, 1 ) = AFAC( ( K-2 )*LDA+K-1 )
                         BLOCK( 1, 2 ) = E( K )
-                        BLOCK( 2, 1 ) = DCONJG( BLOCK( 1, 2 ) )
+                        BLOCK( 2, 1 ) = CONJG( BLOCK( 1, 2 ) )
                         BLOCK( 2, 2 ) = AFAC( (K-1)*LDA+K )
 *
                         CALL ZGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,
@@ -687,7 +687,7 @@
 *
                         BLOCK( 1, 1 ) = AFAC( ( K-1 )*LDA+K )
                         BLOCK( 2, 1 ) = E( K )
-                        BLOCK( 1, 2 ) = DCONJG( BLOCK( 2, 1 ) )
+                        BLOCK( 1, 2 ) = CONJG( BLOCK( 2, 1 ) )
                         BLOCK( 2, 2 ) = AFAC( K*LDA+K+1 )
 *
                         CALL ZGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,

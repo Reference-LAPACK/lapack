@@ -164,15 +164,16 @@
 *     .. Local Scalars ..
       INTEGER            I, I2, I3, II, IP, J, J2, J3, JB, JJ, JM, JP,
      $                   JU, K2, KM, KV, NB, NW
-      DOUBLE PRECISION   TEMP
+      DOUBLE PRECISION   SFMIN, TEMP
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   WORK13( LDWORK, NBMAX ),
      $                   WORK31( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH
       INTEGER            IDAMAX, ILAENV
-      EXTERNAL           IDAMAX, ILAENV
+      EXTERNAL           DLAMCH, IDAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGBTF2, DGEMM, DGER, DLASWP,
@@ -212,6 +213,10 @@
 *
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
+*
+*     Compute machine safe minimum
+*
+      SFMIN = DLAMCH('S')
 *
 *     Determine the block size for this environment
 *
@@ -324,9 +329,15 @@
 *
 *                 Compute multipliers
 *
-                  CALL DSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2,
-     $                        JJ ),
-     $                        1 )
+                  IF( ABS( AB( KV+1, JJ ) ).GE.SFMIN ) THEN
+                     CALL DSCAL( KM, ONE / AB( KV+1, JJ ),
+     $                           AB( KV+2, JJ ), 1 )
+                  ELSE
+                     DO 75 I = 1, KM
+                        AB( KV+1+I, JJ ) = AB( KV+1+I, JJ ) /
+     $                                     AB( KV+1, JJ )
+   75                CONTINUE
+                  END IF
 *
 *                 Update trailing submatrix within the band and within
 *                 the current block. JM is the index of the last column

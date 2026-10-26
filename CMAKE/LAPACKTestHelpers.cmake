@@ -44,9 +44,10 @@ function(lapack_no_constant_propagation_flag out_var)
   endif()
 endfunction()
 
-# Disable it for the ?errcxx drivers among ARGN, which manufacture their NaN
-# with SQRT( -ONE ).  Call this with every source list such a driver is built
-# from: the generated _64 and _TEST copies need it as much as the originals.
+# Disable it for the given tests that manufacture an Inf or a NaN: the
+# CXX, bidiagonal SVD and symmetric tridiagonal error-exit tests and the
+# packed symmetric-indefinite tests. Call this with every source list: the
+# generated _64 and _TEST copies need it as much as the originals.
 function(lapack_nag_disable_constant_propagation)
   lapack_no_constant_propagation_flag(flag)
   if(NOT flag)
@@ -54,7 +55,7 @@ function(lapack_nag_disable_constant_propagation)
   endif()
   foreach(source IN LISTS ARGN)
     get_filename_component(name "${source}" NAME)
-    if(name MATCHES "^[scdz]errcxx(_[A-Za-z0-9]+)*\\.f$")
+    if(name MATCHES "^[scdz](errcxx|errbd|errst|chksp|chkhp)(_[A-Za-z0-9]+)*\\.f$")
       set_source_files_properties("${source}"
         PROPERTIES COMPILE_OPTIONS "${flag}")
     endif()

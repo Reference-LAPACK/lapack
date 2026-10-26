@@ -165,6 +165,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO, SVMIN
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0,
      $                   SVMIN = 0.1D+0 )
@@ -188,7 +190,7 @@
      $                   ZLARF, ZLARNV, ZLAROR, ZLASCL, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX, MIN
+      INTRINSIC          ABS, CMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -238,8 +240,8 @@
          CALL ZLARNV( 2, ISEED, M, WORK )
          CALL ZDSCAL( M, ONE / DZNRM2( M, WORK, 1 ), WORK, 1 )
          CALL ZLASET( 'Full', M, RANK, CZERO, CONE, A, LDA )
-         CALL ZLARF( 'Left', M, RANK, WORK, 1, DCMPLX( TWO ), A, LDA,
-     $               WORK( M+1 ) )
+         CALL ZLARF( 'Left', M, RANK, WORK, 1, CMPLX( TWO, KIND=DP ), A,
+     $               LDA, WORK( M+1 ) )
 *
 *        workspace used: m+mn
 *

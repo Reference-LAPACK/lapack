@@ -158,7 +158,7 @@
      $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, MAX
+      INTRINSIC          CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -228,11 +228,11 @@
                IF ( IPIV(I-1) .EQ. IPIV(I) ) THEN
                   AKM1K = WORK(I)
                   AKM1 = A( I-1, I-1 ) / AKM1K
-                  AK = A( I, I ) / DCONJG( AKM1K )
+                  AK = A( I, I ) / CONJG( AKM1K )
                   DENOM = AKM1*AK - ONE
                   DO 15 J = 1, NRHS
                      BKM1 = B( I-1, J ) / AKM1K
-                     BK = B( I, J ) / DCONJG( AKM1K )
+                     BK = B( I, J ) / CONJG( AKM1K )
                      B( I-1, J ) = ( AK*BKM1-BK ) / DENOM
                      B( I, J ) = ( AKM1*BK-BKM1 ) / DENOM
  15              CONTINUE
@@ -304,11 +304,11 @@
               CALL ZDSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSE
                   AKM1K = WORK(I)
-                  AKM1 = A( I, I ) / DCONJG( AKM1K )
+                  AKM1 = A( I, I ) / CONJG( AKM1K )
                   AK = A( I+1, I+1 ) / AKM1K
                   DENOM = AKM1*AK - ONE
                   DO 25 J = 1, NRHS
-                     BKM1 = B( I, J ) / DCONJG( AKM1K )
+                     BKM1 = B( I, J ) / CONJG( AKM1K )
                      BK = B( I+1, J ) / AKM1K
                      B( I, J ) = ( AK*BKM1-BK ) / DENOM
                      B( I+1, J ) = ( AKM1*BK-BKM1 ) / DENOM

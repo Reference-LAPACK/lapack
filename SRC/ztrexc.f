@@ -151,7 +151,7 @@
       EXTERNAL           XERBLA, ZLARTG, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MAX
+      INTRINSIC          CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -216,7 +216,7 @@
      $                 CS,
      $                 SN )
          CALL ZROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS,
-     $              DCONJG( SN ) )
+     $              CONJG( SN ) )
 *
          T( K, K ) = T22
          T( K+1, K+1 ) = T11
@@ -226,7 +226,7 @@
 *           Accumulate transformation in the matrix Q.
 *
             CALL ZROT( N, Q( 1, K ), 1, Q( 1, K+1 ), 1, CS,
-     $                 DCONJG( SN ) )
+     $                 CONJG( SN ) )
          END IF
 *
    10 CONTINUE

@@ -19,12 +19,7 @@
  *                        compilers that pass string lengths at the end of
  *                        the argument list.
  */
-void CBLAS_WEAK_SYMBOL F77_xerbla_base(FCHAR F77_srname, void *vinfo
-#ifdef BLAS_FORTRAN_STRLEN_END
-   ,
-   FORTRAN_STRLEN len
-#endif
-)
+void CBLAS_WEAK_SYMBOL F77_xerbla_base BLAS_FORTRAN_XERBLA_ARGS
 {
    extern int CBLAS_CallFromC;
 

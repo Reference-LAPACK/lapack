@@ -181,7 +181,7 @@
       EXTERNAL           ZGEMM, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -225,7 +225,7 @@
             TEMP1 = ZERO
             DO 10 J = 1, N
                TEMP1 = MAX( TEMP1, ABS( DBLE( E( J, JVEC ) ) )+
-     $                 ABS( DIMAG( E( J, JVEC ) ) ) )
+     $                 ABS( AIMAG( E( J, JVEC ) ) ) )
    10       CONTINUE
             ENRMIN = MIN( ENRMIN, TEMP1 )
             ENRMAX = MAX( ENRMAX, TEMP1 )
@@ -239,7 +239,7 @@
             DO 40 JVEC = 1, N
                RWORK( JVEC ) = MAX( RWORK( JVEC ),
      $                         ABS( DBLE( E( JVEC, J ) ) )+
-     $                         ABS( DIMAG( E( JVEC, J ) ) ) )
+     $                         ABS( AIMAG( E( JVEC, J ) ) ) )
    40       CONTINUE
    50    CONTINUE
 *
@@ -268,7 +268,7 @@
          IF( ITRNSW.EQ.0 ) THEN
             WTEMP = W( JCOL )
          ELSE
-            WTEMP = DCONJG( W( JCOL ) )
+            WTEMP = CONJG( W( JCOL ) )
          END IF
 *
          IF( ITRNSE.EQ.0 ) THEN
@@ -281,7 +281,7 @@
    80       CONTINUE
          ELSE
             DO 90 JROW = 1, N
-               WORK( JOFF+JROW ) = DCONJG( E( JCOL, JROW ) )*WTEMP
+               WORK( JOFF+JROW ) = CONJG( E( JCOL, JROW ) )*WTEMP
    90       CONTINUE
          END IF
          JOFF = JOFF + N

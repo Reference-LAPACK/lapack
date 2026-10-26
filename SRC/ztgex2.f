@@ -231,7 +231,7 @@
       EXTERNAL           ZLACPY, ZLARTG, ZLASSQ, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, SQRT
+      INTRINSIC          ABS, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -286,8 +286,8 @@
       SB = ABS( S( 1, 1 ) ) * ABS( T( 2, 2 ) )
       CALL ZLARTG( G, F, CZ, SZ, CDUM )
       SZ = -SZ
-      CALL ZROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, DCONJG( SZ ) )
-      CALL ZROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, DCONJG( SZ ) )
+      CALL ZROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, CONJG( SZ ) )
+      CALL ZROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, CONJG( SZ ) )
       IF( SA.GE.SB ) THEN
          CALL ZLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM )
       ELSE
@@ -313,9 +313,9 @@
 *
          CALL ZLACPY( 'Full', M, M, S, LDST, WORK, M )
          CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
-         CALL ZROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -DCONJG( SZ ) )
+         CALL ZROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -CONJG( SZ ) )
          CALL ZROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ,
-     $              -DCONJG( SZ ) )
+     $              -CONJG( SZ ) )
          CALL ZROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ )
          CALL ZROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ )
          DO 10 I = 1, 2
@@ -341,9 +341,9 @@
 *     equivalence transformations to the original matrix pair (A,B)
 *
       CALL ZROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ,
-     $           DCONJG( SZ ) )
+     $           CONJG( SZ ) )
       CALL ZROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ,
-     $           DCONJG( SZ ) )
+     $           CONJG( SZ ) )
       CALL ZROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ,
      $           SQ )
       CALL ZROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ,
@@ -358,10 +358,10 @@
 *
       IF( WANTZ )
      $   CALL ZROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ,
-     $              DCONJG( SZ ) )
+     $              CONJG( SZ ) )
       IF( WANTQ )
      $   CALL ZROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ,
-     $              DCONJG( SQ ) )
+     $              CONJG( SQ ) )
 *
 *     Exit with INFO = 0 if swap was successfully performed.
 *

@@ -142,7 +142,7 @@
       EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG
+      INTRINSIC          CONJG, DBLE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZCOPY, ZHPMV
@@ -182,13 +182,13 @@
          DO 20 J = 1, N - 1
             CALL ZCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
             DO 10 I = 1, J - 1
-               WORK( J, I+1 ) = DCONJG( AINV( JJ+I-1 ) )
+               WORK( J, I+1 ) = CONJG( AINV( JJ+I-1 ) )
    10       CONTINUE
             JJ = JJ + J
    20    CONTINUE
          JJ = ( ( N-1 )*N ) / 2 + 1
          DO 30 I = 1, N - 1
-            WORK( N, I+1 ) = DCONJG( AINV( JJ+I-1 ) )
+            WORK( N, I+1 ) = CONJG( AINV( JJ+I-1 ) )
    30    CONTINUE
 *
 *        Multiply by A
@@ -209,13 +209,13 @@
 *        Copy AINV
 *
          DO 50 I = 1, N - 1
-            WORK( 1, I ) = DCONJG( AINV( I+1 ) )
+            WORK( 1, I ) = CONJG( AINV( I+1 ) )
    50    CONTINUE
          JJ = N + 1
          DO 70 J = 2, N
             CALL ZCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
             DO 60 I = 1, N - J
-               WORK( J, J+I-1 ) = DCONJG( AINV( JJ+I ) )
+               WORK( J, J+I-1 ) = CONJG( AINV( JJ+I ) )
    60       CONTINUE
             JJ = JJ + N - J + 1
    70    CONTINUE

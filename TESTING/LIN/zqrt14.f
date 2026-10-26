@@ -150,7 +150,7 @@
       EXTERNAL           XER_REPLACE, ZGELQ2, ZGEQR2, ZLACPY, ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -222,7 +222,7 @@
 *
          DO 40 I = 1, N
             DO 30 J = 1, NRHS
-               WORK( M+J+( I-1 )*LDWORK ) = DCONJG( X( I, J ) )
+               WORK( M+J+( I-1 )*LDWORK ) = CONJG( X( I, J ) )
    30       CONTINUE
    40    CONTINUE
 *

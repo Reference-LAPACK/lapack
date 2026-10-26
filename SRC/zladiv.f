@@ -71,6 +71,10 @@
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   ZI, ZR
 *     ..
@@ -78,13 +82,13 @@
       EXTERNAL           DLADIV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, DIMAG
+      INTRINSIC          AIMAG, CMPLX, DBLE
 *     ..
 *     .. Executable Statements ..
 *
-      CALL DLADIV( DBLE( X ), DIMAG( X ), DBLE( Y ), DIMAG( Y ), ZR,
+      CALL DLADIV( DBLE( X ), AIMAG( X ), DBLE( Y ), AIMAG( Y ), ZR,
      $             ZI )
-      ZLADIV = DCMPLX( ZR, ZI )
+      ZLADIV = CMPLX( ZR, ZI, KIND=DP )
 *
       RETURN
 *

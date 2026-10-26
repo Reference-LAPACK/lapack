@@ -396,6 +396,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       COMPLEX*16         CONE
@@ -442,7 +444,7 @@
      $                   ZLASET, ZLATME, ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX, MIN, SQRT
+      INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
 *     ..
 *     .. Data statements ..
       DATA               KTYPE / 1, 2, 3, 5*4, 4*6, 6*6, 3*9 /
@@ -592,7 +594,7 @@
 *              Identity
 *
                DO 70 JCOL = 1, N
-                  A( JCOL, JCOL ) = DCMPLX( ANORM )
+                  A( JCOL, JCOL ) = CMPLX( ANORM, KIND=DP )
    70          CONTINUE
 *
             ELSE IF( ITYPE.EQ.3 ) THEN
@@ -600,7 +602,7 @@
 *              Jordan Block
 *
                DO 80 JCOL = 1, N
-                  A( JCOL, JCOL ) = DCMPLX( ANORM )
+                  A( JCOL, JCOL ) = CMPLX( ANORM, KIND=DP )
                   IF( JCOL.GT.1 )
      $               A( JCOL, JCOL-1 ) = CONE
    80          CONTINUE

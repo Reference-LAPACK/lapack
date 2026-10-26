@@ -231,7 +231,7 @@
       EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC DCONJG,MAX
+      INTRINSIC CONJG, MAX
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16 TEMP
@@ -348,7 +348,7 @@
                   DO 110 I = 1,M
                       TEMP = ZERO
                       DO 100 L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*B(L,J)
+                          TEMP = TEMP + CONJG(A(L,I))*B(L,J)
   100                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP
@@ -391,7 +391,7 @@
   170                 CONTINUE
                   END IF
                   DO 190 L = 1,K
-                      TEMP = ALPHA*DCONJG(B(J,L))
+                      TEMP = ALPHA*CONJG(B(J,L))
                       DO 180 I = 1,M
                           C(I,J) = C(I,J) + TEMP*A(I,L)
   180                 CONTINUE
@@ -428,7 +428,7 @@
                   DO 270 I = 1,M
                       TEMP = ZERO
                       DO 260 L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*DCONJG(B(J,L))
+                          TEMP = TEMP + CONJG(A(L,I))*CONJG(B(J,L))
   260                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP
@@ -445,7 +445,7 @@
                   DO 300 I = 1,M
                       TEMP = ZERO
                       DO 290 L = 1,K
-                          TEMP = TEMP + DCONJG(A(L,I))*B(J,L)
+                          TEMP = TEMP + CONJG(A(L,I))*B(J,L)
   290                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP
@@ -464,7 +464,7 @@
                   DO 330 I = 1,M
                       TEMP = ZERO
                       DO 320 L = 1,K
-                          TEMP = TEMP + A(L,I)*DCONJG(B(J,L))
+                          TEMP = TEMP + A(L,I)*CONJG(B(J,L))
   320                 CONTINUE
                       IF (BETA.EQ.ZERO) THEN
                           C(I,J) = ALPHA*TEMP

@@ -221,7 +221,7 @@
      $                   ZSPTRS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, DBLE, MAX
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -232,7 +232,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

@@ -202,7 +202,7 @@
      $                   ZLARGV, ZLARTG, ZLARTV, ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, MAX, MIN
+      INTRINSIC          CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -355,16 +355,16 @@
                DO 40 J = I - KBT, K
                   AB( J-K+KA1, K ) = AB( J-K+KA1, K ) -
      $                               BB( J-I+KB1, I )*
-     $                               DCONJG( AB( K-I+KA1, I ) ) -
-     $                               DCONJG( BB( K-I+KB1, I ) )*
+     $                               CONJG( AB( K-I+KA1, I ) ) -
+     $                               CONJG( BB( K-I+KB1, I ) )*
      $                               AB( J-I+KA1, I ) +
      $                               DBLE( AB( KA1, I ) )*
      $                               BB( J-I+KB1, I )*
-     $                               DCONJG( BB( K-I+KB1, I ) )
+     $                               CONJG( BB( K-I+KB1, I ) )
    40          CONTINUE
                DO 50 J = MAX( 1, I-KA ), I - KBT - 1
                   AB( J-K+KA1, K ) = AB( J-K+KA1, K ) -
-     $                               DCONJG( BB( K-I+KB1, I ) )*
+     $                               CONJG( BB( K-I+KB1, I ) )*
      $                               AB( J-I+KA1, I )
    50          CONTINUE
    60       CONTINUE
@@ -413,7 +413,7 @@
 *
                   T = -BB( KB1-K, I )*RA1
                   WORK( I-K ) = RWORK( I-K+KA-M )*T -
-     $                          DCONJG( WORK( I-K+KA-M ) )*
+     $                          CONJG( WORK( I-K+KA-M ) )*
      $                          AB( 1, I-K+KA )
                   AB( 1, I-K+KA ) = WORK( I-K+KA-M )*T +
      $                              RWORK( I-K+KA-M )*AB( 1, I-K+KA )
@@ -481,7 +481,7 @@
 *
                DO 120 J = J2, J1, KA1
                   CALL ZROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
-     $                       RWORK( J-M ), DCONJG( WORK( J-M ) ) )
+     $                       RWORK( J-M ), CONJG( WORK( J-M ) ) )
   120          CONTINUE
             END IF
   130    CONTINUE
@@ -578,7 +578,7 @@
 *
                DO 200 J = J2, J1, KA1
                   CALL ZROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
-     $                       RWORK( J ), DCONJG( WORK( J ) ) )
+     $                       RWORK( J ), CONJG( WORK( J ) ) )
   200          CONTINUE
             END IF
   210    CONTINUE
@@ -623,15 +623,15 @@
             DO 290 K = I - KBT, I - 1
                DO 270 J = I - KBT, K
                   AB( K-J+1, J ) = AB( K-J+1, J ) -
-     $                             BB( I-J+1, J )*DCONJG( AB( I-K+1,
-     $                             K ) ) - DCONJG( BB( I-K+1, K ) )*
+     $                             BB( I-J+1, J )*CONJG( AB( I-K+1,
+     $                             K ) ) - CONJG( BB( I-K+1, K ) )*
      $                             AB( I-J+1, J ) + DBLE( AB( 1, I ) )*
-     $                             BB( I-J+1, J )*DCONJG( BB( I-K+1,
+     $                             BB( I-J+1, J )*CONJG( BB( I-K+1,
      $                             K ) )
   270          CONTINUE
                DO 280 J = MAX( 1, I-KA ), I - KBT - 1
                   AB( K-J+1, J ) = AB( K-J+1, J ) -
-     $                             DCONJG( BB( I-K+1, K ) )*
+     $                             CONJG( BB( I-K+1, K ) )*
      $                             AB( I-J+1, J )
   280          CONTINUE
   290       CONTINUE
@@ -681,7 +681,7 @@
 *
                   T = -BB( K+1, I-K )*RA1
                   WORK( I-K ) = RWORK( I-K+KA-M )*T -
-     $                          DCONJG( WORK( I-K+KA-M ) )*
+     $                          CONJG( WORK( I-K+KA-M ) )*
      $                          AB( KA1, I-K )
                   AB( KA1, I-K ) = WORK( I-K+KA-M )*T +
      $                             RWORK( I-K+KA-M )*AB( KA1, I-K )
@@ -944,16 +944,16 @@
                DO 520 J = K, I + KBT
                   AB( K-J+KA1, J ) = AB( K-J+KA1, J ) -
      $                               BB( I-J+KB1, J )*
-     $                               DCONJG( AB( I-K+KA1, K ) ) -
-     $                               DCONJG( BB( I-K+KB1, K ) )*
+     $                               CONJG( AB( I-K+KA1, K ) ) -
+     $                               CONJG( BB( I-K+KB1, K ) )*
      $                               AB( I-J+KA1, J ) +
      $                               DBLE( AB( KA1, I ) )*
      $                               BB( I-J+KB1, J )*
-     $                               DCONJG( BB( I-K+KB1, K ) )
+     $                               CONJG( BB( I-K+KB1, K ) )
   520          CONTINUE
                DO 530 J = I + KBT + 1, MIN( N, I+KA )
                   AB( K-J+KA1, J ) = AB( K-J+KA1, J ) -
-     $                               DCONJG( BB( I-K+KB1, K ) )*
+     $                               CONJG( BB( I-K+KB1, K ) )*
      $                               AB( I-J+KA1, J )
   530          CONTINUE
   540       CONTINUE
@@ -1000,7 +1000,7 @@
 *
                   T = -BB( KB1-K, I+K )*RA1
                   WORK( M-KB+I+K ) = RWORK( I+K-KA )*T -
-     $                               DCONJG( WORK( I+K-KA ) )*
+     $                               CONJG( WORK( I+K-KA ) )*
      $                               AB( 1, I+K )
                   AB( 1, I+K ) = WORK( I+K-KA )*T +
      $                           RWORK( I+K-KA )*AB( 1, I+K )
@@ -1217,15 +1217,15 @@
             DO 770 K = I + 1, I + KBT
                DO 750 J = K, I + KBT
                   AB( J-K+1, K ) = AB( J-K+1, K ) -
-     $                             BB( J-I+1, I )*DCONJG( AB( K-I+1,
-     $                             I ) ) - DCONJG( BB( K-I+1, I ) )*
+     $                             BB( J-I+1, I )*CONJG( AB( K-I+1,
+     $                             I ) ) - CONJG( BB( K-I+1, I ) )*
      $                             AB( J-I+1, I ) + DBLE( AB( 1, I ) )*
-     $                             BB( J-I+1, I )*DCONJG( BB( K-I+1,
+     $                             BB( J-I+1, I )*CONJG( BB( K-I+1,
      $                             I ) )
   750          CONTINUE
                DO 760 J = I + KBT + 1, MIN( N, I+KA )
                   AB( J-K+1, K ) = AB( J-K+1, K ) -
-     $                             DCONJG( BB( K-I+1, I ) )*
+     $                             CONJG( BB( K-I+1, I ) )*
      $                             AB( J-I+1, I )
   760          CONTINUE
   770       CONTINUE
@@ -1273,7 +1273,7 @@
 *
                   T = -BB( K+1, I )*RA1
                   WORK( M-KB+I+K ) = RWORK( I+K-KA )*T -
-     $                               DCONJG( WORK( I+K-KA ) )*
+     $                               CONJG( WORK( I+K-KA ) )*
      $                               AB( KA1, I+K-KA )
                   AB( KA1, I+K-KA ) = WORK( I+K-KA )*T +
      $                                RWORK( I+K-KA )*AB( KA1, I+K-KA )
@@ -1342,7 +1342,7 @@
 *
                DO 830 J = J1, J2, KA1
                   CALL ZROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
-     $                       RWORK( J ), DCONJG( WORK( J ) ) )
+     $                       RWORK( J ), CONJG( WORK( J ) ) )
   830          CONTINUE
             END IF
   840    CONTINUE
@@ -1444,7 +1444,7 @@
 *
                DO 910 J = J1, J2, KA1
                   CALL ZROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
-     $                       RWORK( M-KB+J ), DCONJG( WORK( M-KB+J ) ) )
+     $                       RWORK( M-KB+J ), CONJG( WORK( M-KB+J ) ) )
   910          CONTINUE
             END IF
   920    CONTINUE

@@ -226,7 +226,7 @@
      $                   ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, MAX, MIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -371,7 +371,7 @@
 *
                   DO 20 J = J1, J2, KB1
                      CALL ZROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
-     $                          RWORK( J ), DCONJG( WORK( J ) ) )
+     $                          RWORK( J ), CONJG( WORK( J ) ) )
    20             CONTINUE
                END IF
 *
@@ -451,7 +451,7 @@
                   DO 60 J = J1, J2, KB1
                      CALL ZROT( N, PT( J+KUN-1, 1 ), LDPT,
      $                          PT( J+KUN, 1 ), LDPT, RWORK( J+KUN ),
-     $                          DCONJG( WORK( J+KUN ) ) )
+     $                          CONJG( WORK( J+KUN ) ) )
    60             CONTINUE
                END IF
 *
@@ -498,7 +498,7 @@
             END IF
             IF( WANTQ )
      $         CALL ZROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC,
-     $                    DCONJG( RS ) )
+     $                    CONJG( RS ) )
             IF( WANTC )
      $         CALL ZROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
      $                    RS )
@@ -518,12 +518,12 @@
                CALL ZLARTG( AB( KU+1, I ), RB, RC, RS, RA )
                AB( KU+1, I ) = RA
                IF( I.GT.1 ) THEN
-                  RB = -DCONJG( RS )*AB( KU, I )
+                  RB = -CONJG( RS )*AB( KU, I )
                   AB( KU, I ) = RC*AB( KU, I )
                END IF
                IF( WANTPT )
      $            CALL ZROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
-     $                       RC, DCONJG( RS ) )
+     $                       RC, CONJG( RS ) )
   110       CONTINUE
          END IF
       END IF
@@ -543,16 +543,16 @@
          IF( WANTQ )
      $      CALL ZSCAL( M, T, Q( 1, I ), 1 )
          IF( WANTC )
-     $      CALL ZSCAL( NCC, DCONJG( T ), C( I, 1 ), LDC )
+     $      CALL ZSCAL( NCC, CONJG( T ), C( I, 1 ), LDC )
          IF( I.LT.MINMN ) THEN
             IF( KU.EQ.0 .AND. KL.EQ.0 ) THEN
                E( I ) = ZERO
                T = AB( 1, I+1 )
             ELSE
                IF( KU.EQ.0 ) THEN
-                  T = AB( 2, I )*DCONJG( T )
+                  T = AB( 2, I )*CONJG( T )
                ELSE
-                  T = AB( KU, I+1 )*DCONJG( T )
+                  T = AB( KU, I+1 )*CONJG( T )
                END IF
                ABST = ABS( T )
                E( I ) = ABST
@@ -563,7 +563,7 @@
                END IF
                IF( WANTPT )
      $            CALL ZSCAL( N, T, PT( I+1, 1 ), LDPT )
-               T = AB( KU+1, I+1 )*DCONJG( T )
+               T = AB( KU+1, I+1 )*CONJG( T )
             END IF
          END IF
   120 CONTINUE

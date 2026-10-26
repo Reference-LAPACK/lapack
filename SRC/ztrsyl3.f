@@ -179,6 +179,8 @@
       DOUBLE PRECISION   SWORK( LDSWORK, * )
 *     ..
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       COMPLEX*16         CONE
@@ -207,7 +209,7 @@
      $                   ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, EXPONENT, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, EXPONENT, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -329,7 +331,7 @@
       END DO
 *
       SGN = DBLE( ISGN )
-      CSGN = DCMPLX( SGN, ZERO )
+      CSGN = CMPLX( SGN, ZERO, KIND=DP )
 *
       IF( NOTRNA .AND. NOTRNB ) THEN
 *
@@ -1124,11 +1126,11 @@
 *        How much can the normwise largest entry be upscaled?
 *
          SCAL = MAX( ABS( DBLE( C( 1, 1 ) ) ),
-     $               ABS( DIMAG( C ( 1, 1 ) ) ) )
+     $               ABS( AIMAG( C ( 1, 1 ) ) ) )
          DO K = 1, M
             DO L = 1, N
                SCAL = MAX( SCAL, ABS( DBLE ( C( K, L ) ) ),
-     $                     ABS( DIMAG ( C( K, L ) ) ) )
+     $                     ABS( AIMAG ( C( K, L ) ) ) )
             END DO
          END DO
 *

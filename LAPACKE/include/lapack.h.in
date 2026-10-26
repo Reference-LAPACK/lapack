@@ -20,7 +20,7 @@
 #define LAPACK_FORTRAN_STRLEN_END
 
 #ifndef FORTRAN_STRLEN
-  #define FORTRAN_STRLEN size_t
+  #define FORTRAN_STRLEN @FORTRAN_STRLEN_TYPE@
 #endif
 
 /* Complex types are structures equivalent to the

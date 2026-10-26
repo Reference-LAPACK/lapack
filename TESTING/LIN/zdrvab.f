@@ -171,6 +171,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
       INTEGER            NTYPES
@@ -199,7 +201,7 @@
      $                   ZLATB4, ZLATMS, ZCGESV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, DBLE, MAX, MIN, SQRT
+      INTRINSIC          CMPLX, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -289,8 +291,9 @@
                      A( IOFF+I ) = ZERO
    20             CONTINUE
                ELSE
-                  CALL ZLASET( 'Full', M, N-IZERO+1, DCMPLX(ZERO),
-     $                         DCMPLX(ZERO), A( IOFF+1 ), LDA )
+                  CALL ZLASET( 'Full', M, N-IZERO+1,
+     $                         CMPLX(ZERO,KIND=DP), CMPLX(ZERO,KIND=DP),
+     $                         A( IOFF+1 ), LDA )
                END IF
             ELSE
                IZERO = 0

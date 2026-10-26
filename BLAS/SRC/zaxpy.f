@@ -109,7 +109,7 @@
       DOUBLE PRECISION CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1(ZDUM) = ABS(DBLE(ZDUM)) + ABS(DIMAG(ZDUM))
+      CABS1(ZDUM) = ABS(DBLE(ZDUM)) + ABS(AIMAG(ZDUM))
 *     ..
       IF (N.LE.0) RETURN
       IF (CABS1(ZA).EQ.0.0D+0) RETURN

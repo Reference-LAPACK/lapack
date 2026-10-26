@@ -421,7 +421,7 @@
       EXTERNAL           ZGEMM, ZGEMV, ZLARFG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SQRT
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN
@@ -700,12 +700,12 @@
 *
          IF( K.GT.1 ) THEN
             DO J = 1, K - 1
-               F( K, J ) = DCONJG( F( K, J ) )
+               F( K, J ) = CONJG( F( K, J ) )
             END DO
             CALL ZGEMV( 'No transpose', M-I+1, K-1, -CONE, A( I, 1 ),
      $                  LDA, F( K, 1 ), LDF, CONE, A( I, K ), 1 )
             DO J = 1, K - 1
-               F( K, J ) = DCONJG( F( K, J ) )
+               F( K, J ) = CONJG( F( K, J ) )
             END DO
          END IF
 *
@@ -729,8 +729,8 @@
 *
          IF( DISNAN( DBLE( TAU(K) ) ) ) THEN
             TAUNAN = DBLE( TAU(K) )
-         ELSE IF( DISNAN( DIMAG( TAU(K) ) ) ) THEN
-            TAUNAN = DIMAG( TAU(K) )
+         ELSE IF( DISNAN( AIMAG( TAU(K) ) ) ) THEN
+            TAUNAN = AIMAG( TAU(K) )
          ELSE
             TAUNAN = ZERO
          END IF

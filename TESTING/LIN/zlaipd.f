@@ -95,6 +95,10 @@
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     .. Local Scalars ..
       INTEGER            I, IA, IXA
       DOUBLE PRECISION   BIGNUM
@@ -104,7 +108,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX
+      INTRINSIC          CMPLX, DBLE
 *     ..
 *     .. Executable Statements ..
 *
@@ -112,7 +116,7 @@
       IA = 1
       IXA = INDA
       DO 10 I = 1, N
-         A( IA ) = DCMPLX( DBLE( A( IA ) ), BIGNUM )
+         A( IA ) = CMPLX( DBLE( A( IA ) ), BIGNUM, KIND=DP )
          IA = IA + IXA
          IXA = IXA + VINDA
    10 CONTINUE

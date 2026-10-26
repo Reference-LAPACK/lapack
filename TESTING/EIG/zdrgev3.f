@@ -456,7 +456,7 @@
      $                   ZLARFG, ZLASET, ZLATM4, ZUNM2R, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SIGN
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN, SIGN
 *     ..
 *     .. Data statements ..
       DATA               KCLASS / 15*1, 10*2, 1*3 /
@@ -680,10 +680,10 @@
                   DO 60 JC = 1, N
                      DO 50 JR = 1, N
                         A( JR, JC ) = WORK( 2*N+JR )*
-     $                                DCONJG( WORK( 3*N+JC ) )*
+     $                                CONJG( WORK( 3*N+JC ) )*
      $                                A( JR, JC )
                         B( JR, JC ) = WORK( 2*N+JR )*
-     $                                DCONJG( WORK( 3*N+JC ) )*
+     $                                CONJG( WORK( 3*N+JC ) )*
      $                                B( JR, JC )
    50                CONTINUE
    60             CONTINUE

@@ -254,6 +254,8 @@
 *  ======================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       DOUBLE PRECISION   EIGHT, SEVTEN
@@ -280,13 +282,13 @@
       EXTERNAL           XERBLA, ZDSCAL, ZHER, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, SQRT
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( DIMAG( Z ) )
+      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -475,12 +477,12 @@
      $            CALL ZSWAP( P-1, A( 1, K ), 1, A( 1, P ), 1 )
 *              (2) Swap and conjugate middle parts
                DO 14 J = P + 1, K - 1
-                  T = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( P, J ) )
+                  T = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( P, J ) )
                   A( P, J ) = T
    14          CONTINUE
 *              (3) Swap and conjugate corner elements at row-col intersection
-               A( P, K ) = DCONJG( A( P, K ) )
+               A( P, K ) = CONJG( A( P, K ) )
 *              (4) Swap diagonal elements at row-col intersection
                R1 = DBLE( A( K, K ) )
                A( K, K ) = DBLE( A( P, P ) )
@@ -504,12 +506,12 @@
      $            CALL ZSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *              (2) Swap and conjugate middle parts
                DO 15 J = KP + 1, KK - 1
-                  T = DCONJG( A( J, KK ) )
-                  A( J, KK ) = DCONJG( A( KP, J ) )
+                  T = CONJG( A( J, KK ) )
+                  A( J, KK ) = CONJG( A( KP, J ) )
                   A( KP, J ) = T
    15          CONTINUE
 *              (3) Swap and conjugate corner elements at row-col intersection
-               A( KP, KK ) = DCONJG( A( KP, KK ) )
+               A( KP, KK ) = CONJG( A( KP, KK ) )
 *              (4) Swap diagonal elements at row-col intersection
                R1 = DBLE( A( KK, KK ) )
                A( KK, KK ) = DBLE( A( KP, KP ) )
@@ -609,7 +611,7 @@
                IF( K.GT.2 ) THEN
 *                 D = |A12|
                   D = DLAPY2( DBLE( A( K-1, K ) ),
-     $                DIMAG( A( K-1, K ) ) )
+     $                AIMAG( A( K-1, K ) ) )
                   D11 = DBLE( A( K, K ) / D )
                   D22 = DBLE( A( K-1, K-1 ) / D )
                   D12 = A( K-1, K ) / D
@@ -617,26 +619,27 @@
 *
                   DO 30 J = K - 2, 1, -1
 *
-*                    Compute  D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J
+*                    Compute  ( W(k)W(k+1) ) * inv(D(k)) for row J
 *
-                     WKM1 = TT*( D11*A( J, K-1 )-DCONJG( D12 )*
-     $                      A( J, K ) )
-                     WK = TT*( D22*A( J, K )-D12*A( J, K-1 ) )
+                     WKM1 = TT*( ( D11*A( J, K-1 )-CONJG( D12 )*
+     $                      A( J, K ) ) / D )
+                     WK = TT*( ( D22*A( J, K )-D12*A( J, K-1 ) ) / D )
 *
 *                    Perform a rank-2 update of A(1:k-2,1:k-2)
 *
                      DO 20 I = J, 1, -1
                         A( I, J ) = A( I, J ) -
-     $                              ( A( I, K ) / D )*DCONJG( WK ) -
-     $                              ( A( I, K-1 ) / D )*DCONJG( WKM1 )
+     $                              A( I, K )*CONJG( WK ) -
+     $                              A( I, K-1 )*CONJG( WKM1 )
    20                CONTINUE
 *
 *                    Store U(k) and U(k-1) in cols k and k-1 for row J
 *
-                     A( J, K ) = WK / D
-                     A( J, K-1 ) = WKM1 / D
+                     A( J, K ) = WK
+                     A( J, K-1 ) = WKM1
 *                    (*) Make sure that diagonal element of pivot is real
-                     A( J, J ) = DCMPLX( DBLE( A( J, J ) ), ZERO )
+                     A( J, J ) = CMPLX( DBLE( A( J, J ) ), ZERO,
+     $                          KIND=DP )
 *
    30             CONTINUE
 *
@@ -834,12 +837,12 @@
      $            CALL ZSWAP( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
 *              (2) Swap and conjugate middle parts
                DO 44 J = K + 1, P - 1
-                  T = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( P, J ) )
+                  T = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( P, J ) )
                   A( P, J ) = T
    44          CONTINUE
 *              (3) Swap and conjugate corner elements at row-col intersection
-               A( P, K ) = DCONJG( A( P, K ) )
+               A( P, K ) = CONJG( A( P, K ) )
 *              (4) Swap diagonal elements at row-col intersection
                R1 = DBLE( A( K, K ) )
                A( K, K ) = DBLE( A( P, P ) )
@@ -863,12 +866,12 @@
      $                        1 )
 *              (2) Swap and conjugate middle parts
                DO 45 J = KK + 1, KP - 1
-                  T = DCONJG( A( J, KK ) )
-                  A( J, KK ) = DCONJG( A( KP, J ) )
+                  T = CONJG( A( J, KK ) )
+                  A( J, KK ) = CONJG( A( KP, J ) )
                   A( KP, J ) = T
    45          CONTINUE
 *              (3) Swap and conjugate corner elements at row-col intersection
-               A( KP, KK ) = DCONJG( A( KP, KK ) )
+               A( KP, KK ) = CONJG( A( KP, KK ) )
 *              (4) Swap diagonal elements at row-col intersection
                R1 = DBLE( A( KK, KK ) )
                A( KK, KK ) = DBLE( A( KP, KP ) )
@@ -970,7 +973,7 @@
                IF( K.LT.N-1 ) THEN
 *                 D = |A21|
                   D = DLAPY2( DBLE( A( K+1, K ) ),
-     $                DIMAG( A( K+1, K ) ) )
+     $                AIMAG( A( K+1, K ) ) )
                   D11 = DBLE( A( K+1, K+1 ) ) / D
                   D22 = DBLE( A( K, K ) ) / D
                   D21 = A( K+1, K ) / D
@@ -978,26 +981,27 @@
 *
                   DO 60 J = K + 2, N
 *
-*                    Compute  D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J
+*                    Compute  ( W(k)W(k+1) ) * inv(D(k)) for row J
 *
-                     WK = TT*( D11*A( J, K )-D21*A( J, K+1 ) )
-                     WKP1 = TT*( D22*A( J, K+1 )-DCONJG( D21 )*
-     $                      A( J, K ) )
+                     WK = TT*( ( D11*A( J, K )-D21*A( J, K+1 ) ) / D )
+                     WKP1 = TT*( ( D22*A( J, K+1 )-CONJG( D21 )*
+     $                      A( J, K ) ) / D )
 *
 *                    Perform a rank-2 update of A(k+2:n,k+2:n)
 *
                      DO 50 I = J, N
                         A( I, J ) = A( I, J ) -
-     $                              ( A( I, K ) / D )*DCONJG( WK ) -
-     $                              ( A( I, K+1 ) / D )*DCONJG( WKP1 )
+     $                              A( I, K )*CONJG( WK ) -
+     $                              A( I, K+1 )*CONJG( WKP1 )
    50                CONTINUE
 *
 *                    Store L(k) and L(k+1) in cols k and k+1 for row J
 *
-                     A( J, K ) = WK / D
-                     A( J, K+1 ) = WKP1 / D
+                     A( J, K ) = WK
+                     A( J, K+1 ) = WKP1
 *                    (*) Make sure that diagonal element of pivot is real
-                     A( J, J ) = DCMPLX( DBLE( A( J, J ) ), ZERO )
+                     A( J, J ) = CMPLX( DBLE( A( J, J ) ), ZERO,
+     $                          KIND=DP )
 *
    60             CONTINUE
 *

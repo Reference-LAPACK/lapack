@@ -235,6 +235,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -261,13 +263,13 @@
       EXTERNAL           XERBLA, ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( X ) = ABS( DBLE( X ) ) + ABS( DIMAG( X ) )
+      CABS1( X ) = ABS( DBLE( X ) ) + ABS( AIMAG( X ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -338,7 +340,7 @@
 *
       ILBBAD = .FALSE.
       DO 20 J = 1, N
-         IF( DIMAG( P( J, J ) ).NE.ZERO )
+         IF( AIMAG( P( J, J ) ).NE.ZERO )
      $      ILBBAD = .TRUE.
    20 CONTINUE
 *
@@ -496,18 +498,18 @@
                   SUMB = CZERO
 *
                   DO 80 JR = JE, J - 1
-                     SUMA = SUMA + DCONJG( S( JR, J ) )*WORK( JR )
-                     SUMB = SUMB + DCONJG( P( JR, J ) )*WORK( JR )
+                     SUMA = SUMA + CONJG( S( JR, J ) )*WORK( JR )
+                     SUMB = SUMB + CONJG( P( JR, J ) )*WORK( JR )
    80             CONTINUE
-                  SUM = ACOEFF*SUMA - DCONJG( BCOEFF )*SUMB
+                  SUM = ACOEFF*SUMA - CONJG( BCOEFF )*SUMB
 *
 *                 Form x(j) = - SUM / conjg( a*S(j,j) - b*P(j,j) )
 *
 *                 with scaling and perturbation of the denominator
 *
-                  D = DCONJG( ACOEFF*S( J, J )-BCOEFF*P( J, J ) )
+                  D = CONJG( ACOEFF*S( J, J )-BCOEFF*P( J, J ) )
                   IF( CABS1( D ).LE.DMIN )
-     $               D = DCMPLX( DMIN )
+     $               D = CMPLX( DMIN, KIND=DP )
 *
                   IF( CABS1( D ).LT.ONE ) THEN
                      IF( CABS1( SUM ).GE.BIGNUM*CABS1( D ) ) THEN
@@ -654,7 +656,7 @@
 *
                   D = ACOEFF*S( J, J ) - BCOEFF*P( J, J )
                   IF( CABS1( D ).LE.DMIN )
-     $               D = DCMPLX( DMIN )
+     $               D = CMPLX( DMIN, KIND=DP )
 *
                   IF( CABS1( D ).LT.ONE ) THEN
                      IF( CABS1( WORK( J ) ).GE.BIGNUM*CABS1( D ) ) THEN

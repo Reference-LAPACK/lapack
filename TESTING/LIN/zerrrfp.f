@@ -61,6 +61,10 @@
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO
@@ -81,7 +85,7 @@
       INTEGER            INFOT, NOUT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     ..
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NOUT, OK, LERR
@@ -91,10 +95,10 @@
 *
       NOUT = NUNIT
       OK = .TRUE.
-      A( 1, 1 ) = DCMPLX( 1.0D0 , 1.0D0  )
-      B( 1, 1 ) = DCMPLX( 1.0D0 , 1.0D0  )
+      A( 1, 1 ) = CMPLX( 1.0D0 , 1.0D0, KIND=DP )
+      B( 1, 1 ) = CMPLX( 1.0D0 , 1.0D0, KIND=DP )
       ALPHA     = 1.0D0
-      CALPHA    = DCMPLX( 1.0D0 , 1.0D0  )
+      CALPHA    = CMPLX( 1.0D0 , 1.0D0, KIND=DP )
       BETA      = 1.0D0
 *
       SRNAMT = 'ZPFTRF'

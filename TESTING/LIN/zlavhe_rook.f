@@ -184,7 +184,7 @@
       EXTERNAL           ZGEMV, ZGERU, ZLACGV, ZSCAL, ZSWAP, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -270,7 +270,7 @@
                   D11 = A( K, K )
                   D22 = A( K+1, K+1 )
                   D12 = A( K, K+1 )
-                  D21 = DCONJG( D12 )
+                  D21 = CONJG( D12 )
                   DO 20 J = 1, NRHS
                      T1 = B( K, J )
                      T2 = B( K+1, J )
@@ -363,7 +363,7 @@
                   D11 = A( K-1, K-1 )
                   D22 = A( K, K )
                   D21 = A( K, K-1 )
-                  D12 = DCONJG( D21 )
+                  D12 = CONJG( D21 )
                   DO 50 J = 1, NRHS
                      T1 = B( K-1, J )
                      T2 = B( K, J )
@@ -437,7 +437,7 @@
      $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
-*                    y = y - B' DCONJG(x),
+*                    y = y - B' CONJG(x),
 *                 where x is a column of A and y is a row of B.
 *
                   CALL ZLACGV( NRHS, B( K, 1 ), LDB )
@@ -468,7 +468,7 @@
      $                           LDB )
 *
 *                 Apply the transformations
-*                    y = y - B' DCONJG(x),
+*                    y = y - B' CONJG(x),
 *                 where x is a block column of A and y is a block
 *                 row of B.
 *
@@ -489,7 +489,7 @@
                   D11 = A( K-1, K-1 )
                   D22 = A( K, K )
                   D12 = A( K-1, K )
-                  D21 = DCONJG( D12 )
+                  D21 = CONJG( D12 )
                   DO 80 J = 1, NRHS
                      T1 = B( K-1, J )
                      T2 = B( K, J )
@@ -576,7 +576,7 @@
                   D11 = A( K, K )
                   D22 = A( K+1, K+1 )
                   D21 = A( K+1, K )
-                  D12 = DCONJG( D21 )
+                  D12 = CONJG( D21 )
                   DO 110 J = 1, NRHS
                      T1 = B( K, J )
                      T2 = B( K+1, J )
