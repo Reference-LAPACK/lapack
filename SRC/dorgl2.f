@@ -131,7 +131,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF0C2, DSCAL, XERBLA
+      EXTERNAL           DLARF0C2, DSCAL, XERBLA, DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

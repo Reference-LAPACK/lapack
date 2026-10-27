@@ -190,7 +190,7 @@
       EXTERNAL          LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          ZGEMV, ZGERU, ZLASET, XERBLA
+      EXTERNAL          ZGEMCV, ZGERU, ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC         CONJG

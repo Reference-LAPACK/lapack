@@ -129,10 +129,10 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            J, L
+      INTEGER            J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF0C2, SSCAL, XERBLA
+      EXTERNAL           SLARF0C2, SSCAL, XERBLA, SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

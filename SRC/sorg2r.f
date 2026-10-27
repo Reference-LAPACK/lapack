@@ -132,7 +132,7 @@
       INTEGER            J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF0C2, SSCAL, XERBLA
+      EXTERNAL           SLARF0C2, SSCAL, XERBLA, SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

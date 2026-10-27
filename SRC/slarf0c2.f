@@ -191,9 +191,6 @@
 *     .. External Subroutines ..
       EXTERNAL          SGEMV, SGER, SLASET, XERBLA
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC         MAX
-*     ..
 *     .. Executable Statements ..
 *
 *     Quick return if possible. When \tau is 0, H is defined to be I,

@@ -132,7 +132,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
+      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX

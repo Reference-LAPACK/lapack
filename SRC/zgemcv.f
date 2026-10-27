@@ -178,7 +178,7 @@
         EXTERNAL     LSAME
 *     ..
 *     .. External Subroutines ..
-        EXTERNAL     ZSCAL
+        EXTERNAL     ZSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
         INTRINSIC    MAX, CONJG

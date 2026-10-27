@@ -133,7 +133,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF0C2, CSCAL, XERBLA
+      EXTERNAL           CLARF0C2, CSCAL, XERBLA, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX

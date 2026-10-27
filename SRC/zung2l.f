@@ -130,10 +130,10 @@
      $                   ZERO = (0.0D+0, 0.0D+0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            J, L
+      INTEGER            J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA
+      EXTERNAL           ZLARF0C2, ZSCAL, XERBLA, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
