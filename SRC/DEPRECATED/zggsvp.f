@@ -298,13 +298,13 @@
      $                   ZLASET, ZUNG2R, ZUNM2R, ZUNMR2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( T ) = ABS( DBLE( T ) ) + ABS( DIMAG( T ) )
+      CABS1( T ) = ABS( DBLE( T ) ) + ABS( AIMAG( T ) )
 *     ..
 *     .. Executable Statements ..
 *

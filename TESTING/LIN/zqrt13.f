@@ -106,12 +106,14 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE
       PARAMETER          ( ONE = 1.0D0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, J
-      DOUBLE PRECISION   BIGNUM, SMLNUM
+      DOUBLE PRECISION   BIGNUM, BIGUP, SMLNUM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
@@ -121,7 +123,7 @@
       EXTERNAL           ZLARNV, ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, SIGN
+      INTRINSIC          CMPLX, DBLE, SIGN
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUMMY( 1 )
@@ -136,8 +138,8 @@
       DO 10 J = 1, N
          CALL ZLARNV( 2, ISEED, M, A( 1, J ) )
          IF( J.LE.M ) THEN
-            A( J, J ) = A( J, J ) + DCMPLX( SIGN( DZASUM( M, A( 1, J ),
-     $                  1 ), DBLE( A( J, J ) ) ) )
+            A( J, J ) = A( J, J ) + CMPLX( SIGN( DZASUM( M, A( 1, J ),
+     $                  1 ), DBLE( A( J, J ) ) ), KIND=DP )
          END IF
    10 CONTINUE
 *
@@ -150,11 +152,17 @@
          SMLNUM = SMLNUM / DLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
+*        The least squares drivers scale a matrix whose largest
+*        entry lies outside [SMLNUM, BIGNUM].  Scale up past
+*        that bound, so that their scaling is exercised.
+*
+         BIGUP = DLAMCH( 'Overflow' ) / 256
+*
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL ZLASCL( 'General', 0, 0, NORMA, BIGUP, M, N, A, LDA,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *

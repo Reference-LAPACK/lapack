@@ -480,21 +480,30 @@
 *
       END IF
 *
-*     Undo scaling
+*     Undo scaling.  The solution carries the factor of B divided by
+*     the factor of A.  When both were scaled to the same end of the
+*     range the constants cancel and BNRM/ANRM is applied in one step:
+*     applied in two, the first step could flush or overflow an entry
+*     that the second would have brought back into range.
 *
-      IF( IASCL.EQ.1 ) THEN
-        CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+      IF( IASCL.EQ.IBSCL .AND. IASCL.NE.0 ) THEN
+        CALL CLASCL( 'G', 0, 0, ANRM, BNRM, SCLLEN, NRHS, B, LDB,
      $               INFO )
-      ELSE IF( IASCL.EQ.2 ) THEN
-        CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
-     $               INFO )
-      END IF
-      IF( IBSCL.EQ.1 ) THEN
-        CALL CLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
-     $               INFO )
-      ELSE IF( IBSCL.EQ.2 ) THEN
-        CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
-     $               INFO )
+      ELSE
+         IF( IASCL.EQ.1 ) THEN
+           CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+     $                  INFO )
+         ELSE IF( IASCL.EQ.2 ) THEN
+           CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+     $                  INFO )
+         END IF
+         IF( IBSCL.EQ.1 ) THEN
+           CALL CLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+     $                  INFO )
+         ELSE IF( IBSCL.EQ.2 ) THEN
+           CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+     $                  INFO )
+         END IF
       END IF
 *
    50 CONTINUE

@@ -422,7 +422,7 @@
      $                   ZLASET, ZROT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -520,12 +520,12 @@
                IF( K+J.LE.M )
      $            CALL ZROT( L, A( K+J, N-L+1 ), LDA, A( K+I,
      $                       N-L+1 ),
-     $                       LDA, CSU, DCONJG( SNU ) )
+     $                       LDA, CSU, CONJG( SNU ) )
 *
 *              Update I-th and J-th rows of matrix B: V**H *B
 *
                CALL ZROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
-     $                    CSV, DCONJG( SNV ) )
+     $                    CSV, CONJG( SNV ) )
 *
 *              Update (N-L+I)-th and (N-L+J)-th columns of matrices
 *              A and B: A*Q and B*Q

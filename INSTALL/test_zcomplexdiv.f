@@ -61,6 +61,8 @@
 
 *     ..
 *     .. Local parameters ..
+      integer           DP
+      parameter       ( DP = KIND( 0.0d0 ) )
       logical           debug
       parameter       ( debug = .false. )
       integer           N, nNaN, nInf
@@ -69,8 +71,8 @@
       parameter       ( threeFourth = 3.0d0 / 4,
      $                  fiveFourth = 5.0d0 / 4 )
       double complex    czero, cone
-      parameter       ( czero = DCMPLX( 0.0d0, 0.0d0 ),
-     $                  cone  = DCMPLX( 1.0d0, 0.0d0 ) )
+      parameter       ( czero = CMPLX( 0.0d0, 0.0d0, KIND=DP ),
+     $                  cone  = CMPLX( 1.0d0, 0.0d0, KIND=DP ) )
 *     ..
 *     .. Local Variables ..
       integer           i, min, Max, m,
@@ -83,9 +85,9 @@
       double complex    Y, Y2, R, cInf( nInf ), cNaN( nNaN )
 *
 *     .. Intrinsic Functions ..
-      intrinsic         DCONJG, DBLE, RADIX, CEILING, TINY, DIGITS,
-     $                  MAXEXPONENT, MINEXPONENT, FLOOR, HUGE, DCMPLX,
-     $                  EPSILON
+      intrinsic         CEILING, CMPLX, CONJG, DBLE, DIGITS, EPSILON,
+     $                  FLOOR, HUGE, MAXEXPONENT, MINEXPONENT, RADIX,
+     $                  TINY
 
 *
 *     .. Initialize error counts ..
@@ -131,17 +133,17 @@
 *
 *     .. Inf entries ..
       aInf = OV * 2
-      cInf(1) = DCMPLX( aInf, 0.0d0 )
-      cInf(2) = DCMPLX(-aInf, 0.0d0 )
-      cInf(3) = DCMPLX( 0.0d0, aInf )
-      cInf(4) = DCMPLX( 0.0d0,-aInf )
-      cInf(5) = DCMPLX( aInf,  aInf )
+      cInf(1) = CMPLX( aInf, 0.0d0, KIND=DP )
+      cInf(2) = CMPLX(-aInf, 0.0d0, KIND=DP )
+      cInf(3) = CMPLX( 0.0d0, aInf, KIND=DP )
+      cInf(4) = CMPLX( 0.0d0,-aInf, KIND=DP )
+      cInf(5) = CMPLX( aInf,  aInf, KIND=DP )
 *
 *     .. NaN entries ..
       aNaN = aInf / aInf
-      cNaN(1) = DCMPLX( aNaN, 0.0d0 )
-      cNaN(2) = DCMPLX( 0.0d0, aNaN )
-      cNaN(3) = DCMPLX( aNaN,  aNaN )
+      cNaN(1) = CMPLX( aNaN, 0.0d0, KIND=DP )
+      cNaN(2) = CMPLX( 0.0d0, aNaN, KIND=DP )
+      cNaN(3) = CMPLX( aNaN,  aNaN, KIND=DP )
 
 *
 *     .. Tests ..
@@ -181,7 +183,7 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y = DCMPLX( Xj, 0.0d0 )
+                Y = CMPLX( Xj, 0.0d0, KIND=DP )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
                     caseAFails = caseAFails + 1
@@ -207,7 +209,7 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y = DCMPLX( 0.0d0, Xj )
+                Y = CMPLX( 0.0d0, Xj, KIND=DP )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
                     caseBFails = caseBFails + 1
@@ -233,7 +235,7 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y = DCMPLX( Xj, Xj )
+                Y = CMPLX( Xj, Xj, KIND=DP )
                 R = Y / Y
                 if( R .ne. 1.0D0 ) then
                     caseCFails = caseCFails + 1
@@ -259,16 +261,16 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y  = DCMPLX( 0.0d0, Xj )
-                Y2 = DCMPLX( Xj, 0.0d0 )
+                Y  = CMPLX( 0.0d0, Xj, KIND=DP )
+                Y2 = CMPLX( Xj, 0.0d0, KIND=DP )
                 R = Y / Y2
-                if( R .ne. DCMPLX(0.0D0,1.0D0) ) then
+                if( R .ne. CMPLX(0.0D0,1.0D0,KIND=DP) ) then
                     caseDFails = caseDFails + 1
                     if( caseDFails .eq. 1 ) then
                         print *, "!! Some (0+x*I)/(x+0*I) differ from I"
                     endif
                     WRITE( 0, FMT = 9999 ) 'd',i, Xj, '(0+x*I)/(x+0*I)',
-     $                                      R, DCMPLX(0.0D0,1.0D0)
+     $                                    R, CMPLX(0.0D0,1.0D0,KIND=DP)
                 endif
                 Xj = Xj * stepX(i)
             end do
@@ -286,16 +288,16 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y  = DCMPLX( 0.0d0, Xj )
-                Y2 = DCMPLX( Xj, 0.0d0 )
+                Y  = CMPLX( 0.0d0, Xj, KIND=DP )
+                Y2 = CMPLX( Xj, 0.0d0, KIND=DP )
                 R = Y2 / Y
-                if( R .ne. DCMPLX(0.0D0,-1.0D0) ) then
+                if( R .ne. CMPLX(0.0D0,-1.0D0,KIND=DP) ) then
                     caseEFails = caseEFails + 1
                     if( caseEFails .eq. 1 ) then
                         print *,"!! Some (x+0*I)/(0+x*I) differ from -I"
                     endif
                     WRITE( 0, FMT = 9999 ) 'e',i, Xj, '(x+0*I)/(0+x*I)',
-     $                                      R, DCMPLX(0.0D0,-1.0D0)
+     $                                    R, CMPLX(0.0D0,-1.0D0,KIND=DP)
                 endif
                 Xj = Xj * stepX(i)
             end do
@@ -313,15 +315,15 @@
         else
             do while( Xj .ne. limX(i) )
                 nTests = nTests + 1
-                Y  = DCMPLX( Xj, Xj )
-                R = Y / DCONJG( Y )
-                if( R .ne. DCMPLX(0.0D0,1.0D0) ) then
+                Y  = CMPLX( Xj, Xj, KIND=DP )
+                R = Y / CONJG( Y )
+                if( R .ne. CMPLX(0.0D0,1.0D0,KIND=DP) ) then
                     caseFFails = caseFFails + 1
                     if( caseFFails .eq. 1 ) then
                         print *, "!! Some (x+x*I)/(x-x*I) differ from I"
                     endif
                     WRITE( 0, FMT = 9999 ) 'f',i, Xj, '(x+x*I)/(x-x*I)',
-     $                                      R, DCMPLX(0.0D0,1.0D0)
+     $                                    R, CMPLX(0.0D0,1.0D0,KIND=DP)
                 endif
                 Xj = Xj * stepX(i)
             end do

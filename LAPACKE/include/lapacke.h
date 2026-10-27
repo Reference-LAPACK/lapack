@@ -68,6 +68,9 @@ void LAPACKE_set_alloc(void *(*malloc_fn)(size_t), void (*free_fn)(void *));
 #define LAPACK_WORK_MEMORY_ERROR       -1010
 #define LAPACK_TRANSPOSE_MEMORY_ERROR  -1011
 
+#define LAPACKE_XERBLA_ARGS \
+  ( const char *name, lapack_int info )
+
 lapack_complex_float lapack_make_complex_float( float re, float im );
 lapack_complex_double lapack_make_complex_double( double re, double im );
 

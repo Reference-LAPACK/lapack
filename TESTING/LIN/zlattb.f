@@ -157,6 +157,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ONE, TWO, ZERO
       PARAMETER          ( ONE = 1.0D+0, TWO = 2.0D+0, ZERO = 0.0D+0 )
 *     ..
@@ -182,7 +184,7 @@
      $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN, SQRT
+      INTRINSIC          ABS, CMPLX, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -507,20 +509,20 @@
                   AB( I, J ) = ZERO
   240          CONTINUE
                IF( J.GT.1 .AND. KD.GT.0 )
-     $            AB( KD, J ) = DCMPLX( -ONE, -ONE )
+     $            AB( KD, J ) = CMPLX( -ONE, -ONE, KIND=DP )
                AB( KD+1, J ) = TSCAL*ZLARND( 5, ISEED )
   250       CONTINUE
-            B( N ) = DCMPLX( ONE, ONE )
+            B( N ) = CMPLX( ONE, ONE, KIND=DP )
          ELSE
             DO 270 J = 1, N
                DO 260 I = 3, MIN( N-J+1, KD+1 )
                   AB( I, J ) = ZERO
   260          CONTINUE
                IF( J.LT.N .AND. KD.GT.0 )
-     $            AB( 2, J ) = DCMPLX( -ONE, -ONE )
+     $            AB( 2, J ) = CMPLX( -ONE, -ONE, KIND=DP )
                AB( 1, J ) = TSCAL*ZLARND( 5, ISEED )
   270       CONTINUE
-            B( 1 ) = DCMPLX( ONE, ONE )
+            B( 1 ) = CMPLX( ONE, ONE, KIND=DP )
          END IF
 *
       ELSE IF( IMAT.EQ.15 ) THEN

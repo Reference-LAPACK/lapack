@@ -255,7 +255,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -305,8 +305,8 @@
 *
       DO 10 J = 0, NL - NT - 1
          TEMPX = C*A( IX+J*IINC ) + S*A( IY+J*IINC )
-         A( IY+J*IINC ) = -DCONJG( S )*A( IX+J*IINC ) +
-     $                    DCONJG( C )*A( IY+J*IINC )
+         A( IY+J*IINC ) = -CONJG( S )*A( IX+J*IINC ) +
+     $                    CONJG( C )*A( IY+J*IINC )
          A( IX+J*IINC ) = TEMPX
    10 CONTINUE
 *
@@ -314,7 +314,7 @@
 *
       DO 20 J = 1, NT
          TEMPX = C*XT( J ) + S*YT( J )
-         YT( J ) = -DCONJG( S )*XT( J ) + DCONJG( C )*YT( J )
+         YT( J ) = -CONJG( S )*XT( J ) + CONJG( C )*YT( J )
          XT( J ) = TEMPX
    20 CONTINUE
 *

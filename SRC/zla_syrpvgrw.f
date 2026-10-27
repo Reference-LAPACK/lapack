@@ -144,7 +144,7 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, REAL, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           LSAME
@@ -154,7 +154,7 @@
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function Definitions ..
-      CABS1( ZDUM ) = ABS( DBLE ( ZDUM ) ) + ABS( DIMAG ( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE ( ZDUM ) ) + ABS( AIMAG ( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *

@@ -260,6 +260,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -287,13 +289,13 @@
      $                   ZGEMM, ZLASET, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, CONJG, DIMAG, MAX
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, MAX
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( DIMAG( CDUM ) )
+      CABS1( CDUM ) = ABS( DBLE( CDUM ) ) + ABS( AIMAG( CDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -454,8 +456,8 @@
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.GT.1 )
      $            CALL ZGEMV( 'N', N, KI-1, CONE, VR, LDVR,
-     $                        WORK( 1 + IV*N ), 1, DCMPLX( SCALE ),
-     $                        VR( 1, KI ), 1 )
+     $                        WORK( 1 + IV*N ), 1, CMPLX( SCALE,
+     $                        KIND=DP ), VR( 1, KI ), 1 )
 *
                II = IZAMAX( N, VR( 1, KI ), 1 )
                REMAX = ONE / CABS1( VR( II, KI ) )
@@ -570,10 +572,9 @@
 *              ------------------------------
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.LT.N )
-     $            CALL ZGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ),
-     $                        LDVL,
-     $                        WORK( KI+1 + IV*N ), 1, DCMPLX( SCALE ),
-     $                        VL( 1, KI ), 1 )
+     $            CALL ZGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ), LDVL,
+     $                        WORK( KI+1 + IV*N ), 1, CMPLX( SCALE,
+     $                        KIND=DP ), VL( 1, KI ), 1 )
 *
                II = IZAMAX( N, VL( 1, KI ), 1 )
                REMAX = ONE / CABS1( VL( II, KI ) )

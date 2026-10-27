@@ -519,6 +519,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       COMPLEX*16         CONE
@@ -553,7 +555,7 @@
      $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, MAX, MIN, SQRT
+      INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
 *     ..
 *     .. Data statements ..
       DATA               KTYPE / 1, 2, 3, 5*4, 4*6, 6*6, 3*9 /
@@ -896,7 +898,7 @@
   180 CONTINUE
       DO 190 I = 1, N
          READ( NIUNIT, FMT = * )WR, WI, RCDEIN( I ), RCDVIN( I )
-         W1( I ) = DCMPLX( WR, WI )
+         W1( I ) = CMPLX( WR, WI, KIND=DP )
   190 CONTINUE
       CALL ZGET23( .TRUE., ISRT, 'N', 22, THRESH, ISEED, NOUNIT, N, A,
      $             LDA, H, W, W1, VL, LDVL, VR, LDVR, LRE, LDLRE,

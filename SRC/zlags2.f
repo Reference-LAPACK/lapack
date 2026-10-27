@@ -169,6 +169,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -183,13 +185,13 @@
       EXTERNAL           DLASV2, ZLARTG
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( T ) = ABS( DBLE( T ) ) + ABS( DIMAG( T ) )
+      CABS1( T ) = ABS( DBLE( T ) ) + ABS( AIMAG( T ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -237,22 +239,18 @@
 *           zero (1,2) elements of U**H *A and V**H *B
 *
             IF( ( ABS( UA11R )+CABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ,
-     $                      SNQ,
-     $                      R )
+               CALL ZLARTG( -CMPLX( VB11R, KIND=DP ), CONJG( VB12 ),
+     $                      CSQ, SNQ, R )
             ELSE IF( ( ABS( VB11R )+CABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
-     $                      SNQ,
-     $                      R )
+               CALL ZLARTG( -CMPLX( UA11R, KIND=DP ), CONJG( UA12 ),
+     $                      CSQ, SNQ, R )
             ELSE IF( AUA12 / ( ABS( UA11R )+CABS1( UA12 ) ).LE.AVB12 /
      $               ( ABS( VB11R )+CABS1( VB12 ) ) ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ,
-     $                      SNQ,
-     $                      R )
+               CALL ZLARTG( -CMPLX( UA11R, KIND=DP ), CONJG( UA12 ),
+     $                      CSQ, SNQ, R )
             ELSE
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ,
-     $                      SNQ,
-     $                      R )
+               CALL ZLARTG( -CMPLX( VB11R, KIND=DP ), CONJG( VB12 ),
+     $                      CSQ, SNQ, R )
             END IF
 *
             CSU = CSL
@@ -265,11 +263,11 @@
 *           Compute the (2,1) and (2,2) elements of U**H *A and V**H *B,
 *           and (2,2) element of |U|**H *|A| and |V|**H *|B|.
 *
-            UA21 = -DCONJG( D1 )*SNL*A1
-            UA22 = -DCONJG( D1 )*SNL*A2 + CSL*A3
+            UA21 = -CONJG( D1 )*SNL*A1
+            UA22 = -CONJG( D1 )*SNL*A2 + CSL*A3
 *
-            VB21 = -DCONJG( D1 )*SNR*B1
-            VB22 = -DCONJG( D1 )*SNR*B2 + CSR*B3
+            VB21 = -CONJG( D1 )*SNR*B1
+            VB22 = -CONJG( D1 )*SNR*B2 + CSR*B3
 *
             AUA22 = ABS( SNL )*CABS1( A2 ) + ABS( CSL )*ABS( A3 )
             AVB22 = ABS( SNR )*CABS1( B2 ) + ABS( CSR )*ABS( B3 )
@@ -277,20 +275,20 @@
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( CABS1( UA21 )+CABS1( UA22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ,
+               CALL ZLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ,
      $                      SNQ,
      $                      R )
             ELSE IF( ( CABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
+               CALL ZLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ,
      $                      SNQ,
      $                      R )
             ELSE IF( AUA22 / ( CABS1( UA21 )+CABS1( UA22 ) ).LE.AVB22 /
      $               ( CABS1( VB21 )+CABS1( VB22 ) ) ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ,
+               CALL ZLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ,
      $                      SNQ,
      $                      R )
             ELSE
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ,
+               CALL ZLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ,
      $                      SNQ,
      $                      R )
             END IF
@@ -346,31 +344,31 @@
 *           zero (2,1) elements of U**H *A and V**H *B.
 *
             IF( ( CABS1( UA21 )+ABS( UA22R ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL ZLARTG( CMPLX( VB22R, KIND=DP ), VB21, CSQ, SNQ, R )
             ELSE IF( ( CABS1( VB21 )+ABS( VB22R ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL ZLARTG( CMPLX( UA22R, KIND=DP ), UA21, CSQ, SNQ, R )
             ELSE IF( AUA21 / ( CABS1( UA21 )+ABS( UA22R ) ).LE.AVB21 /
      $               ( CABS1( VB21 )+ABS( VB22R ) ) ) THEN
-               CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL ZLARTG( CMPLX( UA22R, KIND=DP ), UA21, CSQ, SNQ, R )
             ELSE
-               CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL ZLARTG( CMPLX( VB22R, KIND=DP ), VB21, CSQ, SNQ, R )
             END IF
 *
             CSU = CSR
-            SNU = -DCONJG( D1 )*SNR
+            SNU = -CONJG( D1 )*SNR
             CSV = CSL
-            SNV = -DCONJG( D1 )*SNL
+            SNV = -CONJG( D1 )*SNL
 *
          ELSE
 *
 *           Compute the (1,1) and (1,2) elements of U**H *A and V**H *B,
 *           and (1,1) element of |U|**H *|A| and |V|**H *|B|.
 *
-            UA11 = CSR*A1 + DCONJG( D1 )*SNR*A2
-            UA12 = DCONJG( D1 )*SNR*A3
+            UA11 = CSR*A1 + CONJG( D1 )*SNR*A2
+            UA12 = CONJG( D1 )*SNR*A3
 *
-            VB11 = CSL*B1 + DCONJG( D1 )*SNL*B2
-            VB12 = DCONJG( D1 )*SNL*B3
+            VB11 = CSL*B1 + CONJG( D1 )*SNL*B2
+            VB12 = CONJG( D1 )*SNL*B3
 *
             AUA11 = ABS( CSR )*ABS( A1 ) + ABS( SNR )*CABS1( A2 )
             AVB11 = ABS( CSL )*ABS( B1 ) + ABS( SNL )*CABS1( B2 )
@@ -389,9 +387,9 @@
             END IF
 *
             CSU = SNR
-            SNU = DCONJG( D1 )*CSR
+            SNU = CONJG( D1 )*CSR
             CSV = SNL
-            SNV = DCONJG( D1 )*CSL
+            SNV = CONJG( D1 )*CSL
 *
          END IF
 *

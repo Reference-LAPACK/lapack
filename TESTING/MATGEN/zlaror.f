@@ -173,6 +173,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TOOSML
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0,
      $                   TOOSML = 1.0D-20 )
@@ -195,7 +197,7 @@
       EXTERNAL           XERBLA, ZGEMV, ZGERC, ZLACGV, ZLASET, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, DCONJG
+      INTRINSIC          ABS, CMPLX, CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -290,8 +292,8 @@
 *
             CALL ZGEMV( 'C', IXFRM, N, CONE, A( KBEG, 1 ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL ZGERC( IXFRM, N, -DCMPLX( FACTOR ), X( KBEG ), 1,
-     $                  X( 2*NXFRM+1 ), 1, A( KBEG, 1 ), LDA )
+            CALL ZGERC( IXFRM, N, -CMPLX( FACTOR, KIND=DP ), X( KBEG ),
+     $                  1, X( 2*NXFRM+1 ), 1, A( KBEG, 1 ), LDA )
 *
          END IF
 *
@@ -305,8 +307,9 @@
 *
             CALL ZGEMV( 'N', M, IXFRM, CONE, A( 1, KBEG ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL ZGERC( M, IXFRM, -DCMPLX( FACTOR ), X( 2*NXFRM+1 ), 1,
-     $                  X( KBEG ), 1, A( 1, KBEG ), LDA )
+            CALL ZGERC( M, IXFRM, -CMPLX( FACTOR, KIND=DP ),
+     $                  X( 2*NXFRM+1 ), 1, X( KBEG ), 1, A( 1, KBEG ),
+     $                  LDA )
 *
          END IF
    30 CONTINUE
@@ -324,7 +327,7 @@
 *
       IF( ITYPE.EQ.1 .OR. ITYPE.EQ.3 .OR. ITYPE.EQ.4 ) THEN
          DO 40 IROW = 1, M
-            CALL ZSCAL( N, DCONJG( X( NXFRM+IROW ) ), A( IROW, 1 ),
+            CALL ZSCAL( N, CONJG( X( NXFRM+IROW ) ), A( IROW, 1 ),
      $                  LDA )
    40    CONTINUE
       END IF
@@ -337,7 +340,7 @@
 *
       IF( ITYPE.EQ.4 ) THEN
          DO 60 JCOL = 1, N
-            CALL ZSCAL( M, DCONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1 )
+            CALL ZSCAL( M, CONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1 )
    60    CONTINUE
       END IF
       RETURN

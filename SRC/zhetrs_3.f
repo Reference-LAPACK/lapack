@@ -195,7 +195,7 @@
       EXTERNAL           ZDSCAL, ZSWAP, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -259,11 +259,11 @@
             ELSE IF ( I.GT.1 ) THEN
                AKM1K = E( I )
                AKM1 = A( I-1, I-1 ) / AKM1K
-               AK = A( I, I ) / DCONJG( AKM1K )
+               AK = A( I, I ) / CONJG( AKM1K )
                DENOM = AKM1*AK - ONE
                DO J = 1, NRHS
                   BKM1 = B( I-1, J ) / AKM1K
-                  BK = B( I, J ) / DCONJG( AKM1K )
+                  BK = B( I, J ) / CONJG( AKM1K )
                   B( I-1, J ) = ( AK*BKM1-BK ) / DENOM
                   B( I, J ) = ( AKM1*BK-BKM1 ) / DENOM
                END DO
@@ -328,11 +328,11 @@
                CALL ZDSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSE IF( I.LT.N ) THEN
                AKM1K = E( I )
-               AKM1 = A( I, I ) / DCONJG( AKM1K )
+               AKM1 = A( I, I ) / CONJG( AKM1K )
                AK = A( I+1, I+1 ) / AKM1K
                DENOM = AKM1*AK - ONE
                DO  J = 1, NRHS
-                  BKM1 = B( I, J ) / DCONJG( AKM1K )
+                  BKM1 = B( I, J ) / CONJG( AKM1K )
                   BK = B( I+1, J ) / AKM1K
                   B( I, J ) = ( AK*BKM1-BK ) / DENOM
                   B( I+1, J ) = ( AKM1*BK-BKM1 ) / DENOM

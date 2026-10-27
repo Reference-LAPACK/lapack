@@ -157,7 +157,7 @@
       EXTERNAL           ZAXPY, ZGEMV, ZGERC, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -165,6 +165,11 @@
       EXTERNAL           LSAME, ILAZLR, ILAZLC
 *     ..
 *     .. Executable Statements ..
+*
+*     Quick return if C is empty
+*
+      IF( M.LE.0 .OR. N.LE.0 )
+     $   RETURN
 *
       APPLYLEFT = LSAME( SIDE, 'L' )
       FIRSTV = 1

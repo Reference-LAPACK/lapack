@@ -66,6 +66,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D0 )
 *     ..
@@ -84,17 +86,17 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX
+      INTRINSIC          ABS, CMPLX, DBLE
 *     ..
 *     .. Executable Statements ..
 *
       IF( SELOPT.EQ.0 ) THEN
          ZSLECT = ( DBLE( Z ).LT.ZERO )
       ELSE
-         RMIN = ABS( Z-DCMPLX( SELWR( 1 ), SELWI( 1 ) ) )
+         RMIN = ABS( Z-CMPLX( SELWR( 1 ), SELWI( 1 ), KIND=DP ) )
          ZSLECT = SELVAL( 1 )
          DO 10 I = 2, SELDIM
-            X = ABS( Z-DCMPLX( SELWR( I ), SELWI( I ) ) )
+            X = ABS( Z-CMPLX( SELWR( I ), SELWI( I ), KIND=DP ) )
             IF( X.LE.RMIN ) THEN
                RMIN = X
                ZSLECT = SELVAL( I )

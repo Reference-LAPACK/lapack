@@ -46,12 +46,15 @@ include $(TOPSRCDIR)/make.inc
 all: lapacke
 
 .PHONY: lapacke
-lapacke: include/lapacke_mangling.h
+lapacke: include/lapacke_mangling.h include/lapack.h
 	$(MAKE) -C src
 	$(MAKE) -C utils
 
 include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
-	cp include/lapacke_mangling_with_flags.h.in $@
+	cp $< $@
+
+include/lapack.h: include/lapack.h.in
+	sed 's/@FORTRAN_STRLEN_TYPE@/size_t/' $< > $@.tmp && mv $@.tmp $@
 
 .PHONY: lapacke_example
 lapacke_example: lapacke
@@ -62,7 +65,7 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C utils clean
 	$(MAKE) -C example clean
-	rm -f include/lapacke_mangling.h
+	rm -f include/lapacke_mangling.h include/lapack.h
 cleanobj:
 	$(MAKE) -C src cleanobj
 	$(MAKE) -C utils cleanobj

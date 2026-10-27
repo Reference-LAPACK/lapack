@@ -1714,7 +1714,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CZGERC, CZGERU, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, MAX, MIN
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL             OK
@@ -1887,7 +1887,7 @@
                               W( 1 ) = Y( N - J + 1 )
                            END IF
                            IF( CONJ )
-     $                        W( 1 ) = DCONJG( W( 1 ) )
+     $                        W( 1 ) = CONJG( W( 1 ) )
                            CALL ZMVCH( 'N', M, 1, ALPHA, Z, NMAX, W, 1,
      $                                 ONE, A( 1, J ), 1, YT, G,
      $                                 AA( 1 + ( J - 1 )*LDA ), EPS,
@@ -1988,6 +1988,8 @@
 *     Jeremy Du Croz, NAG Central Office.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO, HALF, ONE
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ),
      $                   HALF = ( 0.5D0, 0.0D0 ),
@@ -2027,7 +2029,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CZHER, CZHPR, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, DCONJG, MAX, DBLE
+      INTRINSIC          ABS, CMPLX, CONJG, DBLE, MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL             OK
@@ -2091,7 +2093,7 @@
 *
                DO 70 IA = 1, NALF
                   RALPHA = DBLE( ALF( IA ) )
-                  ALPHA = DCMPLX( RALPHA, RZERO )
+                  ALPHA = CMPLX( RALPHA, RZERO, KIND=DP )
                   NULL = N.LE.0.OR.RALPHA.EQ.RZERO
 *
 *                 Generate the matrix A.
@@ -2193,7 +2195,7 @@
                      END IF
                      JA = 1
                      DO 60 J = 1, N
-                        W( 1 ) = DCONJG( Z( J ) )
+                        W( 1 ) = CONJG( Z( J ) )
                         IF( UPPER )THEN
                            JJ = 1
                            LJ = J
@@ -2355,7 +2357,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CZHER2, CZHPR2, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX
+      INTRINSIC          ABS, CONJG, MAX
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUTC
       LOGICAL             OK
@@ -2550,8 +2552,8 @@
                         END IF
                         JA = 1
                         DO 90 J = 1, N
-                           W( 1 ) = ALPHA*DCONJG( Z( J, 2 ) )
-                           W( 2 ) = DCONJG( ALPHA )*DCONJG( Z( J, 1 ) )
+                           W( 1 ) = ALPHA*CONJG( Z( J, 2 ) )
+                           W( 2 ) = CONJG( ALPHA )*CONJG( Z( J, 1 ) )
                            IF( UPPER )THEN
                               JJ = 1
                               LJ = J
@@ -2693,11 +2695,11 @@
       INTEGER            I, INCXL, INCYL, IY, J, JX, KX, KY, ML, NL
       LOGICAL            CTRAN, TRAN
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DIMAG, DCONJG, MAX, DBLE, SQRT
+      INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, SQRT
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     .. Statement Function definitions ..
-      CABS1( C ) = ABS( DBLE( C ) ) + ABS( DIMAG( C ) )
+      CABS1( C ) = ABS( DBLE( C ) ) + ABS( AIMAG( C ) )
 *     .. Executable Statements ..
       TRAN = TRANS.EQ.'T'
       CTRAN = TRANS.EQ.'C'
@@ -2739,7 +2741,7 @@
    10       CONTINUE
          ELSE IF( CTRAN )THEN
             DO 20 J = 1, NL
-               YT( IY ) = YT( IY ) + DCONJG( A( J, I ) )*X( JX )
+               YT( IY ) = YT( IY ) + CONJG( A( J, I ) )*X( JX )
                G( IY ) = G( IY ) + CABS1( A( J, I ) )*CABS1( X( JX ) )
                JX = JX + INCXL
    20       CONTINUE
@@ -2907,12 +2909,16 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            RESET
+*     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+*     ..
 *     .. Local Scalars ..
       INTEGER            I, IC, J, MI, MJ
 *     .. Save statement ..
       SAVE               I, IC, J, MI, MJ
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX
+      INTRINSIC          CMPLX
 *     .. Executable Statements ..
       IF( RESET )THEN
 *        Initialize local variables.
@@ -2940,7 +2946,8 @@
          IC = 0
          GO TO 10
       END IF
-      ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
+      ZBEG = CMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0,
+     $              KIND=DP )
       RETURN
 *
 *     End of ZBEG.
@@ -2985,6 +2992,8 @@
 *     Jeremy Du Croz, NAG Central Office.
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ),
      $                   ONE = ( 1.0D0, 0.0D0 ) )
@@ -3009,7 +3018,7 @@
       COMPLEX*16         ZBEG
       EXTERNAL           ZBEG
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, DCONJG, MAX, MIN, DBLE
+      INTRINSIC          CMPLX, CONJG, DBLE, MAX, MIN
 *     .. Executable Statements ..
       GEN = TYPE( 1: 1 ).EQ.'g'
       SYM = TYPE( 1: 1 ).EQ.'h'
@@ -3032,7 +3041,7 @@
                END IF
                IF( I.NE.J )THEN
                   IF( SYM )THEN
-                     A( J, I ) = DCONJG( A( I, J ) )
+                     A( J, I ) = CONJG( A( I, J ) )
                   ELSE IF( TRI )THEN
                      A( J, I ) = ZERO
                   END IF
@@ -3040,7 +3049,7 @@
             END IF
    10    CONTINUE
          IF( SYM )
-     $      A( J, J ) = DCMPLX( DBLE( A( J, J ) ), RZERO )
+     $      A( J, J ) = CMPLX( DBLE( A( J, J ) ), RZERO, KIND=DP )
          IF( TRI )
      $      A( J, J ) = A( J, J ) + ONE
          IF( UNIT )
@@ -3098,7 +3107,7 @@
   120       CONTINUE
             IF( SYM )THEN
                JJ = J + ( J - 1 )*LDA
-               AA( JJ ) = DCMPLX( DBLE( AA( JJ ) ), RROGUE )
+               AA( JJ ) = CMPLX( DBLE( AA( JJ ) ), RROGUE, KIND=DP )
             END IF
   130    CONTINUE
       ELSE IF( TYPE.EQ.'hb'.OR.TYPE.EQ.'tb' )THEN
@@ -3131,7 +3140,7 @@
   160       CONTINUE
             IF( SYM )THEN
                JJ = KK + ( J - 1 )*LDA
-               AA( JJ ) = DCMPLX( DBLE( AA( JJ ) ), RROGUE )
+               AA( JJ ) = CMPLX( DBLE( AA( JJ ) ), RROGUE, KIND=DP )
             END IF
   170    CONTINUE
       ELSE IF( TYPE.EQ.'hp'.OR.TYPE.EQ.'tp' )THEN
@@ -3151,7 +3160,8 @@
                   IF( UNIT )
      $               AA( IOFF ) = ROGUE
                   IF( SYM )
-     $               AA( IOFF ) = DCMPLX( DBLE( AA( IOFF ) ), RROGUE )
+     $               AA( IOFF ) = CMPLX( DBLE( AA( IOFF ) ), RROGUE,
+     $               KIND=DP )
                END IF
   180       CONTINUE
   190    CONTINUE

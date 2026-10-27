@@ -171,7 +171,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -237,16 +237,16 @@
 *
             DO 100 J = 1, NRHS
                IF( N.EQ.1 ) THEN
-                  B( 1, J ) = B( 1, J ) + DCONJG( D( 1 ) )*X( 1, J )
+                  B( 1, J ) = B( 1, J ) + CONJG( D( 1 ) )*X( 1, J )
                ELSE
-                  B( 1, J ) = B( 1, J ) + DCONJG( D( 1 ) )*X( 1, J ) +
-     $                        DCONJG( DL( 1 ) )*X( 2, J )
-                  B( N, J ) = B( N, J ) + DCONJG( DU( N-1 ) )*
-     $                        X( N-1, J ) + DCONJG( D( N ) )*X( N, J )
+                  B( 1, J ) = B( 1, J ) + CONJG( D( 1 ) )*X( 1, J ) +
+     $                        CONJG( DL( 1 ) )*X( 2, J )
+                  B( N, J ) = B( N, J ) + CONJG( DU( N-1 ) )*
+     $                        X( N-1, J ) + CONJG( D( N ) )*X( N, J )
                   DO 90 I = 2, N - 1
-                     B( I, J ) = B( I, J ) + DCONJG( DU( I-1 ) )*
-     $                           X( I-1, J ) + DCONJG( D( I ) )*
-     $                           X( I, J ) + DCONJG( DL( I ) )*
+                     B( I, J ) = B( I, J ) + CONJG( DU( I-1 ) )*
+     $                           X( I-1, J ) + CONJG( D( I ) )*
+     $                           X( I, J ) + CONJG( DL( I ) )*
      $                           X( I+1, J )
    90             CONTINUE
                END IF
@@ -295,16 +295,16 @@
 *
             DO 160 J = 1, NRHS
                IF( N.EQ.1 ) THEN
-                  B( 1, J ) = B( 1, J ) - DCONJG( D( 1 ) )*X( 1, J )
+                  B( 1, J ) = B( 1, J ) - CONJG( D( 1 ) )*X( 1, J )
                ELSE
-                  B( 1, J ) = B( 1, J ) - DCONJG( D( 1 ) )*X( 1, J ) -
-     $                        DCONJG( DL( 1 ) )*X( 2, J )
-                  B( N, J ) = B( N, J ) - DCONJG( DU( N-1 ) )*
-     $                        X( N-1, J ) - DCONJG( D( N ) )*X( N, J )
+                  B( 1, J ) = B( 1, J ) - CONJG( D( 1 ) )*X( 1, J ) -
+     $                        CONJG( DL( 1 ) )*X( 2, J )
+                  B( N, J ) = B( N, J ) - CONJG( DU( N-1 ) )*
+     $                        X( N-1, J ) - CONJG( D( N ) )*X( N, J )
                   DO 150 I = 2, N - 1
-                     B( I, J ) = B( I, J ) - DCONJG( DU( I-1 ) )*
-     $                           X( I-1, J ) - DCONJG( D( I ) )*
-     $                           X( I, J ) - DCONJG( DL( I ) )*
+                     B( I, J ) = B( I, J ) - CONJG( DU( I-1 ) )*
+     $                           X( I-1, J ) - CONJG( D( I ) )*
+     $                           X( I, J ) - CONJG( DL( I ) )*
      $                           X( I+1, J )
   150             CONTINUE
                END IF

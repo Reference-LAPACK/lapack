@@ -24,6 +24,11 @@
 !> \verbatim
 !>
 !>  IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
+!>
+!>  If the vector contains a NaN, the index of the first NaN is returned.
+!>  Otherwise, if it contains an Inf or -Inf, the index of the first of those
+!>  is returned.  This keeps the result independent of the order of the
+!>  elements, so that exceptional values propagate.
 !> \endverbatim
 !
 !  Arguments:
@@ -88,7 +93,7 @@ integer function izamax(n, x, incx)
    logical :: scaledsmax
 !  ..
 !  .. Intrinsic Functions ..
-   intrinsic :: abs, dimag, huge, real
+   intrinsic :: abs, aimag, huge, real
 !
 !  Quick return if possible
 !
@@ -103,7 +108,7 @@ integer function izamax(n, x, incx)
    smax = -1
 !
 !  scaledsmax = .true. indicates that x(izamax) is finite but
-!  abs(real(x(izamax))) + abs(dimag(x(izamax))) overflows
+!  abs(real(x(izamax))) + abs(aimag(x(izamax))) overflows
 !
    if (incx == 1) then
       ! code for increment equal to 1
@@ -112,7 +117,7 @@ integer function izamax(n, x, incx)
             ! return when first NaN found
             izamax = i
             return
-         elseif (abs(real(x(i))) > hugeval .or. abs(dimag(x(i))) > hugeval) then
+         elseif (abs(real(x(i))) > hugeval .or. abs(aimag(x(i))) > hugeval) then
             ! keep looking for first NaN
             do j = i+1, n
                if (x(j) /= x(j)) then
@@ -126,18 +131,18 @@ integer function izamax(n, x, incx)
             return
          else ! still no Inf found yet
             if (.not. scaledsmax) then
-               ! no abs(real(x(i))) + abs(dimag(x(i))) = Inf yet
-               val = abs(real(x(i))) + abs(dimag(x(i)))
+               ! no abs(real(x(i))) + abs(aimag(x(i))) = Inf yet
+               val = abs(real(x(i))) + abs(aimag(x(i)))
                if (val > hugeval) then
                   scaledsmax = .true.
-                  smax = 0.25*abs(real(x(i))) + 0.25*abs(dimag(x(i)))
+                  smax = 0.25*abs(real(x(i))) + 0.25*abs(aimag(x(i)))
                   izamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   izamax = i
                endif
             else ! scaledsmax
-               val = 0.25*abs(real(x(i))) + 0.25*abs(dimag(x(i)))
+               val = 0.25*abs(real(x(i))) + 0.25*abs(aimag(x(i)))
                if (val > smax) then
                   smax = val
                   izamax = i
@@ -153,7 +158,7 @@ integer function izamax(n, x, incx)
             ! return when first NaN found
             izamax = i
             return
-         elseif (abs(real(x(ix))) > hugeval .or. abs(dimag(x(ix))) > hugeval) then
+         elseif (abs(real(x(ix))) > hugeval .or. abs(aimag(x(ix))) > hugeval) then
             ! keep looking for first NaN
             jx = ix + incx
             do j = i+1, n
@@ -169,18 +174,18 @@ integer function izamax(n, x, incx)
             return
          else ! still no Inf found yet
             if (.not. scaledsmax) then
-               ! no abs(real(x(ix))) + abs(dimag(x(ix))) = Inf yet
-               val = abs(real(x(ix))) + abs(dimag(x(ix)))
+               ! no abs(real(x(ix))) + abs(aimag(x(ix))) = Inf yet
+               val = abs(real(x(ix))) + abs(aimag(x(ix)))
                if (val > hugeval) then
                   scaledsmax = .true.
-                  smax = 0.25*abs(real(x(ix))) + 0.25*abs(dimag(x(ix)))
+                  smax = 0.25*abs(real(x(ix))) + 0.25*abs(aimag(x(ix)))
                   izamax = i
                elseif (val > smax) then ! everything finite so far
                   smax = val
                   izamax = i
                endif
             else ! scaledsmax
-               val = 0.25*abs(real(x(ix))) + 0.25*abs(dimag(x(ix)))
+               val = 0.25*abs(real(x(ix))) + 0.25*abs(aimag(x(ix)))
                if (val > smax) then
                   smax = val
                   izamax = i

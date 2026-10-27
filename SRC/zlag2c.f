@@ -123,7 +123,7 @@
       DOUBLE PRECISION   RMAX
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DIMAG, CMPLX
+      INTRINSIC          AIMAG, CMPLX, DBLE
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -136,8 +136,8 @@
          DO 10 I = 1, M
             IF( ( DBLE( A( I, J ) ).LT.-RMAX ) .OR.
      $          ( DBLE( A( I, J ) ).GT.RMAX ) .OR.
-     $          ( DIMAG( A( I, J ) ).LT.-RMAX ) .OR.
-     $          ( DIMAG( A( I, J ) ).GT.RMAX ) ) THEN
+     $          ( AIMAG( A( I, J ) ).LT.-RMAX ) .OR.
+     $          ( AIMAG( A( I, J ) ).GT.RMAX ) ) THEN
                INFO = 1
                GO TO 30
             END IF

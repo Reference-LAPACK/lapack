@@ -134,6 +134,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   TWO, ONE, ZERO
       PARAMETER          ( TWO = 2.0D+0, ONE = 1.0D+0, ZERO = 0.0D+0 )
       COMPLEX*16         CZERO
@@ -152,8 +154,8 @@
       EXTERNAL           DLAMCH, DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, LOG,
-     $                   MAX, SQRT
+      INTRINSIC          ABS, AIMAG, CMPLX, CONJG, DBLE, INT, LOG, MAX,
+     $                   SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABSMAX, ABSSQ
@@ -165,8 +167,8 @@
 *     DATA               FIRST / .TRUE. /
 *     ..
 *     .. Statement Function definitions ..
-      CABSMAX( FF ) = MAX( ABS( DBLE( FF ) ), ABS( DIMAG( FF ) ) )
-      ABSSQ( FF ) = DBLE( FF )**2 + DIMAG( FF )**2
+      CABSMAX( FF ) = MAX( ABS( DBLE( FF ) ), ABS( AIMAG( FF ) ) )
+      ABSSQ( FF ) = DBLE( FF )**2 + AIMAG( FF )**2
 *     ..
 *     .. Executable Statements ..
 *
@@ -222,14 +224,14 @@
 *
             IF( F.EQ.CZERO ) THEN
                CS = ZERO
-               R = DLAPY2( DBLE( G ), DIMAG( G ) )
+               R = DLAPY2( DBLE( G ), AIMAG( G ) )
 *              Do complex/real division explicitly with two real
 *              divisions
-               D = DLAPY2( DBLE( GS ), DIMAG( GS ) )
-               SN = DCMPLX( DBLE( GS ) / D, -DIMAG( GS ) / D )
+               D = DLAPY2( DBLE( GS ), AIMAG( GS ) )
+               SN = CMPLX( DBLE( GS ) / D, -AIMAG( GS ) / D, KIND=DP )
                GO TO 50
             END IF
-            F2S = DLAPY2( DBLE( FS ), DIMAG( FS ) )
+            F2S = DLAPY2( DBLE( FS ), AIMAG( FS ) )
 *           G2 and G2S are accurate
 *           G2 is at least SAFMIN, and G2S is at least SAFMN2
             G2S = SQRT( G2 )
@@ -244,15 +246,16 @@
 *           Make sure abs(FF) = 1
 *           Do complex/real division explicitly with 2 real divisions
             IF( CABSMAX( F ).GT.ONE ) THEN
-               D = DLAPY2( DBLE( F ), DIMAG( F ) )
-               FF = DCMPLX( DBLE( F ) / D, DIMAG( F ) / D )
+               D = DLAPY2( DBLE( F ), AIMAG( F ) )
+               FF = CMPLX( DBLE( F ) / D, AIMAG( F ) / D, KIND=DP )
             ELSE
                DR = SAFMX2*DBLE( F )
-               DI = SAFMX2*DIMAG( F )
+               DI = SAFMX2*AIMAG( F )
                D = DLAPY2( DR, DI )
-               FF = DCMPLX( DR / D, DI / D )
+               FF = CMPLX( DR / D, DI / D, KIND=DP )
             END IF
-            SN = FF*DCMPLX( DBLE( GS ) / G2S, -DIMAG( GS ) / G2S )
+            SN = FF*CMPLX( DBLE( GS ) / G2S, -AIMAG( GS ) / G2S,
+     $                     KIND=DP )
             R = CS*F + SN*G
          ELSE
 *
@@ -263,12 +266,12 @@
             F2S = SQRT( ONE+G2 / F2 )
 *           Do the F2S(real)*FS(complex) multiply with two real
 *           multiplies
-            R = DCMPLX( F2S*DBLE( FS ), F2S*DIMAG( FS ) )
+            R = CMPLX( F2S*DBLE( FS ), F2S*AIMAG( FS ), KIND=DP )
             CS = ONE / F2S
             D = F2 + G2
 *           Do complex/real division explicitly with two real divisions
-            SN = DCMPLX( DBLE( R ) / D, DIMAG( R ) / D )
-            SN = SN*DCONJG( GS )
+            SN = CMPLX( DBLE( R ) / D, AIMAG( R ) / D, KIND=DP )
+            SN = SN*CONJG( GS )
             IF( COUNT.NE.0 ) THEN
                IF( COUNT.GT.0 ) THEN
                   DO 30 J = 1, COUNT

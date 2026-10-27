@@ -88,7 +88,7 @@ jobs:
         echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
 
     - name: Build
-      run: make -s -j"$(getconf _NPROCESSORS_ONLN)" all
+      run: make -s -j"$(getconf _NPROCESSORS_ONLN)" all cblas_testing lapackelib
 
     - name: Install
       run: make -j"$(getconf _NPROCESSORS_ONLN)" lapack_install

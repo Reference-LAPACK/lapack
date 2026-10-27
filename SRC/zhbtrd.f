@@ -196,7 +196,7 @@
      $                   ZLASET, ZROT, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
+      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -396,14 +396,14 @@
                            IQAEND = MIN( IQAEND+KD, IQEND )
                            CALL ZROT( NQ, Q( IQB, J-1 ), 1, Q( IQB,
      $                                J ),
-     $                                1, D( J ), DCONJG( WORK( J ) ) )
+     $                                1, D( J ), CONJG( WORK( J ) ) )
    50                   CONTINUE
                      ELSE
 *
                         DO 60 J = J1, J2, KD1
                            CALL ZROT( N, Q( 1, J-1 ), 1, Q( 1, J ),
      $                                1,
-     $                                D( J ), DCONJG( WORK( J ) ) )
+     $                                D( J ), CONJG( WORK( J ) ) )
    60                   CONTINUE
                      END IF
 *
@@ -446,7 +446,7 @@
                IF( I.LT.N-1 )
      $            AB( KD, I+2 ) = AB( KD, I+2 )*T
                IF( WANTQ ) THEN
-                  CALL ZSCAL( N, DCONJG( T ), Q( 1, I+1 ), 1 )
+                  CALL ZSCAL( N, CONJG( T ), Q( 1, I+1 ), 1 )
                END IF
   100       CONTINUE
          ELSE

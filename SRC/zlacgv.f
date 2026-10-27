@@ -88,20 +88,20 @@
       INTEGER            I, IOFF
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG
+      INTRINSIC          CONJG
 *     ..
 *     .. Executable Statements ..
 *
       IF( INCX.EQ.1 ) THEN
          DO 10 I = 1, N
-            X( I ) = DCONJG( X( I ) )
+            X( I ) = CONJG( X( I ) )
    10    CONTINUE
       ELSE
          IOFF = 1
          IF( INCX.LT.0 )
      $      IOFF = 1 - ( N-1 )*INCX
          DO 20 I = 1, N
-            X( IOFF ) = DCONJG( X( IOFF ) )
+            X( IOFF ) = CONJG( X( IOFF ) )
             IOFF = IOFF + INCX
    20    CONTINUE
       END IF

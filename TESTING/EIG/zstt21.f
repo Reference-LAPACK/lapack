@@ -148,6 +148,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -166,7 +168,7 @@
       EXTERNAL           ZGEMM, ZHER, ZHER2, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          ABS, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -208,8 +210,8 @@
 *
       IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
          DO 30 J = 1, N - 1
-            CALL ZHER2( 'L', N, -DCMPLX( SE( J ) ), U( 1, J ), 1,
-     $                  U( 1, J+1 ), 1, WORK, N )
+            CALL ZHER2( 'L', N, -CMPLX( SE( J ), KIND=DP ), U( 1, J ),
+     $                  1, U( 1, J+1 ), 1, WORK, N )
    30    CONTINUE
       END IF
 *

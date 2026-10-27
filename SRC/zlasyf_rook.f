@@ -222,13 +222,13 @@
       EXTERNAL           ZCOPY, ZGEMMTR, ZGEMV, ZSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, SQRT, DIMAG, DBLE
+      INTRINSIC          ABS, AIMAG, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( DIMAG( Z ) )
+      CABS1( Z ) = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
 *     ..
 *     .. Executable Statements ..
 *

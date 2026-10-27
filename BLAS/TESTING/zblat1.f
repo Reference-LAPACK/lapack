@@ -55,7 +55,7 @@
       DOUBLE PRECISION SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -65,7 +65,7 @@
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
-      DO 20 IC = 1, 13
+      DO 20 IC = 1, 14
          ICASE = IC
          CALL HEADER
 *
@@ -80,7 +80,7 @@
          INCX = 9999
          INCY = 9999
          MODE = 9999
-         IF (ICASE.EQ.12) THEN
+         IF (ICASE.EQ.12 .OR. ICASE.EQ.14) THEN
             CALL CHECK0(SFAC)
          ELSE IF (ICASE.LE.5 .OR. ICASE.EQ.11 .OR.
      +            ICASE.EQ.13) THEN
@@ -114,7 +114,7 @@
       INTEGER          ICASE, INCX, INCY, MODE, N
       LOGICAL          PASS
 *     .. Local Arrays ..
-      CHARACTER*6      L(13)
+      CHARACTER*6      L(14)
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /NAMBLA/SUBNAM
@@ -132,6 +132,7 @@
       DATA             L(11)/'ZAXPBY'/
       DATA             L(12)/'ZROTG '/
       DATA             L(13)/'ZDROT '/
+      DATA             L(14)/'DCABS1'/
 
 *     .. Executable Statements ..
       SUBNAM = L(ICASE)
@@ -145,7 +146,15 @@
       END
       SUBROUTINE CHECK0(SFAC)
       IMPLICIT NONE
+*
+*     ZROTG and DCABS1 take no vector at all, so neither the loop over
+*     N nor the loop over INCX that CHECK1 and CHECK2 run applies to
+*     them, and they get a check of their own.  Nothing in the library
+*     calls DCABS1, so this is the only thing that exercises it.
+*
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
 *     .. Scalar Arguments ..
@@ -163,6 +172,11 @@
      +                  CGOT(1), CWANT(1), CSIZE(1)
       DOUBLE PRECISION  SWANT(1)
       DOUBLE PRECISION  CCTRUE(8)
+      COMPLEX*16        ZV0(6)
+      DOUBLE PRECISION  DTRUE0(6)
+*     .. External Functions ..
+      DOUBLE PRECISION  DCABS1
+      EXTERNAL          DCABS1
 *     .. External Subroutines ..
       EXTERNAL          ZROTG, CTEST, STEST1
 *     .. Intrinsic Functions ..
@@ -194,7 +208,29 @@
      +                  (4.0D0,0.0D0), (5.0D0,0.0D0),
      +                  (5.0D0,0.0D0), (0.0D0,5.0D0),
      +                  (3.0D0,4.0D0), (-5.0D0,0.0D0)/
+*
+*     Every part of the DCABS1 arguments is exact in binary, so the
+*     expected sums are exact as well, and the zero case is required to
+*     be exact by the zero it also supplies as the comparison size.  The
+*     three (3,4) variants separate |Re| + |Im| from the Euclidean
+*     length, which would give 5 rather than 7, and cover both signs of
+*     both parts.
+*
+      DATA              ZV0/(0.0D0,0.0D0), (0.5D0,0.0D0),
+     +                  (0.0D0,-0.25D0), (3.0D0,4.0D0), (-3.0D0,4.0D0),
+     +                  (-3.0D0,-4.0D0)/
+      DATA              DTRUE0/0.0D0, 0.5D0, 0.25D0, 7.0D0, 7.0D0,
+     +                  7.0D0/
 *     .. Executable Statements ..
+*
+      IF (ICASE.EQ.14) THEN
+*        .. DCABS1 ..
+         DO 10 K = 1, 6
+            N = K
+            CALL STEST1(DCABS1(ZV0(K)),DTRUE0(K),DTRUE0(K),SFAC)
+   10    CONTINUE
+         RETURN
+      END IF
 *
       DO 20 K = 1, 8
 *        .. Set N=K for identification in output if any ..
@@ -226,42 +262,42 @@
 *           A zero and B below the window, with both parts nonzero so
 *           the general arm is taken rather than the real or imaginary
 *           shortcut.
-            CA0 = DCMPLX(SZERO,SZERO)
-            CB0 = DCMPLX(RTMIN*0.25D0,RTMIN*0.25D0)
+            CA0 = CMPLX(SZERO,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMIN*0.25D0,RTMIN*0.25D0,KIND=DP)
          ELSE IF (K.EQ.2) THEN
 *           Both nonzero, B far above the window.
-            CA0 = DCMPLX(SONE,SZERO)
-            CB0 = DCMPLX(RTMAX,SZERO)
+            CA0 = CMPLX(SONE,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX,SZERO,KIND=DP)
          ELSE IF (K.EQ.3) THEN
 *           Both inside the window, but A so small against B that the
 *           routine switches to its F2 < H2*SAFMIN formulation.
-            CA0 = DCMPLX(RTMIN*2D0,SZERO)
-            CB0 = DCMPLX(RTMAX*0.25D0,SZERO)
+            CA0 = CMPLX(RTMIN*2D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.25D0,SZERO,KIND=DP)
          ELSE IF (K.EQ.4) THEN
 *           Both above the window and of a size, so the routine scales
 *           A and B by the same factor rather than one of its own.
-            CA0 = DCMPLX(RTMAX,SZERO)
-            CB0 = DCMPLX(RTMAX,SZERO)
+            CA0 = CMPLX(RTMAX,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX,SZERO,KIND=DP)
          ELSE IF (K.EQ.5) THEN
 *           The same, below the window.
-            CA0 = DCMPLX(RTMIN*0.25D0,SZERO)
-            CB0 = DCMPLX(RTMIN*0.25D0,SZERO)
+            CA0 = CMPLX(RTMIN*0.25D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMIN*0.25D0,SZERO,KIND=DP)
          ELSE IF (K.EQ.6) THEN
 *           B above the window with both parts set, so the routine
 *           scales, and A small enough against it that the scaled
 *           algorithm takes its F2 < H2*SAFMIN arm as well.
-            CA0 = DCMPLX(SONE,SZERO)
-            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+            CA0 = CMPLX(SONE,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.5D0,RTMAX*0.5D0,KIND=DP)
          ELSE IF (K.EQ.7) THEN
 *           The same, with A large enough that SQRT(F2*H2) is no longer
 *           known to stay in range, so S is formed from R/H2 instead.
-            CA0 = DCMPLX(1.5D0,SZERO)
-            CB0 = DCMPLX(RTMAX*0.5D0,RTMAX*0.5D0)
+            CA0 = CMPLX(1.5D0,SZERO,KIND=DP)
+            CB0 = CMPLX(RTMAX*0.5D0,RTMAX*0.5D0,KIND=DP)
          ELSE
 *           Both inside the window, A just above its lower edge, where
 *           the unscaled algorithm forms S from R/H2 for that reason.
-            CA0 = DCMPLX(RTMIN*2D0,SZERO)
-            CB0 = DCMPLX(SONE,SONE)
+            CA0 = CMPLX(RTMIN*2D0,SZERO,KIND=DP)
+            CB0 = CMPLX(SONE,SONE,KIND=DP)
          END IF
          CSA = CA0
          CSB = CB0
@@ -275,7 +311,7 @@
          SSIZ = ABS(CA0) + ABS(CB0)
          CGOT(1) = SC*CA0 + CS*CB0
          CWANT(1) = CSA
-         CSIZE(1) = DCMPLX(SSIZ,SSIZ)
+         CSIZE(1) = CMPLX(SSIZ,SSIZ,KIND=DP)
          CALL CTEST(1,CGOT,CWANT,CSIZE,SFAC)
          SGOT = SC*SC + REAL(CS)*REAL(CS) + AIMAG(CS)*AIMAG(CS)
          SWANT(1) = SONE
@@ -289,6 +325,8 @@
       SUBROUTINE CHECK1(SFAC)
       IMPLICIT NONE
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NOUT
       DOUBLE PRECISION  THRESH
       PARAMETER         (NOUT=6, THRESH=10.0D0)
@@ -299,7 +337,7 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX*16        CA
-      DOUBLE PRECISION  SA
+      DOUBLE PRECISION  SA, SBIG, SINF, SNAN, SONE, SZERO
       INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
       COMPLEX*16        CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
@@ -313,7 +351,7 @@
 *     .. External Subroutines ..
       EXTERNAL          ZB1NRM2, ZSCAL, ZDSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
-      INTRINSIC         MAX
+      INTRINSIC         HUGE, MAX
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -467,6 +505,68 @@
                IX = IX + INCX
   180       CONTINUE
             CALL ITEST1(IZAMAX(N,CXR,INCX),3)
+*
+*           i?amax returns the position of the first NaN when the vector
+*           holds one, and otherwise that of the first Inf.  The finite
+*           data above reaches neither.  Inf and NaN are built the way
+*           ?B1NRM2 below builds them, by overflowing HUGE and then
+*           dividing the result by itself.
+*
+            SONE = 1.0D0
+            SZERO = 0.0D0
+            SBIG = HUGE(SONE)
+            SINF = SBIG*SBIG
+            SNAN = SINF/SINF
+*
+*           A NaN wins over every finite entry that precedes it, and the
+*           first NaN wins over any that follow.
+            IX = 1
+            DO 190 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  190       CONTINUE
+            CXR(1+3*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),4)
+            CXR(1+5*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),4)
+*
+*           A NaN in the imaginary part counts just as much as one in
+*           the real part.
+            IX = 1
+            DO 200 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  200       CONTINUE
+            CXR(1+INCX) = CMPLX(SZERO,SNAN,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),2)
+*
+*           With no NaN present the first Inf wins instead.
+            IX = 1
+            DO 210 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  210       CONTINUE
+            CXR(1+2*INCX) = CMPLX(SINF,SZERO,KIND=DP)
+            CXR(1+4*INCX) = CMPLX(SZERO,SINF,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),3)
+*
+*           A NaN after an Inf still wins: the scan carries on past the
+*           Inf looking for one.
+            CXR(1+6*INCX) = CMPLX(SNAN,SZERO,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),7)
+*
+*           An element can be finite while abs(real) + abs(aimag)
+*           overflows; i?amax then switches to a scaled comparison for
+*           the rest of the vector.  Both entries below are finite, so
+*           the larger of the two wins.
+            IX = 1
+            DO 220 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  220       CONTINUE
+            CXR(1+INCX) = CMPLX(0.6D0*SBIG,0.6D0*SBIG,KIND=DP)
+            CXR(1+4*INCX) = CMPLX(0.9D0*SBIG,0.9D0*SBIG,KIND=DP)
+            CALL ITEST1(IZAMAX(N,CXR,INCX),5)
          END IF
    60 CONTINUE
 *
@@ -889,6 +989,29 @@
 *
    40    CONTINUE
    60 CONTINUE
+*
+*     Test the quick return taken when the scalar multiplying X is zero.
+*     The cases above all use a nonzero CA, so neither shortcut is
+*     reached by them: ZAXPY must leave Y untouched and ZAXPBY must scale
+*     Y by CB alone.
+*
+      IF (ICASE.EQ.3 .OR. ICASE.EQ.11) THEN
+         DO 120 I = 1, 7
+            CX(I) = CX1(I)
+            CY(I) = CY1(I)
+            IF (ICASE.EQ.3) THEN
+               CTY(I) = CY1(I)
+            ELSE
+               CTY(I) = CB*CY1(I)
+            END IF
+  120    CONTINUE
+         IF (ICASE.EQ.3) THEN
+            CALL ZAXPY(7,(0.0D0,0.0D0),CX,1,CY,1)
+         ELSE
+            CALL ZAXPBY(7,(0.0D0,0.0D0),CX,1,CB,CY,1)
+         END IF
+         CALL CTEST(7,CY,CTY,CTY,SFAC)
+      END IF
       RETURN
 *
 *     End of CHECK2
@@ -1019,15 +1142,15 @@
 *     .. External Subroutines ..
       EXTERNAL         STEST
 *     .. Intrinsic Functions ..
-      INTRINSIC        DIMAG, DBLE
+      INTRINSIC        AIMAG, DBLE
 *     .. Executable Statements ..
       DO 20 I = 1, LEN
          SCOMP(2*I-1) = DBLE(CCOMP(I))
-         SCOMP(2*I) = DIMAG(CCOMP(I))
+         SCOMP(2*I) = AIMAG(CCOMP(I))
          STRUE(2*I-1) = DBLE(CTRUE(I))
-         STRUE(2*I) = DIMAG(CTRUE(I))
+         STRUE(2*I) = AIMAG(CTRUE(I))
          SSIZE(2*I-1) = DBLE(CSIZE(I))
-         SSIZE(2*I) = DIMAG(CSIZE(I))
+         SSIZE(2*I) = AIMAG(CSIZE(I))
    20 CONTINUE
 *
       CALL STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)
@@ -1107,8 +1230,10 @@
 *
 *  =====================================================================
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=10)
+      PARAMETER         (NMAX=20, NOUT=6, NV=12)
       DOUBLE PRECISION  HALF, ONE, THREE, TWO, ZERO
       PARAMETER         (HALF=0.5D+0, ONE=1.0D+0, TWO= 2.0D+0,
      &                  THREE=3.0D+0, ZERO=0.0D+0)
@@ -1116,7 +1241,7 @@
       DOUBLE PRECISION  DZNRM2
       EXTERNAL          DZNRM2
 *     .. Intrinsic Functions ..
-      INTRINSIC         AIMAG, ABS, DCMPLX, DBLE, MAX, MIN, SQRT
+      INTRINSIC         ABS, AIMAG, CMPLX, DBLE, MAX, MIN, SQRT
 *     .. Model parameters ..
       DOUBLE PRECISION  BIGNUM, SAFMAX, SAFMIN, SMLNUM, ULP
       PARAMETER         (BIGNUM=0.99792015476735990583D+292,
@@ -1148,7 +1273,15 @@
       VALUES(8) = SAFMAX
       VALUES(9) = DXVALS(V0,2)
       VALUES(10) = DXVALS(V0,3)
-      ROGUE = DCMPLX(1234.5678D+0,-1234.5678D+0)
+*     SQRT(SAFMIN) is exactly the threshold at which ?NRM2 switches to
+*     its small accumulator: SAFMIN is RADIX**(MINEXPONENT-1) and the
+*     threshold is that exponent halved.  One value at the threshold
+*     and one just below it let the small part of a vector outweigh
+*     its mid-range part, which is what the arm ordering the two sums
+*     needs.  A wider pair leaves them too far apart for that.
+      VALUES(11) = SQRT(SAFMIN)
+      VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
+      ROGUE = CMPLX(1234.5678D+0,-1234.5678D+0,KIND=DP)
       FIRST = .TRUE.
 *
 *     Check that the arrays are large enough
@@ -1188,14 +1321,14 @@
          IF (ABS(V0).GT.ONE) THEN
             V0 = V0*HALF*HALF
          END IF
-         Z(1) = DCMPLX(V0,-THREE*V0)
+         Z(1) = CMPLX(V0,-THREE*V0,KIND=DP)
          DO IW = 1, NV
             V1 = VALUES(IW)
             IF (ABS(V1).GT.ONE) THEN
                V1 = (V1*HALF) / SQRT(DBLE(KS+1))
             END IF
             DO I = 1, N-1
-               Z(I+1) = DCMPLX(V1*WORK(2*I-1),V1*WORK(2*I))
+               Z(I+1) = CMPLX(V1*WORK(2*I-1),V1*WORK(2*I),KIND=DP)
             END DO
 *
 *           Compute the expected value of the 2-norm

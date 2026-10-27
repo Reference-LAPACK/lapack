@@ -111,6 +111,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -125,7 +127,7 @@
       EXTERNAL           XER_REPLACE, ZLASET, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX
+      INTRINSIC          CMPLX, DBLE
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   RDUMMY( 1 )
@@ -146,8 +148,8 @@
       IF( M.LE.0 )
      $   RETURN
 *
-      CALL ZLASET( 'Full', M, M, DCMPLX( ZERO ), DCMPLX( ONE ), WORK,
-     $             M )
+      CALL ZLASET( 'Full', M, M, CMPLX( ZERO, KIND=DP ),
+     $             CMPLX( ONE, KIND=DP ), WORK, M )
 *
 *     Form Q
 *

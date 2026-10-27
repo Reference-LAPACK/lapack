@@ -187,6 +187,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -207,7 +209,7 @@
       EXTERNAL           ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, EXP, LOG, MAX, MIN, MOD
+      INTRINSIC          ABS, CMPLX, DBLE, EXP, LOG, MAX, MIN, MOD
 *     ..
 *     .. Executable Statements ..
 *
@@ -275,7 +277,7 @@
 *
    80    CONTINUE
          DO 90 JD = KBEG, KEND
-            A( JD, JD ) = DCMPLX( JD-NZ1 )
+            A( JD, JD ) = CMPLX( JD-NZ1, KIND=DP )
    90    CONTINUE
          GO TO 220
 *
@@ -283,7 +285,7 @@
 *
   100    CONTINUE
          DO 110 JD = KBEG + 1, KEND
-            A( JD, JD ) = DCMPLX( RCOND )
+            A( JD, JD ) = CMPLX( RCOND, KIND=DP )
   110    CONTINUE
          A( KBEG, KBEG ) = CONE
          GO TO 220
@@ -294,7 +296,7 @@
          DO 130 JD = KBEG, KEND - 1
             A( JD, JD ) = CONE
   130    CONTINUE
-         A( KEND, KEND ) = DCMPLX( RCOND )
+         A( KEND, KEND ) = CMPLX( RCOND, KIND=DP )
          GO TO 220
 *
 *        abs(ITYPE) = 7: Exponentially distributed D values:
@@ -304,7 +306,7 @@
          IF( KLEN.GT.1 ) THEN
             ALPHA = RCOND**( ONE / DBLE( KLEN-1 ) )
             DO 150 I = 2, KLEN
-               A( NZ1+I, NZ1+I ) = DCMPLX( ALPHA**DBLE( I-1 ) )
+               A( NZ1+I, NZ1+I ) = CMPLX( ALPHA**DBLE( I-1 ), KIND=DP )
   150       CONTINUE
          END IF
          GO TO 220
@@ -316,7 +318,8 @@
          IF( KLEN.GT.1 ) THEN
             ALPHA = ( ONE-RCOND ) / DBLE( KLEN-1 )
             DO 170 I = 2, KLEN
-               A( NZ1+I, NZ1+I ) = DCMPLX( DBLE( KLEN-I )*ALPHA+RCOND )
+               A( NZ1+I, NZ1+I ) = CMPLX( DBLE( KLEN-I )*ALPHA+RCOND,
+     $                          KIND=DP )
   170       CONTINUE
          END IF
          GO TO 220

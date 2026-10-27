@@ -161,7 +161,7 @@
       EXTERNAL           ZCOPY, ZHEMV, ZSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, DBLE
+      INTRINSIC          ABS, CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -291,12 +291,12 @@
      $            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
 *
                DO 40 J = KP + 1, K - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
    40          CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -316,12 +316,12 @@
      $            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
 *
                DO 50 J = KP + 1, K - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
    50          CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -342,12 +342,12 @@
      $            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
 *
                DO 60 J = KP + 1, K - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
    60          CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -446,12 +446,12 @@
      $                        1 )
 *
                DO 90 J = K + 1, KP - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
    90          CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -472,12 +472,12 @@
      $                        1 )
 *
                DO 100 J = K + 1, KP - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
   100         CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -499,12 +499,12 @@
      $                        1 )
 *
                DO 110 J = K + 1, KP - 1
-                  TEMP = DCONJG( A( J, K ) )
-                  A( J, K ) = DCONJG( A( KP, J ) )
+                  TEMP = CONJG( A( J, K ) )
+                  A( J, K ) = CONJG( A( KP, J ) )
                   A( KP, J ) = TEMP
   110         CONTINUE
 *
-               A( KP, K ) = DCONJG( A( KP, K ) )
+               A( KP, K ) = CONJG( A( KP, K ) )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )

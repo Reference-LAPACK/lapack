@@ -160,6 +160,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -172,7 +174,7 @@
       EXTERNAL           XERBLA, ZGEQR2, ZLARF, ZLARFG, ZSWAP, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCMPLX, DCONJG, MAX, MIN, SQRT
+      INTRINSIC          ABS, CMPLX, CONJG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
@@ -268,9 +270,9 @@
 *              Apply H(i) to A(i:m,i+1:n) from the left
 *
                AII = A( I, I )
-               A( I, I ) = DCMPLX( ONE )
+               A( I, I ) = CMPLX( ONE, KIND=DP )
                CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
-     $                     DCONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
+     $                     CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
                A( I, I ) = AII
             END IF
 *

@@ -208,6 +208,8 @@
 *  ===================================================================
 *
 *     .. Parameters ..
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
      $                   CONE = ( 1.0E+0, 0.0E+0 ) )
@@ -216,19 +218,24 @@
       LOGICAL            LQUERY
       INTEGER            I, LOPT, LWKMIN, LWKOPT, NB, NB1, NB2, NB3,
      $                   NB4, NP
+      INTEGER            IA, IB, IBIG, ID, ISML, KA, KB, KD
+      REAL               ANRM, BIGNUM, BNRM, DNRM, SMLNUM
+*     ..
+*     .. Local Arrays ..
+      REAL               RWORK( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMV, CGGQRF, CTRTRS, CUNMQR,
-     $                   CUNMRQ,
-     $                   XERBLA
+      EXTERNAL           CCOPY, CGEMV, CGGQRF, CLASCL, CSSCAL, CTRTRS,
+     $                   CUNMQR, CUNMRQ, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
       REAL               SROUNDUP_LWORK
-      EXTERNAL           ILAENV, SROUNDUP_LWORK
+      REAL               SLAMCH, CLANGE
+      EXTERNAL           CLANGE, ILAENV, SLAMCH, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          INT, MAX, MIN
+      INTRINSIC          EXPONENT, HUGE, INT, MAX, MIN, SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -289,6 +296,62 @@
          END DO
          RETURN
       END IF
+*
+*     Get machine parameters
+*
+      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      BIGNUM = ONE / SMLNUM
+      ISML = EXPONENT( SMLNUM )
+      IBIG = EXPONENT( BIGNUM ) - 1
+*
+*     Scale A, B and d independently by powers of two 2**KA, 2**KB and
+*     2**KD so that their largest entries lie in [SMLNUM,BIGNUM), the
+*     values whose EXPONENT lies in [ISML,IBIG].  x is then scaled by
+*     2**(KD-KA) and y by 2**(KD-KB).  Scaling by a power of two is
+*     exact.  A norm that is zero, infinite or NaN takes no part.
+*     CLASCL is called with both endpoints at or above one so that
+*     forming the factor raises no underflow.
+*
+      ANRM = CLANGE( 'M', N, M, A, LDA, RWORK )
+      KA = 0
+      IF( ANRM.GT.ZERO .AND. ANRM.LE.HUGE( ZERO ) ) THEN
+         IA = EXPONENT( ANRM )
+         IF( IA.LT.ISML ) THEN
+            KA = ISML - IA
+         ELSE IF( IA.GT.IBIG ) THEN
+            KA = IBIG - IA
+         END IF
+      END IF
+      IF( KA.NE.0 )
+     $   CALL CLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KA, 0 ) ),
+     $                SCALE( ONE, MAX( KA, 0 ) ), N, M, A, LDA, INFO )
+*
+      BNRM = CLANGE( 'M', N, P, B, LDB, RWORK )
+      KB = 0
+      IF( BNRM.GT.ZERO .AND. BNRM.LE.HUGE( ZERO ) ) THEN
+         IB = EXPONENT( BNRM )
+         IF( IB.LT.ISML ) THEN
+            KB = ISML - IB
+         ELSE IF( IB.GT.IBIG ) THEN
+            KB = IBIG - IB
+         END IF
+      END IF
+      IF( KB.NE.0 )
+     $   CALL CLASCL( 'G', 0, 0, SCALE( ONE, MAX( -KB, 0 ) ),
+     $                SCALE( ONE, MAX( KB, 0 ) ), N, P, B, LDB, INFO )
+*
+      DNRM = CLANGE( 'M', N, 1, D, N, RWORK )
+      KD = 0
+      IF( DNRM.GT.ZERO .AND. DNRM.LE.HUGE( ZERO ) ) THEN
+         ID = EXPONENT( DNRM )
+         IF( ID.LT.ISML ) THEN
+            KD = ISML - ID
+         ELSE IF( ID.GT.IBIG ) THEN
+            KD = IBIG - ID
+         END IF
+      END IF
+      IF( KD.NE.0 )
+     $   CALL CSSCAL( N, SCALE( ONE, KD ), D, 1 )
 *
 *     Compute the GQR factorization of matrices A and B:
 *
@@ -359,6 +422,14 @@
       CALL CUNMRQ( 'Left', 'Conjugate transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
+*
+*     Undo scaling: x carries 2**(KD-KA) and y carries 2**(KD-KB)
+*
+      IF( KA.NE.KD )
+     $   CALL CSSCAL( M, SCALE( ONE, KA-KD ), X, 1 )
+      IF( KB.NE.KD )
+     $   CALL CSSCAL( P, SCALE( ONE, KB-KD ), Y, 1 )
+*
       WORK( 1 ) = CMPLX( M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) ) )
 *
       RETURN

@@ -159,7 +159,7 @@
       COMPLEX*16         ALPHA, COSINE, SINE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, MAX, SQRT
+      INTRINSIC          ABS, CONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -190,7 +190,7 @@
             ELSE
                S = ALPHA / S1
                C = GAMMA / S1
-               TMP = DBLE( SQRT( S*DCONJG( S )+C*DCONJG( C ) ) )
+               TMP = DBLE( SQRT( S*CONJG( S )+C*CONJG( C ) ) )
                S = S / TMP
                C = C / TMP
                SESTPR = S1*TMP
@@ -251,8 +251,8 @@
 *
             SINE = -( ALPHA / ABSEST ) / T
             COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
-            TMP = DBLE( SQRT( SINE * DCONJG( SINE )
-     $        + COSINE * DCONJG( COSINE ) ) )
+            TMP = DBLE( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
 
             S = SINE / TMP
             C = COSINE / TMP
@@ -272,13 +272,13 @@
                SINE = ONE
                COSINE = ZERO
             ELSE
-               SINE = -DCONJG( GAMMA )
-               COSINE = DCONJG( ALPHA )
+               SINE = -CONJG( GAMMA )
+               COSINE = CONJG( ALPHA )
             END IF
             S1 = MAX( ABS( SINE ), ABS( COSINE ) )
             S = SINE / S1
             C = COSINE / S1
-            TMP = DBLE( SQRT( S*DCONJG( S )+C*DCONJG( C ) ) )
+            TMP = DBLE( SQRT( S*CONJG( S )+C*CONJG( C ) ) )
             S = S / TMP
             C = C / TMP
             RETURN
@@ -307,14 +307,14 @@
                TMP = S1 / S2
                SCL = SQRT( ONE+TMP*TMP )
                SESTPR = ABSEST*( TMP / SCL )
-               S = -( DCONJG( GAMMA ) / S2 ) / SCL
-               C = ( DCONJG( ALPHA ) / S2 ) / SCL
+               S = -( CONJG( GAMMA ) / S2 ) / SCL
+               C = ( CONJG( ALPHA ) / S2 ) / SCL
             ELSE
                TMP = S2 / S1
                SCL = SQRT( ONE+TMP*TMP )
                SESTPR = ABSEST / SCL
-               S = -( DCONJG( GAMMA ) / S1 ) / SCL
-               C = ( DCONJG( ALPHA ) / S1 ) / SCL
+               S = -( CONJG( GAMMA ) / S1 ) / SCL
+               C = ( CONJG( ALPHA ) / S1 ) / SCL
             END IF
             RETURN
          ELSE
@@ -355,8 +355,8 @@
                COSINE = -( GAMMA / ABSEST ) / ( ONE+T )
                SESTPR = SQRT( ONE+T+FOUR*EPS*EPS*NORMA )*ABSEST
             END IF
-            TMP = DBLE( SQRT( SINE * DCONJG( SINE )
-     $        + COSINE * DCONJG( COSINE ) ) )
+            TMP = DBLE( SQRT( SINE * CONJG( SINE )
+     $        + COSINE * CONJG( COSINE ) ) )
             S = SINE / TMP
             C = COSINE / TMP
             RETURN

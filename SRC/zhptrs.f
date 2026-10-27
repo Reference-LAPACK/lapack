@@ -146,7 +146,7 @@
      $                   ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, MAX
+      INTRINSIC          CONJG, DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -233,11 +233,11 @@
 *
             AKM1K = AP( KC+K-2 )
             AKM1 = AP( KC-1 ) / AKM1K
-            AK = AP( KC+K-1 ) / DCONJG( AKM1K )
+            AK = AP( KC+K-1 ) / CONJG( AKM1K )
             DENOM = AKM1*AK - ONE
             DO 20 J = 1, NRHS
                BKM1 = B( K-1, J ) / AKM1K
-               BK = B( K, J ) / DCONJG( AKM1K )
+               BK = B( K, J ) / CONJG( AKM1K )
                B( K-1, J ) = ( AK*BKM1-BK ) / DENOM
                B( K, J ) = ( AKM1*BK-BKM1 ) / DENOM
    20       CONTINUE
@@ -379,11 +379,11 @@
 *           Multiply by the inverse of the diagonal block.
 *
             AKM1K = AP( KC+1 )
-            AKM1 = AP( KC ) / DCONJG( AKM1K )
+            AKM1 = AP( KC ) / CONJG( AKM1K )
             AK = AP( KC+N-K+1 ) / AKM1K
             DENOM = AKM1*AK - ONE
             DO 70 J = 1, NRHS
-               BKM1 = B( K, J ) / DCONJG( AKM1K )
+               BKM1 = B( K, J ) / CONJG( AKM1K )
                BK = B( K+1, J ) / AKM1K
                B( K, J ) = ( AK*BKM1-BK ) / DENOM
                B( K+1, J ) = ( AKM1*BK-BKM1 ) / DENOM

@@ -179,6 +179,8 @@
 *
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -194,7 +196,7 @@
       EXTERNAL           LSAME, IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          ABS, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XER_REPLACE, ZUNT01
@@ -250,12 +252,12 @@
          RES1 = ZERO
          DO 20 I = 1, K
             LMX = IZAMAX( N, U( I, 1 ), LDU )
-            IF( V( I, LMX ).EQ.DCMPLX( ZERO ) ) THEN
+            IF( V( I, LMX ).EQ.CMPLX( ZERO, KIND=DP ) ) THEN
                SV = ONE
             ELSE
                SV = ABS( V( I, LMX ) ) / V( I, LMX )
             END IF
-            IF( U( I, LMX ).EQ.DCMPLX( ZERO ) ) THEN
+            IF( U( I, LMX ).EQ.CMPLX( ZERO, KIND=DP ) ) THEN
                SU = ONE
             ELSE
                SU = ABS( U( I, LMX ) ) / U( I, LMX )
@@ -278,12 +280,12 @@
          RES1 = ZERO
          DO 40 I = 1, K
             LMX = IZAMAX( N, U( 1, I ), 1 )
-            IF( V( LMX, I ).EQ.DCMPLX( ZERO ) ) THEN
+            IF( V( LMX, I ).EQ.CMPLX( ZERO, KIND=DP ) ) THEN
                SV = ONE
             ELSE
                SV = ABS( V( LMX, I ) ) / V( LMX, I )
             END IF
-            IF( U( LMX, I ).EQ.DCMPLX( ZERO ) ) THEN
+            IF( U( LMX, I ).EQ.CMPLX( ZERO, KIND=DP ) ) THEN
                SU = ONE
             ELSE
                SU = ABS( U( LMX, I ) ) / U( LMX, I )

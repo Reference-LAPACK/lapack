@@ -142,6 +142,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -161,13 +163,13 @@
       EXTERNAL           ZHERK, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
+      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
 *
@@ -197,8 +199,8 @@
 *
 *        Compute I - U*U' or I - U'*U.
 *
-         CALL ZLASET( 'Upper', MNMIN, MNMIN, DCMPLX( ZERO ),
-     $                DCMPLX( ONE ), WORK, LDWORK )
+         CALL ZLASET( 'Upper', MNMIN, MNMIN, CMPLX( ZERO, KIND=DP ),
+     $                CMPLX( ONE, KIND=DP ), WORK, LDWORK )
          CALL ZHERK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE, WORK,
      $               LDWORK )
 *

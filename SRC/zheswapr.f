@@ -146,11 +146,11 @@
 *
          DO I=1,I2-I1-1
             TMP=A(I1,I1+I)
-            A(I1,I1+I)=DCONJG(A(I1+I,I2))
-            A(I1+I,I2)=DCONJG(TMP)
+            A(I1,I1+I)=CONJG(A(I1+I,I2))
+            A(I1+I,I2)=CONJG(TMP)
          END DO
 *
-          A(I1,I2)=DCONJG(A(I1,I2))
+          A(I1,I2)=CONJG(A(I1,I2))
 
 *
 *          third swap
@@ -179,11 +179,11 @@
 *
           DO I=1,I2-I1-1
              TMP=A(I1+I,I1)
-             A(I1+I,I1)=DCONJG(A(I2,I1+I))
-             A(I2,I1+I)=DCONJG(TMP)
+             A(I1+I,I1)=CONJG(A(I2,I1+I))
+             A(I2,I1+I)=CONJG(TMP)
           END DO
 *
-          A(I2,I1)=DCONJG(A(I2,I1))
+          A(I2,I1)=CONJG(A(I2,I1))
 *
 *         third swap
 *          - swap col I1 and I2 from I2+1 to N

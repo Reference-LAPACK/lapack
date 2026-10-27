@@ -246,6 +246,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       COMPLEX*16         CZERO, CONE
@@ -266,7 +268,7 @@
      $                   ZUNCSD2BY1
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          COS, DBLE, DCMPLX, MAX, MIN, REAL, SIN
+      INTRINSIC          CMPLX, COS, DBLE, MAX, MIN, REAL, SIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -313,7 +315,7 @@
       DO I = 1, R
          XF(MIN(P,Q)-R+I,MIN(P,Q)-R+I) =
      $           XF(MIN(P,Q)-R+I,MIN(P,Q)-R+I) -
-     $           DCMPLX( COS(THETA(I)), ZERO )
+     $           CMPLX( COS(THETA(I)), ZERO, KIND=DP )
       END DO
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', P, M-Q, M-Q,
@@ -328,7 +330,7 @@
       DO I = 1, R
          XF(P-(MIN(P,M-Q)-R)+1-I,M-(MIN(P,M-Q)-R)+1-I) =
      $      XF(P-(MIN(P,M-Q)-R)+1-I,M-(MIN(P,M-Q)-R)+1-I) +
-     $      DCMPLX( SIN(THETA(R-I+1)), ZERO )
+     $      CMPLX( SIN(THETA(R-I+1)), ZERO, KIND=DP )
       END DO
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q,
@@ -343,7 +345,7 @@
       DO I = 1, R
          XF(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) =
      $             XF(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) -
-     $             DCMPLX( SIN(THETA(R-I+1)), ZERO )
+     $             CMPLX( SIN(THETA(R-I+1)), ZERO, KIND=DP )
       END DO
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-Q,
@@ -358,7 +360,7 @@
       DO I = 1, R
          XF(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) =
      $      XF(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) -
-     $      DCMPLX( COS(THETA(I)), ZERO )
+     $      CMPLX( COS(THETA(I)), ZERO, KIND=DP )
       END DO
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
@@ -476,7 +478,7 @@
       DO I = 1, R
          X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) =
      $           X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) -
-     $           DCMPLX( COS(THETA(I)), ZERO )
+     $           CMPLX( COS(THETA(I)), ZERO, KIND=DP )
       END DO
 *
       CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q,
@@ -491,7 +493,7 @@
       DO I = 1, R
          X(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) =
      $             X(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) -
-     $             DCMPLX( SIN(THETA(R-I+1)), ZERO )
+     $             CMPLX( SIN(THETA(R-I+1)), ZERO, KIND=DP )
       END DO
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .

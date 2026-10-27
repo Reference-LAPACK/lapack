@@ -201,7 +201,7 @@
       EXTERNAL           ZLARFG, ZLARFX, ZLARFY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCONJG, MOD
+      INTRINSIC          CONJG, MOD
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
@@ -238,17 +238,17 @@
 *
               V( VPOS ) = ONE
               DO 10 I = 1, LM-1
-                  V( VPOS+I )         = DCONJG( A( OFDPOS-I, ST+I ) )
+                  V( VPOS+I )         = CONJG( A( OFDPOS-I, ST+I ) )
                   A( OFDPOS-I, ST+I ) = ZERO
    10         CONTINUE
-              CTMP = DCONJG( A( OFDPOS, ST ) )
+              CTMP = CONJG( A( OFDPOS, ST ) )
               CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1,
      $                                       TAU( TAUPOS ) )
               A( OFDPOS, ST ) = CTMP
 *
               LM = ED - ST + 1
               CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
-     $                     DCONJG( TAU( TAUPOS ) ),
+     $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
 *
@@ -256,7 +256,7 @@
 *
               LM = ED - ST + 1
               CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
-     $                     DCONJG( TAU( TAUPOS ) ),
+     $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
 *
@@ -267,7 +267,7 @@
               LM = J2-J1+1
               IF( LM.GT.0) THEN
                   CALL ZLARFX( 'Left', LN, LM, V( VPOS ),
-     $                         DCONJG( TAU( TAUPOS ) ),
+     $                         CONJG( TAU( TAUPOS ) ),
      $                         A( DPOS-NB, J1 ), LDA-1, WORK)
 *
                   IF( WANTZ ) THEN
@@ -281,10 +281,10 @@
                   V( VPOS ) = ONE
                   DO 30 I = 1, LM-1
                       V( VPOS+I )          =
-     $                                    DCONJG( A( DPOS-NB-I, J1+I ) )
+     $                                    CONJG( A( DPOS-NB-I, J1+I ) )
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
-                  CTMP = DCONJG( A( DPOS-NB, J1 ) )
+                  CTMP = CONJG( A( DPOS-NB, J1 ) )
                   CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1,
      $                         TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
@@ -321,7 +321,7 @@
               LM = ED - ST + 1
 *
               CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
-     $                     DCONJG( TAU( TAUPOS ) ),
+     $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
           ENDIF
@@ -330,7 +330,7 @@
               LM = ED - ST + 1
 *
               CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
-     $                     DCONJG( TAU( TAUPOS ) ),
+     $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
           ENDIF
@@ -363,7 +363,7 @@
      $                                        TAU( TAUPOS ) )
 *
                   CALL ZLARFX( 'Left', LM, LN-1, V( VPOS ),
-     $                         DCONJG( TAU( TAUPOS ) ),
+     $                         CONJG( TAU( TAUPOS ) ),
      $                         A( DPOS+NB-1, ST+1 ), LDA-1, WORK)
 
               ENDIF
