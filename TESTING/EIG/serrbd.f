@@ -74,7 +74,7 @@
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            I, INFO, J, NS, NT
-      REAL               RNAN, RONE
+      REAL               RNAN, RONE, RZERO
 *     ..
 *     .. Local Arrays ..
       INTEGER            IQ( NMAX, NMAX ), IW( NMAX )
@@ -302,6 +302,34 @@
          END IF
          NT = NT + 1
 *
+*        SBDSQR with singular vectors must return when D contains an
+*        infinity, which makes its convergence threshold a NaN,
+*        instead of iterating forever.
+*
+         RZERO = ZERO
+         DO 50 J = 1, NMAX
+            D( J ) = REAL( J )
+            E( J ) = ONE / REAL( J+1 )
+            DO 40 I = 1, NMAX
+               U( I, J ) = ZERO
+               V( I, J ) = ZERO
+   40       CONTINUE
+            U( J, J ) = ONE
+            V( J, J ) = ONE
+   50    CONTINUE
+         D( 1 ) = ONE / RZERO
+         E( NMAX ) = ZERO
+         SRNAMT = 'SBDSQR'
+         INFOT = 0
+         LERR = .FALSE.
+         CALL SBDSQR( 'U', NMAX, NMAX, NMAX, 0, D, E, V, NMAX, U,
+     $                NMAX, A, NMAX, W, INFO )
+         IF( LERR ) THEN
+            WRITE( NOUT, FMT = 9996 )'SBDSQR'
+            OK = .FALSE.
+         END IF
+         NT = NT + 1
+*
 *        SBDSDC
 *
          SRNAMT = 'SBDSDC'
@@ -447,6 +475,8 @@
      $      'exits ***' )
  9997 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with a NaN',
      $      ' ***' )
+ 9996 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with an ',
+     $      'infinity ***' )
 *
       RETURN
 *
