@@ -192,6 +192,8 @@
 *>          > 0:  the algorithm for computing the SVD failed to converge;
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.
+*>                INFO = 1 is also returned if A contains a NaN or an
+*>                infinity.
 *> \endverbatim
 *
 *  Authors:

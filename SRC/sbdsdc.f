@@ -172,6 +172,8 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  The algorithm failed to compute a singular value.
 *>                The update process of divide and conquer failed.
+*>          = 1:  also if D or E contains a NaN and the divide and
+*>                conquer path is taken (COMPQ = 'I' or 'P', N > SMLSIZ).
 *> \endverbatim
 *
 *  Authors:
@@ -227,10 +229,10 @@
       REAL               CS, EPS, ORGNRM, P, R, SN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            SISNAN, LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, SLANST
-      EXTERNAL           SLAMCH, SLANST, ILAENV, LSAME
+      EXTERNAL           SLAMCH, SLANST, ILAENV, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLARTG, SLASCL, SLASD0, SLASDA,
@@ -370,8 +372,12 @@
 *     Scale.
 *
       ORGNRM = SLANST( 'M', N, D, E )
-      IF( ORGNRM.EQ.ZERO )
-     $   RETURN
+      IF( ORGNRM.EQ.ZERO ) THEN
+         RETURN
+      ELSE IF( SISNAN( ORGNRM ) ) THEN
+         INFO = 1
+         RETURN
+      END IF
       CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
       CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
