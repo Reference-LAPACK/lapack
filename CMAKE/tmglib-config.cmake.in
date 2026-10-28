@@ -2,25 +2,39 @@
 
 include(CMakeFindDependencyMacro)
 if(NOT @BUILD_SHARED_LIBS@)
-  block(PROPAGATE ${CMAKE_FIND_PACKAGE_NAME}_FOUND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
-    set(BLA_SIZEOF_INTEGER @lapack_integer_size@)
-    if(@lapack_external_lapack@)
-      find_dependency(LAPACK MODULE)
-    else()
-      find_dependency(@LAPACKLIB@ @LAPACK_VERSION@ EXACT CONFIG HINTS
-        "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/../@LAPACKLIB@")
-    endif()
-    if(@lapack_external_blas@)
-      find_dependency(BLAS MODULE)
-    else()
-      find_dependency(@BLASLIB@ @LAPACK_VERSION@ EXACT CONFIG HINTS
-        "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/../@BLASLIB@")
-    endif()
+  block(PROPAGATE ${CMAKE_FIND_PACKAGE_NAME}_FOUND
+        ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
+  set(BLA_SIZEOF_INTEGER @lapack_integer_size@)
+  if(@lapack_external_lapack@)
+    find_dependency(LAPACK MODULE)
+  else()
+    find_dependency(
+      @LAPACKLIB@
+      @LAPACK_VERSION@
+      EXACT
+      CONFIG
+      HINTS
+      "${CMAKE_CURRENT_LIST_DIR}"
+      "${CMAKE_CURRENT_LIST_DIR}/../@LAPACKLIB@")
+  endif()
+  if(@lapack_external_blas@)
+    find_dependency(BLAS MODULE)
+  else()
+    find_dependency(
+      @BLASLIB@
+      @LAPACK_VERSION@
+      EXACT
+      CONFIG
+      HINTS
+      "${CMAKE_CURRENT_LIST_DIR}"
+      "${CMAKE_CURRENT_LIST_DIR}/../@BLASLIB@")
+  endif()
   endblock()
 endif()
 if(NOT TARGET LAPACK::@TMGLIB@)
   include("${CMAKE_CURRENT_LIST_DIR}/@TMGLIB@-targets.cmake")
 endif()
 set(TMGLIB_LIBRARIES LAPACK::@TMGLIB@)
-get_target_property(TMGLIB_INCLUDE_DIRS LAPACK::@TMGLIB@ INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(TMGLIB_INCLUDE_DIRS LAPACK::@TMGLIB@
+                    INTERFACE_INCLUDE_DIRECTORIES)
 check_required_components(${CMAKE_FIND_PACKAGE_NAME})

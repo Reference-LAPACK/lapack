@@ -2,18 +2,31 @@
 
 include(CMakeFindDependencyMacro)
 if(NOT @BUILD_SHARED_LIBS@)
-  block(PROPAGATE ${CMAKE_FIND_PACKAGE_NAME}_FOUND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
-    set(BLA_SIZEOF_INTEGER @lapack_integer_size@)
-    if(@lapack_external_lapack@)
-      find_dependency(LAPACK MODULE)
-    else()
-      find_dependency(@LAPACKLIB@ @LAPACK_VERSION@ EXACT CONFIG HINTS
-        "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/../@LAPACKLIB@")
-    endif()
-    if(@LAPACKE_WITH_TMG@)
-      find_dependency(@TMGLIB@ @LAPACK_VERSION@ EXACT CONFIG HINTS
-        "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/../@TMGLIB@")
-    endif()
+  block(PROPAGATE ${CMAKE_FIND_PACKAGE_NAME}_FOUND
+        ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
+  set(BLA_SIZEOF_INTEGER @lapack_integer_size@)
+  if(@lapack_external_lapack@)
+    find_dependency(LAPACK MODULE)
+  else()
+    find_dependency(
+      @LAPACKLIB@
+      @LAPACK_VERSION@
+      EXACT
+      CONFIG
+      HINTS
+      "${CMAKE_CURRENT_LIST_DIR}"
+      "${CMAKE_CURRENT_LIST_DIR}/../@LAPACKLIB@")
+  endif()
+  if(@LAPACKE_WITH_TMG@)
+    find_dependency(
+      @TMGLIB@
+      @LAPACK_VERSION@
+      EXACT
+      CONFIG
+      HINTS
+      "${CMAKE_CURRENT_LIST_DIR}"
+      "${CMAKE_CURRENT_LIST_DIR}/../@TMGLIB@")
+  endif()
   endblock()
 endif()
 if(NOT TARGET LAPACKE::@LAPACKELIB@)
@@ -23,6 +36,7 @@ if(NOT TARGET @LAPACKELIB@)
   add_library(@LAPACKELIB@ ALIAS LAPACKE::@LAPACKELIB@)
 endif()
 set(LAPACKE_LIBRARIES @LAPACKELIB@)
-get_target_property(LAPACKE_INCLUDE_DIRS LAPACKE::@LAPACKELIB@ INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(LAPACKE_INCLUDE_DIRS LAPACKE::@LAPACKELIB@
+                    INTERFACE_INCLUDE_DIRECTORIES)
 set(LAPACKE_Fortran_COMPILER_ID "@CMAKE_Fortran_COMPILER_ID@")
 check_required_components(${CMAKE_FIND_PACKAGE_NAME})

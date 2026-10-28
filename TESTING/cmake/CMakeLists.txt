@@ -4,7 +4,9 @@ include(CTest)
 
 # This intentionally enables only C: installed static targets must supply the
 # Fortran runtime, headers and integer ABI without help from the consumer.
-set(LAPACK_CONSUMER_SUFFIX "" CACHE STRING "64 for unsuffixed ILP64 libraries")
+set(LAPACK_CONSUMER_SUFFIX
+    ""
+    CACHE STRING "64 for unsuffixed ILP64 libraries")
 option(LAPACK_CONSUMER_DEFAULT_API "Exercise the unsuffixed interface" ON)
 option(LAPACK_CONSUMER_EXTENDED "Exercise the suffixed _64 interface" OFF)
 option(LAPACK_CONSUMER_INTERFACES "Exercise CBLAS and LAPACKE too" ON)
@@ -25,8 +27,9 @@ if(LAPACK_CONSUMER_INTERFACES)
   find_package(lapacke${LAPACK_CONSUMER_SUFFIX} CONFIG REQUIRED)
   add_executable(interfaces consumer.c)
   target_compile_definitions(interfaces PRIVATE CHECK_INTERFACES)
-  target_link_libraries(interfaces PRIVATE CBLAS::cblas${LAPACK_CONSUMER_SUFFIX}
-    LAPACKE::lapacke${LAPACK_CONSUMER_SUFFIX})
+  target_link_libraries(
+    interfaces PRIVATE CBLAS::cblas${LAPACK_CONSUMER_SUFFIX}
+                       LAPACKE::lapacke${LAPACK_CONSUMER_SUFFIX})
   if(NOT LAPACK_CONSUMER_DEFAULT_API)
     target_compile_definitions(interfaces PRIVATE CHECK_ONLY_EXTENDED)
     set(LAPACK_CONSUMER_EXTENDED ON)
@@ -44,6 +47,7 @@ endif()
 foreach(target core interfaces)
   if(TARGET ${target})
     target_compile_features(${target} PRIVATE c_std_99)
-    target_compile_definitions(${target} PRIVATE CHECK_INTEGER_BYTES=${integer_bytes})
+    target_compile_definitions(${target}
+                               PRIVATE CHECK_INTEGER_BYTES=${integer_bytes})
   endif()
 endforeach()
