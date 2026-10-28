@@ -1,0 +1,9 @@
+set(config "@cxx_stage@/@CMAKE_INSTALL_LIBDIR@/@package@/@package@Config.cmake")
+file(READ "${config}" content)
+if(NOT content MATCHES "# Netlib dependency")
+  set(dependencies [==[# Netlib dependency
+include(CMakeFindDependencyMacro)
+@cxx_find_dependency@
+]==])
+  file(WRITE "${config}" "${dependencies}${content}")
+endif()
