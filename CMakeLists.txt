@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.26...4.0)
 
 project(LAPACK C)
 
@@ -398,12 +398,7 @@ if(NOT LATESTLAPACK_FOUND)
 
   # Check second function
   include(CheckTimeFunction)
-  set(TIME_FUNC NONE)
-  CHECK_TIME_FUNCTION(NONE TIME_FUNC)
-  CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
-  CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
-  CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
-  CHECK_TIME_FUNCTION(INT_ETIME TIME_FUNC)
+  lapack_check_time_function(TIME_FUNC)
 
   # Set second function
   message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
