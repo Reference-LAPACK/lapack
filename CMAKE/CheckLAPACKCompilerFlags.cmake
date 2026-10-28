@@ -10,7 +10,8 @@
 # Copyright 2011
 #=============================================================================
 
-macro(CheckLAPACKCompilerFlags)
+function(lapack_compiler_flags target)
+  set(FORTRAN_STRLEN_TYPE size_t)
 
   # FORTRAN ILP default
   set(FOPT_ILP64)
@@ -41,19 +42,19 @@ macro(CheckLAPACKCompilerFlags)
       set(FOPT_ILP64 -fdefault-integer-8)
     endif()
   endif()
-  if(FORTRAN_ILP)
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:${FOPT_ILP64}>")
+  if(BUILD_INDEX64)
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:${FOPT_ILP64}>")
   endif()
 
   # GNU Fortran
   if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     set(FPE_EXIT_FLAG "-ffpe-trap=[izoupd]")
 
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-frecursive>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-frecursive>")
 
     if(CMAKE_Fortran_COMPILER_VERSION VERSION_LESS "8")
-      add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
-      set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
+      target_compile_definitions(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+      set(FORTRAN_STRLEN_TYPE "int")
     endif()
 
     # Disabling loop vectorization for GNU Fortran versions affected by
@@ -68,7 +69,7 @@ macro(CheckLAPACKCompilerFlags)
         "Disabling loop vectorization for GNU Fortran (14.0-14.4, 15.0-15.2) on ARM "
         "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122408). "
         "For full performance, consider changing to a different compiler or compiler version.")
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-loop-vectorize>")
     endif()
 
     # Disabling SLP vectorization for GNU Fortran versions affected by
@@ -79,31 +80,31 @@ macro(CheckLAPACKCompilerFlags)
         "Disabling SLP vectorization for GNU Fortran (15.0-15.2) "
         "due to a compiler bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124802). "
         "For full performance, consider changing to a different compiler or compiler version.")
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-slp-vectorize>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-fno-tree-slp-vectorize>")
     endif()
 
   # Intel Fortran
   elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
     set(FPE_EXIT_FLAG "[-/]fpe(-all=|)0")
 
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
     if(WIN32)
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/fp:strict>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:/fp:strict>")
     else()
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-fp-model=strict>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-fp-model=strict>")
     endif()
 
     # disable: The Intel(R) Fortran Compiler Classic (ifort) is deprecated
     if(CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
       if(WIN32)
-        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
-        add_link_options("$<$<LINK_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
+        target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
+        target_link_options(${target} INTERFACE "$<$<LINK_LANGUAGE:Fortran>:/Qdiag-disable:10448>")
 
         # Bad preprocessor line bogus warning
-        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:5117>")
+        target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:/Qdiag-disable:5117>")
       else()
-        add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-diag-disable:10448>")
-        add_link_options("$<$<LINK_LANGUAGE:Fortran>:-diag-disable:10448>")
+        target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-diag-disable:10448>")
+        target_link_options(${target} INTERFACE "$<$<LINK_LANGUAGE:Fortran>:-diag-disable:10448>")
       endif()
     endif()
 
@@ -113,13 +114,17 @@ macro(CheckLAPACKCompilerFlags)
     set(FPE_DISABLE_FLAG "-ftrap=(%|)none")
 
     message(STATUS "Disabling FPE trap handlers with -ftrap=%none")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-ftrap=%none>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-ftrap=%none>")
 
     if(UNIX)
       # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
       # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
-      string(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES
-             "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
+      list(REMOVE_ITEM CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES mtsk)
+      # Compiler metadata is needed by CMake's mixed-language linker as well
+      # as the explicit runtime requirements below. Keep this in LAPACK's
+      # directory scope when embedded in another project.
+      set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES
+        "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}" PARENT_SCOPE)
     endif()
 
   # IBM XL Fortran
@@ -127,10 +132,10 @@ macro(CheckLAPACKCompilerFlags)
          (CMAKE_Fortran_COMPILER_ID STREQUAL "XL"))           # CMake 2.8
     set(FPE_EXIT_FLAG "-qflttrap=[a-zA-Z:]:enable")
 
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-qrecur>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-qrecur>")
     if(UNIX)
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-qnosave>")
-      add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-qstrict>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-qnosave>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-qstrict>")
     endif()
 
   # HP Fortran
@@ -138,97 +143,71 @@ macro(CheckLAPACKCompilerFlags)
     set(FPE_EXIT_FLAG "\\+fp_exception")
 
     message(STATUS "Enabling strict float conversion with +fltconst_strict")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:+fltconst_strict>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:+fltconst_strict>")
 
     # Most versions of cmake don't have good default options for the HP compiler
-    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:DEBUG>>:-g>")
-    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:MINSIZEREL>>:+Osize>")
-    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:RELEASE>>:+O2>")
-    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:RELWITHDEBINFO>>:+O2 -g>")
+    target_compile_options(${target} INTERFACE "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:DEBUG>>:-g>")
+    target_compile_options(${target} INTERFACE "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:MINSIZEREL>>:+Osize>")
+    target_compile_options(${target} INTERFACE "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:RELEASE>>:+O2>")
+    target_compile_options(${target} INTERFACE "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:RELWITHDEBINFO>>:+O2 -g>")
 
   # NAG Fortran
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
     set(FPE_EXIT_FLAG "[-/]ieee=(stop|nonstd)")
 
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-ieee=full>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-dcfuns>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
-    add_link_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-ieee=full>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-dcfuns>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
+    target_link_options(${target} INTERFACE "$<$<LINK_LANGUAGE:Fortran>:-thread_safe>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
 
     # By default NAG Fortran uses 32bit integers as hidden STRLEN arguments
     if(UNIX)
       if(APPLE)
-        add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
-        set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
+        target_compile_definitions(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+        set(FORTRAN_STRLEN_TYPE "int")
       else()
-        # Get all flags added via `add_compile_options(...)`
-        get_directory_property(COMP_OPTIONS COMPILE_OPTIONS)
+        # Get all flags added via `target_compile_options(${target} INTERFACE ...)`
+        get_target_property(COMP_OPTIONS ${target} INTERFACE_COMPILE_OPTIONS)
 
         if(NOT("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "-abi=64c"))
-          add_compile_definitions("$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
-          set(FORTRAN_STRLEN_TYPE "int" CACHE INTERNAL "" FORCE)
+          target_compile_definitions(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:FORTRAN_STRLEN=int>")
+          set(FORTRAN_STRLEN_TYPE "int")
         endif()
       endif()
     endif()
 
     # Disable warnings
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-w=obs>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-w=x77>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-w=ques>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-w=unused>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-w=obs>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-w=x77>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-w=ques>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-w=unused>")
 
     # Suppress compiler banner and summary
     include(CheckFortranCompilerFlag)
     check_fortran_compiler_flag("-quiet" _quiet)
-    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<BOOL:${_quiet}>>:-quiet>")
-    add_link_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<BOOL:${_quiet}>>:-quiet>")
+    target_compile_options(${target} INTERFACE "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<BOOL:${_quiet}>>:-quiet>")
+    target_link_options(${target} INTERFACE "$<$<AND:$<LINK_LANGUAGE:Fortran>,$<BOOL:${_quiet}>>:-quiet>")
 
   # NVIDIA HPC SDK
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
     set(FPE_EXIT_FLAG "-Ktrap=")
     set(FPE_DISABLE_FLAG "-Ktrap=none")
 
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-Kieee>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-Kieee>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
 
   # Flang Fortran
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Flang")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
+    target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-Mrecursive>")
 
   # LLVM Flang
   elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
     # Nothing to do here for now, but this is a placeholder for future
     # LLVM Flang specific flags
 
-  # Compaq Fortran
-  elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq")
-    if(WIN32)
-      if(CMAKE_GENERATOR STREQUAL "NMake Makefiles")
-        get_filename_component(CMAKE_Fortran_COMPILER_CMDNAM ${CMAKE_Fortran_COMPILER} NAME_WE)
-        message(STATUS "Using Compaq Fortran compiler with command name ${CMAKE_Fortran_COMPILER_CMDNAM}")
-        set(cmd ${CMAKE_Fortran_COMPILER_CMDNAM})
-        string(TOLOWER "${cmd}" cmdlc)
-        if(cmdlc STREQUAL "df")
-          message(STATUS "Assume the Compaq Visual Fortran Compiler is being used")
-          set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 1)
-          set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_INCLUDES 1)
-          #This is a workaround that is needed to avoid forward-slashes in the
-          #filenames listed in response files from incorrectly being interpreted as
-          #introducing compiler command options
-          if(${BUILD_SHARED_LIBS})
-            message(FATAL_ERROR "Making of shared libraries with CVF has not been tested.")
-          endif()
-          set(str "NMake version 9 or later should be used. NMake version 6.0 which is\n")
-          set(str "${str}   included with the CVF distribution fails to build Lapack because\n")
-          set(str "${str}   the number of source files exceeds the limit for NMake v6.0\n")
-          message(STATUS ${str})
-          set(CMAKE_Fortran_LINK_EXECUTABLE "LINK /out:<TARGET> <LINK_FLAGS> <LINK_LIBRARIES> <OBJECTS>")
-        endif()
-      endif()
-    endif()
 
-  else()
+  elseif(CMAKE_Fortran_COMPILER_LOADED)
     message(WARNING "Fortran local arrays should be allocated on the stack."
       " Please use a compiler which guarantees that feature."
       " See https://github.com/Reference-LAPACK/lapack/pull/188 and references therein.")
@@ -236,34 +215,30 @@ macro(CheckLAPACKCompilerFlags)
 
   if(CMAKE_C_COMPILER_ID MATCHES "Intel")
     if(WIN32)
-      add_compile_options("$<$<COMPILE_LANGUAGE:C>:/fp:strict>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:/fp:strict>")
     else()
-      add_compile_options("$<$<COMPILE_LANGUAGE:C>:-fp-model=strict>")
+      target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:-fp-model=strict>")
     endif()
 
     # disable: The Intel(R) C++ Compiler Classic (ICC) is deprecated
     if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
       if(WIN32)
-        add_compile_options("$<$<COMPILE_LANGUAGE:C>:/Qdiag-disable:10441>")
-        add_link_options("$<$<LINK_LANGUAGE:C>:/Qdiag-disable:10441>")
+        target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:/Qdiag-disable:10441>")
+        target_link_options(${target} INTERFACE "$<$<LINK_LANGUAGE:C>:/Qdiag-disable:10441>")
       else()
-        add_compile_options("$<$<COMPILE_LANGUAGE:C>:-diag-disable:10441>")
-        add_link_options("$<$<LINK_LANGUAGE:C>:-diag-disable:10441>")
+        target_compile_options(${target} INTERFACE "$<$<COMPILE_LANGUAGE:C>:-diag-disable:10441>")
+        target_link_options(${target} INTERFACE "$<$<LINK_LANGUAGE:C>:-diag-disable:10441>")
       endif()
     endif()
   endif()
 
-  if("${CMAKE_Fortran_FLAGS_RELEASE}" MATCHES "O[3-9]")
-    message(STATUS "Reducing RELEASE optimization level to O2")
-    string(REGEX REPLACE "O[3-9]" "O2" CMAKE_Fortran_FLAGS_RELEASE
-           "${CMAKE_Fortran_FLAGS_RELEASE}")
+  if(CMAKE_Fortran_FLAGS_RELEASE MATCHES "-O[3-9]|-Ofast")
+    target_compile_options(${target} INTERFACE
+      "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:Release>>:-O2>")
   endif()
 
-  # Get all flags added via `add_compile_options(...)`
-  get_directory_property(COMP_OPTIONS COMPILE_OPTIONS)
-
-  if(("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "${FPE_EXIT_FLAG}") AND NOT
-     ("${CMAKE_Fortran_FLAGS};${COMP_OPTIONS}" MATCHES "${FPE_DISABLE_FLAG}"))
+  if(FPE_EXIT_FLAG AND "${CMAKE_Fortran_FLAGS};${CMAKE_Fortran_FLAGS_DEBUG};${CMAKE_Fortran_FLAGS_RELEASE};${CMAKE_Fortran_FLAGS_RELWITHDEBINFO};${CMAKE_Fortran_FLAGS_MINSIZEREL}" MATCHES "${FPE_EXIT_FLAG}"
+      AND (NOT FPE_DISABLE_FLAG OR NOT CMAKE_Fortran_FLAGS MATCHES "${FPE_DISABLE_FLAG}"))
     message( FATAL_ERROR "Floating Point Exception (FPE) trap handlers are"
       " currently explicitly enabled in the compiler flags.  LAPACK is designed"
       " to check for and handle these cases internally and enabling these traps"
@@ -271,4 +246,23 @@ macro(CheckLAPACKCompilerFlags)
       " point exception trapping disabled.")
   endif()
 
-endmacro()
+  # A consumer need not enable Fortran or use the same compiler installation.
+  # Resolve only the runtime libraries missing from the C toolchain's link line.
+  set(runtime_libraries ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
+  list(REMOVE_ITEM runtime_libraries ${CMAKE_C_IMPLICIT_LINK_LIBRARIES})
+  list(REMOVE_DUPLICATES runtime_libraries)
+  set(lapack_fortran_runtime)
+  foreach(runtime IN LISTS runtime_libraries)
+    unset(runtime_path)
+    find_library(runtime_path NAMES ${runtime}
+      HINTS ${CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES} NO_CACHE)
+    if(runtime_path)
+      list(APPEND lapack_fortran_runtime "${runtime_path}")
+    else()
+      list(APPEND lapack_fortran_runtime "${runtime}")
+    endif()
+  endforeach()
+  set(lapack_fortran_runtime "${lapack_fortran_runtime}" PARENT_SCOPE)
+  set(FOPT_ILP64 "${FOPT_ILP64}" PARENT_SCOPE)
+  set(FORTRAN_STRLEN_TYPE "${FORTRAN_STRLEN_TYPE}" PARENT_SCOPE)
+endfunction()

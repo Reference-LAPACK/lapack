@@ -533,59 +533,39 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-# Use special target for MOD files to guarantee they are built before
-# any other files that depend on them
-add_library(const_mod_file OBJECT ${CONSTMOD})
-set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
-lapack_add_coverage(const_mod_file)
+# Module objects are private implementation details shared by both APIs.
+add_library(lapack-constants OBJECT ${CONSTMOD})
+lapack_configure_target(lapack-constants)
+set_target_properties(lapack-constants PROPERTIES Fortran_PREPROCESS ON
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
+target_include_directories(lapack-constants INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/modules")
+add_library(lapack-modules OBJECT ${NANMOD})
+lapack_configure_target(lapack-modules)
+target_link_libraries(lapack-modules PRIVATE lapack-constants)
+set_target_properties(lapack-modules PROPERTIES Fortran_PREPROCESS ON
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
+target_include_directories(lapack-modules INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/modules")
 
-add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
-set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
-lapack_add_coverage(mod_files)
-
+target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:lapack-constants> $<TARGET_OBJECTS:lapack-modules>)
 if(BUILD_DEFAULT_API)
   add_library(${LAPACKLIB}_obj OBJECT ${SOURCES} ${XSOURCES})
-  target_link_libraries(${LAPACKLIB}_obj PUBLIC mod_files)
+  lapack_configure_target(${LAPACKLIB}_obj)
   set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
-  lapack_add_coverage(${LAPACKLIB}_obj)
+  target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:${LAPACKLIB}_obj>)
 endif()
-
 if(BUILD_INDEX64_EXT_API)
-  include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
-
   add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-  target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)
+  lapack_configure_target(${LAPACKLIB}_64_obj)
   target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
   set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
+  target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>)
 endif()
-
-add_library(${LAPACKLIB}
-  $<TARGET_OBJECTS:mod_files>
-  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
-
-# For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
-# that CMake adds (tested CMake 4.2).
+foreach(variant ${LAPACKLIB}_obj ${LAPACKLIB}_64_obj)
+  if(TARGET ${variant})
+    target_link_libraries(${variant} PRIVATE lapack-modules)
+  endif()
+endforeach()
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
-  set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+  set_target_properties(${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
 endif()
-set_target_properties(
-  ${LAPACKLIB} PROPERTIES
-  VERSION ${LAPACK_VERSION}
-  SOVERSION ${LAPACK_MAJOR_VERSION}
-  )
-
-if(TEST_FORTRAN_COMPILER)
-  add_dependencies(${LAPACKLIB}
-    run_test_zcomplexabs run_test_zcomplexdiv
-    run_test_zcomplexmult run_test_zminMax)
-endif()
-
-if(USE_XBLAS)
-  target_link_libraries(${LAPACKLIB} PRIVATE ${XBLAS_LIBRARY})
-endif()
-target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
-
-lapack_add_coverage(${LAPACKLIB})
-lapack_install_library(${LAPACKLIB})

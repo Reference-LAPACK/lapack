@@ -18,12 +18,7 @@ if(CBLAS)
 endif()
 
 # Create a header file for CBLAS routine mangling (cblas_mangling.h)
-include(CheckLanguage)
-check_language(Fortran)
-check_language(C)
-if(CMAKE_Fortran_COMPILER AND CMAKE_C_COMPILER)
-  enable_language(Fortran)
-  enable_language(C)
+if(CMAKE_Fortran_COMPILER_LOADED)
   include(FortranCInterface)
   ## Ensure that the fortran compiler and c compiler specified are compatible
   FortranCInterface_VERIFY()
@@ -31,11 +26,8 @@ if(CMAKE_Fortran_COMPILER AND CMAKE_C_COMPILER)
                            MACRO_NAMESPACE "F77_"
                            SYMBOL_NAMESPACE "F77_")
 
-  # Check for any necessary platform specific compiler flags
-  include(CheckLAPACKCompilerFlags)
-  CheckLAPACKCompilerFlags()
 endif()
-if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
+if(NOT FortranCInterface_GLOBAL_FOUND)
   message(WARNING "Reverting to pre-defined include/cblas_mangling.h")
     configure_file(
       cblas_mangling_with_flags.h.in

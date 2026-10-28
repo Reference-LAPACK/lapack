@@ -1,7 +1,8 @@
 function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
+  lapack_configure_target(${name})
   target_link_libraries(${name} PRIVATE ${BLASLIB})
-  lapack_add_coverage(${name})
+
 
   # A driver that reads an input file takes the name of its summary file from
   # it and opens that itself on unit 6, so redirecting stdout there as well

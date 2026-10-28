@@ -47,6 +47,8 @@ file(MAKE_DIRECTORY ${_lapacke_test_out_dir})
 
 foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
   string(TOUPPER "${_prec}" _prec_upper)
+  get_property(LAPACKE_TEST_LIN_${_prec_upper}_SOURCES GLOBAL
+    PROPERTY LAPACKE_TEST_LIN_${_prec_upper}_SOURCES)
   if(NOT LAPACKE_TEST_LIN_${_prec_upper}_SOURCES)
     continue()
   endif()
@@ -70,6 +72,7 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
 
   if(BUILD_DEFAULT_API)
     add_library(xlintst${_prec}_lapacke_core OBJECT ${_lin_sources_test})
+    lapack_configure_target(xlintst${_prec}_lapacke_core)
 
     foreach(_layer work high)
       foreach(_layout cm rm)
@@ -77,10 +80,11 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
 
         add_executable(${_driver}
           $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core>)
+        lapack_configure_target(${_driver})
         set_target_properties(${_driver} PROPERTIES LINKER_LANGUAGE Fortran)
         target_link_libraries(${_driver}
-          lapacke_test_wrappers_${_layer}_${_layout}
-          ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+          PRIVATE lapacke_test_wrappers_${_layer}_${_layout}
+          LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
 
         set(_output "${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}.out")
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
@@ -106,6 +110,7 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
     lapack_nag_disable_constant_propagation(${_lin_sources_test_64})
 
     add_library(xlintst${_prec}_lapacke_core_64 OBJECT ${_lin_sources_test_64})
+    lapack_configure_target(xlintst${_prec}_lapacke_core_64)
     target_compile_options(xlintst${_prec}_lapacke_core_64
       PRIVATE ${FOPT_ILP64})
 
@@ -115,10 +120,11 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
 
         add_executable(${_driver}
           $<TARGET_OBJECTS:xlintst${_prec}_lapacke_core_64>)
+        lapack_configure_target(${_driver})
         set_target_properties(${_driver} PROPERTIES LINKER_LANGUAGE Fortran)
         target_link_libraries(${_driver}
-          lapacke_test_wrappers_${_layer}_${_layout}_64
-          ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+          PRIVATE lapacke_test_wrappers_${_layer}_${_layout}_64
+          LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
 
         set(_output "${_lapacke_test_out_dir}/${_prec}test_${_layer}_${_layout}_64.out")
         if(_layer STREQUAL "work" AND _layout STREQUAL "cm")
