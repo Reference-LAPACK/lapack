@@ -1449,11 +1449,13 @@
 *     Compare NRM2 with a reference computation using combinations
 *     of the following values:
 *
-*     0, very small, small, ulp, 1, 1/ulp, big, very big, infinity, NaN
+*     0, very small, small, ulp, 1, 1/ulp, big, very big, infinity,
+*     NaN, subnormal
 *
 *     one of these values is used to initialize x(1) and x(2:N) is
 *     filled with random values from [-1,1] scaled by another of
-*     these values.
+*     these values.  A fixed subnormal tail also tests absolute
+*     rounding error independently of the random values.
 *
 *     This routine is adapted from the test suite provided by
 *     Anderson E. (2017)
@@ -1468,8 +1470,8 @@
 *
 *  =====================================================================
 *     .. Parameters ..
-      INTEGER           NMAX, NOUT, NV
-      PARAMETER         (NMAX=20, NOUT=6, NV=12)
+      INTEGER           IFIXED, NMAX, NOUT, NV
+      PARAMETER         (IFIXED=13, NMAX=20, NOUT=6, NV=13)
       REAL              HALF, ONE, TWO, ZERO
       PARAMETER         (HALF=0.5E+0, ONE=1.0E+0, TWO= 2.0E+0,
      &                  ZERO=0.0E+0)
@@ -1515,6 +1517,11 @@
 *     needs.  A wider pair leaves them too far apart for that.
       VALUES(11) = SQRT(SAFMIN)
       VALUES(12) = SQRT(SAFMIN)*(ONE-ULP)
+*     A fixed subnormal for the unrandomized case below: deep enough
+*     that one subnormal ulp, SAFMIN*ULP, is a relative error above
+*     THRESH*N*ULP, and shallow enough that SQRT(N)*x and NRM2(N,x,0)
+*     still round differently.  Few values of 2*SAFMIN/k meet both.
+      VALUES(IFIXED) = TWO*SAFMIN / 6654.0E0
       ROGUE = -1234.5678E+0
       FIRST = .TRUE.
 *
@@ -1561,14 +1568,22 @@
                V1 = (V1*HALF) / SQRT(REAL(N))
             END IF
             DO I = 2, N
-               Z(I) = V1*WORK(I)
+               IF (IW.EQ.IFIXED) THEN
+                  Z(I) = V1
+               ELSE
+                  Z(I) = V1*WORK(I)
+               END IF
             END DO
 *
 *           Compute the expected value of the 2-norm
 *
             Y1 = ABS(V0)
             IF (N.GT.1) THEN
-               Y2 = ABS(V1)*SQRT(WORKSSQ)
+               IF (IW.EQ.IFIXED) THEN
+                  Y2 = ABS(V1)*SQRT(REAL(N-1))
+               ELSE
+                  Y2 = ABS(V1)*SQRT(WORKSSQ)
+               END IF
             ELSE
                Y2 = ZERO
             END IF
@@ -1625,10 +1640,10 @@
                END IF
             ELSE IF (SNRM == ZNRM) THEN
                TRAT = ZERO
-            ELSE IF (ZNRM == ZERO) THEN
-               TRAT = SNRM / ULP
             ELSE
-               TRAT = (ABS(SNRM-ZNRM) / ZNRM) / (REAL(N)*ULP)
+*              Subnormal results have absolute error O(SAFMIN*ULP).
+               TRAT = (ABS(SNRM-ZNRM) / MAX(ZNRM,SAFMIN)) /
+     &                (REAL(N)*ULP)
             END IF
             NTESTS = NTESTS + 1
             IF ((TRAT.NE.TRAT).OR.(TRAT.GE.THRESH)) THEN
