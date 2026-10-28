@@ -45,7 +45,7 @@ set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
 
-set(SCLAUX
+set(SCLAUX slarmm.f
    sbdsvdx.f sbdsvdmr3.f sbdsvdmr3_work.f sbdtgk.f slar1v_tgk.f slarrf_tgk.f slarrv_tgk.f slarrb_tgk.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -65,7 +65,8 @@ set(SCLAUX
    slartgp.f slartgs.f ../INSTALL/sroundup_lwork.f
    ${SECOND_SRC})
 
-set(DZLAUX
+set(DZLAUX dlarmm.f dbdsvdmr3.f dbdsvdmr3_work.f dbdtgk.f
+   dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f
    dbdsdc.f dbdsvdx.f
    dbdsqr.f ddisna.f
    disnan.f
@@ -113,7 +114,7 @@ set(SLASRC
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarf1f.f slarf1l.f slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarft_lvl2.f slarfx.f slarfy.f
-   slargv.f slarmm.f slarrv.f slartv.f
+   slargv.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrs3.f slatrz.f
@@ -292,7 +293,7 @@ set(ZCLASRC
     sisnan.f slaisnan.f)
 
 set(DLASRC
-   dbdsvdx.f dbdsvdmr3.f dbdsvdmr3_work.f dbdtgk.f dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
+   dbdsvdx.f        dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
    dgbsvx.f dgbtf2.f dgbtrf.f dgbtrs.f dgebak.f dgebal.f dgebd2.f
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
@@ -316,7 +317,7 @@ set(DLASRC
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarft_lvl2.f dlarfx.f dlarfy.f dlarf1f.f dlarf1l.f
-   dlargv.f dlarmm.f dlarrv.f dlartv.f
+   dlargv.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrs3.f dlatrz.f dlauu2.f
