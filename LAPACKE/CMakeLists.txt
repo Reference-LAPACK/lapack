@@ -18,10 +18,3 @@ if(BUILD_TESTING)
   endif()
   add_subdirectory(testing)
 endif()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKELIB}.pc @ONLY)
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKELIB}.pc
-  DESTINATION ${PKG_CONFIG_DIR}
-  COMPONENT Development
-  )

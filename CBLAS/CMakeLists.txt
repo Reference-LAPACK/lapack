@@ -12,11 +12,3 @@ if(BUILD_TESTING)
     add_subdirectory(examples)
   endif()
 endif()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc @ONLY)
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc
-  DESTINATION ${PKG_CONFIG_DIR}
-  COMPONENT Development
-  )
