@@ -1,18 +1,10 @@
 cmake_minimum_required(VERSION 3.26...4.0)
+project(LAPACK VERSION 3.12.1 LANGUAGES C)
 
-project(LAPACK C)
-
-set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 12)
-set(LAPACK_PATCH_VERSION 1)
-set(
-  LAPACK_VERSION
-  ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
-  )
-
-set(CMAKE_C_STANDARD 99)
-
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMAKE")
+include(GNUInstallDirs)
 include(CMakeDependentOption)
+include(CMakePackageConfigHelpers)
 
 # Build options. Keep the established cache names together here.
 string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type)
@@ -88,378 +80,250 @@ if(NOT DEFINED LAPACK_SKIP_ERROR_EXIT_TESTS)
   endif()
 endif()
 
-# Allow setting a prefix for the library names
-set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
-set(CMAKE_SHARED_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
-
-# Add the CMake directory for custom CMake modules
-set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
-
-# Export all symbols on Windows when building shared libraries
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-
-# Enable position independent code for all targets by default
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-
-# Set a default build type if none was specified
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-  # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+# Build layout and integer ABI.
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
+  message(FATAL_ERROR "Use an out-of-source build: cmake -S . -B build")
 endif()
-
-# Coverage
-set(_is_coverage_build 0)
-set(_msg "Checking if build type is 'Coverage'")
-message(STATUS "${_msg}")
-if(NOT CMAKE_CONFIGURATION_TYPES)
-  string(TOLOWER ${CMAKE_BUILD_TYPE} _build_type_lc)
-  if(${_build_type_lc} STREQUAL "coverage")
-    set(_is_coverage_build 1)
-  endif()
+if(CMAKE_INSTALL_PREFIX STREQUAL CMAKE_CURRENT_BINARY_DIR)
+  message(FATAL_ERROR "The installation prefix must differ from the build directory.")
 endif()
-message(STATUS "${_msg}: ${_is_coverage_build}")
-
-if(_is_coverage_build)
-  message(STATUS "Adding coverage")
-  find_package(codecov)
+if(PROJECT_IS_TOP_LEVEL AND NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build configuration" FORCE)
 endif()
-
-# Instrument the library ${lib} for coverage.
-function(lapack_add_coverage lib)
-  if(NOT _is_coverage_build)
-    return()
-  endif()
-  if(NOT TARGET ${lib})
-    message(FATAL_ERROR "lapack_add_coverage: no such target '${lib}'")
-  endif()
-  add_coverage(${lib})
-  target_link_libraries(${lib} PRIVATE gcov)
-endfunction()
-
-
-if(LAPACK_MEMORY_CHECK)
-  find_program(MEMORYCHECK_COMMAND valgrind REQUIRED)
-  message(STATUS "Memory checking with valgrind: ${MEMORYCHECK_COMMAND}")
-  set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=definite,indirect --track-origins=yes --trace-children=yes")
-
-  # The Python summary is a test of its own, so the memory check would run the
-  # interpreter under valgrind and report on that rather than on LAPACK.
-  if(LAPACK_TESTING_USE_PYTHON)
-    message(STATUS "Memory checking: forcing LAPACK_TESTING_USE_PYTHON to OFF")
-    set(LAPACK_TESTING_USE_PYTHON OFF CACHE BOOL
-      "Use Python for testing. Disable it on memory checks." FORCE)
-  endif()
-endif()
-
-# By default test Fortran compiler complex abs and complex division
-if( TEST_FORTRAN_COMPILER )
-
-  add_executable( test_zcomplexabs ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
-  add_custom_target( run_test_zcomplexabs
-    COMMAND test_zcomplexabs 2> test_zcomplexabs.err
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
-    COMMENT "Running test_zcomplexabs in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexabs.err"
-    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
-
-  add_executable( test_zcomplexdiv ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
-  add_custom_target( run_test_zcomplexdiv
-    COMMAND test_zcomplexdiv 2> test_zcomplexdiv.err
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
-    COMMENT "Running test_zcomplexdiv in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexdiv.err"
-    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
-
-  add_executable( test_zcomplexmult ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
-  add_custom_target( run_test_zcomplexmult
-    COMMAND test_zcomplexmult 2> test_zcomplexmult.err
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
-    COMMENT "Running test_zcomplexmult in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zcomplexmult.err"
-    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
-
-  add_executable( test_zminMax ${LAPACK_SOURCE_DIR}/INSTALL/test_zminMax.f )
-  add_custom_target( run_test_zminMax
-    COMMAND test_zminMax 2> test_zminMax.err
-    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
-    COMMENT "Running test_zminMax in ${LAPACK_BINARY_DIR}/INSTALL with stderr: test_zminMax.err"
-    SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zminMax.f )
-
-endif()
-
-# By default static library
-message(STATUS "Build shared libraries: ${BUILD_SHARED_LIBS}")
-
-message(STATUS "Build default API: ${BUILD_DEFAULT_API}")
-
-# By default build index32 library
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${LAPACK_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${LAPACK_BINARY_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${LAPACK_BINARY_DIR}/lib")
+set(lapack_integer_size 4)
+set(lapack_library_suffix "")
 if(BUILD_INDEX64)
-  set(BLASLIB "blas64")
-  set(CBLASLIB "cblas64")
-  set(LAPACKLIB "lapack64")
-  set(LAPACKELIB "lapacke64")
-  set(TMGLIB "tmglib64")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWeirdNEC -DLAPACK_ILP64 -DHAVE_LAPACK_CONFIG_H")
-  set(FORTRAN_ILP TRUE)
-else()
-  set(BLASLIB "blas")
-  set(CBLASLIB "cblas")
-  set(LAPACKLIB "lapack")
-  set(LAPACKELIB "lapacke")
-  set(TMGLIB "tmglib")
+  set(lapack_integer_size 8)
+  set(lapack_library_suffix 64)
 endif()
-message(STATUS "Build default API as Index-64: ${BUILD_INDEX64}")
+set(BLASLIB blas${lapack_library_suffix})
+set(CBLASLIB cblas${lapack_library_suffix})
+set(LAPACKLIB lapack${lapack_library_suffix})
+set(LAPACKELIB lapacke${lapack_library_suffix})
+set(TMGLIB tmglib${lapack_library_suffix})
 
-# By default build extended _64 API
-message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
-
-if(BUILD_INDEX64_EXT_API AND BUILD_INDEX64)
-  message(WARNING
-    "Building Index-64 API redundantly as extended API and default API. "
-    "Consider disabling one of them (BUILD_INDEX64_EXT_API / BUILD_INDEX64).")
-endif()
-
-include(GNUInstallDirs)
-
-include(PreventInSourceBuilds)
-include(PreventInBuildInstalls)
-
-# Add option to enable flat namespace for symbol resolution on macOS
-if(APPLE)
-
-  if(USE_FLAT_NAMESPACE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flat_namespace")
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-flat_namespace")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-flat_namespace")
-  endif()
-endif()
-
-# --------------------------------------------------
-set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
-
-
-if(NOT "${LAPACK_BINARY_PATH_SUFFIX}" STREQUAL "" AND NOT "${LAPACK_BINARY_PATH_SUFFIX}" MATCHES "^/")
-endif()
-
-macro(lapack_install_library lib)
-  install(TARGETS ${lib}
-    EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT Development
-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}${LAPACK_BINARY_PATH_SUFFIX}" COMPONENT RuntimeLibraries
-  )
-endmacro()
-
-set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-
-# --------------------------------------------------
-# Testing
-include(CTest)
-include(LAPACKTestHelpers)
-message(STATUS "Build tests: ${BUILD_TESTING}")
-
-if(BUILD_TESTING)
-  set(_msg "Looking for Python3 needed for summary tests")
-  message(STATUS "${_msg}")
-  set(Python3_FIND_STRATEGY LOCATION)
-  find_package(Python3 COMPONENTS Interpreter)
-  if(Python3_Interpreter_FOUND )
-    message(STATUS "${_msg} - found: ${Python3_VERSION}")
-  else()
-    message(STATUS "${_msg} - not found (skipping summary tests)")
-  endif()
-
-  # Configure the warning and code coverage suppression file
-  configure_file(
-    "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
-    "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
-    @ONLY
-  )
-endif()
-
-# --------------------------------------------------
-# Organize output files.  On Windows this also keeps .dll files next
-# to the .exe files that need them, making tests easy to run.
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
-
-# deprecated LAPACK and LAPACKE routines
-message(STATUS "Build deprecated routines: ${BUILD_DEPRECATED}")
-
-# --------------------------------------------------
-# Precision to build
-# By default all precisions are generated
-message(STATUS "Build single precision real: ${BUILD_SINGLE}")
-message(STATUS "Build double precision real: ${BUILD_DOUBLE}")
-message(STATUS "Build single precision complex: ${BUILD_COMPLEX}")
-message(STATUS "Build double precision complex: ${BUILD_COMPLEX16}")
-
-
-
-
-# --------------------------------------------------
-# Subdirectories that need to be processed
-
-# Check the usage of the user provided BLAS libraries
-if(BLAS_LIBRARIES)
+# Only LAPACKE with both external providers can use a C-only toolchain.
+if(NOT lapack_external_blas OR NOT lapack_external_lapack OR
+    BUILD_TESTING OR LAPACKE_WITH_TMG OR
+    TEST_FORTRAN_COMPILER)
   enable_language(Fortran)
-  include(CheckFortranFunctionExists)
-  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
-  unset(CMAKE_REQUIRED_LIBRARIES)
-  if(BLAS_FOUND)
-    message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
-  else()
-    message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
-    message(ERROR "-->     Will use REFERENCE BLAS (by default)")
-    message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
-    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_BLAS")
-  endif()
-
-# User did not provide a BLAS Library but specified to search for one
-elseif(USE_OPTIMIZED_BLAS)
-  find_package(BLAS)
-endif()
-
-# Neither user specified or optimized BLAS libraries can be used
-if(NOT BLAS_FOUND)
-  message(STATUS "Using supplied NETLIB BLAS implementation")
-  add_subdirectory(BLAS)
-  set(BLAS_LIBRARIES ${BLASLIB})
 else()
-  add_link_options(${BLAS_LINKER_FLAGS})
-endif()
-
-
-# --------------------------------------------------
-# CBLAS
-
-# Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
-if(CBLAS OR NOT BLAS_FOUND)
-  add_subdirectory(CBLAS/include)
-endif()
-
-if(CBLAS)
-  add_subdirectory(CBLAS)
-endif()
-
-# --------------------------------------------------
-# XBLAS
-
-if(USE_XBLAS)
-  find_library(XBLAS_LIBRARY NAMES xblas REQUIRED)
-  message(STATUS "Looking for XBLAS library: ${XBLAS_LIBRARY}")
-endif()
-
-
-# --------------------------------------------------
-# LAPACK
-# User did not provide a LAPACK Library but specified to search for one
-if(USE_OPTIMIZED_LAPACK)
-  find_package(LAPACK)
-endif()
-
-# Check the usage of the user provided or automatically found LAPACK libraries
-if(LAPACK_LIBRARIES)
   include(CheckLanguage)
   check_language(Fortran)
   if(CMAKE_Fortran_COMPILER)
     enable_language(Fortran)
-    include(CheckFortranFunctionExists)
-    set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-    # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
-    CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
-    unset(CMAKE_REQUIRED_LIBRARIES)
-    if(LATESTLAPACK_FOUND)
-      message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
-    else()
-      message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
-      message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
-      message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
-      message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
-    endif()
-  else()
-    message(STATUS "--> LAPACK supplied by user is ${LAPACK_LIBRARIES}.")
-    message(STATUS "--> CMake couldn't find a Fortran compiler, so it cannot check if the provided LAPACK library works.")
-    set(LATESTLAPACK_FOUND TRUE)
   endif()
 endif()
 
-# Neither user specified or optimized LAPACK libraries can be used
-if(NOT LATESTLAPACK_FOUND)
-  message(STATUS "Using supplied NETLIB LAPACK implementation")
-  set(LAPACK_LIBRARIES ${LAPACKLIB})
+# Private requirements shared by libraries, object libraries and test drivers.
+add_library(lapack-build-options INTERFACE)
+include(CheckLAPACKCompilerFlags)
+lapack_compiler_flags(lapack-build-options)
+target_include_directories(lapack-build-options INTERFACE "${LAPACK_BINARY_DIR}/include")
+if(BUILD_INDEX64)
+  target_compile_definitions(lapack-build-options INTERFACE
+    "$<$<COMPILE_LANGUAGE:C>:WeirdNEC;LAPACK_ILP64;HAVE_LAPACK_CONFIG_H>")
+endif()
+if(APPLE AND USE_FLAT_NAMESPACE)
+  target_link_options(lapack-build-options INTERFACE "LINKER:-flat_namespace")
+endif()
+if(build_type STREQUAL "coverage")
+  find_package(codecov REQUIRED)
+endif()
+function(lapack_configure_target target)
+  target_link_libraries(${target} PRIVATE $<BUILD_LOCAL_INTERFACE:lapack-build-options>)
+  set_target_properties(${target} PROPERTIES POSITION_INDEPENDENT_CODE ON
+    C_STANDARD 99 C_STANDARD_REQUIRED ON C_EXTENSIONS OFF)
+  if(build_type STREQUAL "coverage")
+    add_coverage(${target})
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+      target_link_libraries(${target} PRIVATE gcov)
+    endif()
+  endif()
+endfunction()
+include(ExtendedAPIHelpers)
 
-  enable_language(Fortran)
+# External providers. Raw library lists are confined to this compatibility boundary.
+set(lapack_blas_target BLAS::${BLASLIB})
+set(lapack_lapack_target LAPACK::${LAPACKLIB})
+set(lapack_blas_package ${BLASLIB})
+set(lapack_lapack_package ${LAPACKLIB})
+set(probe_precision z)
+foreach(spec "COMPLEX;c" "SINGLE;s" "DOUBLE;d")
+  list(GET spec 0 precision)
+  list(GET spec 1 letter)
+  if(BUILD_${precision})
+    set(probe_precision ${letter})
+  endif()
+endforeach()
+foreach(provider BLAS LAPACK)
+  string(TOLOWER "${provider}" name)
+  if(NOT lapack_external_${name})
+    continue()
+  endif()
+  if(NOT TARGET ${provider}::${provider})
+    if(${provider}_LIBRARIES)
+      add_library(${provider}::${provider} INTERFACE IMPORTED)
+      set_target_properties(${provider}::${provider} PROPERTIES
+        INTERFACE_LINK_LIBRARIES "${${provider}_LIBRARIES}")
+      separate_arguments(link_flags NATIVE_COMMAND "${${provider}_LINKER_FLAGS}")
+      set_property(TARGET ${provider}::${provider} PROPERTY INTERFACE_LINK_OPTIONS "${link_flags}")
+    else()
+      block(PROPAGATE ${provider}_LIBRARIES ${provider}_LINKER_FLAGS)
+        set(BLA_SIZEOF_INTEGER ${lapack_integer_size})
+        find_package(${provider} REQUIRED MODULE)
+      endblock()
+    endif()
+  endif()
+  set(symbol ${probe_precision}gemm)
+  if(provider STREQUAL "LAPACK")
+    set(symbol ${probe_precision}geqrt)
+  endif()
+  set(symbols)
+  if(BUILD_DEFAULT_API)
+    list(APPEND symbols ${symbol})
+  endif()
+  if(BUILD_INDEX64_EXT_API)
+    list(APPEND symbols ${symbol}_64)
+  endif()
+  foreach(symbol IN LISTS symbols)
+    if(CMAKE_Fortran_COMPILER_LOADED)
+      set(probe_file check.f90)
+      set(probe "program check\nexternal ${symbol}\ncall ${symbol}()\nend program")
+    else()
+      set(probe_file check.c)
+      set(probe "extern void ${symbol}_(void);\nint main(void) { ${symbol}_(); return 0; }")
+    endif()
+    try_compile(works SOURCE_FROM_CONTENT ${probe_file} "${probe}"
+      LINK_LIBRARIES ${provider}::${provider} NO_CACHE)
+    if(NOT works)
+      message(FATAL_ERROR "The requested ${provider} cannot link ${symbol}; check the provider, integer ABI and BUILD_INDEX64_EXT_API.")
+    endif()
+  endforeach()
+  set(lapack_${name}_target ${provider}::${provider})
+  set(lapack_${name}_package ${provider})
+endforeach()
+if(USE_XBLAS)
+  find_library(XBLAS_LIBRARY NAMES xblas REQUIRED)
+  add_library(LAPACK::XBLAS UNKNOWN IMPORTED)
+  set_target_properties(LAPACK::XBLAS PROPERTIES IMPORTED_LOCATION "${XBLAS_LIBRARY}")
+endif()
 
-  # Check for any necessary platform specific compiler flags
-  include(CheckLAPACKCompilerFlags)
-  CheckLAPACKCompilerFlags()
+# Canonical targets. Each source directory contributes to these libraries.
+# IntelLLVM otherwise expands a large LAPACKE response file past link.exe's limit.
+if(WIN32 AND BUILD_SHARED_LIBS AND CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
+    AND CMAKE_GENERATOR MATCHES "^Ninja")
+  set(CMAKE_C_RESPONSE_FILE_LINK_FLAG "/Qoption,link,@")
+  set(CMAKE_C_USE_RESPONSE_FILE_FOR_LIBRARIES OFF)
+endif()
+set(lapack_libraries)
+if(NOT lapack_external_blas)
+  add_library(${BLASLIB})
+  add_library(BLAS::${BLASLIB} ALIAS ${BLASLIB})
+  if(NOT TARGET BLAS::BLAS)
+    add_library(BLAS::BLAS ALIAS ${BLASLIB})
+  endif()
+  list(APPEND lapack_libraries ${BLASLIB})
+endif()
+if(NOT lapack_external_lapack)
+  add_library(${LAPACKLIB})
+  add_library(LAPACK::${LAPACKLIB} ALIAS ${LAPACKLIB})
+  if(NOT TARGET LAPACK::LAPACK)
+    add_library(LAPACK::LAPACK ALIAS ${LAPACKLIB})
+  endif()
+  target_link_libraries(${LAPACKLIB} PRIVATE ${lapack_blas_target})
+  if(USE_XBLAS)
+    target_link_libraries(${LAPACKLIB} PRIVATE LAPACK::XBLAS)
+  endif()
+  list(APPEND lapack_libraries ${LAPACKLIB})
+endif()
+if(CBLAS)
+  add_library(${CBLASLIB})
+  add_library(CBLAS::${CBLASLIB} ALIAS ${CBLASLIB})
+  target_link_libraries(${CBLASLIB} PRIVATE ${lapack_blas_target})
+  list(APPEND lapack_libraries ${CBLASLIB})
+endif()
+if(BUILD_TESTING OR LAPACKE_WITH_TMG)
+  add_library(${TMGLIB})
+  add_library(LAPACK::${TMGLIB} ALIAS ${TMGLIB})
+  target_link_libraries(${TMGLIB} PRIVATE ${lapack_lapack_target} ${lapack_blas_target})
+  list(APPEND lapack_libraries ${TMGLIB})
+endif()
+if(LAPACKE)
+  add_library(${LAPACKELIB})
+  add_library(LAPACKE::${LAPACKELIB} ALIAS ${LAPACKELIB})
+  target_link_libraries(${LAPACKELIB} PRIVATE ${lapack_lapack_target})
+  if(LAPACKE_WITH_TMG)
+    target_link_libraries(${LAPACKELIB} PRIVATE LAPACK::${TMGLIB})
+  endif()
+  list(APPEND lapack_libraries ${LAPACKELIB})
+endif()
+foreach(target IN LISTS lapack_libraries)
+  set_target_properties(${target} PROPERTIES VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR} OUTPUT_NAME "${LIBRARY_PREFIX}${target}"
+    WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  target_include_directories(${target} PUBLIC
+    $<BUILD_INTERFACE:${LAPACK_BINARY_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+  if(BUILD_INDEX64)
+    target_compile_definitions(${target} INTERFACE
+      "$<$<COMPILE_LANGUAGE:C,CXX>:WeirdNEC;LAPACK_ILP64;HAVE_LAPACK_CONFIG_H>")
+  endif()
+  if(NOT BUILD_SHARED_LIBS)
+    target_link_libraries(${target} PRIVATE ${lapack_fortran_runtime})
+  endif()
+  if(TEST_FORTRAN_COMPILER)
+    add_dependencies(${target} run_test_zcomplexabs run_test_zcomplexdiv
+      run_test_zcomplexmult run_test_zminMax)
+  endif()
+endforeach()
 
-  # Check second function
+# Sources and tests.
+set(PKG_CONFIG_DIR "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+if(BUILD_TESTING)
+  enable_testing()
+  if(LAPACK_MEMORY_CHECK)
+    find_program(MEMORYCHECK_COMMAND valgrind REQUIRED)
+    set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-leak-kinds=definite,indirect --track-origins=yes --trace-children=yes")
+    set(LAPACK_TESTING_USE_PYTHON OFF)
+    include(CTest) # Generates the configuration needed by ctest -T memcheck.
+  endif()
+  include(LAPACKTestHelpers)
+  if(LAPACK_TESTING_USE_PYTHON)
+    find_package(Python3 COMPONENTS Interpreter)
+  endif()
+  configure_file(CTestCustom.cmake.in CTestCustom.cmake @ONLY)
+endif()
+add_subdirectory(CBLAS/include)
+add_subdirectory(LAPACKE/include)
+if(NOT lapack_external_blas)
+  add_subdirectory(BLAS)
+endif()
+if(NOT lapack_external_lapack)
   include(CheckTimeFunction)
   lapack_check_time_function(TIME_FUNC)
-
-  # Set second function
-  message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
-  set(SECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
-  set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-
+  set(SECOND_SRC "${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f")
+  set(DSECOND_SRC "${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f")
   add_subdirectory(SRC)
-else()
-  add_link_options(${LAPACK_LINKER_FLAGS})
 endif()
-
-# --------------------------------------------------
-# LAPACKE
-
-# LAPACKE has also the interface to some routines from tmglib,
-# if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
-if(LAPACKE_WITH_TMG)
-  set(LAPACKE ON)
-endif()
-
-
-if(BUILD_TESTING)
-  add_subdirectory(TESTING)
-endif()
-
-# TMGLIB
-# Cache export target
-set(LAPACK_INSTALL_EXPORT_NAME_CACHE ${LAPACK_INSTALL_EXPORT_NAME})
-if(BUILD_TESTING OR LAPACKE_WITH_TMG)
-  enable_language(Fortran)
-  if(LATESTLAPACK_FOUND AND LAPACKE_WITH_TMG)
-    set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-    # Check if dlatms (part of tmg) is found
-    include(CheckFortranFunctionExists)
-    CHECK_FORTRAN_FUNCTION_EXISTS("dlatms" LAPACK_WITH_TMGLIB_FOUND)
-    unset(CMAKE_REQUIRED_LIBRARIES)
-    if(NOT LAPACK_WITH_TMGLIB_FOUND)
-      # Build and install TMG as part of LAPACKE targets (as opposed to LAPACK
-      # targets)
-      set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
-    endif()
-  endif()
+if(TARGET ${TMGLIB})
   add_subdirectory(TESTING/MATGEN)
 endif()
-# Reset export target
-set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
-unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
-
-# Include lapack.h and lapacke_mangling.h even if LAPACKE is not built
-add_subdirectory(LAPACKE/include)
-
+if(CBLAS)
+  add_subdirectory(CBLAS)
+endif()
+if(BUILD_TESTING OR TEST_FORTRAN_COMPILER)
+  add_subdirectory(TESTING)
+endif()
 if(LAPACKE)
   add_subdirectory(LAPACKE)
 endif()
-
-#-------------------------------------
-# Test summary
-#
-# The summary parses the .out files the LAPACK, LAPACKE, BLAS and CBLAS
-# drivers leave behind, so it has to run after all of them. set_property(TEST)
-# only reaches tests added in the calling directory, hence the top level.
+foreach(target IN LISTS lapack_libraries)
+  lapack_configure_target(${target})
+endforeach()
 if(BUILD_TESTING AND Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
   message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt and lapack_testing_junit.xml)")
 
@@ -503,11 +367,64 @@ if(BUILD_TESTING AND Python3_EXECUTABLE AND LAPACK_TESTING_USE_PYTHON)
   endif()
 endif()
 
+# Each package keeps its own config and export; both trees use the same template.
+# The only nonstandard binary layout is the existing optional path suffix.
+string(REGEX REPLACE "^/+" "" binary_suffix "${LAPACK_BINARY_PATH_SUFFIX}")
+function(lapack_install_library target namespace config_template)
+  set(package_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${target}")
+  if(binary_suffix)
+    string(APPEND CMAKE_INSTALL_LIBDIR "/${binary_suffix}")
+    string(APPEND CMAKE_INSTALL_BINDIR "/${binary_suffix}")
+  endif()
+  install(TARGETS ${target} EXPORT ${target}-targets
+    ARCHIVE COMPONENT Development LIBRARY COMPONENT RuntimeLibraries
+    RUNTIME COMPONENT RuntimeLibraries)
+  configure_package_config_file(${config_template} "${target}-config.cmake"
+    INSTALL_DESTINATION "${package_dir}")
+  write_basic_package_version_file("${target}-config-version.cmake"
+    VERSION ${LAPACK_VERSION} COMPATIBILITY SameMajorVersion)
+  export(EXPORT ${target}-targets NAMESPACE ${namespace}:: FILE "${target}-targets.cmake")
+  install(EXPORT ${target}-targets NAMESPACE ${namespace}::
+    DESTINATION "${package_dir}" COMPONENT Development)
+  install(FILES "${LAPACK_BINARY_DIR}/${target}-config.cmake"
+    "${LAPACK_BINARY_DIR}/${target}-config-version.cmake"
+    DESTINATION "${package_dir}" COMPONENT Development)
+endfunction()
+if(NOT lapack_external_blas)
+  lapack_install_library(${BLASLIB} BLAS CMAKE/blas-config.cmake.in)
+endif()
+if(NOT lapack_external_lapack)
+  lapack_install_library(${LAPACKLIB} LAPACK CMAKE/lapack-config.cmake.in)
+endif()
+if(CBLAS)
+  lapack_install_library(${CBLASLIB} CBLAS CBLAS/cmake/cblas-config.cmake.in)
+endif()
+if(TARGET ${TMGLIB})
+  lapack_install_library(${TMGLIB} LAPACK CMAKE/tmglib-config.cmake.in)
+endif()
+if(LAPACKE)
+  lapack_install_library(${LAPACKELIB} LAPACKE LAPACKE/cmake/lapacke-config.cmake.in)
+endif()
 
-#-------------------------------------
-# BLAS++ / LAPACK++
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc @ONLY)
+  install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc
+  DESTINATION ${PKG_CONFIG_DIR}
+  COMPONENT Development
+  )
 
 
+if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
+  add_subdirectory(DOCS)
+endif()
+# Keep the existing C++ integration until its dependency handling is migrated.
+block()
+  if(NOT lapack_external_blas)
+    set(BLAS_LIBRARIES ${BLASLIB})
+  endif()
+  if(NOT lapack_external_lapack)
+    set(LAPACK_LIBRARIES ${LAPACKLIB})
+  endif()
 function(_display_cpp_implementation_msg name)
   string(TOLOWER ${name} name_lc)
   message(STATUS "${name}++ enable")
@@ -553,112 +470,6 @@ endif()
 
 # --------------------------------------------------
 # CPACK Packaging
-
-set(CPACK_PACKAGE_NAME "LAPACK")
-set(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LAPACK- Linear Algebra Package")
-set(CPACK_PACKAGE_VERSION_MAJOR ${LAPACK_MAJOR_VERSION})
-set(CPACK_PACKAGE_VERSION_MINOR ${LAPACK_MINOR_VERSION})
-set(CPACK_PACKAGE_VERSION_PATCH ${LAPACK_PATCH_VERSION})
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-set(CPACK_MONOLITHIC_INSTALL ON)
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
-if(WIN32 AND NOT UNIX)
-  # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backslashes.
-  set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
-  set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/lapack")
-  set(CPACK_NSIS_CONTACT "lapack@eecs.utk.edu")
-  set(CPACK_NSIS_MODIFY_PATH ON)
-  set(CPACK_NSIS_DISPLAY_NAME "LAPACK-${LAPACK_VERSION}")
-  set(CPACK_PACKAGE_RELOCATABLE "true")
-else()
-  set(CPACK_GENERATOR "TGZ")
-  set(CPACK_SOURCE_GENERATOR TGZ)
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}")
-  set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES})
-endif()
-include(CPack)
-
-
-# --------------------------------------------------
-
-if(NOT BLAS_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
-endif()
-
-if(NOT LATESTLAPACK_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
-endif()
-
-# Export lapack targets, not including lapacke, from the
-# install tree, if any.
-set(_lapack_config_install_guard_target "")
-if(ALL_TARGETS)
-  add_library(LAPACK::LAPACK ALIAS ${LAPACKLIB})
-  install(EXPORT ${LAPACKLIB}-targets
-    FILE ${LAPACKLIB}-targets.cmake
-    NAMESPACE LAPACK::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
-    COMPONENT Development
-    )
-
-  # Choose one of the lapack targets to use as a guard for
-  # lapack-config.cmake to load targets from the install tree.
-  list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
-endif()
-
-# Include cblas in targets exported from the build tree.
-if(CBLAS)
-  set(ALL_TARGETS ${ALL_TARGETS} ${CBLASLIB})
-endif()
-
-# Include lapacke in targets exported from the build tree.
-if(LAPACKE)
-  set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKELIB})
-endif()
-
-if(NOT LAPACK_WITH_TMGLIB_FOUND AND LAPACKE_WITH_TMG)
-  set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
-endif()
-
-# Export lapack and lapacke targets from the build tree, if any.
-set(_lapack_config_build_guard_target "")
-if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE ${LAPACKLIB}-targets.cmake)
-
-  # Choose one of the lapack or lapacke targets to use as a guard
-  # for lapack-config.cmake to load targets from the build tree.
-  list(GET ALL_TARGETS 0 _lapack_config_build_guard_target)
-endif()
-
-configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
-  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config.cmake @ONLY)
-
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc @ONLY)
-  install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}.pc
-  DESTINATION ${PKG_CONFIG_DIR}
-  COMPONENT Development
-  )
-
-configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
-  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake @ONLY)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
-  VERSION ${LAPACK_VERSION}
-  COMPATIBILITY SameMajorVersion
-  )
-
-install(FILES
-  ${LAPACK_BINARY_DIR}/CMakeFiles/${LAPACKLIB}-config.cmake
-  ${LAPACK_BINARY_DIR}/${LAPACKLIB}-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
-  COMPONENT Development
-  )
 if (LAPACK++)
   install(
   DIRECTORY "${LAPACK_BINARY_DIR}/lib/"
@@ -704,7 +515,18 @@ if (BLAS++)
     FILES_MATCHING REGEX "\\.(h|hh)$"
   )
 endif()
+endblock()
 
-if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
-  add_subdirectory(DOCS)
+# Standard CPack packaging, matching the ScaLAPACK build.
+set(CPACK_PACKAGE_NAME "LAPACK")
+set(CPACK_PACKAGE_VENDOR "University of Tennessee, University of California Berkeley, University of Colorado Denver and NAG Ltd")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LAPACK - Linear Algebra Package")
+set(CPACK_PACKAGE_VERSION ${LAPACK_VERSION})
+set(CPACK_RESOURCE_FILE_LICENSE "${LAPACK_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}")
+if(NOT WIN32)
+  set(CPACK_GENERATOR TGZ)
+  set(CPACK_SOURCE_GENERATOR TGZ)
 endif()
+include(CPack)

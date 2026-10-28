@@ -1,15 +1,20 @@
-enable_language(Fortran)
-
-# Check for any necessary platform specific compiler flags
-include(CheckLAPACKCompilerFlags)
-CheckLAPACKCompilerFlags()
-
-if(MSVC_VERSION)
-#  string(REPLACE "/STACK:10000000" "/STACK:900000000000000000"
-#    CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-  string(REGEX REPLACE "(.*)/STACK:(.*) (.*)" "\\1/STACK:900000000000000000 \\3"
-    CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+if(TEST_FORTRAN_COMPILER)
+  file(MAKE_DIRECTORY "${LAPACK_BINARY_DIR}/TESTING")
+  foreach(test zcomplexabs zcomplexdiv zcomplexmult zminMax)
+    add_executable(test_${test} "${LAPACK_SOURCE_DIR}/INSTALL/test_${test}.f")
+    lapack_configure_target(test_${test})
+    add_custom_target(run_test_${test}
+      COMMAND ${CMAKE_COMMAND} -DTEST=$<TARGET_FILE:test_${test}>
+        -DOUTPUT=${LAPACK_BINARY_DIR}/TESTING/test_${test}.out
+        -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake"
+      DEPENDS test_${test}
+      VERBATIM)
+  endforeach()
 endif()
+if(NOT BUILD_TESTING)
+  return()
+endif()
+
 add_subdirectory(LIN)
 add_subdirectory(EIG)
 
