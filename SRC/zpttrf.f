@@ -113,6 +113,10 @@
       INTEGER            I, I4
       DOUBLE PRECISION   EII, EIR, F, G
 *     ..
+*     .. External Functions ..
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA
 *     ..
@@ -139,7 +143,7 @@
 *
       I4 = MOD( N-1, 4 )
       DO 10 I = 1, I4
-         IF( D( I ).LE.ZERO ) THEN
+         IF( D( I ).LE.ZERO.OR.DISNAN( D( I ) ) ) THEN
             INFO = I
             GO TO 30
          END IF
@@ -156,7 +160,7 @@
 *        Drop out of the loop if d(i) <= 0: the matrix is not positive
 *        definite.
 *
-         IF( D( I ).LE.ZERO ) THEN
+         IF( D( I ).LE.ZERO.OR.DISNAN( D( I ) ) ) THEN
             INFO = I
             GO TO 30
          END IF
@@ -170,7 +174,7 @@
          E( I ) = CMPLX( F, G, KIND=DP )
          D( I+1 ) = D( I+1 ) - F*EIR - G*EII
 *
-         IF( D( I+1 ).LE.ZERO ) THEN
+         IF( D( I+1 ).LE.ZERO.OR.DISNAN( D( I+1 ) ) ) THEN
             INFO = I + 1
             GO TO 30
          END IF
@@ -184,7 +188,7 @@
          E( I+1 ) = CMPLX( F, G, KIND=DP )
          D( I+2 ) = D( I+2 ) - F*EIR - G*EII
 *
-         IF( D( I+2 ).LE.ZERO ) THEN
+         IF( D( I+2 ).LE.ZERO.OR.DISNAN( D( I+2 ) ) ) THEN
             INFO = I + 2
             GO TO 30
          END IF
@@ -198,7 +202,7 @@
          E( I+2 ) = CMPLX( F, G, KIND=DP )
          D( I+3 ) = D( I+3 ) - F*EIR - G*EII
 *
-         IF( D( I+3 ).LE.ZERO ) THEN
+         IF( D( I+3 ).LE.ZERO.OR.DISNAN( D( I+3 ) ) ) THEN
             INFO = I + 3
             GO TO 30
          END IF
@@ -215,7 +219,7 @@
 *
 *     Check d(n) for positive definiteness.
 *
-      IF( D( N ).LE.ZERO )
+      IF( D( N ).LE.ZERO.OR.DISNAN( D( N ) ) )
      $   INFO = N
 *
    30 CONTINUE

@@ -223,7 +223,10 @@ endif()
 
 lapack_nag_disable_constant_propagation(
   serrcxx.f cerrcxx.f derrcxx.f zerrcxx.f
-  schksp.f cchksp.f dchksp.f zchksp.f cchkhp.f zchkhp.f)
+  schksp.f cchksp.f dchksp.f zchksp.f cchkhp.f zchkhp.f
+  schkpt.f cchkpt.f dchkpt.f zchkpt.f
+  schkpp.f cchkpp.f dchkpp.f zchkpp.f
+  schkpb.f cchkpb.f dchkpb.f zchkpb.f)
 
 set(DSLINTST dchkab.f
 	ddrvab.f ddrvac.f derrab.f derrac.f dget08.f
@@ -258,7 +261,7 @@ set(ZLINTSTRFP
   chkxer.f xerbla.f alaerh.f aladhd.f alahd.f alasvm.f)
 
 function(add_lin_executable name)
-  cmake_parse_arguments(PARSE_ARGV 1 LIN "" "" "SOURCES;DEFAULT_API;EXT_API")
+  cmake_parse_arguments(PARSE_ARGV 1 LIN "TEST" "" "SOURCES;DEFAULT_API;EXT_API")
   set(sources ${LIN_SOURCES} ${LIN_DEFAULT_API})
   set(ext_sources ${LIN_SOURCES} ${LIN_EXT_API})
 
@@ -266,6 +269,9 @@ function(add_lin_executable name)
     add_executable(${name} ${sources})
     target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name})
+    if(LIN_TEST)
+      add_test(NAME LAPACK-${name} COMMAND $<TARGET_FILE:${name}>)
+    endif()
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -277,6 +283,9 @@ function(add_lin_executable name)
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name}_64)
+    if(LIN_TEST)
+      add_test(NAME LAPACK-${name}_64 COMMAND $<TARGET_FILE:${name}_64>)
+    endif()
 
     # Add dependency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be
@@ -284,6 +293,9 @@ function(add_lin_executable name)
     add_dependencies(${name}_64 64bit_codegen)
   endif()
 endfunction()
+
+add_lin_executable(xalaerh TEST
+  SOURCES test_alaerh.f90 alaerh.f aladhd.f alahd.f)
 
 if(BUILD_SINGLE)
   add_lin_executable(xlintsts
