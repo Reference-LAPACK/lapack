@@ -31,6 +31,8 @@ function(generate_suffixed_sources target source_list generated_sources)
   get_property(_generated_suffixed_source_files GLOBAL PROPERTY EXTENDED_API_GENERATED_SOURCE_FILES)
   set(new_generated_source_files)
   set(generated_source_files)
+  set(_pending_codegen_inputs)
+  set(_pending_codegen_outputs)
 
   foreach(_source IN LISTS ${source_list})
     get_filename_component(source_abs "${_source}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -44,40 +46,118 @@ function(generate_suffixed_sources target source_list generated_sources)
       continue()
     endif()
 
-    # Make sure we only have one custom command generating a given output file
-    if(NOT "${output_file}" IN_LIST _generated_suffixed_source_files)
-      set(generator_args
-        "-DINPUT_FILE=${source_abs}"
-        "-DOUTPUT_FILE=${output_file}"
-        "-DSUFFIX=${extended_api_SUFFIX}")
-      if(extended_api_NO_STRING_REPLACEMENTS)
-        list(APPEND generator_args "-DREPLACE_IN_STRINGS=OFF")
-      endif()
-      if(DEFINED extended_api_SYMBOL_ALLOWLIST)
-        # Join with $<SEMICOLON> so that the allowlist stays one -D argument
-        # on the command line but still reaches the script as a CMake list.
-        # An allowlist change re-runs the generation (the command changes).
-        list(JOIN extended_api_SYMBOL_ALLOWLIST "$<SEMICOLON>" _symbol_allowlist)
-        list(APPEND generator_args "-DSYMBOL_ALLOWLIST=${_symbol_allowlist}")
-      endif()
-
-      add_custom_command(
-        OUTPUT "${output_file}"
-        COMMAND
-          "${CMAKE_COMMAND}"
-          ${generator_args}
-          -P "${EXTENDED_API_GENERATOR}"
-        DEPENDS
-          "${source_abs}"
-          "${EXTENDED_API_GENERATOR}"
-        COMMENT "Generating ${extended_api_SUFFIX} extended API source for ${_source}"
-        VERBATIM)
-
+    # Make sure we only have one custom command generating a given output file.
+    # Check both the global registry (outputs queued by earlier calls) and
+    # the outputs already queued by this call: source lists may repeat a
+    # file (e.g. dchklq.f appears twice in DLINTST), which would otherwise
+    # put the same OUTPUT in two different unity batches -> Ninja
+    # "multiple rules generate ..." error (identical per-file rules are
+    # tolerated, differing batch rules are not).
+    if(NOT "${output_file}" IN_LIST _generated_suffixed_source_files AND NOT "${output_file}" IN_LIST new_generated_source_files)
+      list(APPEND _pending_codegen_inputs "${source_abs}")
+      list(APPEND _pending_codegen_outputs "${output_file}")
       list(APPEND new_generated_source_files "${output_file}")
     endif()
 
     list(APPEND generated_source_files "${output_file}")
   endforeach()
+
+  # With CMAKE_UNITY_BUILD the many tiny per-file codegen rules become the
+  # bottleneck (one cmake process per file), so group generation into
+  # unity-like batches of CMAKE_UNITY_BUILD_BATCH_SIZE files sharing a
+  # single cmake invocation.
+  set(_use_unity_batches FALSE)
+  if(CMAKE_UNITY_BUILD)
+    set(_use_unity_batches TRUE)
+  elseif(TARGET "${target}")
+    get_target_property(_target_unity_build "${target}" UNITY_BUILD)
+    if(_target_unity_build)
+      set(_use_unity_batches TRUE)
+    endif()
+  endif()
+  if(_use_unity_batches)
+    if(DEFINED CMAKE_UNITY_BUILD_BATCH_SIZE AND CMAKE_UNITY_BUILD_BATCH_SIZE GREATER 0)
+      set(_codegen_batch_size "${CMAKE_UNITY_BUILD_BATCH_SIZE}")
+    else()
+      set(_codegen_batch_size 8)
+    endif()
+  endif()
+
+  # Options shared by every file of this call (hence by every batch).
+  set(_common_generator_args "-DSUFFIX=${extended_api_SUFFIX}")
+  if(extended_api_NO_STRING_REPLACEMENTS)
+    list(APPEND _common_generator_args "-DREPLACE_IN_STRINGS=OFF")
+  endif()
+  if(DEFINED extended_api_SYMBOL_ALLOWLIST)
+    # Join with $<SEMICOLON> so that the allowlist stays one -D argument
+    # on the command line but still reaches the script as a CMake list.
+    # An allowlist change re-runs the generation (the command changes).
+    list(JOIN extended_api_SYMBOL_ALLOWLIST "$<SEMICOLON>" _symbol_allowlist)
+    list(APPEND _common_generator_args "-DSYMBOL_ALLOWLIST=${_symbol_allowlist}")
+  endif()
+
+  if(_use_unity_batches AND _pending_codegen_inputs)
+    list(LENGTH _pending_codegen_inputs _pending_count)
+    set(_batch_index 0)
+    set(_batch_offset 0)
+    while(_batch_offset LESS _pending_count)
+      set(_batch_inputs)
+      set(_batch_outputs)
+      set(_batch_count 0)
+      while(_batch_count LESS _codegen_batch_size)
+        math(EXPR _pending_index "${_batch_offset} + ${_batch_count}")
+        if(NOT _pending_index LESS _pending_count)
+          break()
+        endif()
+        list(GET _pending_codegen_inputs ${_pending_index} _batch_input)
+        list(GET _pending_codegen_outputs ${_pending_index} _batch_output)
+        list(APPEND _batch_inputs "${_batch_input}")
+        list(APPEND _batch_outputs "${_batch_output}")
+        math(EXPR _batch_count "${_batch_count} + 1")
+      endwhile()
+      list(JOIN _batch_inputs "$<SEMICOLON>" _batch_inputs_joined)
+      list(JOIN _batch_outputs "$<SEMICOLON>" _batch_outputs_joined)
+      list(LENGTH _batch_outputs _batch_len)
+      add_custom_command(
+        OUTPUT ${_batch_outputs}
+        COMMAND
+          "${CMAKE_COMMAND}"
+          "-DINPUT_FILES=${_batch_inputs_joined}"
+          "-DOUTPUT_FILES=${_batch_outputs_joined}"
+          ${_common_generator_args}
+          -P "${EXTENDED_API_GENERATOR}"
+        DEPENDS
+          ${_batch_inputs}
+          "${EXTENDED_API_GENERATOR}"
+        COMMENT "Generating ${extended_api_SUFFIX} extended API Unity/unity_${_batch_index} (${_batch_len} sources for target ${target})"
+        VERBATIM)
+      math(EXPR _batch_offset "${_batch_offset} + ${_batch_count}")
+      math(EXPR _batch_index "${_batch_index} + 1")
+    endwhile()
+  else()
+    list(LENGTH _pending_codegen_inputs _pending_count)
+    if(_pending_count GREATER 0)
+      math(EXPR _last_pending_index "${_pending_count} - 1")
+      foreach(_pending_index RANGE 0 ${_last_pending_index})
+        list(GET _pending_codegen_inputs ${_pending_index} _single_input)
+        list(GET _pending_codegen_outputs ${_pending_index} _single_output)
+        get_filename_component(_single_display "${_single_input}" NAME)
+        add_custom_command(
+          OUTPUT "${_single_output}"
+          COMMAND
+            "${CMAKE_COMMAND}"
+            "-DINPUT_FILE=${_single_input}"
+            "-DOUTPUT_FILE=${_single_output}"
+            ${_common_generator_args}
+            -P "${EXTENDED_API_GENERATOR}"
+          DEPENDS
+            "${_single_input}"
+            "${EXTENDED_API_GENERATOR}"
+          COMMENT "Generating ${extended_api_SUFFIX} extended API source for ${_single_display}"
+          VERBATIM)
+      endforeach()
+    endif()
+  endif()
 
   # Make sure each generated source file is only part of one target to
   # avoid multiple targets trying to generate the same file

@@ -29,6 +29,10 @@ foreach(_layer work high)
     if(BUILD_DEFAULT_API)
       set(_wrapper_lib lapacke_test_wrappers_${_layer}_${_layout})
       add_library(${_wrapper_lib} STATIC ${LAPACKE_TEST_WRAPPER_SOURCES})
+      # Each wrapper source defines file-scope `static const int layout` etc.;
+      # a unity batch would pull all of them into one TU and fail with
+      # redefinition errors, so keep test wrappers fine-grained.
+      set_target_properties(${_wrapper_lib} PROPERTIES UNITY_BUILD OFF)
       target_compile_definitions(${_wrapper_lib} PRIVATE
         LAPACKE_TEST_LAYOUT=${_layout_define}
         LAPACKE_TEST_LAYER=LAPACKE_TEST_LAYER_${_layer_upper})
@@ -40,6 +44,8 @@ foreach(_layer work high)
     if(BUILD_INDEX64_EXT_API)
       set(_wrapper_lib lapacke_test_wrappers_${_layer}_${_layout}_64)
       add_library(${_wrapper_lib} STATIC ${LAPACKE_TEST_WRAPPER_SOURCES})
+      # See above: test wrappers must stay fine-grained.
+      set_target_properties(${_wrapper_lib} PROPERTIES UNITY_BUILD OFF)
       target_compile_definitions(${_wrapper_lib} PRIVATE
         LAPACKE_TEST_LAYOUT=${_layout_define}
         LAPACKE_TEST_LAYER=LAPACKE_TEST_LAYER_${_layer_upper}

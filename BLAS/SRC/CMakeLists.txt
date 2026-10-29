@@ -117,6 +117,17 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
+# lsame.f, xerbla.f and xerbla_array.f are also compiled into liblapack
+# (see SRC/CMakeLists.txt: ../INSTALL/lsame.f, xerbla.f, xerbla_array.f,
+# with different content). With one-object-per-source archives this
+# duplication is benign (the linker pulls only the objects it needs, first
+# archive wins per symbol), but unity builds batch many sources into a single
+# object, so linking pulls both definitions at once ("multiple definition of
+# `lsame_'", ...). Keep these files out of the unity batches to restore the
+# fine-grained resolution. No-op for non-unity builds.
+set_source_files_properties(lsame.f xerbla.f xerbla_array.f
+  PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
 if(BUILD_DEFAULT_API)
   add_library(${BLASLIB}_obj OBJECT ${SOURCES})
   lapack_add_coverage(${BLASLIB}_obj)
@@ -125,6 +136,14 @@ endif()
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${BLASLIB} SOURCES SOURCES_64)
+
+  # Same duplication as above applies to the generated _64 sources.
+  # Explicit list: no-op if a source is unused in this configuration.
+  set_source_files_properties(
+    "${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_sources/lsame_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_sources/xerbla_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${BLASLIB}_64_sources/xerbla_array_64.f"
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
   add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64})
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})

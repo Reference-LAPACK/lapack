@@ -532,6 +532,19 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
+# ../INSTALL/lsame.f, xerbla.f and xerbla_array.f are also compiled into
+# libblas (see BLAS/SRC/CMakeLists.txt: ALLBLAS, with different content).
+# ilaenv.f, ilaenv2stage.f, iparmq.f and s/d/c/zlarfy.f are bundled again
+# (in test variants) by the LIN/EIG test drivers. With one-object-per-source this
+# duplication is benign (the linker pulls only the objects it needs, first
+# archive wins per symbol), but unity builds batch many sources into a single
+# object, so linking pulls both definitions at once ("multiple definition of
+# `lsame_'", ...). Keep these files out of the unity batches to restore the
+# fine-grained resolution. No-op for non-unity builds.
+set_source_files_properties(../INSTALL/lsame.f xerbla.f xerbla_array.f
+  ilaenv.f ilaenv2stage.f iparmq.f slarfy.f dlarfy.f clarfy.f zlarfy.f
+  PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
 # Use special target for MOD files to guarantee they are built before
 # any other files that depend on them
 add_library(const_mod_file OBJECT ${CONSTMOD})
@@ -552,6 +565,21 @@ endif()
 if(BUILD_INDEX64_EXT_API)
   include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
+
+  # Same duplication as above applies to the generated _64 sources.
+  # Explicit list: no-op if a source is unused in this configuration.
+  set_source_files_properties(
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/lsame_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/xerbla_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/xerbla_array_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/ilaenv_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/ilaenv2stage_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/iparmq_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/slarfy_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/dlarfy_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/clarfy_64.f"
+    "${CMAKE_CURRENT_BINARY_DIR}/${LAPACKLIB}_64_sources/zlarfy_64.f"
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
   add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
   target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)

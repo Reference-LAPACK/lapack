@@ -1,12 +1,48 @@
 # Use this to test GenerateSuffixedSource.cmake. Run from top of repo:
 # bash CMAKE/GenerateSuffixedSource.test
 
-if(NOT DEFINED INPUT_FILE)
-  message(FATAL_ERROR "INPUT_FILE must be set")
+# Empty list elements are load-bearing below (blank physical lines must
+# survive the split/iterate/rejoin round-trip), so pin the new behavior
+# explicitly: script mode does not inherit the project's policies.
+cmake_policy(SET CMP0007 NEW)
+
+# Matcher for fixed-form lines exceeding the 72-column statement field.
+# CMake's regex engine has no {n} interval quantifiers, so spell the 73
+# characters out.
+set(_overlong_line_pat "\n")
+foreach(_overlong_col RANGE 1 73)
+  string(APPEND _overlong_line_pat "[^\n]")
+endforeach()
+string(APPEND _overlong_line_pat "[^\n]*")
+
+# Single-file mode (INPUT_FILE/OUTPUT_FILE) and batched mode
+# (INPUT_FILES/OUTPUT_FILES, semicolon-separated lists of equal length) share
+# the same per-file processing below. Batching amortizes the cmake startup
+# cost when CMAKE_UNITY_BUILD groups compilation into a few unity objects.
+if(DEFINED INPUT_FILES OR DEFINED OUTPUT_FILES)
+  if(NOT DEFINED INPUT_FILES)
+    message(FATAL_ERROR "INPUT_FILES must be set in batch mode")
+  endif()
+  if(NOT DEFINED OUTPUT_FILES)
+    message(FATAL_ERROR "OUTPUT_FILES must be set in batch mode")
+  endif()
+else()
+  if(NOT DEFINED INPUT_FILE)
+    message(FATAL_ERROR "INPUT_FILE must be set")
+  endif()
+  if(NOT DEFINED OUTPUT_FILE)
+    message(FATAL_ERROR "OUTPUT_FILE must be set")
+  endif()
+  set(INPUT_FILES "${INPUT_FILE}")
+  set(OUTPUT_FILES "${OUTPUT_FILE}")
+  unset(INPUT_FILE)
+  unset(OUTPUT_FILE)
 endif()
 
-if(NOT DEFINED OUTPUT_FILE)
-  message(FATAL_ERROR "OUTPUT_FILE must be set")
+list(LENGTH INPUT_FILES _num_input_files)
+list(LENGTH OUTPUT_FILES _num_output_files)
+if(NOT _num_input_files EQUAL _num_output_files)
+  message(FATAL_ERROR "INPUT_FILES (${_num_input_files}) and OUTPUT_FILES (${_num_output_files}) must have the same length")
 endif()
 
 if(NOT DEFINED REPLACE_IN_STRINGS)
@@ -27,15 +63,6 @@ if(DEFINED SYMBOL_ALLOWLIST)
     string(TOLOWER "${_allowlist_entry}" _allowlist_entry)
     list(APPEND _symbol_allowlist "${_allowlist_entry}")
   endforeach()
-endif()
-
-# Check whether the input file is fixed or free form based on its extension.
-get_filename_component(input_extension "${INPUT_FILE}" LAST_EXT)
-string(TOLOWER "${input_extension}" input_extension_lower)
-if(input_extension_lower MATCHES "^\\.f(90|95|03|08)$")
-  set(_source_is_free_form TRUE)
-else()
-  set(_source_is_free_form FALSE)
 endif()
 
 # Check if line is a comment line based on the form of the Fortran source.
@@ -96,44 +123,40 @@ function(_normalize_fortran_statement_fragment line result)
   set(${result} "${fragment}" PARENT_SCOPE)
 endfunction()
 
-# Pop one physical source line from a newline-delimited string. Do not use a
-# CMake list here: source comments may contain unmatched brackets, which changes
-# how list semicolons are interpreted.
-macro(_pop_source_line remaining_source line result)
-  if("${${remaining_source}}" STREQUAL "")
-    set(${line} "")
-    set(${result} FALSE)
-  else()
-    string(FIND "${${remaining_source}}" "\n" _source_line_newline_index)
-    if(_source_line_newline_index EQUAL -1)
-      set(${line} "${${remaining_source}}")
-      set(${remaining_source} "")
-    else()
-      string(SUBSTRING "${${remaining_source}}" 0
-        ${_source_line_newline_index} ${line})
-      math(EXPR _source_line_next_index
-        "${_source_line_newline_index} + 1")
-      string(SUBSTRING "${${remaining_source}}"
-        ${_source_line_next_index} -1 ${remaining_source})
-    endif()
-    set(${result} TRUE)
+# Split a newline-delimited string into physical lines for single-pass
+# foreach iteration (much faster than popping lines with repeated
+# full-string copies). Three hazards: file contents (comments, strings)
+# may contain `;`, which would corrupt list iteration, and unmatched `[`
+# or `]` (common in comments, e.g. `(VL,VU]`), which also corrupt how list
+# semicolons are interpreted -- so all three are masked behind placeholders
+# while scanning; and foreach skips empty elements, so blank lines are
+# shielded behind a further placeholder that callers map back to "". The
+# placeholders contain no regex-active characters and never appear in real
+# sources. Callers that need the exact line text restore all placeholders.
+macro(_split_lines text lines_var)
+  string(REPLACE ";" "@@LAPACK_GEN_SEMICOLON@@" _split_masked "${${text}}")
+  string(REPLACE "[" "@@LAPACK_GEN_LBRACKET@@" _split_masked "${_split_masked}")
+  string(REPLACE "]" "@@LAPACK_GEN_RBRACKET@@" _split_masked "${_split_masked}")
+  if(_split_masked MATCHES "^\n")
+    string(REGEX REPLACE "^\n" "@@LAPACK_GEN_EMPTY_LINE@@\n" _split_masked "${_split_masked}")
   endif()
+  if(_split_masked MATCHES "\n$")
+    string(APPEND _split_masked "@@LAPACK_GEN_EMPTY_LINE@@")
+  endif()
+  while(_split_masked MATCHES "\n\n")
+    string(REPLACE "\n\n" "\n@@LAPACK_GEN_EMPTY_LINE@@\n" _split_masked "${_split_masked}")
+  endwhile()
+  string(REPLACE "\n" ";" ${lines_var} "${_split_masked}")
 endmacro()
 
-# Peek at the next physical line without consuming it.
-macro(_peek_source_line remaining_source line result)
-  if("${${remaining_source}}" STREQUAL "")
+# Map one split line back to its exact source text.
+macro(_restore_line line)
+  if("${${line}}" STREQUAL "@@LAPACK_GEN_EMPTY_LINE@@")
     set(${line} "")
-    set(${result} FALSE)
   else()
-    string(FIND "${${remaining_source}}" "\n" _source_line_newline_index)
-    if(_source_line_newline_index EQUAL -1)
-      set(${line} "${${remaining_source}}")
-    else()
-      string(SUBSTRING "${${remaining_source}}" 0
-        ${_source_line_newline_index} ${line})
-    endif()
-    set(${result} TRUE)
+    string(REPLACE "@@LAPACK_GEN_SEMICOLON@@" ";" ${line} "${${line}}")
+    string(REPLACE "@@LAPACK_GEN_LBRACKET@@" "[" ${line} "${${line}}")
+    string(REPLACE "@@LAPACK_GEN_RBRACKET@@" "]" ${line} "${${line}}")
   endif()
 endmacro()
 
@@ -251,69 +274,82 @@ function(_wrap_fixed_form_source source_text result)
     return()
   endif()
 
-  string(REPLACE "\r\n" "\n" remaining_source "${source_text}")
-  string(REPLACE "\r" "\n" remaining_source "${remaining_source}")
-  set(wrapped_source "")
+  string(REPLACE "\r\n" "\n" _wrap_text "${source_text}")
+  string(REPLACE "\r" "\n" _wrap_text "${_wrap_text}")
+  # Fast path: fixed-form files that fit in 72 columns need no wrapping.
+  if(NOT _wrap_text MATCHES "${_overlong_line_pat}")
+    set(${result} "${_wrap_text}" PARENT_SCOPE)
+    return()
+  endif()
 
-  while(1)
-    string(FIND "${remaining_source}" "\n" newline_index)
-    if(newline_index EQUAL -1)
-      if(NOT remaining_source STREQUAL "")
-        _wrap_fixed_form_line("${remaining_source}" wrapped_line)
-        string(APPEND wrapped_source "${wrapped_line}")
-      endif()
-      break()
+  # Wrap only the over-long lines. Collecting the distinct ones in a single
+  # scan is far cheaper than walking every line: `;` would corrupt list
+  # iteration, so match on masked text (no `;` left, elements stay intact),
+  # then map each candidate back to exact text. Replacements are anchored
+  # on the leading newline, so one line can never match inside another;
+  # each distinct line is therefore wrapped exactly once.
+  string(REPLACE ";" "@@LAPACK_GEN_SEMICOLON@@" _wrap_masked "\n${_wrap_text}")
+  string(REPLACE "[" "@@LAPACK_GEN_LBRACKET@@" _wrap_masked "${_wrap_masked}")
+  string(REPLACE "]" "@@LAPACK_GEN_RBRACKET@@" _wrap_masked "${_wrap_masked}")
+  string(REGEX MATCHALL "${_overlong_line_pat}" _wrap_candidates "${_wrap_masked}")
+  list(REMOVE_DUPLICATES _wrap_candidates)
+  set(_wrap_work "\n${_wrap_text}")
+  foreach(_wrap_candidate IN LISTS _wrap_candidates)
+    string(REGEX REPLACE "^\n" "" _wrap_body "${_wrap_candidate}")
+    string(REPLACE "@@LAPACK_GEN_SEMICOLON@@" ";" _wrap_body "${_wrap_body}")
+    string(REPLACE "@@LAPACK_GEN_LBRACKET@@" "[" _wrap_body "${_wrap_body}")
+    string(REPLACE "@@LAPACK_GEN_RBRACKET@@" "]" _wrap_body "${_wrap_body}")
+    string(LENGTH "${_wrap_body}" _wrap_body_len)
+    if(NOT _wrap_body_len GREATER 72)
+      continue()
     endif()
+    _wrap_fixed_form_line("${_wrap_body}" _wrap_body_wrapped)
+    if(_wrap_body_wrapped STREQUAL _wrap_body)
+      continue()
+    endif()
+    string(REPLACE "\n${_wrap_body}" "\n${_wrap_body_wrapped}" _wrap_work "${_wrap_work}")
+  endforeach()
+  string(SUBSTRING "${_wrap_work}" 1 -1 _wrap_text)
 
-    string(SUBSTRING "${remaining_source}" 0 ${newline_index} source_line)
-    math(EXPR next_index "${newline_index} + 1")
-    string(SUBSTRING "${remaining_source}" ${next_index} -1 remaining_source)
-
-    _wrap_fixed_form_line("${source_line}" wrapped_line)
-    string(APPEND wrapped_source "${wrapped_line}\n")
-  endwhile()
-
-  set(${result} "${wrapped_source}" PARENT_SCOPE)
+  set(${result} "${_wrap_text}" PARENT_SCOPE)
 endfunction()
 
 # Protect string literals in the source content by replacing them with
 # placeholders, and save the original literals in variables for later restoration.
 function(_protect_fortran_string_literals input_text result count_result)
   set(output_text "")
-  set(remaining_source "${input_text}")
   set(literal_count 0)
   set(string_literal_regex "'([^']|'')*'|\"([^\"]|\"\")*\"")
 
-  while(NOT remaining_source STREQUAL "")
-    string(FIND "${remaining_source}" "\n" newline_index)
-    if(newline_index EQUAL -1)
-      set(current_line "${remaining_source}")
-      set(remaining_source "")
-      set(has_newline FALSE)
+  _split_lines(input_text _protect_lines)
+  set(_protect_first TRUE)
+  foreach(_protect_masked IN LISTS _protect_lines)
+    if(_protect_first)
+      set(_protect_first FALSE)
     else()
-      string(SUBSTRING "${remaining_source}" 0 ${newline_index} current_line)
-      math(EXPR next_index "${newline_index} + 1")
-      string(SUBSTRING "${remaining_source}" ${next_index} -1
-        remaining_source)
-      set(has_newline TRUE)
+      string(APPEND output_text "\n")
     endif()
-
+    # Match and replace on the masked line: literals may contain `;` or
+    # unmatched brackets, which would corrupt list iteration. The saved
+    # copy is restored to exact text, since the restore phase works on
+    # the real (unmasked) rewritten content.
+    set(current_line "${_protect_masked}")
     string(REGEX MATCHALL "${string_literal_regex}" string_literals
       "${current_line}")
     foreach(string_literal IN LISTS string_literals)
       set(placeholder "@@LAPACK_SUFFIX_STRING_LITERAL_${literal_count}@@")
       string(REPLACE "${string_literal}" "${placeholder}" current_line
         "${current_line}")
-      set(protected_string_literal_${literal_count} "${string_literal}"
+      set(_protected_literal "${string_literal}")
+      _restore_line(_protected_literal)
+      set(protected_string_literal_${literal_count} "${_protected_literal}"
         PARENT_SCOPE)
       math(EXPR literal_count "${literal_count} + 1")
     endforeach()
+    _restore_line(current_line)
 
     string(APPEND output_text "${current_line}")
-    if(has_newline)
-      string(APPEND output_text "\n")
-    endif()
-  endwhile()
+  endforeach()
 
   set(${result} "${output_text}" PARENT_SCOPE)
   set(${count_result} "${literal_count}" PARENT_SCOPE)
@@ -335,10 +371,27 @@ function(_restore_fortran_string_literals input_text literal_count result)
   set(${result} "${output_text}" PARENT_SCOPE)
 endfunction()
 
-get_filename_component(output_dir "${OUTPUT_FILE}" DIRECTORY)
-file(MAKE_DIRECTORY "${output_dir}")
+math(EXPR _last_pair_index "${_num_input_files} - 1")
+foreach(_pair_index RANGE 0 ${_last_pair_index})
+  list(GET INPUT_FILES ${_pair_index} INPUT_FILE)
+  list(GET OUTPUT_FILES ${_pair_index} OUTPUT_FILE)
 
-file(READ "${INPUT_FILE}" source_content)
+  # Check whether this input file is fixed or free form based on extension.
+  get_filename_component(input_extension "${INPUT_FILE}" LAST_EXT)
+  string(TOLOWER "${input_extension}" input_extension_lower)
+  if(input_extension_lower MATCHES "^\\.f(90|95|03|08)$")
+    set(_source_is_free_form TRUE)
+  else()
+    set(_source_is_free_form FALSE)
+  endif()
+
+  unset(existing_output)
+  unset(protected_string_literal_count)
+
+  get_filename_component(output_dir "${OUTPUT_FILE}" DIRECTORY)
+  file(MAKE_DIRECTORY "${output_dir}")
+
+  file(READ "${INPUT_FILE}" source_content)
 set(rewritten_content "${source_content}")
 
 # Extract symbol names from the source file
@@ -346,61 +399,88 @@ string(REPLACE "\r\n" "\n" symbol_scan_source "${source_content}")
 string(REPLACE "\r" "\n" symbol_scan_source "${symbol_scan_source}")
 set(symbol_names)
 
-while(1)
-  _pop_source_line(symbol_scan_source current_line has_line)
-  if(NOT has_line)
-    break()
+_split_lines(symbol_scan_source _scan_lines)
+set(_have_logical FALSE)
+set(logical_line "")
+set(last_line "")
+foreach(_scan_masked IN LISTS _scan_lines)
+  # Map blank-line shields back; `;` stays masked while scanning (the
+  # declaration patterns never need the literal `;`).
+  if("${_scan_masked}" STREQUAL "@@LAPACK_GEN_EMPTY_LINE@@")
+    set(current_line "")
+  else()
+    set(current_line "${_scan_masked}")
   endif()
 
   _is_fortran_comment_line("${current_line}" is_comment_line)
   if(is_comment_line)
+    # A comment ends the open logical line, exactly like the lookahead
+    # version breaking its continuation join on a comment line.
+    if(_have_logical)
+      if("${logical_line}" MATCHES "(external|EXTERNAL|subroutine|SUBROUTINE|function|FUNCTION|use|USE|module|MODULE)")
+        _extract_symbols("${logical_line}" symbols)
+      else()
+        set(symbols)
+      endif()
+      if(symbols)
+        list(APPEND symbol_names ${symbols})
+      endif()
+      set(_have_logical FALSE)
+    endif()
     continue()
   endif()
 
-  _normalize_fortran_statement_fragment("${current_line}" logical_line)
-  set(last_line "${current_line}")
-
-  while(1)
-    _peek_source_line(symbol_scan_source continuation_line has_line)
-    if(NOT has_line)
-      break()
-    endif()
-
-    _is_fortran_comment_line("${continuation_line}" continuation_is_comment)
-    if(continuation_is_comment)
-      break()
-    endif()
-
-    set(consume_continuation FALSE)
+  # Does this line continue the open logical line? Same test as the old
+  # peek-at-next-line version, asked from the other side: the current
+  # line joins when it looks like a continuation of the previous one.
+  set(consume_continuation FALSE)
+  if(_have_logical)
     if(_source_is_free_form)
       if("${last_line}" MATCHES "&[ \t]*$" OR
-          "${continuation_line}" MATCHES "^[ \t]*&")
+          "${current_line}" MATCHES "^[ \t]*&")
         set(consume_continuation TRUE)
       endif()
     else()
-      _is_fixed_form_continuation_line("${continuation_line}"
+      _is_fixed_form_continuation_line("${current_line}"
         is_fixed_form_continuation)
       if(is_fixed_form_continuation)
         set(consume_continuation TRUE)
       endif()
     endif()
+  endif()
 
-    if(NOT consume_continuation)
-      break()
+  _normalize_fortran_statement_fragment("${current_line}" fragment)
+  if(consume_continuation)
+    string(APPEND logical_line " ${fragment}")
+  else()
+    if(_have_logical)
+      # Cheap trigger: most lines cannot declare anything, so skip the
+      # heavier _extract_symbols call unless a declaration keyword is
+      # present (it applies the precise anchored patterns itself).
+      if("${logical_line}" MATCHES "(external|EXTERNAL|subroutine|SUBROUTINE|function|FUNCTION|use|USE|module|MODULE)")
+        _extract_symbols("${logical_line}" symbols)
+      else()
+        set(symbols)
+      endif()
+      if(symbols)
+        list(APPEND symbol_names ${symbols})
+      endif()
     endif()
-
-    _pop_source_line(symbol_scan_source continuation_line has_line)
-    _normalize_fortran_statement_fragment("${continuation_line}"
-      continuation_fragment)
-    string(APPEND logical_line " ${continuation_fragment}")
-    set(last_line "${continuation_line}")
-  endwhile()
-
-  _extract_symbols("${logical_line}" symbols)
+    set(logical_line "${fragment}")
+    set(_have_logical TRUE)
+  endif()
+  set(last_line "${current_line}")
+endforeach()
+if(_have_logical)
+  if("${logical_line}" MATCHES "(external|EXTERNAL|subroutine|SUBROUTINE|function|FUNCTION|use|USE|module|MODULE)")
+    _extract_symbols("${logical_line}" symbols)
+  else()
+    set(symbols)
+  endif()
   if(symbols)
     list(APPEND symbol_names ${symbols})
   endif()
-endwhile()
+endif()
 list(REMOVE_DUPLICATES symbol_names)
 list(REMOVE_ITEM symbol_names ETIME etime ETIME_ etime_)
 
@@ -423,18 +503,58 @@ if(NOT REPLACE_IN_STRINGS)
     "${rewritten_content}" rewritten_content protected_string_literal_count)
 endif()
 
-# Replace symbol names with their suffixed versions in the source content
-foreach(symbol_name IN LISTS symbol_names)
-  string(TOLOWER "${symbol_name}" symbol_lower)
-  string(TOUPPER "${symbol_name}" symbol_upper)
-  foreach(symbol_variant "${symbol_name}" "${symbol_lower}" "${symbol_upper}")
-    set(match_regex "(^|[^A-Za-z0-9_])${symbol_variant}([^A-Za-z0-9_]|$)")
-    set(replacement "\\1${symbol_variant}${SUFFIX}\\2")
-    string(REGEX REPLACE
-      "${match_regex}" "${replacement}"
-      rewritten_content "${rewritten_content}")
+# Replace symbol names with their suffixed versions in the source content.
+# One alternation over the whole file replaces one full-file regex scan per
+# symbol and case variant. Matches are non-overlapping within a scan, so a
+# name adjacent to a renamed one (e.g. `X = FOO()+BAR()`) can be missed when
+# the shared boundary character is consumed; repeat to quiescence (renaming
+# only appends word characters, so blocked names become matchable and no
+# pass can undo an earlier one).
+if(symbol_names)
+  set(_rename_alternatives)
+  foreach(symbol_name IN LISTS symbol_names)
+    string(TOLOWER "${symbol_name}" symbol_lower)
+    string(TOUPPER "${symbol_name}" symbol_upper)
+    foreach(symbol_variant "${symbol_name}" "${symbol_lower}" "${symbol_upper}")
+      list(APPEND _rename_alternatives "${symbol_variant}")
+    endforeach()
   endforeach()
-endforeach()
+  list(REMOVE_DUPLICATES _rename_alternatives)
+  # Longest first so overlapping names prefer the longest match.
+  set(_sorted_alternatives)
+  foreach(_alternative IN LISTS _rename_alternatives)
+    string(LENGTH "${_alternative}" _alternative_len)
+    set(_inserted FALSE)
+    set(_new_sorted)
+    foreach(_current IN LISTS _sorted_alternatives)
+      if(NOT _inserted)
+        string(LENGTH "${_current}" _current_len)
+        if(_alternative_len GREATER _current_len)
+          list(APPEND _new_sorted "${_alternative}")
+          set(_inserted TRUE)
+        endif()
+      endif()
+      list(APPEND _new_sorted "${_current}")
+    endforeach()
+    if(NOT _inserted)
+      list(APPEND _new_sorted "${_alternative}")
+    endif()
+    set(_sorted_alternatives "${_new_sorted}")
+  endforeach()
+  list(JOIN _sorted_alternatives "|" _rename_pattern)
+  set(_rename_regex "(^|[^A-Za-z0-9_])(${_rename_pattern})([^A-Za-z0-9_]|$)")
+  set(_rename_replacement "\\1\\2${SUFFIX}\\3")
+  set(_rename_pass 0)
+  while(_rename_pass LESS 10)
+    set(_rename_before "${rewritten_content}")
+    string(REGEX REPLACE "${_rename_regex}" "${_rename_replacement}"
+      rewritten_content "${rewritten_content}")
+    if(rewritten_content STREQUAL _rename_before)
+      break()
+    endif()
+    math(EXPR _rename_pass "${_rename_pass} + 1")
+  endwhile()
+endif()
 
 # Restore string literals if they were protected
 if(NOT REPLACE_IN_STRINGS)
@@ -448,6 +568,7 @@ if(EXISTS "${OUTPUT_FILE}")
   file(READ "${OUTPUT_FILE}" existing_output)
 endif()
 
-if(NOT DEFINED existing_output OR NOT existing_output STREQUAL rewritten_content)
-  file(WRITE "${OUTPUT_FILE}" "${rewritten_content}")
-endif()
+  if(NOT DEFINED existing_output OR NOT existing_output STREQUAL rewritten_content)
+    file(WRITE "${OUTPUT_FILE}" "${rewritten_content}")
+  endif()
+endforeach()

@@ -13,6 +13,11 @@ if(BUILD_DEFAULT_API)
   add_test(example_DGESV_colmajor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGESV_colmajor)
   add_test(example_DGELS_rowmajor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGELS_rowmajor)
   add_test(example_DGELS_colmajor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGELS_colmajor)
+
+  # Examples gain nothing from unity builds; keep them fine-grained like
+  # the other test/example drivers.
+  set_target_properties(xexample_DGESV_rowmajor xexample_DGESV_colmajor
+    xexample_DGELS_rowmajor xexample_DGELS_colmajor PROPERTIES UNITY_BUILD OFF)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -30,4 +35,8 @@ if(BUILD_INDEX64_EXT_API)
   add_test(example_DGESV_colmajor_64 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGESV_colmajor_64)
   add_test(example_DGELS_rowmajor_64 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGELS_rowmajor_64)
   add_test(example_DGELS_colmajor_64 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xexample_DGELS_colmajor_64)
+
+  # See above: keep example drivers fine-grained.
+  set_target_properties(xexample_DGESV_rowmajor_64 xexample_DGESV_colmajor_64
+    xexample_DGELS_rowmajor_64 xexample_DGELS_colmajor_64 PROPERTIES UNITY_BUILD OFF)
 endif()
