@@ -537,6 +537,10 @@
 !>              to zero if JOBS=='C'. The computation proceeds
 !>              with original or modified data and warning
 !>              flag is set with INFO=4.
+!>       = 5 :: If JOBS == 'Y' and all columns of Y are zero,
+!>              the procedure returns early with K = 0. This is
+!>              reported as a degenerate input diagnostic, not
+!>              as an illegal argument.
 !>    \endverbatim
 !
 !  Authors:
@@ -796,8 +800,8 @@ SUBROUTINE ZGEDMDQ( JOBS,  JOBZ, JOBR, JOBQ, JOBT, JOBF,   &
                   EIGS, Z, LDZ, RES, B,  LDB,   V, LDV,    &
                   S, LDS, ZWORK(MINMN+1), LZWORK-MINMN, &
                   WORK,   LWORK, IWORK, LIWORK, INFO1 )
-      IF ( INFO1 == 2 .OR. INFO1 == 3 ) THEN
-          ! Return with error code. See ZGEDMD for details.
+      IF ( INFO1 == 2 .OR. INFO1 == 3 .OR. INFO1 == 5 ) THEN
+          ! Return with terminal diagnostic or error code.
           INFO = INFO1
           RETURN
       ELSE
