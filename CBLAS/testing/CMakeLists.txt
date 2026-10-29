@@ -22,6 +22,8 @@ endfunction()
 
 function(add_cblas_test_target target)
   add_executable(${target} ${ARGN})
+  # Test drivers must stay fine-grained (see TESTING/LIN).
+  set_target_properties(${target} PROPERTIES UNITY_BUILD OFF)
   lapack_add_coverage(${target})
 
   if(HAS_ATTRIBUTE_WEAK_SUPPORT)
