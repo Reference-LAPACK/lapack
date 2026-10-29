@@ -384,8 +384,11 @@
          END IF
          IF( M.EQ.1 ) THEN
             W( 1 ) = DBLE( CTMP1 )
-            IF( WANTZ )
-     $         Z( 1, 1 ) = CONE
+            IF( WANTZ ) THEN
+               Q( 1, 1 ) = CONE
+               Z( 1, 1 ) = CONE
+               IFAIL(1) = 0
+            ENDIF
          END IF
          RETURN
       END IF
