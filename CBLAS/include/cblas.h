@@ -371,6 +371,10 @@ void cblas_sskewsymv(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const CBLAS_INT N, const float alpha, const float *A,
                  const CBLAS_INT lda, const float *X, const CBLAS_INT incX,
                  const float beta, float *Y, const CBLAS_INT incY);
+void cblas_sskewsbmv(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                 const CBLAS_INT N, const CBLAS_INT K, const float alpha, const float *A,
+                 const CBLAS_INT lda, const float *X, const CBLAS_INT incX,
+                 const float beta, float *Y, const CBLAS_INT incY);
 void cblas_sger(CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,
                 const float alpha, const float *X, const CBLAS_INT incX,
                 const float *Y, const CBLAS_INT incY, float *A, const CBLAS_INT lda);
@@ -406,6 +410,10 @@ void cblas_dspmv(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const double beta, double *Y, const CBLAS_INT incY);
 void cblas_dskewsymv(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
                  const CBLAS_INT N, const double alpha, const double *A,
+                 const CBLAS_INT lda, const double *X, const CBLAS_INT incX,
+                 const double beta, double *Y, const CBLAS_INT incY);
+void cblas_dskewsbmv(CBLAS_LAYOUT layout, CBLAS_UPLO Uplo,
+                 const CBLAS_INT N, const CBLAS_INT K, const double alpha, const double *A,
                  const CBLAS_INT lda, const double *X, const CBLAS_INT incX,
                  const double beta, double *Y, const CBLAS_INT incY);
 void cblas_dger(CBLAS_LAYOUT layout, const CBLAS_INT M, const CBLAS_INT N,

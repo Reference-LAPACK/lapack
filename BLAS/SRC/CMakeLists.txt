@@ -67,7 +67,7 @@ set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
 #---------------------------------------------------------
 set(SBLAS2
   sgemv.f sgbmv.f ssymv.f ssbmv.f sspmv.f strmv.f stbmv.f stpmv.f strsv.f
-  stbsv.f stpsv.f sger.f ssyr.f sspr.f ssyr2.f sspr2.f sskewsymv.f sskewsyr2.f)
+  stbsv.f stpsv.f sger.f ssyr.f sspr.f ssyr2.f sspr2.f sskewsymv.f sskewsbmv.f sskewsyr2.f)
 
 set(CBLAS2
   cgemv.f cgbmv.f chemv.f chbmv.f chpmv.f ctrmv.f ctbmv.f ctpmv.f ctrsv.f
@@ -75,7 +75,7 @@ set(CBLAS2
 
 set(DBLAS2
   dgemv.f dgbmv.f dsymv.f dsbmv.f dspmv.f dtrmv.f dtbmv.f dtpmv.f dtrsv.f
-  dtbsv.f dtpsv.f dger.f dsyr.f dspr.f dsyr2.f dspr2.f dskewsymv.f dskewsyr2.f)
+  dtbsv.f dtpsv.f dger.f dsyr.f dspr.f dsyr2.f dspr2.f dskewsymv.f dskewsbmv.f dskewsyr2.f)
 
 set(ZBLAS2
   zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f ztrmv.f ztbmv.f ztpmv.f ztrsv.f

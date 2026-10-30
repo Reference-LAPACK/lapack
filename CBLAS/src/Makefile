@@ -86,13 +86,13 @@ zlib1: $(zlev1)
 slev2 = cblas_sgemv.o cblas_sgbmv.o cblas_sger.o  cblas_ssbmv.o cblas_sspmv.o \
         cblas_sspr.o  cblas_sspr2.o cblas_ssymv.o cblas_ssyr.o  cblas_ssyr2.o \
         cblas_stbmv.o cblas_stbsv.o cblas_stpmv.o cblas_stpsv.o cblas_strmv.o \
-        cblas_strsv.o cblas_sskewsymv.o cblas_sskewsyr2.o
+        cblas_strsv.o cblas_sskewsymv.o cblas_sskewsbmv.o cblas_sskewsyr2.o
 
 # Files for level 2 double precision real
 dlev2 = cblas_dgemv.o cblas_dgbmv.o cblas_dger.o  cblas_dsbmv.o cblas_dspmv.o \
         cblas_dspr.o  cblas_dspr2.o cblas_dsymv.o cblas_dsyr.o  cblas_dsyr2.o \
         cblas_dtbmv.o cblas_dtbsv.o cblas_dtpmv.o cblas_dtpsv.o cblas_dtrmv.o \
-        cblas_dtrsv.o cblas_dskewsymv.o cblas_dskewsyr2.o
+        cblas_dtrsv.o cblas_dskewsymv.o cblas_dskewsbmv.o cblas_dskewsyr2.o
 
 # Files for level 2 single precision complex
 clev2 = cblas_cgemv.o cblas_cgbmv.o cblas_chemv.o cblas_chbmv.o cblas_chpmv.o \
