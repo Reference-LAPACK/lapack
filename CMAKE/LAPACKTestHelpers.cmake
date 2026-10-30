@@ -45,8 +45,9 @@ function(lapack_no_constant_propagation_flag out_var)
 endfunction()
 
 # Disable it for the given tests that manufacture an Inf or a NaN: the
-# CXX, bidiagonal SVD and symmetric tridiagonal error-exit tests and the
-# packed symmetric-indefinite tests. Call this with every source list: the
+# CXX, bidiagonal SVD and symmetric tridiagonal error-exit tests, the
+# symmetric tridiagonal eigensolver tests and the packed
+# symmetric-indefinite tests. Call this with every source list: the
 # generated _64 and _TEST copies need it as much as the originals.
 function(lapack_nag_disable_constant_propagation)
   lapack_no_constant_propagation_flag(flag)
@@ -55,7 +56,7 @@ function(lapack_nag_disable_constant_propagation)
   endif()
   foreach(source IN LISTS ARGN)
     get_filename_component(name "${source}" NAME)
-    if(name MATCHES "^[scdz](errcxx|errbd|errst|chksp|chkhp)(_[A-Za-z0-9]+)*\\.f$")
+    if(name MATCHES "^[scdz](errcxx|errbd|errst|chkst|chksp|chkhp)(_[A-Za-z0-9]+)*\\.f$")
       set_source_files_properties("${source}"
         PROPERTIES COMPILE_OPTIONS "${flag}")
     endif()
