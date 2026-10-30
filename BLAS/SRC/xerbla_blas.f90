@@ -31,6 +31,8 @@
 !>
 !> Users should usually also use SET_LAPACK_XERBLA since the error
 !> handlers may be separate due to the vagaries of linkage.
+!> GET_BLAS_XERBLA returns the current BLAS XERBLA. It always returns an
+!> associated value, so can always be passed to SET_BLAS_XERBLA.
 !> The current handler value can be retrieved by calling GET_BLAS_XERBLA:
 !>
 !>   PROGRAM HELLO
@@ -39,13 +41,14 @@
 !>         CHARACTER*(*), INTENT(IN) :: SRNAME
 !>         INTEGER, INTENT(IN) :: INFO
 !>       END SUBROUTINE
-!>       FUNCTION GET_BLAS_XERBLA() RESULT(CB_RET)
+!>       SUBROUTINE GET_BLAS_XERBLA(CB)
+!>         IMPORT :: XERBLA_INTERFACE
 !>         IMPLICIT NONE
-!>         PROCEDURE(XERBLA_INTERFACE), POINTER :: CB_RET
-!>       END FUNCTION
+!>         PROCEDURE(XERBLA_INTERFACE), POINTER, INTENT(OUT) :: CB
+!>       END SUBROUTINE
 !>     END INTERFACE
 !>     PROCEDURE(XERBLA_INTERFACE), POINTER :: ALREADY_CB
-!>     ALREADY_CB => GET_BLAS_XERBLA()
+!>     CALL GET_BLAS_XERBLA(ALREADY_CB)
 !>   END PROGRAM HELLO
 !> \endverbatim
 !
@@ -70,7 +73,7 @@
 !  =====================================================================
 module xerbla_blas
   private
-  public :: active_callback, xerbla_interface
+  public :: active_callback, default_blas_xerbla, xerbla_interface
   intrinsic          null
   abstract interface
     subroutine xerbla_interface(srname, info)
@@ -79,17 +82,31 @@ module xerbla_blas
     end subroutine
   end interface
   procedure(xerbla_interface), pointer :: active_callback => null()
+contains
+  ! The default handler, the historical XERBLA. It is a module procedure,
+  ! so it has no fixed external name; GET_BLAS_XERBLA returns it while no
+  ! other handler is installed.
+  subroutine default_blas_xerbla(srname, info)
+    character*(*), intent(in) :: srname
+    integer, intent(in) :: info
+    intrinsic          len_trim
+    write (*, fmt = 9999) srname(1:len_trim(srname)), info
+    stop
+9999 format (' ** On entry to ', a, ' parameter number ', i2, ' had ', &
+             'an illegal value')
+  end subroutine
 end module xerbla_blas
 
+! Called by XERBLA: runs the installed handler, or the default.
 subroutine xerbla_blas_sub(srname, info)
   use xerbla_blas
   character*(*)      srname
   integer            info
-  if (.not. associated(active_callback)) then
-    print *, 'Error: BLAS XERBLA called but no callback registered'
-    stop 2
+  if (associated(active_callback)) then
+    call active_callback(srname, info)
+  else
+    call default_blas_xerbla(srname, info)
   end if
-  call active_callback(srname, info)
 end
 
 subroutine set_blas_xerbla(cb)
@@ -99,9 +116,17 @@ subroutine set_blas_xerbla(cb)
   active_callback => cb
 end
 
-function get_blas_xerbla() result(cb_ret)
+! A subroutine, not a function returning a procedure pointer: ifx
+! miscompiles references to such a function when the caller declares
+! it through an interface body (ICE in 2025.1, a call through a null
+! pointer in 2026.1).
+subroutine get_blas_xerbla(cb) ! never returns disassociated pointer
   use xerbla_blas
   implicit none
-  procedure(xerbla_interface), pointer :: cb_ret
-  cb_ret => active_callback
+  procedure(xerbla_interface), pointer :: cb
+  if (associated(active_callback)) then
+    cb => active_callback
+  else
+    cb => default_blas_xerbla
+  end if
 end
