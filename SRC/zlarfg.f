@@ -120,8 +120,9 @@
 *     .. Parameters ..
       INTEGER            DP
       PARAMETER          ( DP = KIND( 0.0D0 ) )
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      DOUBLE PRECISION   ONE, ZERO, HALF
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0,
+     $                   HALF = 0.5D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
@@ -133,7 +134,7 @@
       EXTERNAL           DLAMCH, DLAPY3, DZNRM2, ZLADIV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, SIGN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, HUGE, SIGN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZDSCAL, ZSCAL
@@ -181,16 +182,31 @@
             XNORM = DZNRM2( N-1, X, INCX )
             ALPHA = CMPLX( ALPHR, ALPHI, KIND=DP )
             BETA = -SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         ELSE IF( ABS( BETA ).GT.HALF*HUGE( ZERO ) ) THEN
+*
+*           |ALPHA| <= |BETA|, so ALPHA-BETA can overflow only when
+*           |BETA| > HUGE/2; scale X down and recompute them.
+*
+            KNT = -1
+            CALL ZDSCAL( N-1, SAFMIN, X, INCX )
+            ALPHI = ALPHI*SAFMIN
+            ALPHR = ALPHR*SAFMIN
+            XNORM = DZNRM2( N-1, X, INCX )
+            ALPHA = CMPLX( ALPHR, ALPHI, KIND=DP )
+            BETA = -SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          TAU = CMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA, KIND=DP )
          ALPHA = ZLADIV( CMPLX( ONE, KIND=DP ), ALPHA-BETA )
          CALL ZSCAL( N-1, ALPHA, X, INCX )
 *
-*        If ALPHA is subnormal, it may lose relative accuracy
+*        Undo the scaling.  If ALPHA is subnormal, it may lose relative
+*        accuracy
 *
          DO 20 J = 1, KNT
             BETA = BETA*SAFMIN
  20      CONTINUE
+         IF( KNT.LT.0 )
+     $      BETA = BETA*RSAFMN
          ALPHA = BETA
       END IF
 *
