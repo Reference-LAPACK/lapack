@@ -125,7 +125,7 @@
       REAL               S1, S2
       REAL               EPS, ERR, THRESH
       INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NINC, NKB,
-     $                   NOUT, NTRA
+     $                   NOUT, NTRA, VERS_MAJOR, VERS_MINOR, VERS_PATCH
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANS
@@ -147,7 +147,8 @@
       EXTERNAL           SDIFF, LSE
 *     .. External Subroutines ..
       EXTERNAL           SCHK1, SCHK2, SCHK3, SCHK4, SCHK5, SCHK6,
-     $                   SCHKE, SMVCH
+     $                   SCHKE, SMVCH, SET_BLAS_XERBLA, XER_REPLACE,
+     $                   IBLAVER
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -169,6 +170,7 @@
      $                   'SSKEWSYMV ', 'SSKEWSYR2 '/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_BLAS_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -176,6 +178,8 @@
       READ( NIN, FMT = * )NOUT
       OPEN( NOUT, FILE = SUMMRY, STATUS = 'UNKNOWN' )
       NOUTC = NOUT
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,9978) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read name and unit number for snapshot output file and open file.
 *
@@ -434,6 +438,7 @@
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
  9979 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9978 FORMAT (/ ' BLAS VERSION ', I1, '.', I2, '.', I1)
 *
 *     End of SBLAT2
 *
@@ -3385,7 +3390,7 @@
   10  CONTINUE
       RETURN
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of

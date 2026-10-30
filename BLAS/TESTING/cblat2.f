@@ -126,7 +126,7 @@
       REAL               S1, S2
       REAL               EPS, ERR, THRESH
       INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NINC, NKB,
-     $                   NOUT, NTRA
+     $                   NOUT, NTRA, VERS_MAJOR, VERS_MINOR, VERS_PATCH
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANS
@@ -149,7 +149,8 @@
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
       EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHK6,
-     $                   CCHKE, CMVCH
+     $                   CCHKE, CMVCH, SET_BLAS_XERBLA, XER_REPLACE,
+     $                   IBLAVER
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -165,8 +166,22 @@
      $                   'CTRSV ', 'CTBSV ', 'CTPSV ', 'CGERC ',
      $                   'CGERU ', 'CHER  ', 'CHPR  ', 'CHER2 ',
      $                   'CHPR2 '/
+      INTERFACE
+        SUBROUTINE XERBLA_INTERFACE(SRNAME, INFO)
+          CHARACTER*(*), INTENT(IN) :: SRNAME
+          INTEGER, INTENT(IN) :: INFO
+        END SUBROUTINE
+        SUBROUTINE GET_BLAS_XERBLA(CB)
+          IMPORT :: XERBLA_INTERFACE
+          IMPLICIT NONE
+          PROCEDURE(XERBLA_INTERFACE), POINTER, INTENT(OUT) :: CB
+        END SUBROUTINE
+      END INTERFACE
+      PROCEDURE(XERBLA_INTERFACE), POINTER :: ALREADY_CB
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL GET_BLAS_XERBLA(ALREADY_CB)
+      CALL SET_BLAS_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -174,6 +189,8 @@
       READ( NIN, FMT = * )NOUT
       OPEN( NOUT, FILE = SUMMRY, STATUS = 'UNKNOWN' )
       NOUTC = NOUT
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,9978) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read name and unit number for snapshot output file and open file.
 *
@@ -434,6 +451,7 @@
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
  9979 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9978 FORMAT (/ ' BLAS VERSION ', I1, '.', I2, '.', I1)
 *
 *     End of CBLAT2
 *
@@ -3403,7 +3421,7 @@
   10  CONTINUE
       RETURN
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of

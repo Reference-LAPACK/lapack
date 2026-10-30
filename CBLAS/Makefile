@@ -4,9 +4,14 @@ include $(TOPSRCDIR)/make.inc
 .PHONY: all
 all: cblas
 
+CBLAS_INCLUDES = include/cblas.h include/cblas_mangling.h include/cblas_f77.h
+
 .PHONY: cblas
-cblas: include/cblas_mangling.h include/cblas_f77.h
+cblas: $(CBLAS_INCLUDES)
 	$(MAKE) -C src
+
+include/cblas.h: include/cblas.h.in
+	sed 's/@FORTRAN_STRLEN_TYPE@/size_t/' $< > $@.tmp && mv $@.tmp $@
 
 include/cblas_mangling.h: include/cblas_mangling_with_flags.h.in
 	cp $< $@
@@ -27,7 +32,7 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C testing clean
 	$(MAKE) -C examples clean
-	rm -f include/cblas_mangling.h include/cblas_f77.h
+	rm -f $(CBLAS_INCLUDES)
 cleanobj:
 	$(MAKE) -C src cleanobj
 	$(MAKE) -C testing cleanobj

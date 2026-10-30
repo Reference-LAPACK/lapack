@@ -107,7 +107,8 @@
 *     .. Local Scalars ..
       REAL               S1, S2
       REAL               EPS, ERR, THRESH
-      INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NOUT, NTRA
+      INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NOUT, NTRA,
+     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANSA, TRANSB
@@ -130,7 +131,7 @@
       EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
       EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHKE, CMMCH
-      EXTERNAL           CCHK6
+      EXTERNAL           CCHK6, SET_BLAS_XERBLA, XER_REPLACE, IBLAVER
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -146,6 +147,7 @@
      $                   'CSYR2K', 'CGEMMTR'/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_BLAS_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -153,6 +155,8 @@
       READ( NIN, FMT = * )NOUT
       OPEN( NOUT, FILE = SUMMRY )
       NOUTC = NOUT
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,9982) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read name and unit number for snapshot output file and open file.
 *
@@ -409,6 +413,7 @@
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
  9983 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9982 FORMAT (/ ' BLAS VERSION ', I1, '.', I2, '.', I1)
 *
 *     End of CBLAT3
 *
@@ -3726,7 +3731,7 @@
 *     End of CHKXER
 *
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
 *
 *  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 3 BLAS

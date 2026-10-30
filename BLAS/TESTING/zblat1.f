@@ -54,8 +54,9 @@
       DOUBLE PRECISION S1, S2
       DOUBLE PRECISION SFAC
       INTEGER          IC
+      INTEGER          VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *     .. External Subroutines ..
-      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, HEADER, IBLAVER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -63,6 +64,8 @@
 *     .. Data statements ..
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,99995) VERS_MAJOR, VERS_MINOR, VERS_PATCH
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
       DO 20 IC = 1, 14
@@ -101,6 +104,7 @@
 99997 FORMAT (1X,A6,' COMPUTATIONAL TESTS:',I9,' RUN,',I9,
      +        ' FAILED')
 99996 FORMAT (' Total time used = ',F12.2,' seconds',/)
+99995 FORMAT (/ ' BLAS VERSION ', I1, '.', I2, '.', I1)
 *
 *     End of ZBLAT1
 *

@@ -253,7 +253,7 @@ if(BLAS_LIBRARIES)
   enable_language(Fortran)
   include(CheckFortranFunctionExists)
   set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
+  CHECK_FORTRAN_FUNCTION_EXISTS("dgemmtr" BLAS_FOUND)
   unset(CMAKE_REQUIRED_LIBRARIES)
   if(BLAS_FOUND)
     message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
@@ -709,6 +709,7 @@ if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
                         SRC/VARIANTS
                         BLAS/SRC/lsame.f
                         BLAS/SRC/xerbla.f
+                        BLAS/SRC/xerbla_blas.f90
                         BLAS/SRC/xerbla_array.f
                         INSTALL/slamchf77.f
                         INSTALL/dlamchf77.f )
