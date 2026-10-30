@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.18)
 project(TIMING Fortran)
 
+# Timing tools bundle their own sources; unity batches gain nothing here.
+set(CMAKE_UNITY_BUILD OFF)
+
 # Add the CMake directory for custom CMake modules
 set(CMAKE_MODULE_PATH "${TIMING_SOURCE_DIR}/../CMAKE" ${CMAKE_MODULE_PATH})
 

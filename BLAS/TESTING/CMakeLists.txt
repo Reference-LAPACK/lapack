@@ -1,5 +1,8 @@
 function(_add_blas_test name src test_input test_output)
   add_executable(${name} ${src})
+  # Single-source drivers gain nothing from unity builds (the unity file
+  # would just include that one source), so keep them as-is.
+  set_target_properties(${name} PROPERTIES UNITY_BUILD OFF)
   target_link_libraries(${name} PRIVATE ${BLASLIB})
   lapack_add_coverage(${name})
 
