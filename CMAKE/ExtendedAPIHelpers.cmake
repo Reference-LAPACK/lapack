@@ -1,9 +1,5 @@
 include_guard(GLOBAL)
 
-set(EXTENDED_API_GENERATOR
-  "${CMAKE_CURRENT_LIST_DIR}/GenerateSuffixedSource.cmake" CACHE INTERNAL
-  "Script that generates suffixed sources for extended APIs")
-
 if(BUILD_INDEX64_EXT_API)
   add_custom_target(64bit_codegen ALL
     COMMENT "Generating 64-bit suffixed sources for extended API")
@@ -66,10 +62,10 @@ function(generate_suffixed_sources target source_list generated_sources)
         COMMAND
           "${CMAKE_COMMAND}"
           ${generator_args}
-          -P "${EXTENDED_API_GENERATOR}"
+          -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/GenerateSuffixedSource.cmake"
         DEPENDS
           "${source_abs}"
-          "${EXTENDED_API_GENERATOR}"
+          "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/GenerateSuffixedSource.cmake"
         COMMENT "Generating ${extended_api_SUFFIX} extended API source for ${_source}"
         VERBATIM)
 
