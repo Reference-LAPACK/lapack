@@ -76,8 +76,9 @@
      $                   RQCORR2, SIGMA, TMP, TMP2, ZTZ, ZTZ2
 *     ..
 *     .. External Functions ..
+      LOGICAL            LSAME
       REAL   SDOT, SLAMCH, SNRM2
-      EXTERNAL           SDOT, SLAMCH, SNRM2
+      EXTERNAL           LSAME, SDOT, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SLAR1V_TGK, SLAR1V2_TGK,
@@ -301,7 +302,7 @@
 *                          (the caller falls back to SBDSDC).
                            INFO = 3
                            RETURN
-                        ELSE IF( REP.EQ.'T' ) THEN
+                        ELSE IF( LSAME( REP, 'T' ) ) THEN
 *                          At the root the representation is the
 *                          Golub-Kahan matrix by its entries, so the
 *                          LDL^T-based inverse-iteration fallback does

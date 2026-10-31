@@ -43,8 +43,8 @@
 *> the tuning parameters for their particular machine using the option
 *> and problem size information in the arguments.
 *>
-*> This routine will not function correctly if it is converted to all
-*> lower case.  Converting it to all upper case is allowed.
+*> Routine names are compared case-insensitively using LSAME and LSAMEN;
+*> no conversion of NAME to upper case is needed.
 *> \endverbatim
 *
 *  Arguments:
@@ -87,8 +87,8 @@
 *> \param[in] NAME
 *> \verbatim
 *>          NAME is CHARACTER*(*)
-*>          The name of the calling subroutine, in either upper case or
-*>          lower case.
+*>          The name of the calling subroutine, in upper, lower, or
+*>          mixed case.
 *> \endverbatim
 *>
 *> \param[in] OPTS
@@ -171,16 +171,17 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      INTEGER            I, IC, IZ, NB, NBMIN, NX
+      INTEGER            NB, NBMIN, NX
       LOGICAL            CNAME, SNAME, TWOSTAGE
       CHARACTER          C1*1, C2*2, C4*2, C3*3, SUBNAM*16
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
+      INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
       INTEGER            IEEECK, IPARMQ
-      EXTERNAL           IEEECK, IPARMQ
+      LOGICAL            LSAME, LSAMEN
+      EXTERNAL           IEEECK, IPARMQ, LSAME, LSAMEN
 *     ..
 *     .. Executable Statements ..
 *
@@ -194,66 +195,21 @@
 *
    10 CONTINUE
 *
-*     Convert NAME to upper case if the first character is lower case.
+*     Compare names without changing their case.
 *
       ILAENV = 1
       SUBNAM = NAME
-      IC = ICHAR( SUBNAM( 1: 1 ) )
-      IZ = ICHAR( 'Z' )
-      IF( IZ.EQ.90 .OR. IZ.EQ.122 ) THEN
-*
-*        ASCII character set
-*
-         IF( IC.GE.97 .AND. IC.LE.122 ) THEN
-            SUBNAM( 1: 1 ) = CHAR( IC-32 )
-            DO 20 I = 2, 6
-               IC = ICHAR( SUBNAM( I: I ) )
-               IF( IC.GE.97 .AND. IC.LE.122 )
-     $            SUBNAM( I: I ) = CHAR( IC-32 )
-   20       CONTINUE
-         END IF
-*
-      ELSE IF( IZ.EQ.233 .OR. IZ.EQ.169 ) THEN
-*
-*        EBCDIC character set
-*
-         IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $       ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $       ( IC.GE.162 .AND. IC.LE.169 ) ) THEN
-            SUBNAM( 1: 1 ) = CHAR( IC+64 )
-            DO 30 I = 2, 6
-               IC = ICHAR( SUBNAM( I: I ) )
-               IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $             ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $             ( IC.GE.162 .AND. IC.LE.169 ) )SUBNAM( I:
-     $             I ) = CHAR( IC+64 )
-   30       CONTINUE
-         END IF
-*
-      ELSE IF( IZ.EQ.218 .OR. IZ.EQ.250 ) THEN
-*
-*        Prime machines:  ASCII+128
-*
-         IF( IC.GE.225 .AND. IC.LE.250 ) THEN
-            SUBNAM( 1: 1 ) = CHAR( IC-32 )
-            DO 40 I = 2, 6
-               IC = ICHAR( SUBNAM( I: I ) )
-               IF( IC.GE.225 .AND. IC.LE.250 )
-     $            SUBNAM( I: I ) = CHAR( IC-32 )
-   40       CONTINUE
-         END IF
-      END IF
 *
       C1 = SUBNAM( 1: 1 )
-      SNAME = C1.EQ.'S' .OR. C1.EQ.'D'
-      CNAME = C1.EQ.'C' .OR. C1.EQ.'Z'
+      SNAME = LSAME( C1, 'S' ) .OR. LSAME( C1, 'D' )
+      CNAME = LSAME( C1, 'C' ) .OR. LSAME( C1, 'Z' )
       IF( .NOT.( CNAME .OR. SNAME ) )
      $   RETURN
       C2 = SUBNAM( 2: 3 )
       C3 = SUBNAM( 4: 6 )
       C4 = C3( 2: 3 )
-      TWOSTAGE = LEN( SUBNAM ).GE.11
-     $           .AND. SUBNAM( 11: 11 ).EQ.'2'
+      TWOSTAGE = LEN( SUBNAM ).GE.11 .AND. LSAME( SUBNAM( 11: 11 ), '2'
+     $    )
 *
       GO TO ( 50, 60, 70 )ISPEC
 *
@@ -267,7 +223,7 @@
 *
       NB = 1
 *
-      IF( SUBNAM(2:6).EQ.'LAORH' ) THEN
+      IF( LSAMEN( 5, SUBNAM(2:6), 'LAORH' ) ) THEN
 *
 *        This is for *LAORHR_GETRFNP routine
 *
@@ -276,31 +232,32 @@
          ELSE
              NB = 32
          END IF
-      ELSE IF( SUBNAM(2:6).EQ.'TZRZF' ) THEN
+      ELSE IF( LSAMEN( 5, SUBNAM(2:6), 'TZRZF' ) ) THEN
          IF( SNAME ) THEN
              NB = 64
          ELSE
              NB = 32
          END IF
-      ELSE IF( SUBNAM(2:6).EQ.'ORMRZ' ) THEN
+      ELSE IF( LSAMEN( 5, SUBNAM(2:6), 'ORMRZ' ) ) THEN
              NB = 64
-      ELSE IF( SUBNAM(2:6).EQ.'UNMRZ' ) THEN
+      ELSE IF( LSAMEN( 5, SUBNAM(2:6), 'UNMRZ' ) ) THEN
              NB = 32
-      ELSE IF( C2.EQ.'GE' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
-         ELSE IF( C3.EQ.'QRF' .OR. C3.EQ.'RQF' .OR. C3.EQ.'LQF' .OR.
-     $            C3.EQ.'QLF' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'QRF' ) .OR. LSAMEN( 3, C3, 'RQF' )
+     $       .OR. LSAMEN( 3, C3, 'LQF' ) .OR. LSAMEN( 3, C3, 'QLF' ) )
+     $       THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
                NB = 32
             END IF
-         ELSE IF( C3.EQ.'QR ') THEN
+         ELSE IF( LSAMEN( 3, C3, 'QR ' )) THEN
             IF( N3 .EQ. 1) THEN
                IF( SNAME ) THEN
 *     M*N
@@ -323,7 +280,7 @@
                   NB = 1
                END IF
             END IF
-         ELSE IF( C3.EQ.'LQ ') THEN
+         ELSE IF( LSAMEN( 3, C3, 'LQ ' )) THEN
             IF( N3 .EQ. 2) THEN
                IF( SNAME ) THEN
 *     M*N
@@ -346,41 +303,41 @@
                   NB = 1
                END IF
             END IF
-         ELSE IF( C3.EQ.'HRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'HRD' ) ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
                NB = 32
             END IF
-         ELSE IF( C3.EQ.'BRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'BRD' ) ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
                NB = 32
             END IF
-         ELSE IF( C3.EQ.'TRI' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( LSAMEN( 5, SUBNAM( 4: 7 ), 'QP3RK' ) ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
                NB = 32
             END IF
          END IF
-      ELSE IF( C2.EQ.'PO' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PO' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
          END IF
-      ELSE IF( C2.EQ.'SY' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                IF( TWOSTAGE ) THEN
                   NB = 192
@@ -394,53 +351,57 @@
                   NB = 64
                END IF
             END IF
-         ELSE IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+         ELSE IF( SNAME .AND. LSAMEN( 3, C3, 'TRD' ) ) THEN
             NB = 32
-         ELSE IF( SNAME .AND. C3.EQ.'GST' ) THEN
+         ELSE IF( SNAME .AND. LSAMEN( 3, C3, 'GST' ) ) THEN
             NB = 64
          END IF
-      ELSE IF( CNAME .AND. C2.EQ.'HE' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'HE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( TWOSTAGE ) THEN
                NB = 192
             ELSE
                NB = 64
             END IF
-         ELSE IF( C3.EQ.'TRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'TRD' ) ) THEN
             NB = 32
-         ELSE IF( C3.EQ.'GST' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'GST' ) ) THEN
             NB = 64
          END IF
-      ELSE IF( SNAME .AND. C2.EQ.'OR' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+      ELSE IF( SNAME .AND. LSAMEN( 2, C2, 'OR' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NB = 32
             END IF
-         ELSE IF( C3( 1: 1 ).EQ.'M' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
-               NB = 32
-            END IF
-         END IF
-      ELSE IF( CNAME .AND. C2.EQ.'UN' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
-               NB = 32
-            END IF
-         ELSE IF( C3( 1: 1 ).EQ.'M' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+         ELSE IF( LSAME( C3( 1: 1 ), 'M' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NB = 32
             END IF
          END IF
-      ELSE IF( C2.EQ.'GB' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'UN' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
+               NB = 32
+            END IF
+         ELSE IF( LSAME( C3( 1: 1 ), 'M' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
+               NB = 32
+            END IF
+         END IF
+      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                IF( N4.LE.64 ) THEN
                   NB = 1
@@ -455,8 +416,8 @@
                END IF
             END IF
          END IF
-      ELSE IF( C2.EQ.'PB' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                IF( N2.LE.64 ) THEN
                   NB = 1
@@ -471,20 +432,20 @@
                END IF
             END IF
          END IF
-      ELSE IF( C2.EQ.'TR' ) THEN
-         IF( C3.EQ.'TRI' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'TR' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
-         ELSE IF ( C3.EQ.'EVC' ) THEN
+         ELSE IF ( LSAMEN( 3, C3, 'EVC' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
-         ELSE IF( C3.EQ.'SYL' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'SYL' ) ) THEN
 *           The upper bound is to prevent overly aggressive scaling.
             IF( SNAME ) THEN
                NB = MIN( MAX( 48, INT( ( MIN( N1, N2 ) * 16 ) / 100) ),
@@ -494,33 +455,33 @@
      $                   80 )
             END IF
          END IF
-      ELSE IF( C2.EQ.'LA' ) THEN
-         IF( C3.EQ.'UUM' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'LA' ) ) THEN
+         IF( LSAMEN( 3, C3, 'UUM' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
-         ELSE IF( C3.EQ.'TRS' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'TRS' ) ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
                NB = 32
             END IF
-         ELSE IF( C3.EQ.'LLM' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'LLM' ) ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE
                NB = 64
             END IF
          END IF
-      ELSE IF( SNAME .AND. C2.EQ.'ST' ) THEN
-         IF( C3.EQ.'EBZ' ) THEN
+      ELSE IF( SNAME .AND. LSAMEN( 2, C2, 'ST' ) ) THEN
+         IF( LSAMEN( 3, C3, 'EBZ' ) ) THEN
             NB = 1
          END IF
-      ELSE IF( C2.EQ.'GG' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'GG' ) ) THEN
          NB = 32
-         IF( C3.EQ.'HD3' ) THEN
+         IF( LSAMEN( 3, C3, 'HD3' ) ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
@@ -536,33 +497,33 @@
 *     ISPEC = 2:  minimum block size
 *
       NBMIN = 2
-      IF( C2.EQ.'GE' ) THEN
-         IF( C3.EQ.'QRF' .OR. C3.EQ.'RQF' .OR. C3.EQ.'LQF' .OR. C3.EQ.
-     $       'QLF' ) THEN
+      IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'QRF' ) .OR. LSAMEN( 3, C3, 'RQF' ) .OR.
+     $       LSAMEN( 3, C3, 'LQF' ) .OR. LSAMEN( 3, C3, 'QLF' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
                NBMIN = 2
             END IF
-         ELSE IF( C3.EQ.'HRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'HRD' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
                NBMIN = 2
             END IF
-         ELSE IF( C3.EQ.'BRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'BRD' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
                NBMIN = 2
             END IF
-         ELSE IF( C3.EQ.'TRI' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
                NBMIN = 2
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( LSAMEN( 5, SUBNAM( 4: 7 ), 'QP3RK' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
@@ -570,51 +531,55 @@
             END IF
          END IF
 
-      ELSE IF( C2.EQ.'SY' ) THEN
-         IF( C3.EQ.'TRF' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( SNAME ) THEN
                NBMIN = 8
             ELSE
                NBMIN = 8
             END IF
-         ELSE IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+         ELSE IF( SNAME .AND. LSAMEN( 3, C3, 'TRD' ) ) THEN
             NBMIN = 2
          END IF
-      ELSE IF( CNAME .AND. C2.EQ.'HE' ) THEN
-         IF( C3.EQ.'TRD' ) THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'HE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRD' ) ) THEN
             NBMIN = 2
          END IF
-      ELSE IF( SNAME .AND. C2.EQ.'OR' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+      ELSE IF( SNAME .AND. LSAMEN( 2, C2, 'OR' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NBMIN = 2
             END IF
-         ELSE IF( C3( 1: 1 ).EQ.'M' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
-               NBMIN = 2
-            END IF
-         END IF
-      ELSE IF( CNAME .AND. C2.EQ.'UN' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
-               NBMIN = 2
-            END IF
-         ELSE IF( C3( 1: 1 ).EQ.'M' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+         ELSE IF( LSAME( C3( 1: 1 ), 'M' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NBMIN = 2
             END IF
          END IF
-      ELSE IF( C2.EQ.'GG' ) THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'UN' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
+               NBMIN = 2
+            END IF
+         ELSE IF( LSAME( C3( 1: 1 ), 'M' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
+               NBMIN = 2
+            END IF
+         END IF
+      ELSE IF( LSAMEN( 2, C2, 'GG' ) ) THEN
          NBMIN = 2
-         IF( C3.EQ.'HD3' ) THEN
+         IF( LSAMEN( 3, C3, 'HD3' ) ) THEN
             NBMIN = 2
          END IF
       END IF
@@ -626,70 +591,72 @@
 *     ISPEC = 3:  crossover point
 *
       NX = 0
-      IF( C2.EQ.'GE' ) THEN
-         IF( C3.EQ.'QRF' .OR. C3.EQ.'RQF' .OR. C3.EQ.'LQF' .OR. C3.EQ.
-     $       'QLF' ) THEN
+      IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'QRF' ) .OR. LSAMEN( 3, C3, 'RQF' ) .OR.
+     $       LSAMEN( 3, C3, 'LQF' ) .OR. LSAMEN( 3, C3, 'QLF' ) ) THEN
             IF( SNAME ) THEN
                NX = 128
             ELSE
                NX = 128
             END IF
-         ELSE IF( C3.EQ.'HRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'HRD' ) ) THEN
             IF( SNAME ) THEN
                NX = 128
             ELSE
                NX = 128
             END IF
-         ELSE IF( C3.EQ.'BRD' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'BRD' ) ) THEN
             IF( SNAME ) THEN
                NX = 128
             ELSE
                NX = 128
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( LSAMEN( 5, SUBNAM( 4: 7 ), 'QP3RK' ) ) THEN
             IF( SNAME ) THEN
                NX = 128
             ELSE
                NX = 128
             END IF
          END IF
-      ELSE IF( C2.EQ.'SY' ) THEN
-         IF( SNAME .AND. C3.EQ.'TRD' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+         IF( SNAME .AND. LSAMEN( 3, C3, 'TRD' ) ) THEN
             NX = 32
          END IF
-      ELSE IF( CNAME .AND. C2.EQ.'HE' ) THEN
-         IF( C3.EQ.'TRD' ) THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'HE' ) ) THEN
+         IF( LSAMEN( 3, C3, 'TRD' ) ) THEN
             NX = 32
          END IF
-      ELSE IF( SNAME .AND. C2.EQ.'OR' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+      ELSE IF( SNAME .AND. LSAMEN( 2, C2, 'OR' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NX = 128
             END IF
          END IF
-      ELSE IF( CNAME .AND. C2.EQ.'UN' ) THEN
-         IF( C3( 1: 1 ).EQ.'G' ) THEN
-            IF( C4.EQ.'QR' .OR. C4.EQ.'RQ' .OR. C4.EQ.'LQ' .OR. C4.EQ.
-     $          'QL' .OR. C4.EQ.'HR' .OR. C4.EQ.'TR' .OR. C4.EQ.'BR' )
-     $           THEN
+      ELSE IF( CNAME .AND. LSAMEN( 2, C2, 'UN' ) ) THEN
+         IF( LSAME( C3( 1: 1 ), 'G' ) ) THEN
+            IF( LSAMEN( 2, C4, 'QR' ) .OR. LSAMEN( 2, C4, 'RQ' ) .OR.
+     $          LSAMEN( 2, C4, 'LQ' ) .OR. LSAMEN( 2, C4, 'QL' ) .OR.
+     $          LSAMEN( 2, C4, 'HR' ) .OR. LSAMEN( 2, C4, 'TR' ) .OR.
+     $          LSAMEN( 2, C4, 'BR' ) ) THEN
                NX = 128
             END IF
          END IF
-      ELSE IF( C2.EQ.'GG' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'GG' ) ) THEN
          NX = 128
-         IF( C3.EQ.'HD3' ) THEN
+         IF( LSAMEN( 3, C3, 'HD3' ) ) THEN
             NX = 128
          END IF
-      ELSE IF( C2.EQ.'LA' ) THEN
-         IF( C3.EQ.'RFT' ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'LA' ) ) THEN
+         IF( LSAMEN( 3, C3, 'RFT' ) ) THEN
             NX = 64
-         ELSE IF( C3.EQ.'LLM' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'LLM' ) ) THEN
 *
 *           Note that this matches on *lallm*, but we only use it in
 *           *lallm_recursive at the moment
-         ELSE IF( C3.EQ.'UUM' ) THEN
+         ELSE IF( LSAMEN( 3, C3, 'UUM' ) ) THEN
 *
 *           Note that this matches on *lauum_recursive, which is the
 *           only place we currently use this

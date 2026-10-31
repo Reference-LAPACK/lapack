@@ -30,6 +30,10 @@ CBLAS/examples/cblas_ex2
 # LAPACK testing
 /lapack_testing_junit.xml
 TESTING/LIN/xlintst*
+TESTING/LIN/test_env_case
+TESTING/LIN/test_lin_env_case
+TESTING/LIN/test_env_case.exe
+TESTING/LIN/test_lin_env_case.exe
 TESTING/EIG/xeigtst*
 TESTING/EIG/xdmd*
 TESTING/*.out

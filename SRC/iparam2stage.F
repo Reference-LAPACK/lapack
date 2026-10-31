@@ -166,18 +166,18 @@
 *  ================================================================
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, IC, IZ, KD, IB, LHOUS, LWORK, NTHREADS,
+      INTEGER            KD, IB, LHOUS, LWORK, NTHREADS,
      $                   FACTOPTNB, QROPTNB, LQOPTNB
       LOGICAL            RPREC, CPREC
       CHARACTER          PREC*1, ALGO*3, STAG*5, SUBNAM*12, VECT*1
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CHAR, ICHAR, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      LOGICAL            LSAME
-      EXTERNAL           ILAENV, LSAME
+      LOGICAL            LSAME, LSAMEN
+      EXTERNAL           ILAENV, LSAME, LSAMEN
 *     ..
 *     .. Executable Statements ..
 *
@@ -200,61 +200,16 @@
 *
       IF( ISPEC .NE. 19 ) THEN
 *
-*        Convert NAME to upper case if the first character is lower case.
+*        Compare names without changing their case.
 *
          IPARAM2STAGE = -1
          SUBNAM = NAME
-         IC = ICHAR( SUBNAM( 1: 1 ) )
-         IZ = ICHAR( 'Z' )
-         IF( IZ.EQ.90 .OR. IZ.EQ.122 ) THEN
-*
-*           ASCII character set
-*
-            IF( IC.GE.97 .AND. IC.LE.122 ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC-32 )
-               DO 100 I = 2, 12
-                  IC = ICHAR( SUBNAM( I: I ) )
-                  IF( IC.GE.97 .AND. IC.LE.122 )
-     $               SUBNAM( I: I ) = CHAR( IC-32 )
-  100          CONTINUE
-            END IF
-*
-         ELSE IF( IZ.EQ.233 .OR. IZ.EQ.169 ) THEN
-*
-*           EBCDIC character set
-*
-            IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $          ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $          ( IC.GE.162 .AND. IC.LE.169 ) ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC+64 )
-               DO 110 I = 2, 12
-                  IC = ICHAR( SUBNAM( I: I ) )
-                  IF( ( IC.GE.129 .AND. IC.LE.137 ) .OR.
-     $                ( IC.GE.145 .AND. IC.LE.153 ) .OR.
-     $                ( IC.GE.162 .AND. IC.LE.169 ) )SUBNAM( I:
-     $                I ) = CHAR( IC+64 )
-  110          CONTINUE
-            END IF
-*
-         ELSE IF( IZ.EQ.218 .OR. IZ.EQ.250 ) THEN
-*
-*           Prime machines:  ASCII+128
-*
-            IF( IC.GE.225 .AND. IC.LE.250 ) THEN
-               SUBNAM( 1: 1 ) = CHAR( IC-32 )
-               DO 120 I = 2, 12
-                 IC = ICHAR( SUBNAM( I: I ) )
-                 IF( IC.GE.225 .AND. IC.LE.250 )
-     $             SUBNAM( I: I ) = CHAR( IC-32 )
-  120          CONTINUE
-            END IF
-         END IF
 *
          PREC  = SUBNAM( 1: 1 )
          ALGO  = SUBNAM( 4: 6 )
          STAG  = SUBNAM( 8:12 )
-         RPREC = PREC.EQ.'S' .OR. PREC.EQ.'D'
-         CPREC = PREC.EQ.'C' .OR. PREC.EQ.'Z'
+         RPREC = LSAME( PREC, 'S' ) .OR. LSAME( PREC, 'D' )
+         CPREC = LSAME( PREC, 'C' ) .OR. LSAME( PREC, 'Z' )
 *
 *        Invalid value for PRECISION
 *
@@ -344,24 +299,26 @@
          LQOPTNB      = ILAENV( 1, SUBNAM, ' ', NBI, NI, -1, -1 )
 *        Could be QR or LQ for TRD and the max for BRD
          FACTOPTNB    = MAX(QROPTNB, LQOPTNB)
-         IF( ALGO.EQ.'TRD' ) THEN
-            IF( STAG.EQ.'2STAG' ) THEN
+         IF( LSAMEN( 3, ALGO, 'TRD' ) ) THEN
+            IF( LSAMEN( 5, STAG, '2STAG' ) ) THEN
                LWORK = NI*NBI + NI*MAX(NBI+1,FACTOPTNB)
      $              + MAX(2*NBI*NBI, NBI*NTHREADS)
      $              + (NBI+1)*NI
-            ELSE IF( (STAG.EQ.'HE2HB').OR.(STAG.EQ.'SY2SB') ) THEN
+            ELSE IF( (LSAMEN( 5, STAG, 'HE2HB' )).OR.(LSAMEN( 5, STAG,
+     $          'SY2SB' )) ) THEN
                LWORK = NI*NBI + NI*MAX(NBI,FACTOPTNB) + 2*NBI*NBI
-            ELSE IF( (STAG.EQ.'HB2ST').OR.(STAG.EQ.'SB2ST') ) THEN
+            ELSE IF( (LSAMEN( 5, STAG, 'HB2ST' )).OR.(LSAMEN( 5, STAG,
+     $          'SB2ST' )) ) THEN
                LWORK = (2*NBI+1)*NI + NBI*NTHREADS
             ENDIF
-         ELSE IF( ALGO.EQ.'BRD' ) THEN
-            IF( STAG.EQ.'2STAG' ) THEN
+         ELSE IF( LSAMEN( 3, ALGO, 'BRD' ) ) THEN
+            IF( LSAMEN( 5, STAG, '2STAG' ) ) THEN
                LWORK = 2*NI*NBI + NI*MAX(NBI+1,FACTOPTNB)
      $              + MAX(2*NBI*NBI, NBI*NTHREADS)
      $              + (NBI+1)*NI
-            ELSE IF( STAG.EQ.'GE2GB' ) THEN
+            ELSE IF( LSAMEN( 5, STAG, 'GE2GB' ) ) THEN
                LWORK = NI*NBI + NI*MAX(NBI,FACTOPTNB) + 2*NBI*NBI
-            ELSE IF( STAG.EQ.'GB2BD' ) THEN
+            ELSE IF( LSAMEN( 5, STAG, 'GB2BD' ) ) THEN
                LWORK = (3*NBI+1)*NI + NBI*NTHREADS
             ENDIF
          ENDIF

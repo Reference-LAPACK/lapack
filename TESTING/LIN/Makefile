@@ -255,7 +255,8 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 	chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o
 
 .PHONY: all
-all: single double complex complex16 proto-single proto-double proto-complex proto-complex16
+all: single double complex complex16 proto-single proto-double proto-complex proto-complex16 \
+     test_env_case test_lin_env_case
 
 .PHONY: single double complex complex16
 single: xlintsts
@@ -299,6 +300,23 @@ xlintstrfc: $(CLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 xlintstrfz: $(ZLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+# The source-library environment test must not link the LIN ilaenv override.
+test_env_case: test_env_case.o $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+test_lin_env_case: test_lin_env_case.o ilaenv.o xlaenv.o $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+.PHONY: check-env-case
+check-env-case: test_env_case test_lin_env_case
+	OMP_NUM_THREADS=1 ./test_env_case
+	OMP_NUM_THREADS=1 ./test_lin_env_case
+
+test_env_case.o: test_env_case.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+test_lin_env_case.o: test_lin_env_case.f90
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+
 $(ALINTST): $(FRC)
 $(SCLNTST): $(FRC)
 $(DZLNTST): $(FRC)
@@ -315,7 +333,7 @@ clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o
 cleanexe:
-	rm -f xlintst*
+	rm -f xlintst* test_env_case test_lin_env_case
 
 schkaa.o: schkaa.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
