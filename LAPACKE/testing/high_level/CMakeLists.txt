@@ -34,10 +34,11 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
       ${CMAKE_CURRENT_BINARY_DIR}/${_runner}_main.c @ONLY)
 
     add_executable(${_runner} ${CMAKE_CURRENT_BINARY_DIR}/${_runner}_main.c ${_sources})
+    lapack_configure_target(${_runner})
     target_include_directories(${_runner} PRIVATE
       ${LAPACK_BINARY_DIR}/include ${LAPACK_SOURCE_DIR}/LAPACKE/include)
     target_link_libraries(${_runner}
-      ${LAPACKELIB} ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+      PRIVATE ${LAPACKELIB} LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
 
     add_test(NAME LAPACKE-high-level-${_prec} COMMAND ${_runner})
   endif()
@@ -49,12 +50,13 @@ foreach(_prec IN LISTS LAPACKE_TEST_PRECISIONS)
       ${CMAKE_CURRENT_BINARY_DIR}/${_runner}_main.c @ONLY)
 
     add_executable(${_runner} ${CMAKE_CURRENT_BINARY_DIR}/${_runner}_main.c ${_sources})
+    lapack_configure_target(${_runner})
     target_compile_definitions(${_runner} PRIVATE
       LAPACK_ILP64 LAPACKE_API64 WeirdNEC CBLAS_API64)
     target_include_directories(${_runner} PRIVATE
       ${LAPACK_BINARY_DIR}/include ${LAPACK_SOURCE_DIR}/LAPACKE/include)
     target_link_libraries(${_runner}
-      ${LAPACKELIB} ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+      PRIVATE ${LAPACKELIB} LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
 
     add_test(NAME LAPACKE-high-level-${_prec}_64 COMMAND ${_runner})
   endif()
