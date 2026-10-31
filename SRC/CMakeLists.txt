@@ -45,7 +45,7 @@ set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
 
-set(SCLAUX
+set(SCLAUX slarmm.f
    sbdsvdx.f sbdsvdmr3.f sbdsvdmr3_work.f sbdtgk.f slar1v_tgk.f slarrf_tgk.f slarrv_tgk.f slarrb_tgk.f sbdsdc.f
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
@@ -65,7 +65,8 @@ set(SCLAUX
    slartgp.f slartgs.f ../INSTALL/sroundup_lwork.f
    ${SECOND_SRC})
 
-set(DZLAUX
+set(DZLAUX dlarmm.f dbdsvdmr3.f dbdsvdmr3_work.f dbdtgk.f
+   dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f
    dbdsdc.f dbdsvdx.f
    dbdsqr.f ddisna.f
    disnan.f
@@ -113,7 +114,7 @@ set(SLASRC
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarf1f.f slarf1l.f slarfb.f slarfb_gett.f slarfg.f slarfgp.f slarft.f slarft_lvl2.f slarfx.f slarfy.f
-   slargv.f slarmm.f slarrv.f slartv.f
+   slargv.f slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slasy2.f
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrs3.f slatrz.f
@@ -292,7 +293,7 @@ set(ZCLASRC
     sisnan.f slaisnan.f)
 
 set(DLASRC
-   dbdsvdx.f dbdsvdmr3.f dbdsvdmr3_work.f dbdtgk.f dlar1v_tgk.f dlarrf_tgk.f dlarrv_tgk.f dlarrb_tgk.f dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
+   dbdsvdx.f        dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f
    dgbsvx.f dgbtf2.f dgbtrf.f dgbtrs.f dgebak.f dgebal.f dgebd2.f
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f
@@ -316,7 +317,7 @@ set(DLASRC
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfb_gett.f dlarfg.f dlarfgp.f dlarft.f dlarft_lvl2.f dlarfx.f dlarfy.f dlarf1f.f dlarf1l.f
-   dlargv.f dlarmm.f dlarrv.f dlartv.f
+   dlargv.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrs3.f dlatrz.f dlauu2.f
@@ -532,59 +533,39 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
-# Use special target for MOD files to guarantee they are built before
-# any other files that depend on them
-add_library(const_mod_file OBJECT ${CONSTMOD})
-set_target_properties(const_mod_file PROPERTIES Fortran_PREPROCESS ON)
-lapack_add_coverage(const_mod_file)
+# Module objects are private implementation details shared by both APIs.
+add_library(lapack-constants OBJECT ${CONSTMOD})
+lapack_configure_target(lapack-constants)
+set_target_properties(lapack-constants PROPERTIES Fortran_PREPROCESS ON
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
+target_include_directories(lapack-constants INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/modules")
+add_library(lapack-modules OBJECT ${NANMOD})
+lapack_configure_target(lapack-modules)
+target_link_libraries(lapack-modules PRIVATE lapack-constants)
+set_target_properties(lapack-modules PROPERTIES Fortran_PREPROCESS ON
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
+target_include_directories(lapack-modules INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/modules")
 
-add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
-set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
-lapack_add_coverage(mod_files)
-
+target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:lapack-constants> $<TARGET_OBJECTS:lapack-modules>)
 if(BUILD_DEFAULT_API)
   add_library(${LAPACKLIB}_obj OBJECT ${SOURCES} ${XSOURCES})
-  target_link_libraries(${LAPACKLIB}_obj PUBLIC mod_files)
+  lapack_configure_target(${LAPACKLIB}_obj)
   set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
-  lapack_add_coverage(${LAPACKLIB}_obj)
+  target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:${LAPACKLIB}_obj>)
 endif()
-
 if(BUILD_INDEX64_EXT_API)
-  include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${LAPACKLIB} SOURCES SOURCES_64)
-
   add_library(${LAPACKLIB}_64_obj OBJECT ${SOURCES_64})
-  target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)
+  lapack_configure_target(${LAPACKLIB}_64_obj)
   target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
   set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
+  target_sources(${LAPACKLIB} PRIVATE $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>)
 endif()
-
-add_library(${LAPACKLIB}
-  $<TARGET_OBJECTS:mod_files>
-  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
-
-# For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
-# that CMake adds (tested CMake 4.2).
+foreach(variant ${LAPACKLIB}_obj ${LAPACKLIB}_64_obj)
+  if(TARGET ${variant})
+    target_link_libraries(${variant} PRIVATE lapack-modules)
+  endif()
+endforeach()
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
-  set_target_properties (${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
+  set_target_properties(${LAPACKLIB} PROPERTIES LINKER_LANGUAGE C)
 endif()
-set_target_properties(
-  ${LAPACKLIB} PROPERTIES
-  VERSION ${LAPACK_VERSION}
-  SOVERSION ${LAPACK_MAJOR_VERSION}
-  )
-
-if(TEST_FORTRAN_COMPILER)
-  add_dependencies(${LAPACKLIB}
-    run_test_zcomplexabs run_test_zcomplexdiv
-    run_test_zcomplexmult run_test_zminMax)
-endif()
-
-if(USE_XBLAS)
-  target_link_libraries(${LAPACKLIB} PRIVATE ${XBLAS_LIBRARY})
-endif()
-target_link_libraries(${LAPACKLIB} PRIVATE ${BLAS_LIBRARIES})
-
-lapack_add_coverage(${LAPACKLIB})
-lapack_install_library(${LAPACKLIB})

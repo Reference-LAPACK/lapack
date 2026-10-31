@@ -22,7 +22,9 @@ endfunction()
 
 function(add_cblas_test_target target)
   add_executable(${target} ${ARGN})
-  lapack_add_coverage(${target})
+  lapack_configure_target(${target})
+  target_include_directories(${target} PRIVATE "${LAPACK_SOURCE_DIR}/CBLAS/include")
+
 
   if(HAS_ATTRIBUTE_WEAK_SUPPORT)
     target_compile_definitions(${target} PRIVATE HAS_ATTRIBUTE_WEAK_SUPPORT)
@@ -32,7 +34,8 @@ function(add_cblas_test_target target)
     target_compile_definitions(${target} PRIVATE CBLAS_DLL_IMPORTS)
   endif()
 
-  target_link_libraries(${target} PRIVATE ${CBLASLIB})
+  # The Fortran test drivers also call BLAS directly.
+  target_link_libraries(${target} PRIVATE ${CBLASLIB} ${lapack_blas_target})
 endfunction()
 
 function(add_cblas_test target output input f_source)

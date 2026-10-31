@@ -1,41 +1,8 @@
-# The test drivers ship their own XERBLA, which records the expected INFO and
-# returns, and rely on it replacing the one in the library, which prints and
-# stops.  A shared library on Windows always calls the XERBLA it was linked
-# with, so the first deliberate illegal argument stops the driver before any
-# test runs.  CBLAS skips its xerbla tests for the same reason, see
-# CBLAS/testing.  macOS binds a shared library with a two-level namespace by
-# default, which keeps the override from taking effect in the same way;
-# USE_FLAT_NAMESPACE restores it, see the top-level CMakeLists.txt.
-#
-# Recomputed on every configure, so that toggling BUILD_SHARED_LIBS in an
-# existing build tree is picked up, but left alone when it was asked for on
-# the command line: -D puts it in the cache, which defines it here.
-if(NOT DEFINED LAPACK_SKIP_ERROR_EXIT_TESTS)
-  if(WIN32 AND BUILD_SHARED_LIBS)
-    set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
-    message(STATUS
-      "Disabling the error-exit tests: the test suite's XERBLA cannot replace "
-      "the one in a shared library on Windows")
-  elseif(APPLE AND BUILD_SHARED_LIBS AND NOT USE_FLAT_NAMESPACE)
-    set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
-    message(STATUS
-      "Disabling the error-exit tests: the test suite's XERBLA cannot replace "
-      "the one in a shared library bound with the default two-level namespace; "
-      "configure with -D USE_FLAT_NAMESPACE=ON to run them")
-  else()
-    set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
-  endif()
-endif()
-
 # nagfor folds expressions that deliberately manufacture an Inf or a NaN
 # and then rejects the result ("Invalid operand for intrinsic SQRT ... Errors
 # found during constant propagation"), so the test drivers that do that are
 # built with constant propagation disabled.  The compiler id and the flag it
 # takes live here only.
-#
-# Read when this is called rather than when the file is included: the top
-# level enables Fortran well after that, so CMAKE_Fortran_COMPILER_ID is
-# still empty at include time.
 function(lapack_no_constant_propagation_flag out_var)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL "NAG")
     set(${out_var} "-Onopropagate" PARENT_SCOPE)
@@ -153,8 +120,50 @@ function(lapack_runtest_command out_var target)
     if(ARG_OUTPUT)
       list(APPEND command -DOUTPUT=${ARG_OUTPUT})
     endif()
-    list(APPEND command -DINTDIR=${CMAKE_CFG_INTDIR}
-      -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
+    list(APPEND command -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
     set(${out_var} ${command} PARENT_SCOPE)
+  endif()
+endfunction()
+
+function(lapack_add_test_summary)
+  message(STATUS "Enabling LAPACK test summary (see TESTING/testing_results.txt and lapack_testing_junit.xml)")
+
+  # Every test registered anywhere below the source root, so that adding a
+  # test directory never needs a matching edit here. Collected before the
+  # summary itself is added, so that it does not depend on itself.
+  function(_collect_tests dir out)
+    get_property(_tests DIRECTORY "${dir}" PROPERTY TESTS)
+    get_property(_subdirs DIRECTORY "${dir}" PROPERTY SUBDIRECTORIES)
+    foreach(_subdir IN LISTS _subdirs)
+      _collect_tests("${_subdir}" _subdir_tests)
+      list(APPEND _tests ${_subdir_tests})
+    endforeach()
+    set(${out} "${_tests}" PARENT_SCOPE)
+  endfunction()
+
+  _collect_tests("${LAPACK_SOURCE_DIR}" _all_tests)
+
+  # Without a job identifier the report keeps the plain suite and class names.
+  set(_summary_job_option "")
+  if(LAPACK_TESTING_JUNIT_JOB_ID)
+    set(_summary_job_option "--junit-job" "${LAPACK_TESTING_JUNIT_JOB_ID}")
+  endif()
+
+  file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
+  # The test drivers report a numerical failure in their output and still exit
+  # with a status of 0, so this is the test that fails the run when one of them
+  # found something: --fail-on-error turns any failure or error they reported
+  # into a nonzero exit status of the summary.
+  add_test(
+    NAME LAPACK_Test_Summary
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
+    COMMAND ${Python3_EXECUTABLE} "lapack_testing.py"
+      "--fail-on-error" "--fail-if-empty" "--fail-on-empty-output"
+      "--fail-on-unrecognized" "--merge-apis"
+      "--junit-xml" "lapack_testing_junit.xml" ${_summary_job_option}
+    )
+
+  if(_all_tests)
+    set_property(TEST LAPACK_Test_Summary APPEND PROPERTY DEPENDS ${_all_tests})
   endif()
 endfunction()

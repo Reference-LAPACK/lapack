@@ -110,8 +110,9 @@ function(add_eig_executable name)
 
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
-    target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-    lapack_add_coverage(${name})
+    lapack_configure_target(${name})
+    target_link_libraries(${name} PRIVATE LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
+
   endif()
 
   if(BUILD_INDEX64_EXT_API)
@@ -120,9 +121,10 @@ function(add_eig_executable name)
     lapack_nag_disable_constant_propagation(${sources_64})
 
     add_executable(${name}_64 ${sources_64})
+    lapack_configure_target(${name}_64)
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
-    target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-    lapack_add_coverage(${name}_64)
+    target_link_libraries(${name}_64 PRIVATE LAPACK::${TMGLIB} ${lapack_lapack_target} ${lapack_blas_target})
+
 
     # Add dependency to the global codegen target. Since we reuse the same
     # generated source file for multiple tests, the generation could be

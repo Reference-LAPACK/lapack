@@ -49,29 +49,15 @@ list(REMOVE_DUPLICATES SOURCES)
 
 if(BUILD_DEFAULT_API)
   add_library(${TMGLIB}_obj OBJECT ${SOURCES})
+  lapack_configure_target(${TMGLIB}_obj)
   set_target_properties(${TMGLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
-  lapack_add_coverage(${TMGLIB}_obj)
+  target_sources(${TMGLIB} PRIVATE $<TARGET_OBJECTS:${TMGLIB}_obj>)
 endif()
-
 if(BUILD_INDEX64_EXT_API)
-  include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${TMGLIB} SOURCES SOURCES_64)
-
   add_library(${TMGLIB}_64_obj OBJECT ${SOURCES_64})
-  target_compile_options(${TMGLIB}_64_obj PRIVATE "${FOPT_ILP64}")
+  lapack_configure_target(${TMGLIB}_64_obj)
+  target_compile_options(${TMGLIB}_64_obj PRIVATE ${FOPT_ILP64})
   set_target_properties(${TMGLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
+  target_sources(${TMGLIB} PRIVATE $<TARGET_OBJECTS:${TMGLIB}_64_obj>)
 endif()
-
-add_library(${TMGLIB}
-  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${TMGLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${TMGLIB}_64_obj>>)
-
-set_target_properties(
-  ${TMGLIB} PROPERTIES
-  VERSION ${LAPACK_VERSION}
-  SOVERSION ${LAPACK_MAJOR_VERSION}
-)
-
-target_link_libraries(${TMGLIB} PRIVATE ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
-lapack_add_coverage(${TMGLIB})
-lapack_install_library(${TMGLIB})
