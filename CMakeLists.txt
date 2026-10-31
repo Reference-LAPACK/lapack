@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.26...4.0)
 
 project(LAPACK C)
 
@@ -11,6 +11,82 @@ set(
   )
 
 set(CMAKE_C_STANDARD 99)
+
+include(CMakeDependentOption)
+
+# Build options. Keep the established cache names together here.
+string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type)
+set(testing_default OFF)
+if(build_type STREQUAL "coverage")
+  set(testing_default ON)
+endif()
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(BUILD_TESTING "Build tests" ${testing_default})
+
+option(BUILD_SINGLE "Build single precision real" ON)
+option(BUILD_DOUBLE "Build double precision real" ON)
+option(BUILD_COMPLEX "Build single precision complex" ON)
+option(BUILD_COMPLEX16 "Build double precision complex" ON)
+option(BUILD_DEPRECATED "Build deprecated routines" OFF)
+
+option(USE_OPTIMIZED_BLAS "Use an external BLAS implementation" OFF)
+option(USE_OPTIMIZED_LAPACK "Use an external LAPACK implementation" OFF)
+option(USE_XBLAS "Build extra precision routines using XBLAS" OFF)
+# External providers do not normally implement Netlib's suffixed ILP64 API.
+set(lapack_external_blas OFF)
+set(lapack_external_lapack OFF)
+if(USE_OPTIMIZED_BLAS OR BLAS_LIBRARIES)
+  set(lapack_external_blas ON)
+endif()
+if(USE_OPTIMIZED_LAPACK OR LAPACK_LIBRARIES)
+  set(lapack_external_lapack ON)
+endif()
+set(extended_default ON)
+if(lapack_external_blas OR lapack_external_lapack)
+  set(extended_default OFF)
+endif()
+option(BUILD_DEFAULT_API "Build the unsuffixed API" ON)
+option(BUILD_INDEX64 "Use 64-bit integers in the unsuffixed API" OFF)
+option(BUILD_INDEX64_EXT_API "Build the suffixed _64 API" ${extended_default})
+
+option(CBLAS "Build the C BLAS interface" OFF)
+option(LAPACKE "Build the C LAPACK interface" OFF)
+option(LAPACKE_WITH_TMG "Include matrix generators in LAPACKE" OFF)
+cmake_dependent_option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON "BUILD_SINGLE" OFF)
+cmake_dependent_option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON "BUILD_DOUBLE" OFF)
+cmake_dependent_option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON "BUILD_COMPLEX" OFF)
+cmake_dependent_option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON "BUILD_COMPLEX16" OFF)
+
+option(TEST_FORTRAN_COMPILER "Test Fortran complex arithmetic" OFF)
+option(USE_FLAT_NAMESPACE "Use a flat namespace on macOS" OFF)
+option(LAPACK_TESTING_USE_PYTHON "Use Python for the numerical test summary" ON)
+option(LAPACK_MEMORY_CHECK "Configure the tests for valgrind" OFF)
+set(LAPACK_TESTING_JUNIT_JOB_ID "" CACHE STRING "Job identifier in JUnit reports")
+mark_as_advanced(LAPACK_TESTING_JUNIT_JOB_ID)
+option(BUILD_HTML_DOCUMENTATION "Build the HTML API documentation" OFF)
+option(BUILD_MAN_DOCUMENTATION "Build the manual pages" OFF)
+option(BLAS++ "Build the optional BLAS++ package" OFF)
+option(LAPACK++ "Build the optional LAPACK++ package" OFF)
+set(LIBRARY_PREFIX "" CACHE STRING "Prefix added to library base names")
+set(LAPACK_BINARY_PATH_SUFFIX "" CACHE STRING "Subdirectory for installed libraries and binaries")
+
+if(NOT (BUILD_SINGLE OR BUILD_DOUBLE OR BUILD_COMPLEX OR BUILD_COMPLEX16))
+  message(FATAL_ERROR "Enable at least one of BUILD_SINGLE, BUILD_DOUBLE, BUILD_COMPLEX or BUILD_COMPLEX16.")
+endif()
+if(NOT BUILD_DEFAULT_API AND NOT BUILD_INDEX64_EXT_API)
+  message(FATAL_ERROR "Enable BUILD_DEFAULT_API or BUILD_INDEX64_EXT_API.")
+endif()
+if(LAPACKE_WITH_TMG)
+  set(LAPACKE ON)
+endif()
+# Recompute the platform default unless the caller explicitly supplied it.
+if(NOT DEFINED LAPACK_SKIP_ERROR_EXIT_TESTS)
+  set(LAPACK_SKIP_ERROR_EXIT_TESTS OFF)
+  if(BUILD_SHARED_LIBS AND (WIN32 OR (APPLE AND NOT USE_FLAT_NAMESPACE)))
+    set(LAPACK_SKIP_ERROR_EXIT_TESTS ON)
+    message(STATUS "Disabling error-exit tests: this shared-library platform cannot override XERBLA")
+  endif()
+endif()
 
 # Allow setting a prefix for the library names
 set(CMAKE_STATIC_LIBRARY_PREFIX "lib${LIBRARY_PREFIX}")
@@ -62,12 +138,7 @@ function(lapack_add_coverage lib)
   target_link_libraries(${lib} PRIVATE gcov)
 endfunction()
 
-set(LAPACK_TESTING_JUNIT_JOB_ID "" CACHE STRING
-  "Identifier of the job running the tests, prefixed to the JUnit report's names." )
-mark_as_advanced(LAPACK_TESTING_JUNIT_JOB_ID)
 
-option(LAPACK_TESTING_USE_PYTHON "Use Python for testing. Disable it on memory checks." ON)
-option(LAPACK_MEMORY_CHECK "Configure the test suite for valgrind memory checking" OFF)
 if(LAPACK_MEMORY_CHECK)
   find_program(MEMORYCHECK_COMMAND valgrind REQUIRED)
   message(STATUS "Memory checking with valgrind: ${MEMORYCHECK_COMMAND}")
@@ -83,7 +154,6 @@ if(LAPACK_MEMORY_CHECK)
 endif()
 
 # By default test Fortran compiler complex abs and complex division
-option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex division" OFF)
 if( TEST_FORTRAN_COMPILER )
 
   add_executable( test_zcomplexabs ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
@@ -117,14 +187,11 @@ if( TEST_FORTRAN_COMPILER )
 endif()
 
 # By default static library
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 message(STATUS "Build shared libraries: ${BUILD_SHARED_LIBS}")
 
-option(BUILD_DEFAULT_API "Build default API. Disable and combine with -DBUILD_INDEX64_EXT_API=ON to build only extended API" ON)
 message(STATUS "Build default API: ${BUILD_DEFAULT_API}")
 
 # By default build index32 library
-option(BUILD_INDEX64 "Build Index-64 API libraries" OFF)
 if(BUILD_INDEX64)
   set(BLASLIB "blas64")
   set(CBLASLIB "cblas64")
@@ -143,7 +210,6 @@ endif()
 message(STATUS "Build default API as Index-64: ${BUILD_INDEX64}")
 
 # By default build extended _64 API
-option(BUILD_INDEX64_EXT_API "Build Index-64 API as extended API with _64 suffix" ON)
 message(STATUS "Build Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 if(BUILD_INDEX64_EXT_API AND BUILD_INDEX64)
@@ -159,7 +225,6 @@ include(PreventInBuildInstalls)
 
 # Add option to enable flat namespace for symbol resolution on macOS
 if(APPLE)
-  option(USE_FLAT_NAMESPACE "Use flat namespaces for symbol resolution during build and runtime." OFF)
 
   if(USE_FLAT_NAMESPACE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flat_namespace")
@@ -171,10 +236,8 @@ endif()
 # --------------------------------------------------
 set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKLIB}-targets)
 
-set(LAPACK_BINARY_PATH_SUFFIX "" CACHE STRING "Path suffix appended to the install path of binaries")
 
 if(NOT "${LAPACK_BINARY_PATH_SUFFIX}" STREQUAL "" AND NOT "${LAPACK_BINARY_PATH_SUFFIX}" MATCHES "^/")
-  set(LAPACK_BINARY_PATH_SUFFIX "/${LAPACK_BINARY_PATH_SUFFIX}")
 endif()
 
 macro(lapack_install_library lib)
@@ -190,7 +253,6 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # --------------------------------------------------
 # Testing
-option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
 include(LAPACKTestHelpers)
 message(STATUS "Build tests: ${BUILD_TESTING}")
@@ -222,31 +284,21 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 
 # deprecated LAPACK and LAPACKE routines
-option(BUILD_DEPRECATED "Build deprecated routines" OFF)
 message(STATUS "Build deprecated routines: ${BUILD_DEPRECATED}")
 
 # --------------------------------------------------
 # Precision to build
 # By default all precisions are generated
-option(BUILD_SINGLE "Build single precision real" ON)
-option(BUILD_DOUBLE "Build double precision real" ON)
-option(BUILD_COMPLEX "Build single precision complex" ON)
-option(BUILD_COMPLEX16 "Build double precision complex" ON)
 message(STATUS "Build single precision real: ${BUILD_SINGLE}")
 message(STATUS "Build double precision real: ${BUILD_DOUBLE}")
 message(STATUS "Build single precision complex: ${BUILD_COMPLEX}")
 message(STATUS "Build double precision complex: ${BUILD_COMPLEX16}")
 
-if(NOT (BUILD_SINGLE OR BUILD_DOUBLE OR BUILD_COMPLEX OR BUILD_COMPLEX16))
-  message(FATAL_ERROR "Nothing to build, no precision selected.
-  Please enable at least one of these:
-  BUILD_SINGLE, BUILD_DOUBLE, BUILD_COMPLEX, BUILD_COMPLEX16.")
-endif()
+
 
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
-option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
 
 # Check the usage of the user provided BLAS libraries
 if(BLAS_LIBRARIES)
@@ -281,7 +333,6 @@ endif()
 
 # --------------------------------------------------
 # CBLAS
-option(CBLAS "Build CBLAS" OFF)
 
 # Include cblas_f77.h and cblas_mangling.h even if CBLAS is not built
 if(CBLAS OR NOT BLAS_FOUND)
@@ -295,13 +346,11 @@ endif()
 # --------------------------------------------------
 # XBLAS
 
-option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if(USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas REQUIRED)
   message(STATUS "Looking for XBLAS library: ${XBLAS_LIBRARY}")
 endif()
 
-option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
 # --------------------------------------------------
 # LAPACK
@@ -349,12 +398,7 @@ if(NOT LATESTLAPACK_FOUND)
 
   # Check second function
   include(CheckTimeFunction)
-  set(TIME_FUNC NONE)
-  CHECK_TIME_FUNCTION(NONE TIME_FUNC)
-  CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
-  CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
-  CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
-  CHECK_TIME_FUNCTION(INT_ETIME TIME_FUNC)
+  lapack_check_time_function(TIME_FUNC)
 
   # Set second function
   message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
@@ -368,19 +412,13 @@ endif()
 
 # --------------------------------------------------
 # LAPACKE
-option(LAPACKE "Build LAPACKE" OFF)
 
 # LAPACKE has also the interface to some routines from tmglib,
 # if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
-option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if(LAPACKE_WITH_TMG)
   set(LAPACKE ON)
 endif()
 
-option(LAPACKE_BUILD_SINGLE "Build LAPACKE single precision real" ON)
-option(LAPACKE_BUILD_DOUBLE "Build LAPACKE double precision real" ON)
-option(LAPACKE_BUILD_COMPLEX "Build LAPACKE single precision complex" ON)
-option(LAPACKE_BUILD_COMPLEX16 "Build LAPACKE double precision complex" ON)
 
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
@@ -468,8 +506,6 @@ endif()
 
 #-------------------------------------
 # BLAS++ / LAPACK++
-option(BLAS++ "Build BLAS++" OFF)
-option(LAPACK++ "Build LAPACK++" OFF)
 
 
 function(_display_cpp_implementation_msg name)
@@ -669,99 +705,6 @@ if (BLAS++)
   )
 endif()
 
-# --------------------------------------------------
-# Generate MAN and/or HTML Documentation
-option(BUILD_HTML_DOCUMENTATION "Create and install the HTML based API
-documentation (requires Doxygen) - command: make html" OFF)
-option(BUILD_MAN_DOCUMENTATION "Create and install the MAN based documentation (requires Doxygen) - command: make man" OFF)
-message(STATUS "Build html documentation: ${BUILD_HTML_DOCUMENTATION}")
-message(STATUS "Build man documentation: ${BUILD_MAN_DOCUMENTATION}")
-
 if(BUILD_HTML_DOCUMENTATION OR BUILD_MAN_DOCUMENTATION)
-    find_package(Doxygen)
-    if(NOT DOXYGEN_FOUND)
-         message(WARNING "Doxygen is needed to build the documentation.")
-
-    else()
-
-    set(DOXYGEN_PROJECT_BRIEF "LAPACK: Linear Algebra PACKage")
-    set(DOXYGEN_PROJECT_NUMBER ${LAPACK_VERSION})
-    set(DOXYGEN_OUTPUT_DIRECTORY DOCS)
-    set(DOXYGEN_PROJECT_LOGO DOCS/lapack.png)
-    set(DOXYGEN_OPTIMIZE_FOR_FORTRAN YES)
-    set(DOXYGEN_SOURCE_BROWSER YES)
-    set(DOXYGEN_CREATE_SUBDIRS YES)
-    set(DOXYGEN_SEPARATE_MEMBER_PAGES YES)
-    set(DOXYGEN_TAB_SIZE 8)
-    set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_FILE_PATTERNS *.f *.f90 *.c *.h )
-    set(DOXYGEN_RECURSIVE YES)
-    set(DOXYGEN_GENERATE_TREEVIEW YES)
-    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
-    set(DOXYGEN_INTERACTIVE_SVG YES)
-    set(DOXYGEN_WARN_NO_PARAMDOC YES)
-    set(DOXYGEN_WARN_LOGFILE doxygen_error)
-    set(DOXYGEN_LAYOUT_FILE "DOCS/DoxygenLayout.xml")
-
-    # Exclude functions that are duplicated, creating conflicts.
-    set(DOXYGEN_EXCLUDE .git
-                        .github
-                        SRC/VARIANTS
-                        BLAS/SRC/lsame.f
-                        BLAS/SRC/xerbla.f
-                        BLAS/SRC/xerbla_array.f
-                        INSTALL/slamchf77.f
-                        INSTALL/dlamchf77.f )
-
-    if (BUILD_HTML_DOCUMENTATION)
-        set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_GENERATE_MAN NO)
-        set(DOXYGEN_INLINE_SOURCES YES)
-        set(DOXYGEN_CALL_GRAPH YES)
-        set(DOXYGEN_CALLER_GRAPH YES)
-
-        set(DOXYGEN_HTML_OUTPUT explore-html)
-        set(DOXYGEN_HTML_TIMESTAMP YES)
-        doxygen_add_docs(
-            html
-
-            # Doxygen INPUT =
-            BLAS
-            CBLAS
-            SRC
-            INSTALL
-            TESTING
-            DOCS/groups-usr.dox
-            README.md
-
-            COMMENT "Generating html LAPACK documentation (it will take some time... time to grab a coffee)"
-        )
-        unset(DOXYGEN_HTML_OUTPUT)
-        unset(DOXYGEN_HTML_TIMESTAMP)
-    endif()
-    if (BUILD_MAN_DOCUMENTATION)
-        set(DOXYGEN_GENERATE_HTML NO)
-        set(DOXYGEN_GENERATE_MAN YES)
-        set(DOXYGEN_INLINE_SOURCES NO)
-        set(DOXYGEN_CALL_GRAPH NO)
-        set(DOXYGEN_CALLER_GRAPH NO)
-
-        set(DOXYGEN_MAN_LINKS YES)
-        doxygen_add_docs(
-            man
-
-            # Doxygen INPUT =
-            BLAS
-            CBLAS
-            SRC
-            INSTALL
-            TESTING
-            DOCS/groups-usr.dox
-
-            COMMENT "Generating man LAPACK documentation"
-        )
-        unset(DOXYGEN_MAN_LINKS)
-    endif()
-
-    endif()
+  add_subdirectory(DOCS)
 endif()

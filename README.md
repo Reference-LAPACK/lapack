@@ -76,7 +76,7 @@ CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
    is given in the main directory. Some specific `make.inc` are also available in
    the `INSTALL` directory.
  - LAPACK includes also the [CMake](https://cmake.org/) build.  You will need
-   to have CMake installed on your machine.  CMake will allow an easy
+   to have CMake 3.26 or newer installed on your machine.  CMake will allow an easy
    installation on a Windows Machine.  An example CMake build to install the
    LAPACK library under `$HOME/.local/lapack/` is:
    ```sh
@@ -85,6 +85,8 @@ CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
    cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local/lapack ..
    cmake --build . -j --target install
    ```
+   See the [CMake build and package guide](DOCS/cmake.md) for options, integer
+   APIs, exported targets and consumer tests.
  - LAPACK can be built and installed using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
    ```sh
    git clone https://github.com/Microsoft/vcpkg.git

@@ -636,8 +636,6 @@ lapacke_dbdsqr_work.c
 lapacke_dbdsvdx.c
 lapacke_dbdsvdmr3.c
 lapacke_dbdsvdmr3_work.c
-lapacke_sbdsvdmr3.c
-lapacke_sbdsvdmr3_work.c
 lapacke_dbdsvdx_work.c
 lapacke_ddisna.c
 lapacke_ddisna_work.c
@@ -1225,6 +1223,8 @@ set(SOURCES
 lapacke_ilaver.c
 )
 set(SOURCES_SINGLE
+lapacke_sbdsvdmr3.c
+lapacke_sbdsvdmr3_work.c
 lapacke_sbbcsd.c
 lapacke_sbbcsd_work.c
 lapacke_sbdsdc.c
