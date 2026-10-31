@@ -33,6 +33,10 @@
 *> It is called by an LAPACK routine if an input parameter has an
 *> invalid value.  A message is printed and execution stops.
 *>
+*> Users can replace the LAPACK XERBLA by calling SET_LAPACK_XERBLA
+*> with a replacement handler. See separate documentation in
+*> xerbla_lapack.f90.
+*>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
 *> \endverbatim
@@ -65,6 +69,7 @@
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
+      USE XERBLA_LAPACK
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -80,15 +85,12 @@
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN_TRIM
+      EXTERNAL XERBLA_LAPACK_SUB
 *     ..
 *     .. Executable Statements ..
 *
-      WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
-*
-      STOP
-*
- 9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
-     $      'an illegal value' )
+      CALL XERBLA_LAPACK_SUB( SRNAME, INFO )
+      RETURN
 *
 *     End of XERBLA
 *

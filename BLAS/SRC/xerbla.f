@@ -25,6 +25,10 @@
 *> It is called by an LAPACK routine if an input parameter has an
 *> invalid value.  A message is printed and execution stops.
 *>
+*> Users can replace the BLAS XERBLA by calling SET_BLAS_XERBLA
+*> with a replacement handler. See separate documentation in
+*> xerbla_blas.f90.
+*>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
 *> \endverbatim
@@ -57,6 +61,7 @@
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
+      USE XERBLA_BLAS
       IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
@@ -72,15 +77,12 @@
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN_TRIM
+      EXTERNAL XERBLA_BLAS_SUB
 *     ..
 *     .. Executable Statements ..
 *
-      WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
-*
-      STOP
-*
- 9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
-     $      'an illegal value' )
+      CALL XERBLA_BLAS_SUB( SRNAME, INFO )
+      RETURN
 *
 *     End of XERBLA
 *

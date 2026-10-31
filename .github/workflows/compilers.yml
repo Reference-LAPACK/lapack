@@ -77,7 +77,7 @@ jobs:
       CC: ${{ matrix.toolchain.CC }}
       FFLAGS: ${{ matrix.toolchain.FFLAGS }}
       CFLAGS: ${{ matrix.toolchain.CFLAGS }}
-      JOB_ID: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}-${{ matrix.lib_type }}
+      JOB_ID: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}${{ matrix.toolchain.flat_namespace && '-flat' || '' }}-${{ matrix.lib_type }}
 
     strategy:
       fail-fast: false
@@ -102,6 +102,12 @@ jobs:
         - FC: gfortran-14
           name: macos / gfortran / flat_namespace
           flat_namespace: true
+          CC: gcc-14
+          os: macos-26
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-label"
+        - FC: gfortran-14
+          name: macos / gfortran / 2-level namespace
           CC: gcc-14
           os: macos-26
           CFLAGS: "-Wall -pedantic"
@@ -439,7 +445,7 @@ jobs:
       if: ${{ !cancelled() && env.SKIP_TOOLCHAIN != 'true' }}
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
-        name: test-results-${{ matrix.toolchain.FC }}-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
+        name: test-results-${{ env.JOB_ID }}
         path: |
           build/TESTING/testing_results.txt
           build/lapack_testing_junit.xml
@@ -461,7 +467,7 @@ jobs:
         # The report is named above, so there is nothing to search the tree for.
         disable_search: true
         flags: tests-${{ env.JOB_ID }}
-        name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }} (${{ matrix.lib_type }})
+        name: ${{ env.JOB_ID }}
         fail_ci_if_error: true
         verbose: true
 
