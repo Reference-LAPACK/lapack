@@ -620,7 +620,7 @@
          W = W + TEMP
          ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV
      $          + THREE*ABS( TEMP )
-*    $          + ABS( TAU2 )*DW
+     $          + ABS( TAU2 )*DW
 *
 *        Test for convergence
 *
@@ -801,7 +801,7 @@
          W = RHOINV + PHI + PSI + TEMP
          ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV
      $          + THREE*ABS( TEMP )
-*    $          + ABS( TAU2 )*DW
+     $          + ABS( TAU2 )*DW
 *
          SWTCH = .FALSE.
          IF( ORGATI ) THEN
@@ -1036,7 +1036,7 @@
             W = RHOINV + PHI + PSI + TEMP
             ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV
      $             + THREE*ABS( TEMP )
-*    $             + ABS( TAU2 )*DW
+     $             + ABS( TAU2 )*DW
 *
             IF( W*PREW.GT.ZERO .AND. ABS( W ).GT.ABS( PREW ) / TEN )
      $         SWTCH = .NOT.SWTCH
