@@ -85,6 +85,7 @@ set(DZLAUX
    dstebz.f dstedc.f dstein.f dsteqr.f dsterf.f dstevx.f dstebr.f
    dlaed0_br.f dlaed4_br.f dlaed7_br.f dlaed8_br.f dlaed9_br.f
    dlaed0_merge_pair.f dsteqr_boundary_br.f
+   dsteds.f dlaes0.f dlaes1.f dlaes2.f dlaes3.f dlaes4.f
    dlartgp.f dlartgs.f ../INSTALL/droundup_lwork.f
    ../INSTALL/dlamch.f ${DSECOND_SRC})
 

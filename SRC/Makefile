@@ -114,6 +114,7 @@ DZLAUX = \
    dsteqr.o dsterf.o dstebr.o \
    dlaed0_br.o dlaed4_br.o dlaed7_br.o dlaed8_br.o dlaed9_br.o \
    dlaed0_merge_pair.o dsteqr_boundary_br.o \
+   dsteds.o dlaes0.o dlaes1.o dlaes2.o dlaes3.o dlaes4.o \
    dlaisnan.o disnan.o \
    dlartgp.o dlartgs.o ../INSTALL/droundup_lwork.o \
    ../INSTALL/dlamch.o ../INSTALL/dsecnd_$(TIMER).o

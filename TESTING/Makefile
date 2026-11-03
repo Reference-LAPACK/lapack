@@ -88,6 +88,8 @@ CDMDEIGTST= cdmd.out
 
 DEIGTST= dnep.out \
          dsep.out \
+         ddsteds.out \
+         ddsteds_error_locations.out \
          dse2.out \
          dsvd.out \
          dec.out \
@@ -637,3 +639,10 @@ FRC:
 	@FRC=$(FRC)
 
 .NOTPARALLEL:
+
+# DSTEDS boundary tests, built by TESTING/EIG's double target.
+ddsteds.out: dsteds.in EIG/test_dsteds_interfaces
+	./EIG/test_dsteds_interfaces < dsteds.in > $@ 2>&1
+
+ddsteds_error_locations.out: dsteds.in EIG/test_dsteds_error_locations
+	./EIG/test_dsteds_error_locations < dsteds.in > $@ 2>&1

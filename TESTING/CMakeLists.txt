@@ -89,6 +89,8 @@ if(BUILD_DOUBLE)
   # ======== DOUBLE EIG TESTS ===========================
   add_lapack_test(dnep.out nep.in xeigtstd)
   add_lapack_test(dsep.out sep.in xeigtstd)
+  add_lapack_test(ddsteds.out dsteds.in test_dsteds_interfaces)
+  add_lapack_test(ddsteds_error_locations.out dsteds.in test_dsteds_error_locations)
   add_lapack_test(dse2.out se2.in xeigtstd)
   add_lapack_test(dsvd.out svd.in xeigtstd)
   add_lapack_test(dec.out dec.in xeigtstd)
