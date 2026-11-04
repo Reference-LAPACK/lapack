@@ -146,7 +146,7 @@ set(DLINTST
   dtrt02.f dtrt03.f dtrt05.f dtrt06.f
   dgennd.f
   dqrt04.f dqrt05.f dchkqrt.f derrqrt.f dchkqrtp.f derrqrtp.f
-  dchklq.f dchklqt.f dchklqtp.f dchktsqr.f
+   dchklqt.f dchklqtp.f dchktsqr.f
   derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f
   dchkorhr_col.f derrorhr_col.f dorhr_col01.f dorhr_col02.f)
 

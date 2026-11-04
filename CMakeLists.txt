@@ -87,6 +87,8 @@ option(TEST_FORTRAN_COMPILER "Test Fortran compiler complex abs and complex divi
 if( TEST_FORTRAN_COMPILER )
 
   add_executable( test_zcomplexabs ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
+  # Single-source tools gain nothing from unity builds.
+  set_target_properties( test_zcomplexabs PROPERTIES UNITY_BUILD OFF)
   add_custom_target( run_test_zcomplexabs
     COMMAND test_zcomplexabs 2> test_zcomplexabs.err
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
@@ -94,6 +96,7 @@ if( TEST_FORTRAN_COMPILER )
     SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexabs.f )
 
   add_executable( test_zcomplexdiv ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
+  set_target_properties( test_zcomplexdiv PROPERTIES UNITY_BUILD OFF)
   add_custom_target( run_test_zcomplexdiv
     COMMAND test_zcomplexdiv 2> test_zcomplexdiv.err
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
@@ -101,6 +104,7 @@ if( TEST_FORTRAN_COMPILER )
     SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexdiv.f )
 
   add_executable( test_zcomplexmult ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
+  set_target_properties( test_zcomplexmult PROPERTIES UNITY_BUILD OFF)
   add_custom_target( run_test_zcomplexmult
     COMMAND test_zcomplexmult 2> test_zcomplexmult.err
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
@@ -108,6 +112,7 @@ if( TEST_FORTRAN_COMPILER )
     SOURCES ${LAPACK_SOURCE_DIR}/INSTALL/test_zcomplexmult.f )
 
   add_executable( test_zminMax ${LAPACK_SOURCE_DIR}/INSTALL/test_zminMax.f )
+  set_target_properties( test_zminMax PROPERTIES UNITY_BUILD OFF)
   add_custom_target( run_test_zminMax
     COMMAND test_zminMax 2> test_zminMax.err
     WORKING_DIRECTORY ${LAPACK_BINARY_DIR}/INSTALL
