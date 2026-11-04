@@ -151,7 +151,6 @@ macro(CheckLAPACKCompilerFlags)
     set(FPE_EXIT_FLAG "[-/]ieee=(stop|nonstd)")
 
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-ieee=full>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-dcfuns>")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
     add_link_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
