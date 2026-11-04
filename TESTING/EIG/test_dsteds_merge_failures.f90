@@ -21,7 +21,10 @@ program test_dsteds_merge_failures
   isel=0
   dummy=0d0
   call dsteds(n,d,e,0,isel,dummy,n,wq,-1,iq,-1,info)
-  if(info/=0) stop 1
+  if(info/=0) then
+    deallocate(d,e)
+    stop 1
+  endif
   lw=int(wq(1))
   liw=iq(1)
   allocate(w(lw),iw(liw))
@@ -63,6 +66,7 @@ program test_dsteds_merge_failures
     endif
   enddo
   call dlasum('DST',6,nerr,ntest)
+  deallocate(d,e,w,iw)
   if(nerr/=0) stop 1
 end program test_dsteds_merge_failures
 
