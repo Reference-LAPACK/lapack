@@ -92,6 +92,7 @@ SCLAUX = \
    ssteqr.o ssterf.o sstebr.o \
    slaed0_br.o slaed4_br.o slaed7_br.o slaed8_br.o slaed9_br.o \
    slaed0_merge_pair.o ssteqr_boundary_br.o \
+   ssteds.o slaes0.o slaes1.o slaes2.o slaes3.o slaes4.o \
    slaisnan.o sisnan.o \
    slartgp.o slartgs.o ../INSTALL/sroundup_lwork.o \
    ../INSTALL/second_$(TIMER).o

@@ -1,5 +1,5 @@
 ! Boundary and query tests for DSTEDS. Numerical checks use DCHKSTEDS,
-! DSTT21 and DSTT22 with the threshold read from dsteds.in.
+! DSTT21 and DSTT22 with the threshold read from steds.in.
 program test_dsteds_interfaces
   implicit none
   integer :: sizes(8), leaves(2), n, nn, js, jl, kind, sc, i, j, m

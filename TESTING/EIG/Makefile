@@ -50,7 +50,7 @@ SCIGTST = slafts.o slahd2.o slasum.o slatb9.o sstech.o sstect.o \
 SEIGTST = schkee.o \
    sbdt01.o sbdt02.o sbdt03.o sbdt04.o sbdt05.o \
    schkbb.o schkbd.o schkbk.o schkbl.o schkec.o \
-   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schkst2stg.o schksb2stg.o \
+   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schksteds.o schkst2stg.o schksb2stg.o \
    sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
    sdrges.o sdrgev.o sdrges3.o sdrgev3.o sdrgsx.o sdrgvx.o \
    sdrvbd.o sdrvmr3.o sdrves.o sdrvev.o sdrvsg.o sdrvsg2stg.o \
@@ -130,7 +130,7 @@ ZDMDEIGTST = zchkdmd.o
 all: single complex double complex16
 
 .PHONY: single complex double complex16
-single: xeigtsts xdmdeigtsts
+single: xeigtsts xdmdeigtsts test_ssteds_interfaces test_ssteds_error_locations
 complex: xeigtstc xdmdeigtstc
 double: xeigtstd xdmdeigtstd test_dsteds_interfaces test_dsteds_error_locations
 complex16: xeigtstz xdmdeigtstz
@@ -179,7 +179,8 @@ clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o
 cleanexe:
-	rm -f xeigtst* xdmdeigtst* test_dsteds_interfaces test_dsteds_error_locations
+	rm -f xeigtst* xdmdeigtst* test_dsteds_interfaces test_dsteds_error_locations \
+	      test_ssteds_interfaces test_ssteds_error_locations
 
 schkee.o: schkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
@@ -197,6 +198,30 @@ dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkdmd.o: zchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+
+# SSTEDS interface and boundary regression (same ratios as SCHKST).
+test_ssteds_interfaces: test_ssteds_interfaces.o schksteds.o sstt21.o \
+                       sstt22.o slasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
+                       $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+schksteds.o: schksteds.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+test_ssteds_interfaces.o: test_ssteds_interfaces.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# SSTEDS and SLAES0 are linked from local objects so that SLAES0 reaches the
+# program's SSTEQR mock without symbol interposition into a shared LAPACK.
+test_ssteds_error_locations: test_ssteds_error_locations.o slasum.o \
+                             ssteds_errloc.o slaes0_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_ssteds_error_locations.o: test_ssteds_error_locations.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+ssteds_errloc.o: $(TOPSRCDIR)/SRC/ssteds.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaes0_errloc.o: $(TOPSRCDIR)/SRC/slaes0.f
+	$(FC) $(FFLAGS) -c -o $@ $<
 
 # DSTEDS interface and boundary regression (same ratios as DCHKST).
 test_dsteds_interfaces: test_dsteds_interfaces.o dchksteds.o dstt21.o \

@@ -24,7 +24,7 @@ set(SEIGTST
   schkee.F
   sbdt01.f sbdt02.f sbdt03.f sbdt04.f sbdt05.f
   schkbb.f schkbd.f schkbk.f schkbl.f schkec.f
-  schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schkst2stg.f schksb2stg.f
+  schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schksteds.f90 schkst2stg.f schksb2stg.f
   sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
   sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f
   sdrvbd.f sdrvmr3.f sdrves.f sdrvev.f sdrvsg.f sdrvsg2stg.f
@@ -133,6 +133,14 @@ endfunction()
 
 if(BUILD_SINGLE)
 add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
+# SSTEDS and SLAES0 are compiled into the program so that SLAES0 reaches the
+# program's SSTEQR mock without relying on symbol interposition into a shared
+# LAPACK, which Windows DLLs and macOS two-level namespaces do not provide.
+add_eig_executable(test_ssteds_error_locations test_ssteds_error_locations.f90
+  slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f)
+add_eig_executable(test_ssteds_interfaces test_ssteds_interfaces.f90
+  schksteds.f90 sstt21.f sstt22.f slasum.f
+  ilaenv.f xlaenv.f xerbla.f chkxer.f)
 add_eig_executable(xdmdeigtsts ${SDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_sgges3_scaling test_sgges3_scaling.f90)
 add_eig_executable(test_sgesvj_emptsw test_sgesvj_emptsw.f90)

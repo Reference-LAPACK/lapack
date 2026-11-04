@@ -495,14 +495,38 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         parser=PARSER_BALANCE,
                     )
                 )
+            if letter == "s":
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="eig",
+                        description="SSTEDS interfaces and boundary cases",
+                        input_name="steds.in",
+                        output_name="ssteds.out",
+                        executable="test_ssteds_interfaces",
+                        parser=PARSER_STANDARD,
+                    )
+                )
+            if letter == "s":
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="eig",
+                        description="SSTEDS failure location diagnostics",
+                        input_name="steds.in",
+                        output_name="ssteds_error_locations.out",
+                        executable="test_ssteds_error_locations",
+                        parser=PARSER_STANDARD,
+                    )
+                )
             if letter == "d":
                 cases.append(
                     TestCase(
                         precision=letter,
                         family="eig",
                         description="DSTEDS interfaces and boundary cases",
-                        input_name="dsteds.in",
-                        output_name="ddsteds.out",
+                        input_name="steds.in",
+                        output_name="dsteds.out",
                         executable="test_dsteds_interfaces",
                         parser=PARSER_STANDARD,
                     )
@@ -513,8 +537,8 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         precision=letter,
                         family="eig",
                         description="DSTEDS failure location diagnostics",
-                        input_name="dsteds.in",
-                        output_name="ddsteds_error_locations.out",
+                        input_name="steds.in",
+                        output_name="dsteds_error_locations.out",
                         executable="test_dsteds_error_locations",
                         parser=PARSER_STANDARD,
                     )

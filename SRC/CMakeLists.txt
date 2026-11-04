@@ -62,6 +62,7 @@ set(SCLAUX
    sstein.f ssteqr.f ssterf.f sstevx.f sstebr.f
    slaed0_br.f slaed4_br.f slaed7_br.f slaed8_br.f slaed9_br.f
    slaed0_merge_pair.f ssteqr_boundary_br.f
+   ssteds.f slaes0.f slaes1.f slaes2.f slaes3.f slaes4.f
    slartgp.f slartgs.f ../INSTALL/sroundup_lwork.f
    ${SECOND_SRC})
 
