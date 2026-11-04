@@ -247,6 +247,13 @@
 *> (20) Same as (16), but multiplied by SQRT( underflow threshold )
 *> (21) A diagonally dominant tridiagonal matrix with geometrically
 *>      spaced diagonal entries 1, ..., ULP.
+*> (22) A tridiagonal matrix with constant diagonal entries
+*>      SQRT( underflow threshold / ULP ) and off-diagonal entries
+*>      SQRT( ULP ) / 10 times as large, whose squares underflow.
+*> (23) A tridiagonal matrix with diagonal entries +Inf, 2, ..., N
+*>      and off-diagonal entries 1/2, ..., 1/N.  Only SSTEMR is run
+*>      on it, in tests 35 and 37, each of which is 1/ULP if SSTEMR
+*>      returns INFO = 0.  N < 3 is skipped.
 *> \endverbatim
 *
 *  Arguments:
@@ -624,7 +631,7 @@
       REAL               TENTH
       PARAMETER          ( TENTH = 0.1E0 )
       INTEGER            MAXTYP
-      PARAMETER          ( MAXTYP = 22 )
+      PARAMETER          ( MAXTYP = 23 )
       LOGICAL            SRANGE
       PARAMETER          ( SRANGE = .FALSE. )
       LOGICAL            SREL
@@ -641,10 +648,9 @@
      $                   SMLSAV
       REAL               RNAN, RONE
       REAL               ABSTOL, ANINV, ANORM, COND, OVFL, RTOVFL,
-     $                   RTUNFL, TEMP1, TEMP2, TEMP3, TEMP4, ULP,
-     $                   ULPINV, UNFL, VL, VU
+     $                   RTUNFL, RZERO, TEMP1, TEMP2, TEMP3, TEMP4,
+     $                   ULP, ULPINV, UNFL, VL, VU
 *     ..
-      REAL               RINF, RZERO
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
@@ -669,11 +675,11 @@
 *     .. Data statements ..
       DATA               SMLSZS / 2, 8, 25 /
       DATA               KTYPE / 1, 2, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 8,
-     $                   8, 8, 9, 9, 9, 9, 9, 10, 11 /
+     $                   8, 8, 9, 9, 9, 9, 9, 10, 11, 1 /
       DATA               KMAGN / 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 2, 3, 1,
-     $                   2, 3, 1, 1, 1, 2, 3, 1, 4 /
+     $                   2, 3, 1, 1, 1, 2, 3, 1, 4, 1 /
       DATA               KMODE / 0, 0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
-     $                   0, 0, 4, 3, 1, 4, 4, 3, 0 /
+     $                   0, 0, 4, 3, 1, 4, 4, 3, 0, 0 /
 *     ..
 *     .. Executable Statements ..
 *
@@ -932,6 +938,46 @@
      $            IOLDSD
                INFO = ABS( IINFO )
                RETURN
+            END IF
+*
+*           Type 23 has an infinite diagonal entry, which SSTEMR
+*           must report instead of returning NaN eigenvalues.  It is
+*           given to SSTEMR alone: tests 35 and 37 (JOBZ = 'V' and
+*           'N', RANGE = 'A') are 1/ULP if it returns INFO = 0.
+*           SSTEMR solves N < 3 in closed form, so those sizes are
+*           skipped.  The matrix is not random: KTYPE( 23 ) = 1 leaves
+*           A zero, and it is built here.
+*
+            IF( JTYPE.EQ.23 ) THEN
+               NTEST = 0
+               IF( N.LT.3 .OR.
+     $             ILAENV( 10, 'SSTEMR', 'VA', 1, 0, 0, 0 ).NE.1 .OR.
+     $             ILAENV( 11, 'SSTEMR', 'VA', 1, 0, 0, 0 ).NE.1 )
+     $            GO TO 280
+               RZERO = ZERO
+               SD( 1 ) = ONE / RZERO
+               DO 97 J = 1, N - 1
+                  SD( J+1 ) = REAL( J+1 )
+                  SE( J ) = ONE / REAL( J+1 )
+   97          CONTINUE
+               DO 98 JR = 1, 37
+                  RESULT( JR ) = ZERO
+   98          CONTINUE
+               NTEST = 37
+               DO 99 JR = 35, 37, 2
+                  JOBZ = 'V'
+                  IF( JR.EQ.37 )
+     $               JOBZ = 'N'
+                  CALL SCOPY( N, SD, 1, D5, 1 )
+                  CALL SCOPY( N-1, SE, 1, WORK, 1 )
+                  CALL SSTEMR( JOBZ, 'A', N, D5, WORK, VL, VU, IL,
+     $                         IU, M, D1, Z, LDU, N, IWORK( 1 ), TRYRAC,
+     $                         WORK( N+1 ), LWORK-N, IWORK( 2*N+1 ),
+     $                         LIWORK-2*N, IINFO )
+                  IF( IINFO.EQ.0 )
+     $               RESULT( JR ) = ULPINV
+   99          CONTINUE
+               GO TO 280
             END IF
 *
   100       CONTINUE
@@ -2020,45 +2066,6 @@
   300    CONTINUE
   310 CONTINUE
 *
-*
-*     SSTEMR must not scale a matrix with an infinite entry to zero:
-*     the factor RMAX / TNRM underflows to zero for an infinite TNRM,
-*     and the routine returned INFO = 0 with every eigenvalue a NaN.
-*
-      IF( NMAX.GE.3 .AND. LWORK.GE.18*NMAX .AND. LIWORK.GE.12*NMAX .AND.
-     $    ILAENV( 10, 'SSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 .AND.
-     $    ILAENV( 11, 'SSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 ) THEN
-         N = NMAX
-         RZERO = ZERO
-         RINF = ONE / RZERO
-         DO 360 JOBNUM = 1, 2
-            IF( JOBNUM.EQ.1 ) THEN
-               JOBZ = 'V'
-            ELSE
-               JOBZ = 'N'
-            END IF
-            DO 350 J = 1, N
-               SD( J ) = REAL( J )
-               SE( J ) = ONE / REAL( J+1 )
-  350       CONTINUE
-            SD( 1 ) = RINF
-            SE( N ) = ZERO
-            VL = ZERO
-            VU = ZERO
-            IL = 0
-            IU = 0
-            TRYRAC = .TRUE.
-            CALL SSTEMR( JOBZ, 'A', N, SD, SE, VL, VU, IL, IU, M,
-     $                   WR, Z, LDU, N, IWORK( 1 ), TRYRAC, WORK,
-     $                   LWORK, IWORK( 2*N+1 ), LIWORK-2*N, IINFO )
-            IF( IINFO.EQ.0 ) THEN
-               WRITE( NOUNIT, FMT = 9984 )JOBZ
-               NERRS = NERRS + 1
-            END IF
-            NTESTT = NTESTT + 1
-  360    CONTINUE
-      END IF
-*
 *     Summary
 *
 *
@@ -2111,8 +2118,6 @@
 *
  9986 FORMAT( ' SCHKST: SSTEMR( ', A1, ', A ) on a matrix with a',
      $      ' NaN returned INFO=', I6 )
- 9984 FORMAT( ' SCHKST: SSTEMR( ', A1, ', A ) returned INFO=0 for a',
-     $      ' matrix with an infinite entry' )
  9999 FORMAT( ' SCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
@@ -2142,7 +2147,9 @@
      $      / ' 19=Positive definite, small evenly spaced eigenvalues',
      $      / ' 20=Positive definite, large evenly spaced eigenvalues',
      $      / ' 21=Diagonally dominant tridiagonal, geometrically',
-     $      ' spaced eigenvalues' )
+     $      ' spaced eigenvalues',
+     $      / ' 22=Tridiagonal, off-diagonal squares underflow',
+     $      / ' 23=Tridiagonal with an infinite diagonal entry' )
 *
  9990 FORMAT( ' N=', I5, ', seed=', 4( I4, ',' ), ' type ', I2,
      $      ', test(', I2, ')=', G10.3 )
