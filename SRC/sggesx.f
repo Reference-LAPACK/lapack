@@ -542,6 +542,14 @@
 *
       IF( N.EQ.0 ) THEN
          SDIM = 0
+         IF( WANTSE .OR. WANTSB ) THEN
+            RCONDE(1) = ONE
+            RCONDE(2) = ONE
+         END IF
+         IF( WANTSV .OR. WANTSB ) THEN
+            RCONDV(1) = ZERO
+            RCONDV(2) = ZERO
+         END IF
          RETURN
       END IF
 *
