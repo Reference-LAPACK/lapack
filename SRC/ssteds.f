@@ -236,6 +236,7 @@
          LDREC = 0
          LIREC = 0
          LNT = 0
+         SMLSIZ = 0
          IF( N.GT.1 ) THEN
             SMLSIZ = ILAENV( 9, 'SSTEDS', ' ', 0, 0, 0, 0 )
             TLVN = 0
