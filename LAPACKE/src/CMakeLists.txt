@@ -1043,6 +1043,8 @@ lapacke_dstebr.c
 lapacke_dstebr_work.c
 lapacke_dstedc.c
 lapacke_dstedc_work.c
+lapacke_dsteds.c
+lapacke_dsteds_work.c
 lapacke_dstegr.c
 lapacke_dstegr_work.c
 lapacke_dstein.c
@@ -1633,6 +1635,8 @@ lapacke_sstebr.c
 lapacke_sstebr_work.c
 lapacke_sstedc.c
 lapacke_sstedc_work.c
+lapacke_ssteds.c
+lapacke_ssteds_work.c
 lapacke_sstegr.c
 lapacke_sstegr_work.c
 lapacke_sstein.c
