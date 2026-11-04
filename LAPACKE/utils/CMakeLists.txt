@@ -44,3 +44,11 @@ lapacke_ctz_trans.c           lapacke_dtz_trans.c           lapacke_stz_trans.c 
 lapacke_lsame.c
 lapacke_xerbla.c
 )
+
+target_sources(${LAPACKELIB}_obj PRIVATE ${COMMON_UTILS})
+if(BUILD_DEFAULT_API)
+  target_sources(${LAPACKELIB}_obj PRIVATE ${UTILS})
+endif()
+if(BUILD_INDEX64_EXT_API)
+  target_sources(${LAPACKELIB}_64_obj PRIVATE ${UTILS})
+endif()

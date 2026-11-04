@@ -1,0 +1,11 @@
+prefix=${pcfiledir}/@pc_prefix@
+libdir=@pc_libdir@
+includedir=@pc_includedir@
+
+Name: @target@
+Description: Netlib @target@
+Version: @LAPACK_VERSION@
+Libs: -L${libdir} -l@LIBRARY_PREFIX@@target@
+Libs.private:@pc_private@
+Requires.private:@pc_requires@
+Cflags: -I${includedir}@pc_definitions@

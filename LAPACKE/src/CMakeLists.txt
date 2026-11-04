@@ -636,8 +636,6 @@ lapacke_dbdsqr_work.c
 lapacke_dbdsvdx.c
 lapacke_dbdsvdmr3.c
 lapacke_dbdsvdmr3_work.c
-lapacke_sbdsvdmr3.c
-lapacke_sbdsvdmr3_work.c
 lapacke_dbdsvdx_work.c
 lapacke_ddisna.c
 lapacke_ddisna_work.c
@@ -1225,6 +1223,8 @@ set(SOURCES
 lapacke_ilaver.c
 )
 set(SOURCES_SINGLE
+lapacke_sbdsvdmr3.c
+lapacke_sbdsvdmr3_work.c
 lapacke_sbbcsd.c
 lapacke_sbbcsd_work.c
 lapacke_sbdsdc.c
@@ -2512,3 +2512,53 @@ lapacke_slagsy_work.c
 lapacke_zlagsy.c
 lapacke_zlagsy_work.c
 )
+
+set(interface_sources ${SOURCES})
+foreach(precision SINGLE DOUBLE COMPLEX COMPLEX16)
+  if(LAPACKE_BUILD_${precision})
+    list(APPEND interface_sources ${SOURCES_${precision}})
+  endif()
+endforeach()
+set(optional_sources)
+if(BUILD_DEPRECATED)
+  list(APPEND optional_sources ${DEPRECATED})
+endif()
+if(LAPACKE_WITH_TMG)
+  list(APPEND optional_sources ${MATGEN})
+endif()
+# Optional groups contain all precisions; honor the selected interface subset.
+foreach(precision_letter s d c z)
+  if(precision_letter STREQUAL "s")
+    set(precision SINGLE)
+  elseif(precision_letter STREQUAL "d")
+    set(precision DOUBLE)
+  elseif(precision_letter STREQUAL "c")
+    set(precision COMPLEX)
+  else()
+    set(precision COMPLEX16)
+  endif()
+  if(LAPACKE_BUILD_${precision})
+    foreach(source IN LISTS optional_sources)
+      if(source MATCHES "^lapacke_${precision_letter}")
+        list(APPEND interface_sources ${source})
+      endif()
+    endforeach()
+  endif()
+endforeach()
+target_sources(${LAPACKELIB}_obj PRIVATE ${COMMON_SOURCES})
+if(BUILD_DEFAULT_API)
+  target_sources(${LAPACKELIB}_obj PRIVATE ${interface_sources})
+  if(USE_XBLAS)
+    foreach(source IN LISTS EXTENDED)
+      if((source MATCHES "^lapacke_s" AND LAPACKE_BUILD_SINGLE) OR
+          (source MATCHES "^lapacke_d" AND LAPACKE_BUILD_DOUBLE) OR
+          (source MATCHES "^lapacke_c" AND LAPACKE_BUILD_COMPLEX) OR
+          (source MATCHES "^lapacke_z" AND LAPACKE_BUILD_COMPLEX16))
+        target_sources(${LAPACKELIB}_obj PRIVATE ${source})
+      endif()
+    endforeach()
+  endif()
+endif()
+if(BUILD_INDEX64_EXT_API)
+  target_sources(${LAPACKELIB}_64_obj PRIVATE ${interface_sources})
+endif()

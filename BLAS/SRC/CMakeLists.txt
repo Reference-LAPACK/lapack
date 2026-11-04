@@ -119,43 +119,18 @@ list(REMOVE_DUPLICATES SOURCES)
 
 if(BUILD_DEFAULT_API)
   add_library(${BLASLIB}_obj OBJECT ${SOURCES})
-  lapack_add_coverage(${BLASLIB}_obj)
+  lapack_configure_target(${BLASLIB}_obj)
+  set_target_properties(${BLASLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
+  target_sources(${BLASLIB} PRIVATE $<TARGET_OBJECTS:${BLASLIB}_obj>)
 endif()
-
 if(BUILD_INDEX64_EXT_API)
-  include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${BLASLIB} SOURCES SOURCES_64)
-
   add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64})
+  lapack_configure_target(${BLASLIB}_64_obj)
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${BLASLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
+  target_sources(${BLASLIB} PRIVATE $<TARGET_OBJECTS:${BLASLIB}_64_obj>)
 endif()
-
-add_library(${BLASLIB}
-  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${BLASLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>)
-
-# For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
-# that CMake adds (tested CMake 4.2).
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
-  set_target_properties (${BLASLIB} PROPERTIES LINKER_LANGUAGE C)
-endif()
-
-set_target_properties(
-  ${BLASLIB} PROPERTIES
-  VERSION ${LAPACK_VERSION}
-  SOVERSION ${LAPACK_MAJOR_VERSION}
-  )
-lapack_add_coverage(${BLASLIB})
-lapack_install_library(${BLASLIB})
-
-add_library(BLAS::BLAS ALIAS ${BLASLIB})
-install(EXPORT ${BLASLIB}-targets
-  FILE ${BLASLIB}-targets.cmake
-  NAMESPACE BLAS::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKLIB}-${LAPACK_VERSION}
-  COMPONENT Development
-)
-
-if( TEST_FORTRAN_COMPILER )
-  add_dependencies( ${BLASLIB} run_test_zcomplexabs run_test_zcomplexdiv run_test_zcomplexmult run_test_zminMax )
+  set_target_properties(${BLASLIB} PROPERTIES LINKER_LANGUAGE C)
 endif()
