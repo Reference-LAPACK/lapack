@@ -519,6 +519,18 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         parser=PARSER_STANDARD,
                     )
                 )
+            if letter == "s":
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="eig",
+                        description="SSTEDS merge failure diagnostics",
+                        input_name="steds.in",
+                        output_name="ssteds_merge_failures.out",
+                        executable="test_ssteds_merge_failures",
+                        parser=PARSER_STANDARD,
+                    )
+                )
             if letter == "d":
                 cases.append(
                     TestCase(
@@ -540,6 +552,18 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         input_name="steds.in",
                         output_name="dsteds_error_locations.out",
                         executable="test_dsteds_error_locations",
+                        parser=PARSER_STANDARD,
+                    )
+                )
+            if letter == "d":
+                cases.append(
+                    TestCase(
+                        precision=letter,
+                        family="eig",
+                        description="DSTEDS merge failure diagnostics",
+                        input_name="steds.in",
+                        output_name="dsteds_merge_failures.out",
+                        executable="test_dsteds_merge_failures",
                         parser=PARSER_STANDARD,
                     )
                 )

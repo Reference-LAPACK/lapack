@@ -130,9 +130,11 @@ ZDMDEIGTST = zchkdmd.o
 all: single complex double complex16
 
 .PHONY: single complex double complex16
-single: xeigtsts xdmdeigtsts test_ssteds_interfaces test_ssteds_error_locations
+single: xeigtsts xdmdeigtsts test_ssteds_interfaces test_ssteds_error_locations \
+        test_ssteds_merge_failures
 complex: xeigtstc xdmdeigtstc
-double: xeigtstd xdmdeigtstd test_dsteds_interfaces test_dsteds_error_locations
+double: xeigtstd xdmdeigtstd test_dsteds_interfaces test_dsteds_error_locations \
+        test_dsteds_merge_failures
 complex16: xeigtstz xdmdeigtstz
 
 xdmdeigtsts: $(SDMDEIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
@@ -180,7 +182,8 @@ cleanobj:
 	rm -f *.o
 cleanexe:
 	rm -f xeigtst* xdmdeigtst* test_dsteds_interfaces test_dsteds_error_locations \
-	      test_ssteds_interfaces test_ssteds_error_locations
+	      test_ssteds_interfaces test_ssteds_error_locations \
+	      test_dsteds_merge_failures test_ssteds_merge_failures
 
 schkee.o: schkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
@@ -223,6 +226,20 @@ ssteds_errloc.o: $(TOPSRCDIR)/SRC/ssteds.f
 slaes0_errloc.o: $(TOPSRCDIR)/SRC/slaes0.f
 	$(FC) $(FFLAGS) -c -o $@ $<
 
+# The merge-failure test also links SLAES1 and SLAED9_BR, the callers
+# of its SLAED4 mock, from local objects for the same reason.
+test_ssteds_merge_failures: test_ssteds_merge_failures.o slasum.o \
+                             ssteds_errloc.o slaes0_errloc.o \
+                             slaes1_errloc.o slaed9_br_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_ssteds_merge_failures.o: test_ssteds_merge_failures.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaes1_errloc.o: $(TOPSRCDIR)/SRC/slaes1.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaed9_br_errloc.o: $(TOPSRCDIR)/SRC/slaed9_br.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+
 # DSTEDS interface and boundary regression (same ratios as DCHKST).
 test_dsteds_interfaces: test_dsteds_interfaces.o dchksteds.o dstt21.o \
                        dstt22.o dlasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
@@ -245,4 +262,18 @@ test_dsteds_error_locations.o: test_dsteds_error_locations.f90
 dsteds_errloc.o: $(TOPSRCDIR)/SRC/dsteds.f
 	$(FC) $(FFLAGS) -c -o $@ $<
 dlaes0_errloc.o: $(TOPSRCDIR)/SRC/dlaes0.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# The merge-failure test also links DLAES1 and DLAED9_BR, the callers
+# of its DLAED4 mock, from local objects for the same reason.
+test_dsteds_merge_failures: test_dsteds_merge_failures.o dlasum.o \
+                             dsteds_errloc.o dlaes0_errloc.o \
+                             dlaes1_errloc.o dlaed9_br_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_dsteds_merge_failures.o: test_dsteds_merge_failures.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+dlaes1_errloc.o: $(TOPSRCDIR)/SRC/dlaes1.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+dlaed9_br_errloc.o: $(TOPSRCDIR)/SRC/dlaed9_br.f
 	$(FC) $(FFLAGS) -c -o $@ $<

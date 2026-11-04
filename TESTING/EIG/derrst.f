@@ -621,7 +621,23 @@
          INFOT = 9
          CALL DSTEDS( BIG, D, E, 0, I1, Z, BIG, W, -1, IW, -1, INFO )
          CALL CHKXER( 'DSTEDS', INFOT, NOUT, LERR, OK )
-         NT = NT + 16
+*
+*        The leaf size fits, but the per-row workspace does not
+*        (N = HUGE/100), and only the 2*N*M term overflows
+*        (N = HUGE/1000, M = N).
+*
+         BIG = HUGE( 0 )
+         BIG = BIG / 100
+         INFOT = 9
+         CALL DSTEDS( BIG, D, E, 0, I1, Z, BIG, W, -1, IW, -1, INFO )
+         CALL CHKXER( 'DSTEDS', INFOT, NOUT, LERR, OK )
+         BIG = HUGE( 0 )
+         BIG = BIG / 1000
+         INFOT = 9
+         CALL DSTEDS( BIG, D, E, BIG, I1, Z, BIG, W, -1, IW, -1,
+     $   INFO )
+         CALL CHKXER( 'DSTEDS', INFOT, NOUT, LERR, OK )
+         NT = NT + 18
 *
 *        DSTEVD
 *

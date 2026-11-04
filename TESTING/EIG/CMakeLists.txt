@@ -138,6 +138,11 @@ add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
 # LAPACK, which Windows DLLs and macOS two-level namespaces do not provide.
 add_eig_executable(test_ssteds_error_locations test_ssteds_error_locations.f90
   slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f)
+# The merge-failure test also compiles SLAES1 and SLAED9_BR, the
+# callers of its SLAED4 mock, for the same reason.
+add_eig_executable(test_ssteds_merge_failures test_ssteds_merge_failures.f90
+  slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f
+  ${LAPACK_SOURCE_DIR}/SRC/slaes1.f ${LAPACK_SOURCE_DIR}/SRC/slaed9_br.f)
 add_eig_executable(test_ssteds_interfaces test_ssteds_interfaces.f90
   schksteds.f90 sstt21.f sstt22.f slasum.f
   ilaenv.f xlaenv.f xerbla.f chkxer.f)
@@ -161,6 +166,11 @@ add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
 # LAPACK, which Windows DLLs and macOS two-level namespaces do not provide.
 add_eig_executable(test_dsteds_error_locations test_dsteds_error_locations.f90
   dlasum.f ${LAPACK_SOURCE_DIR}/SRC/dsteds.f ${LAPACK_SOURCE_DIR}/SRC/dlaes0.f)
+# The merge-failure test also compiles DLAES1 and DLAED9_BR, the
+# callers of its DLAED4 mock, for the same reason.
+add_eig_executable(test_dsteds_merge_failures test_dsteds_merge_failures.f90
+  dlasum.f ${LAPACK_SOURCE_DIR}/SRC/dsteds.f ${LAPACK_SOURCE_DIR}/SRC/dlaes0.f
+  ${LAPACK_SOURCE_DIR}/SRC/dlaes1.f ${LAPACK_SOURCE_DIR}/SRC/dlaed9_br.f)
 add_eig_executable(test_dsteds_interfaces test_dsteds_interfaces.f90
   dchksteds.f90 dstt21.f dstt22.f dlasum.f
   ilaenv.f xlaenv.f xerbla.f chkxer.f)
