@@ -135,47 +135,31 @@ endif()
 list(REMOVE_DUPLICATES SOURCES_C)
 list(REMOVE_DUPLICATES SOURCES_F)
 
-if(BUILD_DEFAULT_API)
-  add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES} ${SOURCES_C} ${SOURCES_F})
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(${CBLASLIB}_obj PRIVATE
-      "$<$<COMPILE_LANGUAGE:C>:HAS_ATTRIBUTE_WEAK_SUPPORT>")
-  endif()
-else()
-  add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES})
+if(NOT CMAKE_Fortran_COMPILER_LOADED)
+  set(SOURCES_F)
 endif()
-lapack_add_coverage(${CBLASLIB}_obj)
 
+add_library(${CBLASLIB}_obj OBJECT ${COMMON_SOURCES})
+if(BUILD_DEFAULT_API)
+  target_sources(${CBLASLIB}_obj PRIVATE ${SOURCES_C} ${SOURCES_F})
+endif()
+target_sources(${CBLASLIB} PRIVATE $<TARGET_OBJECTS:${CBLASLIB}_obj>)
 if(BUILD_INDEX64_EXT_API)
-  include(ExtendedAPIHelpers)
   generate_64bit_suffixed_sources(${CBLASLIB} SOURCES_F SOURCES_64_F)
-
   add_library(${CBLASLIB}_64_obj OBJECT ${SOURCES_C} ${SOURCES_64_F})
   target_compile_definitions(${CBLASLIB}_64_obj PRIVATE
-    "$<$<COMPILE_LANGUAGE:C>:WeirdNEC>" "$<$<COMPILE_LANGUAGE:C>:CBLAS_API64>")
+    "$<$<COMPILE_LANGUAGE:C>:WeirdNEC;CBLAS_API64>")
   target_compile_options(${CBLASLIB}_64_obj PRIVATE
     "$<$<COMPILE_LANGUAGE:Fortran>:${FOPT_ILP64}>")
-  if(HAS_ATTRIBUTE_WEAK_SUPPORT)
-    target_compile_definitions(${CBLASLIB}_64_obj PRIVATE
-      "$<$<COMPILE_LANGUAGE:C>:HAS_ATTRIBUTE_WEAK_SUPPORT>")
-  endif()
+  target_sources(${CBLASLIB} PRIVATE $<TARGET_OBJECTS:${CBLASLIB}_64_obj>)
 endif()
-
-add_library(${CBLASLIB}
-  $<TARGET_OBJECTS:${CBLASLIB}_obj>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${CBLASLIB}_64_obj>>)
-
-set_target_properties(
-  ${CBLASLIB} PROPERTIES
-  LINKER_LANGUAGE C
-  VERSION ${LAPACK_VERSION}
-  SOVERSION ${LAPACK_MAJOR_VERSION}
-  )
-
-target_include_directories(${CBLASLIB} PUBLIC
-  $<INSTALL_INTERFACE:include>
-)
-target_link_libraries(${CBLASLIB} PUBLIC ${BLAS_LIBRARIES})
-
-lapack_add_coverage(${CBLASLIB})
-lapack_install_library(${CBLASLIB})
+foreach(variant ${CBLASLIB}_obj ${CBLASLIB}_64_obj)
+  if(TARGET ${variant})
+    lapack_configure_target(${variant})
+    target_include_directories(${variant} PRIVATE "${LAPACK_SOURCE_DIR}/CBLAS/include")
+    if(HAS_ATTRIBUTE_WEAK_SUPPORT)
+      target_compile_definitions(${variant} PRIVATE
+        "$<$<COMPILE_LANGUAGE:C>:HAS_ATTRIBUTE_WEAK_SUPPORT>")
+    endif()
+  endif()
+endforeach()

@@ -1,0 +1,23 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+if(NOT @BUILD_SHARED_LIBS@)
+  block(PROPAGATE ${CMAKE_FIND_PACKAGE_NAME}_FOUND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
+    set(BLA_SIZEOF_INTEGER @lapack_integer_size@)
+    if(@lapack_external_blas@)
+      find_dependency(BLAS MODULE)
+    else()
+      find_dependency(@BLASLIB@ @LAPACK_VERSION@ EXACT CONFIG HINTS
+        "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/../@BLASLIB@")
+    endif()
+  endblock()
+endif()
+if(NOT TARGET CBLAS::@CBLASLIB@)
+  include("${CMAKE_CURRENT_LIST_DIR}/@CBLASLIB@-targets.cmake")
+endif()
+if(NOT TARGET @CBLASLIB@)
+  add_library(@CBLASLIB@ ALIAS CBLAS::@CBLASLIB@)
+endif()
+set(CBLAS_LIBRARIES @CBLASLIB@)
+get_target_property(CBLAS_INCLUDE_DIRS CBLAS::@CBLASLIB@ INTERFACE_INCLUDE_DIRECTORIES)
+check_required_components(${CMAKE_FIND_PACKAGE_NAME})
