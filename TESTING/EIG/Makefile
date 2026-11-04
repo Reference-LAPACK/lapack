@@ -203,9 +203,10 @@ zchkdmd.o: zchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 
 # SSTEDS interface and boundary regression (same ratios as SCHKST).
+# Use the local driver object for the test ILAENV/XERBLA callbacks.
 test_ssteds_interfaces: test_ssteds_interfaces.o schksteds.o sstt21.o \
                        sstt22.o slasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
-                       $(LAPACKLIB) $(BLASLIB)
+                       ssteds_errloc.o $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 schksteds.o: schksteds.f90
@@ -241,9 +242,10 @@ slaed9_br_errloc.o: $(TOPSRCDIR)/SRC/slaed9_br.f
 	$(FC) $(FFLAGS) -c -o $@ $<
 
 # DSTEDS interface and boundary regression (same ratios as DCHKST).
+# Use the local driver object for the test ILAENV/XERBLA callbacks.
 test_dsteds_interfaces: test_dsteds_interfaces.o dchksteds.o dstt21.o \
                        dstt22.o dlasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
-                       $(LAPACKLIB) $(BLASLIB)
+                       dsteds_errloc.o $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 dchksteds.o: dchksteds.f90

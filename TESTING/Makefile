@@ -604,6 +604,12 @@ LIN/xlintstds: $(FRCLIN) $(FRC)
 LIN/xlintstzc: $(FRCLIN) $(FRC)
 	$(MAKE) -C LIN xlintstzc
 
+# Forward the standalone STEDS tests on a clean Makefile build.
+EIG/test_ssteds_interfaces EIG/test_ssteds_error_locations \
+EIG/test_ssteds_merge_failures EIG/test_dsteds_interfaces \
+EIG/test_dsteds_error_locations EIG/test_dsteds_merge_failures: $(FRCEIG) $(FRC)
+	$(MAKE) -C EIG $(notdir $@)
+
 EIG/xeigtsts: $(FRCEIG) $(FRC)
 	$(MAKE) -C EIG xeigtsts
 
