@@ -443,8 +443,10 @@
                W( 1 ) = REAL( A( 1, 1 ) )
             END IF
          END IF
-         IF( WANTZ )
-     $      Z( 1, 1 ) = CONE
+         IF( WANTZ ) THEN
+            Z( 1, 1 ) = CONE
+            IFAIL( 1 ) = 0
+         END IF
          RETURN
       END IF
 *
