@@ -128,11 +128,3 @@
 *     End of XER_REPLACE
 *
       END
-
-      SUBROUTINE XERBLA( SRNAME, INFO )
-      IMPLICIT NONE
-      CHARACTER*(*)      SRNAME
-      INTEGER            INFO
-      EXTERNAL XER_REPLACE
-      CALL XER_REPLACE( SRNAME, INFO )
-      END
