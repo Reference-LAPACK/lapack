@@ -13,6 +13,8 @@ program test_ssteds_interfaces
   real, allocatable :: d(:), e(:), ref(:), ec(:), rw(:)
   real, external :: slamch
   external :: schksteds, ssteqr, ssteds, xlaenv, slasum, chkxer
+  external :: set_lapack_xerbla, xer_replace
+  call set_lapack_xerbla(xer_replace)
   read(*,*) thresh
   if(.not.(thresh>0e0)) stop 1
   infot=0

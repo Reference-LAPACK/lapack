@@ -143,8 +143,9 @@ add_eig_executable(test_ssteds_error_locations test_ssteds_error_locations.f90
 add_eig_executable(test_ssteds_merge_failures test_ssteds_merge_failures.f90
   slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f
   ${LAPACK_SOURCE_DIR}/SRC/slaes1.f ${LAPACK_SOURCE_DIR}/SRC/slaed9_br.f)
-# Compile the driver locally so the test ILAENV and XERBLA are used
-# even when calls inside a shared LAPACK cannot be interposed.
+# Compile the driver locally so the test ILAENV is used even when calls
+# inside a shared LAPACK cannot be interposed.  The program registers the
+# test XERBLA itself with SET_LAPACK_XERBLA.
 add_eig_executable(test_ssteds_interfaces test_ssteds_interfaces.f90
   ${LAPACK_SOURCE_DIR}/SRC/ssteds.f
   schksteds.f90 sstt21.f sstt22.f slasum.f
@@ -174,8 +175,9 @@ add_eig_executable(test_dsteds_error_locations test_dsteds_error_locations.f90
 add_eig_executable(test_dsteds_merge_failures test_dsteds_merge_failures.f90
   dlasum.f ${LAPACK_SOURCE_DIR}/SRC/dsteds.f ${LAPACK_SOURCE_DIR}/SRC/dlaes0.f
   ${LAPACK_SOURCE_DIR}/SRC/dlaes1.f ${LAPACK_SOURCE_DIR}/SRC/dlaed9_br.f)
-# Compile the driver locally so the test ILAENV and XERBLA are used
-# even when calls inside a shared LAPACK cannot be interposed.
+# Compile the driver locally so the test ILAENV is used even when calls
+# inside a shared LAPACK cannot be interposed.  The program registers the
+# test XERBLA itself with SET_LAPACK_XERBLA.
 add_eig_executable(test_dsteds_interfaces test_dsteds_interfaces.f90
   ${LAPACK_SOURCE_DIR}/SRC/dsteds.f
   dchksteds.f90 dstt21.f dstt22.f dlasum.f

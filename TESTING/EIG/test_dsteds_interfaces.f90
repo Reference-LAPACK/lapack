@@ -13,6 +13,8 @@ program test_dsteds_interfaces
   double precision, allocatable :: d(:), e(:), ref(:), ec(:), rw(:)
   double precision, external :: dlamch
   external :: dchksteds, dsteqr, dsteds, xlaenv, dlasum, chkxer
+  external :: set_lapack_xerbla, xer_replace
+  call set_lapack_xerbla(xer_replace)
   read(*,*) thresh
   if(.not.(thresh>0d0)) stop 1
   infot=0
