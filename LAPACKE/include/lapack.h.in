@@ -102,6 +102,14 @@ extern "C" {
 #endif
 #endif
 
+#ifdef LAPACK_FORTRAN_STRLEN_END
+#define LAPACK_FORTRAN_XERBLA_LENARG , FORTRAN_STRLEN len
+#else
+#define LAPACK_FORTRAN_XERBLA_LENARG
+#endif
+#define LAPACK_FORTRAN_XERBLA_ARGS \
+  /*not a func-style macro*/(char const* F77_srname, lapack_int *info LAPACK_FORTRAN_XERBLA_LENARG)
+
 /*
  * Integer format string
  */
@@ -143,6 +151,7 @@ typedef lapack_logical (*LAPACK_C_SELECT2)
 typedef lapack_logical (*LAPACK_Z_SELECT1) ( const lapack_complex_double* );
 typedef lapack_logical (*LAPACK_Z_SELECT2)
     ( const lapack_complex_double*, const lapack_complex_double* );
+typedef void (*LAPACK_XERBLA) LAPACK_FORTRAN_XERBLA_ARGS;
 
 /*
  * Integer specific API
@@ -156,6 +165,14 @@ typedef lapack_logical (*LAPACK_Z_SELECT2)
 #else
 #define LAPACK_GLOBAL_SUFFIX(a,b) LAPACK_GLOBAL(a,b)
 #endif
+
+#define LAPACK_set_lapack_xerbla_base LAPACK_GLOBAL_SUFFIX(set_lapack_xerbla,SET_LAPACK_XERBLA)
+void LAPACK_set_lapack_xerbla_base(LAPACK_XERBLA cb);
+#define LAPACK_set_lapack_xerbla(...) LAPACK_set_lapack_xerbla_base(__VA_ARGS__)
+
+#define LAPACK_get_lapack_xerbla_base LAPACK_GLOBAL_SUFFIX(get_lapack_xerbla,GET_LAPACK_XERBLA)
+void LAPACK_get_lapack_xerbla_base(LAPACK_XERBLA *cb);
+#define LAPACK_get_lapack_xerbla(...) LAPACK_get_lapack_xerbla_base(__VA_ARGS__)
 
 #define LAPACK_lsame_base LAPACK_GLOBAL_SUFFIX(lsame,LSAME)
 lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb

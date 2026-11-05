@@ -183,6 +183,7 @@
      $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
      $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
      $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR,
+     $                   SET_LAPACK_XERBLA, XER_REPLACE,
      $                   ZCHKHE_AA_2STAGE, ZCHKSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
@@ -241,6 +242,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       S1 = DSECND( )
       LDA = NMAX
       FATAL = .FALSE.

@@ -146,7 +146,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLALLM', -INFO )
+         CALL XERBLA( 'ZLALLM_BLOCKED', -INFO )
          RETURN
       END IF
 *

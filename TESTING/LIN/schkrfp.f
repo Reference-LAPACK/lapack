@@ -109,10 +109,12 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, SDRVRFP, SDRVRF1, SDRVRF2, SDRVRF3,
+     +                   SET_LAPACK_XERBLA, XER_REPLACE,
      +                   SDRVRF4, SERRRFP
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       S1 = SECOND( )
       FATAL = .FALSE.
 *

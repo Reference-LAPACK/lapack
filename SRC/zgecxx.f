@@ -1629,7 +1629,7 @@
 *
       IF( MIN( MRESID, NRESID ).NE.0 ) THEN
          FNRMK = ZLANGE( 'F',  MRESID, NRESID, A( K+1, K+1 ),
-     $                   LDA, WORK )
+     $                   LDA, RWORK )
       ELSE
          FNRMK = ZERO
       END IF

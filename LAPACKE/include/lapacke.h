@@ -91,6 +91,11 @@ lapack_complex_double lapack_make_complex_double( double re, double im );
 
 /* C-LAPACK function prototypes */
 
+typedef void (*lapack_xerbla_callback_t) LAPACKE_XERBLA_ARGS;
+typedef void (*lapack_fortran_xerbla_callback_t) LAPACK_FORTRAN_XERBLA_ARGS;
+lapack_xerbla_callback_t LAPACKE_get_xerbla(void);
+lapack_xerbla_callback_t LAPACKE_set_xerbla(lapack_xerbla_callback_t cb, lapack_fortran_xerbla_callback_t F77_cb);
+
 lapack_int LAPACKE_sbdsdc( int matrix_layout, char uplo, char compq,
                            lapack_int n, float* d, float* e, float* u,
                            lapack_int ldu, float* vt, lapack_int ldvt, float* q,

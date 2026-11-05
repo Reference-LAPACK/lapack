@@ -148,7 +148,7 @@
       EXTERNAL           DDIFF, LDE
 *     .. External Subroutines ..
       EXTERNAL           DCHK1, DCHK2, DCHK3, DCHK4, DCHK5, DCHK6,
-     $                   DCHKE, DMVCH
+     $                   DCHKE, DMVCH, SET_BLAS_XERBLA, XER_REPLACE
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -171,6 +171,7 @@
      $                   'DSKEWSBMV '/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
+      CALL SET_BLAS_XERBLA(XER_REPLACE)
 *
 *     Read name and unit number for summary output file and open file.
 *
@@ -3424,7 +3425,7 @@
   10  CONTINUE
       RETURN
       END
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE XER_REPLACE( SRNAME, INFO )
       IMPLICIT NONE
 *
 *  This is a special version of XERBLA to be used only as part of

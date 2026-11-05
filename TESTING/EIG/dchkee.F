@@ -1115,6 +1115,7 @@
      $                   DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV, DDRVST,
      $                   DDRVMR3,
      $                   DDRVSX, DDRVVX, DERRBD, DERRED, DERRGG, DERRHS,
+     $                   SET_LAPACK_XERBLA, XER_REPLACE,
      $                   DERRST, ILAVER, XLAENV, DDRGES3, DDRGEV3,
      $                   DCHKST2STG, DDRVST2STG, DCHKSB2STG, DDRVSG2STG
 *     ..
@@ -1169,6 +1170,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      CALL SET_LAPACK_XERBLA(XER_REPLACE)
       A = 0.0
       B = 0.0
       C = 0.0

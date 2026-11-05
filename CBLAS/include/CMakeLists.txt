@@ -10,8 +10,9 @@ install(
 
 if(CBLAS)
   set(CBLAS_INCLUDE cblas.h cblas_64.h)
-  configure_file(cblas.h ${LAPACK_BINARY_DIR}/include/cblas.h COPYONLY)
+  configure_file(cblas.h.in ${LAPACK_BINARY_DIR}/include/cblas.h)
   configure_file(cblas_64.h ${LAPACK_BINARY_DIR}/include/cblas_64.h COPYONLY)
+  list(TRANSFORM CBLAS_INCLUDE PREPEND "${LAPACK_BINARY_DIR}/include/")
   install(FILES ${CBLAS_INCLUDE}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT Development)
