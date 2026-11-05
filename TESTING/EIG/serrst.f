@@ -24,7 +24,7 @@
 *> SERRST tests the error exits for SSYTRD, SSYTD2, SORGTR, SORMTR, SSPTRD,
 *> SOPGTR, SOPMTR, SSTEQR, SSTERF, SSTEBZ, SSTEIN, SPTEQR, SSBTRD,
 *> SSYEV, SSYEVX, SSYEVD, SSBEV, SSBEVX, SSBEVD,
-*> SSPEV, SSPEVX, SSPEVD, SSTEV, SSTEVX, SSTEVD, and SSTEDC.
+*> SSPEV, SSPEVX, SSPEVD, SSTEV, SSTEVX, SSTEVD, SSTEDC, and SSTEDS.
 *> SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
 *> SSYEV_2STAGE, SSBEV_2STAGE, SSBEVD_2STAGE,
 *> SSBEVX_2STAGE, SSYTRD_2STAGE, SSYTRD_SY2SB,
@@ -78,7 +78,7 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            I, INFO, J, M, N, NSPLIT, NT
+      INTEGER            I, INFO, J, M, N, NSPLIT, NT, LWE, LIE, BIG
 *     ..
 *     .. Local Arrays ..
       INTEGER            I1( NMAX ), I2( NMAX ), I3( NMAX ), IW( LIW )
@@ -95,7 +95,8 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, SOPGTR, SOPMTR, SORGTR, SORMTR, SPTEQR,
      $                   SSBEV, SSBEVD, SSBEVX, SSBTRD, SSPEV, SSPEVD,
-     $                   SSPEVX, SSPTRD, SSTEBZ, SSTEDC, SSTEIN, SSTEQR,
+     $                   SSPEVX, SSPTRD, SSTEBZ, SSTEDC, SSTEDS, SSTEIN,
+     $                   SSTEQR,
      $                   SSTERF, SSTEV, SSTEVD, SSTEVR, SSTEVX, SSYEV,
      $                   SSYEVD, SSYEVR, SSYEVX, SSYTRD, SSYTD2,
      $                   SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
@@ -113,7 +114,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL
+      INTRINSIC          REAL, HUGE, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -536,6 +537,107 @@
          CALL SSTEDC( 'V', 2, D, E, Z, 2, W, 23, IW, 0, INFO )
          CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          NT = NT + 9
+*
+*
+*        SSTEDS: scalar arguments, selected indices, exact workspace
+*        bounds, and unrepresentable query sizes.  These calls never
+*        access workspace beyond its first element.
+*
+         SRNAMT = 'SSTEDS'
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, -1, IW, -1,
+     $   INFO )
+         LWE = INT( W( 1 ) )
+         LIE = IW( 1 )
+         INFOT = 1
+         CALL SSTEDS( -1, D, E, 0, I1, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SSTEDS( NMAX, D, E, -1, I1, Z, NMAX, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SSTEDS( NMAX, D, E, NMAX+1, I1, Z, NMAX, W, LWE, IW,
+     $   LIE, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         I1( 1 ) = 0
+         INFOT = 5
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         I1( 1 ) = 1
+         I1( 3 ) = NMAX+1
+         INFOT = 5
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         I1( 3 ) = 3
+         I1( 2 ) = 1
+         INFOT = 5
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         I1( 2 ) = 2
+         I1( 1 ) = 2
+         I1( 2 ) = 1
+         INFOT = 5
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         I1( 1 ) = 1
+         I1( 2 ) = 2
+         INFOT = 7
+         CALL SSTEDS( NMAX, D, E, 1, I1, Z, NMAX-1, W, LWE, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, 0, IW, LIE,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE-1, IW,
+     $   LIE, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW, 0,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SSTEDS( NMAX, D, E, NMAX, I1, Z, NMAX, W, LWE, IW,
+     $   LIE-1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 1
+         CALL SSTEDS( -1, D, E, 0, I1, Z, 1, W, -1, IW, -1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         BIG = HUGE( 0 )
+         BIG = BIG / 4
+         INFOT = 9
+         CALL SSTEDS( BIG, D, E, 0, I1, Z, BIG, W, -1, IW, -1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SSTEDS( BIG, D, E, BIG, I1, Z, BIG, W, -1, IW, -1,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         BIG = HUGE( 0 )
+         INFOT = 9
+         CALL SSTEDS( BIG, D, E, 0, I1, Z, BIG, W, -1, IW, -1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+*
+*        The leaf size fits, but the per-row workspace does not
+*        (N = HUGE/100), and only the 2*N*M term overflows
+*        (N = HUGE/1000, M = N).
+*
+         BIG = HUGE( 0 )
+         BIG = BIG / 100
+         INFOT = 9
+         CALL SSTEDS( BIG, D, E, 0, I1, Z, BIG, W, -1, IW, -1, INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         BIG = HUGE( 0 )
+         BIG = BIG / 1000
+         INFOT = 9
+         CALL SSTEDS( BIG, D, E, BIG, I1, Z, BIG, W, -1, IW, -1,
+     $   INFO )
+         CALL CHKXER( 'SSTEDS', INFOT, NOUT, LERR, OK )
+         NT = NT + 18
 *
 *        SSTEVD
 *

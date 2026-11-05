@@ -24,7 +24,7 @@ set(SEIGTST
   schkee.F
   sbdt01.f sbdt02.f sbdt03.f sbdt04.f sbdt05.f
   schkbb.f schkbd.f schkbk.f schkbl.f schkec.f
-  schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schkst2stg.f schksb2stg.f
+  schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f schksteds.f90 schkst2stg.f schksb2stg.f
   sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
   sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f
   sdrvbd.f sdrvmr3.f sdrves.f sdrvev.f sdrvsg.f sdrvsg2stg.f
@@ -68,7 +68,7 @@ set(DEIGTST
   dchkee.F
   dbdt01.f dbdt02.f dbdt03.f dbdt04.f dbdt05.f
   dchkbb.f dchkbd.f dchkbk.f dchkbl.f dchkec.f
-  dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f dchkst2stg.f dchksb2stg.f
+  dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f dchksteds.f90 dchkst2stg.f dchksb2stg.f
   dckcsd.f dckglm.f dckgqr.f dckgsv.f dcklse.f dcsdts.f
   ddrges.f ddrgev.f ddrges3.f ddrgev3.f ddrgsx.f ddrgvx.f
   ddrvbd.f ddrvmr3.f ddrves.f ddrvev.f ddrvsg.f ddrvsg2stg.f
@@ -133,6 +133,23 @@ endfunction()
 
 if(BUILD_SINGLE)
 add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
+# SSTEDS and SLAES0 are compiled into the program so that SLAES0 reaches the
+# program's SSTEQR mock without relying on symbol interposition into a shared
+# LAPACK, which Windows DLLs and macOS two-level namespaces do not provide.
+add_eig_executable(test_ssteds_error_locations test_ssteds_error_locations.f90
+  slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f)
+# The merge-failure test also compiles SLAES1 and SLAED9_BR, the
+# callers of its SLAED4 mock, for the same reason.
+add_eig_executable(test_ssteds_merge_failures test_ssteds_merge_failures.f90
+  slasum.f ${LAPACK_SOURCE_DIR}/SRC/ssteds.f ${LAPACK_SOURCE_DIR}/SRC/slaes0.f
+  ${LAPACK_SOURCE_DIR}/SRC/slaes1.f ${LAPACK_SOURCE_DIR}/SRC/slaed9_br.f)
+# Compile the driver locally so the test ILAENV is used even when calls
+# inside a shared LAPACK cannot be interposed.  The program registers the
+# test XERBLA itself with SET_LAPACK_XERBLA.
+add_eig_executable(test_ssteds_interfaces test_ssteds_interfaces.f90
+  ${LAPACK_SOURCE_DIR}/SRC/ssteds.f
+  schksteds.f90 sstt21.f sstt22.f slasum.f
+  ilaenv.f xlaenv.f xerbla.f chkxer.f)
 add_eig_executable(xdmdeigtsts ${SDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_sgges3_scaling test_sgges3_scaling.f90)
 add_eig_executable(test_sgesvj_emptsw test_sgesvj_emptsw.f90)
@@ -148,6 +165,23 @@ endif()
 
 if(BUILD_DOUBLE)
 add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
+# DSTEDS and DLAES0 are compiled into the program so that DLAES0 reaches the
+# program's DSTEQR mock without relying on symbol interposition into a shared
+# LAPACK, which Windows DLLs and macOS two-level namespaces do not provide.
+add_eig_executable(test_dsteds_error_locations test_dsteds_error_locations.f90
+  dlasum.f ${LAPACK_SOURCE_DIR}/SRC/dsteds.f ${LAPACK_SOURCE_DIR}/SRC/dlaes0.f)
+# The merge-failure test also compiles DLAES1 and DLAED9_BR, the
+# callers of its DLAED4 mock, for the same reason.
+add_eig_executable(test_dsteds_merge_failures test_dsteds_merge_failures.f90
+  dlasum.f ${LAPACK_SOURCE_DIR}/SRC/dsteds.f ${LAPACK_SOURCE_DIR}/SRC/dlaes0.f
+  ${LAPACK_SOURCE_DIR}/SRC/dlaes1.f ${LAPACK_SOURCE_DIR}/SRC/dlaed9_br.f)
+# Compile the driver locally so the test ILAENV is used even when calls
+# inside a shared LAPACK cannot be interposed.  The program registers the
+# test XERBLA itself with SET_LAPACK_XERBLA.
+add_eig_executable(test_dsteds_interfaces test_dsteds_interfaces.f90
+  ${LAPACK_SOURCE_DIR}/SRC/dsteds.f
+  dchksteds.f90 dstt21.f dstt22.f dlasum.f
+  ilaenv.f xlaenv.f xerbla.f chkxer.f)
 add_eig_executable(xdmdeigtstd ${DDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_dgges3_scaling test_dgges3_scaling.f90)
 add_eig_executable(test_dgesvj_emptsw test_dgesvj_emptsw.f90)

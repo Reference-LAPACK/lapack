@@ -156,6 +156,13 @@
 *>         (values-only boundary-row divide-and-conquer)
 *>         Maximum over SMLSIZ = 2, 8, and 25.
 *>
+*> (39)    SSTEDS eigenvalues, including M=0 and selected vectors.
+*> (40-41) SSTEDS full decomposition (SSTT21).
+*> (42-43) SSTEDS selected subsets (SSTT22).
+*> (44)    SSTEDS workspace queries and interface invariants.
+*>         Tests 39-44 retain the worst result over SMLSIZ=2,8,25;
+*>         subset tests use lowest, highest, middle and spread indices.
+*>
 *> Test 27 is disabled at the moment because SSTEMR does not
 *> guarantee high relatvie accuracy.
 *>
@@ -528,7 +535,7 @@
 *>
 *> \param[out] RESULT
 *> \verbatim
-*>          RESULT is REAL array, dimension (26)
+*>          RESULT is REAL array, dimension (44)
 *>          The values computed by the tests described above.
 *>          The values are currently limited to 1/ulp, to avoid
 *>          overflow.
@@ -645,7 +652,7 @@
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP ), SMLSZS( 3 )
-      REAL               DUMMA( 1 )
+      REAL               DUMMA( 1 ), RESEDS( 6 )
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -653,7 +660,8 @@
       EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SLASET, SLASUM, SLATMR, SLATMS,
+      EXTERNAL           SCHKSTEDS, SCOPY, SLACPY, SLASET, SLASUM,
+     $                   SLATMR, SLATMS,
      $                   SOPGTR, SORGTR, SPTEQR, SSPT21, SSPTRD, SSTEBZ,
      $                   SSTEBR, SSTECH, SSTEDC, SSTEMR, SSTEIN, SSTEQR,
      $                   SSTERF, SSTT21, SSTT22, SSYT21, SSYTRD,
@@ -1947,8 +1955,10 @@
                RESULT( JR ) = ZERO
   265       CONTINUE
 *
-            NTEST = 38
-            RESULT( 38 ) = ZERO
+            NTEST = 44
+            DO 268 JR = 38, 44
+               RESULT( JR ) = ZERO
+  268       CONTINUE
             SMLSAV = ILAENV( 9, 'SSTEBR', ' ', 0, 0, 0, 0 )
             DO 267 JSM = 1, 3
                CALL SCOPY( N, SD, 1, D5, 1 )
@@ -1981,6 +1991,20 @@
 *
                RESULT( 38 ) = MAX( RESULT( 38 ), TEMP2 /
      $                        MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) ) )
+*
+               CALL XLAENV( 9, SMLSZS( JSM ) )
+               CALL SCHKSTEDS( N, SD, SE, D1, RESEDS, IINFO )
+               CALL XLAENV( 9, SMLSAV )
+               DO 269 JR = 1, 6
+                  RESULT( 38+JR ) = MAX( RESULT( 38+JR ),
+     $                                  RESEDS( JR ) )
+  269          CONTINUE
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'SSTEDS', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 ) RETURN
+               END IF
   267       CONTINUE
 *
   280       CONTINUE

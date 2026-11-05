@@ -16718,6 +16718,28 @@ void LAPACK_sstebr(
     lapack_int* iwork, lapack_int const* liwork,
     lapack_int* info );
 
+#define LAPACK_dsteds LAPACK_GLOBAL_SUFFIX(dsteds,DSTEDS)
+void LAPACK_dsteds(
+    lapack_int const* n,
+    double* D,
+    double* E,
+    lapack_int const* m, lapack_int const* ISEL,
+    double* Z, lapack_int const* ldz,
+    double* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info );
+
+#define LAPACK_ssteds LAPACK_GLOBAL_SUFFIX(ssteds,SSTEDS)
+void LAPACK_ssteds(
+    lapack_int const* n,
+    float* D,
+    float* E,
+    lapack_int const* m, lapack_int const* ISEL,
+    float* Z, lapack_int const* ldz,
+    float* work, lapack_int const* lwork,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_int* info );
+
 #define LAPACK_cstedc_base LAPACK_GLOBAL_SUFFIX(cstedc,CSTEDC)
 void LAPACK_cstedc_base(
     char const* compz,
