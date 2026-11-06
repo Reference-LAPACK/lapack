@@ -255,14 +255,17 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            SAWNAN1, SAWNAN2
-      INTEGER            I, INDLPL, INDP, INDS, INDUMN, NEG1, NEG2, R1,
-     $                   R2
-      REAL               DMINUS, DPLUS, EPS, S, TMP
+      INTEGER            I, IINFO, INDLPL, INDP, INDS, INDUMN, NEG1,
+     $                   NEG2, R1, R2
+      REAL               DMINUS, DPLUS, EPS, S, SFMIN, TMP
 *     ..
 *     .. External Functions ..
       LOGICAL SISNAN
       REAL               SLAMCH
       EXTERNAL           SISNAN, SLAMCH
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL           SLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL
@@ -270,6 +273,7 @@
 *     .. Executable Statements ..
 *
       EPS = SLAMCH( 'Precision' )
+      SFMIN = SLAMCH( 'Safe minimum' )
 
 
       IF( R.EQ.0 ) THEN
@@ -369,8 +373,15 @@
             IF(DMINUS.LT.ZERO) NEG2 = NEG2 + 1
             WORK( INDUMN+I ) = L( I )*TMP
             WORK( INDP+I-1 ) = WORK( INDP+I )*TMP - LAMBDA
-            IF( TMP.EQ.ZERO )
-     $          WORK( INDP+I-1 ) = D( I ) - LAMBDA
+            IF( TMP.EQ.ZERO ) THEN
+               WORK( INDP+I-1 ) = D( I ) - LAMBDA
+            ELSE IF( ABS( TMP ).LT.SFMIN ) THEN
+*              Avoid amplifying rounding in a subnormal quotient.
+               WORK( INDP+I-1 ) = WORK( INDP+I )
+               CALL SLASCL( 'G', 0, 0, DMINUS, D( I ),
+     $                      1, 1, WORK( INDP+I-1 ), 1, IINFO )
+               WORK( INDP+I-1 ) = WORK( INDP+I-1 ) - LAMBDA
+            END IF
  100     CONTINUE
       END IF
 *
