@@ -71,11 +71,12 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            INFO, IRNK
-      REAL               NAN, ONE, RCOND
+      INTEGER            INFO, IRNK, J
+      REAL               INF, NAN, ONE, RCOND, RZERO
 *     ..
 *     .. Local Arrays ..
       INTEGER            IP( LIW )
+      REAL               E( NMAX )
       REAL               RW( LW ), S( NMAX )
       COMPLEX            A( NMAX, NMAX ), B( NMAX, NMAX ), W( LW )
 *     ..
@@ -85,7 +86,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, CGELS, CGELSD, CGELSS, CGELST,
-     $                   CGELSY, CGETSLS
+     $                   CGELSY, CGETSLS, CLALSD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -275,25 +276,58 @@
      $                RW, IP, INFO )
          CALL CHKXER( 'CGELSD', INFOT, NOUT, LERR, OK )
 *
-*        CGELSD must return INFO = 1, without calling XERBLA, when A
-*        contains a NaN: the NaN norm would otherwise be rejected by
-*        SLASCL inside CLALSD.
+*        CGELSD must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
 *
          ONE = 1.0E+0
+         RZERO = 0.0E+0
          NAN = SQRT( -ONE )
-         A( 2, 2 ) = NAN
-         B( 1, 1 ) = ( 1.0E+0, 0.0E+0 )
-         B( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+         INF = ONE / RZERO
          RCOND = -1.0E+0
-         SRNAMT = 'CGELSD'
-         INFOT = 0
-         LERR = .FALSE.
-         CALL CGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, LW, RW,
-     $                IP, INFO )
-         IF( LERR .OR. INFO.NE.1 ) THEN
-            WRITE( NOUT, FMT = 9999 )INFO
-            OK = .FALSE.
-         END IF
+         DO 10 J = 1, 2
+            A( 1, 1 ) = ( 1.0E+0, 0.0E+0 )
+            A( 1, 2 ) = ( 1.0E+0, 0.0E+0 )
+            A( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+            A( 2, 2 ) = NAN
+            IF( J.EQ.2 )
+     $         A( 2, 2 ) = INF
+            B( 1, 1 ) = ( 1.0E+0, 0.0E+0 )
+            B( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+            SRNAMT = 'CGELSD'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL CGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, LW, RW,
+     $                   IP, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9999 )'CGELSD', -4, INFO
+               OK = .FALSE.
+            END IF
+   10    CONTINUE
+*
+*        CLALSD must return INFO = -5 or -6, without calling XERBLA,
+*        when D or E contains a NaN or an infinity.
+*
+         DO 20 J = 1, 2
+            S( 1 ) = ONE
+            S( 2 ) = ONE
+            E( 1 ) = ONE
+            IF( J.EQ.1 ) THEN
+               S( 2 ) = INF
+            ELSE
+               E( 1 ) = NAN
+            END IF
+            B( 1, 1 ) = ( 1.0E+0, 0.0E+0 )
+            B( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+            SRNAMT = 'CLALSD'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL CLALSD( 'U', 25, 2, 1, S, E, B, 2, RCOND, IRNK, W, RW,
+     $                   IP, INFO )
+            IF( LERR .OR. INFO.NE.-4-J ) THEN
+               WRITE( NOUT, FMT = 9999 )'CLALSD', -4-J, INFO
+               OK = .FALSE.
+            END IF
+   20    CONTINUE
       END IF
 *
 *     Print a summary line.
@@ -302,8 +336,9 @@
 *
       RETURN
 *
- 9999 FORMAT( ' *** CGELSD on a matrix with a NaN returned INFO = ', I6,
-     $      ' instead of 1 ***' )
+ 9999 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
+     $      ' calling XERBLA for input with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
 *
 *     End of CERRLS
 *

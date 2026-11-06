@@ -143,10 +143,11 @@
 *>          INFO is INTEGER
 *>         = 0:  successful exit.
 *>         < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>               INFO = -5 or -6 if D or E contains a NaN or an
+*>               infinity; XERBLA is not called in that case.
 *>         > 0:  The algorithm failed to compute a singular value while
 *>               working on the submatrix lying in rows and columns
 *>               INFO/(N+1) through MOD(INFO,N+1).
-*>         = 1:  also if D or E contains a NaN.
 *> \endverbatim
 *
 *  Authors:
@@ -200,9 +201,10 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANST
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANST
       LOGICAL            DISNAN, LSAME
-      EXTERNAL           IDAMAX, DLAMCH, DLANST, DISNAN, LSAME
+      EXTERNAL           IDAMAX, DLAMCH, DLANGE, DLANST, DISNAN,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG,
@@ -210,7 +212,7 @@
      $                   DLASDA, DLASDQ, DLASET, DLASRT, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, INT, LOG, SIGN
+      INTRINSIC          ABS, DBLE, INT, LOG, MAX, SIGN
 *     ..
 *     .. Executable Statements ..
 *
@@ -244,13 +246,26 @@
 *
 *     Quick return if possible.
 *
-      IF( N.EQ.0 ) THEN
+      IF( N.EQ.0 )
+     $   RETURN
+*
+*     Return INFO = -5 or -6, without calling XERBLA, if D or E
+*     contains a NaN or an infinity.
+*
+      ORGNRM = DLANGE( 'M', N, 1, D, N, WORK )
+      IF( DISNAN( ORGNRM ) .OR. ORGNRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -5
          RETURN
-      ELSE IF( N.EQ.1 ) THEN
+      END IF
+      ORGNRM = DLANGE( 'M', N-1, 1, E, MAX( 1, N-1 ), WORK )
+      IF( DISNAN( ORGNRM ) .OR. ORGNRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
+*
+      IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
             CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
-         ELSE IF( DISNAN( D( 1 ) ) ) THEN
-            INFO = 1
          ELSE
             RANK = 1
             CALL DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB,
@@ -293,9 +308,6 @@
       ORGNRM = DLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
          CALL DLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
-         RETURN
-      ELSE IF( DISNAN( ORGNRM ) ) THEN
-         INFO = 1
          RETURN
       END IF
 *

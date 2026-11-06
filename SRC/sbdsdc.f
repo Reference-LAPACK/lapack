@@ -170,10 +170,10 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -4 or -5 if D or E contains a NaN or an
+*>                infinity; XERBLA is not called in that case.
 *>          > 0:  The algorithm failed to compute a singular value.
 *>                The update process of divide and conquer failed.
-*>          = 1:  also if D or E contains a NaN and the divide and
-*>                conquer path is taken (COMPQ = 'I' or 'P', N > SMLSIZ).
 *> \endverbatim
 *
 *  Authors:
@@ -231,8 +231,8 @@
 *     .. External Functions ..
       LOGICAL            SISNAN, LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANST
-      EXTERNAL           SLAMCH, SLANST, ILAENV, LSAME, SISNAN
+      REAL               SLAMCH, SLANGE, SLANST
+      EXTERNAL           SLAMCH, SLANGE, SLANST, ILAENV, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLARTG, SLASCL, SLASD0, SLASDA,
@@ -240,7 +240,7 @@
      $                   SLASET, SLASR, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, ABS, INT, LOG, SIGN
+      INTRINSIC          REAL, ABS, INT, LOG, MAX, SIGN
 *     ..
 *     .. Executable Statements ..
 *
@@ -284,6 +284,21 @@
 *
       IF( N.EQ.0 )
      $   RETURN
+*
+*     Return INFO = -4 or -5, without calling XERBLA, if D or E
+*     contains a NaN or an infinity.
+*
+      ORGNRM = SLANGE( 'M', N, 1, D, N, WORK )
+      IF( SISNAN( ORGNRM ) .OR. ORGNRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -4
+         RETURN
+      END IF
+      ORGNRM = SLANGE( 'M', N-1, 1, E, MAX( 1, N-1 ), WORK )
+      IF( SISNAN( ORGNRM ) .OR. ORGNRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -5
+         RETURN
+      END IF
+*
       SMLSIZ = ILAENV( 9, 'SBDSDC', ' ', 0, 0, 0, 0 )
       IF( N.EQ.1 ) THEN
          IF( ICOMPQ.EQ.1 ) THEN
@@ -372,12 +387,8 @@
 *     Scale.
 *
       ORGNRM = SLANST( 'M', N, D, E )
-      IF( ORGNRM.EQ.ZERO ) THEN
-         RETURN
-      ELSE IF( SISNAN( ORGNRM ) ) THEN
-         INFO = 1
-         RETURN
-      END IF
+      IF( ORGNRM.EQ.ZERO )
+     $   RETURN
       CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
       CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
