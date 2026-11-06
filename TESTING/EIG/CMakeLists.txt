@@ -150,6 +150,7 @@ if(BUILD_DOUBLE)
 add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
 add_eig_executable(xdmdeigtstd ${DDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_dgges3_scaling test_dgges3_scaling.f90)
+add_eig_executable(test_devx_ifail test_devx_ifail.f90)
 add_eig_executable(test_dgesvj_emptsw test_dgesvj_emptsw.f90)
 endif()
 
