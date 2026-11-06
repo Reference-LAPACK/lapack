@@ -22,6 +22,14 @@ FFLAGS = -O2 -recursive -fpp -ieee=full -thread_safe -w=obs
 FFLAGS_DRV = $(FFLAGS)
 FFLAGS_NOOPT = -O0 -recursive -fpp -ieee=full -thread_safe -w=obs
 
+#  Some test programs deliberately compute an Inf or a NaN from constants.
+#  nagfor folds those expressions at compile time and then rejects the
+#  result ("Errors found during constant propagation"), so those programs
+#  are compiled with FFLAGS_NOPROPAGATE added.  Other compilers need nothing
+#  here and can leave it undefined.
+#
+FFLAGS_NOPROPAGATE = -Onopropagate
+
 #  Define LDFLAGS to the desired linker options for your machine.
 #
 LDFLAGS =

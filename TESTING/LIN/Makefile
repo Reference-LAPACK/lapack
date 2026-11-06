@@ -326,4 +326,12 @@ cchkaa.o: cchkaa.F
 zchkaa.o: zchkaa.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 
+# The CXX error-exit tests and the packed symmetric-indefinite tests compute
+# an Inf or a NaN from constants.
+# nagfor folds those expressions at compile time and rejects the result, so
+# make.inc can turn that off for them through FFLAGS_NOPROPAGATE.
+serrcxx.o derrcxx.o cerrcxx.o zerrcxx.o \
+schksp.o dchksp.o cchksp.o zchksp.o cchkhp.o zchkhp.o: \
+	FFLAGS += $(FFLAGS_NOPROPAGATE)
+
 .NOTPARALLEL:

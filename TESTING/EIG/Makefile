@@ -197,3 +197,13 @@ dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkdmd.o: zchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+
+# The bidiagonal SVD and symmetric tridiagonal error-exit tests and the
+# symmetric tridiagonal eigensolver tests compute an Inf or a NaN from
+# constants.
+# nagfor folds those expressions at compile time and rejects the result, so
+# make.inc can turn that off for them through FFLAGS_NOPROPAGATE.
+serrbd.o derrbd.o cerrbd.o zerrbd.o \
+serrst.o derrst.o cerrst.o zerrst.o \
+schkst.o dchkst.o cchkst.o zchkst.o: \
+	FFLAGS += $(FFLAGS_NOPROPAGATE)
