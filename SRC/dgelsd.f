@@ -173,6 +173,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -4 if A contains a NaN or an infinity;
+*>                XERBLA is not called in that case.
 *>          > 0:  the algorithm for computing the SVD failed to converge;
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.
@@ -232,9 +234,10 @@
      $                   DLASCL, DLASET, DORMBR, DORMLQ, DORMQR, XERBLA
 *     ..
 *     .. External Functions ..
+      LOGICAL            DISNAN
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           ILAENV, DLAMCH, DLANGE
+      EXTERNAL           DISNAN, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, INT, LOG, MAX, MIN
@@ -381,6 +384,10 @@
 *     Scale A if max entry outside range [SMLNUM,BIGNUM].
 *
       ANRM = DLANGE( 'M', M, N, A, LDA, WORK )
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -4
+         RETURN
+      END IF
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *

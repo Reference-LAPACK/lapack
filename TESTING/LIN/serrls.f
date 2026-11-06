@@ -66,18 +66,19 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      INTEGER            NMAX
-      PARAMETER          ( NMAX = 2 )
+      INTEGER            NMAX, LW, LIW
+      PARAMETER          ( NMAX = 2, LW = 1000, LIW = 30 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            INFO, IRNK
-      REAL               RCOND
+      INTEGER            INFO, IRNK, J
+      REAL               INF, NAN, ONE, RCOND, RZERO
 *     ..
 *     .. Local Arrays ..
-      INTEGER            IP( NMAX )
+      INTEGER            IP( LIW )
+      REAL               E( NMAX )
       REAL               A( NMAX, NMAX ), B( NMAX, NMAX ), S( NMAX ),
-     $                   W( NMAX )
+     $                   W( LW )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -85,7 +86,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SGELS, SGELSD, SGELSS, SGELST,
-     $                   SGELSY, SGETSLS
+     $                   SGELSY, SGETSLS, SLALSD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -95,6 +96,9 @@
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NOUT, OK, LERR
       COMMON             / SRNAMC / SRNAMT
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -265,6 +269,59 @@
          CALL SGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, 1, IP,
      $                INFO )
          CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+*
+*        SGELSD must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         ONE = 1.0E+0
+         RZERO = 0.0E+0
+         NAN = SQRT( -ONE )
+         INF = ONE / RZERO
+         RCOND = -1.0E+0
+         DO 10 J = 1, 2
+            A( 1, 1 ) = 1.0E+0
+            A( 1, 2 ) = 1.0E+0
+            A( 2, 1 ) = 1.0E+0
+            A( 2, 2 ) = NAN
+            IF( J.EQ.2 )
+     $         A( 2, 2 ) = INF
+            B( 1, 1 ) = 1.0E+0
+            B( 2, 1 ) = 1.0E+0
+            SRNAMT = 'SGELSD'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL SGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, LW,
+     $                   IP, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9999 )'SGELSD', -4, INFO
+               OK = .FALSE.
+            END IF
+   10    CONTINUE
+*
+*        SLALSD must return INFO = -5 or -6, without calling XERBLA,
+*        when D or E contains a NaN or an infinity.
+*
+         DO 20 J = 1, 2
+            S( 1 ) = ONE
+            S( 2 ) = ONE
+            E( 1 ) = ONE
+            IF( J.EQ.1 ) THEN
+               S( 2 ) = INF
+            ELSE
+               E( 1 ) = NAN
+            END IF
+            B( 1, 1 ) = 1.0E+0
+            B( 2, 1 ) = 1.0E+0
+            SRNAMT = 'SLALSD'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL SLALSD( 'U', 25, 2, 1, S, E, B, 2, RCOND, IRNK, W,
+     $                   IP, INFO )
+            IF( LERR .OR. INFO.NE.-4-J ) THEN
+               WRITE( NOUT, FMT = 9999 )'SLALSD', -4-J, INFO
+               OK = .FALSE.
+            END IF
+   20    CONTINUE
       END IF
 *
 *     Print a summary line.
@@ -272,6 +329,10 @@
       CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
+*
+ 9999 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
+     $      ' calling XERBLA for input with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
 *
 *     End of SERRLS
 *

@@ -150,6 +150,8 @@
 *>          INFO is INTEGER
 *>         = 0:  successful exit.
 *>         < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>               INFO = -5 or -6 if D or E contains a NaN or an
+*>               infinity; XERBLA is not called in that case.
 *>         > 0:  The algorithm failed to compute a singular value while
 *>               working on the submatrix lying in rows and columns
 *>               INFO/(N+1) through MOD(INFO,N+1).
@@ -211,9 +213,10 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               SLAMCH, SLANST
-      LOGICAL            LSAME
-      EXTERNAL           ISAMAX, SLAMCH, SLANST, LSAME
+      REAL               SLAMCH, SLANGE, SLANST
+      LOGICAL            SISNAN, LSAME
+      EXTERNAL           ISAMAX, SLAMCH, SLANGE, SLANST, SISNAN,
+     $                   LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET,
@@ -222,7 +225,7 @@
      $                   SLASRT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AIMAG, CMPLX, INT, LOG, REAL, SIGN
+      INTRINSIC          ABS, AIMAG, CMPLX, INT, LOG, MAX, REAL, SIGN
 *     ..
 *     .. Executable Statements ..
 *
@@ -256,9 +259,24 @@
 *
 *     Quick return if possible.
 *
-      IF( N.EQ.0 ) THEN
+      IF( N.EQ.0 )
+     $   RETURN
+*
+*     Return INFO = -5 or -6, without calling XERBLA, if D or E
+*     contains a NaN or an infinity.
+*
+      ORGNRM = SLANGE( 'M', N, 1, D, N, RWORK )
+      IF( SISNAN( ORGNRM ) .OR. ORGNRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -5
          RETURN
-      ELSE IF( N.EQ.1 ) THEN
+      END IF
+      ORGNRM = SLANGE( 'M', N-1, 1, E, MAX( 1, N-1 ), RWORK )
+      IF( SISNAN( ORGNRM ) .OR. ORGNRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
+*
+      IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
             CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
          ELSE

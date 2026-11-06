@@ -192,7 +192,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          <  0:  if INFO = -i, the i-th argument had an illegal value.
-*>          = -4:  if A had a NAN entry.
+*>          = -4:  if A had a NaN or an infinite entry.
 *>          >  0:  The updating process of DBDSDC did not converge.
 *>          =  0:  successful exit.
 *> \endverbatim
@@ -641,7 +641,7 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = ZLANGE( 'M', M, N, A, LDA, DUM )
-      IF( DISNAN( ANRM ) ) THEN
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
           INFO = -4
           RETURN
       END IF
