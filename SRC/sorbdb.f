@@ -313,7 +313,7 @@
       REAL               Z1, Z2, Z3, Z4
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SLARF1F, SLARFGP, SSCAL,
+      EXTERNAL           SAXPBY, SLARF1F, SLARFGP, SSCAL,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -396,18 +396,16 @@
             IF( I .EQ. 1 ) THEN
                CALL SSCAL( P-I+1, Z1, X11(I,I), 1 )
             ELSE
-               CALL SSCAL( P-I+1, Z1*COS(PHI(I-1)), X11(I,I), 1 )
-               CALL SAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I,
-     $                     I-1),
-     $                     1, X11(I,I), 1 )
+               CALL SAXPBY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      X12(I,I-1), 1,
+     $                      Z1*COS(PHI(I-1)), X11(I,I), 1 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL SSCAL( M-P-I+1, Z2, X21(I,I), 1 )
             ELSE
-               CALL SSCAL( M-P-I+1, Z2*COS(PHI(I-1)), X21(I,I), 1 )
-               CALL SAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I,
-     $                     I-1),
-     $                     1, X21(I,I), 1 )
+               CALL SAXPBY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      X22(I,I-1), 1,
+     $                      Z2*COS(PHI(I-1)), X21(I,I), 1 )
             END IF
 *
             THETA(I) = ATAN2( SNRM2( M-P-I+1, X21(I,I), 1 ),
@@ -445,17 +443,13 @@
             END IF
 *
             IF( I .LT. Q ) THEN
-               CALL SSCAL( Q-I, -Z1*Z3*SIN(THETA(I)), X11(I,I+1),
-     $                     LDX11 )
-               CALL SAXPY( Q-I, Z2*Z3*COS(THETA(I)), X21(I,I+1),
-     $                     LDX21,
-     $                     X11(I,I+1), LDX11 )
+               CALL SAXPBY( Q-I, Z2*Z3*COS(THETA(I)), X21(I,I+1),
+     $                      LDX21, -Z1*Z3*SIN(THETA(I)),
+     $                      X11(I,I+1), LDX11 )
             END IF
-            CALL SSCAL( M-Q-I+1, -Z1*Z4*SIN(THETA(I)), X12(I,I),
-     $                  LDX12 )
-            CALL SAXPY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I),
-     $                  LDX22,
-     $                  X12(I,I), LDX12 )
+            CALL SAXPBY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I),
+     $                   LDX22, -Z1*Z4*SIN(THETA(I)), X12(I,I),
+     $                   LDX12 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( SNRM2( Q-I, X11(I,I+1), LDX11 ),
@@ -549,19 +543,16 @@
             IF( I .EQ. 1 ) THEN
                CALL SSCAL( P-I+1, Z1, X11(I,I), LDX11 )
             ELSE
-               CALL SSCAL( P-I+1, Z1*COS(PHI(I-1)), X11(I,I), LDX11 )
-               CALL SAXPY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)), X12(I-1,
-     $                     I),
-     $                     LDX12, X11(I,I), LDX11 )
+               CALL SAXPBY( P-I+1, -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      X12(I-1,I), LDX12, Z1*COS(PHI(I-1)),
+     $                      X11(I,I), LDX11 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL SSCAL( M-P-I+1, Z2, X21(I,I), LDX21 )
             ELSE
-               CALL SSCAL( M-P-I+1, Z2*COS(PHI(I-1)), X21(I,I),
-     $                     LDX21 )
-               CALL SAXPY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)), X22(I-1,
-     $                     I),
-     $                     LDX22, X21(I,I), LDX21 )
+               CALL SAXPBY( M-P-I+1, -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      X22(I-1,I), LDX22, Z2*COS(PHI(I-1)),
+     $                      X21(I,I), LDX21 )
             END IF
 *
             THETA(I) = ATAN2( SNRM2( M-P-I+1, X21(I,I), LDX21 ),
@@ -595,13 +586,11 @@
             END IF
 *
             IF( I .LT. Q ) THEN
-               CALL SSCAL( Q-I, -Z1*Z3*SIN(THETA(I)), X11(I+1,I), 1 )
-               CALL SAXPY( Q-I, Z2*Z3*COS(THETA(I)), X21(I+1,I), 1,
-     $                     X11(I+1,I), 1 )
+               CALL SAXPBY( Q-I, Z2*Z3*COS(THETA(I)), X21(I+1,I),
+     $                      1, -Z1*Z3*SIN(THETA(I)), X11(I+1,I), 1 )
             END IF
-            CALL SSCAL( M-Q-I+1, -Z1*Z4*SIN(THETA(I)), X12(I,I), 1 )
-            CALL SAXPY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I), 1,
-     $                  X12(I,I), 1 )
+            CALL SAXPBY( M-Q-I+1, Z2*Z4*COS(THETA(I)), X22(I,I), 1,
+     $                   -Z1*Z4*SIN(THETA(I)), X12(I,I), 1 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( SNRM2( Q-I, X11(I+1,I), 1 ),
