@@ -31,10 +31,10 @@ SSP   10               List types on next line if 0 < NTYPES < 10
 STR   18               List types on next line if 0 < NTYPES < 18
 STP   18               List types on next line if 0 < NTYPES < 18
 STB   17               List types on next line if 0 < NTYPES < 17
-SQR    8               List types on next line if 0 < NTYPES <  8
-SRQ    8               List types on next line if 0 < NTYPES <  8
-SLQ    8               List types on next line if 0 < NTYPES <  8
-SQL    8               List types on next line if 0 < NTYPES <  8
+SQR    9               List types on next line if 0 < NTYPES <  9
+SRQ    9               List types on next line if 0 < NTYPES <  9
+SLQ    9               List types on next line if 0 < NTYPES <  9
+SQL    9               List types on next line if 0 < NTYPES <  9
 SQP    6               List types on next line if 0 < NTYPES <  6
 SQK   19               List types on next line if 0 < NTYPES < 19
 SCX   19               LIst types on next line if 0 < NTYPES < 19

@@ -323,6 +323,8 @@ if(BUILD_COMPLEX)
     DEFAULT_API ${CXLINTST}
     EXT_API ${CLINTST_NO_XBLAS})
   add_lin_executable(xlintstrfc SOURCES ${CLINTSTRFP})
+  add_lin_executable(xrq_helpers_c TEST
+    SOURCES ctest_rq_helpers.f90 cgerqs.f cget02.f xerbla.f)
 endif()
 
 if(BUILD_COMPLEX16)
@@ -331,6 +333,8 @@ if(BUILD_COMPLEX16)
     DEFAULT_API ${ZXLINTST}
     EXT_API ${ZLINTST_NO_XBLAS})
   add_lin_executable(xlintstrfz SOURCES ${ZLINTSTRFP})
+  add_lin_executable(xrq_helpers_z TEST
+    SOURCES ztest_rq_helpers.f90 zgerqs.f zget02.f xerbla.f)
 endif()
 
 if(BUILD_COMPLEX AND BUILD_COMPLEX16)

@@ -219,9 +219,10 @@
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 8 )
-      DOUBLE PRECISION   ZERO
-      PARAMETER          ( ZERO = 0.0D0 )
+      PARAMETER          ( NTYPES = 9 )
+      DOUBLE PRECISION   ZERO, ONE, QUARTER
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0,
+     $                   QUARTER = 0.25D0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER          DIST, TYPE
@@ -234,6 +235,11 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
+*     ..
+*     .. External Functions ..
+      LOGICAL            DISNAN
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DISNAN, DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRLQ, DGELQF, DGELS,
@@ -313,6 +319,14 @@
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 50
                END IF
+*
+*              Type 9:  make the entry the first reflector works on
+*              large enough that its sum with the norm of the column
+*              overflows.  The generator cannot produce such a matrix,
+*              because it scales the matrix by its norm.
+*
+               IF( IMAT.EQ.9 .AND. MINMN.GT.0 )
+     $            A( 1 ) = ( ONE - QUARTER )*DLAMCH( 'Overflow' )
 *
 *              Set some values for K: the first value must be MINMN,
 *              corresponding to the call of DLQT01; other values are
@@ -433,7 +447,8 @@
 *                    pass the threshold.
 *
                      DO 20 I = 1, NT
-                        IF( RESULT( I ).GE.THRESH ) THEN
+                        IF( RESULT( I ).GE.THRESH .OR.
+     $                      DISNAN( RESULT( I ) ) ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, K, NB, NX,
