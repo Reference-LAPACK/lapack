@@ -69,7 +69,6 @@
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
-      USE XERBLA_LAPACK
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine --
@@ -83,9 +82,8 @@
 *
 * =====================================================================
 *
-*     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM
-      EXTERNAL XERBLA_LAPACK_SUB
+*     .. External Subroutines ..
+      EXTERNAL           XERBLA_LAPACK_SUB
 *     ..
 *     .. Executable Statements ..
 *

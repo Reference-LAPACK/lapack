@@ -653,4 +653,8 @@ la_xisnan.o: la_xisnan.F90 la_constants.mod
 	$(FC) $(FFLAGS) -c -o $@ $<
 la_constants.o: la_constants.f90
 	$(FC) $(FFLAGS) -c -o $@ $<
-xerbla.o: xerbla_lapack.o
+# Built without nagfor's -thread_safe: SET_LAPACK_XERBLA assigns a module
+# procedure pointer, which -thread_safe rejects (setting a handler is not
+# thread-safe anyway). The link still uses it.
+xerbla_lapack.o: xerbla_lapack.f90
+	$(FC) $(filter-out -thread_safe,$(FFLAGS)) -c -o $@ $<

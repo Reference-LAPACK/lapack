@@ -61,7 +61,6 @@
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
-      USE XERBLA_BLAS
       IMPLICIT NONE
 *
 *  -- Reference BLAS level1 routine --
@@ -75,9 +74,8 @@
 *
 * =====================================================================
 *
-*     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM
-      EXTERNAL XERBLA_BLAS_SUB
+*     .. External Subroutines ..
+      EXTERNAL           XERBLA_BLAS_SUB
 *     ..
 *     .. Executable Statements ..
 *

@@ -151,7 +151,11 @@ macro(CheckLAPACKCompilerFlags)
     set(FPE_EXIT_FLAG "[-/]ieee=(stop|nonstd)")
 
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-ieee=full>")
-    add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
+    # Targets that set LAPACK_NO_THREAD_SAFE are compiled without
+    # -thread_safe: the XERBLA handler modules, whose setters assign a module
+    # procedure pointer, which -thread_safe rejects (setting a handler is not
+    # thread-safe anyway). The link still uses -thread_safe below.
+    add_compile_options("$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<NOT:$<BOOL:$<TARGET_PROPERTY:LAPACK_NO_THREAD_SAFE>>>>:-thread_safe>")
     add_link_options("$<$<COMPILE_LANGUAGE:Fortran>:-thread_safe>")
     add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:-recursive>")
 
