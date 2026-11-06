@@ -1,7 +1,16 @@
 name: Makefile
 
-# This workflow builds and installs LAPACK using the Makefile build system.
-# Only GFortran is tested.
+# This workflow builds BLAS, CBLAS, LAPACK, LAPACKE and TMGLIB using the
+# Makefile build system and runs their tests, with GFortran, the NAG Fortran
+# Compiler and the Intel oneAPI compilers.
+#
+# The configurations with a make_inc start from INSTALL/make.inc.<make_inc>
+# instead of the flags below, so that the make.inc files shipped for GFortran
+# (optimised and debug), nagfor and ifx are tested too.
+#
+# The NAG Fortran Compiler is licence managed, see compilers.yml: each of its
+# configurations reads a repository secret of its own and is skipped when that
+# secret is not set.
 
 on:
   push:
@@ -50,7 +59,7 @@ defaults:
 
 jobs:
   build-install:
-    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}${{ matrix.toolchain.make_inc && format(' (make.inc.{0})', matrix.toolchain.make_inc) || '' }}
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
@@ -70,16 +79,150 @@ jobs:
         - FC: gfortran-14
           CC: gcc-14
           os: macos-26
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04
+          make_inc: gfortran
+        - FC: gfortran
+          CC: gcc
+          os: ubuntu-26.04
+          make_inc: gfortran_debug
+        - FC: nagfor
+          CC: gcc
+          os: ubuntu-26.04
+          make_inc: nagfor
+          nag_url: https://support.nag.com/downloads/impl/npl6a72na_amd64.tgz
+          nag_secret: NAG_KUSARI_KEY_LINUX_X86_64
+        - FC: ifx
+          CC: icx
+          os: ubuntu-24.04
+          make_inc: ifx
 
     steps:
     - name: Checkout LAPACK
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-    - name: Set configurations
+    - name: Install the NAG Fortran Compiler
+      if: ${{ matrix.toolchain.FC == 'nagfor' }}
+      env:
+        # The secrets context cannot be reached from the matrix, but it can be
+        # indexed with a name taken from it.  The guard keeps the index away
+        # from an undefined name for the non-NAG toolchains.
+        NAG_KUSARI_KEY: ${{ matrix.toolchain.nag_secret && secrets[matrix.toolchain.nag_secret] || '' }}
+        NAG_KUSARI_SECRET: ${{ matrix.toolchain.nag_secret }}
+        NAG_URL: ${{ matrix.toolchain.nag_url }}
       run: |
-        echo "SHELL = /bin/sh" >> make.inc
-        echo "FFLAGS_DRV = ${{env.FFLAGS}}" >> make.inc
-        echo "TIMER = INT_ETIME" >> make.inc
+        # Repository secrets are not exposed to pull requests from forks, so
+        # the compiler cannot be licensed there.  Skip instead of failing the
+        # run of a contributor who cannot do anything about it.
+        if [ -z "${NAG_KUSARI_KEY}" ]; then
+          echo "::warning title=NAG Fortran Compiler skipped::" \
+            "The ${NAG_KUSARI_SECRET} secret is not available (pull requests" \
+            "from forks cannot read repository secrets), so the compiler" \
+            "cannot be licensed for this platform."
+          echo "SKIP_TOOLCHAIN=true" >> "$GITHUB_ENV"
+          exit 0
+        fi
+
+        # Kusari looks for the licence key in a file of its own; anywhere
+        # outside its handful of default locations has to be named explicitly
+        # through NAG_KUSARI_FILE.
+        key_file="${RUNNER_TEMP}/nag.key"
+        printf '%s\n' "${NAG_KUSARI_KEY}" > "${key_file}"
+        chmod 600 "${key_file}"
+        export NAG_KUSARI_FILE="${key_file}"
+        echo "NAG_KUSARI_FILE=${key_file}" >> "$GITHUB_ENV"
+
+        # Linux is shipped as a tarball, macOS as a disk image; both unpack to
+        # the same distribution layout.
+        case "${NAG_URL}" in
+          *.dmg)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.dmg" "${NAG_URL}"
+            dist="${RUNNER_TEMP}/nag-mount"
+            hdiutil attach "${RUNNER_TEMP}/nagfor.dmg" \
+              -nobrowse -readonly -mountpoint "${dist}"
+            ;;
+          *)
+            curl -fsSL -o "${RUNNER_TEMP}/nagfor.tgz" "${NAG_URL}"
+            tar xzf "${RUNNER_TEMP}/nagfor.tgz" -C "${RUNNER_TEMP}"
+            # The directory carries the platform in its name
+            # (NAG_Fortran-amd64, NAG_Fortran-arm64linux, ...), so look it up
+            # rather than assuming one.
+            dist=$(find "${RUNNER_TEMP}" -maxdepth 1 -type d -name 'NAG_Fortran-*' \
+                     | head -n 1)
+            ;;
+        esac
+        if [ -z "${dist}" ] || [ ! -f "${dist}/INSTALLU.sh" ]; then
+          echo "::error::No NAG Fortran Compiler distribution found in ${RUNNER_TEMP}."
+          exit 1
+        fi
+
+        # INSTALLU.sh is the unattended installer.  It takes both target
+        # directories from the environment, they have to be absolute and they
+        # have to differ from each other.  /usr/local/lib/NAG_Fortran is the
+        # compiler's own default library directory on every platform here,
+        # which keeps the installed nagfor a plain binary rather than a -Qpath
+        # wrapper script.
+        cd "${dist}"
+        sudo env \
+          INSTALL_TO_BINDIR=/usr/local/bin \
+          INSTALL_TO_LIBDIR=/usr/local/lib/NAG_Fortran \
+          ./INSTALLU.sh
+
+        nagfor -version
+
+        # Confirm the key is usable rather than merely present.  -xlicinfo
+        # reports the licence status but exits with status 2 whether or not a
+        # licence was found, so it cannot be used as a bare command: what
+        # counts is its output, which reports a failure as a line starting
+        # with 'Error:'.
+        licence_info=$(nagfor -xlicinfo 2>&1) || true
+        printf '%s\n' "${licence_info}"
+        if printf '%s\n' "${licence_info}" | grep -q '^Error:'; then
+          echo "::error title=NAG Fortran Compiler licence invalid::" \
+            "nagfor found no usable licence in ${NAG_KUSARI_FILE}; check that" \
+            "the ${NAG_KUSARI_SECRET} secret holds a key for this platform."
+          exit 1
+        fi
+
+    - name: Install the Intel oneAPI compilers
+      if: ${{ matrix.toolchain.FC == 'ifx' }}
+      run: |
+        # ifx and icx are not in the Ubuntu archive; Intel ships them from its
+        # own APT repository.
+        curl -fsSL https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+          | gpg --dearmor \
+          | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+        echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg]" \
+             "https://apt.repos.intel.com/oneapi all main" \
+          | sudo tee /etc/apt/sources.list.d/oneAPI.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y \
+          intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp
+
+        # setvars.sh only changes the shell that sources it, and every step
+        # runs in a shell of its own, so announce it through TOOLCHAIN_SETUP
+        # and let the steps below source it themselves.
+        echo "TOOLCHAIN_SETUP=/opt/intel/oneapi/setvars.sh" >> "$GITHUB_ENV"
+
+        source /opt/intel/oneapi/setvars.sh
+        ifx --version
+        icx --version
+
+    - name: Set configurations
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      env:
+        MAKE_INC: ${{ matrix.toolchain.make_inc }}
+      run: |
+        if [ -n "${MAKE_INC}" ]; then
+          # Start from the make.inc shipped for this compiler; its compiler
+          # flags take precedence over the ones in the environment.
+          cp "INSTALL/make.inc.${MAKE_INC}" make.inc
+        else
+          echo "SHELL = /bin/sh" >> make.inc
+          echo "FFLAGS_DRV = ${{env.FFLAGS}}" >> make.inc
+          echo "TIMER = INT_ETIME" >> make.inc
+        fi
         echo "BLASLIB = ${{github.workspace}}/librefblas.a" >> make.inc
         echo "CBLASLIB = ${{github.workspace}}/libcblas.a" >> make.inc
         echo "LAPACKLIB = ${{github.workspace}}/liblapack.a" >> make.inc
@@ -88,7 +231,20 @@ jobs:
         echo "DOCSDIR = ${{github.workspace}}/DOCS" >> make.inc
 
     - name: Build
-      run: make -s -j"$(getconf _NPROCESSORS_ONLN)" all cblas_testing lapackelib
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        make -s -j"$(getconf _NPROCESSORS_ONLN)" \
+          blaslib cblaslib lapacklib lapackelib tmglib
+
+    - name: Test
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        make -s -j"$(getconf _NPROCESSORS_ONLN)" all cblas_testing
 
     - name: Install
-      run: make -j"$(getconf _NPROCESSORS_ONLN)" lapack_install
+      if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
+      run: |
+        [ -z "${TOOLCHAIN_SETUP-}" ] || source "${TOOLCHAIN_SETUP}"
+        make -j"$(getconf _NPROCESSORS_ONLN)" lapack_install
