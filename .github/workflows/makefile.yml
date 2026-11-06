@@ -56,7 +56,7 @@ defaults:
 
 jobs:
   build-install:
-    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}
+    name: ${{ matrix.toolchain.os }}-${{ matrix.toolchain.FC }}${{ matrix.toolchain.make_inc && ' (make.inc)' || '' }}
     runs-on: ${{ matrix.toolchain.os }}
 
     env:
