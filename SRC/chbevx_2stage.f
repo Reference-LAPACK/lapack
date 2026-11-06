@@ -470,8 +470,11 @@
          END IF
          IF( M.EQ.1 ) THEN
             W( 1 ) = REAL( CTMP1 )
-            IF( WANTZ )
-     $         Z( 1, 1 ) = CONE
+            Q( 1, 1 ) = CONE
+            IF( WANTZ ) THEN
+               Z( 1, 1 ) = CONE
+               IFAIL( 1 ) = 0
+            END IF
          END IF
          RETURN
       END IF
