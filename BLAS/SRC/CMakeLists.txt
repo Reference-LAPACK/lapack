@@ -60,7 +60,8 @@ set(ZB1AUX
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
 #---------------------------------------------------------------------
-set(ALLBLAS lsame.f xerbla.f xerbla_array.f xerbla_blas.f90 iblaver.f)
+set(ALLBLAS lsame.f xerbla.f xerbla_array.f xerbla_blas.f90 iblaver.f
+  get_blas_libname.f90)
 
 #---------------------------------------------------------
 #  Level 2 BLAS
