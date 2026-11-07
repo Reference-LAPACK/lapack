@@ -72,7 +72,7 @@ ALLMOD = la_xisnan.mod la_constants.mod
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o xerbla_lapack.o \
    iparmq.o iparam2stage.o la_xisnan.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
-   ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
+   ../INSTALL/ilaver.o ../INSTALL/get_lapack_libname.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
 SCLAUX = \
    la_constants.o \

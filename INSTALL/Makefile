@@ -1,6 +1,10 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
+.SUFFIXES: .F .f90 .F90 .o .mod
+%.o: %.f90 $(ALLMOD)
+	$(FC) $(FFLAGS) -c -o $@ $<
+
 .PHONY: all testlsame testslamch testdlamch testsecond testdsecnd testieee testversion test_zcomplexabs test_zcomplexdiv test_zcomplexmult test_zminMax
 all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion test_zcomplexabs test_zcomplexdiv test_zcomplexmult test_zminMax
 
@@ -24,7 +28,7 @@ testdsecnd: dsecnd_$(TIMER).o dsecndtst.o
 testieee: tstiee.o $(TOPSRCDIR)/SRC/ieeeck.o $(TOPSRCDIR)/SRC/ilaenv.o $(TOPSRCDIR)/SRC/iparmq.o
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-testversion: ilaver.o LAPACK_version.o
+testversion: ilaver.o LAPACK_version.o get_lapack_libname.o
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 test_zcomplexabs: test_zcomplexabs.o
