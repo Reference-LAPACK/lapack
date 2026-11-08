@@ -71,8 +71,9 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
+      LOGICAL            NANB
       INTEGER            INFO, IRNK, J
-      REAL               INF, NAN, ONE, RCOND, RZERO
+      REAL               INF, NAN, ONE, RCOND, RZERO, TOL
 *     ..
 *     .. Local Arrays ..
       INTEGER            IP( LIW )
@@ -81,8 +82,9 @@
       COMPLEX            A( NMAX, NMAX ), B( NMAX, NMAX ), W( LW )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            SISNAN, LSAMEN
+      REAL               SLAMCH
+      EXTERNAL           SISNAN, SLAMCH, LSAMEN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, CGELS, CGELSD, CGELSS, CGELST,
@@ -98,7 +100,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          SQRT
+      INTRINSIC          ABS, AIMAG, LEN_TRIM, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -328,6 +330,61 @@
                OK = .FALSE.
             END IF
    20    CONTINUE
+*
+*        A NaN in one column of B must leave the solution for the
+*        other column intact: each driver returns INFO = 0, without
+*        calling XERBLA, the solution for the finite column, and a
+*        NaN in the solution for the other one.  The drivers do not
+*        check B for a NaN or an infinity.
+*
+         TOL = 100*SLAMCH( 'Epsilon' )
+         DO 30 J = 1, 6
+            A( 1, 1 ) = ( 3.0E+0, 0.0E+0 )
+            A( 2, 1 ) = ( 1.0E+0, 0.0E+0 )
+            A( 1, 2 ) = ( 1.0E+0, 0.0E+0 )
+            A( 2, 2 ) = ( 2.0E+0, 0.0E+0 )
+            B( 1, 1 ) = ( 4.0E+0, 0.0E+0 )
+            B( 2, 1 ) = ( 3.0E+0, 0.0E+0 )
+            B( 1, 2 ) = ( 1.0E+0, 0.0E+0 )
+            B( 2, 2 ) = NAN
+            IP( 1 ) = 0
+            IP( 2 ) = 0
+            INFOT = 0
+            LERR = .FALSE.
+            IF( J.EQ.1 ) THEN
+               SRNAMT = 'CGELS'
+               CALL CGELS( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.2 ) THEN
+               SRNAMT = 'CGELST'
+               CALL CGELST( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.3 ) THEN
+               SRNAMT = 'CGETSLS'
+               CALL CGETSLS( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.4 ) THEN
+               SRNAMT = 'CGELSS'
+               CALL CGELSS( 2, 2, 2, A, 2, B, 2, S, RCOND, IRNK, W, LW,
+     $                      RW, INFO )
+            ELSE IF( J.EQ.5 ) THEN
+               SRNAMT = 'CGELSY'
+               CALL CGELSY( 2, 2, 2, A, 2, B, 2, IP, RCOND, IRNK, W, LW,
+     $                      RW, INFO )
+            ELSE
+               SRNAMT = 'CGELSD'
+               CALL CGELSD( 2, 2, 2, A, 2, B, 2, S, RCOND, IRNK, W, LW,
+     $                      RW, IP, INFO )
+            END IF
+            NANB = SISNAN( REAL( B( 1, 2 ) ) ) .OR.
+     $             SISNAN( AIMAG( B( 1, 2 ) ) ) .OR.
+     $             SISNAN( REAL( B( 2, 2 ) ) ) .OR.
+     $             SISNAN( AIMAG( B( 2, 2 ) ) )
+            IF( LERR .OR. INFO.NE.0 .OR. .NOT.NANB .OR.
+     $          .NOT.( ABS( B( 1, 1 )-ONE ).LE.TOL .AND.
+     $                 ABS( B( 2, 1 )-ONE ).LE.TOL ) ) THEN
+               WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $            INFO
+               OK = .FALSE.
+            END IF
+   30    CONTINUE
       END IF
 *
 *     Print a summary line.
@@ -339,6 +396,9 @@
  9999 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
      $      ' calling XERBLA for input with a NaN or an infinity',
      $      ' (INFO = ', I6, ') ***' )
+ 9998 FORMAT( ' *** ', A, ' with a NaN in one column of B did not',
+     $      ' return INFO = 0 and the solution for the other column',
+     $      ' without calling XERBLA (INFO = ', I6, ') ***' )
 *
 *     End of CERRLS
 *

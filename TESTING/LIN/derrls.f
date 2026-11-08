@@ -71,8 +71,9 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
+      LOGICAL            NANB
       INTEGER            INFO, IRNK, J
-      DOUBLE PRECISION   INF, NAN, ONE, RCOND, RZERO
+      DOUBLE PRECISION   INF, NAN, ONE, RCOND, RZERO, TOL
 *     ..
 *     .. Local Arrays ..
       INTEGER            IP( LIW )
@@ -81,8 +82,9 @@
      $                   W( LW )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            DISNAN, LSAMEN
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DISNAN, DLAMCH, LSAMEN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DGELS, DGELSD, DGELSS, DGELST,
@@ -98,7 +100,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          SQRT
+      INTRINSIC          ABS, LEN_TRIM, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -322,6 +324,58 @@
                OK = .FALSE.
             END IF
    20    CONTINUE
+*
+*        A NaN in one column of B must leave the solution for the
+*        other column intact: each driver returns INFO = 0, without
+*        calling XERBLA, the solution for the finite column, and a
+*        NaN in the solution for the other one.  The drivers do not
+*        check B for a NaN or an infinity.
+*
+         TOL = 100*DLAMCH( 'Epsilon' )
+         DO 30 J = 1, 6
+            A( 1, 1 ) = 3.0D+0
+            A( 2, 1 ) = 1.0D+0
+            A( 1, 2 ) = 1.0D+0
+            A( 2, 2 ) = 2.0D+0
+            B( 1, 1 ) = 4.0D+0
+            B( 2, 1 ) = 3.0D+0
+            B( 1, 2 ) = 1.0D+0
+            B( 2, 2 ) = NAN
+            IP( 1 ) = 0
+            IP( 2 ) = 0
+            INFOT = 0
+            LERR = .FALSE.
+            IF( J.EQ.1 ) THEN
+               SRNAMT = 'DGELS'
+               CALL DGELS( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.2 ) THEN
+               SRNAMT = 'DGELST'
+               CALL DGELST( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.3 ) THEN
+               SRNAMT = 'DGETSLS'
+               CALL DGETSLS( 'N', 2, 2, 2, A, 2, B, 2, W, LW, INFO )
+            ELSE IF( J.EQ.4 ) THEN
+               SRNAMT = 'DGELSS'
+               CALL DGELSS( 2, 2, 2, A, 2, B, 2, S, RCOND, IRNK, W, LW,
+     $                      INFO )
+            ELSE IF( J.EQ.5 ) THEN
+               SRNAMT = 'DGELSY'
+               CALL DGELSY( 2, 2, 2, A, 2, B, 2, IP, RCOND, IRNK, W, LW,
+     $                      INFO )
+            ELSE
+               SRNAMT = 'DGELSD'
+               CALL DGELSD( 2, 2, 2, A, 2, B, 2, S, RCOND, IRNK, W, LW,
+     $                      IP, INFO )
+            END IF
+            NANB = DISNAN( B( 1, 2 ) ) .OR. DISNAN( B( 2, 2 ) )
+            IF( LERR .OR. INFO.NE.0 .OR. .NOT.NANB .OR.
+     $          .NOT.( ABS( B( 1, 1 )-ONE ).LE.TOL .AND.
+     $                 ABS( B( 2, 1 )-ONE ).LE.TOL ) ) THEN
+               WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $            INFO
+               OK = .FALSE.
+            END IF
+   30    CONTINUE
       END IF
 *
 *     Print a summary line.
@@ -333,6 +387,9 @@
  9999 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
      $      ' calling XERBLA for input with a NaN or an infinity',
      $      ' (INFO = ', I6, ') ***' )
+ 9998 FORMAT( ' *** ', A, ' with a NaN in one column of B did not',
+     $      ' return INFO = 0 and the solution for the other column',
+     $      ' without calling XERBLA (INFO = ', I6, ') ***' )
 *
 *     End of DERRLS
 *

@@ -179,6 +179,28 @@
          CALL CHKXER( 'ZGEEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
+*        ZGEEV must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 50 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGEEV( 'N', 'N', 2, A, NMAX, X, VL, 1, VR, 1, W,
+     $                  10*NMAX, RW, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9997 )'ZGEEV', INFO
+               OK = .FALSE.
+            END IF
+   50    CONTINUE
+         NT = NT + 2
+*
       ELSE IF( LSAMEN( 2, C2, 'ES' ) ) THEN
 *
 *        Test ZGEES

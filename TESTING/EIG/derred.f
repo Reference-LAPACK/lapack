@@ -178,6 +178,28 @@
          CALL CHKXER( 'DGEEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
+*        DGEEV must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 50 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL DGEEV( 'N', 'N', 2, A, NMAX, WR, WI, VL, 1, VR, 1, W,
+     $                  10*NMAX, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9997 )'DGEEV', INFO
+               OK = .FALSE.
+            END IF
+   50    CONTINUE
+         NT = NT + 2
+*
       ELSE IF( LSAMEN( 2, C2, 'ES' ) ) THEN
 *
 *        Test DGEES
