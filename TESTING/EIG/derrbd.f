@@ -67,7 +67,7 @@
 *
 *     .. Parameters ..
       INTEGER            NMAX, LW
-      PARAMETER          ( NMAX = 4, LW = 4*NMAX )
+      PARAMETER          ( NMAX = 4, LW = 25*NMAX )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -77,7 +77,7 @@
       DOUBLE PRECISION   RNAN, RONE, RZERO
 *     ..
 *     .. Local Arrays ..
-      INTEGER            IQ( NMAX, NMAX ), IW( NMAX )
+      INTEGER            IQ( NMAX, NMAX ), IW( 12*NMAX )
       DOUBLE PRECISION   A( NMAX, NMAX ), D( NMAX ), E( NMAX ),
      $                   Q( NMAX, NMAX ), S( NMAX ), TP( NMAX ),
      $                   TQ( NMAX ), U( NMAX, NMAX ),
@@ -460,6 +460,32 @@
      $                 S, Q, 2, W, 1, IW, 1, INFO )
          CALL CHKXER( 'DBDSVDMR3', INFOT, NOUT, LERR, OK )
          NT = NT + 12
+*
+*        DBDSVDMR3 must return INFO = -5 or -6, without calling XERBLA,
+*        when D or E contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 70 J = 1, 2
+            D( 1 ) = ONE
+            D( 2 ) = ONE
+            E( 1 ) = ONE
+            IF( J.EQ.1 ) THEN
+               D( 2 ) = RONE / RZERO
+            ELSE
+               E( 1 ) = RNAN
+            END IF
+            INFOT = 0
+            LERR = .FALSE.
+            CALL DBDSVDMR3( 'U', 'N', 'A', 2, D, E, ZERO, ZERO, 0, 0,
+     $                      NS, S, Q, 1, W, LW, IW, 12*NMAX, INFO )
+            IF( LERR .OR. INFO.NE.-4-J ) THEN
+               WRITE( NOUT, FMT = 9994 )'DBDSVDMR3', -4-J, INFO
+               OK = .FALSE.
+            END IF
+   70    CONTINUE
+         NT = NT + 2
       END IF
 *
 *     Print a summary line.
@@ -470,6 +496,9 @@
          WRITE( NOUT, FMT = 9998 )PATH
       END IF
 *
+ 9994 FORMAT( ' *** ', A, ' did not return INFO = ', I2, ' without',
+     $      ' calling XERBLA for input with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
  9999 FORMAT( 1X, A3, ' routines passed the tests of the error exits',
      $      ' (', I3, ' tests done)' )
  9998 FORMAT( ' *** ', A3, ' routines failed the tests of the error ',
