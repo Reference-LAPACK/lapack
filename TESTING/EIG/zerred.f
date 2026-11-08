@@ -82,7 +82,7 @@
 *
 *     .. Parameters ..
       INTEGER            NMAX, LW
-      PARAMETER          ( NMAX = 4, LW = 5*NMAX )
+      PARAMETER          ( NMAX = 4, LW = 15*NMAX )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
@@ -97,7 +97,7 @@
       DOUBLE PRECISION   R1( NMAX ), R2( NMAX ), RW( LW ), S( NMAX )
       COMPLEX*16         A( NMAX, NMAX ), U( NMAX, NMAX ),
      $                   VL( NMAX, NMAX ), VR( NMAX, NMAX ),
-     $                   VT( NMAX, NMAX ), W( 10*NMAX ), X( NMAX )
+     $                   VT( NMAX, NMAX ), W( 20*NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGEJSV,
@@ -593,6 +593,30 @@
      $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
          CALL CHKXER( 'ZGESVDMR3', INFOT, NOUT, LERR, OK )
          NT = 12
+*
+*        ZGESVDMR3 must return INFO = -6, without calling XERBLA,
+*        when A contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 60 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGESVDMR3( 'N', 'N', 'A', 2, 1, A, NMAX, ZERO, ZERO,
+     $                      0, 0, NS, S, U, NMAX, VT, NMAX, W, 20*NMAX,
+     $                      RW, IW, INFO )
+            IF( LERR .OR. INFO.NE.-6 ) THEN
+               WRITE( NOUT, FMT = 9996 )'ZGESVDMR3', INFO
+               OK = .FALSE.
+            END IF
+   60    CONTINUE
+         A( 2, 1 ) = ZERO
+         NT = NT + 2
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
@@ -667,6 +691,9 @@
          END IF
       END IF
 *
+ 9996 FORMAT( ' *** ', A, ' did not return INFO = -6 without calling',
+     $      ' XERBLA for a matrix with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
  9999 FORMAT( 1X, A, ' passed the tests of the error exits (', I3,
      $      ' tests done)' )
  9998 FORMAT( ' *** ', A, ' failed the tests of the error exits ***' )
