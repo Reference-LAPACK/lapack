@@ -54,8 +54,11 @@
       DOUBLE PRECISION S1, S2
       DOUBLE PRECISION SFAC
       INTEGER          IC
+      INTEGER          VERS_MAJOR, VERS_MINOR, VERS_PATCH, OUT_LEN
+      CHARACTER*30     LIBNAME
 *     .. External Subroutines ..
-      EXTERNAL         CHECK0, CHECK1, CHECK2, CHECK3, HEADER
+      EXTERNAL         CHECK0, CHECK1, CHECK2, CHECK3, HEADER, IBLAVER,
+     $                 GET_BLAS_LIBNAME
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, PASS
       COMMON           /CNTBLA/NTESTS, NFAILS
@@ -63,6 +66,10 @@
 *     .. Data statements ..
       DATA             SFAC/9.765625D-4/
 *     .. Executable Statements ..
+      CALL GET_BLAS_LIBNAME( LIBNAME, OUT_LEN )
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,99995) LIBNAME(1:OUT_LEN-1),
+     $    VERS_MAJOR, VERS_MINOR, VERS_PATCH
       CALL CPU_TIME( S1 )
       WRITE (NOUT,99999)
       DO 20 IC = 1, 14
@@ -104,6 +111,7 @@
 99997 FORMAT (1X,A6,' COMPUTATIONAL TESTS:',I9,' RUN,',I9,
      +        ' FAILED')
 99996 FORMAT (' Total time used = ',F12.2,' seconds',/)
+99995 FORMAT (/ ' ', A, ', BLAS API VERSION ', I0, '.', I0, '.', I0)
 *
 *     End of DBLAT1
 *

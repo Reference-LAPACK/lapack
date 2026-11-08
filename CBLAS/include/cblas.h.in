@@ -717,6 +717,8 @@ typedef void (*cblas_xerbla_callback_t) CBLAS_XERBLA_CALLBACK_ARGS;
 void CBLAS_WEAK_SYMBOL cblas_xerbla CBLAS_XERBLA_ARGS;
 cblas_xerbla_callback_t cblas_get_xerbla(void);
 cblas_xerbla_callback_t cblas_set_xerbla(cblas_xerbla_callback_t cb, blas_fortran_xerbla_callback_t F77_cb);
+void cblas_iblaver(CBLAS_INT *major, CBLAS_INT *minor, CBLAS_INT *patch);
+void cblas_get_libname(char *buffer, CBLAS_INT *out_len, CBLAS_INT len);
 
 #ifdef __cplusplus
 }

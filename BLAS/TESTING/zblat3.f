@@ -109,12 +109,14 @@
 *     .. Local Scalars ..
       DOUBLE PRECISION   S1, S2
       DOUBLE PRECISION   EPS, ERR, THRESH
-      INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NOUT, NTRA
+      INTEGER            I, ISNUM, J, N, NALF, NBET, NIDIM, NOUT, NTRA,
+     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH, OUT_LEN
       LOGICAL            FATAL, LTESTT, REWI, SAME, SFATAL, TRACE,
      $                   TSTERR
       CHARACTER*1        TRANSA, TRANSB
       CHARACTER*7        SNAMET
       CHARACTER*32       SNAPS, SUMMRY
+      CHARACTER*30       LIBNAME
 *     .. Local Arrays ..
       COMPLEX*16         AA( NMAX*NMAX ), AB( NMAX, 2*NMAX ),
      $                   ALF( NALMAX ), AS( NMAX*NMAX ),
@@ -132,7 +134,8 @@
       EXTERNAL           DDIFF, LZE
 *     .. External Subroutines ..
       EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5, ZCHK6
-      EXTERNAL           ZCHKE, ZMMCH, SET_BLAS_XERBLA, XER_REPLACE
+      EXTERNAL           ZCHKE, ZMMCH, SET_BLAS_XERBLA, XER_REPLACE,
+     $                   IBLAVER, GET_BLAS_LIBNAME
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -156,6 +159,10 @@
       READ( NIN, FMT = * )NOUT
       OPEN( NOUT, FILE = SUMMRY, STATUS = 'UNKNOWN' )
       NOUTC = NOUT
+      CALL GET_BLAS_LIBNAME( LIBNAME, OUT_LEN )
+      CALL IBLAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      WRITE (NOUT,9982) LIBNAME(1:OUT_LEN-1),
+     $    VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read name and unit number for snapshot output file and open file.
 *
@@ -413,6 +420,7 @@
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
  9983 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9982 FORMAT( / ' ', A, ', BLAS API VERSION ', I0, '.', I0, '.', I0 )
 *
 *     End of ZBLAT3
 *

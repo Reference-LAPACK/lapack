@@ -1079,9 +1079,10 @@
       CHARACTER*32       VNAME
       CHARACTER*10       INTSTR
       CHARACTER*80       LINE
+      CHARACTER*30       LIBNAME
       INTEGER            I, I1, IC, INFO, ITMP, K, LENP, MAXTYP, NEWSD,
      $                   NK, NN, NPARMS, NRHS, NTYPES,
-     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH
+     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH, OUT_LEN
       INTEGER*4          N_THREADS, ONE_THREAD
       REAL               EPS, S1, S2, THRESH, THRSHN
 *     ..
@@ -1117,6 +1118,7 @@
      $                   SDRVSX, SDRVVX, SERRBD, SERRED, SERRGG, SERRHS,
      $                   SERRST, ILAVER, XLAENV, SDRGES3, SDRGEV3,
      $                   SET_LAPACK_XERBLA, XER_REPLACE,
+     $                   GET_LAPACK_LIBNAME,
      $                   SCHKST2STG, SDRVST2STG, SCHKSB2STG, SDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
@@ -1297,8 +1299,10 @@
          WRITE( NOUT, FMT = 9992 )PATH
          GO TO 10
       END IF
+      CALL GET_LAPACK_LIBNAME( LIBNAME, OUT_LEN )
       CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
-      WRITE( NOUT, FMT = 9972 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
+      WRITE( NOUT, FMT = 9972 ) LIBNAME(1:OUT_LEN-1),
+     $    VERS_MAJOR, VERS_MINOR, VERS_PATCH
       WRITE( NOUT, FMT = 9984 )
 *
 *     Read the number of values of M, P, and N.
@@ -2549,7 +2553,7 @@
  9974 FORMAT( ' Tests of SSBTRD', / ' (reduction of a symmetric band ',
      $      'matrix to tridiagonal form)' )
  9973 FORMAT( / 1X, 71( '-' ) )
- 9972 FORMAT( / ' LAPACK VERSION ', I1, '.', I2, '.', I1 )
+ 9972 FORMAT( / ' ', A, ' VERSION ', I0, '.', I0, '.', I0 )
  9971 FORMAT( / ' Tests of the Generalized Linear Regression Model ',
      $      'routines' )
  9970 FORMAT( / ' Tests of the Generalized QR and RQ routines' )

@@ -40,7 +40,8 @@
 int main(int argc, char **argv) {
 
         /* Locals */
-        lapack_int n, nrhs, lda, ldb, info;
+        lapack_int n, nrhs, lda, ldb, info, out_len, major, minor, patch;
+        char buf[30];
         int i, j;
         /* Local arrays */
         double *A, *b;
@@ -76,6 +77,10 @@ int main(int argc, char **argv) {
 
         for(i=0;i<n*nrhs;i++)
             b[i] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
+
+        LAPACKE_get_libname(buf, &out_len, sizeof(buf));
+        LAPACKE_ilaver(&major, &minor, &patch);
+        printf( "\n%s version %d.%d.%d\n", buf, (int)major, (int)minor, (int)patch );
 
         /* Print Entry Matrix */
         print_matrix_colmajor( "Entry Matrix A", n, n, A, lda );

@@ -144,9 +144,10 @@
       CHARACTER*3        PATH
       CHARACTER*10       INTSTR
       CHARACTER*72       ALINE
+      CHARACTER*30       LIBNAME
       INTEGER            I, IC, J, K, LA, LAFAC, LDA, NB, NM, NMATS, NN,
      $                   NNB, NNB2, NNS, NRHS, NTYPES, NRANK,
-     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH
+     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH, OUT_LEN
       DOUBLE PRECISION   EPS, S1, S2, THREQ, THRESH
 *     ..
 *     .. Local Arrays ..
@@ -184,6 +185,7 @@
      $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
      $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR,
      $                   SET_LAPACK_XERBLA, XER_REPLACE,
+     $                   GET_LAPACK_LIBNAME,
      $                   ZCHKHE_AA_2STAGE, ZCHKSY_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
@@ -253,8 +255,10 @@
 *
 *     Report values of parameters.
 *
+      CALL GET_LAPACK_LIBNAME( LIBNAME, OUT_LEN )
       CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
-      WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
+      WRITE( NOUT, FMT = 9994 ) LIBNAME(1:OUT_LEN-1),
+     $    VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of M
 *
@@ -1335,7 +1339,7 @@
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
  9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK routines ',
-     $      / ' LAPACK VERSION ', I1, '.', I2, '.', I1,
+     $      / ' ', A, ' VERSION ', I0, '.', I0, '.', I0,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
  9992 FORMAT( / ' Routines pass computational tests if test ratio is ',
