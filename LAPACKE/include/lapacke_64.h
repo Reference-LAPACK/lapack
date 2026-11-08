@@ -11865,6 +11865,7 @@ int64_t LAPACKE_zsyr_work_64( int matrix_layout, char uplo, int64_t n,
 void LAPACKE_ilaver_64( int64_t* vers_major,
                      int64_t* vers_minor,
                      int64_t* vers_patch );
+void LAPACKE_get_libname_64(char *buffer, int64_t *out_len, int64_t buf_len);
 // LAPACK 3.7.0
 int64_t LAPACKE_ssysv_aa_64( int matrix_layout, char uplo, int64_t n,
                           int64_t nrhs, float* a, int64_t lda,

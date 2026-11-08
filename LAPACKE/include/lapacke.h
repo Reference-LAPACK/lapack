@@ -11914,6 +11914,7 @@ lapack_int LAPACKE_zsyr_work( int matrix_layout, char uplo, lapack_int n,
 void LAPACKE_ilaver( lapack_int* vers_major,
                      lapack_int* vers_minor,
                      lapack_int* vers_patch );
+void LAPACKE_get_libname(char *buffer, lapack_int *out_len, lapack_int buf_len);
 // LAPACK 3.7.0
 lapack_int LAPACKE_ssysv_aa( int matrix_layout, char uplo, lapack_int n,
                           lapack_int nrhs, float* a, lapack_int lda,
