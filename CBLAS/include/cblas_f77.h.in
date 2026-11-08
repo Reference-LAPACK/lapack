@@ -93,6 +93,7 @@
 #define F77_saxpy_base        F77_GLOBAL_SUFFIX(saxpy,SAXPY)
 #define F77_saxpby_base       F77_GLOBAL_SUFFIX(saxpby,SAXPBY)
 #define F77_iblaver_base      F77_GLOBAL_SUFFIX(iblaver,IBLAVER)
+#define F77_get_blas_libname_base F77_GLOBAL_SUFFIX(get_blas_libname,GET_BLAS_LIBNAME)
 #define F77_isamax_sub_base   F77_GLOBAL_SUFFIX(isamaxsub,ISAMAXSUB)
 #define F77_dswap_base        F77_GLOBAL_SUFFIX(dswap,DSWAP)
 #define F77_dcopy_base        F77_GLOBAL_SUFFIX(dcopy,DCOPY)
@@ -477,6 +478,9 @@
    #define F77_ztrmm(...)     F77_ztrmm_base(__VA_ARGS__, 1, 1, 1, 1)
    #define F77_ztrsm(...)     F77_ztrsm_base(__VA_ARGS__, 1, 1, 1, 1)
 
+   #define F77_get_blas_libname(buffer, out_len, buf_len) \
+      F77_get_blas_libname_base(buffer, out_len, buf_len)
+
 #else
 
    /*
@@ -613,6 +617,9 @@
    #define F77_ztrmm(...)     F77_ztrmm_base(__VA_ARGS__)
    #define F77_ztrsm(...)     F77_ztrsm_base(__VA_ARGS__)
 
+   #define F77_get_blas_libname(buffer, out_len, buf_len) \
+      F77_get_blas_libname_base(buffer, buf_len, out_len)
+
 #endif
 
 /*
@@ -647,6 +654,11 @@ typedef void (*blas_fortran_xerbla_callback_t) BLAS_FORTRAN_XERBLA_ARGS;
 void F77_get_blas_xerbla_base(blas_fortran_xerbla_callback_t *);
 void F77_set_blas_xerbla_base(blas_fortran_xerbla_callback_t);
 void F77_iblaver_base(FINT2, FINT2, FINT2);
+#ifdef BLAS_FORTRAN_STRLEN_END
+void F77_get_blas_libname_base(FCHAR, FINT2, FORTRAN_STRLEN);
+#else
+void F77_get_blas_libname_base(FCHAR, FORTRAN_STRLEN, FINT2);
+#endif
 
 /*
  * Level 1 Fortran Prototypes

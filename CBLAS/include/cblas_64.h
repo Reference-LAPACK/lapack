@@ -650,6 +650,7 @@ void CBLAS_WEAK_SYMBOL cblas_xerbla_64 CBLAS_XERBLA_64_ARGS;
 cblas_xerbla_64_callback_t cblas_get_xerbla_64(void);
 cblas_xerbla_64_callback_t cblas_set_xerbla_64(cblas_xerbla_64_callback_t cb, blas_fortran_xerbla_64_callback_t F77_cb);
 void cblas_iblaver_64(int64_t *major, int64_t *minor, int64_t *patch);
+void cblas_get_libname_64(char *buffer, int64_t *out_len, int64_t len);
 
 #ifdef __cplusplus
 }
