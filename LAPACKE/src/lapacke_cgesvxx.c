@@ -85,7 +85,7 @@ lapack_int API_SUFFIX(LAPACKE_cgesvxx)( int matrix_layout, char fact, char trans
     }
 #endif
     /* Allocate memory for working array(s) */
-    rwork = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,3*n) );
+    rwork = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,2*n) );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;

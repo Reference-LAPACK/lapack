@@ -56,7 +56,7 @@ lapack_int API_SUFFIX(LAPACKE_zgbcon)( int matrix_layout, char norm, lapack_int 
     }
 #endif
     /* Allocate memory for working array(s) */
-    rwork = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,2*n) );
+    rwork = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,n) );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
