@@ -52,7 +52,7 @@ lapack_int API_SUFFIX(LAPACKE_zsyequb)( int matrix_layout, char uplo, lapack_int
 #endif
     /* Allocate memory for working array(s) */
     work = (lapack_complex_double*)
-        LAPACKE_malloc( sizeof(lapack_complex_double) * MAX(1,3*n) );
+        LAPACKE_malloc( sizeof(lapack_complex_double) * MAX(1,2*n) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
