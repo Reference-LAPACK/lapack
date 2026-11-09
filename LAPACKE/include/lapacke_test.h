@@ -77,13 +77,14 @@ void lapacke_test_check(const char *name, const char *variant, lapack_int info,
                         lapack_int expected);
 
 /* ------------------------------------------------------------------------
- * Allocation failure injection and leak tracking (lapacke_test_alloc.c).
+ * Allocation failure injection, leak tracking and overrun detection
+ * (lapacke_test_alloc.c).
  * ---------------------------------------------------------------------- */
 
-/** The counting/failing test allocator. */
+/** The counting/failing test allocator; guards the end of each block. */
 void *lapacke_test_malloc(size_t size);
 
-/** The deallocator matching lapacke_test_malloc. */
+/** The deallocator matching lapacke_test_malloc; checks that guard. */
 void lapacke_test_free(void *ptr);
 
 /** Schedule the (countdown+1)-th LAPACKE allocation to fail once. */

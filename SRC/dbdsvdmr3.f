@@ -190,8 +190,8 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          If JOBZ='V', LWORK >= max( 1, 5*N*N + 37*N ).
-*>          If JOBZ='N', LWORK >= max( 1, 2*N*N + 37*N ).  These bounds
-*>          cover both DBDSVDMR3 and the DBDSDC fallback.  If
+*>          If JOBZ='N', LWORK >= max( 1, 2*N*N + 37*N + 2 ).  These
+*>          bounds cover both DBDSVDMR3 and the DBDSDC fallback.  If
 *>          LWORK = -1, a workspace query is performed: the optimal
 *>          size is returned in WORK(1) and no work is done.
 *> \endverbatim
@@ -212,7 +212,7 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          LIWORK >= max( 1, 20*N ).  If LIWORK = -1, a workspace
+*>          LIWORK >= max( 1, 24*N ).  If LIWORK = -1, a workspace
 *>          query is performed.
 *> \endverbatim
 *>
