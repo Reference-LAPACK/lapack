@@ -54,7 +54,7 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdmr3)( int matrix_layout, char jobu, char job
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( API_SUFFIX(LAPACKE_dge_nancheck)( matrix_layout, m, n, a, lda ) ) {
-            return -6;
+            return -7;
         }
     }
 #endif

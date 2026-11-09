@@ -241,14 +241,13 @@
 *>     INFO is INTEGER
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
+*>                 INFO = -6 if A contains a NaN or an infinity;
+*>                 XERBLA is not called in that case.
 *>           > 0:  DBDSVDMR3 returned a positive INFO, passed through
-*>                 unchanged: MIN(M,N)+1 if the bidiagonal contained
-*>                 a NaN or Inf, MIN(M,N)+2 if the DBDSDC fallback
+*>                 unchanged: MIN(M,N)+2 if the DBDSDC fallback
 *>                 in DBDSVDMR3 returned a non-finite result, and any
 *>                 other positive value is the INFO of that fallback.
 *>                 See DBDSVDMR3.
-*>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 DGESVDMR3
 *> \endverbatim
 *
 *  Authors:
@@ -306,10 +305,10 @@
      $                   DCOPY, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            DISNAN, LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE
+      EXTERNAL           DISNAN, LSAME, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -511,6 +510,14 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = DLANGE( 'M', M, N, A, LDA, DUM )
+*
+*     Return INFO = -6, without calling XERBLA, if A contains a NaN or
+*     an infinity.
+*
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1

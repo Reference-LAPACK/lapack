@@ -221,8 +221,9 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          = N+1: the input contains a NaN or an Inf; nothing was
-*>                computed.
+*>                INFO = -5 or -6 if D or E contains a NaN or an
+*>                infinity; XERBLA is not called in that case, and
+*>                nothing is computed.
 *>          = N+2: the MRRR path was rejected and the DBDSDC fallback
 *>                returned a non-finite result.
 *>          > 0, other values: the MRRR path was rejected and the DBDSDC
@@ -371,24 +372,25 @@
       IF( N.EQ.0 ) RETURN
 *
 *     A NaN or Inf in the input cannot be processed by either backend
-*     (it may hang the fallback's QR iteration); report it as INFO = N+1
-*     without calling XERBLA, so that the caller can recover.
+*     (it may hang the fallback's QR iteration).  Return INFO = -5 or
+*     -6, the position of D or E, without calling XERBLA, so that the
+*     caller can recover.
 *
       OVFL = DLAMCH( 'Overflow' )
       DO 5 I = 1, N
          SVAL = D( I )
          IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) ) THEN
-            INFO = N + 1
+            INFO = -5
             RETURN
          END IF
-         IF( I.LT.N ) THEN
-            SVAL = E( I )
-            IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) ) THEN
-               INFO = N + 1
-               RETURN
-            END IF
-         END IF
     5 CONTINUE
+      DO 6 I = 1, N - 1
+         SVAL = E( I )
+         IF( .NOT.( SVAL.EQ.SVAL .AND. ABS( SVAL ).LE.OVFL ) ) THEN
+            INFO = -6
+            RETURN
+         END IF
+    6 CONTINUE
 *
       IF( N.EQ.1 ) THEN
          IWORK( 2 ) = 0
