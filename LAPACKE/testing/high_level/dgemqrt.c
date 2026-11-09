@@ -5,6 +5,7 @@
 #define LD LAPACKE_TEST_LD
 #define K 2
 #define NB 2
+#define KBIG LAPACKE_TEST_N /* more reflectors than NB */
 
 /* One call: refill V (nrows_v-by-K), T (NB-by-K) and C (rows-by-cols),
  * schedule the malloc failure countdown and check the info result of a
@@ -25,6 +26,36 @@
                            expected);                                          \
     } while (0)
 
+/* Apply Q with KBIG > NB reflectors to the same V, T and C in both layouts
+ * and return the largest difference between the two results, or -1 if a
+ * call fails. V is nrows_v-by-KBIG and T is NB-by-KBIG in both layouts. */
+static double lapacke_test_dgemqrt_layout_diff(char side, char trans,
+                                               lapack_int rows,
+                                               lapack_int cols)
+{
+    double v[2][LD * LD], t[2][LD * LD], c[2][LD * LD];
+    const lapack_int nrows_v = side == 'L' ? rows : cols;
+    double diff = 0.0;
+    for (size_t l = 0; l < 2; l++) {
+        const int layout = lapacke_test_layouts[l];
+        lapacke_test_dfill(layout, nrows_v, KBIG, v[l], LD);
+        lapacke_test_dfill(layout, NB, KBIG, t[l], LD);
+        lapacke_test_dfill(layout, rows, cols, c[l], LD);
+        if (API_SUFFIX(LAPACKE_dgemqrt)(layout, side, trans, rows, cols, KBIG,
+                                        NB, v[l], LD, t[l], LD, c[l],
+                                        LD) != 0)
+            return -1.0;
+    }
+    for (lapack_int i = 0; i < rows; i++)
+        for (lapack_int j = 0; j < cols; j++) {
+            double d = c[0][i + j * LD] - c[1][i * LD + j];
+            d = d < 0 ? -d : d;
+            if (d > diff)
+                diff = d;
+        }
+    return diff;
+}
+
 LAPACKE_TEST(dgemqrt)
 {
     double v[LD * LD], t[LD * LD], c[LD * LD];
@@ -37,6 +68,19 @@ LAPACKE_TEST(dgemqrt)
     for (size_t l = 0; l < 2; l++) {
         LAPACKE_DGEMQRT_TEST(l, 'L', N, M, -1, "dgemqrt side = L", 0);
         LAPACKE_DGEMQRT_TEST(l, 'R', M, N, -1, "dgemqrt side = R", 0);
+    }
+
+    /* In row-major layout V and T are copied as nrows_v-by-K and NB-by-K
+     * matrices; with K > NB both layouts must give the same result. */
+    for (size_t sd = 0; sd < 2; sd++) {
+        for (size_t tt = 0; tt < 2; tt++) {
+            const char side = sd ? 'R' : 'L', trans = tt ? 'T' : 'N';
+            const double diff = lapacke_test_dgemqrt_layout_diff(
+                side, trans, side == 'L' ? N : M, side == 'L' ? M : N);
+            lapacke_test_check("dgemqrt row-major result (K > NB)",
+                               side == 'L' ? "side L" : "side R",
+                               diff >= 0.0 && diff <= 1e-12 ? 0 : 1, 0);
+        }
     }
 
     /* Column-major: the workspace is the only allocation. */

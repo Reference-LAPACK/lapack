@@ -48,19 +48,26 @@ lapack_int API_SUFFIX(LAPACKE_cgemqrt_work)( int matrix_layout, char side, char 
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
+        lapack_int nrows_v = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? m : n;
         lapack_int ldc_t = MAX(1,m);
-        lapack_int ldt_t = MAX(1,ldt);
-        lapack_int ldv_t = MAX(1,ldv);
+        lapack_int ldt_t = MAX(1,nb);
+        lapack_int ldv_t = MAX(1,nrows_v);
         lapack_complex_float* v_t = NULL;
         lapack_complex_float* t_t = NULL;
         lapack_complex_float* c_t = NULL;
+        if( !API_SUFFIX(LAPACKE_lsame)( side, 'l' ) &&
+            !API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ) {
+            info = -2;
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgemqrt_work", info );
+            return info;
+        }
         /* Check leading dimension(s) */
         if( ldc < n ) {
             info = -13;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgemqrt_work", info );
             return info;
         }
-        if( ldt < nb ) {
+        if( ldt < k ) {
             info = -11;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgemqrt_work", info );
             return info;
@@ -78,7 +85,7 @@ lapack_int API_SUFFIX(LAPACKE_cgemqrt_work)( int matrix_layout, char side, char 
             goto exit_level_0;
         }
         t_t = (lapack_complex_float*)
-            LAPACKE_malloc( sizeof(lapack_complex_float) * ldt_t * MAX(1,nb) );
+            LAPACKE_malloc( sizeof(lapack_complex_float) * ldt_t * MAX(1,k) );
         if( t_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
@@ -90,8 +97,8 @@ lapack_int API_SUFFIX(LAPACKE_cgemqrt_work)( int matrix_layout, char side, char 
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, ldv, k, v, ldv, v_t, ldv_t );
-        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, ldt, nb, t, ldt, t_t, ldt_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, nrows_v, k, v, ldv, v_t, ldv_t );
+        API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, nb, k, t, ldt, t_t, ldt_t );
         API_SUFFIX(LAPACKE_cge_trans)( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgemqrt( &side, &trans, &m, &n, &k, &nb, v_t, &ldv_t, t_t,
