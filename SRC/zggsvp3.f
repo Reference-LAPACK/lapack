@@ -231,7 +231,10 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= 1.
+*>          The dimension of the array WORK.
+*>          If N > 0 and MAX(M,P) > 0, LWORK >= MAX(M,P,N+1) if
+*>          JOBV = 'V', and LWORK >= MAX(M,N+1) otherwise.
+*>          LWORK >= 1 if N = 0 or MAX(M,P) = 0.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -304,7 +307,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FORWRD, WANTQ, WANTU, WANTV, LQUERY
-      INTEGER            I, J, LWKOPT
+      INTEGER            I, J, LWKOPT, LWMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -328,6 +331,20 @@
       FORWRD = .TRUE.
       LQUERY = ( LWORK.EQ.-1 )
       LWKOPT = 1
+*
+*     ZGEQP3 needs N+1, the unblocked QR, RQ and
+*     unitary-transformation routines need M or N, and
+*     ZUNG2R needs P to form V.
+*
+      IF( N.GT.0 .AND. MAX( M, P ).GT.0 ) THEN
+         IF( WANTV ) THEN
+            LWMIN = MAX( M, P, N+1 )
+         ELSE
+            LWMIN = MAX( M, N+1 )
+         END IF
+      ELSE
+         LWMIN = 1
+      END IF
 *
 *     Test the input arguments
 *
@@ -354,8 +371,8 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
-      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -24
+      ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
+         INFO = -25
       END IF
 *
 *     Compute workspace
@@ -375,7 +392,7 @@
          CALL ZGEQP3( M, N, A, LDA, IWORK, TAU, WORK, -1, RWORK,
      $                INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK ( 1 ) ) )
-         LWKOPT = MAX( 1, LWKOPT )
+         LWKOPT = MAX( LWMIN, LWKOPT )
          WORK( 1 ) = CMPLX( LWKOPT, KIND=DP )
       END IF
 *

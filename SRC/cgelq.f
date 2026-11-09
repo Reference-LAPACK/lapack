@@ -98,7 +98,9 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= 1.
+*>          The dimension of the array WORK.
+*>          LWORK >= MAX(1,M), and LWORK >= MAX(1,MB*M) for the blocked
+*>          code, where MB is the row block size (see Further Details).
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
@@ -245,13 +247,10 @@
 *
 *     Determine if the workspace size satisfies minimal size
 *
-      IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-         LWMIN = MAX( 1, N )
-         LWOPT = MAX( 1, MB*N )
-      ELSE
-         LWMIN = MAX( 1, M )
-         LWOPT = MAX( 1, MB*M )
-      END IF
+*     CGELQT and CLASWLQ both use MB*M entries of WORK.
+*
+      LWMIN = MAX( 1, M )
+      LWOPT = MAX( 1, MB*M )
       LMINWS = .FALSE.
       IF( ( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) .OR. LWORK.LT.LWOPT )
      $    .AND. ( LWORK.GE.LWMIN ) .AND. ( TSIZE.GE.MINTSZ )
@@ -266,11 +265,7 @@
           MB = 1
         END IF
       END IF
-      IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-         LWREQ = MAX( 1, MB*N )
-      ELSE
-         LWREQ = MAX( 1, MB*M )
-      END IF
+      LWREQ = MAX( 1, MB*M )
 *
       IF( M.LT.0 ) THEN
         INFO = -1

@@ -386,14 +386,16 @@
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TEN = 10.0D0 )
       INTEGER            MAXTYP
       PARAMETER          ( MAXTYP = 21 )
+      DOUBLE PRECISION   GUARD
+      PARAMETER          ( GUARD = -1.0D+300 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            BADNN
       CHARACTER          UPLO
       INTEGER            I, IBTYPE, IBUPLO, IINFO, IJ, IL, IMODE, ITEMP,
      $                   ITYPE, IU, J, JCOL, JSIZE, JTYPE, KA, KA9, KB,
-     $                   KB9, M, MTYPES, N, NERRS, NMATS, NMAX, NTEST,
-     $                   NTESTT
+     $                   KB9, LWQ, M, MTYPES, N, NERRS, NGUARD, NMATS,
+     $                   NMAX, NTEST, NTESTT
       DOUBLE PRECISION   ABSTOL, ANINV, ANORM, COND, OVFL, RTOVFL,
      $                   RTUNFL, ULP, ULPINV, UNFL, VL, VU, TEMP1, TEMP2
 *     ..
@@ -1172,8 +1174,20 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   430                   CONTINUE
                      END IF
 *
+*                    Give DSBGVD exactly the workspace that its
+*                    workspace query asks for, followed by a guard
+*                    that the call must leave unchanged.
+*
                      CALL DSBGVD( 'V', UPLO, N, KA, KB, AB, LDA, BB,
-     $                            LDB, D, Z, LDZ, WORK, NWORK, IWORK,
+     $                            LDB, D, Z, LDZ, WORK, -1, IWORK,
+     $                            LIWORK, IINFO )
+                     LWQ = INT( WORK( 1 ) )
+                     NGUARD = MIN( 4*N+4, NWORK-LWQ )
+                     DO 431 J = LWQ + 1, LWQ + NGUARD
+                        WORK( J ) = GUARD
+  431                 CONTINUE
+                     CALL DSBGVD( 'V', UPLO, N, KA, KB, AB, LDA, BB,
+     $                            LDB, D, Z, LDZ, WORK, LWQ, IWORK,
      $                            LIWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
                         WRITE( NOUNIT, FMT = 9999 )'DSBGVD(V,' //
@@ -1186,6 +1200,14 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
                            GO TO 620
                         END IF
                      END IF
+                     DO 432 J = LWQ + 1, LWQ + NGUARD
+                        IF( WORK( J ).NE.GUARD ) THEN
+                           WRITE( NOUNIT, FMT = 9998 )'DSBGVD(V,' //
+     $                     UPLO // ')', N, JTYPE, IOLDSD
+                           RESULT( NTEST ) = ULPINV
+                           GO TO 620
+                        END IF
+  432                 CONTINUE
 *
 *                    Do Test
 *
@@ -1355,4 +1377,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
  9999 FORMAT( ' DDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X,
      $    'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9998 FORMAT( ' DDRVSG2STG: ', A, ' wrote past the workspace size that',
+     $      ' its workspace query returned.', / 9X, 'N=', I6,
+     $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
       END

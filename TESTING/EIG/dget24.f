@@ -443,7 +443,14 @@
 *     Perform tests (1)-(13)
 *
       SELOPT = 0
-      LIWORK = N*N
+*
+*     Take the length of IWORK from a workspace query of DGEESX for
+*     SENSE = 'B', which asks for the most.
+*
+      CALL DGEESX( 'V', 'S', DSLECT, 'B', N, H, LDA, SDIM, WR, WI, VS,
+     $             LDVS, RCONDE, RCONDV, WORK, -1, IWORK, -1, BWORK,
+     $             IINFO )
+      LIWORK = IWORK( 1 )
       DO 120 ISORT = 0, 1
          IF( ISORT.EQ.0 ) THEN
             SORT = 'N'

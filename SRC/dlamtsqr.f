@@ -138,7 +138,7 @@
 *>          The dimension of the array WORK.
 *>          If MIN(M,N,K) = 0, LWORK >= 1.
 *>          If SIDE = 'L', LWORK >= max(1,N*NB).
-*>          If SIDE = 'R', LWORK >= max(1,MB*NB).
+*>          If SIDE = 'R', LWORK >= max(1,M*NB).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the minimal size of the WORK array, returns
@@ -240,7 +240,7 @@
         LW = N * NB
         Q = M
       ELSE
-        LW = MB * NB
+        LW = M * NB
         Q = N
       END IF
 *

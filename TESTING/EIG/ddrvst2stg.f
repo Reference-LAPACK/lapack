@@ -480,15 +480,17 @@
       PARAMETER          ( HALF = 0.5D0 )
       INTEGER            MAXTYP
       PARAMETER          ( MAXTYP = 18 )
+      DOUBLE PRECISION   GUARD
+      PARAMETER          ( GUARD = -1.0D+300 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            BADNN
       CHARACTER          UPLO
       INTEGER            I, IDIAG, IHBW, IINFO, IL, IMODE, INDX, IROW,
      $                   ITEMP, ITYPE, IU, IUPLO, J, J1, J2, JCOL,
-     $                   JSIZE, JTYPE, KD, LGN, LIWEDC, LWEDC, M, M2,
-     $                   M3, MTYPES, N, NERRS, NMATS, NMAX, NTEST,
-     $                   NTESTT
+     $                   JSIZE, JTYPE, KD, LGN, LIWEDC, LWEDC, LWQ, M,
+     $                   M2, M3, MTYPES, N, NERRS, NGUARD, NMATS, NMAX,
+     $                   NTEST, NTESTT
       DOUBLE PRECISION   ABSTOL, ANINV, ANORM, COND, OVFL, RTOVFL,
      $                   RTUNFL, TEMP1, TEMP2, TEMP3, ULP, ULPINV, UNFL,
      $                   VL, VU
@@ -2205,10 +2207,23 @@ c           LIWEDC = 12
  1260             CONTINUE
                END IF
 *
+*              Give DSBEVX_2STAGE exactly the workspace that its
+*              workspace query asks for, followed by a guard that the
+*              call must leave unchanged.
+*
                SRNAMT = 'DSBEVX_2STAGE'
                CALL DSBEVX_2STAGE( 'N', 'A', UPLO, N, KD, V, LDU,
      $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
-     $                      Z, LDU, WORK, LWORK, IWORK, IWORK( 5*N+1 ),
+     $                      Z, LDU, WORK, -1, IWORK, IWORK( 5*N+1 ),
+     $                      IINFO )
+               LWQ = MIN( INT( WORK( 1 ) ), LWORK )
+               NGUARD = MIN( 4*N, LWORK-LWQ )
+               DO 1261 J = LWQ + 1, LWQ + NGUARD
+                  WORK( J ) = GUARD
+ 1261          CONTINUE
+               CALL DSBEVX_2STAGE( 'N', 'A', UPLO, N, KD, V, LDU,
+     $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
+     $                      Z, LDU, WORK, LWQ, IWORK, IWORK( 5*N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUNIT, FMT = 9999 )
@@ -2222,6 +2237,15 @@ c           LIWEDC = 12
                      GO TO 1280
                   END IF
                END IF
+               DO 1262 J = LWQ + 1, LWQ + NGUARD
+                  IF( WORK( J ).NE.GUARD ) THEN
+                     WRITE( NOUNIT, FMT = 9998 )
+     $                  'DSBEVX_2STAGE(N,A,' // UPLO // ')', N,
+     $                  JTYPE, IOLDSD
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 1280
+                  END IF
+ 1262          CONTINUE
 *
 *              Do test 54 (or +54)
 *
@@ -2289,10 +2313,23 @@ c           LIWEDC = 12
  1360             CONTINUE
                END IF
 *
+*              Give DSBEVX_2STAGE exactly the workspace that its
+*              workspace query asks for, followed by a guard that the
+*              call must leave unchanged.
+*
                SRNAMT = 'DSBEVX_2STAGE'
                CALL DSBEVX_2STAGE( 'N', 'I', UPLO, N, KD, V, LDU,
      $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
-     $                      Z, LDU, WORK, LWORK, IWORK, IWORK( 5*N+1 ),
+     $                      Z, LDU, WORK, -1, IWORK, IWORK( 5*N+1 ),
+     $                      IINFO )
+               LWQ = MIN( INT( WORK( 1 ) ), LWORK )
+               NGUARD = MIN( 4*N, LWORK-LWQ )
+               DO 1361 J = LWQ + 1, LWQ + NGUARD
+                  WORK( J ) = GUARD
+ 1361          CONTINUE
+               CALL DSBEVX_2STAGE( 'N', 'I', UPLO, N, KD, V, LDU,
+     $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
+     $                      Z, LDU, WORK, LWQ, IWORK, IWORK( 5*N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUNIT, FMT = 9999 )
@@ -2306,6 +2343,15 @@ c           LIWEDC = 12
                      GO TO 1370
                   END IF
                END IF
+               DO 1362 J = LWQ + 1, LWQ + NGUARD
+                  IF( WORK( J ).NE.GUARD ) THEN
+                     WRITE( NOUNIT, FMT = 9998 )
+     $                  'DSBEVX_2STAGE(N,I,' // UPLO // ')', N,
+     $                  JTYPE, IOLDSD
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 1370
+                  END IF
+ 1362          CONTINUE
 *
 *              Do test 57 (or +54)
 *
@@ -2374,10 +2420,23 @@ c           LIWEDC = 12
  1450             CONTINUE
                END IF
 *
+*              Give DSBEVX_2STAGE exactly the workspace that its
+*              workspace query asks for, followed by a guard that the
+*              call must leave unchanged.
+*
                SRNAMT = 'DSBEVX_2STAGE'
                CALL DSBEVX_2STAGE( 'N', 'V', UPLO, N, KD, V, LDU,
      $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
-     $                      Z, LDU, WORK, LWORK, IWORK, IWORK( 5*N+1 ),
+     $                      Z, LDU, WORK, -1, IWORK, IWORK( 5*N+1 ),
+     $                      IINFO )
+               LWQ = MIN( INT( WORK( 1 ) ), LWORK )
+               NGUARD = MIN( 4*N, LWORK-LWQ )
+               DO 1451 J = LWQ + 1, LWQ + NGUARD
+                  WORK( J ) = GUARD
+ 1451          CONTINUE
+               CALL DSBEVX_2STAGE( 'N', 'V', UPLO, N, KD, V, LDU,
+     $                      U, LDU, VL, VU, IL, IU, ABSTOL, M3, WA3,
+     $                      Z, LDU, WORK, LWQ, IWORK, IWORK( 5*N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUNIT, FMT = 9999 )
@@ -2391,6 +2450,15 @@ c           LIWEDC = 12
                      GO TO 1460
                   END IF
                END IF
+               DO 1452 J = LWQ + 1, LWQ + NGUARD
+                  IF( WORK( J ).NE.GUARD ) THEN
+                     WRITE( NOUNIT, FMT = 9998 )
+     $                  'DSBEVX_2STAGE(N,V,' // UPLO // ')', N,
+     $                  JTYPE, IOLDSD
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 1460
+                  END IF
+ 1452          CONTINUE
 *
                IF( M3.EQ.0 .AND. N.GT.0 ) THEN
                   RESULT( NTEST ) = ULPINV
@@ -2860,6 +2928,9 @@ c           LIWEDC = 12
 *
  9999 FORMAT( ' DDRVST2STG: ', A, ' returned INFO=', I6, '.', / 9X,
      $    'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9998 FORMAT( ' DDRVST2STG: ', A, ' wrote past the workspace size',
+     $    ' that its workspace query returned.', / 9X, 'N=', I6,
+     $    ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *

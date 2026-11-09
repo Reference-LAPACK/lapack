@@ -353,7 +353,11 @@
          CALL SGGSVD3( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
          CALL CHKXER( 'SGGSVD3', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
+         INFOT = 22
+         CALL SGGSVD3( 'N', 'N', 'N', 1, 1, 1, DUMMYK, DUMMYL, A, 1, B,
+     $               1, R1, R2, U, 1, V, 1, Q, 1, W, 1, IDUM, INFO )
+         CALL CHKXER( 'SGGSVD3', INFOT, NOUT, LERR, OK )
+         NT = NT + 12
 *
 *        SGGSVP3
 *
@@ -413,7 +417,12 @@
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
          CALL CHKXER( 'SGGSVP3', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
+         INFOT = 24
+         CALL SGGSVP3( 'N', 'N', 'N', 1, 1, 1, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 1, INFO )
+         CALL CHKXER( 'SGGSVP3', INFOT, NOUT, LERR, OK )
+         NT = NT + 12
 *
 *        STGSJA
 *

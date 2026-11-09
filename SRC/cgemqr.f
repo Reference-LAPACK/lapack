@@ -118,7 +118,11 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= 1.
+*>          The dimension of the array WORK.
+*>          If MIN(M,N,K) = 0, LWORK >= 1.
+*>          If SIDE = 'L', LWORK >= MAX(1,N*NB).
+*>          If SIDE = 'R', LWORK >= MAX(1,M*NB).
+*>          NB = INT(T(3)) is the block size stored in T by CGEQR.
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
 *>          value as WORK(1), and no error message related to WORK
@@ -220,7 +224,7 @@
         LW = N * NB
         MN = M
       ELSE
-        LW = MB * NB
+        LW = M * NB
         MN = N
       END IF
 *
@@ -258,7 +262,7 @@
         INFO = -9
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
         INFO = -11
-      ELSE IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
         INFO = -13
       END IF
 *
