@@ -235,8 +235,9 @@
 *>          The length of the array WORK. LWORK >= 1, when N <= 1;
 *>          otherwise
 *>          If JOBZ = 'N' and N > 1, LWORK must be queried.
-*>                                   LWORK = MAX(1, 7*N, dimension) where
-*>                                   dimension = (2KD+1)*N + KD*NTHREADS + 2*N
+*>                                   LWORK = MAX(1, dimension) where
+*>                                   dimension = 6*N + MAX(4*N,
+*>                                         (2KD+1)*N + KD*NTHREADS)
 *>                                   where KD is the size of the band.
 *>                                   NTHREADS is the number of threads used when
 *>                                   openMP compilation is enabled, otherwise =1.
@@ -425,7 +426,10 @@
      $                            N, KD, IB, -1 )
             LWTRD = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
-            LWMIN = 2*N + LHTRD + LWTRD
+*           WORK holds D, E and the Householder vectors (2*N+LHTRD),
+*           then the workspace of DSYTRD_SB2ST (LWTRD) or of DSTEBZ
+*           (4*N), which also covers the copy of E for DSTERF.
+            LWMIN = 2*N + LHTRD + MAX( 4*N, LWTRD )
             WORK( 1 )  = LWMIN
          ENDIF
 *
