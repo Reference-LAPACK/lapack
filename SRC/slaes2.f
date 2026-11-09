@@ -20,8 +20,18 @@
 *> matrix is formed unless KB=N is itself requested.
 *> \endverbatim
 *
-*> \param[in] N, TLVLS, NT, LDNT, DREC, IREC
-*>          Records returned by SLAES0.
+*> \param[in] N
+*>          Order of the unreduced block, N >= 2.
+*> \param[in] TLVLS
+*>          Number of merge levels, from SLAES0.
+*> \param[in] NT
+*>          Node table from SLAES0, dimension (LDNT,2**(TLVLS+1)-1).
+*> \param[in] LDNT
+*>          Leading dimension of NT, LDNT >= 7.
+*> \param[in] DREC
+*>          Real records from SLAES0 and SLAES1.
+*> \param[in] IREC
+*>          Integer records from SLAES0 and SLAES1.
 *> \param[in] KB
 *>          Number of selected eigenvectors of this block.
 *> \param[in] ICOL
@@ -41,7 +51,7 @@
 *> \param[out] INFO
 *>          Zero on success; positive if a small secular solve failed.
 *>
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================

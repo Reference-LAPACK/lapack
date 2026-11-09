@@ -495,78 +495,35 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         parser=PARSER_BALANCE,
                     )
                 )
-            if letter == "s":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="SSTEDS interfaces and boundary cases",
-                        input_name="steds.in",
-                        output_name="ssteds.out",
-                        executable="test_ssteds_interfaces",
-                        parser=PARSER_STANDARD,
+            if letter in ("s", "d"):
+                for out_stem, exe_stem, description in (
+                    (
+                        "steds",
+                        "steds_interfaces",
+                        "interfaces and boundary cases",
+                    ),
+                    (
+                        "steds_error_locations",
+                        "steds_error_locations",
+                        "failure location diagnostics",
+                    ),
+                    (
+                        "steds_merge_failures",
+                        "steds_merge_failures",
+                        "merge failure diagnostics",
+                    ),
+                ):
+                    cases.append(
+                        TestCase(
+                            precision=letter,
+                            family="eig",
+                            description=letter.upper() + "STEDS " + description,
+                            input_name="steds.in",
+                            output_name=letter + out_stem + ".out",
+                            executable="test_" + letter + exe_stem,
+                            parser=PARSER_STANDARD,
+                        )
                     )
-                )
-            if letter == "s":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="SSTEDS failure location diagnostics",
-                        input_name="steds.in",
-                        output_name="ssteds_error_locations.out",
-                        executable="test_ssteds_error_locations",
-                        parser=PARSER_STANDARD,
-                    )
-                )
-            if letter == "s":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="SSTEDS merge failure diagnostics",
-                        input_name="steds.in",
-                        output_name="ssteds_merge_failures.out",
-                        executable="test_ssteds_merge_failures",
-                        parser=PARSER_STANDARD,
-                    )
-                )
-            if letter == "d":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="DSTEDS interfaces and boundary cases",
-                        input_name="steds.in",
-                        output_name="dsteds.out",
-                        executable="test_dsteds_interfaces",
-                        parser=PARSER_STANDARD,
-                    )
-                )
-            if letter == "d":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="DSTEDS failure location diagnostics",
-                        input_name="steds.in",
-                        output_name="dsteds_error_locations.out",
-                        executable="test_dsteds_error_locations",
-                        parser=PARSER_STANDARD,
-                    )
-                )
-            if letter == "d":
-                cases.append(
-                    TestCase(
-                        precision=letter,
-                        family="eig",
-                        description="DSTEDS merge failure diagnostics",
-                        input_name="steds.in",
-                        output_name="dsteds_merge_failures.out",
-                        executable="test_dsteds_merge_failures",
-                        parser=PARSER_STANDARD,
-                    )
-                )
         for family, stem, executable_prefix, description in LIN_SETS:
             if family not in families:
                 continue

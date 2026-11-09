@@ -49,7 +49,7 @@
 *> \param[in] NEAR    Pole-adjacent differences, dimension (2,K).
 *> \param[out] S      Column J, dimension (K).
 *
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================

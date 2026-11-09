@@ -95,7 +95,7 @@
 *> \param[out] INFO
 *>          = 0: success; > 0: SLAED4 failed; -1: record too small.
 *
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================

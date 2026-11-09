@@ -87,6 +87,27 @@ program test_ssteds_interfaces
       deallocate(d,e,ref,ec,rw)
     enddo
   enddo
+  ! Nearly coincident roots can be out of order after deflation.
+  ! Check the reported cluster and two split blocks with tied spectra.
+  call xlaenv(9,25)
+  do n=47,94,47
+    allocate(d(n),e(n),ref(n),ec(n),rw(2*n))
+    d=1e0
+    e=9*epsilon(1e0)
+    if(n==94) e(47)=0e0
+    ref=d
+    ec=e
+    call ssteqr('N',n,ref,ec,rw,n,rw,info)
+    call check(info==0,'Cluster SSTEQR reference')
+    if(info==0) then
+      call schksteds(n,d,e,ref,result,info)
+      call check(info==0,'Cluster SSTEDS computation')
+      call check(result(6)==0e0,'Cluster ordering and storage guards')
+      call check(all(result(1:5)>=0e0 .and. result(1:5)<thresh), &
+                 'Cluster eigenpair residuals and orthogonality')
+    endif
+    deallocate(d,e,ref,ec,rw)
+  enddo
   ! N=0/1 quick returns need one element in each workspace. The query
   ! must not inspect ISEL or data, even if the arrays have only one entry.
   do n=0,1

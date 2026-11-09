@@ -50,8 +50,9 @@
 *>   NT(7,h) start of its real record in DREC (leaf: U_p)
 *>
 *> On exit D holds the eigenvalues in the internal order of the root
-*> and D(INDXQ(i)) is the i-th smallest one; column INDXQ(i) of the
-*> (never formed) root eigenvector matrix is its eigenvector.
+*> and INDXQ gives the merge order, which can have small inversions
+*> due to rounding. Column INDXQ(i) of the root eigenvector matrix
+*> corresponds to D(INDXQ(i)).
 *> \endverbatim
 *
 *  Arguments:
@@ -79,7 +80,7 @@
 *>                     failed (encoded as DLAED0); 1 if the location cannot
 *>                     be encoded in INTEGER; -1: record full.
 *
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================

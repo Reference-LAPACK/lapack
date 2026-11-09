@@ -66,7 +66,7 @@
 *> \param[in] NB     Panel width.
 *> \param[out] INFO  = 0: success; > 0: DLAED4 failed (K <= 2).
 *
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================

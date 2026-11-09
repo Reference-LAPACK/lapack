@@ -151,7 +151,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \ingroup stebr
+*> \ingroup steds
 *
 *> \par Contributors:
 *  ==================
@@ -202,7 +202,7 @@
       EXTERNAL           DLAES0, DLAES2, DLAMRG, DLASCL, DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, HUGE, MAX, MOD, SQRT
+      INTRINSIC          ABS, HUGE, MAX, MOD, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -386,7 +386,7 @@
      $                   IWORK( IIW0 ), INFO )
             IF( INFO.NE.0 ) THEN
                IF( INFO.GT.0 ) THEN
-                  IF( INFO.EQ.1 ) RETURN
+                  IF( INFO.EQ.1 ) GO TO 200
                   I = INFO / ( SZ+1 ) + START - 1
                   J = MOD( INFO, ( SZ+1 ) ) + START - 1
                   IF( I.GT.( HUGE( 0 )-J ) / ( N+1 ) ) THEN
@@ -397,7 +397,7 @@
                ELSE
                   INFO = -9
                END IF
-               RETURN
+               GO TO 200
             END IF
             CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, SZ, 1, D( START ), SZ,
      $                   INFO )
@@ -408,19 +408,30 @@
          GO TO 40
       END IF
 *
-*     Global ascending order: merge the sorted runs of the blocks.
+*     Gather eigenvalues and their root column indices.
 *
       DO 80 B = 1, NBLOCK
          START = IWORK( IBST+B-1 )
          SZ = IWORK( IBSIZ+B-1 )
-         IWORK( IRUN+B-1 ) = START
          DO 70 I = 1, SZ
             G = START - 1 + IWORK( IINDXQ+START+I-2 )
             WORK( IV+START+I-2 ) = D( G )
             IWORK( IP+START+I-2 ) = G
    70    CONTINUE
    80 CONTINUE
-      NRUN = NBLOCK
+*
+*     Rounding in a merge can leave a block slightly out of order.
+*     Merge the actual nondecreasing runs, carrying the column
+*     indices with the eigenvalues before interpreting ISEL.
+*
+      NRUN = 1
+      IWORK( IRUN ) = 1
+      DO 85 I = 2, N
+         IF( WORK( IV+I-1 ).LT.WORK( IV+I-2 ) ) THEN
+            NRUN = NRUN + 1
+            IWORK( IRUN+NRUN-1 ) = I
+         END IF
+   85 CONTINUE
       IWORK( IRUN+NRUN ) = N + 1
    90 CONTINUE
       IF( NRUN.GT.1 ) THEN
@@ -504,7 +515,7 @@
                ELSE
                   INFO = START*( N+1 ) + J
                END IF
-               RETURN
+               GO TO 200
             END IF
          END IF
   180 CONTINUE

@@ -64,6 +64,11 @@ program test_dsteds_merge_failures
       nerr=nerr+1
       print *, 'Wrong failure encoding: ',mode,info,expected
     endif
+    ntest=ntest+1
+    if(w(1)/=wq(1) .or. iw(1)/=liw) then
+      nerr=nerr+1
+      print *, 'Workspace sizes not restored on failure: ',mode
+    endif
   enddo
   call dlasum('DST',6,nerr,ntest)
   deallocate(d,e,w,iw)

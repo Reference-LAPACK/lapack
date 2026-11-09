@@ -71,10 +71,10 @@
 *
 *  =====================================================================
 *
-*     NMAX has to be at least 3 or LIW may be too small
+*     Include the queried workspace sizes used in the DSTEDS tests.
 *     .. Parameters ..
       INTEGER            NMAX, LIW, LW
-      PARAMETER          ( NMAX = 3, LIW = 12*NMAX, LW = 20*NMAX )
+      PARAMETER          ( NMAX = 3, LIW = 36*NMAX, LW = 120*NMAX )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
