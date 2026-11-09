@@ -426,8 +426,10 @@
          IF( NS.EQ.0 ) THEN
             RETURN
          ELSE
-            IF( WANTZ ) CALL DLASET( 'F', N*2, NS, ZERO, ZERO, Z,
-     $          LDZ )
+*           NS counts each zero singular value twice (+0 and -0 of
+*           the TGK matrix), but at most N columns of Z are used.
+            IF( WANTZ ) CALL DLASET( 'F', N*2, MIN( NS, N ), ZERO,
+     $          ZERO, Z, LDZ )
          END IF
       ELSE IF( INDSV ) THEN
 *
