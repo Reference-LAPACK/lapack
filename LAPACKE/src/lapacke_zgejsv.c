@@ -135,8 +135,8 @@ lapack_int API_SUFFIX(LAPACKE_zgejsv)( int matrix_layout, char joba, char jobu, 
         }
     }
 #endif
-    /* Allocate memory for working array(s) */
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(3,m+2*n) );
+    /* Allocate memory for working array(s); ?gejsv always sets IWORK(1:4) */
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(4,m+2*n) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
