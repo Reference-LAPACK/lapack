@@ -402,7 +402,7 @@
             IF( .NOT.WANTSN )
      $         LWRK = MAX( LWRK, N + ( N*N )/2 )
             IF( WANTSV .OR. WANTSB )
-     $         LIWRK = ( N*N )/4
+     $         LIWRK = MAX( 1, ( N*N )/4 )
          END IF
          IWORK( 1 ) = LIWRK
          WORK( 1 ) = SROUNDUP_LWORK(LWRK)
@@ -648,7 +648,7 @@
 *
       WORK( 1 ) = SROUNDUP_LWORK(MAXWRK)
       IF( WANTSV .OR. WANTSB ) THEN
-         IWORK( 1 ) = SDIM*(N-SDIM)
+         IWORK( 1 ) = MAX( 1, SDIM*( N-SDIM ) )
       ELSE
          IWORK( 1 ) = 1
       END IF

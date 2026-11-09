@@ -401,7 +401,7 @@
             IF( .NOT.WANTSN )
      $         LWRK = MAX( LWRK, N + ( N*N )/2 )
             IF( WANTSV .OR. WANTSB )
-     $         LIWRK = ( N*N )/4
+     $         LIWRK = MAX( 1, ( N*N )/4 )
          END IF
          IWORK( 1 ) = LIWRK
          WORK( 1 ) = LWRK
