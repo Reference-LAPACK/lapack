@@ -189,8 +189,9 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value.
-*>                INFO = -4 if A contains a NaN or an infinity;
-*>                XERBLA is not called in that case.
+*>                INFO = -4 if A contains a NaN or an infinity, or an
+*>                entry whose absolute value overflows; XERBLA is not
+*>                called in that case.
 *>          > 0:  the algorithm for computing the SVD failed to converge;
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.

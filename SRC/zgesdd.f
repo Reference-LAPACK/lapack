@@ -192,7 +192,8 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          <  0:  if INFO = -i, the i-th argument had an illegal value.
-*>          = -4:  if A had a NaN or an infinite entry.
+*>          = -4:  if A had a NaN or an infinite entry, or an entry
+*>                 whose absolute value overflows.
 *>          >  0:  The updating process of DBDSDC did not converge.
 *>          =  0:  successful exit.
 *> \endverbatim
