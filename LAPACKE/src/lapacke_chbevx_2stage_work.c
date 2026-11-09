@@ -78,6 +78,13 @@ lapack_int API_SUFFIX(LAPACKE_chbevx_2stage_work)( int matrix_layout, char jobz,
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_chbevx_2stage_work", info );
             return info;
         }
+        /* Query optimal working array(s) size if requested */
+        if( lwork == -1 ) {
+            LAPACK_chbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab, &ldab_t, q,
+                       &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w, z, &ldz_t,
+                       work, &lwork, rwork, iwork, ifail, &info );
+            return (info < 0) ? (info - 1) : info;
+        }
         /* Allocate memory for temporary array(s) */
         ab_t = (lapack_complex_float*)
             LAPACKE_malloc( sizeof(lapack_complex_float) * ldab_t * MAX(1,n) );
@@ -102,13 +109,6 @@ lapack_int API_SUFFIX(LAPACKE_chbevx_2stage_work)( int matrix_layout, char jobz,
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_2;
             }
-        }
-        /* Query optimal working array(s) size if requested */
-        if( lwork == -1 ) {
-             LAPACK_chbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
-                       &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w, z_t, &ldz_t,
-                       work, &lwork, rwork, iwork, ifail, &info );
-            return (info < 0) ? (info - 1) : info;
         }
         /* Transpose input matrices */
         API_SUFFIX(LAPACKE_chb_trans)( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
