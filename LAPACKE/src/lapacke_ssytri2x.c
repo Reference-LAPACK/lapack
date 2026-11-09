@@ -51,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_ssytri2x)( int matrix_layout, char uplo, lapack_in
     }
 #endif
     /* Allocate memory for working array(s) */
-    work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,n+nb+1)*(+1) );
+    work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,n+nb+1) * MAX(1,nb+3) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;

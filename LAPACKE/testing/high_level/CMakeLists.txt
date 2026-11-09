@@ -7,7 +7,8 @@
 # whose test table is generated from the list below; to add a test, add the
 # file for every precision and list its routine name here.
 set(LAPACKE_HIGH_LEVEL_ROUTINES
-  gels geqrf gesvdmr3 getrf getri getrs lange matgen potrf potrs pteqr)
+  gels geqrf gesvdmr3 getrf getri getrs lange matgen potrf potrs pteqr
+  sytri2x)
 
 set(LAPACKE_HIGH_LEVEL_COMMON_SOURCES
   lapacke_test.c lapacke_test_alloc.c lapacke_test_nan_sweep.c)
