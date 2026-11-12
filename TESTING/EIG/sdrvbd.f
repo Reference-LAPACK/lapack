@@ -391,13 +391,15 @@
      $                   HALF = 0.5E0 )
       INTEGER            MAXTYP
       PARAMETER          ( MAXTYP = 5 )
+      REAL               GUARD
+      PARAMETER          ( GUARD = -1.0E+37 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADMM, BADNN
+      LOGICAL            BADMM, BADNN, OVERRN
       CHARACTER          JOBQ, JOBU, JOBVT, RANGE
       CHARACTER*3        PATH
       INTEGER            I, IINFO, IJQ, IJU, IJVT, IL,IU, IWS, IWTMP,
-     $                   ITEMP, J, JSIZE, JTYPE, LSWORK, M, MINWRK,
+     $                   ITEMP, J, JSIZE, JTYPE, LSWORK, LWQ, M, MINWRK,
      $                   MMAX, MNMAX, MNMIN, MTYPES, N, NFAIL,
      $                   NMAX, NS, NSI, NSV, NTEST
       REAL               ANORM, DIF, DIV, OVFL, RTUNFL, ULP,
@@ -1132,15 +1134,36 @@
                   VU = ONE
                END IF
                CALL SLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+*
+*              Give SGESVDX exactly the workspace that its workspace
+*              query asks for; the rest of WORK is a guard that the
+*              call must leave unchanged.
+*
                CALL SGESVDX( 'V', 'V', 'V', M, N, A, LDA,
      $                       VL, VU, IL, IU, NSV, S, U, LDU,
-     $                       VT, LDVT, WORK, LWORK, IWORK,
+     $                       VT, LDVT, WORK, -1, IWORK,
+     $                       IINFO )
+               LWQ = MIN( INT( WORK( 1 ) ), LWORK )
+               DO 201 J = LWQ + 1, LWORK
+                  WORK( J ) = GUARD
+  201          CONTINUE
+               CALL SGESVDX( 'V', 'V', 'V', M, N, A, LDA,
+     $                       VL, VU, IL, IU, NSV, S, U, LDU,
+     $                       VT, LDVT, WORK, LWQ, IWORK,
      $                       IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUT, FMT = 9995 )'GESVDX', IINFO, M, N,
      $               JTYPE, LSWORK, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
+               END IF
+               OVERRN = .FALSE.
+               DO 202 J = LWQ + 1, LWORK
+                  IF( WORK( J ).NE.GUARD ) OVERRN = .TRUE.
+  202          CONTINUE
+               IF( OVERRN ) THEN
+                  WRITE( NOUT, FMT = 9994 )'GESVDX', M, N, JTYPE,
+     $            IOLDSD
                END IF
 *
                RESULT( 33 ) = ZERO
@@ -1152,6 +1175,7 @@
      $                      RESULT( 34 ) )
                CALL SORT01( 'Rows', NSV, N, VT, LDVT, WORK, LWORK,
      $                      RESULT( 35 ) )
+               IF( OVERRN ) RESULT( 33 ) = ULPINV
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
 *
@@ -1242,6 +1266,10 @@
  9995 FORMAT( ' SDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
      $      I6, ', N=', I6, ', JTYPE=', I6, ', LSWORK=', I6, / 9X,
      $      'ISEED=(', 3( I5, ',' ), I5, ')' )
+ 9994 FORMAT( ' SDRVBD: S', A, ' wrote past the workspace size',
+     $      ' that its workspace query returned.', / 9X, 'M=', I6,
+     $      ', N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
+     $      ')' )
 *
       RETURN
 *
