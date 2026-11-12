@@ -330,11 +330,13 @@ jobs:
       run: |
         # AOCC 6.0 brought aof, a Fortran compiler based on LLVM Flang, and
         # aoc, the new name of its clang.  AMD ships it as a self-contained
-        # tarball under a URL that carries the major and minor version.
+        # tarball under a URL that carries the major and minor version.  The
+        # file is xz-compressed despite its plain .tar name, and GNU tar
+        # cannot detect that on a pipe, so say so with -J.
         series=$(echo "${AOCC_VERSION}" | cut -d. -f1-2 | tr . -)
         curl -fsSL \
           "https://download.amd.com/developer/eula/aocc/aocc-${series}/aocc-compiler-${AOCC_VERSION}.tar" \
-          | sudo tar xf - -C /opt
+          | sudo tar xJf - -C /opt
 
         # The compilers find their own shared libraries through an RPATH and
         # link the Fortran runtime statically, so the bin directory is all
