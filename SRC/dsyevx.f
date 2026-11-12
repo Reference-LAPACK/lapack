@@ -280,8 +280,8 @@
       CHARACTER          ORDER
       INTEGER            I, IINFO, INDD, INDE, INDEE, INDIBL,
      $                   INDISP, INDIWO, INDTAU, INDWKN, INDWRK, ISCALE,
-     $                   ITMP1, J, JJ, LLWORK, LLWRKN, LWKMIN,
-     $                   LWKOPT, NB, NSPLIT
+     $                   ITMP1, J, JJ, K, LLWORK, LLWRKN, LWKMIN,
+     $                   LWKOPT, NB, NFAIL, NSPLIT
       DOUBLE PRECISION   ABSTLL, ANRM, BIGNUM, EPS, RMAX, RMIN, SAFMIN,
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
 *     ..
@@ -311,6 +311,7 @@
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
+      NFAIL = 0
       IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
@@ -501,6 +502,8 @@
          CALL DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, IINFO )
+*        Retain the packed failure count returned by DSTEIN.
+         NFAIL = IINFO
          IF( IINFO.NE.0 .AND. INFO.EQ.0 )
      $      INFO = IINFO
 *
@@ -541,10 +544,15 @@
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
                CALL DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
-               IF( INFO.NE.0 ) THEN
-                  ITMP1 = IFAIL( I )
-                  IFAIL( I ) = IFAIL( J )
-                  IFAIL( J ) = ITMP1
+               IF( NFAIL.GT.0 ) THEN
+*                 IFAIL contains indices, not per-column flags.
+                  DO 55 K = 1, NFAIL
+                     IF( IFAIL( K ).EQ.I ) THEN
+                        IFAIL( K ) = J
+                     ELSE IF( IFAIL( K ).EQ.J ) THEN
+                        IFAIL( K ) = I
+                     END IF
+   55             CONTINUE
                END IF
             END IF
    60    CONTINUE
