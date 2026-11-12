@@ -56,7 +56,7 @@ lapack_int API_SUFFIX(LAPACKE_csytrs2)( int matrix_layout, char uplo, lapack_int
 #endif
     /* Allocate memory for working array(s) */
     work = (lapack_complex_float*)
-        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,2*n) );
+        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,n) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
