@@ -50,7 +50,7 @@ SCIGTST = slafts.o slahd2.o slasum.o slatb9.o sstech.o sstect.o \
 SEIGTST = schkee.o \
    sbdt01.o sbdt02.o sbdt03.o sbdt04.o sbdt05.o \
    schkbb.o schkbd.o schkbk.o schkbl.o schkec.o \
-   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schkst2stg.o schksb2stg.o \
+   schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o schksteds.o schkst2stg.o schksb2stg.o \
    sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
    sdrges.o sdrgev.o sdrges3.o sdrgev3.o sdrgsx.o sdrgvx.o \
    sdrvbd.o sdrvmr3.o sdrves.o sdrvev.o sdrvsg.o sdrvsg2stg.o \
@@ -91,7 +91,7 @@ DZIGTST = dlafts.o dlahd2.o dlasum.o dlatb9.o dstech.o dstect.o \
 DEIGTST = dchkee.o \
    dbdt01.o dbdt02.o dbdt03.o dbdt04.o dbdt05.o \
    dchkbb.o dchkbd.o dchkbk.o dchkbl.o dchkec.o \
-   dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o dchkst2stg.o dchksb2stg.o \
+   dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o dchksteds.o dchkst2stg.o dchksb2stg.o \
    dckcsd.o dckglm.o dckgqr.o dckgsv.o dcklse.o dcsdts.o \
    ddrges.o ddrgev.o ddrges3.o ddrgev3.o ddrgsx.o ddrgvx.o \
    ddrvbd.o ddrvmr3.o ddrves.o ddrvev.o ddrvsg.o ddrvsg2stg.o \
@@ -130,9 +130,11 @@ ZDMDEIGTST = zchkdmd.o
 all: single complex double complex16
 
 .PHONY: single complex double complex16
-single: xeigtsts xdmdeigtsts
+single: xeigtsts xdmdeigtsts test_ssteds_interfaces test_ssteds_error_locations \
+        test_ssteds_merge_failures
 complex: xeigtstc xdmdeigtstc
-double: xeigtstd xdmdeigtstd
+double: xeigtstd xdmdeigtstd test_dsteds_interfaces test_dsteds_error_locations \
+        test_dsteds_merge_failures
 complex16: xeigtstz xdmdeigtstz
 
 xdmdeigtsts: $(SDMDEIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
@@ -179,7 +181,9 @@ clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o
 cleanexe:
-	rm -f xeigtst* xdmdeigtst*
+	rm -f xeigtst* xdmdeigtst* test_dsteds_interfaces test_dsteds_error_locations \
+	      test_ssteds_interfaces test_ssteds_error_locations \
+	      test_dsteds_merge_failures test_ssteds_merge_failures
 
 schkee.o: schkee.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
@@ -197,3 +201,81 @@ dchkdmd.o: dchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkdmd.o: zchkdmd.f90
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
+
+# SSTEDS interface and boundary regression (same ratios as SCHKST).
+# Use the local driver object so that it calls the test ILAENV.
+test_ssteds_interfaces: test_ssteds_interfaces.o schksteds.o sstt21.o \
+                       sstt22.o slasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
+                       ssteds_errloc.o $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+schksteds.o: schksteds.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+test_ssteds_interfaces.o: test_ssteds_interfaces.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# SSTEDS and SLAES0 are linked from local objects so that SLAES0 reaches the
+# program's SSTEQR mock without symbol interposition into a shared LAPACK.
+test_ssteds_error_locations: test_ssteds_error_locations.o slasum.o \
+                             ssteds_errloc.o slaes0_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_ssteds_error_locations.o: test_ssteds_error_locations.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+ssteds_errloc.o: $(TOPSRCDIR)/SRC/ssteds.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaes0_errloc.o: $(TOPSRCDIR)/SRC/slaes0.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# The merge-failure test also links SLAES1 and SLAED9_BR, the callers
+# of its SLAED4 mock, from local objects for the same reason.
+test_ssteds_merge_failures: test_ssteds_merge_failures.o slasum.o \
+                             ssteds_errloc.o slaes0_errloc.o \
+                             slaes1_errloc.o slaed9_br_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_ssteds_merge_failures.o: test_ssteds_merge_failures.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaes1_errloc.o: $(TOPSRCDIR)/SRC/slaes1.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+slaed9_br_errloc.o: $(TOPSRCDIR)/SRC/slaed9_br.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# DSTEDS interface and boundary regression (same ratios as DCHKST).
+# Use the local driver object so that it calls the test ILAENV.
+test_dsteds_interfaces: test_dsteds_interfaces.o dchksteds.o dstt21.o \
+                       dstt22.o dlasum.o ilaenv.o xlaenv.o xerbla.o chkxer.o \
+                       dsteds_errloc.o $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+
+dchksteds.o: dchksteds.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+test_dsteds_interfaces.o: test_dsteds_interfaces.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# DSTEDS and DLAES0 are linked from local objects so that DLAES0 reaches the
+# program's DSTEQR mock without symbol interposition into a shared LAPACK.
+test_dsteds_error_locations: test_dsteds_error_locations.o dlasum.o \
+                             dsteds_errloc.o dlaes0_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_dsteds_error_locations.o: test_dsteds_error_locations.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+dsteds_errloc.o: $(TOPSRCDIR)/SRC/dsteds.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+dlaes0_errloc.o: $(TOPSRCDIR)/SRC/dlaes0.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+# The merge-failure test also links DLAES1 and DLAED9_BR, the callers
+# of its DLAED4 mock, from local objects for the same reason.
+test_dsteds_merge_failures: test_dsteds_merge_failures.o dlasum.o \
+                             dsteds_errloc.o dlaes0_errloc.o \
+                             dlaes1_errloc.o dlaed9_br_errloc.o \
+                             $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
+test_dsteds_merge_failures.o: test_dsteds_merge_failures.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+dlaes1_errloc.o: $(TOPSRCDIR)/SRC/dlaes1.f
+	$(FC) $(FFLAGS) -c -o $@ $<
+dlaed9_br_errloc.o: $(TOPSRCDIR)/SRC/dlaed9_br.f
+	$(FC) $(FFLAGS) -c -o $@ $<

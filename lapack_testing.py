@@ -495,6 +495,35 @@ def build_test_cases(letters: str, families: "Sequence[str]") -> "List[TestCase]
                         parser=PARSER_BALANCE,
                     )
                 )
+            if letter in ("s", "d"):
+                for out_stem, exe_stem, description in (
+                    (
+                        "steds",
+                        "steds_interfaces",
+                        "interfaces and boundary cases",
+                    ),
+                    (
+                        "steds_error_locations",
+                        "steds_error_locations",
+                        "failure location diagnostics",
+                    ),
+                    (
+                        "steds_merge_failures",
+                        "steds_merge_failures",
+                        "merge failure diagnostics",
+                    ),
+                ):
+                    cases.append(
+                        TestCase(
+                            precision=letter,
+                            family="eig",
+                            description=letter.upper() + "STEDS " + description,
+                            input_name="steds.in",
+                            output_name=letter + out_stem + ".out",
+                            executable="test_" + letter + exe_stem,
+                            parser=PARSER_STANDARD,
+                        )
+                    )
         for family, stem, executable_prefix, description in LIN_SETS:
             if family not in families:
                 continue
