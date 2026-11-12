@@ -153,6 +153,9 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -4 if A contains a NaN or an infinity, or an
+*>                entry whose absolute value overflows; XERBLA is not
+*>                called in that case.
 *>          > 0:  if INFO = i, the QR algorithm failed to compute all the
 *>                eigenvalues, and no eigenvectors have been computed;
 *>                elements i+1:N of W contain eigenvalues which have
@@ -327,6 +330,14 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = ZLANGE( 'M', N, N, A, LDA, DUM )
+*
+*     Return INFO = -4, without calling XERBLA, if A contains a NaN
+*     or an infinity, or an entry whose absolute value overflows.
+*
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -4
+         RETURN
+      END IF
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
@@ -334,10 +345,6 @@
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
          CSCALE = BIGNUM
-      ELSE IF( DISNAN( ANRM ) ) THEN
-         INFO = -4
-         CALL XERBLA( 'ZGEEV ', -INFO )
-         RETURN
       END IF
       IF( SCALEA )
      $   CALL ZLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )

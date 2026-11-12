@@ -170,6 +170,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -4 or -5 if D or E contains a NaN or an
+*>                infinity; XERBLA is not called in that case.
 *>          > 0:  The algorithm failed to compute a singular value.
 *>                The update process of divide and conquer failed.
 *> \endverbatim
@@ -227,10 +229,10 @@
       DOUBLE PRECISION   CS, EPS, ORGNRM, P, R, SN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            DISNAN, LSAME
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANST
-      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANST
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE, DLANST, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLARTG, DLASCL, DLASD0, DLASDA,
@@ -238,7 +240,7 @@
      $                   DLASET, DLASR, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, INT, LOG, SIGN
+      INTRINSIC          ABS, DBLE, INT, LOG, MAX, SIGN
 *     ..
 *     .. Executable Statements ..
 *
@@ -282,6 +284,21 @@
 *
       IF( N.EQ.0 )
      $   RETURN
+*
+*     Return INFO = -4 or -5, without calling XERBLA, if D or E
+*     contains a NaN or an infinity.
+*
+      ORGNRM = DLANGE( 'M', N, 1, D, N, WORK )
+      IF( DISNAN( ORGNRM ) .OR. ORGNRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -4
+         RETURN
+      END IF
+      ORGNRM = DLANGE( 'M', N-1, 1, E, MAX( 1, N-1 ), WORK )
+      IF( DISNAN( ORGNRM ) .OR. ORGNRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -5
+         RETURN
+      END IF
+*
       SMLSIZ = ILAENV( 9, 'DBDSDC', ' ', 0, 0, 0, 0 )
       IF( N.EQ.1 ) THEN
          IF( ICOMPQ.EQ.1 ) THEN

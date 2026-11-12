@@ -189,6 +189,9 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -4 if A contains a NaN or an infinity, or an
+*>                entry whose absolute value overflows; XERBLA is not
+*>                called in that case.
 *>          > 0:  the algorithm for computing the SVD failed to converge;
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.
@@ -252,9 +255,10 @@
      $                   ZUNMQR
 *     ..
 *     .. External Functions ..
+      LOGICAL            DISNAN
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           ILAENV, DLAMCH, ZLANGE
+      EXTERNAL           DISNAN, ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, DBLE
@@ -404,6 +408,10 @@
 *     Scale A if max entry outside range [SMLNUM,BIGNUM].
 *
       ANRM = ZLANGE( 'M', M, N, A, LDA, RWORK )
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -4
+         RETURN
+      END IF
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *

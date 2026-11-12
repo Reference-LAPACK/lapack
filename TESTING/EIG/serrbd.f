@@ -355,6 +355,33 @@
          CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
          NT = NT + 5
 *
+*        SBDSDC must return INFO = -4 or -5, without calling XERBLA,
+*        when D or E contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 60 J = 1, 2
+            D( 1 ) = ONE
+            D( 2 ) = ONE
+            E( 1 ) = ONE
+            IF( J.EQ.1 ) THEN
+               D( 2 ) = RONE / RZERO
+            ELSE
+               E( 1 ) = RNAN
+            END IF
+            SRNAMT = 'SBDSDC'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL SBDSDC( 'U', 'N', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
+     $                   INFO )
+            IF( LERR .OR. INFO.NE.-3-J ) THEN
+               WRITE( NOUT, FMT = 9995 )'SBDSDC', -3-J, INFO
+               OK = .FALSE.
+            END IF
+   60    CONTINUE
+         NT = NT + 2
+*
 *        SBDSVDX
 *
          SRNAMT = 'SBDSVDX'
@@ -477,6 +504,9 @@
      $      ' ***' )
  9996 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with an ',
      $      'infinity ***' )
+ 9995 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
+     $      ' calling XERBLA for a matrix with a NaN or an',
+     $      ' infinity (INFO = ', I6, ') ***' )
 *
       RETURN
 *
