@@ -599,7 +599,7 @@
 *
 *        PP:  positive definite packed matrices
 *
-         NTYPES = 9
+         NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -624,7 +624,7 @@
 *
 *        PB:  positive definite banded matrices
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -649,7 +649,7 @@
 *
 *        PT:  positive definite tridiagonal matrices
 *
-         NTYPES = 12
+         NTYPES = 13
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -882,7 +882,7 @@
 *
 *        QR:  QR factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -899,7 +899,7 @@
 *
 *        LQ:  LQ factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -916,7 +916,7 @@
 *
 *        QL:  QL factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
@@ -933,7 +933,7 @@
 *
 *        RQ:  RQ factorization
 *
-         NTYPES = 8
+         NTYPES = 9
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

@@ -140,9 +140,9 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      EXTERNAL           LSAME, CDOTC, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHPR, CSSCAL, CTPSV, XERBLA
@@ -191,7 +191,7 @@
 *
             AJJ = REAL( REAL( AP( JJ ) ) - CDOTC( J-1,
      $            AP( JC ), 1, AP( JC ), 1 ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF
@@ -207,7 +207,7 @@
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
             AJJ = REAL( AP( JJ ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AP( JJ ) = AJJ
                GO TO 30
             END IF

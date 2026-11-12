@@ -3659,6 +3659,13 @@ int64_t LAPACKE_zstedc_64( int matrix_layout, char compz, int64_t n,
                            double* d, double* e, lapack_complex_double* z,
                            int64_t ldz );
 
+int64_t LAPACKE_ssteds_64( int matrix_layout, int64_t n, float* d,
+                           float* e, int64_t m, const int64_t* isel,
+                           float* z, int64_t ldz );
+int64_t LAPACKE_dsteds_64( int matrix_layout, int64_t n, double* d,
+                           double* e, int64_t m, const int64_t* isel,
+                           double* z, int64_t ldz );
+
 int64_t LAPACKE_sstegr_64( int matrix_layout, char jobz, char range,
                            int64_t n, float* d, float* e, float vl, float vu,
                            int64_t il, int64_t iu, float abstol,
@@ -9400,6 +9407,17 @@ int64_t LAPACKE_zstedc_work_64( int matrix_layout, char compz, int64_t n,
                                 int64_t lwork, double* rwork,
                                 int64_t lrwork, int64_t* iwork,
                                 int64_t liwork );
+
+int64_t LAPACKE_ssteds_work_64( int matrix_layout, int64_t n, float* d,
+                                float* e, int64_t m,
+                                const int64_t* isel, float* z,
+                                int64_t ldz, float* work, int64_t lwork,
+                                int64_t* iwork, int64_t liwork );
+int64_t LAPACKE_dsteds_work_64( int matrix_layout, int64_t n, double* d,
+                                double* e, int64_t m,
+                                const int64_t* isel, double* z,
+                                int64_t ldz, double* work, int64_t lwork,
+                                int64_t* iwork, int64_t liwork );
 
 int64_t LAPACKE_sstegr_work_64( int matrix_layout, char jobz, char range,
                                 int64_t n, float* d, float* e, float vl,

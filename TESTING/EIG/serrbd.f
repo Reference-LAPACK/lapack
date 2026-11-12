@@ -74,7 +74,7 @@
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            I, INFO, J, NS, NT
-      REAL               RNAN, RONE
+      REAL               RNAN, RONE, RZERO
 *     ..
 *     .. Local Arrays ..
       INTEGER            IQ( NMAX, NMAX ), IW( NMAX )
@@ -302,6 +302,34 @@
          END IF
          NT = NT + 1
 *
+*        SBDSQR with singular vectors must return when D contains an
+*        infinity, which makes its convergence threshold a NaN,
+*        instead of iterating forever.
+*
+         RZERO = ZERO
+         DO 50 J = 1, NMAX
+            D( J ) = REAL( J )
+            E( J ) = ONE / REAL( J+1 )
+            DO 40 I = 1, NMAX
+               U( I, J ) = ZERO
+               V( I, J ) = ZERO
+   40       CONTINUE
+            U( J, J ) = ONE
+            V( J, J ) = ONE
+   50    CONTINUE
+         D( 1 ) = ONE / RZERO
+         E( NMAX ) = ZERO
+         SRNAMT = 'SBDSQR'
+         INFOT = 0
+         LERR = .FALSE.
+         CALL SBDSQR( 'U', NMAX, NMAX, NMAX, 0, D, E, V, NMAX, U,
+     $                NMAX, A, NMAX, W, INFO )
+         IF( LERR ) THEN
+            WRITE( NOUT, FMT = 9996 )'SBDSQR'
+            OK = .FALSE.
+         END IF
+         NT = NT + 1
+*
 *        SBDSDC
 *
          SRNAMT = 'SBDSDC'
@@ -326,6 +354,33 @@
      $                INFO )
          CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
          NT = NT + 5
+*
+*        SBDSDC must return INFO = -4 or -5, without calling XERBLA,
+*        when D or E contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 60 J = 1, 2
+            D( 1 ) = ONE
+            D( 2 ) = ONE
+            E( 1 ) = ONE
+            IF( J.EQ.1 ) THEN
+               D( 2 ) = RONE / RZERO
+            ELSE
+               E( 1 ) = RNAN
+            END IF
+            SRNAMT = 'SBDSDC'
+            INFOT = 0
+            LERR = .FALSE.
+            CALL SBDSDC( 'U', 'N', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
+     $                   INFO )
+            IF( LERR .OR. INFO.NE.-3-J ) THEN
+               WRITE( NOUT, FMT = 9995 )'SBDSDC', -3-J, INFO
+               OK = .FALSE.
+            END IF
+   60    CONTINUE
+         NT = NT + 2
 *
 *        SBDSVDX
 *
@@ -447,6 +502,11 @@
      $      'exits ***' )
  9997 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with a NaN',
      $      ' ***' )
+ 9996 FORMAT( ' *** ', A6, ' called XERBLA for a matrix with an ',
+     $      'infinity ***' )
+ 9995 FORMAT( ' *** ', A6, ' did not return INFO = ', I2, ' without',
+     $      ' calling XERBLA for a matrix with a NaN or an',
+     $      ' infinity (INFO = ', I6, ') ***' )
 *
       RETURN
 *

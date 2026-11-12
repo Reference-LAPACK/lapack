@@ -42,6 +42,9 @@ all: single complex double complex16 singleproto doubleproto complexproto comple
 
 SEIGTST= snep.out \
          ssep.out \
+         ssteds.out \
+         ssteds_error_locations.out \
+         ssteds_merge_failures.out \
          sse2.out \
          ssvd.out \
          sec.out \
@@ -88,6 +91,9 @@ CDMDEIGTST= cdmd.out
 
 DEIGTST= dnep.out \
          dsep.out \
+         dsteds.out \
+         dsteds_error_locations.out \
+         dsteds_merge_failures.out \
          dse2.out \
          dsvd.out \
          dec.out \
@@ -598,6 +604,12 @@ LIN/xlintstds: $(FRCLIN) $(FRC)
 LIN/xlintstzc: $(FRCLIN) $(FRC)
 	$(MAKE) -C LIN xlintstzc
 
+# Forward the standalone STEDS tests on a clean Makefile build.
+EIG/test_ssteds_interfaces EIG/test_ssteds_error_locations \
+EIG/test_ssteds_merge_failures EIG/test_dsteds_interfaces \
+EIG/test_dsteds_error_locations EIG/test_dsteds_merge_failures: $(FRCEIG) $(FRC)
+	$(MAKE) -C EIG $(notdir $@)
+
 EIG/xeigtsts: $(FRCEIG) $(FRC)
 	$(MAKE) -C EIG xeigtsts
 
@@ -637,3 +649,23 @@ FRC:
 	@FRC=$(FRC)
 
 .NOTPARALLEL:
+
+# SSTEDS boundary tests, built by TESTING/EIG's single target.
+ssteds.out: steds.in EIG/test_ssteds_interfaces
+	./EIG/test_ssteds_interfaces < steds.in > $@ 2>&1
+
+ssteds_error_locations.out: steds.in EIG/test_ssteds_error_locations
+	./EIG/test_ssteds_error_locations < steds.in > $@ 2>&1
+
+ssteds_merge_failures.out: steds.in EIG/test_ssteds_merge_failures
+	./EIG/test_ssteds_merge_failures < steds.in > $@ 2>&1
+
+# DSTEDS boundary tests, built by TESTING/EIG's double target.
+dsteds.out: steds.in EIG/test_dsteds_interfaces
+	./EIG/test_dsteds_interfaces < steds.in > $@ 2>&1
+
+dsteds_error_locations.out: steds.in EIG/test_dsteds_error_locations
+	./EIG/test_dsteds_error_locations < steds.in > $@ 2>&1
+
+dsteds_merge_failures.out: steds.in EIG/test_dsteds_merge_failures
+	./EIG/test_dsteds_merge_failures < steds.in > $@ 2>&1

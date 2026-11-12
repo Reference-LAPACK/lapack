@@ -89,7 +89,7 @@
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            I, IHI, ILO, INFO, J, NS, NT, SDIM
-      DOUBLE PRECISION   ABNRM
+      DOUBLE PRECISION   ABNRM, RNAN, RONE, RZERO
 *     ..
 *     .. Local Arrays ..
       LOGICAL            B( NMAX )
@@ -109,7 +109,7 @@
       EXTERNAL           LSAMEN, ZSLECT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM
+      INTRINSIC          LEN_TRIM, SQRT
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -178,6 +178,28 @@
      $               INFO )
          CALL CHKXER( 'ZGEEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        ZGEEV must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 50 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGEEV( 'N', 'N', 2, A, NMAX, X, VL, 1, VR, 1, W,
+     $                  10*NMAX, RW, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9997 )'ZGEEV', INFO
+               OK = .FALSE.
+            END IF
+   50    CONTINUE
+         NT = NT + 2
 *
       ELSE IF( LSAMEN( 2, C2, 'ES' ) ) THEN
 *
@@ -365,6 +387,28 @@
      $                INFO )
          CALL CHKXER( 'ZGESDD', INFOT, NOUT, LERR, OK )
          NT = NT - 2
+*
+*        ZGESDD must return INFO = -4, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 40 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGESDD( 'N', 2, 1, A, NMAX, S, U, NMAX, VT, NMAX, W,
+     $                   10*NMAX, RW, IW, INFO )
+            IF( LERR .OR. INFO.NE.-4 ) THEN
+               WRITE( NOUT, FMT = 9997 )'ZGESDD', INFO
+               OK = .FALSE.
+            END IF
+   40    CONTINUE
+         NT = NT + 2
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
@@ -626,6 +670,9 @@
  9999 FORMAT( 1X, A, ' passed the tests of the error exits (', I3,
      $      ' tests done)' )
  9998 FORMAT( ' *** ', A, ' failed the tests of the error exits ***' )
+ 9997 FORMAT( ' *** ', A, ' did not return INFO = -4 without calling',
+     $      ' XERBLA for a matrix with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
       RETURN
 *
 *     End of ZERRED

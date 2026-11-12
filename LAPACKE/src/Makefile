@@ -1089,6 +1089,8 @@ lapacke_dstebr.o \
 lapacke_dstebr_work.o \
 lapacke_dstedc.o \
 lapacke_dstedc_work.o \
+lapacke_dsteds.o \
+lapacke_dsteds_work.o \
 lapacke_dstegr.o \
 lapacke_dstegr_work.o \
 lapacke_dstein.o \
@@ -1671,6 +1673,8 @@ lapacke_sstebr.o \
 lapacke_sstebr_work.o \
 lapacke_sstedc.o \
 lapacke_sstedc_work.o \
+lapacke_ssteds.o \
+lapacke_ssteds_work.o \
 lapacke_sstegr.o \
 lapacke_sstegr_work.o \
 lapacke_sstein.o \
