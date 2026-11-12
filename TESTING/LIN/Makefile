@@ -326,4 +326,17 @@ cchkaa.o: cchkaa.F
 zchkaa.o: zchkaa.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 
+# The CXX and least-squares error-exit tests, the packed symmetric-indefinite
+# tests and the packed, banded and tridiagonal Cholesky tests compute an Inf
+# or a NaN from constants.
+# nagfor folds those expressions at compile time and rejects the result, so
+# make.inc can turn that off for them through FFLAGS_NOPROPAGATE.
+serrcxx.o derrcxx.o cerrcxx.o zerrcxx.o \
+serrls.o derrls.o cerrls.o zerrls.o \
+schksp.o dchksp.o cchksp.o zchksp.o cchkhp.o zchkhp.o \
+schkpp.o dchkpp.o cchkpp.o zchkpp.o \
+schkpb.o dchkpb.o cchkpb.o zchkpb.o \
+schkpt.o dchkpt.o cchkpt.o zchkpt.o: \
+	FFLAGS += $(FFLAGS_NOPROPAGATE)
+
 .NOTPARALLEL:

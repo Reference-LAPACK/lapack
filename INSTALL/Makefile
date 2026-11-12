@@ -67,3 +67,9 @@ dlamch.o: dlamch.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 
 sroundup_lwork.o: sroundup_lwork.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 droundup_lwork.o: droundup_lwork.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+
+# These test complex arithmetic on an Inf or a NaN computed from constants.
+# nagfor folds those expressions at compile time and rejects the result, so
+# make.inc can turn that off for them through FFLAGS_NOPROPAGATE.
+test_zcomplexabs.o test_zcomplexdiv.o test_zcomplexmult.o test_zminMax.o: \
+	FFLAGS += $(FFLAGS_NOPROPAGATE)

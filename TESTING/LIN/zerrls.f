@@ -100,7 +100,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DIMAG, LEN_TRIM, SQRT
+      INTRINSIC          ABS, DBLE, AIMAG, LEN_TRIM, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -374,9 +374,9 @@
      $                      RW, IP, INFO )
             END IF
             NANB = DISNAN( DBLE( B( 1, 2 ) ) ) .OR.
-     $             DISNAN( DIMAG( B( 1, 2 ) ) ) .OR.
+     $             DISNAN( AIMAG( B( 1, 2 ) ) ) .OR.
      $             DISNAN( DBLE( B( 2, 2 ) ) ) .OR.
-     $             DISNAN( DIMAG( B( 2, 2 ) ) )
+     $             DISNAN( AIMAG( B( 2, 2 ) ) )
             IF( LERR .OR. INFO.NE.0 .OR. .NOT.NANB .OR.
      $          .NOT.( ABS( B( 1, 1 )-ONE ).LE.TOL .AND.
      $                 ABS( B( 2, 1 )-ONE ).LE.TOL ) ) THEN
