@@ -1,9 +1,10 @@
 name: Compilers
 
 # Build and test BLAS, CBLAS, LAPACK, and LAPACKE with a variety of compilers:
-# GFortran, NAG Fortran Compiler, LLVM Flang, Intel oneAPI compilers and the
-# Arm Toolchain for Linux.  Each of them is exercised against static and against
-# shared libraries, always in Release mode.
+# GFortran, NAG Fortran Compiler, LLVM Flang, Intel oneAPI compilers, the AMD
+# Optimizing C/C++ and Fortran Compilers (AOCC) and the Arm Toolchain for Linux.
+# Each of them is exercised against static and against shared libraries, always
+# in Release mode.
 #
 # The NAG Fortran Compiler is licence managed and its key is tied to the
 # platform it was issued for, so each of its configurations reads a repository
@@ -117,11 +118,6 @@ jobs:
           os: ubuntu-26.04
           CFLAGS: "-Wall -pedantic"
           FFLAGS: "-Wall -pedantic"
-        - FC: flang
-          CC: clang
-          os: ubuntu-26.04-arm
-          CFLAGS: "-Wall -pedantic"
-          FFLAGS: "-Wall -pedantic"
         - FC: nagfor
           CC: gcc
           os: ubuntu-26.04
@@ -144,6 +140,11 @@ jobs:
         - FC: armflang
           CC: armclang
           os: ubuntu-24.04-arm
+          CFLAGS: "-Wall -pedantic"
+          FFLAGS: "-Wall -pedantic"
+        - FC: aof
+          CC: aoc
+          os: ubuntu-24.04
           CFLAGS: "-Wall -pedantic"
           FFLAGS: "-Wall -pedantic"
         - FC: nagfor
@@ -321,6 +322,30 @@ jobs:
 
         "${prefix}/bin/armflang" --version
         "${prefix}/bin/armclang" --version
+
+    - name: Install the AMD Optimizing C/C++ and Fortran Compilers
+      if: ${{ matrix.toolchain.FC == 'aof' }}
+      env:
+        AOCC_VERSION: 6.0.0
+      run: |
+        # AOCC 6.0 brought aof, a Fortran compiler based on LLVM Flang, and
+        # aoc, the new name of its clang.  AMD ships it as a self-contained
+        # tarball under a URL that carries the major and minor version.
+        series=$(echo "${AOCC_VERSION}" | cut -d. -f1-2 | tr . -)
+        curl -fsSL \
+          "https://download.amd.com/developer/eula/aocc/aocc-${series}/aocc-compiler-${AOCC_VERSION}.tar" \
+          | sudo tar xf - -C /opt
+
+        # The compilers find their own shared libraries through an RPATH and
+        # link the Fortran runtime statically, so the bin directory is all
+        # the setup needed.  The install.sh in the tarball would also put
+        # AOCC's lib directory, which holds its own libunwind and libc++, on
+        # LD_LIBRARY_PATH for every program run afterwards.
+        prefix="/opt/aocc-compiler-${AOCC_VERSION}"
+        echo "${prefix}/bin" >> "$GITHUB_PATH"
+
+        "${prefix}/bin/aof" --version
+        "${prefix}/bin/aoc" --version
 
     - name: Install flang (Windows)
       if: ${{ matrix.toolchain.FC == 'flang' && runner.os == 'Windows' }}

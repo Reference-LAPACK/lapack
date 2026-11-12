@@ -2,11 +2,12 @@ name: Makefile
 
 # This workflow builds BLAS, CBLAS, LAPACK, LAPACKE and TMGLIB using the
 # Makefile build system and runs their tests, with GFortran, the NAG Fortran
-# Compiler and the Intel oneAPI compilers.
+# Compiler, the Intel oneAPI compilers, LLVM Flang, the AMD Optimizing C/C++
+# and Fortran Compilers (AOCC) and the Arm Toolchain for Linux.
 #
 # The configurations with a make_inc start from INSTALL/make.inc.<make_inc>
 # instead of the flags below, so that the make.inc files shipped for GFortran
-# (optimised and debug), nagfor and ifx are tested too.
+# (optimised and debug), nagfor, ifx, flang, aof and armflang are tested too.
 #
 # The NAG Fortran Compiler is licence managed, see compilers.yml: each of its
 # configurations reads a repository secret of its own and is skipped when that
@@ -97,6 +98,18 @@ jobs:
           CC: icx
           os: ubuntu-24.04
           make_inc: ifx
+        - FC: flang
+          CC: clang
+          os: ubuntu-26.04
+          make_inc: flang
+        - FC: aof
+          CC: aoc
+          os: ubuntu-24.04
+          make_inc: aof
+        - FC: armflang
+          CC: armclang
+          os: ubuntu-24.04-arm
+          make_inc: armflang
 
     steps:
     - name: Checkout LAPACK
@@ -208,6 +221,75 @@ jobs:
         source /opt/intel/oneapi/setvars.sh
         ifx --version
         icx --version
+
+    - name: Install flang 21 and clang 21
+      if: ${{ matrix.toolchain.FC == 'flang' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y flang-21 clang-21
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-21 100
+        sudo update-alternatives --install /usr/bin/flang flang /usr/bin/flang-21 100
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-21 100
+        flang --version
+        clang --version
+
+    - name: Install the AMD Optimizing C/C++ and Fortran Compilers (6.0.0)
+      if: ${{ matrix.toolchain.FC == 'aof' }}
+      env:
+        AOCC_VERSION: 6.0.0
+      run: |
+        # AOCC 6.0 brought aof, a Fortran compiler based on LLVM Flang, and
+        # aoc, the new name of its clang.  AMD ships it as a self-contained
+        # tarball under a URL that carries the major and minor version.
+        series=$(echo "${AOCC_VERSION}" | cut -d. -f1-2 | tr . -)
+        curl -fsSL \
+          "https://download.amd.com/developer/eula/aocc/aocc-${series}/aocc-compiler-${AOCC_VERSION}.tar" \
+          | sudo tar xf - -C /opt
+
+        # The compilers find their own shared libraries through an RPATH and
+        # link the Fortran runtime statically, so the bin directory is all
+        # the setup needed.  The install.sh in the tarball would also put
+        # AOCC's lib directory, which holds its own libunwind and libc++, on
+        # LD_LIBRARY_PATH for every program run afterwards.
+        prefix="/opt/aocc-compiler-${AOCC_VERSION}"
+        echo "${prefix}/bin" >> "$GITHUB_PATH"
+
+        "${prefix}/bin/aof" --version
+        "${prefix}/bin/aoc" --version
+
+    - name: Install the Arm Toolchain for Linux
+      if: ${{ matrix.toolchain.FC == 'armflang' }}
+      env:
+        ARM_REPO: https://developer.arm.com/packages/arm-toolchains/ubuntu
+      run: |
+        # armclang and armflang come from Arm's own APT repository, whose
+        # configuration package carries both the sources list and the signing
+        # key.  Its version moves independently of the toolchain, so look the
+        # file up instead of pinning it.
+        deb=$(curl -fsSL "${ARM_REPO}/dists/noble/main/binary-arm64/Packages" \
+                | awk '/^Package: arm-toolchains-repository$/ { found = 1 }
+                       found && /^Filename:/ { print $2; exit }')
+        if [ -z "${deb}" ]; then
+          echo "::error::Could not find the arm-toolchains-repository package."
+          exit 1
+        fi
+        curl -fsSL -o "${RUNNER_TEMP}/arm-repo.deb" "${ARM_REPO}/${deb}"
+        sudo apt-get install -y "${RUNNER_TEMP}/arm-repo.deb"
+        sudo apt-get update
+        sudo apt-get install -y arm-toolchain-for-linux
+
+        # The package ships a modulefile generator rather than an environment
+        # script, so set up what that module would: its bin directory, plus
+        # the library paths the compilers and the built shared libraries need.
+        prefix=/opt/arm/arm-toolchain-for-linux
+        libs="${prefix}/lib:${prefix}/lib/aarch64-unknown-linux-gnu"
+        echo "${prefix}/bin" >> "$GITHUB_PATH"
+        echo "CPATH=${prefix}/include${CPATH:+:${CPATH}}" >> "$GITHUB_ENV"
+        echo "LIBRARY_PATH=${libs}${LIBRARY_PATH:+:${LIBRARY_PATH}}" >> "$GITHUB_ENV"
+        echo "LD_LIBRARY_PATH=${libs}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> "$GITHUB_ENV"
+
+        "${prefix}/bin/armflang" --version
+        "${prefix}/bin/armclang" --version
 
     - name: Set configurations
       if: ${{ env.SKIP_TOOLCHAIN != 'true' }}
